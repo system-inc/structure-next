@@ -2,7 +2,7 @@
 import StructureSettings from '@structure/StructureSettings';
 
 // Dependencies - React and Next.js
-import { Metadata, Viewport } from 'next';
+import { Metadata, ResolvingMetadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
 import Script from 'next/script';
 
@@ -15,13 +15,14 @@ import Providers from '@structure/source/layouts/providers/Providers';
 // import { SignInSignUpModal } from '@structure/source/modules/account/SignInSignUpModal';
 
 // Metadata
-export const metadata: Metadata = {
-    title: {
-        template: '%s • ' + StructureSettings.title,
-        default: StructureSettings.title + ' • ' + StructureSettings.tagline, // default is required when creating a template
-    },
-    description: StructureSettings.description,
-};
+export async function generateMetadata(properties: any, parent: ResolvingMetadata): Promise<Metadata> {
+    return {
+        title: {
+            template: '%s • ' + StructureSettings.title,
+            default: StructureSettings.title + ' • ' + StructureSettings.tagline, // default is required when creating a template
+        },
+    };
+}
 
 // Viewport
 export const viewport: Viewport = {

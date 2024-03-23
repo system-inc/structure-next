@@ -52,7 +52,7 @@ routes.forEach(route => {
     appInternalPageDirectory = path.join(__dirname, appInternalPageDirectory);
     console.log('appInternalPageDirectory', appInternalPageDirectory);
 
-    const content = `// Shim all named exports and the default export from Structure
+    const content = `// Shim the default export from Structure
 export * from '${structureImportPath}';
 export { default } from '${structureImportPath}';
 `;
