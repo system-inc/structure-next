@@ -22,8 +22,8 @@ import BarGraphIcon from '@structure/assets/icons/analytics/BarGraphIcon.svg';
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Component - DatabasePage
-export interface DevelopersDatabasePageInterface {}
-export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterface) {
+export interface DevelopersDataPageInterface {}
+export function DevelopersDataPage(properties: DevelopersDataPageInterface) {
     // Use the Apollo Client for refetching queries with the refresh button
     const apolloClient = useApolloClient();
 
@@ -52,9 +52,70 @@ export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterfa
     return (
         <>
             <InternalNavigationTrail />
-            {/* <div className="mb-4 flex">
-                <div className="flex-grow"></div>
+
+            <div className="flex">
+                <div className="flex flex-grow space-x-2">
+                    <DatabaseAndTableFormInputSelects
+                        className="mb-4"
+                        databaseNameFormInputSelectProperties={{
+                            className: 'w-48',
+                            defaultValue: databaseNameUrlParameter ?? undefined,
+                        }}
+                        tableNameFormInputSelectProperties={{
+                            className: 'w-80',
+                            defaultValue: tableNameUrlParameter ?? undefined,
+                        }}
+                        onChange={function (databaseName?: string, tableName?: string) {
+                            // console.log('onChange', databaseName, tableName);
+
+                            // Reset the page
+                            setPaginationPageUrlParameter(1);
+
+                            // Set the state
+                            setDatabaseName(databaseName);
+                            setTableName(tableName);
+
+                            // Set the URL parameters
+                            if(databaseName) {
+                                setDatabaseNameUrlParameter(databaseName);
+                            }
+                            if(tableName) {
+                                setTableNameUrlParameter(tableName);
+                            }
+                        }}
+                    />
+                </div>
                 <div className="flex space-x-2">
+                    <Button
+                        className="mt-[22px]"
+                        icon={PlusIcon}
+                        iconPosition="left"
+                        // onClick={addNewCondition}
+                    >
+                        Create
+                    </Button>
+
+                    <Button
+                        className="mt-[22px]"
+                        size="icon"
+                        icon={BarGraphIcon}
+                        iconClassName="h-[17px] w-[17px]"
+                        tip="Metrics"
+                        href={
+                            `/internal/developers/metrics/?dataSources={"databaseName":"` +
+                            databaseName +
+                            `","tableName":"` +
+                            tableName +
+                            `"}`
+                        }
+                        target="_blank"
+                        // onClick={async () => {
+                        //     const newPage = 1;
+                        //     setPage(newPage);
+                        //     await onChangeIntercept(itemsPerPage, newPage);
+                        // }}
+                    />
+
                     <RefreshButton
                         className="mt-[22px]"
                         size={'formInputIcon'}
@@ -65,8 +126,8 @@ export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterfa
                         }}
                     />
                 </div>
-            </div> */}
-            Now just use the graphql call to get the databases and their tables and record counts
+            </div>
+
             <GraphQlQueryTable
                 key={databaseName ? databaseName : '' + tableName ? tableName : ''}
                 queryDocument={dataInteractionDatabaseTableRowsQueryDocument}
@@ -103,4 +164,4 @@ export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterfa
 }
 
 // Export - Default
-export default DevelopersDatabasePage;
+export default DevelopersDataPage;

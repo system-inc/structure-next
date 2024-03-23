@@ -255,6 +255,10 @@ export const InternalNavigationLinks: InternalNavigationLinkInterface[] = [
         icon: CodeIcon,
         links: [
             {
+                title: 'Data',
+                href: '/internal/developers/data',
+            },
+            {
                 title: 'Metrics',
                 href: '/internal/developers/metrics',
             },
