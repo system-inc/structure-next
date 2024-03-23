@@ -11,6 +11,7 @@ apiDirectory=$PWD
 
 echo "Pulling the latest api code..."
 git pull
+npm i
 
 # Change to the base directory and pull the latest code
 echo "Changing to the base library directory..."
