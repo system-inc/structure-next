@@ -105,10 +105,13 @@ export function useAccountCurrent() {
         [accountCurrentQueryState.data?.accountCurrent],
     );
 
-    // Set the client state when the component mounts
-    React.useEffect(function () {
-        setIsClient(true);
-    }, []);
+    // Set the client state when the component mounts or when the session token changes
+    React.useEffect(
+        function () {
+            setIsClient(true);
+        },
+        [sessionToken],
+    );
 
     return {
         loading:
