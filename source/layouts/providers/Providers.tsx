@@ -4,18 +4,18 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { CookiesProvider } from './CookiesProvider';
 import cookies from '@structure/source/utilities/Cookies';
-import SessionProvider from './SessionProvider';
-import ThemeProvider from './ThemeProvider';
-import ApolloProvider from './ApolloProvider';
-import TipProvider from './TipProvider';
+import CookiesProvider from '@structure/source/utilities/CookiesProvider';
+import SessionProvider from '@structure/source/modules/account/SessionProvider';
+import ThemeProvider from '@structure/source/styles/ThemeProvider';
+import ApolloProvider from '@structure/source/common/api/graphql/ApolloProvider';
+import TipProvider from '@structure/source/common/notifications/TipProvider';
 import NoticeProvider from '@structure/source/common/interactions/notice/NoticeProvider';
 
-export type ProvidersProperties = {
+export interface ProvidersInterface {
     children: React.ReactNode;
-};
-export function Providers(properties: ProvidersProperties) {
+}
+export function Providers(properties: ProvidersInterface) {
     // Render the component
     return (
         <CookiesProvider cookies={cookies}>

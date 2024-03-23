@@ -38,10 +38,10 @@ const apolloClient = new ApolloClient({
 });
 
 // Component - ApolloWrapper
-export type ApolloProviderProperties = {
+export interface ApolloProviderInterface {
     children: React.ReactNode;
-};
-export function ApolloProvider({ children }: ApolloProviderProperties) {
+}
+export function ApolloProvider({ children }: ApolloProviderInterface) {
     return <ApolloClientProvider client={apolloClient}>{children}</ApolloClientProvider>;
 }
 

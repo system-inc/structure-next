@@ -5,7 +5,7 @@ import React from 'react';
 import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
 
 // Dependencies - Styles
-import { useTheme } from '@structure/source/providers/ThemeProvider';
+import { useTheme } from '@structure/source/styles/ThemeProvider';
 
 // Dependencies - Assets
 import SearchIcon from '@structure/assets/icons/navigation/SearchIcon.svg';

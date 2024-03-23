@@ -23,7 +23,7 @@ import {
 } from 'recharts';
 
 // Dependencies - Styles
-import { useTheme } from '@structure/source/providers/ThemeProvider';
+import { useTheme } from '@structure/source/styles/ThemeProvider';
 
 // Dependencies - Utilities
 import useMeasure from 'react-use-measure';

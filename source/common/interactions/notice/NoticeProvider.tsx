@@ -5,7 +5,9 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { NoticeContainer } from '@structure/source/common/interactions/notice/NoticeContainer';
-import { NoticeInterface, Notice } from '@structure/source/common/interactions/notice/Notice';
+import { NoticeInterface } from '@structure/source/common/interactions/notice/Notice';
+
+// Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Context - Notice
@@ -29,30 +31,30 @@ const NoticeContext = React.createContext<NoticeContextInterface>({
 });
 
 // Component - NoticeProvider
-export type NoticeProviderProperties = {
+export interface NoticeProviderInterface {
     children: React.ReactNode;
-};
-export function NoticeProvider({ children }: NoticeProviderProperties) {
+}
+export function NoticeProvider({ children }: NoticeProviderInterface) {
     // State
     const [notices, setNotices] = React.useState<NoticeInterface[]>([]);
 
     // Function to add a notice
-    function addNotice(newNotice: Omit<NoticeInterface, 'id'>) {
+    const addNotice = React.useCallback(function (newNotice: Omit<NoticeInterface, 'id'>) {
         // Generate a unique ID.id = uniqueIdentifier();
         const notice: NoticeInterface = { ...newNotice, id: uniqueIdentifier() };
 
         setNotices((notices) => [...notices, notice]);
-    }
+    }, []);
 
     // Function to remove a notice
-    function removeNotice(id: string) {
+    const removeNotice = React.useCallback(function (id: string) {
         setNotices((notices) => notices.filter((notice) => notice.id !== id));
-    }
+    }, []);
 
     // Function to remove all notices
-    function removeAllNotices() {
+    const removeAllNotices = React.useCallback(function () {
         setNotices([]);
-    }
+    }, []);
 
     // Render the component
     return (

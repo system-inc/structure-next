@@ -33,10 +33,10 @@ const ThemeContext = React.createContext<ThemeType>({
 });
 
 // Component - ThemeProvider
-export type ThemeProviderProperties = {
+export interface ThemeProviderInterface {
     children: React.ReactNode;
-};
-export function ThemeProvider({ children }: ThemeProviderProperties) {
+}
+export function ThemeProvider({ children }: ThemeProviderInterface) {
     // State for the theme, default to light theme
     const [theme, setTheme] = React.useState<string | null>(null);
 

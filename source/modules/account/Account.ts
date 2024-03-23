@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Accounts
-import { useSession } from '@structure/source/providers/SessionProvider';
+import { useSession } from '@structure/source/modules/account/SessionProvider';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';

@@ -8,7 +8,7 @@ import GraphQlMutationForm from '@structure/source/common/forms/GraphQlMutationF
 import Alert from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Accounts
-import { useSession } from '@structure/source/providers/SessionProvider';
+import { useSession } from '@structure/source/modules/account/SessionProvider';
 
 // Dependencies - API
 import { accountSignInUsingEmailAddressAndPasswordMutationDocument } from '@structure/source/modules/account/api/AccountDocuments';

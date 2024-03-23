@@ -29,10 +29,10 @@ const SessionContext = React.createContext<SessionContextInterface>({
 });
 
 // Component - SessionProvider
-export type SessionProviderProperties = {
+export interface SessionProviderInterface {
     children: React.ReactNode;
-};
-export function SessionProvider({ children }: SessionProviderProperties) {
+}
+export function SessionProvider({ children }: SessionProviderInterface) {
     // Next router and pathname
     const router = useRouter();
     const pathname = usePathname();

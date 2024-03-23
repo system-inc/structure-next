@@ -11,8 +11,7 @@ import '@structure/source/styles/globals.css';
 import { themeClassNameCookieKey, darkThemeClassName } from '@structure/source/styles/Theme';
 
 // Dependencies - Main Components
-import Providers from '@structure/source/providers/Providers';
-import { NoticeContainer } from '@structure/source/common/interactions/notice/NoticeContainer';
+import Providers from '@structure/source/layouts/providers/Providers';
 // import { SignInSignUpModal } from '@structure/source/modules/account/SignInSignUpModal';
 
 // Metadata
