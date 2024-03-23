@@ -7,7 +7,7 @@ import React from 'react';
 import cookies from '@structure/source/utilities/Cookies';
 import CookiesProvider from '@structure/source/utilities/CookiesProvider';
 import SessionProvider from '@structure/source/modules/account/SessionProvider';
-import ThemeProvider from '@structure/source/styles/ThemeProvider';
+import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import ApolloProvider from '@structure/source/api/ApolloProvider';
 import TipProvider from '@structure/source/common/notifications/TipProvider';
 import NoticeProvider from '@structure/source/common/interactions/notice/NoticeProvider';

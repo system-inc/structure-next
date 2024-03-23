@@ -7,7 +7,7 @@ import React from 'react';
 import Tip from '@structure/source/common/notifications/Tip';
 
 // Dependencies - Styles
-import { themeModeLocalStorageKey, themeModeChangeEventIdentifier, ThemeMode } from '@structure/source/styles/Theme';
+import { themeModeLocalStorageKey, themeModeChangeEventIdentifier, ThemeMode } from '@structure/source/theme/Theme';
 
 // Dependencies - Assets
 import DesktopIcon from '@structure/assets/icons/technology/DesktopIcon.svg';

@@ -5,7 +5,7 @@ import React from 'react';
 import AccountMenuSignedIn from './AccountMenuSignedIn';
 import AccountMenuSignedOut from './AccountMenuSignedOut';
 import Button from '@structure/source/common/interactions/Button';
-import ThemeToggle from '@structure/source/styles/ThemeToggle';
+import ThemeToggle from '@structure/source/theme/ThemeToggle';
 
 // Dependencies - Accounts
 import { Account } from '@structure/source/modules/account/Account';

@@ -6,9 +6,9 @@ import { Metadata, ResolvingMetadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
 import Script from 'next/script';
 
-// Dependencies - Styles
-import '@structure/source/styles/globals.css';
-import { themeClassNameCookieKey, darkThemeClassName } from '@structure/source/styles/Theme';
+// Dependencies - Theme
+import '@structure/source/theme/theme.css';
+import { themeClassNameCookieKey, darkThemeClassName } from '@structure/source/theme/Theme';
 
 // Dependencies - Main Components
 import Providers from '@structure/source/layouts/providers/Providers';

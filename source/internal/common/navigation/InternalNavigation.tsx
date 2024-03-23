@@ -24,7 +24,7 @@ import Button from '@structure/source/common/interactions/Button';
 import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';
 
 // Dependencies - Styles
-import { useTheme } from '@structure/source/styles/ThemeProvider';
+import { useTheme } from '@structure/source/theme/ThemeProvider';
 import { useSpring, animated, easings } from '@react-spring/web';
 
 // Dependencies - Utilities

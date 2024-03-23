@@ -15,7 +15,7 @@ import {
     darkThemeClassName,
     darkThemeMediaQuery,
     ThemeMode,
-} from '@structure/source/styles/Theme';
+} from '@structure/source/theme/Theme';
 
 // Dependencies - Utilities
 import cookies from '@structure/source/utilities/Cookies';
