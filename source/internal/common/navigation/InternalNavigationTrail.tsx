@@ -67,7 +67,7 @@ export function InternalNavigationTrail(properties: NavigationTrailInterface) {
 
                 // Add the path segment to the navigation trail
                 navigationTrailLinks.push({
-                    title: titleCase(urlPathSegment), // Format the segment into a title
+                    title: titleCase(urlPathSegment.replaceAll('-', ' ')), // Format the segment into a title
                     href: cumulativePath,
                     links: siblingNavigationTrailLinks,
                 });
