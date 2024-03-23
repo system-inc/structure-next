@@ -1,11 +1,7 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import StructureSettings from '@structure/StructureSettings';
-
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
 import InternalNavigation from '@structure/source/internal/common/navigation/InternalNavigation';
@@ -141,18 +137,6 @@ export function InternalLayout(properties: InternalLayoutInterface) {
         [setInternalNavigationSidebarClosed, bodySpringControl],
     );
 
-    // Use the pathname to dynamically create the title
-    const pathname = usePathname();
-    let title =
-        pathname
-            .split('/')
-            .reverse()
-            .filter(Boolean)
-            .map((segment) => titleCase(segment))
-            .join(' • ') +
-        ' • ' +
-        StructureSettings.title;
-
     // throw new Error('hi!');
     // return <NotAuthorized />;
     // return <NotConnected />;
@@ -184,9 +168,6 @@ export function InternalLayout(properties: InternalLayoutInterface) {
     // Render the component
     return (
         <>
-            {/* Dynamically set the title this way for now, there should be a better way */}
-            {/* <title>{title}</title> */}
-
             {/* Navigation */}
             <InternalNavigation
                 sidebarOpen={!internalNavigationSidebarClosed}
