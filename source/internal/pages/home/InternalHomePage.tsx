@@ -1,0 +1,162 @@
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Main Components
+import HomeMetricLink from '@structure/source/internal/common/dashboard/HomeMetricLink';
+import CardLink from '@structure/source/internal/common/dashboard/CardLink';
+import ActivityLink from '@structure/source/internal/common/dashboard/ActivityLink';
+import TopProductLink from '@structure/source/internal/common/dashboard/TopProductLink';
+
+// Component - InternalPage
+type InternalHomePageProperties = {};
+export function InternalHomePage(properties: InternalHomePageProperties) {
+    // List of links to metrics
+    const metricLinks = [
+        {
+            href: '/internal/fulfillment',
+            number: 9,
+            text: 'orders are ready to fulfill',
+        },
+        {
+            href: '/internal/fulfillment',
+            number: 5,
+            text: 'payments ready to capture',
+        },
+        {
+            href: '/internal/fulfillment',
+            number: 0,
+            text: 'products are out of stock',
+        },
+    ];
+
+    // Render the component
+    return (
+        <div className="mx-auto flex flex-row">
+            {/* Left column */}
+            <div className="flex flex-grow flex-col pr-6">
+                {/* Summary */}
+                <div className="flex flex-row justify-between gap-3">
+                    <CardLink href="/internal/fulfillment" title="Orders" value={'+33 ($3,000)'} date="Today" />
+                    <CardLink href="/internal/fulfillment" title="Active Users" value={'4,240'} date="Today" />
+                    <CardLink href="/internal/fulfillment" title="New Accounts" value={'+410'} date="Today" />
+                </div>
+
+                {/* List of full width links that have a bottom border and a right chevron. When you hover the link hover color is grey */}
+                <div className="mt-6 flex flex-col divide-y divide-light-4/75 transition-colors dark:divide-dark-4">
+                    {metricLinks.map((link, _id) => (
+                        <HomeMetricLink key={_id} href={link.href} number={link.number} text={link.text} />
+                    ))}
+                </div>
+
+                <div className="mt-6 flex flex-col">
+                    <h2 className="mb-4 text-base font-normal">Top Products</h2>
+                    <div className="flex flex-col divide-y divide-light-4/75 transition-colors dark:divide-dark-4">
+                        <TopProductLink
+                            href="/internal/fulfillment"
+                            productName="Stack"
+                            totalRevenue={2000}
+                            amountOrdered={100}
+                        />
+                        <TopProductLink
+                            href="/internal/fulfillment"
+                            productName="Origami"
+                            totalRevenue={1500}
+                            amountOrdered={50}
+                        />
+                        <TopProductLink
+                            href="/internal/fulfillment"
+                            productName="Bento"
+                            totalRevenue={1000}
+                            amountOrdered={25}
+                        />
+                        <TopProductLink
+                            href="/internal/fulfillment"
+                            productName="Water"
+                            totalRevenue={500}
+                            amountOrdered={10}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Right column */}
+            <div className="flex min-w-[240px] flex-col border-l border-light-4 pl-6 transition-colors dark:border-l-dark-4">
+                <h1 className="text-base">Activity</h1>
+                {/* List of activities */}
+
+                <div className="mt-4 flex flex-col gap-4">
+                    <h1>TODO!</h1>
+
+                    {Array.from(new Array(10)).map((_, _id) => {
+                        // Random time ago increased as we go down the list in ms
+                        const randomTimeAgo = _id * 1000 * 60 * 60 * 24 * 7 + 1000;
+
+                        // TODO: Move this to the right file
+                        const characters = '234567CDFGHJKLMNPQRTVWXYZ';
+                        function getLuhnCheckDigit(partialIdentifier: { [x: string]: any }) {
+                            // Create a mapping of characters to their index values
+                            const valueMapping = characters
+                                .split('')
+                                .reduce((accumulator: { [key: string]: number }, character, index) => {
+                                    accumulator[character] = index;
+                                    return accumulator;
+                                }, {});
+
+                            let sum = 0;
+                            let alternate = false;
+
+                            // Iterate through the partialIdentifier characters in reverse order
+                            for(let index = partialIdentifier.length - 1; index >= 0; index--) {
+                                let number = valueMapping[partialIdentifier[index]];
+                                if(!number) return; // If the character isn't in the character set, return
+
+                                // If it's an alternate character, double its value
+                                if(alternate) {
+                                    number = number * 2;
+                                    // If the doubled value is greater than the character set length, subtract the character set length and add 1
+                                    if(number > characters.length - 1) {
+                                        number = number - characters.length + 1;
+                                    }
+                                }
+
+                                // Add the number to the sum
+                                sum += number;
+                                // Toggle the alternate flag for the next character
+                                alternate = !alternate;
+                            }
+                            return sum;
+                        }
+
+                        // TODO: Move this to the right file
+                        function generateOrderIdentifier() {
+                            let part1 = '';
+                            let part2 = '';
+                            let part3 = '';
+                            for(let i = 0; i < 3; i++) {
+                                part1 += characters.charAt(Math.floor(Math.random() * characters.length));
+                                part2 += characters.charAt(Math.floor(Math.random() * characters.length));
+                                part3 += characters.charAt(Math.floor(Math.random() * characters.length));
+                            }
+                            const partialIdentifier = `${part1}-${part2}-${part3}`;
+                            const checkDigit = getLuhnCheckDigit(partialIdentifier.split(''));
+                            return `${partialIdentifier}${checkDigit ?? '0'}`;
+                        }
+                        const orderID = generateOrderIdentifier();
+
+                        return (
+                            <ActivityLink
+                                key={_id}
+                                href="/internal/fulfillment"
+                                title={`Order ${orderID.slice(0, 3) + '...' + orderID.slice(-4)} placed`}
+                                timeAgo={randomTimeAgo}
+                            />
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Export - Default
+export default InternalHomePage;

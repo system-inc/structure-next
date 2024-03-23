@@ -1,0 +1,37 @@
+// Dependencies - Structure
+import StructureSettings from '@structure/StructureSettings';
+
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Main Components
+import { AlertInterface, Alert } from '@structure/source/common/notifications/Alert';
+
+// Dependencies - Assets
+import CloudErrorIcon from '@structure/assets/icons/status/CloudErrorIcon.svg';
+
+// Component - NotSignedIn
+export type NotConnectedProperties = {
+    alertProperties?: AlertInterface;
+};
+export function NotConnected(properties: NotConnectedProperties) {
+    // Render the component
+    return (
+        <div className="flex h-screen flex-col items-center justify-center">
+            <Alert
+                variant={'error'}
+                size={'large'}
+                icon={CloudErrorIcon}
+                title="Not Connected"
+                {...properties.alertProperties}
+            >
+                <div className="space-y-2">
+                    <p>Unable to connect to the {StructureSettings.title} servers.</p>
+                </div>
+            </Alert>
+        </div>
+    );
+}
+
+// Export - Default
+export default NotConnected;

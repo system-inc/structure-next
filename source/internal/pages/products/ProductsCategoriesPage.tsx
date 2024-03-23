@@ -1,0 +1,21 @@
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Main Components
+import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
+
+// Component - ProductsCategoriesPage
+export type ProductsCategoriesPageProperties = {};
+export function ProductsCategoriesPage(properties: ProductsCategoriesPageProperties) {
+    // Render the component
+    return (
+        <>
+            <InternalNavigationTrail />
+
+            <h1>Categories</h1>
+        </>
+    );
+}
+
+// Export - Default
+export default ProductsCategoriesPage;

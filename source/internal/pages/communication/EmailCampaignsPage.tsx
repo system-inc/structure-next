@@ -1,0 +1,29 @@
+'use client'; // This component uses client-only features
+
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Main Components
+import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
+import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
+
+// Dependencies - API
+import { emailCampaignsQueryDocument } from '@structure/source/modules/email/api/EmailDocuments';
+
+// Component - EmailCampaignsPage
+export interface EmailCampaignsPageInterface {}
+export function EmailCampaignsPage(properties: EmailCampaignsPageInterface) {
+    // Render the component
+    return (
+        <>
+            <InternalNavigationTrail />
+
+            <h1 className="mb-5">Email Campaigns</h1>
+
+            <GraphQlQueryTable queryDocument={emailCampaignsQueryDocument} />
+        </>
+    );
+}
+
+// Export - Default
+export default EmailCampaignsPage;
