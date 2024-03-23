@@ -10,6 +10,10 @@ import { usePathname } from 'next/navigation';
 // Dependencies - Main Components
 import InternalNavigation from '@structure/source/internal/common/navigation/InternalNavigation';
 
+// Dependencies - Hooks
+import { useCookies } from 'react-cookie';
+import { useSpring, animated, easings } from '@react-spring/web';
+
 // Dependencies - Authorization
 import ApiError from '@structure/source/common/notifications/ApiError';
 import NotConnected from '@structure/source/common/notifications/NotConnected';
@@ -25,30 +29,21 @@ import { useAccountCurrent } from '@structure/source/modules/account/Account';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 import { titleCase } from '@structure/source/utilities/String';
-import { useCookies } from 'react-cookie';
-import { useSpring, animated, easings } from '@react-spring/web';
 
 // Component - InternalLayout
-export type InternalLayoutProperties = {
+export interface InternalLayoutInterface {
     children: React.ReactNode;
-};
-export function InternalLayout(properties: InternalLayoutProperties) {
+}
+export function InternalLayout(properties: InternalLayoutInterface) {
     // Get a stateful set of cookies with the cookie name as a dependency
     const [cookies, setCookies, removeCookies] = useCookies(['internalNavigationSidebarClosed']);
     const [internalNavigationSidebarClosed, setInternalNavigationSidebarClosedState] = React.useState(
         cookies.internalNavigationSidebarClosed === 'true' ? true : false,
     );
 
-    /**
-      @function setInternalNavigationSidebarClosed
-      @description Function to set the internal navigation sidebar closed cookie
-
-      @param closed - Whether the internal navigation sidebar is closed
-      @param withCookie - Whether to update the cookie to reflect the state
-      @returns void
-    */
+    // Function to set the internal navigation sidebar closed cookie
     const setInternalNavigationSidebarClosed = React.useCallback(
-        (closed: boolean, withCookie?: boolean) => {
+        function (closed: boolean, withCookie?: boolean) {
             setInternalNavigationSidebarClosedState(closed);
 
             if(withCookie) {
@@ -63,29 +58,36 @@ export function InternalLayout(properties: InternalLayoutProperties) {
         [setCookies, removeCookies],
     );
 
-    const [bodySpring, bodySpringControl] = useSpring(() => ({
-        paddingLeft: internalNavigationSidebarClosed ? '0rem' : '18rem',
-        config: {
-            easing: easings.easeInOutQuart,
-            duration: 300,
-        },
-    }));
-    // Animate the body padding when the internal navigation sidebar is opened or closed
-    React.useEffect(() => {
-        // If the window is mobile sizing, don't animate the body padding (768px is the medium breakpoint in tailwindcss)
-        if(window.innerWidth < 768) {
-            return;
-        }
-
-        // Otherwise, animate the body padding based on the internal navigation sidebar state
-        bodySpringControl.start({
+    // Spring to animate the body padding when the internal navigation sidebar is opened or closed
+    const [bodySpring, bodySpringControl] = useSpring(function () {
+        return {
             paddingLeft: internalNavigationSidebarClosed ? '0rem' : '18rem',
             config: {
                 easing: easings.easeInOutQuart,
                 duration: 300,
             },
-        });
-    }, [internalNavigationSidebarClosed, bodySpringControl]);
+        };
+    });
+
+    // Animate the body padding when the internal navigation sidebar is opened or closed
+    React.useEffect(
+        function () {
+            // If the window is mobile sizing, don't animate the body padding (768px is the medium breakpoint in tailwindcss)
+            if(window.innerWidth < 768) {
+                return;
+            }
+
+            // Otherwise, animate the body padding based on the internal navigation sidebar state
+            bodySpringControl.start({
+                paddingLeft: internalNavigationSidebarClosed ? '0rem' : '18rem',
+                config: {
+                    easing: easings.easeInOutQuart,
+                    duration: 300,
+                },
+            });
+        },
+        [internalNavigationSidebarClosed, bodySpringControl],
+    );
 
     // Resize event listener for the internal navigation sidebar
     // If the window is resized to mobile sizing, close the internal navigation sidebar
@@ -183,7 +185,7 @@ export function InternalLayout(properties: InternalLayoutProperties) {
     return (
         <>
             {/* Dynamically set the title this way for now, there should be a better way */}
-            <title>{title}</title>
+            {/* <title>{title}</title> */}
 
             {/* Navigation */}
             <InternalNavigation

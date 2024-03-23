@@ -84,6 +84,7 @@ export function RootLayout(properties: RootLayoutProperties) {
                     }
                 />
             </head>
+
             <body className="min-h-screen text-dark transition-colors dark:bg-dark dark:text-white">
                 {/* Providers pass properties down to children */}
                 <Providers>
