@@ -319,7 +319,8 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
                 filter={true}
                 // filters={properties.filters}
                 pagination={pagination}
-                loading={queryState.loading || !queryState.data}
+                loading={queryState.loading || (!queryState.error && !queryState.data)}
+                error={queryState.error as ApolloError}
             />
 
             {relations && relationsRows.length > 0 && (

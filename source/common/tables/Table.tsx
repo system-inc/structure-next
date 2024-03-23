@@ -56,8 +56,13 @@ export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
     // Pagination
     pagination?: PaginationInterface;
 
-    // Loading
+    // States
     loading?: boolean;
+    error?: {
+        code?: string;
+        message?: string;
+        url?: string;
+    };
 }
 export function Table(properties: TableInterface) {
     // Hooks
@@ -424,6 +429,11 @@ export function Table(properties: TableInterface) {
                     // Loading
                     <div className="flex items-center justify-center">
                         <div className="p-8 text-sm">Loading...</div>
+                    </div>
+                ) : properties.error ? (
+                    // Error
+                    <div className="flex items-center justify-center">
+                        <div className="p-8 text-sm">Error: {properties.error.message}</div>
                     </div>
                 ) : (
                     // Loaded
