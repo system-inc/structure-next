@@ -6,7 +6,7 @@ import { Options as NextUseQueryStateOptions } from 'next-usequerystate';
 import { DataSourceType, DataSourceWithMetricsType } from './Metrics';
 import DataSource from './DataSource';
 
-import { TimeInterval } from '@project/source/graphql/generated/graphql';
+import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Supporting Components
 import { Button } from '@structure/source/common/interactions/Button';

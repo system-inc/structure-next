@@ -1,5 +1,5 @@
 // Dependencies
-import { graphql } from '@project/source/graphql/generated';
+import { graphql } from '@project/source/api/GraphQlGeneratedCode';
 
 // Document - Email Campaigns Query
 export const emailCampaignsQueryDocument = graphql(`

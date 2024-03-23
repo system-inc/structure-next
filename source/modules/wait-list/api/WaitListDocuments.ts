@@ -1,5 +1,5 @@
 // Dependencies
-import { graphql } from '@project/source/graphql/generated';
+import { graphql } from '@project/source/api/GraphQlGeneratedCode';
 
 // Document - Wait List Entries Query
 // export const waitListEntriesQueryDocument = graphql(`

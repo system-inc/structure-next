@@ -33,7 +33,7 @@ import {
     differenceInYears,
 } from 'date-fns';
 
-import { TimeInterval } from '@project/source/graphql/generated/graphql';
+import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
 
 // Fills in missing interval values with zeroes
 export function fillMissingIntervalValuesWithZeroes(

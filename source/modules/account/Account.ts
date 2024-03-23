@@ -15,7 +15,7 @@ import {
     AccountSession,
     AccountStatus,
     Profile,
-} from '@project/source/graphql/generated/graphql';
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Class - Account
 export class Account {

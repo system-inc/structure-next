@@ -13,7 +13,7 @@ import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - API
-import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/graphql/generated/graphql';
+import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';

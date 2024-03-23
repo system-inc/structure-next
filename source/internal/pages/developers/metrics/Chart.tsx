@@ -27,7 +27,7 @@ import { useTheme } from '@structure/source/styles/ThemeProvider';
 
 // Dependencies - Utilities
 import useMeasure from 'react-use-measure';
-import { TimeInterval } from '@project/source/graphql/generated/graphql';
+import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
 import { addCommas } from '@structure/source/utilities/Number';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 

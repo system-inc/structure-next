@@ -18,7 +18,7 @@ import {
     dataInteractionDatabaseTablesQueryDocument,
     dataInteractionDatabaseTableMetricsQueryDocument,
 } from '@structure/source/modules/data-interaction/api/DataInteractionDocuments';
-import { TimeInterval } from '@project/source/graphql/generated/graphql';
+import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import DragIcon from '@structure/assets/icons/interface/DragIcon.svg';

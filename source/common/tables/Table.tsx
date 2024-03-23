@@ -14,7 +14,7 @@ import { InputMultipleSelect } from '@structure/source/common/forms/InputMultipl
 import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
 import { PaginationInterface, Pagination } from '@structure/source/common/interactions/Pagination';
 import { ColumnFilterGroup, ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
-import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/graphql/generated/graphql';
+import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import FilterIcon from '@structure/assets/icons/interface/FilterIcon.svg';

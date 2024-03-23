@@ -21,7 +21,7 @@ import { MenuItemInterface } from '@structure/source/common/interactions/MenuIte
 
 // Dependencies - API
 import { useApolloClient } from '@apollo/client';
-import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/graphql/generated/graphql';
+import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import MinusIcon from '@structure/assets/icons/interface/MinusIcon.svg';
@@ -37,7 +37,7 @@ import {
     convertIntervalValueToDate,
     calculateTimeIntervalValueStartAndEndDate,
 } from '@structure/source/utilities/ChartData';
-import { TimeInterval } from '@project/source/graphql/generated/graphql';
+import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
 import {
     // Adding and subtracting time
     addHours,
