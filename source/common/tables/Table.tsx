@@ -207,17 +207,30 @@ export function Table(properties: TableInterface) {
         function () {
             // Determine if the header row is selected
             let selected = false;
-            if(rows.length > 0) {
-                let allVisibleRowsSelected = true;
+            let thereAreVisibleRows = false;
+            let allVisibleRowsAreSelected = true;
 
-                // Loop through all of the rows and check if they are all visible and selected
-                rows.forEach(function (row, rowIndex) {
-                    if(row.visible && !selectedRowsIndexesSet.has(rowIndex)) {
-                        allVisibleRowsSelected = false;
+            // Loop through all of the rows and check if they are all visible and selected
+            rows.forEach(function (row, rowIndex) {
+                // If the row is visible
+                if(row.visible) {
+                    // Increment the visible rows count
+                    thereAreVisibleRows = true;
+
+                    // If the row is not selected
+                    if(!selectedRowsIndexesSet.has(rowIndex)) {
+                        // Not all visible rows are selected
+                        allVisibleRowsAreSelected = false;
+
+                        // Break out of the loop
+                        return;
                     }
-                });
+                }
+            });
 
-                selected = allVisibleRowsSelected;
+            // If there are visible rows and all visible rows are selected
+            if(thereAreVisibleRows && allVisibleRowsAreSelected) {
+                selected = true;
             }
 
             return {
