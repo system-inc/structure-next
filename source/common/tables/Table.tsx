@@ -108,6 +108,7 @@ export function Table(properties: TableInterface) {
 
         return initialVisibleColumnIndexesSet;
     });
+    const [searchTerm, setSearchTerm] = React.useState<string>('');
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
 
     // Columns
@@ -129,7 +130,7 @@ export function Table(properties: TableInterface) {
     const rows = React.useMemo(
         function () {
             return properties.rows.map(function (row, rowIndex) {
-                return {
+                const updatedRow = {
                     ...row,
                     type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
                     cells: row.cells
@@ -161,14 +162,64 @@ export function Table(properties: TableInterface) {
                         }
                     },
                 };
+
+                let rowVisible = true;
+
+                // If there is a search term
+                if(searchTerm !== '') {
+                    // Start out with the row hidden
+                    rowVisible = false;
+
+                    // Loop over each cell
+                    updatedRow.cells.forEach(function (cell) {
+                        // If the cell not hidden and the cell value includes the search term
+                        if(
+                            !cell.column?.hidden &&
+                            cell.value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                        ) {
+                            // Show the row
+                            rowVisible = true;
+
+                            // Break out of the loop
+                            return;
+                        }
+                    });
+                }
+
+                // Set the row visibility
+                updatedRow.visible = rowVisible;
+
+                return updatedRow;
             });
         },
-        [columns, properties.rows, properties.rowSelection, selectedRowsIndexesSet, visibleColumnsIndexesSet],
+        [
+            columns,
+            properties.rows,
+            properties.rowSelection,
+            selectedRowsIndexesSet,
+            visibleColumnsIndexesSet,
+            searchTerm,
+        ],
     );
 
     // Column TableRow properties
     const columnTableRowProperties = React.useMemo(
         function () {
+            // Determine if the header row is selected
+            let selected = false;
+            if(rows.length > 0) {
+                let allVisibleRowsSelected = true;
+
+                // Loop through all of the rows and check if they are all visible and selected
+                rows.forEach(function (row, rowIndex) {
+                    if(row.visible && !selectedRowsIndexesSet.has(rowIndex)) {
+                        allVisibleRowsSelected = false;
+                    }
+                });
+
+                selected = allVisibleRowsSelected;
+            }
+
             return {
                 type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
                 cells: columns
@@ -181,13 +232,15 @@ export function Table(properties: TableInterface) {
                         };
                     }),
                 selection: properties.rowSelection,
-                selected: selectedRowsIndexesSet.size === rows.length && rows.length > 0,
+                selected: selected,
                 onSelectChange: function (row: TableRowInterface, event: React.ChangeEvent<HTMLInputElement>) {
-                    // If the header row is selected, select all
+                    // If the header row is selected, select all visible rows
                     if(event.target.checked) {
                         setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
                             rows.forEach(function (row, rowIndex) {
-                                selectedRowsIndexes.add(rowIndex);
+                                if(row.visible) {
+                                    selectedRowsIndexes.add(rowIndex);
+                                }
                             });
                             return new Set(selectedRowsIndexes);
                         });
@@ -202,7 +255,7 @@ export function Table(properties: TableInterface) {
                 },
             };
         },
-        [rows, columns, , properties.rowSelection, selectedRowsIndexesSet.size],
+        [rows, columns, properties.rowSelection, selectedRowsIndexesSet],
     );
 
     // Defaults
@@ -313,33 +366,6 @@ export function Table(properties: TableInterface) {
         [onFiltersChange],
     );
 
-    // Function to handle search
-    // const search = React.useCallback(
-    //     function (search: string) {
-    //         // Show all rows if the search is empty
-    //         if(search === '') {
-    //             setVisibleRows(properties.rows);
-    //         }
-    //         // Otherwise, filter the rows
-    //         else {
-    //             // Loop over all of the rows
-    //             const newVisibleRows = properties.rows.filter(function (row) {
-    //                 // Loop over the visible columns
-    //                 for(const visibleColumn of visibleColumns) {
-    //                     const columnIndex = properties.columns?.indexOf(visibleColumn)!;
-    //                     const cellValue = row[columnIndex];
-    //                     if(cellValue?.toString().toLowerCase().includes(search.toLowerCase())) {
-    //                         return true;
-    //                     }
-    //                 }
-    //             });
-
-    //             setVisibleRows(newVisibleRows);
-    //         }
-    //     },
-    //     [properties.rows, properties.columns, visibleColumns],
-    // );
-
     // Render the component
     return (
         <>
@@ -357,9 +383,7 @@ export function Table(properties: TableInterface) {
                                     value: string | undefined,
                                     event: React.ChangeEvent<HTMLInputElement>,
                                 ) {
-                                    if(value !== undefined) {
-                                        // search(value);
-                                    }
+                                    setSearchTerm(value || '');
                                 }}
                             />
                         )}
@@ -377,6 +401,7 @@ export function Table(properties: TableInterface) {
                         )}
                     </div>
 
+                    {/* Filters - Column Filter Group */}
                     {filtersEnabled && filtersReference.current && (
                         <div className="mt-4 flex">
                             <ColumnFilterGroup
@@ -472,9 +497,13 @@ export function Table(properties: TableInterface) {
                         {/* Rows */}
                         {rows && rows.length > 0 ? (
                             <tbody>
-                                {rows.map(function (row, rowIndex) {
-                                    return <TableRow key={rowIndex} {...row} />;
-                                })}
+                                {rows
+                                    .filter(function (row, rowIndex) {
+                                        return row.visible;
+                                    })
+                                    .map(function (row, rowIndex) {
+                                        return <TableRow key={rowIndex} {...row} />;
+                                    })}
                             </tbody>
                         ) : (
                             // No rows

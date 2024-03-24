@@ -13,6 +13,7 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElement> {
     cells: TableHeaderCellInterface[] | TableCellInterface[];
     type?: 'Header' | 'Body' | 'Footer';
+    visible?: boolean;
 
     // Selection
     selection?: boolean;
