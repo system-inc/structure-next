@@ -43,6 +43,7 @@ export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
 
     // Search
     search?: boolean;
+    searchTerm?: string;
 
     // Filters
     filter?: boolean;
@@ -108,7 +109,7 @@ export function Table(properties: TableInterface) {
 
         return initialVisibleColumnIndexesSet;
     });
-    const [searchTerm, setSearchTerm] = React.useState<string>('');
+    const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
 
     // Columns
@@ -392,6 +393,7 @@ export function Table(properties: TableInterface) {
                                 variant="search"
                                 placeholder="Filter visible rows..."
                                 autoComplete="off"
+                                defaultValue={properties.searchTerm}
                                 onChange={function (
                                     value: string | undefined,
                                     event: React.ChangeEvent<HTMLInputElement>,
