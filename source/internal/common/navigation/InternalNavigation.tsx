@@ -247,6 +247,7 @@ export function InternalNavigation(properties: InternalNavigationInterface) {
                                     alt="Logo"
                                     height={28} // h-7 = 28px
                                     width={28} // h-7 = 28px
+                                    priority={true}
                                 />
                             </Link>
                         </div>

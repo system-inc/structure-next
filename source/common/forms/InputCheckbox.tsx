@@ -86,18 +86,18 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
     const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
         function (inputCheckBoxState: InputCheckboxState, event: any) {
-            console.log('InputCheckbox.tsx value changed:', inputCheckBoxState);
-            let newValue = inputCheckBoxState;
+            // console.log('InputCheckbox.tsx value changed:', inputCheckBoxState);
+            let newInputCheckboxState = inputCheckBoxState;
 
             // If the value is not undefined
-            if(newValue !== undefined) {
+            if(newInputCheckboxState !== undefined) {
                 // Set the new value
-                setValue(newValue);
+                setValue(newInputCheckboxState);
             }
 
             // Call the onChange callback if it exists
             if(propertiesOnChange) {
-                propertiesOnChange(newValue, event);
+                propertiesOnChange(newInputCheckboxState, event);
             }
         },
         [propertiesOnChange],

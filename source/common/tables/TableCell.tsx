@@ -30,7 +30,26 @@ export function TableCell(properties: TableCellInterface) {
     // console.log('properties.value', properties.value);
 
     // Set the content
-    let content = properties.children || properties.value;
+    let content;
+
+    // Wrap the children in a span if it is a string
+    // This is so we can listen for clicks the row to select it
+    if(properties.children) {
+        if(typeof properties.children === 'string') {
+            content = <span>{properties.children}</span>;
+        }
+        else {
+            content = properties.children;
+        }
+    }
+    else if(properties.value) {
+        if(properties.url === undefined) {
+            content = <span>{properties.value}</span>;
+        }
+        else {
+            content = properties.value;
+        }
+    }
 
     // If we have a value
     if(properties.value) {

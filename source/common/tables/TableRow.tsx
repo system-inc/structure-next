@@ -28,6 +28,26 @@ export function TableRow(properties: TableRowInterface) {
     let CellComponent = type === 'Header' || type === 'Footer' ? TableHeaderCell : TableCell;
     // console.log('cells', cells);
 
+    // Function to intercept the onClick event
+    const onClickIntercept = React.useCallback(
+        function (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>) {
+            // If the click originated from a td elemement
+            if((event.target as HTMLElement).tagName === 'TD') {
+                // Select the row
+                if(properties.onSelectChange) {
+                    // console.log('Toggling row selection');
+                    properties.onSelectChange(properties, !properties.selected);
+                }
+            }
+
+            // Call the onChange callback if it exists
+            if(properties.onClick) {
+                properties.onClick(event);
+            }
+        },
+        [properties],
+    );
+
     // Render the component
     return (
         <tr
@@ -35,12 +55,14 @@ export function TableRow(properties: TableRowInterface) {
                 'h-10 border-b border-light-6 text-sm last:border-b-0 hover:bg-light-1 dark:border-dark-4 dark:hover:bg-dark-1',
                 properties.className,
             )}
+            onClick={properties.selection ? onClickIntercept : undefined}
         >
             {/* Selection */}
             {properties.selection && (
                 <CellComponent className="w-4 px-2 py-1 text-left">
                     <InputCheckbox
                         key={properties.selected ? 'selected' : 'unselected'}
+                        tabIndex={0}
                         defaultValue={properties.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
                         onChange={function (value, event) {
                             if(properties.onSelectChange) {
