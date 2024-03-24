@@ -133,7 +133,8 @@ export function InternalNavigation(properties: InternalNavigationInterface) {
             // Links besides the root link
             else if(internalNavigationLink.title !== 'Home') {
                 internalNavigationLink.active =
-                    internalNavigationLink.href === urlPathname || urlPathname.includes(internalNavigationLink.href);
+                    internalNavigationLink.href === urlPathname ||
+                    urlPathname.includes(internalNavigationLink.href + '/');
             }
 
             // If the link is a group, recursively set the active flag on the links
@@ -151,7 +152,7 @@ export function InternalNavigation(properties: InternalNavigationInterface) {
         function () {
             return (
                 <ul role="list" className="-mx-2 space-y-0.5">
-                    {memoizedInternalNavigationLinks.map((internalNavigationLink) => {
+                    {memoizedInternalNavigationLinks.map(function (internalNavigationLink) {
                         // Check if the item is a group
                         if(internalNavigationLink.links) {
                             // Return a collapsible group

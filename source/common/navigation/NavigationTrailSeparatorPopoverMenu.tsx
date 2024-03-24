@@ -32,19 +32,26 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
     return (
         <PopoverMenu
             {...properties}
-            items={properties.links.map((link) => ({
-                content: link.title,
-                href: link.href,
-                className: 'cursor-pointer w-full',
-                onChange: (event) => {
-                    // console.log('selected me!', link.href, event);
-                    // Close the popover immediately for a better navigation experience
-                    setOpen(false);
-                },
-                selected: urlPathname.startsWith(link.href),
-                icon: urlPathname.startsWith(link.href) ? CheckIcon : undefined,
-                iconPosition: 'left',
-            }))}
+            items={properties.links.map(function (link) {
+                // Use trailing slashes for comparison to prevent issues with comparing paths like /data and /database
+                const linkWithTrailingSlash = link.href.endsWith('/') ? link.href : link.href + '/';
+                const urlPathnameWithTrailingSlash = urlPathname.endsWith('/') ? urlPathname : urlPathname + '/';
+                const selected = urlPathnameWithTrailingSlash.startsWith(linkWithTrailingSlash);
+
+                return {
+                    content: link.title,
+                    href: link.href,
+                    className: 'cursor-pointer w-full',
+                    onChange: (event) => {
+                        // console.log('selected me!', link.href, event);
+                        // Close the popover immediately for a better navigation experience
+                        setOpen(false);
+                    },
+                    selected: selected,
+                    icon: selected ? CheckIcon : undefined,
+                    iconPosition: 'left',
+                };
+            })}
             search={true}
             popoverProperties={{
                 ...properties.popoverProperties,
