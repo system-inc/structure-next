@@ -30,7 +30,7 @@ export function TableCell(properties: TableCellInterface) {
     // console.log('properties.value', properties.value);
 
     // Set the content
-    let content = properties.value || properties.children;
+    let content = properties.children || properties.value;
 
     // If we have a value
     if(properties.value) {

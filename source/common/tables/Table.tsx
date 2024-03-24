@@ -211,31 +211,55 @@ export function Table(properties: TableInterface) {
             return (
                 properties.rowsSelectionActions ||
                 // Use the default table rows actions if no actions are provided
-                defaultTableRowsActions.map(function (tableRowsAction) {
-                    return {
-                        content: tableRowsAction.action,
-                        onSelected: async function () {
-                            // Get the selected rows, must use properties.rows here to get the original rows
-                            // If we use rows, they will have filtered cells
-                            const selectedRows = properties.rows.filter(function (row, rowIndex) {
-                                return selectedRowsIndexesSet.has(rowIndex);
-                            });
+                defaultTableRowsActions
+                    // Filter out the actions that are for visible columns only
+                    .filter(function (tableRowsAction) {
+                        let showTableRowsAction = true;
 
-                            // Execute the action function
-                            await tableRowsAction.actionFunction(selectedRows, columns);
+                        // If the action is for visible columns only
+                        if(tableRowsAction.action.includes('(Visible Columns Only)')) {
+                            // If column visibility is disabled or if all columns are visible already
+                            if(!properties.columnVisibility || visibleColumnsIndexesSet.size === columns.length) {
+                                // Do not show Visible Columns actions
+                                showTableRowsAction = false;
+                            }
+                        }
 
-                            // Show a notice
-                            addNotice({
-                                title: tableRowsAction.notice.title,
-                                content: tableRowsAction.notice.content,
-                            });
-                        },
-                        closeMenuOnSelect: true,
-                    };
-                })
+                        return showTableRowsAction;
+                    })
+                    .map(function (tableRowsAction) {
+                        return {
+                            content: tableRowsAction.action,
+                            onSelected: async function () {
+                                // Get the selected rows, must use properties.rows here to get the original rows
+                                // If we use rows, they will have filtered cells
+                                const selectedRows = properties.rows.filter(function (row, rowIndex) {
+                                    return selectedRowsIndexesSet.has(rowIndex);
+                                });
+
+                                // Execute the action function
+                                await tableRowsAction.actionFunction(selectedRows, columns);
+
+                                // Show a notice
+                                addNotice({
+                                    title: tableRowsAction.notice.title,
+                                    content: tableRowsAction.notice.content,
+                                });
+                            },
+                            closeMenuOnSelect: true,
+                        };
+                    })
             );
         },
-        [properties.rows, properties.rowsSelectionActions, columns, selectedRowsIndexesSet, addNotice],
+        [
+            properties.rows,
+            properties.rowsSelectionActions,
+            selectedRowsIndexesSet,
+            columns,
+            properties.columnVisibility,
+            visibleColumnsIndexesSet.size,
+            addNotice,
+        ],
     );
 
     // Function to handle visible columns change

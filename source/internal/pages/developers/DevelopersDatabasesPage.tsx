@@ -2,102 +2,115 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useQueryState as useUrlQueryState, parseAsInteger, parseAsJson } from 'next-usequerystate';
-import { useSearchParams as useUrlSearchParameters } from 'next/navigation';
 
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
-import DatabaseAndTableFormInputSelects from '@structure/source/internal/pages/developers/databases/DatabaseAndTableFormInputSelects';
-import Button from '@structure/source/common/interactions/Button';
-import RefreshButton from '@structure/source/common/interactions/RefreshButton';
-import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
-import { ColumnFilterGroupDataInterface, ColumnFilterGroup } from '@structure/source/common/tables/ColumnFilterGroup';
+import Table from '@structure/source/common/tables/Table';
+import { TableRowInterface } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
-import { useApolloClient } from '@apollo/client';
-import { dataInteractionDatabaseTableRowsQueryDocument } from '@structure/source/modules/data-interaction/api/DataInteractionDocuments';
+import { useSuspenseQuery } from '@apollo/client';
+import { dataInteractionDatabaseTablesQueryDocument } from '@structure/source/modules/data-interaction/api/DataInteractionDocuments';
 
-// Dependencies - Assets
-import BarGraphIcon from '@structure/assets/icons/analytics/BarGraphIcon.svg';
-import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
+// Dependencies - Utilities
+import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - DatabasePage
 export interface DevelopersDatabasePageInterface {}
 export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterface) {
-    // Use the Apollo Client for refetching queries with the refresh button
-    const apolloClient = useApolloClient();
+    // Get the databases and tables from the GraphQL API
+    const dataInteractionDatabaseTablesQueryState = useSuspenseQuery(dataInteractionDatabaseTablesQueryDocument, {
+        variables: {
+            pagination: {
+                itemsPerPage: 1000,
+            },
+        },
+    });
 
-    // State
-    const [databaseName, setDatabaseName] = React.useState<string | undefined>(undefined);
-    const [tableName, setTableName] = React.useState<string | undefined>(undefined);
+    // Extract databases and tables from the query
+    const databasesAndTables = React.useMemo(
+        function () {
+            // Data structure for the databases and tables
+            const databasesAndTablesObject: { [databaseName: string]: { tableName: string; rowCount: number }[] } = {};
 
-    // URL parameters
-    const [databaseNameUrlParameter, setDatabaseNameUrlParameter] = useUrlQueryState('databaseName');
-    const [tableNameUrlParameter, setTableNameUrlParameter] = useUrlQueryState('tableName');
-    const [paginationItemsPerPageUrlParameter, setPaginationItemsPerPageUrlParameter] = useUrlQueryState<number>(
-        'itemsPerPage',
-        parseAsInteger,
+            // Loop over the query results with a reference to the index
+            dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items.forEach(
+                function (item, index) {
+                    // Create the entry for the database if it doesn't exist
+                    if(!databasesAndTablesObject[item.databaseName]) {
+                        databasesAndTablesObject[item.databaseName] = [];
+                    }
+
+                    databasesAndTablesObject[item.databaseName]?.push({
+                        tableName: item.tableName,
+                        rowCount: item.rowCount,
+                    });
+                },
+            );
+
+            return databasesAndTablesObject;
+        },
+        [dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items],
     );
-    const [paginationPageUrlParameter, setPaginationPageUrlParameter] = useUrlQueryState<number>(
-        'page',
-        parseAsInteger,
-    );
-    const [filtersUrlParameter, setFiltersUrlParameter] = useUrlQueryState<ColumnFilterGroupDataInterface>(
-        'filters',
-        parseAsJson<ColumnFilterGroupDataInterface>(),
-    );
-    // console.log('filtersUrlParameter', filtersUrlParameter);
+
+    // console.log('databasesAndTables', databasesAndTables);
 
     // Render the component
     return (
         <>
-            <InternalNavigationTrail />
-            {/* <div className="mb-4 flex">
-                <div className="flex-grow"></div>
-                <div className="flex space-x-2">
-                    <RefreshButton
-                        className="mt-[22px]"
-                        size={'formInputIcon'}
-                        onClick={async () => {
-                            await apolloClient.refetchQueries({
-                                include: 'active',
-                            });
-                        }}
-                    />
-                </div>
-            </div> */}
-            Now just use the graphql call to get the databases and their tables and record counts
-            <GraphQlQueryTable
-                key={databaseName ? databaseName : '' + tableName ? tableName : ''}
-                queryDocument={dataInteractionDatabaseTableRowsQueryDocument}
-                skip={!databaseName || !tableName} // Skip if we don't have a database or table
-                variables={{
-                    databaseName: databaseName,
-                    tableName: tableName,
-                    filters:
-                        filtersUrlParameter &&
-                        filtersUrlParameter.conditions.length > 0 &&
-                        filtersUrlParameter.conditions[0]?.value
-                            ? filtersUrlParameter
-                            : undefined,
-                }}
-                filters={filtersUrlParameter ?? undefined}
-                // onFiltersChange={function (filters: ColumnFilterGroupDataInterface) {
-                //     // console.log('onFiltersChange', filters);
-                //     setFiltersUrlParameter(filters);
-                // }}
-                sortable={true}
-                pagination={{
-                    itemsPerPage: paginationItemsPerPageUrlParameter ?? undefined,
-                    page: paginationPageUrlParameter ?? undefined,
-                    onChange: async function (itemsPerPage: number, page: number) {
-                        console.log('pagination onChange', itemsPerPage, page);
-                        setPaginationItemsPerPageUrlParameter(itemsPerPage);
-                        setPaginationPageUrlParameter(page);
-                    },
-                }}
-                hideTypeColumns={false}
-            />
+            <React.Suspense>
+                <InternalNavigationTrail />
+
+                {dataInteractionDatabaseTablesQueryState.error ? (
+                    // Error
+                    <p>Error: {dataInteractionDatabaseTablesQueryState.error.message}</p>
+                ) : Object.keys(databasesAndTables).length === 0 ? (
+                    // No databases found
+                    <p>No databases found.</p>
+                ) : (
+                    // Databases and tables
+                    Object.keys(databasesAndTables).map(function (databaseName) {
+                        return (
+                            <div key={databaseName} className="mb-8 mt-6">
+                                <h2 className="mb-6">{databaseName}</h2>
+
+                                <Table
+                                    columns={[
+                                        {
+                                            title: 'Table Name',
+                                            identifier: 'tableName',
+                                        },
+                                        {
+                                            title: 'Row Count',
+                                            identifier: 'rowCount',
+                                        },
+                                    ]}
+                                    rows={
+                                        databasesAndTables[databaseName]?.map(function (table) {
+                                            return {
+                                                cells: [
+                                                    {
+                                                        value: table.tableName,
+                                                        url: `/internal/developers/data?page=1&databaseName=${databaseName}&tableName=${table.tableName}`,
+                                                        openUrlInNewTab: true,
+                                                    },
+                                                    {
+                                                        children: addCommas(table.rowCount),
+                                                        value: table.rowCount,
+                                                    },
+                                                ],
+                                            } as TableRowInterface;
+                                        }) || []
+                                    }
+                                    search={true}
+                                    rowSelection={true}
+                                    sortable={true}
+                                />
+                            </div>
+                        );
+                    })
+                )}
+            </React.Suspense>
         </>
     );
 }

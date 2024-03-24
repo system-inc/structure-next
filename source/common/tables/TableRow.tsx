@@ -37,7 +37,7 @@ export function TableRow(properties: TableRowInterface) {
         >
             {/* Selection */}
             {properties.selection && (
-                <CellComponent className="px-2 py-1 text-left">
+                <CellComponent className="w-4 px-2 py-1 text-left">
                     <input
                         type="checkbox"
                         checked={properties.selected}
