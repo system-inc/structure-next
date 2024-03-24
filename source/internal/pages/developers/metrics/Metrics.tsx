@@ -10,14 +10,14 @@ import Chart from './Chart';
 import DataSources from './DataSources';
 
 // Dependencies - Supporting Components
-import Button from '@structure/source/common/interactions/Button';
-import { TimeRangeType } from '@structure/source/common/forms/time/TimeRange';
+import Button from '@structure/source/common/buttons/Button';
+import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import { FormInputTimeRange } from '@structure/source/common/forms/FormInputTimeRange';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
-import RefreshButton from '@structure/source/common/interactions/RefreshButton';
-import Dialog from '@structure/source/common/interactions/dialog/Dialog';
-import { ContextMenu } from '@structure/source/common/interactions/ContextMenu';
-import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
+import RefreshButton from '@structure/source/common/buttons/RefreshButton';
+import Dialog from '@structure/source/common/dialogs/Dialog';
+import { ContextMenu } from '@structure/source/common/menus/ContextMenu';
+import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
 import { useApolloClient } from '@apollo/client';

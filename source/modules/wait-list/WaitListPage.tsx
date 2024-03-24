@@ -11,7 +11,7 @@ import AccountMenuButton from '@structure/source/modules/account/AccountMenuButt
 import WaitListForm from '@structure/source/modules/wait-list/WaitListForm';
 
 // Testing
-import Button from '@structure/source/common/interactions/Button';
+import Button from '@structure/source/common/buttons/Button';
 import StarsIcon from '@structure/assets/icons/nature/StarsIcon.svg';
 
 // Component - WaitListPage

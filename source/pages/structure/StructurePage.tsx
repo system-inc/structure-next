@@ -5,22 +5,23 @@ import React from 'react';
 
 // Dependencies - Main Components
 import AccountMenuButton from '@structure/source/modules/account/AccountMenuButton';
-import Button from '@structure/source/common/interactions/Button';
-import Menu from '@structure/source/common/interactions/Menu';
-import PopoverMenu from '@structure/source/common/interactions/PopoverMenu';
+import Button from '@structure/source/common/buttons/Button';
+import Menu from '@structure/source/common/menus/Menu';
+import PopoverMenu from '@structure/source/common/popovers/PopoverMenu';
 import Alert from '@structure/source/common/notifications/Alert';
 import FormInputText from '@structure/source/common/forms/FormInputText';
 import InputSelect from '@structure/source/common/forms/InputSelect';
 import InputMultipleSelect from '@structure/source/common/forms/InputMultipleSelect';
+import { InputCheckboxState, InputCheckbox } from '@structure/source/common/forms/InputCheckbox';
 import FormInputSelect from '@structure/source/common/forms/FormInputSelect';
 import { Form } from '@structure/source/common/forms/Form';
 import { DatabaseAndTableFormInputSelects } from '@structure/source/internal/pages/developers/databases/DatabaseAndTableFormInputSelects';
 import { FormInputDate } from '@structure/source/common/forms/FormInputDate';
 import { InputDate } from '@structure/source/common/forms/InputDate';
 import { InputTimeRange } from '@structure/source/common/forms/InputTimeRange';
-import { Calendar } from '@structure/source/common/forms/time/Calendar';
+import { Calendar } from '@structure/source/common/time/Calendar';
 import { Table } from '@structure/source/common/tables/Table';
-import { Tip } from '@structure/source/common/notifications/Tip';
+import { Tip } from '@structure/source/common/popovers/Tip';
 import ChevronsUpDownIcon from '@structure/assets/icons/interface/ChevronsUpDownIcon.svg';
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 
@@ -310,6 +311,8 @@ export function StructurePage(properties: StructurePageInterface) {
                 {/* Header */}
                 <h1 className="mb-10">Interface</h1>
 
+                <InputCheckbox defaultValue={InputCheckboxState.Indeterminate} />
+
                 {/* <Table
                     columns={[]}
                     rows={[]}
@@ -329,7 +332,7 @@ export function StructurePage(properties: StructurePageInterface) {
                     }}
                 /> */}
 
-                <Table
+                {/* <Table
                     columns={[
                         {
                             title: 'ID',
@@ -401,7 +404,7 @@ export function StructurePage(properties: StructurePageInterface) {
                             console.log('page', page);
                         },
                     }}
-                />
+                /> */}
 
                 {/* <FormInputDate
                     label="Birth Date"

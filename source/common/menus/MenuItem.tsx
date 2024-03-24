@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';

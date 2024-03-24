@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { DayPicker as ReactDayPicker } from 'react-day-picker';
-import { ButtonVariants } from '@structure/source/common/interactions/Button';
+import { ButtonVariants } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.svg';

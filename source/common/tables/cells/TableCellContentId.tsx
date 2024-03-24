@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { CopyTip } from '@structure/source/common/notifications/CopyTip';
+import { CopyTip } from '@structure/source/common/popovers/CopyTip';
 
 // Dependencies - Utilities
 import { truncateUniqueIdentifier } from '@structure/source/utilities/String';

@@ -7,9 +7,9 @@ import { DataSourceType, DataSourceWithMetricsType } from './Metrics';
 import { InputText } from '@structure/source/common/forms/InputText';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 import { DatabaseAndTableFormInputSelects } from '@structure/source/internal/pages/developers/databases/DatabaseAndTableFormInputSelects';
-import Button from '@structure/source/common/interactions/Button';
-import Popover from '@structure/source/common/interactions/Popover';
-import Tip from '@structure/source/common/notifications/Tip';
+import Button from '@structure/source/common/buttons/Button';
+import Popover from '@structure/source/common/popovers/Popover';
+import Tip from '@structure/source/common/popovers/Tip';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';

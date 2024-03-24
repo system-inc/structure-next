@@ -6,14 +6,14 @@ import React from 'react';
 // Dependencies - Main Components
 import { DateRange as ReactDayPickerDateRange } from 'react-day-picker';
 import { InputInterface } from '@structure/source/common/forms/Input';
-import { Calendar } from '@structure/source/common/forms/time/Calendar';
+import { Calendar } from '@structure/source/common/time/Calendar';
 import {
     TimeRangeType,
     getTimeRangePresets,
     getMatchingTimeRangePresetKey,
-} from '@structure/source/common/forms/time/TimeRange';
-import { PopoverInterface, Popover } from '@structure/source/common/interactions/Popover';
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+} from '@structure/source/common/time/TimeRange';
+import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';

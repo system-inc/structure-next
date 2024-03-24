@@ -8,7 +8,7 @@ import StructureSettings from '@structure/StructureSettings';
 // Dependencies - React and Next.js
 
 // Dependencies - Main Components
-import Button from '@structure/source/common/interactions/Button';
+import Button from '@structure/source/common/buttons/Button';
 // import { useStore } from '@structure/source/utilities/Store';
 
 // Component - RootPage

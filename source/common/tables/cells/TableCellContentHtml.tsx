@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TipIcon } from '@structure/source/common/notifications/TipIcon';
+import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Assets
 import WebIcon from '@structure/assets/icons/content/WebIcon.svg';

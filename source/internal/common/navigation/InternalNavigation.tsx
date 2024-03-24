@@ -18,7 +18,7 @@ import {
 import { InternalNavigationLinkGroup } from '@structure/source/internal/common/navigation/InternalNavigationLinkGroup';
 import AccountMenuButton from '@structure/source/modules/account/AccountMenuButton';
 import InternalDialogMenu from '@structure/source/internal/common/navigation/InternalDialogMenu';
-import Button from '@structure/source/common/interactions/Button';
+import Button from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';

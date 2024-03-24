@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import GraphQlMutationForm from '@structure/source/common/forms/GraphQlMutationForm';
+import GraphQlMutationForm from '@structure/source/api/GraphQlMutationForm';
 import Alert from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Assets

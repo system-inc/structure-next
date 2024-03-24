@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputReferenceInterface } from '@structure/source/common/forms/Input';
-import TipIcon from '@structure/source/common/notifications/TipIcon';
+import TipIcon from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';

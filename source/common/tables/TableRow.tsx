@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { TableCellInterface, TableCell } from '@structure/source/common/tables/TableCell';
 import { TableHeaderCellInterface, TableHeaderCell } from '@structure/source/common/tables/TableHeaderCell';
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+import { InputCheckboxState, InputCheckbox } from '@structure/source/common/forms/InputCheckbox';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -18,7 +18,7 @@ export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElem
     // Selection
     selection?: boolean;
     selected?: boolean;
-    onSelectChange?: (row: TableRowInterface, event: React.ChangeEvent<HTMLInputElement>) => void;
+    onSelectChange?: (row: TableRowInterface, rowSelected: boolean) => void;
 }
 export function TableRow(properties: TableRowInterface) {
     let cells = properties.cells;
@@ -39,12 +39,15 @@ export function TableRow(properties: TableRowInterface) {
             {/* Selection */}
             {properties.selection && (
                 <CellComponent className="w-4 px-2 py-1 text-left">
-                    <input
-                        type="checkbox"
-                        checked={properties.selected}
-                        onChange={function (event) {
+                    <InputCheckbox
+                        key={properties.selected ? 'selected' : 'unselected'}
+                        defaultValue={properties.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
+                        onChange={function (value, event) {
                             if(properties.onSelectChange) {
-                                properties.onSelectChange(properties, event);
+                                properties.onSelectChange(
+                                    properties,
+                                    value === InputCheckboxState.Checked ? true : false,
+                                );
                             }
                         }}
                     />

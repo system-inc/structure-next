@@ -8,7 +8,7 @@ import {
     FormInputInterface,
 } from '@structure/source/common/forms/FormInput';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';

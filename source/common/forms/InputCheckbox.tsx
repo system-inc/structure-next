@@ -1,0 +1,159 @@
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Main Components
+import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+
+// Dependencies - Assets
+import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
+import MinusIcon from '@structure/assets/icons/interface/MinusIcon.svg';
+
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Styles';
+
+// InputCheckbox - Variants
+export const InputCheckboxVariants = {
+    // Default variant
+    default:
+        // Layout and sizing
+        ``,
+};
+
+// InputCheckbox - Sizes
+export const InputCheckboxSizes = {
+    default: '',
+};
+
+// Type - InputCheckboxState
+export enum InputCheckboxState {
+    Checked = 'Checked',
+    Unchecked = 'Unchecked',
+    Indeterminate = 'Indeterminate',
+}
+
+// Interface - InputCheckboxReference
+export interface InputCheckboxReferenceInterface {
+    getValue: () => InputCheckboxState | undefined;
+    setValue: (value?: InputCheckboxState, event?: any) => void;
+    focus: () => void;
+}
+
+// Component - InputCheckbox
+export interface InputCheckboxInterface extends Omit<InputInterface, 'defaultValue' | 'onChange' | 'onBlur'> {
+    defaultValue?: InputCheckboxState;
+
+    // Events
+    onChange?: (value: InputCheckboxState | undefined, event: any) => void;
+    onBlur?: (value: InputCheckboxState | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
+
+    variant?: keyof typeof InputCheckboxVariants;
+    size?: keyof typeof InputCheckboxSizes;
+
+    buttonProperties?: ButtonInterface;
+}
+export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, InputCheckboxInterface>(function (
+    properties: InputCheckboxInterface,
+    reference: React.Ref<InputCheckboxReferenceInterface>,
+) {
+    // References
+    const buttonReference = React.useRef<HTMLButtonElement>(null);
+
+    // Defaults
+    const variant = properties.variant || 'default';
+    const size = properties.size || 'default';
+
+    // State
+    const [value, setValue] = React.useState<InputCheckboxState | undefined>(properties.defaultValue);
+
+    // Function to expose methods to parent components
+    React.useImperativeHandle(reference, function () {
+        return {
+            getValue: function () {
+                return value;
+            },
+            setValue: function (value) {
+                setValue(value);
+            },
+            focus: function () {
+                // Call the focus method on the button's DOM element
+                buttonReference.current?.focus();
+            },
+        };
+    });
+
+    // Function to handle input value changes
+    const propertiesOnChange = properties.onChange;
+    const onChangeIntercept = React.useCallback(
+        function (inputCheckBoxState: InputCheckboxState, event: any) {
+            console.log('InputCheckbox.tsx value changed:', inputCheckBoxState);
+            let newValue = inputCheckBoxState;
+
+            // If the value is not undefined
+            if(newValue !== undefined) {
+                // Set the new value
+                setValue(newValue);
+            }
+
+            // Call the onChange callback if it exists
+            if(propertiesOnChange) {
+                propertiesOnChange(newValue, event);
+            }
+        },
+        [propertiesOnChange],
+    );
+
+    // Function to handle blur events
+    const propertiesOnBlur = properties.onBlur;
+    const onBlurIntercept = React.useCallback(
+        function (event: React.FocusEvent<HTMLButtonElement>) {
+            // Run the provided form input onBlur function if provided
+            if(propertiesOnBlur) {
+                propertiesOnBlur(value, event);
+            }
+        },
+        [propertiesOnBlur, value],
+    );
+
+    // Render the component
+    return (
+        <Button
+            ref={buttonReference}
+            className={mergeClassNames('', properties.className)}
+            variant="formInputCheckbox"
+            size="formInputCheckbox"
+            disabled={properties.disabled}
+            tabIndex={properties.tabIndex ?? 1}
+            data-state={
+                value === InputCheckboxState.Checked
+                    ? 'checked'
+                    : value === InputCheckboxState.Indeterminate
+                      ? 'indeterminate'
+                      : 'unchecked'
+            }
+            {...properties.buttonProperties}
+            onBlur={onBlurIntercept}
+            onClick={function (event) {
+                onChangeIntercept(
+                    value === InputCheckboxState.Checked ? InputCheckboxState.Unchecked : InputCheckboxState.Checked,
+                    event,
+                );
+            }}
+        >
+            {value === InputCheckboxState.Checked ? (
+                // Checked
+                <CheckIcon className="h-3 w-3" />
+            ) : value === InputCheckboxState.Indeterminate ? (
+                // Indeterminate
+                <MinusIcon className="h-3 w-3" />
+            ) : // Unchecked
+            null}
+        </Button>
+    );
+});
+
+// Set the display name for the component for debugging
+InputCheckbox.displayName = 'InputCheckbox';
+
+// Export - Default
+export default InputCheckbox;

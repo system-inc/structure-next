@@ -5,7 +5,7 @@ import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 // Dependencies - Main Components
-import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/interactions/PopoverMenu';
+import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { NavigationTrailLinkInterface } from '@structure/source/common/navigation/NavigationTrail';
 
 // Dependencies - Assets

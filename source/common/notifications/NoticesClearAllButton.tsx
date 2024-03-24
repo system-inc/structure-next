@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -15,11 +15,11 @@ import { useNotice } from './NoticeProvider';
 const AnimatedButton = animated(Button);
 
 // Component - Notice
-export interface ClearAllNoticesButtonInterface extends ButtonInterface {
+export interface NoticesClearAllButtonInterface extends ButtonInterface {
     show?: boolean;
     xSpringFunction: (x: number, onRestFunction: () => void) => void;
 }
-export const ClearAllNoticesButton = React.forwardRef<HTMLButtonElement, ClearAllNoticesButtonInterface>(
+export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, NoticesClearAllButtonInterface>(
     function (properties, reference) {
         // Hooks
         const { removeAllNotices } = useNotice();
@@ -66,7 +66,7 @@ export const ClearAllNoticesButton = React.forwardRef<HTMLButtonElement, ClearAl
 );
 
 // Set the display name for debugging purposes
-ClearAllNoticesButton.displayName = 'ClearAllNoticesButton';
+NoticesClearAllButton.displayName = 'ClearAllNoticesButton';
 
 // Export - Default
-export default ClearAllNoticesButton;
+export default NoticesClearAllButton;

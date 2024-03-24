@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 // Dependencies - Main Components
-import { TipIcon } from '@structure/source/common/notifications/TipIcon';
+import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Assets
 import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';

@@ -5,8 +5,8 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { Tip } from '@structure/source/common/notifications/Tip';
-import { PopoverInterface } from '@structure/source/common/interactions/Popover';
+import { Tip } from '@structure/source/common/popovers/Tip';
+import { PopoverInterface } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -116,6 +116,22 @@ export const ButtonVariants = {
         `data-[highlighted=true]:active:bg-light-3 data-[highlighted=true]:dark:active:bg-dark-4 ` +
         // Disabled states
         `disabled:opacity-50`,
+    formInputCheckbox:
+        `${commonButton} ` +
+        // Layout and sizing
+        `flex items-center justify-center content-center ` +
+        // Border
+        `rounded-sm border border-light-6 dark:border-light ` +
+        // Text and background
+        `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
+        // Hover
+        `hover:bg-light-2 dark:hover:bg-dark-1 ` +
+        // Active
+        `active:bg-light-3 dark:active:bg-dark-4 ` +
+        // Disabled
+        `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
+        // Focus
+        `focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`,
     // Form Input Select variant: styles for buttons which trigger a popover menu for selecting an option
     formInputSelect:
         `${commonButton} ` +
@@ -154,6 +170,7 @@ export const ButtonSizes = {
     lg: 'h-10 rounded-md px-8',
     icon: 'relative h-9 w-9',
     menuItem: 'pt-1.5 pr-3 pb-1.5 pl-3',
+    formInputCheckbox: 'h-4 w-4',
     formInputSelect: 'px-4 h-9',
     formInputIcon: 'relative h-9 w-9',
     tableHeaderCell: 'h-8',
@@ -398,8 +415,8 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
     else if(Icon) {
         content = <Icon className={mergeClassNames('h-5 w-5', properties.iconClassName)} />;
     }
-    // If the children are not provided, and an icon is not provided, use the processing icon
-    else if(ProcessingIcon) {
+    // If the children are not provided, and an icon is not provided, and the processing animation is enabled, use the processing icon
+    else if(ProcessingIcon && processingAnimationEnabled) {
         content = <ProcessingIcon className="h-5 w-5" />;
     }
     // Otherwise, use nothing

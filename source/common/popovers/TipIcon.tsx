@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Tip from '@structure/source/common/notifications/Tip';
-import { PopoverInterface, Popover } from '@structure/source/common/interactions/Popover';
+import Tip from '@structure/source/common/popovers/Tip';
+import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Assets
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';

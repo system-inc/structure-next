@@ -2,17 +2,17 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/common/interactions/notice/NoticeProvider';
+import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
 import { TableRowInterface, TableRow } from '@structure/source/common/tables/TableRow';
 import { defaultTableRowsActions } from '@structure/source/common/tables/TableRowsActions';
-import { Button } from '@structure/source/common/interactions/Button';
-import { ToggleButton } from '@structure/source/common/interactions/ToggleButton';
-import { PopoverMenu } from '@structure/source/common/interactions/PopoverMenu';
+import { Button } from '@structure/source/common/buttons/Button';
+import { ToggleButton } from '@structure/source/common/buttons/ToggleButton';
+import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { InputText } from '@structure/source/common/forms/InputText';
 import { InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
-import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
-import { PaginationInterface, Pagination } from '@structure/source/common/interactions/Pagination';
+import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { PaginationInterface, Pagination } from '@structure/source/common/navigation/Pagination';
 import { ColumnFilterGroup, ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 
@@ -146,9 +146,9 @@ export function Table(properties: TableInterface) {
                         }),
                     selection: properties.rowSelection,
                     selected: selectedRowsIndexesSet.has(rowIndex),
-                    onSelectChange: function (row: TableRowInterface, event: React.ChangeEvent<HTMLInputElement>) {
+                    onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                         // If the row is selected
-                        if(event.target.checked) {
+                        if(rowSelected) {
                             setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
                                 selectedRowsIndexes.add(rowIndex);
                                 return new Set(selectedRowsIndexes);
@@ -247,9 +247,9 @@ export function Table(properties: TableInterface) {
                     }),
                 selection: properties.rowSelection,
                 selected: selected,
-                onSelectChange: function (row: TableRowInterface, event: React.ChangeEvent<HTMLInputElement>) {
+                onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                     // If the header row is selected, select all visible rows
-                    if(event.target.checked) {
+                    if(rowSelected) {
                         setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
                             rows.forEach(function (row, rowIndex) {
                                 if(row.visible) {

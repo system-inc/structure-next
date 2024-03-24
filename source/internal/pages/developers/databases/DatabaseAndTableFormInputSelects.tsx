@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { FormInputSelectInterface, FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
-import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
+import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';

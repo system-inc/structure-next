@@ -9,7 +9,7 @@ import DataSource from './DataSource';
 import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Supporting Components
-import { Button } from '@structure/source/common/interactions/Button';
+import { Button } from '@structure/source/common/buttons/Button';
 import useDragAnimation from '@structure/source/common/animations/useDragAnimation';
 
 // Dependencies - Assets

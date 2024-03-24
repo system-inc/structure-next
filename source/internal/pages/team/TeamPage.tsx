@@ -5,10 +5,10 @@ import React from 'react';
 
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
-import Button from '@structure/source/common/interactions/Button';
-import Dialog from '@structure/source/common/interactions/dialog/Dialog';
-import DialogCloseControl from '@structure/source/common/interactions/dialog/DialogCloseControl';
-import { useNotice } from '@structure/source/common/interactions/notice/NoticeProvider';
+import Button from '@structure/source/common/buttons/Button';
+import Dialog from '@structure/source/common/dialogs/Dialog';
+import DialogCloseControl from '@structure/source/common/dialogs/DialogCloseControl';
+import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 
 // Component - TeamPage
 export type TeamPageProperties = {};

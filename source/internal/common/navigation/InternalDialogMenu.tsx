@@ -6,9 +6,9 @@ import React from 'react';
 // Dependencies - Main Components
 import { InternalNavigationLinkInterface } from './InternalNavigationLink';
 import InternalNavigationLinks from '@structure/source/internal/common/navigation/InternalNavigationLinks';
-import { DialogMenuInterface, DialogMenu } from '@structure/source/common/interactions/dialog/DialogMenu';
-import { MenuInterface, Menu } from '@structure/source/common/interactions/Menu';
-import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
+import { DialogMenuInterface, DialogMenu } from '@structure/source/common/dialogs/DialogMenu';
+import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
+import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Assets
 

@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import AccountMenuSignedIn from './AccountMenuSignedIn';
 import AccountMenuSignedOut from './AccountMenuSignedOut';
-import Button from '@structure/source/common/interactions/Button';
+import Button from '@structure/source/common/buttons/Button';
 import ThemeToggle from '@structure/source/theme/ThemeToggle';
 
 // Dependencies - Accounts

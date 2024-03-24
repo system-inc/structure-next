@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { FormInputErrorInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
-import { TimeRangeType } from '@structure/source/common/forms/time/TimeRange';
+import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import {
     InputTimeRangeReferenceInterface,
     InputTimeRangeInterface,

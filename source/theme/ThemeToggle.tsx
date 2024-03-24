@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Tip from '@structure/source/common/notifications/Tip';
+import Tip from '@structure/source/common/popovers/Tip';
 
 // Dependencies - Styles
 import { themeModeLocalStorageKey, themeModeChangeEventIdentifier, ThemeMode } from '@structure/source/theme/Theme';

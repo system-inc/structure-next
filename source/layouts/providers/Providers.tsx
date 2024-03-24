@@ -9,8 +9,8 @@ import CookiesProvider from '@structure/source/utilities/CookiesProvider';
 import SessionProvider from '@structure/source/modules/account/SessionProvider';
 import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import ApolloProvider from '@structure/source/api/ApolloProvider';
-import TipProvider from '@structure/source/common/notifications/TipProvider';
-import NoticeProvider from '@structure/source/common/interactions/notice/NoticeProvider';
+import TipProvider from '@structure/source/common/popovers/TipProvider';
+import NoticeProvider from '@structure/source/common/notifications/NoticeProvider';
 
 export interface ProvidersInterface {
     children: React.ReactNode;

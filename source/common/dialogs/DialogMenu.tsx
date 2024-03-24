@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogInterface, Dialog } from '@structure/source/common/interactions/dialog/Dialog';
-import { MenuInterface, Menu } from '@structure/source/common/interactions/Menu';
+import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';

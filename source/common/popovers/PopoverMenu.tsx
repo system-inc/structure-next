@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { PopoverInterface, Popover } from '@structure/source/common/interactions/Popover';
-import { MenuInterface, Menu } from '@structure/source/common/interactions/Menu';
-import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
+import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
+import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
+import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';

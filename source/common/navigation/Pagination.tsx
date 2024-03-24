@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 import { InputReferenceInterface } from '@structure/source/common/forms/Input';
 import { InputText } from '@structure/source/common/forms/InputText';
 import InputSelect from '@structure/source/common/forms/InputSelect';

@@ -8,8 +8,8 @@ import { useSearchParams as useUrlSearchParameters } from 'next/navigation';
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
 import DatabaseAndTableFormInputSelects from '@structure/source/internal/pages/developers/databases/DatabaseAndTableFormInputSelects';
-import Button from '@structure/source/common/interactions/Button';
-import RefreshButton from '@structure/source/common/interactions/RefreshButton';
+import Button from '@structure/source/common/buttons/Button';
+import RefreshButton from '@structure/source/common/buttons/RefreshButton';
 import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
 import { ColumnFilterGroupDataInterface, ColumnFilterGroup } from '@structure/source/common/tables/ColumnFilterGroup';
 

@@ -3,10 +3,10 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
-import { PopoverInterface } from '@structure/source/common/interactions/Popover';
-import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/interactions/PopoverMenu';
-import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+import { PopoverInterface } from '@structure/source/common/popovers/Popover';
+import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
+import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';

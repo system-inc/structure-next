@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/common/interactions/notice/NoticeProvider';
-import { NoticeInterface, Notice } from '@structure/source/common/interactions/notice/Notice';
-import ClearAllNoticesButton from '@structure/source/common/interactions/notice/ClearAllNoticesButton';
+import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
+import { NoticeInterface, Notice } from '@structure/source/common/notifications/Notice';
+import ClearAllNoticesButton from '@structure/source/common/notifications/NoticesClearAllButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -375,7 +375,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
                             style={{ ...animation, zIndex: noticesState.length - noticeIndex }}
                         >
                             <Notice
-                                ref={function(reference) {
+                                ref={function (reference) {
                                     reference && noticeReferences.set(notice, reference);
                                 }}
                                 {...notice}

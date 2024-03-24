@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemInterface } from '@structure/source/common/interactions/MenuItem';
+import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 import {
     FormInputErrorInterface,
     FormInputReferenceInterface,

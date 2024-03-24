@@ -4,9 +4,9 @@ import React from 'react';
 // Dependencies - Main Components
 import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
 import { TableCellInterface } from '@structure/source/common/tables/TableCell';
-import { PopoverMenu } from '@structure/source/common/interactions/PopoverMenu';
-import { TipIcon } from '@structure/source/common/notifications/TipIcon';
-import { Button } from '@structure/source/common/interactions/Button';
+import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
+import { TipIcon } from '@structure/source/common/popovers/TipIcon';
+import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import InformationCircledIconFilled from '@structure/assets/icons/status/InformationCircledIconFilled.svg';

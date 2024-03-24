@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Supporting Components
-import { Button, ButtonInterface } from '@structure/source/common/interactions/Button';
+import { Button, ButtonInterface } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';

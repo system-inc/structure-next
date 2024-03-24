@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemInterface, MenuItem } from '@structure/source/common/interactions/MenuItem';
+import { MenuItemInterface, MenuItem } from '@structure/source/common/menus/MenuItem';
 import { InputReferenceInterface } from '@structure/source/common/forms/Input';
 import { InputText } from '@structure/source/common/forms/InputText';
 
@@ -434,7 +434,7 @@ export function Menu(properties: MenuInterface) {
                                     <MenuItem
                                         {...itemToRender}
                                         key={itemToRenderIndex}
-                                        ref={function(element) {
+                                        ref={function (element) {
                                             itemDomElementReferences.current[itemToRenderIndex] = element;
                                         }}
                                         tabIndex={-1}

@@ -5,9 +5,9 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputInterface } from '@structure/source/common/forms/Input';
-import { Calendar } from '@structure/source/common/forms/time/Calendar';
-import { PopoverInterface, Popover } from '@structure/source/common/interactions/Popover';
-import { ButtonInterface, Button } from '@structure/source/common/interactions/Button';
+import { Calendar } from '@structure/source/common/time/Calendar';
+import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
+import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
