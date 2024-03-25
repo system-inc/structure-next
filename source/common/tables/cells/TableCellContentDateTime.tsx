@@ -12,7 +12,14 @@ export interface TableCellContentDateTimeInterface extends React.HTMLAttributes<
     value: string | null;
 }
 export function TableCellContentDateTime(properties: TableCellContentDateTimeInterface) {
-    const date = properties.value ? new Date(properties.value) : null;
+    // console.log('properties.value', properties.value);
+    let date = properties.value ? new Date(properties.value) : null;
+
+    // Make sure the data is valid
+    if(date !== null && isNaN(date.getTime())) {
+        console.warn('Invalid date, something is wrong with the data');
+        date = null;
+    }
 
     // Render the component
     return date !== null ? (

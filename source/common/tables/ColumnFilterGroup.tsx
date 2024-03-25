@@ -7,6 +7,7 @@ import React from 'react';
 import { Button } from '@structure/source/common/buttons/Button';
 import { InputText } from '@structure/source/common/forms/InputText';
 import { InputSelectItemInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
+import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
 
 // Dependencies - Assets
 import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';
@@ -39,7 +40,7 @@ export interface ColumnFilterGroupDataInterface {
 // Component - ColumnFilterGroup
 export interface ColumnFilterGroupInterface {
     className?: string;
-    columns: string[];
+    columns: TableColumnInterface[];
     columnFilterGroupData: ColumnFilterGroupDataInterface;
     onChange: (columnFilterGroupData: ColumnFilterGroupDataInterface) => void;
     onRemove?: () => void;
@@ -54,7 +55,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                   conditions: [
                       {
                           id: uniqueIdentifier(),
-                          column: properties.columns[0] ?? '',
+                          column: properties.columns[0]?.identifier ?? '',
                           operator: ColumnFilterConditionOperator.Equal,
                           value: '',
                       },
@@ -124,7 +125,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         });
     }
 
-    // Filter Group Manipulation Functions
+    // Function to add a new filter group
     function addNewFilterGroup() {
         // Create a new filter group
         const newFilterGroup: ColumnFilterGroupDataInterface = {
@@ -134,7 +135,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                 // Enforce at least one condition
                 {
                     id: uniqueIdentifier(),
-                    column: properties.columns[0] ?? '',
+                    column: properties.columns[0]?.identifier ?? '',
                     operator: ColumnFilterConditionOperator.Equal,
                     value: '',
                 },
@@ -148,6 +149,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         }));
     }
 
+    // Function to remove a filter group
     function removeFilterGroup(filterId: string) {
         // Remove the filter group from the filters state
         setColumnFilterGroupData((prevData) => ({
@@ -156,12 +158,12 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         }));
     }
 
-    // Condition Manipulation Functions
+    // Function to add a new condition
     function addNewCondition() {
         // Create a new condition
         const newCondition: ColumnFilterConditionDataInterface = {
             id: uniqueIdentifier(),
-            column: properties.columns[0] ?? '',
+            column: properties.columns[0]?.identifier ?? '',
             operator: ColumnFilterConditionOperator.Equal,
             value: '',
         };
@@ -173,6 +175,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         }));
     }
 
+    // Function to remove a condition
     function removeCondition(conditionId: string) {
         // Remove the condition from the conditions state
         setColumnFilterGroupData((prevData) => ({
@@ -181,7 +184,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         }));
     }
 
-    // Function - Remove Button On Click Intercept
+    // Function to intercept remove button click
     function removeFilterGroupButtonOnClickIntercept(event: React.MouseEvent<HTMLElement>) {
         event.preventDefault();
         event.stopPropagation();
@@ -194,6 +197,61 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         else {
             console.error('ColumnFilterGroup: removeFilterGroupButtonOnClickIntercept: No ID to remove');
         }
+    }
+
+    // Function to get an input component for a condition
+    function getInputComponentForCondition(condition: ColumnFilterConditionDataInterface, conditionIndex: number) {
+        let inputComponent = null;
+
+        let column = properties.columns.find((column) => column.identifier === condition.column);
+
+        // If the operator is IsNull or IsNotNull, return null
+        if(
+            condition.operator === ColumnFilterConditionOperator.IsNull ||
+            condition.operator === ColumnFilterConditionOperator.IsNotNull
+        ) {
+            inputComponent = null;
+        }
+        // If the column has possible values, return a select input
+        else if(column?.possibleValues?.length) {
+            inputComponent = (
+                <InputSelect
+                    className="w-64"
+                    items={column?.possibleValues?.map((possibleValue) => ({
+                        value: possibleValue.value,
+                        content: possibleValue.title,
+                    }))}
+                    defaultValue={condition.value}
+                    onChange={(value) => {
+                        setColumnFilterGroupData((previousColumnFilterGroupData) => ({
+                            ...previousColumnFilterGroupData,
+                            conditions: previousColumnFilterGroupData.conditions.map((condition) =>
+                                condition.id === condition.id ? { ...condition, value } : condition,
+                            ),
+                        }));
+                    }}
+                />
+            );
+        }
+        // Otherwise, return a text input
+        else {
+            inputComponent = (
+                <InputText
+                    className="w-64"
+                    placeholder="Value..."
+                    defaultValue={condition.value}
+                    onChange={(value) => {
+                        setColumnFilterGroupData((previousColumnFilterGroupData) => ({
+                            ...previousColumnFilterGroupData,
+                            conditions: previousColumnFilterGroupData.conditions.map((condition) =>
+                                condition.id === condition.id ? { ...condition, value } : condition,
+                            ),
+                        }));
+                    }}
+                />
+            );
+        }
+        return inputComponent;
     }
 
     // console.log('columns', properties.columns);
@@ -242,8 +300,8 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                                 className="w-48"
                                 items={properties.columns.map(function (column) {
                                     return {
-                                        value: column,
-                                        content: column,
+                                        value: column.identifier,
+                                        content: column.title,
                                     };
                                 })}
                                 placeholder="Column..."
@@ -297,34 +355,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             />
 
                             {/* Value */}
-                            <InputText
-                                className="w-64"
-                                placeholder="Value..."
-                                defaultValue={condition.value}
-                                disabled={
-                                    condition.operator === ColumnFilterConditionOperator.IsNull ||
-                                    condition.operator === ColumnFilterConditionOperator.IsNotNull
-                                }
-                                onChange={function (value) {
-                                    setColumnFilterGroupData(function (previousColumnFilterGroupData) {
-                                        const updatedConditions = previousColumnFilterGroupData.conditions.map(
-                                            function (currentCondition, currentConditionIndex) {
-                                                if(currentConditionIndex === conditionIndex) {
-                                                    return {
-                                                        ...currentCondition,
-                                                        value: value,
-                                                    };
-                                                }
-                                                return currentCondition;
-                                            },
-                                        );
-                                        return {
-                                            ...previousColumnFilterGroupData,
-                                            conditions: updatedConditions,
-                                        };
-                                    });
-                                }}
-                            />
+                            {getInputComponentForCondition(condition, conditionIndex)}
 
                             {/* Remove Condition Button */}
                             <Button

@@ -69,108 +69,118 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
     // console.log('data', data);
 
     // Create the columns from the data
-    let columns: TableColumnInterface[] = [];
+    // let columns: TableColumnInterface[] = [];
+    const columns = React.useRef<TableColumnInterface[]>([]);
+    const columnsLoaded = React.useRef<boolean>(false);
 
     // Prefer to use the columns property if it is provided
-    if(
-        queryState.data &&
-        queryState.data.dataInteractionDatabaseTableRows &&
-        queryState.data.dataInteractionDatabaseTableRows.columns
-    ) {
-        queryState.data.dataInteractionDatabaseTableRows.columns.forEach(function (column: any) {
-            // Determine the column type
-            let columnType = column.type;
-            if(column.isKey) {
-                columnType = 'id';
-            }
-            else if(columnType === 'datetime') {
-                columnType = 'dateTime';
-            }
-            else if(columnType === 'enum') {
-                columnType = 'option';
-            }
-            else if(columnType === 'int') {
-                columnType = 'number';
-            }
-
-            // Meta object to store additional information
-            let meta: any = {
-                databaseName: properties.variables.databaseName,
-            };
-
-            // If the column is an ID
-            if(columnType === 'id') {
-                let keyTableName = column.keyTableName;
-
-                // If the column is an ID column, and there is no key table name
-                if(!keyTableName) {
-                    // Guess the key table name from the column name
-                    keyTableName = uppercaseFirstCharacter(column.name).replace('Id', '');
+    if(!columnsLoaded.current) {
+        if(
+            queryState.data &&
+            queryState.data.dataInteractionDatabaseTableRows &&
+            queryState.data.dataInteractionDatabaseTableRows.columns
+        ) {
+            queryState.data.dataInteractionDatabaseTableRows.columns.forEach(function (column: any) {
+                // Determine the column type
+                let columnType = column.type;
+                if(column.isKey) {
+                    columnType = 'id';
+                }
+                else if(columnType === 'datetime') {
+                    columnType = 'dateTime';
+                }
+                else if(columnType === 'enum') {
+                    columnType = 'option';
+                }
+                else if(columnType === 'int') {
+                    columnType = 'number';
                 }
 
-                if(keyTableName) {
-                    // Add the table name to the meta object
-                    meta['tableName'] = keyTableName;
+                // Meta object to store additional information
+                let meta: any = {
+                    databaseName: properties.variables.databaseName,
+                };
 
-                    // Add the URL to the meta object
-                    meta['url'] =
-                        `/internal/developers/databases/${properties.variables.databaseName}/tables/${keyTableName}/rows/`;
+                // If the column is an ID
+                if(columnType === 'id') {
+                    let keyTableName = column.keyTableName;
+
+                    // If the column is an ID column, and there is no key table name
+                    if(!keyTableName) {
+                        // Guess the key table name from the column name
+                        keyTableName = uppercaseFirstCharacter(column.name).replace('Id', '');
+                    }
+
+                    if(keyTableName) {
+                        // Add the table name to the meta object
+                        meta['tableName'] = keyTableName;
+
+                        // Add the URL to the meta object
+                        meta['url'] =
+                            `/internal/developers/databases/${properties.variables.databaseName}/tables/${keyTableName}/rows/`;
+                    }
                 }
-            }
 
-            // Get the possible values
-            const possibleValues = column.possibleValues
-                ? column.possibleValues.map(function (possibleValue: string) {
-                      return {
-                          value: possibleValue,
-                          title: possibleValue,
-                      };
-                  })
-                : undefined;
+                // Get the possible values
+                const possibleValues = column.possibleValues
+                    ? column.possibleValues.map(function (possibleValue: string) {
+                          return {
+                              value: possibleValue,
+                              title: possibleValue,
+                          };
+                      })
+                    : undefined;
 
-            // Add the column
-            columns.push({
-                identifier: column.name,
-                title: titleCase(column.name),
-                type: columnType,
-                possibleValues,
-                meta,
+                // Add the column
+                columns.current.push({
+                    identifier: column.name,
+                    title: titleCase(column.name),
+                    type: columnType,
+                    possibleValues,
+                    meta,
+                });
             });
+        }
+        // Otherwise, create the columns using the keys of the first item
+        else {
+            // Get the column identifiers from the first item
+            const columnIdentifiers = data.length > 0 ? Object.keys(data[0]) : [];
+            // console.log('columnIdentifiers', columnIdentifiers);
+
+            // Loop through the column identifiers and create the columns
+            columnIdentifiers.forEach(function (columnIdentifier, columnIdentifierIndex) {
+                columns.current.push({
+                    identifier: columnIdentifier,
+                    title: titleCase(columnIdentifier),
+                });
+            });
+        }
+
+        // Sort the columns by their identifiers
+        columns.current.sort(function (columnA, columnB) {
+            if(columnA.identifier === 'id') return -1;
+            if(columnB.identifier === 'id') return 1;
+            if(columnA.identifier === 'createdAt') return 1;
+            if(columnB.identifier === 'createdAt') return -1;
+            if(columnA.identifier === 'updatedAt') return columnB.identifier === 'createdAt' ? -1 : 1;
+            if(columnB.identifier === 'updatedAt') return columnA.identifier === 'id' ? 1 : -1;
+            return 0;
         });
     }
-    // Otherwise, create the columns using the keys of the first item
-    else {
-        // Get the column identifiers from the first item
-        const columnIdentifiers = data.length > 0 ? Object.keys(data[0]) : [];
-        // console.log('columnIdentifiers', columnIdentifiers);
-
-        // Loop through the column identifiers and create the columns
-        columnIdentifiers.forEach(function (columnIdentifier, columnIdentifierIndex) {
-            columns.push({
-                identifier: columnIdentifier,
-                title: titleCase(columnIdentifier),
-            });
-        });
-    }
-
-    // Sort the columns by their identifiers
-    columns.sort(function (columnA, columnB) {
-        if(columnA.identifier === 'id') return -1;
-        if(columnB.identifier === 'id') return 1;
-        if(columnA.identifier === 'createdAt') return 1;
-        if(columnB.identifier === 'createdAt') return -1;
-        if(columnA.identifier === 'updatedAt') return columnB.identifier === 'createdAt' ? -1 : 1;
-        if(columnB.identifier === 'updatedAt') return columnA.identifier === 'id' ? 1 : -1;
-        return 0;
-    });
     // console.log('columns', columns);
+
+    // Mark the columns as loaded so we do not load them again in subsequent renders
+    // console.log('columnsLoaded', columnsLoaded.current);
+    if(columns.current.length > 0) {
+        columnsLoaded.current = true;
+    }
 
     // Create the rows from the data
     const rows = data.map(function (item) {
         // console.log('item', item);
 
         return {
-            cells: columns.map(function (column, columnIndex) {
+            cells: columns.current.map(function (column, columnIndex) {
                 let cell = item[column.identifier];
 
                 // If the cell is not null
@@ -310,7 +320,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
             <Table
                 key={queryState.loading ? 'loading' : 'loaded'}
                 {...properties}
-                columns={columns}
+                columns={columns.current}
                 rows={rows}
                 rowSelection={true}
                 columnVisibility={true}

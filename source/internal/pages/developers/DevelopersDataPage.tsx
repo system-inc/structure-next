@@ -48,6 +48,26 @@ export function DevelopersDataPage(properties: DevelopersDataPageInterface) {
     );
     // console.log('filtersUrlParameter', filtersUrlParameter);
 
+    // Sanitized the filters so they are valid for the query
+    let sanitizedFilters = filtersUrlParameter
+        ? {
+              ...filtersUrlParameter,
+              conditions: filtersUrlParameter.conditions.map((condition) => {
+                  return {
+                      ...condition,
+                      // Remove the ID
+                      id: undefined,
+                  };
+              }),
+          }
+        : undefined;
+
+    // If there are sanitized filters but no conditions, remove the filters
+    if(sanitizedFilters && sanitizedFilters.conditions.length > 0 && !sanitizedFilters.conditions[0]?.value) {
+        sanitizedFilters = undefined;
+    }
+    // console.log('sanitizedFilters', sanitizedFilters);
+
     // Render the component
     return (
         <>
@@ -135,18 +155,13 @@ export function DevelopersDataPage(properties: DevelopersDataPageInterface) {
                 variables={{
                     databaseName: databaseName,
                     tableName: tableName,
-                    filters:
-                        filtersUrlParameter &&
-                        filtersUrlParameter.conditions.length > 0 &&
-                        filtersUrlParameter.conditions[0]?.value
-                            ? filtersUrlParameter
-                            : undefined,
+                    filters: sanitizedFilters,
                 }}
                 filters={filtersUrlParameter ?? undefined}
-                // onFiltersChange={function (filters: ColumnFilterGroupDataInterface) {
-                //     // console.log('onFiltersChange', filters);
-                //     setFiltersUrlParameter(filters);
-                // }}
+                onFiltersChange={function (filters) {
+                    // console.log('onFiltersChange', filters);
+                    setFiltersUrlParameter(filters ?? null);
+                }}
                 sortable={true}
                 pagination={{
                     itemsPerPage: paginationItemsPerPageUrlParameter ?? undefined,

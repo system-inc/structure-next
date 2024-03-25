@@ -420,9 +420,7 @@ export function Table(properties: TableInterface) {
                     {filtersEnabled && filtersReference.current && (
                         <div className="mt-4 flex">
                             <ColumnFilterGroup
-                                columns={columns.map(function (column) {
-                                    return column.identifier;
-                                })}
+                                columns={columns}
                                 columnFilterGroupData={filtersReference.current}
                                 onChange={onFiltersChange}
                             />
