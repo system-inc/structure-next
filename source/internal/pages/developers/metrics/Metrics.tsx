@@ -770,7 +770,6 @@ export function Metrics(properties: MetricsInterface) {
             const dataSourceMenuItems = dataSources.map(function (dataSource) {
                 return {
                     id: dataSource.id,
-                    className: 'text-xs',
                     content: 'View Records for ' + dataSource.tableName + ' (' + dataSource.databaseName + ')',
                     href:
                         '/internal/developers/data?page=1&databaseName=' +

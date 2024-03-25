@@ -56,7 +56,7 @@ export function ContextMenu(properties: ContextMenuInterface) {
                         maxHeight: 'var(--radix-context-menu-content-available-height)',
                     }}
                 >
-                    <Menu {...menuProperties} className={mergeClassNames('z-40', properties.className)} />
+                    <Menu {...menuProperties} className={mergeClassNames('z-40 text-xs', properties.className)} />
                 </RadixContextMenu.Content>
             </RadixContextMenu.Portal>
         </RadixContextMenu.Root>

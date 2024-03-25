@@ -22,7 +22,7 @@ export const menuClassName =
     // Border
     `rounded-md border border-light-4 dark:border-dark-4 ` +
     // Background and text
-    `bg-light text-dark dark:bg-dark+2 dark:text-light`;
+    `text-sm bg-light text-dark dark:bg-dark+2 dark:text-light`;
 
 // Component - Menu
 export interface MenuInterface extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -429,7 +429,7 @@ export function Menu(properties: MenuInterface) {
                     {itemsToRender.length ? (
                         // If there are menu items
                         <div className="overflow-y-auto p-1">
-                            {itemsToRender.map((itemToRender, itemToRenderIndex) => {
+                            {itemsToRender.map(function (itemToRender, itemToRenderIndex) {
                                 return (
                                     <MenuItem
                                         {...itemToRender}
