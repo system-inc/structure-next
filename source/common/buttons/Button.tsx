@@ -372,26 +372,31 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
             {Icon && properties.iconPosition == 'left' && (
                 <Icon className={mergeClassNames('mr-2 h-4 w-4', properties.iconClassName)} />
             )}
-            {content}
-            {properties.loading && (
-                <>
-                    <div className="flex-grow" />
-                    <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin text-inherit" />
-                </>
-            )}
 
-            {variant === 'formInputSelect' &&
-                (properties.loading ? (
+            {content}
+
+            {variant === 'formInputSelect' ? (
+                // The variant is form input select and the button is loading
+                properties.loading ? (
                     <>
                         <div className="flex-grow" />
                         <BrokenCircleIcon className="ml-4 h-4 w-4 animate-spin text-neutral+2 dark:text-neutral-2" />
                     </>
                 ) : (
+                    // The variant is form input select and the button is not loading
                     <>
                         <div className="flex-grow" />
                         <ChevronDownIcon className="ml-4 h-4 w-4 text-neutral+2 dark:text-neutral-2" />
                     </>
-                ))}
+                )
+            ) : // The variant is not a form input select
+            properties.loading ? (
+                <>
+                    <div className="flex-grow" />
+                    <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin text-inherit" />
+                </>
+            ) : null}
+
             {Icon && properties.iconPosition == 'right' && (
                 <Icon className={mergeClassNames('ml-2 h-4 w-4', properties.iconClassName)} />
             )}
