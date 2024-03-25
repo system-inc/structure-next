@@ -13,6 +13,7 @@ import FormInputText from '@structure/source/common/forms/FormInputText';
 import InputSelect from '@structure/source/common/forms/InputSelect';
 import InputMultipleSelect from '@structure/source/common/forms/InputMultipleSelect';
 import { InputCheckboxState, InputCheckbox } from '@structure/source/common/forms/InputCheckbox';
+import FormInputCheckbox from '@structure/source/common/forms/FormInputCheckbox';
 import FormInputSelect from '@structure/source/common/forms/FormInputSelect';
 import { Form } from '@structure/source/common/forms/Form';
 import { DatabaseAndTableFormInputSelects } from '@structure/source/internal/pages/developers/databases/DatabaseAndTableFormInputSelects';
@@ -311,7 +312,7 @@ export function StructurePage(properties: StructurePageInterface) {
                 {/* Header */}
                 <h1 className="mb-10">Interface</h1>
 
-                <InputCheckbox defaultValue={InputCheckboxState.Indeterminate} />
+                {/* <InputCheckbox defaultValue={InputCheckboxState.Indeterminate} /> */}
 
                 {/* <Table
                     columns={[]}
@@ -429,7 +430,7 @@ export function StructurePage(properties: StructurePageInterface) {
 
                 {/* <DatabaseAndTableFormInputSelects /> */}
 
-                {/* <Form
+                <Form
                     description={<p className="font-medium">Select a Country</p>}
                     onSubmit={async function (formValues) {
                         console.log('formValues', formValues);
@@ -476,8 +477,17 @@ export function StructurePage(properties: StructurePageInterface) {
                             required={true}
                             placeholder="Select a Country..."
                         />,
+                        <FormInputCheckbox
+                            id="terms"
+                            key="terms"
+                            label="I agree to the terms and conditions."
+                            labelTip="This is a tip for the terms and conditions."
+                            description="You must agree to the terms and conditions."
+                            className=""
+                            required={true}
+                        />,
                     ]}
-                /> */}
+                />
 
                 {/* <InputSelect
                     className=""

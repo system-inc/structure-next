@@ -153,7 +153,6 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
     });
 
     // Function to handle input value changes
-    const propertiesItems = properties.items;
     const propertiesOnChange = properties.onChange;
     const propertiesAllowNoSelection = properties.allowNoSelection;
     const onChangeIntercept = React.useCallback(

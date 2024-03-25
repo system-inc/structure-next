@@ -142,3 +142,6 @@ export const ButtonVariants = {
         // `dark:disabled:hover:bg-dark active:bg-light-2 dark:active:bg-dark-2`,
         ``,
 };
+
+// Export - Default
+export default ButtonVariants;

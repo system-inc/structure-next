@@ -181,6 +181,7 @@ export function Form(properties: FormInterface) {
 
                 // Get the form input value
                 let formInputValue = formInputReference?.getValue();
+                // console.log('formInputValue', formInput.props.id, formInputValue);
 
                 // Validate the form input
                 let formInputIsValid = await validateFormInput(formInputValue, formInput);
@@ -198,6 +199,8 @@ export function Form(properties: FormInterface) {
     // Function to handle form submission
     const onSubmitIntercept = React.useCallback(
         async function (event: React.FormEvent<HTMLFormElement>) {
+            // console.log('onSubmitIntercept', event);
+
             setSubmitResponse(null);
 
             // Set the submitting state
@@ -343,7 +346,10 @@ export function Form(properties: FormInterface) {
                         onFormInputChangeIntercept(formInputValue, formInput, event);
                     },
                     onBlur: (formInputValue: any, event?: Event) => {
-                        validateFormInput(formInputValue, formInput);
+                        // If the form input is FormInputText, we validate on blur
+                        if(formInput.type === FormInputText) {
+                            validateFormInput(formInputValue, formInput);
+                        }
                     },
                     validating: formInputValidating,
                     errors: formInputsErrors[formInput.props.id]?.errors,

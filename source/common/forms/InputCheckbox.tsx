@@ -37,6 +37,7 @@ export interface InputCheckboxReferenceInterface {
     getValue: () => InputCheckboxState | undefined;
     setValue: (value?: InputCheckboxState, event?: any) => void;
     focus: () => void;
+    click: () => void;
 }
 
 // Component - InputCheckbox
@@ -79,6 +80,9 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
                 // Call the focus method on the button's DOM element
                 buttonReference.current?.focus();
             },
+            click: function () {
+                buttonReference.current?.click();
+            },
         };
     });
 
@@ -120,6 +124,7 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
         <Button
             ref={buttonReference}
             className={mergeClassNames('', properties.className)}
+            type="button" // Set this so forms does not submit on click
             variant="formInputCheckbox"
             size="formInputCheckbox"
             disabled={properties.disabled}
