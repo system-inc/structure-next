@@ -757,12 +757,7 @@ export function Metrics(properties: MetricsInterface) {
     });
 
     // Create the context menu items
-    const contextMenuItems: MenuItemInterface[] = [
-        {
-            id: 'copyLink',
-            content: 'Copy Link',
-        },
-    ];
+    const contextMenuItems: MenuItemInterface[] = [];
     // Create a list of items for the context menu that will allow the user to click and view the records for each data source
     if(chartActiveLabel) {
         let timeIntervalValueStartAndEndDate = calculateTimeIntervalValueStartAndEndDate(
@@ -775,9 +770,10 @@ export function Metrics(properties: MetricsInterface) {
             const dataSourceMenuItems = dataSources.map(function (dataSource) {
                 return {
                     id: dataSource.id,
+                    className: 'text-xs',
                     content: 'View Records for ' + dataSource.tableName + ' (' + dataSource.databaseName + ')',
                     href:
-                        '/internal/developers/databases?page=1&databaseName=' +
+                        '/internal/developers/data?page=1&databaseName=' +
                         dataSource.databaseName +
                         '&tableName=' +
                         dataSource.tableName +
