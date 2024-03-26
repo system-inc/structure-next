@@ -353,7 +353,12 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
             </div>
 
             {/* Border fade */}
-            <div className="pointer-events-none relative top-7 z-40 h-7 w-full bg-gradient-to-b from-light to-transparent dark:from-dark dark:to-transparent" />
+            <div
+                className={mergeClassNames(
+                    'pointer-events-none relative top-7 z-40 h-7 w-full bg-gradient-to-b from-light to-transparent dark:from-dark dark:to-transparent',
+                    (!hovered || noticesState.length === 0) && 'hidden',
+                )}
+            />
 
             <div
                 className="pointer-events-auto relative z-0 flex flex-col-reverse overflow-y-auto overflow-x-hidden border-red-500 pb-4"
