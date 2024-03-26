@@ -6,7 +6,7 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
+import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
 import { TableCellContentId } from '@structure/source/common/tables/cells/TableCellContentId';
 import { TableCellContentOption } from '@structure/source/common/tables/cells/TableCellContentOption';
 import { TableCellContentImageUrl } from '@structure/source/common/tables/cells/TableCellContentImageUrl';
@@ -27,8 +27,8 @@ export interface TableCellInterface extends React.HTMLAttributes<HTMLTableCellEl
     openUrlInNewTab?: boolean;
 }
 export function TableCell(properties: TableCellInterface) {
-    console.log('properties.value', properties.value);
-    console.log('properties.children', properties.children);
+    // console.log('properties.value', properties.value);
+    // console.log('properties.children', properties.children);
 
     // Set the content
     let content;
@@ -55,7 +55,7 @@ export function TableCell(properties: TableCellInterface) {
     // If we have a value
     if(properties.value) {
         // Cell Content - ID
-        if(properties.column?.type === 'id') {
+        if(properties.column?.type === TableColumnType.Id) {
             let url = properties.column?.meta?.url;
             if(url) {
                 url += properties.value;
@@ -64,12 +64,12 @@ export function TableCell(properties: TableCellInterface) {
             content = <TableCellContentId value={properties.value} url={url} openUrlInNewTab={true} />;
         }
         // Cell Content - Option
-        else if(properties.column?.type === 'option') {
+        else if(properties.column?.type === TableColumnType.Option) {
             content = <TableCellContentOption value={properties.value} />;
         }
         // Cell Content - Image URL
         else if(
-            properties.column?.type === 'imageUrl' ||
+            properties.column?.type === TableColumnType.ImageUrl ||
             /(\.jpeg|\.jpg|\.png|\.webp|\.bmp|\.gif|\.svg|\.tiff|\.tif|\.ico|\.heif|\.heic|\.avif)$/i.test(
                 properties.value,
             )
@@ -84,27 +84,27 @@ export function TableCell(properties: TableCellInterface) {
             content = <TableCellContentImageUrl value={properties.value} url={url} openUrlInNewTab={true} />;
         }
         // Cell Content - Date Time
-        else if(properties.column?.type === 'dateTime') {
+        else if(properties.column?.type === TableColumnType.DateTime) {
             content = <TableCellContentDateTime value={properties.value} />;
         }
         // Cell Content - Boolean
-        else if(properties.column?.type === 'boolean') {
+        else if(properties.column?.type === TableColumnType.Boolean) {
             content = <TableCellContentBoolean value={properties.value} />;
         }
         // Cell Content - HTML
         else if(
-            properties.column?.type === 'html' ||
+            properties.column?.type === TableColumnType.Html ||
             properties.value?.toString().toLowerCase().startsWith('<!doctype') ||
             properties.value?.toString().toLowerCase().startsWith('<html')
         ) {
             content = <TableCellContentHtml value={properties.value} />;
         }
         // Cell Content - URL
-        else if(properties.column?.type === 'url') {
+        else if(properties.column?.type === TableColumnType.Url) {
             content = <TableCellContentUrl value={properties.value} openUrlInNewTab={true} />;
         }
         // Cell Content - Number
-        else if(properties.column?.type === 'number') {
+        else if(properties.column?.type === TableColumnType.Number) {
             content = <TableCellContentNumber value={properties.value} />;
         }
     }
