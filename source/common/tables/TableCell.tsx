@@ -55,7 +55,11 @@ export function TableCell(properties: TableCellInterface) {
     // If we have a value
     if(properties.value) {
         // Cell Content - ID
-        if(properties.column?.type === TableColumnType.Id) {
+        if(
+            properties.column?.type === TableColumnType.Id &&
+            typeof properties.value == 'string' &&
+            properties.value.length == 36
+        ) {
             let url = properties.column?.meta?.url;
             if(url) {
                 url += properties.value;

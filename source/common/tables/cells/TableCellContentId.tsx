@@ -15,6 +15,7 @@ export interface TableCellContentIdInterface extends React.HTMLAttributes<HTMLEl
     openUrlInNewTab?: boolean;
 }
 export function TableCellContentId(properties: TableCellContentIdInterface) {
+    // console.log('truncating!', properties.value);
     const content = truncateUniqueIdentifier(properties.value);
 
     // Render the component

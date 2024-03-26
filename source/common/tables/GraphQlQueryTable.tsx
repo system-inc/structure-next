@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { TableInterface, Table } from '@structure/source/common/tables/Table';
-import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
+import { TableColumnInterface, inferTableColumnType } from '@structure/source/common/tables/TableColumn';
 import { TableRowInterface } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
@@ -79,9 +79,16 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
 
             // Loop through the column identifiers and create the columns
             columnIdentifiers.forEach(function (columnIdentifier, columnIdentifierIndex) {
+                let columnIdentifierForTitleCase = columnIdentifier;
+                columnIdentifierForTitleCase = columnIdentifierForTitleCase.replaceAll('-', ' ');
+                columnIdentifierForTitleCase = columnIdentifierForTitleCase.replaceAll('__typename', 'TypeName');
+
+                let columnTitle = titleCase(columnIdentifierForTitleCase);
+
                 columns.push({
                     identifier: columnIdentifier,
-                    title: titleCase(columnIdentifier),
+                    title: columnTitle,
+                    type: inferTableColumnType(columnIdentifier, data[0][columnIdentifier]),
                 });
             });
 
@@ -134,12 +141,14 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
         });
         return key ? queryState.data[key].pagination : undefined;
     })();
-    console.log('queryStateDataPagination', queryStateDataPagination);
+    // console.log('queryStateDataPagination', queryStateDataPagination);
 
     const pagination = queryStateDataPagination
         ? {
               ...queryStateDataPagination,
               onChange: async function (itemsPerPage: number, page: number) {
+                  console.log('pagination onChange', { itemsPerPage, page });
+
                   // Invoke the provided onChange function
                   if(properties.pagination?.onChange) {
                       await properties.pagination.onChange(itemsPerPage, page);
@@ -167,7 +176,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
               },
           }
         : undefined;
-    console.log('pagination', pagination);
+    // console.log('pagination', pagination);
 
     let key = '';
     if(queryState.loading) {
@@ -177,7 +186,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
         key += 'loaded';
     }
 
-    console.log('queryState', queryState);
+    // console.log('queryState', queryState);
 
     // Render the component
     return (
