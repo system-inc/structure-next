@@ -292,21 +292,23 @@ export function Form(properties: FormInterface) {
 
             // If the form input is FormInputText, we delay the validation until the input is idle
             if(formInput.type === FormInputText) {
-                // Check for an existing timeout
-                const existingTimeout = formInputsDelayedUntilIdleFunctionsMap.get(formInput.props.id);
-
-                // Check if a delayed function exists for this form input, create if not
-                if(existingTimeout) {
-                    // Clear the existing timeout
-                    clearTimeout(existingTimeout);
-                }
-
-                // Create a new timeout and wait for the input to be idle
-                let newTimeout = setTimeout(function () {
-                    validateFormInput(formInputValue, formInput);
-                }, 750);
-
-                formInputsDelayedUntilIdleFunctionsMap.set(formInput.props.id, newTimeout);
+                // Validating text inputs, even using a debounce, is super distracting for the user
+                // Especially on mobile
+                // So, we will skip validation of text inputs for now, we can make this a configuration option later
+                // For now, text inputs will not validate on change, instead, just on blur
+                // PREVIOUS CODE FOR DEBOUNCED VALIDATION:
+                // // Check for an existing timeout
+                // const existingTimeout = formInputsDelayedUntilIdleFunctionsMap.get(formInput.props.id);
+                // // Check if a delayed function exists for this form input, create if not
+                // if(existingTimeout) {
+                //     // Clear the existing timeout
+                //     clearTimeout(existingTimeout);
+                // }
+                // // Create a new timeout and wait for the input to be idle
+                // let newTimeout = setTimeout(function () {
+                //     validateFormInput(formInputValue, formInput);
+                // }, 750);
+                // formInputsDelayedUntilIdleFunctionsMap.set(formInput.props.id, newTimeout);
             }
             // Otherwise, we validate the form input immediately
             else {
@@ -319,7 +321,7 @@ export function Form(properties: FormInterface) {
                 formInput.props.onChange(formInputValue, event);
             }
         },
-        [formInputsDelayedUntilIdleFunctionsMap, validateFormInput],
+        [validateFormInput],
     );
 
     // Function to render form inputs
