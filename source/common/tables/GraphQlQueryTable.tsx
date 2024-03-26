@@ -312,13 +312,27 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
         });
     }
 
-    // console.log('queryState', queryState);
+    console.log('queryState', queryState);
+
+    let key = '';
+    if(properties.variables.databaseName) {
+        key += properties.variables.databaseName;
+    }
+    if(properties.variables.tableName) {
+        key += properties.variables.tableName;
+    }
+    if(queryState.loading) {
+        key += 'loading';
+    }
+    else if(queryState.data) {
+        key += 'loaded';
+    }
 
     // Render the component
     return (
         <>
             <Table
-                key={queryState.loading ? 'loading' : 'loaded'}
+                key={key}
                 {...properties}
                 columns={columns.current}
                 rows={rows}

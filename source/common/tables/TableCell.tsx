@@ -27,7 +27,8 @@ export interface TableCellInterface extends React.HTMLAttributes<HTMLTableCellEl
     openUrlInNewTab?: boolean;
 }
 export function TableCell(properties: TableCellInterface) {
-    // console.log('properties.value', properties.value);
+    console.log('properties.value', properties.value);
+    console.log('properties.children', properties.children);
 
     // Set the content
     let content;
