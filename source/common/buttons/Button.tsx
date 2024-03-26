@@ -390,7 +390,12 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                     </>
                 )
             ) : // The variant is not a form input select
-            null}
+            properties.loading ? (
+                <>
+                    <div className="flex-grow" />
+                    <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin text-inherit" />
+                </>
+            ) : null}
 
             {Icon && properties.iconPosition == 'right' && (
                 <Icon className={mergeClassNames('ml-2 h-4 w-4', properties.iconClassName)} />
