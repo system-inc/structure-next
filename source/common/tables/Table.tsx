@@ -543,7 +543,7 @@ export function Table(properties: TableInterface) {
                 )}
             >
                 {/* Table */}
-                {properties.loading ? (
+                {properties.loading && !properties.columns ? (
                     // Loading
                     <div className="flex items-center justify-center">
                         <div className="p-8 text-sm">Loading...</div>
@@ -564,7 +564,18 @@ export function Table(properties: TableInterface) {
                         )}
 
                         {/* Rows */}
-                        {rows && rows.length > 0 ? (
+                        {properties.loading ? (
+                            // Loading but have the table headers
+                            <tbody>
+                                <tr>
+                                    <td colSpan={visibleColumnsIndexesSet.size + 1}>
+                                        <div className="flex items-center justify-center">
+                                            <div className="p-8 text-sm">Loading...</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        ) : rows && rows.length > 0 ? (
                             <tbody>
                                 {rows
                                     .filter(function (row, rowIndex) {
