@@ -136,6 +136,14 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
         [loadMenuItems],
     );
 
+    // Update possible items when the items property changes
+    React.useEffect(
+        function () {
+            setItems(properties.items ?? []);
+        },
+        [properties.items],
+    );
+
     // Function to expose methods to parent components
     React.useImperativeHandle(reference, function () {
         return {

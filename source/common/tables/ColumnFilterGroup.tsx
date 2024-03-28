@@ -263,7 +263,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                 {/* Conditions */}
                 {columnFilterGroupData.conditions.map(function (condition, conditionIndex) {
                     return (
-                        <div key={conditionIndex} className="flex space-x-2">
+                        <div key={condition.id} className="flex space-x-2">
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
