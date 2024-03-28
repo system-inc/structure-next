@@ -140,18 +140,33 @@ export function Table(properties: TableInterface) {
     // Extract the dependencies
     const propertiesColumns = properties.columns;
     const propertiesSortable = properties.sortable;
-    const columns = React.useMemo(
+    const [columns, setColumns] = React.useState(function () {
+        return propertiesColumns.map(function (column, columnIndex) {
+            // If the column is not hidden already and not excluded from the default visible columns
+            // add it to the visibleColumnsIndexesSet
+            return {
+                ...column,
+                sortable: propertiesSortable,
+            };
+        });
+    });
+    // Update the columns when the properties change
+    React.useEffect(
         function () {
-            return propertiesColumns.map(function (column, columnIndex) {
-                // If the column is not hidden already and not excluded from the default visible columns
-                // add it to the visibleColumnsIndexesSet
-                return {
-                    ...column,
-                    sortable: propertiesSortable,
-                };
+            setColumns((previousColumns) => {
+                if(properties.loading) {
+                    return previousColumns;
+                }
+
+                return propertiesColumns.map(function (column, columnIndex) {
+                    return {
+                        ...column,
+                        sortable: propertiesSortable,
+                    };
+                });
             });
         },
-        [propertiesColumns, propertiesSortable],
+        [propertiesColumns, propertiesSortable, properties.loading],
     );
 
     // Rows

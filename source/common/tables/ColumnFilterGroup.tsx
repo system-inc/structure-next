@@ -225,8 +225,8 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                     onChange={(value) => {
                         setColumnFilterGroupData((previousColumnFilterGroupData) => ({
                             ...previousColumnFilterGroupData,
-                            conditions: previousColumnFilterGroupData.conditions.map((condition) =>
-                                condition.id === condition.id ? { ...condition, value } : condition,
+                            conditions: previousColumnFilterGroupData.conditions.map((oldCondition) =>
+                                oldCondition.id === condition.id ? { ...oldCondition, value } : oldCondition,
                             ),
                         }));
                     }}
@@ -241,12 +241,16 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                     placeholder="Value..."
                     defaultValue={condition.value}
                     onChange={(value) => {
-                        setColumnFilterGroupData((previousColumnFilterGroupData) => ({
-                            ...previousColumnFilterGroupData,
-                            conditions: previousColumnFilterGroupData.conditions.map((condition) =>
-                                condition.id === condition.id ? { ...condition, value } : condition,
-                            ),
-                        }));
+                        setColumnFilterGroupData((previousColumnFilterGroupData) => {
+                            const updatedCondition = { ...condition, value };
+
+                            return {
+                                ...previousColumnFilterGroupData,
+                                conditions: previousColumnFilterGroupData.conditions.map((oldCondition) =>
+                                    oldCondition.id === condition.id ? updatedCondition : oldCondition,
+                                ),
+                            };
+                        });
                     }}
                 />
             );
@@ -255,6 +259,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
     }
 
     // console.log('columns', properties.columns);
+    console.log('columnFilterGroupData', columnFilterGroupData);
 
     // Render the component
     return (
@@ -263,7 +268,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                 {/* Conditions */}
                 {columnFilterGroupData.conditions.map(function (condition, conditionIndex) {
                     return (
-                        <div key={condition.id} className="flex space-x-2">
+                        <div id="condition" key={condition.id} className="flex space-x-2">
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
