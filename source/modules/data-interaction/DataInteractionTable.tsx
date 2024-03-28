@@ -287,20 +287,6 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
             }) ?? [];
     }
 
-    let key = '';
-    if(databaseName) {
-        key += databaseName;
-    }
-    if(tableName) {
-        key += tableName;
-    }
-    if(queryState.loading) {
-        key += 'loading';
-    }
-    else if(queryState.data) {
-        key += 'loaded';
-    }
-
     // console.log('queryState', queryState);
 
     // Render the component
@@ -384,7 +370,6 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
             </div>
 
             <Table
-                key={key}
                 {...properties}
                 columns={columns}
                 rows={rows}
@@ -400,7 +385,8 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
                 error={queryState.error as ApolloError}
             />
 
-            {relations && relationsRows.length > 0 && (
+            {/* FIXME: Uncomment after fixing above table rendering issues. */}
+            {/* {relations && relationsRows.length > 0 && (
                 <>
                     <h3 className="mt-8">{tableName} Relations</h3>
                     <Table
@@ -410,7 +396,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
                         loading={queryState.loading}
                     />
                 </>
-            )}
+            )} */}
         </>
     );
 }

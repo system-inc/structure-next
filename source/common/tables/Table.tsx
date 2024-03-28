@@ -109,22 +109,36 @@ export function Table(properties: TableInterface) {
 
         return initialVisibleColumnIndexesSet;
     });
+
     const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
 
     // Columns
+    // Extract the dependencies
+    const propertiesColumns = properties.columns;
+    const propertiesSortable = properties.sortable;
     const columns = React.useMemo(
         function () {
-            return properties.columns.map(function (column, columnIndex) {
+            return propertiesColumns.map(function (column, columnIndex) {
+                // If the column is not hidden already and not excluded from the default visible columns
+                // add it to the visibleColumnsIndexesSet
+                if(
+                    !column.hidden &&
+                    !visibleColumnsIndexesSet.has(columnIndex) &&
+                    !properties.defaultVisibleColumnsIdentifiers
+                ) {
+                    visibleColumnsIndexesSet.add(columnIndex);
+                }
+
                 return {
                     ...column,
                     // Add the hidden property using the visibleColumnsIndexesSet
                     hidden: !visibleColumnsIndexesSet.has(columnIndex),
-                    sortable: properties.sortable,
+                    sortable: propertiesSortable,
                 };
             });
         },
-        [properties.columns, properties.sortable, visibleColumnsIndexesSet],
+        [propertiesColumns, propertiesSortable, visibleColumnsIndexesSet, properties.defaultVisibleColumnsIdentifiers],
     );
 
     // Rows
@@ -204,6 +218,7 @@ export function Table(properties: TableInterface) {
     );
 
     // Column TableRow properties
+    const propertiesRowSelection = properties.rowSelection;
     const columnTableRowProperties = React.useMemo(
         function () {
             // Determine if the header row is selected
@@ -234,18 +249,20 @@ export function Table(properties: TableInterface) {
                 selected = true;
             }
 
+            const cells = columns
+                // Filter out the hidden columns
+                .filter((column, columnIndex) => !column.hidden)
+                .map(function (column) {
+                    return {
+                        value: column.title,
+                        column: column,
+                    };
+                });
+
             return {
                 type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
-                cells: columns
-                    // Filter out the hidden columns
-                    .filter((column, columnIndex) => !column.hidden)
-                    .map(function (column) {
-                        return {
-                            value: column.title,
-                            column: column,
-                        };
-                    }),
-                selection: properties.rowSelection,
+                cells: cells,
+                selection: propertiesRowSelection,
                 selected: selected,
                 onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                     // If the header row is selected, select all visible rows
@@ -269,7 +286,7 @@ export function Table(properties: TableInterface) {
                 },
             };
         },
-        [rows, columns, properties.rowSelection, selectedRowsIndexesSet],
+        [rows, columns, propertiesRowSelection, selectedRowsIndexesSet],
     );
 
     // Defaults
@@ -379,6 +396,17 @@ export function Table(properties: TableInterface) {
         },
         [onFiltersChange],
     );
+
+    console.log('Table', {
+        columns,
+        rows,
+        selectedRowsIndexesSet,
+        visibleColumnsIndexesSet,
+        searchTerm,
+        filtersReference,
+        filtersEnabled,
+        columnTableRowProperties,
+    });
 
     // Render the component
     return (

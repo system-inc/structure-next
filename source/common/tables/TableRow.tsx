@@ -21,11 +21,11 @@ export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElem
     onSelectChange?: (row: TableRowInterface, rowSelected: boolean) => void;
 }
 export function TableRow(properties: TableRowInterface) {
-    let cells = properties.cells;
+    const cells = properties.cells;
 
     // Defaults
-    let type = properties.type || 'Body';
-    let CellComponent = type === 'Header' || type === 'Footer' ? TableHeaderCell : TableCell;
+    const type = properties.type || 'Body';
+    const CellComponent = type === 'Header' || type === 'Footer' ? TableHeaderCell : TableCell;
     // console.log('cells', cells);
 
     // Function to intercept the onClick event
@@ -61,7 +61,7 @@ export function TableRow(properties: TableRowInterface) {
             {properties.selection && (
                 <CellComponent className="w-4 px-2 py-1 text-left">
                     <InputCheckbox
-                        key={properties.selected ? 'selected' : 'unselected'}
+                        // key={properties.selected ? 'selected' : 'unselected'}
                         tabIndex={0}
                         defaultValue={properties.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
                         onChange={function (value, event) {
