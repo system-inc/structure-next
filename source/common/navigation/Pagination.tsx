@@ -73,6 +73,15 @@ export function Pagination(properties: PaginationInterface) {
                         {
                             value: '100',
                         },
+                        {
+                            value: '250',
+                        },
+                        {
+                            value: '500',
+                        },
+                        {
+                            value: '1000',
+                        },
                     ]}
                     defaultValue={itemsPerPage.toString()}
                     onChange={function (value) {

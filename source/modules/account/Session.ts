@@ -1,10 +1,13 @@
+// Dependencies - Structure
+import StructureSettings from '@structure/StructureSettings';
+
 // Dependencies
 import { type CookieSetOptions } from 'universal-cookie';
 import cookies from '@structure/source/utilities/Cookies';
 
 // Class - Session
 export class Session {
-    static sessionTokenKey = 'sessionToken';
+    static sessionTokenKey = StructureSettings.identifier + 'SessionToken';
 
     static cookieConfiguration: CookieSetOptions = {
         path: '/',
@@ -16,23 +19,23 @@ export class Session {
 
     // Gets the session token from the browser cookies
     static getToken() {
-        return cookies.get(this.sessionTokenKey) as string | null;
+        return cookies.get(Session.sessionTokenKey) as string | null;
     }
 
     // Sets the session token in local storage and the browser cookies
     static setToken(sessionToken: string) {
         // Set the session token in local storage
-        localStorage.setItem(this.sessionTokenKey, sessionToken);
+        localStorage.setItem(Session.sessionTokenKey, sessionToken);
 
-        return cookies.set(this.sessionTokenKey, sessionToken, this.cookieConfiguration);
+        return cookies.set(Session.sessionTokenKey, sessionToken, Session.cookieConfiguration);
     }
 
     // Deletes the session token from local storage and the browser cookies
     static deleteToken() {
         // Delete the session token from local storage
-        localStorage.removeItem(this.sessionTokenKey);
+        localStorage.removeItem(Session.sessionTokenKey);
 
-        return cookies.remove(this.sessionTokenKey, this.cookieConfiguration);
+        return cookies.remove(Session.sessionTokenKey, Session.cookieConfiguration);
     }
 }
 

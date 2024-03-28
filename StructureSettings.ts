@@ -35,6 +35,7 @@ interface Platform {
 }
 
 interface StructureSettingsType {
+    identifier: string;
     title: string;
     ownerDisplayName: string;
     tagline: string;

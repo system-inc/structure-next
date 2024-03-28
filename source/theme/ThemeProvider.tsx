@@ -70,7 +70,12 @@ export function ThemeProvider({ children }: ThemeProviderInterface) {
             // right away without needing to check the theme mode in local storage which
             // would flash the page in light mode before switching to dark mode if the client
             // is in dark mode
-            cookies.set(themeClassNameCookieKey, darkThemeClassName);
+            cookies.set(themeClassNameCookieKey, darkThemeClassName, {
+                path: '/',
+                maxAge: 31536000, // 1 year
+                sameSite: 'strict',
+                secure: true,
+            });
 
             setTheme(darkThemeClassName);
         }
