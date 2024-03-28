@@ -74,6 +74,8 @@ export function Table(properties: TableInterface) {
     const previousFiltersReference = React.useRef<ColumnFilterGroupDataInterface | undefined>(properties.filters);
 
     // State
+    const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
+    const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
     const [selectedRowsIndexesSet, setSelectedRowsIndexesSet] = React.useState<Set<number>>(function () {
         const initialSelectedRowsIndexesSet = new Set<number>();
 
@@ -109,6 +111,7 @@ export function Table(properties: TableInterface) {
 
         return initialVisibleColumnIndexesSet;
     });
+
     // Sync the visible columns with the default visible columns and available columns
     React.useEffect(
         function () {
@@ -133,9 +136,6 @@ export function Table(properties: TableInterface) {
         [properties.columns, properties.defaultVisibleColumnsIdentifiers, visibleColumnsIndexesSet],
     );
 
-    const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
-    const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
-
     // Columns
     // Extract the dependencies
     const propertiesColumns = properties.columns;
@@ -150,6 +150,7 @@ export function Table(properties: TableInterface) {
             };
         });
     });
+
     // Update the columns when the properties change
     React.useEffect(
         function () {
