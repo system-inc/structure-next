@@ -259,7 +259,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
     }
 
     // console.log('columns', properties.columns);
-    console.log('columnFilterGroupData', columnFilterGroupData);
+    // console.log('columnFilterGroupData', columnFilterGroupData);
 
     // Render the component
     return (
