@@ -109,6 +109,29 @@ export function Table(properties: TableInterface) {
 
         return initialVisibleColumnIndexesSet;
     });
+    // Sync the visible columns with the default visible columns and available columns
+    React.useEffect(
+        function () {
+            // If the defaultVisibleColumnsIdentifiers is provided
+            if(properties.defaultVisibleColumnsIdentifiers) {
+                // Loop over the columns and add the default visible columns to the set
+                properties.columns.forEach(function (column, columnIndex) {
+                    if(properties.defaultVisibleColumnsIdentifiers?.includes(column.identifier)) {
+                        visibleColumnsIndexesSet.add(columnIndex);
+                    }
+                });
+            }
+            // Otherwise, use all columns
+            else {
+                properties.columns.forEach(function (column, columnIndex) {
+                    if(!column.hidden) {
+                        visibleColumnsIndexesSet.add(columnIndex);
+                    }
+                });
+            }
+        },
+        [properties.columns, properties.defaultVisibleColumnsIdentifiers, visibleColumnsIndexesSet],
+    );
 
     const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
@@ -122,23 +145,13 @@ export function Table(properties: TableInterface) {
             return propertiesColumns.map(function (column, columnIndex) {
                 // If the column is not hidden already and not excluded from the default visible columns
                 // add it to the visibleColumnsIndexesSet
-                if(
-                    !column.hidden &&
-                    !visibleColumnsIndexesSet.has(columnIndex) &&
-                    !properties.defaultVisibleColumnsIdentifiers
-                ) {
-                    visibleColumnsIndexesSet.add(columnIndex);
-                }
-
                 return {
                     ...column,
-                    // Add the hidden property using the visibleColumnsIndexesSet
-                    hidden: !visibleColumnsIndexesSet.has(columnIndex),
                     sortable: propertiesSortable,
                 };
             });
         },
-        [propertiesColumns, propertiesSortable, visibleColumnsIndexesSet, properties.defaultVisibleColumnsIdentifiers],
+        [propertiesColumns, propertiesSortable],
     );
 
     // Rows
@@ -189,7 +202,7 @@ export function Table(properties: TableInterface) {
                     updatedRow.cells.forEach(function (cell) {
                         // If the cell not hidden and the cell value includes the search term
                         if(
-                            !cell.column?.hidden &&
+                            visibleColumnsIndexesSet.has(columns.findIndex((column) => column === cell.column)) &&
                             cell.value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
                         ) {
                             // Show the row
@@ -251,7 +264,7 @@ export function Table(properties: TableInterface) {
 
             const cells = columns
                 // Filter out the hidden columns
-                .filter((column, columnIndex) => !column.hidden)
+                .filter((column, columnIndex) => visibleColumnsIndexesSet.has(columnIndex))
                 .map(function (column) {
                     return {
                         value: column.title,
@@ -286,7 +299,7 @@ export function Table(properties: TableInterface) {
                 },
             };
         },
-        [rows, columns, propertiesRowSelection, selectedRowsIndexesSet],
+        [rows, columns, propertiesRowSelection, selectedRowsIndexesSet, visibleColumnsIndexesSet],
     );
 
     // Defaults

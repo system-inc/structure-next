@@ -140,6 +140,14 @@ export const InputMultipleSelect = React.forwardRef<
         [loadMenuItems],
     );
 
+    // Update the items when the default items change
+    React.useEffect(
+        function () {
+            setValue(properties.defaultValue);
+        },
+        [properties.defaultValue],
+    );
+
     // Function to expose methods to parent components
     React.useImperativeHandle(reference, function () {
         return {
