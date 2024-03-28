@@ -425,16 +425,16 @@ export function Table(properties: TableInterface) {
         [onFiltersChange],
     );
 
-    console.log('Table', {
-        columns,
-        rows,
-        selectedRowsIndexesSet,
-        visibleColumnsIndexesSet,
-        searchTerm,
-        filtersReference,
-        filtersEnabled,
-        columnTableRowProperties,
-    });
+    // console.log('Table', {
+    //     columns,
+    //     rows,
+    //     selectedRowsIndexesSet,
+    //     visibleColumnsIndexesSet,
+    //     searchTerm,
+    //     filtersReference,
+    //     filtersEnabled,
+    //     columnTableRowProperties,
+    // });
 
     // Render the component
     return (

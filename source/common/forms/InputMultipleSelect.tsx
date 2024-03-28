@@ -118,7 +118,7 @@ export const InputMultipleSelect = React.forwardRef<
                     setItems(items);
                 }
                 catch(error: any) {
-                    console.log('Error loading menu items:', error);
+                    console.error('Error loading menu items:', error);
                     // Set the loading error
                     setLoadingItemsError(error.message ?? 'Error Loading Items');
                 }
