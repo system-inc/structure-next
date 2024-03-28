@@ -60,6 +60,7 @@ interface StructureSettingsType {
 
 // Default Settings
 let StructureSettings: StructureSettingsType = {
+    identifier: 'system',
     title: 'Structure',
     ownerDisplayName: 'System, Inc.',
     tagline: 'React and Next.js Implementation for Base',
