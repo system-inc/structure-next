@@ -59,7 +59,7 @@ export function Pagination(properties: PaginationInterface) {
                 <p>Show</p>
                 <InputSelect
                     key={itemsPerPage}
-                    className="w-24"
+                    className="w-[102px]"
                     items={[
                         {
                             value: '10',
@@ -81,6 +81,7 @@ export function Pagination(properties: PaginationInterface) {
                         },
                         {
                             value: '1000',
+                            content: '1,000',
                         },
                     ]}
                     defaultValue={itemsPerPage.toString()}
