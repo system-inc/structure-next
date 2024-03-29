@@ -88,6 +88,24 @@ export function Table(properties: TableInterface) {
 
         return initialSelectedRowsIndexesSet;
     });
+
+    // Sync the selected rows with the default selected rows
+    React.useEffect(
+        function () {
+            setSelectedRowsIndexesSet((previousSelectedRowsIndexes) => {
+                return new Set(
+                    properties.rows.reduce(function (selectedRowsIndexes, row, rowIndex) {
+                        if(row.selected) {
+                            selectedRowsIndexes.add(rowIndex);
+                        }
+                        return selectedRowsIndexes;
+                    }, previousSelectedRowsIndexes),
+                );
+            });
+        },
+        [properties.rows],
+    );
+
     const [visibleColumnsIndexesSet, setVisibleColumnsIndexesSet] = React.useState<Set<number>>(function () {
         const initialVisibleColumnIndexesSet = new Set<number>();
 
@@ -155,7 +173,7 @@ export function Table(properties: TableInterface) {
     React.useEffect(
         function () {
             setColumns((previousColumns) => {
-                if(properties.loading) {
+                if(properties.loading || properties.error) {
                     return previousColumns;
                 }
 
@@ -167,7 +185,7 @@ export function Table(properties: TableInterface) {
                 });
             });
         },
-        [propertiesColumns, propertiesSortable, properties.loading],
+        [propertiesColumns, propertiesSortable, properties.loading, properties.error],
     );
 
     // Rows

@@ -61,7 +61,22 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                       },
                   ],
               }
-            : properties.columnFilterGroupData,
+            : // Otherwise, just use the data, but ensure all conditions have a unique ID
+              {
+                  ...properties.columnFilterGroupData,
+                  conditions: properties.columnFilterGroupData.conditions.map((condition) => {
+                      return {
+                          ...condition,
+                          id: condition.id ?? uniqueIdentifier(),
+                      };
+                  }),
+                  filters: properties.columnFilterGroupData.filters?.map((filter) => {
+                      return {
+                          ...filter,
+                          id: filter.id ?? uniqueIdentifier(),
+                      };
+                  }),
+              },
     );
 
     // Effect to trigger onChange when the filterData changes

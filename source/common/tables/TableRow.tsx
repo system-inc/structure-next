@@ -61,7 +61,7 @@ export function TableRow(properties: TableRowInterface) {
             {properties.selection && (
                 <CellComponent className="w-4 px-2 py-1 text-left">
                     <InputCheckbox
-                        // key={properties.selected ? 'selected' : 'unselected'}
+                        key={properties.selected ? 'selected' : 'unselected'}
                         tabIndex={0}
                         defaultValue={properties.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
                         onChange={function (value, event) {
