@@ -25,6 +25,15 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 import { uniqueIdentifier } from '@structure/source/utilities/String';
 
+// Dependencies - State Management
+import { proxy as createState, useSnapshot as useValtioState } from 'valtio';
+
+// Table state management
+export const tableState = createState({
+    selectedRowsIndexesSet: new Set<number>(),
+    allRowsSelected: false,
+});
+
 // Component - Table
 export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
     containerClassName?: string;
@@ -76,34 +85,21 @@ export function Table(properties: TableInterface) {
     // State
     const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
-    const [selectedRowsIndexesSet, setSelectedRowsIndexesSet] = React.useState<Set<number>>(function () {
-        const initialSelectedRowsIndexesSet = new Set<number>();
-
-        // Loop over the rows and add the selected ones to the set
-        properties.rows.forEach(function (row, rowIndex) {
-            if(row.selected) {
-                initialSelectedRowsIndexesSet.add(rowIndex);
-            }
-        });
-
-        return initialSelectedRowsIndexesSet;
-    });
+    const selectedRowsIndexesSet = useValtioState(tableState).selectedRowsIndexesSet;
 
     // Sync the selected rows with the default selected rows
     React.useEffect(
         function () {
-            setSelectedRowsIndexesSet((previousSelectedRowsIndexes) => {
-                return new Set(
-                    properties.rows.reduce(function (selectedRowsIndexes, row, rowIndex) {
-                        if(row.selected) {
-                            selectedRowsIndexes.add(rowIndex);
-                        }
-                        return selectedRowsIndexes;
-                    }, previousSelectedRowsIndexes),
-                );
+            properties.rows.forEach(function (row, rowIndex) {
+                if(row.selected) {
+                    tableState.selectedRowsIndexesSet.add(rowIndex);
+                }
+                else {
+                    tableState.selectedRowsIndexesSet.delete(rowIndex);
+                }
             });
         },
-        [properties.rows],
+        [properties.rows, selectedRowsIndexesSet],
     );
 
     const [visibleColumnsIndexesSet, setVisibleColumnsIndexesSet] = React.useState<Set<number>>(function () {
@@ -189,9 +185,11 @@ export function Table(properties: TableInterface) {
     );
 
     // Rows
+    const propertiesRowSelection = properties.rowSelection;
+    const propertiesRows = properties.rows;
     const rows = React.useMemo(
         function () {
-            return properties.rows.map(function (row, rowIndex) {
+            return propertiesRows.map(function (row, rowIndex) {
                 const updatedRow = {
                     ...row,
                     type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
@@ -205,23 +203,18 @@ export function Table(properties: TableInterface) {
                         .filter(function (cell, columnIndex) {
                             return visibleColumnsIndexesSet.has(columnIndex);
                         }),
-                    selection: properties.rowSelection,
-                    selected: selectedRowsIndexesSet.has(rowIndex),
-                    onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
+                    selection: propertiesRowSelection,
+                    selected: tableState.selectedRowsIndexesSet.has(rowIndex),
+                    onSelectChange: function (rowSelected: boolean) {
                         // If the row is selected
                         if(rowSelected) {
-                            setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                                selectedRowsIndexes.add(rowIndex);
-                                return new Set(selectedRowsIndexes);
-                            });
+                            tableState.selectedRowsIndexesSet.add(rowIndex);
                         }
                         // If the row is unselected
                         else {
-                            setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                                selectedRowsIndexes.delete(rowIndex);
-                                return new Set(selectedRowsIndexes);
-                            });
+                            tableState.selectedRowsIndexesSet.delete(rowIndex);
                         }
+                        console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
                     },
                 };
 
@@ -254,18 +247,10 @@ export function Table(properties: TableInterface) {
                 return updatedRow;
             });
         },
-        [
-            columns,
-            properties.rows,
-            properties.rowSelection,
-            selectedRowsIndexesSet,
-            visibleColumnsIndexesSet,
-            searchTerm,
-        ],
+        [columns, propertiesRows, propertiesRowSelection, selectedRowsIndexesSet, visibleColumnsIndexesSet, searchTerm],
     );
 
     // Column TableRow properties
-    const propertiesRowSelection = properties.rowSelection;
     const columnTableRowProperties = React.useMemo(
         function () {
             // Determine if the header row is selected
@@ -281,20 +266,20 @@ export function Table(properties: TableInterface) {
                     thereAreVisibleRows = true;
 
                     // If the row is not selected
-                    if(!selectedRowsIndexesSet.has(rowIndex)) {
-                        // Not all visible rows are selected
-                        allVisibleRowsAreSelected = false;
+                    // if(!tableState.selectedRowsIndexesSet.has(rowIndex)) {
+                    //     // Not all visible rows are selected
+                    //     allVisibleRowsAreSelected = false;
 
-                        // Break out of the loop
-                        return;
-                    }
+                    //     // Break out of the loop
+                    //     return;
+                    // }
                 }
             });
 
             // If there are visible rows and all visible rows are selected
-            if(thereAreVisibleRows && allVisibleRowsAreSelected) {
-                selected = true;
-            }
+            // if(thereAreVisibleRows && allVisibleRowsAreSelected) {
+            //     selected = true;
+            // }
 
             const cells = columns
                 // Filter out the hidden columns
@@ -310,26 +295,23 @@ export function Table(properties: TableInterface) {
                 type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
                 cells: cells,
                 selection: propertiesRowSelection,
-                selected: selected,
-                onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
+                // selected: selected,
+                onSelectChange: function (rowSelected: boolean) {
                     // If the header row is selected, select all visible rows
                     if(rowSelected) {
-                        setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                            rows.forEach(function (row, rowIndex) {
-                                if(row.visible) {
-                                    selectedRowsIndexes.add(rowIndex);
-                                }
-                            });
-                            return new Set(selectedRowsIndexes);
+                        rows.forEach(function (row, rowIndex) {
+                            if(row.visible) {
+                                tableState.selectedRowsIndexesSet.add(rowIndex);
+                            }
                         });
+                        tableState.allRowsSelected = true;
                     }
                     // If the header row is unselected, unselect all
                     else {
-                        setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                            selectedRowsIndexes.clear();
-                            return new Set(selectedRowsIndexes);
-                        });
+                        tableState.selectedRowsIndexesSet.clear();
+                        tableState.allRowsSelected = false;
                     }
+                    console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
                 },
             };
         },
@@ -365,7 +347,7 @@ export function Table(properties: TableInterface) {
                                 // Get the selected rows, must use properties.rows here to get the original rows
                                 // If we use rows, they will have filtered cells
                                 const selectedRows = properties.rows.filter(function (row, rowIndex) {
-                                    return selectedRowsIndexesSet.has(rowIndex);
+                                    return tableState.selectedRowsIndexesSet.has(rowIndex);
                                 });
 
                                 // Execute the action function
@@ -385,7 +367,6 @@ export function Table(properties: TableInterface) {
         [
             properties.rows,
             properties.rowsSelectionActions,
-            selectedRowsIndexesSet,
             columns,
             properties.columnVisibility,
             visibleColumnsIndexesSet.size,
@@ -444,16 +425,16 @@ export function Table(properties: TableInterface) {
         [onFiltersChange],
     );
 
-    // console.log('Table', {
-    //     columns,
-    //     rows,
-    //     selectedRowsIndexesSet,
-    //     visibleColumnsIndexesSet,
-    //     searchTerm,
-    //     filtersReference,
-    //     filtersEnabled,
-    //     columnTableRowProperties,
-    // });
+    console.log('Table', {
+        columns,
+        rows,
+        selectedRowsIndexesSet,
+        visibleColumnsIndexesSet,
+        searchTerm,
+        filtersReference,
+        filtersEnabled,
+        columnTableRowProperties,
+    });
 
     // Render the component
     return (
@@ -516,12 +497,12 @@ export function Table(properties: TableInterface) {
                             >
                                 <Button
                                     // Fade in and out when appearing and disappearing
-                                    data-show={selectedRowsIndexesSet.size > 0}
+                                    data-show={tableState.selectedRowsIndexesSet.size > 0}
                                     className="duration-75 data-[show=true]:flex data-[show=false]:hidden data-[show=true]:animate-in data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:fade-in"
                                     icon={CheckCircledIcon}
                                     iconPosition="left"
                                 >
-                                    {selectedRowsIndexesSet.size} of {rows.length} selected
+                                    {tableState.selectedRowsIndexesSet.size} of {rows.length} selected
                                 </Button>
                             </PopoverMenu>
                         )}
