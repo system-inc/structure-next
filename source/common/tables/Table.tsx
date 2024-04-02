@@ -76,32 +76,31 @@ export function Table(properties: TableInterface) {
     // State
     const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
-    const [selectedRowsIndexesSet, setSelectedRowsIndexesSet] = React.useState<Set<number>>(function () {
+    const selectedRowsIndexesSet = React.useMemo<Set<number>>(function () {
         const initialSelectedRowsIndexesSet = new Set<number>();
 
         // Loop over the rows and add the selected ones to the set
         properties.rows.forEach(function (row, rowIndex) {
             if(row.selected) {
                 initialSelectedRowsIndexesSet.add(rowIndex);
+                // Emit the updateCheckboxes event
             }
         });
+        window.dispatchEvent(new CustomEvent('updateCheckboxes'));
 
         return initialSelectedRowsIndexesSet;
-    });
+    }, []);
 
     // Sync the selected rows with the default selected rows
     React.useEffect(
         function () {
-            setSelectedRowsIndexesSet((previousSelectedRowsIndexes) => {
-                return new Set(
-                    properties.rows.reduce(function (selectedRowsIndexes, row, rowIndex) {
-                        if(row.selected) {
-                            selectedRowsIndexes.add(rowIndex);
-                        }
-                        return selectedRowsIndexes;
-                    }, previousSelectedRowsIndexes),
-                );
+            properties.rows.forEach(function (row, rowIndex) {
+                if(row.selected) {
+                    selectedRowsIndexesSet.add(rowIndex);
+                }
             });
+            // Emit the updateCheckboxes event
+            window.dispatchEvent(new CustomEvent('updateCheckboxes'));
         },
         [properties.rows],
     );
@@ -189,9 +188,11 @@ export function Table(properties: TableInterface) {
     );
 
     // Rows
+    const propertiesRows = properties.rows;
+    const propertiesRowSelection = properties.rowSelection;
     const rows = React.useMemo(
         function () {
-            return properties.rows.map(function (row, rowIndex) {
+            return propertiesRows.map(function (row, rowIndex) {
                 const updatedRow = {
                     ...row,
                     type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
@@ -205,23 +206,20 @@ export function Table(properties: TableInterface) {
                         .filter(function (cell, columnIndex) {
                             return visibleColumnsIndexesSet.has(columnIndex);
                         }),
-                    selection: properties.rowSelection,
+                    selection: propertiesRowSelection,
                     selected: selectedRowsIndexesSet.has(rowIndex),
                     onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                         // If the row is selected
                         if(rowSelected) {
-                            setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                                selectedRowsIndexes.add(rowIndex);
-                                return new Set(selectedRowsIndexes);
-                            });
+                            selectedRowsIndexesSet.add(rowIndex);
                         }
                         // If the row is unselected
                         else {
-                            setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                                selectedRowsIndexes.delete(rowIndex);
-                                return new Set(selectedRowsIndexes);
-                            });
+                            selectedRowsIndexesSet.delete(rowIndex);
                         }
+                        // Emit the updateCheckboxes event
+                        window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+                        console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
                     },
                 };
 
@@ -254,18 +252,10 @@ export function Table(properties: TableInterface) {
                 return updatedRow;
             });
         },
-        [
-            columns,
-            properties.rows,
-            properties.rowSelection,
-            selectedRowsIndexesSet,
-            visibleColumnsIndexesSet,
-            searchTerm,
-        ],
+        [columns, propertiesRows, propertiesRowSelection, selectedRowsIndexesSet, visibleColumnsIndexesSet, searchTerm],
     );
 
     // Column TableRow properties
-    const propertiesRowSelection = properties.rowSelection;
     const columnTableRowProperties = React.useMemo(
         function () {
             // Determine if the header row is selected
@@ -314,22 +304,21 @@ export function Table(properties: TableInterface) {
                 onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                     // If the header row is selected, select all visible rows
                     if(rowSelected) {
-                        setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                            rows.forEach(function (row, rowIndex) {
-                                if(row.visible) {
-                                    selectedRowsIndexes.add(rowIndex);
-                                }
-                            });
-                            return new Set(selectedRowsIndexes);
+                        rows.forEach(function (row, rowIndex) {
+                            if(row.visible) {
+                                selectedRowsIndexesSet.add(rowIndex);
+                                // Emit the updateCheckboxes event
+                                window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+                            }
                         });
                     }
                     // If the header row is unselected, unselect all
                     else {
-                        setSelectedRowsIndexesSet(function (selectedRowsIndexes) {
-                            selectedRowsIndexes.clear();
-                            return new Set(selectedRowsIndexes);
-                        });
+                        selectedRowsIndexesSet.clear();
+                        // Emit the updateCheckboxes event
+                        window.dispatchEvent(new CustomEvent('updateCheckboxes'));
                     }
+                    console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
                 },
             };
         },
@@ -442,6 +431,16 @@ export function Table(properties: TableInterface) {
             setFiltersEnabled(filtersOn);
         },
         [onFiltersChange],
+    );
+
+    // Reset selection when pagination changes
+    React.useEffect(
+        function () {
+            selectedRowsIndexesSet.clear();
+            // Emit the updateCheckboxes event
+            window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+        },
+        [properties.pagination],
     );
 
     // console.log('Table', {
@@ -578,7 +577,11 @@ export function Table(properties: TableInterface) {
                         {/* Column Header Row */}
                         {columns && columns.length > 0 && (
                             <thead className="border-b border-light-6 dark:border-dark-4">
-                                <TableRow {...columnTableRowProperties} />
+                                <TableRow
+                                    rowsLength={rows.length}
+                                    selectedRowsIndexesSet={selectedRowsIndexesSet}
+                                    {...columnTableRowProperties}
+                                />
                             </thead>
                         )}
 
@@ -601,7 +604,15 @@ export function Table(properties: TableInterface) {
                                         return row.visible;
                                     })
                                     .map(function (row, rowIndex) {
-                                        return <TableRow key={rowIndex} {...row} />;
+                                        return (
+                                            <TableRow
+                                                key={rowIndex}
+                                                {...row}
+                                                selectedRowsIndexesSet={selectedRowsIndexesSet}
+                                                rowsLength={rows.length}
+                                                rowIndex={rowIndex}
+                                            />
+                                        );
                                     })}
                             </tbody>
                         ) : (
