@@ -14,7 +14,8 @@ import {
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Dependencies - State Management
-import { useSnapshot as useValtioState, subscribe as subscribeToValtioState } from 'valtio';
+// import { useSnapshot as useValtioState, subscribe as subscribeToValtioState } from 'valtio';
+import { subscribeKey as subscribeToValtioStateKey } from 'valtio/utils';
 
 // Table State Management
 import { tableState } from '@structure/source/common/tables/Table';
@@ -28,7 +29,8 @@ export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElem
     // Selection
     selection?: boolean;
     selected?: boolean;
-    onSelectChange?: (rowSelected: boolean) => void;
+    onSelectChange?: (row: TableRowInterface, rowSelected: boolean) => void;
+    rowIndex?: number;
 }
 export function TableRow(properties: TableRowInterface) {
     const cells = properties.cells;
@@ -46,7 +48,7 @@ export function TableRow(properties: TableRowInterface) {
                 // Select the row
                 if(properties.onSelectChange) {
                     // console.log('Toggling row selection');
-                    properties.onSelectChange(!properties.selected);
+                    properties.onSelectChange(properties, !properties.selected);
                 }
             }
 
@@ -100,18 +102,17 @@ interface TableRowCheckboxInterface {
 function TableRowCheckbox(properties: TableRowCheckboxInterface) {
     // Checkbox reference
     const checkboxRef = React.useRef<InputCheckboxReferenceInterface>(null);
-
-    // Subscribe to the table state
-    // const tableStateSnapshot = useValtioState(tableState);
+    const rowIndex = properties.row.rowIndex;
 
     React.useEffect(function () {
-        const unsubscribe = subscribeToValtioState(tableState, function () {
+        const unsubscribe = subscribeToValtioStateKey(tableState, 'selectedRowsIndexesSet', function () {
             if(checkboxRef.current) {
-                checkboxRef.current.setValue(
-                    tableState.allRowsSelected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked,
-                );
+                console.log('Updating checkbox state');
+                const selected = tableState.selectedRowsIndexesSet.has(rowIndex ?? -1);
+                checkboxRef.current.setValue(selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked);
             }
         });
+
         return function () {
             unsubscribe();
         };
@@ -125,7 +126,7 @@ function TableRowCheckbox(properties: TableRowCheckboxInterface) {
             defaultValue={properties.row.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
             onChange={function (value, event) {
                 if(properties.row.onSelectChange) {
-                    properties.row.onSelectChange(value === InputCheckboxState.Checked ? true : false);
+                    properties.row.onSelectChange(properties.row, value === InputCheckboxState.Checked ? true : false);
                 }
             }}
         />
