@@ -18,7 +18,7 @@ import { useSnapshot as useValtioState, subscribe as subscribeToValtioState } fr
 // import { subscribeKey as subscribeToValtioStateKey } from 'valtio/utils';
 
 // Table State Management
-import { proxySelectedRowsSet, tableState } from '@structure/source/common/tables/Table';
+import { tableState } from '@structure/source/common/tables/Table';
 
 // Component - TableRow
 export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElement> {
@@ -104,23 +104,26 @@ function TableRowCheckbox(properties: TableRowCheckboxInterface) {
     // Checkbox reference
     const checkboxRef = React.useRef<InputCheckboxReferenceInterface>(null);
 
-    React.useEffect(function () {
-        if(checkboxRef.current) {
-            const unsubscribe = subscribeToValtioState(proxySelectedRowsSet, function (value) {
-                console.log('Updating checkbox state', value);
-                const rowIndex = properties.row.rowIndex;
-                const selected =
-                    proxySelectedRowsSet.has(rowIndex ?? -1) ||
-                    (properties.type === 'Header' &&
-                        (tableState.allRowsSelected ||
-                            proxySelectedRowsSet.size === tableState.formattedRowsData.length));
-                checkboxRef.current?.setValue(selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked);
-            });
-            return function () {
-                unsubscribe();
-            };
-        }
-    }, []);
+    React.useEffect(
+        function () {
+            if(checkboxRef.current) {
+                const unsubscribe = subscribeToValtioState(tableState, function (value) {
+                    console.log('Updating checkbox state', value);
+                    const rowIndex = properties.row.rowIndex;
+                    const selected =
+                        tableState.selectedRowsIndexesSet.has(rowIndex ?? -1) ||
+                        (properties.type === 'Header' &&
+                            (tableState.allRowsSelected ||
+                                tableState.selectedRowsIndexesSet.size === tableState.formattedRowsData.length));
+                    checkboxRef.current?.setValue(selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked);
+                });
+                return function () {
+                    unsubscribe();
+                };
+            }
+        },
+        [properties.row.rowIndex, properties.type],
+    );
 
     // Render the component
     return (

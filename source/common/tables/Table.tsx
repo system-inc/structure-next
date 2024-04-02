@@ -28,7 +28,7 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 import { proxy as createState, useSnapshot as useValtioState } from 'valtio';
 import { proxySet as createProxySet } from 'valtio/utils';
 
-// Table state management
+// Table state management -- Accessible globally to update and read the table state (.e.g., <TableRow />, etc.)
 export const proxySelectedRowsSet = createProxySet<number>([]);
 export const tableState = createState({
     // Search
@@ -46,7 +46,73 @@ export const tableState = createState({
 
     // Rows data
     rows: [] as TableRowInterface[],
-    formattedRowsData: [] as TableRowInterface[],
+
+    // Computed property to get the formatted rows data
+    get formattedRowsData() {
+        console.log('gettting formattedRowsData');
+        const visibleColumnsIndexesSet = tableState.visibleColumnsIndexesSet;
+
+        return this.rows.map(function (row, rowIndex) {
+            const updatedRow = {
+                ...row,
+                type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
+                cells: row.cells
+                    .map(function (cell, columnIndex) {
+                        return {
+                            ...cell,
+                            column: tableState.columns[columnIndex],
+                        };
+                    })
+                    .filter(function (cell, columnIndex) {
+                        return visibleColumnsIndexesSet.has(columnIndex);
+                    }),
+                onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
+                    // If the row is selected
+                    if(rowSelected) {
+                        tableState.selectedRowsIndexesSet.add(rowIndex);
+                    }
+                    // If the row is unselected
+                    else {
+                        tableState.selectedRowsIndexesSet.delete(rowIndex);
+                    }
+                    console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
+                },
+                selected: tableState.selectedRowsIndexesSet.has(rowIndex),
+                selection: tableState.showSelectColumn,
+            };
+
+            let rowVisible = true;
+
+            // If there is a search term
+            if(tableState.searchTerm !== '') {
+                // Start out with the row hidden
+                rowVisible = false;
+
+                // Loop over each cell
+                updatedRow.cells.forEach(function (cell) {
+                    // If the cell not hidden and the cell value includes the search term
+                    if(
+                        visibleColumnsIndexesSet.has(
+                            tableState.columns.findIndex((column) => column === cell.column),
+                        ) &&
+                        cell.value?.toString().toLowerCase().includes(tableState.searchTerm.toLowerCase())
+                    ) {
+                        // Show the row
+                        rowVisible = true;
+
+                        // Break out of the loop
+                        return;
+                    }
+                });
+            }
+
+            // Set the row visibility
+            updatedRow.visible = rowVisible;
+
+            return updatedRow;
+        });
+    },
+
     // Computed property to get the column table header properties
     get columnTableHeaderProperties() {
         console.log('gettting formattedTableRows');
@@ -73,12 +139,12 @@ export const tableState = createState({
                 // If the header row is selected, select all visible rows
                 if(rowSelected) {
                     Array.from(rowsData).map(function (_row, rowIndex) {
-                        proxySelectedRowsSet.add(rowIndex);
+                        tableState.selectedRowsIndexesSet.add(rowIndex);
                     });
                 }
                 // If the header row is unselected, unselect all
                 else {
-                    proxySelectedRowsSet.clear();
+                    tableState.selectedRowsIndexesSet.clear();
                 }
                 console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
             },
@@ -217,24 +283,19 @@ export function Table(properties: TableInterface) {
             }
             // Otherwise, update the columns
             else {
+                // Update the table state with the new columns and properties
                 tableState.columnsAreSortable = propertiesSortable ?? false;
                 tableState.columns = propertiesColumns;
 
-                // Set the formatted columns
-                const getFormattedColumns = () => {
-                    console.log('gettting formattedColumns');
-                    const columnsAreSortable = tableState.columnsAreSortable;
-
-                    return tableState.columns.map(function (column, columnIndex) {
-                        // If the column is not hidden already and not excluded from the default visible columns
-                        // add it to the visibleColumnsIndexesSet
-                        return {
-                            ...column,
-                            sortable: columnsAreSortable,
-                        };
-                    });
-                };
-                tableState.formattedColumns = getFormattedColumns();
+                // Update the formatted columns
+                tableState.formattedColumns = tableState.columns.map(function (column, columnIndex) {
+                    // If the column is not hidden already and not excluded from the default visible columns
+                    // add it to the visibleColumnsIndexesSet
+                    return {
+                        ...column,
+                        sortable: tableState.columnsAreSortable,
+                    };
+                });
             }
         },
         [properties.columns, properties.loading, propertiesSortable, properties.error, propertiesColumns],
@@ -246,75 +307,8 @@ export function Table(properties: TableInterface) {
     React.useEffect(
         function () {
             tableState.rows = properties.rows;
-
-            const getFormattedRowsData = () => {
-                console.log('gettting formattedRowsData');
-                const rows = tableState.rows;
-                const columns = tableState.columns;
-                const visibleColumnsIndexesSet = tableState.visibleColumnsIndexesSet;
-                const searchTerm = tableState.searchTerm;
-
-                return rows.map(function (row, rowIndex) {
-                    const updatedRow = {
-                        ...row,
-                        type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
-                        cells: row.cells
-                            .map(function (cell, columnIndex) {
-                                return {
-                                    ...cell,
-                                    column: columns[columnIndex],
-                                };
-                            })
-                            .filter(function (cell, columnIndex) {
-                                return visibleColumnsIndexesSet.has(columnIndex);
-                            }),
-                        onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
-                            // If the row is selected
-                            if(rowSelected) {
-                                proxySelectedRowsSet.add(rowIndex);
-                            }
-                            // If the row is unselected
-                            else {
-                                proxySelectedRowsSet.delete(rowIndex);
-                            }
-                            console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
-                        },
-                        selected: proxySelectedRowsSet.has(rowIndex),
-                        selection: tableSnapshot.showSelectColumn,
-                    };
-
-                    let rowVisible = true;
-
-                    // If there is a search term
-                    if(searchTerm !== '') {
-                        // Start out with the row hidden
-                        rowVisible = false;
-
-                        // Loop over each cell
-                        updatedRow.cells.forEach(function (cell) {
-                            // If the cell not hidden and the cell value includes the search term
-                            if(
-                                visibleColumnsIndexesSet.has(columns.findIndex((column) => column === cell.column)) &&
-                                cell.value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-                            ) {
-                                // Show the row
-                                rowVisible = true;
-
-                                // Break out of the loop
-                                return;
-                            }
-                        });
-                    }
-
-                    // Set the row visibility
-                    updatedRow.visible = rowVisible;
-
-                    return updatedRow;
-                });
-            };
-            tableState.formattedRowsData = getFormattedRowsData();
         },
-        [properties.rows, properties.rowSelection],
+        [properties.rows],
     );
     tableState.showSelectColumn = properties.rowSelection || false;
 
@@ -353,7 +347,7 @@ export function Table(properties: TableInterface) {
                                 // Get the selected rows, must use properties.rows here to get the original rows
                                 // If we use rows, they will have filtered cells
                                 const selectedRows = properties.rows.filter(function (row, rowIndex) {
-                                    return proxySelectedRowsSet.has(rowIndex);
+                                    return tableState.selectedRowsIndexesSet.has(rowIndex);
                                 });
 
                                 // Execute the action function
@@ -507,12 +501,12 @@ export function Table(properties: TableInterface) {
                             >
                                 <Button
                                     // Fade in and out when appearing and disappearing
-                                    data-show={proxySelectedRowsSet.size > 0}
+                                    data-show={tableState.selectedRowsIndexesSet.size > 0}
                                     className="duration-75 data-[show=true]:flex data-[show=false]:hidden data-[show=true]:animate-in data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:fade-in"
                                     icon={CheckCircledIcon}
                                     iconPosition="left"
                                 >
-                                    {proxySelectedRowsSet.size} of {rowsData.length} selected
+                                    {tableState.selectedRowsIndexesSet.size} of {rowsData.length} selected
                                 </Button>
                             </PopoverMenu>
                         )}
