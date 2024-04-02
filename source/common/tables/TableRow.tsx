@@ -14,11 +14,11 @@ import {
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Dependencies - State Management
-// import { useSnapshot as useValtioState, subscribe as subscribeToValtioState } from 'valtio';
-import { subscribeKey as subscribeToValtioStateKey } from 'valtio/utils';
+import { useSnapshot as useValtioState, subscribe as subscribeToValtioState } from 'valtio';
+// import { subscribeKey as subscribeToValtioStateKey } from 'valtio/utils';
 
 // Table State Management
-import { tableState } from '@structure/source/common/tables/Table';
+import { proxySelectedRowsSet, tableState } from '@structure/source/common/tables/Table';
 
 // Component - TableRow
 export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElement> {
@@ -106,14 +106,14 @@ function TableRowCheckbox(properties: TableRowCheckboxInterface) {
 
     React.useEffect(function () {
         if(checkboxRef.current) {
-            const unsubscribe = subscribeToValtioStateKey(tableState, 'selectedRowsIndexesSet', function (value) {
+            const unsubscribe = subscribeToValtioState(proxySelectedRowsSet, function (value) {
                 console.log('Updating checkbox state', value);
                 const rowIndex = properties.row.rowIndex;
                 const selected =
-                    tableState.selectedRowsIndexesSet.has(rowIndex ?? -1) ||
+                    proxySelectedRowsSet.has(rowIndex ?? -1) ||
                     (properties.type === 'Header' &&
                         (tableState.allRowsSelected ||
-                            tableState.selectedRowsIndexesSet.size === tableState.formattedRowsData.length));
+                            proxySelectedRowsSet.size === tableState.formattedRowsData.length));
                 checkboxRef.current?.setValue(selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked);
             });
             return function () {

@@ -26,8 +26,10 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Dependencies - State Management
 import { proxy as createState, useSnapshot as useValtioState } from 'valtio';
+import { proxySet as createProxySet } from 'valtio/utils';
 
 // Table state management
+export const proxySelectedRowsSet = createProxySet<number>([]);
 export const tableState = createState({
     // Search
     searchTerm: '',
@@ -45,6 +47,7 @@ export const tableState = createState({
     // Rows data
     rows: [] as TableRowInterface[],
     formattedRowsData: [] as TableRowInterface[],
+    // Computed property to get the column table header properties
     get columnTableHeaderProperties() {
         console.log('gettting formattedTableRows');
         const rowsData = this.formattedRowsData;
@@ -70,16 +73,12 @@ export const tableState = createState({
                 // If the header row is selected, select all visible rows
                 if(rowSelected) {
                     Array.from(rowsData).map(function (_row, rowIndex) {
-                        const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
-                        setCopy.add(rowIndex);
-                        tableState.selectedRowsIndexesSet = setCopy;
+                        proxySelectedRowsSet.add(rowIndex);
                     });
                 }
                 // If the header row is unselected, unselect all
                 else {
-                    const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
-                    setCopy.clear();
-                    tableState.selectedRowsIndexesSet = setCopy;
+                    proxySelectedRowsSet.clear();
                 }
                 console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
             },
@@ -88,25 +87,11 @@ export const tableState = createState({
 
     // Row selection
     showSelectColumn: false,
-    selectedRowsIndexesSet: new Set<number>(),
+    selectedRowsIndexesSet: proxySelectedRowsSet,
+    // Computed property to get the allRowsSelected state
     get allRowsSelected() {
         return this.selectedRowsIndexesSet.size === this.formattedRowsData.length;
     },
-
-    // set allRowsSelected(value: boolean | 'indeterminate') {
-    //     if(value === true) {
-    //         this.selectedRowsIndexesSet = new Set(this.formattedRowsData.map((row, rowIndex) => rowIndex));
-    //     }
-    //     else if(value === false) {
-    //         this.selectedRowsIndexesSet.clear();
-    //     }
-    //     else if(value === 'indeterminate') {
-    //         // If the value is indeterminate, do nothing
-    //     }
-    // },
-    // get allRowsSelected() {
-    //     return this.selectedRowsIndexesSet.size === this.formattedRowsData.length;
-    // },
 });
 
 // Component - Table
@@ -188,7 +173,10 @@ export function Table(properties: TableInterface) {
                 });
             }
 
-            tableState.visibleColumnsIndexesSet = initialVisibleColumnIndexesSet;
+            tableState.visibleColumnsIndexesSet.clear();
+            initialVisibleColumnIndexesSet.forEach(function (columnIndex) {
+                tableState.visibleColumnsIndexesSet.add(columnIndex);
+            });
         },
     ];
     // Sync the visible columns with the default visible columns and available columns
@@ -283,19 +271,15 @@ export function Table(properties: TableInterface) {
                         onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                             // If the row is selected
                             if(rowSelected) {
-                                const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
-                                setCopy.add(rowIndex);
-                                tableState.selectedRowsIndexesSet = setCopy;
+                                proxySelectedRowsSet.add(rowIndex);
                             }
                             // If the row is unselected
                             else {
-                                const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
-                                setCopy.delete(rowIndex);
-                                tableState.selectedRowsIndexesSet = setCopy;
+                                proxySelectedRowsSet.delete(rowIndex);
                             }
                             console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
                         },
-                        selected: tableSnapshot.selectedRowsIndexesSet.has(rowIndex),
+                        selected: proxySelectedRowsSet.has(rowIndex),
                         selection: tableSnapshot.showSelectColumn,
                     };
 
@@ -369,7 +353,7 @@ export function Table(properties: TableInterface) {
                                 // Get the selected rows, must use properties.rows here to get the original rows
                                 // If we use rows, they will have filtered cells
                                 const selectedRows = properties.rows.filter(function (row, rowIndex) {
-                                    return tableState.selectedRowsIndexesSet.has(rowIndex);
+                                    return proxySelectedRowsSet.has(rowIndex);
                                 });
 
                                 // Execute the action function
@@ -523,12 +507,12 @@ export function Table(properties: TableInterface) {
                             >
                                 <Button
                                     // Fade in and out when appearing and disappearing
-                                    data-show={tableState.selectedRowsIndexesSet.size > 0}
+                                    data-show={proxySelectedRowsSet.size > 0}
                                     className="duration-75 data-[show=true]:flex data-[show=false]:hidden data-[show=true]:animate-in data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:fade-in"
                                     icon={CheckCircledIcon}
                                     iconPosition="left"
                                 >
-                                    {tableState.selectedRowsIndexesSet.size} of {rowsData.length} selected
+                                    {proxySelectedRowsSet.size} of {rowsData.length} selected
                                 </Button>
                             </PopoverMenu>
                         )}

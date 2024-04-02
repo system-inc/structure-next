@@ -178,21 +178,12 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
         : undefined;
     // console.log('pagination', pagination);
 
-    let key = '';
-    if(queryState.loading) {
-        key += 'loading';
-    }
-    else if(queryState.data) {
-        key += 'loaded';
-    }
-
     // console.log('queryState', queryState);
 
     // Render the component
     return (
         <>
             <Table
-                key={key}
                 {...properties}
                 columns={columns}
                 rows={rows}
