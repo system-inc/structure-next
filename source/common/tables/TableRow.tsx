@@ -72,7 +72,7 @@ export function TableRow(properties: TableRowInterface) {
             {/* Selection */}
             {properties.selection && (
                 <CellComponent className="w-4 px-2 py-1 text-left">
-                    <TableRowCheckbox row={properties} />
+                    <TableRowCheckbox row={properties} type={properties.type} />
                 </CellComponent>
             )}
             {cells.map(function (cell, cellIndex) {
@@ -98,24 +98,28 @@ export default TableRow;
 // Component - TableRowCheckbox
 interface TableRowCheckboxInterface {
     row: TableRowInterface;
+    type?: 'Header' | 'Body' | 'Footer';
 }
 function TableRowCheckbox(properties: TableRowCheckboxInterface) {
     // Checkbox reference
     const checkboxRef = React.useRef<InputCheckboxReferenceInterface>(null);
-    const rowIndex = properties.row.rowIndex;
 
     React.useEffect(function () {
-        const unsubscribe = subscribeToValtioStateKey(tableState, 'selectedRowsIndexesSet', function () {
-            if(checkboxRef.current) {
-                console.log('Updating checkbox state');
-                const selected = tableState.selectedRowsIndexesSet.has(rowIndex ?? -1);
-                checkboxRef.current.setValue(selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked);
-            }
-        });
-
-        return function () {
-            unsubscribe();
-        };
+        if(checkboxRef.current) {
+            const unsubscribe = subscribeToValtioStateKey(tableState, 'selectedRowsIndexesSet', function (value) {
+                console.log('Updating checkbox state', value);
+                const rowIndex = properties.row.rowIndex;
+                const selected =
+                    tableState.selectedRowsIndexesSet.has(rowIndex ?? -1) ||
+                    (properties.type === 'Header' &&
+                        (tableState.allRowsSelected ||
+                            tableState.selectedRowsIndexesSet.size === tableState.formattedRowsData.length));
+                checkboxRef.current?.setValue(selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked);
+            });
+            return function () {
+                unsubscribe();
+            };
+        }
     }, []);
 
     // Render the component

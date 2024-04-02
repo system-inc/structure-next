@@ -49,36 +49,7 @@ export const tableState = createState({
         console.log('gettting formattedTableRows');
         const rowsData = this.formattedRowsData;
         const visibleColumnsIndexesSet = this.visibleColumnsIndexesSet;
-        const selectedRowsIndexesSet = this.selectedRowsIndexesSet;
         const formattedColumns = this.formattedColumns;
-
-        // Determine if the header row is selected
-        let selected = false;
-        let thereAreVisibleRows = false;
-        let allVisibleRowsAreSelected = true;
-
-        // Loop through all of the rows and check if they are all visible and selected
-        rowsData.forEach(function (row, rowIndex) {
-            // If the row is visible
-            if(row.visible) {
-                // Increment the visible rows count
-                thereAreVisibleRows = true;
-
-                // If the row is not selected
-                // if(!tableState.selectedRowsIndexesSet.has(rowIndex)) {
-                //     // Not all visible rows are selected
-                //     allVisibleRowsAreSelected = false;
-
-                //     // Break out of the loop
-                //     return;
-                // }
-            }
-        });
-
-        // If there are visible rows and all visible rows are selected
-        // if(thereAreVisibleRows && allVisibleRowsAreSelected) {
-        //     selected = true;
-        // }
 
         const cells = formattedColumns
             // Filter out the hidden columns
@@ -94,17 +65,23 @@ export const tableState = createState({
             type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
             cells: cells,
             selection: this.showSelectColumn,
-            selected: selected,
+            selected: false,
             onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                 // If the header row is selected, select all visible rows
                 if(rowSelected) {
-                    tableState.allRowsSelected = true;
+                    Array.from(rowsData).map(function (_row, rowIndex) {
+                        const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
+                        setCopy.add(rowIndex);
+                        tableState.selectedRowsIndexesSet = setCopy;
+                    });
                 }
                 // If the header row is unselected, unselect all
                 else {
-                    tableState.allRowsSelected = false;
+                    const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
+                    setCopy.clear();
+                    tableState.selectedRowsIndexesSet = setCopy;
                 }
-                console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
+                console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
             },
         } as TableRowInterface;
     },
@@ -112,18 +89,24 @@ export const tableState = createState({
     // Row selection
     showSelectColumn: false,
     selectedRowsIndexesSet: new Set<number>(),
-
-    set allRowsSelected(value: boolean) {
-        if(value) {
-            this.selectedRowsIndexesSet = new Set(this.formattedRowsData.map((row, rowIndex) => rowIndex));
-        }
-        else {
-            this.selectedRowsIndexesSet.clear();
-        }
-    },
     get allRowsSelected() {
         return this.selectedRowsIndexesSet.size === this.formattedRowsData.length;
     },
+
+    // set allRowsSelected(value: boolean | 'indeterminate') {
+    //     if(value === true) {
+    //         this.selectedRowsIndexesSet = new Set(this.formattedRowsData.map((row, rowIndex) => rowIndex));
+    //     }
+    //     else if(value === false) {
+    //         this.selectedRowsIndexesSet.clear();
+    //     }
+    //     else if(value === 'indeterminate') {
+    //         // If the value is indeterminate, do nothing
+    //     }
+    // },
+    // get allRowsSelected() {
+    //     return this.selectedRowsIndexesSet.size === this.formattedRowsData.length;
+    // },
 });
 
 // Component - Table
@@ -281,7 +264,6 @@ export function Table(properties: TableInterface) {
                 const rows = tableState.rows;
                 const columns = tableState.columns;
                 const visibleColumnsIndexesSet = tableState.visibleColumnsIndexesSet;
-                const selectedRowsIndexesSet = tableState.selectedRowsIndexesSet;
                 const searchTerm = tableState.searchTerm;
 
                 return rows.map(function (row, rowIndex) {
@@ -301,13 +283,17 @@ export function Table(properties: TableInterface) {
                         onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
                             // If the row is selected
                             if(rowSelected) {
-                                tableState.selectedRowsIndexesSet.add(rowIndex);
+                                const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
+                                setCopy.add(rowIndex);
+                                tableState.selectedRowsIndexesSet = setCopy;
                             }
                             // If the row is unselected
                             else {
-                                tableState.selectedRowsIndexesSet.delete(rowIndex);
+                                const setCopy = new Set<number>(tableState.selectedRowsIndexesSet);
+                                setCopy.delete(rowIndex);
+                                tableState.selectedRowsIndexesSet = setCopy;
                             }
-                            console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
+                            console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
                         },
                         selected: tableSnapshot.selectedRowsIndexesSet.has(rowIndex),
                         selection: tableSnapshot.showSelectColumn,
