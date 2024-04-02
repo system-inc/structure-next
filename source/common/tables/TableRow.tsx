@@ -22,7 +22,7 @@ export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElem
 
     // Selected rows
     selectedRowsIndexesSet?: Set<number>;
-    rowsLength: number;
+    rowsLength?: number;
     rowIndex?: number;
 }
 export function TableRow(properties: TableRowInterface) {
@@ -91,7 +91,7 @@ export default TableRow;
 function TableRowInputCheckbox(properties: TableRowInterface) {
     const checkboxRef = React.useRef<React.ElementRef<typeof InputCheckbox> | null>(null);
     const [forceSafeRerender, setForceSafeRerender] = React.useState<number>(0);
-    const propertiesRowsLength = properties.rowsLength;
+    const propertiesRowsLength = properties.rowsLength ?? 0;
     const propertiesSelectedRowsIndexesSet = properties.selectedRowsIndexesSet;
 
     React.useEffect(
@@ -118,7 +118,13 @@ function TableRowInputCheckbox(properties: TableRowInterface) {
                 );
             }
         },
-        [propertiesSelectedRowsIndexesSet, propertiesRowsLength, forceSafeRerender],
+        [
+            propertiesSelectedRowsIndexesSet,
+            propertiesRowsLength,
+            forceSafeRerender,
+            properties.rowIndex,
+            properties.type,
+        ],
     );
 
     React.useEffect(function () {
