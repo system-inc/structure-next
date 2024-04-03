@@ -14,8 +14,14 @@ import {
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Dependencies - State Management
-import { useAtomValue } from 'jotai';
-import { allRowsSelectedAtom, formattedColumnsAtom, selectedRowsIndexesSetAtom } from './Table';
+import { useAtom, useAtomValue } from 'jotai';
+import {
+    allRowsSelectedAtom,
+    filteredFormattedRowsDataAtom,
+    formattedColumnsAtom,
+    selectedRowsIndexesSetAtom,
+    showSelectColumnAtom,
+} from './Table';
 
 // Component - TableRow
 export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElement> {
@@ -23,13 +29,60 @@ export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElem
     type?: 'Header' | 'Body' | 'Footer';
 
     // Selection
-    selection?: boolean;
-    selected?: boolean;
-    onSelectChange?: (row: TableRowInterface, rowSelected: boolean) => void;
     rowIndex?: number;
 }
 export function TableRow(properties: TableRowInterface) {
+    // Destructure the properties
     const cells = properties.cells;
+
+    // State
+    const [selectedRowsIndexesSet, setSelectedRowsIndexesSet] = useAtom(selectedRowsIndexesSetAtom);
+    const filteredRows = useAtomValue(filteredFormattedRowsDataAtom);
+    const allRowsSelected = useAtomValue(allRowsSelectedAtom);
+    const showSelectColumn = useAtomValue(showSelectColumnAtom);
+
+    // Callbacks
+    const handleSelectChange = React.useCallback(
+        function handleSelectChange() {
+            // Handle header selection toggle
+            if(properties.type === 'Header') {
+                // If all rows are selected, deselect all rows
+                if(allRowsSelected) {
+                    setSelectedRowsIndexesSet(new Set());
+                }
+                // If all rows are not selected, select all rows
+                else {
+                    setSelectedRowsIndexesSet(new Set(filteredRows.map((row, index) => index)));
+                }
+            }
+            // Handle row selection toggle
+            else {
+                if(properties.rowIndex === undefined) {
+                    return;
+                }
+                // If the row is in the selected set, remove it
+                if(selectedRowsIndexesSet.has(properties.rowIndex)) {
+                    const newSet = new Set(selectedRowsIndexesSet);
+                    newSet.delete(properties.rowIndex);
+                    setSelectedRowsIndexesSet(newSet);
+                }
+                // If the row is not in the selected set, add it
+                else {
+                    const newSet = new Set(selectedRowsIndexesSet);
+                    newSet.add(properties.rowIndex);
+                    setSelectedRowsIndexesSet(newSet);
+                }
+            }
+        },
+        [
+            allRowsSelected,
+            filteredRows,
+            properties.rowIndex,
+            properties.type,
+            selectedRowsIndexesSet,
+            setSelectedRowsIndexesSet,
+        ],
+    );
 
     // Defaults
     const type = properties.type || 'Body';
@@ -42,10 +95,7 @@ export function TableRow(properties: TableRowInterface) {
             // If the click originated from a td elemement
             if((event.target as HTMLElement).tagName === 'TD') {
                 // Select the row
-                if(properties.onSelectChange) {
-                    // console.log('Toggling row selection');
-                    properties.onSelectChange(properties, !properties.selected);
-                }
+                handleSelectChange();
             }
 
             // Call the onChange callback if it exists
@@ -53,7 +103,7 @@ export function TableRow(properties: TableRowInterface) {
                 properties.onClick(event);
             }
         },
-        [properties],
+        [properties, handleSelectChange],
     );
 
     // Render the component
@@ -63,12 +113,12 @@ export function TableRow(properties: TableRowInterface) {
                 'h-10 border-b border-light-6 text-sm last:border-b-0 hover:bg-light-1 dark:border-dark-4 dark:hover:bg-dark-1',
                 properties.className,
             )}
-            onClick={properties.selection ? onClickIntercept : undefined}
+            onClick={showSelectColumn ? onClickIntercept : undefined}
         >
             {/* Selection */}
-            {properties.selection && (
+            {showSelectColumn && (
                 <CellComponent className="w-4 px-2 py-1 text-left">
-                    <TableRowCheckbox row={properties} type={properties.type} />
+                    <TableRowCheckbox row={properties} type={properties.type} handleSelectChange={handleSelectChange} />
                 </CellComponent>
             )}
             {cells.map(function (cell, cellIndex) {
@@ -95,6 +145,7 @@ export default TableRow;
 interface TableRowCheckboxInterface {
     row: TableRowInterface;
     type?: 'Header' | 'Body' | 'Footer';
+    handleSelectChange?: () => void;
 }
 function TableRowCheckbox(properties: TableRowCheckboxInterface) {
     // Checkbox reference
@@ -104,20 +155,26 @@ function TableRowCheckbox(properties: TableRowCheckboxInterface) {
     const selectedRowsIndexesSet = useAtomValue(selectedRowsIndexesSetAtom);
     const allRowsSelected = useAtomValue(allRowsSelectedAtom);
     const formattedRowsData = useAtomValue(formattedColumnsAtom);
+    const rowIndex = properties.row.rowIndex;
+    const selected =
+        (rowIndex !== undefined && selectedRowsIndexesSet.has(rowIndex)) ||
+        (properties.type === 'Header' && (allRowsSelected || selectedRowsIndexesSet.size === formattedRowsData.length));
 
     React.useEffect(
         function () {
             if(checkboxRef.current) {
                 // console.log('Updating checkbox state', value);
-                const rowIndex = properties.row.rowIndex;
-                const selected =
-                    selectedRowsIndexesSet.has(rowIndex ?? -1) ||
-                    (properties.type === 'Header' &&
-                        (allRowsSelected || selectedRowsIndexesSet.size === formattedRowsData.length));
                 checkboxRef.current?.setValue(selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked);
             }
         },
-        [allRowsSelected, formattedRowsData, properties.row.rowIndex, properties.type, selectedRowsIndexesSet],
+        [
+            allRowsSelected,
+            formattedRowsData,
+            properties.row.rowIndex,
+            properties.type,
+            selectedRowsIndexesSet,
+            selected,
+        ],
     );
 
     // Render the component
@@ -125,11 +182,12 @@ function TableRowCheckbox(properties: TableRowCheckboxInterface) {
         <InputCheckbox
             ref={checkboxRef}
             tabIndex={0}
-            defaultValue={properties.row.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
+            defaultValue={selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
             onChange={function (value, event) {
-                if(properties.row.onSelectChange) {
-                    properties.row.onSelectChange(properties.row, value === InputCheckboxState.Checked ? true : false);
+                if(properties.handleSelectChange) {
+                    properties.handleSelectChange();
                 }
+                console.log(rowIndex, properties.row.rowIndex, selectedRowsIndexesSet);
             }}
         />
     );
