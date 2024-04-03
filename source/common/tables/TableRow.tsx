@@ -24,7 +24,6 @@ import { tableState } from '@structure/source/common/tables/Table';
 export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElement> {
     cells: TableHeaderCellInterface[] | TableCellInterface[];
     type?: 'Header' | 'Body' | 'Footer';
-    visible?: boolean;
 
     // Selection
     selection?: boolean;
@@ -108,7 +107,7 @@ function TableRowCheckbox(properties: TableRowCheckboxInterface) {
         function () {
             if(checkboxRef.current) {
                 const unsubscribe = subscribeToValtioState(tableState, function (value) {
-                    console.log('Updating checkbox state', value);
+                    // console.log('Updating checkbox state', value);
                     const rowIndex = properties.row.rowIndex;
                     const selected =
                         tableState.selectedRowsIndexesSet.has(rowIndex ?? -1) ||

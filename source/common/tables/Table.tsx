@@ -29,7 +29,12 @@ import { proxy as createState, useSnapshot as useValtioState } from 'valtio';
 import { proxySet as createProxySet } from 'valtio/utils';
 
 // Table state management -- Accessible globally to update and read the table state (.e.g., <TableRow />, etc.)
+// The proxySelectedRowsSet is used to store the selected rows indexes and still be reactive (unlike traditional Set)
 export const proxySelectedRowsSet = createProxySet<number>([]);
+
+// The table state is a reactive state that can be used to update and read the table state
+// the `useSnapshot` hook can be used to get the current state of the table that triggers a re-render when the state changes
+// otherwise, you can synchronously access and update the state (outside of the React render cycle).
 export const tableState = createState({
     // Search
     searchTerm: '',
@@ -49,7 +54,7 @@ export const tableState = createState({
 
     // Computed property to get the formatted rows data
     get formattedRowsData() {
-        console.log('gettting formattedRowsData');
+        // console.log('gettting formattedRowsData');
         const visibleColumnsIndexesSet = tableState.visibleColumnsIndexesSet;
 
         return this.rows.map(function (row, rowIndex) {
@@ -75,47 +80,33 @@ export const tableState = createState({
                     else {
                         tableState.selectedRowsIndexesSet.delete(rowIndex);
                     }
-                    console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
+                    // console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
                 },
                 selected: tableState.selectedRowsIndexesSet.has(rowIndex),
                 selection: tableState.showSelectColumn,
             };
 
-            let rowVisible = true;
-
-            // If there is a search term
-            if(tableState.searchTerm !== '') {
-                // Start out with the row hidden
-                rowVisible = false;
-
-                // Loop over each cell
-                updatedRow.cells.forEach(function (cell) {
-                    // If the cell not hidden and the cell value includes the search term
-                    if(
-                        visibleColumnsIndexesSet.has(
-                            tableState.columns.findIndex((column) => column === cell.column),
-                        ) &&
-                        cell.value?.toString().toLowerCase().includes(tableState.searchTerm.toLowerCase())
-                    ) {
-                        // Show the row
-                        rowVisible = true;
-
-                        // Break out of the loop
-                        return;
-                    }
-                });
-            }
-
-            // Set the row visibility
-            updatedRow.visible = rowVisible;
-
             return updatedRow;
         });
+    },
+    // Computed property to get the filtered formatted rows data if there is a search term
+    get filteredFormattedRowsData() {
+        const term = this.searchTerm;
+        if(term === '') {
+            return this.formattedRowsData;
+        }
+        else {
+            return this.formattedRowsData.filter(function (row) {
+                return row.cells.some(function (cell) {
+                    return cell.value?.includes(term);
+                });
+            });
+        }
     },
 
     // Computed property to get the column table header properties
     get columnTableHeaderProperties() {
-        console.log('gettting formattedTableRows');
+        // console.log('gettting formattedTableRows');
         const rowsData = this.formattedRowsData;
         const visibleColumnsIndexesSet = this.visibleColumnsIndexesSet;
         const formattedColumns = this.formattedColumns;
@@ -146,7 +137,7 @@ export const tableState = createState({
                 else {
                     tableState.selectedRowsIndexesSet.clear();
                 }
-                console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
+                // console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
             },
         } as TableRowInterface;
     },
@@ -239,6 +230,7 @@ export function Table(properties: TableInterface) {
                 });
             }
 
+            // Clear the visible columns and add the new ones
             tableState.visibleColumnsIndexesSet.clear();
             initialVisibleColumnIndexesSet.forEach(function (columnIndex) {
                 tableState.visibleColumnsIndexesSet.add(columnIndex);
@@ -273,7 +265,7 @@ export function Table(properties: TableInterface) {
     // Extract the dependencies
     const propertiesColumns = properties.columns;
     const propertiesSortable = properties.sortable;
-    const formattedColumns = tableState.formattedColumns as TableColumnInterface[];
+    const formattedColumns = tableState.formattedColumns;
     // Update the columns when the properties change
     React.useEffect(
         function () {
@@ -302,7 +294,7 @@ export function Table(properties: TableInterface) {
     );
 
     // Rows
-    const rowsData = tableState.formattedRowsData as TableRowInterface[];
+    const rowsData = tableState.filteredFormattedRowsData as TableRowInterface[];
     // Update the rows when the properties change
     React.useEffect(
         function () {
@@ -438,7 +430,7 @@ export function Table(properties: TableInterface) {
     //     filtersEnabled,
     //     columnTableRowProperties,
     // });
-    console.log('rendering table');
+    // console.log('rendering table');
 
     // Render the component
     return (
@@ -581,13 +573,9 @@ export function Table(properties: TableInterface) {
                             </tbody>
                         ) : rowsData && rowsData.length > 0 ? (
                             <tbody>
-                                {rowsData
-                                    .filter(function (row, rowIndex) {
-                                        return row.visible;
-                                    })
-                                    .map(function (row, rowIndex) {
-                                        return <TableRow key={rowIndex} rowIndex={rowIndex} {...row} />;
-                                    })}
+                                {rowsData.map(function (row, rowIndex) {
+                                    return <TableRow key={rowIndex} rowIndex={rowIndex} {...row} />;
+                                })}
                             </tbody>
                         ) : (
                             // No rows
