@@ -25,130 +25,171 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Dependencies - State Management
-import { proxy as createState, useSnapshot as useValtioState } from 'valtio';
-import { proxySet as createProxySet } from 'valtio/utils';
+import { atom, useAtom, useSetAtom, useAtomValue, Provider as TableStateProvider } from 'jotai';
 
 // Table state management -- Accessible globally to update and read the table state (.e.g., <TableRow />, etc.)
 // The proxySelectedRowsSet is used to store the selected rows indexes and still be reactive (unlike traditional Set)
-export const proxySelectedRowsSet = createProxySet<number>([]);
+// export const proxySelectedRowsSet = createProxySet<number>([]);
 
 // The table state is a reactive state that can be used to update and read the table state
 // the `useSnapshot` hook can be used to get the current state of the table that triggers a re-render when the state changes
 // otherwise, you can synchronously access and update the state (outside of the React render cycle).
-export const tableState = createState({
-    // Search
-    searchTerm: '',
+// Search
+export const searchTermAtom = atom('');
 
-    // Sorting
-    columnsAreSortable: false,
+// Sorting
+export const columnsAreSortableAtom = atom(false);
 
-    // Columns data
-    columns: [] as TableColumnInterface[],
-    formattedColumns: [] as TableColumnInterface[],
+// Columns data
+export const columnsAtom = atom([] as TableColumnInterface[]);
+export const formattedColumnsAtom = atom([] as TableColumnInterface[]);
 
-    // Column visibility
-    visibleColumnsIndexesSet: new Set<number>(),
+// Column visibility
+export const visibleColumnsIndexesSetAtom = atom(
+    new Set<number>(),
+    function (
+        get,
+        set,
+        args: {
+            defaultVisibleColumnsIdentifiers?: string[];
+        },
+    ) {
+        const initialVisibleColumnIndexesSet = new Set<number>();
 
-    // Rows data
-    rows: [] as TableRowInterface[],
-
-    // Computed property to get the formatted rows data
-    get formattedRowsData() {
-        // console.log('gettting formattedRowsData');
-        const visibleColumnsIndexesSet = tableState.visibleColumnsIndexesSet;
-
-        return this.rows.map(function (row, rowIndex) {
-            const updatedRow = {
-                ...row,
-                type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
-                cells: row.cells
-                    .map(function (cell, columnIndex) {
-                        return {
-                            ...cell,
-                            column: tableState.columns[columnIndex],
-                        };
-                    })
-                    .filter(function (cell, columnIndex) {
-                        return visibleColumnsIndexesSet.has(columnIndex);
-                    }),
-                onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
-                    // If the row is selected
-                    if(rowSelected) {
-                        tableState.selectedRowsIndexesSet.add(rowIndex);
-                    }
-                    // If the row is unselected
-                    else {
-                        tableState.selectedRowsIndexesSet.delete(rowIndex);
-                    }
-                    // console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
-                },
-                selected: tableState.selectedRowsIndexesSet.has(rowIndex),
-                selection: tableState.showSelectColumn,
-            };
-
-            return updatedRow;
-        });
-    },
-    // Computed property to get the filtered formatted rows data if there is a search term
-    get filteredFormattedRowsData() {
-        const term = this.searchTerm;
-        if(term === '') {
-            return this.formattedRowsData;
-        }
-        else {
-            return this.formattedRowsData.filter(function (row) {
-                return row.cells.some(function (cell) {
-                    return cell.value?.includes(term);
-                });
-            });
-        }
-    },
-
-    // Computed property to get the column table header properties
-    get columnTableHeaderProperties() {
-        // console.log('gettting formattedTableRows');
-        const rowsData = this.formattedRowsData;
-        const visibleColumnsIndexesSet = this.visibleColumnsIndexesSet;
-        const formattedColumns = this.formattedColumns;
-
-        const cells = formattedColumns
-            // Filter out the hidden columns
-            .filter((column, columnIndex) => visibleColumnsIndexesSet.has(columnIndex))
-            .map(function (column) {
-                return {
-                    value: column.title,
-                    column: column,
-                };
-            });
-
-        return {
-            type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
-            cells: cells,
-            selection: this.showSelectColumn,
-            selected: false,
-            onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
-                // If the header row is selected, select all visible rows
-                if(rowSelected) {
-                    Array.from(rowsData).map(function (_row, rowIndex) {
-                        tableState.selectedRowsIndexesSet.add(rowIndex);
-                    });
+        // If defaultVisibleColumnsIdentifiers is provided, use it
+        if(args.defaultVisibleColumnsIdentifiers) {
+            // Map the column identifiers to column indexes
+            get(columnsAtom).forEach(function (column, columnIndex) {
+                if(args.defaultVisibleColumnsIdentifiers?.includes(column.identifier)) {
+                    initialVisibleColumnIndexesSet.add(columnIndex);
                 }
-                // If the header row is unselected, unselect all
+            });
+        }
+        // Otherwise, use all columns
+        else {
+            get(columnsAtom).forEach(function (column, columnIndex) {
+                if(!column.hidden) {
+                    initialVisibleColumnIndexesSet.add(columnIndex);
+                }
+            });
+        }
+
+        return initialVisibleColumnIndexesSet;
+    },
+);
+
+// Rows data
+export const rowsAtom = atom([] as TableRowInterface[]);
+
+// Computed property to get the formatted rows data
+export const formattedRowsDataAtom = atom(function (get) {
+    // console.log('gettting formattedRowsData');
+    const visibleColumnsIndexesSet = get(visibleColumnsIndexesSetAtom);
+    const selectedRowsIndexesSet = get(selectedRowsIndexesSetAtom);
+    const setSelectedRowsIndexesSet = useSetAtom(selectedRowsIndexesSetAtom);
+    const columns = get(columnsAtom);
+    const showSelectColumn = get(showSelectColumnAtom);
+
+    return get(rowsAtom).map(function (row, rowIndex) {
+        const updatedRow = {
+            ...row,
+            type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
+            cells: row.cells
+                .map(function (cell, columnIndex) {
+                    return {
+                        ...cell,
+                        column: columns[columnIndex],
+                    };
+                })
+                .filter(function (cell, columnIndex) {
+                    return visibleColumnsIndexesSet.has(columnIndex);
+                }),
+            onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
+                // If the row is selected
+                if(rowSelected) {
+                    const setCopy = new Set(selectedRowsIndexesSet);
+                    setCopy.add(rowIndex);
+                    setSelectedRowsIndexesSet(setCopy);
+                }
+                // If the row is unselected
                 else {
-                    tableState.selectedRowsIndexesSet.clear();
+                    const setCopy = new Set(selectedRowsIndexesSet);
+                    setCopy.delete(rowIndex);
+                    setSelectedRowsIndexesSet(setCopy);
                 }
                 // console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
             },
-        } as TableRowInterface;
-    },
+            selected: selectedRowsIndexesSet.has(rowIndex),
+            selection: showSelectColumn,
+        };
 
-    // Row selection
-    showSelectColumn: false,
-    selectedRowsIndexesSet: proxySelectedRowsSet,
-    // Computed property to get the allRowsSelected state
-    get allRowsSelected() {
-        return this.selectedRowsIndexesSet.size === this.formattedRowsData.length;
-    },
+        return updatedRow;
+    });
+});
+// Computed property to get the filtered formatted rows data if there is a search term
+export const filteredFormattedRowsDataAtom = atom(function (get) {
+    const term = get(searchTermAtom);
+    if(term === '') {
+        return get(formattedRowsDataAtom);
+    }
+    else {
+        return get(formattedRowsDataAtom).filter(function (row) {
+            return row.cells.some(function (cell) {
+                return cell.value?.includes(term);
+            });
+        });
+    }
+});
+
+// // Computed property to get the column table header properties
+export const columnTableHeaderPropertiesAtom = atom(function (get) {
+    // console.log('gettting formattedTableRows');
+    const rowsData = get(formattedRowsDataAtom);
+    const visibleColumnsIndexesSet = get(visibleColumnsIndexesSetAtom);
+    const selectedRowsIndexesSet = get(selectedRowsIndexesSetAtom);
+    const setSelectedRowsIndexesSet = useSetAtom(selectedRowsIndexesSetAtom);
+    const formattedColumns = get(formattedColumnsAtom);
+    const showSelectColumn = get(showSelectColumnAtom);
+
+    const cells = formattedColumns
+        // Filter out the hidden columns
+        .filter((column, columnIndex) => visibleColumnsIndexesSet.has(columnIndex))
+        .map(function (column) {
+            return {
+                value: column.title,
+                column: column,
+            };
+        });
+
+    return {
+        type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
+        cells: cells,
+        selection: showSelectColumn,
+        selected: false,
+        onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
+            // If the header row is selected, select all visible rows
+            if(rowSelected) {
+                Array.from(rowsData).map(function (_row, rowIndex) {
+                    const setCopy = new Set(selectedRowsIndexesSet);
+                    setCopy.add(rowIndex);
+                    setSelectedRowsIndexesSet(setCopy);
+                });
+            }
+            // If the header row is unselected, unselect all
+            else {
+                setSelectedRowsIndexesSet(new Set<number>());
+            }
+            // console.log('selectedRowsIndexesSet', tableState.selectedRowsIndexesSet);
+        },
+    } as TableRowInterface;
+});
+
+// // Row selection
+export const showSelectColumnAtom = atom(false);
+export const selectedRowsIndexesSetAtom = atom(new Set<number>());
+// Computed property to get the allRowsSelected state
+export const allRowsSelectedAtom = atom(function (get) {
+    return get(selectedRowsIndexesSetAtom).size === get(formattedRowsDataAtom).length;
 });
 
 // Component - Table
@@ -194,49 +235,19 @@ export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
 export function Table(properties: TableInterface) {
     // Hooks
     const { addNotice } = useNotice();
-    const tableSnapshot = useValtioState(tableState);
 
     // References
     const filtersReference = React.useRef<ColumnFilterGroupDataInterface | undefined>(properties.filters);
     const previousFiltersReference = React.useRef<ColumnFilterGroupDataInterface | undefined>(properties.filters);
 
     // State
-    const setSearchTerm = function (value: string) {
-        tableState.searchTerm = value;
-    };
+    const setSearchTerm = useSetAtom(searchTermAtom);
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
+    const [columnsAreSortable, setColumnsAreSortable] = useAtom(columnsAreSortableAtom);
+    const selectedRowsIndexesSet = useAtomValue(selectedRowsIndexesSetAtom);
 
     // Visible Columns
-    const [visibleColumnsIndexesSet, setVisibleColumnsIndexesSet] = [
-        tableState.visibleColumnsIndexesSet,
-        function (visibleColumnsIndexesSet: Set<number>) {
-            const initialVisibleColumnIndexesSet = new Set<number>();
-
-            // If defaultVisibleColumnsIdentifiers is provided, use it
-            if(properties.defaultVisibleColumnsIdentifiers) {
-                // Map the column identifiers to column indexes
-                properties.columns.forEach(function (column, columnIndex) {
-                    if(properties.defaultVisibleColumnsIdentifiers?.includes(column.identifier)) {
-                        initialVisibleColumnIndexesSet.add(columnIndex);
-                    }
-                });
-            }
-            // Otherwise, use all columns
-            else {
-                properties.columns.forEach(function (column, columnIndex) {
-                    if(!column.hidden) {
-                        initialVisibleColumnIndexesSet.add(columnIndex);
-                    }
-                });
-            }
-
-            // Clear the visible columns and add the new ones
-            tableState.visibleColumnsIndexesSet.clear();
-            initialVisibleColumnIndexesSet.forEach(function (columnIndex) {
-                tableState.visibleColumnsIndexesSet.add(columnIndex);
-            });
-        },
-    ];
+    const [visibleColumnsIndexesSet, setVisibleColumnsIndexesSet] = useAtom(visibleColumnsIndexesSetAtom);
     // Sync the visible columns with the default visible columns and available columns
     React.useEffect(
         function () {
@@ -265,8 +276,9 @@ export function Table(properties: TableInterface) {
     // Extract the dependencies
     const propertiesColumns = properties.columns;
     const propertiesSortable = properties.sortable;
-    const formattedColumns = tableState.formattedColumns;
     // Update the columns when the properties change
+    const [columns, setColumns] = useAtom(columnsAtom);
+    const [formattedColumns, setFormattedColumns] = useAtom(formattedColumnsAtom);
     React.useEffect(
         function () {
             // If the table is loading or there is an error, do not update the columns
@@ -276,36 +288,56 @@ export function Table(properties: TableInterface) {
             // Otherwise, update the columns
             else {
                 // Update the table state with the new columns and properties
-                tableState.columnsAreSortable = propertiesSortable ?? false;
-                tableState.columns = propertiesColumns;
+                setColumnsAreSortable(propertiesSortable ?? false);
+                setColumns(propertiesColumns);
 
                 // Update the formatted columns
-                tableState.formattedColumns = tableState.columns.map(function (column, columnIndex) {
-                    // If the column is not hidden already and not excluded from the default visible columns
-                    // add it to the visibleColumnsIndexesSet
-                    return {
-                        ...column,
-                        sortable: tableState.columnsAreSortable,
-                    };
-                });
+                setFormattedColumns(
+                    columns.map(function (column, columnIndex) {
+                        // If the column is not hidden already and not excluded from the default visible columns
+                        // add it to the visibleColumnsIndexesSet
+                        return {
+                            ...column,
+                            sortable: columnsAreSortable,
+                        };
+                    }),
+                );
             }
         },
-        [properties.columns, properties.loading, propertiesSortable, properties.error, propertiesColumns],
+        [
+            columns,
+            columnsAreSortable,
+            properties,
+            setColumns,
+            setFormattedColumns,
+            propertiesColumns,
+            propertiesSortable,
+            setColumnsAreSortable,
+        ],
     );
 
     // Rows
-    const rowsData = tableState.filteredFormattedRowsData as TableRowInterface[];
+    const rowsData = useAtomValue(filteredFormattedRowsDataAtom);
+    const setRows = useSetAtom(rowsAtom);
     // Update the rows when the properties change
     React.useEffect(
         function () {
-            tableState.rows = properties.rows;
+            setRows(properties.rows);
         },
-        [properties.rows],
+        [properties.rows, setRows],
     );
-    tableState.showSelectColumn = properties.rowSelection || false;
+
+    const setShowSelectColumn = useSetAtom(showSelectColumnAtom);
+
+    React.useEffect(
+        function () {
+            setShowSelectColumn(properties.rowSelection ?? false);
+        },
+        [setShowSelectColumn, properties.rowSelection],
+    );
 
     // Column TableRow properties
-    const columnTableHeaderProperties = tableSnapshot.columnTableHeaderProperties as TableRowInterface;
+    const columnTableHeaderProperties = useAtomValue(columnTableHeaderPropertiesAtom);
 
     // Defaults
     const rowsSelectionActions: MenuItemInterface[] = React.useMemo(
@@ -339,7 +371,7 @@ export function Table(properties: TableInterface) {
                                 // Get the selected rows, must use properties.rows here to get the original rows
                                 // If we use rows, they will have filtered cells
                                 const selectedRows = properties.rows.filter(function (row, rowIndex) {
-                                    return tableState.selectedRowsIndexesSet.has(rowIndex);
+                                    return selectedRowsIndexesSet.has(rowIndex);
                                 });
 
                                 // Execute the action function
@@ -363,6 +395,7 @@ export function Table(properties: TableInterface) {
             properties.columnVisibility,
             visibleColumnsIndexesSet.size,
             addNotice,
+            selectedRowsIndexesSet,
         ],
     );
 
@@ -371,7 +404,9 @@ export function Table(properties: TableInterface) {
         async function (visibleColumnsIndexes?: string[]) {
             // console.log('onVisibleColumnsChange', visibleColumnsIndexes);
             if(visibleColumnsIndexes) {
-                setVisibleColumnsIndexesSet(new Set<number>(visibleColumnsIndexes.map(Number)));
+                setVisibleColumnsIndexesSet({
+                    defaultVisibleColumnsIdentifiers: visibleColumnsIndexes,
+                });
             }
         },
         [setVisibleColumnsIndexesSet],
@@ -434,7 +469,7 @@ export function Table(properties: TableInterface) {
 
     // Render the component
     return (
-        <>
+        <TableStateProvider>
             <div className="mb-4 flex">
                 <div className="flex flex-grow flex-col">
                     <div className="flex space-x-2">
@@ -493,12 +528,12 @@ export function Table(properties: TableInterface) {
                             >
                                 <Button
                                     // Fade in and out when appearing and disappearing
-                                    data-show={tableState.selectedRowsIndexesSet.size > 0}
+                                    data-show={selectedRowsIndexesSet.size > 0}
                                     className="duration-75 data-[show=true]:flex data-[show=false]:hidden data-[show=true]:animate-in data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:fade-in"
                                     icon={CheckCircledIcon}
                                     iconPosition="left"
                                 >
-                                    {tableState.selectedRowsIndexesSet.size} of {rowsData.length} selected
+                                    {selectedRowsIndexesSet.size} of {rowsData.length} selected
                                 </Button>
                             </PopoverMenu>
                         )}
@@ -600,7 +635,7 @@ export function Table(properties: TableInterface) {
                     className={mergeClassNames('mt-4', properties.pagination.className)}
                 />
             )}
-        </>
+        </TableStateProvider>
     );
 }
 

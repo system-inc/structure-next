@@ -11,6 +11,7 @@ import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import ApolloProvider from '@structure/source/api/ApolloProvider';
 import TipProvider from '@structure/source/common/popovers/TipProvider';
 import NoticeProvider from '@structure/source/common/notifications/NoticeProvider';
+import { Provider as JotaiProvider } from 'jotai';
 
 export interface ProvidersInterface {
     children: React.ReactNode;
@@ -19,15 +20,17 @@ export function Providers(properties: ProvidersInterface) {
     // Render the component
     return (
         <CookiesProvider cookies={cookies}>
-            <ApolloProvider>
-                <SessionProvider>
-                    <ThemeProvider>
-                        <NoticeProvider>
-                            <TipProvider delayDuration={100}>{properties.children}</TipProvider>
-                        </NoticeProvider>
-                    </ThemeProvider>
-                </SessionProvider>
-            </ApolloProvider>
+            <JotaiProvider>
+                <ApolloProvider>
+                    <SessionProvider>
+                        <ThemeProvider>
+                            <NoticeProvider>
+                                <TipProvider delayDuration={100}>{properties.children}</TipProvider>
+                            </NoticeProvider>
+                        </ThemeProvider>
+                    </SessionProvider>
+                </ApolloProvider>
+            </JotaiProvider>
         </CookiesProvider>
     );
 }
