@@ -28,6 +28,9 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 import { proxy as createState, useSnapshot as useValtioState } from 'valtio';
 import { proxySet as createProxySet } from 'valtio/utils';
 
+// Dependencies - Virtualization
+import { TableVirtuoso as VirtualizedTable } from 'react-virtuoso';
+
 // Table state management -- Accessible globally to update and read the table state (.e.g., <TableRow />, etc.)
 // The proxySelectedRowsSet is used to store the selected rows indexes and still be reactive (unlike traditional Set)
 export const proxySelectedRowsSet = createProxySet<number>([]);
@@ -371,7 +374,8 @@ export function Table(properties: TableInterface) {
         async function (visibleColumnsIndexes?: string[]) {
             // console.log('onVisibleColumnsChange', visibleColumnsIndexes);
             if(visibleColumnsIndexes) {
-                setVisibleColumnsIndexesSet(new Set<number>(visibleColumnsIndexes.map(Number)));
+                const visibleColumnsIndexesSet = new Set<number>(visibleColumnsIndexes.map(Number));
+                setVisibleColumnsIndexesSet(visibleColumnsIndexesSet);
             }
         },
         [setVisibleColumnsIndexesSet],
@@ -435,6 +439,7 @@ export function Table(properties: TableInterface) {
     // Render the component
     return (
         <>
+            {/* Table Controls */}
             <div className="mb-4 flex">
                 <div className="flex flex-grow flex-col">
                     <div className="flex space-x-2">
@@ -532,66 +537,73 @@ export function Table(properties: TableInterface) {
             </div>
 
             {/* Table Container */}
-            <div
-                className={mergeClassNames(
-                    'overflow-scroll rounded-md border border-light-6 dark:border-dark-4',
-                    properties.containerClassName,
-                )}
-            >
-                {/* Table */}
-                {properties.loading && !properties.columns ? (
-                    // Loading
-                    <div className="flex items-center justify-center">
-                        <div className="p-8 text-sm">Loading...</div>
-                    </div>
-                ) : properties.error ? (
-                    // Error
-                    <div className="flex items-center justify-center">
-                        <div className="p-8 text-sm">Error: {properties.error.message}</div>
-                    </div>
-                ) : (
-                    // Loaded
-                    <table className={mergeClassNames('w-full', properties.className)}>
-                        {/* Column Header Row */}
-                        {formattedColumns && formattedColumns.length > 0 && (
-                            <thead className="border-b border-light-6 dark:border-dark-4">
+            <VirtualizedTable
+                style={{ height: 'calc(100vh - 350px)' }}
+                data={rowsData}
+                fixedHeaderContent={function () {
+                    return (
+                        formattedColumns &&
+                        formattedColumns.length > 0 && (
+                            <thead className="border-b border-light-6 bg-light dark:border-dark-4 dark:bg-dark">
                                 <TableRow {...columnTableHeaderProperties} />
                             </thead>
-                        )}
-
-                        {/* Rows */}
-                        {properties.loading ? (
-                            // Loading but have the table headers
-                            <tbody>
-                                <tr>
-                                    <td colSpan={visibleColumnsIndexesSet.size + 1}>
-                                        <div className="flex items-center justify-center">
-                                            <div className="p-8 text-sm">Loading...</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        ) : rowsData && rowsData.length > 0 ? (
-                            <tbody>
-                                {rowsData.map(function (row, rowIndex) {
-                                    return <TableRow key={rowIndex} rowIndex={rowIndex} {...row} />;
-                                })}
-                            </tbody>
-                        ) : (
-                            // No rows
-                            <tbody>
-                                <tr>
-                                    <td colSpan={visibleColumnsIndexesSet.size + 1}>
-                                        <div className="flex items-center justify-center">
-                                            <div className="p-8 text-sm">No data.</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        )}
-                    </table>
+                        )
+                    );
+                }}
+                itemContent={function (index, row) {
+                    return <TableRow key={index} rowIndex={index} {...row} />;
+                }}
+                className={mergeClassNames(
+                    'overflow-y-clip overflow-x-scroll rounded-md border border-light-6 dark:border-dark-4',
+                    properties.containerClassName,
                 )}
-            </div>
+                components={
+                    {
+                        // Table: ({ children }) =>
+                        //     properties.loading && !properties.columns ? (
+                        //         // Loading
+                        //         <div className="flex items-center justify-center">
+                        //             <div className="p-8 text-sm">Loading...</div>
+                        //         </div>
+                        //     ) : properties.error ? (
+                        //         // Error
+                        //         <div className="flex items-center justify-center">
+                        //             <div className="p-8 text-sm">Error: {properties.error.message}</div>
+                        //         </div>
+                        //     ) : (
+                        //         // Loaded
+                        //         <table className={mergeClassNames('w-full', properties.className)}>{children}</table>
+                        //     ),
+                        // TableBody: ({ children }) =>
+                        //     properties.loading ? (
+                        //         // Loading but have the table headers
+                        //         <tbody>
+                        //             <tr>
+                        //                 <td colSpan={visibleColumnsIndexesSet.size + 1}>
+                        //                     <div className="flex items-center justify-center">
+                        //                         <div className="p-8 text-sm">Loading...</div>
+                        //                     </div>
+                        //                 </td>
+                        //             </tr>
+                        //         </tbody>
+                        //     ) : rowsData && rowsData.length > 0 ? (
+                        //         <tbody>{children}</tbody>
+                        //     ) : (
+                        //         // No rows
+                        //         <tbody>
+                        //             <tr>
+                        //                 <td colSpan={visibleColumnsIndexesSet.size + 1}>
+                        //                     <div className="flex items-center justify-center">
+                        //                         <div className="p-8 text-sm">No data.</div>
+                        //                     </div>
+                        //                 </td>
+                        //             </tr>
+                        //         </tbody>
+                        //     ),
+                        // TableRow: ({ children }) => <tr className="border-b">{children}</tr>,
+                    }
+                }
+            />
 
             {/* Pagination */}
             {properties.pagination && (
@@ -606,3 +618,59 @@ export function Table(properties: TableInterface) {
 
 // Export - Default
 export default Table;
+
+// <>
+//     {/* Table */}
+//     {properties.loading && !properties.columns ? (
+//         // Loading
+//         <div className="flex items-center justify-center">
+//             <div className="p-8 text-sm">Loading...</div>
+//         </div>
+//     ) : properties.error ? (
+//         // Error
+//         <div className="flex items-center justify-center">
+//             <div className="p-8 text-sm">Error: {properties.error.message}</div>
+//         </div>
+//     ) : (
+//         // Loaded
+//         <table className={mergeClassNames('w-full', properties.className)}>
+//             {/* Column Header Row */}
+//             {formattedColumns && formattedColumns.length > 0 && (
+//                 <thead className="border-b border-light-6 dark:border-dark-4">
+//                     <TableRow {...columnTableHeaderProperties} />
+//                 </thead>
+//             )}
+
+//             {/* Rows */}
+//             {properties.loading ? (
+//                 // Loading but have the table headers
+//                 <tbody>
+//                     <tr>
+//                         <td colSpan={visibleColumnsIndexesSet.size + 1}>
+//                             <div className="flex items-center justify-center">
+//                                 <div className="p-8 text-sm">Loading...</div>
+//                             </div>
+//                         </td>
+//                     </tr>
+//                 </tbody>
+//             ) : rowsData && rowsData.length > 0 ? (
+//                 <tbody>
+//                     {rowsData.map(function (row, rowIndex) {
+//                         return <TableRow key={rowIndex} rowIndex={rowIndex} {...row} />;
+//                     })}
+//                 </tbody>
+//             ) : (
+//                 // No rows
+//                 <tbody>
+//                     <tr>
+//                         <td colSpan={visibleColumnsIndexesSet.size + 1}>
+//                             <div className="flex items-center justify-center">
+//                                 <div className="p-8 text-sm">No data.</div>
+//                             </div>
+//                         </td>
+//                     </tr>
+//                 </tbody>
+//             )}
+//         </table>
+//     )}
+// </>;
