@@ -22,7 +22,7 @@ export function AccountMenuButton(properties: AccountMenuButtonProperties) {
     const profileImageUrl = account?.currentProfile?.imageUrls?.find((image) => image.variant === 'profile')?.url;
 
     // Get the profile image alternate text
-    let profileImageAlternateText = 'Profile Image';
+    let profileImageAlternateText = undefined;
     if(account) {
         profileImageAlternateText = account.getPublicDisplayName();
     }
