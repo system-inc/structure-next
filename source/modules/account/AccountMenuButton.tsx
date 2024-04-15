@@ -11,6 +11,9 @@ import Popover from '@structure/source/common/popovers/Popover';
 // Dependencies - Account
 import { useAccountCurrent } from '@structure/source/modules/account/Account';
 
+// Dependencies - Icons
+import AccountIcon from '@structure/assets/icons/people/UserIcon.svg';
+
 // Component - AccountMenuButton
 export type AccountMenuButtonProperties = {};
 export function AccountMenuButton(properties: AccountMenuButtonProperties) {
@@ -31,7 +34,10 @@ export function AccountMenuButton(properties: AccountMenuButtonProperties) {
     return (
         <Popover content={<AccountMenu account={account} className="py-3 outline-none" />}>
             <div className="relative flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-light-6 bg-light p-1 text-xs dark:border-dark-4 dark:bg-dark">
-                <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
+                {account && (
+                    <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
+                )}
+                {!account && currentAccountState.error && <AccountIcon className="h-full w-full object-cover" />}
             </div>
         </Popover>
     );

@@ -92,6 +92,9 @@ export function useAccountCurrent() {
         skip: !sessionToken, // If there is no session token, skip this query
     });
 
+    // Set the account error separately to provide feedback even if the query is skipped (i.e., to tell consumers of the hook that the user is not signed in).
+    const accountError = accountCurrentQueryState.error ?? !sessionToken ? new Error('No session token.') : null;
+
     // Create the account object from the GraphQL query data
     const account = React.useMemo(
         function () {
@@ -121,7 +124,7 @@ export function useAccountCurrent() {
                   true // This handles SSR loading state (i.e., hydration mismatch issues)
                 : // Otherwise, set loading to the loading state of the query
                   accountCurrentQueryState.loading,
-        error: accountCurrentQueryState.error,
+        error: accountError,
         data: account,
     };
 }
