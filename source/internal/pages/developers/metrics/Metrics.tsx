@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useQueryState as useUrlQueryState, parseAsArrayOf, parseAsJson, parseAsStringEnum } from 'next-usequerystate';
+import { useQueryState as useUrlQueryState, parseAsArrayOf, parseAsJson, parseAsStringEnum } from 'nuqs';
 import { useSearchParams as useUrlSearchParameters } from 'next/navigation';
 
 // Dependencies - Main Components

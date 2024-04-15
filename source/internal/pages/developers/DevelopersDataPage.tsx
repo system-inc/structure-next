@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useQueryState as useUrlQueryState, parseAsInteger, parseAsJson } from 'next-usequerystate';
+import { useQueryState as useUrlQueryState, parseAsInteger, parseAsJson } from 'nuqs';
 
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';

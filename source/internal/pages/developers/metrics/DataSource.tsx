@@ -1,6 +1,6 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import { Options as NextUseQueryStateOptions } from 'next-usequerystate';
+import { Options as NextUseQueryStateOptions } from 'nuqs';
 
 // Dependencies - Main Components
 import { DataSourceType, DataSourceWithMetricsType } from './Metrics';
