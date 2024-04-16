@@ -7,7 +7,7 @@ import { ApolloError } from '@apollo/client';
 
 // Component - NotAuthorized
 export interface ApiErrorInterface {
-    error?: ApolloError;
+    error?: ApolloError | Error;
     alertProperties?: AlertInterface;
 }
 export function ApiError(properties: ApiErrorInterface) {
