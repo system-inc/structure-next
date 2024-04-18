@@ -152,13 +152,13 @@ export function InternalLayout(properties: InternalLayoutInterface) {
     if(currentAccountState.loading) {
         return <LineLoadingAnimation />;
     }
-    // Error loading account
-    else if(currentAccountState.error) {
-        return <ApiError error={currentAccountState.error} />;
-    }
     // Not signed in
     else if(!account) {
         return <NotSignedIn />;
+    }
+    // Error loading account
+    else if(currentAccountState.error) {
+        return <ApiError error={currentAccountState.error} />;
     }
     // Not authorized
     else if(account && !account.isAdministator()) {

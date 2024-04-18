@@ -316,6 +316,16 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             )}
 
                             {/* Columns */}
+
+                            {/* TODO: Migrate to using this */}
+                            {/* <ColumnFilterCondition
+                                id={condition.id}
+                                columns={properties.columns}
+                                column={condition.column}
+                                operator={condition.operator}
+                                value={condition.value}
+                            /> */}
+
                             <InputSelect
                                 className="w-48"
                                 items={properties.columns.map(function (column) {

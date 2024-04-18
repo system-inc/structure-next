@@ -19,7 +19,11 @@ export function ApiError(properties: ApiErrorInterface) {
             <Alert variant={'error'} size={'large'} title="API Error" {...properties.alertProperties}>
                 <div className="space-y-2">
                     <p>There was an error while communicating with our servers.</p>
-                    {properties.error?.message && <p>{properties.error.message}</p>}
+                    {properties.error?.message && (
+                        <p>
+                            <i>{properties.error.message}</i>
+                        </p>
+                    )}
                 </div>
             </Alert>
         </div>
