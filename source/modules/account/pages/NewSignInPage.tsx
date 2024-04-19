@@ -171,7 +171,7 @@ function Verification() {
     return (
         <div className="mt-4">
             {challengeState === 'verifying' && <p>Verifying...</p>}
-            {challengeState === 'verified' && <p>Challenge verified!</p>}
+            {challengeState === 'verified' && <p>Identity verified!</p>}
             {challengeState === 'error' && <p>Error verifying challenge</p>}
         </div>
     );
