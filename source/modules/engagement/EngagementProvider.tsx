@@ -64,7 +64,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                 }
             }
 
-            console.log('Current page:', urlPath);
+            // console.log('Current page:', urlPath);
 
             // Get the device ID from local storage
             const deviceIdLocalStorageKey = StructureSettings.identifier + 'DeviceId';

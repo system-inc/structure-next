@@ -11,13 +11,13 @@ import TopProductLink from '@structure/source/internal/common/dashboard/TopProdu
 
 // Dependencies - API
 import { useQuery, ApolloError } from '@apollo/client';
-// import { engagementLiveQueryDocument } from '@structure/source/modules/engagement/api/EngagementDocuments';
+import { engagementOveriewQueryDocument } from '@structure/source/modules/engagement/api/EngagementDocuments';
 
 // Component - InternalPage
 type InternalHomePageProperties = {};
 export function InternalHomePage(properties: InternalHomePageProperties) {
     // Hooks
-    // const engagementLiveQueryState = useQuery(engagementLiveQueryDocument);
+    const engagementLiveQueryState = useQuery(engagementOveriewQueryDocument);
 
     // List of links to metrics
     const metricLinks = [
@@ -44,95 +44,102 @@ export function InternalHomePage(properties: InternalHomePageProperties) {
             {/* Left column */}
             <div className="flex flex-grow flex-col pr-6">
                 <div className="mb-10">
-                    <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
-                        <div className="flex items-center justify-between">
-                            <h2 className="mb-1 text-base">Users</h2>
-                            <p className="text-base">1</p>
-                        </div>
-                        <p className="text-xs font-light text-dark-4/75 dark:text-light-4/50">In the Last 30 Minutes</p>
-                    </div>
-
-                    <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
-                        <div className="flex items-center justify-between">
-                            <h2 className="mb-1 text-base">Views</h2>
-                        </div>
-                        <div className="text-sm text-neutral dark:text-neutral">
-                            <div className="flex justify-between font-medium">
-                                <div>Page</div>
-                                <div>Views</div>
-                            </div>
-
-                            <div className="flex justify-between">
-                                <div>
-                                    Phi - Believe in yourself <span>(/)</span>
-                                </div>
-                                <div>3</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
-                        <div className="flex items-center justify-between">
-                            <h2 className="mb-1 text-base">Locations</h2>
-                        </div>
-                        <div className="text-sm text-neutral dark:text-neutral">
-                            <div className="flex justify-between font-medium">
-                                <div>Location</div>
-                                <div>Count</div>
-                            </div>
-
-                            <div className="flex justify-between">
-                                <div>
-                                    10.00, 10.00 <span>(US)</span>
-                                </div>
-                                <div>2</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
-                        <div className="flex items-center justify-between">
-                            <h2 className="mb-1 text-base">Device Categories</h2>
-                        </div>
-                        <div className="text-sm text-neutral dark:text-neutral">
-                            <div className="flex justify-between font-medium">
-                                <div>Category</div>
-                                <div>%</div>
-                            </div>
-
-                            <div className="flex justify-between">
-                                <div>Desktop</div>
-                                <div>25%</div>
-                            </div>
-
-                            <div className="flex justify-between">
-                                <div>Mobile</div>
-                                <div>25%</div>
-                            </div>
-
-                            <div className="flex justify-between">
-                                <div>Tablet</div>
-                                <div>25%</div>
-                            </div>
-
-                            <div className="flex justify-between">
-                                <div>Unknown</div>
-                                <div>25%</div>
-                            </div>
-                        </div>
-                    </div>
-
                     {/* Render the unique device IDs */}
-                    {/* {engagementLiveQueryState.error && (
+                    {engagementLiveQueryState.error && (
                         <div className="text-red-500">Error: {engagementLiveQueryState.error.message}</div>
                     )}
                     {engagementLiveQueryState.loading && <div>Loading...</div>}
                     {engagementLiveQueryState.data && (
-                        <div>
-                            <h2>Unique Device IDs</h2>
-                            <div>{JSON.stringify(engagementLiveQueryState.data)}</div>
-                        </div>
-                    )} */}
+                        <>
+                            <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                                <div className="flex items-center justify-between">
+                                    <h2 className="mb-1 text-base">Users</h2>
+                                    <p className="text-base">
+                                        {engagementLiveQueryState.data.engagementOverview.uniqueDeviceIds}
+                                    </p>
+                                </div>
+                                <p className="text-xs font-light text-dark-4/75 dark:text-light-4/50">
+                                    In the Last 30 Minutes
+                                </p>
+                            </div>
+
+                            <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                                <div className="flex items-center justify-between">
+                                    <h2 className="mb-1 text-base">Views</h2>
+                                </div>
+                                <div className="text-sm text-neutral dark:text-neutral">
+                                    <div className="flex justify-between font-medium">
+                                        <div>Page</div>
+                                        <div>Views</div>
+                                    </div>
+
+                                    {engagementLiveQueryState.data.engagementOverview.views.map(function (view) {
+                                        return (
+                                            <div className="flex justify-between" key={view.viewIdentifier}>
+                                                <div>{view.viewIdentifier}</div>
+                                                <div>{view.uniqueDeviceCount}</div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                                <div className="flex items-center justify-between">
+                                    <h2 className="mb-1 text-base">Locations</h2>
+                                </div>
+                                <div className="text-sm text-neutral dark:text-neutral">
+                                    <div className="flex justify-between font-medium">
+                                        <div>Location</div>
+                                        <div>Count</div>
+                                    </div>
+
+                                    {engagementLiveQueryState.data.engagementOverview.locations.map(
+                                        function (location, locationIndex) {
+                                            return (
+                                                <div className="flex justify-between" key={locationIndex}>
+                                                    <div>
+                                                        {location.latitude}, {location.longitude}{' '}
+                                                        <span>({location.countryCode})</span>
+                                                    </div>
+                                                    <div>{location.uniqueDeviceCount}</div>
+                                                </div>
+                                            );
+                                        },
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                                <div className="flex items-center justify-between">
+                                    <h2 className="mb-1 text-base">Device Categories</h2>
+                                </div>
+                                <div className="text-sm text-neutral dark:text-neutral">
+                                    <div className="flex justify-between font-medium">
+                                        <div>Category</div>
+                                        <div>%</div>
+                                    </div>
+
+                                    {Object.keys(
+                                        engagementLiveQueryState.data.engagementOverview.deviceCategoryPercentages,
+                                    ).map(function (category) {
+                                        return (
+                                            <div className="flex justify-between" key={category}>
+                                                <div>{category}</div>
+                                                <div>
+                                                    {
+                                                        engagementLiveQueryState.data?.engagementOverview
+                                                            .deviceCategoryPercentages[category]
+                                                    }
+                                                    %
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Summary */}

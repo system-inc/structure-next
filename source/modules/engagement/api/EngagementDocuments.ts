@@ -16,22 +16,21 @@ export const engagementEventsCreateMutationDocument = graphql(`
 `);
 
 // Document - Engagement Overview Query
-// export const engagementOveriewQueryDocument = graphql(`
-//     query engagementOverviewQuery {
-//         engagementOverview() {
-//             uniqueDeviceIds
-//             views {
-//                 uniqueDeviceIdCount
-//                 viewIdentifier
-//                 viewTitle
-//             }
-//             locations {
-//                 uniqueDeviceIdCount
-//                 countryCode
-//                 latitude
-//                 longitude
-//             }
-//             deviceCategoryPercentages
-//         }
-//     }
-// `);
+export const engagementOveriewQueryDocument = graphql(`
+    query engagementOverviewQuery {
+        engagementOverview {
+            uniqueDeviceIds
+            views {
+                uniqueDeviceCount
+                viewIdentifier
+            }
+            locations {
+                uniqueDeviceCount
+                countryCode
+                latitude
+                longitude
+            }
+            deviceCategoryPercentages
+        }
+    }
+`);
