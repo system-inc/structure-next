@@ -9,6 +9,7 @@ import { RESET, atomWithRefresh, atomWithReset, loadable as loadableAtom } from 
 import FormInputText from '@structure/source/common/forms/FormInputText';
 import Button from '@structure/source/common/buttons/Button';
 import ChallengeContainer from './ChallengeContainer';
+import VerificationStateHeader from './VerificationStateHeader';
 
 // Atomic State
 /**
@@ -61,14 +62,16 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
 
     return (
         <div className="w-full">
-            <h1 className="mb-2">Sign In</h1>
-            <p className="mb-4">Please enter your email address</p>
+            <h4 className="mb-2 text-center text-3xl font-bold">Sign In</h4>
+            <p className="mb-6 text-center text-sm font-light text-muted-foreground">
+                Please enter your email address to sign in
+            </p>
 
-            <form className="space-y-2" onSubmit={onSubmit}>
+            <form className="space-y-4" onSubmit={onSubmit}>
                 <FormInputText
                     disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
                     id="sign-in-email"
-                    label="Email"
+                    placeholder="name@example.com"
                     type="email"
                     autoComplete="email"
                     onChange={function (value) {
@@ -78,7 +81,7 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
                 <Button
                     disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
                     variant="light"
-                    className="w-full"
+                    className="w-full text-center"
                     type="submit"
                     loading={verificationState === 'verifying-identity' || verificationState === 'challenging'}
                 >
@@ -86,7 +89,8 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
                 </Button>
             </form>
 
-            <div className="mt-8">
+            <div className="relative mt-8 w-full overflow-x-clip">
+                <VerificationStateHeader />
                 <ChallengeContainer />
             </div>
         </div>
