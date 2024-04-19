@@ -4,6 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
+import EngagementProvider from '@structure/source/modules/engagement/EngagementProvider';
 import cookies from '@structure/source/utilities/Cookies';
 import CookiesProvider from '@structure/source/utilities/CookiesProvider';
 import SessionProvider from '@structure/source/modules/account/SessionProvider';
@@ -24,9 +25,11 @@ export function Providers(properties: ProvidersInterface) {
                 <SessionProvider>
                     <JotaiProvider>
                         <ThemeProvider>
-                            <NoticeProvider>
-                                <TipProvider delayDuration={100}>{properties.children}</TipProvider>
-                            </NoticeProvider>
+                            <EngagementProvider>
+                                <NoticeProvider>
+                                    <TipProvider delayDuration={100}>{properties.children}</TipProvider>
+                                </NoticeProvider>
+                            </EngagementProvider>
                         </ThemeProvider>
                     </JotaiProvider>
                 </SessionProvider>
