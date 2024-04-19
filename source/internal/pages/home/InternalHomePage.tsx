@@ -1,3 +1,5 @@
+'use client'; // This component uses client-only features
+
 // Dependencies - React and Next.js
 import React from 'react';
 
@@ -7,9 +9,16 @@ import CardLink from '@structure/source/internal/common/dashboard/CardLink';
 import ActivityLink from '@structure/source/internal/common/dashboard/ActivityLink';
 import TopProductLink from '@structure/source/internal/common/dashboard/TopProductLink';
 
+// Dependencies - API
+import { useQuery, ApolloError } from '@apollo/client';
+// import { engagementLiveQueryDocument } from '@structure/source/modules/engagement/api/EngagementDocuments';
+
 // Component - InternalPage
 type InternalHomePageProperties = {};
 export function InternalHomePage(properties: InternalHomePageProperties) {
+    // Hooks
+    // const engagementLiveQueryState = useQuery(engagementLiveQueryDocument);
+
     // List of links to metrics
     const metricLinks = [
         {
@@ -34,6 +43,98 @@ export function InternalHomePage(properties: InternalHomePageProperties) {
         <div className="mx-auto flex flex-row">
             {/* Left column */}
             <div className="flex flex-grow flex-col pr-6">
+                <div className="mb-10">
+                    <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                        <div className="flex items-center justify-between">
+                            <h2 className="mb-1 text-base">Users</h2>
+                            <p className="text-base">1</p>
+                        </div>
+                        <p className="text-xs font-light text-dark-4/75 dark:text-light-4/50">In the Last 30 Minutes</p>
+                    </div>
+
+                    <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                        <div className="flex items-center justify-between">
+                            <h2 className="mb-1 text-base">Views</h2>
+                        </div>
+                        <div className="text-sm text-neutral dark:text-neutral">
+                            <div className="flex justify-between font-medium">
+                                <div>Page</div>
+                                <div>Views</div>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <div>
+                                    Phi - Believe in yourself <span>(/)</span>
+                                </div>
+                                <div>3</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                        <div className="flex items-center justify-between">
+                            <h2 className="mb-1 text-base">Locations</h2>
+                        </div>
+                        <div className="text-sm text-neutral dark:text-neutral">
+                            <div className="flex justify-between font-medium">
+                                <div>Location</div>
+                                <div>Count</div>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <div>
+                                    10.00, 10.00 <span>(US)</span>
+                                </div>
+                                <div>2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                        <div className="flex items-center justify-between">
+                            <h2 className="mb-1 text-base">Device Categories</h2>
+                        </div>
+                        <div className="text-sm text-neutral dark:text-neutral">
+                            <div className="flex justify-between font-medium">
+                                <div>Category</div>
+                                <div>%</div>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <div>Desktop</div>
+                                <div>25%</div>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <div>Mobile</div>
+                                <div>25%</div>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <div>Tablet</div>
+                                <div>25%</div>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <div>Unknown</div>
+                                <div>25%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Render the unique device IDs */}
+                    {/* {engagementLiveQueryState.error && (
+                        <div className="text-red-500">Error: {engagementLiveQueryState.error.message}</div>
+                    )}
+                    {engagementLiveQueryState.loading && <div>Loading...</div>}
+                    {engagementLiveQueryState.data && (
+                        <div>
+                            <h2>Unique Device IDs</h2>
+                            <div>{JSON.stringify(engagementLiveQueryState.data)}</div>
+                        </div>
+                    )} */}
+                </div>
+
                 {/* Summary */}
                 <div className="flex flex-row justify-between gap-3">
                     <CardLink href="/internal/fulfillment" title="Orders" value={'+33 ($3,000)'} date="Today" />

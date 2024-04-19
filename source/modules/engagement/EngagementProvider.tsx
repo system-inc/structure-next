@@ -51,18 +51,20 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     // Trigger whenever the URL changes
     React.useEffect(
         function () {
-            // In development mode, NextJS runs effects twice on the first render, so we need to avoid sending two events
-            if(!engagementProviderMounted) {
-                engagementProviderMounted = true;
-                return;
-            }
-
             // Return early if we are not in the browser
             if(typeof window !== 'object') {
                 return;
             }
 
-            // console.log('Current page:', urlPath);
+            // In development mode, NextJS runs effects twice on the first render, so we need to avoid sending two events
+            if(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                if(!engagementProviderMounted) {
+                    engagementProviderMounted = true;
+                    return;
+                }
+            }
+
+            console.log('Current page:', urlPath);
 
             // Get the device ID from local storage
             const deviceIdLocalStorageKey = StructureSettings.identifier + 'DeviceId';
