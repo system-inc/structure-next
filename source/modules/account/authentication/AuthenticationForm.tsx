@@ -18,14 +18,14 @@ import VerificationStateHeader from './VerificationStateHeader';
  * This state is used to determine what UI to show.
  */
 // A set of random challenges that can be selected -- TODO: Remove this once the server is implemented
-const challenges = ['password', 'mfa', 'sms', 'otp', 'u2f', 'webauthn', 'recovery', 'captcha'] as const;
+const challenges = ['password', 'mfa', 'sms', 'otp', 'webauthn', 'captcha'] as const;
 export type ChallengeType = (typeof challenges)[number]; // The type of challenge
 export const signInChallengeTypeAtom = atomWithRefresh(
     // Function to get the challenge type
     async function (get) {
         if(get(verificationStateAtom) === 'challenging') {
             // Simulate a server request
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             return challenges[Math.floor(Math.random() * challenges.length)]; // Randomly select a challenge
         }
         else {

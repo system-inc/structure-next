@@ -10,6 +10,7 @@ export function VerificationStateHeader() {
         headerLinesOffset: 1,
         headerY: '100%',
         headerWidth: renderVerificationState(verificationState).length * 8,
+        color: 'hsl(var(--muted-foreground) / 0.5)',
     }));
 
     const titleTransition = useTransition(verificationState, {
@@ -36,10 +37,15 @@ export function VerificationStateHeader() {
         }
     }
 
+    // Because the spring is derived from the verification state, it will update when the verification state changes
     containerSpringApi.start({
         headerWidth: renderVerificationState(verificationState).length * 8,
         headerLinesOffset: verificationState !== 'unauthenticated' ? 0 : 1,
         opacity: verificationState !== 'unauthenticated' ? 1 : 0,
+        color:
+            verificationState === 'verified-identity'
+                ? 'hsl(var(--success) / 0.5)'
+                : 'hsl(var(--muted-foreground) / 0.5)',
     });
 
     return (
@@ -49,12 +55,13 @@ export function VerificationStateHeader() {
             }}
             className="relative w-full"
         >
-            <animated.div className="mb-5 flex w-full select-none items-center justify-center text-muted-foreground/50">
+            <animated.div className="mb-5 flex w-full select-none items-center justify-center">
                 <animated.div
                     style={{
                         clipPath: containerSpring.headerLinesOffset.to((offset) => `inset(0 0 0 ${offset * 100}%)`),
+                        backgroundColor: containerSpring.color,
                     }}
-                    className="mr-4 h-px flex-grow rounded-full bg-muted-foreground/50"
+                    className="mr-4 h-px flex-grow rounded-full"
                 ></animated.div>
 
                 <animated.div
@@ -64,7 +71,10 @@ export function VerificationStateHeader() {
                     }}
                 >
                     {titleTransition((style, state) => (
-                        <animated.p style={style} className="absolute whitespace-nowrap text-xs uppercase">
+                        <animated.p
+                            style={{ ...style, color: containerSpring.color }}
+                            className="absolute whitespace-nowrap text-xs uppercase"
+                        >
                             {renderVerificationState(state)}
                         </animated.p>
                     ))}
@@ -73,8 +83,9 @@ export function VerificationStateHeader() {
                 <animated.div
                     style={{
                         clipPath: containerSpring.headerLinesOffset.to((offset) => `inset(0 ${offset * 100}% 0 0)`),
+                        backgroundColor: containerSpring.color,
                     }}
-                    className="ml-4 h-px flex-grow rounded-full bg-muted-foreground/50"
+                    className="ml-4 h-px flex-grow rounded-full"
                 ></animated.div>
             </animated.div>
         </animated.div>
