@@ -11,7 +11,7 @@ const NewSignInPage = (props: Props) => {
                 <AccountMenuButton />
             </div>
 
-            <div className="relative w-full max-w-md px-12 py-16">
+            <div className="relative w-full max-w-md px-4 py-4 md:px-12 md:py-16">
                 <AuthenticationForm />
             </div>
         </div>
