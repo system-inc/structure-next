@@ -6,7 +6,7 @@ type Props = {};
 
 const NewSignInPage = (props: Props) => {
     return (
-        <div className="flex h-screen w-screen items-center justify-center">
+        <div className="relative flex h-screen w-screen items-center justify-center overflow-hidden">
             <div className="absolute right-4 top-4">
                 <AccountMenuButton />
             </div>

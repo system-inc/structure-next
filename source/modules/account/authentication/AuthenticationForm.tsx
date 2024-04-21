@@ -10,6 +10,7 @@ import FormInputText from '@structure/source/common/forms/FormInputText';
 import Button from '@structure/source/common/buttons/Button';
 import ChallengeContainer from './ChallengeContainer';
 import VerificationStateHeader from './VerificationStateHeader';
+import { useSpring, animated } from '@react-spring/web';
 
 // Atomic State
 /**
@@ -53,6 +54,11 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
     const emailRef = React.useRef<string>();
     const [verificationState, setVerificationState] = useAtom(verificationStateAtom);
 
+    const [formSpring, formSpringApi] = useSpring(() => ({
+        marginTop: '0%',
+        titleOpacity: 1,
+    }));
+
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
@@ -60,39 +66,67 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
         setVerificationState('challenging');
     }
 
+    formSpringApi.start({
+        marginTop: verificationState === 'unauthenticated' ? '0%' : '-100%',
+        titleOpacity: verificationState === 'unauthenticated' ? 1 : 0,
+    });
+
+    // TODO: Remove this once the server is implemented. This is just for resetting the demo.
+    React.useEffect(() => {
+        if(verificationState === 'verified-identity') {
+            setTimeout(() => {
+                setVerificationState('unauthenticated');
+            }, 2000);
+        }
+    }, [verificationState, setVerificationState]);
+
     return (
         <div className="w-full">
-            <h4 className="mb-2 text-center text-3xl font-bold">Sign In</h4>
-            <p className="mb-6 text-center text-sm font-light text-muted-foreground">
-                Please enter your email address to sign in
-            </p>
-
-            <form className="space-y-4" onSubmit={onSubmit}>
-                <FormInputText
-                    disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
-                    id="sign-in-email"
-                    placeholder="name@example.com"
-                    type="email"
-                    autoComplete="email"
-                    onChange={function (value) {
-                        emailRef.current = value;
-                    }}
-                />
-                <Button
-                    disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
-                    variant="light"
-                    className="w-full text-center"
-                    type="submit"
-                    loading={verificationState === 'verifying-identity' || verificationState === 'challenging'}
+            <animated.div
+                style={{
+                    marginTop: formSpring.marginTop,
+                }}
+            >
+                <animated.h4
+                    style={{ opacity: formSpring.titleOpacity }}
+                    className="mb-2 text-center text-3xl font-bold"
                 >
                     Sign In
-                </Button>
-            </form>
+                </animated.h4>
+                <animated.p
+                    style={{ opacity: formSpring.titleOpacity }}
+                    className="mb-6 text-center text-sm font-light text-muted-foreground"
+                >
+                    Please enter your email address to sign in
+                </animated.p>
 
-            <div className="relative mt-8 w-full overflow-x-clip">
+                <form className="space-y-4" onSubmit={onSubmit}>
+                    <FormInputText
+                        disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
+                        id="sign-in-email"
+                        placeholder="name@example.com"
+                        type="email"
+                        autoComplete="email"
+                        onChange={function (value) {
+                            emailRef.current = value;
+                        }}
+                    />
+                    <Button
+                        disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
+                        variant="light"
+                        className="w-full text-center"
+                        type="submit"
+                        loading={verificationState === 'verifying-identity' || verificationState === 'challenging'}
+                    >
+                        Sign In
+                    </Button>
+                </form>
+            </animated.div>
+
+            <animated.div className="relative mt-8 w-full overflow-x-clip">
                 <VerificationStateHeader />
                 <ChallengeContainer />
-            </div>
+            </animated.div>
         </div>
     );
 }

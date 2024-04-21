@@ -12,6 +12,8 @@ import {
 } from './AuthenticationForm';
 import { RESET } from 'jotai/utils';
 import Button from '@structure/source/common/buttons/Button';
+
+// TODO: Changed these to actual animations or remove them if they are not needed in `@structure`
 import Lottie from 'react-lottie';
 import SuccessLottie from './success-lottie.json';
 import VerificationLottie from './verification-lottie.json';
