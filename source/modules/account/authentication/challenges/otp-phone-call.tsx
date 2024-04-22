@@ -1,22 +1,21 @@
+import FormInputText from '@structure/source/common/forms/FormInputText';
 import React from 'react';
 import ChallengeInput from './common/ChallengeInput';
 import ChallengeSubmitButton from './common/ChallengeSubmitButton';
 
 type Props = {};
 
-const Password = (props: Props) => {
+const OtpPhoneCall = (props: Props) => {
     return (
         <>
             <ChallengeInput
-                id="password-challenge"
-                type="password"
-                label="Password"
-                labelTip="This is the password you set on sign-up"
-                className="w-full"
+                id="one-time-password"
+                label="One-time password"
+                placeholder="Enter your one-time password"
             />
             <ChallengeSubmitButton />
         </>
     );
 };
 
-export default Password;
+export default OtpPhoneCall;

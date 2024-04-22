@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import OneTimePasswordChallenge from '../authentication/challenges/one-time-password';
-import PasswordChallenge from '../authentication/challenges/password';
+import OtpEmail from './challenges/otp-email';
+import Password from '../authentication/challenges/password';
 import { useTransition, animated, useSpring } from '@react-spring/web';
 import {
     VerificationState,
@@ -18,53 +18,40 @@ import Lottie from 'react-lottie';
 import SuccessLottie from './success-lottie.json';
 import VerificationLottie from './verification-lottie.json';
 import LoadingChallengeLottie from './loading-challenge-lottie.json';
+import DeviceVerification from './challenges/device-verification';
+import MfaDevice from './challenges/mfa-device';
+import OtpPhoneCall from './challenges/otp-phone-call';
+import WebAuthn from './challenges/webauthn';
+import Captcha from './challenges/captcha';
+import MfaApp from './challenges/mfa-app';
+import OtpSms from './challenges/otp-sms';
 
 function ChallengeContainer() {
     const challengeType = useAtomValue(signInChallengeTypeLoadableAtom);
-    const [verificationState, setVerificationState] = useAtom(verificationStateAtom);
-    const refreshChallengeType = useSetAtom(signInChallengeTypeAtom);
-    const setEmail = useSetAtom(emailAtom);
-
-    async function completeChallenge() {
-        // Get new challenge
-        setVerificationState('verifying-identity');
-
-        // Simulate a server request
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        const challengeDifficulty = 0.65;
-        const challengeRandomness = Math.random() > 1 - challengeDifficulty ? 0 : 1;
-        const newState = ['challenging', 'verified-identity'][challengeRandomness] as VerificationState;
-
-        // Set the new state based on the server response
-        setVerificationState(newState);
-
-        // Reset the challenge type if we are challenging
-        if(newState === 'challenging') {
-            refreshChallengeType();
-        }
-
-        if(newState === 'verified-identity') {
-            // Reset email
-            setEmail(RESET);
-        }
-    }
+    const verificationState = useAtomValue(verificationStateAtom);
 
     function renderChallenge(challengeState: ChallengeType) {
         switch(challengeState) {
             default:
                 return <div>Unknown challenge type: {challengeState}</div>;
             case 'password':
-                return <PasswordChallenge />;
-            case 'otp':
-                return <OneTimePasswordChallenge />;
-            case 'mfa':
-                return <div>Multi-factor authentication</div>;
-            case 'sms':
-                return <div>SMS</div>;
+                return <Password />;
+            case 'otp-email':
+                return <OtpEmail />;
+            case 'otp-phone-call':
+                return <OtpPhoneCall />;
+            case 'otp-sms':
+                return <OtpSms />;
+            case 'mfa-app':
+                return <MfaApp />;
+            case 'mfa-device':
+                return <MfaDevice />;
             case 'captcha':
-                return <div>Captcha</div>;
+                return <Captcha />;
             case 'webauthn':
-                return <div>WebAuthn</div>;
+                return <WebAuthn />;
+            case 'device-verification':
+                return <DeviceVerification />;
         }
     }
 
@@ -188,9 +175,6 @@ function ChallengeContainer() {
             return (
                 <animated.div style={style} className={'absolute w-full'}>
                     <div className="rounded bg-muted/50 p-1">{renderChallenge(challengeState)}</div>
-                    <Button variant="contrast" className="mt-2 w-full" onClick={completeChallenge}>
-                        Complete Challenge
-                    </Button>
                 </animated.div>
             );
         }

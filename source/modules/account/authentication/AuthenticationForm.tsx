@@ -13,6 +13,7 @@ import VerificationStateHeader from './VerificationStateHeader';
 import { useSpring, animated } from '@react-spring/web';
 import { InputTextVariants } from '@structure/source/common/forms/InputText';
 import { mergeClassNames } from '@structure/source/utilities/Styles';
+import ChallengeInput from './challenges/common/ChallengeInput';
 
 // Atomic State
 /**
@@ -21,7 +22,17 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
  * This state is used to determine what UI to show.
  */
 // A set of random challenges that can be selected -- TODO: Remove this once the server is implemented
-const challenges = ['password', 'mfa', 'sms', 'otp', 'webauthn', 'captcha'] as const;
+const challenges = [
+    'captcha', // CAPTCHA challenge
+    'otp-phone-call', // Phone call one-time password
+    'otp-sms', // SMS one-time password
+    'otp-email', // Email one-time password
+    'device-verification', // Play Integrity API or Apple Device Attestation API
+    'webauthn', // WebAuthn supports multiple vectors for verification (e.g., fingerprint, face, etc.)
+    'mfa-app', // App-based multi-factor authentication (e.g., Google Authenticator, Authy, etc.)
+    'mfa-device', // Device-based multi-factor authentication (e.g., Yubikey, FIDO2, etc.)
+    'password', // Password challenge
+] as const;
 export type ChallengeType = (typeof challenges)[number]; // The type of challenge
 export const signInChallengeTypeAtom = atomWithRefresh(
     // Function to get the challenge type
@@ -53,6 +64,7 @@ export const emailAtom = atomWithReset<string | undefined>(undefined);
 interface AuthenticationFormInterface {}
 function AuthenticationForm(properties: AuthenticationFormInterface) {
     const setEmail = useSetAtom(emailAtom);
+    const refreshChallengeType = useSetAtom(signInChallengeTypeAtom);
     const emailRef = React.useRef<string>();
     const [verificationState, setVerificationState] = useAtom(verificationStateAtom);
 
@@ -61,11 +73,34 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
         titleOpacity: 1,
     }));
 
-    function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    function startChallengeFlow(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         setEmail(emailRef.current);
         setVerificationState('challenging');
+    }
+    async function completeChallenge() {
+        // Get new challenge
+        setVerificationState('verifying-identity');
+
+        // Simulate a server request
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const challengeDifficulty = 0.65;
+        const challengeRandomness = Math.random() > 1 - challengeDifficulty ? 0 : 1;
+        const newState = ['challenging', 'verified-identity'][challengeRandomness] as VerificationState;
+
+        // Set the new state based on the server response
+        setVerificationState(newState);
+
+        // Reset the challenge type if we are challenging
+        if(newState === 'challenging') {
+            refreshChallengeType();
+        }
+
+        if(newState === 'verified-identity') {
+            // Reset email
+            setEmail(RESET);
+        }
     }
 
     formSpringApi.start({
@@ -102,17 +137,17 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
                     Please enter your email address to sign in
                 </animated.p>
 
-                <form className="space-y-4" onSubmit={onSubmit}>
-                    <input
+                <form className="space-y-4" onSubmit={startChallengeFlow}>
+                    <ChallengeInput
                         disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
                         id="sign-in-email"
                         placeholder="name@example.com"
                         type="email"
-                        autoComplete="mobile email"
                         onChange={function (event) {
                             emailRef.current = event.target.value;
                         }}
-                        className={mergeClassNames(InputTextVariants.default, 'w-full')}
+                        className="w-full"
+                        required
                     />
                     <Button
                         disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
@@ -126,10 +161,16 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
                 </form>
             </animated.div>
 
-            <animated.div className="relative mt-8 w-full overflow-x-clip">
+            <animated.form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    completeChallenge();
+                }}
+                className="relative mt-8 w-full overflow-x-clip"
+            >
                 <VerificationStateHeader />
                 <ChallengeContainer />
-            </animated.div>
+            </animated.form>
         </div>
     );
 }
