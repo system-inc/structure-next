@@ -156,7 +156,7 @@ function ChallengeContainer() {
                     }}
                     className="absolute flex w-full flex-col items-center"
                 >
-                    <div className="pointer-events-none relative h-40 w-full">
+                    <div className="pointer-events-none relative h-40 w-full dark:invert">
                         <Lottie
                             options={{
                                 animationData: LoadingChallengeLottie,

@@ -11,6 +11,8 @@ import Button from '@structure/source/common/buttons/Button';
 import ChallengeContainer from './ChallengeContainer';
 import VerificationStateHeader from './VerificationStateHeader';
 import { useSpring, animated } from '@react-spring/web';
+import { InputTextVariants } from '@structure/source/common/forms/InputText';
+import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Atomic State
 /**
@@ -101,15 +103,16 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
                 </animated.p>
 
                 <form className="space-y-4" onSubmit={onSubmit}>
-                    <FormInputText
+                    <input
                         disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
                         id="sign-in-email"
                         placeholder="name@example.com"
                         type="email"
-                        autoComplete="email"
-                        onChange={function (value) {
-                            emailRef.current = value;
+                        autoComplete="mobile email"
+                        onChange={function (event) {
+                            emailRef.current = event.target.value;
                         }}
+                        className={mergeClassNames(InputTextVariants.default, 'w-full')}
                     />
                     <Button
                         disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
