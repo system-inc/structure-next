@@ -40,7 +40,8 @@ export const signInChallengeTypeAtom = atomWithRefresh(
         if(get(verificationStateAtom) === 'challenging') {
             // Simulate a server request
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            return challenges[Math.floor(Math.random() * challenges.length)]; // Randomly select a challenge
+            return 'otp-email'; // Always return 'otp-email' for now
+            // return challenges[Math.floor(Math.random() * challenges.length)]; // Randomly select a challenge
         }
         else {
             return undefined;
