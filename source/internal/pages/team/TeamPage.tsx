@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
+import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 import Button from '@structure/source/common/buttons/Button';
 import Dialog from '@structure/source/common/dialogs/Dialog';
 import DialogCloseControl from '@structure/source/common/dialogs/DialogCloseControl';

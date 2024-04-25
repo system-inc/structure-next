@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import InternalNavigation from '@structure/source/internal/common/navigation/InternalNavigation';
+import InternalNavigation from '@structure/source/internal/layouts/navigation/InternalNavigation';
 
 // Dependencies - Hooks
 import { useCookies } from 'react-cookie';
@@ -24,7 +24,6 @@ import { useAccountCurrent } from '@structure/source/modules/account/Account';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
-import { titleCase } from '@structure/source/utilities/String';
 
 // Component - InternalLayout
 export interface InternalLayoutInterface {

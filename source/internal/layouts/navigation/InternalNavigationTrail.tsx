@@ -10,7 +10,7 @@ import {
     NavigationTrailInterface,
     NavigationTrail,
 } from '@structure/source/common/navigation/NavigationTrail';
-import InternalNavigationLinks from '@structure/source/internal/common/navigation/InternalNavigationLinks';
+import InternalNavigationLinks from '@structure/source/internal/layouts/navigation/InternalNavigationLinks';
 
 // Dependencies - Utilities
 import { titleCase } from '@structure/source/utilities/String';

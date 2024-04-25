@@ -5,7 +5,7 @@ import React from 'react';
 import { useQueryState as useUrlQueryState, parseAsInteger, parseAsJson } from 'nuqs';
 
 // Dependencies - Main Components
-import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
+import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 import { DataInteractionTable } from '@structure/source/modules/data-interaction/DataInteractionTable';
 import { ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 

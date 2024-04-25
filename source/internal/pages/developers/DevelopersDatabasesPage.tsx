@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
+import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 import Table from '@structure/source/common/tables/Table';
 import { TableRowInterface } from '@structure/source/common/tables/TableRow';
 

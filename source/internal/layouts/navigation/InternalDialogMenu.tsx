@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InternalNavigationLinkInterface } from './InternalNavigationLink';
-import InternalNavigationLinks from '@structure/source/internal/common/navigation/InternalNavigationLinks';
+import InternalNavigationLinks from '@structure/source/internal/layouts/navigation/InternalNavigationLinks';
 import { DialogMenuInterface, DialogMenu } from '@structure/source/common/dialogs/DialogMenu';
 import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';

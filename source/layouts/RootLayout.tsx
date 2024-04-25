@@ -33,10 +33,10 @@ export const viewport: Viewport = {
 };
 
 // Component - RootLayout
-export type RootLayoutProperties = {
+export interface RootLayoutInterface {
     children: React.ReactNode;
-};
-export function RootLayout(properties: RootLayoutProperties) {
+}
+export function RootLayout(properties: RootLayoutInterface) {
     // We need to get the theme class name from the client's cookies in order to prevent a flash
     // of light mode when the page first loads. We can't use the theme mode from local storage because
     // we need to know the theme class name before the page completely loads.

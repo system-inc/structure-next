@@ -10,14 +10,14 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
-import InternalNavigationLinks from '@structure/source/internal/common/navigation/InternalNavigationLinks';
+import InternalNavigationLinks from '@structure/source/internal/layouts/navigation/InternalNavigationLinks';
 import {
     InternalNavigationLinkInterface,
     InternalNavigationLink,
-} from '@structure/source/internal/common/navigation/InternalNavigationLink';
-import { InternalNavigationLinkGroup } from '@structure/source/internal/common/navigation/InternalNavigationLinkGroup';
+} from '@structure/source/internal/layouts/navigation/InternalNavigationLink';
+import { InternalNavigationLinkGroup } from '@structure/source/internal/layouts/navigation/InternalNavigationLinkGroup';
 import AccountMenuButton from '@structure/source/modules/account/AccountMenuButton';
-import InternalDialogMenu from '@structure/source/internal/common/navigation/InternalDialogMenu';
+import InternalDialogMenu from '@structure/source/internal/layouts/navigation/InternalDialogMenu';
 import Button from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
@@ -218,7 +218,7 @@ export function InternalNavigation(properties: InternalNavigationInterface) {
             <InternalDialogMenu />
 
             {/* Top Navigation Bar */}
-            <div className="fixed inset-x-0 top-0 z-10 flex h-16 shrink-0 items-center gap-x-2 border-b border-light-4 bg-light px-4 transition-colors dark:border-dark-4 dark:bg-dark dark:text-white lg:px-4">
+            <div className="fixed inset-x-0 top-0 z-10 flex h-16 shrink-0 items-center gap-x-2 border-b border-light-4 bg-light px-4 transition-colors lg:px-4 dark:border-dark-4 dark:bg-dark dark:text-white">
                 <Button
                     variant="ghost"
                     size="icon"

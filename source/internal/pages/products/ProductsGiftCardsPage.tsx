@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import InternalNavigationTrail from '@structure/source/internal/common/navigation/InternalNavigationTrail';
+import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
 // Component - ProductsGiftCardsPage
 export type ProductsGiftCardsPageProperties = {};
