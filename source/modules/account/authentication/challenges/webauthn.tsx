@@ -89,7 +89,7 @@ function usePasskeySignIn() {
                     publicKey: {
                         challenge: new Uint8Array(32),
                         rp: {
-                            id: 'localhost',
+                            id: 'phi.health',
                             name: 'PhiHealth',
                         },
                         user: {
