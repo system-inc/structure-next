@@ -2,17 +2,15 @@ import FormInputText from '@structure/source/common/forms/FormInputText';
 import React from 'react';
 import ChallengeInput from './common/ChallengeInput';
 import ChallengeSubmitButton from './common/ChallengeSubmitButton';
+import ChallengeOtp, { OTP_PATTERNS } from './common/ChallengeOtp';
 
 type Props = {};
 
 const OtpPhoneCall = (props: Props) => {
     return (
         <>
-            <ChallengeInput
-                id="one-time-password"
-                label="One-time password"
-                placeholder="Enter your one-time password"
-            />
+            <p>Please enter the code you received from your phone call:</p>
+            <ChallengeOtp pattern={OTP_PATTERNS.numbers} />
             <ChallengeSubmitButton />
         </>
     );

@@ -7,6 +7,7 @@ type Props = {};
 const OtpEmail = (props: Props) => {
     return (
         <>
+            <p>Please enter the code you received from your email:</p>
             <ChallengeOtp pattern={OTP_PATTERNS.numbers} />
             <ChallengeSubmitButton />
         </>
