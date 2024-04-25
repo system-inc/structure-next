@@ -174,7 +174,7 @@ function ChallengeContainer() {
         else {
             return (
                 <animated.div style={style} className={'absolute w-full'}>
-                    <div className="rounded bg-muted/50 p-1">{renderChallenge(challengeState)}</div>
+                    <div className="">{renderChallenge(challengeState)}</div>
                 </animated.div>
             );
         }

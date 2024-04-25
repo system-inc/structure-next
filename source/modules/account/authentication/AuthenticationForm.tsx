@@ -85,7 +85,7 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
 
         // Simulate a server request
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        const challengeDifficulty = 0.65;
+        const challengeDifficulty = 0.6;
         const challengeRandomness = Math.random() > 1 - challengeDifficulty ? 0 : 1;
         const newState = ['challenging', 'verified-identity'][challengeRandomness] as VerificationState;
 
@@ -137,7 +137,7 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
                     Please enter your email address to sign in
                 </animated.p>
 
-                <form className="space-y-4" onSubmit={startChallengeFlow}>
+                <form id="authentication-form" className="space-y-4" onSubmit={startChallengeFlow}>
                     <ChallengeInput
                         disabled={verificationState === 'challenging' || verificationState === 'verifying-identity'}
                         id="sign-in-email"
