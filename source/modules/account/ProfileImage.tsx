@@ -1,14 +1,16 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import Image from 'next/image';
+
+// Dependencies - Main Components
 import * as Avatar from '@radix-ui/react-avatar';
 
-// Component - ProfilePicture
-export type ProfileImageProperties = {
+// Component - ProfileImage
+export interface ProfileImageInterface {
     profileImageUrl?: string | null;
     alternateText?: string;
-};
-export function ProfileImage(properties: ProfileImageProperties) {
+}
+export function ProfileImage(properties: ProfileImageInterface) {
     let alternateText = 'Profile Image';
     if(properties.alternateText) {
         alternateText = properties.alternateText;
