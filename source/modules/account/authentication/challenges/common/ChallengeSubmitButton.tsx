@@ -5,7 +5,14 @@ interface ChallengeSubmitButtonInterface {}
 
 const ChallengeSubmitButton = React.forwardRef<HTMLElement, ChallengeSubmitButtonInterface>((properties, ref) => {
     return (
-        <Button ref={ref} {...properties} variant="contrast" className="mt-2 w-full text-center" type="submit">
+        <Button
+            id="challenge-submit-button"
+            ref={ref}
+            {...properties}
+            variant="contrast"
+            className="mt-2 w-full text-center"
+            type="submit"
+        >
             Submit
         </Button>
     );

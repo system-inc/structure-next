@@ -1,15 +1,13 @@
-import FormInputText from '@structure/source/common/forms/FormInputText';
 import React from 'react';
-import ChallengeInput from './common/ChallengeInput';
 import ChallengeSubmitButton from './common/ChallengeSubmitButton';
-import ChallengeOtp from './common/ChallengeOtp';
+import ChallengeOtp, { OTP_PATTERNS } from './common/ChallengeOtp';
 
 type Props = {};
 
 const OtpEmail = (props: Props) => {
     return (
         <>
-            <ChallengeOtp />
+            <ChallengeOtp pattern={OTP_PATTERNS.numbers} />
             <ChallengeSubmitButton />
         </>
     );

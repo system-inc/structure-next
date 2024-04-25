@@ -10,7 +10,7 @@ export function VerificationStateHeader() {
         headerLinesOffset: 1,
         headerY: '100%',
         headerWidth: renderVerificationState(verificationState).length * 8,
-        color: 'hsl(var(--muted-foreground) / 0.5)',
+        color: 'hsl(240 3.8% 46.1% / 0.5)',
     }));
 
     const titleTransition = useTransition(verificationState, {

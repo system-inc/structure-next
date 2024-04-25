@@ -36,7 +36,7 @@ const challenges = [
 export type ChallengeType = (typeof challenges)[number]; // The type of challenge
 export const signInChallengeTypeAtom = atomWithRefresh(
     // Function to get the challenge type
-    async function (get) {
+    async function (get): Promise<ChallengeType | undefined> {
         if(get(verificationStateAtom) === 'challenging') {
             // Simulate a server request
             await new Promise((resolve) => setTimeout(resolve, 2000));
