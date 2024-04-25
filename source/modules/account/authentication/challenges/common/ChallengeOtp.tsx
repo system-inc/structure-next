@@ -74,6 +74,19 @@ const ChallengeOtp = ({ numberOfSlots = 6, ...properties }: ChallengeOtpInterfac
     function handleFocus() {
         setIsFocused(true);
 
+        // If the virtual input has been completely filled, select all the inputs
+        if(virtualInputRef.current && virtualInputRef.current.value.length === numberOfSlots) {
+            virtualInputRef.current.setSelectionRange(0, numberOfSlots);
+
+            // Select all the inputs
+            setFocusedSlots(
+                Array(numberOfSlots)
+                    .fill(0)
+                    .map((_, index) => index),
+            );
+            return;
+        }
+
         // Set the focus index to the first input without a value
         const index = Array.from(inputMap.keys()).find((index) => inputMap.get(index)?.value === '');
         if(index !== undefined) {
@@ -146,9 +159,9 @@ const ChallengeOtp = ({ numberOfSlots = 6, ...properties }: ChallengeOtpInterfac
     }, [setFocusedSlots, inputMap, isFocused]);
 
     return (
-        <div className="group relative w-min">
+        <div className="group relative z-0 w-min">
             {/* Visual Input */}
-            <div className="pointer-events-none flex items-center">
+            <div className="pointer-events-none z-10 flex items-center">
                 <div className="relative flex items-center">
                     {GROUPED_SLOT_ARRAY.map((group, groupIndex) => (
                         <React.Fragment key={groupIndex}>
@@ -184,8 +197,15 @@ const ChallengeOtp = ({ numberOfSlots = 6, ...properties }: ChallengeOtpInterfac
                 onFocus={handleFocus}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                maxLength={6}
-                className="absolute inset-0 h-full w-full uppercase opacity-0"
+                style={{
+                    background: 'transparent',
+                    WebkitTextFillColor: 'transparent',
+                    WebkitBoxShadow: 'none',
+                }}
+                className="absolute inset-0 z-0 h-full w-full border-none bg-transparent uppercase tracking-wide text-transparent caret-transparent shadow-none selection:bg-transparent selection:text-transparent focus:outline-none focus:ring-0" // opacity must be 100 to allow iOS paste tooltip
+                autoComplete={properties.autoComplete ?? 'one-time-code'}
+                inputMode={properties.inputMode ?? properties.pattern === OTP_PATTERNS.numbers ? 'numeric' : 'text'}
+                maxLength={numberOfSlots}
                 {...properties}
             />
         </div>
@@ -215,7 +235,7 @@ const ChallengeOtpSlot = React.forwardRef<HTMLInputElement, ChallengeOtpSlotInte
             {properties.showCaret && (
                 <div
                     data-focus={properties.showCaret}
-                    className='data-[focus="true"]:animate-blink absolute h-1/2 w-px rounded-full bg-dark opacity-0 data-[focus="true"]:transition-opacity dark:bg-light'
+                    className='absolute h-1/2 w-px rounded-full bg-dark opacity-0 data-[focus="true"]:animate-blink data-[focus="true"]:transition-opacity dark:bg-light'
                 />
             )}
         </div>
