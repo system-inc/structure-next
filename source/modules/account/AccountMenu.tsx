@@ -20,12 +20,18 @@ export type AccountMenuProperties = {
     className?: string;
 };
 export function AccountMenu(properties: AccountMenuProperties) {
-    // Use the session hook
+    // Hooks
     const { signOut } = useSession();
 
     // Render the component
     return (
-        <div className={mergeClassNames('w-96', properties.className)} tabIndex={1}>
+        <div
+            className={mergeClassNames(
+                'relative w-[var(--radix-popover-content-available-width)] overflow-hidden md:w-full md:min-w-[24rem]',
+                properties.className,
+            )}
+            tabIndex={1}
+        >
             {/* If signed in */}
             {properties.account ? <AccountMenuSignedIn account={properties.account} /> : <AccountMenuSignedOut />}
 
@@ -41,7 +47,14 @@ export function AccountMenu(properties: AccountMenuProperties) {
                 {/* If signed in */}
                 {properties.account && (
                     <div className="mr-4 justify-end">
-                        <Button tabIndex={1} onClick={signOut} processingAnimation={true} className="w-[92px]">
+                        <Button
+                            tabIndex={1}
+                            onClick={function () {
+                                signOut();
+                            }}
+                            processingAnimation={true}
+                            className="w-[92px]"
+                        >
                             Sign Out
                         </Button>
                     </div>

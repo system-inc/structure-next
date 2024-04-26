@@ -35,7 +35,7 @@ export function ProfileImage(properties: ProfileImageInterface) {
 
     // Render the component
     return (
-        <Avatar.Root>
+        <Avatar.Root className="select-none">
             {properties.profileImageUrl && (
                 <Avatar.Image asChild>
                     <Image

@@ -15,14 +15,14 @@ import { accountSignOutMutationDocument } from '@structure/source/modules/accoun
 interface SessionContextInterface {
     sessionToken: string | null;
     setSessionToken: (newSessionToken: string | null) => void;
-    signOut: () => Promise<any>;
+    signOut: (redirectPath?: string) => Promise<any>;
 }
 const SessionContext = React.createContext<SessionContextInterface>({
     sessionToken: null,
     setSessionToken: (newSessionToken: string | null) => {
         console.error('No SessionProvider found.');
     },
-    signOut: () => {
+    signOut: (redirectPath?: string) => {
         console.error('No SessionProvider found.');
         return Promise.resolve();
     },
@@ -58,26 +58,31 @@ export function SessionProvider({ children }: SessionProviderInterface) {
 
     // Sign out function
     const signOut = React.useCallback(
-        function () {
+        function (redirectPath?: string) {
+            const updateSessionTokenAndRedirect = function () {
+                // Now that we are signed out on the server, we can set the local session token to null
+                updateSessionToken(null);
+
+                // Redirect to the path if provided
+                if(redirectPath) {
+                    router.push(redirectPath);
+                }
+            };
+
             // Invoke the GraphQL mutation, using the current session token
             return accountSignOutMutation({
                 variables: {},
-                onCompleted: (data) => {
-                    // Now that we are signed out on the server, we can set the local session token to null
+                onCompleted: function (data) {
                     // console.log('accountSignOutMutation onCompleted', data);
-                    updateSessionToken(null);
-
-                    // Redirect to root if the current path starts with /internal
-                    // if(pathname.startsWith('/internal')) {
-                    //     router.push('/');
-                    // }
+                    updateSessionTokenAndRedirect();
                 },
-                onError: (error) => {
+                onError: function (error) {
                     // console.error('accountSignOutMutation onError', error);
+                    updateSessionTokenAndRedirect();
                 },
             });
         },
-        [accountSignOutMutation, updateSessionToken],
+        [accountSignOutMutation, updateSessionToken, router],
     );
 
     // On mount

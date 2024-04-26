@@ -10,9 +10,9 @@ import React from 'react';
 import Button from '@structure/source/common/buttons/Button';
 import { SignInForm } from '@structure/source/modules/account/SignInForm';
 
-// Component - RootPage
-export interface HomePageInterface {}
-export function HomePage(properties: HomePageInterface) {
+// Component - SignInPage
+export interface SignInPageInterface {}
+export function SignInPage(properties: SignInPageInterface) {
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
@@ -24,4 +24,4 @@ export function HomePage(properties: HomePageInterface) {
 }
 
 // Export - Default
-export default HomePage;
+export default SignInPage;

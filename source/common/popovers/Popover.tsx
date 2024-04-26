@@ -18,7 +18,9 @@ export const popoverClassName =
     // Border
     `rounded-md border border-light-4 dark:border-dark-4 ` +
     // Animations
-    `data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 `;
+    `data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 ` +
+    // Base width and height
+    `w-full`;
 
 // Component - Popover
 export interface PopoverInterface {

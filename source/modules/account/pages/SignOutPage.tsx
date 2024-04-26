@@ -1,0 +1,52 @@
+'use client'; // This component uses client-only features
+
+// Dependencies - React and Next.js
+import React from 'react';
+import { useRouter } from 'next/navigation';
+
+// Dependencies - Main Components
+import Button from '@structure/source/common/buttons/Button';
+
+// Dependencies - Accounts
+import { useSession } from '@structure/source/modules/account/SessionProvider';
+
+// Component - SignOutPage
+export interface SignOutPageInterface {}
+export function SignOutPage(properties: SignOutPageInterface) {
+    // Hooks
+    const { signOut } = useSession();
+    const router = useRouter();
+
+    // Render the component
+    return (
+        <div className="flex h-screen flex-col items-center justify-center">
+            <div className="rounded-md border p-8">
+                <div className="flex w-80 flex-col">
+                    <p className="font-medium">Sign Out</p>
+                    <p className="mt-4 text-sm">Would you like to sign out?</p>
+                    <div className="mt-8 flex flex-col space-y-4">
+                        <Button
+                            variant="destructive"
+                            onClick={function () {
+                                console.log('signing out..');
+                                signOut('/');
+                            }}
+                        >
+                            Sign Out
+                        </Button>
+                        <Button
+                            onClick={function () {
+                                router.back();
+                            }}
+                        >
+                            No, Go Back
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Export - Default
+export default SignOutPage;

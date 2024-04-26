@@ -34,7 +34,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
 
     // Render the component
     return (
-        <div>
+        <div className="w-full">
             {/* Email and role */}
             <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
                 <Link
