@@ -64,6 +64,28 @@ export const accountCurrentQueryDocument = graphql(`
     }
 `);
 
+// Document - Account Profile Update
+export const accountProfileUpdateMutationDocument = graphql(`
+    mutation accountProfileUpdate($input: UpdateProfileInput!) {
+        accountProfileUpdate(input: $input) {
+            id
+            username
+            givenName
+            preferredName
+            middleName
+            familyName
+            displayName
+            phoneNumber
+            imageUrls {
+                url
+                variant
+            }
+            updatedAt
+            createdAt
+        }
+    }
+`);
+
 // Document - Account Sign In Using Email Address and Password
 export const accountSignInUsingEmailAddressAndPasswordMutationDocument = graphql(`
     mutation accountSignIn($emailAddress: String!, $password: String!) {
