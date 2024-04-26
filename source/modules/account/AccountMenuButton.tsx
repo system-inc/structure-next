@@ -33,7 +33,7 @@ export function AccountMenuButton(properties: AccountMenuButtonProperties) {
     // Render the component
     return (
         <Popover content={<AccountMenu account={account} className="py-3 outline-none" />} align="end">
-            <div className="relative flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-light-6 bg-light p-1 text-xs dark:border-dark-4 dark:bg-dark">
+            <div className="relative flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-light-6 bg-light p-1 dark:border-dark-4 dark:bg-dark">
                 {account && (
                     <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
                 )}

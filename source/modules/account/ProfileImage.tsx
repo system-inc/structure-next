@@ -35,26 +35,39 @@ export function ProfileImage(properties: ProfileImageInterface) {
 
     // Render the component
     return (
-        <Avatar.Root className="select-none">
-            {properties.profileImageUrl && (
-                <Avatar.Image asChild>
-                    <Image
-                        src={properties.profileImageUrl}
-                        alt={alternateText}
-                        className="h-full w-full object-cover"
-                        fill
-                    />
-                </Avatar.Image>
-            )}
-            <Avatar.Fallback
-                className="uppercase"
-                // Delay the fallback text to prevent flickering when the image is loading
-                delayMs={300}
+        <div
+            className="flex h-full w-full items-center justify-center rounded-full"
+            style={{
+                containerType: 'size',
+                containerName: 'account-menu-button',
+            }}
+        >
+            <Avatar.Root
+                className="select-none"
+                style={{
+                    fontSize: 'calc(0.5rem + 25cqb)',
+                }}
             >
-                {/* Fallback to the first letter of each word in the alternate text if there is no profile image. */}
-                {shortHandMoniker}
-            </Avatar.Fallback>
-        </Avatar.Root>
+                {properties.profileImageUrl && (
+                    <Avatar.Image asChild>
+                        <Image
+                            src={properties.profileImageUrl}
+                            alt={alternateText}
+                            className="h-full w-full object-cover"
+                            fill
+                        />
+                    </Avatar.Image>
+                )}
+                <Avatar.Fallback
+                    className="flex items-center justify-center uppercase"
+                    // Delay the fallback text to prevent flickering when the image is loading
+                    delayMs={300}
+                >
+                    {/* Fallback to the first letter of each word in the alternate text if there is no profile image. */}
+                    {shortHandMoniker}
+                </Avatar.Fallback>
+            </Avatar.Root>
+        </div>
     );
 }
 
