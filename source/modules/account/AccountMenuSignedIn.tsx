@@ -37,7 +37,11 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
         <div>
             {/* Email and role */}
             <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
-                <Link tabIndex={1} className="whitespace-nowrap font-medium hover:cursor-pointer" href="/profile">
+                <Link
+                    tabIndex={1}
+                    className="whitespace-nowrap font-medium hover:cursor-pointer"
+                    href="/account/profile"
+                >
                     {displayName}
                 </Link>
                 {/* If the account is an administrator */}
