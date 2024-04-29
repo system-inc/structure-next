@@ -239,7 +239,7 @@ export function DataSources(properties: DataSourcesInterface) {
                                         scale,
                                     }}
                                     key={dataSource.id + '-' + index}
-                                    className={'absolute touch-none'}
+                                    className={'absolute'}
                                 >
                                     <DataSource
                                         settings={{
