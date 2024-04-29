@@ -13,10 +13,13 @@ import { useAccountCurrent } from '@structure/source/modules/account/Account';
 
 // Dependencies - Icons
 import AccountIcon from '@structure/assets/icons/people/UserIcon.svg';
+import { usePathname } from 'next/navigation';
 
 // Component - AccountMenuButton
 export type AccountMenuButtonProperties = {};
 export function AccountMenuButton(properties: AccountMenuButtonProperties) {
+    const [open, setOpen] = React.useState(false);
+
     // Use the current account hook
     const currentAccountState = useAccountCurrent();
     const account = currentAccountState.data;
@@ -30,9 +33,19 @@ export function AccountMenuButton(properties: AccountMenuButtonProperties) {
         profileImageAlternateText = account.getPublicDisplayName();
     }
 
+    const pathname = usePathname();
+    React.useEffect(() => {
+        setOpen(false);
+    }, [pathname]);
+
     // Render the component
     return (
-        <Popover content={<AccountMenu account={account} className="py-3 outline-none" />} align="end">
+        <Popover
+            open={open}
+            onOpenChange={setOpen}
+            content={<AccountMenu account={account} className="py-3 outline-none" />}
+            align="end"
+        >
             <div className="relative flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-light-6 bg-light p-1 dark:border-dark-4 dark:bg-dark">
                 {account && (
                     <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
