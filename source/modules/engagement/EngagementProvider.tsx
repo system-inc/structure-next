@@ -156,6 +156,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                             viewIdentifier: viewIdentifier,
                             previousViewTitle: previousViewTitleReference.current || undefined,
                             previousViewIdentifier: previousViewIdentifierReference.current || undefined,
+                            referrer: document.referrer || undefined,
                         },
                     },
                 },
