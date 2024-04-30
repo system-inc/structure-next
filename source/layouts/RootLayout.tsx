@@ -7,7 +7,8 @@ import { cookies } from 'next/headers';
 import Script from 'next/script';
 
 // Dependencies - Theme
-import '@structure/source/theme/theme.css';
+import '@structure/source/styles/global.css';
+import '@structure/source/theme/styles/theme.css';
 import { themeClassNameCookieKey, darkThemeClassName } from '@structure/source/theme/Theme';
 
 // Dependencies - Main Components

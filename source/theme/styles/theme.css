@@ -64,32 +64,3 @@
             'calt' 1;
     }
 }
-
-* {
-    font-family: system-ui, Arial, sans-serif;
-}
-
-/* For Webkit-based browsers (Chrome, Safari, and Opera) */
-.scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
-
-/* For Internet Explorer, Edge and Firefox */
-.scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* Form inputs autofilled by the browser are styled in undesirable ways */
-/* This hack delays the style transitions */
-/* It requires that we set a key={theme} on React components */
-/* such that the component is re-rendered when the theme changes */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    transition:
-        background-color 99999s,
-        color 99999s;
-    transition-delay: 99999s;
-}
