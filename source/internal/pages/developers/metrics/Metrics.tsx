@@ -809,7 +809,7 @@ export function Metrics(properties: MetricsInterface) {
         <>
             {/* Display Options */}
             <div className="mb-12 w-full overflow-x-auto">
-                <div className="mb-4 flex space-x-2 md:justify-end">
+                <div className="mb-4 ml-auto flex w-min space-x-2">
                     {/* Interval */}
                     <FormInputSelect
                         key={timeInterval}
