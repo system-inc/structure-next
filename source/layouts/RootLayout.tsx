@@ -13,6 +13,7 @@ import { themeClassNameCookieKey, darkThemeClassName } from '@structure/source/t
 
 // Dependencies - Main Components
 import Providers from '@structure/source/layouts/providers/Providers';
+import { mergeClassNames } from '../utilities/Styles';
 // import { SignInSignUpModal } from '@structure/source/modules/account/SignInSignUpModal';
 
 // Metadata
@@ -49,7 +50,13 @@ export function RootLayout(properties: RootLayoutInterface) {
 
     // Render the component
     return (
-        <html lang="en" className={themeClassNameCookie === darkThemeClassName ? darkThemeClassName : ''}>
+        <html
+            lang="en"
+            className={mergeClassNames(
+                themeClassNameCookie === darkThemeClassName ? darkThemeClassName : '',
+                'font-sans',
+            )}
+        >
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
             <head>
