@@ -2,31 +2,40 @@
 import React from 'react';
 import Image from 'next/image';
 
-// Dependencies - Main Components
-import * as Avatar from '@radix-ui/react-avatar';
+// Dependencies - Assets
+import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
+
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Component - ProfileImage
 export interface ProfileImageInterface {
-    profileImageUrl?: string | null;
+    profileImageUrl?: string;
     alternateText?: string;
 }
 export function ProfileImage(properties: ProfileImageInterface) {
-    let alternateText = 'Profile Image';
-    if(properties.alternateText) {
-        alternateText = properties.alternateText;
-    }
+    // State
+    const [imageError, setImageError] = React.useState(false);
 
-    // When loading the user information, display nothing as a placeholder
+    // Default alternate text and short-hand moniker
+    let alternateText = 'Profile Image';
     let shortHandMoniker = '';
+
+    // If there is alternate text
     if(properties.alternateText) {
-        const splitWords = properties.alternateText.split(' ');
+        // Set the alternate text
+        alternateText = properties.alternateText;
+
+        // Split the alternate text into words
+        const alternateTextSplitWords = alternateText.split(' ');
+
         // If the alternate text is a username, use the first letter of the first word only, omitting the '@' symbol
-        if(splitWords.length === 1 && properties.alternateText.includes('@')) {
+        if(alternateTextSplitWords.length === 1 && properties.alternateText.includes('@')) {
             shortHandMoniker = properties.alternateText.charAt(1).toUpperCase();
         }
         // Otherwise, if the alternate text is a full name, use the first letter of each word
         else {
-            shortHandMoniker = splitWords
+            shortHandMoniker = alternateTextSplitWords
                 .map((word) => word[0])
                 .join('')
                 .toUpperCase();
@@ -36,37 +45,37 @@ export function ProfileImage(properties: ProfileImageInterface) {
     // Render the component
     return (
         <div
-            className="flex h-full w-full items-center justify-center rounded-full"
+            className="relative flex h-full w-full items-center justify-center rounded-full border border-light-6 bg-light dark:border-dark-2 dark:bg-dark"
             style={{
                 containerType: 'size',
                 containerName: 'account-menu-button',
             }}
         >
-            <Avatar.Root
-                className="select-none"
-                style={{
-                    fontSize: 'calc(0.5rem + 25cqb)',
-                }}
-            >
-                {properties.profileImageUrl && (
-                    <Avatar.Image asChild>
-                        <Image
-                            src={properties.profileImageUrl}
-                            alt={alternateText}
-                            className="h-full w-full object-cover"
-                            fill
-                        />
-                    </Avatar.Image>
-                )}
-                <Avatar.Fallback
-                    className="flex items-center justify-center uppercase"
-                    // Delay the fallback text to prevent flickering when the image is loading
-                    delayMs={300}
-                >
-                    {/* Fallback to the first letter of each word in the alternate text if there is no profile image. */}
-                    {shortHandMoniker}
-                </Avatar.Fallback>
-            </Avatar.Root>
+            {
+                // If we have a profile image and there is no error
+                properties.profileImageUrl && !imageError ? (
+                    <Image
+                        src={properties.profileImageUrl}
+                        alt={alternateText}
+                        fill={true}
+                        className="rounded-full"
+                        onError={function () {
+                            setImageError(true);
+                        }}
+                    />
+                ) : // If we do not have a profile image, but we do have a short-hand moniker
+                shortHandMoniker !== '' ? (
+                    <div
+                        className="flex select-none items-center justify-center uppercase"
+                        style={{ fontSize: 'calc(0.4rem + 25cqb)' }}
+                    >
+                        {shortHandMoniker}
+                    </div>
+                ) : (
+                    // If there is no profile image or short-hand moniker
+                    <UserIcon className="h-[75%] w-[75%]" />
+                )
+            }
         </div>
     );
 }
