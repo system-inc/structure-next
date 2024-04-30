@@ -62,6 +62,7 @@ export function ProfileImage(properties: ProfileImageInterface) {
                         onError={function () {
                             setImageError(true);
                         }}
+                        priority={true}
                     />
                 ) : // If we do not have a profile image, but we do have a short-hand moniker
                 shortHandMoniker !== '' ? (

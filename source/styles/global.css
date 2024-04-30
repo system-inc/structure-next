@@ -1,3 +1,8 @@
+/* Default font */
+:root {
+    --font-sans: system-ui, Arial, sans-serif;
+}
+
 /* For Webkit-based browsers (Chrome, Safari, and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
