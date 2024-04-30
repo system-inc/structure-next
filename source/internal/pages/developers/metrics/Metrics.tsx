@@ -808,7 +808,7 @@ export function Metrics(properties: MetricsInterface) {
     return (
         <>
             {/* Display Options */}
-            <div className="mb-12 w-full overflow-x-auto md:mb-0">
+            <div className="mb-12 w-full overflow-x-auto">
                 <div className="mb-4 flex space-x-2 md:justify-end">
                     {/* Interval */}
                     <FormInputSelect
@@ -961,7 +961,7 @@ export function Metrics(properties: MetricsInterface) {
             </ContextMenu>
 
             {/* A line to separate the options from the graph */}
-            <div className="mb-4 mt-1 border-t border-light-4 dark:border-dark-4 md:mb-6 md:mt-6"></div>
+            <div className="mb-4 mt-1 border-t border-light-4 md:mb-6 md:mt-6 dark:border-dark-4"></div>
 
             {/* DataSources */}
             <DataSources

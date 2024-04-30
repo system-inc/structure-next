@@ -651,7 +651,7 @@ export function DataSource(properties: DataSourceInterface) {
                 />
             )}
 
-            <div className="absolute bottom-0 right-10 flex w-9 items-center space-x-2 overflow-visible md:-right-10">
+            <div className="flex items-center space-x-2 overflow-visible pr-2">
                 <Button
                     variant="ghostDestructive"
                     size="icon"
