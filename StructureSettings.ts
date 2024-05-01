@@ -34,7 +34,7 @@ interface Platform {
     type: string;
 }
 
-interface StructureSettingsType {
+export interface StructureSettingsType {
     identifier: string;
     title: string;
     ownerDisplayName: string;

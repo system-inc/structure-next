@@ -67,8 +67,9 @@ export function RootLayout(properties: RootLayoutInterface) {
                             async
                             src={'https://www.googletagmanager.com/gtag/js?id=' + googleAnalyticsId}
                             strategy="afterInteractive"
+                            rel="preconnect"
                         />
-                        <Script id={'google-analytics'} strategy="afterInteractive">
+                        <Script id={'google-analytics'} strategy="afterInteractive" rel="preconnect">
                             {`
                             window.dataLayer = window.dataLayer || [];
                             function gtag() {
