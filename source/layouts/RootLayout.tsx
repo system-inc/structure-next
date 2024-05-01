@@ -23,6 +23,7 @@ export async function generateMetadata(properties: any, parent: ResolvingMetadat
             template: '%s • ' + StructureSettings.title,
             default: StructureSettings.title + ' • ' + StructureSettings.tagline, // default is required when creating a template
         },
+        description: StructureSettings.description,
     };
 }
 
@@ -30,7 +31,7 @@ export async function generateMetadata(properties: any, parent: ResolvingMetadat
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
+    // maximumScale: 1,
     userScalable: true,
 };
 
