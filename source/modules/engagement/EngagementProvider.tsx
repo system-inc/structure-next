@@ -156,7 +156,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                             viewIdentifier: viewIdentifier,
                             previousViewTitle: previousViewTitleReference.current || undefined,
                             previousViewIdentifier: previousViewIdentifierReference.current || undefined,
-                            // referrer: document.referrer || undefined, // FIXME: This does not exist on the current document object
+                            referrer: document.referrer || undefined,
                         },
                     },
                 },
