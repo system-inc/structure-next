@@ -34,6 +34,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
     // State
+    const [validating, setValidating] = React.useState<boolean>(properties.validating ?? false);
     const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
         properties.validationResult,
     );
@@ -58,8 +59,11 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     const propertiesValidate = properties.validate;
     const propertiesOnValidate = properties.onValidate;
     const validate = React.useCallback(
-        async function (value?: string) {
-            // console.log('Form input text validating:', value);
+        async function (value: string | undefined) {
+            console.log('Form input text validating:', value);
+
+            // Set validating state
+            setValidating(true);
 
             // Apply email address validation to form input text components which are of type email
             let validationResult = undefined;
@@ -73,7 +77,13 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 : undefined;
 
             // Run the provided validate function from properties if provided
-            const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
+            const propertiesValidationResult = propertiesValidate
+                ? await propertiesValidate(
+                      value,
+                      // Pass in the concurrent validation result
+                      mergeValidationResults(validationResult, validationSchemaValidationResult),
+                  )
+                : undefined;
 
             // Merge the validation results
             const mergedValidationResult = mergeValidationResults(
@@ -89,6 +99,9 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
             if(propertiesOnValidate) {
                 propertiesOnValidate(mergedValidationResult);
             }
+
+            // Set validating state
+            setValidating(false);
 
             return mergedValidationResult;
         },
@@ -175,7 +188,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
             required={properties.required}
             focus={focus}
             validate={properties.validate}
-            validating={properties.validating}
+            validating={validating}
             validationResult={validationResult}
             component={
                 <div className="relative">

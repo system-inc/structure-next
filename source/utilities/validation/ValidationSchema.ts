@@ -4,7 +4,6 @@ import {
     ValidationRuleInstance,
     ValidationResult,
     isEmailAddress,
-    isUsername,
 } from '@structure/source/utilities/validation/Validation';
 
 // Interface - ValidationSchema
@@ -339,13 +338,11 @@ export class ValidationSchema {
         return this;
     }
 
-    // Username
-    username() {
+    optionalSingleInternalPeriod() {
         // Create the validation rule
         const validationRule: ValidationRule = {
-            identifier: 'username',
-            message:
-                'Must be 3-16 characters long, can include letters, numbers, underscores, international characters, and a single period not at the start or end.',
+            identifier: 'optionalSingleInternalPeriod',
+            message: 'May contain a single period not at the start or end.',
         };
 
         // Add the validation rule instance
@@ -360,13 +357,66 @@ export class ValidationSchema {
                     successes: [],
                 };
 
-                // If the value is not a valid username, add an error
-                if(!isUsername(value)) {
+                // If the value has a period at the start or end or has more than two periods anywhere, add an error
+                if(value.startsWith('.') || value.endsWith('.') || value.split('.').length > 2) {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'invalidSingleInternalPeriod',
+                        message: 'Contains a period at the start or end or has more than one period.',
+                    });
+                }
+                // Otherwise, add a success
+                else {
+                    validationResult.successes.push({
+                        validationRule: validationRule,
+                        identifier: 'validSingleInternalPeriod',
+                        message: 'May contain a single period not at the start or end.',
+                    });
+                }
+
+                // If there are errors, set the validation result to invalid
+                if(validationResult.errors.length) {
+                    validationResult.valid = false;
+                }
+
+                return validationResult;
+            },
+        });
+
+        // Return the validation schema for chaining
+        return this;
+    }
+
+    // Username
+    username() {
+        this.minimumLength(3);
+        this.maximumLength(32);
+        this.optionalSingleInternalPeriod();
+
+        // Create the validation rule
+        const validationRule: ValidationRule = {
+            identifier: 'username',
+            message: 'May include letters, numbers, and underscores.',
+        };
+
+        // Add the validation rule instance
+        this.validationRuleInstances.push({
+            validationRule: validationRule,
+            validate: function (value: any) {
+                // Create the validation result
+                const validationResult: ValidationResult = {
+                    value: value,
+                    valid: true,
+                    errors: [],
+                    successes: [],
+                };
+
+                // If the value has characters other than letters, numbers, underscores, international characters, or period, add an error
+                if(!/^[a-zA-Z0-9_.\p{L}]+$/u.test(value)) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'invalidUsername',
-                        message:
-                            'Invalid username. Must be 3-16 characters long, can include letters, numbers, underscores, international characters, and a single period not at the start or end.',
+                        message: 'Contains invalid characters. Letters, numbers, and underscores are allowed.',
                     });
                 }
                 // Otherwise, add a success
@@ -374,7 +424,7 @@ export class ValidationSchema {
                     validationResult.successes.push({
                         validationRule: validationRule,
                         identifier: 'validUsername',
-                        message: 'Valid username.',
+                        message: 'Contains valid characters.',
                     });
                 }
 

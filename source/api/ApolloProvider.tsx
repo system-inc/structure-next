@@ -31,7 +31,7 @@ const setAuthorizationContext = setContext(function (_, { headers }) {
 });
 
 // Create the Apollo client
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
     link: setAuthorizationContext.concat(apolloClientHttpLink),
     cache: new InMemoryCache(),
     ssrMode: true,

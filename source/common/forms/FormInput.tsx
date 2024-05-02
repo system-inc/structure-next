@@ -6,6 +6,10 @@ import { InputReferenceInterface, InputInterface } from '@structure/source/commo
 import { ValidationResult } from '@structure/source/utilities/validation/Validation';
 import TipIcon from '@structure/source/common/popovers/TipIcon';
 
+// Dependencies - Assets
+import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
+import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
+
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
@@ -60,8 +64,20 @@ export function FormInput({
             {properties.validationResult?.errors &&
                 properties.validationResult.errors.length > 0 &&
                 properties.validationResult.errors.map((validationError, validationErrorIndex) => (
-                    <p key={validationErrorIndex} className="mt-1.5 text-xs text-red-500">
-                        {validationError.message}
+                    <p key={validationErrorIndex} className="mt-1.5 flex items-center space-x-1 text-xs text-red-500">
+                        <ErrorIcon className="h-4 w-4" /> <span>{validationError.message}</span>
+                    </p>
+                ))}
+
+            {/* Successes */}
+            {properties.validationResult?.successes &&
+                properties.validationResult.successes.length > 0 &&
+                properties.validationResult.successes.map((validationSuccess, validationSuccessIndex) => (
+                    <p
+                        key={validationSuccessIndex}
+                        className="mt-1.5 flex items-center space-x-1 text-xs text-green-600 dark:text-green-500"
+                    >
+                        <CheckCircledIcon className="h-4 w-4" /> <span>{validationSuccess.message}</span>
                     </p>
                 ))}
 

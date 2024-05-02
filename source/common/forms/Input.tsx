@@ -26,7 +26,10 @@ export interface InputInterface {
     onValidate?: (validationResult: ValidationResult) => void;
 
     // Validation
-    validate?: (value: any) => Promise<ValidationResult> | ValidationResult;
+    validate?: (
+        value: any,
+        concurrentValidationResult?: ValidationResult,
+    ) => Promise<ValidationResult | undefined | void> | ValidationResult | undefined | void;
     validating?: boolean;
     validateOnChange?: boolean;
     validateOnBlur?: boolean;

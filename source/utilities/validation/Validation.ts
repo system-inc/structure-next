@@ -69,8 +69,8 @@ export function isEmailAddress(string: string): boolean {
 
 // Function to validate a username
 export function isUsername(string: string): boolean {
-    // Must be 3-16 characters long, can include letters, numbers, underscores, international characters, and a single period not at the start or end
-    return !!(string && /^(?![_\.])(?!.*\.$)(?!.*\..*\.)[\w.\u00A0-\uFFFF]{3,16}$/.test(string));
+    // Must be 3-32 characters long, can include letters, numbers, underscores, international characters, and a single period not at the start or end
+    return !!(string && /^(?![_\.])(?!.*\.$)(?!.*\..*\.)[\w.\u00A0-\uFFFF]{3,32}$/.test(string));
 }
 
 // https://github.com/validatorjs/validator.js
