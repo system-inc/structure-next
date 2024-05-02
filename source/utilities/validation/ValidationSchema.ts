@@ -344,7 +344,8 @@ export class ValidationSchema {
         // Create the validation rule
         const validationRule: ValidationRule = {
             identifier: 'username',
-            message: 'Must be a valid username.',
+            message:
+                'Must be 3-16 characters long, can include letters, numbers, underscores, international characters, and a single period not at the start or end.',
         };
 
         // Add the validation rule instance
@@ -364,7 +365,8 @@ export class ValidationSchema {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'invalidUsername',
-                        message: 'Invalid username.',
+                        message:
+                            'Invalid username. Must be 3-16 characters long, can include letters, numbers, underscores, international characters, and a single period not at the start or end.',
                     });
                 }
                 // Otherwise, add a success

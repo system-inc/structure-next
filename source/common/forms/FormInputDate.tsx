@@ -35,16 +35,29 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
 
     // Function to validate the component
     const propertiesValidate = properties.validate;
+    const propertiesValidationSchema = properties.validationSchema;
     const validate = React.useCallback(
         async function (value?: Date) {
+            // Run the validation schema validation if provided
+            const validationSchemaValidationResult = propertiesValidationSchema
+                ? await propertiesValidationSchema.validate(value)
+                : undefined;
+
             // Run the provided validate function if provided
             const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
 
-            setValidationResult(propertiesValidationResult);
+            // Merge the validation results
+            const mergedValidationResult = mergeValidationResults(
+                validationSchemaValidationResult,
+                propertiesValidationResult,
+            );
 
-            return propertiesValidationResult;
+            // Set the validation result
+            setValidationResult(mergedValidationResult);
+
+            return mergedValidationResult;
         },
-        [propertiesValidate],
+        [propertiesValidationSchema, propertiesValidate],
     );
 
     // Function to handle value changes and propagate them upwards through the form

@@ -54,6 +54,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
 
     // Function to validate the component
     const propertiesType = properties.type;
+    const propertiesValidationSchema = properties.validationSchema;
     const propertiesValidate = properties.validate;
     const validate = React.useCallback(
         async function (value?: string) {
@@ -65,17 +66,27 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 validationResult = await new ValidationSchema().emailAddress().validate(value);
             }
 
-            // Run the provided validate function if provided
+            // Run the validation schema validation if provided
+            const validationSchemaValidationResult = propertiesValidationSchema
+                ? await propertiesValidationSchema.validate(value)
+                : undefined;
+
+            // Run the provided validate function from properties if provided
             const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
 
             // Merge the validation results
-            const mergedValidationResult = mergeValidationResults(validationResult, propertiesValidationResult);
+            const mergedValidationResult = mergeValidationResults(
+                validationResult,
+                validationSchemaValidationResult,
+                propertiesValidationResult,
+            );
 
+            // Set the validation result
             setValidationResult(mergedValidationResult);
 
-            return validationResult;
+            return mergedValidationResult;
         },
-        [propertiesType, propertiesValidate],
+        [propertiesType, propertiesValidationSchema, propertiesValidate],
     );
 
     // Function to handle form input value changes
