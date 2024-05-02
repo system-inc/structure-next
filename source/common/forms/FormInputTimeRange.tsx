@@ -40,6 +40,7 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
         // Function to validate the component
         const propertiesValidate = properties.validate;
         const propertiesValidationSchema = properties.validationSchema;
+        const propertiesOnValidate = properties.onValidate;
         const validate = React.useCallback(
             async function (value?: TimeRangeType) {
                 // Run the validation schema validation if provided
@@ -59,9 +60,14 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
                 // Set the validation result
                 setValidationResult(mergedValidationResult);
 
+                // Optionally run the onValidate function from properties if provided
+                if(propertiesOnValidate) {
+                    propertiesOnValidate(mergedValidationResult);
+                }
+
                 return mergedValidationResult;
             },
-            [propertiesValidationSchema, propertiesValidate],
+            [propertiesValidationSchema, propertiesValidate, propertiesOnValidate],
         );
 
         // Function to handle value changes and propagate them upwards through the form

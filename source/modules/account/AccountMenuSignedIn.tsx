@@ -51,6 +51,13 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
             </div>
 
             <div className="pt-4">
+                <Link
+                    className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-primary/5"
+                    href="/account/profile"
+                >
+                    Profile
+                </Link>
+
                 {/* If the account is an administrator */}
                 {properties.account.isAdministator() && (
                     <Link

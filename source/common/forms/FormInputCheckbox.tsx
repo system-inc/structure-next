@@ -45,6 +45,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
         // Function to validate the component
         const propertiesValidate = properties.validate;
         const propertiesValidationSchema = properties.validationSchema;
+        const propertiesOnValidate = properties.onValidate;
         const validate = React.useCallback(
             async function (value?: string) {
                 // Run the validation schema validation if provided
@@ -64,9 +65,14 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                 // Set the validation result
                 setValidationResult(mergedValidationResult);
 
+                // Optionally run the onValidate function from properties if provided
+                if(propertiesOnValidate) {
+                    propertiesOnValidate(mergedValidationResult);
+                }
+
                 return mergedValidationResult;
             },
-            [propertiesValidationSchema, propertiesValidate],
+            [propertiesValidationSchema, propertiesValidate, propertiesOnValidate],
         );
 
         // Function to handle form input value changes

@@ -23,6 +23,7 @@ export interface InputInterface {
     // Events
     onChange?: (value: any | undefined, event?: any) => void;
     onBlur?: (value: any | undefined, event?: any) => void;
+    onValidate?: (validationResult: ValidationResult) => void;
 
     // Validation
     validate?: (value: any) => Promise<ValidationResult> | ValidationResult;
