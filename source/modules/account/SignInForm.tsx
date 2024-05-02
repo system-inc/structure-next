@@ -55,6 +55,7 @@ export function SignInForm(properties: SignInFormInterface) {
                 }
 
                 return {
+                    success: !error,
                     message: message,
                 };
             }}

@@ -149,16 +149,15 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
         async function (value: string | undefined) {
             // console.log('validating', value);
 
-            let valid = true;
+            // Run the provided form input validation function if provided
             if(propertiesValidate) {
                 setValidating(true);
-                valid = await propertiesValidate(value);
+                const validationResult = await propertiesValidate(value);
+                setValid(validationResult.valid);
                 setValidating(false);
             }
 
-            // console.log('valid', valid, value);
-
-            setValid(valid);
+            // console.log('validationResult.valid', validationResult.valid, value);
         },
         [propertiesValidate],
     );

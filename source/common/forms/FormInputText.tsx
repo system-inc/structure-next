@@ -2,12 +2,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import {
-    FormInputErrorInterface,
-    FormInputReferenceInterface,
-    FormInputInterface,
-    FormInput,
-} from '@structure/source/common/forms/FormInput';
+import { FormInputReferenceInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
+import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 import { InputTextInterface, InputText } from '@structure/source/common/forms/InputText';
 
 // Dependencies - Assets
@@ -15,7 +12,6 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
-import { isEmailAddress } from '@structure/source/utilities/Validation';
 
 // Class Names - Form Input Text
 export const inputTextClassName =
@@ -37,6 +33,11 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     properties: FormInputTextInterface,
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
+    // State
+    const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
+        properties.validationResult,
+    );
+
     // References
     const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
     const inputTextReference = React.useRef<FormInputReferenceInterface>(null);
@@ -51,7 +52,35 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
         }
     }, []);
 
+    // Function to validate the component
+    const propertiesType = properties.type;
+    const propertiesValidate = properties.validate;
+    const validate = React.useCallback(
+        async function (value?: string) {
+            // console.log('Form input text validating:', value);
+
+            // Apply email address validation to form input text components which are of type email
+            let validationResult = undefined;
+            if(propertiesType === 'email') {
+                validationResult = await new ValidationSchema().emailAddress().validate(value);
+            }
+
+            // Run the provided validate function if provided
+            const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
+
+            // Merge the validation results
+            const mergedValidationResult = mergeValidationResults(validationResult, propertiesValidationResult);
+
+            setValidationResult(mergedValidationResult);
+
+            return validationResult;
+        },
+        [propertiesType, propertiesValidate],
+    );
+
     // Function to handle form input value changes
+    const propertiesOnChange = properties.onChange;
+    const propertiesValidateOnChange = properties.validateOnChange;
     const onChangeIntercept = React.useCallback(
         function (
             value: string | undefined,
@@ -68,42 +97,53 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 inputTextReference.current.setValue(value);
             }
 
-            // Run the provided form input onChange function if provided
-            if(!skipOnChangeCallback && properties.onChange) {
-                properties.onChange(value, event);
+            // Optionally run the provided onChange function if provided
+            if(!skipOnChangeCallback && propertiesOnChange) {
+                propertiesOnChange(value, event);
+            }
+
+            // Optionally run validation if a properties.validateOnChange is true
+            if(propertiesValidateOnChange) {
+                validate(value);
             }
         },
-        [properties],
+        [propertiesOnChange, propertiesValidateOnChange, validate],
     );
 
-    // Expose internal state to Form
-    React.useImperativeHandle(reference, () => ({
-        // Expose the value to the Form component
-        getValue: () => valueReference.current,
-        // Expose the setValue function to the Form component
-        setValue: (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) => {
-            onChangeIntercept(value, event, true);
-        },
-        // Expose the focus function to the Form component
-        focus: () => {
-            focus();
-        },
-        // Expose a validate function to the Form component for form input validation
-        // This will run in addition to the provided property.validate
-        validate: async function (value: string | undefined) {
-            // Store the errors
-            const errors: FormInputErrorInterface[] = [];
-
-            // Email validation
-            if(value && type === 'email') {
-                if(!isEmailAddress(value)) {
-                    errors.push({ message: 'This email is not valid.' });
-                }
+    // Function to handle form input blur events
+    const propertiesOnBlur = properties.onBlur;
+    const propertiesValidateOnBlur = properties.validateOnBlur;
+    const onBlurIntercept = React.useCallback(
+        function (
+            value: string | undefined,
+            event: React.ChangeEvent<HTMLInputElement>,
+            skipOnBlurCallback: boolean = false,
+        ) {
+            // Run the provided form input onBlur function if provided
+            if(!skipOnBlurCallback && propertiesOnBlur) {
+                propertiesOnBlur(value, event);
             }
 
-            return errors;
+            // Optionally run validation
+            if(propertiesValidateOnBlur) {
+                validate(value);
+            }
         },
-    }));
+        [propertiesOnBlur, propertiesValidateOnBlur, validate],
+    );
+
+    React.useImperativeHandle(reference, function () {
+        return {
+            getValue: function () {
+                return valueReference.current;
+            },
+            setValue: function (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) {
+                onChangeIntercept(value, event, true);
+            },
+            focus: focus,
+            validate: validate,
+        };
+    });
 
     // Render the component
     return (
@@ -119,7 +159,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
             focus={focus}
             validate={properties.validate}
             validating={properties.validating}
-            errors={properties.errors}
+            validationResult={validationResult}
             component={
                 <div className="relative">
                     <InputText
@@ -132,7 +172,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                         disabled={properties.disabled}
                         tabIndex={properties.tabIndex}
                         onChange={onChangeIntercept}
-                        onBlur={properties.onBlur}
+                        onBlur={onBlurIntercept}
                         // Specific to InputText
                         type={type}
                         placeholder={properties.placeholder}
@@ -140,7 +180,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                     />
                     {properties.sibling && properties.sibling}
                     {properties.validating && (
-                        <div className="absolute right-2.5 top-2.5 animate-spin">
+                        <div className="absolute right-2.5 top-2 animate-spin">
                             <BrokenCircleIcon className="h-5 w-5" />
                         </div>
                     )}

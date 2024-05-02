@@ -2,7 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputErrorInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import {
     InputTimeRangeReferenceInterface,
@@ -21,6 +22,11 @@ export interface FormInputTimeRangeInterface
 }
 export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface, FormInputTimeRangeInterface>(
     function (properties: FormInputTimeRangeInterface, reference: React.Ref<InputTimeRangeReferenceInterface>) {
+        // State
+        const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
+            properties.validationResult,
+        );
+
         // References
         const valueReference = React.useRef<TimeRangeType | undefined>(properties.defaultValue); // For managing the value internally and exposing it to a form
         const inputTimeRangeReference = React.useRef<InputTimeRangeReferenceInterface>(null);
@@ -31,7 +37,23 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
             inputTimeRangeReference.current?.focus();
         }, []);
 
+        // Function to validate the component
+        const propertiesValidate = properties.validate;
+        const validate = React.useCallback(
+            async function (value?: TimeRangeType) {
+                // Run the provided validate function if provided
+                const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
+
+                setValidationResult(propertiesValidationResult);
+
+                return propertiesValidationResult;
+            },
+            [propertiesValidate],
+        );
+
         // Function to handle value changes and propagate them upwards through the form
+        const propertiesOnChange = properties.onChange;
+        const propertiesValidateOnChange = properties.validateOnChange;
         const onChangeIntercept = React.useCallback(
             function (value: TimeRangeType | undefined, skipOnChangeCallback: boolean = false) {
                 // Update the value reference
@@ -40,28 +62,31 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
                 // Set the value of the input time range
                 inputTimeRangeReference.current?.setValue(value);
 
-                // Run the provided form input onChange function if provided
-                if(!skipOnChangeCallback && properties.onChange) {
-                    properties.onChange(value);
+                // Optionally run the provided onChange function if provided
+                if(!skipOnChangeCallback && propertiesOnChange) {
+                    propertiesOnChange(value);
+                }
+
+                // Optionally run validation if a properties.validateOnChange is true
+                if(propertiesValidateOnChange) {
+                    validate(value);
                 }
             },
-            [properties],
+            [propertiesOnChange, propertiesValidateOnChange, validate],
         );
 
-        // Expose internal state to Form through the reference
-        React.useImperativeHandle(reference, () => ({
-            getValue: () => valueReference.current,
-            setValue: (value: TimeRangeType | undefined) => {
-                onChangeIntercept(value, true); // Skip the onChange callback
-            },
-            focus,
-            // Expose a validate function to the Form component for form input validation
-            // This will run in addition to the provided property.validate
-            validate: async function (value?: TimeRangeType) {
-                const errors: FormInputErrorInterface[] = [];
-                return errors;
-            },
-        }));
+        React.useImperativeHandle(reference, function () {
+            return {
+                getValue: function () {
+                    return valueReference.current;
+                },
+                setValue: function (value: TimeRangeType | undefined) {
+                    onChangeIntercept(value, true); // Skip the onChange callback
+                },
+                focus: focus,
+                validate: validate,
+            };
+        });
 
         // Render the component
         return (
@@ -78,7 +103,7 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
                 focus={focus}
                 validate={properties.validate}
                 validating={properties.validating}
-                errors={properties.errors}
+                validationResult={validationResult}
                 component={
                     <div className="relative">
                         <InputTimeRange

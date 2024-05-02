@@ -60,6 +60,7 @@ export function WaitListForm(properties: WaitListFormInterface) {
                 }
 
                 return {
+                    success: !error,
                     message: message,
                 };
             }}

@@ -1,3 +1,7 @@
+// Dependencies - Utilities
+import { ValidationResult } from '@structure/source/utilities/validation/Validation';
+import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
+
 // Interface - InputReference
 export interface InputReferenceInterface {
     getValue: () => string | undefined;
@@ -8,16 +12,23 @@ export interface InputReferenceInterface {
 // Interface - InputInterface
 export interface InputInterface {
     className?: string;
-    defaultValue?: string;
+    defaultValue?: any;
     required?: boolean;
     disabled?: boolean;
     tabIndex?: number;
 
+    // Methods
+    focus?: () => void;
+
     // Events
-    onChange?: (value: string | undefined, event?: Event) => void;
-    onBlur?: (value: string | undefined, event?: Event) => void;
+    onChange?: (value: any | undefined, event?: any) => void;
+    onBlur?: (value: any | undefined, event?: any) => void;
 
     // Validation
-    validate?: (value: any) => Promise<boolean>;
+    validate?: (value: any) => Promise<ValidationResult> | ValidationResult;
     validating?: boolean;
+    validateOnChange?: boolean;
+    validateOnBlur?: boolean;
+    validationSchema?: ValidationSchema;
+    validationResult?: ValidationResult;
 }

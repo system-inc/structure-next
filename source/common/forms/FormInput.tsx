@@ -2,50 +2,37 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface } from '@structure/source/common/forms/Input';
+import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
+import { ValidationResult } from '@structure/source/utilities/validation/Validation';
 import TipIcon from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
-// Interface - Form Input Error
-export interface FormInputErrorInterface {
-    message: string;
-}
-
 // Type - Form Input Reference
 export interface FormInputReferenceInterface extends InputReferenceInterface {
-    validate: (value: any) => Promise<FormInputErrorInterface[]>;
+    validate: (value: any) => ValidationResult | Promise<ValidationResult | undefined | void> | undefined | void;
 }
 
 // Component - FormInput
-export interface FormInputInterface {
+export interface FormInputInterface extends InputInterface {
     ref?: (instance: FormInputReferenceInterface) => void;
     id: string;
-    className?: string;
     componentClassName?: string;
-    defaultValue?: any;
     label?: React.ReactNode;
     labelTip?: React.ReactNode;
     description?: React.ReactNode;
-    disabled?: boolean;
-    required?: boolean;
-    tabIndex?: number;
-    focus?: () => void;
-
-    // Events
-    onChange?: (formInputValue: any, event?: Event) => void;
-    onBlur?: (formInputValue: any, event?: Event) => void;
-
-    // Validation
-    validate?: (value: any) => Promise<FormInputErrorInterface[]>;
-    validating?: boolean;
-    errors?: FormInputErrorInterface[];
 }
 export function FormInput({
     component,
     ...properties
 }: { component: React.ReactElement<FormInputInterface> } & FormInputInterface) {
+    // State
+    const [validating, setValidating] = React.useState(properties.validating || false);
+
+    // console.log('validationResult:', properties.validationResult);
+    // console.log('properties.validationResult?.errors.length', properties.validationResult?.errors.length);
+
     // Render the component
     return (
         // Form Input
@@ -70,15 +57,19 @@ export function FormInput({
             {component}
 
             {/* Errors */}
-            {Array.isArray(properties.errors) &&
-                properties.errors.map((error, errorIndex) => (
-                    <p key={errorIndex} className="mt-1.5 text-xs text-red-500">
-                        {error.message}
+            {properties.validationResult?.errors &&
+                properties.validationResult.errors.length > 0 &&
+                properties.validationResult.errors.map((validationError, validationErrorIndex) => (
+                    <p key={validationErrorIndex} className="mt-1.5 text-xs text-red-500">
+                        {validationError.message}
                     </p>
                 ))}
 
             {/* Description */}
             {properties.description && <div className="text-ss text-muted-foreground">{properties.description}</div>}
+
+            {/* Validating */}
+            {validating && <p className="text-xs text-neutral">Validating...</p>}
         </div>
     );
 }

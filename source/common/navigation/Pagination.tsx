@@ -144,15 +144,20 @@ export function Pagination(properties: PaginationInterface) {
                     onClick={function (event: React.MouseEvent<HTMLInputElement>) {
                         event.currentTarget.select();
                     }}
-                    validate={async function (value: string | undefined) {
-                        let valid = false;
-                        const valueNumber = parseInt(value ?? '0');
+                    validate={async function (value?: string) {
+                        const validationResult = {
+                            value: value,
+                            valid: false,
+                            errors: [],
+                            successes: [],
+                        };
 
+                        const valueNumber = parseInt(value ?? '0');
                         if(value == '' || (valueNumber >= 1 && valueNumber <= properties.pagesTotal)) {
-                            valid = true;
+                            validationResult.valid = true;
                         }
 
-                        return valid;
+                        return validationResult;
                     }}
                 />
                 <p>of {properties.pagesTotal}</p>

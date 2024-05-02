@@ -114,3 +114,10 @@ export const accountSignOutMutationDocument = graphql(`
         accountSignOut
     }
 `);
+
+// Document - Account Profile Username Check
+export const accountProfileUsernameCheckQueryDocument = graphql(`
+    query accountProfileUsernameValidate($value: String!) {
+        accountProfileUsernameValidate(username: $value)
+    }
+`);

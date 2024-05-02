@@ -2,7 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputErrorInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import {
     InputCheckboxState,
     InputCheckboxReferenceInterface,
@@ -22,6 +23,11 @@ export interface FormInputCheckboxInterface
 }
 export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, FormInputCheckboxInterface>(
     function (properties: FormInputCheckboxInterface, reference: React.Ref<InputCheckboxReferenceInterface>) {
+        // State
+        const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
+            properties.validationResult,
+        );
+
         // References
         const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
         const inputCheckboxReference = React.useRef<InputCheckboxReferenceInterface>(null);
@@ -36,7 +42,23 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
             inputCheckboxReference.current?.click();
         }, []);
 
+        // Function to validate the component
+        const propertiesValidate = properties.validate;
+        const validate = React.useCallback(
+            async function (value?: string) {
+                // Run the provided validate function if provided
+                const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
+
+                setValidationResult(propertiesValidationResult);
+
+                return propertiesValidationResult;
+            },
+            [propertiesValidate],
+        );
+
         // Function to handle form input value changes
+        const propertiesOnChange = properties.onChange;
+        const propertiesValidateOnChange = properties.validateOnChange;
         const onChangeIntercept = React.useCallback(
             function (value: InputCheckboxState | undefined, event?: Event, skipOnChangeCallback: boolean = false) {
                 // console.log('FormInputCheckbox.tsx Form input value changed:', value);
@@ -47,29 +69,32 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                 // Set the value of the input select
                 inputCheckboxReference.current?.setValue(value);
 
-                // Run the provided form input onChange function if provided
-                if(!skipOnChangeCallback && properties.onChange) {
-                    properties.onChange(value, event);
+                // Optionally run the provided onChange function if provided
+                if(!skipOnChangeCallback && propertiesOnChange) {
+                    propertiesOnChange(value, event);
+                }
+
+                // Optionally run validation if a properties.validateOnChange is true
+                if(propertiesValidateOnChange) {
+                    validate(value);
                 }
             },
-            [properties],
+            [propertiesOnChange, propertiesValidateOnChange, validate],
         );
 
-        // Expose internal state to Form through the reference
-        React.useImperativeHandle(reference, () => ({
-            getValue: () => valueReference.current,
-            setValue: (value: InputCheckboxState | undefined, event?: Event) => {
-                onChangeIntercept(value, event, true);
-            },
-            focus,
-            click,
-            // Expose a validate function to the Form component for form input validation
-            // This will run in addition to the provided property.validate
-            validate: async function (value?: string) {
-                const errors: FormInputErrorInterface[] = [];
-                return errors;
-            },
-        }));
+        React.useImperativeHandle(reference, function () {
+            return {
+                getValue: function () {
+                    return valueReference.current;
+                },
+                setValue: function (value: InputCheckboxState | undefined, event?: Event) {
+                    onChangeIntercept(value, event, true);
+                },
+                click: click,
+                focus: focus,
+                validate: validate,
+            };
+        });
 
         // Render the component
         return (
@@ -86,7 +111,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                 focus={focus}
                 validate={properties.validate}
                 validating={properties.validating}
-                errors={properties.errors}
+                validationResult={validationResult}
                 component={
                     <div className="relative flex items-center">
                         {/* Input Checkbox */}

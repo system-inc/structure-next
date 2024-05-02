@@ -125,7 +125,7 @@ export function GraphQlMutationForm(properties: GraphQlMutationFormInterface) {
                     // Invoke the onSubmit property
                     submitResponse = await properties.onSubmit(formValues, mutationResponseData, mutationResponseError);
                 }
-                // If no onSubmit property has been provided
+                // If no onSubmit property has been provided, infer the submitResponse from the mutation response
                 else {
                     // The message to display
                     let message = <></>;
@@ -149,6 +149,7 @@ export function GraphQlMutationForm(properties: GraphQlMutationFormInterface) {
                     }
 
                     submitResponse = {
+                        success: !mutationResponseError,
                         message: message,
                     };
                 }

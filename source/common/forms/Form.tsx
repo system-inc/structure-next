@@ -2,35 +2,30 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import {
-    FormInputErrorInterface,
-    FormInputReferenceInterface,
-    FormInputInterface,
-} from '@structure/source/common/forms/FormInput';
+import { FormInputReferenceInterface, FormInputInterface } from '@structure/source/common/forms/FormInput';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
+import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
+import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 import { mergeClassNames } from '@structure/source/utilities/Styles';
-import { createDelayedUntilIdleFunction } from '@structure/source/utilities/Function';
 
 // Interface - Form Values
 export interface FormValuesInterface {
     [key: string]: any;
 }
 
-// Interface Form Inputs Errors
-export interface FormInputsErrorsInterface {
-    [id: string]: {
-        errors: FormInputErrorInterface[];
-        validatedValue: any;
-    };
+// Interface Form Inputs Validation Results
+export interface FormInputsValidationResultsInterface {
+    [id: string]: ValidationResult;
 }
 
 // Interface - Submit Response
 export interface FormSubmitResponseInterface {
+    success: boolean;
     message?: React.ReactNode;
-    errors?: { [id: string]: FormInputErrorInterface[] };
+    validationResults?: { [id: string]: ValidationResult };
     time?: Date;
     timeElapsedInMilliseconds?: number;
     redirectUrl?: string;
@@ -54,7 +49,6 @@ export interface FormInterface {
 export function Form(properties: FormInterface) {
     // References
     const formInputsReferencesMap = React.useRef(new Map<string, FormInputReferenceInterface>()).current;
-    const formInputsDelayedUntilIdleFunctionsMap = React.useRef(new Map<string, NodeJS.Timeout>()).current;
 
     // State
     const [submittable, setSubmittable] = React.useState(properties.submittable ?? false);
@@ -63,7 +57,8 @@ export function Form(properties: FormInterface) {
         properties.submitResponse ?? null,
     );
     const [formInputsValidating, setFormInputsValidating] = React.useState<{ [id: string]: boolean }>({});
-    const [formInputsErrors, setFormInputsErrors] = React.useState<FormInputsErrorsInterface>({});
+    const [formInputsValidationResults, setFormInputsValidationResults] =
+        React.useState<FormInputsValidationResultsInterface>({});
 
     // Defaults
     const resetOnSubmitSuccess = properties.resetOnSubmitSuccess ?? false;
@@ -86,7 +81,7 @@ export function Form(properties: FormInterface) {
             }
 
             // Reset the form input errors
-            setFormInputsErrors({});
+            setFormInputsValidationResults({});
 
             // Reset the submit response
             setSubmitResponse(null);
@@ -98,17 +93,17 @@ export function Form(properties: FormInterface) {
     // Validation errors are handled at the form level in case sibling form inputs need to be validated against each other
     const validateFormInput = React.useCallback(
         async function (formInputValue: any, formInput: React.ReactElement<FormInputInterface>) {
+            // console.log('Form.tsx - validateFormInput id:', formInput.props.id, 'value:', formInputValue);
+
             let formInputIsValid = true;
 
-            // Create a variable to store the errors
-            let formInputToValidateErrors: FormInputErrorInterface[] = [];
-
-            // console.log('Form.tsx - validateFormInput id:', formInput.props.id, 'value:', formInputValue);
+            // Create a variable to store the validation result
+            let formInputValidationResult: ValidationResult | undefined = undefined;
 
             // Check if we have already validated the current value
             if(
-                formInputsErrors[formInput.props.id]?.validatedValue &&
-                formInputValue == formInputsErrors[formInput.props.id]?.validatedValue
+                formInputsValidationResults[formInput.props.id] &&
+                formInputValue == formInputsValidationResults[formInput.props.id]?.value
             ) {
                 // console.log(
                 //     'Already validated, skipping validation for:',
@@ -116,57 +111,76 @@ export function Form(properties: FormInterface) {
                 //     'value:',
                 //     formInputValue,
                 // );
-                formInputToValidateErrors = formInputsErrors[formInput.props.id]?.errors || [];
+                formInputValidationResult = formInputsValidationResults[formInput.props.id];
             }
             // If we haven't validated the current value
             else {
                 // Mark the form input as validating
-                setFormInputsValidating((previousValue) => ({ ...previousValue, [formInput.props.id]: true }));
+                setFormInputsValidating((previousFormInputsValidating) => ({
+                    ...previousFormInputsValidating,
+                    [formInput.props.id]: true,
+                }));
+
+                // Perform form level validation, mainly for required fields but this may be extended in the future
+                let formLevelFormInputValidationResult: ValidationResult | undefined = undefined;
 
                 // If the form input is required
                 if(formInput?.props.required) {
-                    if(!formInputValue) {
-                        formInputToValidateErrors.push({ message: 'This field is required.' });
-                    }
+                    // Create a required validation schema
+                    const requiredValidationSchema = new ValidationSchema().required();
+
+                    // Validate the form input using the required validation schema
+                    formLevelFormInputValidationResult = await requiredValidationSchema.validate(formInputValue);
                 }
 
                 // console.log('formInputReference', formInputReference);
 
                 // Get the form input reference
-                let formInputReference = formInputsReferencesMap.get(formInput.props.id);
+                const formInputReference = formInputsReferencesMap.get(formInput.props.id);
 
-                // Validate the form input using its referenced internal validate function
-                formInputToValidateErrors.push(...((await formInputReference?.validate?.(formInputValue)) || []));
+                // Validate the form input using the form input's validate function
+                // All form input components should have a validate function which uses their validate property
+                // Form input components may also provide custom validation logic in their validate function
+                // beyond what is provided in the validate property.
+                // E.g., FormInputText's validate function uses the provided property as well as a custom email address check
+                const formInputLevelValidationResult = await formInputReference?.validate?.(formInputValue);
+
+                // The form input level validation result is the merge of the form level and form input level validation results
+                formInputValidationResult = mergeValidationResults(
+                    formLevelFormInputValidationResult,
+                    formInputLevelValidationResult,
+                );
                 // console.log('formInputToValidateErrors', formInputToValidateErrors);
 
-                // Validate the form input using its provided validate property
-                formInputToValidateErrors.push(...((await formInput?.props.validate?.(formInputValue)) || []));
-
                 // Update the state
-                setFormInputsErrors((previousFormInputsErrors) => ({
-                    ...previousFormInputsErrors,
-                    [formInput.props.id]: {
-                        errors: formInputToValidateErrors,
-                        validatedValue: formInputValue,
-                    },
-                }));
+                if(formInputValidationResult) {
+                    setFormInputsValidationResults(function (previousFormInputsValidationResults) {
+                        const newFormInputsValidationResults = { ...previousFormInputsValidationResults };
+                        if(formInputValidationResult !== undefined) {
+                            newFormInputsValidationResults[formInput.props.id] = formInputValidationResult;
+                        }
+                        return newFormInputsValidationResults;
+                    });
+                }
 
                 // Mark the form input as not validating
                 setFormInputsValidating((previousValue) => ({ ...previousValue, [formInput.props.id]: false }));
             }
 
-            // Return the valid state
-            if(formInputToValidateErrors.length > 0) {
+            // If the validation result is affirmatively invalid
+            // This means we are explicitly checking if the validation result exists and .valid is false
+            if(formInputValidationResult && formInputValidationResult.valid === false) {
                 setSubmittable(false);
                 formInputIsValid = false;
             }
+            // Otherwise, we assume the form input is valid
             else {
                 setSubmittable(true);
             }
 
             return formInputIsValid;
         },
-        [formInputsReferencesMap, formInputsErrors],
+        [formInputsReferencesMap, formInputsValidationResults],
     );
 
     // Function to validate the form
@@ -227,39 +241,46 @@ export function Form(properties: FormInterface) {
                 // Proceed with form submission
                 let formSubmitResponse = await properties.onSubmit(formValues);
 
-                // If there are errors in the response
-                if(formSubmitResponse.errors) {
-                    // console.log('formSubmitResponse.errors', formSubmitResponse.errors);
+                // The form submission may return validation results from the API for individual form inputs
 
-                    for(let formInputId in formSubmitResponse.errors) {
-                        // console.log('formInputId', formInputId);
-
-                        // Get the current form input errors
-                        let currentFormInputErrors = formSubmitResponse.errors[formInputId];
-                        // console.log('currentFormInputErrors', currentFormInputErrors);
-
-                        // Get the form input reference
-                        let formInputReference = formInputsReferencesMap.get(formInputId);
-
-                        // Get the form input value
-                        let formInputValue = formInputReference?.getValue();
-
-                        // Update the form input errors
-                        setFormInputsErrors((previousFormInputsErrors) => ({
-                            ...previousFormInputsErrors,
-                            [formInputId]: {
-                                errors: currentFormInputErrors ? currentFormInputErrors : [],
-                                validatedValue: formInputValue,
-                            },
-                        }));
-                    }
-                }
                 // If the form submission was successful
-                else {
-                    // Reset the form
+                if(formSubmitResponse.success) {
+                    // Optionally reset the form
                     if(resetOnSubmitSuccess) {
                         console.log('resetting!');
                         reset();
+                    }
+                }
+                // If the form submission was not successful
+                else {
+                    // If validation results were provided in the response
+                    // This allows for server side validation of individual form inputs
+                    if(formSubmitResponse.validationResults) {
+                        // console.log('formSubmitResponse.validationResults', formSubmitResponse.validationResults);
+
+                        // Loop over the validation results
+                        for(let formInputId in formSubmitResponse.validationResults) {
+                            // console.log('formInputId', formInputId);
+
+                            // Get the current form input errors
+                            let currentFormInputValidationResult = formSubmitResponse.validationResults[formInputId];
+                            // console.log('currentFormInputValidationResult', currentFormInputValidationResult);
+
+                            // Get the form input reference
+                            let formInputReference = formInputsReferencesMap.get(formInputId);
+
+                            // Get the form input value
+                            let formInputValue = formInputReference?.getValue();
+
+                            // Update the form input validation results using the new validation results
+                            setFormInputsValidationResults(function (previousFormInputsValidationResults) {
+                                const newFormInputsValidationResults = { ...previousFormInputsValidationResults };
+                                if(currentFormInputValidationResult !== undefined) {
+                                    newFormInputsValidationResults[formInputId] = currentFormInputValidationResult;
+                                }
+                                return newFormInputsValidationResults;
+                            });
+                        }
                     }
                 }
 
@@ -354,7 +375,7 @@ export function Form(properties: FormInterface) {
                         }
                     },
                     validating: formInputValidating,
-                    errors: formInputsErrors[formInput.props.id]?.errors,
+                    validationResult: formInputsValidationResults[formInput.props.id],
                 });
 
                 return formInputClone;
@@ -364,7 +385,7 @@ export function Form(properties: FormInterface) {
             properties.formInputs,
             formInputsReferencesMap,
             formInputsValidating,
-            formInputsErrors,
+            formInputsValidationResults,
             attachFormInputReference,
             onFormInputChangeIntercept,
             validateFormInput,

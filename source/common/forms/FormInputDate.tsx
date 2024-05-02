@@ -2,7 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputErrorInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { InputDateReferenceInterface, InputDateInterface, InputDate } from '@structure/source/common/forms/InputDate';
 
 // Dependencies - Utilities
@@ -18,6 +19,11 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
     properties: FormInputDateInterface,
     reference: React.Ref<InputDateReferenceInterface>,
 ) {
+    // State
+    const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
+        properties.validationResult,
+    );
+
     // References
     const valueReference = React.useRef<Date | undefined>(properties.defaultValue); // For managing the value internally and exposing it to a form
     const inputDateReference = React.useRef<InputDateReferenceInterface>(null);
@@ -27,7 +33,23 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
         inputDateReference.current?.focus();
     }, []);
 
+    // Function to validate the component
+    const propertiesValidate = properties.validate;
+    const validate = React.useCallback(
+        async function (value?: Date) {
+            // Run the provided validate function if provided
+            const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
+
+            setValidationResult(propertiesValidationResult);
+
+            return propertiesValidationResult;
+        },
+        [propertiesValidate],
+    );
+
     // Function to handle value changes and propagate them upwards through the form
+    const propertiesOnChange = properties.onChange;
+    const propertiesValidateOnChange = properties.validateOnChange;
     const onChangeIntercept = React.useCallback(
         function (value: Date | undefined, skipOnChangeCallback: boolean = false) {
             // Update the value reference
@@ -36,28 +58,32 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
             // Set the value of the input date
             inputDateReference.current?.setValue(value);
 
-            // Run the provided form input onChange function if provided
-            if(!skipOnChangeCallback && properties.onChange) {
-                properties.onChange(value);
+            // Optionally run the provided onChange function if provided
+            if(!skipOnChangeCallback && propertiesOnChange) {
+                propertiesOnChange(value);
+            }
+
+            // Optionally run validation if a properties.validateOnChange is true
+            if(propertiesValidateOnChange) {
+                validate(value);
             }
         },
-        [properties],
+        [propertiesOnChange, propertiesValidateOnChange, validate],
     );
 
     // Expose internal state to Form through the reference
-    React.useImperativeHandle(reference, () => ({
-        getValue: () => valueReference.current,
-        setValue: (value: Date | undefined) => {
-            onChangeIntercept(value, true); // Skip the onChange callback
-        },
-        focus,
-        // Expose a validate function to the Form component for form input validation
-        // This will run in addition to the provided property.validate
-        validate: async function (value?: Date) {
-            const errors: FormInputErrorInterface[] = [];
-            return errors;
-        },
-    }));
+    React.useImperativeHandle(reference, function () {
+        return {
+            getValue: function () {
+                return valueReference.current;
+            },
+            setValue: function (value: Date | undefined) {
+                onChangeIntercept(value, true); // Skip the onChange callback
+            },
+            focus: focus,
+            validate: validate,
+        };
+    });
 
     // Render the component
     return (
@@ -74,7 +100,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
             focus={focus}
             validate={properties.validate}
             validating={properties.validating}
-            errors={properties.errors}
+            validationResult={validationResult}
             component={
                 <div className="relative">
                     <InputDate

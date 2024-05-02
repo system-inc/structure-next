@@ -436,6 +436,7 @@ export function StructurePage(properties: StructurePageInterface) {
                         console.log('formValues', formValues);
 
                         return {
+                            success: true,
                             message: 'formVales: ' + JSON.stringify(formValues),
                         };
                     }}

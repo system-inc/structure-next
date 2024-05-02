@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
+import { InputInterface } from '@structure/source/common/forms/Input';
 import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets

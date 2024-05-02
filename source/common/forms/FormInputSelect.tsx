@@ -3,12 +3,8 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
-import {
-    FormInputErrorInterface,
-    FormInputReferenceInterface,
-    FormInputInterface,
-    FormInput,
-} from '@structure/source/common/forms/FormInput';
+import { FormInputReferenceInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { InputSelectInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
 
 // Dependencies - Utilities
@@ -30,6 +26,11 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
     properties: FormInputSelectInterface,
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
+    // State
+    const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
+        properties.validationResult,
+    );
+
     // References
     const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
     const inputSelectReference = React.useRef<FormInputReferenceInterface>(null);
@@ -39,7 +40,23 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
         inputSelectReference.current?.focus();
     }, []);
 
+    // Function to validate the component
+    const propertiesValidate = properties.validate;
+    const validate = React.useCallback(
+        async function (value?: string) {
+            // Run the provided validate function if provided
+            const propertiesValidationResult = propertiesValidate ? await propertiesValidate(value) : undefined;
+
+            setValidationResult(propertiesValidationResult);
+
+            return propertiesValidationResult;
+        },
+        [propertiesValidate],
+    );
+
     // Function to handle form input value changes
+    const propertiesOnChange = properties.onChange;
+    const propertiesValidateOnChange = properties.validateOnChange;
     const onChangeIntercept = React.useCallback(
         function (value: string | undefined, event?: Event, skipOnChangeCallback: boolean = false) {
             // console.log('FormInputSelect.tsx Form input value changed:', value);
@@ -50,28 +67,32 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
             // Set the value of the input select
             inputSelectReference.current?.setValue(value);
 
-            // Run the provided form input onChange function if provided
-            if(!skipOnChangeCallback && properties.onChange) {
-                properties.onChange(value, event);
+            // Optionally run the provided onChange function if provided
+            if(!skipOnChangeCallback && propertiesOnChange) {
+                propertiesOnChange(value, event);
+            }
+
+            // Optionally run validation if a properties.validateOnChange is true
+            if(propertiesValidateOnChange) {
+                validate(value);
             }
         },
-        [properties],
+        [propertiesOnChange, propertiesValidateOnChange, validate],
     );
 
     // Expose internal state to Form through the reference
-    React.useImperativeHandle(reference, () => ({
-        getValue: () => valueReference.current,
-        setValue: (value: string | undefined, event?: Event) => {
-            onChangeIntercept(value, event, true);
-        },
-        focus,
-        // Expose a validate function to the Form component for form input validation
-        // This will run in addition to the provided property.validate
-        validate: async function (value?: string) {
-            const errors: FormInputErrorInterface[] = [];
-            return errors;
-        },
-    }));
+    React.useImperativeHandle(reference, function () {
+        return {
+            getValue: function () {
+                return valueReference.current;
+            },
+            setValue: function (value: string | undefined, event?: Event) {
+                onChangeIntercept(value, event, true);
+            },
+            focus: focus,
+            validate: validate,
+        };
+    });
 
     // Render the component
     return (
@@ -88,7 +109,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
             focus={focus}
             validate={properties.validate}
             validating={properties.validating}
-            errors={properties.errors}
+            validationResult={validationResult}
             component={
                 <div className="relative">
                     <InputSelect

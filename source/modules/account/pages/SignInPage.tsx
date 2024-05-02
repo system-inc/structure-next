@@ -7,7 +7,6 @@ import StructureSettings from '@structure/StructureSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import Button from '@structure/source/common/buttons/Button';
 import { SignInForm } from '@structure/source/modules/account/SignInForm';
 
 // Component - SignInPage
