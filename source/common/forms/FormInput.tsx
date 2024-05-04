@@ -3,7 +3,6 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
-import { ValidationResult } from '@structure/source/utilities/validation/Validation';
 import TipIcon from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Assets
@@ -12,6 +11,8 @@ import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { ValidationResult } from '@structure/source/utilities/validation/Validation';
+import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
 
 // Type - Form Input Reference
 export interface FormInputReferenceInterface extends InputReferenceInterface {
@@ -26,6 +27,18 @@ export interface FormInputInterface extends InputInterface {
     label?: React.ReactNode;
     labelTip?: React.ReactNode;
     description?: React.ReactNode;
+
+    // Validation
+    validate?: (
+        value: any,
+        concurrentValidationResult?: ValidationResult,
+    ) => Promise<ValidationResult | undefined | void> | ValidationResult | undefined | void;
+    validating?: boolean;
+    validateOnChange?: boolean;
+    validateOnBlur?: boolean;
+    validationSchema?: ValidationSchema;
+    validationResult?: ValidationResult;
+    onValidate?: (validationResult: ValidationResult) => void;
 }
 export function FormInput({
     component,
@@ -33,6 +46,11 @@ export function FormInput({
 }: { component: React.ReactElement<FormInputInterface> } & FormInputInterface) {
     // State
     const [validating, setValidating] = React.useState(properties.validating || false);
+
+    // Listen for changes to the validation property
+    React.useEffect(() => {
+        setValidating(properties.validating || false);
+    }, [properties.validating]);
 
     // console.log('validationResult:', properties.validationResult);
     // console.log('properties.validationResult?.errors.length', properties.validationResult?.errors.length);
@@ -64,21 +82,21 @@ export function FormInput({
             {properties.validationResult?.errors &&
                 properties.validationResult.errors.length > 0 &&
                 properties.validationResult.errors.map((validationError, validationErrorIndex) => (
-                    <p key={validationErrorIndex} className="mt-1.5 flex items-center space-x-1 text-xs text-red-500">
-                        <ErrorIcon className="h-4 w-4" /> <span>{validationError.message}</span>
-                    </p>
+                    <div key={validationErrorIndex} className="mt-1.5 flex items-center space-x-1 text-xs text-red-500">
+                        <ErrorIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationError.message}</span>
+                    </div>
                 ))}
 
             {/* Successes */}
             {properties.validationResult?.successes &&
                 properties.validationResult.successes.length > 0 &&
                 properties.validationResult.successes.map((validationSuccess, validationSuccessIndex) => (
-                    <p
+                    <div
                         key={validationSuccessIndex}
                         className="mt-1.5 flex items-center space-x-1 text-xs text-green-600 dark:text-green-500"
                     >
-                        <CheckCircledIcon className="h-4 w-4" /> <span>{validationSuccess.message}</span>
-                    </p>
+                        <CheckCircledIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationSuccess.message}</span>
+                    </div>
                 ))}
 
             {/* Description */}

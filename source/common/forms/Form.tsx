@@ -1,6 +1,40 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Export a standardized version of React's useForm hook
+import {
+    useForm as reactHookFormUseForm,
+    FieldValues,
+    UseFormProps as UseFormProperties,
+    UseFormReturn,
+    SubmitHandler as FormSubmitFunctionType,
+} from 'react-hook-form';
+export { type FormSubmitFunctionType };
+type StandardizedUseFormReturn<T extends FieldValues> = {
+    setInputValue: UseFormReturn<T>['setValue'];
+    getInputValue: UseFormReturn<T>['getValues'];
+    getInputValues: UseFormReturn<T>['getValues'];
+    watchInputValue: UseFormReturn<T>['watch'];
+    watchInputValues: UseFormReturn<T>['watch'];
+    registerInput: UseFormReturn<T>['register'];
+    state: UseFormReturn<T>['formState'];
+    submit: UseFormReturn<T>['handleSubmit'];
+};
+export function useForm<T extends FieldValues>(properties?: UseFormProperties<T>): StandardizedUseFormReturn<T> {
+    const { setValue, getValues, watch, register, formState, handleSubmit } = reactHookFormUseForm<T>(properties);
+
+    return {
+        setInputValue: setValue,
+        getInputValue: getValues,
+        getInputValues: getValues,
+        watchInputValue: watch,
+        watchInputValues: watch,
+        registerInput: register,
+        state: formState,
+        submit: handleSubmit,
+    };
+}
+
 // Dependencies - Main Components
 import { FormInputReferenceInterface, FormInputInterface } from '@structure/source/common/forms/FormInput';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';

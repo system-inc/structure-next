@@ -6,6 +6,11 @@ import {
     isEmailAddress,
 } from '@structure/source/utilities/validation/Validation';
 
+// Dependencies - API
+import { DocumentNode } from '@apollo/client';
+import { apolloClient } from '@structure/source/api/ApolloProvider';
+import { UniqueFieldValidationResult } from '@project/source/api/graphql';
+
 // Interface - ValidationSchema
 export class ValidationSchema {
     private validationRuleInstances: ValidationRuleInstance[] = [];
@@ -24,6 +29,7 @@ export class ValidationSchema {
         for(const validationRuleInstance of this.validationRuleInstances) {
             // Validate the value
             const validationRuleResult = await validationRuleInstance.validate(value);
+            console.log('validationRuleResult', validationRuleInstance.validationRule.identifier, validationRuleResult);
 
             // If the result is not valid, set the validation result to invalid
             if(!validationRuleResult.valid) {
@@ -362,7 +368,8 @@ export class ValidationSchema {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'invalidSingleInternalPeriod',
-                        message: 'Contains a period at the start or end or has more than one period.',
+                        message:
+                            'Contains a period at the start or end or has more than one period. Contains a period at the start or end or has more than one period.',
                     });
                 }
                 // Otherwise, add a success
@@ -430,6 +437,100 @@ export class ValidationSchema {
 
                 // If there are errors, set the validation result to invalid
                 if(validationResult.errors.length) {
+                    validationResult.valid = false;
+                }
+
+                return validationResult;
+            },
+        });
+
+        // Return the validation schema for chaining
+        return this;
+    }
+
+    graphQlQuery(validateGraphQlQueryDocument: DocumentNode, variables?: any) {
+        // Create the validation rule
+        const validationRule: ValidationRule = {
+            identifier: 'graphQlQuery',
+            message: 'Must satisfy server requirements.',
+        };
+
+        // Add the validation rule instance
+        this.validationRuleInstances.push({
+            validationRule: validationRule,
+            validate: async function (value: any) {
+                // validate: async function (value: any, concurrentValidationResult: ValidationResult) {
+                // Skip validation if concurrent validation is not valid
+                // This will prevent making a request to the API if the value is already invalid
+                // if(!concurrentValidationResult?.valid) {
+                //     return;
+                // }
+
+                // Create the validation result
+                const validationResult: ValidationResult = {
+                    value: value,
+                    valid: true,
+                    errors: [],
+                    successes: [],
+                };
+
+                try {
+                    // Execute the GraphQL query
+                    const queryState = await apolloClient.query({
+                        query: validateGraphQlQueryDocument,
+                        variables: {
+                            ...variables,
+                            value: value,
+                        },
+                    });
+                    console.log('queryResult', queryState);
+
+                    // If there is data, get first property from the data object as the result
+                    // It could be named anything, e.g., queryState.data?.accountProfileUsernameValidate;
+                    // or queryState.data?.accountProjectNameValidate;
+                    const uniqueFieldValidationResult = queryState.data ? Object.values(queryState.data)[0] : null;
+                    console.log('uniqueFieldValidationResult', uniqueFieldValidationResult);
+
+                    // Check the UniqueFieldValidationResult and add errors or successes accordingly
+                    if(uniqueFieldValidationResult === UniqueFieldValidationResult.Available) {
+                        validationResult.successes.push({
+                            validationRule: validationRule,
+                            identifier: 'available',
+                            message: 'Available.',
+                        });
+                    }
+                    else if(uniqueFieldValidationResult === UniqueFieldValidationResult.Forbidden) {
+                        validationResult.errors.push({
+                            validationRule: validationRule,
+                            identifier: 'forbidden',
+                            message: 'Forbidden.',
+                        });
+                        validationResult.valid = false;
+                    }
+                    else if(uniqueFieldValidationResult === UniqueFieldValidationResult.Invalid) {
+                        validationResult.errors.push({
+                            validationRule: validationRule,
+                            identifier: 'invalid',
+                            message: 'Invalid.',
+                        });
+                        validationResult.valid = false;
+                    }
+                    else if(uniqueFieldValidationResult === UniqueFieldValidationResult.Taken) {
+                        validationResult.errors.push({
+                            validationRule: validationRule,
+                            identifier: 'taken',
+                            message: 'Taken.',
+                        });
+                        validationResult.valid = false;
+                    }
+                }
+                catch(error) {
+                    // Handle any errors that occur during the GraphQL query
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'graphqlError',
+                        message: 'An error occurred while validating.',
+                    });
                     validationResult.valid = false;
                 }
 

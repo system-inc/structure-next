@@ -2,23 +2,23 @@
 export interface ValidationRule {
     // An identifier for the validation rule, e.g. 'required', 'email', 'minimumLength', etc.
     identifier: string;
-    message: string;
+    message?: string;
 }
 
 // Interface - ValidationError
 export interface ValidationError {
-    validationRule: ValidationRule;
+    validationRule?: ValidationRule;
     // An identifier for the validation error, e.g. 'tooShort', 'invalidEmailAddress', etc.
     identifier: string;
-    message: string;
+    message?: string;
 }
 
 // Interface - ValidationSuccess
 export interface ValidationSuccess {
-    validationRule: ValidationRule;
+    validationRule?: ValidationRule;
     // An identifier for the validation success, e.g. 'isLongEnough', 'validEmailAddress', etc.
     identifier: string;
-    message: string;
+    message?: string;
 }
 
 // Type - ValidationResult

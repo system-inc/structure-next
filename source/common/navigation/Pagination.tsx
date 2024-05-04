@@ -34,6 +34,7 @@ export function Pagination(properties: PaginationInterface) {
     // State
     const [itemsPerPage, setItemsPerPage] = React.useState(properties.itemsPerPage || 10);
     const [page, setPage] = React.useState(properties.page || 1);
+    const [pageIsValid, setPageIsValid] = React.useState(true);
 
     // References
     const inputTextPageReference = React.useRef<InputReferenceInterface>(null);
@@ -49,6 +50,8 @@ export function Pagination(properties: PaginationInterface) {
         },
         [propertiesOnChange],
     );
+
+    console.log('pageIsValid', pageIsValid);
 
     // Render the component
     return (
@@ -127,37 +130,28 @@ export function Pagination(properties: PaginationInterface) {
                 <InputText
                     key={page.toString()}
                     ref={inputTextPageReference}
-                    className="w-20"
+                    className={mergeClassNames('w-20', !pageIsValid ? 'text-red-500 dark:text-red-500' : '')}
                     type="number"
                     autoComplete="off"
                     selectOnFocus={true}
                     defaultValue={page.toString()}
-                    onChange={function (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) {
+                    onChange={function (value, event) {
+                        console.log('input text page onChange', value);
+
                         if(value !== undefined) {
                             const newPage = parseInt(value);
                             if(newPage >= 1 && newPage <= properties.pagesTotal) {
+                                setPageIsValid(true);
                                 setPage(newPage);
                                 onChangeIntercept(itemsPerPage, newPage);
+                            }
+                            else {
+                                setPageIsValid(false);
                             }
                         }
                     }}
                     onClick={function (event: React.MouseEvent<HTMLInputElement>) {
                         event.currentTarget.select();
-                    }}
-                    validate={async function (value?: string) {
-                        const validationResult = {
-                            value: value,
-                            valid: false,
-                            errors: [],
-                            successes: [],
-                        };
-
-                        const valueNumber = parseInt(value ?? '0');
-                        if(value == '' || (valueNumber >= 1 && valueNumber <= properties.pagesTotal)) {
-                            validationResult.valid = true;
-                        }
-
-                        return validationResult;
                     }}
                 />
                 <p>of {properties.pagesTotal}</p>

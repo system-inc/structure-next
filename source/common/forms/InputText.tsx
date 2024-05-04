@@ -94,7 +94,7 @@ export interface InputTextInterface extends Omit<InputInterface, 'onChange' | 'o
     onBlur?: (value: string | undefined, event: React.FocusEvent<HTMLInputElement>) => void;
     onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    onChange?: (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (value: string | undefined, event?: React.ChangeEvent<HTMLInputElement>) => void;
 
     // Component properties
     variant?: keyof typeof InputTextVariants;
@@ -112,11 +112,6 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
     // References
     const inputReference = React.useRef<HTMLInputElement>(null);
 
-    // State
-    const [value, setValue] = React.useState(properties.defaultValue);
-    const [valid, setValid] = React.useState(true);
-    const [validating, setValidating] = React.useState(properties.validating || false);
-
     // Defaults
     const type = properties.type ?? 'text';
     const variant = properties.variant || 'default';
@@ -125,55 +120,34 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
     const iconPosition = properties.iconPosition || 'left';
 
     // Function to expose methods to parent components
-    React.useImperativeHandle(reference, () => ({
-        getValue: function () {
-            return value;
-        },
-        setValue: function (value?: string) {
-            setValue(value);
-            validate(value);
-            if(inputReference.current) {
-                inputReference.current.value = value ?? '';
-            }
-        },
-        focus: function () {
-            if(inputReference.current) {
-                inputReference.current.focus(); // Call the focus method on the input's DOM element
-            }
-        },
-    }));
-
-    // Function to validate the input value
-    const propertiesValidate = properties.validate;
-    const validate = React.useCallback(
-        async function (value: string | undefined) {
-            // console.log('validating', value);
-
-            // Run the provided form input validation function if provided
-            if(propertiesValidate) {
-                setValidating(true);
-                const validationResult = await propertiesValidate(value);
-                setValid(validationResult.valid);
-                setValidating(false);
-            }
-
-            // console.log('validationResult.valid', validationResult.valid, value);
-        },
-        [propertiesValidate],
-    );
+    React.useImperativeHandle(reference, function () {
+        return {
+            getValue: function () {
+                return inputReference.current?.value ?? undefined;
+            },
+            setValue: function (value) {
+                if(inputReference.current) {
+                    inputReference.current.value = value;
+                }
+            },
+            focus: function () {
+                if(inputReference.current) {
+                    inputReference.current.focus(); // Call the focus method on the input's DOM element
+                }
+            },
+        };
+    });
 
     // Function to handle input value changes
     const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
         function (event: React.ChangeEvent<HTMLInputElement>) {
-            validate(event.target.value);
-
             // Run the provided form input onChange function if provided
             if(propertiesOnChange) {
                 propertiesOnChange(event.target.value, event);
             }
         },
-        [validate, propertiesOnChange],
+        [propertiesOnChange],
     );
 
     // Function to handle blur events
@@ -218,12 +192,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
             <input
                 ref={inputReference}
                 key={theme} // Force the component to re-render when the theme changes, so that the autofill color is correct
-                className={mergeClassNames(
-                    InputTextVariants[variant],
-                    InputTextSizes[size],
-                    properties.className,
-                    valid ? '' : 'text-red-500 dark:text-red-500',
-                )}
+                className={mergeClassNames(InputTextVariants[variant], InputTextSizes[size], properties.className)}
                 type={type}
                 defaultValue={properties.defaultValue}
                 placeholder={properties.placeholder}

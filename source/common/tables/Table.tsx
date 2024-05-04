@@ -76,20 +76,23 @@ export function Table(properties: TableInterface) {
     // State
     const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
     const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
-    const selectedRowsIndexesSet = React.useMemo<Set<number>>(function () {
-        const initialSelectedRowsIndexesSet = new Set<number>();
+    const selectedRowsIndexesSet = React.useMemo<Set<number>>(
+        function () {
+            const initialSelectedRowsIndexesSet = new Set<number>();
 
-        // Loop over the rows and add the selected ones to the set
-        properties.rows.forEach(function (row, rowIndex) {
-            if(row.selected) {
-                initialSelectedRowsIndexesSet.add(rowIndex);
-                // Emit the updateCheckboxes event
-            }
-        });
-        window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+            // Loop over the rows and add the selected ones to the set
+            properties.rows.forEach(function (row, rowIndex) {
+                if(row.selected) {
+                    initialSelectedRowsIndexesSet.add(rowIndex);
+                    // Emit the updateCheckboxes event
+                }
+            });
+            window.dispatchEvent(new CustomEvent('updateCheckboxes'));
 
-        return initialSelectedRowsIndexesSet;
-    }, []);
+            return initialSelectedRowsIndexesSet;
+        },
+        [properties.rows],
+    );
 
     // Sync the selected rows with the default selected rows
     React.useEffect(
@@ -102,7 +105,7 @@ export function Table(properties: TableInterface) {
             // Emit the updateCheckboxes event
             window.dispatchEvent(new CustomEvent('updateCheckboxes'));
         },
-        [properties.rows],
+        [properties.rows, selectedRowsIndexesSet],
     );
 
     const [visibleColumnsIndexesSet, setVisibleColumnsIndexesSet] = React.useState<Set<number>>(function () {
@@ -440,7 +443,7 @@ export function Table(properties: TableInterface) {
             // Emit the updateCheckboxes event
             window.dispatchEvent(new CustomEvent('updateCheckboxes'));
         },
-        [properties.pagination],
+        [properties.pagination, selectedRowsIndexesSet],
     );
 
     // console.log('Table', {
@@ -468,10 +471,7 @@ export function Table(properties: TableInterface) {
                                 placeholder="Filter visible rows..."
                                 autoComplete="off"
                                 defaultValue={properties.searchTerm}
-                                onChange={function (
-                                    value: string | undefined,
-                                    event: React.ChangeEvent<HTMLInputElement>,
-                                ) {
+                                onChange={function (value, event) {
                                     setSearchTerm(value || '');
                                 }}
                             />

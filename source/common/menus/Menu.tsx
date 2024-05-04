@@ -417,7 +417,10 @@ export function Menu(properties: MenuInterface) {
                                     event.stopPropagation();
                                 }
                             }}
-                            onChange={function (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) {
+                            onChange={function (
+                                value: string | undefined,
+                                event?: React.ChangeEvent<HTMLInputElement>,
+                            ) {
                                 // console.log('onChange', event.currentTarget.value);
                                 // Search on all change events
                                 search((value = value ?? ''));

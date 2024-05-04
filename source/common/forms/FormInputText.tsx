@@ -13,11 +13,6 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
-// Class Names - Form Input Text
-export const inputTextClassName =
-    // Layout and sizing
-    `w-full`;
-
 // Component - FormInputText
 export interface FormInputTextInterface
     extends Omit<InputTextInterface, 'validate'>,
@@ -26,8 +21,8 @@ export interface FormInputTextInterface
     placeholder?: React.InputHTMLAttributes<HTMLInputElement>['placeholder'];
     autoComplete?: React.InputHTMLAttributes<HTMLInputElement>['autoComplete'];
     sibling?: React.ReactNode;
-    onChange?: (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur?: (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (value: string | undefined, event?: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: (value: string | undefined, event?: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormInputTextInterface>(function (
     properties: FormInputTextInterface,
@@ -60,8 +55,6 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     const propertiesOnValidate = properties.onValidate;
     const validate = React.useCallback(
         async function (value: string | undefined) {
-            console.log('Form input text validating:', value);
-
             // Set validating state
             setValidating(true);
 
@@ -92,6 +85,8 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 propertiesValidationResult,
             );
 
+            console.log('mergedValidationResult', mergedValidationResult);
+
             // Set the validation result
             setValidationResult(mergedValidationResult);
 
@@ -114,7 +109,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     const onChangeIntercept = React.useCallback(
         function (
             value: string | undefined,
-            event: React.ChangeEvent<HTMLInputElement>,
+            event?: React.ChangeEvent<HTMLInputElement>,
             skipOnChangeCallback: boolean = false,
         ) {
             // console.log('Form input value changed:', value);
@@ -175,6 +170,8 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
         };
     });
 
+    // console.log('validationResult', validationResult);
+
     // Render the component
     return (
         <FormInput
@@ -196,7 +193,11 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                         ref={inputTextReference}
                         variant={properties.variant}
                         size={properties.size}
-                        className={mergeClassNames(inputTextClassName, properties.componentClassName)}
+                        className={mergeClassNames(
+                            'w-full',
+                            properties.componentClassName,
+                            // validationResult?.valid === false ? 'text-red-500 dark:text-red-500' : '',
+                        )}
                         defaultValue={properties.defaultValue}
                         required={properties.required}
                         disabled={properties.disabled}
@@ -209,7 +210,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                         autoComplete={properties.autoComplete}
                     />
                     {properties.sibling && properties.sibling}
-                    {properties.validating && (
+                    {validating && (
                         <div className="absolute right-2.5 top-2 animate-spin">
                             <BrokenCircleIcon className="h-5 w-5" />
                         </div>
