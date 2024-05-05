@@ -1,3 +1,4 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-    <path fill="currentColor" d="M18,1c-2.762,0-5,2.238-5,5s2.238,5,5,5s5-2.238,5-5S20.762,1,18,1z M18,9c-1.657,0-3-1.343-3-3s1.343-3,3-3s3,1.343,3,3 S19.657,9,18,9z M18,19c0,1.103-0.897,2-2,2H5c-1.103,0-2-0.897-2-2V8c0-1.103,0.897-2,2-2h6c0-0.695,0.104-1.366,0.294-2H5 C2.8,4,1,5.8,1,8v11c0,2.2,1.8,4,4,4h11c2.2,0,4-1.8,4-4v-6.294C19.366,12.896,18.695,13,18,13V19z" />
+<svg viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M32.2939 19V28.4573C32.2939 31.4109 29.9004 33.8053 26.9478 33.8053H6.34613C3.39355 33.8053 1 31.4109 1 28.4573V7.84847C1 4.89487 3.39355 2.50049 6.34613 2.50049H14.678" />
+    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M26.178 15C30.044 15 33.178 11.866 33.178 8C33.178 4.13401 30.044 1 26.178 1C22.312 1 19.178 4.13401 19.178 8C19.178 11.866 22.312 15 26.178 15Z" />
 </svg>

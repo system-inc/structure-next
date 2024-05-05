@@ -7,7 +7,7 @@ import { InternalNavigationLinkInterface, InternalNavigationLink } from './Inter
 // Dependencies - Assets
 import HomeIcon from '@structure/assets/icons/structures/HomeIcon.svg';
 import TeamIcon from '@structure/assets/icons/people/TeamIcon.svg';
-import EmailIcon from '@structure/assets/icons/communication/EmailIcon.svg';
+import MailIcon from '@structure/assets/icons/communication/MailIcon.svg';
 import BagIcon from '@structure/assets/icons/commerce/BagIcon.svg';
 import ShippingBoxIcon from '@structure/assets/icons/commerce/ShippingBoxIcon.svg';
 import BeakerIcon from '@structure/assets/icons/science/BeakerIcon.svg';
@@ -56,7 +56,7 @@ export const InternalNavigationLinks: InternalNavigationLinkInterface[] = [
     {
         title: 'Communication',
         href: '/internal/communication',
-        icon: EmailIcon,
+        icon: MailIcon,
         links: [
             {
                 title: 'Email Campaigns',
