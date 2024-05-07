@@ -31,6 +31,7 @@ export interface PopoverInterface {
     sideOffset?: number;
     align?: 'start' | 'center' | 'end';
     alignOffset?: number;
+    portalContainer?: HTMLElement;
     collisionPadding?: number;
     collisionBoundary?: HTMLElement[];
     open?: boolean;
@@ -84,7 +85,7 @@ export function Popover(properties: PopoverInterface) {
             >
                 {properties.children}
             </RadixPopover.Trigger>
-            <RadixPopover.Portal>
+            <RadixPopover.Portal container={properties.portalContainer}>
                 <RadixPopover.Content
                     side={side}
                     sideOffset={sideOffset}

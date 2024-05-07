@@ -12,7 +12,6 @@ import Popover from '@structure/source/common/popovers/Popover';
 import { useAccountCurrent } from '@structure/source/modules/account/Account';
 
 // Dependencies - Icons
-import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
 import { usePathname } from 'next/navigation';
 
 // Component - AccountMenuButton

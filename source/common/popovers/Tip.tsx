@@ -49,7 +49,7 @@ export function Tip(properties: TipInterface) {
             >
                 {properties.children}
             </RadixTooltip.Trigger>
-            <RadixTooltip.Portal>
+            <RadixTooltip.Portal container={properties.portalContainer}>
                 <RadixTooltip.Content
                     side={side}
                     sideOffset={sideOffset} // Offset the RadixTooltip from the trigger

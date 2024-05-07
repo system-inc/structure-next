@@ -34,7 +34,7 @@ export function ThemeToggle(properties: ThemeToggleProperties) {
     }
 
     // On mount
-    React.useEffect(() => {
+    React.useEffect(function () {
         // Get the client's preference
         const themeFromLocalStorage = localStorage.getItem(themeModeLocalStorageKey);
 

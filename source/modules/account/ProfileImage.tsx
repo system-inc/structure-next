@@ -10,6 +10,7 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Component - ProfileImage
 export interface ProfileImageInterface {
+    className?: string;
     profileImageUrl?: string;
     alternateText?: string;
 }
@@ -45,7 +46,10 @@ export function ProfileImage(properties: ProfileImageInterface) {
     // Render the component
     return (
         <div
-            className="relative flex h-full w-full items-center justify-center rounded-full border border-light-6 bg-light dark:border-dark-2 dark:bg-dark"
+            className={mergeClassNames(
+                properties.className,
+                'relative flex h-full w-full items-center justify-center rounded-full border border-light-6 bg-light dark:border-dark-2 dark:bg-dark',
+            )}
             style={{
                 containerType: 'size',
                 containerName: 'account-menu-button',
