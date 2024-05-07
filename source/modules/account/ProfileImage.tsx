@@ -74,7 +74,7 @@ export function ProfileImage(properties: ProfileImageInterface) {
                     </div>
                 ) : (
                     // If there is no profile image or short-hand moniker
-                    <UserIcon className="h-[75%] w-[75%]" />
+                    <UserIcon className="h-[55%] w-[55%]" />
                 )
             }
         </div>
