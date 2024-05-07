@@ -1,3 +1,4 @@
+// Function to flatten an object
 export function flattenObject(object: any, parentKey = '', result: any = {}): any {
     for(const key in object) {
         if(object.hasOwnProperty(key)) {
@@ -11,5 +12,21 @@ export function flattenObject(object: any, parentKey = '', result: any = {}): an
             }
         }
     }
+    return result;
+}
+
+// Function to merge two objects deeply
+export function mergeDeep<T extends Record<string, any>>(original: T, updates: Partial<T> | Record<string, any>): T {
+    const result: any = { ...original };
+
+    for(const key in updates) {
+        if(typeof updates[key] === 'object' && original[key]) {
+            result[key] = mergeDeep(original[key], updates[key] ?? {});
+        }
+        else {
+            result[key] = updates[key];
+        }
+    }
+
     return result;
 }
