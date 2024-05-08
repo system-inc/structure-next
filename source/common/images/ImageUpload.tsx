@@ -1,5 +1,8 @@
 'use client'; // This component uses client-only features
 
+// Dependencies - Structure
+import StructureSettings from '@structure/StructureSettings';
+
 // Dependencies - React and Next.js
 import React from 'react';
 import NextImage from 'next/image';
@@ -62,7 +65,8 @@ export function ImageUpload(properties: ImageUploadInterface) {
         if(!sessionToken) return;
 
         // Upload image to server via designated avatar URL
-        fetch('https://api.phi.health/accounts/profiles/images', {
+
+        fetch(StructureSettings.apis.base.url + 'accounts/profiles/images', {
             method: 'POST',
             body: imgData,
             headers: {
