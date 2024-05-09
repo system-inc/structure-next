@@ -13,7 +13,8 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 export const scrollAreaClassName = 'h-full w-full rounded-[inherit]';
 export const scrollAreaScrollbarClassName =
     'flex touch-none select-none p-[4px] transition-colors duration-150 ease-out';
-export const scrollAreaVerticalScrollbarClassName = 'w-[14px]';
+export const scrollAreaVerticalScrollbarClassName =
+    'w-[14px] transition-colors duration-500 hover:bg-neutral+6/30 dark:hover:bg-dark-4/30';
 export const scrollAreaHorizontalScrollbarClassName = 'h-[14px] flex-col';
 export const scrollAreaThumbClassName =
     'relative flex-1 rounded bg-dark/60 hover:bg-dark/75 dark:bg-neutral-6/60 hover:dark:bg-neutral-6/75 before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:translate-x-[50%] before:translate-y-[50%]';
@@ -23,9 +24,10 @@ export const scrollAreaCornerClassName = '';
 export interface ScrollAreaInterface {
     children: React.ReactNode;
     className?: string;
+    scrollAreaClassName?: string;
     scrollbarClassName?: string;
-    verticalScrollbarClassName?: boolean;
-    horizontalScrollbarClassName?: boolean;
+    verticalScrollbarClassName?: string;
+    horizontalScrollbarClassName?: string;
     thumbClassName?: string;
     cornerClassName?: string;
     type?: 'auto' | 'always' | 'scroll' | 'hover';
@@ -34,7 +36,10 @@ export interface ScrollAreaInterface {
     verticalScrollbar?: boolean;
     horizontalScrollbar?: boolean;
 }
-export function ScrollArea(properties: ScrollAreaInterface) {
+export const ScrollArea = React.forwardRef(function ScrollArea(
+    properties: ScrollAreaInterface,
+    reference: React.Ref<HTMLDivElement>,
+) {
     // Defaults
     const type = properties.type ?? 'hover';
     const scrollHideDelay = properties.scrollHideDelay ?? 600;
@@ -45,8 +50,16 @@ export function ScrollArea(properties: ScrollAreaInterface) {
 
     // Render the component
     return (
-        <RadixScrollArea.Root type={type} scrollHideDelay={scrollHideDelay} dir={direction} className="overflow-hidden">
-            <RadixScrollArea.Viewport className={mergeClassNames(scrollAreaClassName, properties.className)}>
+        <RadixScrollArea.Root
+            type={type}
+            scrollHideDelay={scrollHideDelay}
+            dir={direction}
+            className={mergeClassNames('overflow-hidden', properties.className)}
+        >
+            <RadixScrollArea.Viewport
+                ref={reference}
+                className={mergeClassNames(scrollAreaClassName, properties.scrollAreaClassName)}
+            >
                 {properties.children}
             </RadixScrollArea.Viewport>
             {verticalScrollbar && (
@@ -84,7 +97,10 @@ export function ScrollArea(properties: ScrollAreaInterface) {
             />
         </RadixScrollArea.Root>
     );
-}
+});
+
+// Set displayName for debugging purposes
+ScrollArea.displayName = 'ScrollArea';
 
 // Export - Default
 export default ScrollArea;
