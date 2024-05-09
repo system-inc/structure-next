@@ -13,7 +13,7 @@ import { setContext } from '@apollo/client/link/context';
 
 // Create the link to the API
 const apolloClientHttpLink = createHttpLink({
-    uri: StructureSettings.apis.base.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
+    uri: StructureSettings.apis.base.url, // This needs to be an absolute url, as relative urls cannot be used in SSR
     credentials: 'same-origin',
 });
 
