@@ -2,16 +2,6 @@
 // - assets/icons
 // - libraries/structure/assets/icons/
 // It will then create assets/icons/Icons.ts
-// This file will have an objects structured like this:
-/*
-interface IconInterface {
-    name: string;
-    path: string;
-    category: string;
-    source: 'project' | 'structure';
-}
-const Icons = IconInterface[];
-*/
 
 // Dependencies - Node
 const fs = require('fs');
@@ -51,12 +41,26 @@ function readIcons(directory, source) {
                 let category = directory.replace(/^.*assets\/icons\//, '');
                 category = category.charAt(0).toUpperCase() + category.slice(1);
 
+                // Get the viewbox from the SVG
+                let svgContent = fs.readFileSync(fullPath, 'utf8');
+                // console.log('svgContent', svgContent);
+
+                let viewBox = svgContent
+                    .toLowerCase().match(/viewbox="([^"]*)"/)[1];
+                // console.log('viewBox', viewBox);
+
+                let validIcon = true;
+                if(viewBox !== '0 0 100 100') {
+                    validIcon = false;
+                }
+
                 const icon = {
                     name: item.replace('.svg', ''),
                     importPath: importPath,
                     path: fullPath,
                     category: category,
                     source: source,
+                    valid: validIcon,
                 };
                 icons.push(icon);
             }
@@ -100,6 +104,7 @@ iconsTsContent += `export interface IconInterface {
     importPath: string;
     category: string;
     source: 'Project' | 'Structure';
+    valid: boolean;
 }`;
 
 // Loop over icons 
@@ -113,6 +118,7 @@ icons.forEach(function (icon) {
         importPath: '${icon.importPath}',
         category: '${icon.category}',
         source: '${icon.source}',
+        valid: ${icon.valid},
     },\n`;
 });
 iconsTsContent += '];\n';
