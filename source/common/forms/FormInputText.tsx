@@ -204,6 +204,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                         tabIndex={properties.tabIndex}
                         onChange={onChangeIntercept}
                         onBlur={onBlurIntercept}
+                        onFocus={properties.onFocus}
                         // Specific to InputText
                         type={type}
                         placeholder={properties.placeholder}
