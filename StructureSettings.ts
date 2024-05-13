@@ -42,6 +42,10 @@ export interface StructureSettingsType {
     description: string;
     url: string;
     assetsUrl: string;
+    sourceCodeRepositoryUrls: {
+        structure: string;
+        project: string;
+    };
     apis: {
         base: ApiService;
         [key: string]: ApiService;
@@ -67,6 +71,10 @@ let StructureSettings: StructureSettingsType = {
     description: 'A React and Next.js implementation for Base.',
     url: 'https://www.system.inc/',
     assetsUrl: 'https://assets.system.inc/',
+    sourceCodeRepositoryUrls: {
+        structure: 'https://github.com/system-inc/structure-next/',
+        project: 'https://github.com/system-inc/structure-next-template/',
+    },
     apis: {
         base: {
             url: 'https://api.system.inc/graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR

@@ -2,13 +2,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { NoticeInterface } from '@structure/source/common/notifications/Notice';
-import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 import { TipInterface, Tip } from '@structure/source/common/popovers/Tip';
+import { NoticeInterface } from '@structure/source/common/notifications/Notice';
+import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 
-// Dependencies - Assets
-import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
-import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Component - CopyTip
 export interface CopyTipInterface extends Omit<TipInterface, 'content'> {
@@ -16,36 +15,7 @@ export interface CopyTipInterface extends Omit<TipInterface, 'content'> {
     notice?: Omit<NoticeInterface, 'id'>;
 }
 export function CopyTip(properties: CopyTipInterface) {
-    // Hooks
-    const { addNotice } = useNotice();
-
-    // State
-    const [valueCopiedToClipboard, setValueCopiedToClipboard] = React.useState(false);
-
-    // Function to copy the value to the clipboard
-    const onCopyValueToClipboard = React.useCallback(
-        function () {
-            // Copy the value to the clipboard
-            navigator.clipboard.writeText(properties.value);
-
-            // Update the state
-            setValueCopiedToClipboard(true);
-
-            // Show a notice
-            if(properties.notice) {
-                addNotice(properties.notice);
-            }
-
-            // Reset the state after a delay
-            setTimeout(function () {
-                setValueCopiedToClipboard(false);
-            }, 1000);
-        },
-        [properties.value, properties.notice, addNotice],
-    );
-
-    // Get the Tip specific properties
-    const { children, notice, ...tipProperties } = properties;
+    const { children, notice, value, className, ...tipProperties } = properties;
 
     // Render the component
     return (
@@ -53,28 +23,15 @@ export function CopyTip(properties: CopyTipInterface) {
             content={
                 <div className="flex text-xs transition-all">
                     <div className="border-r">
-                        <button
-                            className={`p-1.5 transition-colors ${
-                                valueCopiedToClipboard
-                                    ? 'text-emerald-500 hover:text-emerald-500'
-                                    : 'text-neutral hover:text-dark dark:text-neutral+6 dark:hover:text-light'
-                            }`}
-                            onClick={onCopyValueToClipboard}
-                        >
-                            {valueCopiedToClipboard ? (
-                                <CheckCircledIcon className="h-4 w-4" />
-                            ) : (
-                                <CopyIcon className="h-4 w-4 p-[1px]" />
-                            )}
-                        </button>
+                        <CopyButton value={value} notice={notice} className={mergeClassNames('p-1.5', className)} />
                     </div>
-                    <div className="whitespace-nowrap p-1.5">{properties.value}</div>
+                    <div className="whitespace-nowrap p-1.5">{value}</div>
                 </div>
             }
             align="start"
             {...tipProperties}
         >
-            <span>{properties.children}</span>
+            <span>{children}</span>
         </Tip>
     );
 }

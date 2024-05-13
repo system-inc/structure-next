@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+    <path stroke="currentColor" stroke-width="6" d="M17.6711 88H82.3289M11 80.8158V17.6974M89 81.3289V17.6974M17.6711 10H80.7895" />
+    <circle cx="10.5" cy="88.5" r="7.5" stroke="currentColor" stroke-width="6" />
+    <circle cx="10.5" cy="11.5" r="7.5" stroke="currentColor" stroke-width="6" />
+    <circle cx="89.5" cy="88.5" r="7.5" stroke="currentColor" stroke-width="6" />
+    <circle cx="89.5" cy="11.5" r="7.5" stroke="currentColor" stroke-width="6" />
+</svg>
