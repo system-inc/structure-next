@@ -1,5 +1,5 @@
 // Dependencies - Structure
-import StructureSettings from '@structure/StructureSettings';
+import StructureSettings from '@project/StructureSettings';
 
 // Dependencies
 import { type CookieSetOptions } from 'universal-cookie';

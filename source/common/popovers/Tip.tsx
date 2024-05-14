@@ -30,7 +30,7 @@ export function Tip(properties: TipInterface) {
 
     // Render the component
     return (
-        <RadixTooltip.Root open={open} onOpenChange={setOpen}>
+        <RadixTooltip.Root open={open} onOpenChange={setOpen} delayDuration={properties.delayInMilliseconds}>
             <RadixTooltip.Trigger
                 asChild
                 tabIndex={properties.tabIndex ?? 1}

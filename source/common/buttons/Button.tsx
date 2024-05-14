@@ -339,17 +339,17 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
     } = properties;
 
     // If icon is defined and size is not "icon" and iconPosition is not defined, log a warning to the console
-    if(iconProperty && size !== 'icon' && !iconPositionProperty) {
-        console.warn(
-            'A button icon is provided, but the size is not "icon" and the iconPosition is not defined. The icon will not be rendered unless a position is defined or the size is set to "icon".',
-            'Warning found in Button component: ',
-            properties.id ?? properties.title ?? properties.children ?? properties,
-            'Properties: ',
-            properties,
-            'Parent Element: ',
-            properties.id ? document.getElementById(properties.id)?.parentElement : 'Not found',
-        );
-    }
+    // if(iconProperty && size !== 'icon' && !iconPositionProperty) {
+    //     console.warn(
+    //         'A button icon is provided, but the size is not "icon" and the iconPosition is not defined. The icon will not be rendered unless a position is defined or the size is set to "icon".',
+    //         'Warning found in Button component: ',
+    //         properties.id ?? properties.title ?? properties.children ?? properties,
+    //         'Properties: ',
+    //         properties,
+    //         'Parent Element: ',
+    //         properties.id ? document.getElementById(properties.id)?.parentElement : 'Not found',
+    //     );
+    // }
 
     // Render the button
     let component = (

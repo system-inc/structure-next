@@ -1,8 +1,5 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import StructureSettings from '@structure/StructureSettings';
-
 // Dependencies - React and Next.js
 import React from 'react';
 

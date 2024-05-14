@@ -86,8 +86,6 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
     // Get the popover properties to spread onto the Popover component
     const { side, align, ...popoverProperties } = properties.popoverProperties ?? {};
 
-    // console.log('Rendering PopoverMenu');
-
     // Render the component
     return (
         <Popover

@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
 // Dependencies - Structure
-import StructureSettings from '@structure/StructureSettings';
+import StructureSettings from '@project/StructureSettings';
 
 // Dependencies - React and Next.js
 import Link from 'next/link';
@@ -43,16 +43,16 @@ export function WaitListPage(properties: WaitListPageProperties) {
     // Render the component
     return (
         <>
-            <div className="flex h-screen items-center transition-colors dark:bg-dark dark:text-light-2 md:h-screen md:items-stretch">
+            <div className="flex h-screen items-center transition-colors md:h-screen md:items-stretch dark:bg-dark dark:text-light-2">
                 {/* Show the account menu button */}
                 <div className="absolute right-4 top-4 z-20">{<AccountMenuButton />}</div>
 
                 {/* Primary div, shows up on left side of screen on medium displays */}
-                <div className="scrollbar-hide flex-grow items-center justify-center dark:border-r dark:border-dark-4 md:flex md:overflow-auto md:border-r md:border-r-light-4">
+                <div className="scrollbar-hide flex-grow items-center justify-center md:flex md:overflow-auto md:border-r md:border-r-light-4 dark:border-r dark:border-dark-4">
                     <div className="max-w-[680px] p-8 md:max-h-screen">
                         {/* Show the logo on small screens */}
                         <div
-                            className="mb-6 bg-logoLight bg-no-repeat dark:bg-logoDark md:hidden"
+                            className="mb-6 bg-logoLight bg-no-repeat md:hidden dark:bg-logoDark"
                             style={{
                                 backgroundSize: StructureSettings.assets.logo.width + 'px',
                                 width: StructureSettings.assets.logo.width + 'px',

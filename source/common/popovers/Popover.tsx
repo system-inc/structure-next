@@ -24,7 +24,7 @@ export const popoverClassName =
 
 // Component - Popover
 export interface PopoverInterface {
-    children: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
+    children?: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
     content: React.ReactNode;
     className?: string;
     side?: 'top' | 'bottom' | 'left' | 'right';
@@ -37,6 +37,8 @@ export interface PopoverInterface {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     onOpenAutoFocus?: (event: Event) => void;
+    delayInMilliseconds?: number;
+    anchor?: HTMLElement;
     tabIndex?: number;
 }
 export function Popover(properties: PopoverInterface) {
@@ -64,27 +66,45 @@ export function Popover(properties: PopoverInterface) {
         setOpen(!open);
     }
 
+    // Determine if the child is an SVG
+    let isSvg = false;
+    if(properties.children && properties.children.type) {
+        const constructorName = (properties.children.type as React.JSXElementConstructor<any>).name;
+        if(constructorName) {
+            isSvg = constructorName.startsWith('Svg');
+        }
+    }
+
     // Render the component
     return (
         <RadixPopover.Root open={open} onOpenChange={onOpenChange}>
-            <RadixPopover.Trigger
-                asChild
-                tabIndex={properties.tabIndex ?? 1}
-                onKeyDown={function (event) {
-                    // console.log('Popover.tsx onKeyDown', event.code);
+            {/* Trigger */}
+            {properties.children && (
+                <RadixPopover.Trigger
+                    asChild
+                    tabIndex={properties.tabIndex ?? 1}
+                    onKeyDown={function (event) {
+                        // console.log('Popover.tsx onKeyDown', event.code);
 
-                    // Open the popover when the user presses the arrow keys, spacebar, or enter
-                    if(
-                        open == false &&
-                        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
-                    ) {
-                        event.preventDefault();
-                        setOpen(true);
-                    }
-                }}
-            >
-                {properties.children}
-            </RadixPopover.Trigger>
+                        // Open the popover when the user presses the arrow keys, spacebar, or enter
+                        if(
+                            open == false &&
+                            ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
+                        ) {
+                            event.preventDefault();
+                            setOpen(true);
+                        }
+                    }}
+                >
+                    {isSvg ? (
+                        // Wrap SVGs in a span so they can be interacted with
+                        <span>{properties.children}</span>
+                    ) : (
+                        // If not an SVG, render the children as is
+                        properties.children
+                    )}
+                </RadixPopover.Trigger>
+            )}
             <RadixPopover.Portal container={properties.portalContainer}>
                 <RadixPopover.Content
                     side={side}
