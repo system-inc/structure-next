@@ -14,10 +14,10 @@ import Tip from '@structure/source/common/popovers/Tip';
 // Dependencies - API
 import { useQuery } from '@apollo/client';
 import {
-    dataInteractionDatabaseTableQueryDocument,
-    dataInteractionDatabaseTablesQueryDocument,
-    dataInteractionDatabaseTableMetricsQueryDocument,
-} from '@structure/source/modules/data-interaction/api/DataInteractionDocuments';
+    DataInteractionDatabaseTableDocument,
+    DataInteractionDatabaseTablesDocument,
+    DataInteractionDatabaseTableMetricsDocument,
+} from '@project/source/api/GraphQlGeneratedCode';
 import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
@@ -51,7 +51,7 @@ export interface DataSourceInterface {
 }
 export function DataSource(properties: DataSourceInterface) {
     // Query the API for the available columns for the current table table
-    const dataInteractionDatabaseTableQueryState = useQuery(dataInteractionDatabaseTableQueryDocument, {
+    const dataInteractionDatabaseTableQueryState = useQuery(DataInteractionDatabaseTableDocument, {
         variables: {
             databaseName: properties.settings.databaseName,
             tableName: properties.settings.tableName,
@@ -103,7 +103,7 @@ export function DataSource(properties: DataSourceInterface) {
     }
 
     // Get the table metrics and update the aggregate metrics data when the data is fetched
-    const dataInteractionDatabaseTableMetricsQueryState = useQuery(dataInteractionDatabaseTableMetricsQueryDocument, {
+    const dataInteractionDatabaseTableMetricsQueryState = useQuery(DataInteractionDatabaseTableMetricsDocument, {
         variables: {
             input: {
                 databaseName: properties.settings.databaseName as string,

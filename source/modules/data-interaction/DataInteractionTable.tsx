@@ -18,7 +18,7 @@ import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - API
 import { useApolloClient, useQuery, ApolloError, TypedDocumentNode } from '@apollo/client';
-import { dataInteractionDatabaseTableRowsQueryDocument } from '@structure/source/modules/data-interaction/api/DataInteractionDocuments';
+import { DataInteractionDatabaseTableRowsDocument } from '@project/source/api/GraphQlGeneratedCode';
 import { OrderByDirection, ColumnFilterGroup as ColumnFilterGroupGraphQl } from '@project/source/api/graphql';
 
 // Dependencies - Utilities
@@ -69,7 +69,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
     }
 
     // Hooks
-    const queryState = useQuery(dataInteractionDatabaseTableRowsQueryDocument, {
+    const queryState = useQuery(DataInteractionDatabaseTableRowsDocument, {
         skip: !databaseName || !tableName,
         variables: {
             databaseName: databaseName!,

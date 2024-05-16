@@ -11,7 +11,7 @@ import Alert from '@structure/source/common/notifications/Alert';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - API
-import { waitListEntryCreateMutationDocument } from '@structure/source/modules/wait-list/api/WaitListDocuments';
+import { WaitListEntryCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - WaitListForm
 export interface WaitListFormInterface {}
@@ -19,7 +19,7 @@ export function WaitListForm(properties: WaitListFormInterface) {
     // Render the component
     return (
         <GraphQlMutationForm
-            mutationDocument={waitListEntryCreateMutationDocument}
+            mutationDocument={WaitListEntryCreateDocument}
             className="relative w-full max-w-[380px]"
             description={<p className="font-light">Enter your email to register for early access.</p>}
             buttonProperties={{

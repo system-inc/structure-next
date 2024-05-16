@@ -11,7 +11,7 @@ import Alert from '@structure/source/common/notifications/Alert';
 import { useSession } from '@structure/source/modules/account/SessionProvider';
 
 // Dependencies - API
-import { accountSignInUsingEmailAddressAndPasswordMutationDocument } from '@structure/source/modules/account/api/AccountDocuments';
+import { AccountSignInDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -27,7 +27,7 @@ export function SignInForm(properties: SignInFormInterface) {
     // Render the component
     return (
         <GraphQlMutationForm
-            mutationDocument={accountSignInUsingEmailAddressAndPasswordMutationDocument}
+            mutationDocument={AccountSignInDocument}
             className={mergeClassNames('', properties.className)}
             description={<p className="font-medium">Sign In</p>}
             buttonProperties={{

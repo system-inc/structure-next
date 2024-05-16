@@ -6,7 +6,7 @@ import { useSession } from '@structure/source/modules/account/SessionProvider';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { accountCurrentQueryDocument } from '@structure/source/modules/account/api/AccountDocuments';
+import { AccountCurrentDocument } from '@project/source/api/GraphQlGeneratedCode';
 import {
     AccountCurrentQuery,
     AccessRoleType,
@@ -88,7 +88,7 @@ export function useAccountCurrent() {
     const [isClient, setIsClient] = React.useState(false);
 
     // Get the current account the GraphQL API
-    const accountCurrentQueryState = useQuery(accountCurrentQueryDocument, {
+    const accountCurrentQueryState = useQuery(AccountCurrentDocument, {
         skip: !sessionToken, // If there is no session token, skip this query
     });
 

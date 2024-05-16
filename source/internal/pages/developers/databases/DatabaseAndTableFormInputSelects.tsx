@@ -9,7 +9,7 @@ import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { dataInteractionDatabaseTablesQueryDocument } from '@structure/source/modules/data-interaction/api/DataInteractionDocuments';
+import { DataInteractionDatabaseTablesDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -29,7 +29,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     const [selectedTableName, setSelectedTableName] = React.useState<string | undefined>(undefined);
 
     // Get the databases from the GraphQL API
-    const dataInteractionDatabaseTablesQueryState = useQuery(dataInteractionDatabaseTablesQueryDocument, {
+    const dataInteractionDatabaseTablesQueryState = useQuery(DataInteractionDatabaseTablesDocument, {
         variables: {
             pagination: {
                 // TODO: This is probably bad and will break with lots of tables

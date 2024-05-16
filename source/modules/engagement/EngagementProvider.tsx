@@ -12,7 +12,7 @@ import { EngagementContainer } from '@structure/source/modules/engagement/Engage
 
 // Dependencies - API
 import { useMutation, ApolloError } from '@apollo/client';
-import { engagementEventCreateMutationDocument } from '@structure/source/modules/engagement/api/EngagementDocuments';
+import { EngagementEventCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/String';
@@ -36,9 +36,8 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     // Hooks
     const urlPath = usePathname();
     const urlSearchParameters = useSearchParams();
-    const [engagementEventCreateMutation, engagementEventCreateMutationState] = useMutation(
-        engagementEventCreateMutationDocument,
-    );
+    const [engagementEventCreateMutation, engagementEventCreateMutationState] =
+        useMutation(EngagementEventCreateDocument);
 
     // References
     const engagementEventsSentReference = React.useRef(0);

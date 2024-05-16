@@ -9,7 +9,7 @@ import Session from '@structure/source/modules/account/Session';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { accountSignOutMutationDocument } from '@structure/source/modules/account/api/AccountDocuments';
+import { AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Context - Session
 interface SessionContextInterface {
@@ -41,7 +41,7 @@ export function SessionProvider({ children }: SessionProviderInterface) {
     const [sessionToken, setSessionToken] = React.useState<string | null>(null);
 
     // Sign out mutation
-    const [accountSignOutMutation, accountSignOutMutationState] = useMutation(accountSignOutMutationDocument);
+    const [accountSignOutMutation, accountSignOutMutationState] = useMutation(AccountSignOutDocument);
 
     // Updated the function name to 'updateSessionToken'
     const updateSessionToken = React.useCallback(function (newSessionToken: string | null) {

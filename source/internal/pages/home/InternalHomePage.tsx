@@ -11,13 +11,13 @@ import TopProductLink from '@structure/source/internal/common/dashboard/TopProdu
 
 // Dependencies - API
 import { useQuery, ApolloError } from '@apollo/client';
-import { engagementOveriewQueryDocument } from '@structure/source/modules/engagement/api/EngagementDocuments';
+import { EngagementOverviewDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - InternalPage
 type InternalHomePageProperties = {};
 export function InternalHomePage(properties: InternalHomePageProperties) {
     // Hooks
-    const engagementLiveQueryState = useQuery(engagementOveriewQueryDocument);
+    const engagementLiveQueryState = useQuery(EngagementOverviewDocument);
 
     // List of links to metrics
     const metricLinks = [

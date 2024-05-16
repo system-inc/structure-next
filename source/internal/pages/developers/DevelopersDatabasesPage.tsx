@@ -10,7 +10,7 @@ import { TableRowInterface } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
 import { useSuspenseQuery } from '@apollo/client';
-import { dataInteractionDatabaseTablesQueryDocument } from '@structure/source/modules/data-interaction/api/DataInteractionDocuments';
+import { DataInteractionDatabaseTablesDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { addCommas } from '@structure/source/utilities/Number';
@@ -19,7 +19,7 @@ import { addCommas } from '@structure/source/utilities/Number';
 export interface DevelopersDatabasePageInterface {}
 export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterface) {
     // Get the databases and tables from the GraphQL API
-    const dataInteractionDatabaseTablesQueryState = useSuspenseQuery(dataInteractionDatabaseTablesQueryDocument, {
+    const dataInteractionDatabaseTablesQueryState = useSuspenseQuery(DataInteractionDatabaseTablesDocument, {
         variables: {
             pagination: {
                 itemsPerPage: 1000,
