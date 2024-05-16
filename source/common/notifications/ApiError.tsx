@@ -1,3 +1,5 @@
+'use client';
+
 // Dependencies - React and Next.js
 import React from 'react';
 
