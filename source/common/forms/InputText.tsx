@@ -82,6 +82,8 @@ export const InputTextSizes = {
 
 // Component - InputText
 export interface InputTextInterface extends Omit<InputInterface, 'onChange' | 'onBlur'> {
+    containerClassName?: string;
+
     // <input /> tag properties
     type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
     placeholder?: React.InputHTMLAttributes<HTMLInputElement>['placeholder'];
@@ -183,7 +185,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
 
     // Render the component
     return (
-        <div className="relative">
+        <div className={mergeClassNames('relative', properties.containerClassName)}>
             {Icon && (
                 <div className={`absolute inset-y-0 ${iconPosition}-0 flex items-center pl-3 text-neutral-2`}>
                     <Icon className="h-4 w-4" />
