@@ -19,7 +19,10 @@ import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 // Dependencies - API
 import { useApolloClient, useQuery, ApolloError, TypedDocumentNode } from '@apollo/client';
 import { DataInteractionDatabaseTableRowsDocument } from '@project/source/api/GraphQlGeneratedCode';
-import { OrderByDirection, ColumnFilterGroup as ColumnFilterGroupGraphQl } from '@project/source/api/graphql';
+import {
+    OrderByDirection,
+    ColumnFilterGroup as ColumnFilterGroupGraphQl,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
