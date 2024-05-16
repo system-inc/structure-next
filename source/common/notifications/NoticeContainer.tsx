@@ -322,7 +322,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
         <div
             tabIndex={0} // Make the menu focusable
             className={mergeClassNames(
-                'fixed bottom-0 right-0 z-50 w-[420px]',
+                'pointer-events-none fixed bottom-0 right-0 z-50 w-[420px]',
                 hovered && 'pt-16',
                 properties.className,
             )}
