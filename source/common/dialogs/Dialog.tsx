@@ -12,6 +12,7 @@ import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { wrapSvg } from '@structure/source/utilities/React';
 
 // Class Names - Dialog Overlay
 export const dialogOverlayClassName =
@@ -97,7 +98,7 @@ export const DialogVariants = {
 // Component - Dialog
 export interface DialogInterface {
     variant?: keyof typeof DialogVariants;
-    children?: React.ReactNode; // The trigger
+    children?: React.ReactElement; // The trigger
     overlayClassName?: string; // The class names for the overlay
     className?: string; // The class names for the dialog
     closeControl?: React.ReactNode | boolean; // The close button
@@ -138,7 +139,12 @@ export function Dialog(properties: DialogInterface) {
     return (
         <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
             {/* Trigger */}
-            {properties.children && <RadixDialog.Trigger asChild>{properties.children}</RadixDialog.Trigger>}
+            {properties.children && (
+                <RadixDialog.Trigger asChild>
+                    {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
+                    {wrapSvg(properties.children, open ? 'data-state-open' : '')}
+                </RadixDialog.Trigger>
+            )}
             <RadixDialog.Portal>
                 <RadixDialog.Overlay className={mergeClassNames(dialogOverlayClassName, properties.overlayClassName)} />
                 <RadixDialog.Content

@@ -8,6 +8,7 @@ import * as RadixPopover from '@radix-ui/react-popover';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { wrapSvg } from '@structure/source/utilities/React';
 
 // Class Names - Popover
 export const popoverClassName =
@@ -66,15 +67,6 @@ export function Popover(properties: PopoverInterface) {
         setOpen(!open);
     }
 
-    // Determine if the child is an SVG
-    let isSvg = false;
-    if(properties.children && properties.children.type) {
-        const constructorName = (properties.children.type as React.JSXElementConstructor<any>).name;
-        if(constructorName) {
-            isSvg = constructorName.startsWith('Svg');
-        }
-    }
-
     // Render the component
     return (
         <RadixPopover.Root open={open} onOpenChange={onOpenChange}>
@@ -96,13 +88,8 @@ export function Popover(properties: PopoverInterface) {
                         }
                     }}
                 >
-                    {isSvg ? (
-                        // Wrap SVGs in a span so they can be interacted with
-                        <span className={mergeClassNames(open ? 'data-state-open' : '')}>{properties.children}</span>
-                    ) : (
-                        // If not an SVG, render the children as is
-                        properties.children
-                    )}
+                    {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
+                    {wrapSvg(properties.children, open ? 'data-state-open' : '')}
                 </RadixPopover.Trigger>
             )}
             <RadixPopover.Portal container={properties.portalContainer}>
