@@ -98,7 +98,7 @@ export function Popover(properties: PopoverInterface) {
                 >
                     {isSvg ? (
                         // Wrap SVGs in a span so they can be interacted with
-                        <span>{properties.children}</span>
+                        <span className={mergeClassNames(open ? 'data-state-open' : '')}>{properties.children}</span>
                     ) : (
                         // If not an SVG, render the children as is
                         properties.children

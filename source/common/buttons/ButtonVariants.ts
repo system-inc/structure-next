@@ -70,8 +70,14 @@ export const ButtonVariants = {
     // Destructive variant: styles for negative actions like delete or remove
     destructive:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
-        // Text, background, and hover
-        `bg-destructive text-destructive-foreground hover:bg-destructive/90`,
+        // Border
+        `border ` +
+        // Light
+        `text-light bg-red-600 border-red-700 hover:bg-red-500 hover:border-red-600 ` +
+        // Dark
+        `dark:bg-red-900 dark:border-red-800 dark:hover:bg-red-800 dark:hover:border-red-700 ` +
+        // Disabled and active states
+        `disabled:hover:bg-light dark:disabled:hover:bg-dark active:bg-light-2 dark:active:bg-dark-2`,
     // Toggle on
     toggleOn:
         `${commonButton} ${centeredButton} ` +
