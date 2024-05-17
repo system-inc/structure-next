@@ -15,6 +15,8 @@ import { TableCellContentBoolean } from '@structure/source/common/tables/cells/T
 import { TableCellContentHtml } from '@structure/source/common/tables/cells/TableCellContentHtml';
 import { TableCellContentUrl } from '@structure/source/common/tables/cells/TableCellContentUrl';
 import { TableCellContentNumber } from '@structure/source/common/tables/cells/TableCellContentNumber';
+import { Popover } from '@structure/source/common/popovers/Popover';
+import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -110,6 +112,23 @@ export function TableCell(properties: TableCellInterface) {
         // Cell Content - Number
         else if(properties.column?.type === TableColumnType.Number) {
             content = <TableCellContentNumber value={properties.value} />;
+        }
+        // Long content
+        else if(typeof properties.value === 'string' && properties.value.length > 50) {
+            content = (
+                <Popover
+                    align="start"
+                    // Setting z-100 here to make sure these appear when they are in a dialog
+                    className="z-[100] w-80"
+                    content={
+                        <ScrollArea className="h-full max-h-48 w-full py-3 pl-3 pr-5 text-sm">
+                            {properties.value}
+                        </ScrollArea>
+                    }
+                >
+                    <div className="w-full truncate">{properties.value}</div>
+                </Popover>
+            );
         }
     }
     // If there is no content, render null

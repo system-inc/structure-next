@@ -38,6 +38,7 @@ export interface PopoverInterface {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     onOpenAutoFocus?: (event: Event) => void;
+    modal?: boolean;
     delayInMilliseconds?: number;
     anchor?: HTMLElement;
     tabIndex?: number;
@@ -69,11 +70,10 @@ export function Popover(properties: PopoverInterface) {
 
     // Render the component
     return (
-        <RadixPopover.Root open={open} onOpenChange={onOpenChange}>
+        <RadixPopover.Root open={open} onOpenChange={onOpenChange} modal={properties.modal}>
             {/* Trigger */}
             {properties.children && (
                 <RadixPopover.Trigger
-                    asChild
                     tabIndex={properties.tabIndex ?? 1}
                     onKeyDown={function (event) {
                         // console.log('Popover.tsx onKeyDown', event.code);
@@ -87,6 +87,7 @@ export function Popover(properties: PopoverInterface) {
                             setOpen(true);
                         }
                     }}
+                    asChild
                 >
                     {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
                     {wrapSvg(properties.children, open ? 'data-state-open' : '')}
@@ -108,6 +109,8 @@ export function Popover(properties: PopoverInterface) {
                         'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
                         // Side bottom is specific to Popover
                         'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+                        // This was previously set to z-50 but the tips were showing through the dialog overlay
+                        // This is now set to 40 to ensure the tooltip is below the dialog overlay
                         'z-40',
                         properties.className,
                     )}

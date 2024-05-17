@@ -66,7 +66,9 @@ export function Tip(properties: TipInterface) {
                         // State delayed-open is specific to Tip
                         'data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
                         popoverClassName,
-                        'z-50',
+                        // This was previously set to z-50 but the tips were showing through the dialog overlay
+                        // This is now set to 40 to ensure the tooltip is below the dialog overlay
+                        'z-40',
                         properties.className,
                     )}
                     // Use Radix variables to style the popover content size

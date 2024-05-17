@@ -111,6 +111,7 @@ export interface DialogInterface {
     open?: boolean; // Whether the dialog is open
     onOpenChange?: (open: boolean) => void; // The callback for when the open state changes
     onOpenAutoFocus?: (event: Event) => void; // The callback for when the dialog opens
+    modal?: boolean; // Whether the dialog is a modal
 }
 export function Dialog(properties: DialogInterface) {
     // State
@@ -137,7 +138,7 @@ export function Dialog(properties: DialogInterface) {
 
     // Render the component
     return (
-        <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
+        <RadixDialog.Root open={open} onOpenChange={onOpenChange} modal={properties.modal}>
             {/* Trigger */}
             {properties.children && (
                 <RadixDialog.Trigger asChild>
