@@ -51,14 +51,15 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     // Render the component
     return (
         <RadixScrollArea.Root
+            ref={reference}
             type={type}
             scrollHideDelay={scrollHideDelay}
             dir={direction}
-            className={mergeClassNames('overflow-hidden', properties.className)}
+            className={mergeClassNames('relative overflow-scroll', properties.className)}
         >
             <RadixScrollArea.Viewport
-                ref={reference}
                 className={mergeClassNames(scrollAreaClassName, properties.scrollAreaClassName)}
+                asChild
             >
                 {properties.children}
             </RadixScrollArea.Viewport>

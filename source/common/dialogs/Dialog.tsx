@@ -54,8 +54,8 @@ export const dialogFooterClassName =
 export const dialogContentPositionCenteredClassName =
     // Position, outline, and z-index
     'outline-none fixed left-[50%] top-[50%] z-50 ' +
-    // Grid layout and alignment
-    'grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 ' +
+    // Flex layout and alignment
+    'w-full max-w-[90vw] md:max-w-lg max-h-[95vh] translate-x-[-50%] translate-y-[-50%] ' +
     // Animation states
     'duration-200 ' +
     // Open animation
@@ -82,7 +82,7 @@ export const DialogVariants = {
     default:
         `${dialogContentPositionCenteredClassName} ` +
         // Border, background, and shadow
-        `border bg-background p-6 shadow-lg rounded-lg w-full`,
+        `flex flex-col border bg-background p-6 shadow-lg rounded-lg w-full gap-4 `,
     // Unstyled centered variant
     unstyled:
         `${dialogContentPositionCenteredClassName} ` +
