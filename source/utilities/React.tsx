@@ -1,5 +1,5 @@
 // Function to wrap SVGs in a span so they can be interacted with
-export function wrapSvg(children: React.ReactElement, className: string) {
+export function wrapSvg(children: React.ReactElement, className?: string) {
     // Determine if the child is an SVG
     let isSvg = false;
     if(children && children.type) {
