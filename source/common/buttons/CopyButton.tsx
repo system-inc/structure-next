@@ -58,6 +58,10 @@ export function CopyButton(properties: CopyButtonInterface) {
         <Button
             variant="unstyled"
             size="unstyled"
+            onClick={onCopyValueToClipboard}
+            icon={valueCopiedToClipboard ? CheckCircledIcon : CopyIcon}
+            iconClassName={valueCopiedToClipboard ? 'h-4 w-4' : 'h-4 w-4'}
+            {...buttonProperties}
             className={mergeClassNames(
                 'transition-colors',
                 !valueCopiedToClipboard ? 'text-neutral hover:text-dark dark:text-neutral+6 dark:hover:text-light' : '',
@@ -66,10 +70,6 @@ export function CopyButton(properties: CopyButtonInterface) {
                     ? 'text-emerald-500 hover:text-emerald-500 dark:text-emerald-500 dark:hover:text-emerald-500'
                     : '',
             )}
-            onClick={onCopyValueToClipboard}
-            icon={valueCopiedToClipboard ? CheckCircledIcon : CopyIcon}
-            iconClassName={valueCopiedToClipboard ? 'h-4 w-4' : 'h-4 w-4'}
-            {...buttonProperties}
         />
     );
 }

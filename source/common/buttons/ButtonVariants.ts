@@ -60,7 +60,7 @@ export const ButtonVariants = {
     ghost:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Rounded and hover
-        `rounded-md hover:bg-accent hover:text-accent-foreground`,
+        `rounded-md hover:bg-accent border border-transparent hover:text-accent-foreground`,
     ghostDestructive:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Rounded and hover

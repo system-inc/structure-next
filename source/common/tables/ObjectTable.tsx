@@ -16,44 +16,123 @@ export interface ObjectTableInterface extends Omit<TableInterface, 'columns' | '
     };
 }
 export function ObjectTable(properties: ObjectTableInterface) {
-    // Variables to store our rows and columns
-    const columns: TableColumnInterface[] = [
-        {
-            identifier: 'key',
-            title: 'Key',
-        },
-        {
-            identifier: 'value',
-            title: 'Value',
-        },
-    ];
-    const rows: TableRowInterface[] = [];
+    // Columns
+    let columns: TableColumnInterface[] = [];
 
-    // Add a row for each key in the object
-    Object.keys(properties.object)
-        .sort()
-        .forEach(function (key) {
-            let value = properties.object[key];
-            if(value && typeof value === 'object') {
-                // value = JSON.stringify(value);
-                value = <ObjectTable object={value} />;
-            }
+    // Determine if the object is an array of objects and every item has the same keys
+    let isArrayOfSimilarObjects = false;
 
-            let row = {
-                cells: [
-                    {
-                        column: columns[0],
-                        value: key,
-                    },
-                    {
-                        column: columns[1],
-                        value: value,
-                    },
-                ],
+    // Store the keys of all the objects
+    let arrayOfSimilarObjectsKeys: { [key: string]: boolean } = {};
+
+    // Check if the object is an array of objects
+    if(Array.isArray(properties.object) && properties.object.length > 0) {
+        // Get the keys of the first object
+        let keys = Object.keys(properties.object[0]);
+
+        // Check if every object has the same keys
+        isArrayOfSimilarObjects = properties.object.every(function (item) {
+            return Object.keys(item).every(function (key) {
+                // Store the keys
+                arrayOfSimilarObjectsKeys[key] = true;
+                return keys.includes(key);
+            });
+        });
+    }
+
+    // If the object is an array of objects
+    if(isArrayOfSimilarObjects) {
+        columns.push({
+            identifier: 'index',
+            title: 'Index',
+        });
+
+        // Columns is the arrayOfSimilarObjectsKeys sorted
+        Object.keys(arrayOfSimilarObjectsKeys)
+            .sort()
+            .map(function (key) {
+                columns.push({
+                    identifier: key,
+                    title: titleCase(key),
+                });
+            });
+    }
+    else {
+        // Variables to store our rows and columns
+        columns = [
+            {
+                identifier: 'key',
+                title: 'Key',
+            },
+            {
+                identifier: 'value',
+                title: 'Value',
+            },
+        ];
+    }
+
+    let rows: TableRowInterface[] = [];
+
+    // If the object is an array of objects
+    if(isArrayOfSimilarObjects) {
+        // Add a row for each object
+        properties.object.forEach(function (item: any, itemIndex: number) {
+            let row: TableRowInterface = {
+                cells: [],
             };
+
+            columns.forEach(function (column, columnIndex) {
+                let value = item[column.identifier];
+                if(column.identifier === 'index') {
+                    value = String(itemIndex);
+                }
+                else if(value && typeof value === 'object') {
+                    // value = JSON.stringify(value);
+                    value = <ObjectTable object={value} />;
+                }
+
+                row.cells.push({
+                    column: column,
+                    value: value,
+                });
+            });
 
             rows.push(row);
         });
+    }
+    else {
+        // Add a row for each key in the object
+        Object.keys(properties.object)
+            .sort()
+            .forEach(function (key) {
+                let value = properties.object[key];
+                if(value && typeof value === 'object') {
+                    // value = JSON.stringify(value);
+                    value = <ObjectTable object={value} />;
+                }
+                else if(value === true) {
+                    value = 'true';
+                }
+                else if(value === false) {
+                    value = 'false';
+                }
+
+                let row = {
+                    cells: [
+                        {
+                            column: columns[0],
+                            value: key,
+                        },
+                        {
+                            column: columns[1],
+                            value: value,
+                        },
+                    ],
+                };
+
+                rows.push(row);
+            });
+    }
 
     // Render the component
     return <Table columns={columns} rows={rows} {...properties} />;

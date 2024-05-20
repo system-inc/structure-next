@@ -460,98 +460,101 @@ export function Table(properties: TableInterface) {
     // Render the component
     return (
         <>
-            <div className="mb-4 flex">
-                <div className="flex flex-grow flex-col">
-                    <div className="flex space-x-2">
-                        {/* Search */}
-                        {properties.search && (
-                            <InputText
-                                className="w-80"
-                                variant="search"
-                                placeholder="Filter visible rows..."
-                                autoComplete="off"
-                                defaultValue={properties.searchTerm}
-                                onChange={function (value, event) {
-                                    setSearchTerm(value || '');
-                                }}
-                            />
-                        )}
+            {/* Only render this section if options are enabled */}
+            {properties.search || properties.filter || properties.columnVisibility || properties.rowSelection ? (
+                <div className="mb-4 flex">
+                    <div className="flex flex-grow flex-col">
+                        <div className="flex space-x-2">
+                            {/* Search */}
+                            {properties.search && (
+                                <InputText
+                                    className="w-80"
+                                    variant="search"
+                                    placeholder="Filter visible rows..."
+                                    autoComplete="off"
+                                    defaultValue={properties.searchTerm}
+                                    onChange={function (value, event) {
+                                        setSearchTerm(value || '');
+                                    }}
+                                />
+                            )}
 
-                        {/* Filters Toggle */}
-                        {properties.filter && (
-                            <ToggleButton
-                                size="icon"
-                                icon={FunnelIcon}
-                                tip="Toggle filters"
-                                tipProperties={{ side: 'right' }}
-                                pressed={filtersEnabled}
-                                onPressedChange={onFiltersToggle}
-                            />
+                            {/* Filters Toggle */}
+                            {properties.filter && (
+                                <ToggleButton
+                                    size="icon"
+                                    icon={FunnelIcon}
+                                    tip="Toggle filters"
+                                    tipProperties={{ side: 'right' }}
+                                    pressed={filtersEnabled}
+                                    onPressedChange={onFiltersToggle}
+                                />
+                            )}
+                        </div>
+
+                        {/* Filters - Column Filter Group */}
+                        {filtersEnabled && filtersReference.current && (
+                            <div className="mt-4 flex">
+                                <ColumnFilterGroup
+                                    columns={columns}
+                                    columnFilterGroupData={filtersReference.current}
+                                    onChange={onFiltersChange}
+                                />
+                            </div>
                         )}
                     </div>
 
-                    {/* Filters - Column Filter Group */}
-                    {filtersEnabled && filtersReference.current && (
-                        <div className="mt-4 flex">
-                            <ColumnFilterGroup
-                                columns={columns}
-                                columnFilterGroupData={filtersReference.current}
-                                onChange={onFiltersChange}
-                            />
+                    {/* Table Controls */}
+                    {(properties.columnVisibility || properties.rowSelection) && (
+                        <div className="flex items-end justify-end space-x-2">
+                            {/* Rows Selection Actions */}
+                            {properties.rowSelection && (
+                                <PopoverMenu
+                                    items={rowsSelectionActions}
+                                    popoverProperties={{
+                                        align: 'end',
+                                    }}
+                                >
+                                    <Button
+                                        // Fade in and out when appearing and disappearing
+                                        data-show={selectedRowsIndexesSet.size > 0}
+                                        className="duration-75 data-[show=true]:flex data-[show=false]:hidden data-[show=true]:animate-in data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:fade-in"
+                                        icon={CheckCircledIcon}
+                                        iconPosition="left"
+                                    >
+                                        {selectedRowsIndexesSet.size} of {rows.length} selected
+                                    </Button>
+                                </PopoverMenu>
+                            )}
+
+                            {/* Column Visibility */}
+                            {properties.columnVisibility && (
+                                <InputMultipleSelect
+                                    key={columns.length}
+                                    title="Columns"
+                                    items={columns.map(function (column, columnIndex) {
+                                        return {
+                                            value: columnIndex.toString(),
+                                            content: column.title,
+                                        };
+                                    })}
+                                    defaultValue={Array.from(visibleColumnsIndexesSet).map(String)}
+                                    search={true}
+                                    popoverProperties={{
+                                        align: 'end',
+                                    }}
+                                    buttonProperties={{
+                                        variant: 'default',
+                                        size: 'icon',
+                                        children: <FilterIcon className="h-5 w-5" />,
+                                    }}
+                                    onChange={onColumnVisibilityChange}
+                                />
+                            )}
                         </div>
                     )}
                 </div>
-
-                {/* Table Controls */}
-                {(properties.columnVisibility || properties.rowSelection) && (
-                    <div className="flex items-end justify-end space-x-2">
-                        {/* Rows Selection Actions */}
-                        {properties.rowSelection && (
-                            <PopoverMenu
-                                items={rowsSelectionActions}
-                                popoverProperties={{
-                                    align: 'end',
-                                }}
-                            >
-                                <Button
-                                    // Fade in and out when appearing and disappearing
-                                    data-show={selectedRowsIndexesSet.size > 0}
-                                    className="duration-75 data-[show=true]:flex data-[show=false]:hidden data-[show=true]:animate-in data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:fade-in"
-                                    icon={CheckCircledIcon}
-                                    iconPosition="left"
-                                >
-                                    {selectedRowsIndexesSet.size} of {rows.length} selected
-                                </Button>
-                            </PopoverMenu>
-                        )}
-
-                        {/* Column Visibility */}
-                        {properties.columnVisibility && (
-                            <InputMultipleSelect
-                                key={columns.length}
-                                title="Columns"
-                                items={columns.map(function (column, columnIndex) {
-                                    return {
-                                        value: columnIndex.toString(),
-                                        content: column.title,
-                                    };
-                                })}
-                                defaultValue={Array.from(visibleColumnsIndexesSet).map(String)}
-                                search={true}
-                                popoverProperties={{
-                                    align: 'end',
-                                }}
-                                buttonProperties={{
-                                    variant: 'default',
-                                    size: 'icon',
-                                    children: <FilterIcon className="h-5 w-5" />,
-                                }}
-                                onChange={onColumnVisibilityChange}
-                            />
-                        )}
-                    </div>
-                )}
-            </div>
+            ) : null}
 
             {/* Table Container */}
             <div

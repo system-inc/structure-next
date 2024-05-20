@@ -363,6 +363,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 properties.icon && properties.iconPosition == 'left' ? 'pl-2' : '',
                 !properties.icon && properties.iconPosition == 'left' ? 'pl-8' : '',
                 properties.iconPosition == 'right' ? 'justify-between' : '',
+                properties.className,
             )}
             // <Link> components cannot be disabled, otherwise set the disabled state
             disabled={Component == Link ? undefined : properties.disabled || processing}

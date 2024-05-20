@@ -16,7 +16,12 @@ import { TableCellContentHtml } from '@structure/source/common/tables/cells/Tabl
 import { TableCellContentUrl } from '@structure/source/common/tables/cells/TableCellContentUrl';
 import { TableCellContentNumber } from '@structure/source/common/tables/cells/TableCellContentNumber';
 import { Popover } from '@structure/source/common/popovers/Popover';
+import { Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogCloseControl } from '@structure/source/common/dialogs/DialogCloseControl';
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
+import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
+import { Button } from '@structure/source/common/buttons/Button';
+import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
@@ -113,21 +118,67 @@ export function TableCell(properties: TableCellInterface) {
         else if(properties.column?.type === TableColumnType.Number) {
             content = <TableCellContentNumber value={properties.value} />;
         }
-        // Long content
-        else if(typeof properties.value === 'string' && properties.value.length > 50) {
+        // Text
+        else if(typeof properties.value === 'string') {
+            const longContent = properties.value.length > 200;
+
+            // If the value is JSON, parse it
+            let value: string | JSX.Element | JSX.Element[] = properties.value;
+            let json = null;
+            try {
+                json = JSON.parse(properties.value);
+            }
+            catch(error) {
+                // Do nothing
+            }
+
+            // If the JSON is valid, format it into a table
+            if(json) {
+                value = <ObjectTable object={json} containerClassName={''} />;
+            }
+            else {
+                // Replace new lines with breaks
+                value = properties.value.split('\n').map(function (line, index) {
+                    return (
+                        <React.Fragment key={index}>
+                            {line}
+                            <br />
+                        </React.Fragment>
+                    );
+                });
+            }
+
             content = (
-                <Popover
-                    align="start"
-                    // Setting z-100 here to make sure these appear when they are in a dialog
-                    className="z-[100] w-80"
-                    content={
-                        <ScrollArea className="h-full max-h-48 w-full py-3 pl-3 pr-5 text-sm">
-                            {properties.value}
-                        </ScrollArea>
+                <ScrollArea className={mergeClassNames('text-sm', json === null ? 'py-3 pl-3 pr-5' : '')}>
+                    {value}
+                </ScrollArea>
+            );
+
+            // Use dialogs for long content
+            content = (
+                <Dialog
+                    className={mergeClassNames('md:min-w-lg w-full md:max-w-4xl', longContent ? '' : '')}
+                    header={properties.column?.title}
+                    content={content}
+                    footer={
+                        <div className="flex flex-row-reverse">
+                            <DialogCloseControl>
+                                <Button>Dismiss</Button>
+                            </DialogCloseControl>
+                            <CopyButton
+                                variant="ghost"
+                                size="default"
+                                iconPosition="left"
+                                className="mr-3 pl-3"
+                                value={properties.value}
+                            >
+                                Copy
+                            </CopyButton>
+                        </div>
                     }
                 >
                     <div className="w-full truncate">{properties.value}</div>
-                </Popover>
+                </Dialog>
             );
         }
     }
