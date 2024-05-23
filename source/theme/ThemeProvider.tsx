@@ -18,7 +18,7 @@ import {
 } from '@structure/source/theme/Theme';
 
 // Dependencies - Utilities
-import cookies from '@structure/source/utilities/Cookies';
+import cookies from '@structure/source/utilities/cookies/Cookies';
 
 // Context - Theme
 interface ThemeType {

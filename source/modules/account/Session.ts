@@ -3,7 +3,7 @@ import StructureSettings from '@project/StructureSettings';
 
 // Dependencies
 import { type CookieSetOptions } from 'universal-cookie';
-import cookies from '@structure/source/utilities/Cookies';
+import cookies from '@structure/source/utilities/cookies/Cookies';
 
 // Class - Session
 export class Session {
