@@ -12,7 +12,7 @@ import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import ApolloProvider from '@structure/source/api/ApolloProvider';
 import TipProvider from '@structure/source/common/popovers/TipProvider';
 import NoticeProvider from '@structure/source/common/notifications/NoticeProvider';
-import { Provider as JotaiProvider } from 'jotai';
+import StateProvider from './StateProvider';
 
 export interface ProvidersInterface {
     children: React.ReactNode;
@@ -23,7 +23,7 @@ export function Providers(properties: ProvidersInterface) {
         <CookiesProvider cookies={cookies}>
             <ApolloProvider>
                 <SessionProvider>
-                    <JotaiProvider>
+                    <StateProvider>
                         <ThemeProvider>
                             <EngagementProvider>
                                 <NoticeProvider>
@@ -31,7 +31,7 @@ export function Providers(properties: ProvidersInterface) {
                                 </NoticeProvider>
                             </EngagementProvider>
                         </ThemeProvider>
-                    </JotaiProvider>
+                    </StateProvider>
                 </SessionProvider>
             </ApolloProvider>
         </CookiesProvider>
