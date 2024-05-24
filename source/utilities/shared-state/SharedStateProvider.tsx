@@ -4,20 +4,20 @@
 import React from 'react';
 
 // Dependencies - Utilities
-import { Provider as JotaiProvider, createStore } from 'jotai';
+import { Provider as JotaiProvider, createStore as jotaiCreateStore } from 'jotai';
 
-// Create the store and export it for use in the application
-export const globalStore = createStore();
+// Global Store
+export const globalStore = jotaiCreateStore();
 
 // Interface
-export interface StateProviderInterface {
+export interface SharedStateProviderInterface {
     children: React.ReactNode;
 }
 // State Provider
-export function StateProvider(properties: StateProviderInterface) {
+export function SharedStateProvider(properties: SharedStateProviderInterface) {
     // Render the component
     return <JotaiProvider store={globalStore}>{properties.children}</JotaiProvider>;
 }
 
 // Export - Default
-export default StateProvider;
+export default SharedStateProvider;

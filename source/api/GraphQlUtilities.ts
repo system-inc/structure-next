@@ -2,8 +2,8 @@
 import { ApolloError } from '@apollo/client';
 
 // Function to convert an Apollo error to a message
-export const apolloErrorToMessage = function (mutationError: ApolloError) {
-    let errorObject = mutationError.graphQLErrors;
+export const apolloErrorToMessage = function (mutationError?: ApolloError) {
+    let errorObject = mutationError?.graphQLErrors;
 
     if(errorObject && errorObject.length > 0) {
         const error = errorObject[0];

@@ -5,7 +5,7 @@ import React from 'react';
 import { FormInputReferenceInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { InputTextInterface, InputText } from '@structure/source/common/forms/InputText';
+import { InputTextAreaInterface, InputTextArea } from '@structure/source/common/forms/InputTextArea';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -13,19 +13,18 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
-// Component - FormInputText
-export interface FormInputTextInterface
-    extends Omit<InputTextInterface, 'validate'>,
+// Component - FormInputTextArea
+export interface FormInputTextAreaInterface
+    extends Omit<InputTextAreaInterface, 'validate'>,
         Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
-    type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
-    placeholder?: React.InputHTMLAttributes<HTMLInputElement>['placeholder'];
-    autoComplete?: React.InputHTMLAttributes<HTMLInputElement>['autoComplete'];
+    placeholder?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['placeholder'];
+    autoComplete?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['autoComplete'];
     sibling?: React.ReactNode;
-    onChange?: (value: string | undefined, event?: React.ChangeEvent<HTMLInputElement>) => void;
-    onBlur?: (value: string | undefined, event?: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (value: string | undefined, event?: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onBlur?: (value: string | undefined, event?: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
-export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormInputTextInterface>(function (
-    properties: FormInputTextInterface,
+export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, FormInputTextAreaInterface>(function (
+    properties: FormInputTextAreaInterface,
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
     // State
@@ -36,20 +35,16 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
 
     // References
     const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
-    const inputTextReference = React.useRef<FormInputReferenceInterface>(null);
-
-    // Defaults
-    const type = properties.type ?? 'text';
+    const inputTextAreaReference = React.useRef<FormInputReferenceInterface>(null);
 
     // Function to focus on the component
     const focus = React.useCallback(function () {
-        if(inputTextReference.current) {
-            inputTextReference.current.focus();
+        if(inputTextAreaReference.current) {
+            inputTextAreaReference.current.focus();
         }
     }, []);
 
     // Function to validate the component
-    const propertiesType = properties.type;
     const propertiesValidationSchema = properties.validationSchema;
     const propertiesValidate = properties.validate;
     const propertiesOnValidate = properties.onValidate;
@@ -57,12 +52,6 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
         async function (value: string | undefined) {
             // Set validating state
             setValidating(true);
-
-            // Apply email address validation to form input text components which are of type email
-            let validationResult = undefined;
-            if(propertiesType === 'email') {
-                validationResult = await new ValidationSchema().emailAddress().validate(value);
-            }
 
             // Run the validation schema validation if provided
             const validationSchemaValidationResult = propertiesValidationSchema
@@ -74,18 +63,15 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 ? await propertiesValidate(
                       value,
                       // Pass in the concurrent validation result
-                      mergeValidationResults(validationResult, validationSchemaValidationResult),
+                      validationSchemaValidationResult,
                   )
                 : undefined;
 
             // Merge the validation results
             const mergedValidationResult = mergeValidationResults(
-                validationResult,
                 validationSchemaValidationResult,
                 propertiesValidationResult,
             );
-
-            console.log('mergedValidationResult', mergedValidationResult);
 
             // Set the validation result
             setValidationResult(mergedValidationResult);
@@ -100,7 +86,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
 
             return mergedValidationResult;
         },
-        [propertiesType, propertiesValidationSchema, propertiesValidate, propertiesOnValidate],
+        [propertiesValidationSchema, propertiesValidate, propertiesOnValidate],
     );
 
     // Function to handle form input value changes
@@ -109,17 +95,15 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     const onChangeIntercept = React.useCallback(
         function (
             value: string | undefined,
-            event?: React.ChangeEvent<HTMLInputElement>,
+            event?: React.ChangeEvent<HTMLTextAreaElement>,
             skipOnChangeCallback: boolean = false,
         ) {
-            // console.log('Form input value changed:', value);
-
             // Update the value
             valueReference.current = value;
 
-            // Set the value of the input text
-            if(inputTextReference.current) {
-                inputTextReference.current.setValue(value);
+            // Set the value of the input text area
+            if(inputTextAreaReference.current) {
+                inputTextAreaReference.current.setValue(value);
             }
 
             // Optionally run the provided onChange function if provided
@@ -141,7 +125,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     const onBlurIntercept = React.useCallback(
         function (
             value: string | undefined,
-            event: React.ChangeEvent<HTMLInputElement>,
+            event: React.ChangeEvent<HTMLTextAreaElement>,
             skipOnBlurCallback: boolean = false,
         ) {
             // Run the provided form input onBlur function if provided
@@ -163,15 +147,13 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
             getValue: function () {
                 return valueReference.current;
             },
-            setValue: function (value: string | undefined, event: React.ChangeEvent<HTMLInputElement>) {
+            setValue: function (value: string | undefined, event: React.ChangeEvent<HTMLTextAreaElement>) {
                 onChangeIntercept(value, event, true);
             },
             focus: focus,
             validate: validate,
         };
     });
-
-    // console.log('validationResult', validationResult);
 
     // Render the component
     return (
@@ -190,15 +172,11 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
             validationResult={validationResult}
             component={
                 <div className="relative">
-                    <InputText
-                        ref={inputTextReference}
+                    <InputTextArea
+                        ref={inputTextAreaReference}
                         variant={properties.variant}
                         size={properties.size}
-                        className={mergeClassNames(
-                            'w-full',
-                            properties.componentClassName,
-                            // validationResult?.valid === false ? 'text-red-500 dark:text-red-500' : '',
-                        )}
+                        className={mergeClassNames('w-full', properties.componentClassName)}
                         defaultValue={properties.defaultValue}
                         required={properties.required}
                         disabled={properties.disabled}
@@ -206,10 +184,10 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                         onChange={onChangeIntercept}
                         onBlur={onBlurIntercept}
                         onFocus={properties.onFocus}
-                        // Specific to InputText
-                        type={type}
+                        // Specific to InputTextArea
                         placeholder={properties.placeholder}
                         autoComplete={properties.autoComplete}
+                        rows={properties.rows}
                     />
                     {properties.sibling && properties.sibling}
                     {validating && (
@@ -224,7 +202,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
 });
 
 // Set the display name for debugging purposes
-FormInputText.displayName = 'FormInputText';
+FormInputTextArea.displayName = 'FormInputTextArea';
 
 // Export - Default
-export default FormInputText;
+export default FormInputTextArea;

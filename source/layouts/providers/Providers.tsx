@@ -12,7 +12,7 @@ import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import ApolloProvider from '@structure/source/api/ApolloProvider';
 import TipProvider from '@structure/source/common/popovers/TipProvider';
 import NoticeProvider from '@structure/source/common/notifications/NoticeProvider';
-import StateProvider from '@structure/source/utilities/state/StateProvider';
+import SharedStateProvider from '@structure/source/utilities/shared-state/SharedStateProvider';
 
 export interface ProvidersInterface {
     children: React.ReactNode;
@@ -23,7 +23,7 @@ export function Providers(properties: ProvidersInterface) {
         <CookiesProvider cookies={cookies}>
             <ApolloProvider>
                 <SessionProvider>
-                    <StateProvider>
+                    <SharedStateProvider>
                         <ThemeProvider>
                             <EngagementProvider>
                                 <NoticeProvider>
@@ -31,7 +31,7 @@ export function Providers(properties: ProvidersInterface) {
                                 </NoticeProvider>
                             </EngagementProvider>
                         </ThemeProvider>
-                    </StateProvider>
+                    </SharedStateProvider>
                 </SessionProvider>
             </ApolloProvider>
         </CookiesProvider>
