@@ -48,6 +48,7 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
         return <NotAuthorized />;
     }
 
+    // Render the component
     return properties.children;
 }
 
