@@ -12,6 +12,8 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Component - ContextMenu
 export interface ContextMenuInterface extends MenuInterface {
+    containerClassName?: string;
+
     // Menu
     closeOnItemSelect?: boolean;
 
@@ -45,6 +47,7 @@ export function ContextMenu(properties: ContextMenuInterface) {
             <RadixContextMenu.Trigger>{properties.children}</RadixContextMenu.Trigger>
             <RadixContextMenu.Portal>
                 <RadixContextMenu.Content
+                    className={mergeClassNames('z-30', properties.containerClassName)}
                     onCloseAutoFocus={properties.onCloseAutoFocus}
                     alignOffset={properties.alignOffset}
                     avoidCollisions={properties.avoidCollisions}
@@ -56,7 +59,7 @@ export function ContextMenu(properties: ContextMenuInterface) {
                         maxHeight: 'var(--radix-context-menu-content-available-height)',
                     }}
                 >
-                    <Menu {...menuProperties} className={mergeClassNames('z-40 text-xs', properties.className)} />
+                    <Menu {...menuProperties} className={mergeClassNames('text-xs', properties.className)} />
                 </RadixContextMenu.Content>
             </RadixContextMenu.Portal>
         </RadixContextMenu.Root>
