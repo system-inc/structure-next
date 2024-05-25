@@ -6,6 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
 import { Button } from '@structure/source/common/buttons/Button';
+import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 
 // Dependencies - Assets
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
@@ -170,7 +171,13 @@ export function Dialog(properties: DialogInterface) {
 
                     {/* Header */}
                     {properties.header && (
-                        <div className={mergeClassNames(dialogHeaderClassName, properties.headerClassName)}>
+                        <div
+                            className={mergeClassNames(
+                                dialogHeaderClassName,
+                                properties.headerClassName,
+                                // 'border border-red-500',
+                            )}
+                        >
                             {
                                 // If the header is a string, render it as a title which is accessible to screen readers
                                 typeof properties.header === 'string' ? (
@@ -186,11 +193,18 @@ export function Dialog(properties: DialogInterface) {
                     )}
 
                     {/* Content */}
-                    {properties.content && properties.content}
+                    {/* We wrap the content in a scroll area to standardize all scrollbars in dialogs */}
+                    {properties.content && <ScrollArea className="max-h-[75vh]">{properties.content}</ScrollArea>}
 
                     {/* Footer */}
                     {(properties.footer || properties.footerCloseButton) && (
-                        <div className={mergeClassNames(dialogFooterClassName, properties.footerClassName)}>
+                        <div
+                            className={mergeClassNames(
+                                dialogFooterClassName,
+                                properties.footerClassName,
+                                // 'border border-red-500',
+                            )}
+                        >
                             {properties.footer}
 
                             {/* Close Button */}

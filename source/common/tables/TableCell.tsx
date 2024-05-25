@@ -15,10 +15,8 @@ import { TableCellContentBoolean } from '@structure/source/common/tables/cells/T
 import { TableCellContentHtml } from '@structure/source/common/tables/cells/TableCellContentHtml';
 import { TableCellContentUrl } from '@structure/source/common/tables/cells/TableCellContentUrl';
 import { TableCellContentNumber } from '@structure/source/common/tables/cells/TableCellContentNumber';
-import { Popover } from '@structure/source/common/popovers/Popover';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { DialogCloseControl } from '@structure/source/common/dialogs/DialogCloseControl';
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
 import { Button } from '@structure/source/common/buttons/Button';
 import { CopyButton } from '@structure/source/common/buttons/CopyButton';
@@ -148,18 +146,12 @@ export function TableCell(properties: TableCellInterface) {
                 });
             }
 
-            content = (
-                <ScrollArea containerClassName={mergeClassNames('text-sm', json === null ? 'py-3 pl-3 pr-5' : '')}>
-                    {value}
-                </ScrollArea>
-            );
-
             // Use dialogs for long content
             content = (
                 <Dialog
-                    className={mergeClassNames('md:min-w-lg w-full md:max-w-4xl', longContent ? '' : '')}
+                    className={mergeClassNames('md:min-w-lg w-full text-sm md:max-w-4xl', longContent ? '' : '')}
                     header={properties.column?.title}
-                    content={content}
+                    content={value}
                     footer={
                         <div className="flex flex-row-reverse">
                             <DialogCloseControl>
