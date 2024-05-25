@@ -28,7 +28,7 @@ export interface PaginationInterface {
     page?: number;
 
     pagesTotal: number;
-    onChange: (itemsPerPage: number, page: number) => Promise<void>;
+    onChange: (itemsPerPage: number, page: number) => Promise<void> | void;
 }
 export function Pagination(properties: PaginationInterface) {
     // State
@@ -51,7 +51,7 @@ export function Pagination(properties: PaginationInterface) {
         [propertiesOnChange],
     );
 
-    console.log('pageIsValid', pageIsValid);
+    // console.log('pageIsValid', pageIsValid);
 
     // Render the component
     return (

@@ -6,7 +6,7 @@
  * @param {number} millisecondsSinceUnixEpoch - The timestamp to convert, represented as milliseconds since the Unix epoch.
  * @returns {string} A string representing the elapsed time since the timestamp in a human-readable format.
  */
-export function getTimeAgoString(millisecondsSinceUnixEpoch: number) {
+export function timeAgo(millisecondsSinceUnixEpoch: number) {
     const deltaMillisecondsSinceUnixEpoch = new Date().getTime() - millisecondsSinceUnixEpoch;
 
     const secondsAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / 1000).toFixed(0);
@@ -40,4 +40,52 @@ export function getTimeAgoString(millisecondsSinceUnixEpoch: number) {
     }
 
     return `${yearsAgo} year${Number(yearsAgo) === 1 ? '' : 's'} ago`;
+}
+
+// Function to convert a date object into the format January 12, 2020
+export function fullDate(date: Date) {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+}
+
+// Function to convert a date object into the format Friday, January 12, 2020
+export function dayNameWithFullDate(date: Date) {
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+}
+
+// Function to convert a date object into the format January 12, 2020 at 3:30 PM
+export function fullDateWithTime(date: Date) {
+    return (
+        date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        }) +
+        ' at ' +
+        date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+        })
+    );
+}
+
+// Function to convert a date object into the ISO 8601 format 2020-01-12
+export function iso8601Date(date: Date) {
+    return date.toISOString().split('T')[0];
+}
+
+// Function to convert a date object into January 2024
+export function monthYear(date: Date) {
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+    });
 }

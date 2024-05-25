@@ -6,7 +6,7 @@ import Link from 'next/link';
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
 // Dependencies - Utilities
-import { getTimeAgoString } from '@structure/source/utilities/Time';
+import { timeAgo } from '@structure/source/utilities/Time';
 
 // Component - ActivityLink
 export type ActivityLinkProperties = {
@@ -20,9 +20,7 @@ export function ActivityLink(properties: ActivityLinkProperties) {
         <Link href={properties.href} className="group flex transition-all">
             <div>
                 <p className="text-sm font-light">{properties.title}</p>
-                <p className="text-xs font-light text-dark-4/50 dark:text-light-4/50">
-                    {getTimeAgoString(properties.timeAgo)}
-                </p>
+                <p className="text-xs font-light text-dark-4/50 dark:text-light-4/50">{timeAgo(properties.timeAgo)}</p>
             </div>
             <div className="flex items-center justify-start opacity-0 transition-opacity group-hover:opacity-100">
                 <ChevronRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
