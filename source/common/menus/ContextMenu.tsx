@@ -15,7 +15,7 @@ export interface ContextMenuInterface extends MenuInterface {
     containerClassName?: string;
 
     // Menu
-    closeOnItemSelect?: boolean;
+    closeOnItemSelected?: boolean;
 
     // Radix Context Menu Root
     modal?: boolean;

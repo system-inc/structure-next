@@ -15,7 +15,7 @@ import { mergeClassNames } from '@structure/source/utilities/Styles';
 export interface PopoverMenuInterface extends Omit<MenuInterface, 'items'> {
     children: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
     items: MenuItemInterface[];
-    closeOnItemSelect?: boolean;
+    closeOnItemSelected?: boolean;
     popoverProperties?: Omit<PopoverInterface, 'children' | 'content'>;
 }
 export function PopoverMenu(properties: PopoverMenuInterface) {
@@ -64,7 +64,7 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
 
     // Function to handle when a menu item is selected
     const propertiesOnItemSelected = properties.onItemSelected;
-    const propertiesCloseOnItemSelect = properties.closeOnItemSelect;
+    const propertiesCloseOnItemSelected = properties.closeOnItemSelected;
     const onItemSelectedIntercept = React.useCallback(
         function (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) {
             // Call the onSelected callback
@@ -73,11 +73,11 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
             }
 
             // Close the popover if closePopoverOnSelect is true
-            if(propertiesCloseOnItemSelect || menuItem.closeMenuOnSelect) {
+            if(propertiesCloseOnItemSelected || menuItem.closeMenuOnSelect) {
                 setOpen(false);
             }
         },
-        [propertiesOnItemSelected, propertiesCloseOnItemSelect],
+        [propertiesOnItemSelected, propertiesCloseOnItemSelected],
     );
 
     // Get the menu properties to spread onto the Menu component

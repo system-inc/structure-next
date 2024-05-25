@@ -149,7 +149,7 @@ export function TableCell(properties: TableCellInterface) {
             }
 
             content = (
-                <ScrollArea className={mergeClassNames('text-sm', json === null ? 'py-3 pl-3 pr-5' : '')}>
+                <ScrollArea containerClassName={mergeClassNames('text-sm', json === null ? 'py-3 pl-3 pr-5' : '')}>
                     {value}
                 </ScrollArea>
             );

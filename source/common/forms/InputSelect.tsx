@@ -229,7 +229,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
             loadingItemsError={loadingItemsError}
             search={properties.search}
             onItemSelected={onChangeIntercept}
-            closeOnItemSelect={true}
+            closeOnItemSelected={true}
             popoverProperties={{
                 ...properties.popoverProperties,
                 open: open,

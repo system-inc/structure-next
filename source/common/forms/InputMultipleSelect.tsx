@@ -46,7 +46,7 @@ export interface InputMultipleSelectInterface extends Omit<InputInterface, 'defa
     title?: string | React.ReactNode;
     items?: InputMultipleSelectItemInterface[];
     placeholder?: string;
-    closeOnItemSelect?: boolean;
+    closeOnItemSelected?: boolean;
 
     // Events
     onChange?: (value: string[] | undefined, event: any) => void;
@@ -167,7 +167,7 @@ export const InputMultipleSelect = React.forwardRef<
     // Function to handle input value changes
     const propertiesItems = properties.items;
     const propertiesOnChange = properties.onChange;
-    const propertiesCloseOnSelect = properties.closeOnItemSelect;
+    const propertiesCloseOnItemSelected = properties.closeOnItemSelected;
     const onChangeIntercept = React.useCallback(
         function (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) {
             // console.log('InputMultipleSelect.tsx value changed:', menuItem.value);
@@ -208,11 +208,11 @@ export const InputMultipleSelect = React.forwardRef<
             }
 
             // Close the popover
-            if(propertiesCloseOnSelect) {
+            if(propertiesCloseOnItemSelected) {
                 setOpen(false);
             }
         },
-        [value, propertiesItems, propertiesOnChange, propertiesCloseOnSelect],
+        [value, propertiesItems, propertiesOnChange, propertiesCloseOnItemSelected],
     );
 
     // Function to handle blur events
@@ -253,7 +253,7 @@ export const InputMultipleSelect = React.forwardRef<
             loadingItemsError={loadingItemsError}
             search={properties.search}
             onItemSelected={onChangeIntercept}
-            closeOnItemSelect={properties.closeOnItemSelect}
+            closeOnItemSelected={properties.closeOnItemSelected}
             popoverProperties={{
                 ...properties.popoverProperties,
                 open: open,

@@ -944,7 +944,7 @@ export function Metrics(properties: MetricsInterface) {
             </div>
 
             {/* Chart */}
-            <ContextMenu items={contextMenuItems} closeOnItemSelect={true}>
+            <ContextMenu items={contextMenuItems} closeOnItemSelected={true}>
                 <Chart
                     dataSourcesWithMetrics={dataSourcesWithMetricsFilledWithZeroes}
                     timeInterval={timeInterval}

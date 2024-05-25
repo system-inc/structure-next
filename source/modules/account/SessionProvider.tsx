@@ -43,7 +43,7 @@ export function SessionProvider({ children }: SessionProviderInterface) {
     // Sign out mutation
     const [accountSignOutMutation, accountSignOutMutationState] = useMutation(AccountSignOutDocument);
 
-    // Updated the function name to 'updateSessionToken'
+    // Function to update the session token
     const updateSessionToken = React.useCallback(function (newSessionToken: string | null) {
         // Allow for null values
         if(newSessionToken) {
@@ -56,7 +56,7 @@ export function SessionProvider({ children }: SessionProviderInterface) {
         // console.log('Session token updated:', newSessionToken);
     }, []);
 
-    // Sign out function
+    // Function to sign out
     const signOut = React.useCallback(
         function (redirectPath?: string) {
             const updateSessionTokenAndRedirect = function () {
@@ -85,7 +85,7 @@ export function SessionProvider({ children }: SessionProviderInterface) {
         [accountSignOutMutation, updateSessionToken, router],
     );
 
-    // On mount
+    // Effect to listen for changes in local storage
     React.useEffect(
         function () {
             function handleLocalStorageChange(event: StorageEvent) {
@@ -94,13 +94,14 @@ export function SessionProvider({ children }: SessionProviderInterface) {
                 }
             }
 
+            // console.log('Session token:', Session.getToken());
             setSessionToken(Session.getToken());
 
             // Listen for changes in local storage
             window.addEventListener('storage', handleLocalStorageChange);
 
             // Clean up event listener
-            return () => {
+            return function () {
                 window.removeEventListener('storage', handleLocalStorageChange);
             };
         },

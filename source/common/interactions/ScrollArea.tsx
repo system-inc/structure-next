@@ -10,9 +10,10 @@ import * as RadixScrollArea from '@radix-ui/react-scroll-area';
 import { mergeClassNames } from '@structure/source/utilities/Styles';
 
 // Class Names - Scroll Area
+export const scrollAreaContainerClassName = 'h-full overflow-hidden';
 export const scrollAreaClassName = 'h-full w-full rounded-[inherit]';
 export const scrollAreaScrollbarClassName =
-    'flex touch-none select-none p-[4px] transition-colors duration-150 ease-out';
+    'flex touch-none select-none px-[4px] py-[2px] transition-colors duration-150 ease-out';
 export const scrollAreaVerticalScrollbarClassName =
     'w-[14px] transition-colors duration-500 hover:bg-neutral+6/30 dark:hover:bg-dark-4/30';
 export const scrollAreaHorizontalScrollbarClassName = 'h-[14px] flex-col';
@@ -24,7 +25,7 @@ export const scrollAreaCornerClassName = '';
 export interface ScrollAreaInterface {
     children: React.ReactNode;
     className?: string;
-    scrollAreaClassName?: string;
+    containerClassName?: string;
     scrollbarClassName?: string;
     verticalScrollbarClassName?: string;
     horizontalScrollbarClassName?: string;
@@ -51,15 +52,14 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     // Render the component
     return (
         <RadixScrollArea.Root
-            ref={reference}
             type={type}
             scrollHideDelay={scrollHideDelay}
             dir={direction}
-            className={mergeClassNames('relative overflow-scroll', properties.className)}
+            className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName)}
         >
             <RadixScrollArea.Viewport
-                className={mergeClassNames(scrollAreaClassName, properties.scrollAreaClassName)}
-                asChild
+                className={mergeClassNames(scrollAreaClassName, properties.className)}
+                ref={reference}
             >
                 {properties.children}
             </RadixScrollArea.Viewport>
