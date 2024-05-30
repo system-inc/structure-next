@@ -9,7 +9,7 @@ import { NoticeInterface, Notice } from '@structure/source/common/notifications/
 import ClearAllNoticesButton from '@structure/source/common/notifications/NoticesClearAllButton';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { animated, useTransition } from '@react-spring/web';
 
 // Component - NoticeContainer

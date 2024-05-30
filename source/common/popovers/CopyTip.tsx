@@ -7,7 +7,7 @@ import { NoticeInterface } from '@structure/source/common/notifications/Notice';
 import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - CopyTip
 export interface CopyTipInterface extends Omit<TipInterface, 'content'> {

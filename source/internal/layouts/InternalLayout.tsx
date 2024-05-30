@@ -23,7 +23,7 @@ import LineLoadingAnimation from '@structure/source/common/animations/LineLoadin
 import { useAccountCurrent } from '@structure/source/modules/account/Account';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - InternalLayout
 export interface InternalLayoutInterface {

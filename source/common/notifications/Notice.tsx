@@ -10,7 +10,7 @@ import { ButtonInterface, Button } from '@structure/source/common/buttons/Button
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 

@@ -8,7 +8,7 @@ import { ValidationResult, mergeValidationResults } from '@structure/source/util
 import { InputSelectInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Class Names - InputSelect
 export const inputSelectClassName =

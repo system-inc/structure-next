@@ -13,7 +13,7 @@ import { ButtonInterface, Button } from '@structure/source/common/buttons/Button
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { format, startOfToday } from 'date-fns';
 
 // Interface - InputDateReference

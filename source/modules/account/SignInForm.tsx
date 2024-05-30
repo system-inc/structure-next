@@ -14,7 +14,7 @@ import { useSession } from '@structure/source/modules/account/SessionProvider';
 import { AccountSignInDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - WaitListForm
 export interface SignInFormInterface {

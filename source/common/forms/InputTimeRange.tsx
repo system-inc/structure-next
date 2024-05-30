@@ -19,7 +19,7 @@ import { ButtonInterface, Button } from '@structure/source/common/buttons/Button
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { format, endOfDay, startOfToday, endOfToday, addMonths } from 'date-fns';
 import { camelCase } from '@structure/source/utilities/String';
 

@@ -11,7 +11,7 @@ import { useTheme } from '@structure/source/theme/ThemeProvider';
 import SearchIcon from '@structure/assets/icons/navigation/SearchIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Classes - InputText
 

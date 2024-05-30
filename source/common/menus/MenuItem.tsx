@@ -7,7 +7,7 @@ import React from 'react';
 import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Class Names - Menu Item
 export const menuItemClassName = '';

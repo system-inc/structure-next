@@ -12,7 +12,7 @@ import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { wrapSvg } from '@structure/source/utilities/React';
 
 // Class Names - Dialog Overlay
@@ -194,7 +194,11 @@ export function Dialog(properties: DialogInterface) {
 
                     {/* Content */}
                     {/* We wrap the content in a scroll area to standardize all scrollbars in dialogs */}
-                    {properties.content && <ScrollArea className="max-h-[75vh]">{properties.content}</ScrollArea>}
+                    {properties.content && (
+                        <ScrollArea className="max-h-[75vh]" horizontalScrollbar={true}>
+                            {properties.content}
+                        </ScrollArea>
+                    )}
 
                     {/* Footer */}
                     {(properties.footer || properties.footerCloseButton) && (

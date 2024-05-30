@@ -7,7 +7,7 @@ import React from 'react';
 import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { animated, easings, useSpring } from '@react-spring/web';
 import { useNotice } from './NoticeProvider';
 

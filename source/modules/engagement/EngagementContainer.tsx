@@ -7,7 +7,7 @@ import React from 'react';
 import { useEngagement } from '@structure/source/modules/engagement/EngagementProvider';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - EngagementContainer
 export interface EngagementContainerInterface extends React.HTMLAttributes<HTMLDivElement> {

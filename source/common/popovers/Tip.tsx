@@ -8,7 +8,7 @@ import * as RadixTooltip from '@radix-ui/react-tooltip';
 import { PopoverInterface, popoverClassName } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { wrapSvg } from '@structure/source/utilities/React';
 
 // Component - Tip

@@ -11,7 +11,7 @@ import { Tip } from '@structure/source/common/popovers/Tip';
 import { PopoverInterface } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { addCommas } from '@structure/source/utilities/Number';
 
 // Dependencies - Assets

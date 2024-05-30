@@ -12,7 +12,7 @@ import ChallengeContainer from './ChallengeContainer';
 import VerificationStateHeader from './VerificationStateHeader';
 import { useSpring, animated } from '@react-spring/web';
 import { InputTextVariants } from '@structure/source/common/forms/InputText';
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import ChallengeInput from './challenges/common/ChallengeInput';
 
 // Atomic State

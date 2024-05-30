@@ -13,7 +13,7 @@ import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 // Dependencies - Assets
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - InternalCommandDialog
 export interface InternalDialogMenuInterface extends Omit<DialogMenuInterface, 'menuItems'> {}

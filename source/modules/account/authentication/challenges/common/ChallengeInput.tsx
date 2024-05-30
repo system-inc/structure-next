@@ -1,6 +1,6 @@
 import { InputTextVariants } from '@structure/source/common/forms/InputText';
 import TipIcon from '@structure/source/common/popovers/TipIcon';
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import EyeIcon from '@structure/assets/icons/security/EyeIcon.svg';
 import EyeCancelIcon from '@structure/assets/icons/security/EyeCancelIcon.svg';
 import React from 'react';

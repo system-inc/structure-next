@@ -6,7 +6,7 @@ import Image from 'next/image';
 import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ProfileImage
 export interface ProfileImageInterface {

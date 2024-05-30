@@ -13,7 +13,7 @@ import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - MutableImage
 export interface MutableImageInterface {

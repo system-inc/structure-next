@@ -2,7 +2,7 @@
 import Link from 'next/link';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // NavigationLink
 export interface InternalNavigationLinkInterface {

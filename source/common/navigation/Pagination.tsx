@@ -16,7 +16,7 @@ import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon
 import ChevronRightDoubleIcon from '@structure/assets/icons/interface/ChevronRightDoubleIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Pagination
 export interface PaginationInterface {

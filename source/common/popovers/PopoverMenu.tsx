@@ -9,7 +9,7 @@ import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PopoverMenu
 export interface PopoverMenuInterface extends Omit<MenuInterface, 'items'> {

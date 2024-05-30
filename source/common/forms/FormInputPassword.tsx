@@ -10,7 +10,7 @@ import EyeIcon from '@structure/assets/icons/security/EyeIcon.svg';
 import EyeCancelIcon from '@structure/assets/icons/security/EyeCancelIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputPassword
 export const FormInputPassword = React.forwardRef(function (

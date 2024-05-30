@@ -13,7 +13,7 @@ import { themeClassNameCookieKey, darkThemeClassName } from '@structure/source/t
 
 // Dependencies - Main Components
 import Providers from '@structure/source/layouts/providers/Providers';
-import { mergeClassNames } from '../utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 // import { SignInSignUpModal } from '@structure/source/modules/account/SignInSignUpModal';
 
 // Metadata

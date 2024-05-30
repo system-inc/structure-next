@@ -13,7 +13,7 @@ import {
 import TipIcon from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputCheckbox
 export interface FormInputCheckboxInterface

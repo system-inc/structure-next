@@ -11,7 +11,7 @@ import { usePathname } from 'next/navigation';
 import CurrentLocationIcon from '@structure/assets/icons/navigation/CurrentLocationIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - LocaleControl
 export interface LocaleControlInterface {

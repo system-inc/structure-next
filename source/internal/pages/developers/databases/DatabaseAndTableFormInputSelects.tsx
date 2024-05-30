@@ -12,7 +12,7 @@ import { useQuery } from '@apollo/client';
 import { DataInteractionDatabaseTablesDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - DatabaseAndTableFormInputSelects
 export interface DatabaseAndTableFormInputSelectsInterface {

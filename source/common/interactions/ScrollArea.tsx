@@ -7,7 +7,7 @@ import React from 'react';
 import * as RadixScrollArea from '@radix-ui/react-scroll-area';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Class Names - Scroll Area
 export const scrollAreaContainerClassName = 'h-full overflow-hidden';

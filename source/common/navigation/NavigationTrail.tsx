@@ -10,7 +10,7 @@ import NavigationTrailSeparatorPopoverMenu from '@structure/source/common/naviga
 
 // Dependencies - Utilities
 import { titleCase } from '@structure/source/utilities/String';
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Dependencies - Assets
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';

@@ -8,7 +8,7 @@ import * as RadixContextMenu from '@radix-ui/react-context-menu';
 import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ContextMenu
 export interface ContextMenuInterface extends MenuInterface {

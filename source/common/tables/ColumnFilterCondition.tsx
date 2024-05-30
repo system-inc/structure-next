@@ -25,7 +25,7 @@ import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';
 import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - ColumnFilterCondition

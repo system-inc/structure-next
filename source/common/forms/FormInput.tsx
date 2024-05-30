@@ -10,7 +10,7 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { ValidationResult } from '@structure/source/utilities/validation/Validation';
 import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
 

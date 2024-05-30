@@ -43,7 +43,7 @@ import { ButtonInterface, Button } from '@structure/source/common/buttons/Button
 // Dependencies - Utilities
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Interface - Form Values
 export interface FormValuesInterface {

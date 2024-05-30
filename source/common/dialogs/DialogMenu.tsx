@@ -8,7 +8,7 @@ import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog
 import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - CommandDialog
 export interface DialogMenuInterface extends MenuInterface {

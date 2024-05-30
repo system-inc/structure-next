@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { useSpring, animated, easings } from '@react-spring/web';
 
 // Component - LoadingAnimation

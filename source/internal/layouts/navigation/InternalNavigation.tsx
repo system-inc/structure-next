@@ -28,7 +28,7 @@ import { useTheme } from '@structure/source/theme/ThemeProvider';
 import { useSpring, animated, easings } from '@react-spring/web';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - InternalNavigation
 export interface InternalNavigationInterface {

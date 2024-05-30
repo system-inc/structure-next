@@ -11,7 +11,7 @@ import { InputTextAreaInterface, InputTextArea } from '@structure/source/common/
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputTextArea
 export interface FormInputTextAreaInterface

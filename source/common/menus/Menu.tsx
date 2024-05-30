@@ -13,7 +13,7 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Class Names - Menu
 export const menuClassName =

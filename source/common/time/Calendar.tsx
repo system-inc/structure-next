@@ -12,7 +12,7 @@ import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.s
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Calendar
 export type CalendarInterface = React.ComponentProps<typeof ReactDayPicker>;

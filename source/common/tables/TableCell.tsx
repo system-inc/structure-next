@@ -22,7 +22,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TableCell
 export interface TableCellInterface extends React.HTMLAttributes<HTMLTableCellElement> {

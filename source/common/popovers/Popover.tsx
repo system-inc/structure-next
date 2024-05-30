@@ -7,7 +7,7 @@ import React from 'react';
 import * as RadixPopover from '@radix-ui/react-popover';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Styles';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { wrapSvg } from '@structure/source/utilities/React';
 
 // Class Names - Popover
