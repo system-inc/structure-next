@@ -23,21 +23,24 @@ export function LineLoadingAnimation(properties: LineLoadingAnimationProperties)
     });
 
     // Update the progress percentage when the width or progress percentage changes
-    React.useEffect(() => {
-        if(!width) return;
-        setTimeout(() => {
-            // If the progress percentage is less than 99.5%
-            if(progressPercentage < 0.995) {
-                // Add a small amount to the progress percentage
-                const currentProgress = progressPercentage;
-                const unfilledPortion = 1 - currentProgress;
-                const percentToAdd = unfilledPortion / 8;
+    React.useEffect(
+        function effectFunction() {
+            if(!width) return;
+            setTimeout(function timeoutFunction() {
+                // If the progress percentage is less than 99.5%
+                if(progressPercentage < 0.995) {
+                    // Add a small amount to the progress percentage
+                    const currentProgress = progressPercentage;
+                    const unfilledPortion = 1 - currentProgress;
+                    const percentToAdd = unfilledPortion / 8;
 
-                // Update the progress percentage
-                setProgressPercentage(currentProgress + percentToAdd);
-            }
-        }, 800);
-    }, [width, progressPercentage]); // Watch for changes in width and progress percentage
+                    // Update the progress percentage
+                    setProgressPercentage(currentProgress + percentToAdd);
+                }
+            }, 800);
+        },
+        [width, progressPercentage],
+    ); // Watch for changes in width and progress percentage
 
     // Render the component
     return (

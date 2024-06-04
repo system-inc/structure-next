@@ -9,7 +9,7 @@ import { PopoverInterface, popoverClassName } from '@structure/source/common/pop
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { wrapSvg } from '@structure/source/utilities/React';
+import { wrapForSlot } from '@structure/source/utilities/React';
 
 // Component - Tip
 export interface TipInterface extends PopoverInterface {}
@@ -55,7 +55,7 @@ export function Tip(properties: TipInterface) {
                 }}
             >
                 {/* Wrap SVGs in a span so they can be interacted with */}
-                {properties.children && wrapSvg(properties.children)}
+                {properties.children && wrapForSlot(properties.children)}
             </RadixTooltip.Trigger>
             <RadixTooltip.Portal container={properties.portalContainer}>
                 <RadixTooltip.Content

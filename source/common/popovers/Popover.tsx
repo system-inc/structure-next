@@ -8,7 +8,7 @@ import * as RadixPopover from '@radix-ui/react-popover';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { wrapSvg } from '@structure/source/utilities/React';
+import { wrapForSlot } from '@structure/source/utilities/React';
 
 // Class Names - Popover
 export const popoverClassName =
@@ -90,7 +90,7 @@ export function Popover(properties: PopoverInterface) {
                     asChild
                 >
                     {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
-                    {wrapSvg(properties.children, open ? 'data-state-open' : '')}
+                    {wrapForSlot(properties.children, open ? 'data-state-open' : '')}
                 </RadixPopover.Trigger>
             )}
             <RadixPopover.Portal container={properties.portalContainer}>

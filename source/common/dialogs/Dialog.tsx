@@ -13,7 +13,7 @@ import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { wrapSvg } from '@structure/source/utilities/React';
+import { wrapForSlot } from '@structure/source/utilities/React';
 
 // Class Names - Dialog Overlay
 export const dialogOverlayClassName =
@@ -144,7 +144,7 @@ export function Dialog(properties: DialogInterface) {
             {properties.children && (
                 <RadixDialog.Trigger asChild>
                     {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
-                    {wrapSvg(properties.children, open ? 'data-state-open' : '')}
+                    {wrapForSlot(properties.children, open ? 'data-state-open' : '')}
                 </RadixDialog.Trigger>
             )}
             <RadixDialog.Portal>
