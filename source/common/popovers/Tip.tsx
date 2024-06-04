@@ -29,6 +29,12 @@ export function Tip(properties: TipInterface) {
     const alignOffset = properties.alignOffset ?? 0;
     const collisionPadding = properties.collisionPadding ?? 12;
 
+    // If the content is a string, wrap it in a div
+    let content = properties.content;
+    if(typeof content === 'string') {
+        content = <div className="px-2 py-1.5 text-xs">{properties.content}</div>;
+    }
+
     // Render the component
     return (
         <RadixTooltip.Root open={open} onOpenChange={setOpen} delayDuration={properties.delayInMilliseconds}>
@@ -77,7 +83,7 @@ export function Tip(properties: TipInterface) {
                         maxHeight: 'var(--radix-tooltip-content-available-height)',
                     }}
                 >
-                    {properties.content}
+                    {content}
                 </RadixTooltip.Content>
             </RadixTooltip.Portal>
         </RadixTooltip.Root>
