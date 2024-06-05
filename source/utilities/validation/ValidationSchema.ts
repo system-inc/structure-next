@@ -195,11 +195,14 @@ export class ValidationSchema {
     }
 
     // Minimum length
-    minimumLength(length: number) {
+    minimumLength(minimumLength: number) {
         // Create the validation rule
         const validationRule: ValidationRule = {
             identifier: 'minimumLength',
-            message: 'Must be at least ' + length + ' characters long.',
+            parameters: {
+                minimumLength: minimumLength,
+            },
+            message: 'Must be at least ' + minimumLength + ' characters long.',
         };
 
         // Add the validation rule instance
@@ -215,11 +218,11 @@ export class ValidationSchema {
                 };
 
                 // If the value is less than the minimum length, add an error
-                if(value.length < length) {
+                if(value.length < minimumLength) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'tooShort',
-                        message: 'Too short, must be at least ' + length + ' characters long.',
+                        message: 'Too short, must be at least ' + minimumLength + ' characters long.',
                     });
                 }
                 // Otherwise, add a success
@@ -227,7 +230,7 @@ export class ValidationSchema {
                     validationResult.successes.push({
                         validationRule: validationRule,
                         identifier: 'isLongEnough',
-                        message: 'Meets minimum length of ' + length + ' characters.',
+                        message: 'Meets minimum length of ' + minimumLength + ' characters.',
                     });
                 }
 
@@ -245,11 +248,14 @@ export class ValidationSchema {
     }
 
     // Maximum length
-    maximumLength(length: number) {
+    maximumLength(maximumLength: number) {
         // Create the validation rule
         const validationRule: ValidationRule = {
             identifier: 'maximumLength',
-            message: 'Must be at most ' + length + ' characters long.',
+            parameters: {
+                maximumLength: maximumLength,
+            },
+            message: 'Must be at most ' + maximumLength + ' characters long.',
         };
 
         // Add the validation rule instance
@@ -265,11 +271,11 @@ export class ValidationSchema {
                 };
 
                 // If the value is greater than the maximum length, add an error
-                if(value.length > length) {
+                if(value.length > maximumLength) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'tooLong',
-                        message: 'Too long, must be at most ' + length + ' characters long.',
+                        message: 'Too long, must be at most ' + maximumLength + ' characters long.',
                     });
                 }
                 // Otherwise, add a success
@@ -277,7 +283,7 @@ export class ValidationSchema {
                     validationResult.successes.push({
                         validationRule: validationRule,
                         identifier: 'isShortEnough',
-                        message: 'Meets maximum length of ' + length + ' characters.',
+                        message: 'Meets maximum length of ' + maximumLength + ' characters.',
                     });
                 }
 
@@ -540,6 +546,22 @@ export class ValidationSchema {
 
         // Return the validation schema for chaining
         return this;
+    }
+
+    toJson() {
+        const object: any = {};
+
+        // Loop over the validation rule instances
+        for(const validationRuleInstance of this.validationRuleInstances) {
+            object[validationRuleInstance.validationRule.identifier] = {};
+            // object[validationRuleInstance.validationRule.identifier] = validationRuleInstance.validationRule;
+            if(validationRuleInstance.validationRule.parameters) {
+                object[validationRuleInstance.validationRule.identifier].parameters =
+                    validationRuleInstance.validationRule.parameters;
+            }
+        }
+
+        return JSON.stringify(object, null, 4);
     }
 }
 

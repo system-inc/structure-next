@@ -25,6 +25,7 @@ import { Table } from '@structure/source/common/tables/Table';
 import { Tip } from '@structure/source/common/popovers/Tip';
 import ChevronsUpDownIcon from '@structure/assets/icons/interface/ChevronsUpDownIcon.svg';
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
+import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
 // Component - StructurePage
 export interface StructurePageInterface {}
