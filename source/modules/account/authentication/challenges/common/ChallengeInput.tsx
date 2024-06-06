@@ -14,7 +14,7 @@ interface ChallengeInputInterface extends React.InputHTMLAttributes<HTMLInputEle
  *
  * @description
  * This is an uncontrolled input component--meaning that the value of the input is not controlled by React. It is
- * controlled by the HTML input element itself. This is more flexible because it can be overridden by passing a value
+ * controlled by the HTML input element itself. This is more flexible because it can be overwritten by passing a value
  * prop to the input element on a case-by-case basis.
  *
  * @param {ChallengeInputInterface} properties - Extends the HTML input element attributes.
