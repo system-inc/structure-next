@@ -9,6 +9,13 @@ const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguration = {
     generates: {
         './source/api/': {
             preset: 'client',
+            plugins: [
+                {
+                    'typescript-operation-metadata': {
+                        metadata: ['./source/api/schemas/**/*.json'],
+                    },
+                },
+            ],
         },
     },
 };
