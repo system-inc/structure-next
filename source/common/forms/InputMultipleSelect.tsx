@@ -77,6 +77,7 @@ export const InputMultipleSelect = React.forwardRef<
     const variant = properties.variant || 'default';
     const size = properties.size || 'default';
     const placeholder = properties.placeholder || 'Select...';
+    const closeOnItemSelected = properties.closeOnItemSelected ?? true;
 
     // State
     const [open, setOpen] = React.useState<boolean>(false);
@@ -167,7 +168,6 @@ export const InputMultipleSelect = React.forwardRef<
     // Function to handle input value changes
     const propertiesItems = properties.items;
     const propertiesOnChange = properties.onChange;
-    const propertiesCloseOnItemSelected = properties.closeOnItemSelected;
     const onChangeIntercept = React.useCallback(
         function (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) {
             // console.log('InputMultipleSelect.tsx value changed:', menuItem.value);
@@ -208,11 +208,15 @@ export const InputMultipleSelect = React.forwardRef<
             }
 
             // Close the popover
-            if(propertiesCloseOnItemSelected) {
+            if(closeOnItemSelected) {
+                // console.log('Closing popover');
                 setOpen(false);
             }
+            else {
+                // console.log('Not closing popover');
+            }
         },
-        [value, propertiesItems, propertiesOnChange, propertiesCloseOnItemSelected],
+        [value, propertiesItems, propertiesOnChange, closeOnItemSelected],
     );
 
     // Function to handle blur events
@@ -253,7 +257,7 @@ export const InputMultipleSelect = React.forwardRef<
             loadingItemsError={loadingItemsError}
             search={properties.search}
             onItemSelected={onChangeIntercept}
-            closeOnItemSelected={properties.closeOnItemSelected}
+            closeOnItemSelected={closeOnItemSelected}
             popoverProperties={{
                 ...properties.popoverProperties,
                 open: open,

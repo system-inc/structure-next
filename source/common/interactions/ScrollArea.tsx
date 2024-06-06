@@ -21,8 +21,10 @@ export const scrollAreaScrollbarClassName =
     'group ' +
     // Animation - Animate the hover colors
     'duration-500 ease-out transition-colors';
-export const scrollAreaVerticalScrollbarClassName = 'w-[14px]';
-export const scrollAreaHorizontalScrollbarClassName = 'h-[14px] flex-col';
+export const scrollAreaVerticalScrollbarClassName =
+    'w-[14px] data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
+export const scrollAreaHorizontalScrollbarClassName =
+    'h-[14px] flex-col data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
 export const scrollAreaThumbClassName =
     // Layout
     'relative flex-1 rounded before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:translate-x-[50%] before:translate-y-[50%] ' +

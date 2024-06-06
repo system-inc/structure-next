@@ -15,10 +15,12 @@ import useDragAnimation from '@structure/source/common/animations/useDragAnimati
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
-// Dependencies - Utilities
-import { hexStringToRgbaString, getComplementaryHexColor } from '@structure/source/utilities/Color';
+// Dependencies - Animation
 import { useSprings, animated, config, UseSpringProps as UseSpringProperties } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
+
+// Dependencies - Utilities
+import { hexStringToRgbaString, getComplementaryHexColor } from '@structure/source/utilities/Color';
 import { clamp } from '@structure/source/utilities/Number';
 import { swapArrayElements } from '@structure/source/utilities/Array';
 
