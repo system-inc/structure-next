@@ -10,11 +10,6 @@ import { InputSelectInterface, InputSelect } from '@structure/source/common/form
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Class Names - InputSelect
-export const inputSelectClassName =
-    // Layout and sizing
-    `w-full`;
-
 // Component - FormInputSelect
 export interface FormInputSelectInterface
     extends Omit<InputSelectInterface, 'validate'>,
@@ -136,7 +131,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
                         ref={inputSelectReference}
                         variant={properties.variant}
                         size={properties.size}
-                        className={mergeClassNames(inputSelectClassName, properties.componentClassName)}
+                        className={mergeClassNames('w-full', properties.componentClassName)}
                         defaultValue={properties.defaultValue}
                         required={properties.required}
                         disabled={properties.disabled}

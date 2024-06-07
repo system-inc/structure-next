@@ -14,6 +14,7 @@ import FormInputText from '@structure/source/common/forms/FormInputText';
 import FormInputTextArea from '@structure/source/common/forms/FormInputTextArea';
 import FormInputPassword from '@structure/source/common/forms/FormInputPassword';
 import FormInputSelect from '@structure/source/common/forms/FormInputSelect';
+import FormInputMultipleSelect from '@structure/source/common/forms/FormInputMultipleSelect';
 import Alert from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Assets
@@ -33,6 +34,7 @@ import { titleCase } from '@structure/source/utilities/String';
 // Component - GraphQlOperationForm
 export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'formInputs' | 'onSubmit'> {
     operation: GraphQLOperationMetadata<DocumentNode>;
+    inputComponentsProperties?: any;
     onSubmit?: (
         formValues: FormValuesInterface,
         mutationResponseData: any,
@@ -144,6 +146,9 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                     if(validation.constraints) {
                         niceValidation[validation.type] = validation.constraints[0];
                     }
+                    else {
+                        niceValidation[validation.type] = true;
+                    }
                 }
 
                 return niceValidation;
@@ -177,9 +182,21 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 required: true,
             };
 
+            // If there is a special configuration for this input
+            if(properties.inputComponentsProperties.hasOwnProperty(input.name)) {
+                // Merge the configuration with the component properties
+                Object.assign(componentProperties, properties.inputComponentsProperties[input.name]);
+            }
+
             // Determine the component
             let FormInputComponent: any;
-            if(input.type === 'enum') {
+            if(componentProperties.component) {
+                FormInputComponent = componentProperties.component;
+            }
+            else if(input.validation?.arrayUnique) {
+                FormInputComponent = FormInputMultipleSelect;
+            }
+            else if(input.type === 'enum') {
                 FormInputComponent = FormInputSelect;
                 componentProperties.items = input.possibleValues?.map(function (value) {
                     return {
@@ -215,6 +232,10 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 }
             }
 
+            if(componentProperties.items) {
+                console.log('componentProperties.items', componentProperties.items);
+            }
+
             // Add the form input
             formInputs.push(<FormInputComponent {...componentProperties} key={componentProperties.key} />);
         }
@@ -234,11 +255,35 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 let mutationResponseData = null;
                 let mutationResponseError = null;
 
+                // We need to map the formValues to the mutation variables
+                // The form values are in the form of { 'input.name': 'value' }
+                // The mutation variables are in the form of { input: { name: 'value' } }
+                function assignNestedValue(object: any, keyPath: string[], value: any) {
+                    let lastKeyIndex = keyPath.length - 1;
+                    for(let i = 0; i < lastKeyIndex; ++i) {
+                        let key = keyPath[i];
+                        if(key) {
+                            if(!(key in object)) object[key] = {};
+                            object = object[key];
+                        }
+                    }
+                    if(keyPath[lastKeyIndex]) {
+                        object[keyPath[lastKeyIndex]!] = value;
+                    }
+                }
+
+                const mutationVariables: any = {};
+                for(const [key, value] of Object.entries(formValues)) {
+                    const keyParts = key.split('.');
+                    assignNestedValue(mutationVariables, keyParts, value);
+                }
+                console.log('mutationVariables:', mutationVariables);
+
                 // Invoke the GraphQL mutation
                 try {
                     let mutationResponse = await mutation({
                         variables: {
-                            ...formValues,
+                            ...mutationVariables,
                         },
                     });
 

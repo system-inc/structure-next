@@ -1,6 +1,6 @@
 // Interface - InputReference
 export interface InputReferenceInterface {
-    getValue: () => string | undefined;
+    getValue: () => any | undefined;
     setValue: (value: any, event?: any) => void;
     focus: () => void;
 }
