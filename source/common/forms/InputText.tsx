@@ -1,3 +1,5 @@
+'use client'; // This component uses client-only features
+
 // Dependencies - React and Next.js
 import React from 'react';
 
