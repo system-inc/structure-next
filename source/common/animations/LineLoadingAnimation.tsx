@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Utilities
 import useMeasure from 'react-use-measure';
-import { config, useSpring, animated } from '@react-spring/web';
+import { config, useSpring, animated, easings } from '@react-spring/web';
 
 // Component - LineLoadingAnimation
 export type LineLoadingAnimationProperties = {};
@@ -19,7 +19,10 @@ export function LineLoadingAnimation(properties: LineLoadingAnimationProperties)
     // The spring for animating the bar
     const barSpring = useSpring({
         width: progressPercentage * width,
-        config: config.molasses,
+        config: {
+            easing: easings.easeOutExpo,
+            duration: 800,
+        },
     });
 
     // Update the progress percentage when the width or progress percentage changes
