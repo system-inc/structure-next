@@ -96,7 +96,7 @@ export function RootLayout(properties: RootLayoutInterface) {
                 />
             </head>
 
-            <body className="min-h-screen bg-light text-dark transition-colors dark:bg-dark dark:text-white">
+            <body className="isolate min-h-screen bg-light text-dark transition-colors dark:bg-dark dark:text-white">
                 {/* Providers pass properties down to children */}
                 <Providers>
                     {/* Render children passed into the layout */}

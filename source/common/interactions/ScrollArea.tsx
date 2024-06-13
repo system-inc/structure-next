@@ -66,6 +66,23 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     const verticalScrollbar = properties.verticalScrollbar ?? true;
     const horizontalScrollbar = properties.horizontalScrollbar ?? false;
 
+    return (
+        <div className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName, 'relative')}>
+            <div
+                ref={reference}
+                className={mergeClassNames(
+                    verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
+                    horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
+                    verticalScrollbar && horizontalScrollbar && 'overflow-auto',
+                    'h-full w-full',
+                )}
+            >
+                {properties.children}
+            </div>
+        </div>
+    );
+
+    // FIXME: Memory leak exists somewhere in here: Likely RadixScrollArea.Thumb (https://github.com/radix-ui/primitives/issues/1973)
     // Render the component
     return (
         <RadixScrollArea.Root
