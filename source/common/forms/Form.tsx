@@ -69,6 +69,7 @@ export interface FormSubmitResponseInterface {
 export interface FormInterface {
     formInputs: React.ReactElement<FormInputInterface>[];
     onSubmit: (values: FormValuesInterface) => Promise<FormSubmitResponseInterface>;
+    onSubmitSuccess?: (response: FormSubmitResponseInterface) => void;
     className?: string;
     title?: React.ReactNode;
     description?: React.ReactNode;
@@ -279,6 +280,9 @@ export function Form(properties: FormInterface) {
 
                 // If the form submission was successful
                 if(formSubmitResponse.success) {
+                    // Optionally run the onSubmitSuccess callback
+                    properties.onSubmitSuccess?.(formSubmitResponse);
+
                     // Optionally reset the form
                     if(resetOnSubmitSuccess) {
                         console.log('resetting!');

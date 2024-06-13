@@ -39,7 +39,7 @@ export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'form
         formValues: FormValuesInterface,
         mutationResponseData: any,
         mutationResponseError: ApolloError | null,
-    ) => Promise<FormSubmitResponseInterface>;
+    ) => void;
 }
 export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) {
     const [mutation, mutationState] = useMutation(properties.operation.document);
@@ -298,12 +298,15 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 }
 
                 // Prepare the submitResponse
-                let submitResponse = null;
+                let submitResponse: { success: boolean; message: any } = {
+                    success: !mutationResponseError,
+                    message: undefined,
+                };
 
                 // If an onSubmit property has been provided
                 if(properties.onSubmit) {
                     // Invoke the onSubmit property
-                    submitResponse = await properties.onSubmit(formValues, mutationResponseData, mutationResponseError);
+                    await properties.onSubmit(formValues, mutationResponseData, mutationResponseError);
                 }
                 // If no onSubmit property has been provided, infer the submitResponse from the mutation response
                 else {
