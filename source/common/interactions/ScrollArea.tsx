@@ -8,6 +8,8 @@ import * as RadixScrollArea from '@radix-ui/react-scroll-area';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { SpringValue, useSpring, animated } from '@react-spring/web';
+import { useDrag } from '@use-gesture/react';
 
 // Class Names - Scroll Area
 export const scrollAreaContainerClassName = 'h-full overflow-hidden';
@@ -58,6 +60,9 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     properties: ScrollAreaInterface,
     reference: React.Ref<HTMLDivElement>,
 ) {
+    const scrollAreaMeasureRef = React.useRef<HTMLDivElement>(null);
+    const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
     // Defaults
     const type = properties.type ?? 'scroll';
     const scrollHideDelay = properties.scrollHideDelay ?? 600;
@@ -67,18 +72,190 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     const horizontalScrollbar = properties.horizontalScrollbar ?? false;
 
     return (
-        <div className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName, 'relative')}>
+        <div
+            ref={reference}
+            className={mergeClassNames(
+                scrollAreaContainerClassName,
+                properties.containerClassName,
+                verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
+                horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
+                'custom-scroll h-full',
+            )}
+        >
+            {properties.children}
+        </div>
+    );
+
+    // Below is a custom implementation of the ScrollArea component more akin to Radix's, but maybe it would be better to use a more minimal one like the one above
+
+    const [thumbSpringVertical, thumbSpringVerticalApi] = useSpring(() => ({
+        y: 0,
+    }));
+    const [thumbSpringHorizontal, thumbSpringHorizontalApi] = useSpring(() => ({
+        x: 0,
+    }));
+
+    const [thumbSizeHorizontal, setThumbSizeHorizontal] = React.useState<number>(0);
+    const [thumbSizeVertical, setThumbSizeVertical] = React.useState<number>(0);
+
+    React.useEffect(() => {
+        if(scrollAreaMeasureRef.current) {
+            // Existing ResizeObserver logic for size changes
+            const resizeObserver = new ResizeObserver(() => {
+                updateThumbSizes();
+            });
+            resizeObserver.observe(scrollAreaMeasureRef.current);
+
+            // New MutationObserver logic for content changes
+            const mutationObserver = new MutationObserver(() => {
+                updateThumbSizes();
+            });
+            mutationObserver.observe(scrollAreaMeasureRef.current, { childList: true, subtree: true });
+
+            // Function to update thumb sizes
+            const updateThumbSizes = () => {
+                if(scrollAreaMeasureRef.current) {
+                    const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                    const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+                    const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                    const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+
+                    const thumbSizeHorizontal = (clientWidth / scrollWidth) * clientWidth - 6;
+                    setThumbSizeHorizontal(thumbSizeHorizontal);
+
+                    const thumbSizeVertical = (clientHeight / scrollHeight) * clientHeight - 6;
+                    setThumbSizeVertical(thumbSizeVertical);
+                }
+            };
+
+            // Cleanup function to disconnect observers
+            return () => {
+                resizeObserver.disconnect();
+                mutationObserver.disconnect();
+            };
+        }
+    }, []);
+
+    const bindDrag = useDrag((state) => {
+        if(scrollAreaMeasureRef.current) {
+            const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+            const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+            const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+            const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+
+            if(horizontalScrollbar) {
+                const scrollTo =
+                    (state.offset[0] / (clientWidth - thumbSizeHorizontal - 6)) * (scrollWidth - clientWidth);
+                scrollAreaMeasureRef.current.scrollLeft = scrollTo;
+            }
+
+            if(verticalScrollbar) {
+                const scrollTo =
+                    (state.offset[1] / (clientHeight - thumbSizeVertical - 6)) * (scrollHeight - clientHeight);
+                scrollAreaMeasureRef.current.scrollTop = scrollTo;
+            }
+        }
+    });
+
+    function handleScroll(event: React.UIEvent<HTMLDivElement>) {
+        if(scrollAreaMeasureRef.current) {
+            if(horizontalScrollbar) {
+                const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+                const scrollTo =
+                    (event.currentTarget.scrollLeft / (scrollWidth - clientWidth)) *
+                    (clientWidth - thumbSizeHorizontal - 6);
+
+                thumbSpringHorizontalApi.start({
+                    x: scrollTo,
+                    immediate: true,
+                    onStart: () => {
+                        if(scrollContainerRef.current) {
+                            scrollContainerRef.current.dataset['state'] = 'visible';
+                        }
+                    },
+                    onRest: () => {
+                        if(scrollContainerRef.current) {
+                            const timeout = setTimeout(() => {
+                                if(scrollContainerRef.current) {
+                                    scrollContainerRef.current.dataset['state'] = 'hidden';
+                                }
+                            });
+                            return () => clearTimeout(timeout);
+                        }
+                    },
+                });
+            }
+
+            if(verticalScrollbar) {
+                const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+                const scrollTo =
+                    (event.currentTarget.scrollTop / (scrollHeight - clientHeight)) *
+                    (clientHeight - thumbSizeVertical - 6);
+
+                thumbSpringVerticalApi.start({
+                    y: scrollTo,
+                    immediate: true,
+                    onStart: () => {
+                        if(scrollContainerRef.current) {
+                            scrollContainerRef.current.dataset['state'] = 'visible';
+                        }
+                    },
+                    onRest: () => {
+                        if(scrollContainerRef.current) {
+                            const timeout = setTimeout(() => {
+                                if(scrollContainerRef.current) {
+                                    scrollContainerRef.current.dataset['state'] = 'hidden';
+                                }
+                            });
+                            return () => clearTimeout(timeout);
+                        }
+                    },
+                });
+            }
+        }
+    }
+
+    return (
+        <div
+            ref={scrollContainerRef}
+            className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName, 'relative')}
+        >
             <div
-                ref={reference}
+                ref={mergeRefs(reference, scrollAreaMeasureRef)}
+                onScroll={handleScroll}
                 className={mergeClassNames(
                     verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
                     horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
                     verticalScrollbar && horizontalScrollbar && 'overflow-auto',
                     'h-full w-full',
                 )}
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                }}
             >
                 {properties.children}
             </div>
+
+            {/* Scroll Bar */}
+            {verticalScrollbar && (
+                <ScrollBar
+                    orientation="vertical"
+                    thumbSize={thumbSizeVertical}
+                    scrollAnimation={thumbSpringVertical}
+                    {...bindDrag()}
+                />
+            )}
+            {horizontalScrollbar && (
+                <ScrollBar
+                    orientation="horizontal"
+                    thumbSize={thumbSizeHorizontal}
+                    scrollAnimation={thumbSpringHorizontal}
+                    {...bindDrag()}
+                />
+            )}
         </div>
     );
 
@@ -149,3 +326,56 @@ ScrollArea.displayName = 'ScrollArea';
 
 // Export - Default
 export default ScrollArea;
+
+/**
+ * TEMPORARY Components
+ */
+
+function mergeRefs<T>(...refs: (React.Ref<T> | undefined)[]): (instance: T | null) => void {
+    return (element: T | null) => {
+        refs.forEach((ref) => {
+            if(typeof ref === 'function') {
+                ref(element);
+            }
+            else if(ref) {
+                (ref as React.MutableRefObject<T | null>).current = element;
+            }
+        });
+    };
+}
+
+function ScrollBar({
+    orientation,
+    thumbSize,
+    scrollAnimation,
+    ...properties
+}: {
+    orientation: 'vertical' | 'horizontal';
+    thumbSize: number;
+    scrollAnimation: {
+        x?: SpringValue<number>;
+        y?: SpringValue<number>;
+    };
+} & React.HTMLAttributes<HTMLDivElement>) {
+    return (
+        <div
+            className={mergeClassNames(
+                scrollAreaScrollbarClassName,
+                orientation === 'vertical'
+                    ? scrollAreaVerticalScrollbarClassName
+                    : scrollAreaHorizontalScrollbarClassName,
+                'absolute',
+                orientation === 'vertical' ? 'inset-y-0 right-0' : 'inset-x-0 bottom-0',
+            )}
+        >
+            <animated.div
+                className={mergeClassNames(scrollAreaThumbClassName)}
+                style={{
+                    ...scrollAnimation,
+                    [orientation === 'vertical' ? 'height' : 'width']: thumbSize,
+                }}
+                {...properties}
+            />
+        </div>
+    );
+}

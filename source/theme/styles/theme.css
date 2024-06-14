@@ -64,4 +64,21 @@
             'rlig' 1,
             'calt' 1;
     }
+
+    .custom-scroll {
+        scrollbar-gutter: stable both-edges;
+        @apply my-1.5 mr-1;
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+        @apply w-2;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+        @apply rounded-full border-2 border-transparent bg-dark-4/50 bg-clip-content transition-opacity duration-300 ease-out hover:bg-dark-4/65 dark:bg-neutral-6/60 hover:dark:bg-neutral-6/75;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
 }
