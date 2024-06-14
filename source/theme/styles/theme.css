@@ -66,6 +66,8 @@
     }
 
     .custom-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: theme('colors.dark-4/50');
         scrollbar-gutter: stable both-edges;
         @apply my-1.5 mr-1;
     }

@@ -9,7 +9,8 @@ import * as RadixScrollArea from '@radix-ui/react-scroll-area';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { SpringValue, useSpring, animated } from '@react-spring/web';
-import { useDrag } from '@use-gesture/react';
+import { useDrag, useGesture, useScroll } from '@use-gesture/react';
+import { clamp } from '@structure/source/utilities/Number';
 
 // Class Names - Scroll Area
 export const scrollAreaContainerClassName = 'h-full overflow-hidden';
@@ -18,26 +19,20 @@ export const scrollAreaScrollbarClassName =
     // Layout
     'flex touch-none select-none px-[4px] py-[2px] ' +
     // Hover - Only show the scrollbar on hover when the thumb is visible
-    'data-[state=visible]:hover:bg-neutral+6/30 data-[state=visible]:dark:hover:bg-dark-4/30 ' +
+    'hover:bg-neutral+6/30 dark:hover:bg-dark-4/30 ' +
     // Group
     'group ' +
     // Animation - Animate the hover colors
     'duration-500 ease-out transition-colors';
-export const scrollAreaVerticalScrollbarClassName =
-    'w-[14px] data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
-export const scrollAreaHorizontalScrollbarClassName =
-    'h-[14px] flex-col data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
+export const scrollAreaVerticalScrollbarClassName = 'w-[14px] pointer-events-auto';
+export const scrollAreaHorizontalScrollbarClassName = 'h-[14px] flex-col pointer-events-auto';
 export const scrollAreaThumbClassName =
     // Layout
-    'relative flex-1 rounded before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:translate-x-[50%] before:translate-y-[50%] ' +
+    'relative flex-1 rounded-full before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:translate-x-[50%] before:translate-y-[50%] ' +
     // Colors
     'bg-dark/60 hover:bg-dark/75 dark:bg-neutral-6/60 hover:dark:bg-neutral-6/75 ' +
     // Animation
-    'duration-300 ease-out transition-opacity ' +
-    // Animate in when the group is visible
-    'group-data-[state=visible]:opacity-100 ' +
-    // Animate out when the group is hidden
-    'group-data-[state=hidden]:opacity-0';
+    'duration-300 ease-out transition-opacity ';
 export const scrollAreaCornerClassName = '';
 
 // Component - ScrollArea
@@ -71,23 +66,30 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     const verticalScrollbar = properties.verticalScrollbar ?? true;
     const horizontalScrollbar = properties.horizontalScrollbar ?? false;
 
-    return (
-        <div
-            ref={reference}
-            className={mergeClassNames(
-                scrollAreaContainerClassName,
-                properties.containerClassName,
-                verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
-                horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
-                'custom-scroll h-full',
-            )}
-        >
-            {properties.children}
-        </div>
-    );
+    // return (
+    //     <div
+    //         ref={reference}
+    //         className={mergeClassNames(
+    //             scrollAreaContainerClassName,
+    //             properties.containerClassName,
+    //             verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
+    //             horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
+    //             'custom-scroll h-full',
+    //         )}
+    //     >
+    //         {properties.children}
+    //     </div>
+    // );
 
     // Below is a custom implementation of the ScrollArea component more akin to Radix's, but maybe it would be better to use a more minimal one like the one above
 
+    const dragging = React.useRef(false);
+    const hovered = React.useRef(false);
+
+    const [trackSpring, trackSpringApi] = useSpring(() => ({
+        opacity: 0,
+        width: 14,
+    }));
     const [thumbSpringVertical, thumbSpringVerticalApi] = useSpring(() => ({
         y: 0,
     }));
@@ -97,18 +99,22 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
 
     const [thumbSizeHorizontal, setThumbSizeHorizontal] = React.useState<number>(0);
     const [thumbSizeVertical, setThumbSizeVertical] = React.useState<number>(0);
+    const [showVerticalScroll, setShowVerticalScroll] = React.useState<boolean>(false);
+    const [showHorizontalScroll, setShowHorizontalScroll] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         if(scrollAreaMeasureRef.current) {
             // Existing ResizeObserver logic for size changes
             const resizeObserver = new ResizeObserver(() => {
                 updateThumbSizes();
+                updateShowScrollBars();
             });
             resizeObserver.observe(scrollAreaMeasureRef.current);
 
             // New MutationObserver logic for content changes
             const mutationObserver = new MutationObserver(() => {
                 updateThumbSizes();
+                updateShowScrollBars();
             });
             mutationObserver.observe(scrollAreaMeasureRef.current, { childList: true, subtree: true });
 
@@ -120,11 +126,43 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
                     const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
                     const clientWidth = scrollAreaMeasureRef.current.clientWidth;
 
+                    // Calculate thumb sizes
                     const thumbSizeHorizontal = (clientWidth / scrollWidth) * clientWidth - 6;
+                    // console.log(thumbSizeHorizontal);
                     setThumbSizeHorizontal(thumbSizeHorizontal);
 
                     const thumbSizeVertical = (clientHeight / scrollHeight) * clientHeight - 6;
+                    // console.log(thumbSizeVertical);
                     setThumbSizeVertical(thumbSizeVertical);
+
+                    // Update springs
+                    thumbSpringHorizontalApi.start({
+                        x:
+                            (scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth)) *
+                            (clientWidth - thumbSizeHorizontal),
+                        immediate: true,
+                    });
+                    thumbSpringVerticalApi.start({
+                        y:
+                            (scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight)) *
+                            (clientHeight - thumbSizeVertical),
+                        immediate: true,
+                    });
+                }
+            };
+
+            const updateShowScrollBars = () => {
+                if(scrollAreaMeasureRef.current) {
+                    const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                    const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+                    const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                    const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+
+                    const showVertical = scrollHeight > clientHeight;
+                    const showHorizontal = scrollWidth > clientWidth;
+
+                    setShowVerticalScroll(showVertical);
+                    setShowHorizontalScroll(showHorizontal);
                 }
             };
 
@@ -137,6 +175,8 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
     }, []);
 
     const bindDrag = useDrag((state) => {
+        dragging.current = state.active;
+
         if(scrollAreaMeasureRef.current) {
             const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
             const clientWidth = scrollAreaMeasureRef.current.clientWidth;
@@ -145,77 +185,88 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
 
             if(horizontalScrollbar) {
                 const scrollTo =
-                    (state.offset[0] / (clientWidth - thumbSizeHorizontal - 6)) * (scrollWidth - clientWidth);
+                    (scrollAreaMeasureRef.current.scrollLeft -
+                        state.delta[0] / (clientWidth - thumbSizeHorizontal - 6)) *
+                    (scrollWidth - clientWidth);
+                // console.log(scrollTo);
                 scrollAreaMeasureRef.current.scrollLeft = scrollTo;
             }
 
             if(verticalScrollbar) {
                 const scrollTo =
-                    (state.offset[1] / (clientHeight - thumbSizeVertical - 6)) * (scrollHeight - clientHeight);
-                scrollAreaMeasureRef.current.scrollTop = scrollTo;
+                    scrollAreaMeasureRef.current.scrollTop + state.delta[1] * (scrollHeight / clientHeight);
+                // console.log(scrollTo);
+                scrollAreaMeasureRef.current.scrollTop = clamp(scrollTo, 0, scrollHeight - clientHeight);
             }
         }
     });
 
-    function handleScroll(event: React.UIEvent<HTMLDivElement>) {
-        if(scrollAreaMeasureRef.current) {
+    const bindScroll = useScroll((state) => {
+        const scrollTop = state.xy[1];
+        const scrollLeft = state.xy[0];
+
+        if(scrollAreaMeasureRef.current && state.scrolling) {
             if(horizontalScrollbar) {
                 const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
                 const clientWidth = scrollAreaMeasureRef.current.clientWidth;
-                const scrollTo =
-                    (event.currentTarget.scrollLeft / (scrollWidth - clientWidth)) *
-                    (clientWidth - thumbSizeHorizontal - 6);
+                const scrollTo = (scrollLeft / (scrollWidth - clientWidth)) * (clientWidth - thumbSizeHorizontal - 6);
 
                 thumbSpringHorizontalApi.start({
                     x: scrollTo,
                     immediate: true,
-                    onStart: () => {
-                        if(scrollContainerRef.current) {
-                            scrollContainerRef.current.dataset['state'] = 'visible';
-                        }
-                    },
-                    onRest: () => {
-                        if(scrollContainerRef.current) {
-                            const timeout = setTimeout(() => {
-                                if(scrollContainerRef.current) {
-                                    scrollContainerRef.current.dataset['state'] = 'hidden';
-                                }
-                            });
-                            return () => clearTimeout(timeout);
-                        }
-                    },
                 });
             }
 
             if(verticalScrollbar) {
                 const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
                 const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                const scrollTo =
-                    (event.currentTarget.scrollTop / (scrollHeight - clientHeight)) *
-                    (clientHeight - thumbSizeVertical - 6);
+                const scrollTo = (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - thumbSizeVertical - 6);
 
                 thumbSpringVerticalApi.start({
                     y: scrollTo,
                     immediate: true,
-                    onStart: () => {
-                        if(scrollContainerRef.current) {
-                            scrollContainerRef.current.dataset['state'] = 'visible';
-                        }
-                    },
-                    onRest: () => {
-                        if(scrollContainerRef.current) {
-                            const timeout = setTimeout(() => {
-                                if(scrollContainerRef.current) {
-                                    scrollContainerRef.current.dataset['state'] = 'hidden';
-                                }
-                            });
-                            return () => clearTimeout(timeout);
-                        }
+                });
+            }
+
+            // Update track spring
+            trackSpringApi.start({
+                opacity: 1,
+            });
+        }
+        else if(!dragging.current && !hovered.current) {
+            // Update track spring
+            trackSpringApi.start({
+                delay: scrollHideDelay,
+                opacity: 0,
+            });
+        }
+    });
+
+    const bindMouseEvents = useGesture({
+        onMouseEnter: () => {
+            hovered.current = true;
+
+            // Clear current springs
+            trackSpringApi.stop();
+
+            trackSpringApi.start({
+                opacity: 1,
+                width: 18,
+            });
+        },
+        onMouseLeave: () => {
+            hovered.current = false;
+
+            if(!dragging.current) {
+                trackSpringApi.start({
+                    to: async (next) => {
+                        await next({ width: 14 });
+                        await next({ opacity: 0 });
                     },
                 });
             }
-        }
-    }
+        },
+    });
 
     return (
         <div
@@ -224,7 +275,6 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
         >
             <div
                 ref={mergeRefs(reference, scrollAreaMeasureRef)}
-                onScroll={handleScroll}
                 className={mergeClassNames(
                     verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
                     horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
@@ -235,24 +285,29 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
                     scrollbarWidth: 'none',
                     msOverflowStyle: 'none',
                 }}
+                {...bindScroll()}
             >
                 {properties.children}
             </div>
 
             {/* Scroll Bar */}
-            {verticalScrollbar && (
+            {verticalScrollbar && showVerticalScroll && (
                 <ScrollBar
                     orientation="vertical"
                     thumbSize={thumbSizeVertical}
                     scrollAnimation={thumbSpringVertical}
+                    trackAnimation={trackSpring}
+                    trackGestureBinds={bindMouseEvents}
                     {...bindDrag()}
                 />
             )}
-            {horizontalScrollbar && (
+            {horizontalScrollbar && showHorizontalScroll && (
                 <ScrollBar
                     orientation="horizontal"
                     thumbSize={thumbSizeHorizontal}
                     scrollAnimation={thumbSpringHorizontal}
+                    trackAnimation={trackSpring}
+                    trackGestureBinds={bindMouseEvents}
                     {...bindDrag()}
                 />
             )}
@@ -348,6 +403,8 @@ function ScrollBar({
     orientation,
     thumbSize,
     scrollAnimation,
+    trackAnimation,
+    trackGestureBinds,
     ...properties
 }: {
     orientation: 'vertical' | 'horizontal';
@@ -356,9 +413,14 @@ function ScrollBar({
         x?: SpringValue<number>;
         y?: SpringValue<number>;
     };
+    trackAnimation: {
+        opacity: SpringValue<number>;
+        width: SpringValue<number>;
+    };
+    trackGestureBinds?: ReturnType<typeof useGesture>;
 } & React.HTMLAttributes<HTMLDivElement>) {
     return (
-        <div
+        <animated.div
             className={mergeClassNames(
                 scrollAreaScrollbarClassName,
                 orientation === 'vertical'
@@ -367,15 +429,17 @@ function ScrollBar({
                 'absolute',
                 orientation === 'vertical' ? 'inset-y-0 right-0' : 'inset-x-0 bottom-0',
             )}
+            style={trackAnimation}
+            {...trackGestureBinds()}
         >
             <animated.div
-                className={mergeClassNames(scrollAreaThumbClassName)}
+                className={mergeClassNames(scrollAreaThumbClassName, 'touch-none')}
                 style={{
                     ...scrollAnimation,
                     [orientation === 'vertical' ? 'height' : 'width']: thumbSize,
                 }}
                 {...properties}
             />
-        </div>
+        </animated.div>
     );
 }
