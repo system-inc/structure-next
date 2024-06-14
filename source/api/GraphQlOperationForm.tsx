@@ -4,17 +4,13 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import {
-    FormSubmitResponseInterface,
-    FormValuesInterface,
-    FormInterface,
-    Form,
-} from '@structure/source/common/forms/Form';
+import { FormValuesInterface, FormInterface, Form } from '@structure/source/common/forms/Form';
 import FormInputText from '@structure/source/common/forms/FormInputText';
 import FormInputTextArea from '@structure/source/common/forms/FormInputTextArea';
 import FormInputPassword from '@structure/source/common/forms/FormInputPassword';
 import FormInputSelect from '@structure/source/common/forms/FormInputSelect';
 import FormInputMultipleSelect from '@structure/source/common/forms/FormInputMultipleSelect';
+import FormInputCheckbox from '@structure/source/common/forms/FormInputCheckbox';
 import Alert from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Assets
@@ -47,6 +43,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
     interface InputMetadata {
         name: string;
         type: GraphQLInputTypeMetadata | string;
+        kind: string;
         required: boolean;
         validation?: any;
         possibleValues?: string[];
@@ -86,6 +83,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                         inputMetadata.push({
                             name: parameter.parameter,
                             type: parameter.type,
+                            kind: parameter.kind,
                             required: parameter.required,
                         });
                     }
@@ -104,7 +102,8 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
                 inputMetadata.push({
                     name: parentIdentifier ? parentIdentifier + '.' + field.name : field.name,
-                    type: field.kind,
+                    type: field.type,
+                    kind: field.kind,
                     required: field.required,
                     possibleValues:
                         niceValidation && niceValidation.hasOwnProperty('isEnum')
@@ -163,7 +162,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
         // Loop through the operation
         for(const input of inputMetadataArray) {
-            // console.log('input', input);
+            console.log('input', input);
 
             // Get the last part of the input name
             const inputNameParts = input.name.split('.');
@@ -183,7 +182,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
             };
 
             // If there is a special configuration for this input
-            if(properties.inputComponentsProperties.hasOwnProperty(input.name)) {
+            if(properties.inputComponentsProperties?.hasOwnProperty(input.name)) {
                 // Merge the configuration with the component properties
                 Object.assign(componentProperties, properties.inputComponentsProperties[input.name]);
             }
@@ -211,6 +210,9 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 FormInputComponent = FormInputTextArea;
                 // One row for every 128 characters with a max rows of 8
                 componentProperties.rows = Math.min(Math.ceil(input.validation.maxLength / 128), 8);
+            }
+            else if(input.type === 'Boolean') {
+                FormInputComponent = FormInputCheckbox;
             }
             else {
                 FormInputComponent = FormInputText;
@@ -274,8 +276,19 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
                 const mutationVariables: any = {};
                 for(const [key, value] of Object.entries(formValues)) {
+                    let graphQlValue = value;
+
                     const keyParts = key.split('.');
-                    assignNestedValue(mutationVariables, keyParts, value);
+
+                    // Handle booleans
+                    if(value == 'Checked') {
+                        graphQlValue = true;
+                    }
+                    else if(value == 'Unchecked') {
+                        graphQlValue = false;
+                    }
+
+                    assignNestedValue(mutationVariables, keyParts, graphQlValue);
                 }
                 console.log('mutationVariables:', mutationVariables);
 
