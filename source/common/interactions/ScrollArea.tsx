@@ -8,7 +8,7 @@ import * as RadixScrollArea from '@radix-ui/react-scroll-area';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { SpringValue, useSpring, animated } from '@react-spring/web';
+import { SpringValue, useSpring, animated, SpringConfig, easings, update } from '@react-spring/web';
 import { useDrag, useGesture, useScroll } from '@use-gesture/react';
 import { clamp } from '@structure/source/utilities/Number';
 
@@ -35,6 +35,11 @@ export const scrollAreaThumbClassName =
     'duration-300 ease-out transition-opacity ';
 export const scrollAreaCornerClassName = '';
 
+const springConfig: SpringConfig = {
+    easing: easings.easeOutExpo,
+    duration: 800,
+};
+
 // Component - ScrollArea
 export interface ScrollAreaInterface {
     children: React.ReactNode;
@@ -51,330 +56,408 @@ export interface ScrollAreaInterface {
     verticalScrollbar?: boolean;
     horizontalScrollbar?: boolean;
 }
-export const ScrollArea = React.forwardRef(function ScrollArea(
-    properties: ScrollAreaInterface,
-    reference: React.Ref<HTMLDivElement>,
-) {
-    const scrollAreaMeasureRef = React.useRef<HTMLDivElement>(null);
-    const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaInterface>(
+    function ScrollArea(properties, reference) {
+        const scrollAreaMeasureRef = React.useRef<HTMLDivElement>(null);
+        const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
-    // Defaults
-    const type = properties.type ?? 'scroll';
-    const scrollHideDelay = properties.scrollHideDelay ?? 600;
-    const direction =
-        properties.direction === 'rightToLeft' ? 'rtl' : properties.direction === 'leftToRight' ? 'ltr' : 'ltr';
-    const verticalScrollbar = properties.verticalScrollbar ?? true;
-    const horizontalScrollbar = properties.horizontalScrollbar ?? false;
+        // Defaults
+        const type = properties.type ?? 'scroll';
+        const scrollHideDelay = properties.scrollHideDelay ?? 600;
+        const direction =
+            properties.direction === 'rightToLeft' ? 'rtl' : properties.direction === 'leftToRight' ? 'ltr' : 'ltr';
+        const verticalScrollbar = properties.verticalScrollbar ?? true;
+        const horizontalScrollbar = properties.horizontalScrollbar ?? false;
 
-    // return (
-    //     <div
-    //         ref={reference}
-    //         className={mergeClassNames(
-    //             scrollAreaContainerClassName,
-    //             properties.containerClassName,
-    //             verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
-    //             horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
-    //             'custom-scroll h-full',
-    //         )}
-    //     >
-    //         {properties.children}
-    //     </div>
-    // );
+        // return (
+        //     <div
+        //         ref={reference}
+        //         className={mergeClassNames(
+        //             scrollAreaContainerClassName,
+        //             properties.containerClassName,
+        //             verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
+        //             horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
+        //             'custom-scroll h-full',
+        //         )}
+        //     >
+        //         {properties.children}
+        //     </div>
+        // );
 
-    // Below is a custom implementation of the ScrollArea component more akin to Radix's, but maybe it would be better to use a more minimal one like the one above
+        // Below is a custom implementation of the ScrollArea component more akin to Radix's, but maybe it would be better to use a more minimal one like the one above
 
-    const dragging = React.useRef(false);
-    const hovered = React.useRef(false);
+        const dragging = React.useRef(false);
+        const hovered = React.useRef(false);
 
-    const [trackSpring, trackSpringApi] = useSpring(() => ({
-        opacity: 0,
-        width: 14,
-    }));
-    const [thumbSpringVertical, thumbSpringVerticalApi] = useSpring(() => ({
-        y: 0,
-    }));
-    const [thumbSpringHorizontal, thumbSpringHorizontalApi] = useSpring(() => ({
-        x: 0,
-    }));
+        const [thumbSizeHorizontal, setThumbSizeHorizontal] = React.useState<number>(0);
+        const [thumbSizeVertical, setThumbSizeVertical] = React.useState<number>(0);
+        const [showVerticalScroll, setShowVerticalScroll] = React.useState<boolean>(false);
+        const [showHorizontalScroll, setShowHorizontalScroll] = React.useState<boolean>(false);
 
-    const [thumbSizeHorizontal, setThumbSizeHorizontal] = React.useState<number>(0);
-    const [thumbSizeVertical, setThumbSizeVertical] = React.useState<number>(0);
-    const [showVerticalScroll, setShowVerticalScroll] = React.useState<boolean>(false);
-    const [showHorizontalScroll, setShowHorizontalScroll] = React.useState<boolean>(false);
+        const [trackSpring, trackSpringApi] = useSpring(() => ({
+            opacity: 0,
+            width: 14,
+        }));
+        const [thumbSpringVertical, thumbSpringVerticalApi] = useSpring(() => ({
+            y: 0,
+        }));
+        const [thumbSpringHorizontal, thumbSpringHorizontalApi] = useSpring(() => ({
+            x: 0,
+        }));
 
-    React.useEffect(() => {
-        if(scrollAreaMeasureRef.current) {
-            // Existing ResizeObserver logic for size changes
-            const resizeObserver = new ResizeObserver(() => {
+        React.useEffect(() => {
+            if(scrollAreaMeasureRef.current) {
+                const scrollAreaRef = scrollAreaMeasureRef.current;
+
+                // Existing ResizeObserver logic for size changes
+                const resizeObserver = new ResizeObserver(() => {
+                    updateThumbSizes();
+                    updateThumbPositions();
+                    updateShowScrollBars();
+                });
+                resizeObserver.observe(scrollAreaRef);
+
+                // New MutationObserver logic for content changes
+                const mutationObserver = new MutationObserver(() => {
+                    updateThumbSizes();
+                    updateThumbPositions();
+                    updateShowScrollBars();
+                });
+                mutationObserver.observe(scrollAreaRef, { childList: true, subtree: true });
+
+                // Function to update thumb sizes
+                const updateThumbSizes = () => {
+                    if(scrollAreaMeasureRef.current) {
+                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                        const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+
+                        if(verticalScrollbar) {
+                            // Calculate thumb sizes
+                            const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
+                            // console.log(thumbSizeVertical);
+                            setThumbSizeVertical(thumbSizeVertical);
+                        }
+
+                        if(horizontalScrollbar) {
+                            // Calculate thumb sizes
+                            const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
+                            // console.log(thumbSizeHorizontal);
+                            setThumbSizeHorizontal(thumbSizeHorizontal);
+                        }
+                    }
+                };
+
+                const updateShowScrollBars = () => {
+                    if(scrollAreaMeasureRef.current) {
+                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                        const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+
+                        const showVertical = scrollHeight > clientHeight;
+                        const showHorizontal = scrollWidth > clientWidth;
+
+                        setShowVerticalScroll(showVertical);
+                        setShowHorizontalScroll(showHorizontal);
+                    }
+                };
+
+                const updateThumbPositions = () => {
+                    if(scrollAreaMeasureRef.current) {
+                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                        const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+
+                        if(verticalScrollbar) {
+                            const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
+                            const scrollPosition =
+                                scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight);
+
+                            thumbSpringVerticalApi.start({
+                                config: springConfig,
+                                y: scrollPosition * (clientHeight - thumbSizeVertical),
+                                immediate: true,
+                            });
+                        }
+
+                        if(horizontalScrollbar) {
+                            const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
+                            const scrollPosition =
+                                scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth);
+
+                            thumbSpringHorizontalApi.start({
+                                config: springConfig,
+                                x: scrollPosition * (clientWidth - thumbSizeHorizontal),
+                                immediate: true,
+                            });
+                        }
+                    }
+                    console.log('updateThumbPositions');
+                };
+
+                // Initial update
                 updateThumbSizes();
                 updateShowScrollBars();
-            });
-            resizeObserver.observe(scrollAreaMeasureRef.current);
 
-            // New MutationObserver logic for content changes
-            const mutationObserver = new MutationObserver(() => {
-                updateThumbSizes();
-                updateShowScrollBars();
-            });
-            mutationObserver.observe(scrollAreaMeasureRef.current, { childList: true, subtree: true });
-
-            // Function to update thumb sizes
-            const updateThumbSizes = () => {
-                if(scrollAreaMeasureRef.current) {
-                    const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                    const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                    const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                    const clientWidth = scrollAreaMeasureRef.current.clientWidth;
-
-                    // Calculate thumb sizes
-                    const thumbSizeHorizontal = (clientWidth / scrollWidth) * clientWidth - 6;
-                    // console.log(thumbSizeHorizontal);
-                    setThumbSizeHorizontal(thumbSizeHorizontal);
-
-                    const thumbSizeVertical = (clientHeight / scrollHeight) * clientHeight - 6;
-                    // console.log(thumbSizeVertical);
-                    setThumbSizeVertical(thumbSizeVertical);
-
-                    // Update springs
-                    thumbSpringHorizontalApi.start({
-                        x:
-                            (scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth)) *
-                            (clientWidth - thumbSizeHorizontal),
-                        immediate: true,
-                    });
-                    thumbSpringVerticalApi.start({
-                        y:
-                            (scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight)) *
-                            (clientHeight - thumbSizeVertical),
-                        immediate: true,
-                    });
-                }
-            };
-
-            const updateShowScrollBars = () => {
-                if(scrollAreaMeasureRef.current) {
-                    const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                    const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                    const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                    const clientWidth = scrollAreaMeasureRef.current.clientWidth;
-
-                    const showVertical = scrollHeight > clientHeight;
-                    const showHorizontal = scrollWidth > clientWidth;
-
-                    setShowVerticalScroll(showVertical);
-                    setShowHorizontalScroll(showHorizontal);
-                }
-            };
-
-            // Cleanup function to disconnect observers
-            return () => {
-                resizeObserver.disconnect();
-                mutationObserver.disconnect();
-            };
-        }
-    }, []);
-
-    const bindDrag = useDrag((state) => {
-        dragging.current = state.active;
-
-        if(scrollAreaMeasureRef.current) {
-            const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-            const clientWidth = scrollAreaMeasureRef.current.clientWidth;
-            const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-            const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-
-            if(horizontalScrollbar) {
-                const scrollTo =
-                    (scrollAreaMeasureRef.current.scrollLeft -
-                        state.delta[0] / (clientWidth - thumbSizeHorizontal - 6)) *
-                    (scrollWidth - clientWidth);
-                // console.log(scrollTo);
-                scrollAreaMeasureRef.current.scrollLeft = scrollTo;
+                // Cleanup function to disconnect observers
+                return () => {
+                    resizeObserver.disconnect();
+                    mutationObserver.disconnect();
+                };
             }
+        }, [thumbSpringHorizontalApi, thumbSpringVerticalApi, horizontalScrollbar, verticalScrollbar]);
 
-            if(verticalScrollbar) {
-                const scrollTo =
-                    scrollAreaMeasureRef.current.scrollTop + state.delta[1] * (scrollHeight / clientHeight);
-                // console.log(scrollTo);
-                scrollAreaMeasureRef.current.scrollTop = clamp(scrollTo, 0, scrollHeight - clientHeight);
-            }
-        }
-    });
+        const bindDrag = useDrag((state) => {
+            dragging.current = state.active;
 
-    const bindScroll = useScroll((state) => {
-        const scrollTop = state.xy[1];
-        const scrollLeft = state.xy[0];
-
-        if(scrollAreaMeasureRef.current && state.scrolling) {
-            if(horizontalScrollbar) {
+            if(scrollAreaMeasureRef.current) {
                 const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
                 const clientWidth = scrollAreaMeasureRef.current.clientWidth;
-                const scrollTo = (scrollLeft / (scrollWidth - clientWidth)) * (clientWidth - thumbSizeHorizontal - 6);
-
-                thumbSpringHorizontalApi.start({
-                    x: scrollTo,
-                    immediate: true,
-                });
-            }
-
-            if(verticalScrollbar) {
                 const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
                 const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                const scrollTo = (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - thumbSizeVertical - 6);
 
-                thumbSpringVerticalApi.start({
-                    y: scrollTo,
-                    immediate: true,
-                });
+                if(horizontalScrollbar) {
+                    const scrollTo =
+                        (scrollAreaMeasureRef.current.scrollLeft -
+                            state.delta[0] / (clientWidth - thumbSizeHorizontal - 6)) *
+                        (scrollWidth - clientWidth);
+                    // console.log(scrollTo);
+                    scrollAreaMeasureRef.current.scrollLeft = clamp(scrollTo, 0, scrollWidth - clientWidth);
+                }
+
+                if(verticalScrollbar) {
+                    const scrollTo =
+                        scrollAreaMeasureRef.current.scrollTop + state.delta[1] * (scrollHeight / clientHeight);
+                    // console.log(scrollTo);
+                    scrollAreaMeasureRef.current.scrollTop = clamp(scrollTo, 0, scrollHeight - clientHeight);
+                }
             }
+        });
 
-            // Update track spring
-            trackSpringApi.start({
-                opacity: 1,
-            });
-        }
-        else if(!dragging.current && !hovered.current) {
-            // Update track spring
-            trackSpringApi.start({
-                delay: scrollHideDelay,
-                opacity: 0,
-            });
-        }
-    });
+        useScroll(
+            (state) => {
+                const scrollTop = state.xy[1];
+                const scrollLeft = state.xy[0];
 
-    const bindMouseEvents = useGesture({
-        onMouseEnter: () => {
-            hovered.current = true;
+                if(scrollAreaMeasureRef.current && state.scrolling) {
+                    if(horizontalScrollbar) {
+                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+                        const scrollTo =
+                            (scrollLeft / (scrollWidth - clientWidth)) * (clientWidth - thumbSizeHorizontal);
 
-            // Clear current springs
-            trackSpringApi.stop();
+                        thumbSpringHorizontalApi.start({
+                            x: scrollTo - 4,
+                            immediate: true,
+                        });
+                    }
 
-            trackSpringApi.start({
-                opacity: 1,
-                width: 18,
-            });
-        },
-        onMouseLeave: () => {
-            hovered.current = false;
+                    if(verticalScrollbar) {
+                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                        const clientHeight = scrollAreaMeasureRef.current.clientHeight - 3;
+                        const scrollTo =
+                            (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - thumbSizeVertical);
 
-            if(!dragging.current) {
+                        thumbSpringVerticalApi.start({
+                            y: scrollTo,
+                            immediate: true,
+                        });
+                    }
+
+                    // Update track spring
+                    trackSpringApi.start({
+                        config: springConfig,
+                        opacity: 1,
+                    });
+                }
+                else if(!dragging.current && !hovered.current) {
+                    // Update track spring
+                    trackSpringApi.start({
+                        config: springConfig,
+                        delay: scrollHideDelay,
+                        opacity: 0,
+                    });
+                }
+            },
+            {
+                target: scrollAreaMeasureRef,
+            },
+        );
+
+        React.useEffect(() => {
+            // Set the initial thumb positions
+            const updateThumbPositions = () => {
+                if(scrollAreaMeasureRef.current) {
+                    const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+                    const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+                    const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+                    const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+
+                    if(verticalScrollbar) {
+                        const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
+                        const scrollPosition = scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight);
+
+                        thumbSpringVerticalApi.start({
+                            config: springConfig,
+                            y: scrollPosition * (clientHeight - thumbSizeVertical),
+                            immediate: true,
+                        });
+                    }
+
+                    if(horizontalScrollbar) {
+                        const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
+                        const scrollPosition = scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth);
+
+                        thumbSpringHorizontalApi.start({
+                            config: springConfig,
+                            x: scrollPosition * (clientWidth - thumbSizeHorizontal),
+                            immediate: true,
+                        });
+                    }
+                }
+                console.log('updateThumbPositions');
+            };
+            updateThumbPositions();
+        }, [thumbSpringHorizontalApi, thumbSpringVerticalApi, horizontalScrollbar, verticalScrollbar]);
+
+        const bindMouseEvents = useGesture({
+            onMouseEnter: () => {
+                hovered.current = true;
+
+                // Clear current springs
+                trackSpringApi.stop();
+
                 trackSpringApi.start({
-                    to: async (next) => {
-                        await next({ width: 14 });
-                        await next({ opacity: 0 });
-                    },
+                    config: springConfig,
+                    opacity: 1,
+                    width: 18,
                 });
-            }
-        },
-    });
+            },
+            onMouseLeave: () => {
+                hovered.current = false;
 
-    return (
-        <div
-            ref={scrollContainerRef}
-            className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName, 'relative')}
-        >
+                if(!dragging.current) {
+                    trackSpringApi.start({
+                        config: springConfig,
+                        to: async (next) => {
+                            await next({ width: 14 });
+                            await next({ opacity: 0 });
+                        },
+                    });
+                }
+            },
+        });
+
+        return (
             <div
-                ref={mergeRefs(reference, scrollAreaMeasureRef)}
-                className={mergeClassNames(
-                    verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
-                    horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
-                    verticalScrollbar && horizontalScrollbar && 'overflow-auto',
-                    'h-full w-full',
+                ref={scrollContainerRef}
+                className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName, 'relative')}
+            >
+                <div
+                    ref={mergeRefs(reference, scrollAreaMeasureRef)}
+                    className={mergeClassNames(
+                        verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
+                        horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
+                        verticalScrollbar && horizontalScrollbar && 'overflow-auto',
+                        'h-full w-full',
+                    )}
+                    style={{
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+                    }}
+                >
+                    {properties.children}
+                </div>
+
+                {/* Scroll Bar */}
+                {verticalScrollbar && showVerticalScroll && (
+                    <ScrollBar
+                        orientation="vertical"
+                        thumbSize={thumbSizeVertical}
+                        scrollAnimation={thumbSpringVertical}
+                        trackAnimation={trackSpring}
+                        trackGestureBinds={bindMouseEvents}
+                        {...bindDrag()}
+                    />
                 )}
-                style={{
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none',
-                }}
-                {...bindScroll()}
-            >
-                {properties.children}
+                {horizontalScrollbar && showHorizontalScroll && (
+                    <ScrollBar
+                        orientation="horizontal"
+                        thumbSize={thumbSizeHorizontal}
+                        scrollAnimation={thumbSpringHorizontal}
+                        trackAnimation={trackSpring}
+                        trackGestureBinds={bindMouseEvents}
+                        {...bindDrag()}
+                    />
+                )}
             </div>
+        );
 
-            {/* Scroll Bar */}
-            {verticalScrollbar && showVerticalScroll && (
-                <ScrollBar
-                    orientation="vertical"
-                    thumbSize={thumbSizeVertical}
-                    scrollAnimation={thumbSpringVertical}
-                    trackAnimation={trackSpring}
-                    trackGestureBinds={bindMouseEvents}
-                    {...bindDrag()}
-                />
-            )}
-            {horizontalScrollbar && showHorizontalScroll && (
-                <ScrollBar
-                    orientation="horizontal"
-                    thumbSize={thumbSizeHorizontal}
-                    scrollAnimation={thumbSpringHorizontal}
-                    trackAnimation={trackSpring}
-                    trackGestureBinds={bindMouseEvents}
-                    {...bindDrag()}
-                />
-            )}
-        </div>
-    );
-
-    // FIXME: Memory leak exists somewhere in here: Likely RadixScrollArea.Thumb (https://github.com/radix-ui/primitives/issues/1973)
-    // Render the component
-    return (
-        <RadixScrollArea.Root
-            type={type}
-            scrollHideDelay={scrollHideDelay}
-            dir={direction}
-            className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName)}
-        >
-            <RadixScrollArea.Viewport
-                className={mergeClassNames(scrollAreaClassName, properties.className)}
-                ref={reference}
-                // asChild is causing major issues
-                // If it is enabled, the scroll area works but cannot have a height that
-                // fills the parent container
-                // If it is disabled, the scroll area does not work but can have a height that
-                // fills the parent container
-                // Adding height:100% to the div fixes things, but the viewport component is
-                // adding a div that I can't control here
-                // asChild
+        // FIXME: Memory leak exists somewhere in here: Likely RadixScrollArea.Thumb (https://github.com/radix-ui/primitives/issues/1973)
+        // Render the component
+        return (
+            <RadixScrollArea.Root
+                type={type}
+                scrollHideDelay={scrollHideDelay}
+                dir={direction}
+                className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName)}
             >
-                {properties.children}
-            </RadixScrollArea.Viewport>
-            {verticalScrollbar && (
-                <RadixScrollArea.Scrollbar
-                    forceMount={true}
-                    orientation="vertical"
-                    className={mergeClassNames(
-                        scrollAreaVerticalScrollbarClassName,
-                        properties.verticalScrollbarClassName,
-                        scrollAreaScrollbarClassName,
-                        properties.scrollbarClassName,
-                    )}
+                <RadixScrollArea.Viewport
+                    className={mergeClassNames(scrollAreaClassName, properties.className)}
+                    ref={reference}
+                    // asChild is causing major issues
+                    // If it is enabled, the scroll area works but cannot have a height that
+                    // fills the parent container
+                    // If it is disabled, the scroll area does not work but can have a height that
+                    // fills the parent container
+                    // Adding height:100% to the div fixes things, but the viewport component is
+                    // adding a div that I can't control here
+                    // asChild
                 >
-                    <RadixScrollArea.Thumb
-                        className={mergeClassNames(scrollAreaThumbClassName, properties.thumbClassName)}
-                    />
-                </RadixScrollArea.Scrollbar>
-            )}
-            {horizontalScrollbar && (
-                <RadixScrollArea.Scrollbar
-                    forceMount={true}
-                    orientation="horizontal"
-                    className={mergeClassNames(
-                        scrollAreaHorizontalScrollbarClassName,
-                        properties.horizontalScrollbarClassName,
-                        scrollAreaScrollbarClassName,
-                        properties.scrollbarClassName,
-                    )}
-                >
-                    <RadixScrollArea.Thumb
-                        className={mergeClassNames(scrollAreaThumbClassName, properties.thumbClassName)}
-                    />
-                </RadixScrollArea.Scrollbar>
-            )}
-            <RadixScrollArea.Corner
-                className={mergeClassNames(scrollAreaCornerClassName, properties.cornerClassName)}
-            />
-        </RadixScrollArea.Root>
-    );
-});
+                    {properties.children}
+                </RadixScrollArea.Viewport>
+                {verticalScrollbar && (
+                    <RadixScrollArea.Scrollbar
+                        forceMount={true}
+                        orientation="vertical"
+                        className={mergeClassNames(
+                            scrollAreaVerticalScrollbarClassName,
+                            properties.verticalScrollbarClassName,
+                            scrollAreaScrollbarClassName,
+                            properties.scrollbarClassName,
+                        )}
+                    >
+                        <RadixScrollArea.Thumb
+                            className={mergeClassNames(scrollAreaThumbClassName, properties.thumbClassName)}
+                        />
+                    </RadixScrollArea.Scrollbar>
+                )}
+                {horizontalScrollbar && (
+                    <RadixScrollArea.Scrollbar
+                        forceMount={true}
+                        orientation="horizontal"
+                        className={mergeClassNames(
+                            scrollAreaHorizontalScrollbarClassName,
+                            properties.horizontalScrollbarClassName,
+                            scrollAreaScrollbarClassName,
+                            properties.scrollbarClassName,
+                        )}
+                    >
+                        <RadixScrollArea.Thumb
+                            className={mergeClassNames(scrollAreaThumbClassName, properties.thumbClassName)}
+                        />
+                    </RadixScrollArea.Scrollbar>
+                )}
+                <RadixScrollArea.Corner
+                    className={mergeClassNames(scrollAreaCornerClassName, properties.cornerClassName)}
+                />
+            </RadixScrollArea.Root>
+        );
+    },
+);
 
 // Set displayName for debugging purposes
 ScrollArea.displayName = 'ScrollArea';
