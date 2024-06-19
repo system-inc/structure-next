@@ -50,6 +50,9 @@ export interface StructureSettingsType {
         base: ApiService;
         [key: string]: ApiService;
     };
+    theme?: {
+        default: string;
+    };
     assets: {
         favicon: ThemedAsset;
         logo: LogoAsset;
@@ -79,6 +82,9 @@ let StructureSettings: StructureSettingsType = {
         base: {
             url: 'https://api.system.inc/graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
         },
+    },
+    theme: {
+        default: 'light',
     },
     assets: {
         favicon: {

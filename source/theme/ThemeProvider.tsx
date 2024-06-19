@@ -37,61 +37,66 @@ export interface ThemeProviderInterface {
     children: React.ReactNode;
 }
 export function ThemeProvider({ children }: ThemeProviderInterface) {
-    // State for the theme, default to light theme
-    const [theme, setTheme] = React.useState<string | null>(null);
+    // State for the theme, default to StructureSettings.theme.default
+    const [theme, setTheme] = React.useState<string | null>(StructureSettings?.theme?.default ?? null);
 
     // Handle changing the theme mode in local storage
-    const updateTheme = React.useCallback(function () {
-        // console.log('updateTheme');
-        // console.log('localStorage[themeModeKey]', localStorage[themeModeKey]);
-        // console.log(
-        //     `window.matchMedia(darkThemeMediaQuery)`,
-        //     window.matchMedia(darkThemeMediaQuery),
-        // );
+    const updateTheme = React.useCallback(
+        function () {
+            // console.log('updateTheme');
+            // console.log('localStorage[themeModeKey]', localStorage[themeModeKey]);
+            // console.log(
+            //     `window.matchMedia(darkThemeMediaQuery)`,
+            //     window.matchMedia(darkThemeMediaQuery),
+            // );
 
-        // Dark mode
-        if(
-            // If local storage has the theme mode set to dark
-            localStorage[themeModeLocalStorageKey] === ThemeMode.Dark ||
-            // Or if local storage has the theme mode set to system and the client's operating system is set to dark mode
-            (localStorage[themeModeLocalStorageKey] === ThemeMode.System &&
-                window.matchMedia(darkThemeMediaQuery).matches) ||
-            // Or if local storage does not have the theme mode set and the client's operating system is set to dark mode
-            (localStorage[themeModeLocalStorageKey] === undefined && window.matchMedia(darkThemeMediaQuery).matches)
-        ) {
-            // console.log('Switching to dark mode');
+            // Dark mode
+            if(
+                // If the default theme is dark
+                theme === darkThemeClassName ||
+                // If local storage has the theme mode set to dark
+                localStorage[themeModeLocalStorageKey] === ThemeMode.Dark ||
+                // Or if local storage has the theme mode set to system and the client's operating system is set to dark mode
+                (localStorage[themeModeLocalStorageKey] === ThemeMode.System &&
+                    window.matchMedia(darkThemeMediaQuery).matches) ||
+                // Or if local storage does not have the theme mode set and the client's operating system is set to dark mode
+                (localStorage[themeModeLocalStorageKey] === undefined && window.matchMedia(darkThemeMediaQuery).matches)
+            ) {
+                // console.log('Switching to dark mode');
 
-            // Add the dark theme class to the document
-            document.documentElement.classList.add(darkThemeClassName);
+                // Add the dark theme class to the document
+                document.documentElement.classList.add(darkThemeClassName);
 
-            // Set a cookie to remember the client is in dark mode
-            // We only store the theme class name (not the theme mode) on the cookie, this way
-            // when the page loads we can use the cookie to know if the client is in dark mode
-            // right away without needing to check the theme mode in local storage which
-            // would flash the page in light mode before switching to dark mode if the client
-            // is in dark mode
-            cookies.set(themeClassNameCookieKey, darkThemeClassName, {
-                path: '/',
-                maxAge: 31536000, // 1 year
-                sameSite: 'strict',
-                secure: true,
-            });
+                // Set a cookie to remember the client is in dark mode
+                // We only store the theme class name (not the theme mode) on the cookie, this way
+                // when the page loads we can use the cookie to know if the client is in dark mode
+                // right away without needing to check the theme mode in local storage which
+                // would flash the page in light mode before switching to dark mode if the client
+                // is in dark mode
+                cookies.set(themeClassNameCookieKey, darkThemeClassName, {
+                    path: '/',
+                    maxAge: 31536000, // 1 year
+                    sameSite: 'strict',
+                    secure: true,
+                });
 
-            setTheme(darkThemeClassName);
-        }
-        // Light mode
-        else {
-            // console.log('Switching to light mode');
+                setTheme(darkThemeClassName);
+            }
+            // Light mode
+            else {
+                // console.log('Switching to light mode');
 
-            // Remove the dark theme class from the document
-            document.documentElement.classList.remove(darkThemeClassName);
+                // Remove the dark theme class from the document
+                document.documentElement.classList.remove(darkThemeClassName);
 
-            // Remove the cookie
-            cookies.remove(themeClassNameCookieKey);
+                // Remove the cookie
+                cookies.remove(themeClassNameCookieKey);
 
-            setTheme(lightThemeClassName);
-        }
-    }, []);
+                setTheme(lightThemeClassName);
+            }
+        },
+        [theme],
+    );
 
     // Handle changes in local storage, sent by other tabs
     const handleLocalStorageChange = React.useCallback(

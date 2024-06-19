@@ -47,16 +47,16 @@ export function RootLayout(properties: RootLayoutInterface) {
     // console.log('cookieStore', cookieStore);
     const themeClassNameCookie = cookieStore.get(themeClassNameCookieKey)?.value;
 
+    // The theme comes from the cookie or the default theme from Structure
+    const theme = themeClassNameCookie ? themeClassNameCookie : StructureSettings?.theme?.default || '';
+
     const googleAnalyticsId = StructureSettings.services?.google?.analytics?.id;
 
     // Render the component
     return (
         <html
             lang="en"
-            className={mergeClassNames(
-                themeClassNameCookie === darkThemeClassName ? darkThemeClassName : '',
-                'font-sans',
-            )}
+            className={mergeClassNames(theme === darkThemeClassName ? darkThemeClassName : '', 'font-sans')}
         >
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
