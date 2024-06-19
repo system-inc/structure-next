@@ -88,7 +88,7 @@ export function FormInput({
                 ))}
 
             {/* Successes */}
-            {properties.validationResult?.successes &&
+            {/* {properties.validationResult?.successes &&
                 properties.validationResult.successes.length > 0 &&
                 properties.validationResult.successes.map((validationSuccess, validationSuccessIndex) => (
                     <div
@@ -97,7 +97,7 @@ export function FormInput({
                     >
                         <CheckCircledIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationSuccess.message}</span>
                     </div>
-                ))}
+                ))} */}
 
             {/* Description */}
             {properties.description && <div className="text-ss text-muted-foreground">{properties.description}</div>}

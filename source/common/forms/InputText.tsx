@@ -130,7 +130,13 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
                 return inputReference.current?.value ?? undefined;
             },
             setValue: function (value) {
+                console.log('setValue', value, typeof value);
+
                 if(inputReference.current) {
+                    if(value === undefined) {
+                        value = '';
+                    }
+
                     inputReference.current.value = value;
                 }
             },

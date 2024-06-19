@@ -15,7 +15,7 @@ import { WaitListEntryCreateDocument } from '@project/source/api/GraphQlGenerate
 
 // Component - WaitListForm
 export interface WaitListFormInterface {}
-export function WaitListForm(properties: WaitListFormInterface) {
+export function WaitListForm() {
     // Render the component
     return (
         <GraphQlMutationForm
