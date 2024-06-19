@@ -30,7 +30,7 @@ echo "install packages..."
 npm i
 
 echo "Generating base library GraphQL code..."
-node base graphql schema:generate -w api -s
+node base graphql schema:generate -w api -s -m
 
 # Copy the files from apiDirectory/workers/graphql/graphql/schemas to projectDirectory/source/api/schemas
 echo "Copying the generated GraphQL files to the project directory..."
