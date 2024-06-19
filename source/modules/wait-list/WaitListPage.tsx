@@ -10,13 +10,9 @@ import Link from 'next/link';
 import AccountMenuButton from '@structure/source/modules/account/AccountMenuButton';
 import WaitListForm from '@structure/source/modules/wait-list/WaitListForm';
 
-// Testing
-import Button from '@structure/source/common/buttons/Button';
-import StarsIcon from '@structure/assets/icons/nature/StarsIcon.svg';
-
 // Component - WaitListPage
 export type WaitListPageProperties = {};
-export function WaitListPage(properties: WaitListPageProperties) {
+export function WaitListPage() {
     const currentYear = new Date().getFullYear();
 
     // Function to render social links

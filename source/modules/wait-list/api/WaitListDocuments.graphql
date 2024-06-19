@@ -1,3 +1,80 @@
+# Wait Lists Query
+query WaitLists {
+    waitLists {
+        pagination {
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+            itemsPerPage
+            itemsTotal
+            page
+            pagesTotal
+        }
+        items {
+            id
+            identifier
+            title
+            description
+            emailAutomation {
+                id
+                automationKey
+                type
+                description
+                fromName
+                fromEmail
+                subject
+                updatedAt
+                createdAt
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Wait List Create Mutation
+mutation WaitListCreate($data: WaitListCreationInput!) {
+    waitListCreate(data: $data) {
+        id
+        identifier
+        title
+        description
+        updatedAt
+        createdAt
+    }
+}
+
+# # Wait List Delete Mutation
+# mutation WaitListDelete($id: String!) {
+#     waitListDelete(id: $id)
+# }
+
+# Wait List Entries Query
+query WaitListEntries($waitListIdentifier: String!, $itemsPerPage: Int! = 100) {
+    waitListEntries(input: { itemsPerPage: $itemsPerPage, waitListIdentifier: $waitListIdentifier }) {
+        pagination {
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+            itemsPerPage
+            itemsTotal
+            page
+            pagesTotal
+        }
+        items {
+            id
+            emailAddress
+            message
+            userAgent
+            countryCode
+            referredBy
+            contactedAt
+            updatedAt
+            createdAt
+        }
+    }
+}
+
 # Wait List Entry Create Mutation
 mutation WaitListEntryCreate($emailAddress: String!) {
     waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: "earlyAccess") {

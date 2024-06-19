@@ -63,6 +63,7 @@ export function CopyButton(properties: CopyButtonInterface) {
             iconClassName={valueCopiedToClipboard ? 'h-4 w-4' : 'h-4 w-4'}
             {...buttonProperties}
             className={mergeClassNames(
+                // Animation
                 'transition-colors',
                 !valueCopiedToClipboard ? 'text-neutral hover:text-dark dark:text-neutral+6 dark:hover:text-light' : '',
                 properties.className,

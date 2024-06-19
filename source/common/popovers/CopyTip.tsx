@@ -22,8 +22,13 @@ export function CopyTip(properties: CopyTipInterface) {
         <Tip
             content={
                 <div className="flex text-xs transition-all">
-                    <div className="border-r">
-                        <CopyButton value={value} notice={notice} className={mergeClassNames('p-1.5', className)} />
+                    <div className="flex items-center border-r">
+                        <CopyButton
+                            value={value}
+                            notice={notice}
+                            className={mergeClassNames('p-1.5', className)}
+                            iconClassName="h-3.5 w-3.5"
+                        />
                     </div>
                     <div className="whitespace-nowrap p-1.5">{value}</div>
                 </div>
