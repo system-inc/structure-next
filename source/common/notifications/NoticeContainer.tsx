@@ -355,7 +355,9 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
             {/* Border fade */}
             <div
                 className={mergeClassNames(
-                    'pointer-events-none relative top-7 z-40 h-7 w-full bg-gradient-to-b from-light to-transparent dark:from-dark dark:to-transparent',
+                    'pointer-events-none relative top-7 z-40 h-7 w-full',
+                    // TODO: This doesn't look great on top of content, draws the shadow on top of the content
+                    // 'bg-gradient-to-b from-light to-transparent dark:from-dark dark:to-transparent',
                     (!hovered || noticesState.length === 0) && 'hidden',
                 )}
             />
