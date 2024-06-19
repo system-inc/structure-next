@@ -4,6 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
+import SimpleSvgMap from '@structure/source/common/maps/SimpleSvgMap';
+import PanAndZoomContainer from '@structure/source/common/maps/PanAndZoomContainer';
+
 import HomeMetricLink from '@structure/source/internal/common/dashboard/HomeMetricLink';
 import CardLink from '@structure/source/internal/common/dashboard/CardLink';
 import ActivityLink from '@structure/source/internal/common/dashboard/ActivityLink';
@@ -44,7 +47,9 @@ export function InternalHomePage(properties: InternalHomePageProperties) {
             {/* Left column */}
             <div className="flex flex-grow flex-col pr-6">
                 <div className="mb-10">
-                    {/* Render the unique device IDs */}
+                    <PanAndZoomContainer width={500} height={500} />
+
+                    {/* Engagement */}
                     {engagementLiveQueryState.error && (
                         <div className="text-red-500">Error: {engagementLiveQueryState.error.message}</div>
                     )}
@@ -88,6 +93,19 @@ export function InternalHomePage(properties: InternalHomePageProperties) {
                                 <div className="flex items-center justify-between">
                                     <h2 className="mb-1 text-base">Locations</h2>
                                 </div>
+
+                                <SimpleSvgMap
+                                    points={engagementLiveQueryState.data.engagementOverview.locations.map(
+                                        function (location) {
+                                            return {
+                                                latitude: Number(location.latitude),
+                                                longitude: Number(location.longitude),
+                                                title: location.countryCode || undefined,
+                                            };
+                                        },
+                                    )}
+                                />
+
                                 <div className="text-sm text-neutral dark:text-neutral">
                                     <div className="flex justify-between font-medium">
                                         <div>Location</div>

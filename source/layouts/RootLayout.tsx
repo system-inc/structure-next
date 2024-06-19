@@ -17,7 +17,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // import { SignInSignUpModal } from '@structure/source/modules/account/SignInSignUpModal';
 
 // Metadata
-export async function generateMetadata(properties: any, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
     return {
         title: {
             template: '%s • ' + StructureSettings.title,
