@@ -195,7 +195,7 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaInterface>(
                             });
                         }
                     }
-                    console.log('updateThumbPositions');
+                    // console.log('updateThumbPositions');
                 };
 
                 // Initial update
@@ -318,7 +318,7 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaInterface>(
                         });
                     }
                 }
-                console.log('updateThumbPositions');
+                // console.log('updateThumbPositions');
             };
             updateThumbPositions();
         }, [thumbSpringHorizontalApi, thumbSpringVerticalApi, horizontalScrollbar, verticalScrollbar]);
