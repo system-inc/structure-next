@@ -322,7 +322,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
         <div
             tabIndex={0} // Make the menu focusable
             className={mergeClassNames(
-                'pointer-events-none fixed bottom-0 right-0 z-50 w-[420px]',
+                'pointer-events-none fixed bottom-0 right-0 z-50 md:w-[420px]',
                 hovered && 'pt-16',
                 properties.className,
             )}
@@ -333,7 +333,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
             {/* Clear All Button */}
             <div
                 className={mergeClassNames(
-                    'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pb-0 pr-8',
+                    'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pb-0 pr-4 md:pr-8',
                 )}
             >
                 <ClearAllNoticesButton
@@ -378,7 +378,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
                     return (
                         <animated.div
                             key={notice.id}
-                            className={'relative w-full flex-shrink-0 pl-4 pr-8 pt-0'}
+                            className={'relative w-full flex-shrink-0 pl-4 pr-4 pt-0 md:pr-8'}
                             style={{ ...animation, zIndex: noticesState.length - noticeIndex }}
                         >
                             <Notice
