@@ -19,7 +19,7 @@ cd libraries/base
 baseLibraryDirectory=$PWD
 
 echo "Pulling the latest base library code..."
-git checkout main
+# git checkout main
 git pull
 
 # Generating the base library GraphQL code
