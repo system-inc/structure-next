@@ -121,6 +121,10 @@ export const InputTextArea = React.forwardRef<InputReferenceInterface, InputText
             },
             setValue: function (value) {
                 if(inputReference.current) {
+                    if(value === undefined) {
+                        value = '';
+                    }
+
                     inputReference.current.value = value;
                 }
             },
