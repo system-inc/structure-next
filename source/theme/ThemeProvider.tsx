@@ -53,7 +53,7 @@ export function ThemeProvider({ children }: ThemeProviderInterface) {
             // Dark mode
             if(
                 // If the default theme is dark
-                theme === darkThemeClassName ||
+                (theme === darkThemeClassName && localStorage[themeModeLocalStorageKey] === undefined) ||
                 // If local storage has the theme mode set to dark
                 localStorage[themeModeLocalStorageKey] === ThemeMode.Dark ||
                 // Or if local storage has the theme mode set to system and the client's operating system is set to dark mode
@@ -89,8 +89,13 @@ export function ThemeProvider({ children }: ThemeProviderInterface) {
                 // Remove the dark theme class from the document
                 document.documentElement.classList.remove(darkThemeClassName);
 
-                // Remove the cookie
-                cookies.remove(themeClassNameCookieKey);
+                // Set a cookie to remember the client is in light mode
+                cookies.set(themeClassNameCookieKey, lightThemeClassName, {
+                    path: '/',
+                    maxAge: 31536000, // 1 year
+                    sameSite: 'strict',
+                    secure: true,
+                });
 
                 setTheme(lightThemeClassName);
             }
