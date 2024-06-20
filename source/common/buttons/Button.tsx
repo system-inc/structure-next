@@ -413,7 +413,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 {...properties.tipProperties}
                 open={processed && processingAnimationRunning}
                 content={tipContent}
-                className={mergeClassNames('px-2 py-1 text-xs', properties.tipProperties?.className)}
+                className={mergeClassNames('px-1 py-0.5 text-xs', properties.tipProperties?.className)}
             >
                 {component}
             </Tip>

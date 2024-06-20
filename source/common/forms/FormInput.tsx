@@ -63,7 +63,7 @@ export function FormInput({
             {properties.label && (
                 <div className="flex items-center text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-75">
                     <label
-                        className="pointer:cursor select-none"
+                        className="pointer:cursor select-none whitespace-nowrap"
                         onClick={properties.focus instanceof Function ? properties.focus : undefined}
                     >
                         {properties.label}
