@@ -9,7 +9,7 @@ import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
-import InformationCircledIconFilled from '@structure/assets/icons/status/InformationCircledIconFilled.svg';
+import InformationCircledFilledIcon from '@structure/assets/icons/status/InformationCircledFilledIcon.svg';
 import ChevronsUpDownIcon from '@structure/assets/icons/interface/ChevronsUpDownIcon.svg';
 import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
 import ArrowDownIcon from '@structure/assets/icons/interface/ArrowDownIcon.svg';
@@ -98,7 +98,7 @@ export function TableHeaderCell(properties: TableHeaderCellInterface) {
                                     <TipIcon
                                         className="ml-1"
                                         side="bottom"
-                                        icon={InformationCircledIconFilled}
+                                        icon={InformationCircledFilledIcon}
                                         contentClassName="p-2.5"
                                         content={
                                             <div
