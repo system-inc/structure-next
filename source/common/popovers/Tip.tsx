@@ -18,9 +18,12 @@ export function Tip(properties: TipInterface) {
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // On mount, set the open state
-    React.useEffect(() => {
-        setOpen(properties.open ?? false);
-    }, [properties.open]); // Listen for changes to the open property
+    React.useEffect(
+        function () {
+            setOpen(properties.open ?? false);
+        },
+        [properties.open],
+    ); // Listen for changes to the open property
 
     // Defaults
     const side = properties.side ?? 'top';

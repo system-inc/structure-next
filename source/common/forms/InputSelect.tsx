@@ -267,7 +267,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                     selectedItem ? (
                         typeof selectedItem!.content === 'string' ? (
                             // If the content is a string, create a container for it
-                            <span className="truncate text-dark-6 dark:text-light-6">{selectedItem.content}</span>
+                            <span className="truncate text-dark dark:text-light">{selectedItem.content}</span>
                         ) : (
                             // If the content is not a string, use the content as the button content
                             selectedItem.content

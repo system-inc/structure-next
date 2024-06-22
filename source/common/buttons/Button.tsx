@@ -26,8 +26,8 @@ export interface ButtonInterface extends React.HTMLAttributes<HTMLElement> {
     variant?: keyof typeof ButtonVariants;
     size?: keyof typeof ButtonSizes;
     disabled?: boolean;
-    loading?: boolean;
-    processing?: boolean;
+    loading?: boolean; // The button state is loading
+    processing?: boolean; // The button has been pressed and is processing
     processingText?: string;
     processingIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     processingSuccessIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
