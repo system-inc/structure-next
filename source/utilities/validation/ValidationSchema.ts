@@ -425,6 +425,7 @@ export class ValidationSchema {
                 };
 
                 // If the value has characters other than letters, numbers, underscores, international characters, or period, add an error
+                // @ts-ignore -- FIXME: This regex is not working as expected with typescript@5.5 (looking into it here -- https://github.com/microsoft/TypeScript/issues/58287)
                 if(!/^[a-zA-Z0-9_.\p{L}]+$/u.test(value)) {
                     validationResult.errors.push({
                         validationRule: validationRule,
