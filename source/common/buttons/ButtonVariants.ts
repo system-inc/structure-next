@@ -40,6 +40,21 @@ export const ButtonVariants = {
         `dark:disabled:hover:bg-dark active:bg-light-2 dark:active:bg-dark-2`,
     // Unstyled variant: no styles
     unstyled: ``,
+    // Primary variant
+    primary:
+        `${commonButton} ${focusStyle} ${centeredButton} ` +
+        // Light text on dark background
+        `text-light bg-theme-light-primary dark:bg-theme-dark-primary ` +
+        // Hover
+        `hover:bg-theme-light-primary-hover dark:hover:bg-theme-dark-primary-hover ` +
+        // Active
+        `active:bg-theme-light-primary-active dark:active:bg-theme-dark-primary-active ` +
+        // Focus
+        `focus:border-transparent dark:focus:border-transparent ` +
+        // Disabled
+        `disabled:opacity-100 disabled:bg-theme-light-primary-disabled disabled:dark:bg-theme-dark-primary-disabled ` +
+        // Border matches background
+        `border border-transparent`,
     // Light variant: light background and border with hover and active states
     light:
         `${commonButton} ${focusStyle} ${centeredButton} ` +

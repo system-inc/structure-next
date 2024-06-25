@@ -113,6 +113,7 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
                 defaultValue={properties.defaultValue}
                 label={properties.label}
                 labelTip={properties.labelTip}
+                labelTipIconProperties={properties.labelTipIconProperties}
                 description={properties.description}
                 disabled={properties.disabled}
                 required={properties.required}

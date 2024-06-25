@@ -163,6 +163,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
             defaultValue={properties.defaultValue}
             label={properties.label}
             labelTip={properties.labelTip}
+            labelTipIconProperties={properties.labelTipIconProperties}
             description={properties.description}
             disabled={properties.disabled}
             required={properties.required}
