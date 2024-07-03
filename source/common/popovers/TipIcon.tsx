@@ -27,7 +27,7 @@ export const TipIconVariants = {
 // Variants - TipIconContent
 export const TipIconContentVariants = {
     // Default variant
-    default: `max-w-xs rounded-sm px-3 py-1.5 text-xs`,
+    default: `max-w-xs rounded-sm px-2 py-1.5 text-xs`,
     // Unstyled variant
     unstyled: `border-none`,
 };
