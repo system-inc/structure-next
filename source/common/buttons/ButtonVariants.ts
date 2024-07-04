@@ -35,7 +35,7 @@ export const ButtonVariants = {
     default:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Dark text on light background
-        `border bg-light dark:bg-dark+2 hover:bg-light-1 dark:hover:bg-dark-1 disabled:hover:bg-light ` +
+        `border dark:border-dark-3 bg-light dark:bg-dark+2 hover:bg-light-1 dark:hover:bg-dark-1 disabled:hover:bg-light ` +
         // Disabled and active states
         `dark:disabled:hover:bg-dark active:bg-light-2 dark:active:bg-dark-2`,
     // Unstyled variant: no styles

@@ -62,6 +62,6 @@ query EmailLists($pagination: PaginationInput) {
 }
 
 # Email Contact Mutation
-mutation EmailContact($input: EmailContactInput!) {
-    emailContact(input: $input)
-}
+# mutation EmailContact($input: EmailContactInput!) {
+#     emailContact(input: $input)
+# }

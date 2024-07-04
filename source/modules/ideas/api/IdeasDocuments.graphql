@@ -1,0 +1,40 @@
+# Ideas Query
+query Ideas($pagination: PaginationInputWithFilters) {
+    articlesMine(input: $pagination) {
+        items {
+            id
+            status
+            title
+            content
+            topic {
+                name
+            }
+            latestRevisionId
+            updatedAt
+            createdAt
+        }
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+            pagesTotal
+            page
+        }
+    }
+}
+
+# Idea Create
+mutation IdeaCreate($input: ArticleCreateInput!) {
+    articleCreate(input: $input) {
+        id
+        status
+        title
+        contentType
+        content
+        settings
+        upvoteCount
+        downvoteCount
+    }
+}

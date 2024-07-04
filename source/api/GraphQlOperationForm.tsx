@@ -178,7 +178,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 key: input.name,
                 label: titleCase(inputName),
                 placeholder: titleCase(inputName),
-                required: true,
+                required: input.required,
             };
 
             // If there is a special configuration for this input
