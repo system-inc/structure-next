@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
+import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
@@ -158,40 +159,61 @@ export function IdeasPage(properties: IdeasPageInterface) {
                                     </div>
                                 </div>
 
+                                <p>add active and focus states to each of these controls below:</p>
+
                                 {/* Metadata */}
                                 <div className="mt-3 flex items-center justify-between space-x-2 text-sm">
-                                    <div className="flex items-center space-x-1">
+                                    <div className="flex items-center">
                                         {/* Vote (Mobile) */}
-                                        <div className="group flex cursor-pointer items-center space-x-1.5 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2 md:hidden">
+                                        <div className="group mr-1 flex cursor-pointer items-center space-x-1.5 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2 md:hidden">
                                             <ArrowUpIcon className="h-3.5 w-3.5" />
                                             <div className="">{idea.upvotes}</div>
                                         </div>
 
                                         {/* Reactions */}
-                                        <div className="group flex cursor-pointer items-center rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                        <div className="group mr-1 flex cursor-pointer items-center rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
                                             <ReactionIcon className="h-4 w-4" />
                                         </div>
 
-                                        <div className="group flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                        <div className="group mr-1 flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
                                             <CommentIcon className="h-4 w-4" />
                                             <div className="">10</div>
                                         </div>
 
-                                        <div className="group flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
-                                            <ShareIcon className="h-4 w-4" />
-                                            <p>this has a popover that has a Copy Link menu item and a notice</p>
-                                        </div>
+                                        <PopoverMenu
+                                            items={[
+                                                {
+                                                    content:
+                                                        'Copy Link this has a popover that has a Copy Link menu item and a notice',
+                                                    onClick: function () {
+                                                        console.log('Copy Link');
+                                                    },
+                                                },
+                                            ]}
+                                        >
+                                            <div className="group mr-1 flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                                <ShareIcon className="h-4 w-4" />
+                                            </div>
+                                        </PopoverMenu>
 
-                                        <div className="group flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
-                                            <EllipsesIcon className="h-4 w-4" />
-                                            <p>
-                                                this has a popover that has a Report with flag icon which goes through a
-                                                report flow - see randomseed.com
-                                            </p>
-                                        </div>
+                                        <PopoverMenu
+                                            items={[
+                                                {
+                                                    content:
+                                                        'Report - this has a popover that has a Report with flag icon which goes through a report flow - see randomseed.com',
+                                                    onClick: function () {
+                                                        console.log('report');
+                                                    },
+                                                },
+                                            ]}
+                                        >
+                                            <div className="group mr-1 flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                                <EllipsesIcon className="h-4 w-4" />
+                                            </div>
+                                        </PopoverMenu>
                                     </div>
 
-                                    <div className="flex space-x-2">
+                                    <div className="flex space-x-1.5">
                                         {/* Time Ago */}
                                         <div className="text-neutral">1 year ago by</div>
 
