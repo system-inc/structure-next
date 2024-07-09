@@ -28,6 +28,7 @@ export const menuClassName =
 export interface MenuInterface extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     title?: string | React.ReactNode;
     items?: MenuItemInterface[];
+    itemsClassName?: string;
     search?: boolean;
     highlightItemOnMount?: boolean; // Highlight the first item or first selected item on mount
     onItemSelected?: (item: MenuItemInterface, itemRenderIndex: number, event: any) => void;
@@ -431,7 +432,7 @@ export function Menu(properties: MenuInterface) {
                     {/* Menu Items */}
                     {itemsToRender.length ? (
                         // If there are menu items
-                        <div className="overflow-y-auto p-1">
+                        <div className={mergeClassNames('overflow-y-auto p-1', properties.itemsClassName)}>
                             {itemsToRender.map(function (itemToRender, itemToRenderIndex) {
                                 return (
                                     <MenuItem

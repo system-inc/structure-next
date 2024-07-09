@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Button } from '@structure/source/common/buttons/Button';
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { IdeaControl } from '@structure/source/modules/ideas/pages/IdeaControl';
+import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
@@ -23,11 +24,13 @@ import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
 import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
+import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
 
 // Component - IdeasPage
 export interface IdeasPageInterface {}
 export function IdeasPage(properties: IdeasPageInterface) {
     // Hooks
+    const { addNotice } = useNotice();
     const ideasQueryState = useQuery(IdeasDocument, {
         variables: {
             // pagination: {
@@ -36,25 +39,24 @@ export function IdeasPage(properties: IdeasPageInterface) {
         },
     });
 
-    const ideas = [
-        {
-            identifier: 'setting-to-enable-timestamps-on-each-chat-message-with-a-companion',
-            title: 'Add a setting to enable timestamps on each chat message with a companion',
-            description:
-                'This allows the AI to provide more contextually relevant responses by knowing when the user sent a message.',
-            upvotes: 12,
-            views: 1542,
-            submittedByDisplayName: 'Kirk Ouimet',
-            submittedByUsername: 'kirkouimet',
-            createdAt: new Date().toString(),
-            updatedAt: new Date().toString(),
-            topics: ['AI', 'Chat'],
-        },
-    ];
+    const ideas: {
+        id: string;
+        identifier: string;
+        title: string;
+        description: string;
+        upvotes: number;
+        views: number;
+        submittedByDisplayName: string;
+        submittedByUsername: string;
+        createdAt: string;
+        updatedAt: string;
+        topics: string[];
+    }[] = [];
 
     ideasQueryState.data?.articlesMine.items.forEach(function (idea) {
         ideas.push({
-            identifier: idea.id,
+            id: idea.id,
+            identifier: 'slug',
             title: idea.title,
             // description: idea.content,
             // Truncate description
@@ -65,7 +67,7 @@ export function IdeasPage(properties: IdeasPageInterface) {
             submittedByUsername: 'bill',
             createdAt: idea.createdAt,
             updatedAt: idea.updatedAt,
-            topics: ['Topic 1'].map(function (topic) {
+            topics: ['Stack', 'Supplements'].map(function (topic) {
                 return topic;
             }),
         });
@@ -98,6 +100,8 @@ export function IdeasPage(properties: IdeasPageInterface) {
 
             <ul className="mt-4">
                 {ideas.map(function (idea) {
+                    const ideaUrlPath = '/ideas/' + idea.id + '/' + idea.identifier;
+
                     return (
                         <li
                             key={idea.identifier}
@@ -128,7 +132,7 @@ export function IdeasPage(properties: IdeasPageInterface) {
                                 {/* Title and Topics */}
                                 <div className="">
                                     {/* Title */}
-                                    <Link href="/">
+                                    <Link href={ideaUrlPath}>
                                         <h4 className="inline font-medium">{idea.title}</h4>
                                     </Link>
 
@@ -161,9 +165,10 @@ export function IdeasPage(properties: IdeasPageInterface) {
                                     {[
                                         { content: '🍑', count: 6 },
                                         { content: '🍌', count: 2 },
-                                    ].map(function (reaction) {
+                                    ].map(function (reaction, reactionIndex) {
                                         return (
                                             <div
+                                                key={reactionIndex}
                                                 className={
                                                     // Layout
                                                     'flex cursor-pointer select-none items-center space-x-1.5 rounded-lg border px-2.5 ' +
@@ -200,23 +205,138 @@ export function IdeasPage(properties: IdeasPageInterface) {
                                         </IdeaControl>
 
                                         {/* Reactions */}
-                                        <IdeaControl className="">
-                                            <ReactionIcon className="h-4 w-4" />
-                                        </IdeaControl>
+                                        <PopoverMenu
+                                            itemsClassName="grid grid-cols-6 gap-1 text-2xl"
+                                            items={[
+                                                // Positive
+                                                {
+                                                    content: '😍',
+                                                },
+                                                {
+                                                    content: '🎉',
+                                                },
+                                                {
+                                                    content: '💯',
+                                                },
+                                                {
+                                                    content: '🚀',
+                                                },
+                                                {
+                                                    content: '❤️‍🔥',
+                                                },
+                                                {
+                                                    content: '👍',
+                                                },
+                                                // Negative
+                                                {
+                                                    content: '😢',
+                                                },
+                                                {
+                                                    content: '😡',
+                                                },
+                                                {
+                                                    content: '💔',
+                                                },
+                                                {
+                                                    content: '👿',
+                                                },
+                                                {
+                                                    content: '😠',
+                                                },
+                                                {
+                                                    content: '👎',
+                                                },
+                                                // Neutral
+                                                {
+                                                    content: '😐',
+                                                },
+                                                {
+                                                    content: '🤔',
+                                                },
+                                                {
+                                                    content: '😑',
+                                                },
+                                                {
+                                                    content: '🤷',
+                                                },
+                                                {
+                                                    content: '🤨',
+                                                },
+                                                {
+                                                    content: '😕',
+                                                },
+                                                // Funny
+                                                {
+                                                    content: '😂',
+                                                },
+                                                {
+                                                    content: '😆',
+                                                },
+                                                {
+                                                    content: '🤣',
+                                                },
+                                                {
+                                                    content: '😜',
+                                                },
+                                                {
+                                                    content: '🤪',
+                                                },
+                                                {
+                                                    content: '😝',
+                                                },
+                                                // Miscellaneous
+                                                {
+                                                    content: '🔥',
+                                                },
+                                                {
+                                                    content: '🎯',
+                                                },
+                                                {
+                                                    content: '🎊',
+                                                },
+                                                {
+                                                    content: '😈',
+                                                },
+                                                {
+                                                    content: '🥑',
+                                                },
+                                                {
+                                                    content: '🍑',
+                                                },
+                                            ]}
+                                            popoverProperties={{
+                                                side: 'top',
+                                            }}
+                                        >
+                                            <IdeaControl className="">
+                                                <ReactionIcon className="h-4 w-4" />
+                                            </IdeaControl>
+                                        </PopoverMenu>
 
                                         {/* Comments */}
-                                        <IdeaControl className="space-x-1.5">
+                                        <IdeaControl className="space-x-1.5" href={ideaUrlPath}>
                                             <CommentIcon className="h-4 w-4" />
                                             <div className="">10</div>
                                         </IdeaControl>
 
+                                        {/* Share */}
                                         <PopoverMenu
                                             items={[
                                                 {
-                                                    content:
-                                                        'Copy Link this has a popover that has a Copy Link menu item and a notice',
-                                                    onClick: function () {
-                                                        console.log('Copy Link');
+                                                    icon: CopyIcon,
+                                                    iconPosition: 'left',
+                                                    content: 'Copy Link',
+                                                    closeMenuOnSelected: true,
+                                                    onSelected: function () {
+                                                        const link = `${window.location.origin}/ideas/${idea.id}/${idea.identifier}`;
+
+                                                        // Copy the link to the clipboard
+                                                        navigator.clipboard.writeText(link);
+
+                                                        addNotice({
+                                                            title: 'Copied Link',
+                                                            content: link,
+                                                        });
                                                     },
                                                 },
                                             ]}

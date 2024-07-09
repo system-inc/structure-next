@@ -73,7 +73,7 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
             }
 
             // Close the popover if closePopoverOnSelect is true
-            if(propertiesCloseOnItemSelected || menuItem.closeMenuOnSelect) {
+            if(propertiesCloseOnItemSelected || menuItem.closeMenuOnSelected) {
                 setOpen(false);
             }
         },

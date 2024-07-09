@@ -19,12 +19,12 @@ export interface MenuItemInterface extends Omit<ButtonInterface, 'content'> {
     highlighted?: boolean;
     selected?: boolean;
     onSelected?: (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) => void;
-    closeMenuOnSelect?: boolean; // Used anytime the Menu is closable (e.g., in a popover or context menu)
+    closeMenuOnSelected?: boolean; // Used anytime the Menu is closable (e.g., in a popover or context menu)
 }
 export const MenuItem = React.memo(
     React.forwardRef<HTMLButtonElement, MenuItemInterface>((properties, reference) => {
         // Separate the non-Button properties from the Button properties
-        const { value, content, highlighted, selected, onSelected, closeMenuOnSelect, ...buttonProperties } =
+        const { value, content, highlighted, selected, onSelected, closeMenuOnSelected, ...buttonProperties } =
             properties;
 
         // Render the component

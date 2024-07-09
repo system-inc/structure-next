@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import Link from 'next/link';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -10,11 +11,14 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export interface IdeaControlInterface {
     className?: string;
     children?: React.ReactNode;
+    href?: string;
 }
 export function IdeaControl(properties: IdeaControlInterface) {
+    const Component = properties.href ? Link : 'div';
+
     // Render the component
     return (
-        <div
+        <Component
             tabIndex={0}
             className={mergeClassNames(
                 // Layout
@@ -37,9 +41,10 @@ export function IdeaControl(properties: IdeaControlInterface) {
                 'dark:group-aria-expanded:border-dark-5 dark:group-aria-expanded:bg-dark-3',
                 properties.className,
             )}
+            href={properties.href as string}
         >
             {properties.children}
-        </div>
+        </Component>
     );
 }
 

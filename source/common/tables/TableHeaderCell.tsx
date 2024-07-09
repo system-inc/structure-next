@@ -45,28 +45,28 @@ export function TableHeaderCell(properties: TableHeaderCellInterface) {
                                 value: 'Ascending',
                                 icon: ArrowUpIcon,
                                 iconPosition: 'left',
-                                closeMenuOnSelect: true,
+                                closeMenuOnSelected: true,
                             },
                             {
                                 content: 'Descending',
                                 value: 'Descending',
                                 icon: ArrowDownIcon,
                                 iconPosition: 'left',
-                                closeMenuOnSelect: true,
+                                closeMenuOnSelected: true,
                             },
                             {
                                 content: 'None',
                                 value: 'None',
                                 icon: ChevronsUpDownIcon,
                                 iconPosition: 'left',
-                                closeMenuOnSelect: true,
+                                closeMenuOnSelected: true,
                             },
                             {
                                 content: 'Hide',
                                 value: 'Hide',
                                 icon: HideIcon,
                                 iconPosition: 'left',
-                                closeMenuOnSelect: true,
+                                closeMenuOnSelected: true,
                                 onSelected: function () {
                                     if(properties.onColumnVisibilityChange) {
                                         properties.onColumnVisibilityChange(false, properties.column);
