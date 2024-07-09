@@ -7,6 +7,7 @@ import Link from 'next/link';
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
+import { IdeaControl } from '@structure/source/modules/ideas/pages/IdeaControl';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
@@ -21,6 +22,7 @@ import SupportIcon from '@structure/assets/icons/communication/SupportIcon.svg';
 import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
 import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
+import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
 
 // Component - IdeasPage
 export interface IdeasPageInterface {}
@@ -104,7 +106,7 @@ export function IdeasPage(properties: IdeasPageInterface) {
                             {/* Voting */}
                             <div className="mb-0 hidden flex-col items-center md:flex">
                                 {/* Votes */}
-                                <div className="w-full rounded-md border border-dark-3 bg-dark-1 p-4 text-center">
+                                <div className="w-full rounded-md border border-light-4 bg-light-1 p-4 text-center dark:border-dark-3 dark:bg-dark-1">
                                     <div className="text-2xl">{idea.upvotes}</div>
                                     <div className="text-sm">votes</div>
                                 </div>
@@ -136,7 +138,14 @@ export function IdeasPage(properties: IdeasPageInterface) {
                                             <Link
                                                 href="/"
                                                 key={topic}
-                                                className="ml-1.5 rounded-lg border border-purple-500 bg-purple-700 px-1.5 align-text-top text-sm leading-4 text-purple-200 hover:border-purple-400 hover:bg-purple-600 hover:text-purple-100"
+                                                className={
+                                                    // Layout
+                                                    'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 transition-colors ' +
+                                                    // Light
+                                                    'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500 ' +
+                                                    // Dark
+                                                    'dark:border-purple-500 dark:bg-purple-700 dark:text-purple-200 dark:hover:border-purple-400 dark:hover:bg-purple-600 dark:hover:text-purple-100'
+                                                }
                                             >
                                                 {topic}
                                             </Link>
@@ -149,36 +158,57 @@ export function IdeasPage(properties: IdeasPageInterface) {
 
                                 {/* Reactions */}
                                 <div className="mt-3.5 flex space-x-1.5">
-                                    <div className="flex cursor-pointer select-none items-center space-x-1.5 rounded-lg border border-dark-3 bg-dark-1 px-2.5 text-light-2 hover:bg-dark-2 hover:text-light">
-                                        <div className="text-lg">🍑</div>
-                                        <div className="">6</div>
-                                    </div>
-                                    <div className="flex cursor-pointer select-none items-center space-x-1.5 rounded-lg border border-dark-3 bg-dark-1 px-2.5 text-light-2 hover:bg-dark-2 hover:text-light">
-                                        <div className="text-lg">🍌</div>
-                                        <div className="">2</div>
-                                    </div>
+                                    {[
+                                        { content: '🍑', count: 6 },
+                                        { content: '🍌', count: 2 },
+                                    ].map(function (reaction) {
+                                        return (
+                                            <div
+                                                className={
+                                                    // Layout
+                                                    'flex cursor-pointer select-none items-center space-x-1.5 rounded-lg border px-2.5 ' +
+                                                    // Animation
+                                                    'transition-colors ' +
+                                                    // Light
+                                                    'border-light-3 text-dark ' +
+                                                    // Dark
+                                                    'dark:border-dark-3 dark:bg-dark-1 dark:text-light-2 ' +
+                                                    // Hover - Light
+                                                    'hover:border-light-4 hover:bg-light-1 hover:text-dark-1 ' +
+                                                    // Hover - Dark
+                                                    'dark:hover:border-dark-4 dark:hover:bg-dark-2 dark:hover:text-light ' +
+                                                    // Active - Light
+                                                    'active:border-light-5 active:bg-light-2 active:text-dark-2 ' +
+                                                    // Active - Dark
+                                                    'dark:active:border-dark-5 dark:active:bg-dark-3 '
+                                                }
+                                            >
+                                                <div className="text-lg">{reaction.content}</div>
+                                                <div className="">{reaction.count}</div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
 
-                                <p>add active and focus states to each of these controls below:</p>
-
-                                {/* Metadata */}
+                                {/* Controls */}
                                 <div className="mt-3 flex items-center justify-between space-x-2 text-sm">
-                                    <div className="flex items-center">
+                                    <div className="flex select-none items-center">
                                         {/* Vote (Mobile) */}
-                                        <div className="group mr-1 flex cursor-pointer items-center space-x-1.5 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2 md:hidden">
+                                        <IdeaControl className="space-x-1.5 md:hidden">
                                             <ArrowUpIcon className="h-3.5 w-3.5" />
                                             <div className="">{idea.upvotes}</div>
-                                        </div>
+                                        </IdeaControl>
 
                                         {/* Reactions */}
-                                        <div className="group mr-1 flex cursor-pointer items-center rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                        <IdeaControl className="">
                                             <ReactionIcon className="h-4 w-4" />
-                                        </div>
+                                        </IdeaControl>
 
-                                        <div className="group mr-1 flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                        {/* Comments */}
+                                        <IdeaControl className="space-x-1.5">
                                             <CommentIcon className="h-4 w-4" />
                                             <div className="">10</div>
-                                        </div>
+                                        </IdeaControl>
 
                                         <PopoverMenu
                                             items={[
@@ -191,14 +221,16 @@ export function IdeasPage(properties: IdeasPageInterface) {
                                                 },
                                             ]}
                                         >
-                                            <div className="group mr-1 flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                            <IdeaControl className="">
                                                 <ShareIcon className="h-4 w-4" />
-                                            </div>
+                                            </IdeaControl>
                                         </PopoverMenu>
 
                                         <PopoverMenu
                                             items={[
                                                 {
+                                                    icon: FlagIcon,
+                                                    iconPosition: 'left',
                                                     content:
                                                         'Report - this has a popover that has a Report with flag icon which goes through a report flow - see randomseed.com',
                                                     onClick: function () {
@@ -207,19 +239,19 @@ export function IdeasPage(properties: IdeasPageInterface) {
                                                 },
                                             ]}
                                         >
-                                            <div className="group mr-1 flex cursor-pointer items-center space-x-1 rounded-lg border border-transparent px-2 py-1.5 hover:border-dark-3 hover:bg-dark-2">
+                                            <IdeaControl className="">
                                                 <EllipsesIcon className="h-4 w-4" />
-                                            </div>
+                                            </IdeaControl>
                                         </PopoverMenu>
                                     </div>
 
                                     <div className="flex space-x-1.5">
                                         {/* Time Ago */}
-                                        <div className="text-neutral">1 year ago by</div>
+                                        <div className="text-neutral+3 dark:text-neutral">1 year ago by</div>
 
                                         {/* User Display Name */}
                                         <Link
-                                            className="flex items-center space-x-1 text-light-3 hover:text-light"
+                                            className="flex items-center space-x-1 text-neutral-6 transition-colors hover:text-dark-6 active:text-dark dark:text-light-3 dark:hover:text-light-2 dark:active:text-light"
                                             href={`/profile/${idea.submittedByUsername}`}
                                         >
                                             {/* Profile Picture */}

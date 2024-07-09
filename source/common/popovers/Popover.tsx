@@ -90,7 +90,7 @@ export function Popover(properties: PopoverInterface) {
                     asChild
                 >
                     {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
-                    {wrapForSlot(properties.children, open ? 'data-state-open' : '')}
+                    {wrapForSlot(properties.children, open ? 'group data-state-open' : 'group')}
                 </RadixPopover.Trigger>
             )}
             <RadixPopover.Portal container={properties.portalContainer}>
