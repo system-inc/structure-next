@@ -68,7 +68,7 @@ export interface FormSubmitResponseInterface {
 // Component - Form
 export interface FormInterface {
     formInputs: React.ReactElement<FormInputInterface>[];
-    onSubmit: (values: FormValuesInterface) => Promise<FormSubmitResponseInterface>;
+    onSubmit: (values: FormValuesInterface) => FormSubmitResponseInterface | Promise<FormSubmitResponseInterface>;
     onSubmitSuccess?: (response: FormSubmitResponseInterface) => void;
     className?: string;
     title?: React.ReactNode;
