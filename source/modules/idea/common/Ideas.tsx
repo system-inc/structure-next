@@ -30,7 +30,8 @@ export function Ideas(properties: IdeasInterface) {
         identifier: string;
         title: string;
         description: string;
-        upvotes: number;
+        upvoteCount: number;
+        upvoted: boolean;
         views: number;
         submittedByDisplayName: string;
         submittedByUsername: string;
@@ -47,7 +48,8 @@ export function Ideas(properties: IdeasInterface) {
             // description: idea.content,
             // Truncate description
             description: idea.content.substring(0, 500) + '...',
-            upvotes: 10,
+            upvoteCount: idea.upvoteCount,
+            upvoted: idea.upvoted,
             views: 100,
             submittedByDisplayName: 'Bill',
             submittedByUsername: 'bill',
@@ -88,7 +90,8 @@ export function Ideas(properties: IdeasInterface) {
                                 identifier={idea.identifier}
                                 title={idea.title}
                                 description={idea.description}
-                                upvotes={idea.upvotes}
+                                upvoteCount={idea.upvoteCount}
+                                upvoted={idea.upvoted}
                                 views={idea.views}
                                 submittedByDisplayName={idea.submittedByDisplayName}
                                 submittedByUsername={idea.submittedByUsername}

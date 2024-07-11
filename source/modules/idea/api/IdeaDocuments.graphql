@@ -9,6 +9,8 @@ query Ideas($pagination: PaginationInputWithFilters) {
             topic {
                 name
             }
+            upvoteCount
+            upvoted
             latestRevisionId
             updatedAt
             createdAt
@@ -37,4 +39,14 @@ mutation IdeaCreate($input: ArticleCreateInput!) {
         upvoteCount
         downvoteCount
     }
+}
+
+# Idea Vote
+mutation IdeaVote($articleId: String!, $type: ArticleVoteType!) {
+    articleVote(articleId: $articleId, type: $type)
+}
+
+# Idea Unvote
+mutation IdeaUnvote($articleId: String!) {
+    articleUnvote(articleId: $articleId)
 }

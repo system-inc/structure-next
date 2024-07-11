@@ -5,12 +5,9 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { IdeaVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaVoteControl';
 import { IdeaReactions } from '@structure/source/modules/idea/common/idea/IdeaReactions';
 import { IdeaControls } from '@structure/source/modules/idea/common/idea/controls/IdeaControls';
-
-// Dependencies - Assets
-import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
 
 // Component - Idea
 export interface IdeaInterface {
@@ -18,7 +15,8 @@ export interface IdeaInterface {
     identifier: string;
     title: string;
     description: string;
-    upvotes: number;
+    upvoteCount: number;
+    upvoted: boolean;
     views: number;
     submittedByDisplayName: string;
     submittedByUsername: string;
@@ -34,19 +32,12 @@ export function Idea(properties: IdeaInterface) {
     return (
         <div className="flex flex-col border-b border-dark-3 py-6 md:flex-row md:space-x-5">
             {/* Voting */}
-            <div className="mb-0 hidden flex-col items-center md:flex">
-                {/* Votes */}
-                <div className="w-full rounded-md border border-light-4 bg-light-1 p-4 text-center dark:border-dark-3 dark:bg-dark-1">
-                    <div className="text-2xl">{properties.upvotes}</div>
-                    <div className="text-sm">votes</div>
-                </div>
-                {/* Upvote */}
-                <div className="mb-4 mt-2">
-                    <Button className="pl-3" icon={ArrowUpIcon} iconPosition="left" iconClassName="w-3 h-3">
-                        Upvote
-                    </Button>
-                </div>
-            </div>
+            <IdeaVoteControl
+                className="hidden w-24 shrink-0 md:flex"
+                ideaId={properties.id}
+                upvoteCount={properties.upvoteCount}
+                upvoted={properties.upvoted}
+            />
 
             {/* Post */}
             <div>
@@ -58,7 +49,7 @@ export function Idea(properties: IdeaInterface) {
                     </Link>
 
                     {/* Topics */}
-                    {properties.topics.map(function (topic, index) {
+                    {properties.topics.map(function (topic) {
                         return (
                             <Link
                                 href="/"

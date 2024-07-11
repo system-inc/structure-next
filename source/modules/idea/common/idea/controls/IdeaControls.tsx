@@ -7,7 +7,7 @@ import Link from 'next/link';
 // Dependencies - Main Components
 import { IdeaInterface } from '@structure/source/modules/idea/common/idea/Idea';
 import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
-import { IdeaVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaVoteControl';
+import { IdeaMiniVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaMiniVoteControl';
 import { IdeaReactionControl } from '@structure/source/modules/idea/common/idea/controls/IdeaReactionControl';
 import { IdeaShareControl } from '@structure/source/modules/idea/common/idea/controls/IdeaShareControl';
 import { IdeaReportControl } from '@structure/source/modules/idea/common/idea/controls/IdeaReportControl';
@@ -29,7 +29,7 @@ export function IdeaControls(properties: IdeaControlsInterface) {
         <div className={mergeClassNames('flex items-center justify-between space-x-2 text-sm', properties.className)}>
             <div className="flex select-none items-center">
                 {/* Vote (Mobile) */}
-                <IdeaVoteControl upvotes={properties.idea.upvotes} />
+                <IdeaMiniVoteControl upvotes={properties.idea.upvoteCount} />
 
                 {/* Reactions */}
                 <IdeaReactionControl />
