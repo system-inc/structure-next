@@ -8,7 +8,7 @@ import * as RadixScrollArea from '@radix-ui/react-scroll-area';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { SpringValue, useSpring, animated, SpringConfig, easings, update } from '@react-spring/web';
+import { SpringValue, useSpring, animated, SpringConfig, easings } from '@react-spring/web';
 import { useDrag, useGesture, useScroll } from '@use-gesture/react';
 import { clamp } from '@structure/source/utilities/Number';
 

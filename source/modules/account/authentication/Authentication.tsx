@@ -65,6 +65,18 @@ export function Authentication(properties: AuthenticationInterface) {
     // The current authentication component based on the authentication state
     let currentAuthenticationComponent = null;
 
+    /*
+    status can be
+  Authenticated - i have proved and can now do the thing, accountRegistrationComplete
+  AuthenticationExpired - start over
+  AuthenticationUsed - already done
+  ChallengeExpired - didn't complete in time, start over
+  ChallengeFailed - check AuthenticationCurrent query
+  Challenged - check challenge type
+    - email verification is one flow, emailVerificationSend mutation, run it, do emailVerificationConfirm
+    - accountCredentials - provide password using accountCredentialVerify
+*/
+
     // If the current challenge is EmailVerification
     if(authenticationCurrentQuery.data?.authenticationCurrent?.currentChallenge?.challengeType == 'EmailVerification') {
         currentAuthenticationComponent = (
