@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import OtpEmail from './challenges/otp-email';
-import Password from '../authentication/challenges/password';
+import Password from '../authentication-old/challenges/password';
 import { useTransition, animated, useSpring } from '@react-spring/web';
 import {
     VerificationState,

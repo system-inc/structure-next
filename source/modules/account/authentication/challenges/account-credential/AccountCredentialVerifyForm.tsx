@@ -13,7 +13,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { AccountRegistrationCompleteDocument } from '@project/source/api/GraphQlGeneratedCode';
+// import { AccountRegistrationCompleteDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import PhiIcon from '@project/assets/icons/phi/PhiIcon.svg';
@@ -22,9 +22,9 @@ import PhiIcon from '@project/assets/icons/phi/PhiIcon.svg';
 export interface AccountCredentialVerifyFormInterface {}
 export function AccountCredentialVerifyForm(properties: AccountCredentialVerifyFormInterface) {
     // Hooks
-    const [accountRegistrationCompleteMutation, accountRegistrationCompleteMutationState] = useMutation(
-        AccountRegistrationCompleteDocument,
-    );
+    // const [accountRegistrationCompleteMutation, accountRegistrationCompleteMutationState] = useMutation(
+    //     AccountRegistrationCompleteDocument,
+    // );
 
     // Render the component
     return (
