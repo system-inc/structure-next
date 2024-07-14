@@ -86,315 +86,315 @@ export const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaInterface>(
 
         // Below is a custom implementation of the ScrollArea component more akin to Radix's, but maybe it would be better to use a more minimal one like the one above
 
-        const dragging = React.useRef(false);
-        const hovered = React.useRef(false);
+        // const dragging = React.useRef(false);
+        // const hovered = React.useRef(false);
 
-        const [thumbSizeHorizontal, setThumbSizeHorizontal] = React.useState<number>(0);
-        const [thumbSizeVertical, setThumbSizeVertical] = React.useState<number>(0);
-        const [showVerticalScroll, setShowVerticalScroll] = React.useState<boolean>(false);
-        const [showHorizontalScroll, setShowHorizontalScroll] = React.useState<boolean>(false);
+        // const [thumbSizeHorizontal, setThumbSizeHorizontal] = React.useState<number>(0);
+        // const [thumbSizeVertical, setThumbSizeVertical] = React.useState<number>(0);
+        // const [showVerticalScroll, setShowVerticalScroll] = React.useState<boolean>(false);
+        // const [showHorizontalScroll, setShowHorizontalScroll] = React.useState<boolean>(false);
 
-        const [trackSpring, trackSpringApi] = useSpring(() => ({
-            opacity: 0,
-            width: 14,
-        }));
-        const [thumbSpringVertical, thumbSpringVerticalApi] = useSpring(() => ({
-            y: 0,
-        }));
-        const [thumbSpringHorizontal, thumbSpringHorizontalApi] = useSpring(() => ({
-            x: 0,
-        }));
+        // const [trackSpring, trackSpringApi] = useSpring(() => ({
+        //     opacity: 0,
+        //     width: 14,
+        // }));
+        // const [thumbSpringVertical, thumbSpringVerticalApi] = useSpring(() => ({
+        //     y: 0,
+        // }));
+        // const [thumbSpringHorizontal, thumbSpringHorizontalApi] = useSpring(() => ({
+        //     x: 0,
+        // }));
 
-        React.useEffect(() => {
-            if(scrollAreaMeasureRef.current) {
-                const scrollAreaRef = scrollAreaMeasureRef.current;
+        // React.useEffect(() => {
+        //     if(scrollAreaMeasureRef.current) {
+        //         const scrollAreaRef = scrollAreaMeasureRef.current;
 
-                // Existing ResizeObserver logic for size changes
-                const resizeObserver = new ResizeObserver(() => {
-                    updateThumbSizes();
-                    updateThumbPositions();
-                    updateShowScrollBars();
-                });
-                resizeObserver.observe(scrollAreaRef);
+        //         // Existing ResizeObserver logic for size changes
+        //         const resizeObserver = new ResizeObserver(() => {
+        //             updateThumbSizes();
+        //             updateThumbPositions();
+        //             updateShowScrollBars();
+        //         });
+        //         resizeObserver.observe(scrollAreaRef);
 
-                // New MutationObserver logic for content changes
-                const mutationObserver = new MutationObserver(() => {
-                    updateThumbSizes();
-                    updateThumbPositions();
-                    updateShowScrollBars();
-                });
-                mutationObserver.observe(scrollAreaRef, { childList: true, subtree: true });
+        //         // New MutationObserver logic for content changes
+        //         const mutationObserver = new MutationObserver(() => {
+        //             updateThumbSizes();
+        //             updateThumbPositions();
+        //             updateShowScrollBars();
+        //         });
+        //         mutationObserver.observe(scrollAreaRef, { childList: true, subtree: true });
 
-                // Function to update thumb sizes
-                const updateThumbSizes = () => {
-                    if(scrollAreaMeasureRef.current) {
-                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                        const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+        //         // Function to update thumb sizes
+        //         const updateThumbSizes = () => {
+        //             if(scrollAreaMeasureRef.current) {
+        //                 const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+        //                 const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+        //                 const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+        //                 const clientWidth = scrollAreaMeasureRef.current.clientWidth;
 
-                        if(verticalScrollbar) {
-                            // Calculate thumb sizes
-                            const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
-                            // console.log(thumbSizeVertical);
-                            setThumbSizeVertical(thumbSizeVertical);
-                        }
+        //                 if(verticalScrollbar) {
+        //                     // Calculate thumb sizes
+        //                     const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
+        //                     // console.log(thumbSizeVertical);
+        //                     setThumbSizeVertical(thumbSizeVertical);
+        //                 }
 
-                        if(horizontalScrollbar) {
-                            // Calculate thumb sizes
-                            const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
-                            // console.log(thumbSizeHorizontal);
-                            setThumbSizeHorizontal(thumbSizeHorizontal);
-                        }
-                    }
-                };
+        //                 if(horizontalScrollbar) {
+        //                     // Calculate thumb sizes
+        //                     const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
+        //                     // console.log(thumbSizeHorizontal);
+        //                     setThumbSizeHorizontal(thumbSizeHorizontal);
+        //                 }
+        //             }
+        //         };
 
-                const updateShowScrollBars = () => {
-                    if(scrollAreaMeasureRef.current) {
-                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                        const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+        //         const updateShowScrollBars = () => {
+        //             if(scrollAreaMeasureRef.current) {
+        //                 const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+        //                 const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+        //                 const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+        //                 const clientWidth = scrollAreaMeasureRef.current.clientWidth;
 
-                        const showVertical = scrollHeight > clientHeight;
-                        const showHorizontal = scrollWidth > clientWidth;
+        //                 const showVertical = scrollHeight > clientHeight;
+        //                 const showHorizontal = scrollWidth > clientWidth;
 
-                        setShowVerticalScroll(showVertical);
-                        setShowHorizontalScroll(showHorizontal);
-                    }
-                };
+        //                 setShowVerticalScroll(showVertical);
+        //                 setShowHorizontalScroll(showHorizontal);
+        //             }
+        //         };
 
-                const updateThumbPositions = () => {
-                    if(scrollAreaMeasureRef.current) {
-                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                        const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+        //         const updateThumbPositions = () => {
+        //             if(scrollAreaMeasureRef.current) {
+        //                 const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+        //                 const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+        //                 const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+        //                 const clientWidth = scrollAreaMeasureRef.current.clientWidth;
 
-                        if(verticalScrollbar) {
-                            const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
-                            const scrollPosition =
-                                scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight);
+        //                 if(verticalScrollbar) {
+        //                     const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
+        //                     const scrollPosition =
+        //                         scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight);
 
-                            thumbSpringVerticalApi.start({
-                                config: springConfig,
-                                y: scrollPosition * (clientHeight - thumbSizeVertical),
-                                immediate: true,
-                            });
-                        }
+        //                     thumbSpringVerticalApi.start({
+        //                         config: springConfig,
+        //                         y: scrollPosition * (clientHeight - thumbSizeVertical),
+        //                         immediate: true,
+        //                     });
+        //                 }
 
-                        if(horizontalScrollbar) {
-                            const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
-                            const scrollPosition =
-                                scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth);
+        //                 if(horizontalScrollbar) {
+        //                     const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
+        //                     const scrollPosition =
+        //                         scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth);
 
-                            thumbSpringHorizontalApi.start({
-                                config: springConfig,
-                                x: scrollPosition * (clientWidth - thumbSizeHorizontal),
-                                immediate: true,
-                            });
-                        }
-                    }
-                    // console.log('updateThumbPositions');
-                };
+        //                     thumbSpringHorizontalApi.start({
+        //                         config: springConfig,
+        //                         x: scrollPosition * (clientWidth - thumbSizeHorizontal),
+        //                         immediate: true,
+        //                     });
+        //                 }
+        //             }
+        //             // console.log('updateThumbPositions');
+        //         };
 
-                // Initial update
-                updateThumbSizes();
-                updateShowScrollBars();
+        //         // Initial update
+        //         updateThumbSizes();
+        //         updateShowScrollBars();
 
-                // Cleanup function to disconnect observers
-                return () => {
-                    resizeObserver.disconnect();
-                    mutationObserver.disconnect();
-                };
-            }
-        }, [thumbSpringHorizontalApi, thumbSpringVerticalApi, horizontalScrollbar, verticalScrollbar]);
+        //         // Cleanup function to disconnect observers
+        //         return () => {
+        //             resizeObserver.disconnect();
+        //             mutationObserver.disconnect();
+        //         };
+        //     }
+        // }, [thumbSpringHorizontalApi, thumbSpringVerticalApi, horizontalScrollbar, verticalScrollbar]);
 
-        const bindDrag = useDrag((state) => {
-            dragging.current = state.active;
+        // const bindDrag = useDrag((state) => {
+        //     dragging.current = state.active;
 
-            if(scrollAreaMeasureRef.current) {
-                const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                const clientWidth = scrollAreaMeasureRef.current.clientWidth;
-                const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+        //     if(scrollAreaMeasureRef.current) {
+        //         const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+        //         const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+        //         const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+        //         const clientHeight = scrollAreaMeasureRef.current.clientHeight;
 
-                if(horizontalScrollbar) {
-                    const scrollTo =
-                        (scrollAreaMeasureRef.current.scrollLeft -
-                            state.delta[0] / (clientWidth - thumbSizeHorizontal - 6)) *
-                        (scrollWidth - clientWidth);
-                    // console.log(scrollTo);
-                    scrollAreaMeasureRef.current.scrollLeft = clamp(scrollTo, 0, scrollWidth - clientWidth);
-                }
+        //         if(horizontalScrollbar) {
+        //             const scrollTo =
+        //                 (scrollAreaMeasureRef.current.scrollLeft -
+        //                     state.delta[0] / (clientWidth - thumbSizeHorizontal - 6)) *
+        //                 (scrollWidth - clientWidth);
+        //             // console.log(scrollTo);
+        //             scrollAreaMeasureRef.current.scrollLeft = clamp(scrollTo, 0, scrollWidth - clientWidth);
+        //         }
 
-                if(verticalScrollbar) {
-                    const scrollTo =
-                        scrollAreaMeasureRef.current.scrollTop + state.delta[1] * (scrollHeight / clientHeight);
-                    // console.log(scrollTo);
-                    scrollAreaMeasureRef.current.scrollTop = clamp(scrollTo, 0, scrollHeight - clientHeight);
-                }
-            }
-        });
+        //         if(verticalScrollbar) {
+        //             const scrollTo =
+        //                 scrollAreaMeasureRef.current.scrollTop + state.delta[1] * (scrollHeight / clientHeight);
+        //             // console.log(scrollTo);
+        //             scrollAreaMeasureRef.current.scrollTop = clamp(scrollTo, 0, scrollHeight - clientHeight);
+        //         }
+        //     }
+        // });
 
-        useScroll(
-            (state) => {
-                const scrollTop = state.xy[1];
-                const scrollLeft = state.xy[0];
+        // useScroll(
+        //     (state) => {
+        //         const scrollTop = state.xy[1];
+        //         const scrollLeft = state.xy[0];
 
-                if(scrollAreaMeasureRef.current && state.scrolling) {
-                    if(horizontalScrollbar) {
-                        const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                        const clientWidth = scrollAreaMeasureRef.current.clientWidth;
-                        const scrollTo =
-                            (scrollLeft / (scrollWidth - clientWidth)) * (clientWidth - thumbSizeHorizontal);
+        //         if(scrollAreaMeasureRef.current && state.scrolling) {
+        //             if(horizontalScrollbar) {
+        //                 const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+        //                 const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+        //                 const scrollTo =
+        //                     (scrollLeft / (scrollWidth - clientWidth)) * (clientWidth - thumbSizeHorizontal);
 
-                        thumbSpringHorizontalApi.start({
-                            x: scrollTo - 4,
-                            immediate: true,
-                        });
-                    }
+        //                 thumbSpringHorizontalApi.start({
+        //                     x: scrollTo - 4,
+        //                     immediate: true,
+        //                 });
+        //             }
 
-                    if(verticalScrollbar) {
-                        const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                        const clientHeight = scrollAreaMeasureRef.current.clientHeight - 3;
-                        const scrollTo =
-                            (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - thumbSizeVertical);
+        //             if(verticalScrollbar) {
+        //                 const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+        //                 const clientHeight = scrollAreaMeasureRef.current.clientHeight - 3;
+        //                 const scrollTo =
+        //                     (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - thumbSizeVertical);
 
-                        thumbSpringVerticalApi.start({
-                            y: scrollTo,
-                            immediate: true,
-                        });
-                    }
+        //                 thumbSpringVerticalApi.start({
+        //                     y: scrollTo,
+        //                     immediate: true,
+        //                 });
+        //             }
 
-                    // Update track spring
-                    trackSpringApi.start({
-                        config: springConfig,
-                        opacity: 1,
-                    });
-                }
-                else if(!dragging.current && !hovered.current) {
-                    // Update track spring
-                    trackSpringApi.start({
-                        config: springConfig,
-                        delay: scrollHideDelay,
-                        opacity: 0,
-                    });
-                }
-            },
-            {
-                target: scrollAreaMeasureRef,
-            },
-        );
+        //             // Update track spring
+        //             trackSpringApi.start({
+        //                 config: springConfig,
+        //                 opacity: 1,
+        //             });
+        //         }
+        //         else if(!dragging.current && !hovered.current) {
+        //             // Update track spring
+        //             trackSpringApi.start({
+        //                 config: springConfig,
+        //                 delay: scrollHideDelay,
+        //                 opacity: 0,
+        //             });
+        //         }
+        //     },
+        //     {
+        //         target: scrollAreaMeasureRef,
+        //     },
+        // );
 
-        React.useEffect(() => {
-            // Set the initial thumb positions
-            const updateThumbPositions = () => {
-                if(scrollAreaMeasureRef.current) {
-                    const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
-                    const clientHeight = scrollAreaMeasureRef.current.clientHeight;
-                    const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
-                    const clientWidth = scrollAreaMeasureRef.current.clientWidth;
+        // React.useEffect(() => {
+        //     // Set the initial thumb positions
+        //     const updateThumbPositions = () => {
+        //         if(scrollAreaMeasureRef.current) {
+        //             const scrollHeight = scrollAreaMeasureRef.current.scrollHeight;
+        //             const clientHeight = scrollAreaMeasureRef.current.clientHeight;
+        //             const scrollWidth = scrollAreaMeasureRef.current.scrollWidth;
+        //             const clientWidth = scrollAreaMeasureRef.current.clientWidth;
 
-                    if(verticalScrollbar) {
-                        const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
-                        const scrollPosition = scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight);
+        //             if(verticalScrollbar) {
+        //                 const thumbSizeVertical = Math.max((clientHeight / scrollHeight) * clientHeight, 44);
+        //                 const scrollPosition = scrollAreaMeasureRef.current.scrollTop / (scrollHeight - clientHeight);
 
-                        thumbSpringVerticalApi.start({
-                            config: springConfig,
-                            y: scrollPosition * (clientHeight - thumbSizeVertical),
-                            immediate: true,
-                        });
-                    }
+        //                 thumbSpringVerticalApi.start({
+        //                     config: springConfig,
+        //                     y: scrollPosition * (clientHeight - thumbSizeVertical),
+        //                     immediate: true,
+        //                 });
+        //             }
 
-                    if(horizontalScrollbar) {
-                        const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
-                        const scrollPosition = scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth);
+        //             if(horizontalScrollbar) {
+        //                 const thumbSizeHorizontal = Math.max((clientWidth / scrollWidth) * clientWidth, 44);
+        //                 const scrollPosition = scrollAreaMeasureRef.current.scrollLeft / (scrollWidth - clientWidth);
 
-                        thumbSpringHorizontalApi.start({
-                            config: springConfig,
-                            x: scrollPosition * (clientWidth - thumbSizeHorizontal),
-                            immediate: true,
-                        });
-                    }
-                }
-                // console.log('updateThumbPositions');
-            };
-            updateThumbPositions();
-        }, [thumbSpringHorizontalApi, thumbSpringVerticalApi, horizontalScrollbar, verticalScrollbar]);
+        //                 thumbSpringHorizontalApi.start({
+        //                     config: springConfig,
+        //                     x: scrollPosition * (clientWidth - thumbSizeHorizontal),
+        //                     immediate: true,
+        //                 });
+        //             }
+        //         }
+        //         // console.log('updateThumbPositions');
+        //     };
+        //     updateThumbPositions();
+        // }, [thumbSpringHorizontalApi, thumbSpringVerticalApi, horizontalScrollbar, verticalScrollbar]);
 
-        const bindMouseEvents = useGesture({
-            onMouseEnter: () => {
-                hovered.current = true;
+        // const bindMouseEvents = useGesture({
+        //     onMouseEnter: () => {
+        //         hovered.current = true;
 
-                // Clear current springs
-                trackSpringApi.stop();
+        //         // Clear current springs
+        //         trackSpringApi.stop();
 
-                trackSpringApi.start({
-                    config: springConfig,
-                    opacity: 1,
-                    width: 18,
-                });
-            },
-            onMouseLeave: () => {
-                hovered.current = false;
+        //         trackSpringApi.start({
+        //             config: springConfig,
+        //             opacity: 1,
+        //             width: 18,
+        //         });
+        //     },
+        //     onMouseLeave: () => {
+        //         hovered.current = false;
 
-                if(!dragging.current) {
-                    trackSpringApi.start({
-                        config: springConfig,
-                        to: async (next) => {
-                            await next({ width: 14 });
-                            await next({ opacity: 0 });
-                        },
-                    });
-                }
-            },
-        });
+        //         if(!dragging.current) {
+        //             trackSpringApi.start({
+        //                 config: springConfig,
+        //                 to: async (next) => {
+        //                     await next({ width: 14 });
+        //                     await next({ opacity: 0 });
+        //                 },
+        //             });
+        //         }
+        //     },
+        // });
 
-        return (
-            <div
-                ref={scrollContainerRef}
-                className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName, 'relative')}
-            >
-                <div
-                    ref={mergeRefs(reference, scrollAreaMeasureRef)}
-                    className={mergeClassNames(
-                        verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
-                        horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
-                        verticalScrollbar && horizontalScrollbar && 'overflow-auto',
-                        'h-full w-full',
-                    )}
-                    style={{
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                    }}
-                >
-                    {properties.children}
-                </div>
+        // return (
+        //     <div
+        //         ref={scrollContainerRef}
+        //         className={mergeClassNames(scrollAreaContainerClassName, properties.containerClassName, 'relative')}
+        //     >
+        //         <div
+        //             ref={mergeRefs(reference, scrollAreaMeasureRef)}
+        //             className={mergeClassNames(
+        //                 verticalScrollbar && !horizontalScrollbar && 'overflow-y-auto overflow-x-clip',
+        //                 horizontalScrollbar && !verticalScrollbar && 'overflow-x-auto overflow-y-clip',
+        //                 verticalScrollbar && horizontalScrollbar && 'overflow-auto',
+        //                 'h-full w-full',
+        //             )}
+        //             style={{
+        //                 scrollbarWidth: 'none',
+        //                 msOverflowStyle: 'none',
+        //             }}
+        //         >
+        //             {properties.children}
+        //         </div>
 
-                {/* Scroll Bar */}
-                {verticalScrollbar && showVerticalScroll && (
-                    <ScrollBar
-                        orientation="vertical"
-                        thumbSize={thumbSizeVertical}
-                        scrollAnimation={thumbSpringVertical}
-                        trackAnimation={trackSpring}
-                        trackGestureBinds={bindMouseEvents}
-                        {...bindDrag()}
-                    />
-                )}
-                {horizontalScrollbar && showHorizontalScroll && (
-                    <ScrollBar
-                        orientation="horizontal"
-                        thumbSize={thumbSizeHorizontal}
-                        scrollAnimation={thumbSpringHorizontal}
-                        trackAnimation={trackSpring}
-                        trackGestureBinds={bindMouseEvents}
-                        {...bindDrag()}
-                    />
-                )}
-            </div>
-        );
+        //         {/* Scroll Bar */}
+        //         {verticalScrollbar && showVerticalScroll && (
+        //             <ScrollBar
+        //                 orientation="vertical"
+        //                 thumbSize={thumbSizeVertical}
+        //                 scrollAnimation={thumbSpringVertical}
+        //                 trackAnimation={trackSpring}
+        //                 trackGestureBinds={bindMouseEvents}
+        //                 {...bindDrag()}
+        //             />
+        //         )}
+        //         {horizontalScrollbar && showHorizontalScroll && (
+        //             <ScrollBar
+        //                 orientation="horizontal"
+        //                 thumbSize={thumbSizeHorizontal}
+        //                 scrollAnimation={thumbSpringHorizontal}
+        //                 trackAnimation={trackSpring}
+        //                 trackGestureBinds={bindMouseEvents}
+        //                 {...bindDrag()}
+        //             />
+        //         )}
+        //     </div>
+        // );
 
         // FIXME: Memory leak exists somewhere in here: Likely RadixScrollArea.Thumb (https://github.com/radix-ui/primitives/issues/1973)
         // Render the component
