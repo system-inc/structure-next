@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Idea } from '@structure/source/modules/idea/common/idea/Idea';
+import { Idea, IdeaReactionsType } from '@structure/source/modules/idea/common/idea/Idea';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
@@ -32,6 +32,7 @@ export function Ideas(properties: IdeasInterface) {
         description: string;
         upvoteCount: number;
         voteType: ArticleVoteType | null | undefined;
+        reactions: IdeaReactionsType;
         views: number;
         submittedByDisplayName: string;
         submittedByUsername: string;
@@ -50,6 +51,7 @@ export function Ideas(properties: IdeasInterface) {
             description: idea.content.substring(0, 500) + '...',
             upvoteCount: idea.upvoteCount,
             voteType: idea.voteType,
+            reactions: idea.reactions ?? [],
             views: 100,
             submittedByDisplayName: 'Bill',
             submittedByUsername: 'bill',
@@ -92,6 +94,7 @@ export function Ideas(properties: IdeasInterface) {
                                 description={idea.description}
                                 upvoteCount={idea.upvoteCount}
                                 voteType={idea.voteType}
+                                reactions={idea.reactions}
                                 views={idea.views}
                                 submittedByDisplayName={idea.submittedByDisplayName}
                                 submittedByUsername={idea.submittedByUsername}

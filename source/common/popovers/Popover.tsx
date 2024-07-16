@@ -48,9 +48,12 @@ export function Popover(properties: PopoverInterface) {
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // On mount, set the open state
-    React.useEffect(() => {
-        setOpen(properties.open ?? false);
-    }, [properties.open]); // Listen for changes to the open property
+    React.useEffect(
+        function () {
+            setOpen(properties.open ?? false);
+        },
+        [properties.open],
+    ); // Listen for changes to the open property
 
     // Defaults
     const side = properties.side ?? 'top';
@@ -58,6 +61,8 @@ export function Popover(properties: PopoverInterface) {
     const align = properties.align ?? 'center';
     const alignOffset = properties.alignOffset ?? 0;
     const collisionPadding = properties.collisionPadding ?? 12;
+
+    // Function to handle on open change
     function onOpenChange() {
         // Call the onOpenChange callback
         if(properties.onOpenChange) {

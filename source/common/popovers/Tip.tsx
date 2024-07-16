@@ -32,6 +32,17 @@ export function Tip(properties: TipInterface) {
     const alignOffset = properties.alignOffset ?? 0;
     const collisionPadding = properties.collisionPadding ?? 12;
 
+    // Function to handle on open change
+    function onOpenChange() {
+        // Call the onOpenChange callback
+        if(properties.onOpenChange) {
+            properties.onOpenChange(!open);
+        }
+
+        // Update the state
+        setOpen(!open);
+    }
+
     // If the content is a string, wrap it in a div
     let content = properties.content;
     if(typeof content === 'string') {
@@ -40,7 +51,7 @@ export function Tip(properties: TipInterface) {
 
     // Render the component
     return (
-        <RadixTooltip.Root open={open} onOpenChange={setOpen} delayDuration={properties.delayInMilliseconds}>
+        <RadixTooltip.Root open={open} onOpenChange={onOpenChange} delayDuration={properties.delayInMilliseconds}>
             <RadixTooltip.Trigger
                 asChild
                 tabIndex={properties.tabIndex ?? 1}

@@ -10,18 +10,47 @@ import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls
 // Dependencies - Assets
 import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 
+// Dependencies - API
+import { useMutation } from '@apollo/client';
+import { IdeaReactionCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - IdeaReactionControl
 export interface IdeaReactionControlInterface {
+    ideaId: string;
     className?: string;
+    onReactionCreate: (content: string) => void;
 }
 export function IdeaReactionControl(properties: IdeaReactionControlInterface) {
+    // Hooks
+    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(IdeaReactionCreateDocument);
+
+    // Function to handle a reaction
+    async function handleReaction(content: string) {
+        // Opportunistically update the parent component
+        properties.onReactionCreate(content);
+
+        // Invoke the mutation
+        ideaReactionCreateMutation({
+            variables: {
+                articleId: properties.ideaId,
+                content: content,
+            },
+        });
+    }
+
     // Render the component
     return (
         <PopoverMenu
             itemsClassName="grid grid-cols-6 gap-1 text-2xl"
+            onItemSelected={function (item) {
+                if(item.content) {
+                    handleReaction(item.content.toString());
+                }
+            }}
+            closeOnItemSelected={true}
             items={[
                 // Positive
                 {

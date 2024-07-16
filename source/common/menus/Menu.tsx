@@ -31,7 +31,7 @@ export interface MenuInterface extends Omit<React.HTMLAttributes<HTMLDivElement>
     itemsClassName?: string;
     search?: boolean;
     highlightItemOnMount?: boolean; // Highlight the first item or first selected item on mount
-    onItemSelected?: (item: MenuItemInterface, itemRenderIndex: number, event: any) => void;
+    onItemSelected?: (item: MenuItemInterface, itemRenderIndex?: number, event?: any) => void;
 
     // Optional asynchronous loading of menu items
     loadItems?: () => Promise<MenuItemInterface[]>;
@@ -86,7 +86,7 @@ export function Menu(properties: MenuInterface) {
             setItemsToRender(
                 itemsToRender.map(function (item, itemIndex) {
                     // For each item, update the selected state of the current itemsProperty state
-                    let newItem = propertiesItems?.find(function (propertiesItem) {
+                    const newItem = propertiesItems?.find(function (propertiesItem) {
                         return propertiesItem.value === item.value;
                     });
                     if(newItem) {
@@ -104,7 +104,7 @@ export function Menu(properties: MenuInterface) {
     );
 
     // Intercept the onClick events for items
-    let propertiesOnItemSelected = properties.onItemSelected;
+    const propertiesOnItemSelected = properties.onItemSelected;
     const itemOnClickIntercept = React.useCallback(
         function (item: MenuItemInterface, itemRenderIndex: number, event: React.MouseEvent<HTMLElement, MouseEvent>) {
             // console.log('itemOnClickIntercept', itemRenderIndex, event.currentTarget);
@@ -236,13 +236,13 @@ export function Menu(properties: MenuInterface) {
             const searchPattern = new RegExp(string, 'i');
 
             // Collect all of the indexes of the items that match the search
-            let foundMenuItems: MenuItemInterface[] = [];
+            const foundMenuItems: MenuItemInterface[] = [];
 
             // Loop through the items
             for(let i = 0; i < items.length; i++) {
                 // Search the value
                 if(searchPattern.test(items[i]?.value ?? '')) {
-                    let foundItem = items[i];
+                    const foundItem = items[i];
                     if(foundItem) {
                         foundMenuItems.push(foundItem);
                     }
@@ -250,9 +250,9 @@ export function Menu(properties: MenuInterface) {
                 // Search the content (if it is a string)
                 else {
                     if(typeof items[i]?.content === 'string') {
-                        let contentString = items[i]?.content as string;
+                        const contentString = items[i]?.content as string;
                         if(searchPattern.test(contentString)) {
-                            let foundItem = items[i];
+                            const foundItem = items[i];
                             if(foundItem) {
                                 foundMenuItems.push(foundItem);
                             }
@@ -313,7 +313,7 @@ export function Menu(properties: MenuInterface) {
     );
 
     // Function to load the menu items
-    let propertiesLoadItems = properties.loadItems;
+    const propertiesLoadItems = properties.loadItems;
     const loadMenuItems = React.useCallback(
         async function () {
             // If a load function is provided, load the items

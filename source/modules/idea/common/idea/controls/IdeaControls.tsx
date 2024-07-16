@@ -28,6 +28,7 @@ export interface IdeaControlsInterface {
     submittedByUsername: IdeaInterface['submittedByUsername'];
 
     onVoteChange: (newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) => void;
+    onReactionCreate: (content: string) => void;
 }
 export function IdeaControls(properties: IdeaControlsInterface) {
     // Render the component
@@ -44,7 +45,7 @@ export function IdeaControls(properties: IdeaControlsInterface) {
                 />
 
                 {/* Reactions */}
-                <IdeaReactionControl />
+                <IdeaReactionControl ideaId={properties.id} onReactionCreate={properties.onReactionCreate} />
 
                 {/* Comments */}
                 <IdeaControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>

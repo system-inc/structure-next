@@ -6,11 +6,14 @@ import Link from 'next/link';
 
 // Dependencies - Main Components
 import { IdeaVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaVoteControl';
-import { IdeaReactions } from '@structure/source/modules/idea/common/idea/IdeaReactions';
+import { IdeaReactions } from '@structure/source/modules/idea/common/idea/controls/IdeaReactions';
 import { IdeaControls } from '@structure/source/modules/idea/common/idea/controls/IdeaControls';
 
 // Dependencies - API
-import { ArticleVoteType } from '@project/source/api/GraphQlGeneratedCode';
+import { ArticleVoteType, IdeasQuery } from '@project/source/api/GraphQlGeneratedCode';
+
+// Type - Reactions
+export type IdeaReactionsType = NonNullable<IdeasQuery['articlesMine']['items'][0]['reactions']>;
 
 // Component - Idea
 export interface IdeaInterface {
@@ -20,6 +23,7 @@ export interface IdeaInterface {
     description: string;
     upvoteCount: number;
     voteType: ArticleVoteType | null | undefined;
+    reactions: IdeaReactionsType;
     views: number;
     submittedByDisplayName: string;
     submittedByUsername: string;
@@ -31,6 +35,7 @@ export function Idea(properties: IdeaInterface) {
     // State
     const [upvoteCount, setUpvoteCount] = React.useState<number>(properties.upvoteCount);
     const [voteType, setVoteType] = React.useState<ArticleVoteType | null | undefined>(properties.voteType ?? null);
+    const [reactions, setReactions] = React.useState<IdeaReactionsType>(properties.reactions || []);
 
     // The URL path for the idea
     const ideaUrlPath = '/ideas/' + properties.id + '/' + properties.identifier;
@@ -40,6 +45,92 @@ export function Idea(properties: IdeaInterface) {
     function onVoteChange(newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) {
         setUpvoteCount(newUpvoteCount);
         setVoteType(newVoteType);
+    }
+
+    // Function to handle a new reaction
+    function onReactionCreate(content: string) {
+        // console.log('reaction', content);
+
+        // Keep track of whether the reaction exists
+        let reactionExists = false;
+
+        // Create a new state for the reactions
+        const updatedReactions = reactions.map(function (reaction) {
+            // If a reaction with this content already exists
+            if(reaction.content === content) {
+                reactionExists = true;
+
+                // If the user has already done this reaction
+                if(reaction.reacted) {
+                    // Do nothing
+                    return reaction;
+                }
+                // If the user has not done this reaction
+                else {
+                    // Increment the count and set the reacted boolean
+                    return {
+                        ...reaction,
+                        count: reaction.count + 1,
+                        reacted: true,
+                    };
+                }
+            }
+            // Not the reaction we are looking for
+            else {
+                return reaction;
+            }
+        });
+
+        // If the reaction does not exist
+        if(!reactionExists) {
+            // Add the reaction
+            updatedReactions.push({
+                content: content,
+                count: 1,
+                reacted: true,
+            });
+        }
+
+        // Update the state
+        setReactions(updatedReactions);
+    }
+
+    // Function to handle deleting a reaction
+    function onReactionDelete(content: string) {
+        // console.log('reaction delete', content);
+
+        // Create a new state for the reactions
+        const updatedReactions = reactions.map(function (reaction) {
+            // If a reaction with this content already exists
+            if(reaction.content === content) {
+                // If the user has already done this reaction
+                if(reaction.reacted) {
+                    const newReactionCount = reaction.count - 1;
+
+                    // Decrement the count and set the reacted boolean
+                    return {
+                        ...reaction,
+                        count: newReactionCount,
+                        reacted: newReactionCount > 0 ? false : reaction.reacted,
+                    };
+                }
+                // If the user has not done this reaction
+                else {
+                    // Do nothing
+                    return reaction;
+                }
+            }
+            // Not the reaction we are looking for
+            else {
+                return reaction;
+            }
+        });
+
+        // Filter out reactions with a count of 0
+        const newReactions = updatedReactions.filter((reaction) => reaction.count > 0);
+
+        // Update the state
+        setReactions(newReactions);
     }
 
     // Render the component
@@ -89,7 +180,15 @@ export function Idea(properties: IdeaInterface) {
                 <p className="mt-2.5">{properties.description}</p>
 
                 {/* Reactions */}
-                <IdeaReactions className="mt-3.5 flex space-x-1.5" />
+                {reactions.length > 0 && (
+                    <IdeaReactions
+                        className="mt-3.5"
+                        ideaId={properties.id}
+                        reactions={reactions}
+                        onReactionCreate={onReactionCreate}
+                        onReactionDelete={onReactionDelete}
+                    />
+                )}
 
                 {/* Controls */}
                 <IdeaControls
@@ -100,6 +199,7 @@ export function Idea(properties: IdeaInterface) {
                     voteType={voteType}
                     submittedByUsername={properties.submittedByUsername}
                     onVoteChange={onVoteChange}
+                    onReactionCreate={onReactionCreate}
                 />
             </div>
         </div>
