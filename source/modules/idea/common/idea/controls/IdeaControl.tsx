@@ -12,6 +12,7 @@ export interface IdeaControlInterface {
     className?: string;
     children?: React.ReactNode;
     href?: string;
+    onClick?: () => void;
 }
 export function IdeaControl(properties: IdeaControlInterface) {
     const Component = properties.href ? Link : 'div';
@@ -42,6 +43,7 @@ export function IdeaControl(properties: IdeaControlInterface) {
                 properties.className,
             )}
             href={properties.href as string}
+            onClick={properties.onClick}
         >
             {properties.children}
         </Component>

@@ -8,7 +8,7 @@ import { Idea } from '@structure/source/modules/idea/common/idea/Idea';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { IdeasDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { ArticleVoteType, IdeasDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -31,7 +31,7 @@ export function Ideas(properties: IdeasInterface) {
         title: string;
         description: string;
         upvoteCount: number;
-        upvoted: boolean;
+        voteType: ArticleVoteType | null | undefined;
         views: number;
         submittedByDisplayName: string;
         submittedByUsername: string;
@@ -49,7 +49,7 @@ export function Ideas(properties: IdeasInterface) {
             // Truncate description
             description: idea.content.substring(0, 500) + '...',
             upvoteCount: idea.upvoteCount,
-            upvoted: idea.upvoted,
+            voteType: idea.voteType,
             views: 100,
             submittedByDisplayName: 'Bill',
             submittedByUsername: 'bill',
@@ -91,7 +91,7 @@ export function Ideas(properties: IdeasInterface) {
                                 title={idea.title}
                                 description={idea.description}
                                 upvoteCount={idea.upvoteCount}
-                                upvoted={idea.upvoted}
+                                voteType={idea.voteType}
                                 views={idea.views}
                                 submittedByDisplayName={idea.submittedByDisplayName}
                                 submittedByUsername={idea.submittedByUsername}

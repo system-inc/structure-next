@@ -9,6 +9,9 @@ import { IdeaVoteControl } from '@structure/source/modules/idea/common/idea/cont
 import { IdeaReactions } from '@structure/source/modules/idea/common/idea/IdeaReactions';
 import { IdeaControls } from '@structure/source/modules/idea/common/idea/controls/IdeaControls';
 
+// Dependencies - API
+import { ArticleVoteType } from '@project/source/api/GraphQlGeneratedCode';
+
 // Component - Idea
 export interface IdeaInterface {
     id: string;
@@ -16,7 +19,7 @@ export interface IdeaInterface {
     title: string;
     description: string;
     upvoteCount: number;
-    upvoted: boolean;
+    voteType: ArticleVoteType | null | undefined;
     views: number;
     submittedByDisplayName: string;
     submittedByUsername: string;
@@ -25,22 +28,35 @@ export interface IdeaInterface {
     topics: string[];
 }
 export function Idea(properties: IdeaInterface) {
+    // State
+    const [upvoteCount, setUpvoteCount] = React.useState<number>(properties.upvoteCount);
+    const [voteType, setVoteType] = React.useState<ArticleVoteType | null | undefined>(properties.voteType ?? null);
+
     // The URL path for the idea
     const ideaUrlPath = '/ideas/' + properties.id + '/' + properties.identifier;
+
+    // Function to handle a change in vote count and type
+    // We need to do this because we have two vote controls that need to stay synchronized
+    function onVoteChange(newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) {
+        setUpvoteCount(newUpvoteCount);
+        setVoteType(newVoteType);
+    }
 
     // Render the component
     return (
         <div className="flex flex-col border-b border-dark-3 py-6 md:flex-row md:space-x-5">
             {/* Voting */}
             <IdeaVoteControl
+                display="Desktop"
                 className="hidden w-24 shrink-0 md:flex"
                 ideaId={properties.id}
-                upvoteCount={properties.upvoteCount}
-                upvoted={properties.upvoted}
+                upvoteCount={upvoteCount}
+                voteType={voteType}
+                onVoteChange={onVoteChange}
             />
 
             {/* Post */}
-            <div>
+            <div className="flex-grow">
                 {/* Title and Topics */}
                 <div className="">
                     {/* Title */}
@@ -76,7 +92,15 @@ export function Idea(properties: IdeaInterface) {
                 <IdeaReactions className="mt-3.5 flex space-x-1.5" />
 
                 {/* Controls */}
-                <IdeaControls className="mt-3" idea={properties} />
+                <IdeaControls
+                    className="mt-3"
+                    id={properties.id}
+                    identifier={properties.identifier}
+                    upvoteCount={upvoteCount}
+                    voteType={voteType}
+                    submittedByUsername={properties.submittedByUsername}
+                    onVoteChange={onVoteChange}
+                />
             </div>
         </div>
     );

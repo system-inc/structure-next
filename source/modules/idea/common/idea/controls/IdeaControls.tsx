@@ -7,7 +7,7 @@ import Link from 'next/link';
 // Dependencies - Main Components
 import { IdeaInterface } from '@structure/source/modules/idea/common/idea/Idea';
 import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
-import { IdeaMiniVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaMiniVoteControl';
+import { IdeaVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaVoteControl';
 import { IdeaReactionControl } from '@structure/source/modules/idea/common/idea/controls/IdeaReactionControl';
 import { IdeaShareControl } from '@structure/source/modules/idea/common/idea/controls/IdeaShareControl';
 import { IdeaReportControl } from '@structure/source/modules/idea/common/idea/controls/IdeaReportControl';
@@ -21,31 +21,40 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - IdeaControls
 export interface IdeaControlsInterface {
     className?: string;
-    idea: IdeaInterface;
+    id: IdeaInterface['id'];
+    identifier: IdeaInterface['identifier'];
+    upvoteCount: IdeaInterface['upvoteCount'];
+    voteType: IdeaInterface['voteType'];
+    submittedByUsername: IdeaInterface['submittedByUsername'];
+
+    onVoteChange: (newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) => void;
 }
 export function IdeaControls(properties: IdeaControlsInterface) {
     // Render the component
     return (
         <div className={mergeClassNames('flex items-center justify-between space-x-2 text-sm', properties.className)}>
             <div className="flex select-none items-center">
-                {/* Vote (Mobile) */}
-                <IdeaMiniVoteControl upvotes={properties.idea.upvoteCount} />
+                {/* Voting */}
+                <IdeaVoteControl
+                    display="Mobile"
+                    ideaId={properties.id}
+                    upvoteCount={properties.upvoteCount}
+                    voteType={properties.voteType}
+                    onVoteChange={properties.onVoteChange}
+                />
 
                 {/* Reactions */}
                 <IdeaReactionControl />
 
                 {/* Comments */}
-                <IdeaControl
-                    className="space-x-1.5"
-                    href={'/ideas/' + properties.idea.id + '/' + properties.idea.identifier}
-                >
+                <IdeaControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>
                     <CommentIcon className="h-4 w-4" />
                     <div className="">10</div>
                 </IdeaControl>
 
                 {/* Share */}
                 <IdeaShareControl
-                    ideaUrl={`${window.location.origin}/ideas/${properties.idea.id}/${properties.idea.identifier}`}
+                    ideaUrl={`${window.location.origin}/ideas/${properties.id}/${properties.identifier}`}
                 />
 
                 {/* Report */}
@@ -59,11 +68,11 @@ export function IdeaControls(properties: IdeaControlsInterface) {
                 {/* User Display Name */}
                 <Link
                     className="flex items-center space-x-1 text-neutral-6 transition-colors hover:text-dark-6 active:text-dark dark:text-light-3 dark:hover:text-light-2 dark:active:text-light"
-                    href={`/profile/${properties.idea.submittedByUsername}`}
+                    href={`/profile/${properties.submittedByUsername}`}
                 >
                     {/* Profile Picture */}
                     <div className="h-4 w-4 rounded-full bg-neutral"></div>
-                    <div>{properties.idea.submittedByUsername}</div>
+                    <div>{properties.submittedByUsername}</div>
                 </Link>
             </div>
         </div>

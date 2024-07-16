@@ -10,7 +10,7 @@ query Ideas($pagination: PaginationInputWithFilters) {
                 name
             }
             upvoteCount
-            upvoted
+            voteType
             latestRevisionId
             updatedAt
             createdAt
