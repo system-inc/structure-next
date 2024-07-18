@@ -15,7 +15,7 @@ import { useAccountCurrent } from '@structure/source/modules/account/Account';
 import { usePathname } from 'next/navigation';
 
 // Component - AccountMenuButton
-export type AccountMenuButtonProperties = {};
+export interface AccountMenuButtonProperties {}
 export function AccountMenuButton(properties: AccountMenuButtonProperties) {
     // Hooks
     const pathname = usePathname();

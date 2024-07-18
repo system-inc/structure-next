@@ -80,6 +80,7 @@ export const InputTextVariants = {
 // InputText - Sizes
 export const InputTextSizes = {
     default: 'text-sm',
+    large: 'text-base h-10',
 };
 
 // Component - InputText
@@ -87,6 +88,7 @@ export interface InputTextInterface extends Omit<InputInterface, 'onChange' | 'o
     containerClassName?: string;
 
     // <input /> tag properties
+    id: string;
     type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
     placeholder?: React.InputHTMLAttributes<HTMLInputElement>['placeholder'];
     autoComplete?: React.InputHTMLAttributes<HTMLInputElement>['autoComplete'];
@@ -111,7 +113,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
     reference: React.Ref<InputReferenceInterface>,
 ) {
     // Hooks
-    const { theme } = useTheme();
+    const { themeClassName } = useTheme();
 
     // References
     const inputReference = React.useRef<HTMLInputElement>(null);
@@ -198,8 +200,9 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
                 </div>
             )}
             <input
+                key={themeClassName} // Force the component to re-render when the theme changes, so that the autofill color is correct
                 ref={inputReference}
-                key={theme} // Force the component to re-render when the theme changes, so that the autofill color is correct
+                id={properties.id}
                 className={mergeClassNames(InputTextVariants[variant], InputTextSizes[size], properties.className)}
                 type={type}
                 defaultValue={properties.defaultValue}

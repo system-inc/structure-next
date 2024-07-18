@@ -231,13 +231,13 @@ const tickFormatter = (
         // console.log("localDate", localDateIsoString);
 
         const hourInLocalTimeZoneMatch = localDateIsoString.match(/T(\d{2}):/);
-        let hourInLocalTimeZone =
+        const hourInLocalTimeZone =
             hourInLocalTimeZoneMatch && hourInLocalTimeZoneMatch[1] !== undefined
                 ? parseInt(hourInLocalTimeZoneMatch[1], 10).toString()
                 : '';
         // console.log("hourInLocalTimeZone", hourInLocalTimeZone);
         const dayInLocalTimeZoneMatch = localDateIsoString.match(/-(\d{2})T/);
-        let dayInLocalTimeZone =
+        const dayInLocalTimeZone =
             dayInLocalTimeZoneMatch && dayInLocalTimeZoneMatch[1] !== undefined
                 ? parseInt(dayInLocalTimeZoneMatch[1], 10).toString()
                 : '';
@@ -445,7 +445,7 @@ const tooltipHeaderColumn = (timeInterval: string, label: string) => {
         const localDateTimeString = localDate.toISOString().replace('T', ' ').substring(0, 19);
 
         // Extract the hour using regex
-        let localHour = localDateTimeString.match(/(\d{2}):/)?.[1] ?? '';
+        const localHour = localDateTimeString.match(/(\d{2}):/)?.[1] ?? '';
 
         // Convert the local hour to AM / PM
         const hour = parseInt(localHour);
@@ -517,7 +517,7 @@ export interface ChartInterface {
     timeInterval: string;
     chartType: 'bar' | 'line' | 'area';
     sortOrder: string;
-    handleReferenceAreaSelection: Function;
+    handleReferenceAreaSelection: (left: string, right: string) => void;
     errorMessage?: string;
     onMouseDown?: (chartEvent: any, mouseEvent: any) => void;
 }
@@ -531,7 +531,7 @@ export const Chart = ({
     onMouseDown,
 }: ChartInterface) => {
     // Use the theme hook
-    const { theme } = useTheme();
+    const { themeClassName } = useTheme();
 
     // Store a reference to the chart
     const chartReference = React.useRef<any>(null);
@@ -546,7 +546,7 @@ export const Chart = ({
                 // First, we need to flatten the data
                 .flatMap((element) =>
                     element.metrics.data.map((data: any) => {
-                        let formattedData = {} as {
+                        const formattedData = {} as {
                             [k: string]: number | string | undefined;
                             metricIndex: string | undefined;
                             intervalValue: string | undefined;
@@ -633,7 +633,7 @@ export const Chart = ({
                     // If the button is the first button
                     if(mouseEvent.button == 0) {
                         // console.log("onMouseUp", event);
-                        let currentReferenceAreaLeft = referenceAreaLeft;
+                        const currentReferenceAreaLeft = referenceAreaLeft;
                         let currentReferenceAreaRight = referenceAreaRight;
 
                         // If there is no right reference area, set it to the left reference area
@@ -654,7 +654,9 @@ export const Chart = ({
             >
                 <CartesianGrid
                     // strokeDasharray="3 3"
-                    stroke={theme === 'light' ? undefined : tailwindConfiguration.theme.extend.colors['dark-4']}
+                    stroke={
+                        themeClassName === 'light' ? undefined : tailwindConfiguration.theme.extend.colors['dark-4']
+                    }
                     vertical={errorMessage ? true : false}
                 />
 
@@ -668,10 +670,10 @@ export const Chart = ({
                             //     borderRadius: "8px",
                             // }}
                             cursor={{
-                                fill: theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.2)',
+                                fill: themeClassName === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.2)',
                                 stroke:
                                     // If the theme is light
-                                    theme === 'light'
+                                    themeClassName === 'light'
                                         ? // And the chart type is bar
                                           chartType === 'bar'
                                             ? // Bar chart stroke color
@@ -720,7 +722,7 @@ export const Chart = ({
                                                                             ? 'dashed'
                                                                             : 'solid',
                                                                     backgroundColor:
-                                                                        theme === 'light'
+                                                                        themeClassName === 'light'
                                                                             ? lightenColor(payload.color || '', 0.2)
                                                                             : darkenColor(payload.color || '', 0.2),
                                                                 }}
@@ -783,7 +785,7 @@ export const Chart = ({
                                             strokeWidth={2}
                                             strokeDasharray={dataSourceWithMetrics.lineStyle === 'dashed' ? '5 5' : ''}
                                             fill={setTransparency(
-                                                theme == 'light'
+                                                themeClassName == 'light'
                                                     ? lightenColor(dataSourceWithMetrics.color, 0.2)
                                                     : darkenColor(dataSourceWithMetrics.color, 0.2),
                                                 0.75,

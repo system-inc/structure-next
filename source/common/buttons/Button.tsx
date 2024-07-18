@@ -99,7 +99,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
         setProcessingAnimationRunning(true);
 
         // Track the time when the processing started
-        let processingStartTime = new Date().getTime();
+        const processingStartTime = new Date().getTime();
 
         // Save the start time in a reference so it can be referenced by the useEffect hook
         processingStartTimeReference.current = processingStartTime;
@@ -158,7 +158,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
             // If we are showing the processed time tip
             if(propertiesShowProcessedTimeTip) {
                 // Start processing
-                let processingStartTime = startProcessing();
+                const processingStartTime = startProcessing();
 
                 // If a click handler is provided, call it
                 if(propertiesOnClick !== undefined) {
@@ -271,8 +271,8 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
 
     // If the processing animation is enabled and running
     if(processingAnimationEnabled && processingAnimationRunning) {
-        let processingAnimatedDivClassName = 'absolute inset-0 flex h-full w-full items-center justify-center';
-        let processingAnimatedDiv = processingIconTransition(
+        const processingAnimatedDivClassName = 'absolute inset-0 flex h-full w-full items-center justify-center';
+        const processingAnimatedDiv = processingIconTransition(
             (processingStateTransitionStyle, processingStateTransitionCompleted) =>
                 processingStateTransitionCompleted ? (
                     <animated.div

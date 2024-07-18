@@ -3,7 +3,7 @@ import StructureSettings from '@project/StructureSettings';
 
 // Dependencies
 import { type CookieSetOptions } from 'universal-cookie';
-import cookies from '@structure/source/utilities/cookies/Cookies';
+import Cookies from '@structure/source/utilities/cookies/Cookies';
 
 // Class - Session
 export class Session {
@@ -19,7 +19,7 @@ export class Session {
 
     // Gets the session token from the browser cookies
     static getToken() {
-        return cookies.get(Session.sessionTokenKey) as string | null;
+        return Cookies.get(Session.sessionTokenKey) as string | null;
     }
 
     // Sets the session token in local storage and the browser cookies
@@ -27,7 +27,7 @@ export class Session {
         // Set the session token in local storage
         localStorage.setItem(Session.sessionTokenKey, sessionToken);
 
-        return cookies.set(Session.sessionTokenKey, sessionToken, Session.cookieConfiguration);
+        return Cookies.set(Session.sessionTokenKey, sessionToken, Session.cookieConfiguration);
     }
 
     // Deletes the session token from local storage and the browser cookies
@@ -35,7 +35,7 @@ export class Session {
         // Delete the session token from local storage
         localStorage.removeItem(Session.sessionTokenKey);
 
-        return cookies.remove(Session.sessionTokenKey, Session.cookieConfiguration);
+        return Cookies.remove(Session.sessionTokenKey, Session.cookieConfiguration);
     }
 }
 

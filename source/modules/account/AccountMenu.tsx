@@ -15,10 +15,10 @@ import { useSession } from '@structure/source/modules/account/SessionProvider';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - AccountMenu
-export type AccountMenuProperties = {
+export interface AccountMenuProperties {
     account: Account | null;
     className?: string;
-};
+}
 export function AccountMenu(properties: AccountMenuProperties) {
     // Hooks
     const { signOut } = useSession();

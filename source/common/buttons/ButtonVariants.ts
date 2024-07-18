@@ -17,7 +17,7 @@ const centeredButton =
 // Focus styles
 const focusStyle =
     // Focus
-    `focus:border focus:border-light-6 dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`;
+    `focus-visible:outline-none focus-visible:ring-0`;
 
 // Hover styles: background and text color changes on hover
 const hoverStyle =
@@ -26,18 +26,33 @@ const hoverStyle =
     // Disabled
     `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2`;
 
-// Active styles: background color changes when active
-const activeStyle = `active:bg-dark-3 dark:active:bg-dark-4`;
-
 // Variants - Button
 export const ButtonVariants = {
     // Default variant: standard background and text color
     default:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
-        // Dark text on light background
-        `border dark:border-dark-3 bg-light dark:bg-dark+2 hover:bg-light-1 dark:hover:bg-dark-1 disabled:hover:bg-light ` +
-        // Disabled and active states
-        `dark:disabled:hover:bg-dark active:bg-light-2 dark:active:bg-dark-2`,
+        // Border
+        `border ` +
+        // Light
+        `bg-light-1 border-light-3 text-dark-2 ` +
+        // Dark
+        `dark:bg-dark-1 dark:border-dark-3 dark:text-light-2 ` +
+        // Light - Hover
+        `hover:bg-light-2 hover:text-dark-1 ` +
+        // Dark - Hover
+        `dark:hover:bg-dark-2 dark:hover:text-light-1 ` +
+        // Light - Active
+        `active:bg-light-3 active:text-dark ` +
+        // Dark - Active
+        `dark:active:bg-dark-3 dark:active:text-light ` +
+        // Light - Focus
+        `focus:border-neutral+6  ` +
+        // Dark - Focus
+        `dark:focus:border-neutral-6 ` +
+        // Light - Disabled
+        `disabled:hover:bg-light-1 ` +
+        // Dark - Disabled
+        `dark:disabled:hover:bg-dark-1`,
     // Unstyled variant: no styles
     unstyled: ``,
     // Primary variant
@@ -66,9 +81,11 @@ export const ButtonVariants = {
         `active:bg-light-2 dark:active:bg-light-3`,
     // Contrast variant: constrasted background
     contrast:
-        `${commonButton} ${focusStyle} ${centeredButton} ${hoverStyle} ${activeStyle} ` +
+        `${commonButton} ${focusStyle} ${centeredButton} ${hoverStyle} ` +
         // Light text on dark background
         `text-white dark:text-light-2 bg-dark-2 dark:bg-dark-2 ` +
+        // Active
+        `active:bg-dark-3 dark:active:bg-dark-4 ` +
         // Border matches background
         `border border-dark-2 dark:border-dark-2`,
     // Ghost variant: transparent with accent color on hover
@@ -88,11 +105,25 @@ export const ButtonVariants = {
         // Border
         `border ` +
         // Light
-        `text-light bg-red-600 border-red-700 hover:bg-red-500 hover:border-red-600 ` +
+        `bg-light-1 border-light-3 text-red-500 ` +
         // Dark
-        `dark:bg-red-900 dark:border-red-800 dark:hover:bg-red-800 dark:hover:border-red-700 ` +
-        // Disabled and active states
-        `disabled:hover:bg-light dark:disabled:hover:bg-dark active:bg-light-2 dark:active:bg-dark-2`,
+        `dark:bg-dark-1 dark:border-dark-3 dark:text-red-500 ` +
+        // Light - Hover
+        `hover:border-red-500 ` +
+        // Dark - Hover
+        `dark:hover:border-red-500 ` +
+        // Light - Active
+        `active:bg-light-3 active:border-red-500 ` +
+        // Dark - Active
+        `dark:active:bg-dark-2 dark:active:border-red-500 ` +
+        // Light - Focus
+        `focus:border-red-500  ` +
+        // Dark - Focus
+        `dark:focus:border-red-500 ` +
+        // Light - Disabled
+        `disabled:hover:bg-light-1 disabled:hover:border-light-3 ` +
+        // Dark - Disabled
+        `dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3`,
     // Toggle on
     toggleOn:
         `${commonButton} ${centeredButton} ` +

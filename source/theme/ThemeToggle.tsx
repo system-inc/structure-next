@@ -15,13 +15,15 @@ import SunIcon from '@structure/assets/icons/nature/SunIcon.svg';
 import MoonIcon from '@structure/assets/icons/nature/MoonIcon.svg';
 
 // Component - ThemeToggle
-export type ThemeToggleProperties = {};
+export interface ThemeToggleProperties {}
 export function ThemeToggle(properties: ThemeToggleProperties) {
     // State for the theme
     const [themeMode, setThemeMode] = React.useState<ThemeMode>(ThemeMode.System);
 
     // Handle the client's input
-    function handleChangeTheme(themeMode: ThemeMode) {
+    function handleChangeThemeMode(themeMode: ThemeMode) {
+        console.log('handleChangeTheme', themeMode);
+
         // Set the state to the input
         setThemeMode(themeMode);
 
@@ -31,6 +33,15 @@ export function ThemeToggle(properties: ThemeToggleProperties) {
         // Emit the event to the browser
         const event = new CustomEvent(themeModeChangeEventIdentifier, { detail: themeMode });
         window.dispatchEvent(event);
+    }
+
+    // Handle another tab changing the theme mode
+    function handleLocalStorageChange(event: StorageEvent) {
+        // If the event is for the theme mode
+        if(event.key === themeModeLocalStorageKey) {
+            // Set the state to the new theme mode
+            setThemeMode(event.newValue as ThemeMode);
+        }
     }
 
     // On mount
@@ -48,11 +59,20 @@ export function ThemeToggle(properties: ThemeToggleProperties) {
             // Use the operating system's theme
             setThemeMode(ThemeMode.System);
         }
+
+        // Add a listener for changes in local storage
+        window.addEventListener('storage', handleLocalStorageChange);
+
+        // On unmount
+        return function () {
+            // Remove the listener for changes in local storage
+            window.removeEventListener('storage', handleLocalStorageChange);
+        };
     }, []);
 
     // Get a theme mode button for a given theme mode
     function themeModeButton(currentThemeMode: ThemeMode) {
-        let IconComponent =
+        const IconComponent =
             currentThemeMode === ThemeMode.Light
                 ? SunIcon
                 : currentThemeMode === ThemeMode.Dark
@@ -62,11 +82,13 @@ export function ThemeToggle(properties: ThemeToggleProperties) {
         return (
             <Tip sideOffset={8} content={<div className="px-2 py-1 text-xs">{currentThemeMode} Theme</div>}>
                 <button
-                    tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
-                    onClick={() => handleChangeTheme(currentThemeMode)}
                     className={`rounded-full transition-colors hover:text-dark dark:hover:text-light ${
                         themeMode === currentThemeMode && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light'
                     }`}
+                    tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
+                    onClick={function () {
+                        handleChangeThemeMode(currentThemeMode);
+                    }}
                 >
                     <IconComponent className="m-1.5 h-3.5 w-3.5" />
                 </button>

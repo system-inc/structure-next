@@ -6,7 +6,7 @@ import StructureSettings from '@project/StructureSettings';
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - Styles
+// Dependencies - Theme
 import {
     themeModeLocalStorageKey,
     themeModeChangeEventIdentifier,
@@ -18,16 +18,16 @@ import {
 } from '@structure/source/theme/Theme';
 
 // Dependencies - Utilities
-import cookies from '@structure/source/utilities/cookies/Cookies';
+import Cookies from '@structure/source/utilities/cookies/Cookies';
 
 // Context - Theme
 interface ThemeType {
-    theme: string | null;
-    setTheme: (newTheme: string | null) => void;
+    themeClassName?: string | null;
+    setThemeClassName: (updatedThemeClassName: string | null) => void;
 }
 const ThemeContext = React.createContext<ThemeType>({
-    theme: null,
-    setTheme: (newTheme: string | null) => {
+    themeClassName: null,
+    setThemeClassName: function (updatedThemeClassName: string | null) {
         console.error('No ThemeProvider found.');
     },
 });
@@ -35,13 +35,14 @@ const ThemeContext = React.createContext<ThemeType>({
 // Component - ThemeProvider
 export interface ThemeProviderInterface {
     children: React.ReactNode;
+    themeClassName?: string;
 }
-export function ThemeProvider({ children }: ThemeProviderInterface) {
-    // State for the theme, default to StructureSettings.theme.default
-    const [theme, setTheme] = React.useState<string | null>(StructureSettings?.theme?.default ?? null);
+export function ThemeProvider(properties: ThemeProviderInterface) {
+    // State
+    const [themeClassName, setThemeClassName] = React.useState<string | undefined>(properties.themeClassName);
 
-    // Handle changing the theme mode in local storage
-    const updateTheme = React.useCallback(
+    // Function to update the theme
+    const updateThemeClassName = React.useCallback(
         function () {
             // console.log('updateTheme');
             // console.log('localStorage[themeModeKey]', localStorage[themeModeKey]);
@@ -52,8 +53,8 @@ export function ThemeProvider({ children }: ThemeProviderInterface) {
 
             // Dark mode
             if(
-                // If the default theme is dark
-                (theme === darkThemeClassName && localStorage[themeModeLocalStorageKey] === undefined) ||
+                // If the current theme is dark and the local storage theme mode is not set (left to right order is important here)
+                (themeClassName === darkThemeClassName && localStorage[themeModeLocalStorageKey] === undefined) ||
                 // If local storage has the theme mode set to dark
                 localStorage[themeModeLocalStorageKey] === ThemeMode.Dark ||
                 // Or if local storage has the theme mode set to system and the client's operating system is set to dark mode
@@ -73,14 +74,15 @@ export function ThemeProvider({ children }: ThemeProviderInterface) {
                 // right away without needing to check the theme mode in local storage which
                 // would flash the page in light mode before switching to dark mode if the client
                 // is in dark mode
-                cookies.set(themeClassNameCookieKey, darkThemeClassName, {
+                Cookies.set(themeClassNameCookieKey, darkThemeClassName, {
                     path: '/',
                     maxAge: 31536000, // 1 year
                     sameSite: 'strict',
                     secure: true,
                 });
 
-                setTheme(darkThemeClassName);
+                // Update the theme class name state
+                setThemeClassName(darkThemeClassName);
             }
             // Light mode
             else {
@@ -90,33 +92,35 @@ export function ThemeProvider({ children }: ThemeProviderInterface) {
                 document.documentElement.classList.remove(darkThemeClassName);
 
                 // Set a cookie to remember the client is in light mode
-                cookies.set(themeClassNameCookieKey, lightThemeClassName, {
+                Cookies.set(themeClassNameCookieKey, lightThemeClassName, {
                     path: '/',
                     maxAge: 31536000, // 1 year
                     sameSite: 'strict',
                     secure: true,
                 });
 
-                setTheme(lightThemeClassName);
+                // Update the theme class name state
+                setThemeClassName(lightThemeClassName);
             }
         },
-        [theme],
+        [themeClassName],
     );
 
     // Handle changes in local storage, sent by other tabs
     const handleLocalStorageChange = React.useCallback(
         function (event: StorageEvent) {
+            console.log('handleLocalStorageChange', event);
             if(event.key === themeModeLocalStorageKey) {
-                updateTheme();
+                updateThemeClassName();
             }
         },
-        [updateTheme],
+        [updateThemeClassName],
     );
 
     // Handle changes in the operating system's theme
-    const handleOperatingSystemThemeChange = React.useCallback(
+    const handleOperatingSystemThemeModeChange = React.useCallback(
         function () {
-            console.log('handleOperatingSystemThemeChange');
+            // console.log('handleOperatingSystemThemeChange');
 
             // We will only change the favicon on operating system theme changes, not website theme changes
             // If the operating system is set to dark mode,
@@ -135,43 +139,49 @@ export function ThemeProvider({ children }: ThemeProviderInterface) {
             }
 
             // Run the theme mode change handler
-            updateTheme();
+            updateThemeClassName();
         },
-        [updateTheme],
+        [updateThemeClassName],
     );
 
     // On mount
     React.useEffect(
         function () {
             // Initalize the theme mode
-            updateTheme();
+            updateThemeClassName();
 
             // Add theme mode change event listener that calls updateTheme on theme change
-            window.addEventListener(themeModeChangeEventIdentifier, updateTheme);
+            window.addEventListener(themeModeChangeEventIdentifier, updateThemeClassName);
 
             // Add a listener for changes in local storage
             window.addEventListener('storage', handleLocalStorageChange);
 
             // Add a listener for changes in the operating system's theme
-            window.matchMedia(darkThemeMediaQuery).addEventListener('change', handleOperatingSystemThemeChange);
+            window.matchMedia(darkThemeMediaQuery).addEventListener('change', handleOperatingSystemThemeModeChange);
 
             // On unmount
-            return () => {
+            return function () {
                 // Remove theme mode change event listener
-                window.removeEventListener(themeModeChangeEventIdentifier, updateTheme);
+                window.removeEventListener(themeModeChangeEventIdentifier, updateThemeClassName);
 
                 // Remove the listener for changes in local storage
                 window.removeEventListener('storage', handleLocalStorageChange);
 
                 // Remove the listener for changes in the operating system's theme
-                window.matchMedia(darkThemeMediaQuery).removeEventListener('change', handleOperatingSystemThemeChange);
+                window
+                    .matchMedia(darkThemeMediaQuery)
+                    .removeEventListener('change', handleOperatingSystemThemeModeChange);
             };
         },
-        [handleLocalStorageChange, handleOperatingSystemThemeChange, updateTheme],
+        [handleLocalStorageChange, handleOperatingSystemThemeModeChange, updateThemeClassName],
     );
 
     // Render the component
-    return <ThemeContext.Provider value={{ theme, setTheme: updateTheme }}>{children}</ThemeContext.Provider>;
+    return (
+        <ThemeContext.Provider value={{ themeClassName: themeClassName, setThemeClassName: updateThemeClassName }}>
+            {properties.children}
+        </ThemeContext.Provider>
+    );
 }
 
 // Hook - useTheme

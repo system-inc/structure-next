@@ -51,7 +51,7 @@ export interface StructureSettingsType {
         [key: string]: ApiService;
     };
     theme?: {
-        default: string;
+        defaultClassName: string;
     };
     assets: {
         favicon: ThemedAsset;
@@ -84,7 +84,7 @@ let StructureSettings: StructureSettingsType = {
         },
     },
     theme: {
-        default: 'light',
+        defaultClassName: 'light',
     },
     assets: {
         favicon: {

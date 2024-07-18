@@ -84,3 +84,25 @@
         @apply bg-transparent;
     }
 }
+
+/* Primary */
+.primary {
+    @apply text-theme-light-primary dark:text-theme-dark-primary transition-colors;
+}
+
+.primary:hover {
+    @apply text-theme-light-primary-hover dark:text-theme-dark-primary-hover;
+}
+
+.primary:active {
+    @apply text-theme-light-primary-active dark:text-theme-dark-primary-active;
+}
+
+.primary:disabled {
+    @apply text-theme-light-primary-disabled dark:text-theme-dark-primary-disabled cursor-not-allowed;
+}
+
+/* Neutral */
+.neutral {
+    @apply text-neutral-3 dark:text-neutral+3;
+}

@@ -14,6 +14,12 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 import { ValidationResult } from '@structure/source/utilities/validation/Validation';
 import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
 
+// FormInput - Sizes
+export const FormInputSizes = {
+    default: 'text-sm',
+    large: 'text-base',
+};
+
 // Type - Form Input Reference
 export interface FormInputReferenceInterface extends InputReferenceInterface {
     validate: (value: any) => ValidationResult | Promise<ValidationResult | undefined | void> | undefined | void;
@@ -23,11 +29,15 @@ export interface FormInputReferenceInterface extends InputReferenceInterface {
 export interface FormInputInterface extends InputInterface {
     ref?: (instance: FormInputReferenceInterface) => void;
     id: string;
+    size?: keyof typeof FormInputSizes;
     componentClassName?: string;
     label?: React.ReactNode;
+    labelContainerClassName?: string;
+    labelClassName?: string;
     labelTip?: React.ReactNode;
     labelTipIconProperties?: Omit<TipIconInterface, 'content'>;
     description?: React.ReactNode;
+    descriptionClassName?: string;
 
     // Validation
     validate?: (
@@ -48,10 +58,16 @@ export function FormInput({
     // State
     const [validating, setValidating] = React.useState(properties.validating || false);
 
+    // Defaults
+    const size = properties.size || 'default';
+
     // Listen for changes to the validation property
-    React.useEffect(() => {
-        setValidating(properties.validating || false);
-    }, [properties.validating]);
+    React.useEffect(
+        function () {
+            setValidating(properties.validating || false);
+        },
+        [properties.validating],
+    );
 
     // console.log('validationResult:', properties.validationResult);
     // console.log('properties.validationResult?.errors.length', properties.validationResult?.errors.length);
@@ -62,10 +78,20 @@ export function FormInput({
         <div className={mergeClassNames('group flex flex-col space-y-2', properties.className)}>
             {/* Label */}
             {properties.label && (
-                <div className="flex items-center text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-75">
+                <div
+                    className={mergeClassNames(
+                        'flex items-center text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-75',
+                        FormInputSizes[size],
+                        properties.labelContainerClassName,
+                    )}
+                >
                     <label
-                        className="pointer:cursor select-none whitespace-nowrap"
+                        className={mergeClassNames(
+                            'pointer:cursor select-none whitespace-nowrap leading-none',
+                            properties.labelClassName,
+                        )}
                         onClick={properties.focus instanceof Function ? properties.focus : undefined}
+                        htmlFor={properties.id}
                     >
                         {properties.label}
                     </label>
@@ -106,7 +132,18 @@ export function FormInput({
                 ))} */}
 
             {/* Description */}
-            {properties.description && <div className="text-ss text-muted-foreground">{properties.description}</div>}
+            {properties.description && (
+                <div
+                    // className="text-ss text-muted-foreground"
+                    className={mergeClassNames(
+                        'text-muted-foreground',
+                        properties.descriptionClassName,
+                        size === 'default' ? 'text-ss' : size === 'large' ? 'text-sm' : 'text-ss',
+                    )}
+                >
+                    {properties.description}
+                </div>
+            )}
 
             {/* Validating */}
             {validating && <p className="text-xs text-neutral">Validating...</p>}

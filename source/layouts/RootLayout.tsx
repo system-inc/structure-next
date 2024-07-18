@@ -2,19 +2,17 @@
 import StructureSettings from '@project/StructureSettings';
 
 // Dependencies - React and Next.js
-import { Metadata, ResolvingMetadata, Viewport } from 'next';
+import { Metadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
 import Script from 'next/script';
 
 // Dependencies - Theme
 import '@structure/source/styles/global.css';
 import '@structure/source/theme/styles/theme.css';
-import { themeClassNameCookieKey, darkThemeClassName } from '@structure/source/theme/Theme';
+import { darkThemeClassName, themeClassNameCookieKey } from '@structure/source/theme/Theme';
 
 // Dependencies - Main Components
 import Providers from '@structure/source/layouts/providers/Providers';
-import { mergeClassNames } from '@structure/source/utilities/Style';
-// import { SignInSignUpModal } from '@structure/source/modules/account/SignInSignUpModal';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    // maximumScale: 1,
+    maximumScale: 1, // This makes it easier to enter form fields on mobile without the page zooming in
     userScalable: true,
 };
 
@@ -40,24 +38,28 @@ export interface RootLayoutInterface {
     children: React.ReactNode;
 }
 export function RootLayout(properties: RootLayoutInterface) {
-    // We need to get the theme class name from the client's cookies in order to prevent a flash
+    // We need to get the theme class name from the response cookies in order to prevent a flash
     // of light mode when the page first loads. We can't use the theme mode from local storage because
     // we need to know the theme class name before the page completely loads.
+
+    // Get the cookies from the response headers
     const cookieStore = cookies();
     // console.log('cookieStore', cookieStore);
-    const themeClassNameCookie = cookieStore.get(themeClassNameCookieKey)?.value;
 
-    // The theme comes from the cookie or the default theme from Structure
-    const theme = themeClassNameCookie ? themeClassNameCookie : StructureSettings?.theme?.default || '';
+    // Get the theme class name from the cookies
+    const themeClassNameCookieValue = cookieStore.get(themeClassNameCookieKey)?.value;
 
+    // The initial theme class name comes from the cookie or StructureSettings
+    const themeClassName = themeClassNameCookieValue
+        ? themeClassNameCookieValue
+        : StructureSettings?.theme?.defaultClassName || undefined;
+
+    // Defaults
     const googleAnalyticsId = StructureSettings.services?.google?.analytics?.id;
 
     // Render the component
     return (
-        <html
-            lang="en"
-            className={mergeClassNames(theme === darkThemeClassName ? darkThemeClassName : '', 'font-sans')}
-        >
+        <html lang="en" className={themeClassName}>
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
             <head>
@@ -86,19 +88,24 @@ export function RootLayout(properties: RootLayoutInterface) {
                 )}
 
                 {/* Favicon */}
+                {/* The favicon is based on the system theme mode not the user selected theme */}
+                {/* This is so it matches the browser tab colors */}
                 <link
                     rel="icon"
+                    // Here we assume that if the cookie is set to dark, the system theme is also dark
+                    // When the page loads we will use JavaScript to check the system theme and update the favicon
                     href={
-                        themeClassNameCookie === darkThemeClassName
+                        themeClassNameCookieValue === darkThemeClassName
                             ? StructureSettings.assets.favicon.dark.location
                             : StructureSettings.assets.favicon.light.location
                     }
                 />
             </head>
 
-            <body className="isolate min-h-screen bg-light text-dark transition-colors dark:bg-dark dark:text-white">
+            <body className="isolate h-full min-h-screen bg-light font-sans text-dark transition-colors dark:bg-dark dark:text-white">
                 {/* Providers pass properties down to children */}
-                <Providers>
+                {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
+                <Providers themeClassName={themeClassName}>
                     {/* Render children passed into the layout */}
                     {properties.children}
                     {/* The following interactions are enabled on all pages */}

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import EngagementProvider from '@structure/source/modules/engagement/EngagementProvider';
-import cookies from '@structure/source/utilities/cookies/Cookies';
+import Cookies from '@structure/source/utilities/cookies/Cookies';
 import CookiesProvider from '@structure/source/utilities/cookies/CookiesProvider';
 import SessionProvider from '@structure/source/modules/account/SessionProvider';
 import ThemeProvider from '@structure/source/theme/ThemeProvider';
@@ -16,15 +16,16 @@ import SharedStateProvider from '@structure/source/utilities/shared-state/Shared
 
 export interface ProvidersInterface {
     children: React.ReactNode;
+    themeClassName?: string;
 }
 export function Providers(properties: ProvidersInterface) {
     // Render the component
     return (
-        <CookiesProvider cookies={cookies}>
+        <CookiesProvider cookies={Cookies}>
             <ApolloProvider>
                 <SessionProvider>
                     <SharedStateProvider>
-                        <ThemeProvider>
+                        <ThemeProvider themeClassName={properties.themeClassName}>
                             <EngagementProvider>
                                 <NoticeProvider>
                                     <TipProvider delayDuration={100}>{properties.children}</TipProvider>

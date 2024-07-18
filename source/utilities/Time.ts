@@ -89,3 +89,37 @@ export function monthYear(date: Date) {
         month: 'long',
     });
 }
+
+// Function to convert milliseconds into Years:Months:Days:Hours:Minutes:Seconds
+// It will not show leading zeros for hours or minutes, but always show minutes and seconds
+export function millisecondsToDuration(milliseconds: number) {
+    const seconds = Math.floor(milliseconds / 1000);
+
+    const years = Math.floor(seconds / (365 * 24 * 3600));
+    const remainingAfterYears = seconds % (365 * 24 * 3600);
+
+    const months = Math.floor(remainingAfterYears / (30 * 24 * 3600));
+    const remainingAfterMonths = remainingAfterYears % (30 * 24 * 3600);
+
+    const days = Math.floor(remainingAfterMonths / (24 * 3600));
+    const remainingAfterDays = remainingAfterMonths % (24 * 3600);
+
+    const hours = Math.floor(remainingAfterDays / 3600);
+    const remainingAfterHours = remainingAfterDays % 3600;
+
+    const minutes = Math.floor(remainingAfterHours / 60);
+    const remainingSeconds = remainingAfterHours % 60;
+
+    const parts = [];
+
+    if(years > 0) parts.push(`${years}`);
+    if(months > 0) parts.push(`${months}`);
+    if(days > 0) parts.push(`${days}`);
+    if(hours > 0) parts.push(`${hours}`);
+
+    // Always show minutes and seconds
+    parts.push(`${minutes}`);
+    parts.push(`${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
+
+    return parts.join(':');
+}

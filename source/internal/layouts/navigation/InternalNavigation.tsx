@@ -45,7 +45,7 @@ export interface InternalNavigationInterface {
 }
 export function InternalNavigation(properties: InternalNavigationInterface) {
     // Use the theme hook
-    const { theme } = useTheme();
+    const { themeClassName } = useTheme();
 
     // Get the current pathname from the URL using the usePathname hook
     const urlPathname = usePathname();
@@ -240,7 +240,7 @@ export function InternalNavigation(properties: InternalNavigationInterface) {
                             <Link href="/">
                                 <Image
                                     src={
-                                        theme == 'dark'
+                                        themeClassName == 'dark'
                                             ? StructureSettings.assets.favicon.dark.location
                                             : StructureSettings.assets.favicon.light.location
                                     }

@@ -84,8 +84,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 validationSchemaValidationResult,
                 propertiesValidationResult,
             );
-
-            console.log('mergedValidationResult', mergedValidationResult);
+            // console.log('mergedValidationResult', mergedValidationResult);
 
             // Set the validation result
             setValidationResult(mergedValidationResult);
@@ -177,9 +176,12 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     return (
         <FormInput
             id={properties.id}
+            size={properties.size}
             className={mergeClassNames('', properties.className)}
             defaultValue={properties.defaultValue}
             label={properties.label}
+            labelContainerClassName={properties.labelContainerClassName}
+            labelClassName={properties.labelClassName}
             labelTip={properties.labelTip}
             labelTipIconProperties={properties.labelTipIconProperties}
             description={properties.description}
@@ -193,8 +195,10 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 <div className="relative">
                     <InputText
                         ref={inputTextReference}
+                        id={properties.id}
                         variant={properties.variant}
                         size={properties.size}
+                        containerClassName={properties.containerClassName}
                         className={mergeClassNames(
                             'w-full',
                             properties.componentClassName,

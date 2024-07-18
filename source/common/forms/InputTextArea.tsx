@@ -104,7 +104,7 @@ export const InputTextArea = React.forwardRef<InputReferenceInterface, InputText
     reference: React.Ref<InputReferenceInterface>,
 ) {
     // Hooks
-    const { theme } = useTheme();
+    const { themeClassName } = useTheme();
 
     // References
     const inputReference = React.useRef<HTMLTextAreaElement>(null);
@@ -182,7 +182,7 @@ export const InputTextArea = React.forwardRef<InputReferenceInterface, InputText
         <div className={mergeClassNames('relative', properties.containerClassName)}>
             <textarea
                 ref={inputReference}
-                key={theme} // Force the component to re-render when the theme changes, so that the autofill color is correct
+                key={themeClassName} // Force the component to re-render when the theme changes, so that the autofill color is correct
                 className={mergeClassNames(
                     InputTextAreaVariants[variant],
                     InputTextAreaSizes[size],
