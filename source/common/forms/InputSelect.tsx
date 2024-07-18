@@ -25,6 +25,7 @@ export const InputSelectVariants = {
 // InputSelect - Sizes
 export const InputSelectSizes = {
     default: '',
+    large: '',
 };
 
 // Interface InputSelectItemInterface
@@ -164,7 +165,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
     const propertiesOnChange = properties.onChange;
     const propertiesAllowNoSelection = properties.allowNoSelection;
     const onChangeIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) {
+        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: any) {
             // console.log('InputSelect.tsx value changed:', menuItem.value);
             let newValue = menuItem.value;
 
@@ -212,7 +213,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
             title={properties.title}
             items={items.map((item, index) => {
                 // Determine if the item is selected
-                let selected = item.value === value;
+                const selected = item.value === value;
 
                 return {
                     ...item,

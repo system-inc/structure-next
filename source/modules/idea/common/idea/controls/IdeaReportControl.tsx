@@ -6,6 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
+import { IdeaReportDialog } from '@structure/source/modules/idea/common/idea/controls/IdeaReportDialog';
 
 // Dependencies - Assets
 import EllipsesIcon from '@structure/assets/icons/interface/EllipsesIcon.svg';
@@ -17,27 +18,39 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - IdeaReportControl
 export interface IdeaReportControlInterface {
     className?: string;
+    ideaId: string;
+    ideaTitle: string;
 }
 export function IdeaReportControl(properties: IdeaReportControlInterface) {
+    // State
+    const [reportDialogOpen, setReportDialogOpen] = React.useState(false);
+
     // Render the component
     return (
-        <PopoverMenu
-            items={[
-                {
-                    icon: FlagIcon,
-                    iconPosition: 'left',
-                    content:
-                        'Report - this has a popover that has a Report with flag icon which goes through a report flow - see randomseed.com',
-                    onClick: function () {
-                        console.log('report');
+        <>
+            <PopoverMenu
+                items={[
+                    {
+                        icon: FlagIcon,
+                        iconPosition: 'left',
+                        content: 'Report',
+                        onSelected: function () {
+                            setReportDialogOpen(true);
+                        },
                     },
-                },
-            ]}
-        >
-            <IdeaControl className="">
-                <EllipsesIcon className="h-4 w-4" />
-            </IdeaControl>
-        </PopoverMenu>
+                ]}
+            >
+                <IdeaControl className="">
+                    <EllipsesIcon className="h-4 w-4" />
+                </IdeaControl>
+            </PopoverMenu>
+            <IdeaReportDialog
+                open={reportDialogOpen}
+                onOpenChange={setReportDialogOpen}
+                ideaId={properties.ideaId}
+                ideaTitle={properties.ideaTitle}
+            />
+        </>
     );
 }
 

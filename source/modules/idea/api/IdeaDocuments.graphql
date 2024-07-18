@@ -16,6 +16,8 @@ query Ideas($pagination: PaginationInputWithFilters) {
             }
             upvoteCount
             voteType
+            reportedCount
+            reportStatus
             latestRevisionId
             updatedAt
             createdAt
@@ -83,5 +85,12 @@ query IdeaReactionProfiles($articleId: String!, $content: String!, $pagination: 
             pagesTotal
             page
         }
+    }
+}
+
+# Idea Report Create
+mutation IdeaReportCreate($input: ArticleReportInput!) {
+    articleReportCreate(input: $input) {
+        id
     }
 }

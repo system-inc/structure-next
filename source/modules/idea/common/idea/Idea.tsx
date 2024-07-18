@@ -135,7 +135,7 @@ export function Idea(properties: IdeaInterface) {
 
     // Render the component
     return (
-        <div className="flex flex-col border-b border-dark-3 py-6 md:flex-row md:space-x-5">
+        <div className="flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3">
             {/* Voting */}
             <IdeaVoteControl
                 display="Desktop"
@@ -195,9 +195,11 @@ export function Idea(properties: IdeaInterface) {
                     className="mt-3"
                     id={properties.id}
                     identifier={properties.identifier}
+                    title={properties.title}
                     upvoteCount={upvoteCount}
                     voteType={voteType}
                     submittedByUsername={properties.submittedByUsername}
+                    createdAt={properties.createdAt}
                     onVoteChange={onVoteChange}
                     onReactionCreate={onReactionCreate}
                 />

@@ -17,14 +17,17 @@ import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { timeAgo } from '@structure/source/utilities/Time';
 
 // Component - IdeaControls
 export interface IdeaControlsInterface {
     className?: string;
     id: IdeaInterface['id'];
     identifier: IdeaInterface['identifier'];
+    title: IdeaInterface['title'];
     upvoteCount: IdeaInterface['upvoteCount'];
     voteType: IdeaInterface['voteType'];
+    createdAt: IdeaInterface['createdAt'];
     submittedByUsername: IdeaInterface['submittedByUsername'];
 
     onVoteChange: (newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) => void;
@@ -59,12 +62,14 @@ export function IdeaControls(properties: IdeaControlsInterface) {
                 />
 
                 {/* Report */}
-                <IdeaReportControl />
+                <IdeaReportControl ideaId={properties.id} ideaTitle={properties.title} />
             </div>
 
             <div className="flex space-x-1.5">
                 {/* Time Ago */}
-                <div className="text-neutral+3 dark:text-neutral">1 year ago by</div>
+                <div className="text-neutral+3 dark:text-neutral">
+                    {timeAgo(new Date(properties.createdAt).getTime())} by
+                </div>
 
                 {/* User Display Name */}
                 <Link

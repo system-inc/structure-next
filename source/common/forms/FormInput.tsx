@@ -98,9 +98,9 @@ export function FormInput({
                     {/* Label Tip */}
                     {properties.label && properties.labelTip && (
                         <TipIcon
-                            className="ml-1 max-w-xs"
                             openOnPress
                             {...properties.labelTipIconProperties}
+                            className={mergeClassNames('ml-1 max-w-xs', properties.labelTipIconProperties?.className)}
                             content={properties.labelTip}
                         />
                     )}

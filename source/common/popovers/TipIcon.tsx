@@ -50,7 +50,7 @@ export function TipIcon(properties: TipIconInterface) {
     const contentVariant = properties.contentVariant || 'default';
 
     // If openOnPress is true, use Popover, otherwise use Tip
-    let Component = openOnPress ? Popover : Tip;
+    const Component = openOnPress ? Popover : Tip;
 
     // Separate the PopoverInterface properties from the TipIconInterface properties
     // We will apply these to the Popover or Tip component
