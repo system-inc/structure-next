@@ -110,3 +110,30 @@ export function truncateUniqueIdentifier(string: string): string {
 export function uppercaseFirstCharacter(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+// Function to create a slug from a string
+// Default max length of 160 characters
+export function slug(string: string, maximumLength = 160): string {
+    // Remove all apostrophes
+    let slug = string.replace(/'/g, '');
+
+    // Replace all non-word characters with a space
+    slug = string.replace(/\W/g, ' ');
+
+    // Replace multiple spaces with a single space
+    slug = slug.replace(/\s+/g, ' ');
+
+    // Trim leading and trailing spaces
+    slug = slug.trim();
+
+    // Lowercase the slug
+    slug = slug.toLowerCase();
+
+    // Replace spaces with hyphens
+    slug = slug.replace(/\s/g, '-');
+
+    // Truncate the slug
+    slug = slug.substring(0, maximumLength);
+
+    return slug;
+}

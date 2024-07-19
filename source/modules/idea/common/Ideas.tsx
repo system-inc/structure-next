@@ -44,7 +44,7 @@ export function Ideas(properties: IdeasInterface) {
     ideasQueryState.data?.articlesMine.items.forEach(function (idea) {
         ideas.push({
             id: idea.id,
-            identifier: 'slug',
+            identifier: idea.identifier,
             title: idea.title,
             // description: idea.content,
             // Truncate description

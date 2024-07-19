@@ -12,6 +12,9 @@ import { IdeaControls } from '@structure/source/modules/idea/common/idea/control
 // Dependencies - API
 import { ArticleVoteType, IdeasQuery } from '@project/source/api/GraphQlGeneratedCode';
 
+// Dependencies - Utilities
+import { slug } from '@structure/source/utilities/String';
+
 // Type - Reactions
 export type IdeaReactionsType = NonNullable<IdeasQuery['articlesMine']['items'][0]['reactions']>;
 
@@ -37,8 +40,11 @@ export function Idea(properties: IdeaInterface) {
     const [voteType, setVoteType] = React.useState<ArticleVoteType | null | undefined>(properties.voteType ?? null);
     const [reactions, setReactions] = React.useState<IdeaReactionsType>(properties.reactions || []);
 
+    // Slug
+    const ideaSlug = slug(properties.title);
+
     // The URL path for the idea
-    const ideaUrlPath = '/ideas/' + properties.id + '/' + properties.identifier;
+    const ideaUrlPath = '/ideas/' + properties.identifier + '/' + ideaSlug;
 
     // Function to handle a change in vote count and type
     // We need to do this because we have two vote controls that need to stay synchronized

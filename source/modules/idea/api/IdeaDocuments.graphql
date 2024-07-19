@@ -3,6 +3,8 @@ query Ideas($pagination: PaginationInputWithFilters) {
     articlesMine(input: $pagination) {
         items {
             id
+            identifier
+            slug
             status
             title
             content
@@ -31,6 +33,33 @@ query Ideas($pagination: PaginationInputWithFilters) {
             pagesTotal
             page
         }
+    }
+}
+
+# Idea Query
+query Idea($identifier: String!) {
+    article(identifier: $identifier) {
+        id
+        identifier
+        slug
+        status
+        title
+        content
+        topic {
+            name
+        }
+        reactions {
+            content
+            count
+            reacted
+        }
+        upvoteCount
+        voteType
+        reportedCount
+        reportStatus
+        latestRevisionId
+        updatedAt
+        createdAt
     }
 }
 
