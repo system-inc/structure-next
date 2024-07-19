@@ -106,6 +106,7 @@ export interface DialogInterface {
     header?: React.ReactNode; // The header
     headerClassName?: string; // The class names for the header
     content?: React.ReactNode; // The content
+    accessibilityDescription?: string; // The accessibility description
     footer?: React.ReactNode; // The footer
     footerClassName?: string; // The class names for the footer
     footerCloseButton?: React.ReactNode | boolean; // The close button for the footer
@@ -120,6 +121,7 @@ export function Dialog(properties: DialogInterface) {
 
     // Defaults
     const variant = properties.variant || 'default';
+    const accessibilityDescription = properties.accessibilityDescription || '';
 
     // On mount, set the open state
     React.useEffect(() => {
@@ -179,18 +181,24 @@ export function Dialog(properties: DialogInterface) {
                             )}
                         >
                             {
-                                // If the header is a string, render it as a title which is accessible to screen readers
+                                // If the header is a string, render it with a default style
                                 typeof properties.header === 'string' ? (
                                     <RadixDialog.Title asChild>
                                         <div className="font-medium">{properties.header}</div>
                                     </RadixDialog.Title>
                                 ) : (
-                                    // Otherwise, render the header as-is
-                                    properties.header
+                                    // Otherwise, render the header as a child
+                                    <RadixDialog.Title asChild>{properties.header}</RadixDialog.Title>
                                 )
                             }
                         </div>
                     )}
+
+                    {/* Accessibility Description */}
+                    <RadixDialog.Description
+                        className="hidden"
+                        aria-describedby={accessibilityDescription}
+                    ></RadixDialog.Description>
 
                     {/* Content */}
                     {/* We wrap the content in a scroll area to standardize all scrollbars in dialogs */}

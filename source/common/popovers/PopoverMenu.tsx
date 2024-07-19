@@ -66,7 +66,7 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
     const propertiesOnItemSelected = properties.onItemSelected;
     const propertiesCloseOnItemSelected = properties.closeOnItemSelected;
     const onItemSelectedIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) {
+        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: any) {
             // Call the onSelected callback
             if(propertiesOnItemSelected) {
                 propertiesOnItemSelected(menuItem, menuItemRenderIndex, event);
@@ -84,6 +84,7 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
     const { className, ...menuProperties } = properties;
 
     // Get the popover properties to spread onto the Popover component
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { side, align, ...popoverProperties } = properties.popoverProperties ?? {};
 
     // Render the component

@@ -17,9 +17,6 @@ import { IdeaReportCreateDocument } from '@project/source/api/GraphQlGeneratedCo
 // Dependencies - Assets
 import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
 
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-
 // Component - IdeaReportDialog
 export interface IdeaReportDialogInterface extends DialogInterface {
     ideaId: string;
@@ -71,9 +68,6 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
             },
         });
     }
-
-    // Close the dialog
-    // onOpenChangeIntercept(false);
 
     // Render the component
     return (
@@ -130,6 +124,7 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
                                 <p className="text-sm">
                                     Your report helps us maintain a safe environment for everyone.
                                 </p>
+
                                 <Form
                                     formInputs={[
                                         <FormInputSelect
@@ -157,10 +152,8 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
                                                 { value: 'Disturbing' },
                                                 { value: 'Other' },
                                             ]}
-                                            popoverProperties={{
-                                                className: 'z-50',
-                                            }}
-                                            required
+                                            // search={true}
+                                            required={true}
                                         />,
                                         <FormInputTextArea
                                             className="w-full"
@@ -184,7 +177,8 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
                                         children: 'Report',
                                     }}
                                     onSubmit={async function (formValues) {
-                                        await report(formValues.reason, formValues.report);
+                                        console.log('Reporting!');
+                                        // await report(formValues.reason, formValues.report);
 
                                         return {
                                             success: true,

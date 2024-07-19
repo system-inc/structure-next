@@ -7,6 +7,7 @@ import React from 'react';
 import { MenuItemInterface, MenuItem } from '@structure/source/common/menus/MenuItem';
 import { InputReferenceInterface } from '@structure/source/common/forms/Input';
 import { InputText } from '@structure/source/common/forms/InputText';
+// import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -31,7 +32,7 @@ export interface MenuInterface extends Omit<React.HTMLAttributes<HTMLDivElement>
     itemsClassName?: string;
     search?: boolean;
     highlightItemOnMount?: boolean; // Highlight the first item or first selected item on mount
-    onItemSelected?: (item: MenuItemInterface, itemRenderIndex?: number, event?: any) => void;
+    onItemSelected?: (item: MenuItemInterface, itemRenderIndex?: number, event?: unknown) => void;
 
     // Optional asynchronous loading of menu items
     loadItems?: () => Promise<MenuItemInterface[]>;
@@ -84,7 +85,7 @@ export function Menu(properties: MenuInterface) {
 
             // Update the items to render
             setItemsToRender(
-                itemsToRender.map(function (item, itemIndex) {
+                itemsToRender.map(function (item) {
                     // For each item, update the selected state of the current itemsProperty state
                     const newItem = propertiesItems?.find(function (propertiesItem) {
                         return propertiesItem.value === item.value;
@@ -333,10 +334,9 @@ export function Menu(properties: MenuInterface) {
                     setItems(items);
                     setItemsToRender(items);
                 }
-                catch(error: any) {
+                catch(error: unknown) {
                     console.log('Error loading menu items:', error);
-                    // Set the loading error
-                    setLoadingItemsError(error.message ?? 'Error Loading Items');
+                    setLoadingItemsError(error instanceof Error ? error.message : 'Error Loading Items');
                 }
 
                 // Set loading to false
@@ -404,6 +404,7 @@ export function Menu(properties: MenuInterface) {
                     {properties.search && (
                         <InputText
                             ref={searchInputTextReference}
+                            id="menuSearch"
                             variant="menuSearch"
                             placeholder="Search..."
                             autoComplete="off"
@@ -420,7 +421,7 @@ export function Menu(properties: MenuInterface) {
                             }}
                             onChange={function (
                                 value: string | undefined,
-                                event?: React.ChangeEvent<HTMLInputElement>,
+                                // event?: React.ChangeEvent<HTMLInputElement>,
                             ) {
                                 // console.log('onChange', event.currentTarget.value);
                                 // Search on all change events

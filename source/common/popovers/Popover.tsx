@@ -98,38 +98,39 @@ export function Popover(properties: PopoverInterface) {
                     {wrapForSlot(properties.children, open ? 'group data-state-open' : 'group')}
                 </RadixPopover.Trigger>
             )}
-            <RadixPopover.Portal container={properties.portalContainer}>
-                <RadixPopover.Content
-                    side={side}
-                    sideOffset={sideOffset}
-                    align={align}
-                    alignOffset={alignOffset}
-                    collisionPadding={collisionPadding}
-                    collisionBoundary={properties.collisionBoundary}
-                    onOpenAutoFocus={properties.onOpenAutoFocus}
-                    tabIndex={properties.tabIndex ?? 1}
-                    className={mergeClassNames(
-                        popoverClassName,
-                        // State open is specific to Popover
-                        'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-                        // Side bottom is specific to Popover
-                        'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-                        // This was previously set to z-50 but the tips were showing through the dialog overlay
-                        // This is now set to 40 to ensure the tooltip is below the dialog overlay
-                        'z-40',
-                        properties.className,
-                    )}
-                    // Use Radix variables to style the popover content size
-                    style={{
-                        maxWidth: 'var(--radix-popover-content-available-width)',
-                        maxHeight: 'var(--radix-popover-content-available-height)',
-                        minWidth: 'var(--radix-popper-anchor-width)',
-                        minHeight: 'var(--radix-popper-anchor-height)',
-                    }}
-                >
-                    {properties.content}
-                </RadixPopover.Content>
-            </RadixPopover.Portal>
+            {/* We don't use a portal since it breaks Popovers with scrollable content that are the content of Dialogs */}
+            {/* <RadixPopover.Portal container={properties.portalContainer}> */}
+            <RadixPopover.Content
+                side={side}
+                sideOffset={sideOffset}
+                align={align}
+                alignOffset={alignOffset}
+                collisionPadding={collisionPadding}
+                collisionBoundary={properties.collisionBoundary}
+                onOpenAutoFocus={properties.onOpenAutoFocus}
+                tabIndex={properties.tabIndex ?? 1}
+                className={mergeClassNames(
+                    popoverClassName,
+                    // State open is specific to Popover
+                    'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+                    // Side bottom is specific to Popover
+                    'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+                    // This was previously set to z-50 but the tips were showing through the dialog overlay
+                    // This is now set to 40 to ensure the tooltip is below the dialog overlay
+                    'z-40',
+                    properties.className,
+                )}
+                // Use Radix variables to style the popover content size
+                style={{
+                    maxWidth: 'var(--radix-popover-content-available-width)',
+                    maxHeight: 'var(--radix-popover-content-available-height)',
+                    minWidth: 'var(--radix-popper-anchor-width)',
+                    minHeight: 'var(--radix-popper-anchor-height)',
+                }}
+            >
+                {properties.content}
+            </RadixPopover.Content>
+            {/* </RadixPopover.Portal> */}
         </RadixPopover.Root>
     );
 }

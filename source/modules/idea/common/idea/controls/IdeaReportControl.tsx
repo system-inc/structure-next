@@ -44,6 +44,7 @@ export function IdeaReportControl(properties: IdeaReportControlInterface) {
                     <EllipsesIcon className="h-4 w-4" />
                 </IdeaControl>
             </PopoverMenu>
+
             <IdeaReportDialog
                 open={reportDialogOpen}
                 onOpenChange={setReportDialogOpen}
