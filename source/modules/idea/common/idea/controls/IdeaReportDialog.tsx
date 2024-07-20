@@ -170,10 +170,6 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
                                                 contentClassName: 'z-50',
                                             }}
                                             rows={4}
-                                            validationSchema={new ValidationSchema()
-                                                .emailAddress()
-                                                .required()
-                                                .username()}
                                         />,
                                     ]}
                                     buttonProperties={{
