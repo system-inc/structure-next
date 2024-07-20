@@ -16,7 +16,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - FormInputTextArea
 export interface FormInputTextAreaInterface
     extends Omit<InputTextAreaInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
+        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
     placeholder?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['placeholder'];
     autoComplete?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['autoComplete'];
     sibling?: React.ReactNode;

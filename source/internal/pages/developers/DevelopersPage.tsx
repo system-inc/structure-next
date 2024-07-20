@@ -26,6 +26,7 @@ const [state, setState] = React.useState<string>('');`);
             <h1>Developers</h1>
             <div className="my-4 space-y-2">
                 <InputText
+                    id="language"
                     placeholder="Language"
                     defaultValue={language}
                     onChange={(val) => {

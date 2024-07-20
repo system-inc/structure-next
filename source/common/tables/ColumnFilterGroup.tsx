@@ -252,6 +252,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         else {
             inputComponent = (
                 <InputText
+                    id="columnFilterConditionValue"
                     className="w-64"
                     placeholder="Value..."
                     defaultValue={condition.value}

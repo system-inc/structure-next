@@ -18,7 +18,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - FormInputCheckbox
 export interface FormInputCheckboxInterface
     extends Omit<InputCheckboxInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
+        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
     sibling?: React.ReactNode;
 }
 export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, FormInputCheckboxInterface>(

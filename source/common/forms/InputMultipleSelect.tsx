@@ -169,7 +169,7 @@ export const InputMultipleSelect = React.forwardRef<
     const propertiesItems = properties.items;
     const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) {
+        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: any) {
             // console.log('InputMultipleSelect.tsx value changed:', menuItem.value);
 
             let newValue: string[] = [];

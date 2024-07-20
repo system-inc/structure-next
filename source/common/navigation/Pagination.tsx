@@ -129,6 +129,7 @@ export function Pagination(properties: PaginationInterface) {
                 <p>Page</p>
                 <InputText
                     key={page.toString()}
+                    id="paginationPage"
                     ref={inputTextPageReference}
                     className={mergeClassNames('w-20', !pageIsValid ? 'text-red-500 dark:text-red-500' : '')}
                     type="number"

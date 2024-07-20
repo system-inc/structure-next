@@ -468,6 +468,7 @@ export function Table(properties: TableInterface) {
                             {/* Search */}
                             {properties.search && (
                                 <InputText
+                                    id="tableSearch"
                                     className="w-80"
                                     variant="search"
                                     placeholder="Filter visible rows..."

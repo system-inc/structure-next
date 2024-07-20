@@ -545,6 +545,7 @@ export function DataSource(properties: DataSourceInterface) {
                                 <div className="relative mt-1 flex items-center">
                                     <span className="text-gray/50 dark:text-gray-secondary/50 absolute left-3">#</span>
                                     <InputText
+                                        id={'color-' + properties.settings.id}
                                         defaultValue={rgbStringToHexString(properties.settings.color).slice(1)}
                                         onChange={function (value, event) {
                                             handleHexColorChange('#' + value);

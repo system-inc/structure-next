@@ -13,7 +13,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - FormInputMultipleSelect
 export interface FormInputMultipleSelectInterface
     extends Omit<InputMultipleSelectInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
+        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
     items: MenuItemInterface[];
     sibling?: React.ReactNode;
 }

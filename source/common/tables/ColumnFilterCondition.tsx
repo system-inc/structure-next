@@ -128,6 +128,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionInterface
             inputComponent = (
                 <InputText
                     className="w-64"
+                    id="columnFilterConditionValue"
                     placeholder="Value..."
                     defaultValue={properties.value}
                     // onChange={(value) => {

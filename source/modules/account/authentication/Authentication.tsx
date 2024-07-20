@@ -39,7 +39,7 @@ export function Authentication(properties: AuthenticationInterface) {
     const [emailAddress, setEmailAddress] = React.useState<string | undefined>(undefined);
 
     // Hooks
-    const { theme } = useTheme();
+    const { themeClassName } = useTheme();
 
     // Hooks - API - Queries
     const accountRegistrationCurrentQuery = useQuery(AccountRegistrationCurrentDocument, {
@@ -118,7 +118,7 @@ export function Authentication(properties: AuthenticationInterface) {
             <div className="mb-8">
                 <Image
                     src={
-                        theme == 'dark'
+                        themeClassName == 'dark'
                             ? StructureSettings.assets.favicon.dark.location
                             : StructureSettings.assets.favicon.light.location
                     }
