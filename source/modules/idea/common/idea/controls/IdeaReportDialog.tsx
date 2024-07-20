@@ -9,6 +9,7 @@ import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog
 import { Form } from '@structure/source/common/forms/Form';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
+import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
@@ -152,7 +153,6 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
                                                 { value: 'Disturbing' },
                                                 { value: 'Other' },
                                             ]}
-                                            // search={true}
                                             required={true}
                                         />,
                                         <FormInputTextArea
@@ -170,6 +170,10 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
                                                 contentClassName: 'z-50',
                                             }}
                                             rows={4}
+                                            validationSchema={new ValidationSchema()
+                                                .emailAddress()
+                                                .required()
+                                                .username()}
                                         />,
                                     ]}
                                     buttonProperties={{
@@ -177,8 +181,8 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
                                         children: 'Report',
                                     }}
                                     onSubmit={async function (formValues) {
-                                        console.log('Reporting!');
-                                        // await report(formValues.reason, formValues.report);
+                                        // console.log('Reporting!');
+                                        await report(formValues.reason, formValues.report);
 
                                         return {
                                             success: true,

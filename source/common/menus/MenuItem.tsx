@@ -40,6 +40,7 @@ export const MenuItem = React.memo(
                 data-selected={properties.selected ? 'true' : undefined}
                 // onSelect <- use this in place of onClick if you want to do something when the menu item is selected
                 onClick={properties.onClick} // Passed in by the Menu component, do not use this directly, use onSelect instead
+                type="button"
             >
                 {properties.content}
             </Button>

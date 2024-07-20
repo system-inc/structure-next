@@ -27,9 +27,11 @@ export class ValidationSchema {
 
         // Iterate over the validation rule instances
         for(const validationRuleInstance of this.validationRuleInstances) {
+            // console.log('value', value, 'validationRuleInstance', validationRuleInstance);
+
             // Validate the value
-            const validationRuleResult = await validationRuleInstance.validate(value);
-            console.log('validationRuleResult', validationRuleInstance.validationRule.identifier, validationRuleResult);
+            const validationRuleResult = await validationRuleInstance.validate(value ?? '');
+            // console.log('validationRuleResult', validationRuleInstance.validationRule.identifier, validationRuleResult);
 
             // If the result is not valid, set the validation result to invalid
             if(!validationRuleResult.valid) {
@@ -209,6 +211,11 @@ export class ValidationSchema {
         this.validationRuleInstances.push({
             validationRule: validationRule,
             validate: function (value: any) {
+                // Throw an exception if the value is not a string
+                if(typeof value !== 'string') {
+                    throw new Error('Value is not a string.');
+                }
+
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -217,8 +224,16 @@ export class ValidationSchema {
                     successes: [],
                 };
 
+                // If the value is invalid
+                if(typeof value !== 'string' && !Object.hasOwn(value, 'length')) {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'invalid',
+                        message: 'Invalid value.',
+                    });
+                }
                 // If the value is less than the minimum length, add an error
-                if(value.length < minimumLength) {
+                else if(value.length < minimumLength) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'tooShort',
@@ -262,6 +277,11 @@ export class ValidationSchema {
         this.validationRuleInstances.push({
             validationRule: validationRule,
             validate: function (value: any) {
+                // Throw an exception if the value is not a string
+                if(typeof value !== 'string') {
+                    throw new Error('Value is not a string.');
+                }
+
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -270,8 +290,16 @@ export class ValidationSchema {
                     successes: [],
                 };
 
+                // If the value is invalid
+                if(typeof value !== 'string' && !Object.hasOwn(value, 'length')) {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'invalid',
+                        message: 'Invalid value.',
+                    });
+                }
                 // If the value is greater than the maximum length, add an error
-                if(value.length > maximumLength) {
+                else if(value.length > maximumLength) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'tooLong',
@@ -312,6 +340,11 @@ export class ValidationSchema {
         this.validationRuleInstances.push({
             validationRule: validationRule,
             validate: function (value: any) {
+                // Throw an exception if the value is not a string
+                if(typeof value !== 'string') {
+                    throw new Error('Value is not a string.');
+                }
+
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -320,8 +353,16 @@ export class ValidationSchema {
                     successes: [],
                 };
 
+                // If the value is invalid
+                if(typeof value !== 'string') {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'invalid',
+                        message: 'Invalid value.',
+                    });
+                }
                 // If the value is not a valid email address, add an error
-                if(!isEmailAddress(value)) {
+                else if(!isEmailAddress(value)) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'invalidEmailAddress',
@@ -361,6 +402,11 @@ export class ValidationSchema {
         this.validationRuleInstances.push({
             validationRule: validationRule,
             validate: function (value: any) {
+                // Throw an exception if the value is not a string
+                if(typeof value !== 'string') {
+                    throw new Error('Value is not a string.');
+                }
+
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -369,8 +415,16 @@ export class ValidationSchema {
                     successes: [],
                 };
 
+                // If the value is invalid
+                if(typeof value !== 'string') {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'invalid',
+                        message: 'Invalid value.',
+                    });
+                }
                 // If the value has a period at the start or end or has more than two periods anywhere, add an error
-                if(value.startsWith('.') || value.endsWith('.') || value.split('.').length > 2) {
+                else if(value.startsWith('.') || value.endsWith('.') || value.split('.').length > 2) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'invalidSingleInternalPeriod',
@@ -416,6 +470,11 @@ export class ValidationSchema {
         this.validationRuleInstances.push({
             validationRule: validationRule,
             validate: function (value: any) {
+                // Throw an exception if the value is not a string
+                if(typeof value !== 'string') {
+                    throw new Error('Value is not a string.');
+                }
+
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -424,9 +483,17 @@ export class ValidationSchema {
                     successes: [],
                 };
 
+                // If the value is invalid
+                if(typeof value !== 'string') {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'invalid',
+                        message: 'Invalid value.',
+                    });
+                }
                 // If the value has characters other than letters, numbers, underscores, international characters, or period, add an error
                 // @ts-ignore -- FIXME: This regex is not working as expected with typescript@5.5 (looking into it here -- https://github.com/microsoft/TypeScript/issues/58287)
-                if(!/^[a-zA-Z0-9_.\p{L}]+$/u.test(value)) {
+                else if(!/^[a-zA-Z0-9_.\p{L}]+$/u.test(value)) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'invalidUsername',
