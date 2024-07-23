@@ -96,6 +96,7 @@ query Post($identifier: String!) {
             reacted
         }
         upvoteCount
+        downvoteCount
         voteType
         reportedCount
         reportStatus

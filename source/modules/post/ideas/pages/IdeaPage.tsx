@@ -50,21 +50,22 @@ export function IdeaPage(properties: IdeaPageInterface) {
             {ideaQueryState.error && <p>Error: {ideaQueryState.error.message}</p>}
             {/* Data */}
             {ideaQueryState.data && (
-                <Post
-                    id={ideaQueryState.data.post.id}
-                    identifier={ideaQueryState.data.post.identifier}
-                    title={ideaQueryState.data.post.title}
-                    content={ideaQueryState.data.post.content}
-                    upvoteCount={ideaQueryState.data.post.upvoteCount ?? 0}
-                    voteType={ideaQueryState.data.post.voteType}
-                    reactions={ideaQueryState.data.post.reactions ?? []}
-                    views={100}
-                    submittedByDisplayName="Bill"
-                    submittedByUsername="bill"
-                    createdAt={ideaQueryState.data.post.createdAt}
-                    updatedAt={ideaQueryState.data.post.updatedAt}
-                    topics={['Stack', 'Supplements']}
-                />
+                <div>data</div>
+                // <Post
+                //     id={ideaQueryState.data.post.id}
+                //     identifier={ideaQueryState.data.post.identifier}
+                //     title={ideaQueryState.data.post.title}
+                //     content={ideaQueryState.data.post.content}
+                //     upvoteCount={ideaQueryState.data.post.upvoteCount ?? 0}
+                //     voteType={ideaQueryState.data.post.voteType}
+                //     reactions={ideaQueryState.data.post.reactions ?? []}
+                //     views={100}
+                //     submittedByDisplayName="Bill"
+                //     submittedByUsername="bill"
+                //     createdAt={ideaQueryState.data.post.createdAt}
+                //     updatedAt={ideaQueryState.data.post.updatedAt}
+                //     topics={['Stack', 'Supplements']}
+                // />
             )}
         </div>
     );

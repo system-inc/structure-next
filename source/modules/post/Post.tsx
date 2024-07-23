@@ -27,7 +27,7 @@ export interface PostInterface {
     content: string;
     upvoteCount: number;
     voteType: PostVoteType | null | undefined;
-    reactions: PostReactionsType;
+    reactions?: PostReactionsType;
     views: number;
     submittedByDisplayName: string;
     submittedByUsername: string;

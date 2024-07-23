@@ -113,7 +113,11 @@ export function uppercaseFirstCharacter(string: string): string {
 
 // Function to create a slug from a string
 // Default max length of 160 characters
-export function slug(string: string, maximumLength = 160): string {
+export function slug(string: string | undefined, maximumLength = 160): string {
+    if(!string) {
+        return '';
+    }
+
     // Remove all apostrophes
     let slug = string.replace(/'/g, '');
 
