@@ -13,24 +13,24 @@ import ValidationSchema from '@structure/source/utilities/validation/ValidationS
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { IdeaReportCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostReportCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
 
-// Component - IdeaReportDialog
-export interface IdeaReportDialogInterface extends DialogInterface {
+// Component - PostReportDialog
+export interface PostReportDialogInterface extends DialogInterface {
     ideaId: string;
     ideaTitle: string;
 }
-export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
+export function PostReportDialog(properties: PostReportDialogInterface) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
     const [reportError, setReportError] = React.useState(false);
     const [reportComplete, setReportComplete] = React.useState(false);
 
     // Hooks
-    const [ideaReportCreateMutation] = useMutation(IdeaReportCreateDocument);
+    const [ideaReportCreateMutation] = useMutation(PostReportCreateDocument);
 
     // Effect to update the open state when the open property changes
     React.useEffect(
@@ -56,7 +56,7 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
         await ideaReportCreateMutation({
             variables: {
                 input: {
-                    articleId: properties.ideaId,
+                    postId: properties.ideaId,
                     reason: reason,
                     note: note,
                 },
@@ -199,4 +199,4 @@ export function IdeaReportDialog(properties: IdeaReportDialogInterface) {
 }
 
 // Export - Default
-export default IdeaReportDialog;
+export default PostReportDialog;

@@ -4,35 +4,46 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Idea, IdeaReactionsType } from '@structure/source/modules/idea/common/idea/Idea';
+import { Post, PostReactionsType } from '@structure/source/modules/post/Post';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { ArticleVoteType, IdeasDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostVoteType, PostsDocument, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
-// Component - Ideas
-export interface IdeasInterface {}
-export function Ideas(properties: IdeasInterface) {
+// Component - Posts
+export interface PostsInterface {
+    type: 'Post' | 'Article' | 'Idea' | 'Question' | 'Principle';
+    itemsPerPage?: number;
+}
+export function Posts(properties: PostsInterface) {
     // Hooks
-    const ideasQueryState = useQuery(IdeasDocument, {
+    const postsQueryState = useQuery(PostsDocument, {
         variables: {
-            // pagination: {
-            //     itemsPerPage: 10,
-            // },
+            pagination: {
+                itemsPerPage: properties.itemsPerPage ?? 10,
+                filters: [
+                    {
+                        column: 'type',
+                        operator: ColumnFilterConditionOperator.Equal,
+                        value: properties.type,
+                    },
+                ],
+            },
         },
     });
+    console.log('postsQueryState', postsQueryState);
 
-    const ideas: {
+    const posts: {
         id: string;
         identifier: string;
         title: string;
         description: string;
         upvoteCount: number;
-        voteType: ArticleVoteType | null | undefined;
-        reactions: IdeaReactionsType;
+        voteType: PostVoteType | null | undefined;
+        reactions: PostReactionsType;
         views: number;
         submittedByDisplayName: string;
         submittedByUsername: string;
@@ -41,8 +52,8 @@ export function Ideas(properties: IdeasInterface) {
         topics: string[];
     }[] = [];
 
-    ideasQueryState.data?.articlesMine.items.forEach(function (idea) {
-        ideas.push({
+    postsQueryState.data?.posts.items.forEach(function (idea) {
+        posts.push({
             id: idea.id,
             identifier: idea.identifier,
             title: idea.title,
@@ -67,26 +78,26 @@ export function Ideas(properties: IdeasInterface) {
     return (
         <div>
             <p>
-                ( Popular Ideas | Trending Ideas | New Ideas ) - use github issues filters
+                ( Popular Posts | Trending Posts | New Posts ) - use github issues filters
                 https://github.com/reactchartjs/react-chartjs-2/issues
             </p>
 
             <div className="mt-4">
                 {/* Loading */}
-                {ideasQueryState.loading && (
+                {postsQueryState.loading && (
                     <div>
                         <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     </div>
                 )}
 
                 {/* Error */}
-                {ideasQueryState.error && <div>Error: {ideasQueryState.error.message}</div>}
+                {postsQueryState.error && <div>Error: {postsQueryState.error.message}</div>}
 
-                {/* Ideas */}
-                {ideasQueryState.data &&
-                    ideas.map(function (idea) {
+                {/* Posts */}
+                {postsQueryState.data &&
+                    posts.map(function (idea) {
                         return (
-                            <Idea
+                            <Post
                                 key={idea.id}
                                 id={idea.id}
                                 identifier={idea.identifier}
@@ -110,4 +121,4 @@ export function Ideas(properties: IdeasInterface) {
 }
 
 // Export - Default
-export default Ideas;
+export default Posts;

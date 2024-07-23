@@ -5,28 +5,28 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { IdeaVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaVoteControl';
-import { IdeaReactions } from '@structure/source/modules/idea/common/idea/controls/IdeaReactions';
-import { IdeaControls } from '@structure/source/modules/idea/common/idea/controls/IdeaControls';
+import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
+import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
+import { PostControls } from '@structure/source/modules/post/controls/PostControls';
 
 // Dependencies - API
-import { ArticleVoteType, IdeasQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { PostVoteType, PostsQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { slug } from '@structure/source/utilities/String';
 
 // Type - Reactions
-export type IdeaReactionsType = NonNullable<IdeasQuery['articlesMine']['items'][0]['reactions']>;
+export type PostReactionsType = NonNullable<PostsQuery['posts']['items'][0]['reactions']>;
 
-// Component - Idea
-export interface IdeaInterface {
+// Component - Post
+export interface PostInterface {
     id: string;
     identifier: string;
     title: string;
     description: string;
     upvoteCount: number;
-    voteType: ArticleVoteType | null | undefined;
-    reactions: IdeaReactionsType;
+    voteType: PostVoteType | null | undefined;
+    reactions: PostReactionsType;
     views: number;
     submittedByDisplayName: string;
     submittedByUsername: string;
@@ -34,21 +34,21 @@ export interface IdeaInterface {
     updatedAt: string;
     topics: string[];
 }
-export function Idea(properties: IdeaInterface) {
+export function Post(properties: PostInterface) {
     // State
     const [upvoteCount, setUpvoteCount] = React.useState<number>(properties.upvoteCount);
-    const [voteType, setVoteType] = React.useState<ArticleVoteType | null | undefined>(properties.voteType ?? null);
-    const [reactions, setReactions] = React.useState<IdeaReactionsType>(properties.reactions || []);
+    const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);
+    const [reactions, setReactions] = React.useState<PostReactionsType>(properties.reactions || []);
 
     // Slug
-    const ideaSlug = slug(properties.title);
+    const postSlug = slug(properties.title);
 
-    // The URL path for the idea
-    const ideaUrlPath = '/ideas/' + properties.identifier + '/' + ideaSlug;
+    // The URL path for the post
+    const postUrlPath = '/posts/' + properties.identifier + '/' + postSlug;
 
     // Function to handle a change in vote count and type
     // We need to do this because we have two vote controls that need to stay synchronized
-    function onVoteChange(newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) {
+    function onVoteChange(newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) {
         setUpvoteCount(newUpvoteCount);
         setVoteType(newVoteType);
     }
@@ -143,7 +143,7 @@ export function Idea(properties: IdeaInterface) {
     return (
         <div className="flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3">
             {/* Voting */}
-            <IdeaVoteControl
+            <PostVoteControl
                 display="Desktop"
                 className="hidden w-24 shrink-0 md:flex"
                 ideaId={properties.id}
@@ -157,7 +157,7 @@ export function Idea(properties: IdeaInterface) {
                 {/* Title and Topics */}
                 <div className="">
                     {/* Title */}
-                    <Link href={ideaUrlPath}>
+                    <Link href={postUrlPath}>
                         <h4 className="inline font-medium">{properties.title}</h4>
                     </Link>
 
@@ -187,7 +187,7 @@ export function Idea(properties: IdeaInterface) {
 
                 {/* Reactions */}
                 {reactions.length > 0 && (
-                    <IdeaReactions
+                    <PostReactions
                         className="mt-3.5"
                         ideaId={properties.id}
                         reactions={reactions}
@@ -197,7 +197,7 @@ export function Idea(properties: IdeaInterface) {
                 )}
 
                 {/* Controls */}
-                <IdeaControls
+                <PostControls
                     className="mt-3"
                     id={properties.id}
                     identifier={properties.identifier}
@@ -215,4 +215,4 @@ export function Idea(properties: IdeaInterface) {
 }
 
 // Export - Default
-export default Idea;
+export default Post;

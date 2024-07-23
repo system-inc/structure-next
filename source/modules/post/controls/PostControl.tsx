@@ -7,14 +7,14 @@ import Link from 'next/link';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - IdeaControl
-export interface IdeaControlInterface {
+// Component - PostControl
+export interface PostControlInterface {
     className?: string;
     children?: React.ReactNode;
     href?: string;
     onClick?: () => void;
 }
-export function IdeaControl(properties: IdeaControlInterface) {
+export function PostControl(properties: PostControlInterface) {
     const Component = properties.href ? Link : 'div';
 
     // Render the component
@@ -51,4 +51,4 @@ export function IdeaControl(properties: IdeaControlInterface) {
 }
 
 // Export - Default
-export default IdeaControl;
+export default PostControl;

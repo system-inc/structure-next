@@ -1,0 +1,163 @@
+# Posts Query
+query Posts($pagination: PaginationInputWithFilters) {
+    posts(input: $pagination) {
+        items {
+            id
+            identifier
+            slug
+            status
+            title
+            content
+            topic {
+                name
+            }
+            reactions {
+                content
+                count
+                reacted
+            }
+            upvoteCount
+            voteType
+            reportedCount
+            reportStatus
+            latestRevisionId
+            updatedAt
+            createdAt
+        }
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+            pagesTotal
+            page
+        }
+    }
+}
+
+# Posts Mine Query
+query PostsMine($pagination: PaginationInputWithFilters) {
+    postsMine(input: $pagination) {
+        items {
+            id
+            identifier
+            slug
+            status
+            title
+            content
+            topic {
+                name
+            }
+            reactions {
+                content
+                count
+                reacted
+            }
+            upvoteCount
+            voteType
+            reportedCount
+            reportStatus
+            latestRevisionId
+            updatedAt
+            createdAt
+        }
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+            pagesTotal
+            page
+        }
+    }
+}
+
+# Post Query
+query Post($identifier: String!) {
+    post(identifier: $identifier) {
+        id
+        identifier
+        slug
+        status
+        title
+        content
+        topic {
+            name
+        }
+        reactions {
+            content
+            count
+            reacted
+        }
+        upvoteCount
+        voteType
+        reportedCount
+        reportStatus
+        latestRevisionId
+        updatedAt
+        createdAt
+    }
+}
+
+# Post Create
+mutation PostCreate($input: PostCreateInput!) {
+    postCreate(input: $input) {
+        id
+        status
+        title
+        contentType
+        content
+        settings
+        upvoteCount
+        downvoteCount
+    }
+}
+
+# Post Vote
+mutation PostVote($postId: String!, $type: PostVoteType!) {
+    postVote(postId: $postId, type: $type)
+}
+
+# Post Unvote
+mutation PostUnvote($postId: String!) {
+    postUnvote(postId: $postId)
+}
+
+# Post Reaction Create
+mutation PostReactionCreate($postId: String!, $content: String!) {
+    postReactionCreate(postId: $postId, content: $content)
+}
+
+# Post Reaction Delete
+mutation PostReactionDelete($postId: String!, $content: String!) {
+    postReactionDelete(postId: $postId, content: $content)
+}
+
+# Post Reaction Profiles
+query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput) {
+    postReactionProfiles(postId: $postId, content: $content, pagination: $pagination) {
+        items {
+            username
+            displayName
+            profileId
+        }
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+            pagesTotal
+            page
+        }
+    }
+}
+
+# Post Report Create
+mutation PostReportCreate($input: PostReportInput!) {
+    postReportCreate(input: $input) {
+        id
+    }
+}

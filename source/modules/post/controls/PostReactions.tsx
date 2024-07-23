@@ -4,27 +4,27 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { IdeaReactionsType } from '@structure/source/modules/idea/common/idea/Idea';
-import { IdeaReaction } from '@structure/source/modules/idea/common/idea/controls/IdeaReaction';
+import { PostReactionsType } from '@structure/source/modules/post/Post';
+import { PostReaction } from '@structure/source/modules/post/controls/PostReaction';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - IdeaReactions
-export interface IdeaReactionsInterface {
+// Component - PostReactions
+export interface PostReactionsInterface {
     className?: string;
     ideaId: string;
-    reactions: IdeaReactionsType;
+    reactions: PostReactionsType;
     onReactionCreate: (content: string) => void;
     onReactionDelete: (content: string) => void;
 }
-export function IdeaReactions(properties: IdeaReactionsInterface) {
+export function PostReactions(properties: PostReactionsInterface) {
     // Render the component
     return (
         <div className={mergeClassNames('flex space-x-1.5', properties.className)}>
             {properties.reactions?.map(function (reaction, reactionIndex) {
                 return (
-                    <IdeaReaction
+                    <PostReaction
                         key={reactionIndex}
                         ideaId={properties.ideaId}
                         content={reaction.content}
@@ -40,4 +40,4 @@ export function IdeaReactions(properties: IdeaReactionsInterface) {
 }
 
 // Export - Default
-export default IdeaReactions;
+export default PostReactions;

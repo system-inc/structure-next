@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
+import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 
 // Dependencies - Assets
@@ -15,12 +15,12 @@ import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - IdeaShareControl
-export interface IdeaShareControlInterface {
+// Component - PostShareControl
+export interface PostShareControlInterface {
     className?: string;
     ideaUrl: string;
 }
-export function IdeaShareControl(properties: IdeaShareControlInterface) {
+export function PostShareControl(properties: PostShareControlInterface) {
     // Hooks
     const { addNotice } = useNotice();
 
@@ -45,12 +45,12 @@ export function IdeaShareControl(properties: IdeaShareControlInterface) {
                 },
             ]}
         >
-            <IdeaControl className="">
+            <PostControl className="">
                 <ShareIcon className="h-4 w-4" />
-            </IdeaControl>
+            </PostControl>
         </PopoverMenu>
     );
 }
 
 // Export - Default
-export default IdeaShareControl;
+export default PostShareControl;

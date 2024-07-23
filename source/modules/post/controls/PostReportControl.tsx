@@ -5,8 +5,8 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
-import { IdeaReportDialog } from '@structure/source/modules/idea/common/idea/controls/IdeaReportDialog';
+import { PostControl } from '@structure/source/modules/post/controls/PostControl';
+import { PostReportDialog } from '@structure/source/modules/post/controls/PostReportDialog';
 
 // Dependencies - Assets
 import EllipsesIcon from '@structure/assets/icons/interface/EllipsesIcon.svg';
@@ -15,13 +15,13 @@ import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - IdeaReportControl
-export interface IdeaReportControlInterface {
+// Component - PostReportControl
+export interface PostReportControlInterface {
     className?: string;
     ideaId: string;
     ideaTitle: string;
 }
-export function IdeaReportControl(properties: IdeaReportControlInterface) {
+export function PostReportControl(properties: PostReportControlInterface) {
     // State
     const [reportDialogOpen, setReportDialogOpen] = React.useState(false);
 
@@ -40,12 +40,12 @@ export function IdeaReportControl(properties: IdeaReportControlInterface) {
                     },
                 ]}
             >
-                <IdeaControl className="">
+                <PostControl className="">
                     <EllipsesIcon className="h-4 w-4" />
-                </IdeaControl>
+                </PostControl>
             </PopoverMenu>
 
-            <IdeaReportDialog
+            <PostReportDialog
                 open={reportDialogOpen}
                 onOpenChange={setReportDialogOpen}
                 ideaId={properties.ideaId}
@@ -56,4 +56,4 @@ export function IdeaReportControl(properties: IdeaReportControlInterface) {
 }
 
 // Export - Default
-export default IdeaReportControl;
+export default PostReportControl;

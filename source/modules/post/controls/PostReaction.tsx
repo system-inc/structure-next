@@ -9,9 +9,9 @@ import { Tip } from '@structure/source/common/popovers/Tip';
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
-    IdeaReactionProfilesDocument,
-    IdeaReactionCreateDocument,
-    IdeaReactionDeleteDocument,
+    PostReactionProfilesDocument,
+    PostReactionCreateDocument,
+    PostReactionDeleteDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
@@ -20,8 +20,8 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - IdeaReaction
-export interface IdeaReactionInterface {
+// Component - PostReaction
+export interface PostReactionInterface {
     className?: string;
     ideaId: string;
     content: string;
@@ -30,20 +30,20 @@ export interface IdeaReactionInterface {
     onReactionCreate: (content: string) => void;
     onReactionDelete: (content: string) => void;
 }
-export function IdeaReaction(properties: IdeaReactionInterface) {
+export function PostReaction(properties: PostReactionInterface) {
     // State
     const [tipOpen, setTipOpen] = React.useState<boolean>(false);
 
     // Hooks
-    const ideaReactionProfilesQueryState = useQuery(IdeaReactionProfilesDocument, {
+    const ideaReactionProfilesQueryState = useQuery(PostReactionProfilesDocument, {
         skip: !tipOpen,
         variables: {
-            articleId: properties.ideaId,
+            postId: properties.ideaId,
             content: properties.content,
         },
     });
-    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(IdeaReactionCreateDocument);
-    const [ideaReactionDeleteMutation, ideaReactionDeleteMutationState] = useMutation(IdeaReactionDeleteDocument);
+    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(PostReactionCreateDocument);
+    const [ideaReactionDeleteMutation, ideaReactionDeleteMutationState] = useMutation(PostReactionDeleteDocument);
 
     // Function to handle clicking on the reaction
     async function handleReaction() {
@@ -55,7 +55,7 @@ export function IdeaReaction(properties: IdeaReactionInterface) {
             // Invoke the mutation to delete the reaction
             ideaReactionDeleteMutation({
                 variables: {
-                    articleId: properties.ideaId,
+                    postId: properties.ideaId,
                     content: properties.content,
                 },
             });
@@ -68,7 +68,7 @@ export function IdeaReaction(properties: IdeaReactionInterface) {
             // Invoke the mutation to create the reaction
             ideaReactionCreateMutation({
                 variables: {
-                    articleId: properties.ideaId,
+                    postId: properties.ideaId,
                     content: properties.content,
                 },
             });
@@ -98,7 +98,7 @@ export function IdeaReaction(properties: IdeaReactionInterface) {
                         {/* Profiles */}
                         {ideaReactionProfilesQueryState.data && (
                             <div className="">
-                                {ideaReactionProfilesQueryState.data.articleReactionProfiles.items.map(
+                                {ideaReactionProfilesQueryState.data.postReactionProfiles.items.map(
                                     function (profile, profileIndex) {
                                         return (
                                             <div key={profileIndex} className="">
@@ -151,4 +151,4 @@ export function IdeaReaction(properties: IdeaReactionInterface) {
 }
 
 // Export - Default
-export default IdeaReaction;
+export default PostReaction;

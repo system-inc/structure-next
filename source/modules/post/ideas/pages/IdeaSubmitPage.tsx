@@ -11,7 +11,7 @@ import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextA
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { IdeaCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+import { PostCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
@@ -37,7 +37,7 @@ export function IdeaSubmitPage(properties: IdeaSubmitPageInterface) {
 
             <GraphQlOperationForm
                 className="mt-6"
-                operation={IdeaCreateOperation}
+                operation={PostCreateOperation}
                 inputComponentsProperties={{
                     'input.description': {
                         className: 'hidden',

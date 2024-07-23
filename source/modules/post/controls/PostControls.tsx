@@ -5,12 +5,12 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { IdeaInterface } from '@structure/source/modules/idea/common/idea/Idea';
-import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
-import { IdeaVoteControl } from '@structure/source/modules/idea/common/idea/controls/IdeaVoteControl';
-import { IdeaReactionControl } from '@structure/source/modules/idea/common/idea/controls/IdeaReactionControl';
-import { IdeaShareControl } from '@structure/source/modules/idea/common/idea/controls/IdeaShareControl';
-import { IdeaReportControl } from '@structure/source/modules/idea/common/idea/controls/IdeaReportControl';
+import { PostInterface } from '@structure/source/modules/post/Post';
+import { PostControl } from '@structure/source/modules/post/controls/PostControl';
+import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
+import { PostReactionControl } from '@structure/source/modules/post/controls/PostReactionControl';
+import { PostShareControl } from '@structure/source/modules/post/controls/PostShareControl';
+import { PostReportControl } from '@structure/source/modules/post/controls/PostReportControl';
 
 // Dependencies - Assets
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
@@ -19,27 +19,27 @@ import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { timeAgo } from '@structure/source/utilities/Time';
 
-// Component - IdeaControls
-export interface IdeaControlsInterface {
+// Component - PostControls
+export interface PostControlsInterface {
     className?: string;
-    id: IdeaInterface['id'];
-    identifier: IdeaInterface['identifier'];
-    title: IdeaInterface['title'];
-    upvoteCount: IdeaInterface['upvoteCount'];
-    voteType: IdeaInterface['voteType'];
-    createdAt: IdeaInterface['createdAt'];
-    submittedByUsername: IdeaInterface['submittedByUsername'];
+    id: PostInterface['id'];
+    identifier: PostInterface['identifier'];
+    title: PostInterface['title'];
+    upvoteCount: PostInterface['upvoteCount'];
+    voteType: PostInterface['voteType'];
+    createdAt: PostInterface['createdAt'];
+    submittedByUsername: PostInterface['submittedByUsername'];
 
-    onVoteChange: (newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) => void;
+    onVoteChange: (newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) => void;
     onReactionCreate: (content: string) => void;
 }
-export function IdeaControls(properties: IdeaControlsInterface) {
+export function PostControls(properties: PostControlsInterface) {
     // Render the component
     return (
         <div className={mergeClassNames('flex items-center justify-between space-x-2 text-sm', properties.className)}>
             <div className="flex select-none items-center">
                 {/* Voting */}
-                <IdeaVoteControl
+                <PostVoteControl
                     display="Mobile"
                     ideaId={properties.id}
                     upvoteCount={properties.upvoteCount}
@@ -48,21 +48,21 @@ export function IdeaControls(properties: IdeaControlsInterface) {
                 />
 
                 {/* Reactions */}
-                <IdeaReactionControl ideaId={properties.id} onReactionCreate={properties.onReactionCreate} />
+                <PostReactionControl ideaId={properties.id} onReactionCreate={properties.onReactionCreate} />
 
                 {/* Comments */}
-                <IdeaControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>
+                <PostControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>
                     <CommentIcon className="h-4 w-4" />
                     <div className="">10</div>
-                </IdeaControl>
+                </PostControl>
 
                 {/* Share */}
-                <IdeaShareControl
+                <PostShareControl
                     ideaUrl={`${window.location.origin}/ideas/${properties.id}/${properties.identifier}`}
                 />
 
                 {/* Report */}
-                <IdeaReportControl ideaId={properties.id} ideaTitle={properties.title} />
+                <PostReportControl ideaId={properties.id} ideaTitle={properties.title} />
             </div>
 
             <div className="flex space-x-1.5">
@@ -86,4 +86,4 @@ export function IdeaControls(properties: IdeaControlsInterface) {
 }
 
 // Export - Default
-export default IdeaControls;
+export default PostControls;

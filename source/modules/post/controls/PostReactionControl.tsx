@@ -5,27 +5,27 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
+import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 
 // Dependencies - Assets
 import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { IdeaReactionCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostReactionCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - IdeaReactionControl
-export interface IdeaReactionControlInterface {
+// Component - PostReactionControl
+export interface PostReactionControlInterface {
     ideaId: string;
     className?: string;
     onReactionCreate: (content: string) => void;
 }
-export function IdeaReactionControl(properties: IdeaReactionControlInterface) {
+export function PostReactionControl(properties: PostReactionControlInterface) {
     // Hooks
-    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(IdeaReactionCreateDocument);
+    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(PostReactionCreateDocument);
 
     // Function to handle a reaction
     async function handleReaction(content: string) {
@@ -35,7 +35,7 @@ export function IdeaReactionControl(properties: IdeaReactionControlInterface) {
         // Invoke the mutation
         ideaReactionCreateMutation({
             variables: {
-                articleId: properties.ideaId,
+                postId: properties.ideaId,
                 content: content,
             },
         });
@@ -152,12 +152,12 @@ export function IdeaReactionControl(properties: IdeaReactionControlInterface) {
                 side: 'top',
             }}
         >
-            <IdeaControl className="">
+            <PostControl className="">
                 <ReactionIcon className="h-4 w-4" />
-            </IdeaControl>
+            </PostControl>
         </PopoverMenu>
     );
 }
 
 // Export - Default
-export default IdeaReactionControl;
+export default PostReactionControl;

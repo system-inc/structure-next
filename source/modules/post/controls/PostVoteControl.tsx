@@ -5,36 +5,36 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
-import { IdeaInterface } from '@structure/source/modules/idea/common/idea/Idea';
-import { IdeaControl } from '@structure/source/modules/idea/common/idea/controls/IdeaControl';
+import { PostInterface } from '@structure/source/modules/post/Post';
+import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 
 // Dependencies - Assets
 import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { IdeaVoteDocument, IdeaUnvoteDocument, ArticleVoteType } from '@project/source/api/GraphQlGeneratedCode';
+import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - IdeaVoteControl
-export interface IdeaVoteControlInterface {
+// Component - PostVoteControl
+export interface PostVoteControlInterface {
     className?: string;
     display: 'Mobile' | 'Desktop';
     ideaId: string;
     upvoteCount: number;
-    voteType?: ArticleVoteType | null;
-    onVoteChange: (newUpvoteCount: IdeaInterface['upvoteCount'], newVoteType: IdeaInterface['voteType']) => void;
+    voteType?: PostVoteType | null;
+    onVoteChange: (newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) => void;
 }
-export function IdeaVoteControl(properties: IdeaVoteControlInterface) {
+export function PostVoteControl(properties: PostVoteControlInterface) {
     // State
     const [upvoteCount, setUpvoteCount] = React.useState<number>(properties.upvoteCount);
-    const [voteType, setVoteType] = React.useState<ArticleVoteType | null | undefined>(properties.voteType ?? null);
+    const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);
 
     // Hooks
-    const [ideaVoteMutation, ideaVoteMutationState] = useMutation(IdeaVoteDocument);
-    const [ideaUnvoteMutation, ideaUnvoteMutationState] = useMutation(IdeaUnvoteDocument);
+    const [ideaVoteMutation, ideaVoteMutationState] = useMutation(PostVoteDocument);
+    const [ideaUnvoteMutation, ideaUnvoteMutationState] = useMutation(PostUnvoteDocument);
 
     // Function to handle voting
     function handleVote() {
@@ -50,7 +50,7 @@ export function IdeaVoteControl(properties: IdeaVoteControlInterface) {
             // Run the unvote mutation in the background
             ideaUnvoteMutation({
                 variables: {
-                    articleId: properties.ideaId,
+                    postId: properties.ideaId,
                 },
             });
         }
@@ -58,16 +58,16 @@ export function IdeaVoteControl(properties: IdeaVoteControlInterface) {
         else {
             // Opportunistically update the UI
             setUpvoteCount(upvoteCount + 1);
-            setVoteType(ArticleVoteType.Upvote);
+            setVoteType(PostVoteType.Upvote);
 
             // Update the parent component
-            properties.onVoteChange(upvoteCount + 1, ArticleVoteType.Upvote);
+            properties.onVoteChange(upvoteCount + 1, PostVoteType.Upvote);
 
             // Run the vote mutation in the background
             ideaVoteMutation({
                 variables: {
-                    articleId: properties.ideaId,
-                    type: ArticleVoteType.Upvote,
+                    postId: properties.ideaId,
+                    type: PostVoteType.Upvote,
                 },
             });
         }
@@ -90,7 +90,7 @@ export function IdeaVoteControl(properties: IdeaVoteControlInterface) {
         <>
             {/* Mobile */}
             {properties.display === 'Mobile' && (
-                <IdeaControl
+                <PostControl
                     className={mergeClassNames(
                         'space-x-1.5 md:hidden',
                         voteType ? 'border-purple-500 dark:border-purple-500' : '',
@@ -99,7 +99,7 @@ export function IdeaVoteControl(properties: IdeaVoteControlInterface) {
                 >
                     <ArrowUpIcon className="h-3.5 w-3.5" />
                     <div className="">{upvoteCount}</div>
-                </IdeaControl>
+                </PostControl>
             )}
 
             {/* Desktop */}
@@ -132,4 +132,4 @@ export function IdeaVoteControl(properties: IdeaVoteControlInterface) {
 }
 
 // Export - Default
-export default IdeaVoteControl;
+export default PostVoteControl;

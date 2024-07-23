@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
-import { Ideas } from '@structure/source/modules/idea/common/Ideas';
+import { Posts } from '@structure/source/modules/post/Posts';
 
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
@@ -30,7 +30,7 @@ export function IdeasPage(properties: IdeasPageInterface) {
 
             <h1 className="mb-8">Ideas</h1>
 
-            <Ideas />
+            <Posts type="Idea" itemsPerPage={10} />
         </div>
     );
 }
