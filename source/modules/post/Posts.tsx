@@ -102,7 +102,7 @@ export function Posts(properties: PostsInterface) {
                                 id={idea.id}
                                 identifier={idea.identifier}
                                 title={idea.title}
-                                description={idea.description}
+                                content={idea.description}
                                 upvoteCount={idea.upvoteCount}
                                 voteType={idea.voteType}
                                 reactions={idea.reactions}

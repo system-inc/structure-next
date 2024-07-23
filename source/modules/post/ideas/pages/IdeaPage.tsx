@@ -54,7 +54,7 @@ export function IdeaPage(properties: IdeaPageInterface) {
                     id={ideaQueryState.data.post.id}
                     identifier={ideaQueryState.data.post.identifier}
                     title={ideaQueryState.data.post.title}
-                    description={ideaQueryState.data.post.content}
+                    content={ideaQueryState.data.post.content}
                     upvoteCount={ideaQueryState.data.post.upvoteCount ?? 0}
                     voteType={ideaQueryState.data.post.voteType}
                     reactions={ideaQueryState.data.post.reactions ?? []}

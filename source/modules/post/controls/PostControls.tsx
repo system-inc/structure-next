@@ -30,39 +30,61 @@ export interface PostControlsInterface {
     createdAt: PostInterface['createdAt'];
     submittedByUsername: PostInterface['submittedByUsername'];
 
+    // Control Visibility
+    voteControl?: boolean;
+    reactionControl?: boolean;
+    commentControl?: boolean;
+    shareControl?: boolean;
+    reportControl?: boolean;
+
     onVoteChange: (newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) => void;
     onReactionCreate: (content: string) => void;
 }
 export function PostControls(properties: PostControlsInterface) {
+    // Defaults
+    const voteControl = properties.voteControl ?? true;
+    const reactionControl = properties.reactionControl ?? true;
+    const commentControl = properties.commentControl ?? true;
+    const shareControl = properties.shareControl ?? true;
+    const reportControl = properties.reportControl ?? true;
+
     // Render the component
     return (
         <div className={mergeClassNames('flex items-center justify-between space-x-2 text-sm', properties.className)}>
             <div className="flex select-none items-center">
                 {/* Voting */}
-                <PostVoteControl
-                    display="Mobile"
-                    ideaId={properties.id}
-                    upvoteCount={properties.upvoteCount}
-                    voteType={properties.voteType}
-                    onVoteChange={properties.onVoteChange}
-                />
+                {voteControl && (
+                    <PostVoteControl
+                        display="Mobile"
+                        ideaId={properties.id}
+                        upvoteCount={properties.upvoteCount}
+                        voteType={properties.voteType}
+                        onVoteChange={properties.onVoteChange}
+                    />
+                )}
 
                 {/* Reactions */}
-                <PostReactionControl ideaId={properties.id} onReactionCreate={properties.onReactionCreate} />
+                {reactionControl && (
+                    <PostReactionControl ideaId={properties.id} onReactionCreate={properties.onReactionCreate} />
+                )}
 
                 {/* Comments */}
-                <PostControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>
-                    <CommentIcon className="h-4 w-4" />
-                    <div className="">10</div>
-                </PostControl>
+                {commentControl && (
+                    <PostControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>
+                        <CommentIcon className="h-4 w-4" />
+                        <div className="">10</div>
+                    </PostControl>
+                )}
 
                 {/* Share */}
-                <PostShareControl
-                    ideaUrl={`${window.location.origin}/ideas/${properties.id}/${properties.identifier}`}
-                />
+                {shareControl && (
+                    <PostShareControl
+                        ideaUrl={`${window.location.origin}/ideas/${properties.id}/${properties.identifier}`}
+                    />
+                )}
 
                 {/* Report */}
-                <PostReportControl ideaId={properties.id} ideaTitle={properties.title} />
+                {reportControl && <PostReportControl ideaId={properties.id} ideaTitle={properties.title} />}
             </div>
 
             <div className="flex space-x-1.5">

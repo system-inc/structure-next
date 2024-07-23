@@ -12,9 +12,6 @@ import { PostControls } from '@structure/source/modules/post/controls/PostContro
 // Dependencies - API
 import { PostVoteType, PostsQuery } from '@project/source/api/GraphQlGeneratedCode';
 
-// Dependencies - Utilities
-import { slug } from '@structure/source/utilities/String';
-
 // Type - Reactions
 export type PostReactionsType = NonNullable<PostsQuery['posts']['items'][0]['reactions']>;
 
@@ -22,8 +19,12 @@ export type PostReactionsType = NonNullable<PostsQuery['posts']['items'][0]['rea
 export interface PostInterface {
     id: string;
     identifier: string;
+    aboveTitleNode?: React.ReactNode;
     title: string;
-    description: string;
+    belowTitleNode?: React.ReactNode;
+    slug: string;
+    urlPath: string;
+    content: string;
     upvoteCount: number;
     voteType: PostVoteType | null | undefined;
     reactions: PostReactionsType;
@@ -33,6 +34,13 @@ export interface PostInterface {
     createdAt: string;
     updatedAt: string;
     topics: string[];
+
+    // Control Visibility
+    voteControl?: boolean;
+    reactionControl?: boolean;
+    commentControl?: boolean;
+    shareControl?: boolean;
+    reportControl?: boolean;
 }
 export function Post(properties: PostInterface) {
     // State
@@ -40,11 +48,8 @@ export function Post(properties: PostInterface) {
     const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);
     const [reactions, setReactions] = React.useState<PostReactionsType>(properties.reactions || []);
 
-    // Slug
-    const postSlug = slug(properties.title);
-
-    // The URL path for the post
-    const postUrlPath = '/posts/' + properties.identifier + '/' + postSlug;
+    // Defaults
+    const urlPath = properties.urlPath ?? '/posts/' + properties.identifier + '/' + properties.slug;
 
     // Function to handle a change in vote count and type
     // We need to do this because we have two vote controls that need to stay synchronized
@@ -143,23 +148,31 @@ export function Post(properties: PostInterface) {
     return (
         <div className="flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3">
             {/* Voting */}
-            <PostVoteControl
-                display="Desktop"
-                className="hidden w-24 shrink-0 md:flex"
-                ideaId={properties.id}
-                upvoteCount={upvoteCount}
-                voteType={voteType}
-                onVoteChange={onVoteChange}
-            />
+            {properties.voteControl && (
+                <PostVoteControl
+                    display="Desktop"
+                    className="hidden w-24 shrink-0 md:flex"
+                    ideaId={properties.id}
+                    upvoteCount={upvoteCount}
+                    voteType={voteType}
+                    onVoteChange={onVoteChange}
+                />
+            )}
 
             {/* Post */}
             <div className="flex-grow">
                 {/* Title and Topics */}
                 <div className="">
+                    {/* Above Title Node */}
+                    {properties.aboveTitleNode}
+
                     {/* Title */}
-                    <Link href={postUrlPath}>
+                    <Link href={properties.urlPath}>
                         <h4 className="inline font-medium">{properties.title}</h4>
                     </Link>
+
+                    {/* Below Title Node */}
+                    {properties.belowTitleNode}
 
                     {/* Topics */}
                     {properties.topics.map(function (topic) {
@@ -183,7 +196,7 @@ export function Post(properties: PostInterface) {
                 </div>
 
                 {/* Description */}
-                <p className="mt-2.5">{properties.description}</p>
+                {properties.content && <p className="mt-2.5">{properties.content}</p>}
 
                 {/* Reactions */}
                 {reactions.length > 0 && (
@@ -208,6 +221,12 @@ export function Post(properties: PostInterface) {
                     createdAt={properties.createdAt}
                     onVoteChange={onVoteChange}
                     onReactionCreate={onReactionCreate}
+                    // Control Visibility
+                    voteControl={properties.voteControl}
+                    reactionControl={properties.reactionControl}
+                    commentControl={properties.commentControl}
+                    shareControl={properties.shareControl}
+                    reportControl={properties.reportControl}
                 />
             </div>
         </div>

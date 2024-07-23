@@ -17,9 +17,11 @@ query Posts($pagination: PaginationInputWithFilters) {
                 reacted
             }
             upvoteCount
+            downvoteCount
             voteType
             reportedCount
             reportStatus
+            metadata
             latestRevisionId
             updatedAt
             createdAt
@@ -55,9 +57,11 @@ query PostsMine($pagination: PaginationInputWithFilters) {
                 reacted
             }
             upvoteCount
+            downvoteCount
             voteType
             reportedCount
             reportStatus
+            metadata
             latestRevisionId
             updatedAt
             createdAt
@@ -95,6 +99,7 @@ query Post($identifier: String!) {
         voteType
         reportedCount
         reportStatus
+        metadata
         latestRevisionId
         updatedAt
         createdAt
@@ -112,6 +117,9 @@ mutation PostCreate($input: PostCreateInput!) {
         settings
         upvoteCount
         downvoteCount
+        metadata
+        updatedAt
+        createdAt
     }
 }
 
