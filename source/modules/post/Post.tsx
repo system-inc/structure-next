@@ -49,7 +49,11 @@ export function Post(properties: PostInterface) {
     const [reactions, setReactions] = React.useState<PostReactionsType>(properties.reactions || []);
 
     // Defaults
-    const urlPath = properties.urlPath ?? '/posts/' + properties.identifier + '/' + properties.slug;
+    const voteControl = properties.voteControl ?? true;
+    const reactionControl = properties.reactionControl ?? true;
+    const commentControl = properties.commentControl ?? true;
+    const shareControl = properties.shareControl ?? true;
+    const reportControl = properties.reportControl ?? true;
 
     // Function to handle a change in vote count and type
     // We need to do this because we have two vote controls that need to stay synchronized
@@ -148,7 +152,7 @@ export function Post(properties: PostInterface) {
     return (
         <div className="flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3">
             {/* Voting */}
-            {properties.voteControl && (
+            {voteControl && (
                 <PostVoteControl
                     display="Desktop"
                     className="hidden w-24 shrink-0 md:flex"
@@ -222,11 +226,11 @@ export function Post(properties: PostInterface) {
                     onVoteChange={onVoteChange}
                     onReactionCreate={onReactionCreate}
                     // Control Visibility
-                    voteControl={properties.voteControl}
-                    reactionControl={properties.reactionControl}
-                    commentControl={properties.commentControl}
-                    shareControl={properties.shareControl}
-                    reportControl={properties.reportControl}
+                    voteControl={voteControl}
+                    reactionControl={reactionControl}
+                    commentControl={commentControl}
+                    shareControl={shareControl}
+                    reportControl={reportControl}
                 />
             </div>
         </div>

@@ -11,6 +11,7 @@ import { PostVoteControl } from '@structure/source/modules/post/controls/PostVot
 import { PostReactionControl } from '@structure/source/modules/post/controls/PostReactionControl';
 import { PostShareControl } from '@structure/source/modules/post/controls/PostShareControl';
 import { PostReportControl } from '@structure/source/modules/post/controls/PostReportControl';
+import { TimeAgo } from '@structure/source/common/time/TimeAgo';
 
 // Dependencies - Assets
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
@@ -90,7 +91,7 @@ export function PostControls(properties: PostControlsInterface) {
             <div className="flex space-x-1.5">
                 {/* Time Ago */}
                 <div className="text-neutral+3 dark:text-neutral">
-                    {timeAgo(new Date(properties.createdAt).getTime())} by
+                    <TimeAgo startTimeInMilliseconds={new Date(properties.createdAt).getTime()} />
                 </div>
 
                 {/* User Display Name */}

@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import Link from 'next/link';
 
 // Dependencies - Main Components
 import { Post, PostReactionsType } from '@structure/source/modules/post/Post';
@@ -12,6 +13,10 @@ import { PostVoteType, PostsDocument, ColumnFilterConditionOperator } from '@pro
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
+
+// Dependencies - Utilities
+import { fullDate } from '@structure/source/utilities/Time';
+import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - Posts
 export interface PostsInterface {
@@ -38,39 +43,57 @@ export function Posts(properties: PostsInterface) {
 
     const posts: {
         id: string;
+        number: string;
         identifier: string;
         title: string;
-        description: string;
-        upvoteCount: number;
-        voteType: PostVoteType | null | undefined;
-        reactions: PostReactionsType;
-        views: number;
+        slug: string;
+        urlPath: string;
+        topics: string[];
+        content: string;
         submittedByDisplayName: string;
         submittedByUsername: string;
-        createdAt: string;
+        voteType: PostVoteType | null | undefined;
+        upvoteCount: number;
+        downvoteCount: number;
+        views: number;
+        reactions: PostReactionsType;
+        metadata: any;
         updatedAt: string;
-        topics: string[];
+        createdAt: string;
     }[] = [];
 
-    postsQueryState.data?.posts.items.forEach(function (idea) {
+    postsQueryState.data?.posts.items.forEach(function (post) {
+        const contentTrimmed = post.content?.trim();
+        let content = contentTrimmed && contentTrimmed.length > 0 ? contentTrimmed : '';
+
+        // If there is 500 characters, add an ellipsis
+        if(content && content.length > 500) {
+            content = content.substring(0, 500) + '...';
+        }
+
+        const principleNumber = post.metadata?.principleNumber ?? 'Unknown';
+
         posts.push({
-            id: idea.id,
-            identifier: idea.identifier,
-            title: idea.title,
-            // description: idea.content,
-            // Truncate description
-            description: idea.content.substring(0, 500) + '...',
-            upvoteCount: idea.upvoteCount,
-            voteType: idea.voteType,
-            reactions: idea.reactions ?? [],
-            views: 100,
-            submittedByDisplayName: 'Bill',
-            submittedByUsername: 'bill',
-            createdAt: idea.createdAt,
-            updatedAt: idea.updatedAt,
-            topics: ['Stack', 'Supplements'].map(function (topic) {
+            id: post.id,
+            number: principleNumber,
+            identifier: post.identifier,
+            title: post.title,
+            slug: post.slug,
+            urlPath: '/posts/' + principleNumber + '/' + post.slug,
+            topics: [].map(function (topic) {
                 return topic;
             }),
+            content: content,
+            submittedByDisplayName: 'Bill',
+            submittedByUsername: 'bill',
+            voteType: post.voteType,
+            upvoteCount: post.upvoteCount,
+            downvoteCount: post.downvoteCount,
+            views: 100,
+            reactions: post.reactions ?? [],
+            metadata: post.metadata,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
         });
     });
 
@@ -85,7 +108,7 @@ export function Posts(properties: PostsInterface) {
             <div className="mt-4">
                 {/* Loading */}
                 {postsQueryState.loading && (
-                    <div>
+                    <div className="mt-10">
                         <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     </div>
                 )}
@@ -102,16 +125,18 @@ export function Posts(properties: PostsInterface) {
                                 id={idea.id}
                                 identifier={idea.identifier}
                                 title={idea.title}
-                                content={idea.description}
-                                upvoteCount={idea.upvoteCount}
-                                voteType={idea.voteType}
-                                reactions={idea.reactions}
-                                views={idea.views}
+                                slug={idea.slug}
+                                urlPath={idea.urlPath}
+                                topics={idea.topics}
+                                content={idea.content}
                                 submittedByDisplayName={idea.submittedByDisplayName}
                                 submittedByUsername={idea.submittedByUsername}
-                                createdAt={idea.createdAt}
+                                voteType={idea.voteType}
+                                upvoteCount={idea.upvoteCount}
+                                views={idea.views}
+                                reactions={idea.reactions}
                                 updatedAt={idea.updatedAt}
-                                topics={idea.topics}
+                                createdAt={idea.createdAt}
                             />
                         );
                     })}
