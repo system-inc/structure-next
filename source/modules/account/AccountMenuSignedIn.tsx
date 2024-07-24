@@ -11,7 +11,7 @@ export type AccountMenuSignedInProperties = {
 };
 export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
     // Email
-    const primaryEmailAddress = properties.account.primaryEmailAddress?.emailAddress;
+    const primaryEmailAddress = properties.account.primaryAccountEmail?.emailAddress;
 
     // Given and family names
     const givenName = properties.account.currentProfile?.givenName;

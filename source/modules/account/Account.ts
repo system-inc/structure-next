@@ -9,41 +9,29 @@ import { useSession } from '@structure/source/modules/account/SessionProvider';
 // Dependencies - API
 import { useQuery } from '@apollo/client';
 import { AccountCurrentDocument } from '@project/source/api/GraphQlGeneratedCode';
-import {
-    AccountCurrentQuery,
-    AccessRoleType,
-    AccountEmail,
-    AccountRole,
-    AccountSession,
-    AccountStatus,
-    Profile,
-} from '@project/source/api/GraphQlGeneratedCode';
+import { AccountCurrentQuery, AccountEmail, AccountSession, Profile } from '@project/source/api/GraphQlGeneratedCode';
 
 // Class - Account
 export class Account {
-    id: string;
-    status: AccountStatus;
+    // status: AccountStatus;
 
-    primaryEmailAddress: AccountEmail;
+    primaryAccountEmail: AccountEmail | null | undefined;
     currentProfile: Profile;
-    roles: AccountRole[];
+    // roles: AccountRole[];
 
     currentSession: AccountSession;
 
     createdAt: Date;
-    updatedAt: Date;
 
     constructor(accountCurrentQueryData: AccountCurrentQuery['accountCurrent']) {
         if(!accountCurrentQueryData) throw new Error('Invalid account data from GraphQL query.');
 
-        this.id = accountCurrentQueryData.id;
         this.createdAt = new Date(accountCurrentQueryData.createdAt);
-        this.updatedAt = new Date(accountCurrentQueryData.updatedAt);
-        this.status = accountCurrentQueryData.status;
-        this.primaryEmailAddress = accountCurrentQueryData.primaryEmailAddress as AccountEmail;
+        // this.status = accountCurrentQueryData.status;
+        this.primaryAccountEmail = accountCurrentQueryData.primaryAccountEmail;
         this.currentSession = accountCurrentQueryData.currentSession as AccountSession;
         this.currentProfile = accountCurrentQueryData.currentProfile as Profile;
-        this.roles = accountCurrentQueryData.roles;
+        // this.roles = accountCurrentQueryData.roles;
     }
 
     getPublicDisplayName() {
@@ -62,22 +50,25 @@ export class Account {
         return publicDisplayName;
     }
 
-    hasRole(roleType: AccessRoleType) {
+    //hasRole(roleType: AccessRoleType) {
+    hasRole(roleType: any) {
         let hasRole = false;
 
-        // Loop through the roles
-        for(let i = 0; i < this.roles.length; i++) {
-            if(this.roles[i]?.roleType === roleType) {
-                hasRole = true;
-                break;
-            }
-        }
+        // // Loop through the roles
+        // for(let i = 0; i < this.roles.length; i++) {
+        //     if(this.roles[i]?.roleType === roleType) {
+        //         hasRole = true;
+        //         break;
+        //     }
+        // }
 
         return hasRole;
     }
 
     isAdministator() {
-        return this.hasRole(AccessRoleType.Administrator);
+        console.log('need to fix this!');
+        return true;
+        // return this.hasRole(AccessRoleType.Administrator);
     }
 }
 
