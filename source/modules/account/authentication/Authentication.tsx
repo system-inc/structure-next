@@ -6,114 +6,211 @@ import { StructureSettings } from '@project/StructureSettings';
 // Dependencies - React and Next.js
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 // Dependencies - Main Components
-import { AccountRegistrationCreateForm } from '@structure/source/modules/account/authentication/registration/AccountRegistrationCreateForm';
+import { Button } from '@structure/source/common/buttons/Button';
+import { useSession } from '@structure/source/modules/account/SessionProvider';
+import { EmailForm } from '@structure/source/modules/account/authentication/EmailForm';
 import { EmailVerificationChallenge } from '@structure/source/modules/account/authentication/challenges/email-verification/EmailVerificationChallenge';
-import { AccountCredentialVerifyForm } from '@structure/source/modules/account/authentication/challenges/account-credential/AccountCredentialVerifyForm';
+import { AccountPasswordChallenge } from '@structure/source/modules/account/authentication/challenges/account-password/AccountPasswordChallenge';
+import { Duration } from '@structure/source/common/time/Duration';
 
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
+    AccountCurrentDocument,
     AuthenticationCurrentDocument,
-    AccountRegistrationCurrentDocument,
     AccountRegistrationCompleteDocument,
-    AccountRegistrationStatus,
-    AuthenticationSessionStatus,
-    EmailVerificationSendDocument,
+    AccountSignInCompleteDocument,
+    AuthenticationSession,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Styles
 import { useTheme } from '@structure/source/theme/ThemeProvider';
 
+// Dependencies - Assets
+import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
+
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Authentication
-export interface AuthenticationInterface {}
+export interface AuthenticationInterface {
+    className?: string;
+    scope: 'SignIn' | 'Maintenance';
+}
 export function Authentication(properties: AuthenticationInterface) {
     // State
-    const [authenticationSessionStatus, setAuthenticationSessionStatus] = React.useState<
-        AuthenticationSessionStatus | undefined
-    >(undefined);
+    const [authenticationSession, setAuthenticationSession] = React.useState<AuthenticationSession | undefined>(
+        undefined,
+    );
+    const [authenticationSessionStartTime] = React.useState<number>(Date.now());
+    const [authenticationSessionSuccess, setAuthenticationSessionSuccess] = React.useState<boolean>(false);
+    const [authenticationSessionTimedOut] = React.useState<boolean>(false);
+    const [signedIn, setSignedIn] = React.useState<boolean>(false);
     const [emailAddress, setEmailAddress] = React.useState<string | undefined>(undefined);
 
     // Hooks
+    const router = useRouter();
     const { themeClassName } = useTheme();
+    const { signOut } = useSession();
 
     // Hooks - API - Queries
-    const accountRegistrationCurrentQuery = useQuery(AccountRegistrationCurrentDocument, {
-        skip: false,
+    useQuery(AuthenticationCurrentDocument, {
+        // Immediately run the query and see if we already have an authentication session
+        onCompleted: function (data) {
+            if(data.authenticationCurrent) {
+                setAuthenticationSession(data.authenticationCurrent);
+            }
+        },
     });
-    console.log('accountRegistrationCurrentQuery', accountRegistrationCurrentQuery);
-    const authenticationCurrentQuery = useQuery(AuthenticationCurrentDocument, {
-        skip:
-            // Skip if the account registration is not set or if the account registration is not authenticating
-            !accountRegistrationCurrentQuery.data ||
-            accountRegistrationCurrentQuery.data?.accountRegistrationCurrent?.status !=
-                AccountRegistrationStatus.Authenticating,
+    const accountCurrentQueryState = useQuery(AccountCurrentDocument, {
+        // Immediately run the query and see if we already have an account
+        onCompleted: function (data) {
+            if(data.accountCurrent) {
+                setSignedIn(true);
+            }
+        },
     });
-    console.log('authenticationCurrentQuery', authenticationCurrentQuery);
 
     // Hooks - API - Mutations
-    const [accountRegistrationCompleteMutation, accountRegistrationCompleteMutationState] = useMutation(
-        AccountRegistrationCompleteDocument,
+    const [accountRegistrationCompleteMutation] = useMutation(AccountRegistrationCompleteDocument);
+    const [accountSignInCompleteMutation] = useMutation(AccountSignInCompleteDocument);
+
+    // Effect to run every time the authentication session changes
+    React.useEffect(
+        function () {
+            // If the authentication session is authenticated
+            if(authenticationSession?.status == 'Authenticated') {
+                // If the scope is AccountRegistration
+                if(authenticationSession?.scopeType == 'AccountRegistration') {
+                    console.log('AccountRegistrationComplete');
+
+                    // Run the accountRegistrationComplete mutation
+                    accountRegistrationCompleteMutation({
+                        variables: {
+                            input: {},
+                        },
+                        onCompleted: function (data) {
+                            console.log('accountRegistrationCompleteMutation', data);
+
+                            // Set the authentication session success
+                            setAuthenticationSessionSuccess(true);
+                        },
+                    });
+                }
+                // If the scope is AccountSignIn
+                else if(authenticationSession?.scopeType == 'AccountSignIn') {
+                    console.log('AccountSignInComplete');
+
+                    // Run the accountSignInComplete mutation
+                    accountSignInCompleteMutation({
+                        onCompleted: function (data) {
+                            console.log('accountSignInCompleteMutation', data);
+
+                            // Set the authentication session success
+                            setAuthenticationSessionSuccess(true);
+                        },
+                    });
+                }
+            }
+        },
+        [authenticationSession, accountRegistrationCompleteMutation, accountSignInCompleteMutation],
     );
-    const [emailVerificationSendMutation, emailVerificationSendMutationState] =
-        useMutation(EmailVerificationSendDocument);
 
     // The current authentication component based on the authentication state
     let currentAuthenticationComponent = null;
 
-    /*
-    status can be
-  Authenticated - i have proved and can now do the thing, accountRegistrationComplete
-  AuthenticationExpired - start over
-  AuthenticationUsed - already done
-  ChallengeExpired - didn't complete in time, start over
-  ChallengeFailed - check AuthenticationCurrent query
-  Challenged - check challenge type
-    - email verification is one flow, emailVerificationSend mutation, run it, do emailVerificationConfirm
-    - accountCredentials - provide password using accountCredentialVerify
-*/
-
-    // If the current challenge is EmailVerification
-    if(authenticationCurrentQuery.data?.authenticationCurrent?.currentChallenge?.challengeType == 'EmailVerification') {
+    // Authenticated session complete
+    if(signedIn) {
+        currentAuthenticationComponent = (
+            <div>
+                <p>
+                    You are signed in as{' '}
+                    {accountCurrentQueryState.data?.accountCurrent.primaryAccountEmail?.emailAddress}.{' '}
+                </p>
+                <div className="mt-8 flex flex-col space-y-4">
+                    <Button
+                        variant="destructive"
+                        onClick={function () {
+                            console.log('signing out..');
+                            signOut('/');
+                        }}
+                    >
+                        Sign Out
+                    </Button>
+                    <Button
+                        onClick={function () {
+                            router.back();
+                        }}
+                    >
+                        Go Back
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+    else if(authenticationSessionSuccess) {
+        router.push('/');
+    }
+    // Challenge - Email Verification
+    else if(authenticationSession?.currentChallenge?.challengeType == 'EmailVerification') {
         currentAuthenticationComponent = (
             <EmailVerificationChallenge
                 emailAddress={emailAddress!}
-                onSuccess={async function () {
-                    // Must refetch authentication current query first
-                    await authenticationCurrentQuery.refetch();
-                    // Then refetch account registration current query
-                    await accountRegistrationCurrentQuery.refetch();
+                onSuccess={function (authenticationSession: AuthenticationSession) {
+                    setAuthenticationSession(authenticationSession);
                 }}
             />
         );
     }
-    // If there is no account registration, then we need to show the account registration form
-    else if(
-        accountRegistrationCurrentQuery.error ||
-        !accountRegistrationCurrentQuery.data?.accountRegistrationCurrent
-    ) {
+    // Challenge - Account Password
+    else if(authenticationSession?.currentChallenge?.challengeType == 'AccountPassword') {
         currentAuthenticationComponent = (
-            <AccountRegistrationCreateForm
-                onSuccess={function (emailAddress: string) {
-                    setEmailAddress(emailAddress);
-                    accountRegistrationCurrentQuery.refetch();
+            <AccountPasswordChallenge
+                emailAddress={emailAddress!}
+                onSuccess={function (authenticationSession: AuthenticationSession) {
+                    setAuthenticationSession(authenticationSession);
                 }}
             />
         );
     }
+    // Authenticated session authenticated and ready to complete
+    else if(authenticationSession?.status == 'Authenticated') {
+        currentAuthenticationComponent = (
+            <div className="flex items-center space-x-1.5">
+                <div>
+                    <BrokenCircleIcon className="h-5 w-5 animate-spin" />
+                </div>
+                <div>
+                    {authenticationSession?.scopeType === 'AccountRegistration'
+                        ? 'Creating your account...'
+                        : 'Signing you in...'}
+                </div>
+            </div>
+        );
+    }
+    // No challenges
     else {
-        if(1) {
-            currentAuthenticationComponent = <AccountCredentialVerifyForm />;
-        }
+        currentAuthenticationComponent = (
+            <EmailForm
+                onSuccess={function (emailAddress: string, authenticationSession: AuthenticationSession) {
+                    setEmailAddress(emailAddress);
+                    setAuthenticationSession(authenticationSession);
+                }}
+            >
+                {/* Previous Authentication Session Timed Out */}
+                {authenticationSessionTimedOut && (
+                    <p className="mb-3">Your previous authentication session timed out.</p>
+                )}
+            </EmailForm>
+        );
     }
 
     // Render the component
     return (
-        <div>
+        <div className={mergeClassNames('', properties.className)}>
             {/* Project Logo */}
             <div className="mb-8">
                 <Image
@@ -131,6 +228,11 @@ export function Authentication(properties: AuthenticationInterface) {
 
             {/* The current authentication based on the authentication state */}
             {currentAuthenticationComponent}
+
+            <Duration
+                className="neutral absolute bottom-5 right-5 font-mono text-sm"
+                startTimeInMilliseconds={authenticationSessionStartTime}
+            />
         </div>
     );
 }

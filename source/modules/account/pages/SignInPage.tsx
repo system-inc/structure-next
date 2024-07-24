@@ -4,19 +4,13 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { SignInForm } from '@structure/source/modules/account/SignInForm';
+import { AuthenticationPage } from '@structure/source/modules/account/pages/AuthenticationPage';
 
 // Component - SignInPage
 export interface SignInPageInterface {}
 export function SignInPage(properties: SignInPageInterface) {
     // Render the component
-    return (
-        <div className="flex h-screen flex-col items-center justify-center">
-            <div className="rounded-md border p-8">
-                <SignInForm className="mb-2 w-80" />
-            </div>
-        </div>
-    );
+    return <AuthenticationPage scope="SignIn" />;
 }
 
 // Export - Default

@@ -1,35 +1,152 @@
+# Account Registration or Sign In Create Mutation
+# If the first challenge happens to be email, this will automatically send an email verification
+# saving us from having to do that manually
+mutation AccountRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
+    accountRegistrationOrSignInCreate(input: $input) {
+        emailAddress
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Account Registration Complete Mutation
+# After this is complete, use AccountCurrent query to get the current account
+mutation AccountRegistrationComplete($input: AccountRegistrationCompleteInput!) {
+    accountRegistrationComplete(input: $input) {
+        success
+    }
+}
+
+# Account Sign In Complete Mutation
+# After this is complete, use AccountCurrent query to get the current account
+mutation AccountSignInComplete {
+    accountSignInComplete {
+        success
+    }
+}
+
+# Account Authentication Query
+# This is used to get the current authentication status
+# Rather than parameters, this uses the authentication ID cookie to determine the current authentication status
+query AuthenticationCurrent {
+    authenticationCurrent {
+        status
+        scopeType
+        currentChallenge {
+            challengeType
+            status
+        }
+        updatedAt
+        createdAt
+    }
+}
+
+# Challenge - Email Verification
+# Email Verification Query
+# This is used to get the status of the email verification challenge
+query EmailVerification {
+    emailVerification {
+        verification {
+            status
+            emailAddress
+            lastEmailSentAt
+        }
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Challenge - Email Verification
+# Email Verification Send Mutation
+# This is used to manually send an email verification email if the user requests another email
+mutation EmailVerificationSend {
+    emailVerificationSend {
+        verification {
+            status
+            emailAddress
+            lastEmailSentAt
+        }
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Challenge - Email Verification
+# Email Verification Verify Mutation
+# This is used to verify the email address with a code sent to the email address
+mutation EmailVerificationVerify($input: EmailVerificationVerifyInput!) {
+    emailVerificationVerify(input: $input) {
+        verification {
+            status
+            emailAddress
+            lastEmailSentAt
+        }
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Challenge - Account Password
+# Account Password Verify Mutation
+# This is used to verify the password of the account
+mutation AccountPasswordVerify($input: AccountPasswordVerifyInput!) {
+    accountPasswordVerify(input: $input) {
+        success
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Account Sign Out Mutation
+mutation AccountSignOut {
+    accountSignOut {
+        success
+    }
+}
+
 # Account Current Query
 query AccountCurrent {
     accountCurrent {
-        id
-        createdAt
-        updatedAt
-        status
-        primaryEmailAddress {
-            id
-            createdAt
-            updatedAt
-            emailAddress
-            status
-            source
-            type
-            isVerified
-            accountId
-        }
-        currentSession {
-            id
-            createdAt
-            updatedAt
-            status
-            method
-            token
-            device
-            lastIpAddress
-            lastLocation
-            expiresAt
-            lastUsed
-            currentProfileId
-        }
         currentProfile {
             id
             createdAt
@@ -44,23 +161,46 @@ query AccountCurrent {
                 variant
             }
         }
+        primaryAccountEmail {
+            id
+            type
+            isVerified
+            emailAddress
+            source
+            updatedAt
+            createdAt
+        }
         roles {
             id
-            createdAt
-            updatedAt
-            createdByAccountId
-            createdByProfileId
-            updatedByAccountId
-            updatedByProfileId
             expiresAt
-            roleType
+            type
             status
+            createdByAccountId
+            updatedByAccountId
+            createdByProfileId
+            updatedByProfileId
+            updatedAt
+            createdAt
         }
+        currentSession {
+            currentProfileId
+            status
+            statusChangedAt
+            expiresAt
+            updatedAt
+            createdAt
+        }
+        createdAt
     }
 }
 
+# Account Profile Username Check Query
+query AccountProfileUsernameValidate($username: String!) {
+    accountProfileUsernameValidate(username: $username)
+}
+
 # Account Profile Update Mutation
-mutation AccountProfileUpdate($input: UpdateProfileInput!) {
+mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
     accountProfileUpdate(input: $input) {
         id
         username
@@ -78,130 +218,3 @@ mutation AccountProfileUpdate($input: UpdateProfileInput!) {
         createdAt
     }
 }
-
-# Account Sign In Using Email Address and Password Mutation
-mutation AccountSignIn($emailAddress: String!, $password: String!) {
-    accountSignIn(data: { emailAddress: $emailAddress, password: $password }) {
-        currentSession {
-            id
-            createdAt
-            updatedAt
-            status
-            method
-            token
-            device
-            lastIpAddress
-            lastLocation
-            expiresAt
-            lastUsed
-            currentProfileId
-        }
-    }
-}
-
-# Account Profile Username Check Query
-query AccountProfileUsernameValidate($value: String!) {
-    accountProfileUsernameValidate(username: $value)
-}
-# Account Sign Out Mutation
-mutation AccountSignOut {
-    accountSignOut
-}
-
-###############################
-###############################
-###############################
-# BELOW IS NEW AUTHENTICATION FLOW WIP
-###############################
-###############################
-###############################
-
-# Account Sign Out Mutation
-# mutation AccountSignOut {
-#     accountSignOut {
-#         success
-#     }
-# }
-
-# # Account Authentication Query
-# # This uses the authentication ID cookie to determine the current authentication status.
-# query AuthenticationCurrent {
-#     authenticationCurrent {
-#         status
-#         currentChallenge {
-#             challengeType
-#             status
-#         }
-#         updatedAt
-#         createdAt
-#     }
-# }
-
-# # Account Registration Create Mutation
-# # This will not create a new account, rather, it will create a new registration session.
-# # After the appropriate challenges have been completed, the registration can be completed and a new account will be created.
-# mutation AccountRegistrationCreate($input: AccountRegistrationCreateInput!) {
-#     accountRegistrationCreate(input: $input) {
-#         authentication {
-#             status
-#             currentChallenge {
-#                 challengeType
-#                 status
-#             }
-#             updatedAt
-#             createdAt
-#         }
-#     }
-# }
-
-# # Account Registration Status Query
-# query AccountRegistrationCurrent {
-#     accountRegistrationCurrent {
-#         status
-#         emailAddress
-#     }
-# }
-
-# # Account Registration Complete Mutation
-# mutation AccountRegistrationComplete($input: AccountRegistrationCompleteInput!) {
-#     accountRegistrationComplete(input: $input) {
-#         account {
-#             emailAddresses {
-#                 emailAddress
-#             }
-#         }
-#     }
-# }
-
-# # Challenge - Email Verification
-# # Email Verification Send Mutation
-# mutation EmailVerificationSend {
-#     emailVerificationSend {
-#         status
-#     }
-# }
-
-# # Challenge Status - Email Verification
-# # Email Verification Query
-# query EmailVerification {
-#     emailVerification {
-#         status
-#         emailAddress
-#     }
-# }
-
-# # Challenge Complete - Email Verification
-# # Email Verification Verify Mutation
-# mutation EmailVerificationVerify($input: EmailVerificationVerifyInput!) {
-#     emailVerificationVerify(input: $input) {
-#         status
-#     }
-# }
-
-# # Challenge - Account Credential
-# # Account Credential Verify Mutation
-# mutation AccountCredentialVerify($input: AccountCredentialVerifyInput!) {
-#     accountCredentialVerify(input: $input) {
-#         success
-#     }
-# }
