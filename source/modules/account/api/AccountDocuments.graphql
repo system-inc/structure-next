@@ -186,7 +186,6 @@ query AccountCurrent {
             currentProfileId
             status
             statusChangedAt
-            expiresAt
             updatedAt
             createdAt
         }

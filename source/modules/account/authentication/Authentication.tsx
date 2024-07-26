@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
-import { useSession } from '@structure/source/modules/account/SessionProvider';
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { EmailForm } from '@structure/source/modules/account/authentication/EmailForm';
 import { EmailVerificationChallenge } from '@structure/source/modules/account/authentication/challenges/email-verification/EmailVerificationChallenge';
 import { AccountPasswordChallenge } from '@structure/source/modules/account/authentication/challenges/account-password/AccountPasswordChallenge';
@@ -19,7 +19,6 @@ import { Duration } from '@structure/source/common/time/Duration';
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
-    AccountCurrentDocument,
     AuthenticationCurrentDocument,
     AccountRegistrationCompleteDocument,
     AccountSignInCompleteDocument,
@@ -48,13 +47,12 @@ export function Authentication(properties: AuthenticationInterface) {
     const [authenticationSessionStartTime] = React.useState<number>(Date.now());
     const [authenticationSessionSuccess, setAuthenticationSessionSuccess] = React.useState<boolean>(false);
     const [authenticationSessionTimedOut] = React.useState<boolean>(false);
-    const [signedIn, setSignedIn] = React.useState<boolean>(false);
     const [emailAddress, setEmailAddress] = React.useState<string | undefined>(undefined);
 
     // Hooks
     const router = useRouter();
     const { themeClassName } = useTheme();
-    const { signOut } = useSession();
+    const { accountState, setSignedIn, signOut } = useAccount();
 
     // Hooks - API - Queries
     useQuery(AuthenticationCurrentDocument, {
@@ -62,14 +60,6 @@ export function Authentication(properties: AuthenticationInterface) {
         onCompleted: function (data) {
             if(data.authenticationCurrent) {
                 setAuthenticationSession(data.authenticationCurrent);
-            }
-        },
-    });
-    const accountCurrentQueryState = useQuery(AccountCurrentDocument, {
-        // Immediately run the query and see if we already have an account
-        onCompleted: function (data) {
-            if(data.accountCurrent) {
-                setSignedIn(true);
             }
         },
     });
@@ -97,6 +87,9 @@ export function Authentication(properties: AuthenticationInterface) {
 
                             // Set the authentication session success
                             setAuthenticationSessionSuccess(true);
+
+                            // Set the account signed in
+                            setSignedIn(true);
                         },
                     });
                 }
@@ -111,6 +104,9 @@ export function Authentication(properties: AuthenticationInterface) {
 
                             // Set the authentication session success
                             setAuthenticationSessionSuccess(true);
+
+                            // Set the account signed in
+                            setSignedIn(true);
                         },
                     });
                 }
@@ -123,13 +119,10 @@ export function Authentication(properties: AuthenticationInterface) {
     let currentAuthenticationComponent = null;
 
     // Authenticated session complete
-    if(signedIn) {
+    if(accountState.account) {
         currentAuthenticationComponent = (
             <div>
-                <p>
-                    You are signed in as{' '}
-                    {accountCurrentQueryState.data?.accountCurrent.primaryAccountEmail?.emailAddress}.{' '}
-                </p>
+                <p>You are signed in as {accountState.account.primaryAccountEmail?.emailAddress}. </p>
                 <div className="mt-8 flex flex-col space-y-4">
                     <Button
                         variant="destructive"
@@ -152,7 +145,8 @@ export function Authentication(properties: AuthenticationInterface) {
         );
     }
     else if(authenticationSessionSuccess) {
-        router.push('/');
+        console.log('decide to redirect or not here');
+        // router.push('/');
     }
     // Challenge - Email Verification
     else if(authenticationSession?.currentChallenge?.challengeType == 'EmailVerification') {

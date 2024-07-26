@@ -9,6 +9,7 @@ import Script from 'next/script';
 // Dependencies - Theme
 import '@structure/source/styles/global.css';
 import '@structure/source/theme/styles/theme.css';
+import { accountSignedInKey } from '@structure/source/modules/account/Account';
 import { darkThemeClassName, themeClassNameCookieKey } from '@structure/source/theme/Theme';
 
 // Dependencies - Main Components
@@ -45,6 +46,9 @@ export function RootLayout(properties: RootLayoutInterface) {
     // Get the cookies from the response headers
     const cookieStore = cookies();
     // console.log('cookieStore', cookieStore);
+
+    // Get the signed in cookie
+    const accountSignedIn = cookieStore.get(accountSignedInKey)?.value == 'true' ? true : false;
 
     // Get the theme class name from the cookies
     const themeClassNameCookieValue = cookieStore.get(themeClassNameCookieKey)?.value;
@@ -105,7 +109,7 @@ export function RootLayout(properties: RootLayoutInterface) {
             <body className="isolate h-full min-h-screen bg-light font-sans text-dark transition-colors dark:bg-dark dark:text-white">
                 {/* Providers pass properties down to children */}
                 {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
-                <Providers themeClassName={themeClassName}>
+                <Providers accountSignedIn={accountSignedIn} themeClassName={themeClassName}>
                     {/* Render children passed into the layout */}
                     {properties.children}
                     {/* The following interactions are enabled on all pages */}

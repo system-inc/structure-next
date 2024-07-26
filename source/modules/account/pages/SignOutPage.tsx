@@ -8,13 +8,13 @@ import { useRouter } from 'next/navigation';
 import Button from '@structure/source/common/buttons/Button';
 
 // Dependencies - Accounts
-import { useSession } from '@structure/source/modules/account/SessionProvider';
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
 
 // Component - SignOutPage
 export interface SignOutPageInterface {}
 export function SignOutPage(properties: SignOutPageInterface) {
     // Hooks
-    const { signOut } = useSession();
+    const { signOut } = useAccount();
     const router = useRouter();
 
     // Render the component

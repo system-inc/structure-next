@@ -9,7 +9,7 @@ import AccountMenu from '@structure/source/modules/account/AccountMenu';
 import Popover from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Account
-import { useAccountCurrent } from '@structure/source/modules/account/Account';
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
 
 // Dependencies - Icons
 import { usePathname } from 'next/navigation';
@@ -19,20 +19,20 @@ export interface AccountMenuButtonProperties {}
 export function AccountMenuButton(properties: AccountMenuButtonProperties) {
     // Hooks
     const pathname = usePathname();
-    const currentAccountState = useAccountCurrent();
-    const account = currentAccountState.data;
+    const { accountState } = useAccount();
 
     // State
     const [open, setOpen] = React.useState(false);
 
     // Get the profile image URL
-    const profileImageUrl = account?.currentProfile?.imageUrls?.find((image) => image.variant === 'profile-image-small')
-        ?.url;
+    const profileImageUrl = accountState.account?.currentProfile?.imageUrls?.find(
+        (image) => image.variant === 'profile-image-small',
+    )?.url;
 
     // Get the profile image alternate text
     let profileImageAlternateText = undefined;
-    if(account) {
-        profileImageAlternateText = account.getPublicDisplayName();
+    if(accountState.account) {
+        profileImageAlternateText = accountState.account.getPublicDisplayName();
     }
 
     // Effect to close the popover when the pathname changes
@@ -48,7 +48,7 @@ export function AccountMenuButton(properties: AccountMenuButtonProperties) {
         <Popover
             open={open}
             onOpenChange={setOpen}
-            content={<AccountMenu account={account} className="py-3 outline-none" />}
+            content={<AccountMenu account={accountState.account} className="py-3 outline-none" />}
             align="end"
         >
             <div className="h-8 w-8 cursor-pointer">

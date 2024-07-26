@@ -7,7 +7,7 @@ import React from 'react';
 import EngagementProvider from '@structure/source/modules/engagement/EngagementProvider';
 import Cookies from '@structure/source/utilities/cookies/Cookies';
 import CookiesProvider from '@structure/source/utilities/cookies/CookiesProvider';
-import SessionProvider from '@structure/source/modules/account/SessionProvider';
+import AccountProvider from '@structure/source/modules/account/AccountProvider';
 import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import ApolloProvider from '@structure/source/api/ApolloProvider';
 import TipProvider from '@structure/source/common/popovers/TipProvider';
@@ -16,6 +16,7 @@ import SharedStateProvider from '@structure/source/utilities/shared-state/Shared
 
 export interface ProvidersInterface {
     children: React.ReactNode;
+    accountSignedIn: boolean;
     themeClassName?: string;
 }
 export function Providers(properties: ProvidersInterface) {
@@ -23,7 +24,7 @@ export function Providers(properties: ProvidersInterface) {
     return (
         <CookiesProvider cookies={Cookies}>
             <ApolloProvider>
-                <SessionProvider>
+                <AccountProvider signedIn={properties.accountSignedIn}>
                     <SharedStateProvider>
                         <ThemeProvider themeClassName={properties.themeClassName}>
                             <EngagementProvider>
@@ -33,7 +34,7 @@ export function Providers(properties: ProvidersInterface) {
                             </EngagementProvider>
                         </ThemeProvider>
                     </SharedStateProvider>
-                </SessionProvider>
+                </AccountProvider>
             </ApolloProvider>
         </CookiesProvider>
     );

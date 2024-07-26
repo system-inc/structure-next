@@ -16,7 +16,6 @@ import Alert from '@structure/source/common/notifications/Alert';
 import { useForm } from 'react-hook-form';
 import { useTransition } from '@react-spring/web';
 import Cropper, { Area, Point } from 'react-easy-crop';
-import { useSession } from '@structure/source/modules/account/SessionProvider';
 
 // Dependencies - Assets
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
@@ -36,8 +35,6 @@ export function ImageUpload(properties: ImageUploadInterface) {
     const [zoom, setZoom] = React.useState(1);
     const [croppedArea, setCroppedArea] = React.useState<Area | null>(null);
     const [croppedAreaPixels, setCroppedAreaPixels] = React.useState<Area | null>(null);
-
-    const { sessionToken } = useSession();
 
     const { register, handleSubmit, reset } = useForm<ChangeProfileButtonFormData>({
         defaultValues: {
@@ -61,9 +58,6 @@ export function ImageUpload(properties: ImageUploadInterface) {
     const addProfilePicture = async (imgData: Blob) => {
         console.log('saving profile pic!', imgData);
 
-        // Check if the user is logged in
-        if(!sessionToken) return;
-
         // Upload image to server via designated avatar URL
 
         fetch(StructureSettings.apis.base.url + 'accounts/profiles/images', {
@@ -71,7 +65,6 @@ export function ImageUpload(properties: ImageUploadInterface) {
             body: imgData,
             headers: {
                 'Content-Type': 'image/jpeg',
-                Authorization: sessionToken,
             },
         })
             .then(async (response) => {

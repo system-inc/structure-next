@@ -20,18 +20,6 @@ import {
 // Dependencies - Utilities
 import Cookies from '@structure/source/utilities/cookies/Cookies';
 
-// Context - Theme
-interface ThemeType {
-    themeClassName?: string | null;
-    setThemeClassName: (updatedThemeClassName: string | null) => void;
-}
-const ThemeContext = React.createContext<ThemeType>({
-    themeClassName: null,
-    setThemeClassName: function (updatedThemeClassName: string | null) {
-        console.error('No ThemeProvider found.');
-    },
-});
-
 // Component - ThemeProvider
 export interface ThemeProviderInterface {
     children: React.ReactNode;
@@ -184,9 +172,22 @@ export function ThemeProvider(properties: ThemeProviderInterface) {
     );
 }
 
+// Context - Theme
+interface ThemeContextInterface {
+    themeClassName?: string | null;
+    setThemeClassName: (updatedThemeClassName: string | null) => void;
+}
+const ThemeContext = React.createContext<ThemeContextInterface | null>(null);
+
 // Hook - useTheme
 export function useTheme() {
-    return React.useContext(ThemeContext);
+    const themeContext = React.useContext(ThemeContext);
+    if(themeContext === null) {
+        throw new Error('useTheme must be used within an ThemeProvider');
+    }
+    else {
+        return themeContext;
+    }
 }
 
 // Export - Default

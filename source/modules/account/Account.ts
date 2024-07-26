@@ -1,15 +1,11 @@
-'use client';
-
-// Dependencies - React and Next.js
-import React from 'react';
-
-// Dependencies - Accounts
-import { useSession } from '@structure/source/modules/account/SessionProvider';
+// Dependencies - Structure
+import StructureSettings from '@project/StructureSettings';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { AccountCurrentDocument } from '@project/source/api/GraphQlGeneratedCode';
 import { AccountCurrentQuery, AccountEmail, AccountSession, Profile } from '@project/source/api/GraphQlGeneratedCode';
+
+// Account variables shared across the application
+export const accountSignedInKey = StructureSettings.identifier + 'AccountSignedIn';
 
 // Class - Account
 export class Account {
@@ -70,56 +66,6 @@ export class Account {
         return true;
         // return this.hasRole(AccessRoleType.Administrator);
     }
-}
-
-// Hook - useAccountCurrent
-export function useAccountCurrent() {
-    // Hooks
-    const { sessionToken } = useSession();
-
-    // State
-    const [isClient, setIsClient] = React.useState(false);
-
-    // Get the current account the GraphQL API
-    const accountCurrentQueryState = useQuery(AccountCurrentDocument, {
-        skip: !sessionToken, // If there is no session token, skip this query
-    });
-
-    // Set the account error separately to provide feedback even if the query is skipped (i.e., to tell consumers of the hook that the user is not signed in).
-    const accountError = accountCurrentQueryState.error ?? !sessionToken ? new Error('No session token.') : null;
-
-    // Create the account object from the GraphQL query data
-    const account = React.useMemo(
-        function () {
-            if(accountCurrentQueryState.data?.accountCurrent) {
-                return new Account(accountCurrentQueryState.data?.accountCurrent);
-            }
-            else {
-                return null;
-            }
-        },
-        [accountCurrentQueryState.data?.accountCurrent],
-    );
-
-    // Set the client state when the component mounts or when the session token changes
-    React.useEffect(
-        function () {
-            setIsClient(true);
-        },
-        [sessionToken],
-    );
-
-    return {
-        loading:
-            // If the client is not ready,
-            !isClient
-                ? // Set loading to true
-                  true // This handles SSR loading state (i.e., hydration mismatch issues)
-                : // Otherwise, set loading to the loading state of the query
-                  accountCurrentQueryState.loading,
-        error: accountError,
-        data: account,
-    };
 }
 
 // Export - Default

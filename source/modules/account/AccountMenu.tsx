@@ -9,7 +9,7 @@ import ThemeToggle from '@structure/source/theme/ThemeToggle';
 
 // Dependencies - Accounts
 import { Account } from '@structure/source/modules/account/Account';
-import { useSession } from '@structure/source/modules/account/SessionProvider';
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -21,7 +21,7 @@ export interface AccountMenuProperties {
 }
 export function AccountMenu(properties: AccountMenuProperties) {
     // Hooks
-    const { signOut } = useSession();
+    const { signOut } = useAccount();
 
     // Render the component
     return (

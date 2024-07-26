@@ -2,7 +2,6 @@ import React from 'react';
 import ChallengeSubmitButton from './common/ChallengeSubmitButton';
 import ChallengeInput from './common/ChallengeInput';
 import Button from '@structure/source/common/buttons/Button';
-import { useAccountCurrent } from '../../Account';
 import { atomWithStorage } from 'jotai/utils';
 import { useAtom, useAtomValue } from 'jotai';
 import { emailAtom } from '../AuthenticationForm';
@@ -40,7 +39,6 @@ export default WebAuthn;
 
 const persistentCredentialsAtom = atomWithStorage('publicKeyCredentialsPhiHealth', [] as string[]);
 function usePasskeySignIn() {
-    const account = useAccountCurrent();
     const email = useAtomValue(emailAtom);
     const [persistentCredentials, setPersistentCredentials] = useAtom(persistentCredentialsAtom);
     const [passkeySignInState, setPasskeySignInState] = React.useState<{

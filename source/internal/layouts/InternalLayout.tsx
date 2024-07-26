@@ -20,7 +20,7 @@ import NotSignedIn from '@structure/source/common/notifications/NotSignedIn';
 import LineLoadingAnimation from '@structure/source/common/animations/LineLoadingAnimation';
 
 // Dependencies - Account
-import { useAccountCurrent } from '@structure/source/modules/account/Account';
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -30,6 +30,9 @@ export interface InternalLayoutInterface {
     children: React.ReactNode;
 }
 export function InternalLayout(properties: InternalLayoutInterface) {
+    // State
+    const { accountState } = useAccount();
+
     // Get a stateful set of cookies with the cookie name as a dependency
     const [cookies, setCookies, removeCookies] = useCookies(['internalNavigationSidebarClosed']);
     const [internalNavigationSidebarClosed, setInternalNavigationSidebarClosedState] = React.useState(
@@ -143,24 +146,20 @@ export function InternalLayout(properties: InternalLayoutInterface) {
     // return <LineLoadingAnimation />;
     // return <ApiError />;
 
-    // Use the current account hook
-    const currentAccountState = useAccountCurrent();
-    const account = currentAccountState.data;
-
     // Loading account or rendering on server
-    if(currentAccountState.loading) {
+    if(accountState.loading) {
         return <LineLoadingAnimation />;
     }
     // Not signed in
-    else if(!account) {
+    else if(!accountState.account) {
         return <NotSignedIn />;
     }
     // Error loading account
-    else if(currentAccountState.error) {
-        return <ApiError error={currentAccountState.error} />;
+    else if(accountState.error) {
+        return <ApiError error={accountState.error} />;
     }
     // Not authorized
-    else if(account && !account.isAdministator()) {
+    else if(accountState.account && !accountState.account.isAdministator()) {
         return <NotAuthorized />;
     }
 
