@@ -57,7 +57,7 @@ export interface StructureSettingsType {
         favicon: ThemedAsset;
         logo: LogoAsset;
     };
-    services: {
+    services?: {
         [providerIdentifier: string]: Service;
     };
     platforms: {
