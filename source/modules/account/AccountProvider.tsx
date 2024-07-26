@@ -134,8 +134,6 @@ export function AccountProvider(properties: AccountProviderInterface) {
     // Effect to listen to errors on the account query
     React.useEffect(
         function () {
-            console.log('error', JSON.stringify(accountQueryState.error));
-
             // If it is not a network error but the API actually returned a response
             if(
                 accountQueryState.error &&
@@ -155,8 +153,7 @@ export function AccountProvider(properties: AccountProviderInterface) {
     React.useEffect(
         function () {
             if(signedIn) {
-                console.log('getting account!!!!');
-
+                // console.log('Getting account...');
                 getAccountQueryState();
             }
         },
@@ -168,7 +165,8 @@ export function AccountProvider(properties: AccountProviderInterface) {
         <AccountContext.Provider
             value={{
                 accountState: {
-                    loading: accountQueryState.loading,
+                    // We are loading if the account query is loading or if we are signed in and the account is not loaded
+                    loading: accountQueryState.loading || (signedIn && account == null),
                     error: accountQueryState.error ?? null,
                     account: account,
                 },
