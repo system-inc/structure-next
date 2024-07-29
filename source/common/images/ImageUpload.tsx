@@ -66,6 +66,7 @@ export function ImageUpload(properties: ImageUploadInterface) {
             headers: {
                 'Content-Type': 'image/jpeg',
             },
+            credentials: 'include', // Include HTTP-only cookies
         })
             .then(async (response) => {
                 // Check if the image was uploaded successfully
