@@ -313,6 +313,25 @@ export function StructurePage(properties: StructurePageInterface) {
                 {/* Header */}
                 <h1 className="mb-10">Interface</h1>
 
+                {/* Loop 10 times and create 10 divs with the number in the div */}
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (number) {
+                    // Convert the number to colors using HSL, rainbow style
+                    const hue = (number - 1) * (360 / 10); // Adjust the hue to cover the rainbow spectrum
+                    const color = `hsl(${hue}, 100%, 50%)`;
+
+                    return (
+                        <div
+                            key={number}
+                            className="mb-2 rounded-md border p-3 text-xl"
+                            style={{
+                                borderColor: color,
+                            }}
+                        >
+                            {number}
+                        </div>
+                    );
+                })}
+
                 {/* <InputCheckbox defaultValue={InputCheckboxState.Indeterminate} /> */}
 
                 {/* <Table
@@ -431,7 +450,7 @@ export function StructurePage(properties: StructurePageInterface) {
 
                 {/* <DatabaseAndTableFormInputSelects /> */}
 
-                <Form
+                {/* <Form
                     description={<p className="font-medium">Select a Country</p>}
                     onSubmit={async function (formValues) {
                         console.log('formValues', formValues);
@@ -489,7 +508,7 @@ export function StructurePage(properties: StructurePageInterface) {
                             required={true}
                         />,
                     ]}
-                />
+                /> */}
 
                 {/* <InputSelect
                     className=""

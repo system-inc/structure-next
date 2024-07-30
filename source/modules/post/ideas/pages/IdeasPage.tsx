@@ -15,7 +15,7 @@ export interface IdeasPageInterface {}
 export function IdeasPage(properties: IdeasPageInterface) {
     // Render the component
     return (
-        <div className="container items-center justify-center pt-12">
+        <div className="container items-center justify-center pb-32 pt-12">
             <div className="float-end">
                 <Button
                     className="pl-3"

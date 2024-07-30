@@ -17,7 +17,7 @@ export function getComplementaryHexColor(index: number, startingHexColor: string
 
     const goldenRatioConjugate = 0.618033988749895;
 
-    let [baseHue, baseSaturation, baseLightness] = hexStringToHsl(startingHexColor);
+    const [baseHue, baseSaturation, baseLightness] = hexStringToHsl(startingHexColor);
 
     // Use golden ratio conjugate for the first jump in hue to get a distinct color
     let newHue = (baseHue + goldenRatioConjugate) % 1.0;
@@ -26,8 +26,8 @@ export function getComplementaryHexColor(index: number, startingHexColor: string
     newHue = (newHue + index * goldenRatioConjugate) % 1.0;
 
     // Saturation and lightness can be adjusted similarly if desired
-    let newSaturation = baseSaturation; // Keeping it the same as base for now
-    let newLightness = baseLightness; // Keeping it the same as base for now
+    const newSaturation = baseSaturation; // Keeping it the same as base for now
+    const newLightness = baseLightness; // Keeping it the same as base for now
 
     return hslToHexString(newHue, newSaturation, newLightness);
 }
@@ -202,7 +202,7 @@ export function convertColorString(
     else if(anyColorString.startsWith('hsl') || anyColorString.startsWith('hsla')) {
         const hslMatches = anyColorString.match(/\d+\.?\d*/g);
         if(hslMatches && (hslMatches.length === 3 || hslMatches.length === 4)) {
-            let rgba = hslaToRgbaString(...(hslMatches.map(Number) as [number, number, number, number?]));
+            const rgba = hslaToRgbaString(...(hslMatches.map(Number) as [number, number, number, number?]));
             const rgbaMatches = rgba.match(/\d+\.?\d*/g);
             if(rgbaMatches && rgbaMatches.length === 4) {
                 [red, green, blue, alpha] = rgbaMatches.map(Number) as [number, number, number, number];
@@ -224,14 +224,14 @@ export function convertColorString(
         case 'rgba':
             return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
         case 'hsl':
-            let [h, s, l] = hexStringToHsl(
+            const [h, s, l] = hexStringToHsl(
                 `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue
                     .toString(16)
                     .padStart(2, '0')}`,
             );
             return `hsl(${h * 360}, ${s * 100}%, ${l * 100}%)`;
         case 'hsla':
-            let [h2, s2, l2] = hexStringToHsl(
+            const [h2, s2, l2] = hexStringToHsl(
                 `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue
                     .toString(16)
                     .padStart(2, '0')}`,
@@ -362,38 +362,38 @@ export function rgbStringToHexString(rgbString: string): string {
 }
 
 export function hexStringToRgb(hexString: string): [number, number, number] {
-    let red = parseInt(hexString.slice(1, 3), 16);
-    let green = parseInt(hexString.slice(3, 5), 16);
-    let blue = parseInt(hexString.slice(5, 7), 16);
+    const red = parseInt(hexString.slice(1, 3), 16);
+    const green = parseInt(hexString.slice(3, 5), 16);
+    const blue = parseInt(hexString.slice(5, 7), 16);
 
     return [red, green, blue];
 }
 
 export function hexStringToRgbaString(hexString: string, alpha: number): string {
-    let red = parseInt(hexString.slice(1, 3), 16);
-    let green = parseInt(hexString.slice(3, 5), 16);
-    let blue = parseInt(hexString.slice(5, 7), 16);
+    const red = parseInt(hexString.slice(1, 3), 16);
+    const green = parseInt(hexString.slice(3, 5), 16);
+    const blue = parseInt(hexString.slice(5, 7), 16);
 
     return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
 
 export function hexStringToHsl(hexString: string): [number, number, number] {
-    let red = parseInt(hexString.slice(1, 3), 16) / 255.0;
-    let green = parseInt(hexString.slice(3, 5), 16) / 255.0;
-    let blue = parseInt(hexString.slice(5, 7), 16) / 255.0;
+    const red = parseInt(hexString.slice(1, 3), 16) / 255.0;
+    const green = parseInt(hexString.slice(3, 5), 16) / 255.0;
+    const blue = parseInt(hexString.slice(5, 7), 16) / 255.0;
 
-    let maxValue = Math.max(red, green, blue);
-    let minValue = Math.min(red, green, blue);
+    const maxValue = Math.max(red, green, blue);
+    const minValue = Math.min(red, green, blue);
 
-    let hue = 0,
-        saturation = 0,
-        lightness = (maxValue + minValue) / 2;
+    let hue = 0;
+    let saturation = 0;
+    const lightness = (maxValue + minValue) / 2;
 
     if(maxValue === minValue) {
         hue = saturation = 0; // achromatic
     }
     else {
-        let delta = maxValue - minValue;
+        const delta = maxValue - minValue;
         saturation = lightness > 0.5 ? delta / (2.0 - maxValue - minValue) : delta / (maxValue + minValue);
 
         switch(maxValue) {
@@ -440,8 +440,8 @@ export function hslToHexString(hue: number, saturation: number, lightness: numbe
             return p;
         };
 
-        let qValue = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
-        let pValue = 2 * lightness - qValue;
+        const qValue = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+        const pValue = 2 * lightness - qValue;
 
         red = hueToRgb(pValue, qValue, hue + 1 / 3);
         green = hueToRgb(pValue, qValue, hue);
@@ -472,8 +472,8 @@ export function hslToRgb(hue: number, saturation: number, lightness: number): [n
             return p;
         };
 
-        let qValue = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
-        let pValue = 2 * lightness - qValue;
+        const qValue = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+        const pValue = 2 * lightness - qValue;
 
         red = hueToRgb(pValue, qValue, hue + 1 / 3);
         green = hueToRgb(pValue, qValue, hue);
@@ -499,8 +499,8 @@ export function hslaToRgbaString(hue: number, saturation: number, lightness: num
             return p;
         };
 
-        let qValue = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
-        let pValue = 2 * lightness - qValue;
+        const qValue = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+        const pValue = 2 * lightness - qValue;
 
         red = hueToRgb(pValue, qValue, hue + 1 / 3);
         green = hueToRgb(pValue, qValue, hue);

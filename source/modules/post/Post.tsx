@@ -12,16 +12,24 @@ import { PostControls } from '@structure/source/modules/post/controls/PostContro
 // Dependencies - API
 import { PostVoteType, PostsQuery } from '@project/source/api/GraphQlGeneratedCode';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
 // Type - Reactions
 export type PostReactionsType = NonNullable<PostsQuery['posts']['items'][0]['reactions']>;
 
 // Component - Post
 export interface PostInterface {
+    className?: string;
+    titleContainerClassName?: string;
+    titleAndTopicsContainerClassName?: string;
+    titleClassName?: string;
+
     id: string;
     identifier: string;
-    aboveTitleNode?: React.ReactNode;
+    beforeTitleNode?: React.ReactNode;
     title: string;
-    belowTitleNode?: React.ReactNode;
+    afterTitleNode?: React.ReactNode;
     slug: string;
     urlPath: string;
     content: string;
@@ -150,7 +158,12 @@ export function Post(properties: PostInterface) {
 
     // Render the component
     return (
-        <div className="flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3">
+        <div
+            className={mergeClassNames(
+                'flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3',
+                properties.className,
+            )}
+        >
             {/* Voting */}
             {voteControl && (
                 <PostVoteControl
@@ -163,40 +176,45 @@ export function Post(properties: PostInterface) {
                 />
             )}
 
-            {/* Post */}
             <div className="flex-grow">
                 {/* Title and Topics */}
-                <div className="">
-                    {/* Above Title Node */}
-                    {properties.aboveTitleNode}
+                <div className={mergeClassNames('', properties.titleContainerClassName)}>
+                    {/* Before Title Node */}
+                    {properties.beforeTitleNode}
 
-                    {/* Title */}
-                    <Link href={properties.urlPath}>
-                        <h4 className="inline font-medium">{properties.title}</h4>
-                    </Link>
+                    {/* Title and Topics */}
+                    <span className={mergeClassNames('', properties.titleAndTopicsContainerClassName)}>
+                        {/* Title */}
+                        <Link
+                            href={properties.urlPath}
+                            className={mergeClassNames('leading-loose', properties.titleClassName)}
+                        >
+                            <h4 className="inline">{properties.title}</h4>
+                        </Link>
 
-                    {/* Below Title Node */}
-                    {properties.belowTitleNode}
+                        {/* Topics */}
+                        {properties.topics.map(function (topic) {
+                            return (
+                                <Link
+                                    href="/"
+                                    key={topic}
+                                    className={
+                                        // Layout
+                                        'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 transition-colors ' +
+                                        // Light
+                                        'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500 ' +
+                                        // Dark
+                                        'dark:border-purple-500 dark:bg-purple-700 dark:text-purple-200 dark:hover:border-purple-400 dark:hover:bg-purple-600 dark:hover:text-purple-100'
+                                    }
+                                >
+                                    {topic}
+                                </Link>
+                            );
+                        })}
+                    </span>
 
-                    {/* Topics */}
-                    {properties.topics.map(function (topic) {
-                        return (
-                            <Link
-                                href="/"
-                                key={topic}
-                                className={
-                                    // Layout
-                                    'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 transition-colors ' +
-                                    // Light
-                                    'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500 ' +
-                                    // Dark
-                                    'dark:border-purple-500 dark:bg-purple-700 dark:text-purple-200 dark:hover:border-purple-400 dark:hover:bg-purple-600 dark:hover:text-purple-100'
-                                }
-                            >
-                                {topic}
-                            </Link>
-                        );
-                    })}
+                    {/* After Title Node */}
+                    {properties.afterTitleNode}
                 </div>
 
                 {/* Description */}
