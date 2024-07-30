@@ -97,7 +97,7 @@ export function ThemeProvider(properties: ThemeProviderInterface) {
     // Handle changes in local storage, sent by other tabs
     const handleLocalStorageChange = React.useCallback(
         function (event: StorageEvent) {
-            console.log('handleLocalStorageChange', event);
+            // console.log('handleLocalStorageChange', event);
             if(event.key === themeModeLocalStorageKey) {
                 updateThemeClassName();
             }
@@ -105,12 +105,12 @@ export function ThemeProvider(properties: ThemeProviderInterface) {
         [updateThemeClassName],
     );
 
-    // Handle changes in the operating system's theme
-    const handleOperatingSystemThemeModeChange = React.useCallback(
+    // Function to update the favicon based on the operating system's theme
+    const applyOperatingSystemTheme = React.useCallback(
         function () {
             // console.log('handleOperatingSystemThemeChange');
 
-            // We will only change the favicon on operating system theme changes, not website theme changes
+            // We change the favicon on operating system theme changes, not website theme changes
             // If the operating system is set to dark mode,
             if(window.matchMedia(darkThemeMediaQuery).matches) {
                 // Change the favicon to the dark favicon
@@ -135,8 +135,8 @@ export function ThemeProvider(properties: ThemeProviderInterface) {
     // On mount
     React.useEffect(
         function () {
-            // Initalize the theme mode
-            updateThemeClassName();
+            // Apply the operating system theme mode to the favicon and theme
+            applyOperatingSystemTheme();
 
             // Add theme mode change event listener that calls updateTheme on theme change
             window.addEventListener(themeModeChangeEventIdentifier, updateThemeClassName);
@@ -145,7 +145,7 @@ export function ThemeProvider(properties: ThemeProviderInterface) {
             window.addEventListener('storage', handleLocalStorageChange);
 
             // Add a listener for changes in the operating system's theme
-            window.matchMedia(darkThemeMediaQuery).addEventListener('change', handleOperatingSystemThemeModeChange);
+            window.matchMedia(darkThemeMediaQuery).addEventListener('change', applyOperatingSystemTheme);
 
             // On unmount
             return function () {
@@ -156,12 +156,10 @@ export function ThemeProvider(properties: ThemeProviderInterface) {
                 window.removeEventListener('storage', handleLocalStorageChange);
 
                 // Remove the listener for changes in the operating system's theme
-                window
-                    .matchMedia(darkThemeMediaQuery)
-                    .removeEventListener('change', handleOperatingSystemThemeModeChange);
+                window.matchMedia(darkThemeMediaQuery).removeEventListener('change', applyOperatingSystemTheme);
             };
         },
-        [handleLocalStorageChange, handleOperatingSystemThemeModeChange, updateThemeClassName],
+        [handleLocalStorageChange, applyOperatingSystemTheme, updateThemeClassName],
     );
 
     // Render the component
