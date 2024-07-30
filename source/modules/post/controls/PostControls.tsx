@@ -86,6 +86,11 @@ export function PostControls(properties: PostControlsInterface) {
 
                 {/* Report */}
                 {reportControl && <PostReportControl ideaId={properties.id} ideaTitle={properties.title} />}
+
+                {/* Edit */}
+                <PostControl href={'/posts/' + properties.identifier + '/edit'}>
+                    Edit (limit to authors only)
+                </PostControl>
             </div>
 
             <div className="flex space-x-1.5">

@@ -111,7 +111,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
                 }
 
                 // Meta object to store additional information
-                let meta: any = {
+                const meta: object = {
                     databaseName: databaseName,
                 };
 
@@ -334,6 +334,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
                         className="mt-[22px]"
                         icon={PlusIcon}
                         iconPosition="left"
+                        iconClassName="h-3 w-3"
                         // onClick={addNewCondition}
                     >
                         Create

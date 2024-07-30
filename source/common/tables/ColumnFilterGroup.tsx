@@ -132,7 +132,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         },
     };
     // Loop over the operators
-    let operatorsItems: InputSelectItemInterface[] = [];
+    const operatorsItems: InputSelectItemInterface[] = [];
     for(const operatorKey in operators) {
         operatorsItems.push({
             value: operatorKey,
@@ -218,7 +218,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
     function getInputComponentForCondition(condition: ColumnFilterConditionDataInterface, conditionIndex: number) {
         let inputComponent = null;
 
-        let column = properties.columns.find((column) => column.identifier === condition.column);
+        const column = properties.columns.find((column) => column.identifier === condition.column);
 
         // If the operator is IsNull or IsNotNull, return null
         if(
@@ -464,12 +464,18 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
             {/* Controls */}
             <div className="mt-4 flex space-x-2">
                 {/* Add Condition Button */}
-                <Button icon={PlusIcon} iconPosition="left" onClick={addNewCondition}>
+                <Button icon={PlusIcon} iconPosition="left" iconClassName="h-3 w-3" onClick={addNewCondition}>
                     Add Condition
                 </Button>
 
                 {/* Add Filter Group Button */}
-                <Button variant="ghost" icon={PlusIcon} iconPosition="left" onClick={addNewFilterGroup}>
+                <Button
+                    variant="ghost"
+                    icon={PlusIcon}
+                    iconClassName="h-3 w-3"
+                    iconPosition="left"
+                    onClick={addNewFilterGroup}
+                >
                     Add Filter Group
                 </Button>
 
