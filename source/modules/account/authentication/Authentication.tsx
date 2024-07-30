@@ -72,7 +72,7 @@ export function Authentication(properties: AuthenticationInterface) {
     // Effect to run on mount
     React.useEffect(function () {
         const urlParameters = new URLSearchParams(window.location.search);
-        const redirect = urlParameters.get('redirect');
+        const redirect = urlParameters.get('redirectUrl');
         if(redirect) {
             setRedirectUrl(decodeURIComponent(redirect));
         }
@@ -130,6 +130,12 @@ export function Authentication(properties: AuthenticationInterface) {
 
     // Authenticated session complete
     if(accountState.account) {
+        // If a redirect URL is provided, redirect to that URL
+        if(redirectUrl) {
+            console.log('redirecting to', redirectUrl);
+            router.push(redirectUrl);
+        }
+
         currentAuthenticationComponent = (
             <div>
                 <p>You are signed in as {accountState.account.primaryAccountEmail?.emailAddress}. </p>
