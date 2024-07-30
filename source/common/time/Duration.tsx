@@ -9,6 +9,7 @@ import { millisecondsToDuration } from '@structure/source/utilities/Time';
 
 // Component - Duration
 export interface DurationProperties {
+    children?: React.ReactNode;
     className?: string;
     startTimeInMilliseconds: number;
 }
@@ -39,6 +40,7 @@ export function Duration(properties: DurationProperties) {
     return (
         <span className={mergeClassNames('', properties.className)}>
             {millisecondsToDuration(durationInMilliseconds)}
+            {properties.children}
         </span>
     );
 }

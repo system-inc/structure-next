@@ -48,6 +48,7 @@ export function Authentication(properties: AuthenticationInterface) {
     const [authenticationSessionSuccess, setAuthenticationSessionSuccess] = React.useState<boolean>(false);
     const [authenticationSessionTimedOut] = React.useState<boolean>(false);
     const [emailAddress, setEmailAddress] = React.useState<string | undefined>(undefined);
+    const [redirectUrl, setRedirectUrl] = React.useState<string | null>(null);
 
     // Hooks
     const router = useRouter();
@@ -67,6 +68,15 @@ export function Authentication(properties: AuthenticationInterface) {
     // Hooks - API - Mutations
     const [accountRegistrationCompleteMutation] = useMutation(AccountRegistrationCompleteDocument);
     const [accountSignInCompleteMutation] = useMutation(AccountSignInCompleteDocument);
+
+    // Effect to run on mount
+    React.useEffect(function () {
+        const urlParameters = new URLSearchParams(window.location.search);
+        const redirect = urlParameters.get('redirect');
+        if(redirect) {
+            setRedirectUrl(decodeURIComponent(redirect));
+        }
+    }, []);
 
     // Effect to run every time the authentication session changes
     React.useEffect(
@@ -112,7 +122,7 @@ export function Authentication(properties: AuthenticationInterface) {
                 }
             }
         },
-        [authenticationSession, accountRegistrationCompleteMutation, accountSignInCompleteMutation],
+        [authenticationSession, accountRegistrationCompleteMutation, accountSignInCompleteMutation, setSignedIn],
     );
 
     // The current authentication component based on the authentication state
@@ -144,9 +154,16 @@ export function Authentication(properties: AuthenticationInterface) {
             </div>
         );
     }
+    // Authenticated session success
     else if(authenticationSessionSuccess) {
-        console.log('decide to redirect or not here');
-        // router.push('/');
+        // If a redirect URL is provided, redirect to that URL
+        if(redirectUrl) {
+            console.log('redirecting to', redirectUrl);
+            router.push(redirectUrl);
+        }
+        else {
+            // router.push('/'); // Default redirect if no specific URL is provided
+        }
     }
     // Challenge - Email Verification
     else if(authenticationSession?.currentChallenge?.challengeType == 'EmailVerification') {
@@ -226,7 +243,10 @@ export function Authentication(properties: AuthenticationInterface) {
             <Duration
                 className="neutral absolute bottom-5 right-5 font-mono text-sm"
                 startTimeInMilliseconds={authenticationSessionStartTime}
-            />
+            >
+                {/* Redirect */}
+                {redirectUrl && <p>Redirecting to {redirectUrl}</p>}
+            </Duration>
         </div>
     );
 }
