@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Recursively get all internal routes that contain a layout.tsx or page.tsx.
@@ -10,14 +10,15 @@ const path = require('path');
 function getAllInternalRoutes(dir, routeList = []) {
     const filesAndDirs = fs.readdirSync(dir);
 
-    filesAndDirs.forEach(item => {
+    filesAndDirs.forEach((item) => {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
 
         if(stat.isDirectory()) {
             // Continue searching in this directory
             getAllInternalRoutes(fullPath, routeList);
-        } else {
+        }
+        else {
             const dirName = path.dirname(fullPath);
             // Check if the directory contains layout.tsx or page.tsx
             if(item === 'layout.tsx' || item === 'page.tsx') {
@@ -37,8 +38,8 @@ function getAllInternalRoutes(dir, routeList = []) {
 const routes = getAllInternalRoutes('../libraries/structure/app/internal');
 // console.log(routes);
 
-routes.forEach(route => {
-    // We need to replace 
+routes.forEach((route) => {
+    // We need to replace
     // "../libraries/structure/app/internal/analytics/live"
     // to
     // "@structure/source/internal/pages/analytics/live"

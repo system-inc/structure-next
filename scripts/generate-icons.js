@@ -4,8 +4,8 @@
 // It will then create assets/icons/Icons.ts
 
 // Dependencies - Node
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // An array to store the icons
 const icons = [];
@@ -45,8 +45,7 @@ function readIcons(directory, source) {
                 let svgContent = fs.readFileSync(fullPath, 'utf8');
                 // console.log('svgContent', svgContent);
 
-                let viewBox = svgContent
-                    .toLowerCase().match(/viewbox="([^"]*)"/)[1];
+                let viewBox = svgContent.toLowerCase().match(/viewbox="([^"]*)"/)[1];
                 // console.log('viewBox', viewBox);
 
                 let validIcon = true;
@@ -107,7 +106,7 @@ iconsTsContent += `export interface IconInterface {
     valid: boolean;
 }`;
 
-// Loop over icons 
+// Loop over icons
 iconsTsContent += '\n';
 iconsTsContent += '// Icons\n';
 iconsTsContent += 'export const Icons: IconInterface[] = [\n';

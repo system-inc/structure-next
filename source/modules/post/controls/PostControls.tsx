@@ -41,6 +41,11 @@ export interface PostControlsInterface {
     onReactionCreate: (content: string) => void;
 }
 export function PostControls(properties: PostControlsInterface) {
+    const windowLocationOrigin = React.useMemo(() => {
+        if(typeof window === 'undefined') return '';
+        return window.location.origin;
+    }, []);
+
     // Defaults
     const voteControl = properties.voteControl ?? true;
     const reactionControl = properties.reactionControl ?? true;
@@ -79,7 +84,7 @@ export function PostControls(properties: PostControlsInterface) {
                 {/* Share */}
                 {shareControl && (
                     <PostShareControl
-                        ideaUrl={`${window.location.origin}/ideas/${properties.id}/${properties.identifier}`}
+                        ideaUrl={`${windowLocationOrigin}/ideas/${properties.id}/${properties.identifier}`}
                     />
                 )}
 
