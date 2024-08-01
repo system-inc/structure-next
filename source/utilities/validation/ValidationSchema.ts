@@ -8,7 +8,7 @@ import {
 
 // Dependencies - API
 import { DocumentNode } from '@apollo/client';
-import { apolloClient } from '@structure/source/api/ApolloProvider';
+import { apolloClient } from '@structure/source/api/Apollo';
 import { UniqueFieldValidationResult } from '@project/source/api/GraphQlGeneratedCode';
 
 // Interface - ValidationSchema
