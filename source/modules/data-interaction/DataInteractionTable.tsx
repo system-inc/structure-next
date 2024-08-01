@@ -111,7 +111,11 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
                 }
 
                 // Meta object to store additional information
-                const meta: object = {
+                const meta: {
+                    databaseName?: string;
+                    tableName?: string;
+                    url?: string;
+                } = {
                     databaseName: databaseName,
                 };
 
@@ -231,7 +235,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
     // console.log('pagination', pagination);
 
     // Determine if there is a relations table as well
-    let relations = queryState.data?.dataInteractionDatabaseTableRows?.relations;
+    const relations = queryState.data?.dataInteractionDatabaseTableRows?.relations;
     let relationsColumns: TableColumnInterface[] = [];
     let relationsRows: TableRowInterface[] = [];
     if(relations && relations[0]) {
@@ -272,7 +276,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
                     // Map over the columns
                     cells: relationsColumns?.map(function (column, columnIndex) {
                         // Get the value for the cell
-                        let value = item[column.identifier];
+                        const value = item[column.identifier];
 
                         // Create a URL if the column is a table name
                         let url = undefined;
