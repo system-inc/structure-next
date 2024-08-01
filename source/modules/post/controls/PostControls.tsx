@@ -18,7 +18,6 @@ import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { timeAgo } from '@structure/source/utilities/Time';
 
 // Component - PostControls
 export interface PostControlsInterface {
