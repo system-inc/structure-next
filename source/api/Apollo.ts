@@ -4,16 +4,25 @@ import StructureSettings from '@project/StructureSettings';
 // Dependencies - API
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 
-// Create the link to the API
-export const apolloClientHttpLink = createHttpLink({
-    uri: StructureSettings.apis.base.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
-    // credentials: 'same-origin',
-    credentials: 'include', // This needs to be 'include' as the GraphQL API is on a different domain and we need to use cookies the GraphQL server sets
+// Function to create an HttpLink for Apollo
+function getApolloClientHttpLink(mode: 'Browser' | 'Server') {
+    // Create the link to the API
+    return createHttpLink({
+        uri: StructureSettings.apis.base.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
+        credentials: mode === 'Browser' ? 'include' : undefined, // Cloudflare Workers does not support 'include'
+    });
+}
+
+// Apollo client
+export const apolloClient = new ApolloClient({
+    link: getApolloClientHttpLink('Browser'),
+    cache: new InMemoryCache(),
+    ssrMode: true,
 });
 
-// Create the Apollo client
-export const apolloClient = new ApolloClient({
-    link: apolloClientHttpLink,
+// Apollo client for server-side rendering
+export const serverSideApolloClient = new ApolloClient({
+    link: getApolloClientHttpLink('Server'),
     cache: new InMemoryCache(),
     ssrMode: true,
 });
