@@ -17,7 +17,7 @@ import Alert from '@structure/source/common/notifications/Alert';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - API
-import { useMutation, ApolloError, DocumentNode } from '@apollo/client';
+import { useQuery, useMutation, ApolloError, DocumentNode, gql } from '@apollo/client';
 import {
     GraphQLOperationMetadata,
     GraphQLOperationParameterMetadata,
@@ -26,10 +26,15 @@ import {
 
 // Dependencies - Utilities
 import { titleCase } from '@structure/source/utilities/String';
+import { getValueForKeyRecursively } from '@structure/source/utilities/Object';
 
 // Component - GraphQlOperationForm
 export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'formInputs' | 'onSubmit'> {
     operation: GraphQLOperationMetadata<DocumentNode>;
+    defaultValuesQuery?: {
+        document: DocumentNode;
+        variables: any;
+    };
     inputComponentsProperties?: any;
     onSubmit?: (
         formValues: FormValuesInterface,
@@ -38,7 +43,28 @@ export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'form
     ) => void;
 }
 export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) {
+    // State
+    const [defaultValues, setDefaultValues] = React.useState<any>(null);
+
+    // Hooks
     const [mutation, mutationState] = useMutation(properties.operation.document);
+    // Fetch default values if defaultValuesQuery is provided
+    const defaultValuesQueryDocument = properties.defaultValuesQuery?.document ?? gql('');
+    const defaultValuesQueryState = useQuery(defaultValuesQueryDocument, {
+        skip: !properties.defaultValuesQuery,
+        variables: properties.defaultValuesQuery?.variables,
+    });
+    // console.log('defaultValuesQueryState', defaultValuesQueryState);
+
+    // Effect to update the default values when the query loads data
+    React.useEffect(
+        function () {
+            if(defaultValuesQueryState.data) {
+                setDefaultValues(defaultValuesQueryState.data);
+            }
+        },
+        [defaultValuesQueryState.data],
+    );
 
     interface InputMetadata {
         name: string;
@@ -50,7 +76,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
     }
 
     function renderFormInputsUsingMutationDocument() {
-        console.log('properties.operation:', properties.operation);
+        // console.log('properties.operation:', properties.operation);
 
         // First, we need to flatten properties.operation.parameters into a flattened list
         // The identifier for each parameter will be the name of the parameter concatenated by periods
@@ -95,7 +121,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
         // Function to convert fields to input metadata array
         function fieldsToInputMetadataArray(fields: any, parentIdentifier: string): InputMetadata[] {
-            let inputMetadata: InputMetadata[] = [];
+            const inputMetadata: InputMetadata[] = [];
 
             for(const field of fields) {
                 const niceValidation = convertValidationToNice(field.validation);
@@ -139,7 +165,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
             }[],
         ) {
             if(validationArray) {
-                let niceValidation: any = {};
+                const niceValidation: any = {};
 
                 for(const validation of validationArray) {
                     if(validation.constraints) {
@@ -155,14 +181,14 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
         }
 
         const inputMetadataArray = inputMetadataArrayFromParameters(properties.operation.parameters);
-        console.log('inputMetadataArray', inputMetadataArray);
+        // console.log('inputMetadataArray', inputMetadataArray);
 
         // Store the form inputs
-        let formInputs: JSX.Element[] = [];
+        const formInputs: JSX.Element[] = [];
 
         // Loop through the operation
         for(const input of inputMetadataArray) {
-            console.log('input', input);
+            // console.log('input', input);
 
             // Get the last part of the input name
             const inputNameParts = input.name.split('.');
@@ -178,8 +204,27 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 key: input.name,
                 label: titleCase(inputName),
                 placeholder: titleCase(inputName),
-                required: input.required,
+                // required: input.required,
             };
+
+            // If there is a default value
+            if(defaultValues) {
+                const defaultValue = getValueForKeyRecursively(defaultValues, inputName);
+                // console.log('inputName', inputName, 'defaultValue', defaultValue);
+
+                // If the default value is not undefined
+                if(defaultValue !== undefined) {
+                    // Set the default value
+
+                    // If the default value is an object, convert it to a string
+                    if(typeof defaultValue === 'object') {
+                        componentProperties.defaultValue = JSON.stringify(defaultValue);
+                    }
+                    else {
+                        componentProperties.defaultValue = defaultValue;
+                    }
+                }
+            }
 
             // If there is a special configuration for this input
             if(properties.inputComponentsProperties?.hasOwnProperty(input.name)) {
@@ -247,112 +292,122 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
     // Render the component
     return (
-        <Form
-            {...properties}
-            formInputs={renderFormInputsUsingMutationDocument()}
-            onSubmit={async function (formValues: FormValuesInterface) {
-                console.log('Form onSubmit formValues:', formValues);
+        <>
+            {properties.defaultValuesQuery && defaultValuesQueryState.loading && <div>Loading...</div>}
+            {properties.defaultValuesQuery && defaultValuesQueryState.error && (
+                <div>Error: {defaultValuesQueryState.error.message}</div>
+            )}
 
-                // Variables to store the mutation response data and error
-                let mutationResponseData = null;
-                let mutationResponseError = null;
+            {((properties.defaultValuesQuery && defaultValuesQueryState.data) ||
+                properties.defaultValuesQuery === undefined) && (
+                <Form
+                    {...properties}
+                    formInputs={renderFormInputsUsingMutationDocument()}
+                    onSubmit={async function (formValues: FormValuesInterface) {
+                        console.log('Form onSubmit formValues:', formValues);
 
-                // We need to map the formValues to the mutation variables
-                // The form values are in the form of { 'input.name': 'value' }
-                // The mutation variables are in the form of { input: { name: 'value' } }
-                function assignNestedValue(object: any, keyPath: string[], value: any) {
-                    let lastKeyIndex = keyPath.length - 1;
-                    for(let i = 0; i < lastKeyIndex; ++i) {
-                        let key = keyPath[i];
-                        if(key) {
-                            if(!(key in object)) object[key] = {};
-                            object = object[key];
+                        // Variables to store the mutation response data and error
+                        let mutationResponseData = null;
+                        let mutationResponseError = null;
+
+                        // We need to map the formValues to the mutation variables
+                        // The form values are in the form of { 'input.name': 'value' }
+                        // The mutation variables are in the form of { input: { name: 'value' } }
+                        function assignNestedValue(object: any, keyPath: string[], value: any) {
+                            const lastKeyIndex = keyPath.length - 1;
+                            for(let i = 0; i < lastKeyIndex; ++i) {
+                                const key = keyPath[i];
+                                if(key) {
+                                    if(!(key in object)) object[key] = {};
+                                    object = object[key];
+                                }
+                            }
+                            if(keyPath[lastKeyIndex]) {
+                                object[keyPath[lastKeyIndex]!] = value;
+                            }
                         }
-                    }
-                    if(keyPath[lastKeyIndex]) {
-                        object[keyPath[lastKeyIndex]!] = value;
-                    }
-                }
 
-                const mutationVariables: any = {};
-                for(const [key, value] of Object.entries(formValues)) {
-                    let graphQlValue = value;
+                        const mutationVariables: any = {};
+                        for(const [key, value] of Object.entries(formValues)) {
+                            let graphQlValue = value;
 
-                    const keyParts = key.split('.');
+                            const keyParts = key.split('.');
 
-                    // Handle booleans
-                    if(value == 'Checked') {
-                        graphQlValue = true;
-                    }
-                    else if(value == 'Unchecked') {
-                        graphQlValue = false;
-                    }
+                            // Handle booleans
+                            if(value == 'Checked') {
+                                graphQlValue = true;
+                            }
+                            else if(value == 'Unchecked') {
+                                graphQlValue = false;
+                            }
 
-                    assignNestedValue(mutationVariables, keyParts, graphQlValue);
-                }
-                console.log('mutationVariables:', mutationVariables);
+                            assignNestedValue(mutationVariables, keyParts, graphQlValue);
+                        }
+                        console.log('mutationVariables:', mutationVariables);
 
-                // Invoke the GraphQL mutation
-                try {
-                    let mutationResponse = await mutation({
-                        variables: {
-                            ...mutationVariables,
-                        },
-                    });
+                        // Invoke the GraphQL mutation
+                        try {
+                            const mutationResponse = await mutation({
+                                variables: {
+                                    ...mutationVariables,
+                                },
+                            });
 
-                    mutationResponseData = mutationResponse.data;
-                }
-                catch(error: any) {
-                    // Handle any errors
-                    console.log('mutationResponseError:', error);
+                            mutationResponseData = mutationResponse.data;
+                        }
+                        catch(error: any) {
+                            // Handle any errors
+                            console.log('mutationResponseError:', error);
 
-                    // Cast the error as an ApolloError
-                    mutationResponseError = error as ApolloError;
-                }
+                            // Cast the error as an ApolloError
+                            mutationResponseError = error as ApolloError;
+                        }
 
-                // Prepare the submitResponse
-                let submitResponse: { success: boolean; message: any } = {
-                    success: !mutationResponseError,
-                    message: undefined,
-                };
+                        // Prepare the submitResponse
+                        let submitResponse: { success: boolean; message: any } = {
+                            success: !mutationResponseError,
+                            message: undefined,
+                        };
 
-                // If an onSubmit property has been provided
-                if(properties.onSubmit) {
-                    // Invoke the onSubmit property
-                    await properties.onSubmit(formValues, mutationResponseData, mutationResponseError);
-                }
-                // If no onSubmit property has been provided, infer the submitResponse from the mutation response
-                else {
-                    // The message to display
-                    let message = <></>;
+                        // If an onSubmit property has been provided
+                        if(properties.onSubmit) {
+                            // Invoke the onSubmit property
+                            await properties.onSubmit(formValues, mutationResponseData, mutationResponseError);
+                        }
+                        // If no onSubmit property has been provided, infer the submitResponse from the mutation response
+                        else {
+                            // The message to display
+                            let message = <></>;
 
-                    // If there's been an error
-                    if(mutationResponseError) {
-                        message = (
-                            <Alert variant="error" title="Error">
-                                <p>There&apos;s been an error: {mutationResponseError.message}.</p>
-                                <p>{JSON.stringify(mutationResponseError)}</p>
-                            </Alert>
-                        );
-                    }
-                    else {
-                        message = (
-                            <Alert icon={CheckCircledIcon} title={<b>Success!</b>}>
-                                <p>The form was submitted successfully.</p>
-                                <p>{JSON.stringify(mutationResponseData)}</p>
-                            </Alert>
-                        );
-                    }
+                            // If there's been an error
+                            if(mutationResponseError) {
+                                message = (
+                                    <Alert variant="error" title="Error">
+                                        <p>There&apos;s been an error: {mutationResponseError.message}.</p>
+                                        <p>{JSON.stringify(mutationResponseError)}</p>
+                                    </Alert>
+                                );
+                            }
+                            else {
+                                message = (
+                                    <Alert icon={CheckCircledIcon} title={<b>Success!</b>}>
+                                        <p>The form was submitted successfully.</p>
+                                        <p>{JSON.stringify(mutationResponseData)}</p>
+                                    </Alert>
+                                );
+                            }
 
-                    submitResponse = {
-                        success: !mutationResponseError,
-                        message: message,
-                    };
-                }
+                            submitResponse = {
+                                success: !mutationResponseError,
+                                message: message,
+                            };
+                        }
 
-                return submitResponse;
-            }}
-        />
+                        return submitResponse;
+                    }}
+                />
+            )}
+        </>
     );
 }
 

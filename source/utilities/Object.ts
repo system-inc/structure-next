@@ -30,3 +30,23 @@ export function mergeDeep<T extends Record<string, any>>(original: T, updates: P
 
     return result;
 }
+
+// Function to get a key value from an object recursively
+export function getValueForKeyRecursively(object: Record<string, unknown>, key: string): unknown {
+    if(object.hasOwnProperty(key)) {
+        return object[key];
+    }
+
+    for(const currentKey in object) {
+        const currentValue = object[currentKey];
+
+        if(typeof currentValue === 'object' && currentValue !== null) {
+            const result = getValueForKeyRecursively(currentValue as Record<string, unknown>, key);
+            if(result !== undefined) {
+                return result;
+            }
+        }
+    }
+
+    return undefined;
+}
