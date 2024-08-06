@@ -29,7 +29,7 @@ export function AccountProvider(properties: AccountProviderInterface) {
     const apolloClient = useApolloClient();
 
     // Mutations
-    const [accountSignOutMutation, accountSignOutMutationState] = useMutation(AccountSignOutDocument);
+    const [accountSignOutMutation] = useMutation(AccountSignOutDocument);
 
     // Queries
     const [getAccountQueryState, accountQueryState] = useLazyQuery(AccountCurrentDocument);
@@ -110,26 +110,29 @@ export function AccountProvider(properties: AccountProviderInterface) {
 
             return true;
         },
-        [accountSignOutMutation, updateSignedIn, router],
+        [accountSignOutMutation, updateSignedIn, router, apolloClient],
     );
 
     // Effect to listen for changes in local storage
-    React.useEffect(function () {
-        function handleLocalStorageChange(event: StorageEvent) {
-            if(event.key === accountSignedInKey) {
-                updateSignedIn(event.newValue == 'true' ? true : false);
+    React.useEffect(
+        function () {
+            function handleLocalStorageChange(event: StorageEvent) {
+                if(event.key === accountSignedInKey) {
+                    updateSignedIn(event.newValue == 'true' ? true : false);
+                }
             }
-        }
 
-        // Add a listener for changes in local storage
-        window.addEventListener('storage', handleLocalStorageChange);
+            // Add a listener for changes in local storage
+            window.addEventListener('storage', handleLocalStorageChange);
 
-        // On unmount
-        return function () {
-            // Remove the listener for changes in local storage
-            window.removeEventListener('storage', handleLocalStorageChange);
-        };
-    }, []);
+            // On unmount
+            return function () {
+                // Remove the listener for changes in local storage
+                window.removeEventListener('storage', handleLocalStorageChange);
+            };
+        },
+        [updateSignedIn],
+    );
 
     // Effect to listen to errors on the account query
     React.useEffect(
@@ -146,7 +149,7 @@ export function AccountProvider(properties: AccountProviderInterface) {
                 updateSignedIn(false);
             }
         },
-        [accountQueryState.error, signOut],
+        [accountQueryState.error, signOut, updateSignedIn],
     );
 
     // Effect to get the account query if signed in
