@@ -7,6 +7,15 @@ query Posts($pagination: PaginationInputWithFilters) {
             slug
             status
             title
+            createdByProfile {
+                displayName
+                username
+                imageUrls {
+                    url
+                    type
+                    variant
+                }
+            }
             content
             topic {
                 name
@@ -47,6 +56,15 @@ query PostsMine($pagination: PaginationInputWithFilters) {
             slug
             status
             title
+            createdByProfile {
+                displayName
+                username
+                imageUrls {
+                    url
+                    type
+                    variant
+                }
+            }
             content
             topic {
                 name
@@ -86,6 +104,15 @@ query Post($identifier: String!) {
         slug
         status
         title
+        createdByProfile {
+            displayName
+            username
+            imageUrls {
+                url
+                type
+                variant
+            }
+        }
         content
         topic {
             name
@@ -110,6 +137,23 @@ query Post($identifier: String!) {
 # Post Create
 mutation PostCreate($input: PostCreateInput!) {
     postCreate(input: $input) {
+        id
+        status
+        title
+        contentType
+        content
+        settings
+        upvoteCount
+        downvoteCount
+        metadata
+        updatedAt
+        createdAt
+    }
+}
+
+# Post Update
+mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
+    postUpdate(id: $id, input: $input) {
         id
         status
         title

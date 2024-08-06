@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
 import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
 import { PostControls } from '@structure/source/modules/post/controls/PostControls';
+import { PostComments } from '@structure/source/modules/post/comments/PostComments';
 
 // Dependencies - API
 import { PostVoteType, PostsQuery } from '@project/source/api/GraphQlGeneratedCode';
@@ -32,13 +33,12 @@ export interface PostInterface {
     afterTitleNode?: React.ReactNode;
     slug: string;
     urlPath: string;
+    createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
     content: string;
     upvoteCount: number;
     voteType: PostVoteType | null | undefined;
     reactions?: PostReactionsType;
     views: number;
-    submittedByDisplayName: string;
-    submittedByUsername: string;
     createdAt: string;
     updatedAt: string;
     topics: string[];
@@ -49,6 +49,9 @@ export interface PostInterface {
     commentControl?: boolean;
     shareControl?: boolean;
     reportControl?: boolean;
+
+    // Comments
+    showComments?: boolean;
 }
 export function Post(properties: PostInterface) {
     // State
@@ -62,6 +65,7 @@ export function Post(properties: PostInterface) {
     const commentControl = properties.commentControl ?? true;
     const shareControl = properties.shareControl ?? true;
     const reportControl = properties.reportControl ?? true;
+    const showComments = properties.showComments ?? true;
 
     // Function to handle a change in vote count and type
     // We need to do this because we have two vote controls that need to stay synchronized
@@ -158,99 +162,108 @@ export function Post(properties: PostInterface) {
 
     // Render the component
     return (
-        <div
-            className={mergeClassNames(
-                'flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3',
-                properties.className,
-            )}
-        >
-            {/* Voting */}
-            {voteControl && (
-                <PostVoteControl
-                    display="Desktop"
-                    className="hidden w-24 shrink-0 md:flex"
-                    ideaId={properties.id}
-                    upvoteCount={upvoteCount}
-                    voteType={voteType}
-                    onVoteChange={onVoteChange}
-                />
-            )}
-
-            <div className="flex-grow">
-                {/* Title and Topics */}
-                <div className={mergeClassNames('', properties.titleContainerClassName)}>
-                    {/* Before Title Node */}
-                    {properties.beforeTitleNode}
-
-                    {/* Title and Topics */}
-                    <span className={mergeClassNames('', properties.titleAndTopicsContainerClassName)}>
-                        {/* Title */}
-                        <Link
-                            href={properties.urlPath}
-                            className={mergeClassNames('leading-loose', properties.titleClassName)}
-                        >
-                            <h4 className="inline">{properties.title}</h4>
-                        </Link>
-
-                        {/* Topics */}
-                        {properties.topics.map(function (topic) {
-                            return (
-                                <Link
-                                    href="/"
-                                    key={topic}
-                                    className={
-                                        // Layout
-                                        'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 transition-colors ' +
-                                        // Light
-                                        'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500 ' +
-                                        // Dark
-                                        'dark:border-purple-500 dark:bg-purple-700 dark:text-purple-200 dark:hover:border-purple-400 dark:hover:bg-purple-600 dark:hover:text-purple-100'
-                                    }
-                                >
-                                    {topic}
-                                </Link>
-                            );
-                        })}
-                    </span>
-
-                    {/* After Title Node */}
-                    {properties.afterTitleNode}
-                </div>
-
-                {/* Description */}
-                {properties.content && <p className="mt-2.5">{properties.content}</p>}
-
-                {/* Reactions */}
-                {reactions.length > 0 && (
-                    <PostReactions
-                        className="mt-3.5"
+        <div>
+            {/* Post */}
+            <div
+                className={mergeClassNames(
+                    'flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3',
+                    properties.className,
+                )}
+            >
+                {/* Voting */}
+                {voteControl && (
+                    <PostVoteControl
+                        display="Desktop"
+                        className="hidden w-24 shrink-0 md:flex"
                         ideaId={properties.id}
-                        reactions={reactions}
-                        onReactionCreate={onReactionCreate}
-                        onReactionDelete={onReactionDelete}
+                        upvoteCount={upvoteCount}
+                        voteType={voteType}
+                        onVoteChange={onVoteChange}
                     />
                 )}
 
-                {/* Controls */}
-                <PostControls
-                    className="mt-3"
-                    id={properties.id}
-                    identifier={properties.identifier}
-                    title={properties.title}
-                    upvoteCount={upvoteCount}
-                    voteType={voteType}
-                    submittedByUsername={properties.submittedByUsername}
-                    createdAt={properties.createdAt}
-                    onVoteChange={onVoteChange}
-                    onReactionCreate={onReactionCreate}
-                    // Control Visibility
-                    voteControl={voteControl}
-                    reactionControl={reactionControl}
-                    commentControl={commentControl}
-                    shareControl={shareControl}
-                    reportControl={reportControl}
-                />
+                <div className="flex-grow">
+                    {/* Title and Topics */}
+                    <div className={mergeClassNames('', properties.titleContainerClassName)}>
+                        {/* Before Title Node */}
+                        {properties.beforeTitleNode}
+
+                        {/* Title and Topics */}
+                        <span className={mergeClassNames('', properties.titleAndTopicsContainerClassName)}>
+                            {/* Title */}
+                            <Link
+                                href={properties.urlPath}
+                                className={mergeClassNames('leading-loose', properties.titleClassName)}
+                            >
+                                <h4 className="inline">{properties.title}</h4>
+                            </Link>
+
+                            {/* Topics */}
+                            {properties.topics.map(function (topic) {
+                                return (
+                                    <Link
+                                        href="/"
+                                        key={topic}
+                                        className={
+                                            // Layout
+                                            'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 transition-colors ' +
+                                            // Light
+                                            'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500 ' +
+                                            // Dark
+                                            'dark:border-purple-500 dark:bg-purple-700 dark:text-purple-200 dark:hover:border-purple-400 dark:hover:bg-purple-600 dark:hover:text-purple-100'
+                                        }
+                                    >
+                                        {topic}
+                                    </Link>
+                                );
+                            })}
+                        </span>
+
+                        {/* After Title Node */}
+                        {properties.afterTitleNode}
+                    </div>
+
+                    {/* Description */}
+                    {properties.content && <p className="mt-2.5">{properties.content}</p>}
+
+                    {/* Reactions */}
+                    {reactions.length > 0 && (
+                        <PostReactions
+                            className="mt-3.5"
+                            ideaId={properties.id}
+                            reactions={reactions}
+                            onReactionCreate={onReactionCreate}
+                            onReactionDelete={onReactionDelete}
+                        />
+                    )}
+
+                    {/* Controls */}
+                    <PostControls
+                        className="mt-3"
+                        id={properties.id}
+                        identifier={properties.identifier}
+                        title={properties.title}
+                        createdByProfile={properties.createdByProfile}
+                        upvoteCount={upvoteCount}
+                        voteType={voteType}
+                        createdAt={properties.createdAt}
+                        onVoteChange={onVoteChange}
+                        onReactionCreate={onReactionCreate}
+                        // Control Visibility
+                        voteControl={voteControl}
+                        reactionControl={reactionControl}
+                        commentControl={commentControl}
+                        shareControl={shareControl}
+                        reportControl={reportControl}
+                    />
+                </div>
             </div>
+            {/* Comments */}
+            {showComments && (
+                <div>
+                    <PostComments className="mt-6" />
+                </div>
+            )}
         </div>
     );
 }
