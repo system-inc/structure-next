@@ -4,7 +4,6 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
 import { InputText } from '@structure/source/common/forms/InputText';
 import { InputSelectItemInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
 import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
@@ -78,7 +77,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionInterface
         },
     };
     // Loop over the operators
-    let operatorsItems: InputSelectItemInterface[] = [];
+    const operatorsItems: InputSelectItemInterface[] = [];
     for(const operatorKey in operators) {
         operatorsItems.push({
             value: operatorKey,
@@ -93,7 +92,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionInterface
     function getInputComponentForCondition() {
         let inputComponent = null;
 
-        let column = properties.columns.find((column) => column.identifier === properties.column);
+        const column = properties.columns.find((column) => column.identifier === properties.column);
 
         // If the operator is IsNull or IsNotNull, return null
         if(
@@ -150,7 +149,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionInterface
     }
 
     // Find the column for the given identifier
-    let column = properties.columns.find((column) => column.identifier === properties.column);
+    const column = properties.columns.find((column) => column.identifier === properties.column);
     console.log('column', column);
 
     // Function to get the column for a given identifier
@@ -160,7 +159,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionInterface
 
     // Function to get the column icon for a given column identifier
     function getColumnIconForIdentifier(identifier: string) {
-        let column = getColumnForIdentifier(identifier);
+        const column = getColumnForIdentifier(identifier);
 
         if(column) {
             // ID
@@ -195,8 +194,8 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionInterface
 
     // Function to get the column content for a given column identifier
     function getColumnContentUsingIdentifier(identifier: string) {
-        let column = getColumnForIdentifier(identifier);
-        let ColumnIcon = getColumnIconForIdentifier(identifier);
+        const column = getColumnForIdentifier(identifier);
+        const ColumnIcon = getColumnIconForIdentifier(identifier);
 
         return (
             <>
