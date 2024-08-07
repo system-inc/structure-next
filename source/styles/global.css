@@ -27,3 +27,8 @@ input:-webkit-autofill:active {
         color 99999s;
     transition-delay: 99999s;
 }
+
+.scrollAreaViewport> :first-child {
+    display: block !important;
+    height: 100% !important;
+}
