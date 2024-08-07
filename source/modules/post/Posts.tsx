@@ -9,7 +9,12 @@ import { Post, PostReactionsType } from '@structure/source/modules/post/Post';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { PostVoteType, PostsDocument, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    PostsQuery,
+    PostVoteType,
+    PostsDocument,
+    ColumnFilterConditionOperator,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -50,8 +55,7 @@ export function Posts(properties: PostsInterface) {
         urlPath: string;
         topics: string[];
         content: string;
-        submittedByDisplayName: string;
-        submittedByUsername: string;
+        createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
         voteType: PostVoteType | null | undefined;
         upvoteCount: number;
         downvoteCount: number;
@@ -84,8 +88,7 @@ export function Posts(properties: PostsInterface) {
                 return topic;
             }),
             content: content,
-            submittedByDisplayName: 'Bill',
-            submittedByUsername: 'bill',
+            createdByProfile: post.createdByProfile,
             voteType: post.voteType,
             upvoteCount: post.upvoteCount,
             downvoteCount: post.downvoteCount,
@@ -129,8 +132,7 @@ export function Posts(properties: PostsInterface) {
                                 urlPath={idea.urlPath}
                                 topics={idea.topics}
                                 content={idea.content}
-                                submittedByDisplayName={idea.submittedByDisplayName}
-                                submittedByUsername={idea.submittedByUsername}
+                                createdByProfile={idea.createdByProfile}
                                 voteType={idea.voteType}
                                 upvoteCount={idea.upvoteCount}
                                 views={idea.views}

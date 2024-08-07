@@ -22,13 +22,13 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export interface PostCommentControlsInterface {
     className?: string;
     id: PostInterface['id'];
-    // identifier: PostInterface['identifier'];
-    // title: PostInterface['title'];
+    identifier: PostInterface['identifier'];
+    title: PostInterface['title'];
     upvoteCount: PostInterface['upvoteCount'];
-    downvoteCount: PostInterface['downvoteCount'];
+    // downvoteCount: PostInterface['downvoteCount'];
     voteType: PostInterface['voteType'];
     createdAt: PostInterface['createdAt'];
-    submittedByUsername: PostInterface['submittedByUsername'];
+    // submittedByUsername: PostInterface['submittedByUsername'];
 
     // Control Visibility
     voteControl?: boolean;

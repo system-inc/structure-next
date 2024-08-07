@@ -17,7 +17,7 @@ export interface ProfileLinkInterface {
     displayName?: string;
     imageUrls?: {
         url: string;
-        variant: string;
+        variant?: string;
     }[];
 }
 export function ProfileLink(properties: ProfileLinkInterface) {

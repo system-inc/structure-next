@@ -259,11 +259,7 @@ export function Post(properties: PostInterface) {
                 </div>
             </div>
             {/* Comments */}
-            {showComments && (
-                <div>
-                    <PostComments className="mt-6" />
-                </div>
-            )}
+            {showComments && <div>{/* <PostComments className="mt-6" /> */}</div>}
         </div>
     );
 }

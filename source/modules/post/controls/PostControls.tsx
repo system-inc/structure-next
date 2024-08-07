@@ -103,7 +103,17 @@ export function PostControls(properties: PostControlsInterface) {
                 <ProfileLink
                     username={properties.createdByProfile?.username ?? 'anonymous'}
                     displayName={properties.createdByProfile?.displayName ?? 'Anonymous'}
-                    imageUrls={properties.createdByProfile?.imageUrls}
+                    imageUrls={
+                        properties.createdByProfile?.imageUrls && properties.createdByProfile?.imageUrls.length
+                            ? properties.createdByProfile?.imageUrls.map(function (imageUrl) {
+                                  return {
+                                      url: imageUrl.url!,
+                                      //   type: imageUrl.type,
+                                      variant: imageUrl.variant!,
+                                  };
+                              })
+                            : undefined
+                    }
                 />
 
                 <div>&bull;</div>

@@ -19,6 +19,9 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - PostComments
 export interface PostCommentsInterface {
     className?: string;
+    submittedByUsername?: string;
+    submittedByDisplayName?: string;
+    createdAt: string;
 }
 export function PostComments(properties: PostCommentsInterface) {
     // Render the component
@@ -49,7 +52,12 @@ export function PostComments(properties: PostCommentsInterface) {
                     <div className="ml-8 mt-3">This is the first principle of our company.</div>
 
                     {/* Comment Controls */}
-                    <PostCommentControls className="ml-6 mt-2" />
+                    {/* <PostCommentControls className="ml-6 mt-2"
+                    id="1"
+                    identifier="1"
+                    title="First Principle"
+                    upvoteCount={0}
+                     /> */}
                 </div>
             </div>
         </div>
