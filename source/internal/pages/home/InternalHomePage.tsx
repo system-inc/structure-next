@@ -4,9 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
+import { InternalNavigationTrail } from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
+import { SideNavigationLayoutContentHeaderLeft } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentHeaderLeft';
 import SimpleSvgMap from '@structure/source/common/maps/SimpleSvgMap';
 import PanAndZoomContainer from '@structure/source/common/maps/PanAndZoomContainer';
-
 import HomeMetricLink from '@structure/source/internal/common/dashboard/HomeMetricLink';
 import CardLink from '@structure/source/internal/common/dashboard/CardLink';
 import ActivityLink from '@structure/source/internal/common/dashboard/ActivityLink';

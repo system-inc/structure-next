@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname as useUrlPath } from 'next/navigation';
 
 // Dependencies - Main Components
 import {
@@ -18,7 +18,7 @@ import { titleCase } from '@structure/source/utilities/String';
 // Component - InternalNavigationTrail
 export function InternalNavigationTrail(properties: NavigationTrailInterface) {
     // Get the current pathname from the URL using the usePathname hook
-    const urlPathname = usePathname();
+    const urlPath = useUrlPath();
 
     // Function to get sibling navigation trail links for a given path
     const getSiblingNavigationTrailLinks = React.useCallback(function (
@@ -43,7 +43,7 @@ export function InternalNavigationTrail(properties: NavigationTrailInterface) {
     // Function to generate links from pathname using the pathname and InternalNavigationLinks
     const generateNavigationTrailLinksUsingPathname = React.useCallback(
         function () {
-            const urlPathSegments = urlPathname.split('/').filter(Boolean);
+            const urlPathSegments = urlPath.split('/').filter(Boolean);
             // console.log('generateNavigationTrailLinksUsingPathname', pathSegments);
             let navigationTrailLinks: NavigationTrailLinkInterface[] = [];
             let cumulativePath = '';
@@ -85,7 +85,7 @@ export function InternalNavigationTrail(properties: NavigationTrailInterface) {
 
             return navigationTrailLinks;
         },
-        [urlPathname, getSiblingNavigationTrailLinks],
+        [urlPath, getSiblingNavigationTrailLinks],
     );
 
     // Use provided links or generate from pathname

@@ -24,6 +24,7 @@ export interface NavigationTrailLinkInterface {
 
 // Component - NavigationTrail
 export interface NavigationTrailInterface {
+    className?: string;
     links?: NavigationTrailLinkInterface[];
     separator?: React.ReactNode;
 }
@@ -63,46 +64,44 @@ export function NavigationTrail(properties: NavigationTrailInterface) {
 
     // Render the component
     return (
-        <nav aria-label="Navigation Trail">
-            <ol className="mb-4 flex list-none text-sm">
-                {navigationTrailLinks.map((navigationTrailLink, index) => {
-                    // Find the index of the last title in the navigationTrailLinks array
-                    let lastTitleIndex = navigationTrailLinks
-                        .slice()
-                        .reverse()
-                        .findIndex((link) => link.title !== '');
-                    lastTitleIndex =
-                        lastTitleIndex >= 0 ? navigationTrailLinks.length - 1 - lastTitleIndex : lastTitleIndex;
+        <ol aria-label="Navigation Trail" className={mergeClassNames('flex list-none text-sm', properties.className)}>
+            {navigationTrailLinks.map((navigationTrailLink, index) => {
+                // Find the index of the last title in the navigationTrailLinks array
+                let lastTitleIndex = navigationTrailLinks
+                    .slice()
+                    .reverse()
+                    .findIndex((link) => link.title !== '');
+                lastTitleIndex =
+                    lastTitleIndex >= 0 ? navigationTrailLinks.length - 1 - lastTitleIndex : lastTitleIndex;
 
-                    return (
-                        <li key={index} className="flex items-center">
-                            {index > 0 ? (
-                                navigationTrailLink.links && navigationTrailLink.links.length > 0 ? (
-                                    <NavigationTrailSeparatorPopoverMenu
-                                        separator={separator}
-                                        links={getLinks(navigationTrailLink.links)}
-                                    />
-                                ) : (
-                                    <div className="mx-1 h-4 w-4">{separator}</div>
-                                )
-                            ) : null}
-                            {/* Only render the link if it has a title */}
-                            {navigationTrailLink.title != '' && (
-                                <Link
-                                    tabIndex={1}
-                                    href={navigationTrailLink.href}
-                                    className={`transition-colors hover:text-dark dark:hover:text-light ${
-                                        index === lastTitleIndex ? 'text-dark dark:text-light' : 'text-neutral '
-                                    }`}
-                                >
-                                    {navigationTrailLink.title}
-                                </Link>
-                            )}
-                        </li>
-                    );
-                })}
-            </ol>
-        </nav>
+                return (
+                    <li key={index} className="flex items-center">
+                        {index > 0 ? (
+                            navigationTrailLink.links && navigationTrailLink.links.length > 0 ? (
+                                <NavigationTrailSeparatorPopoverMenu
+                                    separator={separator}
+                                    links={getLinks(navigationTrailLink.links)}
+                                />
+                            ) : (
+                                <div className="mx-1 h-4 w-4">{separator}</div>
+                            )
+                        ) : null}
+                        {/* Only render the link if it has a title */}
+                        {navigationTrailLink.title != '' && (
+                            <Link
+                                tabIndex={1}
+                                href={navigationTrailLink.href}
+                                className={`transition-colors hover:text-dark dark:hover:text-light ${
+                                    index === lastTitleIndex ? 'text-dark dark:text-light' : 'text-neutral '
+                                }`}
+                            >
+                                {navigationTrailLink.title}
+                            </Link>
+                        )}
+                    </li>
+                );
+            })}
+        </ol>
     );
 }
 

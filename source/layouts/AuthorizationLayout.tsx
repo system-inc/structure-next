@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import ApiError from '@structure/source/common/notifications/ApiError';
-import NotConnected from '@structure/source/common/notifications/NotConnected';
+// import NotConnected from '@structure/source/common/notifications/NotConnected';
 import NotAuthorized from '@structure/source/common/notifications/NotAuthorized';
 import NotSignedIn from '@structure/source/common/notifications/NotSignedIn';
 
