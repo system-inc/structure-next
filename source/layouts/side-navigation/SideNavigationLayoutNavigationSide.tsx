@@ -295,7 +295,6 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                         'mt-16 h-full',
                         topBar ? 'border-r border-r-light-4 dark:border-r-dark-4' : '',
                     )}
-                    className="px-3"
                 >
                     {properties.children}
                 </ScrollArea>

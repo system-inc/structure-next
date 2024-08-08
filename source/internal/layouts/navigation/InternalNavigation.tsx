@@ -13,8 +13,7 @@ import {
 import { InternalNavigationLinkGroup } from '@structure/source/internal/layouts/navigation/InternalNavigationLinkGroup';
 
 // Component - InternalNavigation
-export interface InternalNavigationInterface {}
-export function InternalNavigation(properties: InternalNavigationInterface) {
+export function InternalNavigation() {
     // Get the current pathname from the URL using the usePathname hook
     const urlPath = useUrlPath();
 
@@ -87,11 +86,7 @@ export function InternalNavigation(properties: InternalNavigationInterface) {
     );
 
     // Render the component
-    return (
-        <ul className="flex flex-1 flex-col px-3 py-5">
-            <li>{navigationList}</li>
-        </ul>
-    );
+    return <div className="flex flex-1 flex-col px-6 py-5">{navigationList}</div>;
 }
 
 // Export - Default

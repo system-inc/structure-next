@@ -50,13 +50,6 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
         };
     });
 
-    // Effect to adjust the background color of the body on mount
-    React.useEffect(function () {
-        // Remove the class dark:bg-dark and add the class dark:bg-dark-1 to the body
-        // document.body.classList.remove('dark:bg-dark');
-        // document.body.classList.add('dark:bg-dark-1');
-    }, []);
-
     // Effect to animate the content div padding when the navigation is opened or closed (desktop only)
     React.useEffect(
         function () {

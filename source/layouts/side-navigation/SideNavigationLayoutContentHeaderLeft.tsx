@@ -22,15 +22,26 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export interface SideNavigationLayoutContentHeaderLeftInterface {
     children: React.ReactNode;
     className?: string;
+
+    leftPaddingWhenNavigationClosed?: number;
+    leftPaddingWhenNavigationOpen?: number;
 }
 export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigationLayoutContentHeaderLeftInterface) {
+    // Defaults
+    const leftPaddingWhenNavigationClosed = properties.leftPaddingWhenNavigationClosed ?? 104;
+    const leftPaddingWhenNavigationOpen = properties.leftPaddingWhenNavigationOpen ?? 16;
+
     // Shared State
     const sideNavigationLayoutNavigationOpenPreference = useAtomValue(sideNavigationLayoutNavigationOpenPreferenceAtom);
     const sideNavigationLayoutNavigationOpen = useAtomValue(sideNavigationLayoutNavigationOpenAtom);
 
     // Function to get the padding left
-    const leftPadding = 74;
-    const getPaddingLeft = (isOpen: boolean) => (isOpen ? 0 : leftPadding);
+    const getPaddingLeft = React.useCallback(
+        function (isOpen: boolean) {
+            return isOpen ? leftPaddingWhenNavigationOpen : leftPaddingWhenNavigationClosed;
+        },
+        [leftPaddingWhenNavigationClosed, leftPaddingWhenNavigationOpen],
+    );
 
     // Spring to animate the padding when the side navigation is opened or closed
     const [containerDivSpring, containerDivSpringControl] = useSpring(function () {
@@ -50,7 +61,7 @@ export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigation
                 immediate: window.innerWidth < desktopMinimumWidth,
             });
         },
-        [sideNavigationLayoutNavigationOpen, containerDivSpringControl],
+        [getPaddingLeft, sideNavigationLayoutNavigationOpen, containerDivSpringControl],
     );
 
     // Render the component
