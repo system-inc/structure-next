@@ -13,6 +13,7 @@ import {
 import InternalNavigationLinks from '@structure/source/internal/layouts/navigation/InternalNavigationLinks';
 
 // Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
 import { titleCase } from '@structure/source/utilities/String';
 
 // Component - InternalNavigationTrail
@@ -25,7 +26,7 @@ export function InternalNavigationTrail(properties: NavigationTrailInterface) {
         path: string,
         links: NavigationTrailLinkInterface[],
     ): NavigationTrailLinkInterface[] {
-        let siblingNavigationTrailLinks: NavigationTrailLinkInterface[] = [];
+        const siblingNavigationTrailLinks: NavigationTrailLinkInterface[] = [];
 
         // Loop over InternalNavigationLinks
         for(const internalNavigationLink of links) {
@@ -45,7 +46,7 @@ export function InternalNavigationTrail(properties: NavigationTrailInterface) {
         function () {
             const urlPathSegments = urlPath.split('/').filter(Boolean);
             // console.log('generateNavigationTrailLinksUsingPathname', pathSegments);
-            let navigationTrailLinks: NavigationTrailLinkInterface[] = [];
+            const navigationTrailLinks: NavigationTrailLinkInterface[] = [];
             let cumulativePath = '';
 
             // Loop over each path segment
@@ -89,10 +90,16 @@ export function InternalNavigationTrail(properties: NavigationTrailInterface) {
     );
 
     // Use provided links or generate from pathname
-    let navigationTrailLinks = generateNavigationTrailLinksUsingPathname();
+    const navigationTrailLinks = generateNavigationTrailLinksUsingPathname();
 
     // Render the component
-    return <NavigationTrail links={navigationTrailLinks} {...properties} />;
+    return (
+        <NavigationTrail
+            links={navigationTrailLinks}
+            {...properties}
+            className={mergeClassNames('mb-4', properties.className)}
+        />
+    );
 }
 
 // Export - Default

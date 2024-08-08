@@ -3,15 +3,13 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InternalNavigationTrail } from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
-import { SideNavigationLayoutContentHeaderLeft } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentHeaderLeft';
 
 // Component - SettingsPage
-export type SettingsPageProperties = {};
-export function SettingsPage(properties: SettingsPageProperties) {
+export function SettingsPage() {
     // Render the component
     return (
         <>
-            <InternalNavigationTrail className="mb-4" />
+            <InternalNavigationTrail />
             <h1>Settings</h1>
         </>
     );
