@@ -19,7 +19,7 @@ export function InternalLayout(properties: InternalLayoutInterface) {
     return (
         <AuthorizationLayout>
             {/* Navigation */}
-            <SideNavigationLayoutNavigation className="">
+            <SideNavigationLayoutNavigation className="" topBar={true}>
                 <InternalNavigation />
             </SideNavigationLayoutNavigation>
 

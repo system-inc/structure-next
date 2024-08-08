@@ -35,8 +35,13 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export interface SideNavigationLayoutNavigationSideInterface {
     children: React.ReactNode;
     className?: string;
+
+    topBar?: boolean;
 }
 export function SideNavigationLayoutNavigationSide(properties: SideNavigationLayoutNavigationSideInterface) {
+    // Defaults
+    const topBar = properties.topBar ?? false;
+
     // Hooks
     const urlPath = useUrlPath();
     const urlParameters = useUrlParameters();
@@ -280,7 +285,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 ref={containerDivReference}
                 className={mergeClassNames(
                     'fixed top-0 z-20 flex h-full flex-col bg-light-1 dark:bg-dark',
-                    // 'border-r border-r-light-4 dark:border-r-dark-4',
+                    topBar ? '' : 'border-r border-r-light-4 dark:border-r-dark-4',
                     properties.className,
                 )}
                 style={{ width: sideNavigationLayoutNavigationWidthPreference + 'px', ...containerSpring }}
@@ -288,7 +293,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 <ScrollArea
                     containerClassName={mergeClassNames(
                         'mt-16 h-full',
-                        'border-r border-r-light-4 dark:border-r-dark-4',
+                        topBar ? 'border-r border-r-light-4 dark:border-r-dark-4' : '',
                     )}
                     className="px-3"
                 >
@@ -298,7 +303,13 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 {/* Navigation Resize Handle */}
                 <div
                     ref={containerResizeHandleDivReference}
-                    className="absolute -right-1 h-full w-1 cursor-col-resize touch-none select-none bg-transparent transition-colors hover:bg-blue active:bg-purple-500"
+                    className={mergeClassNames(
+                        'absolute -right-1 h-full w-1 cursor-ew-resize touch-none select-none bg-transparent transition-colors hover:bg-blue active:bg-purple-500',
+                        // If the top bar is enabled, offset the handle by the height of the top bar
+                        topBar ? 'top-16' : '',
+                        // If the navigation is open, show the handle, otherwise disable interacting with it
+                        sideNavigationLayoutNavigationOpen ? 'pointer-events-auto' : 'pointer-events-none',
+                    )}
                 ></div>
             </animated.div>
 

@@ -77,16 +77,21 @@ export const sideNavigationLayoutNavigationSpringConfiguration = {
 export interface SideNavigationLayoutNavigationInterface {
     children: React.ReactNode;
     className?: string;
+
+    topBar?: boolean;
 }
 export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutNavigationInterface) {
+    // Defaults
+    const topBar = properties.topBar ?? false;
+
     // Render the component
     return (
         <>
             {/* Top */}
-            <SideNavigationLayoutNavigationTop className="" />
+            <SideNavigationLayoutNavigationTop className="" topBar={topBar} />
 
             {/* Side */}
-            <SideNavigationLayoutNavigationSide className={mergeClassNames(properties.className)}>
+            <SideNavigationLayoutNavigationSide className={mergeClassNames(properties.className)} topBar={topBar}>
                 {properties.children}
             </SideNavigationLayoutNavigationSide>
         </>

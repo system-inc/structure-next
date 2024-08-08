@@ -5,13 +5,20 @@ import AccountMenuButton from '@structure/source/modules/account/AccountMenuButt
 // Component - SideNavigationLayoutNavigationTop
 export interface SideNavigationLayoutNavigationTopInterface {
     className?: string;
+
+    topBar?: boolean;
 }
 export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayoutNavigationTopInterface) {
+    // Defaults
+    const topBar = properties.topBar ?? false;
+
     // Render the component
     return (
         <>
-            {/* Bottom Border */}
-            <div className="pointer-events-none fixed z-30 h-16 w-full border-b border-b-light-4 dark:border-b-dark-4" />
+            {/* Top Bar Bottom Border */}
+            {topBar && (
+                <div className="pointer-events-none fixed z-30 h-16 w-full border-b border-b-light-4 dark:border-b-dark-4" />
+            )}
 
             {/* Top Left */}
             <div className="fixed left-4 z-30 flex h-[63px] items-center">
