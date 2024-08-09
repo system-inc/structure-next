@@ -10,6 +10,9 @@ import { SideNavigationLayoutContent } from '@structure/source/layouts/side-navi
 import { SideNavigationLayoutContentBody } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody';
 import { InternalNavigation } from '@structure/source/internal/layouts/navigation/InternalNavigation';
 
+// Settings
+export const internalLayoutIdentifier = 'Internal';
+
 // Component - InternalLayout
 export interface InternalLayoutInterface {
     children: React.ReactNode;
@@ -19,12 +22,12 @@ export function InternalLayout(properties: InternalLayoutInterface) {
     return (
         <AuthorizationLayout>
             {/* Navigation */}
-            <SideNavigationLayoutNavigation topBar={true}>
+            <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier} topBar={true}>
                 <InternalNavigation />
             </SideNavigationLayoutNavigation>
 
             {/* Content */}
-            <SideNavigationLayoutContent>
+            <SideNavigationLayoutContent layoutIdentifier={internalLayoutIdentifier}>
                 <SideNavigationLayoutContentBody className="px-8 py-6">
                     {properties.children}
                 </SideNavigationLayoutContentBody>

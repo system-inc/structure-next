@@ -7,12 +7,11 @@ import React from 'react';
 import { desktopMinimumWidth } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Shared State
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
-    sideNavigationLayoutNavigationOpenPreferenceAtom,
-    sideNavigationLayoutNavigationOpenAtom,
-    sideNavigationLayoutNavigationWidthPreferenceAtom,
-    sideNavigationLayoutNavigationIsResizingAtom,
+    getAtomForNavigationOpen,
+    getAtomForNavigationWidth,
+    getAtomForNavigationIsResizing,
     sideNavigationLayoutNavigationSpringConfiguration,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
@@ -25,27 +24,22 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutContent
 export interface SideNavigationLayoutContentInterface {
+    layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     children: React.ReactNode;
     className?: string;
 }
 export function SideNavigationLayoutContent(properties: SideNavigationLayoutContentInterface) {
     // Shared State
-    const sideNavigationLayoutNavigationOpen = useAtomValue(sideNavigationLayoutNavigationOpenAtom);
-    const sideNavigationLayoutNavigationOpenWithStorage = useAtomValue(
-        sideNavigationLayoutNavigationOpenPreferenceAtom,
+    const sideNavigationLayoutNavigationOpen = useAtomValue(getAtomForNavigationOpen(properties.layoutIdentifier));
+    const sideNavigationLayoutNavigationWidth = useAtomValue(getAtomForNavigationWidth(properties.layoutIdentifier));
+    const sideNavigationLayoutNavigationIsResizing = useAtomValue(
+        getAtomForNavigationIsResizing(properties.layoutIdentifier),
     );
-    const sideNavigationLayoutNavigationWidthPreference = useAtomValue(
-        sideNavigationLayoutNavigationWidthPreferenceAtom,
-    );
-    const sideNavigationLayoutNavigationIsResizing = useAtomValue(sideNavigationLayoutNavigationIsResizingAtom);
 
     // Spring to animate the content div padding when the navigation is opened or closed
     const [contentDivSpring, contentDivSpringControl] = useSpring(function () {
         return {
-            paddingLeft:
-                sideNavigationLayoutNavigationOpenWithStorage === false
-                    ? 0
-                    : sideNavigationLayoutNavigationWidthPreference,
+            paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
             config: sideNavigationLayoutNavigationSpringConfiguration,
         };
     });
@@ -57,10 +51,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
             if(window.innerWidth >= desktopMinimumWidth) {
                 // Animate the padding
                 contentDivSpringControl.start({
-                    paddingLeft:
-                        sideNavigationLayoutNavigationOpen === false
-                            ? 0
-                            : sideNavigationLayoutNavigationWidthPreference,
+                    paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
                     // Use the imported spring configuration for consistent animation
                     config: sideNavigationLayoutNavigationSpringConfiguration,
                     // Apply the animation immediately
@@ -71,7 +62,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
         [
             sideNavigationLayoutNavigationOpen,
             contentDivSpringControl,
-            sideNavigationLayoutNavigationWidthPreference,
+            sideNavigationLayoutNavigationWidth,
             sideNavigationLayoutNavigationIsResizing,
         ],
     );
@@ -96,9 +87,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
                     // Animate the padding
                     contentDivSpringControl.start({
                         paddingLeft:
-                            sideNavigationLayoutNavigationOpenWithStorage === false
-                                ? 0
-                                : sideNavigationLayoutNavigationWidthPreference,
+                            sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
                         // Use the imported spring configuration for consistent animation
                         config: sideNavigationLayoutNavigationSpringConfiguration,
                         // immediate: true,
@@ -114,11 +103,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
                 window.removeEventListener('resize', handleWindowResize);
             };
         },
-        [
-            contentDivSpringControl,
-            sideNavigationLayoutNavigationOpenWithStorage,
-            sideNavigationLayoutNavigationWidthPreference,
-        ],
+        [contentDivSpringControl, sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 
     // Effect to handle the initial size on mount
@@ -139,10 +124,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
             else {
                 // Animate the padding
                 contentDivSpringControl.start({
-                    paddingLeft:
-                        sideNavigationLayoutNavigationOpenWithStorage === false
-                            ? 0
-                            : sideNavigationLayoutNavigationWidthPreference,
+                    paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
                     // Use the imported spring configuration for consistent animation
                     config: sideNavigationLayoutNavigationSpringConfiguration,
                     // Apply the animation immediately

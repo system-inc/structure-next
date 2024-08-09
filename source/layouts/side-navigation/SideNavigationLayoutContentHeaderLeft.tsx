@@ -4,10 +4,11 @@
 import React from 'react';
 
 // Dependencies - Shared State
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
-    sideNavigationLayoutNavigationOpenPreferenceAtom,
-    sideNavigationLayoutNavigationOpenAtom,
+    getAtomForNavigationOpen,
+    getAtomForNavigationWidth,
+    getAtomForNavigationIsResizing,
     sideNavigationLayoutNavigationSpringConfiguration,
     desktopMinimumWidth,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
@@ -20,6 +21,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutContentHeaderLeft
 export interface SideNavigationLayoutContentHeaderLeftInterface {
+    layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     children: React.ReactNode;
     className?: string;
 
@@ -32,8 +34,7 @@ export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigation
     const leftPaddingWhenNavigationOpen = properties.leftPaddingWhenNavigationOpen ?? 16;
 
     // Shared State
-    const sideNavigationLayoutNavigationOpenPreference = useAtomValue(sideNavigationLayoutNavigationOpenPreferenceAtom);
-    const sideNavigationLayoutNavigationOpen = useAtomValue(sideNavigationLayoutNavigationOpenAtom);
+    const sideNavigationLayoutNavigationOpen = useAtomValue(getAtomForNavigationOpen(properties.layoutIdentifier));
 
     // Function to get the padding left
     const getPaddingLeft = React.useCallback(
@@ -46,7 +47,7 @@ export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigation
     // Spring to animate the padding when the side navigation is opened or closed
     const [containerDivSpring, containerDivSpringControl] = useSpring(function () {
         return {
-            paddingLeft: getPaddingLeft(sideNavigationLayoutNavigationOpenPreference),
+            paddingLeft: getPaddingLeft(sideNavigationLayoutNavigationOpen),
             config: sideNavigationLayoutNavigationSpringConfiguration,
         };
     });

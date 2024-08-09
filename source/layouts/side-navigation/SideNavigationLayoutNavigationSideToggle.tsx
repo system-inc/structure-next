@@ -12,11 +12,8 @@ import Image from 'next/image';
 import Button from '@structure/source/common/buttons/Button';
 
 // Dependencies - Shared State
-import { useAtomValue, useSetAtom } from 'jotai';
-import {
-    sideNavigationLayoutNavigationOpenAtom,
-    setSideNavigationLayoutNavigationOpenAtom,
-} from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
+import { useAtom } from 'jotai';
+import { getAtomForNavigationOpen } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Assets
 import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';
@@ -30,6 +27,7 @@ import { darkThemeClassName } from '@structure/source/theme/Theme';
 
 // Component - SideNavigationLayoutNavigationSideToggle
 export interface SideNavigationLayoutNavigationSideToggleInterface {
+    layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     className?: string;
 }
 export function SideNavigationLayoutNavigationSideToggle(
@@ -39,8 +37,9 @@ export function SideNavigationLayoutNavigationSideToggle(
     const { themeClassName } = useTheme();
 
     // Shared State
-    const sideNavigationLayoutNavigationOpen = useAtomValue(sideNavigationLayoutNavigationOpenAtom);
-    const setSideNavigationLayoutNavigationOpen = useSetAtom(setSideNavigationLayoutNavigationOpenAtom);
+    const [sideNavigationLayoutNavigationOpen, setSideNavigationLayoutNavigationOpen] = useAtom(
+        getAtomForNavigationOpen(properties.layoutIdentifier),
+    );
 
     // Render the component
     return (

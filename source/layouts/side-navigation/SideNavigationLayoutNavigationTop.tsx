@@ -4,8 +4,8 @@ import AccountMenuButton from '@structure/source/modules/account/AccountMenuButt
 
 // Component - SideNavigationLayoutNavigationTop
 export interface SideNavigationLayoutNavigationTopInterface {
+    layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     className?: string;
-
     topBar?: boolean;
 }
 export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayoutNavigationTopInterface) {
@@ -22,7 +22,7 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
 
             {/* Top Left */}
             <div className="fixed left-4 z-30 flex h-[63px] items-center">
-                <SideNavigationLayoutNavigationSideToggle />
+                <SideNavigationLayoutNavigationSideToggle layoutIdentifier={properties.layoutIdentifier} />
             </div>
 
             {/* Top Right */}

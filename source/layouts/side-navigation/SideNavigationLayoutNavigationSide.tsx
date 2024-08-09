@@ -15,13 +15,12 @@ import {
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Shared State
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
-    sideNavigationLayoutNavigationOpenPreferenceAtom,
-    sideNavigationLayoutNavigationOpenAtom,
-    sideNavigationLayoutNavigationWidthPreferenceAtom,
-    setSideNavigationLayoutNavigationOpenAtom,
-    sideNavigationLayoutNavigationIsResizingAtom,
+    getSideNavigationLayoutLocalStorageKey,
+    getAtomForNavigationOpen,
+    getAtomForNavigationWidth,
+    getAtomForNavigationIsResizing,
     sideNavigationLayoutNavigationSpringConfiguration,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
@@ -33,9 +32,9 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutNavigationSide
 export interface SideNavigationLayoutNavigationSideInterface {
+    layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     children: React.ReactNode;
     className?: string;
-
     topBar?: boolean;
 }
 export function SideNavigationLayoutNavigationSide(properties: SideNavigationLayoutNavigationSideInterface) {
@@ -47,32 +46,32 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     const urlParameters = useUrlParameters();
 
     // Shared State
-    const sideNavigationLayoutNavigationOpen = useAtomValue(sideNavigationLayoutNavigationOpenAtom);
-    const setSideNavigationLayoutNavigationOpen = useSetAtom(setSideNavigationLayoutNavigationOpenAtom);
-    const sideNavigationLayoutNavigationOpenWithStorage = useAtomValue(
-        sideNavigationLayoutNavigationOpenPreferenceAtom,
+    const [sideNavigationLayoutNavigationOpen, setSideNavigationLayoutNavigationOpen] = useAtom(
+        getAtomForNavigationOpen(properties.layoutIdentifier),
     );
-    const [sideNavigationLayoutNavigationWidthPreference, setSideNavigationLayoutNavigationWidthPreference] = useAtom(
-        sideNavigationLayoutNavigationWidthPreferenceAtom,
+    const [sideNavigationLayoutNavigationWidth, setSideNavigationLayoutNavigationWidth] = useAtom(
+        getAtomForNavigationWidth(properties.layoutIdentifier),
     );
-    const setSideNavigationLayoutNavigationIsResizing = useSetAtom(sideNavigationLayoutNavigationIsResizingAtom);
+    const setSideNavigationLayoutNavigationIsResizing = useSetAtom(
+        getAtomForNavigationIsResizing(properties.layoutIdentifier),
+    );
 
     // References
     const containerDivReference = React.useRef<HTMLDivElement>(null);
-    const containerDivWidthReference = React.useRef<number>(sideNavigationLayoutNavigationWidthPreference);
+    const containerDivWidthReference = React.useRef<number>(sideNavigationLayoutNavigationWidth);
     const containerResizeHandleDivReference = React.useRef<HTMLDivElement>(null);
 
     // Spring to animate the container
     const [containerSpring, containerSpringControl] = useSpring(function () {
         return {
             x:
-                sideNavigationLayoutNavigationOpenWithStorage === true
+                sideNavigationLayoutNavigationOpen === true
                     ? // If the navigation is open, animate the container to be at the left edge
                       0
                     : // Otherwise, animate the container to be at negative width to hide it
                       -containerDivWidthReference.current,
             // If the navigation is open, animate the overlay to be at 1 opacity
-            overlayOpacity: sideNavigationLayoutNavigationOpenWithStorage === true ? 1 : 0,
+            overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
             // Use the imported spring configuration for consistent animation
             config: sideNavigationLayoutNavigationSpringConfiguration,
         };
@@ -114,7 +113,20 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
 
                 // Update the shared state
                 // console.log('Updating shared state:', containerDivWidthReference.current);
-                setSideNavigationLayoutNavigationWidthPreference(Math.round(containerDivWidthReference.current));
+                const roundedWidth = Math.round(containerDivWidthReference.current);
+                setSideNavigationLayoutNavigationWidth(roundedWidth);
+
+                // Set the width in local storage
+                // This is used as the default initial width when a new tab is opened
+                // console.log(
+                //     'Setting width in local storage:',
+                //     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
+                //     roundedWidth,
+                // );
+                localStorage.setItem(
+                    getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
+                    roundedWidth.toString(),
+                );
             }
         },
         {
@@ -124,7 +136,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 left: minimumNavigationWidth - defaultNavigationWidth,
                 right: maximumNavigationWidth - defaultNavigationWidth,
             },
-            from: [sideNavigationLayoutNavigationWidthPreference - defaultNavigationWidth, 0],
+            from: [sideNavigationLayoutNavigationWidth - defaultNavigationWidth, 0],
             filterTaps: true, // Prevent taps from triggering the drag
         },
     );
@@ -144,12 +156,12 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         [sideNavigationLayoutNavigationOpen, containerSpringControl],
     );
 
-    // Effect to animate the navigation on window resize
+    // Effect to handle window resizes
     React.useEffect(
         function () {
             // Function to handle the window resize
             function handleWindowResize() {
-                // If on mobile
+                // If the window resizes to a smaller width
                 if(window.innerWidth < desktopMinimumWidth) {
                     // Close the navigation
                     setSideNavigationLayoutNavigationOpen(false);
@@ -157,28 +169,9 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     // Animate the navigation to be offscreen
                     containerSpringControl.start({
                         // Animate the container to be offscreen
-                        x: -containerDivWidthReference.current,
+                        x: -sideNavigationLayoutNavigationWidth,
                         // Animate the overlay to be at 0 opacity
                         overlayOpacity: 0,
-                        // Use the imported spring configuration for consistent animation
-                        config: sideNavigationLayoutNavigationSpringConfiguration,
-                        // immediate: true,
-                    });
-                }
-                // If on desktop
-                else {
-                    // Set the navigation to the preferred state
-                    setSideNavigationLayoutNavigationOpen(sideNavigationLayoutNavigationOpenWithStorage);
-
-                    // Animate the navigation to be the preferred state
-                    containerSpringControl.start({
-                        // Animate the container to be at the left edge if the navigation is open
-                        x:
-                            sideNavigationLayoutNavigationOpenWithStorage === true
-                                ? 0
-                                : -containerDivWidthReference.current,
-                        // Animate the overlay to be at 1 opacity if the navigation is open
-                        overlayOpacity: sideNavigationLayoutNavigationOpenWithStorage === true ? 1 : 0,
                         // Use the imported spring configuration for consistent animation
                         config: sideNavigationLayoutNavigationSpringConfiguration,
                         // immediate: true,
@@ -194,12 +187,33 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 window.removeEventListener('resize', handleWindowResize);
             };
         },
-        [sideNavigationLayoutNavigationOpenWithStorage, containerSpringControl, setSideNavigationLayoutNavigationOpen],
+        [sideNavigationLayoutNavigationOpen, containerSpringControl, setSideNavigationLayoutNavigationOpen],
     );
 
     // Effect to handle the initial size on mount
     React.useEffect(
         function () {
+            // Read the width from session storage
+            const sessionStorageWidth = sessionStorage.getItem(
+                getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
+            );
+            // console.log('Initial width from session storage:', sessionStorageWidth);
+
+            // Read the width from local storage
+            const localStorageWidth = localStorage.getItem(
+                getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
+            );
+            // console.log('Initial width from local storage:', localStorageWidth);
+
+            // If there is no width in session storage but there is in local storage
+            if(!sessionStorageWidth && localStorageWidth) {
+                // Set the width from local storage
+                // This behavior means that users can adjust the width on one tab and it will not affect other active tabs
+                // However, if the user closes the tab and opens a new one, the width will be the same as the last
+                // manually adjusted width
+                setSideNavigationLayoutNavigationWidth(parseInt(localStorageWidth));
+            }
+
             // If on mobile
             if(window.innerWidth < desktopMinimumWidth) {
                 // Close the navigation
@@ -208,7 +222,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 // Animate the navigation to be offscreen
                 containerSpringControl.start({
                     // Animate the container to be offscreen
-                    x: -containerDivWidthReference.current,
+                    x: -sideNavigationLayoutNavigationWidth,
                     // Animate the overlay to be at 0 opacity
                     overlayOpacity: 0,
                     // Use the imported spring configuration for consistent animation
@@ -220,14 +234,14 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             // If on desktop
             else {
                 // Set the navigation to the preferred state
-                setSideNavigationLayoutNavigationOpen(sideNavigationLayoutNavigationOpenWithStorage);
+                setSideNavigationLayoutNavigationOpen(sideNavigationLayoutNavigationOpen);
 
                 // Animate the navigation to be the preferred state
                 containerSpringControl.start({
                     // Animate the container to be at the left edge if the navigation is open
-                    x: sideNavigationLayoutNavigationOpenWithStorage === true ? 0 : -containerDivWidthReference.current,
+                    x: sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth,
                     // Animate the overlay to be at 1 opacity if the navigation is open
-                    overlayOpacity: sideNavigationLayoutNavigationOpenWithStorage === true ? 1 : 0,
+                    overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
                     // Use the imported spring configuration for consistent animation
                     config: sideNavigationLayoutNavigationSpringConfiguration,
                     // Apply the animation immediately
@@ -288,7 +302,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     topBar ? '' : 'border-r border-r-light-4 dark:border-r-dark-4',
                     properties.className,
                 )}
-                style={{ width: sideNavigationLayoutNavigationWidthPreference + 'px', ...containerSpring }}
+                style={{ width: sideNavigationLayoutNavigationWidth + 'px', ...containerSpring }}
             >
                 <ScrollArea
                     containerClassName={mergeClassNames(
