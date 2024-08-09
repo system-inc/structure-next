@@ -7,7 +7,7 @@ import React from 'react';
 import { desktopMinimumWidth } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Shared State
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import {
     getAtomForNavigationOpen,
     getAtomForNavigationWidth,
@@ -29,6 +29,9 @@ export interface SideNavigationLayoutContentInterface {
     className?: string;
 }
 export function SideNavigationLayoutContent(properties: SideNavigationLayoutContentInterface) {
+    // References
+    const firstMount = React.useRef(true);
+
     // Shared State
     const sideNavigationLayoutNavigationOpen = useAtomValue(getAtomForNavigationOpen(properties.layoutIdentifier));
     const sideNavigationLayoutNavigationWidth = useAtomValue(getAtomForNavigationWidth(properties.layoutIdentifier));
@@ -54,8 +57,14 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
                     paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
                     // Use the imported spring configuration for consistent animation
                     config: sideNavigationLayoutNavigationSpringConfiguration,
-                    // Apply the animation immediately
-                    immediate: sideNavigationLayoutNavigationIsResizing,
+                    // Apply the animation immediately if it is the first mount or the navigation is resizing
+                    // Using first mount prevents the animation from running on the first render, which would animate
+                    // content on the screen on the first load
+                    immediate: firstMount.current || sideNavigationLayoutNavigationIsResizing,
+                    onRest: function () {
+                        // Set the first mount to false
+                        firstMount.current = false;
+                    },
                 });
             }
         },

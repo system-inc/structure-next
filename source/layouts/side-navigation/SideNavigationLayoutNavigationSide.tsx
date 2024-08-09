@@ -69,7 +69,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     ? // If the navigation is open, animate the container to be at the left edge
                       0
                     : // Otherwise, animate the container to be at negative width to hide it
-                      -containerDivWidthReference.current,
+                      -sideNavigationLayoutNavigationWidth,
             // If the navigation is open, animate the overlay to be at 1 opacity
             overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
             // Use the imported spring configuration for consistent animation
@@ -146,7 +146,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         function () {
             containerSpringControl.start({
                 // If the navigation is open, animate the container to be at the left edge
-                x: sideNavigationLayoutNavigationOpen === true ? 0 : -containerDivWidthReference.current,
+                x: sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth,
                 // If the navigation is open, animate the overlay to be at 1 opacity
                 overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
                 // Use the imported spring configuration for consistent animation
@@ -299,7 +299,10 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 ref={containerDivReference}
                 className={mergeClassNames(
                     'fixed top-0 z-20 flex h-full flex-col bg-light-1 dark:bg-dark',
-                    topBar ? '' : 'border-r border-r-light-4 dark:border-r-dark-4',
+                    // If there is no top bar or the window is less than the desktop minimum width, add a border to the right
+                    !topBar || window.innerWidth < desktopMinimumWidth
+                        ? 'border-r border-r-light-4 dark:border-r-dark-4'
+                        : '',
                     properties.className,
                 )}
                 style={{ width: sideNavigationLayoutNavigationWidth + 'px', ...containerSpring }}
@@ -307,7 +310,10 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 <ScrollArea
                     containerClassName={mergeClassNames(
                         'mt-16 h-full',
-                        topBar ? 'border-r border-r-light-4 dark:border-r-dark-4' : '',
+                        // If there is a top bar and the window is at least the desktop minimum width, add a border to the right
+                        topBar && window.innerWidth >= desktopMinimumWidth
+                            ? 'border-r border-r-light-4 dark:border-r-dark-4'
+                            : '',
                     )}
                 >
                     {properties.children}
@@ -319,7 +325,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     className={mergeClassNames(
                         'absolute -right-1 h-full w-1 cursor-ew-resize touch-none select-none bg-transparent transition-colors hover:bg-blue active:bg-purple-500',
                         // If the top bar is enabled, offset the handle by the height of the top bar
-                        topBar ? 'top-16' : '',
+                        topBar && window.innerWidth >= desktopMinimumWidth ? 'top-16' : '',
                         // If the navigation is open, show the handle, otherwise disable interacting with it
                         sideNavigationLayoutNavigationOpen ? 'pointer-events-auto' : 'pointer-events-none',
                     )}
