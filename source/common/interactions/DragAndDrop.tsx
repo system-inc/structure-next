@@ -321,13 +321,11 @@ const DropArea = ({ asChild, children, onItemIsHovering, ...props }: DropAreaPro
 
     React.useEffect(() => {
         if(currentlyHoveredDropArea === dropContainerRef) {
-            console.log('onItemIsHovering');
             onItemIsHovering?.();
 
             if(dropContainerRef.current) setIsHovering(true);
         }
         else {
-            console.log('onItemIsHovering');
             if(dropContainerRef.current) setIsHovering(false);
         }
     }, [currentlyHoveredDropArea, onItemIsHovering]);
