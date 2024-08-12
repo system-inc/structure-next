@@ -16,6 +16,7 @@ interface DragAndDropContextInterface {
     dropBounds: { container: DropContainer; bounds: DropBounds }[];
     dropContainers: DropContainer[];
     setDropContainers: React.Dispatch<React.SetStateAction<DropContainer[]>>;
+    currentlyHoveredDropArea: DropContainer | null;
     onEnterDropArea?: (container: DropContainer) => void;
     onLeaveDropArea?: () => void;
     onDrop?: () => void;
@@ -122,6 +123,7 @@ const DragAndDropRoot = ({
     const [dropBounds, setDropBounds] = React.useState<DragAndDropContextInterface['dropBounds']>(() =>
         calculateBoundsFromDropContainers(dropContainers),
     );
+    const [currentlyHoveredDropArea, setCurrentlyHoveredDropArea] = React.useState<DropContainer | null>(null);
 
     React.useEffect(() => {
         // Update drop bounds when drop containers change
@@ -139,14 +141,27 @@ const DragAndDropRoot = ({
         };
     }, [dropContainers]);
 
+    function onEnterDropAreaCallback(container: DropContainer) {
+        onEnterDropArea?.(container);
+
+        setCurrentlyHoveredDropArea(container);
+    }
+
+    function onLeaveDropAreaCallback() {
+        onLeaveDropArea?.();
+
+        setCurrentlyHoveredDropArea(null);
+    }
+
     return (
         <DragAndDropContext.Provider
             value={{
                 dropBounds,
                 dropContainers,
                 setDropContainers,
-                onEnterDropArea,
-                onLeaveDropArea,
+                onEnterDropArea: onEnterDropAreaCallback,
+                onLeaveDropArea: onLeaveDropAreaCallback,
+                currentlyHoveredDropArea,
                 onDrop,
                 onDragItemStart,
                 onDragItemEnd,
@@ -279,6 +294,7 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
 
 interface DropAreaProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
+    onItemIsHovering?: () => void;
     asChild?: boolean;
 }
 
@@ -288,11 +304,12 @@ interface DropAreaProps extends React.HTMLAttributes<HTMLDivElement> {
  * @param {DropAreaProps} props - The props for the component.
  * @returns {JSX.Element} The JSX element for the component.
  */
-const DropArea = ({ asChild, children, ...props }: DropAreaProps) => {
+const DropArea = ({ asChild, children, onItemIsHovering, ...props }: DropAreaProps) => {
     const Component = asChild ? Slot : 'div';
 
     const dropContainerRef = React.useRef<HTMLDivElement>(null);
-    const { setDropContainers } = useDragAndDrop();
+    const { setDropContainers, currentlyHoveredDropArea } = useDragAndDrop();
+    const [isHovering, setIsHovering] = React.useState(false);
 
     React.useEffect(() => {
         setDropContainers((prev) => [...prev, dropContainerRef]);
@@ -302,8 +319,26 @@ const DropArea = ({ asChild, children, ...props }: DropAreaProps) => {
         };
     }, [setDropContainers]);
 
+    React.useEffect(() => {
+        if(currentlyHoveredDropArea === dropContainerRef) {
+            console.log('onItemIsHovering');
+            onItemIsHovering?.();
+
+            if(dropContainerRef.current) setIsHovering(true);
+        }
+        else {
+            console.log('onItemIsHovering');
+            if(dropContainerRef.current) setIsHovering(false);
+        }
+    }, [currentlyHoveredDropArea, onItemIsHovering]);
+
     return (
-        <Component ref={dropContainerRef} className={asChild ? '' : 'h-auto w-auto'} {...props}>
+        <Component
+            ref={dropContainerRef}
+            className={asChild ? '' : 'h-auto w-auto'}
+            {...props}
+            data-item-hovering={isHovering}
+        >
             <Slottable>{children}</Slottable>
         </Component>
     );
