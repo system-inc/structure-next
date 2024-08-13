@@ -41,7 +41,7 @@ export interface PostControlsInterface {
     onReactionCreate: (content: string) => void;
 }
 export function PostControls(properties: PostControlsInterface) {
-    console.log('properties.createdByProfile', properties.createdByProfile);
+    // console.log('properties.createdByProfile', properties.createdByProfile);
 
     // Defaults
     const voteControl = properties.voteControl ?? true;

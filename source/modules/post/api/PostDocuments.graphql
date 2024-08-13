@@ -1,6 +1,6 @@
 # Posts Query
-query Posts($pagination: PaginationInputWithFilters) {
-    posts(input: $pagination) {
+query Posts($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
+    posts(input: $pagination, orderBy: $orderBy) {
         items {
             id
             identifier

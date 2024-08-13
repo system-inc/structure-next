@@ -24,29 +24,29 @@ export function getSideNavigationLayoutLocalStorageKey(identifier: string) {
 }
 
 // Shared State - Atoms
-const atomsForNavigationOpen = new Map<string, ReturnType<typeof atomWithStorage<boolean>>>();
+const atomsForNavigationOpen = new Map<string, ReturnType<typeof atom<boolean>>>();
 const atomsForNavigationWidth = new Map<string, ReturnType<typeof atomWithStorage<number>>>();
+const atomsForNavigationManuallyClosed = new Map<string, ReturnType<typeof atomWithStorage<boolean>>>();
 const atomsForNavigationIsResizing = new Map<string, ReturnType<typeof atom<boolean>>>();
 
 // Function to get an atom for navigation open
 export function getAtomForNavigationOpen(identifier: string) {
     // If the atom does not exist
     if(!atomsForNavigationOpen.has(identifier)) {
+        // Check session storage to see if the navigation was manually closed
+        const manuallyClosed =
+            sessionStorage.getItem(getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed') === 'true';
+
+        // Determine the default open state
+        let openInitialState = !manuallyClosed;
+
+        // If on mobile always start closed
+        if(window.innerWidth < desktopMinimumWidth) {
+            openInitialState = false;
+        }
+
         // Create the atom
-        atomsForNavigationOpen.set(
-            identifier,
-            atomWithStorage<boolean>(
-                getSideNavigationLayoutLocalStorageKey(identifier) + 'Open', // Key
-                true, // Default value
-                // Use session storage to isolate the state to the current tab
-                createJSONStorage(function () {
-                    return sessionStorage;
-                }),
-                {
-                    getOnInit: true, // Get the value on initialization (this is important for SSR)
-                },
-            ),
-        );
+        atomsForNavigationOpen.set(identifier, atom<boolean>(openInitialState));
     }
 
     return atomsForNavigationOpen.get(identifier)!;
@@ -74,6 +74,30 @@ export function getAtomForNavigationWidth(identifier: string) {
     }
 
     return atomsForNavigationWidth.get(identifier)!;
+}
+
+// Function to get an atom for navigation manually closed
+export function getAtomForNavigationManuallyClosed(identifier: string) {
+    // If the atom does not exist
+    if(!atomsForNavigationManuallyClosed.has(identifier)) {
+        // Create the atom
+        atomsForNavigationManuallyClosed.set(
+            identifier,
+            atomWithStorage<boolean>(
+                getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed', // Key
+                false, // Default value
+                // Use session storage to isolate the state to the current tab
+                createJSONStorage(function () {
+                    return sessionStorage;
+                }),
+                {
+                    getOnInit: true, // Get the value on initialization (this is important for SSR)
+                },
+            ),
+        );
+    }
+
+    return atomsForNavigationManuallyClosed.get(identifier)!;
 }
 
 // Function to get an atom for navigation is resizing

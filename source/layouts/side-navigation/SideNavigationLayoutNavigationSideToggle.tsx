@@ -12,8 +12,12 @@ import Image from 'next/image';
 import Button from '@structure/source/common/buttons/Button';
 
 // Dependencies - Shared State
-import { useAtom } from 'jotai';
-import { getAtomForNavigationOpen } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
+import { useAtom, useSetAtom } from 'jotai';
+import {
+    desktopMinimumWidth,
+    getAtomForNavigationOpen,
+    getAtomForNavigationManuallyClosed,
+} from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Assets
 import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';
@@ -40,6 +44,9 @@ export function SideNavigationLayoutNavigationSideToggle(
     const [sideNavigationLayoutNavigationOpen, setSideNavigationLayoutNavigationOpen] = useAtom(
         getAtomForNavigationOpen(properties.layoutIdentifier),
     );
+    const setSideNavigationLayoutNavigationManuallyClosed = useSetAtom(
+        getAtomForNavigationManuallyClosed(properties.layoutIdentifier),
+    );
 
     // Render the component
     return (
@@ -51,7 +58,14 @@ export function SideNavigationLayoutNavigationSideToggle(
                 className="focus:border-0"
                 icon={MenuIcon}
                 onClick={async function () {
+                    // Toggle the navigation open state
                     setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationOpen);
+
+                    // If on desktop
+                    if(window.innerWidth >= desktopMinimumWidth) {
+                        // Set the navigation manually closed state
+                        setSideNavigationLayoutNavigationManuallyClosed(sideNavigationLayoutNavigationOpen);
+                    }
                 }}
             />
 

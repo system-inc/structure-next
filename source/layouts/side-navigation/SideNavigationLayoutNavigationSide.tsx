@@ -15,11 +15,12 @@ import {
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Shared State
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom, useAtomValue } from 'jotai';
 import {
     getSideNavigationLayoutLocalStorageKey,
     getAtomForNavigationOpen,
     getAtomForNavigationWidth,
+    getAtomForNavigationManuallyClosed,
     getAtomForNavigationIsResizing,
     sideNavigationLayoutNavigationSpringConfiguration,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
@@ -51,6 +52,9 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     );
     const [sideNavigationLayoutNavigationWidth, setSideNavigationLayoutNavigationWidth] = useAtom(
         getAtomForNavigationWidth(properties.layoutIdentifier),
+    );
+    const sideNavigationLayoutNavigationManuallyClosed = useAtomValue(
+        getAtomForNavigationManuallyClosed(properties.layoutIdentifier),
     );
     const setSideNavigationLayoutNavigationIsResizing = useSetAtom(
         getAtomForNavigationIsResizing(properties.layoutIdentifier),
@@ -161,21 +165,15 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         function () {
             // Function to handle the window resize
             function handleWindowResize() {
-                // If the window resizes to a smaller width
+                // If the window resizes to mobile
                 if(window.innerWidth < desktopMinimumWidth) {
                     // Close the navigation
                     setSideNavigationLayoutNavigationOpen(false);
-
-                    // Animate the navigation to be offscreen
-                    containerSpringControl.start({
-                        // Animate the container to be offscreen
-                        x: -sideNavigationLayoutNavigationWidth,
-                        // Animate the overlay to be at 0 opacity
-                        overlayOpacity: 0,
-                        // Use the imported spring configuration for consistent animation
-                        config: sideNavigationLayoutNavigationSpringConfiguration,
-                        // immediate: true,
-                    });
+                }
+                // If the window resizes to desktop
+                else {
+                    // Set the navigation to the preferred state
+                    setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationManuallyClosed);
                 }
             }
 
@@ -187,12 +185,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 window.removeEventListener('resize', handleWindowResize);
             };
         },
-        [
-            sideNavigationLayoutNavigationOpen,
-            containerSpringControl,
-            setSideNavigationLayoutNavigationOpen,
-            sideNavigationLayoutNavigationWidth,
-        ],
+        [setSideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationManuallyClosed],
     );
 
     // Effect to handle the initial size on mount

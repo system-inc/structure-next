@@ -77,7 +77,13 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
                 });
             }
         },
-        [topBar, sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
+        [
+            topBar,
+            sideNavigationLayoutNavigationOpen,
+            sideNavigationLayoutNavigationWidth,
+            sideNavigationLayoutNavigationIsResizing,
+            topBarBottomBorderDivSpringControl,
+        ],
     );
 
     // Render the component
