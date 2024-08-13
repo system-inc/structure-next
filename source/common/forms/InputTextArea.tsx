@@ -82,6 +82,7 @@ export interface InputTextAreaInterface extends Omit<InputInterface, 'onChange' 
     containerClassName?: string;
 
     // <textarea /> tag properties
+    id: string;
     placeholder?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['placeholder'];
     autoComplete?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['autoComplete'];
     selectOnFocus?: boolean;

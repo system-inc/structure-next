@@ -153,7 +153,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 config: sideNavigationLayoutNavigationSpringConfiguration,
             });
         },
-        [sideNavigationLayoutNavigationOpen, containerSpringControl],
+        [sideNavigationLayoutNavigationOpen, containerSpringControl, sideNavigationLayoutNavigationWidth],
     );
 
     // Effect to handle window resizes
@@ -187,7 +187,12 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 window.removeEventListener('resize', handleWindowResize);
             };
         },
-        [sideNavigationLayoutNavigationOpen, containerSpringControl, setSideNavigationLayoutNavigationOpen],
+        [
+            sideNavigationLayoutNavigationOpen,
+            containerSpringControl,
+            setSideNavigationLayoutNavigationOpen,
+            sideNavigationLayoutNavigationWidth,
+        ],
     );
 
     // Effect to handle the initial size on mount
