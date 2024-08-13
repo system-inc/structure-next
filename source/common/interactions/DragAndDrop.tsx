@@ -23,6 +23,7 @@ interface DragAndDropContextInterface {
     onDragItemStart?: () => void;
     onDragItemEnd?: () => void;
     resetPositionOnDrop?: boolean;
+    recalcDropBounds: () => void;
 }
 
 /**
@@ -153,10 +154,15 @@ const DragAndDropRoot = ({
         setCurrentlyHoveredDropArea(null);
     }
 
+    function recalcDropBounds() {
+        setDropBounds(calculateBoundsFromDropContainers(dropContainers));
+    }
+
     return (
         <DragAndDropContext.Provider
             value={{
                 dropBounds,
+                recalcDropBounds,
                 dropContainers,
                 setDropContainers,
                 onEnterDropArea: onEnterDropAreaCallback,
@@ -201,6 +207,7 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
         onLeaveDropArea,
         onDrop,
         resetPositionOnDrop,
+        recalcDropBounds,
     } = useDragAndDrop();
     const [spring, api] = useSpring(() => ({
         x: 0,
@@ -210,6 +217,8 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
     useDrag(
         (state) => {
             if(state.first) {
+                recalcDropBounds();
+
                 if(dropBounds.length === 0) {
                     console.warn(
                         'The drop area bounds are not set. Please make sure to provide a list of dropContainers to the <DragAndDrop.Root> component or add some <DragAndDrop.Area>s as descendants of the <DragAndDrop.Root> component.',
