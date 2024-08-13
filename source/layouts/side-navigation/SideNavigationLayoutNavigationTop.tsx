@@ -48,11 +48,10 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
             marginLeft:
                 // If the side navigation is closed set the left margin to 0, otherwise set it to the navigation width
                 sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
-            config: sideNavigationLayoutNavigationSpringConfiguration,
         };
     });
 
-    // Effect to set the top bar bottom border left margin to the navigation width
+    // Effect to animate the top bar bottom border left margin when the navigation is opened, closed, or resized
     React.useEffect(
         function () {
             // Only if the top bar is enabled and the top bar bottom border div reference exists
@@ -60,7 +59,8 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
                 // Animate the left margin
                 topBarBottomBorderDivSpringControl.start({
                     marginLeft:
-                        // If on desktop and the navigation is closed set the left margin to 0, otherwise set it to the navigation width
+                        // Do not apply margin
+                        // If on desktop or the navigation is closed
                         window.innerWidth >= desktopMinimumWidth || sideNavigationLayoutNavigationOpen === false
                             ? 0
                             : sideNavigationLayoutNavigationWidth,
@@ -69,7 +69,14 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
                     // Apply the animation immediately if it is the first mount or the navigation is resizing
                     // Using first mount prevents the animation from running on the first render, which would animate
                     // content on the screen on the first load
-                    immediate: firstMount.current || sideNavigationLayoutNavigationIsResizing,
+                    immediate:
+                        // Conditionally apply the animation immediately
+                        // If on first mount
+                        // Using first mount prevents the animation from running on the first render, which would animate
+                        // content on the screen on the first load
+                        firstMount.current ||
+                        // Or if the navigation is open and is resizing
+                        (sideNavigationLayoutNavigationOpen && sideNavigationLayoutNavigationIsResizing),
                     onRest: function () {
                         // Set the first mount to false
                         firstMount.current = false;
@@ -77,13 +84,9 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
                 });
             }
         },
-        [
-            topBar,
-            sideNavigationLayoutNavigationOpen,
-            sideNavigationLayoutNavigationWidth,
-            sideNavigationLayoutNavigationIsResizing,
-            topBarBottomBorderDivSpringControl,
-        ],
+        // Just when the navigation open state or width changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 
     // Render the component

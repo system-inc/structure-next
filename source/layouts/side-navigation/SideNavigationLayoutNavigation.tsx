@@ -28,6 +28,8 @@ const atomsForNavigationOpen = new Map<string, ReturnType<typeof atom<boolean>>>
 const atomsForNavigationWidth = new Map<string, ReturnType<typeof atomWithStorage<number>>>();
 const atomsForNavigationManuallyClosed = new Map<string, ReturnType<typeof atomWithStorage<boolean>>>();
 const atomsForNavigationIsResizing = new Map<string, ReturnType<typeof atom<boolean>>>();
+const atomsForNavigationIsOpeningByDrag = new Map<string, ReturnType<typeof atom<boolean>>>();
+const atomsForNavigationIsClosingByWindowResize = new Map<string, ReturnType<typeof atom<boolean>>>();
 
 // Function to get an atom for navigation open
 export function getAtomForNavigationOpen(identifier: string) {
@@ -109,6 +111,28 @@ export function getAtomForNavigationIsResizing(identifier: string) {
     }
 
     return atomsForNavigationIsResizing.get(identifier)!;
+}
+
+// Function to get an atom for navigation is opening by drag
+export function getAtomForNavigationIsOpeningByDrag(identifier: string) {
+    // If the atom does not exist
+    if(!atomsForNavigationIsOpeningByDrag.has(identifier)) {
+        // Create the atom
+        atomsForNavigationIsOpeningByDrag.set(identifier, atom<boolean>(false));
+    }
+
+    return atomsForNavigationIsOpeningByDrag.get(identifier)!;
+}
+
+// Function to get an atom for navigation is closing by window resize
+export function getAtomForNavigationIsClosingByWindowResize(identifier: string) {
+    // If the atom does not exist
+    if(!atomsForNavigationIsClosingByWindowResize.has(identifier)) {
+        // Create the atom
+        atomsForNavigationIsClosingByWindowResize.set(identifier, atom<boolean>(false));
+    }
+
+    return atomsForNavigationIsClosingByWindowResize.get(identifier)!;
 }
 
 // Spring to animate the navigation

@@ -15,13 +15,15 @@ import {
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Shared State
-import { useAtom, useSetAtom, useAtomValue } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
     getSideNavigationLayoutLocalStorageKey,
     getAtomForNavigationOpen,
     getAtomForNavigationWidth,
     getAtomForNavigationManuallyClosed,
     getAtomForNavigationIsResizing,
+    getAtomForNavigationIsOpeningByDrag,
+    getAtomForNavigationIsClosingByWindowResize,
     sideNavigationLayoutNavigationSpringConfiguration,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
@@ -53,12 +55,19 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     const [sideNavigationLayoutNavigationWidth, setSideNavigationLayoutNavigationWidth] = useAtom(
         getAtomForNavigationWidth(properties.layoutIdentifier),
     );
-    const sideNavigationLayoutNavigationManuallyClosed = useAtomValue(
+    const [sideNavigationLayoutNavigationManuallyClosed, setSideNavigationLayoutNavigationManuallyClosed] = useAtom(
         getAtomForNavigationManuallyClosed(properties.layoutIdentifier),
     );
     const setSideNavigationLayoutNavigationIsResizing = useSetAtom(
         getAtomForNavigationIsResizing(properties.layoutIdentifier),
     );
+    const setSideNavigationLayoutNavigationIsOpeningByDrag = useSetAtom(
+        getAtomForNavigationIsOpeningByDrag(properties.layoutIdentifier),
+    );
+    const [
+        sideNavigationLayoutNavigationIsClosingByWindowResize,
+        setSideNavigationLayoutNavigationIsClosingByWindowResize,
+    ] = useAtom(getAtomForNavigationIsClosingByWindowResize(properties.layoutIdentifier));
 
     // References
     const containerDivReference = React.useRef<HTMLDivElement>(null);
@@ -76,8 +85,6 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                       -sideNavigationLayoutNavigationWidth,
             // If the navigation is open, animate the overlay to be at 1 opacity
             overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
-            // Use the imported spring configuration for consistent animation
-            config: sideNavigationLayoutNavigationSpringConfiguration,
         };
     });
 
@@ -111,33 +118,65 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 containerDivWidthReference.current = defaultNavigationWidth;
             }
 
-            // Resize the container div
-            if(containerDivReference.current) {
-                containerDivReference.current.style.width = `${containerDivWidthReference.current}px`;
+            // If dragging far enough to the left, close the navigation
+            if(dragState.offset[0] < -minimumNavigationWidth) {
+                // Close the navigation
+                setSideNavigationLayoutNavigationOpen(false);
 
-                // Update the shared state
-                // console.log('Updating shared state:', containerDivWidthReference.current);
-                const roundedWidth = Math.round(containerDivWidthReference.current);
-                setSideNavigationLayoutNavigationWidth(roundedWidth);
+                // If on desktop
+                if(window.innerWidth >= desktopMinimumWidth) {
+                    // Mark the navigation as manually closed
+                    setSideNavigationLayoutNavigationManuallyClosed(true);
+                }
+            }
+            else {
+                // If the navigation is closed
+                if(sideNavigationLayoutNavigationOpen === false) {
+                    // console.log('Opening navigation by drag');
+                    setSideNavigationLayoutNavigationIsOpeningByDrag(true);
+                }
+                else {
+                    // console.log('Not opening navigation by drag');
+                    setSideNavigationLayoutNavigationIsOpeningByDrag(false);
+                }
 
-                // Set the width in local storage
-                // This is used as the default initial width when a new tab is opened
-                // console.log(
-                //     'Setting width in local storage:',
-                //     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
-                //     roundedWidth,
-                // );
-                localStorage.setItem(
-                    getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
-                    roundedWidth.toString(),
-                );
+                // Open or keep the navigation open
+                setSideNavigationLayoutNavigationOpen(true);
+
+                // If on desktop
+                if(window.innerWidth >= desktopMinimumWidth) {
+                    // Mark the navigation as not manually closed
+                    setSideNavigationLayoutNavigationManuallyClosed(false);
+                }
+
+                // Resize the container div
+                if(containerDivReference.current) {
+                    containerDivReference.current.style.width = `${containerDivWidthReference.current}px`;
+
+                    // Update the shared state
+                    // console.log('Updating shared state:', containerDivWidthReference.current);
+                    const roundedWidth = Math.round(containerDivWidthReference.current);
+                    setSideNavigationLayoutNavigationWidth(roundedWidth);
+
+                    // Set the width in local storage
+                    // This is used as the default initial width when a new tab is opened
+                    // console.log(
+                    //     'Setting width in local storage:',
+                    //     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
+                    //     roundedWidth,
+                    // );
+                    localStorage.setItem(
+                        getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
+                        roundedWidth.toString(),
+                    );
+                }
             }
         },
         {
             target: containerResizeHandleDivReference,
             // Bound the drag
             bounds: {
-                left: minimumNavigationWidth - defaultNavigationWidth,
+                // left: minimumNavigationWidth - defaultNavigationWidth,
                 right: maximumNavigationWidth - defaultNavigationWidth,
             },
             from: [sideNavigationLayoutNavigationWidth - defaultNavigationWidth, 0],
@@ -145,7 +184,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         },
     );
 
-    // Effect to animate the navigation when the state changes
+    // Effect to animate the navigation when opening, closing, or resizing
     React.useEffect(
         function () {
             containerSpringControl.start({
@@ -155,9 +194,18 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
                 // Use the imported spring configuration for consistent animation
                 config: sideNavigationLayoutNavigationSpringConfiguration,
+                // On rest
+                onRest: function () {
+                    // console.log('Navigation animation finished');
+
+                    // Mark the navigation as not closing by window resize
+                    setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
+                },
             });
         },
-        [sideNavigationLayoutNavigationOpen, containerSpringControl, sideNavigationLayoutNavigationWidth],
+        // Just when the navigation open state or width changes
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 
     // Effect to handle window resizes
@@ -167,11 +215,18 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             function handleWindowResize() {
                 // If the window resizes to mobile
                 if(window.innerWidth < desktopMinimumWidth) {
+                    // Mark the navigation as closing by window resize
+                    setSideNavigationLayoutNavigationIsClosingByWindowResize(true);
+                    // console.log('Closing navigation by window resize');
+
                     // Close the navigation
                     setSideNavigationLayoutNavigationOpen(false);
                 }
                 // If the window resizes to desktop
                 else {
+                    // Mark the navigation as not closing by window resize
+                    setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
+
                     // Set the navigation to the preferred state
                     setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationManuallyClosed);
                 }
@@ -185,7 +240,11 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 window.removeEventListener('resize', handleWindowResize);
             };
         },
-        [setSideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationManuallyClosed],
+        [
+            setSideNavigationLayoutNavigationOpen,
+            sideNavigationLayoutNavigationManuallyClosed,
+            setSideNavigationLayoutNavigationIsClosingByWindowResize,
+        ],
     );
 
     // Effect to handle the initial size on mount
@@ -297,8 +356,11 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 ref={containerDivReference}
                 className={mergeClassNames(
                     'fixed top-0 z-20 flex h-full flex-col bg-light-1 dark:bg-dark',
-                    // If there is no top bar or the window is less than the desktop minimum width, add a border to the right
-                    !topBar || window.innerWidth < desktopMinimumWidth
+                    // If there is no top bar or the window is less than the desktop minimum width and the side navigation is not closing by window resize
+                    // add a border to the right
+                    !topBar ||
+                        (window.innerWidth < desktopMinimumWidth &&
+                            !sideNavigationLayoutNavigationIsClosingByWindowResize)
                         ? 'border-r border-r-light-4 dark:border-r-dark-4'
                         : '',
                     properties.className,
@@ -308,7 +370,8 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 <ScrollArea
                     containerClassName={mergeClassNames(
                         'mt-16 h-full',
-                        // If there is a top bar and the window is at least the desktop minimum width, add a border to the right
+                        // If there is a top bar and the window is at least the desktop minimum width
+                        // add a border to the right
                         topBar && window.innerWidth >= desktopMinimumWidth
                             ? 'border-r border-r-light-4 dark:border-r-dark-4'
                             : '',
@@ -321,7 +384,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 <div
                     ref={containerResizeHandleDivReference}
                     className={mergeClassNames(
-                        'absolute -right-1 h-full w-1 cursor-ew-resize touch-none select-none bg-transparent transition-colors hover:bg-blue active:bg-purple-500',
+                        'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none select-none bg-transparent transition-colors duration-500 hover:bg-blue active:bg-purple-500',
                         // If the top bar is enabled, offset the handle by the height of the top bar
                         topBar && window.innerWidth >= desktopMinimumWidth ? 'top-16' : '',
                         // If the navigation is open, show the handle, otherwise disable interacting with it
@@ -335,6 +398,9 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 style={{ opacity: containerSpring.overlayOpacity }}
                 className={mergeClassNames(
                     'fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden',
+                    // If the navigation is closing by window resize, do not show the overlay
+                    sideNavigationLayoutNavigationIsClosingByWindowResize ? 'hidden' : '',
+                    // If the navigation is open, allow pointer events, otherwise disable them
                     sideNavigationLayoutNavigationOpen === true ? 'pointer-events-auto' : 'pointer-events-none',
                 )}
                 onClick={function () {

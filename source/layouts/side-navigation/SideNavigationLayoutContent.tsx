@@ -12,6 +12,8 @@ import {
     getAtomForNavigationOpen,
     getAtomForNavigationWidth,
     getAtomForNavigationIsResizing,
+    getAtomForNavigationIsOpeningByDrag,
+    getAtomForNavigationIsClosingByWindowResize,
     sideNavigationLayoutNavigationSpringConfiguration,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
@@ -38,111 +40,56 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
     const sideNavigationLayoutNavigationIsResizing = useAtomValue(
         getAtomForNavigationIsResizing(properties.layoutIdentifier),
     );
+    const sideNavigationLayoutNavigationIsOpeningByDrag = useAtomValue(
+        getAtomForNavigationIsOpeningByDrag(properties.layoutIdentifier),
+    );
+    const sideNavigationLayoutNavigationIsClosingByWindowResize = useAtomValue(
+        getAtomForNavigationIsClosingByWindowResize(properties.layoutIdentifier),
+    );
 
     // Spring to animate the content div padding when the navigation is opened or closed
     const [contentDivSpring, contentDivSpringControl] = useSpring(function () {
         return {
+            // If the side navigation is closed set the left padding to 0, otherwise set it to the navigation width
             paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
-            config: sideNavigationLayoutNavigationSpringConfiguration,
         };
     });
 
-    // Effect to animate the content div padding when the navigation is opened or closed (desktop only)
+    // Effect to animate the content div padding when the navigation is opened, closed, or resized
     React.useEffect(
         function () {
-            // If on desktop
-            if(window.innerWidth >= desktopMinimumWidth) {
-                // Animate the padding
-                contentDivSpringControl.start({
-                    paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
-                    // Use the imported spring configuration for consistent animation
-                    config: sideNavigationLayoutNavigationSpringConfiguration,
-                    // Apply the animation immediately if it is the first mount or the navigation is resizing
+            // Animate the padding
+            contentDivSpringControl.start({
+                paddingLeft:
+                    // Do not apply the padding
+                    // On mobile
+                    window.innerWidth < desktopMinimumWidth ||
+                    // Or if the navigation is closed
+                    sideNavigationLayoutNavigationOpen === false
+                        ? 0
+                        : sideNavigationLayoutNavigationWidth,
+                // Use the imported spring configuration for consistent animation
+                config: sideNavigationLayoutNavigationSpringConfiguration,
+                immediate:
+                    // Conditionally apply the animation immediately
+                    // If on first mount
                     // Using first mount prevents the animation from running on the first render, which would animate
                     // content on the screen on the first load
-                    immediate: firstMount.current || sideNavigationLayoutNavigationIsResizing,
-                    onRest: function () {
-                        // Set the first mount to false
-                        firstMount.current = false;
-                    },
-                });
-            }
+                    firstMount.current ||
+                    // Or if the navigation is open and is resizing and not opening by drag and not closing by window resize
+                    (sideNavigationLayoutNavigationOpen &&
+                        sideNavigationLayoutNavigationIsResizing &&
+                        !sideNavigationLayoutNavigationIsOpeningByDrag &&
+                        !sideNavigationLayoutNavigationIsClosingByWindowResize),
+                onRest: function () {
+                    // Set the first mount to false
+                    firstMount.current = false;
+                },
+            });
         },
-        [
-            sideNavigationLayoutNavigationOpen,
-            contentDivSpringControl,
-            sideNavigationLayoutNavigationWidth,
-            sideNavigationLayoutNavigationIsResizing,
-        ],
-    );
-
-    // Effect to listen to window resizes
-    React.useEffect(
-        function () {
-            // Handle the resize event
-            function handleWindowResize() {
-                // If on mobile
-                if(window.innerWidth < desktopMinimumWidth) {
-                    // Animate the padding to 0rem
-                    contentDivSpringControl.start({
-                        paddingLeft: 0,
-                        // Use the imported spring configuration for consistent animation
-                        config: sideNavigationLayoutNavigationSpringConfiguration,
-                        // immediate: true,
-                    });
-                }
-                // If the window is resized to desktop sizing, open the navigation
-                else {
-                    // Animate the padding
-                    contentDivSpringControl.start({
-                        paddingLeft:
-                            sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
-                        // Use the imported spring configuration for consistent animation
-                        config: sideNavigationLayoutNavigationSpringConfiguration,
-                        // immediate: true,
-                    });
-                }
-            }
-
-            // Add the event listener
-            window.addEventListener('resize', handleWindowResize);
-
-            // On unmount, remove the event listener
-            return function () {
-                window.removeEventListener('resize', handleWindowResize);
-            };
-        },
-        [contentDivSpringControl, sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
-    );
-
-    // Effect to handle the initial size on mount
-    React.useEffect(
-        function () {
-            // If on mobile
-            if(window.innerWidth < desktopMinimumWidth) {
-                // Animate the padding to 0rem
-                contentDivSpringControl.start({
-                    paddingLeft: 0,
-                    // Use the imported spring configuration for consistent animation
-                    config: sideNavigationLayoutNavigationSpringConfiguration,
-                    // Apply the animation immediately
-                    immediate: true,
-                });
-            }
-            // If on desktop
-            else {
-                // Animate the padding
-                contentDivSpringControl.start({
-                    paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
-                    // Use the imported spring configuration for consistent animation
-                    config: sideNavigationLayoutNavigationSpringConfiguration,
-                    // Apply the animation immediately
-                    immediate: true,
-                });
-            }
-        },
+        // Just when the navigation open state or width changes
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
+        [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 
     // Render the component
