@@ -175,6 +175,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
                 <div className="relative">
                     <InputTextArea
                         ref={inputTextAreaReference}
+                        id={properties.id}
                         variant={properties.variant}
                         size={properties.size}
                         className={mergeClassNames('w-full', properties.componentClassName)}
