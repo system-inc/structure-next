@@ -19,6 +19,14 @@ export interface InternalLayoutInterface {
     children: React.ReactNode;
 }
 export function InternalLayout(properties: InternalLayoutInterface) {
+    // Effect to adjust the background color of the body on mount
+    React.useEffect(function () {
+        // Remove the other dark backgrounds and add the one we want
+        document.body.classList.add('dark:bg-dark');
+        document.body.classList.remove('dark:bg-dark-1');
+        document.body.classList.remove('dark:bg-dark-2');
+    }, []);
+
     // Render the component
     return (
         <AuthorizationLayout>
