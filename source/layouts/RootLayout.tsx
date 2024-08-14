@@ -106,7 +106,7 @@ export function RootLayout(properties: RootLayoutInterface) {
                 />
             </head>
 
-            <body className="isolate h-full min-h-screen bg-light font-sans text-dark transition-colors dark:bg-dark dark:text-white">
+            <body className="isolate h-full min-h-screen bg-light font-sans text-dark transition-colors dark:bg-dark-1 dark:text-white">
                 {/* Providers pass properties down to children */}
                 {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
                 <Providers accountSignedIn={accountSignedIn} themeClassName={themeClassName}>
