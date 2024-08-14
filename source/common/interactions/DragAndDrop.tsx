@@ -1,7 +1,7 @@
 /**
  * Import required libraries.
  */
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import { useDrag } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
 import { Slot, Slottable } from '@radix-ui/react-slot';
@@ -186,8 +186,13 @@ function checkIfXyInDropBounds(xy: [number, number], bounds: DropBounds) {
 interface DraggableItemProps {
     children: React.ReactNode;
     onDrop?: (container: DropContainer) => void;
+    onEnterDropArea?: (container: DropContainer) => void;
+    onLeaveDropArea?: () => void;
     onRemove?: () => void;
+    onDragStart?: () => void;
+    onDragEnd?: () => void;
     grabHandle?: React.ReactNode;
+    // asChild?: boolean;
 }
 /**
  * A component for a draggable item.
@@ -195,16 +200,31 @@ interface DraggableItemProps {
  * @param {DraggableItemProps} props - The props for the component.
  * @returns {JSX.Element} The JSX element for the component.
  */
-const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, grabHandle }: DraggableItemProps) => {
+const DraggableItem = ({
+    children,
+    onDrop: onItemDrop,
+    onRemove: onItemRemove,
+    onDragStart,
+    onDragEnd,
+    onEnterDropArea,
+    onLeaveDropArea,
+    grabHandle,
+    // asChild,
+}: DraggableItemProps) => {
+    // const Component = asChild ? Slot : 'div';
+    // const AnimatedComponent = animated(Component);
+
     const handleRef = React.useRef<HTMLDivElement>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
+
+    const isDragging = React.useRef(false); // Used to prevent children from being clicked when the item is being dragged
 
     const {
         onDragItemStart,
         onDragItemEnd,
         dropBounds,
-        onEnterDropArea,
-        onLeaveDropArea,
+        onEnterDropArea: onItemEnterDropArea,
+        onLeaveDropArea: onItemLeaveDropArea,
         onDrop,
         resetPositionOnDrop,
         recalcDropBounds,
@@ -217,6 +237,9 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
     useDrag(
         (state) => {
             if(state.first) {
+                // Set the dragging flag to true
+                isDragging.current = true;
+
                 recalcDropBounds();
 
                 if(dropBounds.length === 0) {
@@ -226,6 +249,7 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
                 }
 
                 onDragItemStart?.();
+                onDragStart?.();
 
                 // Check if the item is inside a drop area
                 const inDropArea = dropBounds.some(({ bounds }) => checkIfXyInDropBounds(state.xy, bounds));
@@ -248,6 +272,7 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
             });
 
             if(currentDropArea) {
+                onItemEnterDropArea?.(currentDropArea.container);
                 onEnterDropArea?.(currentDropArea.container);
 
                 // If the item is dropped inside the drop area, handle the drop event
@@ -257,11 +282,14 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
                 }
             }
             else {
+                onItemLeaveDropArea?.();
                 onLeaveDropArea?.();
             }
 
             if(state.last) {
                 onDragItemEnd?.();
+                onDragEnd?.();
+                onItemLeaveDropArea?.();
                 onLeaveDropArea?.();
 
                 // If the item was dropped outside the drop area, reset its position
@@ -278,8 +306,22 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
         {
             from: () => [spring.x.get(), spring.y.get()],
             target: grabHandle ? handleRef : containerRef,
+
+            // Prevents clicks from being treated as drags
+            filterTaps: true,
         },
     );
+
+    // Function to prevent children from being clicked when the item is being dragged
+    const handleClickCapture: MouseEventHandler<HTMLDivElement> = (event) => {
+        if(isDragging.current) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Reset the dragging flag
+            isDragging.current = false;
+        }
+    };
 
     return (
         <animated.div
@@ -290,13 +332,17 @@ const DraggableItem = ({ children, onDrop: onItemDrop, onRemove: onItemRemove, g
                     ? 'flex items-center justify-start'
                     : 'touch-none select-none hover:cursor-grab active:cursor-grabbing'
             }
+            // Must be applied to the element directly rather than through `useGesture` or in the `useDrag` hook
+            onClickCapture={handleClickCapture}
         >
             {grabHandle ? (
                 <div ref={handleRef} className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing">
                     {grabHandle}
                 </div>
             ) : null}
+            {/* <Slottable> */}
             {children}
+            {/* </Slottable> */}
         </animated.div>
     );
 };
