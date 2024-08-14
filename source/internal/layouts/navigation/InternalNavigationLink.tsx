@@ -23,12 +23,12 @@ export function InternalNavigationLink(properties: InternalNavigationLinkInterfa
         <Link
             href={properties.href}
             className={mergeClassNames(
-                'group flex items-center gap-x-2 rounded-md p-1.5 text-sm leading-6',
+                'group flex items-center gap-x-2 rounded-md px-1.5 py-1 text-[13px] leading-6 transition-colors dark:active:bg-dark-3',
                 properties.active
                     ? // If the live is active
-                      'bg-light-4 text-dark dark:bg-dark-4 dark:text-light-4'
+                      'bg-light-4 text-dark dark:bg-dark-2 dark:text-light-4'
                     : // If the link is not active
-                      'text-dark hover:bg-light-4 hover:text-dark dark:bg-transparent dark:text-light-4 dark:hover:bg-dark-4',
+                      'text-dark hover:bg-light-4 hover:text-dark dark:bg-transparent dark:text-light-4 dark:hover:bg-dark-1',
             )}
         >
             {Icon && (

@@ -7,15 +7,14 @@ import React from 'react';
 import { InternalNavigationLinkInterface } from './InternalNavigationLink';
 import InternalNavigationLinks from '@structure/source/internal/layouts/navigation/InternalNavigationLinks';
 import { DialogMenuInterface, DialogMenu } from '@structure/source/common/dialogs/DialogMenu';
-import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Assets
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+// import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - InternalCommandDialog
+// Component - InternalDialogMenu
 export interface InternalDialogMenuInterface extends Omit<DialogMenuInterface, 'menuItems'> {}
 export function InternalDialogMenu(properties: InternalDialogMenuInterface) {
     // Function to get the menu items from the internal navigation links
@@ -28,7 +27,7 @@ export function InternalDialogMenu(properties: InternalDialogMenuInterface) {
         let menuItems: MenuItemInterface[] = [];
 
         // Set the prefix string
-        let prefixString = prefix ? prefix : '';
+        const prefixString = prefix ? prefix : '';
 
         // Loop through the internal navigation links
         internalNavigationLink.forEach((link) => {

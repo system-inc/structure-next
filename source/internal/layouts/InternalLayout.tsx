@@ -9,6 +9,7 @@ import { SideNavigationLayoutNavigation } from '@structure/source/layouts/side-n
 import { SideNavigationLayoutContent } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContent';
 import { SideNavigationLayoutContentBody } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody';
 import { InternalNavigation } from '@structure/source/internal/layouts/navigation/InternalNavigation';
+import { InternalDialogMenu } from '@structure/source/internal/layouts/navigation/InternalDialogMenu';
 
 // Settings
 export const internalLayoutIdentifier = 'Internal';
@@ -32,6 +33,9 @@ export function InternalLayout(properties: InternalLayoutInterface) {
                     {properties.children}
                 </SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
+
+            {/* Dialog Menu */}
+            <InternalDialogMenu />
         </AuthorizationLayout>
     );
 }

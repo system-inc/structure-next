@@ -86,7 +86,7 @@ export function InternalNavigation() {
     );
 
     // Render the component
-    return <div className="flex flex-1 flex-col px-6 py-5">{navigationList}</div>;
+    return <div className="flex flex-1 flex-col px-5 py-3">{navigationList}</div>;
 }
 
 // Export - Default
