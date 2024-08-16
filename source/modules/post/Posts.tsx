@@ -55,6 +55,7 @@ export function Posts(properties: PostsInterface) {
         urlPath: string;
         topics: string[];
         content: string;
+        createdByProfileId: PostsQuery['posts']['items'][0]['createdByProfileId'];
         createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
         voteType: PostVoteType | null | undefined;
         upvoteCount: number;
@@ -88,6 +89,7 @@ export function Posts(properties: PostsInterface) {
                 return topic;
             }),
             content: content,
+            createdByProfileId: post.createdByProfileId,
             createdByProfile: post.createdByProfile,
             voteType: post.voteType,
             upvoteCount: post.upvoteCount,
@@ -132,6 +134,7 @@ export function Posts(properties: PostsInterface) {
                                 urlPath={idea.urlPath}
                                 topics={idea.topics}
                                 content={idea.content}
+                                createdByProfileId={idea.createdByProfileId}
                                 createdByProfile={idea.createdByProfile}
                                 voteType={idea.voteType}
                                 upvoteCount={idea.upvoteCount}

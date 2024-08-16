@@ -127,15 +127,15 @@ export function PostReaction(properties: PostReactionInterface) {
                         // Light
                         'border-light-3 text-dark ' +
                         // Dark
-                        'dark:border-dark-3 dark:bg-dark-1 dark:text-light-2 ' +
+                        'dark:border-dark-3 dark:bg-dark-2 dark:text-light-2 ' +
                         // Hover - Light
                         'hover:border-light-4 hover:bg-light-1 hover:text-dark-1 ' +
                         // Hover - Dark
-                        'dark:hover:border-dark-4 dark:hover:bg-dark-2 dark:hover:text-light ' +
+                        'dark:hover:border-dark-4 dark:hover:bg-dark-3 dark:hover:text-light ' +
                         // Active - Light
                         'active:border-light-5 active:bg-light-2 active:text-dark-2 ' +
                         // Active - Dark
-                        'dark:active:border-dark-5 dark:active:bg-dark-3',
+                        'dark:active:border-dark-5 dark:active:bg-dark-4',
                     properties.reacted
                         ? 'border-purple-400 hover:border-purple-400 dark:border-purple-800 dark:hover:border-purple-800'
                         : '',

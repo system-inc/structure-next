@@ -13,6 +13,9 @@ import { PostReportControl } from '@structure/source/modules/post/controls/PostR
 import { ProfileLink } from '@structure/source/modules/post/ProfileLink';
 import { TimeAgo } from '@structure/source/common/time/TimeAgo';
 
+// Dependencies - Account
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
+
 // Dependencies - Assets
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 
@@ -25,6 +28,7 @@ export interface PostControlsInterface {
     id: PostInterface['id'];
     identifier: PostInterface['identifier'];
     title: PostInterface['title'];
+    createdByProfileId: PostInterface['createdByProfileId'];
     createdByProfile: PostInterface['createdByProfile'];
     upvoteCount: PostInterface['upvoteCount'];
     voteType: PostInterface['voteType'];
@@ -41,7 +45,8 @@ export interface PostControlsInterface {
     onReactionCreate: (content: string) => void;
 }
 export function PostControls(properties: PostControlsInterface) {
-    // console.log('properties.createdByProfile', properties.createdByProfile);
+    // Hooks
+    const { accountState } = useAccount();
 
     // Defaults
     const voteControl = properties.voteControl ?? true;
@@ -79,7 +84,8 @@ export function PostControls(properties: PostControlsInterface) {
                 {commentControl && (
                     <PostControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>
                         <CommentIcon className="h-4 w-4" />
-                        <div className="">10</div>
+                        {/* Comment Count */}
+                        {false ? <div className="">10</div> : null}
                     </PostControl>
                 )}
 
@@ -94,9 +100,10 @@ export function PostControls(properties: PostControlsInterface) {
                 {reportControl && <PostReportControl ideaId={properties.id} ideaTitle={properties.title} />}
 
                 {/* Edit */}
-                <PostControl href={'/posts/' + properties.identifier + '/edit'}>
-                    Edit (limit to authors only)
-                </PostControl>
+                {/* Must be signed in and the current profile must match the creator profile of the post */}
+                {accountState.account && accountState.account.currentProfile.id === properties.createdByProfileId && (
+                    <PostControl href={'/posts/' + properties.identifier + '/edit'}>Edit</PostControl>
+                )}
             </div>
 
             <div className="flex items-center space-x-2">

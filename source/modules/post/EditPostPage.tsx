@@ -31,7 +31,8 @@ export function EditPostPage(properties: EditPostPageInterface) {
     // Render the component
     return (
         <div className={mergeClassNames('container items-center justify-center pb-32 pt-8', properties.className)}>
-            Edit Post Page {properties.params.postIdentifier}
+            THIS HAS A MAJOR BUG AND YOU NEED TO EDIT EACH FIELD IN ORDER TO HAVE THE FORM VALUES UPDATE Edit Post Page{' '}
+            {properties.params.postIdentifier}
             <GraphQlOperationForm
                 operation={PostUpdateOperation}
                 inputComponentsProperties={{

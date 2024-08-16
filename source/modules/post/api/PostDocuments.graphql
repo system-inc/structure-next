@@ -7,6 +7,7 @@ query Posts($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
             slug
             status
             title
+            createdByProfileId
             createdByProfile {
                 displayName
                 username
@@ -56,6 +57,7 @@ query PostsMine($pagination: PaginationInputWithFilters) {
             slug
             status
             title
+            createdByProfileId
             createdByProfile {
                 displayName
                 username
@@ -104,6 +106,7 @@ query Post($identifier: String!) {
         slug
         status
         title
+        createdByProfileId
         createdByProfile {
             displayName
             username
@@ -136,7 +139,7 @@ query Post($identifier: String!) {
 
 # Post Create
 mutation PostCreate($input: PostCreateInput!) {
-    postCreate(input: $input) {
+    postCreateAdmin(input: $input) {
         id
         status
         title

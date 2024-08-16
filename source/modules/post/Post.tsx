@@ -28,11 +28,15 @@ export interface PostInterface {
 
     id: string;
     identifier: string;
-    beforeTitleNode?: React.ReactNode;
+    nodeFirstChild?: React.ReactNode;
+    nodeBeforeTitle?: React.ReactNode;
     title: string;
-    afterTitleNode?: React.ReactNode;
+    nodeBeforeTitleInLink?: React.ReactNode;
+    nodeAfterTitleInLink?: React.ReactNode;
+    nodeAfterTitle?: React.ReactNode;
     slug: string;
     urlPath: string;
+    createdByProfileId: string;
     createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
     content: string;
     upvoteCount: number;
@@ -170,6 +174,9 @@ export function Post(properties: PostInterface) {
                     properties.className,
                 )}
             >
+                {/* Node First Child */}
+                {properties.nodeFirstChild}
+
                 {/* Voting */}
                 {voteControl && (
                     <PostVoteControl
@@ -185,8 +192,8 @@ export function Post(properties: PostInterface) {
                 <div className="flex-grow">
                     {/* Title and Topics */}
                     <div className={mergeClassNames('', properties.titleContainerClassName)}>
-                        {/* Before Title Node */}
-                        {properties.beforeTitleNode}
+                        {/* Node Before Title */}
+                        {properties.nodeBeforeTitle}
 
                         {/* Title and Topics */}
                         <span className={mergeClassNames('', properties.titleAndTopicsContainerClassName)}>
@@ -195,7 +202,9 @@ export function Post(properties: PostInterface) {
                                 href={properties.urlPath}
                                 className={mergeClassNames('leading-loose', properties.titleClassName)}
                             >
+                                {properties.nodeBeforeTitleInLink}
                                 <h4 className="inline">{properties.title}</h4>
+                                {properties.nodeAfterTitleInLink}
                             </Link>
 
                             {/* Topics */}
@@ -219,8 +228,8 @@ export function Post(properties: PostInterface) {
                             })}
                         </span>
 
-                        {/* After Title Node */}
-                        {properties.afterTitleNode}
+                        {/* Node After Title */}
+                        {properties.nodeAfterTitle}
                     </div>
 
                     {/* Description */}
@@ -243,6 +252,7 @@ export function Post(properties: PostInterface) {
                         id={properties.id}
                         identifier={properties.identifier}
                         title={properties.title}
+                        createdByProfileId={properties.createdByProfileId}
                         createdByProfile={properties.createdByProfile}
                         upvoteCount={upvoteCount}
                         voteType={voteType}
