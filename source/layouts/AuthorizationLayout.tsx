@@ -18,6 +18,7 @@ import { useAccount } from '@structure/source/modules/account/AccountProvider';
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutInterface {
     children: React.ReactNode;
+    mustBeAdministrator?: boolean;
 }
 export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     // throw new Error('hi!');
@@ -26,6 +27,9 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     // return <NotSignedIn />;
     // return <LineLoadingAnimation />;
     // return <ApiError />;
+
+    // Defaults
+    const mustBeAdministrator = properties.mustBeAdministrator || false;
 
     // Hooks
     const { accountState } = useAccount();
@@ -43,7 +47,7 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
         return <ApiError error={accountState.error} />;
     }
     // Not authorized
-    else if(accountState.account && !accountState.account.isAdministator()) {
+    else if(mustBeAdministrator && accountState.account && !accountState.account.isAdministator()) {
         return <NotAuthorized />;
     }
 

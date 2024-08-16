@@ -29,7 +29,7 @@ export function InternalLayout(properties: InternalLayoutInterface) {
 
     // Render the component
     return (
-        <AuthorizationLayout>
+        <AuthorizationLayout mustBeAdministrator={true}>
             {/* Navigation */}
             <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier} topBar={true}>
                 <InternalNavigation />
