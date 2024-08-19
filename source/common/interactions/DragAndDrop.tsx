@@ -5,6 +5,7 @@ import React, { MouseEventHandler } from 'react';
 import { useDrag } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
 import { Slot, Slottable } from '@radix-ui/react-slot';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 type DropBounds = {
     left: number;
@@ -192,6 +193,7 @@ interface DraggableItemProps {
     onDragStart?: () => void;
     onDragEnd?: () => void;
     grabHandle?: React.ReactNode;
+    leaveGhost?: boolean;
     // asChild?: boolean;
 }
 /**
@@ -209,6 +211,7 @@ const DraggableItem = ({
     onEnterDropArea,
     onLeaveDropArea,
     grabHandle,
+    leaveGhost,
     // asChild,
 }: DraggableItemProps) => {
     // const Component = asChild ? Slot : 'div';
@@ -216,6 +219,7 @@ const DraggableItem = ({
 
     const handleRef = React.useRef<HTMLDivElement>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const ghostSpacerRef = React.useRef<HTMLDivElement>(null);
 
     const isDragging = React.useRef(false); // Used to prevent children from being clicked when the item is being dragged
 
@@ -232,6 +236,7 @@ const DraggableItem = ({
     const [spring, api] = useSpring(() => ({
         x: 0,
         y: 0,
+        opacity: 1,
     }));
 
     useDrag(
@@ -239,6 +244,22 @@ const DraggableItem = ({
             if(state.first) {
                 // Set the dragging flag to true
                 isDragging.current = true;
+                if(containerRef.current && ghostSpacerRef.current) {
+                    containerRef.current.style.zIndex = '1000';
+                    // Get the current bounds of the container so that it can be positioned fixed without resizing the container
+                    const currentBounds = containerRef.current.getBoundingClientRect();
+
+                    // Set the position of the container to fixed
+                    containerRef.current.style.position = 'fixed';
+
+                    // Set the height and width of the container to the current width (needed for updating to fixed position)
+                    containerRef.current.style.width = `${currentBounds.width}px`;
+                    containerRef.current.style.height = `${currentBounds.height}px`;
+
+                    // Set the ghost spacer to the same height and width as the container (needed for the container to not resize when the position is set to fixed)
+                    ghostSpacerRef.current.style.width = `${currentBounds.width}px`;
+                    ghostSpacerRef.current.style.height = `${currentBounds.height}px`;
+                }
 
                 recalcDropBounds();
 
@@ -263,6 +284,7 @@ const DraggableItem = ({
             api.start({
                 x: state.offset[0],
                 y: state.offset[1],
+                opacity: state.dragging && leaveGhost ? 0.8 : 1,
                 immediate: state.down,
             });
 
@@ -295,11 +317,25 @@ const DraggableItem = ({
                 // If the item was dropped outside the drop area, reset its position
                 const inDropArea = dropBounds.some(({ bounds }) => checkIfXyInDropBounds(state.xy, bounds));
                 if(!inDropArea) {
-                    api.start({ x: 0, y: 0 });
+                    api.start({
+                        x: 0,
+                        y: 0,
+                        onRest: () => {
+                            if(containerRef.current) {
+                                containerRef.current.style.zIndex = '';
+                                containerRef.current.style.position = '';
+                            }
+                        },
+                    });
                 }
                 else if(resetPositionOnDrop) {
                     api.set({ x: 0, y: 0 });
+                    if(containerRef.current) {
+                        containerRef.current.style.zIndex = '';
+                        containerRef.current.style.position = '';
+                    }
                 }
+
                 return;
             }
         },
@@ -324,26 +360,50 @@ const DraggableItem = ({
     };
 
     return (
-        <animated.div
-            ref={containerRef}
-            style={spring}
-            className={
-                grabHandle
-                    ? 'flex items-center justify-start'
-                    : 'touch-none select-none hover:cursor-grab active:cursor-grabbing'
-            }
-            // Must be applied to the element directly rather than through `useGesture` or in the `useDrag` hook
-            onClickCapture={handleClickCapture}
-        >
-            {grabHandle ? (
-                <div ref={handleRef} className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing">
-                    {grabHandle}
+        <div ref={ghostSpacerRef} className="relative">
+            {/* Spacer */}
+            {leaveGhost && (
+                <div
+                    className={mergeClassNames(
+                        grabHandle
+                            ? 'flex items-center justify-start'
+                            : 'touch-none select-none hover:cursor-grab active:cursor-grabbing',
+                        'pointer-events-none absolute -z-10 w-full opacity-50',
+                    )}
+                >
+                    {grabHandle ? (
+                        <div className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing">
+                            {grabHandle}
+                        </div>
+                    ) : null}
+                    {children}
                 </div>
-            ) : null}
-            {/* <Slottable> */}
-            {children}
-            {/* </Slottable> */}
-        </animated.div>
+            )}
+            <animated.div
+                ref={containerRef}
+                style={spring}
+                className={mergeClassNames(
+                    grabHandle
+                        ? 'flex items-center justify-start'
+                        : 'touch-none select-none hover:cursor-grab active:cursor-grabbing',
+                    leaveGhost ? 'opacity-100' : '',
+                )}
+                // Must be applied to the element directly rather than through `useGesture` or in the `useDrag` hook
+                onClickCapture={handleClickCapture}
+            >
+                {grabHandle ? (
+                    <div
+                        ref={handleRef}
+                        className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing"
+                    >
+                        {grabHandle}
+                    </div>
+                ) : null}
+                {/* <Slottable> */}
+                {children}
+                {/* </Slottable> */}
+            </animated.div>
+        </div>
     );
 };
 
