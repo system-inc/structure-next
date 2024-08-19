@@ -1,19 +1,27 @@
-// Dependencies - React and Next.js
-import React from 'react';
+'use client';
 
 // Dependencies - Main Components
 // import { SignInForm } from '@structure/source/modules/account/SignInForm';
+import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
 
 // Component - NotSignedIn
-export type NotSignedInProperties = {};
-export function NotSignedIn(properties: NotSignedInProperties) {
+export function NotSignedIn() {
+    // TODO: Clean this up. Just a quick solution for now.
+    const pathName = usePathname();
+    const router = useRouter();
+
+    // Redirect to sign in with the current path as the redirect path
+    React.useEffect(() => {
+        if(pathName !== '/sign-in') {
+            router.push(`/sign-in?redirectUrl=${encodeURIComponent(pathName)}`);
+        }
+    }, [pathName, router]);
+
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
-            <div className="rounded-md border p-8">
-                Sign in form
-                {/* <SignInForm className="mb-2 w-80" /> */}
-            </div>
+            <div className="rounded-md border p-8">{/* <SignInForm className="mb-2 w-80" /> */}</div>
         </div>
     );
 }

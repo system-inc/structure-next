@@ -40,7 +40,11 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     }
     // Not signed in
     else if(!accountState.account) {
-        return <NotSignedIn />;
+        return (
+            <React.Suspense fallback={null}>
+                <NotSignedIn />
+            </React.Suspense>
+        );
     }
     // Error loading account
     else if(accountState.error) {
