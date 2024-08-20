@@ -27,7 +27,7 @@ export interface PostCommentControlsInterface {
     upvoteCount: PostInterface['upvoteCount'];
     // downvoteCount: PostInterface['downvoteCount'];
     voteType: PostInterface['voteType'];
-    createdAt: PostInterface['createdAt'];
+    // createdAt: PostInterface['createdAt'];
     // submittedByUsername: PostInterface['submittedByUsername'];
 
     // Control Visibility

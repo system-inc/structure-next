@@ -49,11 +49,11 @@ export function AccountMenu(properties: AccountMenuProperties) {
                     <div className="mr-4 justify-end">
                         <Button
                             tabIndex={1}
-                            onClick={function () {
-                                signOut();
+                            className="w-[92px]"
+                            onClick={async function () {
+                                await signOut();
                             }}
                             processingAnimation={true}
-                            className="w-[92px]"
                         >
                             Sign Out
                         </Button>

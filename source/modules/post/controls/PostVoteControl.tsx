@@ -8,12 +8,15 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { PostInterface } from '@structure/source/modules/post/Post';
 import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 
-// Dependencies - Assets
-import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
+// Dependencies - Account
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
 import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@project/source/api/GraphQlGeneratedCode';
+
+// Dependencies - Assets
+import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -22,7 +25,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export interface PostVoteControlInterface {
     className?: string;
     display: 'Mobile' | 'Desktop';
-    ideaId: string;
+    postId: string;
     upvoteCount: number;
     voteType?: PostVoteType | null;
     onVoteChange: (newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) => void;
@@ -33,43 +36,52 @@ export function PostVoteControl(properties: PostVoteControlInterface) {
     const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);
 
     // Hooks
-    const [ideaVoteMutation, ideaVoteMutationState] = useMutation(PostVoteDocument);
-    const [ideaUnvoteMutation, ideaUnvoteMutationState] = useMutation(PostUnvoteDocument);
+    const { accountState, setAuthenticationDialogOpen } = useAccount();
+    const [ideaVoteMutation] = useMutation(PostVoteDocument);
+    const [ideaUnvoteMutation] = useMutation(PostUnvoteDocument);
 
     // Function to handle voting
     function handleVote() {
-        // If they have already upvoted, unvote
-        if(voteType) {
-            // Opportunistically update the UI
-            setUpvoteCount(upvoteCount - 1);
-            setVoteType(null);
+        // If the user is signed in
+        if(accountState.account) {
+            // If they have already upvoted, unvote
+            if(voteType) {
+                // Opportunistically update the UI
+                setUpvoteCount(upvoteCount - 1);
+                setVoteType(null);
 
-            // Update the parent component
-            properties.onVoteChange(upvoteCount - 1, null);
+                // Update the parent component
+                properties.onVoteChange(upvoteCount - 1, null);
 
-            // Run the unvote mutation in the background
-            ideaUnvoteMutation({
-                variables: {
-                    postId: properties.ideaId,
-                },
-            });
+                // Run the unvote mutation in the background
+                ideaUnvoteMutation({
+                    variables: {
+                        postId: properties.postId,
+                    },
+                });
+            }
+            // Otherwise, upvote
+            else {
+                // Opportunistically update the UI
+                setUpvoteCount(upvoteCount + 1);
+                setVoteType(PostVoteType.Upvote);
+
+                // Update the parent component
+                properties.onVoteChange(upvoteCount + 1, PostVoteType.Upvote);
+
+                // Run the vote mutation in the background
+                ideaVoteMutation({
+                    variables: {
+                        postId: properties.postId,
+                        type: PostVoteType.Upvote,
+                    },
+                });
+            }
         }
-        // Otherwise, upvote
+        // If the user is not signed in
         else {
-            // Opportunistically update the UI
-            setUpvoteCount(upvoteCount + 1);
-            setVoteType(PostVoteType.Upvote);
-
-            // Update the parent component
-            properties.onVoteChange(upvoteCount + 1, PostVoteType.Upvote);
-
-            // Run the vote mutation in the background
-            ideaVoteMutation({
-                variables: {
-                    postId: properties.ideaId,
-                    type: PostVoteType.Upvote,
-                },
-            });
+            // Show the sign in dialog
+            setAuthenticationDialogOpen(true);
         }
     }
 
@@ -92,8 +104,10 @@ export function PostVoteControl(properties: PostVoteControlInterface) {
             {properties.display === 'Mobile' && (
                 <PostControl
                     className={mergeClassNames(
-                        'space-x-1.5 md:hidden',
-                        voteType ? 'border-purple-500 dark:border-purple-500' : '',
+                        'space-x-1.5 py-1',
+                        voteType
+                            ? 'border-purple-400 hover:border-purple-500 active:border-purple-600 dark:border-purple-500 dark:hover:border-purple-500 dark:active:border-purple-600'
+                            : '',
                     )}
                     onClick={handleVote}
                 >

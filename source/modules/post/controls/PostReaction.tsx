@@ -14,6 +14,9 @@ import {
     PostReactionDeleteDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
+// Dependencies - Account
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
+
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
@@ -35,6 +38,7 @@ export function PostReaction(properties: PostReactionInterface) {
     const [tipOpen, setTipOpen] = React.useState<boolean>(false);
 
     // Hooks
+    const { accountState, setAuthenticationDialogOpen } = useAccount();
     const ideaReactionProfilesQueryState = useQuery(PostReactionProfilesDocument, {
         skip: !tipOpen,
         variables: {
@@ -42,36 +46,44 @@ export function PostReaction(properties: PostReactionInterface) {
             content: properties.content,
         },
     });
-    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(PostReactionCreateDocument);
-    const [ideaReactionDeleteMutation, ideaReactionDeleteMutationState] = useMutation(PostReactionDeleteDocument);
+    const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
+    const [ideaReactionDeleteMutation] = useMutation(PostReactionDeleteDocument);
 
     // Function to handle clicking on the reaction
     async function handleReaction() {
-        // If the user has already done this reaction
-        if(properties.reacted) {
-            // Opportunistically update the parent component
-            properties.onReactionDelete(properties.content);
+        // If the user is signed in
+        if(accountState.account) {
+            // If the user has already done this reaction
+            if(properties.reacted) {
+                // Opportunistically update the parent component
+                properties.onReactionDelete(properties.content);
 
-            // Invoke the mutation to delete the reaction
-            ideaReactionDeleteMutation({
-                variables: {
-                    postId: properties.ideaId,
-                    content: properties.content,
-                },
-            });
+                // Invoke the mutation to delete the reaction
+                ideaReactionDeleteMutation({
+                    variables: {
+                        postId: properties.ideaId,
+                        content: properties.content,
+                    },
+                });
+            }
+            // If the user has not done this reaction
+            else {
+                // Opportunistically update the parent component
+                properties.onReactionCreate(properties.content);
+
+                // Invoke the mutation to create the reaction
+                ideaReactionCreateMutation({
+                    variables: {
+                        postId: properties.ideaId,
+                        content: properties.content,
+                    },
+                });
+            }
         }
-        // If the user has not done this reaction
+        // If the user is not signed in
         else {
-            // Opportunistically update the parent component
-            properties.onReactionCreate(properties.content);
-
-            // Invoke the mutation to create the reaction
-            ideaReactionCreateMutation({
-                variables: {
-                    postId: properties.ideaId,
-                    content: properties.content,
-                },
-            });
+            // Show the sign in dialog
+            setAuthenticationDialogOpen(true);
         }
     }
 
@@ -125,19 +137,19 @@ export function PostReaction(properties: PostReactionInterface) {
                         // Animation
                         'transition-colors ' +
                         // Light
-                        'border-light-3 text-dark ' +
+                        'border-light-3 ' +
                         // Dark
-                        'dark:border-dark-3 dark:bg-dark-2 dark:text-light-2 ' +
+                        'dark:border-dark-3 ' +
                         // Hover - Light
-                        'hover:border-light-4 hover:bg-light-1 hover:text-dark-1 ' +
+                        'hover:border-light-4 ' +
                         // Hover - Dark
-                        'dark:hover:border-dark-4 dark:hover:bg-dark-3 dark:hover:text-light ' +
+                        'dark:hover:border-dark-4 dark:hover:bg-dark-2 ' +
                         // Active - Light
-                        'active:border-light-5 active:bg-light-2 active:text-dark-2 ' +
+                        'active:border-light-6 ' +
                         // Active - Dark
-                        'dark:active:border-dark-5 dark:active:bg-dark-4',
+                        'dark:active:border-dark-5 dark:active:bg-dark-3',
                     properties.reacted
-                        ? 'border-purple-400 hover:border-purple-400 dark:border-purple-800 dark:hover:border-purple-800'
+                        ? 'border-purple-400 hover:border-purple-500 active:border-purple-600 dark:border-purple-500 dark:hover:border-purple-500 dark:active:border-purple-600'
                         : '',
                     properties.className,
                 )}

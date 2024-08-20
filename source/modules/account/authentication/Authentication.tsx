@@ -17,7 +17,7 @@ import { AccountPasswordChallenge } from '@structure/source/modules/account/auth
 import { Duration } from '@structure/source/common/time/Duration';
 
 // Dependencies - API
-import { useQuery, useMutation } from '@apollo/client';
+import { useApolloClient, useQuery, useMutation } from '@apollo/client';
 import {
     AuthenticationCurrentDocument,
     AccountRegistrationCompleteDocument,
@@ -37,6 +37,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - Authentication
 export interface AuthenticationInterface {
     className?: string;
+    variant?: 'Page' | 'Dialog' | 'App';
     scope: 'SignIn' | 'Maintenance';
 }
 export function Authentication(properties: AuthenticationInterface) {
@@ -53,7 +54,8 @@ export function Authentication(properties: AuthenticationInterface) {
     // Hooks
     const router = useRouter();
     const { themeClassName } = useTheme();
-    const { accountState, setSignedIn, signOut } = useAccount();
+    const { accountState, setSignedIn, signOut, setAuthenticationDialogOpen } = useAccount();
+    const apolloClient = useApolloClient();
 
     // Hooks - API - Queries
     useQuery(AuthenticationCurrentDocument, {
@@ -134,6 +136,14 @@ export function Authentication(properties: AuthenticationInterface) {
         if(redirectUrl) {
             console.log('redirecting to', redirectUrl);
             router.push(redirectUrl);
+        }
+        // If no redirect URL is provided
+        else {
+            // Close the authentication dialog
+            setAuthenticationDialogOpen(false);
+
+            // Refetch queries
+            apolloClient.reFetchObservableQueries();
         }
 
         currentAuthenticationComponent = (

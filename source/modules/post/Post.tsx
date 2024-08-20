@@ -38,7 +38,7 @@ export interface PostInterface {
     urlPath: string;
     createdByProfileId: string;
     createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
-    content: string;
+    content?: string;
     upvoteCount: number;
     voteType: PostVoteType | null | undefined;
     reactions?: PostReactionsType;
@@ -48,6 +48,7 @@ export interface PostInterface {
     topics: string[];
 
     // Control Visibility
+    largeVoteControl?: boolean;
     voteControl?: boolean;
     reactionControl?: boolean;
     commentControl?: boolean;
@@ -64,6 +65,7 @@ export function Post(properties: PostInterface) {
     const [reactions, setReactions] = React.useState<PostReactionsType>(properties.reactions || []);
 
     // Defaults
+    const largeVoteControl = properties.largeVoteControl ?? false;
     const voteControl = properties.voteControl ?? true;
     const reactionControl = properties.reactionControl ?? true;
     const commentControl = properties.commentControl ?? true;
@@ -178,11 +180,11 @@ export function Post(properties: PostInterface) {
                 {properties.nodeFirstChild}
 
                 {/* Voting */}
-                {voteControl && (
+                {largeVoteControl && voteControl && (
                     <PostVoteControl
                         display="Desktop"
                         className="hidden w-24 shrink-0 md:flex"
-                        ideaId={properties.id}
+                        postId={properties.id}
                         upvoteCount={upvoteCount}
                         voteType={voteType}
                         onVoteChange={onVoteChange}
@@ -196,7 +198,12 @@ export function Post(properties: PostInterface) {
                         {properties.nodeBeforeTitle}
 
                         {/* Title and Topics */}
-                        <span className={mergeClassNames('', properties.titleAndTopicsContainerClassName)}>
+                        <span
+                            className={mergeClassNames(
+                                'text-dark-3 dark:text-light',
+                                properties.titleAndTopicsContainerClassName,
+                            )}
+                        >
                             {/* Title */}
                             <Link
                                 href={properties.urlPath}
@@ -261,6 +268,7 @@ export function Post(properties: PostInterface) {
                         onVoteChange={onVoteChange}
                         onReactionCreate={onReactionCreate}
                         // Control Visibility
+                        largeVoteControl={largeVoteControl}
                         voteControl={voteControl}
                         reactionControl={reactionControl}
                         commentControl={commentControl}
@@ -270,7 +278,11 @@ export function Post(properties: PostInterface) {
                 </div>
             </div>
             {/* Comments */}
-            {showComments && <div>{/* <PostComments className="mt-6" /> */}</div>}
+            {showComments && (
+                <div>
+                    <PostComments className="mt-6" />
+                </div>
+            )}
         </div>
     );
 }

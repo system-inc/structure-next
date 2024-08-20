@@ -4,11 +4,14 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
+// Dependencies - Main Components
+import { AuthenticationDialog } from '@structure/source/modules/account/authentication/AuthenticationDialog';
+
 // Dependencies - Account
 import { accountSignedInKey, Account } from '@structure/source/modules/account/Account';
 
 // Dependencies - API
-import { useLazyQuery, useMutation, useApolloClient, ApolloError } from '@apollo/client';
+import { useApolloClient, useLazyQuery, useMutation, ApolloError } from '@apollo/client';
 import { AccountCurrentDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
@@ -22,7 +25,7 @@ export interface AccountProviderInterface {
 export function AccountProvider(properties: AccountProviderInterface) {
     // State
     const [signedIn, setSignedIn] = React.useState<boolean>(properties.signedIn); // Initialized using response header cookie
-    // console.log('signedIn', signedIn);
+    const [authenticationDialogOpen, setAuthenticationDialogOpen] = React.useState(false);
 
     // Hooks
     const router = useRouter();
@@ -84,19 +87,6 @@ export function AccountProvider(properties: AccountProviderInterface) {
     // Function to sign out
     const signOut = React.useCallback(
         async function (redirectPath?: string) {
-            const updateSignedInAndRedirect = async function () {
-                // Clear the Apollo cache
-                await apolloClient.resetStore();
-
-                // Update the signed in state
-                updateSignedIn(false);
-
-                // Redirect to the path if provided
-                if(redirectPath) {
-                    router.push(redirectPath);
-                }
-            };
-
             // Invoke the GraphQL mutation
             try {
                 await accountSignOutMutation();
@@ -105,12 +95,18 @@ export function AccountProvider(properties: AccountProviderInterface) {
                 console.log('error', JSON.stringify(error));
             }
 
-            // Update the signed in state and redirect
-            await updateSignedInAndRedirect();
+            // Update the signed in state
+            updateSignedIn(false);
+
+            // If a redirect path is provided
+            if(redirectPath) {
+                // Redirect to the path
+                router.push(redirectPath);
+            }
 
             return true;
         },
-        [accountSignOutMutation, updateSignedIn, router, apolloClient],
+        [accountSignOutMutation, updateSignedIn, router],
     );
 
     // Effect to listen for changes in local storage
@@ -149,18 +145,34 @@ export function AccountProvider(properties: AccountProviderInterface) {
                 updateSignedIn(false);
             }
         },
-        [accountQueryState.error, signOut, updateSignedIn],
+        [accountQueryState.error, updateSignedIn],
     );
 
-    // Effect to get the account query if signed in
+    // Effect to handle changes to the signed in state
     React.useEffect(
         function () {
+            // If signed in
             if(signedIn) {
-                // console.log('Getting account...');
-                getAccountQueryState();
+                // Get the account
+                console.log('Getting account...');
+                try {
+                    getAccountQueryState();
+                }
+                catch(error) {
+                    console.log('Error in getAccountQueryState', error);
+                }
+            }
+            // If not signed in
+            else {
+                // If the AccountCurrent query has already been loaded
+                if(accountQueryState.data?.accountCurrent) {
+                    // Clear the Apollo cache
+                    console.log('Resetting Apollo cache...');
+                    apolloClient.resetStore();
+                }
             }
         },
-        [signedIn, getAccountQueryState],
+        [signedIn, getAccountQueryState, accountQueryState.data?.accountCurrent, apolloClient],
     );
 
     // Render the component
@@ -175,9 +187,19 @@ export function AccountProvider(properties: AccountProviderInterface) {
                 },
                 setSignedIn: updateSignedIn,
                 signOut,
+                setAuthenticationDialogOpen,
             }}
         >
             {properties.children}
+
+            {/* AuthenticationDialog */}
+            {!signedIn && (
+                <AuthenticationDialog
+                    scope="SignIn"
+                    open={authenticationDialogOpen}
+                    onOpenChange={setAuthenticationDialogOpen}
+                />
+            )}
         </AccountContext.Provider>
     );
 }
@@ -191,6 +213,7 @@ interface AccountContextInterface {
     };
     setSignedIn: (value: boolean) => void;
     signOut: (redirectPath?: string) => Promise<boolean>;
+    setAuthenticationDialogOpen: (value: boolean) => void;
 }
 const AccountContext = React.createContext<AccountContextInterface | null>(null);
 

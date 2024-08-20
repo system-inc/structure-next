@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import Link from 'next/link';
 
 // Dependencies - Main Components
 import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
@@ -28,16 +29,19 @@ export function PublicProfilePage(properties: PublicProfilePageInterface) {
     // Render the component
     return (
         <AuthorizationLayout>
-            <div className="container pb-32 pt-8">
-                <div className="mb-4 h-24 w-24">
+            <div className="container pb-32 pt-8 text-center">
+                <div className="mx-auto mb-4 flex h-40 w-40">
                     <ProfileImage
+                        className=""
                         alternateText={properties.profilePublic?.displayName ?? undefined}
                         profileImageUrl={profileImageUrl}
                     />
                 </div>
                 <h1 className="mb-1 text-2xl">{properties.profilePublic?.displayName}</h1>
-                <p className="mb-2">@{properties.profilePublic?.username}</p>
-                <p className="neutral flex items-center space-x-1.5 text-sm">
+                <Link className="mb-2" href={'/profiles/' + properties.profilePublic?.username}>
+                    @{properties.profilePublic?.username}
+                </Link>
+                <p className="neutral mt-2 flex items-center justify-center space-x-1.5 text-sm">
                     <CalendarIcon className="h-4 w-4" />
                     <span>
                         Joined {monthYear(new Date(properties.profilePublic?.createdAt))} (

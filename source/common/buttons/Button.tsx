@@ -155,8 +155,8 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
     const propertiesOnClick = properties.onClick;
     const onClickIntercept = React.useCallback(
         async function (event: React.MouseEvent<HTMLElement>) {
-            // If we are showing the processed time tip
-            if(propertiesShowProcessedTimeTip) {
+            // If we are showing the processed time tip or the processing animation is enabled
+            if(propertiesShowProcessedTimeTip || processingAnimationEnabled) {
                 // Start processing
                 const processingStartTime = startProcessing();
 
@@ -168,11 +168,9 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 // End processing
                 endProcessing(processingStartTime);
             }
-            // Otherwise
-            else {
-                if(propertiesOnClick !== undefined) {
-                    propertiesOnClick(event);
-                }
+            // Otherwise, just call the click handler
+            else if(propertiesOnClick !== undefined) {
+                propertiesOnClick(event);
             }
         },
         [propertiesShowProcessedTimeTip, propertiesOnClick, endProcessing],

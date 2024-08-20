@@ -105,6 +105,7 @@ export interface DialogInterface {
     closeControl?: React.ReactNode | boolean; // The close button
     header?: React.ReactNode; // The header
     headerClassName?: string; // The class names for the header
+    accessibilityTitle?: string; // The accessibility description
     content?: React.ReactNode; // The content
     accessibilityDescription?: string; // The accessibility description
     footer?: React.ReactNode; // The footer
@@ -192,6 +193,14 @@ export function Dialog(properties: DialogInterface) {
                                 )
                             }
                         </div>
+                    )}
+
+                    {/* Accessibility Title */}
+                    {properties.accessibilityTitle && (
+                        <RadixDialog.Title
+                            className="hidden"
+                            aria-describedby={properties.accessibilityTitle}
+                        ></RadixDialog.Title>
                     )}
 
                     {/* Accessibility Description */}

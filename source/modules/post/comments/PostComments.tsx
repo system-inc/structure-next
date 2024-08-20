@@ -2,7 +2,6 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -19,14 +18,11 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - PostComments
 export interface PostCommentsInterface {
     className?: string;
-    submittedByUsername?: string;
-    submittedByDisplayName?: string;
-    createdAt: string;
 }
 export function PostComments(properties: PostCommentsInterface) {
     // Render the component
     return (
-        <div className={mergeClassNames('text-sm', properties.className)}>
+        <div id="comments" className={mergeClassNames('text-sm', properties.className)}>
             <div>
                 <Button icon={PlusIcon} iconPosition="left" iconClassName="w-3 h-3 ml-1">
                     Add a Comment
@@ -37,13 +33,10 @@ export function PostComments(properties: PostCommentsInterface) {
             <div className="mt-8">
                 {/* Comment Meta */}
                 <div className="flex items-center space-x-1.5">
-                    <ProfileLink
-                        username={properties.submittedByUsername ?? 'anonymous'}
-                        displayName={properties.submittedByDisplayName ?? 'Anonymous'}
-                    />
+                    <ProfileLink username={'anonymous'} displayName={'Anonymous'} />
                     <div>&bull;</div>
                     <div className="text-neutral+3 dark:text-neutral">
-                        <TimeAgo startTimeInMilliseconds={new Date(properties.createdAt).getTime()} />
+                        <TimeAgo startTimeInMilliseconds={new Date().getTime()} />
                     </div>
                 </div>
 
@@ -52,12 +45,14 @@ export function PostComments(properties: PostCommentsInterface) {
                     <div className="ml-8 mt-3">This is the first principle of our company.</div>
 
                     {/* Comment Controls */}
-                    {/* <PostCommentControls className="ml-6 mt-2"
-                    id="1"
-                    identifier="1"
-                    title="First Principle"
-                    upvoteCount={0}
-                     /> */}
+                    {/* <PostCommentControls
+                        className="ml-6 mt-2"
+                        id="1"
+                        identifier="1"
+                        title="First Principle"
+                        upvoteCount={0}
+                        // voteType={}
+                    /> */}
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import { PostInterface } from '@structure/source/modules/post/Post';
@@ -36,6 +37,7 @@ export interface PostControlsInterface {
     createdAt: PostInterface['createdAt'];
 
     // Control Visibility
+    largeVoteControl?: boolean;
     voteControl?: boolean;
     reactionControl?: boolean;
     commentControl?: boolean;
@@ -48,8 +50,10 @@ export interface PostControlsInterface {
 export function PostControls(properties: PostControlsInterface) {
     // Hooks
     const { accountState } = useAccount();
+    const urlPath = useUrlPath();
 
     // Defaults
+    const largeVoteControl = properties.largeVoteControl ?? false;
     const voteControl = properties.voteControl ?? true;
     const reactionControl = properties.reactionControl ?? true;
     const commentControl = properties.commentControl ?? true;
@@ -66,10 +70,10 @@ export function PostControls(properties: PostControlsInterface) {
         <div className={mergeClassNames('flex items-center justify-between space-x-2 text-sm', properties.className)}>
             <div className="flex select-none items-center">
                 {/* Voting */}
-                {voteControl && (
+                {!largeVoteControl && voteControl && (
                     <PostVoteControl
                         display="Mobile"
-                        ideaId={properties.id}
+                        postId={properties.id}
                         upvoteCount={properties.upvoteCount}
                         voteType={properties.voteType}
                         onVoteChange={properties.onVoteChange}
@@ -83,7 +87,14 @@ export function PostControls(properties: PostControlsInterface) {
 
                 {/* Comments */}
                 {commentControl && (
-                    <PostControl className="space-x-1.5" href={properties.urlPath}>
+                    <PostControl
+                        className="space-x-1.5"
+                        href={
+                            properties.urlPath +
+                            // Add the comments anchor if the current URL path is the same as the post URL path
+                            (urlPath == properties.urlPath ? '#comments' : '')
+                        }
+                    >
                         <CommentIcon className="h-4 w-4" />
                         {/* Comment Count */}
                         {true ? <div className="">0</div> : null}

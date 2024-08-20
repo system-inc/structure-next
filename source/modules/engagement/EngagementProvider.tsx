@@ -11,7 +11,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { EngagementContainer } from '@structure/source/modules/engagement/EngagementContainer';
 
 // Dependencies - API
-import { useMutation, ApolloError } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { EngagementEventCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
@@ -36,8 +36,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     // Hooks
     const urlPath = usePathname();
     const urlSearchParameters = useSearchParams();
-    const [engagementEventCreateMutation, engagementEventCreateMutationState] =
-        useMutation(EngagementEventCreateDocument);
+    const [engagementEventCreateMutation] = useMutation(EngagementEventCreateDocument);
 
     // References
     const engagementEventsSentReference = React.useRef(0);
@@ -56,7 +55,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             }
 
             // In development mode, NextJS runs effects twice on the first render, so we need to avoid sending two events
-            if(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            if(window.location.hostname.includes('localhost') || window.location.hostname === '127.0.0.1') {
                 if(!engagementProviderMounted) {
                     engagementProviderMounted = true;
                     return;
@@ -79,7 +78,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             }
 
             // Get the view title
-            let viewTitle = document.title;
+            const viewTitle = document.title;
 
             // Get the view load time in milliseconds
             if(performance && performance.getEntriesByType && engagementEventsSentReference.current === 0) {
@@ -142,7 +141,8 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                         clientProperties: {
                             // Development or Production
                             environment:
-                                window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                                window.location.hostname.includes('localhost') ||
+                                window.location.hostname === '127.0.0.1'
                                     ? 'Development'
                                     : 'Production',
                         },
