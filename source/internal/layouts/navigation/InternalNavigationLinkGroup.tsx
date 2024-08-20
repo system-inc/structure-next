@@ -12,6 +12,9 @@ import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon
 
 // Dependencies - Animation
 import { Collapse } from '@structure/source/common/interactions/Collapse';
+import { easings, useSpring, animated } from '@react-spring/web';
+
+const AnimatedChevronRightIcon = animated(ChevronRightIcon);
 
 // Component - NavigationGroup
 export function InternalNavigationLinkGroup(properties: InternalNavigationLinkInterface) {
@@ -29,6 +32,12 @@ export function InternalNavigationLinkGroup(properties: InternalNavigationLinkIn
         setIsOpen(active);
     }, [urlPathname, active]); // Listen to changes to the pathname and active state
 
+    const animationConfig = { duration: 500, easing: easings.easeOutExpo };
+    const rotationSpring = useSpring({
+        rotate: isOpen ? 270 : 90,
+        config: animationConfig,
+    });
+
     // Render the component
     return (
         <div>
@@ -44,14 +53,17 @@ export function InternalNavigationLinkGroup(properties: InternalNavigationLinkIn
                         className="relative flex aspect-square w-6 items-center justify-center rounded text-dark transition-colors hover:bg-dark/10 dark:text-white dark:hover:bg-light/10"
                         onClick={() => setIsOpen(!isOpen)}
                     >
-                        <ChevronRightIcon
-                            className={`h-4 w-4 ${isOpen ? 'rotate-[270deg]' : 'rotate-90'} transition-transform`}
+                        <AnimatedChevronRightIcon
+                            className={`h-4 w-4`}
+                            style={{
+                                transform: rotationSpring.rotate.to((rotate) => `rotate(${rotate}deg)`),
+                            }}
                         />
                     </button>
                 </div>
             </div>
 
-            <Collapse key={properties.title} isOpen={isOpen}>
+            <Collapse key={properties.title} isOpen={isOpen} animationConfig={animationConfig}>
                 <div className="ml-3 space-y-0.5 border-l border-l-light-4 pb-0.5 pl-4 pt-0.5 dark:border-l-dark-4">
                     {properties.links?.map((internalNavigationLink) => {
                         return (

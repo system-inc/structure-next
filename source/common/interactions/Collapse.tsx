@@ -5,26 +5,27 @@ import React from 'react';
 import useMeasure from 'react-use-measure';
 
 // Dependencies - Animation
-import { animated, useSpring } from '@react-spring/web';
+import { animated, SpringConfig, useSpring } from '@react-spring/web';
 
 // Component - Collapse
 export interface CollapseInterface {
     children: React.ReactNode;
     isOpen: boolean;
     doNotUnmount?: boolean;
+    animationConfig?: SpringConfig;
 }
-export function Collapse(properties: CollapseInterface) {
+export function Collapse({ children, isOpen, doNotUnmount = false, animationConfig }: CollapseInterface) {
     // Hooks
     const [domElementReference, { height }] = useMeasure();
 
     // State
-    const [show, setShow] = React.useState(properties.isOpen);
+    const [show, setShow] = React.useState(isOpen);
 
     // The spring for animating the collapse
     const [style, styleApi] = useSpring(function () {
         return {
-            opacity: 0,
-            height: 0,
+            opacity: isOpen ? 1 : 0,
+            height: isOpen ? height : 0,
         };
     });
 
@@ -32,29 +33,30 @@ export function Collapse(properties: CollapseInterface) {
     React.useEffect(
         function () {
             styleApi.start({
-                opacity: properties.isOpen ? 1 : 0,
-                height: properties.isOpen ? height : 0,
+                opacity: isOpen ? 1 : 0,
+                height: isOpen ? height : 0,
                 onStart: () => {
-                    if(properties.isOpen) setShow(true);
+                    if(isOpen) setShow(true);
                 },
-                onRest: () => {
-                    if(!properties.isOpen) setShow(false);
+                onRest: (state) => {
+                    if(!isOpen && state.value.height === 0) setShow(false);
                 },
+                config: animationConfig,
             });
         },
-        [properties.isOpen, show, height, styleApi],
+        [isOpen, show, height, styleApi, animationConfig],
     );
 
     // Render the component
     return (
         <div className="w-full">
             <animated.div
-                key={'collapse-' + properties.children?.toString()}
+                key={'collapse-' + children?.toString()}
                 style={{ opacity: style.opacity, height: style.height }}
                 className={'relative w-full overflow-x-auto overflow-y-hidden'}
             >
                 <div className="w-full" ref={domElementReference}>
-                    {(show || properties.doNotUnmount) && properties.children}
+                    {(show || doNotUnmount) && children}
                 </div>
             </animated.div>
         </div>
