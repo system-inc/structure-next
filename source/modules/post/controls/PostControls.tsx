@@ -28,6 +28,7 @@ export interface PostControlsInterface {
     id: PostInterface['id'];
     identifier: PostInterface['identifier'];
     title: PostInterface['title'];
+    urlPath: PostInterface['urlPath'];
     createdByProfileId: PostInterface['createdByProfileId'];
     createdByProfile: PostInterface['createdByProfile'];
     upvoteCount: PostInterface['upvoteCount'];
@@ -82,19 +83,15 @@ export function PostControls(properties: PostControlsInterface) {
 
                 {/* Comments */}
                 {commentControl && (
-                    <PostControl className="space-x-1.5" href={'/ideas/' + properties.id + '/' + properties.identifier}>
+                    <PostControl className="space-x-1.5" href={properties.urlPath}>
                         <CommentIcon className="h-4 w-4" />
                         {/* Comment Count */}
-                        {false ? <div className="">10</div> : null}
+                        {true ? <div className="">0</div> : null}
                     </PostControl>
                 )}
 
                 {/* Share */}
-                {shareControl && (
-                    <PostShareControl
-                        ideaUrl={`${windowLocationOrigin}/ideas/${properties.id}/${properties.identifier}`}
-                    />
-                )}
+                {shareControl && <PostShareControl url={windowLocationOrigin + properties.urlPath} />}
 
                 {/* Report */}
                 {reportControl && <PostReportControl ideaId={properties.id} ideaTitle={properties.title} />}

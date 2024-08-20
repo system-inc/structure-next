@@ -252,6 +252,7 @@ export function Post(properties: PostInterface) {
                         id={properties.id}
                         identifier={properties.identifier}
                         title={properties.title}
+                        urlPath={properties.urlPath}
                         createdByProfileId={properties.createdByProfileId}
                         createdByProfile={properties.createdByProfile}
                         upvoteCount={upvoteCount}

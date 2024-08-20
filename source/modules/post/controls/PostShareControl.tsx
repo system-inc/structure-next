@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import Link from 'next/link';
 
 // Dependencies - Main Components
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
@@ -13,12 +14,12 @@ import ShareIcon from '@structure/assets/icons/interface/ShareIcon.svg';
 import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+// import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostShareControl
 export interface PostShareControlInterface {
     className?: string;
-    ideaUrl: string;
+    url: string;
 }
 export function PostShareControl(properties: PostShareControlInterface) {
     // Hooks
@@ -35,11 +36,15 @@ export function PostShareControl(properties: PostShareControlInterface) {
                     closeMenuOnSelected: true,
                     onSelected: function () {
                         // Copy the link to the clipboard
-                        navigator.clipboard.writeText(properties.ideaUrl);
+                        navigator.clipboard.writeText(properties.url);
 
                         addNotice({
                             title: 'Copied Link',
-                            content: properties.ideaUrl,
+                            content: (
+                                <Link className="break-all" href={properties.url} target="_blank">
+                                    {properties.url}
+                                </Link>
+                            ),
                         });
                     },
                 },

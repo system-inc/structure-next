@@ -217,3 +217,16 @@ mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
         createdAt
     }
 }
+
+# Profile Public Query
+query ProfilePublic($username: String!) {
+    profilePublic(username: $username) {
+        username
+        displayName
+        imageUrls {
+            url
+            variant
+        }
+        createdAt
+    }
+}

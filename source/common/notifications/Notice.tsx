@@ -116,7 +116,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             </AnimatedButton>
 
             {/* Title and Content */}
-            <div className="flex-grow items-center space-y-1 pr-2">
+            <div className="items-center space-y-1 pr-2">
                 {properties.title && <div className="text-sm font-semibold">{properties.title}</div>}
                 {properties.content && <div className="text-sm text-neutral">{properties.content}</div>}
             </div>
