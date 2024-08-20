@@ -81,11 +81,9 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
                         sideNavigationLayoutNavigationIsResizing &&
                         !sideNavigationLayoutNavigationIsOpeningByDrag &&
                         !sideNavigationLayoutNavigationIsClosingByWindowResize),
-                onRest: function () {
-                    // Set the first mount to false
-                    firstMount.current = false;
-                },
             });
+            // Set first mount to false
+            firstMount.current = false;
         },
         // Just when the navigation open state or width changes
         // eslint-disable-next-line react-hooks/exhaustive-deps
