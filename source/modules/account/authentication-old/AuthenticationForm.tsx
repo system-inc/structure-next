@@ -8,7 +8,7 @@ import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { RESET, atomWithRefresh, atomWithReset, loadable as loadableAtom } from 'jotai/utils'; // Supports async client state of atoms
 import FormInputText from '@structure/source/common/forms/FormInputText';
 import Button from '@structure/source/common/buttons/Button';
-import ChallengeContainer from './ChallengeContainer';
+// import ChallengeContainer from './ChallengeContainer';
 import VerificationStateHeader from './VerificationStateHeader';
 import { useSpring, animated } from '@react-spring/web';
 import { InputTextVariants } from '@structure/source/common/forms/InputText';
@@ -169,7 +169,7 @@ function AuthenticationForm(properties: AuthenticationFormInterface) {
                 className="relative mt-8 w-full overflow-x-clip"
             >
                 <VerificationStateHeader />
-                <ChallengeContainer />
+                {/* <ChallengeContainer /> */}
             </animated.form>
         </div>
     );
