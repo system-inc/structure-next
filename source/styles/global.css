@@ -28,6 +28,9 @@ input:-webkit-autofill:active {
     transition-delay: 99999s;
 }
 
-.scrollAreaViewport > :first-child {
-    height: 100% !important;
+/* This allows full width and height for the ScrollArea component */
+.scrollAreaViewport> :first-child {
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
 }
