@@ -11,7 +11,7 @@ import { AuthenticationDialog } from '@structure/source/modules/account/authenti
 import { accountSignedInKey, Account } from '@structure/source/modules/account/Account';
 
 // Dependencies - API
-import { useApolloClient, useLazyQuery, useMutation, ApolloError } from '@apollo/client';
+import { useApolloClient, useQuery, useMutation, ApolloError } from '@apollo/client';
 import { AccountCurrentDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
@@ -29,13 +29,35 @@ export function AccountProvider(properties: AccountProviderInterface) {
 
     // Hooks
     const router = useRouter();
-    const apolloClient = useApolloClient();
+    // const apolloClient = useApolloClient();
 
     // Mutations
     const [accountSignOutMutation] = useMutation(AccountSignOutDocument);
 
     // Queries
-    const [getAccountQueryState, accountQueryState] = useLazyQuery(AccountCurrentDocument);
+    const accountQueryState = useQuery(AccountCurrentDocument, {
+        // Do not run the query if the account is not signed in
+        skip: !signedIn,
+        onCompleted: function (data) {
+            // If signed in
+            if(data.accountCurrent) {
+                // Update the signed in state
+                setSignedIn(true);
+
+                // Close the authentication dialog if it is open
+                setAuthenticationDialogOpen(false);
+            }
+            // If not signed in
+            else {
+                // Update the signed in state
+                setSignedIn(false);
+            }
+        },
+        onError: function () {
+            // If there is an error, the account is not signed in
+            setSignedIn(false);
+        },
+    });
     // console.log('accountQueryState', accountQueryState);
 
     // Create the account object from the GraphQL query data
@@ -54,7 +76,7 @@ export function AccountProvider(properties: AccountProviderInterface) {
 
     // Function to update the signed in state
     const updateSignedIn = React.useCallback(function (value: boolean) {
-        console.log('updateSignedIn', value);
+        // console.log('updateSignedIn', value);
 
         // If signed in
         if(value) {
@@ -89,6 +111,7 @@ export function AccountProvider(properties: AccountProviderInterface) {
         async function (redirectPath?: string) {
             // Invoke the GraphQL mutation
             try {
+                // Invoke the mutation
                 await accountSignOutMutation();
             }
             catch(error) {
@@ -128,51 +151,6 @@ export function AccountProvider(properties: AccountProviderInterface) {
             };
         },
         [updateSignedIn],
-    );
-
-    // Effect to listen to errors on the account query
-    React.useEffect(
-        function () {
-            // If it is not a network error but the API actually returned a response
-            if(
-                accountQueryState.error &&
-                accountQueryState.error.graphQLErrors.length > 0 &&
-                accountQueryState.error.graphQLErrors[0]?.extensions?.code == 401
-            ) {
-                console.log('Marking as signed out due to error in account query', accountQueryState.error);
-
-                // Update the signed in state (do not signOut since we are already signed out)
-                updateSignedIn(false);
-            }
-        },
-        [accountQueryState.error, updateSignedIn],
-    );
-
-    // Effect to handle changes to the signed in state
-    React.useEffect(
-        function () {
-            // If signed in
-            if(signedIn) {
-                // Get the account
-                console.log('Getting account...');
-                try {
-                    getAccountQueryState();
-                }
-                catch(error) {
-                    console.log('Error in getAccountQueryState', error);
-                }
-            }
-            // If not signed in
-            else {
-                // If the AccountCurrent query has already been loaded
-                if(accountQueryState.data?.accountCurrent) {
-                    // Clear the Apollo cache
-                    console.log('Resetting Apollo cache...');
-                    apolloClient.resetStore();
-                }
-            }
-        },
-        [signedIn, getAccountQueryState, accountQueryState.data?.accountCurrent, apolloClient],
     );
 
     // Render the component

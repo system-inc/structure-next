@@ -127,6 +127,18 @@ export function Authentication(properties: AuthenticationInterface) {
         [authenticationSession, accountRegistrationCompleteMutation, accountSignInCompleteMutation, setSignedIn],
     );
 
+    // Effect to close the authentication dialog when the account is signed in
+    React.useEffect(
+        function () {
+            // If the account is signed in
+            if(accountState.account) {
+                // Close the authentication dialog
+                setAuthenticationDialogOpen(false);
+            }
+        },
+        [accountState.account, setAuthenticationDialogOpen],
+    );
+
     // The current authentication component based on the authentication state
     let currentAuthenticationComponent = null;
 
@@ -139,9 +151,6 @@ export function Authentication(properties: AuthenticationInterface) {
         }
         // If no redirect URL is provided
         else {
-            // Close the authentication dialog
-            setAuthenticationDialogOpen(false);
-
             // Refetch queries
             apolloClient.reFetchObservableQueries();
         }
