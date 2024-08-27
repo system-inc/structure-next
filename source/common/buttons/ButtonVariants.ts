@@ -107,7 +107,7 @@ export const ButtonVariants = {
         // Light
         `bg-light-1 border-light-3 text-red-500 ` +
         // Dark
-        `dark:bg-dark-1 dark:border-dark-3 dark:text-red-500 ` +
+        `dark:bg-dark-2 dark:border-dark-4 dark:text-red-500 ` +
         // Light - Hover
         `hover:border-red-500 ` +
         // Dark - Hover
@@ -115,7 +115,7 @@ export const ButtonVariants = {
         // Light - Active
         `active:bg-light-3 active:border-red-500 ` +
         // Dark - Active
-        `dark:active:bg-dark-2 dark:active:border-red-500 ` +
+        `dark:active:bg-dark-3 dark:active:border-red-500 ` +
         // Light - Focus
         `focus:border-red-500  ` +
         // Dark - Focus
