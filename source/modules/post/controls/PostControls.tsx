@@ -30,6 +30,7 @@ export interface PostControlsInterface {
     identifier: PostInterface['identifier'];
     title: PostInterface['title'];
     urlPath: PostInterface['urlPath'];
+    editUrlPath?: string;
     createdByProfileId: PostInterface['createdByProfileId'];
     createdByProfile: PostInterface['createdByProfile'];
     upvoteCount: PostInterface['upvoteCount'];
@@ -53,6 +54,7 @@ export function PostControls(properties: PostControlsInterface) {
     const urlPath = useUrlPath();
 
     // Defaults
+    const editUrlPath = properties.editUrlPath ?? '/posts/' + properties.id + '/edit';
     const largeVoteControl = properties.largeVoteControl ?? false;
     const voteControl = properties.voteControl ?? true;
     const reactionControl = properties.reactionControl ?? true;
@@ -110,7 +112,7 @@ export function PostControls(properties: PostControlsInterface) {
                 {/* Edit */}
                 {/* Must be signed in and the current profile must match the creator profile of the post */}
                 {accountState.account && accountState.account.currentProfile.id === properties.createdByProfileId && (
-                    <PostControl href={'/posts/' + properties.identifier + '/edit'}>Edit</PostControl>
+                    <PostControl href={editUrlPath}>Edit</PostControl>
                 )}
             </div>
 

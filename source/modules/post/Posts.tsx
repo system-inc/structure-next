@@ -123,25 +123,25 @@ export function Posts(properties: PostsInterface) {
 
                 {/* Posts */}
                 {postsQueryState.data &&
-                    posts.map(function (idea) {
+                    posts.map(function (post) {
                         return (
                             <Post
-                                key={idea.id}
-                                id={idea.id}
-                                identifier={idea.identifier}
-                                title={idea.title}
-                                slug={idea.slug}
-                                urlPath={idea.urlPath}
-                                topics={idea.topics}
-                                content={idea.content}
-                                createdByProfileId={idea.createdByProfileId}
-                                createdByProfile={idea.createdByProfile}
-                                voteType={idea.voteType}
-                                upvoteCount={idea.upvoteCount}
-                                views={idea.views}
-                                reactions={idea.reactions}
-                                updatedAt={idea.updatedAt}
-                                createdAt={idea.createdAt}
+                                key={post.id}
+                                id={post.id}
+                                identifier={post.identifier}
+                                title={post.title}
+                                slug={post.slug}
+                                urlPath={post.urlPath}
+                                topics={post.topics}
+                                content={post.content}
+                                createdByProfileId={post.createdByProfileId}
+                                createdByProfile={post.createdByProfile}
+                                voteType={post.voteType}
+                                upvoteCount={post.upvoteCount}
+                                views={post.views}
+                                reactions={post.reactions}
+                                updatedAt={post.updatedAt}
+                                createdAt={post.createdAt}
                             />
                         );
                     })}

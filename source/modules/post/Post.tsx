@@ -36,6 +36,7 @@ export interface PostInterface {
     nodeAfterTitle?: React.ReactNode;
     slug: string;
     urlPath: string;
+    editUrlPath?: string;
     createdByProfileId: string;
     createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
     content?: string;
@@ -260,6 +261,7 @@ export function Post(properties: PostInterface) {
                         identifier={properties.identifier}
                         title={properties.title}
                         urlPath={properties.urlPath}
+                        editUrlPath={properties.editUrlPath}
                         createdByProfileId={properties.createdByProfileId}
                         createdByProfile={properties.createdByProfile}
                         upvoteCount={upvoteCount}
