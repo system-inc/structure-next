@@ -11,7 +11,7 @@ import { AuthenticationDialog } from '@structure/source/modules/account/authenti
 import { accountSignedInKey, Account } from '@structure/source/modules/account/Account';
 
 // Dependencies - API
-import { useApolloClient, useQuery, useMutation, ApolloError } from '@apollo/client';
+import { useQuery, useMutation, ApolloError } from '@apollo/client';
 import { AccountCurrentDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities

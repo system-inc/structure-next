@@ -134,9 +134,20 @@ export function Authentication(properties: AuthenticationInterface) {
             if(accountState.account) {
                 // Close the authentication dialog
                 setAuthenticationDialogOpen(false);
+
+                // If a redirect URL is provided, redirect to that URL
+                if(redirectUrl) {
+                    console.log('redirecting to', redirectUrl);
+                    router.push(redirectUrl);
+                }
+                // If no redirect URL is provided
+                else {
+                    // Refetch queries
+                    apolloClient.reFetchObservableQueries();
+                }
             }
         },
-        [accountState.account, setAuthenticationDialogOpen],
+        [accountState.account, setAuthenticationDialogOpen, apolloClient, redirectUrl, router],
     );
 
     // The current authentication component based on the authentication state
@@ -144,17 +155,6 @@ export function Authentication(properties: AuthenticationInterface) {
 
     // Authenticated session complete
     if(accountState.account) {
-        // If a redirect URL is provided, redirect to that URL
-        if(redirectUrl) {
-            console.log('redirecting to', redirectUrl);
-            router.push(redirectUrl);
-        }
-        // If no redirect URL is provided
-        else {
-            // Refetch queries
-            apolloClient.reFetchObservableQueries();
-        }
-
         currentAuthenticationComponent = (
             <div>
                 <p>You are signed in as {accountState.account.primaryAccountEmail?.emailAddress}. </p>
