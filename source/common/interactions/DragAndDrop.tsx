@@ -324,6 +324,12 @@ const DraggableItem = ({
                             if(containerRef.current) {
                                 containerRef.current.style.zIndex = '';
                                 containerRef.current.style.position = '';
+                                containerRef.current.style.width = '100%';
+                                containerRef.current.style.height = '100%';
+                            }
+                            if(ghostSpacerRef.current) {
+                                ghostSpacerRef.current.style.width = '100%';
+                                ghostSpacerRef.current.style.height = '100%';
                             }
                         },
                     });
@@ -333,6 +339,12 @@ const DraggableItem = ({
                     if(containerRef.current) {
                         containerRef.current.style.zIndex = '';
                         containerRef.current.style.position = '';
+                        containerRef.current.style.width = '100%';
+                        containerRef.current.style.height = '100%';
+                    }
+                    if(ghostSpacerRef.current) {
+                        ghostSpacerRef.current.style.width = '100%';
+                        ghostSpacerRef.current.style.height = '100%';
                     }
                 }
 
