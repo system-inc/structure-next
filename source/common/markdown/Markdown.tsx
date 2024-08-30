@@ -11,7 +11,6 @@ import { renderToString } from 'react-dom/server';
 // import '@project/source/modules/chat/styles/night-owl.css';
 // import '@project/source/modules/chat/styles/monokai.css';
 import '@project/source/modules/chat/styles/phi.css';
-import '@structure/source/common/markdown/styles/markdown.css';
 
 // Function to get the inner text of a node
 function getInnerText(node: React.ReactNode): string {
@@ -46,7 +45,7 @@ const components: ComponentsInterface = {
     ),
     ul: (properties) => <ul className="mb-6 ml-5 mt-6 list-disc pl-5" {...properties} />,
     ol: (properties) => <ol className="mb-6 mt-6 list-decimal pl-7" {...properties} />,
-    li: (properties) => <li className="my-1 text-base" {...properties} />,
+    li: (properties) => <li className="my-1 text-base [&>ol]:my-0 [&>ul]:my-0" {...properties} />,
     blockquote: (properties) => (
         <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
     ),
