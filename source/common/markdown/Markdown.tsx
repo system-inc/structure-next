@@ -20,15 +20,60 @@ function getInnerText(node: React.ReactNode): string {
     return div.textContent || div.innerText || '';
 }
 
+// Function to convert text to an id anchor (e.g. "Hello World" to "hello-world")
+function toAnchor(text: string): string {
+    return (
+        text
+            .toString()
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]+/g, '')
+            // Trim - from start of text
+            .replace(/^-+/, '')
+            // Trim - from end of text
+            .replace(/-+$/, '')
+    );
+}
+
 interface ComponentsInterface {
     [key: string]: (properties: React.HTMLAttributes<HTMLElement>) => JSX.Element;
 }
 const components: ComponentsInterface = {
-    h1: (properties) => <h1 className="mb-6 text-3xl font-medium" {...properties} />,
-    h2: (properties) => <h2 className="mb-6 mt-6 text-2xl font-medium" {...properties} />,
-    h3: (properties) => <h3 className="mb-6 mt-6 text-xl font-medium" {...properties} />,
-    h4: (properties) => <h4 className="mb-6 mt-6 text-[18px] font-medium leading-[26px]" {...properties} />,
-    h5: (properties) => <h5 className="text-base font-medium" {...properties} />,
+    h1: (properties) => (
+        <h1
+            id={toAnchor(getInnerText(properties.children))}
+            className="mb-6 text-3xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            {...properties}
+        />
+    ),
+    h2: (properties) => (
+        <h2
+            id={toAnchor(getInnerText(properties.children))}
+            className="mb-6 mt-6 text-2xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            {...properties}
+        />
+    ),
+    h3: (properties) => (
+        <h3
+            id={toAnchor(getInnerText(properties.children))}
+            className="mb-6 mt-6 text-xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            {...properties}
+        />
+    ),
+    h4: (properties) => (
+        <h4
+            id={toAnchor(getInnerText(properties.children))}
+            className="mb-6 mt-6 text-[18px] font-medium leading-[26px] before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            {...properties}
+        />
+    ),
+    h5: (properties) => (
+        <h5
+            id={toAnchor(getInnerText(properties.children))}
+            className="text-base font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            {...properties}
+        />
+    ),
     p: (properties) => <p className="mt-6 text-base" {...properties} />,
     strong: (properties) => <strong className="font-semibold" {...properties} />,
     a: (properties) => <a className="primary hover:underline" {...properties} />,
