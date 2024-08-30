@@ -25,16 +25,16 @@ interface ComponentsInterface {
     [key: string]: (properties: React.HTMLAttributes<HTMLElement>) => JSX.Element;
 }
 const components: ComponentsInterface = {
-    h1: (properties) => <h1 className="mb-4 text-2xl font-medium" {...properties} />,
-    h2: (properties) => <h2 className="mb-3 mt-4 text-xl font-medium" {...properties} />,
-    h3: (properties) => <h3 className="mb-4 mt-4 text-[1.1rem] font-medium" {...properties} />,
-    h4: (properties) => <h4 className="mb-4 mt-4 text-[1.1rem] font-medium" {...properties} />,
+    h1: (properties) => <h1 className="mb-6 text-3xl font-medium" {...properties} />,
+    h2: (properties) => <h2 className="mb-6 mt-6 text-2xl font-medium" {...properties} />,
+    h3: (properties) => <h3 className="mb-6 mt-6 text-xl font-medium" {...properties} />,
+    h4: (properties) => <h4 className="mb-6 mt-6 text-[18px] font-medium leading-[26px]" {...properties} />,
     h5: (properties) => <h5 className="text-base font-medium" {...properties} />,
-    p: (properties) => <p className="mt-4 text-[14px]" {...properties} />,
+    p: (properties) => <p className="mt-6 text-base" {...properties} />,
     strong: (properties) => <strong className="font-semibold" {...properties} />,
     a: (properties) => <a className="primary hover:underline" {...properties} />,
     pre: (properties) => (
-        <pre className="relative mb-4 rounded-md p-4 text-sm dark:bg-dark" {...properties}>
+        <pre className="relative mb-6 rounded-md p-5 text-sm dark:bg-dark" {...properties}>
             {properties.children}
             <span className="text-sans absolute right-3 top-3">
                 <CopyButton className="" iconClassName="h-3.5 w-3.5" value={getInnerText(properties.children)} />
@@ -42,11 +42,11 @@ const components: ComponentsInterface = {
         </pre>
     ),
     code: (properties) => (
-        <code className="mb-4 whitespace-pre-wrap rounded px-1 py-px font-mono dark:bg-dark" {...properties} />
+        <code className="mb-6 whitespace-pre-wrap rounded px-1 py-px font-mono dark:bg-dark" {...properties} />
     ),
-    ul: (properties) => <ul className="mb-4 ml-4 mt-4 list-disc pl-4" {...properties} />,
-    ol: (properties) => <ol className="mb-4 mt-4 list-decimal pl-7" {...properties} />,
-    li: (properties) => <li className="text-[14px]" {...properties} />,
+    ul: (properties) => <ul className="mb-6 ml-5 mt-6 list-disc pl-5" {...properties} />,
+    ol: (properties) => <ol className="mb-6 mt-6 list-decimal pl-7" {...properties} />,
+    li: (properties) => <li className="my-1 text-base" {...properties} />,
     blockquote: (properties) => (
         <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
     ),
