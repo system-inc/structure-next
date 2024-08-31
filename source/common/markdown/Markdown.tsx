@@ -78,7 +78,7 @@ const components: ComponentsInterface = {
             {...properties}
         />
     ),
-    p: (properties) => <p className="mt-6 text-[16px] leading-[28px]" {...properties} />,
+    p: (properties) => <p className="mt-6 text-[16px] font-light leading-[28px]" {...properties} />,
     strong: (properties) => <strong className="font-semibold" {...properties} />,
     a: (properties) => <a className="primary hover:underline" {...properties} />,
     pre: (properties) => (
@@ -95,7 +95,7 @@ const components: ComponentsInterface = {
     ul: (properties) => <ul className="mb-6 mt-6 list-disc pl-[26px]" {...properties} />,
     ol: (properties) => <ol className="mb-6 mt-6 list-decimal pl-[26px]" {...properties} />,
     li: (properties) => (
-        <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
+        <li className="my-2 pl-1.5 text-[16px] font-light leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
     blockquote: (properties) => (
         <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
