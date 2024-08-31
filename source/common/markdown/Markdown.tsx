@@ -74,11 +74,11 @@ const components: ComponentsInterface = {
     h5: (properties) => (
         <h5
             id={toAnchor(getInnerText(properties.children))}
-            className="text-base font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="text-[16px] font-medium leading-[28px] before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
             {...properties}
         />
     ),
-    p: (properties) => <p className="mt-6 text-base" {...properties} />,
+    p: (properties) => <p className="mt-6 text-[16px] leading-[28px]" {...properties} />,
     strong: (properties) => <strong className="font-semibold" {...properties} />,
     a: (properties) => <a className="primary hover:underline" {...properties} />,
     pre: (properties) => (
@@ -92,13 +92,15 @@ const components: ComponentsInterface = {
     code: (properties) => (
         <code className="mb-6 whitespace-pre-wrap rounded px-1 py-px font-mono dark:bg-dark" {...properties} />
     ),
-    ul: (properties) => <ul className="mb-6 ml-5 mt-6 list-disc pl-5" {...properties} />,
-    ol: (properties) => <ol className="mb-6 mt-6 list-decimal pl-7" {...properties} />,
-    li: (properties) => <li className="my-1 text-base [&>ol]:my-0 [&>ul]:my-0" {...properties} />,
+    ul: (properties) => <ul className="mb-6 mt-6 list-disc pl-[26px]" {...properties} />,
+    ol: (properties) => <ol className="mb-6 mt-6 list-decimal pl-[26px]" {...properties} />,
+    li: (properties) => (
+        <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
+    ),
     blockquote: (properties) => (
         <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
     ),
-    hr: (properties) => <hr className="my-8 border-light-4 dark:border-dark-4" {...properties} />,
+    hr: (properties) => <hr className="my-10 border-light-4 dark:border-dark-4" {...properties} />,
 };
 
 // Component - Markdown
