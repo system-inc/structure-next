@@ -1,3 +1,5 @@
+'use client';
+
 // Dependencies - React and Next.js
 import React from 'react';
 
@@ -14,6 +16,8 @@ import '@project/source/modules/chat/styles/phi.css';
 
 // Function to get the inner text of a node
 function getInnerText(node: React.ReactNode): string {
+    if(typeof window === 'undefined') return '';
+
     const htmlString = renderToString(node);
     const div = document.createElement('div');
     div.innerHTML = htmlString;
