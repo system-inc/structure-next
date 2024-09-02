@@ -62,6 +62,13 @@ export function Pagination(properties: PaginationInterface) {
 
     // console.log('pageIsValid', pageIsValid);
 
+    // Function to construct href with existing query parameters
+    function constructHrefWithExistingUrlSearchParameters(page: number) {
+        const urlSearchParameters = new URLSearchParams(window.location.search);
+        urlSearchParameters.set('page', page.toString());
+        return `?${urlSearchParameters.toString()}`;
+    }
+
     // Render the component
     return (
         <div className={mergeClassNames('flex items-center justify-end space-x-10 text-sm', properties.className)}>
@@ -179,7 +186,11 @@ export function Pagination(properties: PaginationInterface) {
                         size="icon"
                         icon={ChevronLeftDoubleIcon}
                         disabled={properties.page === 1}
-                        href={useLinks && properties.page !== 1 ? `?page=1` : undefined}
+                        href={
+                            useLinks && properties.page !== 1
+                                ? constructHrefWithExistingUrlSearchParameters(1)
+                                : undefined
+                        }
                         onClick={
                             useLinks
                                 ? undefined
@@ -193,7 +204,11 @@ export function Pagination(properties: PaginationInterface) {
                         size="icon"
                         icon={ChevronLeftIcon}
                         disabled={properties.page <= 1}
-                        href={useLinks && properties.page > 1 ? `?page=${properties.page - 1}` : undefined}
+                        href={
+                            useLinks && properties.page > 1
+                                ? constructHrefWithExistingUrlSearchParameters(properties.page - 1)
+                                : undefined
+                        }
                         onClick={
                             useLinks
                                 ? undefined
@@ -209,7 +224,7 @@ export function Pagination(properties: PaginationInterface) {
                         disabled={properties.page >= properties.pagesTotal}
                         href={
                             useLinks && properties.page < properties.pagesTotal
-                                ? `?page=${properties.page + 1}`
+                                ? constructHrefWithExistingUrlSearchParameters(properties.page + 1)
                                 : undefined
                         }
                         onClick={
@@ -227,7 +242,7 @@ export function Pagination(properties: PaginationInterface) {
                         disabled={properties.page >= properties.pagesTotal}
                         href={
                             useLinks && properties.page < properties.pagesTotal
-                                ? `?page=${properties.pagesTotal}`
+                                ? constructHrefWithExistingUrlSearchParameters(properties.pagesTotal)
                                 : undefined
                         }
                         onClick={
