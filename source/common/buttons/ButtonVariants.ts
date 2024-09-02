@@ -40,7 +40,7 @@ export const ButtonVariants = {
         // Light - Hover
         `hover:bg-light-2 hover:text-dark-1 ` +
         // Dark - Hover
-        `dark:hover:bg-dark-2 dark:hover:text-light-1 ` +
+        `dark:hover:bg-dark-2 dark:hover:border-dark-4 dark:hover:text-light-1 ` +
         // Light - Active
         `active:bg-light-3 active:text-dark ` +
         // Dark - Active
