@@ -2,7 +2,7 @@
  * Import required libraries.
  */
 import React, { MouseEventHandler } from 'react';
-import { useDrag } from '@use-gesture/react';
+import { useDrag, useMove } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -34,8 +34,6 @@ const DragAndDropContext = React.createContext<DragAndDropContextInterface | und
 
 /**
  * A hook to use the drag and drop context.
- *
- * @returns {DragAndDropContextInterface} The drag and drop context.
  */
 const useDragAndDrop = () => {
     const context = React.useContext(DragAndDropContext);
@@ -107,9 +105,6 @@ interface DragAndDropRootProps {
 
 /**
  * The root component for the drag and drop functionality.
- *
- * @param {DragAndDropRootProps} props - The props for the component.
- * @returns {JSX.Element} The JSX element for the component.
  */
 const DragAndDropRoot = ({
     children,
@@ -198,9 +193,6 @@ interface DraggableItemProps {
 }
 /**
  * A component for a draggable item.
- *
- * @param {DraggableItemProps} props - The props for the component.
- * @returns {JSX.Element} The JSX element for the component.
  */
 const DraggableItem = ({
     children,
@@ -238,6 +230,23 @@ const DraggableItem = ({
         y: 0,
         opacity: 1,
     }));
+
+    const hoverCoords = React.useRef<[number, number]>([0, 0]);
+    useMove(
+        (state) => {
+            // Calculate the position of the cursor so it can be used to position the dragged item.
+            if(!state.down) {
+                // Get the current bounds of the container so that it can be positioned fixed without resizing the container
+                const currentBounds = containerRef.current?.getBoundingClientRect();
+
+                // Update the hover coords
+                hoverCoords.current = [state.xy[0] - (currentBounds?.x ?? 0), state.xy[1] - (currentBounds?.y ?? 0)];
+            }
+        },
+        {
+            target: containerRef,
+        },
+    );
 
     useDrag(
         (state) => {
@@ -282,8 +291,8 @@ const DraggableItem = ({
 
             // Move the item
             api.start({
-                x: state.offset[0],
-                y: state.offset[1],
+                x: state.offset[0] + hoverCoords.current[0],
+                y: state.offset[1] + hoverCoords.current[1],
                 opacity: state.dragging && leaveGhost ? 0.8 : 1,
                 immediate: state.down,
             });
@@ -379,12 +388,12 @@ const DraggableItem = ({
                     className={mergeClassNames(
                         grabHandle
                             ? 'flex items-center justify-start'
-                            : 'touch-none select-none hover:cursor-grab active:cursor-grabbing',
+                            : 'touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing',
                         'pointer-events-none absolute -z-10 w-full opacity-50',
                     )}
                 >
                     {grabHandle ? (
-                        <div className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing">
+                        <div className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing">
                             {grabHandle}
                         </div>
                     ) : null}
@@ -397,7 +406,7 @@ const DraggableItem = ({
                 className={mergeClassNames(
                     grabHandle
                         ? 'flex items-center justify-start'
-                        : 'touch-none select-none hover:cursor-grab active:cursor-grabbing',
+                        : 'touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing',
                     leaveGhost ? 'opacity-100' : '',
                 )}
                 // Must be applied to the element directly rather than through `useGesture` or in the `useDrag` hook
@@ -406,7 +415,7 @@ const DraggableItem = ({
                 {grabHandle ? (
                     <div
                         ref={handleRef}
-                        className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing"
+                        className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing"
                     >
                         {grabHandle}
                     </div>
@@ -427,9 +436,6 @@ interface DropAreaProps extends React.HTMLAttributes<HTMLDivElement> {
 
 /**
  * A component for the drop area.
- *
- * @param {DropAreaProps} props - The props for the component.
- * @returns {JSX.Element} The JSX element for the component.
  */
 const DropArea = ({ asChild, children, onItemIsHovering, ...props }: DropAreaProps) => {
     const Component = asChild ? Slot : 'div';
