@@ -2,7 +2,7 @@ import { atom, type SetStateAction } from 'jotai';
 
 export function atomWithBroadcast<Value>(key: string, initialValue: Value) {
     const baseAtom = atom(initialValue);
-    const listeners = new Set<(event: MessageEvent<unknown>) => void>();
+    const listeners = new Set<(event: MessageEvent<Value>) => void>();
     const channel = new BroadcastChannel(key);
 
     channel.onmessage = (event) => {
@@ -21,14 +21,8 @@ export function atomWithBroadcast<Value>(key: string, initialValue: Value) {
     );
 
     broadcastAtom.onMount = (setAtom) => {
-        const listener = (event: MessageEvent<unknown>) => {
-            if(typeof event.data === typeof initialValue) {
-                setAtom({ isEvent: true, value: event.data as Value });
-            }
-            else {
-                if(process.env.NODE_ENV !== 'production')
-                    console.warn(`Received data of unexpected type on channel ${key}`);
-            }
+        const listener = (event: MessageEvent<Value>) => {
+            setAtom({ isEvent: true, value: event.data });
         };
 
         listeners.add(listener);
