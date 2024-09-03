@@ -23,21 +23,24 @@ export function ObjectTable(properties: ObjectTableInterface) {
     let isArrayOfSimilarObjects = false;
 
     // Store the keys of all the objects
-    let arrayOfSimilarObjectsKeys: { [key: string]: boolean } = {};
+    const arrayOfSimilarObjectsKeys: { [key: string]: boolean } = {};
 
     // Check if the object is an array of objects
     if(Array.isArray(properties.object) && properties.object.length > 0) {
-        // Get the keys of the first object
-        let keys = Object.keys(properties.object[0]);
+        // If the first item is an object
+        if(typeof properties.object[0] === 'object') {
+            // Get the keys of the first object
+            const keys = Object.keys(properties.object[0]);
 
-        // Check if every object has the same keys
-        isArrayOfSimilarObjects = properties.object.every(function (item) {
-            return Object.keys(item).every(function (key) {
-                // Store the keys
-                arrayOfSimilarObjectsKeys[key] = true;
-                return keys.includes(key);
+            // Check if every object has the same keys
+            isArrayOfSimilarObjects = properties.object.every(function (item) {
+                return Object.keys(item).every(function (key) {
+                    // Store the keys
+                    arrayOfSimilarObjectsKeys[key] = true;
+                    return keys.includes(key);
+                });
             });
-        });
+        }
     }
 
     // If the object is an array of objects
@@ -71,13 +74,13 @@ export function ObjectTable(properties: ObjectTableInterface) {
         ];
     }
 
-    let rows: TableRowInterface[] = [];
+    const rows: TableRowInterface[] = [];
 
     // If the object is an array of objects
     if(isArrayOfSimilarObjects) {
         // Add a row for each object
         properties.object.forEach(function (item: any, itemIndex: number) {
-            let row: TableRowInterface = {
+            const row: TableRowInterface = {
                 cells: [],
             };
 
@@ -117,7 +120,7 @@ export function ObjectTable(properties: ObjectTableInterface) {
                     value = 'false';
                 }
 
-                let row = {
+                const row = {
                     cells: [
                         {
                             column: columns[0],

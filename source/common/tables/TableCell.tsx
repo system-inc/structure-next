@@ -130,8 +130,9 @@ export function TableCell(properties: TableCellInterface) {
                 // Do nothing
             }
 
-            // If the JSON is valid, format it into a table
-            if(json) {
+            // If the JSON is valid and is an array or an object, format it into a table
+            if(json && (Array.isArray(json) || typeof json === 'object')) {
+                // console.log('json', json);
                 value = <ObjectTable object={json} containerClassName={''} />;
             }
             else {

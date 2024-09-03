@@ -96,7 +96,7 @@ function TableRowInputCheckbox(properties: TableRowInterface) {
 
     React.useEffect(
         function () {
-            console.log('TableRowInputCheckbox useEffect', propertiesRowsLength);
+            // console.log('TableRowInputCheckbox useEffect', propertiesRowsLength);
             if(checkboxRef.current) {
                 const headerCondition =
                     properties.type === 'Header' &&
@@ -105,12 +105,12 @@ function TableRowInputCheckbox(properties: TableRowInterface) {
                 const bodyCondition = propertiesSelectedRowsIndexesSet?.has(properties.rowIndex ?? -1);
 
                 if(properties.type === 'Header') {
-                    console.log(
-                        'headerCondition',
-                        headerCondition,
-                        propertiesRowsLength,
-                        propertiesSelectedRowsIndexesSet?.size,
-                    );
+                    // console.log(
+                    //     'headerCondition',
+                    //     headerCondition,
+                    //     propertiesRowsLength,
+                    //     propertiesSelectedRowsIndexesSet?.size,
+                    // );
                 }
 
                 checkboxRef.current.setValue(
