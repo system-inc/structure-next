@@ -39,7 +39,7 @@ export interface PostInterface {
     editUrlPath?: string;
     createdByProfileId: string;
     createdByProfile: PostsQuery['posts']['items'][0]['createdByProfile'];
-    content?: string;
+    content?: PostsQuery['posts']['items'][0]['content'];
     upvoteCount: number;
     voteType: PostVoteType | null | undefined;
     reactions?: PostReactionsType;

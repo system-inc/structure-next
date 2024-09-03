@@ -35,6 +35,9 @@ export function timeAgo(millisecondsSinceUnixEpoch: number) {
     if(Number(weeksAgo) < 4) {
         return `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
     }
+    if(Number(monthsAgo) < 1) {
+        return `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
+    }
     if(Number(monthsAgo) < 12) {
         return `${monthsAgo} month${Number(monthsAgo) === 1 ? '' : 's'} ago`;
     }
