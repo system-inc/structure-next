@@ -118,6 +118,7 @@ export function PostControls(properties: PostControlsInterface) {
 
             <div className="flex items-center space-x-2">
                 <ProfileLink
+                    className="flex-shrink-0"
                     username={properties.createdByProfile?.username ?? 'anonymous'}
                     displayName={properties.createdByProfile?.displayName ?? 'Anonymous'}
                     imageUrls={
@@ -137,7 +138,10 @@ export function PostControls(properties: PostControlsInterface) {
 
                 {/* Time Ago */}
                 <div className="text-neutral+3 dark:text-neutral">
-                    <TimeAgo startTimeInMilliseconds={new Date(properties.createdAt).getTime()} />
+                    <TimeAgo
+                        startTimeInMilliseconds={new Date(properties.createdAt).getTime()}
+                        abbreviatedOnlyAtMobileSize={true}
+                    />
                 </div>
             </div>
         </div>

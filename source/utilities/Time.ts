@@ -4,9 +4,10 @@
  * (in seconds, minutes, hours, days, weeks, months, or years) since the provided timestamp.
  *
  * @param {number} millisecondsSinceUnixEpoch - The timestamp to convert, represented as milliseconds since the Unix epoch.
+ * @param {boolean} abbreviated - Whether to return an abbreviated format (e.g., "7s" instead of "7 seconds ago").
  * @returns {string} A string representing the elapsed time since the timestamp in a human-readable format.
  */
-export function timeAgo(millisecondsSinceUnixEpoch: number) {
+export function timeAgo(millisecondsSinceUnixEpoch: number, abbreviated: boolean = false) {
     const deltaMillisecondsSinceUnixEpoch = new Date().getTime() - millisecondsSinceUnixEpoch;
 
     const secondsAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / 1000).toFixed(0);
@@ -18,31 +19,31 @@ export function timeAgo(millisecondsSinceUnixEpoch: number) {
     const yearsAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60 * 60 * 24 * 365)).toFixed(0);
 
     if(Number(secondsAgo) < 5) {
-        return `now`;
+        return abbreviated ? `now` : `now`;
     }
     if(Number(secondsAgo) < 60) {
-        return `${secondsAgo} second${Number(secondsAgo) === 1 ? '' : 's'} ago`;
+        return abbreviated ? `${secondsAgo}s` : `${secondsAgo} second${Number(secondsAgo) === 1 ? '' : 's'} ago`;
     }
     if(Number(minutesAgo) < 60) {
-        return `${minutesAgo} minute${Number(minutesAgo) === 1 ? '' : 's'} ago`;
+        return abbreviated ? `${minutesAgo}m` : `${minutesAgo} minute${Number(minutesAgo) === 1 ? '' : 's'} ago`;
     }
     if(Number(hoursAgo) < 24) {
-        return `${hoursAgo} hour${Number(hoursAgo) === 1 ? '' : 's'} ago`;
+        return abbreviated ? `${hoursAgo}h` : `${hoursAgo} hour${Number(hoursAgo) === 1 ? '' : 's'} ago`;
     }
     if(Number(daysAgo) < 7) {
-        return `${daysAgo} day${Number(daysAgo) === 1 ? '' : 's'} ago`;
+        return abbreviated ? `${daysAgo}d` : `${daysAgo} day${Number(daysAgo) === 1 ? '' : 's'} ago`;
     }
     if(Number(weeksAgo) < 4) {
-        return `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
+        return abbreviated ? `${weeksAgo}w` : `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
     }
     if(Number(monthsAgo) < 1) {
-        return `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
+        return abbreviated ? `${weeksAgo}w` : `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
     }
     if(Number(monthsAgo) < 12) {
-        return `${monthsAgo} month${Number(monthsAgo) === 1 ? '' : 's'} ago`;
+        return abbreviated ? `${monthsAgo}mo` : `${monthsAgo} month${Number(monthsAgo) === 1 ? '' : 's'} ago`;
     }
 
-    return `${yearsAgo} year${Number(yearsAgo) === 1 ? '' : 's'} ago`;
+    return abbreviated ? `${yearsAgo}y` : `${yearsAgo} year${Number(yearsAgo) === 1 ? '' : 's'} ago`;
 }
 
 // Function to convert a date object into the format January 12, 2020

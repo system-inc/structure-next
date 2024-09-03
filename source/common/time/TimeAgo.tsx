@@ -11,6 +11,8 @@ import { timeAgo } from '@structure/source/utilities/Time';
 export interface TimeAgoProperties {
     className?: string;
     startTimeInMilliseconds: number;
+    abbreviated?: boolean;
+    abbreviatedOnlyAtMobileSize?: boolean;
 }
 export function TimeAgo(properties: TimeAgoProperties) {
     // State
@@ -36,7 +38,16 @@ export function TimeAgo(properties: TimeAgoProperties) {
 
     // Render the component
     return (
-        <span className={mergeClassNames('', properties.className)}>{timeAgo(properties.startTimeInMilliseconds)}</span>
+        <span className={mergeClassNames('', properties.className)}>
+            {properties.abbreviatedOnlyAtMobileSize ? (
+                <>
+                    <span className="sm:hidden">{timeAgo(properties.startTimeInMilliseconds, true)}</span>
+                    <span className="hidden sm:inline">{timeAgo(properties.startTimeInMilliseconds)}</span>
+                </>
+            ) : (
+                timeAgo(properties.startTimeInMilliseconds, properties.abbreviated)
+            )}
+        </span>
     );
 }
 
