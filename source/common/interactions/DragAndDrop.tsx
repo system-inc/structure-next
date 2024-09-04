@@ -250,6 +250,10 @@ const DraggableItem = ({
 
     useDrag(
         (state) => {
+            if(!state.intentional) {
+                return;
+            }
+
             if(state.first) {
                 // Set the dragging flag to true
                 isDragging.current = true;
