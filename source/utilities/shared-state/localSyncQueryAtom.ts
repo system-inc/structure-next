@@ -32,17 +32,19 @@ export function localSyncQueryAtom<TData, TVariables extends OperationVariables 
         : atomWithBroadcast<TData | undefined>(key, undefined);
 
     syncedAtom.onMount = (setAtom) => {
-        const queryObserver = apolloClient.subscribe({
+        const queryObserver = apolloClient.watchQuery({
             query: query,
             variables: queryVariables,
         });
-        queryObserver.subscribe((result) => {
+        const subscribtion = queryObserver.subscribe((result) => {
             const data = !!result.data ? result.data : undefined;
 
             if(data && !syncOptions?.preferLocal) {
                 setAtom(data);
             }
         });
+
+        return subscribtion.unsubscribe;
     };
 
     const derivedAtom = atom(

@@ -7,6 +7,7 @@ import { atomWithBroadcast } from './atomWithBroadcast';
 export function localSyncMutationAtom<TData, TVariables extends OperationVariables | undefined>(
     key: string,
     mutation: DocumentNode | TypedDocumentNode<TData, TVariables>,
+    variables: TVariables | undefined,
     syncOptions?:
         | {
               preferLocal?: boolean;
@@ -27,6 +28,23 @@ export function localSyncMutationAtom<TData, TVariables extends OperationVariabl
               { getOnInit: syncOptions?.getOnInitialization }, // Optionally hydrate the atom with the value from localStorage on initialization
           )
         : atomWithBroadcast<TData | undefined>(key, undefined);
+
+    syncedAtom.onMount = (setAtom) => {
+        const subscriber = apolloClient.watchQuery({
+            query: mutation,
+            variables: variables,
+        });
+
+        const subscription = subscriber.subscribe((result) => {
+            const data = !!result.data ? result.data : undefined;
+
+            if(data && !syncOptions?.preferLocal) {
+                setAtom(data);
+            }
+        });
+
+        return subscription.unsubscribe;
+    };
 
     const derivedAtom = atom(
         // Getter
