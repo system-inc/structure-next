@@ -63,7 +63,10 @@ const components: ComponentsInterface = {
     strong: (properties) => <strong className="font-semibold" {...properties} />,
     a: (properties) => <a className="primary hover:underline" {...properties} />,
     pre: (properties) => (
-        <pre className="relative mb-6 rounded-md p-5 text-sm dark:bg-dark" {...properties}>
+        <pre
+            className="relative mb-6 rounded-md border border-light-4 bg-light-2 p-5 text-sm dark:border-dark-4 dark:bg-dark"
+            {...properties}
+        >
             {properties.children}
             <span className="text-sans absolute right-3 top-3">
                 <CopyButton className="" iconClassName="h-3.5 w-3.5" value={getInnerText(properties.children)} />
@@ -71,7 +74,10 @@ const components: ComponentsInterface = {
         </pre>
     ),
     code: (properties) => (
-        <code className="mb-6 whitespace-pre-wrap rounded px-1 py-px font-mono dark:bg-dark" {...properties} />
+        <code
+            className="mb-6 whitespace-pre-wrap rounded border border-light-4 bg-light-2 px-1 py-px font-mono text-sm dark:border-dark-4 dark:bg-dark"
+            {...properties}
+        />
     ),
     ul: (properties) => <ul className="mb-6 mt-6 list-disc pl-[26px]" {...properties} />,
     ol: (properties) => <ol className="mb-6 mt-6 list-decimal pl-[26px]" {...properties} />,
