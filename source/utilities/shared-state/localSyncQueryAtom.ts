@@ -44,7 +44,9 @@ export function localSyncQueryAtom<TData, TVariables extends OperationVariables 
             }
         });
 
-        return subscribtion.unsubscribe;
+        return () => {
+            subscribtion.unsubscribe();
+        };
     };
 
     const derivedAtom = atom(

@@ -43,7 +43,9 @@ export function localSyncMutationAtom<TData, TVariables extends OperationVariabl
             }
         });
 
-        return subscription.unsubscribe;
+        return () => {
+            subscription.unsubscribe();
+        };
     };
 
     const derivedAtom = atom(
