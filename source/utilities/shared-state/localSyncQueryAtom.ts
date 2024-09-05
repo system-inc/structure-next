@@ -1,5 +1,3 @@
-// TODO: Maybe add a 'persist' option to use local storage or BroadcastChannel API to sync the data between tabs.
-
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { type DocumentNode, type OperationVariables, type TypedDocumentNode } from '@apollo/client';
@@ -32,21 +30,26 @@ export function localSyncQueryAtom<TData, TVariables extends OperationVariables 
         : atomWithBroadcast<TData | undefined>(key, undefined);
 
     syncedAtom.onMount = (setAtom) => {
-        const queryObserver = apolloClient.watchQuery({
-            query: query,
-            variables: queryVariables,
-        });
-        const subscribtion = queryObserver.subscribe((result) => {
-            const data = !!result.data ? result.data : undefined;
+        try {
+            const queryObserver = apolloClient.watchQuery({
+                query: query,
+                variables: queryVariables,
+            });
+            const subscribtion = queryObserver.subscribe((result) => {
+                const data = !!result.data ? result.data : undefined;
 
-            if(data && !syncOptions?.preferLocal) {
-                setAtom(data);
-            }
-        });
+                if(data && !syncOptions?.preferLocal) {
+                    setAtom(data);
+                }
+            });
 
-        return () => {
-            subscribtion.unsubscribe();
-        };
+            return () => {
+                subscribtion.unsubscribe();
+            };
+        }
+        catch(error) {
+            console.error(error);
+        }
     };
 
     const derivedAtom = atom(
@@ -60,16 +63,16 @@ export function localSyncQueryAtom<TData, TVariables extends OperationVariables 
             // Update the atom value
             set(syncedAtom, newValue);
             // Update the Apollo cache
-            await apolloClient.cache.updateQuery(
-                {
-                    query,
-                    variables: queryVariables,
-                },
-                (old) => ({
-                    ...old,
-                    ...newValue,
-                }),
-            );
+            // await apolloClient.cache.updateQuery(
+            //     {
+            //         query,
+            //         variables: queryVariables,
+            //     },
+            //     (old) => ({
+            //         ...old,
+            //         ...newValue,
+            //     }),
+            // );
         },
     );
 

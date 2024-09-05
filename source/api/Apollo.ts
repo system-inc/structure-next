@@ -29,9 +29,16 @@ function getApolloClientHttpLink(mode: 'Browser' | 'Server') {
 }
 
 // Apollo client
+const apolloClientCache = new InMemoryCache({
+    typePolicies: {
+        ShoppingBagItem: {
+            keyFields: ['id'],
+        },
+    },
+});
 export const apolloClient = new ApolloClient({
     link: getApolloClientHttpLink('Browser'),
-    cache: new InMemoryCache(),
+    cache: apolloClientCache,
     ssrMode: true,
 });
 
