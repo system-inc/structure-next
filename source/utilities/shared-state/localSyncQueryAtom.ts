@@ -35,7 +35,7 @@ export function localSyncQueryAtom<TData, TVariables extends OperationVariables 
                 query: query,
                 variables: queryVariables,
             });
-            const subscribtion = queryObserver.subscribe((result) => {
+            const subscription = queryObserver.subscribe((result) => {
                 const data = !!result.data ? result.data : undefined;
 
                 if(data && !syncOptions?.preferLocal) {
@@ -44,7 +44,7 @@ export function localSyncQueryAtom<TData, TVariables extends OperationVariables 
             });
 
             return () => {
-                subscribtion.unsubscribe();
+                subscription.unsubscribe();
             };
         }
         catch(error) {
