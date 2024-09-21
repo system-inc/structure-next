@@ -39,7 +39,6 @@ export interface StructureSettingsInterface {
     tagline: string;
     description: string;
     url: string;
-    assetsUrl: string;
     sourceCodeRepositoryUrls: {
         structure: string;
         project: string;
@@ -52,6 +51,7 @@ export interface StructureSettingsInterface {
         defaultClassName: string;
     };
     assets: {
+        url: string;
         favicon: ThemedAsset;
         logo: LogoAsset;
     };
@@ -71,7 +71,6 @@ export const StructureSettings: StructureSettingsInterface = {
     tagline: 'React and Next.js Implementation for Base',
     description: 'A React and Next.js implementation for Base.',
     url: 'https://www.system.inc/',
-    assetsUrl: 'https://assets.system.inc/',
     sourceCodeRepositoryUrls: {
         structure: 'https://github.com/system-inc/structure-next/',
         project: 'https://github.com/system-inc/structure-next-template/',
@@ -85,6 +84,7 @@ export const StructureSettings: StructureSettingsInterface = {
         defaultClassName: 'light',
     },
     assets: {
+        url: 'https://assets.system.inc/',
         favicon: {
             light: {
                 location: '/images/icons/favicons/favicon-light.png',
