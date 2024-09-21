@@ -1,6 +1,3 @@
-// Dependencies
-import ProjectSettings from '../../StructureSettings'; // Use relative path here for tailwind.config.js
-
 // Types
 interface ApiService {
     url: string;
@@ -34,7 +31,8 @@ interface Platform {
     type: string;
 }
 
-export interface StructureSettingsType {
+// Interface - StructureSettingsInterface
+export interface StructureSettingsInterface {
     identifier: string;
     title: string;
     ownerDisplayName: string;
@@ -65,8 +63,8 @@ export interface StructureSettingsType {
     };
 }
 
-// Default Settings
-let StructureSettings: StructureSettingsType = {
+// Default - StructureSettings
+export const StructureSettings: StructureSettingsInterface = {
     identifier: 'system',
     title: 'Structure',
     ownerDisplayName: 'System, Inc.',
@@ -126,14 +124,6 @@ let StructureSettings: StructureSettingsType = {
         },
     },
 };
-
-// Merge Project Settings
-if(ProjectSettings) {
-    StructureSettings = {
-        ...StructureSettings,
-        ...ProjectSettings,
-    };
-}
 
 // Export - Default
 export default StructureSettings;

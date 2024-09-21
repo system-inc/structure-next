@@ -1,5 +1,5 @@
-// Dependencies - Structure
-import { StructureSettings } from '@project/StructureSettings';
+// Dependencies - Project
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - Main Components
 import SideNavigationLayoutNavigationTop from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationTop';
@@ -20,7 +20,7 @@ export const maximumNavigationWidth = 488;
 
 // Settings - Customizable Local Storage Key
 export function getSideNavigationLayoutLocalStorageKey(identifier: string) {
-    return StructureSettings.identifier + identifier + 'SideNavigationLayoutNavigation';
+    return ProjectSettings.identifier + identifier + 'SideNavigationLayoutNavigation';
 }
 
 // Shared State - Atoms

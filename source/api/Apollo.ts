@@ -1,5 +1,5 @@
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - API
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
@@ -8,7 +8,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 function getApolloClientHttpLink(mode: 'Browser' | 'Server') {
     // Create the link to the API
     return createHttpLink({
-        uri: StructureSettings.apis.base.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
+        uri: ProjectSettings.apis.base.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
         credentials: mode === 'Browser' ? 'include' : undefined, // Cloudflare Workers does not support 'include'
         // Disable caching for server-side rendering for development
         fetch:

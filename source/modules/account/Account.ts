@@ -1,5 +1,5 @@
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - API
 import {
@@ -11,7 +11,7 @@ import {
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Account variables shared across the application
-export const accountSignedInKey = StructureSettings.identifier + 'AccountSignedIn';
+export const accountSignedInKey = ProjectSettings.identifier + 'AccountSignedIn';
 
 // Class - Account
 export class Account {

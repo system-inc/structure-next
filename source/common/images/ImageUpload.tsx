@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -60,7 +60,7 @@ export function ImageUpload(properties: ImageUploadInterface) {
 
         // Upload image to server via designated avatar URL
 
-        fetch(StructureSettings.apis.base.url + 'accounts/profiles/images', {
+        fetch(ProjectSettings.apis.base.url + 'accounts/profiles/images', {
             method: 'POST',
             body: imgData,
             headers: {

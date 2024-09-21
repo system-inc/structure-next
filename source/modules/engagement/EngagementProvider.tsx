@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -65,7 +65,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             // console.log('Current page:', urlPath);
 
             // Get the device ID from local storage
-            const deviceIdLocalStorageKey = StructureSettings.identifier + 'DeviceId';
+            const deviceIdLocalStorageKey = ProjectSettings.identifier + 'DeviceId';
             let deviceId = localStorage.getItem(deviceIdLocalStorageKey) || '';
 
             // If there is no device ID

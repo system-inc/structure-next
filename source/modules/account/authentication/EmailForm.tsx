@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import { StructureSettings } from '@project/StructureSettings';
+// Dependencies - Project
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -33,7 +33,7 @@ export function EmailForm(properties: EmailFormInterface) {
     // Render the component
     return (
         <div>
-            <h1 className="mb-2 text-xl">{StructureSettings.title}</h1>
+            <h1 className="mb-2 text-xl">{ProjectSettings.title}</h1>
 
             <div className="neutral">
                 {properties.children && properties.children}

@@ -1,5 +1,5 @@
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -87,7 +87,7 @@ export function TableCell(properties: TableCellInterface) {
 
             // If the URL is relative, prepend the assets URL
             if(!url?.startsWith('http')) {
-                url = StructureSettings.assetsUrl + url;
+                url = ProjectSettings.assetsUrl + url;
             }
 
             content = <TableCellContentImageUrl value={properties.value} url={url} openUrlInNewTab={true} />;

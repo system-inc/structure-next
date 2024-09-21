@@ -2,8 +2,8 @@
 // TODO: I don't like using use client here as it prevents the home page from being rendered on the server
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 
@@ -24,7 +24,7 @@ export function HomePage(properties: HomePageProperties) {
     return (
         <>
             {/* Header */}
-            <h1>Header - {StructureSettings.title}</h1>
+            <h1>Header - {ProjectSettings.title}</h1>
             {/* <Button onClick={handleClick}>Show Sign In/Sign Up Modal</Button> */}
             {/* Content */}
             <h1>Content</h1>

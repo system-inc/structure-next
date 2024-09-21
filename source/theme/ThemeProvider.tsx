@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -116,14 +116,14 @@ export function ThemeProvider(properties: ThemeProviderInterface) {
                 // Change the favicon to the dark favicon
                 document
                     .querySelector<HTMLLinkElement>('link[rel="icon"]')
-                    ?.setAttribute('href', StructureSettings.assets.favicon.dark.location);
+                    ?.setAttribute('href', ProjectSettings.assets.favicon.dark.location);
             }
             // If the operating system is set to light mode
             else {
                 // Change the favicon to the light favicon
                 document
                     .querySelector<HTMLLinkElement>('link[rel="icon"]')
-                    ?.setAttribute('href', StructureSettings.assets.favicon.light.location);
+                    ?.setAttribute('href', ProjectSettings.assets.favicon.light.location);
             }
 
             // Run the theme mode change handler

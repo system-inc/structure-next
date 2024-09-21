@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import Link from 'next/link';
@@ -17,7 +17,7 @@ export function WaitListPage() {
 
     // Function to render social links
     function renderSocialLinks() {
-        const platforms = StructureSettings.platforms;
+        const platforms = ProjectSettings.platforms;
         const platformsKeys = Object.keys(platforms);
 
         return platformsKeys.map(function (platformKey, index) {
@@ -50,14 +50,14 @@ export function WaitListPage() {
                         <div
                             className="mb-6 bg-logoLight bg-no-repeat md:hidden dark:bg-logoDark"
                             style={{
-                                backgroundSize: StructureSettings.assets.logo.width + 'px',
-                                width: StructureSettings.assets.logo.width + 'px',
-                                height: StructureSettings.assets.logo.height + 'px',
+                                backgroundSize: ProjectSettings.assets.logo.width + 'px',
+                                width: ProjectSettings.assets.logo.width + 'px',
+                                height: ProjectSettings.assets.logo.height + 'px',
                             }}
                         />
 
                         {/* Project description */}
-                        <h1 className="mb-5 leading-10">{StructureSettings.description}</h1>
+                        <h1 className="mb-5 leading-10">{ProjectSettings.description}</h1>
 
                         {/* Wait List form */}
                         <WaitListForm />
@@ -65,8 +65,8 @@ export function WaitListPage() {
                         {/* Footer */}
                         <p className="mt-6 text-sm font-light">
                             &copy;{currentYear}{' '}
-                            <Link href={StructureSettings.url} target="_blank" className="text-blue underline">
-                                {StructureSettings.ownerDisplayName}
+                            <Link href={ProjectSettings.url} target="_blank" className="text-blue underline">
+                                {ProjectSettings.ownerDisplayName}
                             </Link>
                             {' • '}
                             {renderSocialLinks()}
@@ -80,18 +80,18 @@ export function WaitListPage() {
                         <div
                             className="bg-light dark:bg-dark"
                             style={{
-                                marginLeft: '-' + StructureSettings.assets.logo.height / 2 + 'px',
-                                paddingTop: StructureSettings.assets.logo.height + 'px',
-                                paddingBottom: StructureSettings.assets.logo.height + 'px',
+                                marginLeft: '-' + ProjectSettings.assets.logo.height / 2 + 'px',
+                                paddingTop: ProjectSettings.assets.logo.height + 'px',
+                                paddingBottom: ProjectSettings.assets.logo.height + 'px',
                             }}
                         >
                             {/* Logo */}
                             <div
                                 className={`bg-logoLight bg-no-repeat dark:bg-logoDark`}
                                 style={{
-                                    backgroundSize: StructureSettings.assets.logo.width + 'px',
-                                    width: StructureSettings.assets.logo.width + 'px',
-                                    height: StructureSettings.assets.logo.height + 'px',
+                                    backgroundSize: ProjectSettings.assets.logo.width + 'px',
+                                    width: ProjectSettings.assets.logo.width + 'px',
+                                    height: ProjectSettings.assets.logo.height + 'px',
                                 }}
                             />
                         </div>

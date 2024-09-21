@@ -1,10 +1,10 @@
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Theme variables shared across the application
-export const themeModeLocalStorageKey = StructureSettings.identifier + 'ThemeMode';
-export const themeModeChangeEventIdentifier = StructureSettings.identifier + 'ThemeMode.change';
-export const themeClassNameCookieKey = StructureSettings.identifier + 'ThemeClassName';
+export const themeModeLocalStorageKey = ProjectSettings.identifier + 'ThemeMode';
+export const themeModeChangeEventIdentifier = ProjectSettings.identifier + 'ThemeMode.change';
+export const themeClassNameCookieKey = ProjectSettings.identifier + 'ThemeClassName';
 export const lightThemeClassName = 'light';
 export const darkThemeClassName = 'dark';
 export const darkThemeMediaQuery = '(prefers-color-scheme: dark)';

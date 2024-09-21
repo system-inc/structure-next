@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Structure
-import { StructureSettings } from '@project/StructureSettings';
+// Dependencies - Project
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -74,8 +74,8 @@ export function SideNavigationLayoutNavigationSideToggle(
                 <Image
                     src={
                         themeClassName == darkThemeClassName
-                            ? StructureSettings.assets.favicon.dark.location
-                            : StructureSettings.assets.favicon.light.location
+                            ? ProjectSettings.assets.favicon.dark.location
+                            : ProjectSettings.assets.favicon.light.location
                     }
                     alt="Logo"
                     height={28} // h-7 = 28px

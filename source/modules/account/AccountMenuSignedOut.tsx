@@ -1,5 +1,5 @@
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -20,9 +20,7 @@ export function AccountMenuSignedOut(properties: AccountMenuSignedOutProperties)
     return (
         <div className="w-full">
             <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
-                <p className="whitespace-nowrap font-medium hover:cursor-pointer">
-                    Welcome to {StructureSettings.title}
-                </p>
+                <p className="whitespace-nowrap font-medium hover:cursor-pointer">Welcome to {ProjectSettings.title}</p>
             </div>
             <div className="px-4 pt-4">
                 <Button

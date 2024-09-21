@@ -1,5 +1,5 @@
-// Dependencies - Structure
-import StructureSettings from '@project/StructureSettings';
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -26,7 +26,7 @@ export function NotConnected(properties: NotConnectedProperties) {
                 {...properties.alertProperties}
             >
                 <div className="space-y-2">
-                    <p>Unable to connect to the {StructureSettings.title} servers.</p>
+                    <p>Unable to connect to the {ProjectSettings.title} servers.</p>
                 </div>
             </Alert>
         </div>
