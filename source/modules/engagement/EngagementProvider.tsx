@@ -49,6 +49,11 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     // Trigger whenever the URL changes
     React.useEffect(
         function () {
+            // Return early if the engagement module is not enabled
+            if(!ProjectSettings.modules?.engagement === false) {
+                return;
+            }
+
             // Return early if we are not in the browser
             if(typeof window !== 'object') {
                 return;
