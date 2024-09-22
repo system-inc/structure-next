@@ -39,16 +39,19 @@ export interface StructureSettingsInterface {
     tagline: string;
     description: string;
     url: string;
-<<<<<<< HEAD
-    sourceCodeRepositoryUrls: {
-        structure: string;
-        project: string;
-    };
-=======
->>>>>>> 86dc721 (Must explicitly enable the modules you want)
     apis: {
         base: ApiService;
         [key: string]: ApiService;
+    };
+    modules: {
+        engagement: boolean;
+        accounts: boolean;
+        support: boolean;
+        posts: boolean;
+        commerce: boolean;
+    };
+    theme?: {
+        defaultClassName: string;
     };
     assets: {
         url: string;
@@ -63,16 +66,7 @@ export interface StructureSettingsInterface {
             url: string;
         };
     };
-    modules: {
-        engagement: boolean;
-        accounts: boolean;
-        support: boolean;
-        posts: boolean;
-        commerce: boolean;
-    };
-    theme?: {
-        defaultClassName: string;
-    };
+
     services?: {
         [providerIdentifier: string]: Service;
     };
@@ -89,13 +83,6 @@ export const StructureSettings: StructureSettingsInterface = {
     tagline: 'React and Next.js Implementation for Base',
     description: 'A React and Next.js implementation for Base.',
     url: 'https://www.system.inc/',
-<<<<<<< HEAD
-    sourceCodeRepositoryUrls: {
-        structure: 'https://github.com/system-inc/structure-next/',
-        project: 'https://github.com/system-inc/structure-next-template/',
-    },
-=======
->>>>>>> 86dc721 (Must explicitly enable the modules you want)
     apis: {
         base: {
             url: 'https://api.system.inc/graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
