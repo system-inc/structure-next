@@ -87,7 +87,7 @@ export function TableCell(properties: TableCellInterface) {
 
             // If the URL is relative, prepend the assets URL
             if(!url?.startsWith('http')) {
-                url = ProjectSettings.assetsUrl + url;
+                url = ProjectSettings.assets.url + url;
             }
 
             content = <TableCellContentImageUrl value={properties.value} url={url} openUrlInNewTab={true} />;
