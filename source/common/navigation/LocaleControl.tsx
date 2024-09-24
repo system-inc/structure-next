@@ -2,8 +2,8 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+// import Link from 'next/link';
+// import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
 
@@ -19,11 +19,12 @@ export interface LocaleControlInterface {
 }
 export function LocaleControl(properties: LocaleControlInterface) {
     // Hooks
-    const urlPathname = usePathname();
+    // const urlPathname = usePathname();
 
     // Render the component
     return (
-        <div className={mergeClassNames(properties.className, 'flex cursor-pointer items-center')}>
+        // <div className={mergeClassNames(properties.className, 'flex cursor-pointer items-center')}>
+        <div className={mergeClassNames(properties.className, 'flex items-center')}>
             <CurrentLocationIcon className="mr-2 h-4 w-4" />
             <span>English (United States)</span>
         </div>

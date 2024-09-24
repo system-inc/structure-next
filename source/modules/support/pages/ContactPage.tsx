@@ -2,10 +2,10 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+// import { Button } from '@structure/source/common/buttons/Button';
 
 // Component - ContactPage
 export function ContactPage() {
