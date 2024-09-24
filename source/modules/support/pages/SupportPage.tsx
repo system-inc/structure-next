@@ -13,6 +13,12 @@ import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';
 import CreditCardIcon from '@structure/assets/icons/finance/CreditCardIcon.svg';
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 import ShippingBoxIcon from '@structure/assets/icons/commerce/ShippingBoxIcon.svg';
+import ShippingBoxReturnIcon from '@structure/assets/icons/commerce/ShippingBoxReturnIcon.svg';
+import TruckIcon from '@structure/assets/icons/transportation/TruckIcon.svg';
+import StackCapsulesIcon from '@project/assets/icons/stack/StackCapsulesIcon.svg';
+import HeadsetIcon from '@structure/assets/icons/communication/HeadsetIcon.svg';
+import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
+import BalanceScaleIcon from '@structure/assets/icons/tools/BalanceScaleIcon.svg';
 
 const topics = [
     {
@@ -28,25 +34,25 @@ const topics = [
         articleCount: 5,
     },
     {
-        icon: UserIcon,
+        icon: TruckIcon,
         title: 'Shipping and Delivery',
         description: 'Shipping information, tracking orders, delivery delays, lost packages',
         articleCount: 5,
     },
     {
-        icon: UserIcon,
+        icon: ShippingBoxReturnIcon,
         title: 'Returns, Refunds, and Exchanges',
         description: 'Return policies, starting a return, refund processing, exchanging items',
         articleCount: 5,
     },
     {
-        icon: UserIcon,
+        icon: InformationCircledIcon,
         title: 'Product Information and Availability',
         description: 'Product details, stock availability, restocking dates',
         articleCount: 5,
     },
     {
-        icon: UserIcon,
+        icon: StackCapsulesIcon,
         title: 'Stack',
         description: 'Ingredient details, health benefits, dietary restrictions',
         articleCount: 5,
@@ -64,7 +70,7 @@ const topics = [
         articleCount: 5,
     },
     {
-        icon: UserIcon,
+        icon: HeadsetIcon,
         title: 'Technical Support and Accessibility',
         description: 'Website glitches, app errors, accessibility support',
         articleCount: 5,
@@ -76,7 +82,7 @@ const topics = [
         articleCount: 5,
     },
     {
-        icon: UserIcon,
+        icon: BalanceScaleIcon,
         title: 'Legal and Compliance Inquiries',
         description: 'Privacy policies, terms of service, data deletion requests',
         articleCount: 5,
@@ -102,7 +108,7 @@ export function SupportPage() {
                             href="/support/account"
                             className="flex flex-col rounded-lg border border-light-3 p-5 hover:border-light-6 active:border-neutral+5 dark:border-dark-4 dark:hover:border-dark-6 dark:active:border-neutral-5"
                         >
-                            <topic.icon className="neutral h-5 w-5" />
+                            <topic.icon className="neutral h-6 w-6" />
 
                             <h2 className="mt-4 text-base">{topic.title}</h2>
 
