@@ -6,8 +6,9 @@ import Link from 'next/link';
 
 // Dependencies - Main Components
 import { useAccount } from '@structure/source/modules/account/AccountProvider';
-import { Button } from '@structure/source/common/buttons/Button';
 import { NavigationTrail } from '@structure/source/common/navigation/NavigationTrail';
+import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
+import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
@@ -152,7 +153,7 @@ export function SupportPage() {
                                     return (
                                         <div key={articleIndex} className="mb-4">
                                             <Link
-                                                className="-mx-3.5 -my-3 flex items-center justify-between rounded-md px-3.5 py-3 transition-colors hover:bg-dark-2"
+                                                className="-mx-3.5 -my-3 flex items-center justify-between rounded-md px-3.5 py-3 transition-colors hover:bg-light-1 dark:hover:bg-dark-2"
                                                 href={`/support/${slug(article.title)}`}
                                             >
                                                 <span>
@@ -171,18 +172,7 @@ export function SupportPage() {
                 })}
             </div>
 
-            <div className="mt-4 flex justify-center">
-                <div>
-                    <p className="mb-4">Did you find the information you were looking for?</p>
-                    <div className="flex justify-center">
-                        <div className="flex w-36 justify-between text-3xl">
-                            <div className="cursor-pointer">😔</div>
-                            <div className="cursor-pointer">🤨</div>
-                            <div className="cursor-pointer">😃</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <SupportFeedback className="flex justify-center text-center" />
 
             <hr className="my-16" />
 
