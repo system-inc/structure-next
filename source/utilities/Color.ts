@@ -509,3 +509,16 @@ export function hslaToRgbaString(hue: number, saturation: number, lightness: num
 
     return `rgba(${Math.round(red * 255)}, ${Math.round(green * 255)}, ${Math.round(blue * 255)}, ${alpha})`;
 }
+
+// Function to get a rainbow hex color based on a percentage
+export function getRainbowHexColor(percent: number, saturation: number = 0.5, lightness: number = 0.5): string {
+    const hue = percent;
+    return hslToHexString(hue, saturation, lightness);
+}
+
+// Function to get a rainbow hex color based on a percentage and theme
+export function getRainbowHexColorForTheme(percent: number, theme?: 'dark' | 'light' | string | null): string {
+    // Adjust saturation based on theme
+    const saturation = theme === 'dark' ? 0.5 : 0.6;
+    return hslToHexString(percent, saturation, 0.5);
+}

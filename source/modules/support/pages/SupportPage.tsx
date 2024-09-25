@@ -5,9 +5,12 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
+import { useTheme } from '@structure/source/theme/ThemeProvider';
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
+import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
 import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';
 import CreditCardIcon from '@structure/assets/icons/finance/CreditCardIcon.svg';
@@ -19,6 +22,11 @@ import StackCapsulesIcon from '@project/assets/icons/stack/StackCapsulesIcon.svg
 import HeadsetIcon from '@structure/assets/icons/communication/HeadsetIcon.svg';
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
 import BalanceScaleIcon from '@structure/assets/icons/tools/BalanceScaleIcon.svg';
+
+// Define - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+import { slug } from '@structure/source/utilities/String';
+import { getRainbowHexColorForTheme, lightenColor } from '@structure/source/utilities/Color';
 
 const topics = [
     {
@@ -91,30 +99,79 @@ const topics = [
 
 // Component - SupportPage
 export function SupportPage() {
+    // Hooks
+    const { themeClassName } = useTheme();
+    const { accountState } = useAccount();
+
     // Render the component
     return (
         <div className="container pb-32 pt-8">
-            <div className="">
-                <h1 className="mb-6 text-3xl font-medium">Support</h1>
+            {accountState.account?.isAdministator() && (
+                <div className="float-end">
+                    <Button
+                        className="pl-3"
+                        icon={PlusIcon}
+                        iconPosition="left"
+                        iconClassName="w-3 h-3"
+                        href="/ideas/submit"
+                    >
+                        Create Topic
+                    </Button>
+                </div>
+            )}
 
+            <div className="">
+                <Link href="/support">
+                    <h1 className="mb-6 text-3xl font-medium">Support</h1>
+                </Link>
                 <p className="">How can we help?</p>
             </div>
 
             <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {topics.map(function (topic, index) {
+                    const rainbowHexColorForTheme = getRainbowHexColorForTheme(index / topics.length, themeClassName);
+                    const lightenedRainbowHexColorForTheme = lightenColor(
+                        rainbowHexColorForTheme,
+                        // Darken for dark theme, lighten for light theme
+                        0.2 * (themeClassName === 'dark' ? -1 : 1),
+                    );
+
                     return (
                         <Link
                             key={index}
-                            href="/support/account"
-                            className="flex flex-col rounded-lg border border-light-3 p-5 hover:border-light-6 active:border-neutral+5 dark:border-dark-4 dark:hover:border-dark-6 dark:active:border-neutral-5"
+                            href={'/support/' + slug(topic.title)}
+                            className={mergeClassNames(
+                                'flex flex-col rounded-lg border border-light-3 p-5 active:border-neutral+5 dark:border-dark-4 dark:active:border-neutral-5',
+                                // 'hover:border-light-6 dark:hover:border-dark-6',
+                            )}
+                            // We have to use the event handlers to change the colors because of the way Tailwind CSS works
+                            onMouseEnter={function (event) {
+                                // Set the border color
+                                event.currentTarget.style.borderColor = rainbowHexColorForTheme;
+                            }}
+                            onMouseLeave={function (event) {
+                                // Unset the border color
+                                event.currentTarget.style.borderColor = '';
+                            }}
+                            onMouseDown={function (event) {
+                                event.currentTarget.style.borderColor = lightenedRainbowHexColorForTheme;
+                            }}
+                            onMouseUp={function (event) {
+                                event.currentTarget.style.borderColor = rainbowHexColorForTheme;
+                            }}
                         >
-                            <topic.icon className="neutral h-6 w-6" />
+                            <topic.icon
+                                className="neutral h-6 w-6"
+                                style={{
+                                    color: rainbowHexColorForTheme,
+                                }}
+                            />
 
                             <h2 className="mt-4 text-base">{topic.title}</h2>
 
                             <p className="mt-2 text-sm dark:text-light-6">{topic.description}</p>
 
-                            <div className="flex-grow" />
+                            <span className="flex-grow" />
 
                             <p className="neutral mt-5 align-bottom text-sm">{topic.articleCount} articles</p>
                         </Link>

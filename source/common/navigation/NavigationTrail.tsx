@@ -33,14 +33,14 @@ export function NavigationTrail(properties: NavigationTrailInterface) {
     const urlPathname = usePathname();
 
     // Defaults
-    let separator = properties.separator || <ChevronRightIcon className="h-4 w-4" />;
+    const separator = properties.separator || <ChevronRightIcon className="h-4 w-4" />;
 
     // Function to generate links from pathname
     const generateNavigationTrailLinksFromPathname = React.useCallback(
         function (): NavigationTrailLinkInterface[] {
-            const urlPathSegments = urlPathname.split('/').filter(Boolean);
+            const urlPathSegments = urlPathname.replaceAll('-', ' ').split('/').filter(Boolean);
             let urlPathAccumulator = '';
-            return urlPathSegments.map((segment, index) => {
+            return urlPathSegments.map(function (segment) {
                 urlPathAccumulator += `/${segment}`;
                 return {
                     title: titleCase(segment),
@@ -53,10 +53,12 @@ export function NavigationTrail(properties: NavigationTrailInterface) {
 
     // Function to get links list
     const getLinks = React.useCallback(function (links: NavigationTrailLinkInterface[]) {
-        return links.map((currentLink: any, index: any) => ({
-            title: currentLink.title,
-            href: currentLink.href,
-        }));
+        return links.map(function (currentLink: NavigationTrailLinkInterface) {
+            return {
+                title: currentLink.title,
+                href: currentLink.href,
+            };
+        });
     }, []);
 
     // Get the navigation trail links from the properties or generate them from the pathname
@@ -65,7 +67,7 @@ export function NavigationTrail(properties: NavigationTrailInterface) {
     // Render the component
     return (
         <ol aria-label="Navigation Trail" className={mergeClassNames('flex list-none text-sm', properties.className)}>
-            {navigationTrailLinks.map((navigationTrailLink, index) => {
+            {navigationTrailLinks.map(function (navigationTrailLink, index) {
                 // Find the index of the last title in the navigationTrailLinks array
                 let lastTitleIndex = navigationTrailLinks
                     .slice()
