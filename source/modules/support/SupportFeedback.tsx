@@ -28,13 +28,15 @@ export function SupportFeedback(properties: SupportFeedbackInterface) {
 
     // State
     const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [isAnimating, setIsAnimating] = React.useState(false); // New state to track animation status
+    const [isAnimatingEmojis, setIsAnimatingEmojis] = React.useState(false); // State to track animation status
+    const [lastEmojiAnimationTime, setLastEmojiAnimationTime] = React.useState<number | null>(null); // State to track cooldown
 
     // Defaults
     const prompt = properties.prompt || 'Was this page helpful?';
 
     // Emojis array
     const emojis = ['😔', '🤨', '😃'];
+    const emojiHandlers = [handleNegativeFeedback, handleNeutralFeedback, handlePositiveFeedback];
 
     // Function to handle positive feedback
     function handlePositiveFeedback() {
@@ -54,41 +56,64 @@ export function SupportFeedback(properties: SupportFeedbackInterface) {
         setDialogOpen(true);
     }
 
-    // Handlers array
-    const emojiHandlers = [handleNegativeFeedback, handleNeutralFeedback, handlePositiveFeedback];
-
-    // Animation configurations
-    const [springs, api] = useSprings(emojis.length, (index) => ({
-        from: { scale: 1 },
-        to: { scale: 1 },
-    }));
+    // Animation configuration
+    const [emojiSprings, emojiSpringsApi] = useSprings(emojis.length, function () {
+        return {
+            from: { scale: 1 },
+            to: { scale: 1 },
+        };
+    });
 
     // Function to trigger the wave animation
-    // State to track if the animation is in progress
-    // Updated triggerWave function
-    const triggerWave = React.useCallback(() => {
-        if(isAnimating) {
-            console.log('skipping wave');
-            return; // Prevent retriggering if already animating
-        }
+    const triggerWave = React.useCallback(
+        function () {
+            // Get the current time
+            const now = Date.now();
 
-        console.log('Triggering wave');
+            // Prevent retriggering if already animating
+            if(isAnimatingEmojis) {
+                // console.log('Animation is in progress. Skipping wave.');
+                return;
+            }
 
-        setIsAnimating(true);
+            // Prevent retriggering if within cooldown period
+            if(lastEmojiAnimationTime !== null && now - lastEmojiAnimationTime < 10000) {
+                // console.log('Cooldown in effect. Skipping wave.');
+                return;
+            }
 
-        api.start((index) => ({
-            from: { scale: 1 },
-            to: async (next) => {
-                await new Promise((resolve) => setTimeout(resolve, index * 150)); // Delay between emojis
-                await next({ scale: 1.2, config: { duration: 200, easing: easings.linear } });
-                await next({ scale: 1, config: { duration: 200, easing: easings.linear } });
-                if(index === emojis.length - 1) {
-                    // Reset isAnimating after the last emoji animates
-                    setIsAnimating(false);
-                }
-            },
-        }));
-    }, [api, isAnimating, emojis.length]);
+            // console.log('Triggering wave');
+
+            // Set isAnimating and lastEmojiAnimationTime
+            setIsAnimatingEmojis(true);
+            setLastEmojiAnimationTime(now);
+
+            // Start the animation
+            emojiSpringsApi.start(function (index) {
+                return {
+                    from: { scale: 1 },
+                    to: async function (next) {
+                        // Delay between emojis
+                        await new Promise(function (resolve) {
+                            setTimeout(resolve, index * 150);
+                        });
+
+                        // Scale the emoji up
+                        await next({ scale: 1.2, config: { duration: 200, easing: easings.linear } });
+
+                        // Scale the emoji down
+                        await next({ scale: 1, config: { duration: 200, easing: easings.linear } });
+
+                        // Reset isAnimating after the last emoji animates
+                        if(index === emojis.length - 1) {
+                            setIsAnimatingEmojis(false);
+                        }
+                    },
+                };
+            });
+        },
+        [emojiSpringsApi, isAnimatingEmojis, lastEmojiAnimationTime],
+    );
 
     // Render the component
     return (
@@ -100,18 +125,23 @@ export function SupportFeedback(properties: SupportFeedbackInterface) {
                 <p className="mb-4 text-center">{prompt}</p>
                 <div className="flex justify-center">
                     <div className="flex w-36 justify-between text-3xl">
-                        {springs.map((styles, index) => (
-                            <animated.div
-                                key={index}
-                                className="cursor-pointer"
-                                onClick={emojiHandlers[index]}
-                                style={{
-                                    transform: styles.scale.to((s) => `scale(${s})`),
-                                }}
-                            >
-                                {emojis[index]}
-                            </animated.div>
-                        ))}
+                        {/* Emojis */}
+                        {emojiSprings.map(function (styles, index) {
+                            return (
+                                <animated.div
+                                    key={index}
+                                    className="cursor-pointer"
+                                    onClick={emojiHandlers[index]}
+                                    style={{
+                                        transform: styles.scale.to(function (scale) {
+                                            return `scale(${scale})`;
+                                        }),
+                                    }}
+                                >
+                                    {emojis[index]}
+                                </animated.div>
+                            );
+                        })}
                     </div>
                 </div>
 
