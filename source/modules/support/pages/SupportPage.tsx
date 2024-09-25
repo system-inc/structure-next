@@ -179,11 +179,15 @@ export function SupportPage() {
                 })}
             </div>
 
-            <div className="mt-12">
-                <p className="mb-4">Need more help?</p>
-                <Button size="lg" href="/contact">
-                    Contact Us
-                </Button>
+            <hr className="my-16" />
+
+            <div className="flex justify-center">
+                <div>
+                    <p className="mb-4">Need more help?</p>
+                    <Button size="lg" href="/contact">
+                        Contact Us
+                    </Button>
+                </div>
             </div>
         </div>
     );

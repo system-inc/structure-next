@@ -132,21 +132,21 @@ export function SupportPage() {
             <div className="mb-12">
                 <NavigationTrail className="mb-8" />
 
-                <Link href={'/support'}>
+                <Link href={'/support'} className="">
                     <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
                         <ShippingBoxIcon className="h-8 w-8" />
                         <span>Orders and Subscriptions</span>
                     </h1>
                 </Link>
 
-                <p className="neutral">Cart issues, checkout problems, order submission errors</p>
+                {/* <p className="neutral">Cart issues, checkout problems, order submission errors</p> */}
             </div>
 
-            <div className="flex flex-col space-y-16">
+            <div className="flex flex-col">
                 {Object.keys(groupedArticles).map(function (topic, topicIndex) {
                     return (
                         <div key={topicIndex}>
-                            <h2 className="mb-8 text-2xl font-semibold">{topic}</h2>
+                            {topic !== 'General' && <h2 className="mb-8 text-2xl font-semibold">{topic}</h2>}
                             <div className="">
                                 {groupedArticles[topic]?.map(function (article, articleIndex) {
                                     return (
@@ -165,16 +165,34 @@ export function SupportPage() {
                                     );
                                 })}
                             </div>
+                            <hr className="my-12" />
                         </div>
                     );
                 })}
             </div>
 
-            <div className="mt-20">
-                <p className="mb-4">Need more help?</p>
-                <Button size="lg" href="/contact">
-                    Contact Us
-                </Button>
+            <div className="mt-4 flex justify-center">
+                <div>
+                    <p className="mb-4">Did you find the information you were looking for?</p>
+                    <div className="flex justify-center">
+                        <div className="flex w-36 justify-between text-3xl">
+                            <div className="cursor-pointer">😔</div>
+                            <div className="cursor-pointer">🤨</div>
+                            <div className="cursor-pointer">😃</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr className="my-16" />
+
+            <div className="flex justify-center">
+                <div>
+                    <p className="mb-4">Need more help?</p>
+                    <Button size="lg" href="/contact">
+                        Contact Us
+                    </Button>
+                </div>
             </div>
         </div>
     );
