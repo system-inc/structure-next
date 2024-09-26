@@ -99,10 +99,17 @@ const groupedArticles: GroupedArticles = articles.reduce<GroupedArticles>(functi
     return accumulator;
 }, {});
 
-// Component - SupportPage
-export function SupportPage() {
+// Component - SupportTopicPage
+export interface SupportTopicPageInterface {
+    params: {
+        supportPath: string[];
+    };
+}
+export function SupportTopicPage(properties: SupportTopicPageInterface) {
     // Hooks
     const { accountState } = useAccount();
+
+    const supportPath = properties.params.supportPath.join('/');
 
     // Render the component
     return (
@@ -133,7 +140,7 @@ export function SupportPage() {
             <div className="mb-12">
                 <NavigationTrail className="mb-8" />
 
-                <Link href={'/support'} className="">
+                <Link href={'/support/' + supportPath} className="">
                     <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
                         <ShippingBoxIcon className="h-8 w-8" />
                         <span>Orders and Subscriptions</span>
@@ -145,16 +152,28 @@ export function SupportPage() {
 
             <div className="flex flex-col">
                 {Object.keys(groupedArticles).map(function (topic, topicIndex) {
+                    const topicHref = `/support/${supportPath}/${slug(topic)}`;
+
                     return (
                         <div key={topicIndex}>
-                            {topic !== 'General' && <h2 className="mb-8 text-2xl font-semibold">{topic}</h2>}
+                            {topic !== 'General' && (
+                                <Link href={topicHref}>
+                                    <h2 className="mb-8 text-2xl font-semibold">{topic}</h2>
+                                </Link>
+                            )}
                             <div className="">
                                 {groupedArticles[topic]?.map(function (article, articleIndex) {
+                                    const articleHref =
+                                        '/support' +
+                                        (topic !== 'General'
+                                            ? `/${supportPath}/${slug(topic)}/articles/${slug(article.title)}`
+                                            : `/${supportPath}/articles/${slug(article.title)}`);
+
                                     return (
                                         <div key={articleIndex} className="mb-4">
                                             <Link
                                                 className="-mx-3.5 -my-3 flex items-center justify-between rounded-md px-3.5 py-3 transition-colors hover:bg-light-1 dark:hover:bg-dark-2"
-                                                href={`/support/${slug(article.title)}`}
+                                                href={articleHref}
                                             >
                                                 <span>
                                                     <h3 className="text-base font-medium">{article.title}</h3>
@@ -189,4 +208,4 @@ export function SupportPage() {
 }
 
 // Export - Default
-export default SupportPage;
+export default SupportTopicPage;
