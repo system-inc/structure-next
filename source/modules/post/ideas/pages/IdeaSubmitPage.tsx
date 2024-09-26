@@ -46,9 +46,9 @@ export function IdeaSubmitPage(properties: IdeaSubmitPageInterface) {
                         component: FormInputTextArea,
                         rows: 16,
                     },
-                    'input.topicId': {
-                        className: 'hidden',
-                    },
+                    // 'input.topicId': {
+                    //     className: 'hidden',
+                    // },
                     'input.allowComment': {
                         className: 'hidden',
                         defaultValue: 'Checked',

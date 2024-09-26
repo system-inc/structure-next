@@ -19,6 +19,18 @@ export function SupportTopicOrPostPage(properties: SupportTopicOrPostPageInterfa
         properties.params.supportPath.length > 2 &&
         properties.params.supportPath[properties.params.supportPath.length - 2] === 'articles';
 
+    const topicSlug = isPost
+        ? // If post, the topic is the fourth to last part of the path
+          properties.params.supportPath[properties.params.supportPath.length - 4]
+        : // If not a post, the topic is the last part of the path
+          properties.params.supportPath[properties.params.supportPath.length - 1];
+
+    const parentTopicSlugs = isPost
+        ? // If post, the parent topics are the path minus the last 4 parts
+          properties.params.supportPath.slice(0, -4)
+        : // If not a post, the parent topics are the path minus the last part
+          properties.params.supportPath.slice(0, -1);
+
     // Post
     if(isPost) {
         // Render the component
@@ -27,7 +39,7 @@ export function SupportTopicOrPostPage(properties: SupportTopicOrPostPageInterfa
     // Topic
     else {
         // Render the component
-        return <SupportTopicPage {...properties} />;
+        return <SupportTopicPage topicSlug={topicSlug!} parentTopicSlugs={parentTopicSlugs} />;
     }
 }
 

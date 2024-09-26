@@ -5,8 +5,8 @@ import React from 'react';
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
 // Component - SupportPage
-export type SupportPageProperties = {};
-export function SupportPage(properties: SupportPageProperties) {
+export interface SupportPageInterface {}
+export function SupportPage() {
     // Render the component
     return (
         <>

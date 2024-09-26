@@ -10,6 +10,10 @@ import { NavigationTrail } from '@structure/source/common/navigation/NavigationT
 import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
 import { Button } from '@structure/source/common/buttons/Button';
 
+// Dependencies - API
+import { useQuery } from '@apollo/client';
+import { SupportPostTopicDocument } from '@project/source/api/GraphQlGeneratedCode';
+
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
@@ -101,15 +105,21 @@ const groupedArticles: GroupedArticles = articles.reduce<GroupedArticles>(functi
 
 // Component - SupportTopicPage
 export interface SupportTopicPageInterface {
-    params: {
-        supportPath: string[];
-    };
+    topicSlug: string;
+    parentTopicSlugs?: string[];
 }
 export function SupportTopicPage(properties: SupportTopicPageInterface) {
     // Hooks
     const { accountState } = useAccount();
 
-    const supportPath = properties.params.supportPath.join('/');
+    // Hooks - API
+    const supportPostTopicQueryState = useQuery(SupportPostTopicDocument, {
+        variables: {
+            slug: properties.topicSlug,
+        },
+    });
+
+    const supportPath = 'supportpath';
 
     // Render the component
     return (

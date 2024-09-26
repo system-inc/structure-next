@@ -1,0 +1,56 @@
+# Support Post Query
+query SupportPost($identifier: String!) {
+    post(identifier: $identifier) {
+        identifier
+        slug
+        status
+        title
+        content
+        updatedAt
+        createdAt
+    }
+}
+
+# Support Post Topic Query
+query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInput) {
+    postTopic(slug: $slug, path: $path, type: "SupportArticle", pagination: $pagination) {
+        topic {
+            id
+            title
+            slug
+            description
+            postCount
+            createdAt
+        }
+        subTopics {
+            id
+            title
+            slug
+            description
+            postCount
+            createdAt
+        }
+        pagedPosts {
+            items {
+                id
+                identifier
+                slug
+                status
+                title
+                content
+                metadata
+                updatedAt
+                createdAt
+            }
+            pagination {
+                itemIndex
+                itemIndexForPreviousPage
+                itemIndexForNextPage
+                itemsPerPage
+                itemsTotal
+                pagesTotal
+                page
+            }
+        }
+    }
+}

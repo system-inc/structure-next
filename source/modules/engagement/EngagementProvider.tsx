@@ -50,7 +50,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     React.useEffect(
         function () {
             // Return early if the engagement module is not enabled
-            if(!ProjectSettings.modules?.engagement === false) {
+            if(ProjectSettings.modules.engagement === false) {
                 return;
             }
 

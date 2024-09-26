@@ -9,6 +9,10 @@ import { useTheme } from '@structure/source/theme/ThemeProvider';
 import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { Button } from '@structure/source/common/buttons/Button';
 
+// Dependencies - API
+import { useQuery } from '@apollo/client';
+import { PostTopicsDocument } from '@project/source/api/GraphQlGeneratedCode';
+
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
@@ -25,75 +29,85 @@ import BalanceScaleIcon from '@structure/assets/icons/tools/BalanceScaleIcon.svg
 
 // Define - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { slug } from '@structure/source/utilities/String';
 import { getRainbowHexColorForTheme, lightenColor } from '@structure/source/utilities/Color';
 
-const topics = [
+const postTopics = [
+    // Orders and Subscriptions
     {
+        id: '989becc3-d0e5-4df3-ae8d-b25401a0729b',
         icon: ShippingBoxIcon,
         title: 'Orders and Subscriptions',
         description: 'Cart issues, checkout problems, order submission errors',
-        articleCount: 5,
     },
+    // Payments and Billing
     {
+        id: 'b58b1475-e267-4623-9728-c91dd708486a',
         icon: CreditCardIcon,
         title: 'Payments and Billing',
         description: 'Payment failures, declined cards, billing errors, invoice requests',
-        articleCount: 5,
     },
+    // Shipping and Delivery
     {
+        id: '1c02e619-bea2-494d-aa54-1cc7adcd24f1',
         icon: TruckIcon,
         title: 'Shipping and Delivery',
         description: 'Shipping information, tracking orders, delivery delays, lost packages',
-        articleCount: 5,
     },
+    // Returns, Refunds, and Exchanges
     {
+        id: '23c1e599-9b6b-4290-a1e9-b0b33dde3749',
         icon: ShippingBoxReturnIcon,
         title: 'Returns, Refunds, and Exchanges',
         description: 'Return policies, starting a return, refund processing, exchanging items',
-        articleCount: 5,
     },
+    // Product Information and Availability
     {
+        id: 'b4f66159-ab0f-440d-bfc5-bc3f1880489e',
         icon: InformationCircledIcon,
         title: 'Product Information and Availability',
         description: 'Product details, stock availability, restocking dates',
-        articleCount: 5,
     },
+    // Stack
     {
+        id: '93093206-2cce-40ef-b54f-2d7c68b44d90',
         icon: StackCapsulesIcon,
         title: 'Stack',
         description: 'Ingredient details, health benefits, dietary restrictions',
-        articleCount: 5,
     },
+    // Account Management
     {
+        id: '372b47f5-5bfd-47d5-98e9-d8ebf6b1b8d4',
         icon: UserIcon,
         title: 'Account Management',
         description: 'Sign in issues, resetting your password, managing your profile',
-        articleCount: 5,
     },
+    // Security
     {
+        id: '79ace0b4-2bd3-436f-bd3c-4c506da36beb',
         icon: KeyIcon,
         title: 'Security',
         description: 'Reporting unauthorized access, vulnerabilities, best practices',
-        articleCount: 5,
     },
+    // Technical Support and Accessibility
     {
+        id: '94fc5ac4-fb6c-464f-97d6-c383e8991c90',
         icon: HeadsetIcon,
         title: 'Technical Support and Accessibility',
         description: 'Website glitches, app errors, accessibility support',
-        articleCount: 5,
     },
+    // Customer Feedback and Complaints
     {
+        id: '1291d978-46e0-445f-a03a-7f110029a3dd',
         icon: CommentIcon,
         title: 'Customer Feedback and Complaints',
         description: 'Report issues, give feedback, escalate complaints',
-        articleCount: 5,
     },
+    // Legal and Compliance Inquiries
     {
+        id: '27ca535c-33a3-42b1-9628-201427d1cb23',
         icon: BalanceScaleIcon,
         title: 'Legal and Compliance Inquiries',
         description: 'Privacy policies, terms of service, data deletion requests',
-        articleCount: 5,
     },
 ];
 
@@ -102,6 +116,15 @@ export function SupportPage() {
     // Hooks
     const { themeClassName } = useTheme();
     const { accountState } = useAccount();
+
+    // Hooks - API
+    const postTopicsQueryState = useQuery(PostTopicsDocument, {
+        variables: {
+            ids: postTopics.map(function (postTopic) {
+                return postTopic.id;
+            }),
+        },
+    });
 
     // Render the component
     return (
@@ -113,7 +136,7 @@ export function SupportPage() {
                         icon={PlusIcon}
                         iconPosition="left"
                         iconClassName="w-3 h-3"
-                        href="/ideas/submit"
+                        href="/support/create-topic"
                     >
                         Create Topic
                     </Button>
@@ -127,9 +150,32 @@ export function SupportPage() {
                 <p className="">How can we help?</p>
             </div>
 
+            {/* Post Topics */}
             <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {topics.map(function (topic, index) {
-                    const rainbowHexColorForTheme = getRainbowHexColorForTheme(index / topics.length, themeClassName);
+                {/* Data Loading */}
+                {postTopicsQueryState.loading && (
+                    <div className="flex items-center justify-center">
+                        <PlusIcon className="h-4 w-4 animate-spin" />
+                    </div>
+                )}
+
+                {/* Error Loading */}
+                {postTopicsQueryState.error && (
+                    <div className="flex items-center justify-center">
+                        <p>Error: {postTopicsQueryState.error.message}</p>
+                    </div>
+                )}
+
+                {/* Data Loaded */}
+                {postTopicsQueryState.data?.postTopics.map(function (postTopic, postTopicIndex) {
+                    const PostTopicIcon = postTopics.find(function (currentPostTopic) {
+                        return currentPostTopic.id === postTopic.id;
+                    })?.icon;
+
+                    const rainbowHexColorForTheme = getRainbowHexColorForTheme(
+                        postTopicIndex / postTopics.length,
+                        themeClassName,
+                    );
                     const lightenedRainbowHexColorForTheme = lightenColor(
                         rainbowHexColorForTheme,
                         // Darken for dark theme, lighten for light theme
@@ -138,8 +184,8 @@ export function SupportPage() {
 
                     return (
                         <Link
-                            key={index}
-                            href={'/support/' + slug(topic.title)}
+                            key={postTopicIndex}
+                            href={'/support/' + postTopic.slug}
                             className={mergeClassNames(
                                 'flex flex-col rounded-lg border border-light-3 p-5 active:border-neutral+5 dark:border-dark-4 dark:active:border-neutral-5',
                                 // 'hover:border-light-6 dark:hover:border-dark-6',
@@ -160,20 +206,22 @@ export function SupportPage() {
                                 event.currentTarget.style.borderColor = rainbowHexColorForTheme;
                             }}
                         >
-                            <topic.icon
-                                className="neutral h-6 w-6"
-                                style={{
-                                    color: rainbowHexColorForTheme,
-                                }}
-                            />
+                            {PostTopicIcon && (
+                                <PostTopicIcon
+                                    className="neutral h-6 w-6"
+                                    style={{
+                                        color: rainbowHexColorForTheme,
+                                    }}
+                                />
+                            )}
 
-                            <h2 className="mt-4 text-base">{topic.title}</h2>
+                            <h2 className="mt-4 text-base">{postTopic.title}</h2>
 
-                            <p className="mt-2 text-sm dark:text-light-6">{topic.description}</p>
+                            <p className="mt-2 text-sm dark:text-light-6">{postTopic.description}</p>
 
                             <span className="flex-grow" />
 
-                            <p className="neutral mt-5 align-bottom text-sm">{topic.articleCount} articles</p>
+                            <p className="neutral mt-5 align-bottom text-sm">{postTopic.postCount} articles</p>
                         </Link>
                     );
                 })}

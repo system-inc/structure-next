@@ -217,3 +217,44 @@ mutation PostReportCreate($input: PostReportInput!) {
         id
     }
 }
+
+# Post Topics Query
+query PostTopics($ids: [String!]) {
+    postTopics(ids: $ids) {
+        id
+        title
+        slug
+        description
+        postCount
+        createdAt
+    }
+}
+
+# Post Topic Create Mutation
+mutation PostTopicCreate($input: PostTopicCreateInput!) {
+    postTopicCreate(input: $input) {
+        id
+        title
+        slug
+        description
+        postCount
+        createdAt
+    }
+}
+
+# Post Topic Update Mutation
+mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
+    postTopicUpdate(input: $input) {
+        id
+        title
+        slug
+        description
+        postCount
+        createdAt
+    }
+}
+
+# Post Topic Delete Mutation
+mutation PostTopicDelete($id: String!) {
+    postTopicDelete(id: $id)
+}
