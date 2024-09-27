@@ -43,6 +43,10 @@ export function CreateSupportArticlePage() {
                     'input.emailAddress': {
                         placeholder: 'email@domain.com',
                     },
+                    'input.type': {
+                        // className: 'hidden',
+                        defaultValue: 'Contact',
+                    },
                     'input.initialComment': {
                         className: 'hidden',
                     },
