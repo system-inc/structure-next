@@ -1,27 +1,59 @@
 'use client'; // This component uses client-only features
 
+// Dependencies - Project
+import ProjectSettings from '@project/ProjectSettings';
+
 // Dependencies - React and Next.js
 import React from 'react';
-// import Link from 'next/link';
 
 // Dependencies - Main Components
-// import { Button } from '@structure/source/common/buttons/Button';
+import { GraphQlOperationForm } from '@structure/source/api/GraphQlOperationForm';
+import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 
-// Component - ContactPage
-export function ContactPage() {
+// Dependencies - API
+import { SupportTicketCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+
+// Dependencies - Assets
+
+// Component - CreateSupportArticlePage
+export function CreateSupportArticlePage() {
     // Render the component
     return (
-        <div className="container pb-32 pt-8">
-            <div className="">
-                <h1 className="mb-6 text-3xl font-medium">Contact</h1>
+        <div className="container pb-32 pt-12">
+            <h1 className="mb-6 text-3xl font-medium">Contact {ProjectSettings.title}</h1>
 
-                <p className="">We look forward to hearing from you.</p>
-            </div>
+            <p className="">We look forward to hearing from you.</p>
 
-            <div className="mt-12">Contact form</div>
+            <GraphQlOperationForm
+                className="mt-6"
+                operation={SupportTicketCreateOperation}
+                inputComponentsProperties={{
+                    'input.title': {
+                        label: 'Subject',
+                        placeholder: 'Subject',
+                        component: FormInputText,
+                    },
+                    'input.description': {
+                        label: 'Message',
+                        placeholder: 'Message',
+                        component: FormInputTextArea,
+                        rows: 8,
+                    },
+                    'input.emailAddress': {
+                        placeholder: 'email@domain.com',
+                    },
+                    'input.initialComment': {
+                        className: 'hidden',
+                    },
+                }}
+                buttonProperties={{
+                    children: 'Send Message',
+                }}
+            />
         </div>
     );
 }
 
 // Export - Default
-export default ContactPage;
+export default CreateSupportArticlePage;

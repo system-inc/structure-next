@@ -36,15 +36,15 @@ export const ButtonVariants = {
         // Light
         `bg-light-1 border-light-3 text-dark-2 ` +
         // Dark
-        `dark:bg-dark-1 dark:border-dark-3 dark:text-light-2 ` +
+        `dark:bg-dark-2 dark:border-dark-3 dark:text-light-2 ` +
         // Light - Hover
         `hover:bg-light-2 hover:text-dark-1 ` +
         // Dark - Hover
-        `dark:hover:bg-dark-2 dark:hover:border-dark-4 dark:hover:text-light-1 ` +
+        `dark:hover:bg-dark-3 dark:hover:border-dark-4 dark:hover:text-light-1 ` +
         // Light - Active
         `active:bg-light-3 active:text-dark ` +
         // Dark - Active
-        `dark:active:bg-dark-3 dark:active:text-light ` +
+        `dark:active:bg-dark-4 dark:active:text-light ` +
         // Light - Focus
         `focus:border-neutral+6  ` +
         // Dark - Focus

@@ -5,6 +5,7 @@ query SupportPost($identifier: String!) {
         slug
         status
         title
+        description
         content
         updatedAt
         createdAt
@@ -37,6 +38,7 @@ query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInp
                 slug
                 status
                 title
+                description
                 content
                 metadata
                 updatedAt
@@ -52,5 +54,12 @@ query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInp
                 page
             }
         }
+    }
+}
+
+# Support Ticket Create Mutation
+mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
+    supportTicketCreate(input: $input) {
+        id
     }
 }

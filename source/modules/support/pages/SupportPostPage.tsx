@@ -10,23 +10,29 @@ import { NavigationTrail } from '@structure/source/common/navigation/NavigationT
 import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
 import { Button } from '@structure/source/common/buttons/Button';
 
+// Dependencies - API
+import { useQuery } from '@apollo/client';
+import { SupportPostDocument } from '@project/source/api/GraphQlGeneratedCode';
+
 // Dependencies - Assets
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Define - Utilities
-import { slug } from '@structure/source/utilities/String';
 
 // Component - SupportPostPage
 export interface SupportPostPageInterface {
-    params: {
-        supportPath: string[];
-    };
+    postIdentifier: string;
 }
 export function SupportPostPage(properties: SupportPostPageInterface) {
     // Hooks
     const { accountState } = useAccount();
 
-    const supportPath = properties.params.supportPath.join('/');
+    // Hooks - API
+    const supportPostQueryState = useQuery(SupportPostDocument, {
+        variables: {
+            identifier: properties.postIdentifier,
+        },
+    });
 
     // Render the component
     return (
@@ -48,15 +54,17 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
             <div className="mb-12">
                 <NavigationTrail className="mb-8" />
 
-                <Link href={'/support/' + supportPath} className="">
+                <Link href={'/support/'} className="">
                     <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
-                        <span>How do I track my order?</span>
+                        <span>{supportPostQueryState.data?.post.title}</span>
                     </h1>
                 </Link>
 
-                <p className="neutral mb-8 text-sm">Updated over a week ago</p>
+                <p className="neutral mb-8 text-sm">
+                    Updated over a week ago {supportPostQueryState.data?.post.updatedAt}
+                </p>
 
-                <p className="mb-4">This is a support post page.</p>
+                <p className="mb-4">{supportPostQueryState.data?.post.content}</p>
             </div>
 
             <hr className="my-16" />

@@ -140,7 +140,9 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
                         icon={PlusIcon}
                         iconPosition="left"
                         iconClassName="w-3 h-3"
-                        href="/ideas/submit"
+                        href={
+                            '/support/create-article?postTopicId=' + supportPostTopicQueryState.data?.postTopic.topic.id
+                        }
                     >
                         Create Article
                     </Button>
@@ -159,6 +161,40 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
 
                 {/* <p className="neutral">Cart issues, checkout problems, order submission errors</p> */}
             </div>
+
+            <div className="">
+                {supportPostTopicQueryState.data?.postTopic.pagedPosts.items.map(function (post, postIndex) {
+                    let postHref = '/support';
+
+                    // Add parent topic slugs
+                    if(properties.parentTopicSlugs) {
+                        postHref += '/' + properties.parentTopicSlugs.join('/');
+                    }
+
+                    // Add the current topic slug
+                    postHref += properties.topicSlug;
+
+                    // Add the post identifier and slug
+                    postHref += '/articles/' + post.identifier + '/' + post.slug;
+
+                    return (
+                        <div key={postIndex} className="mb-4">
+                            <Link
+                                className="-mx-3.5 -my-3 flex items-center justify-between rounded-md px-3.5 py-3 transition-colors hover:bg-light-1 dark:hover:bg-dark-2"
+                                href={postHref}
+                            >
+                                <span>
+                                    <h3 className="text-base font-medium">{post.title}</h3>
+                                    <p className="neutral text-sm">{post.description}</p>
+                                </span>
+                                <ChevronRightIcon className="h-4 w-4" />
+                            </Link>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <p className="my-16">Delete this below when done</p>
 
             <div className="flex flex-col">
                 {Object.keys(groupedArticles).map(function (topic, topicIndex) {

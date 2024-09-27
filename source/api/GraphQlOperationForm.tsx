@@ -87,6 +87,8 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
             parameters?: readonly GraphQLOperationParameterMetadata[],
             parentParameter: string = '',
         ): InputMetadata[] {
+            console.log('parameters', parameters);
+
             // The input meta data
             let inputMetadata: InputMetadata[] = [];
 
@@ -232,6 +234,8 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 Object.assign(componentProperties, properties.inputComponentsProperties[input.name]);
             }
 
+            console.log('input', input);
+
             // Determine the component
             let FormInputComponent: any;
             if(componentProperties.component) {
@@ -329,6 +333,8 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
                         const mutationVariables: any = {};
                         for(const [key, value] of Object.entries(formValues)) {
+                            console.log('key:', key, 'value:', value);
+
                             let graphQlValue = value;
 
                             const keyParts = key.split('.');
@@ -339,6 +345,12 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                             }
                             else if(value == 'Unchecked') {
                                 graphQlValue = false;
+                            }
+
+                            // TODO: Remove this
+                            // Hard coding this fix for now
+                            if(key == 'input.topicIds') {
+                                graphQlValue = [value];
                             }
 
                             assignNestedValue(mutationVariables, keyParts, graphQlValue);
@@ -352,7 +364,6 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                                     ...mutationVariables,
                                 },
                             });
-
                             mutationResponseData = mutationResponse.data;
                         }
                         catch(error: any) {

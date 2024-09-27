@@ -16,8 +16,10 @@ export interface SupportTopicOrPostPageInterface {
 export function SupportTopicOrPostPage(properties: SupportTopicOrPostPageInterface) {
     // The path is a post if it has more than 2 parts and the second to last part is 'articles'
     const isPost =
-        properties.params.supportPath.length > 2 &&
-        properties.params.supportPath[properties.params.supportPath.length - 2] === 'articles';
+        properties.params.supportPath.length > 3 &&
+        properties.params.supportPath[properties.params.supportPath.length - 3] === 'articles';
+
+    const postIdentifier = isPost ? properties.params.supportPath[properties.params.supportPath.length - 2] : undefined;
 
     const topicSlug = isPost
         ? // If post, the topic is the fourth to last part of the path
@@ -32,9 +34,9 @@ export function SupportTopicOrPostPage(properties: SupportTopicOrPostPageInterfa
           properties.params.supportPath.slice(0, -1);
 
     // Post
-    if(isPost) {
+    if(postIdentifier) {
         // Render the component
-        return <SupportPostPage {...properties} />;
+        return <SupportPostPage postIdentifier={postIdentifier} />;
     }
     // Topic
     else {
