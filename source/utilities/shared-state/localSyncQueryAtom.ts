@@ -1,8 +1,6 @@
 import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
 import { type DocumentNode, type OperationVariables, type TypedDocumentNode } from '@apollo/client';
 import { apolloClient } from '@structure/source/api/Apollo';
-import { atomWithBroadcast } from './atomWithBroadcast';
 
 export function localSyncQueryAtom<TData, TVariables extends OperationVariables | undefined>(
     key: string,
@@ -20,17 +18,35 @@ export function localSyncQueryAtom<TData, TVariables extends OperationVariables 
               getOnInitialization?: boolean;
           },
 ) {
-    const syncedAtom = syncOptions?.persist
-        ? atomWithStorage<TData | undefined>(
-              key, // Local storage key
-              undefined, // Initial value
-              undefined, // Custom storage handler (not needed since we are going to use the default -- localStorage)
-              { getOnInit: syncOptions?.getOnInitialization }, // Optionally hydrate the atom with the value from localStorage on initialization (can result in hydration issues)
-          )
-        : atomWithBroadcast<TData | undefined>(key, undefined);
+    const broadcastChannelAtom = atom(typeof window !== 'undefined' ? new BroadcastChannel(key) : undefined);
 
-    syncedAtom.onMount = (setAtom) => {
+    const baseAtom = atom<TData | undefined>(undefined);
+    const syncedAtom = atom(
+        async (get) => {
+            return get(baseAtom);
+        },
+        async (get, set, newValue: TData) => {
+            set(baseAtom, newValue);
+            if(syncOptions?.persist) {
+                localStorage.setItem(key, JSON.stringify(newValue));
+            }
+            else {
+                // Broadcast the new value to all other tabs
+                get(broadcastChannelAtom)?.postMessage(newValue);
+            }
+        },
+    );
+
+    baseAtom.onMount = (setAtom) => {
         try {
+            // Set the initial value from localStorage
+            setAtom(
+                syncOptions?.persist && localStorage.getItem(key)
+                    ? (JSON.parse(localStorage.getItem(key)!) as TData)
+                    : undefined,
+            );
+
+            // Start listening for updates from the query
             const queryObserver = apolloClient.watchQuery({
                 query: query,
                 variables: queryVariables,
