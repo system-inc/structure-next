@@ -11,8 +11,8 @@ import { SupportFeedback } from '@structure/source/modules/support/SupportFeedba
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { SupportPostTopicDocument } from '@project/source/api/GraphQlGeneratedCode';
+// import { useQuery } from '@apollo/client';
+import { SupportPostTopicQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
@@ -105,19 +105,22 @@ const groupedArticles: GroupedArticles = articles.reduce<GroupedArticles>(functi
 
 // Component - SupportTopicPage
 export interface SupportTopicPageInterface {
-    topicSlug: string;
-    parentTopicSlugs?: string[];
+    postTopic: SupportPostTopicQuery['postTopic'];
+    postTopicSlug: string;
+    parentPostTopicsSlugs?: string[];
 }
 export function SupportTopicPage(properties: SupportTopicPageInterface) {
     // Hooks
     const { accountState } = useAccount();
 
     // Hooks - API
-    const supportPostTopicQueryState = useQuery(SupportPostTopicDocument, {
-        variables: {
-            slug: properties.topicSlug,
-        },
-    });
+    // const supportPostTopicQueryState = useQuery(SupportPostTopicDocument, {
+    //     variables: {
+    //         slug: properties.topicSlug,
+    //     },
+    // });
+
+    const postTopic = properties.postTopic;
 
     const supportPath = 'supportpath';
 
@@ -140,9 +143,7 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
                         icon={PlusIcon}
                         iconPosition="left"
                         iconClassName="w-3 h-3"
-                        href={
-                            '/support/create-article?postTopicId=' + supportPostTopicQueryState.data?.postTopic.topic.id
-                        }
+                        href={'/support/create-article?postTopicId=' + postTopic.topic.id}
                     >
                         Create Article
                     </Button>
@@ -163,16 +164,16 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
             </div>
 
             <div className="">
-                {supportPostTopicQueryState.data?.postTopic.pagedPosts.items.map(function (post, postIndex) {
+                {postTopic.pagedPosts.items.map(function (post, postIndex) {
                     let postHref = '/support';
 
                     // Add parent topic slugs
-                    if(properties.parentTopicSlugs) {
-                        postHref += '/' + properties.parentTopicSlugs.join('/');
+                    if(properties.parentPostTopicsSlugs) {
+                        postHref += '/' + properties.parentPostTopicsSlugs.join('/');
                     }
 
                     // Add the current topic slug
-                    postHref += properties.topicSlug;
+                    postHref += properties.postTopicSlug;
 
                     // Add the post identifier and slug
                     postHref += '/articles/' + post.identifier + '/' + post.slug;

@@ -11,8 +11,8 @@ import { SupportFeedback } from '@structure/source/modules/support/SupportFeedba
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { SupportPostDocument } from '@project/source/api/GraphQlGeneratedCode';
+// import { useQuery } from '@apollo/client';
+import { SupportPostQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
@@ -21,18 +21,20 @@ import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Component - SupportPostPage
 export interface SupportPostPageInterface {
-    postIdentifier: string;
+    post: SupportPostQuery['post'];
 }
 export function SupportPostPage(properties: SupportPostPageInterface) {
     // Hooks
     const { accountState } = useAccount();
 
+    const post = properties.post;
+
     // Hooks - API
-    const supportPostQueryState = useQuery(SupportPostDocument, {
-        variables: {
-            identifier: properties.postIdentifier,
-        },
-    });
+    // const supportPostQueryState = useQuery(SupportPostDocument, {
+    //     variables: {
+    //         identifier: properties.postIdentifier,
+    //     },
+    // });
 
     // Render the component
     return (
@@ -56,15 +58,13 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
 
                 <Link href={'/support/'} className="">
                     <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
-                        <span>{supportPostQueryState.data?.post.title}</span>
+                        <span>{post.title}</span>
                     </h1>
                 </Link>
 
-                <p className="neutral mb-8 text-sm">
-                    Updated over a week ago {supportPostQueryState.data?.post.updatedAt}
-                </p>
+                <p className="neutral mb-8 text-sm">Updated over a week ago {post.updatedAt}</p>
 
-                <p className="mb-4">{supportPostQueryState.data?.post.content}</p>
+                <p className="mb-4">{post.content}</p>
             </div>
 
             <hr className="my-16" />
