@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { NavigationTrail } from '@structure/source/common/navigation/NavigationTrail';
 import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
+import { postTopicIdentifierToIconObject } from '@structure/source/modules/support/pages/SupportPage';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
@@ -17,7 +18,6 @@ import { SupportPostTopicQuery } from '@project/source/api/GraphQlGeneratedCode'
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
-import ShippingBoxIcon from '@structure/assets/icons/commerce/ShippingBoxIcon.svg';
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
 // Define - Utilities
@@ -121,6 +121,7 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
     // });
 
     const postTopic = properties.postTopic;
+    const PostTopicIcon = postTopicIdentifierToIconObject[postTopic.topic.id];
 
     const supportPath = 'supportpath';
 
@@ -153,10 +154,10 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
             <div className="mb-12">
                 <NavigationTrail className="mb-8" />
 
-                <Link href={'/support/' + supportPath} className="">
+                <Link href={'/support/' + properties.postTopic.topic.slug} className="">
                     <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
-                        <ShippingBoxIcon className="h-8 w-8" />
-                        <span>Orders and Subscriptions</span>
+                        {PostTopicIcon && <PostTopicIcon className="h-8 w-8" />}
+                        <span>{properties.postTopic.topic.title}</span>
                     </h1>
                 </Link>
 

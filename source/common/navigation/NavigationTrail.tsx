@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 import NavigationTrailSeparatorPopoverMenu from '@structure/source/common/navigation/NavigationTrailSeparatorPopoverMenu';
 
 // Dependencies - Utilities
-import { titleCase } from '@structure/source/utilities/String';
+import { slug, titleCase } from '@structure/source/utilities/String';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Dependencies - Assets
@@ -40,13 +40,19 @@ export function NavigationTrail(properties: NavigationTrailInterface) {
         function (): NavigationTrailLinkInterface[] {
             const urlPathSegments = urlPathname.replaceAll('-', ' ').split('/').filter(Boolean);
             let urlPathAccumulator = '';
-            return urlPathSegments.map(function (segment) {
-                urlPathAccumulator += `/${segment}`;
+
+            const result = urlPathSegments.map(function (segment) {
+                urlPathAccumulator += `/${slug(segment)}`;
+
                 return {
                     title: titleCase(segment),
                     href: urlPathAccumulator,
                 };
             });
+
+            console.log('result', result);
+
+            return result;
         },
         [urlPathname],
     );

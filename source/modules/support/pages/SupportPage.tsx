@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 // Dependencies - Main Components
 import { useTheme } from '@structure/source/theme/ThemeProvider';
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+// import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
@@ -14,7 +14,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { PostTopicsQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
+// import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
 import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';
 import CreditCardIcon from '@structure/assets/icons/finance/CreditCardIcon.svg';
@@ -31,7 +31,7 @@ import BalanceScaleIcon from '@structure/assets/icons/tools/BalanceScaleIcon.svg
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { getRainbowHexColorForTheme, lightenColor } from '@structure/source/utilities/Color';
 
-const postTopicIdentifierToIconObject: {
+export const postTopicIdentifierToIconObject: {
     [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 } = {
     '989becc3-d0e5-4df3-ae8d-b25401a0729b': ShippingBoxIcon,
@@ -54,7 +54,7 @@ export interface SupportPageInterface {
 export function SupportPage(properties: SupportPageInterface) {
     // Hooks
     const { themeClassName } = useTheme();
-    const { accountState } = useAccount();
+    // const { accountState } = useAccount();
 
     // Hooks - API
     // const postTopicsQueryState = useQuery(PostTopicsDocument, {
@@ -70,7 +70,7 @@ export function SupportPage(properties: SupportPageInterface) {
     // Render the component
     return (
         <div className="container pb-32 pt-8">
-            {accountState.account?.isAdministator() && (
+            {/* {accountState.account?.isAdministator() && (
                 <div className="float-end">
                     <Button
                         className="pl-3"
@@ -82,7 +82,7 @@ export function SupportPage(properties: SupportPageInterface) {
                         Create Topic
                     </Button>
                 </div>
-            )}
+            )} */}
 
             <div className="">
                 <Link href="/support">
