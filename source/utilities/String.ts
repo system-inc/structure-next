@@ -120,9 +120,15 @@ export function slug(string: string | undefined, maximumLength = 160): string {
 
     // Remove all apostrophes
     let slug = string.replace(/'/g, '');
+    slug = slug.replace(/’/g, '');
+
+    // Remove all quotes
+    slug = slug.replace(/"/g, '');
+    slug = slug.replace(/“/g, '');
+    slug = slug.replace(/”/g, '');
 
     // Replace all non-word characters with a space
-    slug = string.replace(/\W/g, ' ');
+    slug = slug.replace(/\W/g, ' ');
 
     // Replace multiple spaces with a single space
     slug = slug.replace(/\s+/g, ' ');
