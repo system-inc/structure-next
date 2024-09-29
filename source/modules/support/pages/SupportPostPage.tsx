@@ -17,10 +17,13 @@ import { SupportPostQuery } from '@project/source/api/GraphQlGeneratedCode';
 // Dependencies - Assets
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
-// Define - Utilities
+// Dependencies - Utilities
+import { titleCase } from '@structure/source/utilities/String';
 
 // Component - SupportPostPage
 export interface SupportPostPageInterface {
+    postTopicSlug: string;
+    parentPostTopicsSlugs?: string[];
     post: SupportPostQuery['post'];
 }
 export function SupportPostPage(properties: SupportPostPageInterface) {
@@ -35,6 +38,17 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
     //         identifier: properties.postIdentifier,
     //     },
     // });
+
+    // The URL pathname for the navigation trail
+    let navigationTrailUrlPathname = '/support';
+    if(properties.parentPostTopicsSlugs) {
+        navigationTrailUrlPathname += properties.parentPostTopicsSlugs.length
+            ? '/' + properties.parentPostTopicsSlugs.join('/')
+            : '';
+    }
+    navigationTrailUrlPathname += '/' + properties.postTopicSlug;
+
+    const postHref = navigationTrailUrlPathname + '/articles/' + post.identifier + '/' + post.slug;
 
     // Render the component
     return (
@@ -54,9 +68,9 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
             )}
 
             <div className="mb-12">
-                <NavigationTrail className="mb-8" />
+                <NavigationTrail className="mb-8" urlPathname={navigationTrailUrlPathname} />
 
-                <Link href={'/support/'} className="">
+                <Link href={postHref} className="">
                     <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
                         <span>{post.title}</span>
                     </h1>

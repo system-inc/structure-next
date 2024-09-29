@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import GraphQlOperationForm from '@structure/source/api/GraphQlOperationForm';
@@ -13,6 +14,10 @@ import { PostTopicCreateOperation } from '@project/source/api/GraphQlGeneratedCo
 
 // Component - CreateTopicPage
 export function CreateTopicPage() {
+    // Hooks
+    const urlSearchParameters = useUrlSearchParameters();
+    const parentPostTopicId = urlSearchParameters.get('parentPostTopicId');
+
     // Render the component
     return (
         <div className="container pb-32 pt-12">
@@ -21,15 +26,16 @@ export function CreateTopicPage() {
             <GraphQlOperationForm
                 className="mt-6"
                 operation={PostTopicCreateOperation}
-                inputComponentsProperties={
-                    {
-                        // 'input.description': {
-                        //     className: 'hidden',
-                        // },
-                    }
-                }
+                inputComponentsProperties={{
+                    'input.type': {
+                        defaultValue: 'SupportArticle',
+                    },
+                    'input.parentId': {
+                        defaultValue: parentPostTopicId,
+                    },
+                }}
                 buttonProperties={{
-                    children: 'Submit Idea',
+                    children: 'Create Topic',
                 }}
             />
         </div>

@@ -25,12 +25,13 @@ export interface NavigationTrailLinkInterface {
 // Component - NavigationTrail
 export interface NavigationTrailInterface {
     className?: string;
+    urlPathname?: string; // Optional, will take preference over the current URL pathname
     links?: NavigationTrailLinkInterface[];
     separator?: React.ReactNode;
 }
 export function NavigationTrail(properties: NavigationTrailInterface) {
     // Hooks
-    const urlPathname = usePathname();
+    const urlPathname = properties.urlPathname || usePathname();
 
     // Defaults
     const separator = properties.separator || <ChevronRightIcon className="h-4 w-4" />;
@@ -50,7 +51,7 @@ export function NavigationTrail(properties: NavigationTrailInterface) {
                 };
             });
 
-            console.log('result', result);
+            // console.log('result', result);
 
             return result;
         },
