@@ -84,10 +84,12 @@ export function SupportPage(properties: SupportPageInterface) {
                 </div>
             )} */}
 
-            <div className="">
-                <Link href="/support">
-                    <h1 className="mb-6 text-3xl font-medium">Support</h1>
-                </Link>
+            <div>
+                <div className="mb-6">
+                    <Link href="/support">
+                        <h1 className="inline text-3xl font-medium">Support</h1>
+                    </Link>
+                </div>
                 <p className="">How can we help?</p>
             </div>
 

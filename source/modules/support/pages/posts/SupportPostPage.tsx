@@ -79,9 +79,9 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
             <div className="mb-12">
                 <NavigationTrail className="mb-8" urlPath={navigationTrailUrlPathname} />
 
-                <div className="max-w-2xl">
+                <div className="mb-4 max-w-2xl ">
                     <Link href={postHref} className="">
-                        <h1 className="mb-4 text-3xl font-medium leading-10">{post.title}</h1>
+                        <h1 className="inline text-3xl font-medium leading-10">{post.title}</h1>
                     </Link>
                 </div>
 

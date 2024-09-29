@@ -82,7 +82,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageInterface) 
 
                 <div className="max-w-2xl">
                     <Link href={'/support/' + properties.postTopic.topic.slug} className="">
-                        <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
+                        <h1 className="inline-flex items-center space-x-3 text-3xl font-medium">
                             {PostTopicIcon && <PostTopicIcon className="h-8 w-8" />}
                             <span>{properties.postTopic.topic.title}</span>
                         </h1>
