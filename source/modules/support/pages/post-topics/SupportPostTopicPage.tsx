@@ -80,12 +80,14 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageInterface) 
             <div className="mb-12">
                 <NavigationTrail className="mb-8" />
 
-                <Link href={'/support/' + properties.postTopic.topic.slug} className="">
-                    <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
-                        {PostTopicIcon && <PostTopicIcon className="h-8 w-8" />}
-                        <span>{properties.postTopic.topic.title}</span>
-                    </h1>
-                </Link>
+                <div className="max-w-2xl">
+                    <Link href={'/support/' + properties.postTopic.topic.slug} className="">
+                        <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
+                            {PostTopicIcon && <PostTopicIcon className="h-8 w-8" />}
+                            <span>{properties.postTopic.topic.title}</span>
+                        </h1>
+                    </Link>
+                </div>
 
                 {/* <p className="neutral">Cart issues, checkout problems, order submission errors</p> */}
             </div>

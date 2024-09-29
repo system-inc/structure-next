@@ -9,6 +9,7 @@ import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { NavigationTrail } from '@structure/source/common/navigation/NavigationTrail';
 import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
 import { Button } from '@structure/source/common/buttons/Button';
+import { Markdown } from '@structure/source/common/markdown/Markdown';
 
 // Dependencies - API
 // import { useQuery } from '@apollo/client';
@@ -19,6 +20,7 @@ import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Dependencies - Utilities
 // import { titleCase } from '@structure/source/utilities/String';
+import { timeAgo } from '@structure/source/utilities/Time';
 
 // Component - SupportPostPage
 export interface SupportPostPageInterface {
@@ -50,6 +52,13 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
 
     const postHref = navigationTrailUrlPathname + '/articles/' + post.identifier + '/' + post.slug;
 
+    const updateAtTimeInMilliseconds = new Date(post.updatedAt).getTime();
+    let updatedTimeAgoString = timeAgo(updateAtTimeInMilliseconds);
+    // If it has been over a month
+    if(updateAtTimeInMilliseconds < new Date().getTime() - 1000 * 60 * 60 * 24 * 30) {
+        updatedTimeAgoString = 'over a month ago';
+    }
+
     // Render the component
     return (
         <div className="container pb-32 pt-8">
@@ -70,15 +79,16 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
             <div className="mb-12">
                 <NavigationTrail className="mb-8" urlPath={navigationTrailUrlPathname} />
 
-                <Link href={postHref} className="">
-                    <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">
-                        <span>{post.title}</span>
-                    </h1>
-                </Link>
+                <div className="max-w-2xl">
+                    <Link href={postHref} className="">
+                        <h1 className="mb-4 text-3xl font-medium leading-10">{post.title}</h1>
+                    </Link>
+                </div>
 
-                <p className="neutral mb-8 text-sm">Updated over a week ago {post.updatedAt}</p>
+                <p className="neutral mb-8 text-sm">Updated {updatedTimeAgoString}</p>
 
-                <p className="mb-4">{post.content}</p>
+                {/* Post Content in Markdown */}
+                {post.content && <Markdown className="mb-4 max-w-2xl">{post.content}</Markdown>}
             </div>
 
             <hr className="my-16" />
