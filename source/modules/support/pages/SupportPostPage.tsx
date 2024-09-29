@@ -68,7 +68,7 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
             )}
 
             <div className="mb-12">
-                <NavigationTrail className="mb-8" urlPathname={navigationTrailUrlPathname} />
+                <NavigationTrail className="mb-8" urlPath={navigationTrailUrlPathname} />
 
                 <Link href={postHref} className="">
                     <h1 className="mb-4 flex items-center space-x-3 text-3xl font-medium">

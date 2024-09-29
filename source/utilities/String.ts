@@ -141,3 +141,8 @@ export function slug(string: string | undefined, maximumLength = 160): string {
 
     return slug;
 }
+
+// Function to conver a slug to title case
+export function slugToTitleCase(slug: string): string {
+    return titleCase(slug.replaceAll('-', ' '));
+}

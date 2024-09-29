@@ -3,7 +3,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import NavigationTrailSeparatorPopoverMenu from '@structure/source/common/navigation/NavigationTrailSeparatorPopoverMenu';
@@ -25,21 +25,22 @@ export interface NavigationTrailLinkInterface {
 // Component - NavigationTrail
 export interface NavigationTrailInterface {
     className?: string;
-    urlPathname?: string; // Optional, will take preference over the current URL pathname
+    urlPath?: string; // Optional, will take preference over the current URL path
     links?: NavigationTrailLinkInterface[];
     separator?: React.ReactNode;
 }
 export function NavigationTrail(properties: NavigationTrailInterface) {
     // Hooks
-    const urlPathname = properties.urlPathname || usePathname();
+    const currentUrlPath = useUrlPath();
 
     // Defaults
+    const urlPath = properties.urlPath || currentUrlPath;
     const separator = properties.separator || <ChevronRightIcon className="h-4 w-4" />;
 
     // Function to generate links from pathname
     const generateNavigationTrailLinksFromPathname = React.useCallback(
         function (): NavigationTrailLinkInterface[] {
-            const urlPathSegments = urlPathname.replaceAll('-', ' ').split('/').filter(Boolean);
+            const urlPathSegments = urlPath.replaceAll('-', ' ').split('/').filter(Boolean);
             let urlPathAccumulator = '';
 
             const result = urlPathSegments.map(function (segment) {
@@ -55,7 +56,7 @@ export function NavigationTrail(properties: NavigationTrailInterface) {
 
             return result;
         },
-        [urlPathname],
+        [urlPath],
     );
 
     // Function to get links list
