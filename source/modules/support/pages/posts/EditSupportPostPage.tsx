@@ -23,12 +23,12 @@ import {
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - EditPostPage
-export interface EditPostPageInterface {
+// Component - EditSupportPostPage
+export interface EditSupportPostPageInterface {
     postIdentifier: string;
     className?: string;
 }
-export function EditPostPage(properties: EditPostPageInterface) {
+export function EditSupportPostPage(properties: EditSupportPostPageInterface) {
     // State
 
     // Render the component
@@ -88,4 +88,4 @@ export function EditPostPage(properties: EditPostPageInterface) {
 }
 
 // Export - Default
-export default EditPostPage;
+export default EditSupportPostPage;

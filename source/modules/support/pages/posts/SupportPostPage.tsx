@@ -60,7 +60,7 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
                         icon={EditIcon}
                         iconPosition="left"
                         iconClassName="w-3 h-3"
-                        href={'/posts/' + post.identifier + '/edit'}
+                        href={'/support/posts/' + post.identifier + '/edit'}
                     >
                         Edit Post
                     </Button>

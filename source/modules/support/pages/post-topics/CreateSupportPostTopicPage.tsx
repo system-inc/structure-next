@@ -12,8 +12,8 @@ import { PostTopicCreateOperation } from '@project/source/api/GraphQlGeneratedCo
 
 // Dependencies - Assets
 
-// Component - CreateTopicPage
-export function CreateTopicPage() {
+// Component - CreateSupportPostTopicPage
+export function CreateSupportPostTopicPage() {
     // Hooks
     const urlSearchParameters = useUrlSearchParameters();
     const parentPostTopicId = urlSearchParameters.get('parentPostTopicId');
@@ -43,4 +43,4 @@ export function CreateTopicPage() {
 }
 
 // Export - Default
-export default CreateTopicPage;
+export default CreateSupportPostTopicPage;

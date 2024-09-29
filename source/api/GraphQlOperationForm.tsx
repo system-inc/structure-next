@@ -25,7 +25,7 @@ import {
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { titleCase } from '@structure/source/utilities/String';
+import { titleCase, slug } from '@structure/source/utilities/String';
 import { getValueForKeyRecursively } from '@structure/source/utilities/Object';
 
 // Component - GraphQlOperationForm
@@ -87,7 +87,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
             parameters?: readonly GraphQLOperationParameterMetadata[],
             parentParameter: string = '',
         ): InputMetadata[] {
-            console.log('parameters', parameters);
+            // console.log('parameters', parameters);
 
             // The input meta data
             let inputMetadata: InputMetadata[] = [];
@@ -185,10 +185,13 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
         const inputMetadataArray = inputMetadataArrayFromParameters(properties.operation.parameters);
         // console.log('inputMetadataArray', inputMetadataArray);
 
-        // Store the form inputs
-        const formInputs: JSX.Element[] = [];
+        // Store the form inputs component and properties
+        const formInputsComponentAndProperties: {
+            component: any;
+            properties: any;
+        }[] = [];
 
-        // Loop through the operation
+        // First, gather all of the properties for the form inputs
         for(const input of inputMetadataArray) {
             // console.log('input', input);
 
@@ -234,17 +237,21 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 Object.assign(componentProperties, properties.inputComponentsProperties[input.name]);
             }
 
-            console.log('input', input);
+            // console.log('input', input);
 
             // Determine the component
             let FormInputComponent: any;
+
+            // If a component has been provided
             if(componentProperties.component) {
                 FormInputComponent = componentProperties.component;
             }
+            // If the input is an array
             else if(input.validation?.arrayUnique) {
                 FormInputComponent = FormInputMultipleSelect;
             }
-            else if(input.type === 'enum') {
+            // If the input is an enum
+            else if(input.kind === 'enum') {
                 FormInputComponent = FormInputSelect;
                 componentProperties.items = input.possibleValues?.map(function (value) {
                     return {
@@ -252,17 +259,41 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                     };
                 });
             }
-            else if(input.name === 'password') {
+            // If the input has validation which requires a specific string
+            else if(input.validation && 'isIn' in input.validation && Array.isArray(input.validation.isIn)) {
+                FormInputComponent = FormInputSelect;
+                componentProperties.items = input.validation.isIn.map(function (value: string) {
+                    return {
+                        value: value,
+                    };
+                });
+            }
+            // If the input is a password
+            else if(input.name.endsWith('.password')) {
                 FormInputComponent = FormInputPassword;
             }
-            else if(input.validation?.maxLength > 128) {
+            // If the input is a title or slug
+            else if(input.name.endsWith('.title') || input.name.endsWith('.slug')) {
+                FormInputComponent = FormInputText;
+            }
+            // If the input is a content or description
+            else if(
+                input.name.endsWith('.content') ||
+                input.name.endsWith('.description') ||
+                (input.validation && 'maxLength' in input.validation && input.validation.maxLength > 128)
+            ) {
                 FormInputComponent = FormInputTextArea;
                 // One row for every 128 characters with a max rows of 8
-                componentProperties.rows = Math.min(Math.ceil(input.validation.maxLength / 128), 8);
+
+                if(input.validation && 'maxLength' in input.validation && input.validation.maxLength > 128) {
+                    componentProperties.rows = Math.min(Math.ceil(input.validation.maxLength / 128), 8);
+                }
             }
+            // If the input is a boolean
             else if(input.type === 'Boolean') {
                 FormInputComponent = FormInputCheckbox;
             }
+            // If the input is an array
             else {
                 FormInputComponent = FormInputText;
             }
@@ -284,14 +315,57 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
             }
 
             if(componentProperties.items) {
-                console.log('componentProperties.items', componentProperties.items);
+                // console.log('componentProperties.items', componentProperties.items);
             }
 
-            // Add the form input
-            formInputs.push(<FormInputComponent {...componentProperties} key={componentProperties.key} />);
+            formInputsComponentAndProperties.push({
+                component: FormInputComponent,
+                properties: componentProperties,
+            });
         }
 
-        return formInputs;
+        // If there is a form input that ends with .slug and there is a form input that ends with .title
+        const slugFormInputComponentAndProperties = formInputsComponentAndProperties.find(
+            function (formInputProperties) {
+                return formInputProperties.properties.id.endsWith('.slug');
+            },
+        );
+        const titleFormInputComponentAndProperties = formInputsComponentAndProperties.find(
+            function (formInputProperties) {
+                return formInputProperties.properties.id.endsWith('.title');
+            },
+        );
+        if(slugFormInputComponentAndProperties && titleFormInputComponentAndProperties) {
+            // console.log('we have a slug and a title');
+
+            // Add an onChange event to the title form input
+            titleFormInputComponentAndProperties.properties.onChange = function (value: string | undefined) {
+                const titleValue = value;
+                const slugValue = slug(titleValue);
+                console.log('titleValue:', titleValue, 'slugValue:', slugValue);
+
+                // Set the value of the slug form input, hacky with JavaScript
+                // TODO: Fix this
+                const slugInputElement = document.getElementById(slugFormInputComponentAndProperties.properties.id);
+                if(slugInputElement) {
+                    // Set the value of the slug input
+                    slugInputElement.setAttribute('value', slugValue);
+                }
+            };
+        }
+
+        // Create the form input components
+        const formInputComponents: JSX.Element[] = [];
+        for(const formInputProperties of formInputsComponentAndProperties) {
+            formInputComponents.push(
+                <formInputProperties.component
+                    {...formInputProperties.properties}
+                    key={formInputProperties.properties.key}
+                />,
+            );
+        }
+
+        return formInputComponents;
     }
 
     // Render the component

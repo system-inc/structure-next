@@ -131,6 +131,7 @@ query Post($identifier: String!) {
         voteType
         reportedCount
         reportStatus
+        type
         metadata
         latestRevisionId
         updatedAt
@@ -218,6 +219,16 @@ mutation PostReportCreate($input: PostReportInput!) {
         id
     }
 }
+
+# Post Topic Query
+# query PostTopic($id: String!) {
+#     postTopic(id: $id) {
+#         topic {
+#             id
+#             title
+#         }
+#     }
+# }
 
 # Post Topics Query
 query PostTopics($ids: [String!]) {

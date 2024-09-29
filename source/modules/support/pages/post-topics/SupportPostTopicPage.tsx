@@ -22,8 +22,8 @@ import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 import GearIcon from '@structure/assets/icons/tools/GearIcon.svg';
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
-// Component - SupportTopicPage
-export interface SupportTopicPageInterface {
+// Component - SupportPostTopicPage
+export interface SupportPostTopicPageInterface {
     postTopicSlug: string;
     parentPostTopicsSlugs?: string[];
     postTopic: SupportPostTopicQuery['postTopic'];
@@ -33,7 +33,7 @@ export interface SupportTopicPageInterface {
         posts: SupportPostTopicQuery['postTopic']['pagedPosts']['items'];
     }[];
 }
-export function SupportTopicPage(properties: SupportTopicPageInterface) {
+export function SupportPostTopicPage(properties: SupportPostTopicPageInterface) {
     // Hooks
     const { accountState } = useAccount();
 
@@ -57,19 +57,19 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
                             icon: EditIcon,
                             iconPosition: 'left',
                             content: 'Edit Topic',
-                            href: '/support/edit-topic/' + postTopic.topic.id,
+                            href: '/support/post-topics/' + postTopic.topic.id + '/edit',
                         },
                         {
                             icon: PlusIcon,
                             iconPosition: 'left',
                             content: 'Create Sub Topic',
-                            href: '/support/create-topic?parentPostTopicId=' + postTopic.topic.id,
+                            href: '/support/post-topics/create?parentPostTopicId=' + postTopic.topic.id,
                         },
                         {
                             icon: PlusIcon,
                             iconPosition: 'left',
-                            content: 'Create Article',
-                            href: '/support/create-article?postTopicId=' + postTopic.topic.id,
+                            content: 'Create Post',
+                            href: '/support/posts/create?postTopicId=' + postTopic.topic.id,
                         },
                     ]}
                 >
@@ -161,4 +161,4 @@ export function SupportTopicPage(properties: SupportTopicPageInterface) {
 }
 
 // Export - Default
-export default SupportTopicPage;
+export default SupportPostTopicPage;

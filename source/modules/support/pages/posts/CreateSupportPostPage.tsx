@@ -6,16 +6,14 @@ import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNav
 
 // Dependencies - Main Components
 import { GraphQlOperationForm } from '@structure/source/api/GraphQlOperationForm';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 
 // Dependencies - API
 import { PostCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 
-// Component - CreateSupportArticlePage
-export function CreateSupportArticlePage() {
+// Component - CreateSupportPostPage
+export function CreateSupportPostPage() {
     // Hooks
     const urlSearchParameters = useUrlSearchParameters();
     const postTopicId = urlSearchParameters.get('postTopicId');
@@ -30,29 +28,29 @@ export function CreateSupportArticlePage() {
                 operation={PostCreateOperation}
                 inputComponentsProperties={{
                     'input.status': {
+                        className: 'hidden',
                         defaultValue: 'Published',
                     },
                     'input.title': {
-                        component: FormInputText,
-                        defaultValue: 'What if my package is missing?',
+                        // defaultValue: 'What if my package is missing?',
                     },
                     'input.type': {
+                        className: 'hidden',
                         defaultValue: 'SupportArticle',
                     },
                     'input.slug': {
-                        component: FormInputText,
-                        defaultValue: 'what-if-my-package-is-missing',
+                        // defaultValue: 'what-if-my-package-is-missing',
                     },
                     'input.description': {
                         // className: 'hidden',
-                        defaultValue: 'Learn how to handle missing packages.',
+                        // defaultValue: 'Learn how to handle missing packages.',
                     },
                     'input.content': {
-                        component: FormInputTextArea,
                         rows: 8,
-                        defaultValue: 'If your package is missing...',
+                        // defaultValue: 'If your package is missing...',
                     },
                     'input.topicIds': {
+                        className: 'hidden',
                         defaultValue: postTopicId,
                     },
                     'input.allowComment': {
@@ -65,7 +63,7 @@ export function CreateSupportArticlePage() {
                         className: 'hidden',
                     },
                     'input.allowReaction': {
-                        // className: 'hidden',
+                        className: 'hidden',
                         defaultValue: 'Checked',
                     },
                     'input.metadata': {
@@ -81,4 +79,4 @@ export function CreateSupportArticlePage() {
 }
 
 // Export - Default
-export default CreateSupportArticlePage;
+export default CreateSupportPostPage;
