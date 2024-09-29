@@ -18,7 +18,7 @@ import { SupportPostQuery } from '@project/source/api/GraphQlGeneratedCode';
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Dependencies - Utilities
-import { titleCase } from '@structure/source/utilities/String';
+// import { titleCase } from '@structure/source/utilities/String';
 
 // Component - SupportPostPage
 export interface SupportPostPageInterface {
@@ -60,7 +60,7 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
                         icon={EditIcon}
                         iconPosition="left"
                         iconClassName="w-3 h-3"
-                        href="/ideas/submit"
+                        href={'/posts/' + post.identifier + '/edit'}
                     >
                         Edit Post
                     </Button>

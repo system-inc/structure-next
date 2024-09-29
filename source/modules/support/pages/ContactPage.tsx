@@ -16,8 +16,8 @@ import { SupportTicketCreateOperation } from '@project/source/api/GraphQlGenerat
 
 // Dependencies - Assets
 
-// Component - CreateSupportArticlePage
-export function CreateSupportArticlePage() {
+// Component - ContactPage
+export function ContactPage() {
     // Render the component
     return (
         <div className="container pb-32 pt-12">
@@ -60,4 +60,4 @@ export function CreateSupportArticlePage() {
 }
 
 // Export - Default
-export default CreateSupportArticlePage;
+export default ContactPage;

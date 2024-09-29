@@ -2,18 +2,23 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 
 // Dependencies - Main Components
-import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
-import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
-import { PostControls } from '@structure/source/modules/post/controls/PostControls';
+// import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
+// import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
+// import { PostControls } from '@structure/source/modules/post/controls/PostControls';
 import { GraphQlOperationForm } from '@structure/source/api/GraphQlOperationForm';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
-import { PostUpdateOperation, PostDocument, PostVoteType, PostsQuery } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    PostUpdateOperation,
+    PostDocument,
+    // PostVoteType,
+    // PostsQuery,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -43,7 +48,7 @@ export function EditPostPage(properties: EditPostPageInterface) {
                         component: FormInputText,
                     },
                     'input.type': {
-                        defaultValue: 'Principle',
+                        // defaultValue: 'Principle',
                         // className: 'hidden',
                     },
                     'input.description': {

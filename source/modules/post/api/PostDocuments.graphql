@@ -117,8 +117,9 @@ query Post($identifier: String!) {
             }
         }
         content
-        topic {
-            name
+        topics {
+            id
+            title
         }
         reactions {
             content
