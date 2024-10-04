@@ -5,12 +5,11 @@ import React from 'react';
 
 // Dependencies - Main Components
 import GraphQlOperationForm from '@structure/source/api/GraphQlOperationForm';
+import { Button } from '@structure/source/common/buttons/Button';
+import { DeletePostTopicDialog } from '@structure/source/modules/post/DeletePostTopicDialog';
 
 // Dependencies - API
-import {
-    PostTopicUpdateOperation,
-    // PostTopicDocument,
-} from '@project/source/api/GraphQlGeneratedCode';
+import { PostTopicUpdateOperation, PostTopicByIdDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 
@@ -19,6 +18,9 @@ export interface EditSupportPostTopicPageInterface {
     postTopicId: string;
 }
 export function EditSupportPostTopicPage(properties: EditSupportPostTopicPageInterface) {
+    // State
+    const [deletePostTopicDialogOpen, setDeletePostTopicDialogOpen] = React.useState(false);
+
     // Render the component
     return (
         <div className="container pb-32 pt-12">
@@ -35,15 +37,33 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPageInt
                     },
                 }}
                 buttonProperties={{
-                    children: 'Edit Topic',
+                    children: 'Save Changes',
                 }}
-                // defaultValuesQuery={{
-                //     document: PostTopicDocument,
-                //     variables: {
-                //         id: properties.postTopicId,
-                //     },
-                // }}
+                defaultValuesQuery={{
+                    document: PostTopicByIdDocument,
+                    variables: {
+                        id: properties.postTopicId,
+                    },
+                }}
             />
+
+            <hr className="my-16" />
+
+            <div className="flex justify-end">
+                <Button
+                    variant="destructive"
+                    onClick={function () {
+                        setDeletePostTopicDialogOpen(true);
+                    }}
+                >
+                    Delete Post Topic
+                </Button>
+                <DeletePostTopicDialog
+                    open={deletePostTopicDialogOpen}
+                    onOpenChange={setDeletePostTopicDialogOpen}
+                    postTopicId={properties.postTopicId}
+                />
+            </div>
         </div>
     );
 }

@@ -24,11 +24,13 @@ import { timeAgo } from '@structure/source/utilities/Time';
 
 // Component - SupportPostPage
 export interface SupportPostPageInterface {
-    postTopicSlug: string;
+    postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
     post: SupportPostQuery['post'];
 }
 export function SupportPostPage(properties: SupportPostPageInterface) {
+    console.log('SupportPostPage', properties);
+
     // Hooks
     const { accountState } = useAccount();
 
@@ -48,7 +50,9 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
             ? '/' + properties.parentPostTopicsSlugs.join('/')
             : '';
     }
-    navigationTrailUrlPathname += '/' + properties.postTopicSlug;
+    if(properties.postTopicSlug) {
+        navigationTrailUrlPathname += '/' + properties.postTopicSlug;
+    }
 
     const postHref = navigationTrailUrlPathname + '/articles/' + post.identifier + '/' + post.slug;
 

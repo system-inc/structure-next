@@ -173,6 +173,11 @@ mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
     }
 }
 
+# Post Delete
+mutation PostDelete($id: String!) {
+    postDelete(id: $id)
+}
+
 # Post Vote
 mutation PostVote($postId: String!, $type: PostVoteType!) {
     postVote(postId: $postId, type: $type)
@@ -221,14 +226,16 @@ mutation PostReportCreate($input: PostReportInput!) {
 }
 
 # Post Topic Query
-# query PostTopic($id: String!) {
-#     postTopic(id: $id) {
-#         topic {
-#             id
-#             title
-#         }
-#     }
-# }
+query PostTopicById($id: String!) {
+    postTopicById(id: $id) {
+        id
+        title
+        slug
+        description
+        postCount
+        createdAt
+    }
+}
 
 # Post Topics Query
 query PostTopics($ids: [String!]) {

@@ -12,6 +12,35 @@ query SupportPost($identifier: String!) {
     }
 }
 
+query SupportPosts($paginationInputWithFilters: PaginationInputWithFilters) {
+    posts(input: $paginationInputWithFilters) {
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+            pagesTotal
+            page
+        }
+        items {
+            identifier
+            slug
+            status
+            title
+            description
+            content
+            topics {
+                id
+                title
+                slug
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
 # Support Post Topic Query
 query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInput) {
     postTopic(slug: $slug, path: $path, type: "SupportArticle", pagination: $pagination) {

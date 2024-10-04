@@ -8,9 +8,11 @@ import React from 'react';
 // import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
 // import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
 // import { PostControls } from '@structure/source/modules/post/controls/PostControls';
+import { Button } from '@structure/source/common/buttons/Button';
 import { GraphQlOperationForm } from '@structure/source/api/GraphQlOperationForm';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { DeletePostDialog } from '@structure/source/modules/post/DeletePostDialog';
 
 // Dependencies - API
 import {
@@ -30,6 +32,7 @@ export interface EditSupportPostPageInterface {
 }
 export function EditSupportPostPage(properties: EditSupportPostPageInterface) {
     // State
+    const [deletePostDialogOpen, setDeletePostDialogOpen] = React.useState(false);
 
     // Render the component
     return (
@@ -82,7 +85,26 @@ export function EditSupportPostPage(properties: EditSupportPostPageInterface) {
                         identifier: properties.postIdentifier,
                     },
                 }}
+                buttonProperties={{
+                    children: 'Save Changes',
+                }}
             />
+            <hr className="my-16" />
+            <div className="flex justify-end">
+                <Button
+                    variant="destructive"
+                    onClick={function () {
+                        setDeletePostDialogOpen(true);
+                    }}
+                >
+                    Delete Post
+                </Button>
+                <DeletePostDialog
+                    open={deletePostDialogOpen}
+                    onOpenChange={setDeletePostDialogOpen}
+                    postIdentifier={properties.postIdentifier}
+                />
+            </div>
         </div>
     );
 }

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useTheme } from '@structure/source/theme/ThemeProvider';
 // import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { Button } from '@structure/source/common/buttons/Button';
+import { SupportSearch } from '@structure/source/modules/support/SupportSearch';
 
 // Dependencies - API
 // import { useQuery } from '@apollo/client';
@@ -92,6 +93,8 @@ export function SupportPage(properties: SupportPageInterface) {
                 </div>
                 <p className="">How can we help?</p>
             </div>
+
+            <SupportSearch className="mt-5" />
 
             {/* Post Topics */}
             <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
