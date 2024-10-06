@@ -14,8 +14,13 @@ import DesktopIcon from '@structure/assets/icons/technology/DesktopIcon.svg';
 import SunIcon from '@structure/assets/icons/nature/SunIcon.svg';
 import MoonIcon from '@structure/assets/icons/nature/MoonIcon.svg';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
 // Component - ThemeToggle
-export interface ThemeToggleProperties {}
+export interface ThemeToggleProperties {
+    className?: string;
+}
 export function ThemeToggle(properties: ThemeToggleProperties) {
     // State for the theme
     const [themeMode, setThemeMode] = React.useState<ThemeMode>(ThemeMode.System);
@@ -98,7 +103,12 @@ export function ThemeToggle(properties: ThemeToggleProperties) {
 
     // Render the component
     return (
-        <div className="transition-color flex w-min items-center justify-center space-x-0.5 rounded-full border border-dark-4/50 p-1 text-dark-4/50 dark:border-dark-4 dark:text-light-6">
+        <div
+            className={mergeClassNames(
+                'transition-color flex w-min items-center justify-center space-x-0.5 rounded-full border border-dark-4/50 p-1 text-dark-4/50 dark:border-dark-4 dark:text-light-6',
+                properties.className,
+            )}
+        >
             {themeModeButton(ThemeMode.System)}
             {themeModeButton(ThemeMode.Light)}
             {themeModeButton(ThemeMode.Dark)}

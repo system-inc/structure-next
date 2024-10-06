@@ -13,7 +13,7 @@ import { renderToString } from 'react-dom/server';
 // Dependencies - Styles
 // import '@project/source/modules/chat/styles/night-owl.css';
 // import '@project/source/modules/chat/styles/monokai.css';
-import '@project/source/modules/chat/styles/phi.css';
+// import '@project/source/modules/chat/styles/phi.css';
 
 // Function to get the inner text of a node
 function getInnerText(node: React.ReactNode): string {

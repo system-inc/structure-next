@@ -9,6 +9,9 @@
  */
 export function timeAgo(millisecondsSinceUnixEpoch: number, abbreviated: boolean = false) {
     const deltaMillisecondsSinceUnixEpoch = new Date().getTime() - millisecondsSinceUnixEpoch;
+    // console.log('millisecondsSinceUnixEpoch', millisecondsSinceUnixEpoch);
+    // console.log('new Date().getTime()', new Date().getTime());
+    // console.log('deltaMillisecondsSinceUnixEpoch', deltaMillisecondsSinceUnixEpoch);
 
     const secondsAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / 1000).toFixed(0);
     const minutesAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60)).toFixed(0);

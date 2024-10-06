@@ -64,9 +64,16 @@ export function Pagination(properties: PaginationInterface) {
 
     // Function to construct href with existing query parameters
     function constructHrefWithExistingUrlSearchParameters(page: number) {
-        const urlSearchParameters = new URLSearchParams(window.location.search);
-        urlSearchParameters.set('page', page.toString());
-        return `?${urlSearchParameters.toString()}`;
+        // Server
+        if(typeof window === 'undefined') {
+            return `?page=${page}`;
+        }
+        // Client
+        else {
+            const urlSearchParameters = new URLSearchParams(window.location.search);
+            urlSearchParameters.set('page', page.toString());
+            return `?${urlSearchParameters.toString()}`;
+        }
     }
 
     // Render the component
