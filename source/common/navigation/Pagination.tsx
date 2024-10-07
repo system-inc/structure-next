@@ -189,6 +189,7 @@ export function Pagination(properties: PaginationInterface) {
                     </>
                 )}
                 <div className="flex items-center space-x-2">
+                    {/* First Page */}
                     <Button
                         size="icon"
                         icon={ChevronLeftDoubleIcon}
@@ -207,13 +208,15 @@ export function Pagination(properties: PaginationInterface) {
                                   }
                         }
                     />
+
+                    {/* Previous Page */}
                     <Button
                         size="icon"
                         icon={ChevronLeftIcon}
                         disabled={properties.page <= 1}
                         href={
                             useLinks && properties.page > 1
-                                ? constructHrefWithExistingUrlSearchParameters(properties.page - 1)
+                                ? constructHrefWithExistingUrlSearchParameters(Number(properties.page) - 1)
                                 : undefined
                         }
                         onClick={
@@ -225,13 +228,15 @@ export function Pagination(properties: PaginationInterface) {
                                   }
                         }
                     />
+
+                    {/* Next Page */}
                     <Button
                         size="icon"
                         icon={ChevronRightIcon}
                         disabled={properties.page >= properties.pagesTotal}
                         href={
                             useLinks && properties.page < properties.pagesTotal
-                                ? constructHrefWithExistingUrlSearchParameters(properties.page + 1)
+                                ? constructHrefWithExistingUrlSearchParameters(Number(properties.page) + 1)
                                 : undefined
                         }
                         onClick={
@@ -243,6 +248,8 @@ export function Pagination(properties: PaginationInterface) {
                                   }
                         }
                     />
+
+                    {/* Last Page */}
                     <Button
                         size="icon"
                         icon={ChevronRightDoubleIcon}
