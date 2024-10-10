@@ -18,8 +18,10 @@ query Posts($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
                 }
             }
             content
-            topic {
-                name
+            topics {
+                id
+                title
+                slug
             }
             reactions {
                 content
@@ -68,8 +70,10 @@ query PostsMine($pagination: PaginationInputWithFilters) {
                 }
             }
             content
-            topic {
-                name
+            topics {
+                id
+                title
+                slug
             }
             reactions {
                 content
