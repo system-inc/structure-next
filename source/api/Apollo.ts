@@ -43,19 +43,23 @@ export const apolloClient = new ApolloClient({
 });
 
 // Apollo client for server-side rendering
-export const serverSideApolloClient = new ApolloClient({
-    link: getApolloClientHttpLink('Server'),
-    cache: new InMemoryCache(),
-    ssrMode: true,
-    // Disable caching for server-side rendering for development
-    defaultOptions: {
-        query: {
-            fetchPolicy: 'no-cache',
-            errorPolicy: 'all',
+// Attempting to fix an issue with Cloudflare Next on Pages
+// It is possible that having a globally shared Apollo client is causing issues with Cloudflare Next on Pages
+export const getServersideApolloClient = function () {
+    return new ApolloClient({
+        link: getApolloClientHttpLink('Server'),
+        cache: new InMemoryCache(),
+        ssrMode: true,
+        // Disable caching for server-side rendering for development
+        defaultOptions: {
+            query: {
+                fetchPolicy: 'no-cache',
+                errorPolicy: 'all',
+            },
+            watchQuery: {
+                fetchPolicy: 'no-cache',
+                errorPolicy: 'all',
+            },
         },
-        watchQuery: {
-            fetchPolicy: 'no-cache',
-            errorPolicy: 'all',
-        },
-    },
-});
+    });
+};
