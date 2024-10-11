@@ -37,13 +37,16 @@ export function getAtomForNavigationOpen(identifier: string) {
     if(!atomsForNavigationOpen.has(identifier)) {
         // Check session storage to see if the navigation was manually closed
         const manuallyClosed =
-            sessionStorage.getItem(getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed') === 'true';
+            typeof sessionStorage !== 'undefined'
+                ? sessionStorage.getItem(getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed') ===
+                  'true'
+                : false;
 
         // Determine the default open state
         let openInitialState = !manuallyClosed;
 
         // If on mobile always start closed
-        if(window.innerWidth < desktopMinimumWidth) {
+        if(typeof window !== 'undefined' && window.innerWidth < desktopMinimumWidth) {
             openInitialState = false;
         }
 
@@ -65,9 +68,11 @@ export function getAtomForNavigationWidth(identifier: string) {
                 getSideNavigationLayoutLocalStorageKey(identifier) + 'Width', // Key
                 defaultNavigationWidth, // Default value
                 // Use session storage to isolate the state to the current tab
-                createJSONStorage(function () {
-                    return sessionStorage;
-                }),
+                typeof sessionStorage !== 'undefined'
+                    ? createJSONStorage(function () {
+                          return sessionStorage;
+                      })
+                    : undefined,
                 {
                     getOnInit: true, // Get the value on initialization (this is important for SSR)
                 },
@@ -89,9 +94,11 @@ export function getAtomForNavigationManuallyClosed(identifier: string) {
                 getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed', // Key
                 false, // Default value
                 // Use session storage to isolate the state to the current tab
-                createJSONStorage(function () {
-                    return sessionStorage;
-                }),
+                typeof sessionStorage !== 'undefined'
+                    ? createJSONStorage(function () {
+                          return sessionStorage;
+                      })
+                    : undefined,
                 {
                     getOnInit: true, // Get the value on initialization (this is important for SSR)
                 },
