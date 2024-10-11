@@ -533,9 +533,6 @@ export const Chart = ({
     // Use the theme hook
     const { themeClassName } = useTheme();
 
-    // Store a reference to the chart
-    const chartReference = React.useRef<any>(null);
-
     // Store a reference to the chart wrapper
     const [chartWrapperDomElementReference, wrapperDimensions] = useMeasure();
 
@@ -604,7 +601,6 @@ export const Chart = ({
             className={'relative h-60 w-full min-w-[300px] max-w-full select-none resize overflow-auto md:h-96'}
         >
             <ComposedChart
-                ref={chartReference}
                 data={formattedDataSourceWithMetrics}
                 width={wrapperDimensions.width}
                 height={wrapperDimensions.height - 20}
