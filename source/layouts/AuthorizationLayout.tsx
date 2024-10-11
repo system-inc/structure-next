@@ -32,10 +32,10 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     const mustBeAdministrator = properties.mustBeAdministrator || false;
 
     // Hooks
-    const { accountState } = useAccount();
+    const { accountState, signedIn } = useAccount();
 
     // Loading account or rendering on server
-    if(accountState.loading) {
+    if(!signedIn && accountState.loading) {
         return <LineLoadingAnimation />;
     }
     // Not signed in

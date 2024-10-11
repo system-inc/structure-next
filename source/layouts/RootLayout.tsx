@@ -4,13 +4,13 @@ import ProjectSettings from '@project/ProjectSettings';
 // Dependencies - React and Next.js
 import { Metadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
-import Script from 'next/script';
+// import Script from 'next/script';
 
 // Dependencies - Theme
 import '@project/source/styles/global.css';
 import '@structure/source/styles/global.css';
 import '@structure/source/theme/styles/theme.css';
-import { accountSignedInKey } from '@structure/source/modules/account/Account';
+// import { accountSignedInKey } from '@structure/source/modules/account/Account';
 import { darkThemeClassName, themeClassNameCookieKey } from '@structure/source/theme/Theme';
 
 // Dependencies - Main Components
@@ -39,8 +39,9 @@ export const viewport: Viewport = {
 // Component - RootLayout
 export interface RootLayoutInterface {
     children: React.ReactNode;
+    className?: string;
 }
-export function RootLayout(properties: RootLayoutInterface) {
+export async function RootLayout(properties: RootLayoutInterface) {
     // We need to get the theme class name from the response cookies in order to prevent a flash
     // of light mode when the page first loads. We can't use the theme mode from local storage because
     // we need to know the theme class name before the page completely loads.
@@ -50,7 +51,8 @@ export function RootLayout(properties: RootLayoutInterface) {
     // console.log('cookieStore', cookieStore);
 
     // Get the signed in cookie
-    const accountSignedIn = cookieStore.get(accountSignedInKey)?.value == 'true' ? true : false;
+    const accountSignedIn = cookieStore.get('sessionId')?.value ? true : false;
+    // console.log('sessionId:', cookieStore.get('sessionId')?.value);
 
     // Get the theme class name from the cookies
     const themeClassNameCookieValue = cookieStore.get(themeClassNameCookieKey)?.value;
@@ -61,11 +63,11 @@ export function RootLayout(properties: RootLayoutInterface) {
         : ProjectSettings?.theme?.defaultClassName || undefined;
 
     // Defaults
-    const googleAnalyticsId = ProjectSettings.services?.google?.analytics?.id;
+    // const googleAnalyticsId = ProjectSettings.services?.google?.analytics?.id;
 
     // Render the component
     return (
-        <html lang="en" className={themeClassName}>
+        <html lang="en" className={mergeClassNames(themeClassName, properties.className)}>
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
             <head>

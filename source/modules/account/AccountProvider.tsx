@@ -14,9 +14,6 @@ import { accountSignedInKey, Account } from '@structure/source/modules/account/A
 import { useQuery, useMutation, ApolloError } from '@apollo/client';
 import { AccountCurrentDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
 
-// Dependencies - Utilities
-import Cookies from '@structure/source/utilities/cookies/Cookies';
-
 // Component - AccountProvider
 export interface AccountProviderInterface {
     children: React.ReactNode;
@@ -78,27 +75,7 @@ export function AccountProvider(properties: AccountProviderInterface) {
     const updateSignedIn = React.useCallback(function (value: boolean) {
         // console.log('updateSignedIn', value);
 
-        // If signed in
-        if(value) {
-            // Set a cookie to remember if the account is signed in
-            // This allows us to know if the account is signed in before the page loads
-            // We just store a boolean and not the session ID as it is an HTTP-only cookie and JavaScript should not access it
-            Cookies.set(accountSignedInKey, 'true', {
-                path: '/',
-                maxAge: 31536000, // 1 year
-                sameSite: 'strict',
-                secure: true,
-            });
-        }
-        // If signed out
-        else {
-            // Delete the cookie
-            Cookies.remove(accountSignedInKey);
-        }
-
         // Update local storage so other tabs can know the account is signed in
-        // We use both cookies and local storage
-        // Cookies - because they come in the response headers and we can use them before the page loads
         // Local storage - because it is shared across tabs
         localStorage.setItem(accountSignedInKey, value ? 'true' : 'false');
 
@@ -163,6 +140,7 @@ export function AccountProvider(properties: AccountProviderInterface) {
                     error: accountQueryState.error ?? null,
                     account: account,
                 },
+                signedIn: signedIn,
                 setSignedIn: updateSignedIn,
                 signOut,
                 setAuthenticationDialogOpen,
@@ -189,6 +167,7 @@ interface AccountContextInterface {
         error: ApolloError | null;
         account: Account | null; // If this is null, the account is not signed in
     };
+    signedIn: boolean;
     setSignedIn: (value: boolean) => void;
     signOut: (redirectPath?: string) => Promise<boolean>;
     setAuthenticationDialogOpen: (value: boolean) => void;
