@@ -95,6 +95,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
         <animated.div
             style={contentDivSpring}
             className={mergeClassNames('relative h-screen w-screen', properties.className)}
+            suppressHydrationWarning
         >
             {/* Show the line loading animation when the page is loading */}
             <React.Suspense

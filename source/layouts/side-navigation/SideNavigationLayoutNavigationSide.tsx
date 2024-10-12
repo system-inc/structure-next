@@ -366,6 +366,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     properties.className,
                 )}
                 style={{ width: sideNavigationLayoutNavigationWidth + 'px', ...containerSpring }}
+                suppressHydrationWarning
             >
                 <ScrollArea
                     containerClassName={mergeClassNames(
