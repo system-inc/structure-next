@@ -197,8 +197,8 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
             const localStorageValue = get(localStorageAtomWithUpdates);
             const queryStateAndValue = get(queryAtomWithStorageUpdate);
 
-            console.log('localStorageValue', localStorageValue);
-            console.log('queryStateAndValue', queryStateAndValue);
+            // console.log('localStorageValue', localStorageValue);
+            // console.log('queryStateAndValue', queryStateAndValue);
 
             return { ...queryStateAndValue, data: localStorageValue ?? queryStateAndValue.data };
         },
