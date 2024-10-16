@@ -66,7 +66,7 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
         (get) => {
             return get(localStorageAtom);
         },
-        (get, set, update: TData | undefined) => {
+        (_, set, update: TData | undefined) => {
             set(localStorageAtom, update);
             if(onStorageUpdate) {
                 onStorageUpdate(update ?? null);
@@ -99,7 +99,7 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
             set(baseQueryAtom, { ...currentValue, ...update });
 
             // Update the localStorageAtom with the new value
-            set(localStorageAtomWithUpdates, update.data);
+            if(update.data) set(localStorageAtomWithUpdates, update.data);
         },
     );
     // On mount, the queryAtomWithStorageUpdate will fetch the latest data from the server and update the baseQueryAtom state
@@ -147,8 +147,16 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
                     },
                     // If the subscription errors, update the queryAtom error state
                     error: (error) => {
-                        setQueryAtomValue({ loading: false, error });
-                        console.error('Error fetching data:', error);
+                        if(error instanceof Error) {
+                            setQueryAtomValue({ loading: false, error });
+                        }
+
+                        if(onError) {
+                            onError(error);
+                        }
+                        else {
+                            console.error('Error fetching data:', error);
+                        }
                     },
                     // If the subscription completes, update the queryAtom loading state
                     complete: () => {
@@ -188,6 +196,10 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
         (get) => {
             const localStorageValue = get(localStorageAtomWithUpdates);
             const queryStateAndValue = get(queryAtomWithStorageUpdate);
+
+            console.log('localStorageValue', localStorageValue);
+            console.log('queryStateAndValue', queryStateAndValue);
+
             return { ...queryStateAndValue, data: localStorageValue ?? queryStateAndValue.data };
         },
         (_, set, update: TData) => {
