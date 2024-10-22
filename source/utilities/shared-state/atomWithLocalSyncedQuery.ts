@@ -27,24 +27,24 @@ import { apolloClient } from '@structure/source/api/Apollo';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
-interface AtomWithLocalSyncedQueryArgs<TData, TVariables extends OperationVariables> {
+interface AtomWithLocalSyncedQueryArgs<TStateData, TQueryData, TQueryVariables extends OperationVariables> {
     key: string;
-    queryDocument: TypedDocumentNode<TData, TVariables>;
-    queryOptions?: QueryOptions<TVariables, TData>;
+    queryDocument: TypedDocumentNode<TQueryData, TQueryVariables>;
+    queryOptions?: Omit<QueryOptions<TQueryVariables, TQueryData>, 'query'>;
 
     // Storage atom options
     getValueFromStorageOnFirstRender?: boolean;
 
     // Callbacks
-    onStorageUpdate?: (newValue: TData | null) => void;
-    onQueryUpdate?: (newValue: TData) => void;
+    onStorageUpdate?: (newValue: TStateData | null) => void;
+    onQueryUpdate: (newValue: TQueryData) => TStateData | void;
     onError?: (error: Error) => void;
 
     // Initial value
-    initialValue?: TData;
+    initialValue?: TStateData;
 }
 
-export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVariables>({
+export function atomWithLocalSyncedQuery<TStateData, TQueryData, TQueryVariables extends OperationVariables>({
     key,
     queryDocument,
     queryOptions,
@@ -53,7 +53,7 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
     onQueryUpdate,
     onError,
     initialValue,
-}: AtomWithLocalSyncedQueryArgs<TData, TVariables>) {
+}: AtomWithLocalSyncedQueryArgs<TStateData, TQueryData, TQueryVariables>) {
     // The localStorageAtom will be the the atom that is responsible for syncing the data between local
     // storage and the baseDataAtom.
     const localStorageAtom = atomWithStorage(key, initialValue, undefined, {
@@ -66,7 +66,7 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
         (get) => {
             return get(localStorageAtom);
         },
-        (_, set, update: TData | undefined) => {
+        (_, set, update: TStateData | undefined) => {
             set(localStorageAtom, update);
             if(onStorageUpdate) {
                 onStorageUpdate(update ?? null);
@@ -77,13 +77,13 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
     // The baseQueryAtom will be initialized with the initial value, but will be updated by the server with the
     // latest value on mount.
     interface QueryAtomValue {
-        data: TData | undefined;
+        data: TQueryData | undefined;
         loading: boolean;
         error: Error | undefined;
     }
 
     // The baseQueryAtom is the foundation of the query state.
-    const baseQueryAtom = atom<QueryAtomValue>({ data: initialValue, loading: true, error: undefined });
+    const baseQueryAtom = atom<QueryAtomValue>({ data: undefined, loading: true, error: undefined });
 
     // The queryAtomWithStorageUpdate is a derived atom that updates the localStorageAtom whenever the baseQueryAtom
     // is updated.
@@ -98,8 +98,14 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
             // Set the baseQueryAtom to the new value
             set(baseQueryAtom, { ...currentValue, ...update });
 
-            // Update the localStorageAtom with the new value
-            if(update.data) set(localStorageAtomWithUpdates, update.data);
+            // If the update has data, update the localStorageAtomWithUpdates
+            if(update.data) {
+                // Transform the data to the format that the localStorageAtomWithUpdates expects
+                const newDataForStorage = onQueryUpdate(update.data);
+
+                // Update the localStorageAtom with the new value if the data is properly transformed and returned by the onQueryUpdate callback
+                if(newDataForStorage) set(localStorageAtomWithUpdates, newDataForStorage);
+            }
         },
     );
     // On mount, the queryAtomWithStorageUpdate will fetch the latest data from the server and update the baseQueryAtom state
@@ -112,7 +118,7 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
             // Try to subscribe to the query and update the queryAtom state
             try {
                 // Get the observer by watching the query
-                const observer = apolloClient.watchQuery<TData, TVariables>({
+                const observer = apolloClient.watchQuery<TQueryData, TQueryVariables>({
                     query: queryDocument,
                     ...queryOptions,
                 });
@@ -200,9 +206,9 @@ export function atomWithLocalSyncedQuery<TData, TVariables extends OperationVari
             // console.log('localStorageValue', localStorageValue);
             // console.log('queryStateAndValue', queryStateAndValue);
 
-            return { ...queryStateAndValue, data: localStorageValue ?? queryStateAndValue.data };
+            return { ...queryStateAndValue, data: localStorageValue };
         },
-        (_, set, update: TData) => {
+        (_, set, update: TStateData) => {
             set(localStorageAtomWithUpdates, update);
         },
     );
