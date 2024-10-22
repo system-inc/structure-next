@@ -13,7 +13,7 @@ import {
     // EmailVerificationSendDocument,
     // EmailVerificationVerifyDocument,
     // AuthenticationEmailVerification,
-    AuthenticationSession,
+    AuthenticationCurrentQuery,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
@@ -22,7 +22,7 @@ import {
 // Component - EmailVerificationChallenge
 export interface EmailVerificationChallengeInterface {
     emailAddress: string;
-    onSuccess: (authenticationSession: AuthenticationSession) => void;
+    onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
 }
 export function EmailVerificationChallenge(properties: EmailVerificationChallengeInterface) {
     // Hooks - API - Queries

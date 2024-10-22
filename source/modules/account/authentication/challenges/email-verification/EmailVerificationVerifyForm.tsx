@@ -9,12 +9,12 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { EmailVerificationVerifyDocument, AuthenticationSession } from '@project/source/api/GraphQlGeneratedCode';
+import { EmailVerificationVerifyDocument, AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - EmailVerificationVerifyForm
 export interface EmailVerificationVerifyFormInterface {
     emailAddress: string;
-    onSuccess: (authenticationSession: AuthenticationSession) => void;
+    onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
 }
 export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyFormInterface) {
     // Hooks

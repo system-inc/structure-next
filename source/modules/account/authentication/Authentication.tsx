@@ -19,10 +19,10 @@ import { Duration } from '@structure/source/common/time/Duration';
 // Dependencies - API
 import { useApolloClient, useQuery, useMutation } from '@apollo/client';
 import {
+    AuthenticationCurrentQuery,
     AuthenticationCurrentDocument,
     AccountRegistrationCompleteDocument,
     AccountSignInCompleteDocument,
-    AuthenticationSession,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Styles
@@ -42,9 +42,9 @@ export interface AuthenticationInterface {
 }
 export function Authentication(properties: AuthenticationInterface) {
     // State
-    const [authenticationSession, setAuthenticationSession] = React.useState<AuthenticationSession | undefined>(
-        undefined,
-    );
+    const [authenticationSession, setAuthenticationSession] = React.useState<
+        AuthenticationCurrentQuery['authenticationCurrent'] | undefined
+    >(undefined);
     const [authenticationSessionStartTime] = React.useState<number>(Date.now());
     const [authenticationSessionSuccess, setAuthenticationSessionSuccess] = React.useState<boolean>(false);
     const [authenticationSessionTimedOut] = React.useState<boolean>(false);
@@ -195,7 +195,7 @@ export function Authentication(properties: AuthenticationInterface) {
         currentAuthenticationComponent = (
             <EmailVerificationChallenge
                 emailAddress={emailAddress!}
-                onSuccess={function (authenticationSession: AuthenticationSession) {
+                onSuccess={function (authenticationSession) {
                     setAuthenticationSession(authenticationSession);
                 }}
             />
@@ -206,7 +206,7 @@ export function Authentication(properties: AuthenticationInterface) {
         currentAuthenticationComponent = (
             <AccountPasswordChallenge
                 emailAddress={emailAddress!}
-                onSuccess={function (authenticationSession: AuthenticationSession) {
+                onSuccess={function (authenticationSession) {
                     setAuthenticationSession(authenticationSession);
                 }}
             />
@@ -231,7 +231,7 @@ export function Authentication(properties: AuthenticationInterface) {
     else {
         currentAuthenticationComponent = (
             <EmailForm
-                onSuccess={function (emailAddress: string, authenticationSession: AuthenticationSession) {
+                onSuccess={function (emailAddress: string, authenticationSession) {
                     setEmailAddress(emailAddress);
                     setAuthenticationSession(authenticationSession);
                 }}

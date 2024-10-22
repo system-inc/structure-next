@@ -7,12 +7,12 @@ import React from 'react';
 import { AccountPasswordForm } from '@structure/source/modules/account/authentication/challenges/account-password/AccountPasswordForm';
 
 // Dependencies - API
-import { AuthenticationSession } from '@project/source/api/GraphQlGeneratedCode';
+import { AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - AccountPasswordChallenge
 export interface AccountPasswordChallengeInterface {
     emailAddress: string;
-    onSuccess: (authenticationSession: AuthenticationSession) => void;
+    onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
 }
 export function AccountPasswordChallenge(properties: AccountPasswordChallengeInterface) {
     // Render the component

@@ -2,23 +2,17 @@
 import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - API
-import {
-    AccountCurrentQuery,
-    AccountEmail,
-    AccountSession,
-    Profile,
-    AccessRole,
-} from '@project/source/api/GraphQlGeneratedCode';
+import { AccountCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Account variables shared across the application
 export const accountSignedInKey = ProjectSettings.identifier + 'AccountSignedIn';
 
 // Class - Account
 export class Account {
-    primaryAccountEmail: AccountEmail | null | undefined;
-    currentProfile: Profile;
-    roles: AccessRole[];
-    currentSession: AccountSession;
+    primaryAccountEmail: AccountCurrentQuery['accountCurrent']['primaryAccountEmail'] | null | undefined;
+    currentProfile: AccountCurrentQuery['accountCurrent']['currentProfile'];
+    roles: AccountCurrentQuery['accountCurrent']['roles'];
+    currentSession: AccountCurrentQuery['accountCurrent']['currentSession'];
     createdAt: Date;
 
     constructor(accountCurrentQueryData: AccountCurrentQuery['accountCurrent']) {
@@ -26,8 +20,8 @@ export class Account {
 
         this.createdAt = new Date(accountCurrentQueryData.createdAt);
         this.primaryAccountEmail = accountCurrentQueryData.primaryAccountEmail;
-        this.currentSession = accountCurrentQueryData.currentSession as AccountSession;
-        this.currentProfile = accountCurrentQueryData.currentProfile as Profile;
+        this.currentSession = accountCurrentQueryData.currentSession;
+        this.currentProfile = accountCurrentQueryData.currentProfile;
         this.roles = accountCurrentQueryData.roles;
     }
 

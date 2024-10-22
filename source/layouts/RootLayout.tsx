@@ -17,7 +17,7 @@ import { darkThemeClassName, themeClassNameCookieKey } from '@structure/source/t
 import Providers from '@structure/source/layouts/providers/Providers';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Metadata
+// Next.js Metadata
 export async function generateMetadata(): Promise<Metadata> {
     return {
         title: {

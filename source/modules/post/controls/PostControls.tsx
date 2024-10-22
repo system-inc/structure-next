@@ -111,7 +111,7 @@ export function PostControls(properties: PostControlsInterface) {
 
                 {/* Edit */}
                 {/* Must be signed in and the current profile must match the creator profile of the post */}
-                {accountState.account && accountState.account.currentProfile.id === properties.createdByProfileId && (
+                {accountState.account && accountState.account.currentProfile?.id === properties.createdByProfileId && (
                     <PostControl href={editUrlPath}>Edit</PostControl>
                 )}
             </div>

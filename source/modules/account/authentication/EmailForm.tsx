@@ -15,7 +15,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { useMutation } from '@apollo/client';
 import {
     AccountRegistrationOrSignInCreateDocument,
-    AuthenticationSession,
+    AuthenticationCurrentQuery,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
@@ -24,7 +24,10 @@ import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg
 // Component - EmailForm
 export interface EmailFormInterface {
     children?: React.ReactNode;
-    onSuccess: (emailAddress: string, authenticationSession: AuthenticationSession) => void;
+    onSuccess: (
+        emailAddress: string,
+        authenticationSession: AuthenticationCurrentQuery['authenticationCurrent'],
+    ) => void;
 }
 export function EmailForm(properties: EmailFormInterface) {
     // Hooks
