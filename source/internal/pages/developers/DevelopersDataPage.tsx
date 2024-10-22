@@ -25,7 +25,9 @@ export function DevelopersDataPage(properties: DevelopersDataPageInterface) {
     );
     const [filtersUrlParameter, setFiltersUrlParameter] = useUrlQueryState<ColumnFilterGroupDataInterface>(
         'filters',
-        parseAsJson<ColumnFilterGroupDataInterface>(),
+        parseAsJson<ColumnFilterGroupDataInterface>(function (value) {
+            return value as ColumnFilterGroupDataInterface;
+        }),
     );
     // console.log('filtersUrlParameter', filtersUrlParameter);
 

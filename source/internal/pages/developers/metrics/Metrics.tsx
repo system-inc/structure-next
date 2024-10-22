@@ -125,7 +125,9 @@ export function Metrics(properties: MetricsInterface) {
     // Date range is stored using URL search parameters
     const [timeRange, setTimeRange] = useUrlQueryState<TimeRangeType>(
         'timeRange',
-        parseAsJson<TimeRangeType>().withDefault({
+        parseAsJson<TimeRangeType>(function (value) {
+            return value as TimeRangeType;
+        }).withDefault({
             startTime: addDays(endOfToday(), -27),
             endTime: endOfToday(),
         }),
@@ -135,7 +137,11 @@ export function Metrics(properties: MetricsInterface) {
     // Data sources are stored using URL search parameters
     const [dataSources, setDataSources] = useUrlQueryState(
         'dataSources',
-        parseAsArrayOf(parseAsJson<DataSourceType>()).withDefault([]),
+        parseAsArrayOf(
+            parseAsJson<DataSourceType>(function (value) {
+                return value as DataSourceType;
+            }),
+        ).withDefault([]),
     );
 
     // Data sources with metrics is stored using React state
@@ -276,7 +282,7 @@ export function Metrics(properties: MetricsInterface) {
                     decodedDataSourcesFromUrlSearchParameters = '[' + decodedDataSourcesFromUrlSearchParameters + ']';
                 }
 
-                let keysOfDataSourcesFromUrlSearchParameters = Object.keys(
+                const keysOfDataSourcesFromUrlSearchParameters = Object.keys(
                     JSON.parse(decodedDataSourcesFromUrlSearchParameters)[0],
                 );
                 if(
@@ -316,7 +322,7 @@ export function Metrics(properties: MetricsInterface) {
                     }
                     // console.log("decodedDataSourcesFromUrlSearchParameters", decodedDataSourcesFromUrlSearchParameters);
 
-                    let dataSourceArray = JSON.parse(decodedDataSourcesFromUrlSearchParameters) as {
+                    const dataSourceArray = JSON.parse(decodedDataSourcesFromUrlSearchParameters) as {
                         databaseName: string;
                         tableName: string;
                     }[];
@@ -378,11 +384,11 @@ export function Metrics(properties: MetricsInterface) {
         const nowDate = new Date();
 
         // Get the current date range and interval
-        let fromDate = new Date(timeRange.startTime ? timeRange.startTime : nowDate.getTime());
-        let toDate = new Date(timeRange.endTime ? timeRange.endTime : nowDate.getTime());
+        const fromDate = new Date(timeRange.startTime ? timeRange.startTime : nowDate.getTime());
+        const toDate = new Date(timeRange.endTime ? timeRange.endTime : nowDate.getTime());
 
         // Determine the new interval and date range based on the zoom direction
-        let { newTimeInterval, newStartTime, newEndTime } = determineNewTimeRangeAndInterval(
+        const { newTimeInterval, newStartTime, newEndTime } = determineNewTimeRangeAndInterval(
             timeInterval,
             fromDate,
             toDate,
@@ -656,8 +662,8 @@ export function Metrics(properties: MetricsInterface) {
         // console.log("leftIntervalValue", leftIntervalValue);
         // console.log("rightIntervalValue", rightIntervalValue);
 
-        let leftIntervalTime = convertIntervalValueToDate(leftIntervalValue, timeInterval as TimeInterval);
-        let rightIntervalTime = convertIntervalValueToDate(rightIntervalValue, timeInterval as TimeInterval);
+        const leftIntervalTime = convertIntervalValueToDate(leftIntervalValue, timeInterval as TimeInterval);
+        const rightIntervalTime = convertIntervalValueToDate(rightIntervalValue, timeInterval as TimeInterval);
         let startIntervalTime: Date, endIntervalTime: Date;
 
         // Determine the start and end interval dates
@@ -760,7 +766,7 @@ export function Metrics(properties: MetricsInterface) {
     const contextMenuItems: MenuItemInterface[] = [];
     // Create a list of items for the context menu that will allow the user to click and view the records for each data source
     if(chartActiveLabel) {
-        let timeIntervalValueStartAndEndDate = calculateTimeIntervalValueStartAndEndDate(
+        const timeIntervalValueStartAndEndDate = calculateTimeIntervalValueStartAndEndDate(
             chartActiveLabel,
             timeInterval,
         );
