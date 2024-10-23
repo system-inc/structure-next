@@ -47,7 +47,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
     // we need to know the theme class name before the page completely loads.
 
     // Get the cookies from the response headers
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     // console.log('cookieStore', cookieStore);
 
     // Get the signed in cookie
