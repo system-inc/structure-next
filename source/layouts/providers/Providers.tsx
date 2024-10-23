@@ -13,6 +13,7 @@ import SharedStateProvider from '@structure/source/utilities/shared-state/Shared
 import EngagementProvider from '@structure/source/modules/engagement/EngagementProvider';
 import NoticeProvider from '@structure/source/common/notifications/NoticeProvider';
 import TipProvider from '@structure/source/common/popovers/TipProvider';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 export interface ProvidersInterface {
     children: React.ReactNode;
@@ -23,19 +24,21 @@ export function Providers(properties: ProvidersInterface) {
     // Render the component
     return (
         <CookiesProvider cookies={Cookies}>
-            <ApolloProvider>
-                <ThemeProvider themeClassName={properties.themeClassName}>
-                    <AccountProvider signedIn={properties.accountSignedIn}>
-                        <SharedStateProvider>
-                            <EngagementProvider>
-                                <NoticeProvider>
-                                    <TipProvider delayDuration={100}>{properties.children}</TipProvider>
-                                </NoticeProvider>
-                            </EngagementProvider>
-                        </SharedStateProvider>
-                    </AccountProvider>
-                </ThemeProvider>
-            </ApolloProvider>
+            <NuqsAdapter>
+                <ApolloProvider>
+                    <ThemeProvider themeClassName={properties.themeClassName}>
+                        <AccountProvider signedIn={properties.accountSignedIn}>
+                            <SharedStateProvider>
+                                <EngagementProvider>
+                                    <NoticeProvider>
+                                        <TipProvider delayDuration={100}>{properties.children}</TipProvider>
+                                    </NoticeProvider>
+                                </EngagementProvider>
+                            </SharedStateProvider>
+                        </AccountProvider>
+                    </ThemeProvider>
+                </ApolloProvider>
+            </NuqsAdapter>
         </CookiesProvider>
     );
 }
