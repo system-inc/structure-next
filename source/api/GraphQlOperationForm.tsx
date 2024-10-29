@@ -423,7 +423,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
                             // TODO: Remove this
                             // Hard coding this fix for now
-                            if(key == 'input.topicIds') {
+                            if(key == 'input.topicIds' && value) {
                                 graphQlValue = [value];
                             }
 
