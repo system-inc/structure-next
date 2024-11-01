@@ -20,36 +20,29 @@ import { SupportTicketCreateDocument } from '@project/source/api/GraphQlGenerate
 
 // Dependencies - Assets
 import SendIcon from '@structure/assets/icons/communication/SendIcon.svg';
+import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Component - ContactPage
 export function ContactPage() {
-    // State
-    const [sending, setSending] = React.useState(false);
-    const [reportError, setReportError] = React.useState(false);
-    const [reportComplete, setReportComplete] = React.useState(false);
-
     // Hooks
     const { accountState } = useAccount();
-    const [supportTicketCreateMutation] = useMutation(SupportTicketCreateDocument);
+    const [supportTicketCreateMutation, supportTicketCreateMutationState] = useMutation(SupportTicketCreateDocument);
 
     // Function to send the message
-    async function sendMessage(reason: string, note?: string) {
-        // console.log('Reporting', properties.ideaId);
-        // await ideaReportCreateMutation({
-        //     variables: {
-        //         input: {
-        //             postId: properties.ideaId,
-        //             reason: reason,
-        //             note: note,
-        //         },
-        //     },
-        //     onError: function () {
-        //         setReportError(true);
-        //     },
-        //     onCompleted: function () {
-        //         setReportComplete(true);
-        //     },
-        // });
+    async function sendMessage(emailAddress: string, subject: string, message: string) {
+        // console.log('Sending', emailAddress, subject, message);
+
+        // Invoke the mutation
+        await supportTicketCreateMutation({
+            variables: {
+                input: {
+                    type: 'Contact',
+                    emailAddress: emailAddress,
+                    title: subject,
+                    description: message,
+                },
+            },
+        });
     }
 
     // Render the component
@@ -57,55 +50,76 @@ export function ContactPage() {
         <div className="container pb-32 pt-12">
             <h1 className="mb-6 text-3xl font-medium">Contact {ProjectSettings.title}</h1>
 
-            <p className="">We look forward to hearing from you.</p>
+            <div className="">
+                {/* Message Not Sent */}
+                {!supportTicketCreateMutationState.data && (
+                    <div>
+                        <p className="">We look forward to hearing from you.</p>
+                        <Form
+                            className="mt-10"
+                            formInputs={[
+                                <FormInputText
+                                    key="emailAddress"
+                                    id="emailAddress"
+                                    label="Your Email Address"
+                                    placeholder="email@domain.com"
+                                    required={true}
+                                    defaultValue={accountState.account?.primaryAccountEmail?.emailAddress}
+                                />,
+                                <FormInputText
+                                    key="subject"
+                                    id="subject"
+                                    label="Subject"
+                                    placeholder="Subject"
+                                    required={true}
+                                />,
+                                <FormInputTextArea
+                                    key="message"
+                                    id="message"
+                                    label="Message"
+                                    placeholder="Message"
+                                    rows={8}
+                                    required={true}
+                                />,
+                            ]}
+                            buttonProperties={{
+                                processing: supportTicketCreateMutationState.loading,
+                                icon: supportTicketCreateMutationState.loading ? undefined : SendIcon,
+                                iconPosition: supportTicketCreateMutationState.loading ? undefined : 'left',
+                                iconClassName: supportTicketCreateMutationState.loading ? undefined : 'ml-1 mr-2.5',
+                                children: 'Send Message',
+                            }}
+                            onSubmit={async function (formValues) {
+                                // console.log('onSubmit', formValues);
 
-            <Form
-                className="mt-10"
-                formInputs={[
-                    <FormInputText
-                        key="emailAddress"
-                        id="emailAddress"
-                        label="Your Email Address"
-                        placeholder="email@domain.com"
-                        required={true}
-                        defaultValue={accountState.account?.primaryAccountEmail?.emailAddress}
-                    />,
-                    <FormInputText key="subject" id="subject" label="Subject" placeholder="Subject" required={true} />,
-                    <FormInputTextArea
-                        key="message"
-                        id="message"
-                        label="Message"
-                        placeholder="Message"
-                        rows={8}
-                        required={true}
-                    />,
-                ]}
-                buttonProperties={{
-                    processing: sending,
-                    icon: sending ? undefined : SendIcon,
-                    iconPosition: sending ? undefined : 'left',
-                    iconClassName: sending ? undefined : 'ml-1 mr-2.5',
-                    children: 'Send Message',
-                }}
-                onSubmit={async function (formValues) {
-                    console.log('onSubmit', formValues);
+                                await sendMessage(formValues.emailAddress, formValues.subject, formValues.message);
 
-                    // Set the sending state
-                    setSending(true);
+                                if(supportTicketCreateMutationState.error) {
+                                    return {
+                                        success: false,
+                                        message:
+                                            'An error occurred while sending the message: ' +
+                                            supportTicketCreateMutationState.error.message,
+                                    };
+                                }
+                                else {
+                                    return {
+                                        success: true,
+                                    };
+                                }
+                            }}
+                        />
+                    </div>
+                )}
 
-                    // wait for 3 seconds
-                    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-                    // Reset the sending state
-                    setSending(false);
-
-                    // await report(formValues.reason, formValues.report);
-
-                    return {
-                        success: true,
-                    };
-                }}
-            />
+                {/* Message Sent */}
+                {supportTicketCreateMutationState.data && (
+                    <div className="mt-10 flex space-x-2">
+                        <CheckCircledIcon className="h-6 w-6" />
+                        <p>Thanks! Your message has been sent. We will get back to you as soon as possible.</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

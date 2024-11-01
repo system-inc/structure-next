@@ -440,7 +440,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                             assignNestedValue(mutationVariables, keyParts, graphQlValue);
                         }
                         console.log('mutationVariables:', mutationVariables);
-                        // return;
+                        // return; // Debug
 
                         // Invoke the GraphQL mutation
                         try {

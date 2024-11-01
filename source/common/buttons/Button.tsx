@@ -131,15 +131,14 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
 
             // Give time for the animation to finish
             processingAnimationTimeoutReference.current = setTimeout(function () {
-                console.log('Processing animation finished');
-
+                // console.log('Processing animation finished');
                 // Reset the processed state
                 // setProcessed(false);
             }, 1000);
 
             // Reset the tip content in a little bit longer, allowing the tip animation to finish
             tipResetTimeoutReference.current = setTimeout(function () {
-                console.log('Tip reset animation finished');
+                // console.log('Tip reset animation finished');
 
                 // If the processed time tip is enabled
                 if(properties.showProcessedTimeTip) {
