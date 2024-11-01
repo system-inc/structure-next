@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputInterface } from '@structure/source/common/forms/Input';
+import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
 import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
@@ -33,11 +33,9 @@ export enum InputCheckboxState {
 }
 
 // Interface - InputCheckboxReference
-export interface InputCheckboxReferenceInterface {
+export interface InputCheckboxReferenceInterface extends InputReferenceInterface {
     getValue: () => InputCheckboxState | undefined;
     setValue: (value?: InputCheckboxState, event?: any) => void;
-    focus: () => void;
-    click: () => void;
 }
 
 // Component - InputCheckbox
@@ -91,7 +89,7 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
     const onChangeIntercept = React.useCallback(
         function (inputCheckBoxState: InputCheckboxState, event: any) {
             // console.log('InputCheckbox.tsx value changed:', inputCheckBoxState);
-            let newInputCheckboxState = inputCheckBoxState;
+            const newInputCheckboxState = inputCheckBoxState;
 
             // If the value is not undefined
             if(newInputCheckboxState !== undefined) {

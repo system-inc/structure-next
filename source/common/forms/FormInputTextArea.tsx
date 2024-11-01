@@ -2,7 +2,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputReferenceInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import {
+    FormInputReferenceInterface,
+    FormInputInterface,
+    FormInput,
+    useFormInputValue,
+} from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 // import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 import { InputTextAreaInterface, InputTextArea } from '@structure/source/common/forms/InputTextArea';
@@ -34,8 +39,8 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
     );
 
     // References
-    const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
     const inputTextAreaReference = React.useRef<FormInputReferenceInterface>(null);
+    const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputTextAreaReference);
 
     // Function to focus on the component
     const focus = React.useCallback(function () {
@@ -99,12 +104,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
             skipOnChangeCallback: boolean = false,
         ) {
             // Update the value
-            valueReference.current = value;
-
-            // Set the value of the input text area
-            if(inputTextAreaReference.current) {
-                inputTextAreaReference.current.setValue(value);
-            }
+            setValue(value);
 
             // Optionally run the provided onChange function if provided
             if(!skipOnChangeCallback && propertiesOnChange) {
@@ -116,7 +116,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
                 validate(value);
             }
         },
-        [propertiesOnChange, propertiesValidateOnChange, validate],
+        [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
     );
 
     // Function to handle form input blur events

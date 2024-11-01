@@ -240,7 +240,7 @@ export const InputMultipleSelect = React.forwardRef<
             title={properties.title}
             items={items.map((item, index) => {
                 // Determine if the item is selected
-                let selected = Boolean(item.value && value?.includes(item.value));
+                const selected = Boolean(item.value && value?.includes(item.value));
 
                 return {
                     ...item,

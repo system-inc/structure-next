@@ -6,13 +6,45 @@ import { InputReferenceInterface, InputInterface } from '@structure/source/commo
 import { TipIconInterface, TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Assets
-import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
+// import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { ValidationResult } from '@structure/source/utilities/validation/Validation';
 import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
+
+// Hook - useFormInputValue
+export function useFormInputValue<T>(
+    defaultValue: T | undefined,
+    inputReference: React.RefObject<FormInputReferenceInterface>,
+) {
+    const valueReference = React.useRef(defaultValue);
+
+    // Using useCallback to memoize the setValue function
+    const setValue = React.useCallback(
+        function (value: T | undefined) {
+            valueReference.current = value;
+            if(inputReference.current) {
+                inputReference.current.setValue(value);
+            }
+        },
+        [inputReference],
+    );
+
+    // Use the memoized setValue in useEffect
+    React.useEffect(
+        function () {
+            setValue(defaultValue);
+        },
+        [defaultValue, setValue],
+    );
+
+    return {
+        valueReference: valueReference,
+        setValue,
+    };
+}
 
 // FormInput - Sizes
 export const FormInputSizes = {

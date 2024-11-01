@@ -2,7 +2,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputReferenceInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import {
+    FormInputReferenceInterface,
+    FormInputInterface,
+    FormInput,
+    useFormInputValue,
+} from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 import { InputTextInterface, InputText } from '@structure/source/common/forms/InputText';
@@ -35,8 +40,8 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
     );
 
     // References
-    const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
     const inputTextReference = React.useRef<FormInputReferenceInterface>(null);
+    const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputTextReference);
 
     // Defaults
     const type = properties.type ?? 'text';
@@ -114,12 +119,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
             // console.log('Form input value changed:', value);
 
             // Update the value
-            valueReference.current = value;
-
-            // Set the value of the input text
-            if(inputTextReference.current) {
-                inputTextReference.current.setValue(value);
-            }
+            setValue(value);
 
             // Optionally run the provided onChange function if provided
             if(!skipOnChangeCallback && propertiesOnChange) {
@@ -131,7 +131,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                 validate(value);
             }
         },
-        [propertiesOnChange, propertiesValidateOnChange, validate],
+        [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
     );
 
     // Function to handle form input blur events

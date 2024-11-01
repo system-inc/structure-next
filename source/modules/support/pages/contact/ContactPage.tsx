@@ -7,17 +7,50 @@ import ProjectSettings from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { GraphQlOperationForm } from '@structure/source/api/GraphQlOperationForm';
+import { Form } from '@structure/source/common/forms/Form';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 
+// Dependencies - Account
+import { useAccount } from '@structure/source/modules/account/AccountProvider';
+
 // Dependencies - API
-import { SupportTicketCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+import { useMutation } from '@apollo/client';
+import { SupportTicketCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
+import MailIcon from '@structure/assets/icons/communication/MailIcon.svg';
 
 // Component - ContactPage
 export function ContactPage() {
+    // State
+    const [reportError, setReportError] = React.useState(false);
+    const [reportComplete, setReportComplete] = React.useState(false);
+
+    // Hooks
+    const { accountState } = useAccount();
+    const [supportTicketCreateMutation] = useMutation(SupportTicketCreateDocument);
+
+    // Function to send the message
+    async function sendMessage(reason: string, note?: string) {
+        // console.log('Reporting', properties.ideaId);
+        // await ideaReportCreateMutation({
+        //     variables: {
+        //         input: {
+        //             postId: properties.ideaId,
+        //             reason: reason,
+        //             note: note,
+        //         },
+        //     },
+        //     onError: function () {
+        //         setReportError(true);
+        //     },
+        //     onCompleted: function () {
+        //         setReportComplete(true);
+        //     },
+        // });
+    }
+
     // Render the component
     return (
         <div className="container pb-32 pt-12">
@@ -25,34 +58,40 @@ export function ContactPage() {
 
             <p className="">We look forward to hearing from you.</p>
 
-            <GraphQlOperationForm
-                className="mt-6"
-                operation={SupportTicketCreateOperation}
-                inputComponentsProperties={{
-                    'input.title': {
-                        label: 'Subject',
-                        placeholder: 'Subject',
-                        component: FormInputText,
-                    },
-                    'input.description': {
-                        label: 'Message',
-                        placeholder: 'Message',
-                        component: FormInputTextArea,
-                        rows: 8,
-                    },
-                    'input.emailAddress': {
-                        placeholder: 'email@domain.com',
-                    },
-                    'input.type': {
-                        // className: 'hidden',
-                        defaultValue: 'Contact',
-                    },
-                    'input.initialComment': {
-                        className: 'hidden',
-                    },
-                }}
+            <Form
+                className="mt-10"
+                formInputs={[
+                    <FormInputText
+                        key="emailAddress"
+                        id="emailAddress"
+                        label="Your Email Address"
+                        placeholder="email@domain.com"
+                        required={true}
+                        defaultValue={accountState.account?.primaryAccountEmail?.emailAddress}
+                    />,
+                    <FormInputText key="subject" id="subject" label="Subject" placeholder="Subject" required={true} />,
+                    <FormInputTextArea
+                        key="message"
+                        id="message"
+                        label="Message"
+                        placeholder="Message"
+                        rows={8}
+                        required={true}
+                    />,
+                ]}
                 buttonProperties={{
+                    icon: MailIcon,
+                    iconPosition: 'left',
+                    iconClassName: 'ml-1 mr-2.5',
                     children: 'Send Message',
+                }}
+                onSubmit={async function (formValues) {
+                    console.log('Reporting!', formValues);
+                    // await report(formValues.reason, formValues.report);
+
+                    return {
+                        success: true,
+                    };
                 }}
             />
         </div>

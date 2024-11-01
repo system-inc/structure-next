@@ -3,7 +3,12 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
-import { FormInputReferenceInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import {
+    FormInputReferenceInterface,
+    FormInputInterface,
+    FormInput,
+    useFormInputValue,
+} from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { InputMultipleSelectInterface, InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
 
@@ -25,8 +30,8 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
         );
 
         // References
-        const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
         const inputMultipleSelectReference = React.useRef<FormInputReferenceInterface>(null);
+        const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputMultipleSelectReference);
 
         // Function to focus on the component
         const focus = React.useCallback(function () {
@@ -72,10 +77,7 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
         const onChangeIntercept = React.useCallback(
             function (value: string[] | undefined, event?: Event, skipOnChangeCallback: boolean = false) {
                 // Update the value reference
-                valueReference.current = value;
-
-                // Set the value of the input multiple select
-                inputMultipleSelectReference.current?.setValue(value);
+                setValue(value);
 
                 // Optionally run the provided onChange function if provided
                 if(!skipOnChangeCallback && propertiesOnChange) {
@@ -87,7 +89,7 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
                     validate(value);
                 }
             },
-            [propertiesOnChange, propertiesValidateOnChange, validate],
+            [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
         );
 
         // Expose internal state to Form through the reference

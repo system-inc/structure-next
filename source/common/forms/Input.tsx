@@ -3,6 +3,7 @@ export interface InputReferenceInterface {
     getValue: () => any | undefined;
     setValue: (value: any, event?: any) => void;
     focus: () => void;
+    click?: () => void;
 }
 
 // Interface - InputInterface

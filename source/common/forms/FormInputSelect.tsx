@@ -3,7 +3,12 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
-import { FormInputReferenceInterface, FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import {
+    FormInputReferenceInterface,
+    FormInputInterface,
+    FormInput,
+    useFormInputValue,
+} from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { InputSelectInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
 
@@ -27,8 +32,8 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
     );
 
     // References
-    const valueReference = React.useRef(properties.defaultValue); // Expose value to Form
     const inputSelectReference = React.useRef<FormInputReferenceInterface>(null);
+    const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputSelectReference);
 
     // Function to focus on the component
     const focus = React.useCallback(function () {
@@ -76,10 +81,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
             // console.log('FormInputSelect.tsx Form input value changed:', value);
 
             // Update the value reference
-            valueReference.current = value;
-
-            // Set the value of the input select
-            inputSelectReference.current?.setValue(value);
+            setValue(value);
 
             // Optionally run the provided onChange function if provided
             if(!skipOnChangeCallback && propertiesOnChange) {
@@ -91,7 +93,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
                 validate(value);
             }
         },
-        [propertiesOnChange, propertiesValidateOnChange, validate],
+        [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
     );
 
     // Expose internal state to Form through the reference

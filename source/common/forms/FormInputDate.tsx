@@ -2,7 +2,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputInterface, FormInput } from '@structure/source/common/forms/FormInput';
+import {
+    FormInputReferenceInterface,
+    FormInputInterface,
+    FormInput,
+    useFormInputValue,
+} from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { InputDateReferenceInterface, InputDateInterface, InputDate } from '@structure/source/common/forms/InputDate';
 
@@ -25,8 +30,8 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
     );
 
     // References
-    const valueReference = React.useRef<Date | undefined>(properties.defaultValue); // For managing the value internally and exposing it to a form
-    const inputDateReference = React.useRef<InputDateReferenceInterface>(null);
+    const inputDateReference = React.useRef<FormInputReferenceInterface>(null);
+    const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputDateReference);
 
     // Function to focus on the component
     const focus = React.useCallback(() => {
@@ -72,10 +77,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
     const onChangeIntercept = React.useCallback(
         function (value: Date | undefined, skipOnChangeCallback: boolean = false) {
             // Update the value reference
-            valueReference.current = value;
-
-            // Set the value of the input date
-            inputDateReference.current?.setValue(value);
+            setValue(value);
 
             // Optionally run the provided onChange function if provided
             if(!skipOnChangeCallback && propertiesOnChange) {
@@ -87,7 +89,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
                 validate(value);
             }
         },
-        [propertiesOnChange, propertiesValidateOnChange, validate],
+        [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
     );
 
     // Expose internal state to Form through the reference
