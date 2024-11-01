@@ -58,9 +58,10 @@ export function SupportPostPage(properties: SupportPostPageInterface) {
 
     const updateAtTimeInMilliseconds = new Date(post.updatedAt).getTime();
     let updatedTimeAgoString = timeAgo(updateAtTimeInMilliseconds);
-    // If it has been over a month
-    if(updateAtTimeInMilliseconds < new Date().getTime() - 1000 * 60 * 60 * 24 * 30) {
-        updatedTimeAgoString = 'over a month ago';
+
+    // If it has been over a week
+    if(updateAtTimeInMilliseconds < new Date().getTime() - 1000 * 60 * 60 * 24 * 7) {
+        updatedTimeAgoString = 'over a week ago';
     }
 
     // Render the component

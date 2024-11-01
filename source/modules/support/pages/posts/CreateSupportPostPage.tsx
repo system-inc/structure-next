@@ -49,8 +49,11 @@ export function CreateSupportPostPage() {
                         rows: 8,
                         // defaultValue: 'If your package is missing...',
                     },
-                    'input.topicIds': {
+                    'input.contentType': {
                         className: 'hidden',
+                    },
+                    'input.topicIds': {
+                        // className: 'hidden',
                         defaultValue: postTopicId,
                     },
                     'input.allowComment': {

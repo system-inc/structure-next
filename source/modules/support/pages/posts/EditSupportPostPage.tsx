@@ -37,20 +37,20 @@ export function EditSupportPostPage(properties: EditSupportPostPageInterface) {
     // Render the component
     return (
         <div className={mergeClassNames('container items-center justify-center pb-32 pt-8', properties.className)}>
-            THIS HAS A MAJOR BUG AND YOU NEED TO EDIT EACH FIELD IN ORDER TO HAVE THE FORM VALUES UPDATE Edit Post Page{' '}
-            {properties.postIdentifier}
+            <h1 className="mb-6 text-3xl font-medium">Edit Post</h1>
+
             <GraphQlOperationForm
                 operation={PostUpdateOperation}
                 inputComponentsProperties={{
                     id: {
-                        // className: 'hidden',
+                        className: 'hidden',
                     },
                     'input.title': {
                         component: FormInputText,
                     },
                     'input.type': {
-                        // defaultValue: 'Principle',
-                        // className: 'hidden',
+                        className: 'hidden',
+                        defaultValue: 'SupportArticle',
                     },
                     'input.description': {
                         component: FormInputTextArea,
@@ -59,24 +59,27 @@ export function EditSupportPostPage(properties: EditSupportPostPageInterface) {
                         component: FormInputTextArea,
                         rows: 16,
                     },
-                    'input.topicId': {
-                        // className: 'hidden',
+                    'input.contentType': {
+                        className: 'hidden',
+                    },
+                    'input.publishedAt': {
+                        className: 'hidden',
                     },
                     'input.allowComment': {
-                        // className: 'hidden',
-                        // defaultValue: 'Checked',
+                        className: 'hidden',
+                        defaultValue: 'Unchecked',
                     },
                     'input.allowVote': {
-                        // className: 'hidden',
-                        // defaultValue: 'Checked',
+                        className: 'hidden',
+                        defaultValue: 'Unchecked',
                     },
                     'input.allowDownvote': {
-                        // className: 'hidden',
-                        // defaultValue: 'Unchecked',
+                        className: 'hidden',
+                        defaultValue: 'Unchecked',
                     },
                     'input.allowReaction': {
-                        // className: 'hidden',
-                        // defaultValue: 'Checked',
+                        className: 'hidden',
+                        defaultValue: 'Checked',
                     },
                 }}
                 defaultValuesQuery={{

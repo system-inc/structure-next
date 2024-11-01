@@ -19,11 +19,12 @@ import { useMutation } from '@apollo/client';
 import { SupportTicketCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import MailIcon from '@structure/assets/icons/communication/MailIcon.svg';
+import SendIcon from '@structure/assets/icons/communication/SendIcon.svg';
 
 // Component - ContactPage
 export function ContactPage() {
     // State
+    const [sending, setSending] = React.useState(false);
     const [reportError, setReportError] = React.useState(false);
     const [reportComplete, setReportComplete] = React.useState(false);
 
@@ -80,13 +81,24 @@ export function ContactPage() {
                     />,
                 ]}
                 buttonProperties={{
-                    icon: MailIcon,
-                    iconPosition: 'left',
-                    iconClassName: 'ml-1 mr-2.5',
+                    processing: sending,
+                    icon: sending ? undefined : SendIcon,
+                    iconPosition: sending ? undefined : 'left',
+                    iconClassName: sending ? undefined : 'ml-1 mr-2.5',
                     children: 'Send Message',
                 }}
                 onSubmit={async function (formValues) {
-                    console.log('Reporting!', formValues);
+                    console.log('onSubmit', formValues);
+
+                    // Set the sending state
+                    setSending(true);
+
+                    // wait for 3 seconds
+                    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+                    // Reset the sending state
+                    setSending(false);
+
                     // await report(formValues.reason, formValues.report);
 
                     return {

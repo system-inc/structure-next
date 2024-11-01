@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { FormValuesInterface, FormInterface, Form } from '@structure/source/common/forms/Form';
+import { FormInputReferenceInterface } from '@structure/source/common/forms/FormInput';
 import FormInputText from '@structure/source/common/forms/FormInputText';
 import FormInputTextArea from '@structure/source/common/forms/FormInputTextArea';
 import FormInputPassword from '@structure/source/common/forms/FormInputPassword';
@@ -45,6 +46,9 @@ export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'form
 export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) {
     // State
     const [defaultValues, setDefaultValues] = React.useState<any>(null);
+
+    // References
+    const formInputsReferencesMap = React.useRef(new Map<string, FormInputReferenceInterface>()).current;
 
     // Hooks
     const [mutation, mutationState] = useMutation(properties.operation.document);
@@ -217,8 +221,8 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 const defaultValue = getValueForKeyRecursively(defaultValues, inputName);
                 // console.log('inputName', inputName, 'defaultValue', defaultValue);
 
-                // If the default value is not undefined
-                if(defaultValue !== undefined) {
+                // If the default value is not undefined or null
+                if(defaultValue !== undefined && defaultValue !== null) {
                     // Set the default value
 
                     // If the default value is an object, convert it to a string
@@ -336,7 +340,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
             },
         );
         if(slugFormInputComponentAndProperties && titleFormInputComponentAndProperties) {
-            // console.log('we have a slug and a title');
+            console.log('we have a slug and a title');
 
             // Add an onChange event to the title form input
             titleFormInputComponentAndProperties.properties.onChange = function (value: string | undefined) {
@@ -344,26 +348,32 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 const slugValue = slug(titleValue);
                 console.log('titleValue:', titleValue, 'slugValue:', slugValue);
 
-                // Set the value of the slug form input, hacky with JavaScript
-                // TODO: Fix this
-                const slugInputElement = document.getElementById(slugFormInputComponentAndProperties.properties.id);
-                if(slugInputElement) {
-                    // Set the value of the slug input
-                    slugInputElement.setAttribute('value', slugValue);
+                // Get the form input reference and use setValue
+                console.log('formInputsReferencesMap', formInputsReferencesMap);
+                const slugFormInput = formInputsReferencesMap.get(slugFormInputComponentAndProperties.properties.id);
+                if(slugFormInput) {
+                    slugFormInput.setValue(slugValue);
+                }
+                else {
+                    console.error('slugFormInput not found');
                 }
             };
         }
 
         // Create the form input components
-        const formInputComponents: JSX.Element[] = [];
-        for(const formInputProperties of formInputsComponentAndProperties) {
-            formInputComponents.push(
-                <formInputProperties.component
-                    {...formInputProperties.properties}
-                    key={formInputProperties.properties.key}
-                />,
+        const formInputComponents = formInputsComponentAndProperties.map(function (formInputComponentAndProperties) {
+            return (
+                <formInputComponentAndProperties.component
+                    {...formInputComponentAndProperties.properties}
+                    key={formInputComponentAndProperties.properties.key}
+                    ref={(reference: FormInputReferenceInterface) => {
+                        if(reference) {
+                            formInputsReferencesMap.set(formInputComponentAndProperties.properties.id, reference);
+                        }
+                    }}
+                />
             );
-        }
+        });
 
         return formInputComponents;
     }
@@ -430,6 +440,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                             assignNestedValue(mutationVariables, keyParts, graphQlValue);
                         }
                         console.log('mutationVariables:', mutationVariables);
+                        // return;
 
                         // Invoke the GraphQL mutation
                         try {
