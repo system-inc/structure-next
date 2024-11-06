@@ -20,11 +20,14 @@ import {
 // Dependencies - Utilities
 import { fullDate } from '@structure/source/utilities/Time';
 import { extractLatestEmailContent } from '@structure/source/utilities/Email';
+import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Component - SupportPage
 export function SupportPage() {
-    // State
+    // State & Refs
     const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(null);
+    const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
+    const commentsContainerRef = React.useRef<HTMLDivElement>(null);
 
     // URL Parameters
     const urlSearchParameters = useUrlSearchParameters();
@@ -44,9 +47,46 @@ export function SupportPage() {
     const [createComment] = useMutation(SupportTicketCommentCreateAdminDocument);
 
     // Selected Ticket
-    const selectedTicket = ticketsQuery.data?.supportTicketsAdmin.items.find(
+    const selectedTicket = ticketsQuery.data?.supportTicketsAdmin?.items?.find(
         (ticket) => ticket.id === selectedTicketId,
     );
+
+    // Auto-select first ticket on load
+    React.useEffect(
+        function () {
+            const items = ticketsQuery.data?.supportTicketsAdmin?.items;
+
+            const firstItem = items && items.length ? items[0] : null;
+
+            if(firstItem && !selectedTicketId) {
+                setSelectedTicketId(firstItem.id);
+            }
+        },
+        [ticketsQuery.data, selectedTicketId],
+    );
+
+    // Scroll to bottom when selecting ticket or when new comments appear
+    React.useEffect(
+        function () {
+            if(commentsContainerRef.current && selectedTicket?.comments) {
+                commentsContainerRef.current.scrollTop = commentsContainerRef.current.scrollHeight;
+            }
+        },
+        [selectedTicket],
+    );
+
+    // Function to format date
+    function formatDate(date: Date): string {
+        const today = new Date();
+        const isToday =
+            date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+
+        return isToday
+            ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
 
     // Render the component
     return (
@@ -57,7 +97,14 @@ export function SupportPage() {
                 <div className="overflow-y-auto border-r border-light-3 dark:border-dark-3">
                     <h2 className="mb-3 mt-3 pl-4 text-xl font-medium">Support Tickets</h2>
 
-                    {ticketsQuery.data?.supportTicketsAdmin.items.map(function (ticket) {
+                    {/* Loading State */}
+                    {ticketsQuery.loading && (
+                        <div className="flex items-center justify-center py-8">
+                            <BrokenCircleIcon className="text-primary-5 h-6 w-6 animate-spin" />
+                        </div>
+                    )}
+
+                    {ticketsQuery.data?.supportTicketsAdmin.items.map(function (ticket, index) {
                         const lastTicketComment = ticket.comments[ticket.comments.length - 1];
 
                         // If the createdAt date is today, show the time of day, e.g. 12:30 PM
@@ -79,7 +126,7 @@ export function SupportPage() {
                                     selectedTicketId === ticket.id
                                         ? 'border-primary-5 bg-light-1 dark:bg-dark-2'
                                         : 'border-light-3 dark:border-dark-3'
-                                }`}
+                                } ${index === 0 ? 'border-t' : ''}`}
                                 onClick={() => setSelectedTicketId(ticket.id)}
                             >
                                 <div className="mb-2 flex items-center justify-between">
@@ -110,9 +157,9 @@ export function SupportPage() {
                 </div>
 
                 {/* Ticket Detail */}
-                <div className="mt-3 overflow-y-auto pb-12 pr-6">
+                <div className="mt-3 flex h-full flex-col overflow-hidden pb-12 pr-6" ref={ticketDetailsRef}>
                     {selectedTicket ? (
-                        <div>
+                        <div className="flex h-full flex-col">
                             <h2 className="mb-4 text-2xl font-medium">{selectedTicket.title}</h2>
 
                             {/* Ticket Information */}
@@ -129,23 +176,29 @@ export function SupportPage() {
                             </div>
 
                             {/* Comments */}
-                            <div className="space-y-4">
+                            <div className="flex-1 space-y-4 overflow-y-auto" ref={commentsContainerRef}>
                                 {selectedTicket.comments.map((comment) => (
                                     <div
                                         key={comment.id}
-                                        className={`rounded-lg p-4 ${
-                                            comment.source === 'Agent'
-                                                ? 'bg-primary-1 dark:bg-primary-9/20'
-                                                : 'bg-light-1 dark:bg-dark-2'
+                                        className={`flex ${
+                                            comment.source === 'Agent' ? 'justify-end' : 'justify-start'
                                         }`}
                                     >
-                                        <div className="mb-2 flex justify-between text-xs">
-                                            <span>{comment.source}</span>
-                                            <span>{fullDate(new Date(comment.createdAt))}</span>
+                                        <div
+                                            className={`min-w-96 max-w-[80%] rounded-lg p-4
+                                            ${
+                                                comment.source === 'Agent'
+                                                    ? 'bg-blue dark:bg-blue'
+                                                    : 'bg-light-1 dark:bg-dark-2'
+                                            }`}
+                                        >
+                                            <p className="whitespace-pre-wrap">
+                                                {extractLatestEmailContent(comment.content)}
+                                            </p>
+                                            <div className="neutral mt-2 text-right text-xs">
+                                                {formatDate(new Date(comment.createdAt))}
+                                            </div>
                                         </div>
-                                        <p className="whitespace-pre-wrap">
-                                            {extractLatestEmailContent(comment.content)}
-                                        </p>
                                     </div>
                                 ))}
                             </div>
