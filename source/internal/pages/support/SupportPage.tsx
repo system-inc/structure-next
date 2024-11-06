@@ -52,6 +52,35 @@ export function SupportPage() {
         refetchQueries: ['SupportTicketsAdmin'],
     });
 
+    // Add loading state for manual refresh
+    const [isManuallyRefreshing, setIsManuallyRefreshing] = React.useState(false);
+
+    // Function to handle manual refresh
+    function handleManualRefresh() {
+        setIsManuallyRefreshing(true);
+        ticketsQuery.refetch().finally(() => {
+            setIsManuallyRefreshing(false);
+        });
+    }
+
+    // Function to format date without leading zeros
+    function formatDate(date: Date): string {
+        const today = new Date();
+        const isToday =
+            date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+
+        if(isToday) {
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const hour = hours % 12 || 12; // Convert 0 to 12
+            return `${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+        }
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
     // Selected Ticket
     const selectedTicket = ticketsQuery.data?.supportTicketsAdmin?.items?.find(
         (ticket) => ticket.id === selectedTicketId,
@@ -107,24 +136,6 @@ export function SupportPage() {
         [selectedTicket],
     );
 
-    // Function to format date without leading zeros
-    function formatDate(date: Date): string {
-        const today = new Date();
-        const isToday =
-            date.getDate() === today.getDate() &&
-            date.getMonth() === today.getMonth() &&
-            date.getFullYear() === today.getFullYear();
-
-        if(isToday) {
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            const hour = hours % 12 || 12; // Convert 0 to 12
-            return `${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
-        }
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    }
-
     // Render the component
     return (
         <>
@@ -132,10 +143,18 @@ export function SupportPage() {
             <div className="grid h-[calc(100vh-64px)] grid-cols-[390px_1fr] gap-6">
                 {/* Ticket List */}
                 <div className="overflow-y-auto border-r border-light-3 dark:border-dark-3">
-                    <h2 className="mb-3 mt-3 pl-4 text-xl font-medium">Support Tickets</h2>
+                    <div
+                        className="group mb-3 mt-3 flex cursor-pointer items-center pl-4"
+                        onClick={handleManualRefresh}
+                    >
+                        <h2 className="group-hover:text-primary-5 text-xl font-medium">Support Tickets</h2>
+                        {isManuallyRefreshing && (
+                            <BrokenCircleIcon className="text-primary-5 ml-2 h-4 w-4 animate-spin" />
+                        )}
+                    </div>
 
                     {/* Loading State */}
-                    {ticketsQuery.loading && (
+                    {ticketsQuery.loading && !isManuallyRefreshing && (
                         <div className="flex items-center justify-center py-8">
                             <BrokenCircleIcon className="text-primary-5 h-6 w-6 animate-spin" />
                         </div>
@@ -143,18 +162,7 @@ export function SupportPage() {
 
                     {ticketsQuery.data?.supportTicketsAdmin.items.map(function (ticket, index) {
                         const lastTicketComment = ticket.comments[ticket.comments.length - 1];
-
-                        // If the createdAt date is today, show the time of day, e.g. 12:30 PM
-                        // Otherwise, show short month and day, e.g, Nov 5
                         const createdAtDate = new Date(ticket.createdAt);
-                        const today = new Date();
-                        const isToday =
-                            createdAtDate.getDate() === today.getDate() &&
-                            createdAtDate.getMonth() === today.getMonth() &&
-                            createdAtDate.getFullYear() === today.getFullYear();
-                        const createdAtText = isToday
-                            ? createdAtDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                            : createdAtDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
                         return (
                             <div
@@ -168,8 +176,7 @@ export function SupportPage() {
                             >
                                 <div className="mb-2 flex items-center justify-between">
                                     <p className="neutral text-xs">{ticket.userEmailAddress}</p>
-                                    <p className="neutral text-xs">{createdAtText}</p>
-                                    {/* <span className="text-xs">{ticket.status}</span> */}
+                                    <p className="neutral text-xs">{formatDate(createdAtDate)}</p>
                                 </div>
                                 <h4 className="text-base font-medium">{ticket.title}</h4>
                                 {lastTicketComment?.content && (
@@ -266,7 +273,10 @@ export function SupportPage() {
                                             },
                                         },
                                     });
-                                    return { success: true };
+                                    return {
+                                        success: true,
+                                        resetForm: true, // Add this to reset the form after successful submission
+                                    };
                                 }}
                             />
                         </div>
