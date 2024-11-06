@@ -39,10 +39,6 @@ export const InternalNavigationLinks: InternalNavigationLinkInterface[] = [
         icon: TeamIcon,
         links: [
             {
-                title: 'Principles',
-                href: '/internal/team/principles',
-            },
-            {
                 title: 'Employees',
                 href: '/internal/team/employees',
             },

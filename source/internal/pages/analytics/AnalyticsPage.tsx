@@ -9,11 +9,10 @@ export type AnalyticsPageProperties = {};
 export function AnalyticsPage(properties: AnalyticsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Analytics</h1>
-        </>
+        </div>
     );
 }
 

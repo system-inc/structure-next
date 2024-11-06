@@ -9,11 +9,10 @@ export type DevelopersObjectStoragePageProperties = {};
 export function DevelopersObjectStoragePage(properties: DevelopersObjectStoragePageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Object Storage</h1>
-        </>
+        </div>
     );
 }
 

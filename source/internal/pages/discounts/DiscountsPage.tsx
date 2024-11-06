@@ -9,11 +9,10 @@ export type DiscountsPageProperties = {};
 export function DiscountsPage(properties: DiscountsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Discounts</h1>
-        </>
+        </div>
     );
 }
 

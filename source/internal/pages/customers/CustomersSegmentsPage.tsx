@@ -9,11 +9,10 @@ export type CustomersSegmentsPageProperties = {};
 export function CustomersSegmentsPage(properties: CustomersSegmentsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Segments</h1>
-        </>
+        </div>
     );
 }
 

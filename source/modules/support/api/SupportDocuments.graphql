@@ -100,3 +100,47 @@ mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
         }
     }
 }
+
+# Support Tickets Admin Query
+query SupportTicketsAdmin($pagination: PaginationInput) {
+    supportTicketsAdmin(pagination: $pagination) {
+        items {
+            id
+            identifier
+            status
+            type
+            title
+            userEmailAddress
+            createdAt
+            comments {
+                id
+                content
+                contentType
+                source
+                visibility
+                createdAt
+            }
+        }
+        pagination {
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+            itemsPerPage
+            itemsTotal
+            page
+            pagesTotal
+        }
+    }
+}
+
+# Support Ticket Comment Create Admin Mutation
+mutation SupportTicketCommentCreateAdmin($input: SupportTicketCommentCreateInput!) {
+    supportTicketCommentCreateAdmin(input: $input) {
+        id
+        content
+        contentType
+        source
+        visibility
+        createdAt
+    }
+}

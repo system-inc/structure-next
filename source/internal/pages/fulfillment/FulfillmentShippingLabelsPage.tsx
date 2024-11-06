@@ -9,11 +9,10 @@ export type FulfillmentShippingLabelsPageProperties = {};
 export function FulfillmentShippingLabelsPage(properties: FulfillmentShippingLabelsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Shipping Labels</h1>
-        </>
+        </div>
     );
 }
 

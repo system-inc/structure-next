@@ -9,11 +9,10 @@ export type FulfillmentPageProperties = {};
 export function FulfillmentPage(properties: FulfillmentPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Fulfillment</h1>
-        </>
+        </div>
     );
 }
 

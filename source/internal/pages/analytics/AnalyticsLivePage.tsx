@@ -9,11 +9,10 @@ export type AnalyticsLivePageProperties = {};
 export function AnalyticsLivePage(properties: AnalyticsLivePageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Live</h1>
-        </>
+        </div>
     );
 }
 

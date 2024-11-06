@@ -9,11 +9,10 @@ export type DevelopersLogsPageProperties = {};
 export function DevelopersLogsPage(properties: DevelopersLogsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Logs</h1>
-        </>
+        </div>
     );
 }
 

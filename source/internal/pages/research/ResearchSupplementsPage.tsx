@@ -9,11 +9,10 @@ export type ResearchSupplementsPageProperties = {};
 export function ResearchSupplementsPage(properties: ResearchSupplementsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Supplements</h1>
-        </>
+        </div>
     );
 }
 

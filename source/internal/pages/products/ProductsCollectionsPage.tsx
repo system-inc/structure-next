@@ -9,11 +9,10 @@ export type ProductsCollectionsPageProperties = {};
 export function ProductsCollectionsPage(properties: ProductsCollectionsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Collections</h1>
-        </>
+        </div>
     );
 }
 

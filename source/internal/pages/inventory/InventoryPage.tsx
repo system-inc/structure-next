@@ -9,11 +9,10 @@ export type InventoryPageProperties = {};
 export function InventoryPage(properties: InventoryPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Inventory</h1>
-        </>
+        </div>
     );
 }
 

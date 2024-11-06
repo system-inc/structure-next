@@ -11,14 +11,13 @@ import DialogCloseControl from '@structure/source/common/dialogs/DialogCloseCont
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 
 // Component - TeamPage
-export type TeamPageProperties = {};
-export function TeamPage(properties: TeamPageProperties) {
+export function TeamPage() {
     // Hooks
     const { addNotice } = useNotice();
 
     // Render the component
     return (
-        <>
+        <div className="px-8 py-6">
             <InternalNavigationTrail />
             <h1>Team</h1>
 
@@ -57,7 +56,7 @@ export function TeamPage(properties: TeamPageProperties) {
             <p>Andrew Jacobs</p>
             <p>Kam Sheffield</p>
             <p>Tyler Alvord</p>
-        </>
+        </div>
     );
 }
 

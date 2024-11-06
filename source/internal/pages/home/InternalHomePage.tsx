@@ -12,12 +12,11 @@ import ActivityLink from '@structure/source/internal/common/dashboard/ActivityLi
 import TopProductLink from '@structure/source/internal/common/dashboard/TopProductLink';
 
 // Dependencies - API
-import { useQuery, ApolloError } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { EngagementOverviewDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - InternalPage
-type InternalHomePageProperties = {};
-export function InternalHomePage(properties: InternalHomePageProperties) {
+export function InternalHomePage() {
     // Hooks
     const engagementLiveQueryState = useQuery(EngagementOverviewDocument);
 
@@ -42,7 +41,7 @@ export function InternalHomePage(properties: InternalHomePageProperties) {
 
     // Render the component
     return (
-        <div className="mx-auto flex flex-row">
+        <div className="mx-auto flex flex-row px-8 py-6">
             {/* Left column */}
             <div className="flex flex-grow flex-col pr-6">
                 <div className="mb-10">

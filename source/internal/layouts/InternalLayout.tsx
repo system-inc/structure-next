@@ -37,9 +37,7 @@ export function InternalLayout(properties: InternalLayoutInterface) {
 
             {/* Content */}
             <SideNavigationLayoutContent layoutIdentifier={internalLayoutIdentifier}>
-                <SideNavigationLayoutContentBody className="px-8 py-6">
-                    {properties.children}
-                </SideNavigationLayoutContentBody>
+                <SideNavigationLayoutContentBody>{properties.children}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
 
             {/* Dialog Menu */}

@@ -9,11 +9,10 @@ export type MarketingAutomationsPageProperties = {};
 export function MarketingAutomationsPage(properties: MarketingAutomationsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Automations</h1>
-        </>
+        </div>
     );
 }
 

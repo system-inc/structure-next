@@ -9,11 +9,10 @@ export type TeamInvestorsPageProperties = {};
 export function TeamInvestorsPage(properties: TeamInvestorsPageProperties) {
     // Render the component
     return (
-        <>
+        <div className="px-8 py-4">
             <InternalNavigationTrail />
-
             <h1>Investors</h1>
-        </>
+        </div>
     );
 }
 
