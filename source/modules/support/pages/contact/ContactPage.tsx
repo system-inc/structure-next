@@ -39,7 +39,11 @@ export function ContactPage() {
                     type: 'Contact',
                     emailAddress: emailAddress,
                     title: subject,
-                    description: message,
+                    initialComment: {
+                        ticketId: '<ignored-id>',
+                        replyToCommentId: '<ignored-id>',
+                        content: message,
+                    },
                 },
             },
         });
@@ -126,10 +130,14 @@ export function ContactPage() {
                             <p>{supportTicketCreateMutationState.data.supportTicketCreate.userEmailAddress}</p>
                             <p className="neutral mb-2 mt-6 text-xs uppercase">Subject</p>
                             <p>{supportTicketCreateMutationState.data.supportTicketCreate.title}</p>
-                            <p className="neutral mb-2 mt-6 text-xs uppercase">Message</p>
-                            <p className="whitespace-pre-wrap">
-                                {supportTicketCreateMutationState.data.supportTicketCreate.description}
-                            </p>
+                            {supportTicketCreateMutationState.data.supportTicketCreate.comments[0]?.content && (
+                                <>
+                                    <p className="neutral mb-2 mt-6 text-xs uppercase">Message</p>
+                                    <p className="whitespace-pre-wrap">
+                                        {supportTicketCreateMutationState.data.supportTicketCreate.comments[0].content}
+                                    </p>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
