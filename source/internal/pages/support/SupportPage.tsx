@@ -56,12 +56,31 @@ export function SupportPage() {
     const [isManuallyRefreshing, setIsManuallyRefreshing] = React.useState(false);
 
     // Function to handle manual refresh
-    function handleManualRefresh() {
-        setIsManuallyRefreshing(true);
-        ticketsQuery.refetch().finally(() => {
-            setIsManuallyRefreshing(false);
-        });
-    }
+    const handleManualRefresh = React.useCallback(
+        function () {
+            setIsManuallyRefreshing(true);
+            ticketsQuery.refetch().finally(() => {
+                setIsManuallyRefreshing(false);
+            });
+        },
+        [ticketsQuery],
+    ); // Add ticketsQuery as a dependency
+
+    // Add auto-refresh interval
+    React.useEffect(
+        function () {
+            // Set up auto-refresh every minute
+            const intervalId = setInterval(function () {
+                handleManualRefresh();
+            }, 60000); // 60000ms = 1 minute
+
+            // Cleanup on unmount
+            return function () {
+                clearInterval(intervalId);
+            };
+        },
+        [ticketsQuery, handleManualRefresh], // Add ticketsQuery as dependency to avoid stale closure
+    );
 
     // Function to format date without leading zeros
     function formatDate(date: Date): string {
