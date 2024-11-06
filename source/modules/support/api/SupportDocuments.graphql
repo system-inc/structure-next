@@ -90,5 +90,10 @@ query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInp
 mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
     supportTicketCreate(input: $input) {
         id
+        type
+        status
+        userEmailAddress
+        title
+        description
     }
 }

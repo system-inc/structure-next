@@ -15,17 +15,6 @@ query WaitLists {
             identifier
             title
             description
-            emailAutomation {
-                id
-                automationKey
-                type
-                description
-                fromName
-                fromEmail
-                subject
-                updatedAt
-                createdAt
-            }
             updatedAt
             createdAt
         }

@@ -114,9 +114,23 @@ export function ContactPage() {
 
                 {/* Message Sent */}
                 {supportTicketCreateMutationState.data && (
-                    <div className="mt-10 flex space-x-2">
-                        <CheckCircledIcon className="h-6 w-6" />
-                        <p>Thanks! Your message has been sent. We will get back to you as soon as possible.</p>
+                    <div className="mt-10">
+                        <div className="flex space-x-2">
+                            <CheckCircledIcon className="h-6 w-6" />
+                            <p>Thanks! Your message has been received. We will get back to you as soon as possible.</p>
+                        </div>
+
+                        <h3 className="mt-8 text-lg font-medium">Message Details</h3>
+                        <div className="mt-3 rounded-lg border border-light-3 bg-light-1/50 p-4 text-sm dark:border-dark-3 dark:bg-dark-2/50">
+                            <p className="neutral mb-2 text-xs uppercase">Email Address</p>
+                            <p>{supportTicketCreateMutationState.data.supportTicketCreate.userEmailAddress}</p>
+                            <p className="neutral mb-2 mt-6 text-xs uppercase">Subject</p>
+                            <p>{supportTicketCreateMutationState.data.supportTicketCreate.title}</p>
+                            <p className="neutral mb-2 mt-6 text-xs uppercase">Message</p>
+                            <p className="whitespace-pre-wrap">
+                                {supportTicketCreateMutationState.data.supportTicketCreate.description}
+                            </p>
+                        </div>
                     </div>
                 )}
             </div>

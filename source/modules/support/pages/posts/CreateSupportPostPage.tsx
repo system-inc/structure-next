@@ -53,7 +53,7 @@ export function CreateSupportPostPage() {
                         className: 'hidden',
                     },
                     'input.topicIds': {
-                        // className: 'hidden',
+                        className: 'hidden',
                         defaultValue: postTopicId,
                     },
                     'input.allowComment': {
