@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNavigation';
+import { useUrlSearchParameters, useRouter } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 // import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
@@ -24,15 +24,18 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 
 // Component - SupportPage
 export function SupportPage() {
-    // State & Refs
-    const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(null);
-    const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
-    const commentsContainerRef = React.useRef<HTMLDivElement>(null);
-
     // URL Parameters
     const urlSearchParameters = useUrlSearchParameters();
     const page = parseInt(urlSearchParameters.get('page') as string) || 1;
     const itemsPerPage = 20;
+
+    // Add router
+    const router = useRouter();
+
+    // State & Refs
+    const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(urlSearchParameters.get('ticket'));
+    const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
+    const commentsContainerRef = React.useRef<HTMLDivElement>(null);
 
     // Queries
     const ticketsQuery = useQuery(SupportTicketsAdminDocument, {
@@ -44,25 +47,54 @@ export function SupportPage() {
         },
     });
 
-    const [createComment] = useMutation(SupportTicketCommentCreateAdminDocument);
+    // Modify the createComment mutation to include refetch
+    const [createComment] = useMutation(SupportTicketCommentCreateAdminDocument, {
+        refetchQueries: ['SupportTicketsAdmin'],
+    });
 
     // Selected Ticket
     const selectedTicket = ticketsQuery.data?.supportTicketsAdmin?.items?.find(
         (ticket) => ticket.id === selectedTicketId,
     );
 
-    // Auto-select first ticket on load
+    // Function to select ticket and update URL
+    const handleTicketSelection = React.useCallback(
+        function (ticketId: string) {
+            setSelectedTicketId(ticketId);
+            const newParams = new URLSearchParams(urlSearchParameters);
+            newParams.set('ticket', ticketId);
+            router.replace(`?${newParams.toString()}`);
+        },
+        [router, urlSearchParameters],
+    );
+
+    // Modify the auto-select effect to respect URL parameter
     React.useEffect(
         function () {
             const items = ticketsQuery.data?.supportTicketsAdmin?.items;
+            const urlTicketId = urlSearchParameters.get('ticket');
 
-            const firstItem = items && items.length ? items[0] : null;
+            const firstTicket = items?.[0];
 
-            if(firstItem && !selectedTicketId) {
-                setSelectedTicketId(firstItem.id);
+            if(firstTicket) {
+                if(urlTicketId) {
+                    // Check if the ticket from URL exists in the list
+                    const ticketExists = items.some((ticket) => ticket.id === urlTicketId);
+                    if(ticketExists) {
+                        setSelectedTicketId(urlTicketId);
+                    }
+                    else {
+                        // If ticket doesn't exist, select first one and update URL
+                        handleTicketSelection(firstTicket.id);
+                    }
+                }
+                else if(!selectedTicketId) {
+                    // No ticket in URL and none selected, select first one
+                    handleTicketSelection(firstTicket.id);
+                }
             }
         },
-        [ticketsQuery.data, selectedTicketId],
+        [ticketsQuery.data, urlSearchParameters, handleTicketSelection, selectedTicketId],
     );
 
     // Scroll to bottom when selecting ticket or when new comments appear
@@ -75,7 +107,7 @@ export function SupportPage() {
         [selectedTicket],
     );
 
-    // Function to format date
+    // Function to format date without leading zeros
     function formatDate(date: Date): string {
         const today = new Date();
         const isToday =
@@ -83,9 +115,14 @@ export function SupportPage() {
             date.getMonth() === today.getMonth() &&
             date.getFullYear() === today.getFullYear();
 
-        return isToday
-            ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        if(isToday) {
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const hour = hours % 12 || 12; // Convert 0 to 12
+            return `${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+        }
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
     // Render the component
@@ -127,7 +164,7 @@ export function SupportPage() {
                                         ? 'border-primary-5 bg-light-1 dark:bg-dark-2'
                                         : 'border-light-3 dark:border-dark-3'
                                 } ${index === 0 ? 'border-t' : ''}`}
-                                onClick={() => setSelectedTicketId(ticket.id)}
+                                onClick={() => handleTicketSelection(ticket.id)}
                             >
                                 <div className="mb-2 flex items-center justify-between">
                                     <p className="neutral text-xs">{ticket.userEmailAddress}</p>
