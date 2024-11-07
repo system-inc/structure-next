@@ -4,11 +4,9 @@
 import React from 'react';
 
 // Dependencies - Shared State
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import {
     getAtomForNavigationOpen,
-    getAtomForNavigationWidth,
-    getAtomForNavigationIsResizing,
     sideNavigationLayoutNavigationSpringConfiguration,
     desktopMinimumWidth,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
