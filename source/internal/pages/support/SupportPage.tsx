@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import Image from 'next/image';
 import { useUrlSearchParameters, useRouter } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
@@ -9,10 +10,14 @@ import { Form } from '@structure/source/common/forms/Form';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 import { Pagination } from '@structure/source/common/navigation/Pagination';
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
+import { InputSelect } from '@structure/source/common/forms/InputSelect';
 
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
+    ColumnFilterConditionOperator,
+    OrderByDirection,
+    SupportTicketsAdminQuery,
     SupportTicketsAdminDocument,
     SupportTicketCommentCreateAdminDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
@@ -21,6 +26,62 @@ import {
 import { fullDate } from '@structure/source/utilities/Time';
 import { extractLatestEmailContent } from '@structure/source/utilities/Email';
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
+
+// Status filter options
+const STATUS_OPTIONS = [
+    { value: 'Open', content: 'Open Tickets' },
+    { value: 'Closed', content: 'Closed Tickets' },
+    { value: 'Deleted', content: 'Deleted Tickets' },
+];
+
+// Helper function to determine if URL is an image
+function isImageUrl(url: string): boolean {
+    return /\.(jpg|jpeg|png|gif|webp)$/i.test(url);
+}
+
+// Component - CommentAttachments
+interface CommentAttachmentsProps {
+    attachments: SupportTicketsAdminQuery['supportTicketsAdmin']['items'][0]['comments'][0]['attachments'];
+    isAgent: boolean;
+}
+
+function CommentAttachments({ attachments, isAgent }: CommentAttachmentsProps) {
+    if(!attachments?.length) return null;
+
+    return (
+        <div className={`flex ${isAgent ? 'justify-end' : 'justify-start'}`}>
+            <div className={`mt-1 flex max-w-[80%] flex-wrap gap-2`}>
+                {attachments.map((attachment, index) => (
+                    <div
+                        key={index}
+                        className={`rounded-lg ${isAgent ? 'bg-blue text-light' : 'bg-light-1 dark:bg-dark-2'}`}
+                    >
+                        {isImageUrl(attachment.url) ? (
+                            <a href={attachment.url} target="_blank" rel="noopener noreferrer" className="block">
+                                <Image
+                                    src={attachment.url}
+                                    alt="Attachment"
+                                    width={200}
+                                    height={200}
+                                    className="rounded-lg object-cover"
+                                />
+                            </a>
+                        ) : (
+                            <a
+                                href={attachment.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block p-3 text-sm hover:underline"
+                            >
+                                📎 Download {attachment.type}
+                            </a>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
 
 // Component - SupportPage
 export function SupportPage() {
@@ -37,12 +98,26 @@ export function SupportPage() {
     const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
     const commentsContainerRef = React.useRef<HTMLDivElement>(null);
 
+    // Add status filter state
+    const [selectedStatus, setSelectedStatus] = React.useState<string>('Open');
+
     // Queries
     const ticketsQuery = useQuery(SupportTicketsAdminDocument, {
         variables: {
             pagination: {
                 itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
+                filters: [
+                    {
+                        column: 'status',
+                        operator: ColumnFilterConditionOperator.Equal,
+                        value: selectedStatus,
+                    },
+                ],
+            },
+            orderBy: {
+                key: 'createdAt',
+                direction: OrderByDirection.Descending,
             },
         },
     });
@@ -160,13 +235,25 @@ export function SupportPage() {
         <div className="grid h-full grid-cols-[390px_1fr] gap-6">
             {/* Left Navigation */}
             <div className="flex h-full flex-col border-r border-light-3 dark:border-dark-3">
-                {/* Title */}
-                <div className="group flex cursor-pointer items-center pb-3 pl-4 pt-3" onClick={handleManualRefresh}>
-                    <h2 className="text-xl font-medium">Support Tickets</h2>
-                    {isManuallyRefreshing && <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin" />}
+                {/* Title and Refresh */}
+                <div className="flex items-center justify-between pb-3 pl-4 pr-4 pt-3">
+                    <div className="group flex cursor-pointer items-center" onClick={handleManualRefresh}>
+                        <h2 className="text-xl font-medium">Support Tickets</h2>
+                        {isManuallyRefreshing && <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin" />}
+                    </div>
                 </div>
 
-                {/* Filters */}
+                {/* Status Filter */}
+                <div className="mb-3 px-4">
+                    <InputSelect
+                        className="w-full"
+                        items={STATUS_OPTIONS}
+                        defaultValue="Open"
+                        onChange={function (value) {
+                            setSelectedStatus(value || 'Open');
+                        }}
+                    />
+                </div>
 
                 {/* Tickets ScrollArea */}
                 <div className="flex-grow">
@@ -247,27 +334,32 @@ export function SupportPage() {
                             <div className="flex flex-grow flex-col justify-end">
                                 <div className="flex flex-col space-y-2">
                                     {selectedTicket.comments.map((comment) => (
-                                        <div
-                                            key={comment.id}
-                                            className={`flex ${
-                                                comment.source === 'Agent' ? 'justify-end' : 'justify-start'
-                                            }`}
-                                        >
+                                        <div key={comment.id}>
                                             <div
-                                                className={`min-w-96 max-w-[80%] rounded-lg p-2 text-sm
+                                                className={`flex ${
+                                                    comment.source === 'Agent' ? 'justify-end' : 'justify-start'
+                                                }`}
+                                            >
+                                                <div
+                                                    className={`min-w-96 max-w-[80%] rounded-lg p-2 text-sm
                                             ${
                                                 comment.source === 'Agent'
                                                     ? 'bg-blue text-light dark:bg-blue'
                                                     : 'bg-light-1 dark:bg-dark-2'
                                             }`}
-                                            >
-                                                <p className="whitespace-pre-wrap">
-                                                    {extractLatestEmailContent(comment.content)}
-                                                </p>
-                                                <div className="dark:neutral mt-1 text-right text-xs">
-                                                    {formatDate(new Date(comment.createdAt))}
+                                                >
+                                                    <p className="whitespace-pre-wrap">
+                                                        {extractLatestEmailContent(comment.content)}
+                                                    </p>
+                                                    <div className="dark:neutral mt-1 text-right text-xs">
+                                                        {formatDate(new Date(comment.createdAt))}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <CommentAttachments
+                                                attachments={comment.attachments}
+                                                isAgent={comment.source === 'Agent'}
+                                            />
                                         </div>
                                     ))}
                                 </div>

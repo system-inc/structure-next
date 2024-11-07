@@ -114,10 +114,15 @@ query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: Ord
             createdAt
             comments {
                 id
-                content
-                contentType
                 source
                 visibility
+                content
+                contentType
+                attachments {
+                    type
+                    url
+                    variant
+                }
                 createdAt
             }
         }
