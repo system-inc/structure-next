@@ -102,8 +102,8 @@ mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
 }
 
 # Support Tickets Admin Query
-query SupportTicketsAdmin($pagination: PaginationInput) {
-    supportTicketsAdmin(pagination: $pagination) {
+query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
+    supportTicketsAdmin(pagination: $pagination, orderBy: $orderBy) {
         items {
             id
             identifier

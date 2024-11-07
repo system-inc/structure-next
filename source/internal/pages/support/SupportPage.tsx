@@ -158,52 +158,60 @@ export function SupportPage() {
     // Render the component
     return (
         <div className="grid h-full grid-cols-[390px_1fr] gap-6">
-            {/* Ticket List */}
-            <ScrollArea className="border-r border-light-3 dark:border-dark-3">
+            {/* Left Navigation */}
+            <div className="flex h-full flex-col border-r border-light-3 dark:border-dark-3">
+                {/* Title */}
                 <div className="group flex cursor-pointer items-center pb-3 pl-4 pt-3" onClick={handleManualRefresh}>
                     <h2 className="text-xl font-medium">Support Tickets</h2>
                     {isManuallyRefreshing && <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin" />}
                 </div>
 
-                {/* Loading State */}
-                {ticketsQuery.loading && !isManuallyRefreshing && (
-                    <div className="flex items-center justify-center py-8">
-                        <BrokenCircleIcon className="h-6 w-6 animate-spin" />
-                    </div>
-                )}
+                {/* Filters */}
 
-                {/* Tickets */}
-                {ticketsQuery.data?.supportTicketsAdmin.items.map(function (ticket, index) {
-                    const lastTicketComment = ticket.comments[ticket.comments.length - 1];
-                    const createdAtDate = new Date(ticket.createdAt);
-
-                    return (
-                        <div
-                            key={ticket.id}
-                            className={`cursor-pointer border-b py-2 pl-12 pr-3 transition-colors hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
-                                selectedTicketId === ticket.id
-                                    ? 'bg-light-1 dark:bg-dark-2'
-                                    : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
-                            } ${index === 0 ? 'border-t' : ''}`}
-                            onClick={() => handleTicketSelection(ticket.id)}
-                        >
-                            <div className="mb-1.5 flex items-center justify-between">
-                                <p className="neutral text-xs">{ticket.userEmailAddress}</p>
-                                <p className="neutral text-xs">{formatDate(createdAtDate)}</p>
+                {/* Tickets ScrollArea */}
+                <div className="flex-grow">
+                    <ScrollArea className="">
+                        {/* Loading State */}
+                        {ticketsQuery.loading && !isManuallyRefreshing && (
+                            <div className="flex items-center justify-center py-8">
+                                <BrokenCircleIcon className="h-6 w-6 animate-spin" />
                             </div>
-                            <h4 className="text-sm font-medium">{ticket.title}</h4>
-                            {lastTicketComment?.content && (
-                                <p className="neutral mt-1.5 overflow-hidden overflow-ellipsis whitespace-nowrap text-xs">
-                                    {extractLatestEmailContent(lastTicketComment?.content)}
-                                </p>
-                            )}
-                        </div>
-                    );
-                })}
+                        )}
+                        {/* Tickets */}
+                        {ticketsQuery.data?.supportTicketsAdmin.items.map(function (ticket, index) {
+                            const lastTicketComment = ticket.comments[ticket.comments.length - 1];
+                            const createdAtDate = new Date(ticket.createdAt);
 
+                            return (
+                                <div
+                                    key={ticket.id}
+                                    className={`cursor-pointer border-b py-2 pl-12 pr-3 transition-colors hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
+                                        selectedTicketId === ticket.id
+                                            ? 'bg-light-1 dark:bg-dark-2'
+                                            : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
+                                    } ${index === 0 ? 'border-t' : ''}`}
+                                    onClick={() => handleTicketSelection(ticket.id)}
+                                >
+                                    <div className="mb-1.5 flex items-center justify-between">
+                                        <p className="neutral text-xs">{ticket.userEmailAddress}</p>
+                                        <p className="neutral text-xs">{formatDate(createdAtDate)}</p>
+                                    </div>
+                                    <h4 className="text-sm font-medium">{ticket.title}</h4>
+                                    {lastTicketComment?.content && (
+                                        <p className="neutral mt-1.5 overflow-hidden overflow-ellipsis whitespace-nowrap text-xs">
+                                            {extractLatestEmailContent(lastTicketComment?.content)}
+                                        </p>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </ScrollArea>
+                </div>
+
+                {/* Pagination */}
                 {ticketsQuery.data && (
                     <Pagination
-                        className="mr-4 mt-6"
+                        className="mr-4 mt-4"
                         page={page}
                         itemsPerPage={itemsPerPage}
                         itemsTotal={ticketsQuery.data?.supportTicketsAdmin.pagination?.itemsTotal ?? 0}
@@ -213,7 +221,7 @@ export function SupportPage() {
                         pageInputControl={false}
                     />
                 )}
-            </ScrollArea>
+            </div>
 
             {/* Ticket Detail */}
             <div className="mt-3 flex h-full flex-col overflow-hidden pb-12 pr-6" ref={ticketDetailsRef}>
