@@ -166,16 +166,14 @@ export function SupportPage() {
                         className="group mb-3 mt-3 flex cursor-pointer items-center pl-4"
                         onClick={handleManualRefresh}
                     >
-                        <h2 className="group-hover:text-primary-5 text-xl font-medium">Support Tickets</h2>
-                        {isManuallyRefreshing && (
-                            <BrokenCircleIcon className="text-primary-5 ml-2 h-4 w-4 animate-spin" />
-                        )}
+                        <h2 className="text-xl font-medium">Support Tickets</h2>
+                        {isManuallyRefreshing && <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin" />}
                     </div>
 
                     {/* Loading State */}
                     {ticketsQuery.loading && !isManuallyRefreshing && (
                         <div className="flex items-center justify-center py-8">
-                            <BrokenCircleIcon className="text-primary-5 h-6 w-6 animate-spin" />
+                            <BrokenCircleIcon className="h-6 w-6 animate-spin" />
                         </div>
                     )}
 
@@ -186,10 +184,10 @@ export function SupportPage() {
                         return (
                             <div
                                 key={ticket.id}
-                                className={`cursor-pointer border-b py-3 pl-12 pr-3 hover:bg-light-1 dark:hover:bg-dark-2 ${
+                                className={`cursor-pointer border-b py-3 pl-12 pr-3 hover:bg-light-1 ${
                                     selectedTicketId === ticket.id
-                                        ? 'border-primary-5 bg-light-1 dark:bg-dark-2'
-                                        : 'border-light-3 dark:border-dark-3'
+                                        ? 'bg-light-1 dark:bg-dark-2'
+                                        : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
                                 } ${index === 0 ? 'border-t' : ''}`}
                                 onClick={() => handleTicketSelection(ticket.id)}
                             >
@@ -199,7 +197,7 @@ export function SupportPage() {
                                 </div>
                                 <h4 className="text-base font-medium">{ticket.title}</h4>
                                 {lastTicketComment?.content && (
-                                    <p className="neutral mt-2 text-sm">
+                                    <p className="neutral mt-2 overflow-hidden overflow-ellipsis whitespace-nowrap text-sm">
                                         {extractLatestEmailContent(lastTicketComment?.content)}
                                     </p>
                                 )}
@@ -207,16 +205,18 @@ export function SupportPage() {
                         );
                     })}
 
-                    <Pagination
-                        className="mr-4 mt-6"
-                        page={page}
-                        itemsPerPage={itemsPerPage}
-                        itemsTotal={ticketsQuery.data?.supportTicketsAdmin.pagination?.itemsTotal ?? 0}
-                        pagesTotal={ticketsQuery.data?.supportTicketsAdmin.pagination?.pagesTotal ?? 0}
-                        useLinks={true}
-                        itemsPerPageControl={false}
-                        pageInputControl={false}
-                    />
+                    {ticketsQuery.data && (
+                        <Pagination
+                            className="mr-4 mt-6"
+                            page={page}
+                            itemsPerPage={itemsPerPage}
+                            itemsTotal={ticketsQuery.data?.supportTicketsAdmin.pagination?.itemsTotal ?? 0}
+                            pagesTotal={ticketsQuery.data?.supportTicketsAdmin.pagination?.pagesTotal ?? 0}
+                            useLinks={true}
+                            itemsPerPageControl={false}
+                            pageInputControl={false}
+                        />
+                    )}
                 </div>
 
                 {/* Ticket Detail */}
@@ -251,14 +251,14 @@ export function SupportPage() {
                                             className={`min-w-96 max-w-[80%] rounded-lg p-4
                                             ${
                                                 comment.source === 'Agent'
-                                                    ? 'bg-blue dark:bg-blue'
+                                                    ? 'bg-blue text-light dark:bg-blue'
                                                     : 'bg-light-1 dark:bg-dark-2'
                                             }`}
                                         >
                                             <p className="whitespace-pre-wrap">
                                                 {extractLatestEmailContent(comment.content)}
                                             </p>
-                                            <div className="neutral mt-2 text-right text-xs">
+                                            <div className="dark:neutral mt-2 text-right text-xs">
                                                 {formatDate(new Date(comment.createdAt))}
                                             </div>
                                         </div>
@@ -282,6 +282,7 @@ export function SupportPage() {
                                 buttonProperties={{
                                     children: 'Send Reply',
                                 }}
+                                resetOnSubmitSuccess={true}
                                 onSubmit={async function (formValues) {
                                     await createComment({
                                         variables: {
@@ -294,7 +295,6 @@ export function SupportPage() {
                                     });
                                     return {
                                         success: true,
-                                        resetForm: true, // Add this to reset the form after successful submission
                                     };
                                 }}
                             />
