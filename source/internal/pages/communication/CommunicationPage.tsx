@@ -9,7 +9,7 @@ export type CommunicationPageProperties = {};
 export function CommunicationPage(properties: CommunicationPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Communication</h1>
         </div>

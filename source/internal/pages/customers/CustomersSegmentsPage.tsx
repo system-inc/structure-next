@@ -5,11 +5,10 @@ import React from 'react';
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
 // Component - CustomersSegmentsPage
-export type CustomersSegmentsPageProperties = {};
-export function CustomersSegmentsPage(properties: CustomersSegmentsPageProperties) {
+export function CustomersSegmentsPage() {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Segments</h1>
         </div>

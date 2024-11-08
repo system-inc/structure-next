@@ -5,11 +5,10 @@ import React from 'react';
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
 // Component - AnalyticsLivePage
-export type AnalyticsLivePageProperties = {};
-export function AnalyticsLivePage(properties: AnalyticsLivePageProperties) {
+export function AnalyticsLivePage() {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Live</h1>
         </div>

@@ -9,7 +9,7 @@ export type OrdersAbandonedCheckoutsPageProperties = {};
 export function OrdersAbandonedCheckoutsPage(properties: OrdersAbandonedCheckoutsPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Abandoned Checkouts</h1>
         </div>

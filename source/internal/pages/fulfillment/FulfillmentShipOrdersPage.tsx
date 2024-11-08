@@ -9,7 +9,7 @@ export type FulfillmentShipOrdersPageProperties = {};
 export function FulfillmentShipOrdersPage(properties: FulfillmentShipOrdersPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Ship Orders</h1>
         </div>

@@ -69,6 +69,9 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         setSideNavigationLayoutNavigationIsClosingByWindowResize,
     ] = useAtom(getAtomForNavigationIsClosingByWindowResize(properties.layoutIdentifier));
 
+    // State
+    const [windowInnerWidth, setWindowInnerWidth] = React.useState<number>(0);
+
     // References
     const containerDivReference = React.useRef<HTMLDivElement>(null);
     const containerDivWidthReference = React.useRef<number>(sideNavigationLayoutNavigationWidth);
@@ -183,6 +186,12 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             filterTaps: true, // Prevent taps from triggering the drag
         },
     );
+
+    // Layout effect to update the window inner width
+    React.useLayoutEffect(function () {
+        // Update the window inner width
+        setWindowInnerWidth(window.innerWidth);
+    }, []);
 
     // Effect to animate the navigation when opening, closing, or resizing
     React.useEffect(
@@ -359,21 +368,20 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     // If there is no top bar or the window is less than the desktop minimum width and the side navigation is not closing by window resize
                     // add a border to the right
                     !topBar ||
-                        (window.innerWidth < desktopMinimumWidth &&
+                        (windowInnerWidth < desktopMinimumWidth &&
                             !sideNavigationLayoutNavigationIsClosingByWindowResize)
                         ? 'border-r border-r-light-4 dark:border-r-dark-4'
                         : '',
                     properties.className,
                 )}
                 style={{ width: sideNavigationLayoutNavigationWidth + 'px', ...containerSpring }}
-                suppressHydrationWarning
             >
                 <ScrollArea
                     containerClassName={mergeClassNames(
                         'mt-16 h-full',
                         // If there is a top bar and the window is at least the desktop minimum width
                         // add a border to the right
-                        topBar && window.innerWidth >= desktopMinimumWidth
+                        topBar && windowInnerWidth >= desktopMinimumWidth
                             ? 'border-r border-r-light-4 dark:border-r-dark-4'
                             : '',
                     )}
@@ -387,7 +395,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     className={mergeClassNames(
                         'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none select-none bg-transparent transition-colors duration-500 hover:bg-blue active:bg-purple-500',
                         // If the top bar is enabled, offset the handle by the height of the top bar
-                        topBar && window.innerWidth >= desktopMinimumWidth ? 'top-16' : '',
+                        topBar && windowInnerWidth >= desktopMinimumWidth ? 'top-16' : '',
                         // If the navigation is open, show the handle, otherwise disable interacting with it
                         sideNavigationLayoutNavigationOpen ? 'pointer-events-auto' : 'pointer-events-none',
                     )}

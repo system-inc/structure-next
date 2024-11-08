@@ -9,7 +9,7 @@ export type OrdersDraftsPageProperties = {};
 export function OrdersDraftsPage(properties: OrdersDraftsPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Drafts</h1>
         </div>

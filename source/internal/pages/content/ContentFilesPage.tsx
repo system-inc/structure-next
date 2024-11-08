@@ -9,7 +9,7 @@ export type ContentFilesPageProperties = {};
 export function ContentFilesPage(properties: ContentFilesPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Content Files</h1>
         </div>

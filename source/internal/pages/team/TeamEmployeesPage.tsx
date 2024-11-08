@@ -8,7 +8,7 @@ import InternalNavigationTrail from '@structure/source/internal/layouts/navigati
 export function TeamEmployeesPage() {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1 className="mb-6">Employees</h1>
         </div>

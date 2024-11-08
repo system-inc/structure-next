@@ -9,7 +9,7 @@ export type FinancesPayoutPageProperties = {};
 export function FinancesPayoutPage(properties: FinancesPayoutPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Payout</h1>
         </div>

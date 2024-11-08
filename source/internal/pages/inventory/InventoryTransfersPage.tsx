@@ -9,7 +9,7 @@ export type InventoryTransfersPageProperties = {};
 export function InventoryTransfersPage(properties: InventoryTransfersPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Transfers</h1>
         </div>

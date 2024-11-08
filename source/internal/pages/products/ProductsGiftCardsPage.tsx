@@ -9,7 +9,7 @@ export type ProductsGiftCardsPageProperties = {};
 export function ProductsGiftCardsPage(properties: ProductsGiftCardsPageProperties) {
     // Render the component
     return (
-        <div className="px-8 py-4">
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Gift Cards</h1>
         </div>

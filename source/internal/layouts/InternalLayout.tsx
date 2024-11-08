@@ -2,14 +2,32 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import dynamic from 'next/dynamic';
 
 // Dependencies - Main Components
 import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
-import { SideNavigationLayoutNavigation } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
-import { SideNavigationLayoutContent } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContent';
-import { SideNavigationLayoutContentBody } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody';
+// import { SideNavigationLayoutNavigation } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
+// import { SideNavigationLayoutContent } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContent';
+// import { SideNavigationLayoutContentBody } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody';
 import { InternalNavigation } from '@structure/source/internal/layouts/navigation/InternalNavigation';
 import { InternalDialogMenu } from '@structure/source/internal/layouts/navigation/InternalDialogMenu';
+
+// Import SideNavigation components with next/dynamic to avoid server-side rendering
+// We can't SSR these because they use localStorage and window.innerWidth to render the navigation state
+// The side and top navigation components cause hydration mismatch errors if they are SSR'd
+// Dependencies - Side Navigation Components
+const SideNavigationLayoutContent = dynamic(
+    () => import('@structure/source/layouts/side-navigation/SideNavigationLayoutContent'),
+    { ssr: false },
+);
+const SideNavigationLayoutContentBody = dynamic(
+    () => import('@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody'),
+    { ssr: false },
+);
+const SideNavigationLayoutNavigation = dynamic(
+    () => import('@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation'),
+    { ssr: false },
+);
 
 // Settings
 export const internalLayoutIdentifier = 'Internal';
