@@ -10,7 +10,7 @@ export interface TicketInformationInterface {
     status: string;
     createdAt: string;
 }
-export function TicketInfo(properties: TicketInformationInterface) {
+export function TicketInformation(properties: TicketInformationInterface) {
     // Render the component
     return (
         <div className="mb-6 rounded-lg border border-light-3 p-2 text-sm dark:border-dark-3">
@@ -28,4 +28,4 @@ export function TicketInfo(properties: TicketInformationInterface) {
 }
 
 // Export - Default
-export default TicketInfo;
+export default TicketInformation;

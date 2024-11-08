@@ -13,7 +13,7 @@ import { FileCarouselDialog } from '@structure/source/common/files/FileCarouselD
 
 // Dependencies - Internal Components
 import { TicketList } from './components/TicketList/TicketList';
-import { TicketInfo } from './components/TicketInformation';
+import { TicketInformation } from './components/TicketInformation';
 import { CommentAttachments } from './components/CommentAttachments';
 
 // Dependencies - Hooks
@@ -107,7 +107,7 @@ export function SupportPage() {
 
     // Get all attachments from comments
     const allAttachments =
-        selectedTicket?.comments.reduce((acc: FileCarouselInterface['files'], comment) => {
+        selectedTicket?.comments.reduce((accumulatedAttachments: FileCarouselInterface['files'], comment) => {
             const attachments = (comment.attachments || []).map(function (attachment) {
                 return {
                     url: attachment.url || '',
@@ -117,7 +117,7 @@ export function SupportPage() {
                     },
                 };
             });
-            return acc.concat(attachments);
+            return accumulatedAttachments.concat(attachments);
         }, []) || [];
 
     // Function to get global index for an attachment URL
@@ -157,7 +157,7 @@ export function SupportPage() {
                             <h2 className="mb-4 text-2xl font-medium">{selectedTicket.title}</h2>
 
                             {/* Ticket Information */}
-                            <TicketInfo
+                            <TicketInformation
                                 email={selectedTicket.userEmailAddress}
                                 status={selectedTicket.status}
                                 createdAt={selectedTicket.createdAt}

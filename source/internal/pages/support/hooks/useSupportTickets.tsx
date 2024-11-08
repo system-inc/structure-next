@@ -34,6 +34,8 @@ export function useSupportTickets(page: number, itemsPerPage: number, selectedSt
                 direction: OrderByDirection.Descending,
             },
         },
+        // Poll every minute
+        pollInterval: 60000,
     });
 
     // Modify the createComment mutation to include refetch
