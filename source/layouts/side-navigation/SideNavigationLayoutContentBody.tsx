@@ -25,7 +25,9 @@ export function SideNavigationLayoutContentBody(properties: SideNavigationLayout
             containerClassName={mergeClassNames('mt-16 h-full', properties.containerClassName)}
         >
             {/* This child div is necessary for easily managing multiple page layouts */}
-            <div className={mergeClassNames('h-full', properties.className)}>{properties.children}</div>
+            <div className={mergeClassNames('h-full max-h-[calc(100vh-4rem)]', properties.className)}>
+                {properties.children}
+            </div>
         </ScrollArea>
     );
 }

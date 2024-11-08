@@ -97,6 +97,24 @@ export function monthYear(date: Date) {
     });
 }
 
+// Function to format the date with time if the date is today, otherwise just the date
+export function formatDateWithTimeIfToday(date: Date): string {
+    const today = new Date();
+    const isToday =
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
+
+    if(isToday) {
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const hour = hours % 12 || 12; // Convert 0 to 12
+        return `${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+    }
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
 // Function to convert milliseconds into Years:Months:Days:Hours:Minutes:Seconds
 // It will not show leading zeros for hours or minutes, but always show minutes and seconds
 export function millisecondsToDuration(milliseconds: number) {
