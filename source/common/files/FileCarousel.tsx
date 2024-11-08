@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 
 // Dependencies - Main Components
+import { Button } from '@structure/source/common/buttons/Button';
 import { Popover } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Assets
@@ -61,22 +62,35 @@ export function FileCarousel(properties: FileCarouselInterface) {
         setCurrentFileIndex((currentFileIndex + 1) % properties.files.length);
     }
 
+    // Effect to handle keyboard navigation
+    React.useEffect(
+        function () {
+            function handleKeydown(event: KeyboardEvent) {
+                if(event.key === 'ArrowLeft') {
+                    previousFile();
+                }
+                else if(event.key === 'ArrowRight') {
+                    nextFile();
+                }
+            }
+
+            window.addEventListener('keydown', handleKeydown);
+            return function () {
+                window.removeEventListener('keydown', handleKeydown);
+            };
+        },
+        [currentFileIndex],
+    );
+
     // Render the component
     return (
         <>
             {currentFile && (
-                <div className={mergeClassNames('relative', properties.className)}>
-                    {/* Previous Button */}
-                    {properties.files.length > 1 && (
-                        <button onClick={previousFile} className="absolute left-0 top-1/2 -translate-y-1/2 transform">
-                            <ChevronLeftIcon className="h-6 w-6" />
-                        </button>
-                    )}
-
+                <div className={mergeClassNames('relative h-full', properties.className)}>
                     {/* File Preview */}
-                    <div className="flex items-center justify-center">
+                    <div className="relative flex h-full items-center justify-center">
                         {isImageFile(currentFile.url) ? (
-                            <Image src={currentFile.url} alt="File" width={400} height={400} />
+                            <Image src={currentFile.url} alt="File" className="object-contain" fill={true} />
                         ) : (
                             <a href={currentFile.url} target="_blank" rel="noopener noreferrer">
                                 Download
@@ -86,17 +100,32 @@ export function FileCarousel(properties: FileCarouselInterface) {
 
                     {/* Next Button */}
                     {properties.files.length > 1 && (
-                        <button onClick={nextFile} className="absolute right-0 top-1/2 -translate-y-1/2 transform">
+                        <Button
+                            onClick={nextFile}
+                            variant="unstyled"
+                            className="absolute right-0 top-1/2 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:outline-none focus-visible:ring-0 dark:focus:border-dark-3"
+                        >
                             <ChevronRightIcon className="h-6 w-6" />
-                        </button>
+                        </Button>
+                    )}
+
+                    {/* Previous Button */}
+                    {properties.files.length > 1 && (
+                        <Button
+                            variant="unstyled"
+                            className="absolute left-0 top-1/2 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:outline-none focus-visible:ring-0 dark:focus:border-dark-3"
+                            icon={ChevronLeftIcon}
+                            iconClassName="h-6 w-6"
+                            onClick={previousFile}
+                        />
                     )}
 
                     {/* Metadata Popover */}
                     {currentFile.metadata && (
                         <Popover content={<MetadataContent metadata={currentFile.metadata} />} side="top" align="end">
-                            <button className="absolute right-0 top-0 m-2">
+                            <Button variant="unstyled" className="absolute right-0 top-0 m-2">
                                 <InformationCircledIcon className="h-5 w-5" />
-                            </button>
+                            </Button>
                         </Popover>
                     )}
                 </div>

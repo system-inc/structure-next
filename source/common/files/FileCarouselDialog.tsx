@@ -11,24 +11,25 @@ export interface FileCarouselDialogInterface extends FileCarouselInterface {
     onOpenChange: (open: boolean) => void;
     startIndex?: number;
 }
-
 export function FileCarouselDialog(properties: FileCarouselDialogInterface) {
     return (
         <Dialog
-            variant="unstyled"
+            variant="fullScreenWithMargin"
+            accessibilityTitle="File Carousel"
             open={properties.open}
             onOpenChange={properties.onOpenChange}
+            className=""
+            contentScrollAreaClassName="max-h-full"
             content={
-                <div className="min-h-[300px] min-w-[300px] rounded-lg bg-background p-6">
-                    <FileCarousel
-                        files={properties.files}
-                        className={properties.className}
-                        startIndex={properties.startIndex}
-                    />
-                </div>
+                <FileCarousel
+                    className={properties.className}
+                    files={properties.files}
+                    startIndex={properties.startIndex}
+                />
             }
         />
     );
 }
 
+// Export - Default
 export default FileCarouselDialog;

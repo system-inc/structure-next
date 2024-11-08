@@ -83,7 +83,7 @@ export const DialogVariants = {
     default:
         `${dialogContentPositionCenteredClassName} ` +
         // Border, background, and shadow
-        `flex flex-col border bg-background p-6 shadow-lg rounded-lg w-full gap-4 `,
+        `flex flex-col border bg-background p-6 shadow-lg rounded-lg w-full gap-4`,
     // Unstyled centered variant
     unstyled:
         `${dialogContentPositionCenteredClassName} ` +
@@ -94,6 +94,11 @@ export const DialogVariants = {
         `${dialogContentPositionTopFixedClassName} ` +
         // Unstyled
         ``,
+    // Full screen with margin
+    fullScreenWithMargin:
+        `${dialogContentPositionCenteredClassName} ` +
+        `flex flex-col border bg-background p-6 shadow-lg rounded-lg w-full gap-4 ` +
+        `h-full max-h-[calc(100vh-8rem)] w-full max-w-[calc(100vw-8rem)] md:max-h-[calc(100vh-8rem)] md:max-w-[calc(100vw-8rem)] `,
 };
 
 // Component - Dialog
@@ -107,6 +112,7 @@ export interface DialogInterface {
     headerClassName?: string; // The class names for the header
     accessibilityTitle?: string; // The accessibility description
     content?: React.ReactNode; // The content
+    contentScrollAreaClassName?: string; // The class names for the content scroll area
     accessibilityDescription?: string; // The accessibility description
     footer?: React.ReactNode; // The footer
     footerClassName?: string; // The class names for the footer
@@ -212,7 +218,10 @@ export function Dialog(properties: DialogInterface) {
                     {/* Content */}
                     {/* We wrap the content in a scroll area to standardize all scrollbars in dialogs */}
                     {properties.content && (
-                        <ScrollArea className="max-h-[75vh]" horizontalScrollbar={true}>
+                        <ScrollArea
+                            className={mergeClassNames('max-h-[75vh]', properties.contentScrollAreaClassName)}
+                            horizontalScrollbar={true}
+                        >
                             {properties.content}
                         </ScrollArea>
                     )}
