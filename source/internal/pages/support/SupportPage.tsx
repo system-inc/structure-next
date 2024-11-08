@@ -167,37 +167,47 @@ export function SupportPage() {
                             <ScrollArea className="flex flex-grow" ref={commentsContainerRef}>
                                 <div className="flex flex-grow flex-col justify-end">
                                     <div className="flex flex-col space-y-2">
-                                        {selectedTicket.comments.map((comment) => (
-                                            <div key={comment.id}>
-                                                <div
-                                                    className={`flex ${
-                                                        comment.source === 'Agent' ? 'justify-end' : 'justify-start'
-                                                    }`}
-                                                >
-                                                    <div
-                                                        className={`min-w-96 max-w-[80%] rounded-lg p-2 text-sm
+                                        {selectedTicket.comments.map(function (comment) {
+                                            const latestEmailContent = extractLatestEmailContent(comment.content);
+
+                                            return (
+                                                <div key={comment.id}>
+                                                    {latestEmailContent.length > 0 && (
+                                                        <div
+                                                            className={`flex ${
+                                                                comment.source === 'Agent'
+                                                                    ? 'justify-end'
+                                                                    : 'justify-start'
+                                                            }`}
+                                                        >
+                                                            <div
+                                                                className={`min-w-96 max-w-[80%] rounded-lg p-2 text-sm
                                                         ${
                                                             comment.source === 'Agent'
                                                                 ? 'bg-blue text-light dark:bg-blue'
                                                                 : 'bg-light-1 dark:bg-dark-2'
                                                         }`}
-                                                    >
-                                                        <p className="whitespace-pre-wrap">
-                                                            {extractLatestEmailContent(comment.content)}
-                                                        </p>
-                                                        <div className="dark:neutral mt-1 text-right text-xs">
-                                                            {formatDateWithTimeIfToday(new Date(comment.createdAt))}
+                                                            >
+                                                                <p className="whitespace-pre-wrap">
+                                                                    {latestEmailContent}
+                                                                </p>
+                                                                <div className="dark:neutral mt-1 text-right text-xs">
+                                                                    {formatDateWithTimeIfToday(
+                                                                        new Date(comment.createdAt),
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    )}
+                                                    <CommentAttachments
+                                                        attachments={comment.attachments}
+                                                        isAgent={comment.source === 'Agent'}
+                                                        onImageClick={handleImageClick}
+                                                        globalAttachmentIndex={getGlobalAttachmentIndex}
+                                                    />
                                                 </div>
-                                                <CommentAttachments
-                                                    attachments={comment.attachments}
-                                                    isAgent={comment.source === 'Agent'}
-                                                    onImageClick={handleImageClick}
-                                                    globalAttachmentIndex={getGlobalAttachmentIndex}
-                                                />
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </ScrollArea>
