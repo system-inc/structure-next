@@ -315,8 +315,8 @@ export const Button = React.forwardRef<ButtonElementType, ButtonInterface>(funct
                 ),
         );
 
-        // If processed and no success icon is provided, revert back to the children
-        if(!disabled && processed && !properties.processingSuccessIcon) {
+        // If processed, revert back to the children
+        if(processed && !properties.processingSuccessIcon) {
             content = properties.children ?? undefined;
         }
         // Otherwise, show the processing animation

@@ -321,7 +321,7 @@ export function Form(properties: FormInterface) {
 
                         // Optionally reset the form
                         if(resetOnSubmitSuccess) {
-                            console.log('resetting!');
+                            console.log('Resetting form.');
                             reset();
                         }
                     }
