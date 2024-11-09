@@ -469,7 +469,7 @@ export function Form(properties: FormInterface) {
             <Button
                 tabIndex={1}
                 type="submit"
-                disabled={submitting}
+                disabled={properties.buttonProperties?.disabled ?? submitting}
                 // tip={submittable ? undefined : 'Please complete the required fields.'}
                 processing={submitting}
                 {...properties.buttonProperties}
