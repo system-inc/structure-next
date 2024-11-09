@@ -61,6 +61,15 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
     const [processed, setProcessed] = React.useState<boolean>(false);
     const [tipContent, setTipContent] = React.useState<string | React.ReactNode>(properties.tip);
 
+    // Memoization
+    // Replace with useMemo
+    const disabled = React.useMemo(
+        function () {
+            return properties.disabled ?? false;
+        },
+        [properties.disabled],
+    );
+
     // Defaults
     const variant = properties.variant || 'default';
     const size = properties.size || 'default';
@@ -172,15 +181,16 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 propertiesOnClick(event);
             }
         },
-        [propertiesShowProcessedTimeTip, propertiesOnClick, endProcessing],
+        [propertiesShowProcessedTimeTip, propertiesOnClick, endProcessing, processingAnimationEnabled],
     );
 
     // Listen to changes in the processing property allowing the component to be controlled by the parent
     React.useEffect(
         function () {
+            // Listen to changes in the processing property
             if(properties.processing !== undefined) {
                 // If the processing state changed
-                if(properties.processing !== processing) {
+                if(processing !== properties.processing) {
                     // If processing started
                     if(properties.processing) {
                         startProcessing();
@@ -193,7 +203,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
             }
 
             // Clear timeouts on unmount
-            return () => {
+            return function () {
                 if(processingAnimationTimeoutReference.current) {
                     clearTimeout(processingAnimationTimeoutReference.current);
                 }
@@ -205,7 +215,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 }
             };
         },
-        [properties.processing, processing, endProcessing],
+        [properties.processing, processing, endProcessing, properties.disabled, disabled],
     );
 
     // Animation - Processing State Icon Transition
@@ -293,7 +303,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
         );
 
         // If processed and no success icon is provided, revert back to the children
-        if(!properties.disabled && processed && !properties.processingSuccessIcon) {
+        if(!disabled && processed && !properties.processingSuccessIcon) {
             content = properties.children ?? undefined;
         }
         // Otherwise, show the processing animation
@@ -363,7 +373,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 properties.className,
             )}
             // <Link> components cannot be disabled, otherwise set the disabled state
-            disabled={Component == Link ? undefined : properties.disabled || processing}
+            disabled={Component == Link ? undefined : disabled || processing}
             href={properties.href ?? ''} // Use an empty string if href is not provided
             onClick={onClickIntercept}
         >
