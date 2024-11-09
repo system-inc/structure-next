@@ -191,6 +191,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
             validate={properties.validate}
             validating={validating}
             validationResult={validationResult}
+            showValidationSuccessResults={properties.showValidationSuccessResults}
             component={
                 <div className="relative">
                     <InputText

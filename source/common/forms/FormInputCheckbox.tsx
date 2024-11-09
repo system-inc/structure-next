@@ -135,6 +135,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                 validate={properties.validate}
                 validating={properties.validating}
                 validationResult={validationResult}
+                showValidationSuccessResults={properties.showValidationSuccessResults}
                 component={
                     <div className="relative flex items-center">
                         {/* Input Checkbox */}

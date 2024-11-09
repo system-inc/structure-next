@@ -6,7 +6,7 @@ import { InputReferenceInterface, InputInterface } from '@structure/source/commo
 import { TipIconInterface, TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Assets
-// import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
+import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Dependencies - Utilities
@@ -81,6 +81,7 @@ export interface FormInputInterface extends InputInterface {
     validateOnBlur?: boolean;
     validationSchema?: ValidationSchema;
     validationResult?: ValidationResult;
+    showValidationSuccessResults?: boolean;
     onValidate?: (validationResult: ValidationResult) => void;
 }
 export function FormInput({
@@ -101,7 +102,7 @@ export function FormInput({
         [properties.validating],
     );
 
-    // console.log('validationResult:', properties.validationResult);
+    console.log('validationResult:', properties.validationResult);
     // console.log('properties.validationResult?.errors.length', properties.validationResult?.errors.length);
 
     // Render the component
@@ -152,7 +153,8 @@ export function FormInput({
                 ))}
 
             {/* Successes */}
-            {/* {properties.validationResult?.successes &&
+            {properties.showValidationSuccessResults &&
+                properties.validationResult?.successes &&
                 properties.validationResult.successes.length > 0 &&
                 properties.validationResult.successes.map((validationSuccess, validationSuccessIndex) => (
                     <div
@@ -161,7 +163,7 @@ export function FormInput({
                     >
                         <CheckCircledIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationSuccess.message}</span>
                     </div>
-                ))} */}
+                ))}
 
             {/* Description */}
             {properties.description && (

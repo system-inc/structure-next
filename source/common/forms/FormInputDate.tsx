@@ -123,6 +123,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
             validate={properties.validate}
             validating={properties.validating}
             validationResult={validationResult}
+            showValidationSuccessResults={properties.showValidationSuccessResults}
             component={
                 <div className="relative">
                     <InputDate

@@ -123,6 +123,7 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
                 validate={properties.validate}
                 validating={properties.validating}
                 validationResult={validationResult}
+                showValidationSuccessResults={properties.showValidationSuccessResults}
                 component={
                     <div className="relative">
                         <InputMultipleSelect

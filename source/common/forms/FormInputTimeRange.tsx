@@ -126,6 +126,7 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
                 validate={properties.validate}
                 validating={properties.validating}
                 validationResult={validationResult}
+                showValidationSuccessResults={properties.showValidationSuccessResults}
                 component={
                     <div className="relative">
                         <InputTimeRange

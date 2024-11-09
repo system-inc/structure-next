@@ -38,18 +38,23 @@ export interface InternalLayoutInterface {
 }
 export function InternalLayout(properties: InternalLayoutInterface) {
     // Effect to adjust the background color of the body on mount
+    // We want the navigation to be dark but the content to be a bit lighter
     React.useEffect(function () {
-        // Remove the other dark backgrounds and add the one we want
-        document.body.classList.add('dark:bg-dark');
+        // Remove the darker backgrounds and add a lighter one
+        document.body.classList.remove('dark:bg-dark');
         document.body.classList.remove('dark:bg-dark-1');
-        document.body.classList.remove('dark:bg-dark-2');
+        document.body.classList.add('dark:bg-[#1C1C1C]');
     }, []);
 
     // Render the component
     return (
         <AuthorizationLayout mustBeAdministrator={true}>
             {/* Navigation */}
-            <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier} topBar={true}>
+            <SideNavigationLayoutNavigation
+                layoutIdentifier={internalLayoutIdentifier}
+                topBar={true}
+                className="dark:bg-dark-1"
+            >
                 <InternalNavigation />
             </SideNavigationLayoutNavigation>
 

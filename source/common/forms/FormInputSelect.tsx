@@ -127,6 +127,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
             validate={properties.validate}
             validating={properties.validating}
             validationResult={validationResult}
+            showValidationSuccessResults={properties.showValidationSuccessResults}
             component={
                 <div className="relative">
                     <InputSelect
