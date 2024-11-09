@@ -8,6 +8,7 @@ import { ButtonInterface, Button } from '@structure/source/common/buttons/Button
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { removeProperties } from '@structure/source/utilities/React';
 
 // Class Names - Menu Item
 export const menuItemClassName = '';
@@ -24,8 +25,14 @@ export interface MenuItemInterface extends Omit<ButtonInterface, 'content'> {
 export const MenuItem = React.memo(
     React.forwardRef<HTMLButtonElement, MenuItemInterface>((properties, reference) => {
         // Separate the non-Button properties from the Button properties
-        const { value, content, highlighted, selected, onSelected, closeMenuOnSelected, ...buttonProperties } =
-            properties;
+        const buttonProperties = removeProperties(properties, [
+            'value',
+            'content',
+            'highlighted',
+            'selected',
+            'onSelected',
+            'closeMenuOnSelected',
+        ]);
 
         // Render the component
         return (

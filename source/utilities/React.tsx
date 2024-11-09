@@ -24,3 +24,13 @@ export function wrapForSlot(children: React.ReactElement, className?: string) {
         children
     );
 }
+
+// Function to remove properties from an object
+export function removeProperties<T extends object, K extends keyof T>(
+    object: T,
+    propertiesToExclude: readonly K[],
+): Omit<T, K> {
+    const result = { ...object };
+    propertiesToExclude.forEach((key) => delete result[key]);
+    return result as Omit<T, K>;
+}

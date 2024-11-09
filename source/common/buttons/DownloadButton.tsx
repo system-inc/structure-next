@@ -85,9 +85,6 @@ export function DownloadButton(properties: DownloadButtonType) {
         }, 1000);
     };
 
-    // Separate the properties
-    // let buttonProperties = null;
-
     // Render the component
     return (
         <Button

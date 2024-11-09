@@ -12,6 +12,7 @@ import InformationCircledIcon from '@structure/assets/icons/status/InformationCi
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { removeProperties } from '@structure/source/utilities/React';
 
 // TODO: add icon variants like information, question, warning, error icons
 // TODO: add size variants like xs, sm, base/default, lg, xl
@@ -54,7 +55,7 @@ export function TipIcon(properties: TipIconInterface) {
 
     // Separate the PopoverInterface properties from the TipIconInterface properties
     // We will apply these to the Popover or Tip component
-    const { icon, openOnPress: openOnPressProperty, content, className, ...popoverInterfaceProperties } = properties;
+    const popoverInterfaceProperties = removeProperties(properties, ['icon', 'openOnPress', 'content', 'className']);
 
     // Render the component
     return (

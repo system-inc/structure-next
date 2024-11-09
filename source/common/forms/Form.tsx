@@ -101,13 +101,6 @@ export function Form(properties: FormInterface) {
     // Memoized button properties
     const buttonProperties: ButtonInterface = React.useMemo(
         function () {
-            // Debug log
-            console.log('Button state:', {
-                submitting,
-                submittable,
-                propertyDisabled: properties.buttonProperties?.disabled,
-            });
-
             return {
                 ...properties.buttonProperties,
                 type: 'submit',
@@ -115,7 +108,7 @@ export function Form(properties: FormInterface) {
                 processing: submitting,
             };
         },
-        [properties.buttonProperties, submitting, submittable],
+        [properties.buttonProperties, submitting],
     );
 
     // Function to reset the form
@@ -372,8 +365,6 @@ export function Form(properties: FormInterface) {
             catch(error) {
                 console.error(error);
             } finally {
-                console.log('updating submitting');
-                // Set the submitting state
                 setSubmitting(false);
             }
         },

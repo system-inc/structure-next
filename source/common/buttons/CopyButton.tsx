@@ -12,6 +12,7 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { removeProperties } from '@structure/source/utilities/React';
 
 // Component - CopyButton
 export interface CopyButtonInterface extends ButtonInterface {
@@ -51,7 +52,7 @@ export function CopyButton(properties: CopyButtonInterface) {
     );
 
     // Separate the properties
-    const { className, value, notice, ...buttonProperties } = properties;
+    const buttonProperties = removeProperties(properties, ['className', 'value', 'notice']);
 
     // Render the component
     return (

@@ -10,19 +10,23 @@ import { ButtonSizes } from '@structure/source/common/buttons/ButtonSizes';
 import { Tip } from '@structure/source/common/popovers/Tip';
 import { PopoverInterface } from '@structure/source/common/popovers/Popover';
 
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { addCommas } from '@structure/source/utilities/Number';
+// Dependencies - Animations
+import { useSpring, animated, easings, useTransition } from '@react-spring/web';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.svg';
 
-// Dependencies - Animations
-import { useSpring, animated, easings, useTransition } from '@react-spring/web';
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+import { addCommas } from '@structure/source/utilities/Number';
+import { removeProperties } from '@structure/source/utilities/React';
+
+// Types
+type ButtonElementType = HTMLButtonElement | HTMLAnchorElement;
 
 // Component - Button
-export interface ButtonInterface extends React.HTMLAttributes<HTMLElement> {
+export interface ButtonInterface extends React.HTMLAttributes<ButtonElementType> {
     variant?: keyof typeof ButtonVariants;
     size?: keyof typeof ButtonSizes;
     disabled?: boolean;
@@ -44,11 +48,11 @@ export interface ButtonInterface extends React.HTMLAttributes<HTMLElement> {
     type?: 'button' | 'submit' | 'reset' | undefined; // For form buttons, type should be set to submit
     onClick?: (event: React.MouseEvent<HTMLElement>) => void | Promise<void>;
 }
-export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
+export const Button = React.forwardRef<ButtonElementType, ButtonInterface>(function Button(
     properties: ButtonInterface,
-    reference: React.Ref<any>,
+    reference: React.Ref<ButtonElementType>,
 ) {
-    // References which persist across renders
+    // References
     const processingStartTimeReference = React.useRef<number>(0);
     const processingAnimationTimeoutReference = React.useRef<NodeJS.Timeout | null>(null);
     const processingAnimationRunningTimeoutReference = React.useRef<NodeJS.Timeout | null>(null);
@@ -61,13 +65,30 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
     const [processed, setProcessed] = React.useState<boolean>(false);
     const [tipContent, setTipContent] = React.useState<string | React.ReactNode>(properties.tip);
 
-    // Memoization
-    // Replace with useMemo
+    // Memoized
     const disabled = React.useMemo(
         function () {
             return properties.disabled ?? false;
         },
         [properties.disabled],
+    );
+    const loading = React.useMemo(
+        function () {
+            return properties.loading ?? false;
+        },
+        [properties.loading],
+    );
+    const processingAnimationEnabled = React.useMemo(
+        function () {
+            return (
+                properties.processingAnimation ??
+                properties.processingIcon ??
+                properties.processingText ??
+                properties.processing !== undefined ??
+                false
+            );
+        },
+        [properties.processingAnimation, properties.processingIcon, properties.processingText, properties.processing],
     );
 
     // Defaults
@@ -75,16 +96,8 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
     const size = properties.size || 'default';
     const Icon = properties.icon;
 
-    // The processing animation is enabled directly or indirectly by setting the processing icon, processing text, or by providing the processing property
-    const processingAnimationEnabled =
-        properties.processingAnimation ??
-        properties.processingIcon ??
-        properties.processingText ??
-        properties.processing !== undefined ??
-        false;
-
     // Function to start processing
-    function startProcessing() {
+    const startProcessing = React.useCallback(function () {
         // console.log('Start processing');
 
         // Clear any existing timeouts
@@ -114,7 +127,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
         processingStartTimeReference.current = processingStartTime;
 
         return processingStartTime;
-    }
+    }, []);
 
     // Function to end processing
     const endProcessing = React.useCallback(
@@ -181,7 +194,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 propertiesOnClick(event);
             }
         },
-        [propertiesShowProcessedTimeTip, propertiesOnClick, endProcessing, processingAnimationEnabled],
+        [propertiesShowProcessedTimeTip, propertiesOnClick, startProcessing, endProcessing, processingAnimationEnabled],
     );
 
     // Listen to changes in the processing property allowing the component to be controlled by the parent
@@ -215,7 +228,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                 }
             };
         },
-        [properties.processing, processing, endProcessing, properties.disabled, disabled],
+        [properties.processing, processing, startProcessing, endProcessing, properties.disabled, disabled],
     );
 
     // Animation - Processing State Icon Transition
@@ -323,60 +336,42 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
         }
     }
 
-    // If asChild is true, render a slot instead of a button
-    const Component = properties.href ? Link : 'button';
+    // Separate the DOM properties from the custom properties
+    const domProperties = removeProperties(properties, [
+        'loading',
+        'processing',
+        'processingText',
+        'processingIcon',
+        'processingSuccessIcon',
+        'processingAnimation',
+        'showProcessedTimeTip',
+        'tip',
+        'tipProperties',
+        'icon',
+        'iconPosition',
+        'iconClassName',
+        'variant',
+        'size',
+    ]);
 
-    // Separate the non-DOM properties from DOM properties
-    const {
-        loading: loadingProperty,
-        processing: processingProperty,
-        processingText: processingTextProperty,
-        processingIcon: processingIconProperty,
-        processingSuccessIcon: processingSuccessIconProperty,
-        processingAnimation: processingAnimationProperty,
-        showProcessedTimeTip: showProcessedTimeTipProperty,
-        tip: tipProperty,
-        tipProperties: tipPropertiesProperty,
-        icon: iconProperty,
-        iconPosition: iconPositionProperty,
-        iconClassName: iconClassNameProperty,
-        variant: variantProperty,
-        size: sizeProperty,
-        ...domProperties
-    } = properties;
+    // Determine the component properties
+    const componentProperties = {
+        ...domProperties,
+        className: mergeClassNames(
+            ButtonVariants[variant],
+            ButtonSizes[size],
+            properties.className,
+            properties.icon && properties.iconPosition == 'left' ? 'pl-2' : '',
+            !properties.icon && properties.iconPosition == 'left' ? 'pl-8' : '',
+            properties.iconPosition == 'right' ? 'justify-between' : '',
+            properties.className,
+        ),
+        onClick: onClickIntercept,
+    };
 
-    // If icon is defined and size is not "icon" and iconPosition is not defined, log a warning to the console
-    // if(iconProperty && size !== 'icon' && !iconPositionProperty) {
-    //     console.warn(
-    //         'A button icon is provided, but the size is not "icon" and the iconPosition is not defined. The icon will not be rendered unless a position is defined or the size is set to "icon".',
-    //         'Warning found in Button component: ',
-    //         properties.id ?? properties.title ?? properties.children ?? properties,
-    //         'Properties: ',
-    //         properties,
-    //         'Parent Element: ',
-    //         properties.id ? document.getElementById(properties.id)?.parentElement : 'Not found',
-    //     );
-    // }
-
-    // Render the button
-    let component = (
-        <Component
-            {...domProperties}
-            ref={reference}
-            className={mergeClassNames(
-                ButtonVariants[variant],
-                ButtonSizes[size],
-                properties.className,
-                properties.icon && properties.iconPosition == 'left' ? 'pl-2' : '',
-                !properties.icon && properties.iconPosition == 'left' ? 'pl-8' : '',
-                properties.iconPosition == 'right' ? 'justify-between' : '',
-                properties.className,
-            )}
-            // <Link> components cannot be disabled, otherwise set the disabled state
-            disabled={Component == Link ? undefined : disabled || processing}
-            href={properties.href ?? ''} // Use an empty string if href is not provided
-            onClick={onClickIntercept}
-        >
+    // Determine the component children
+    const componentChildren = (
+        <>
             {Icon && properties.iconPosition == 'left' && (
                 <Icon className={mergeClassNames('mr-2 h-4 w-4', properties.iconClassName)} />
             )}
@@ -385,7 +380,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
 
             {variant === 'formInputSelect' ? (
                 // The variant is form input select and the button is loading
-                properties.loading ? (
+                loading ? (
                     <>
                         <div className="flex-grow" />
                         <BrokenCircleIcon className="ml-4 h-4 w-4 animate-spin text-neutral+2 dark:text-neutral-2" />
@@ -398,7 +393,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
                     </>
                 )
             ) : // The variant is not a form input select
-            properties.loading ? (
+            loading ? (
                 <>
                     <div className="flex-grow" />
                     <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin text-inherit" />
@@ -408,12 +403,25 @@ export const Button = React.forwardRef<HTMLElement, ButtonInterface>(function (
             {Icon && properties.iconPosition == 'right' && (
                 <Icon className={mergeClassNames('ml-2 h-4 w-4', properties.iconClassName)} />
             )}
-        </Component>
+        </>
     );
 
-    // console.log('tipContent', tipContent);
+    // If the button is a link, render an anchor element, otherwise render a button element
+    let component = properties.href ? (
+        <Link ref={reference as React.Ref<HTMLAnchorElement>} href={properties.href} {...componentProperties}>
+            {componentChildren}
+        </Link>
+    ) : (
+        <button
+            ref={reference as React.Ref<HTMLButtonElement>}
+            disabled={disabled || processing}
+            {...componentProperties}
+        >
+            {componentChildren}
+        </button>
+    );
 
-    // If a tip is provided, wrap the button in a tip
+    // If a tip is provided, wrap the link or button in a tip
     if(properties.tip || (properties.showProcessedTimeTip && processed && processingAnimationRunning)) {
         component = (
             <Tip
