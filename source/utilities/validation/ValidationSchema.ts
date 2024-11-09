@@ -522,7 +522,12 @@ export class ValidationSchema {
         return this;
     }
 
-    graphQlQuery(validateGraphQlQueryDocument: DocumentNode, variables?: any) {
+    // GraphQL query
+    graphQlQuery(
+        validateGraphQlQueryDocument: DocumentNode,
+        variables: (value: any) => any,
+        skip?: (value: any) => boolean,
+    ) {
         // Create the validation rule
         const validationRule: ValidationRule = {
             identifier: 'graphQlQuery',
@@ -533,13 +538,6 @@ export class ValidationSchema {
         this.validationRuleInstances.push({
             validationRule: validationRule,
             validate: async function (value: any) {
-                // validate: async function (value: any, concurrentValidationResult: ValidationResult) {
-                // Skip validation if concurrent validation is not valid
-                // This will prevent making a request to the API if the value is already invalid
-                // if(!concurrentValidationResult?.valid) {
-                //     return;
-                // }
-
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -548,16 +546,20 @@ export class ValidationSchema {
                     successes: [],
                 };
 
+                // Skip validation if skip function returns true
+                if(skip && skip(value)) {
+                    return validationResult;
+                }
+
                 try {
+                    // Get the variables - either use the static variables or call the function
+                    const queryVariables = variables(value);
+
                     // Execute the GraphQL query
                     const queryState = await apolloClient.query({
                         query: validateGraphQlQueryDocument,
-                        variables: {
-                            ...variables,
-                            value: value,
-                        },
+                        variables: queryVariables,
                     });
-                    console.log('queryResult', queryState);
 
                     // If there is data, get first property from the data object as the result
                     // It could be named anything, e.g., queryState.data?.accountProfileUsernameValidate;
@@ -612,7 +614,6 @@ export class ValidationSchema {
             },
         });
 
-        // Return the validation schema for chaining
         return this;
     }
 

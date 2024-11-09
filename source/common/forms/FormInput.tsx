@@ -102,7 +102,7 @@ export function FormInput({
         [properties.validating],
     );
 
-    console.log('validationResult:', properties.validationResult);
+    // console.log('validationResult:', properties.validationResult);
     // console.log('properties.validationResult?.errors.length', properties.validationResult?.errors.length);
 
     // Render the component
