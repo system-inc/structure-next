@@ -492,7 +492,6 @@ export class ValidationSchema {
                     });
                 }
                 // If the value has characters other than letters, numbers, underscores, international characters, or period, add an error
-                // @ts-ignore -- FIXME: This regex is not working as expected with typescript@5.5 (looking into it here -- https://github.com/microsoft/TypeScript/issues/58287)
                 else if(!/^[a-zA-Z0-9_.\p{L}]+$/u.test(value)) {
                     validationResult.errors.push({
                         validationRule: validationRule,
@@ -565,7 +564,7 @@ export class ValidationSchema {
                     // It could be named anything, e.g., queryState.data?.accountProfileUsernameValidate;
                     // or queryState.data?.accountProjectNameValidate;
                     const uniqueFieldValidationResult = queryState.data ? Object.values(queryState.data)[0] : null;
-                    console.log('uniqueFieldValidationResult', uniqueFieldValidationResult);
+                    // console.log('uniqueFieldValidationResult', uniqueFieldValidationResult);
 
                     // Check the UniqueFieldValidationResult and add errors or successes accordingly
                     if(uniqueFieldValidationResult === UniqueFieldValidationResult.Available) {
