@@ -40,6 +40,9 @@ import { FormInputReferenceInterface, FormInputInterface } from '@structure/sour
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
 
+// Dependencies - Animations
+import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+
 // Dependencies - Utilities
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
@@ -76,6 +79,7 @@ export interface FormInterface {
     buttonProperties?: ButtonInterface;
     footer?: React.ReactNode;
     error?: React.ReactNode;
+    loading?: boolean;
     submittable?: boolean;
     submitting?: boolean;
     submitResponse?: FormSubmitResponseInterface;
@@ -426,6 +430,16 @@ export function Form(properties: FormInterface) {
     // Function to render form inputs
     const renderFormInputs = React.useMemo(
         function () {
+            if(properties.loading) {
+                return (
+                    <div className="space-y-4">
+                        {properties.formInputs.map(function (formInput) {
+                            return <PlaceholderAnimation key={formInput.props.id} className="h-[64px] w-full" />;
+                        })}
+                    </div>
+                );
+            }
+
             return properties.formInputs.map(function (formInput) {
                 // Get the reference to the form input
                 // const formInputReference = formInputsReferencesMap.get(formInput.props.id);
@@ -461,7 +475,6 @@ export function Form(properties: FormInterface) {
         },
         [
             properties.formInputs,
-            // formInputsReferencesMap,
             formInputsValidating,
             formInputsValidationResults,
             attachFormInputReference,
@@ -487,7 +500,7 @@ export function Form(properties: FormInterface) {
                 tabIndex={1}
                 {...buttonProperties}
                 type="submit"
-                disabled={submitting || !submittable || buttonProperties?.disabled}
+                disabled={properties.loading || submitting || !submittable || buttonProperties?.disabled}
                 processing={submitting || buttonProperties?.processing}
             >
                 {buttonProperties?.children ?? 'Submit'}
