@@ -50,7 +50,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Interface - Form Values
 export interface FormValuesInterface {
-    [key: string]: unknown;
+    [key: string]: any;
 }
 
 // Interface Form Inputs Validation Results
