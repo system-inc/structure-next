@@ -381,128 +381,125 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
     // Render the component
     return (
         <>
-            {properties.defaultValuesQuery && defaultValuesQueryState.loading && <div>Loading...</div>}
             {properties.defaultValuesQuery && defaultValuesQueryState.error && (
                 <div>Error: {defaultValuesQueryState.error.message}</div>
             )}
 
-            {((properties.defaultValuesQuery && defaultValuesQueryState.data) ||
-                properties.defaultValuesQuery === undefined) && (
-                <Form
-                    {...properties}
-                    formInputs={renderFormInputsUsingMutationDocument()}
-                    onSubmit={async function (formValues: FormValuesInterface) {
-                        console.log('Form onSubmit formValues:', formValues);
+            <Form
+                {...properties}
+                loading={properties.defaultValuesQuery && defaultValuesQueryState.loading}
+                formInputs={renderFormInputsUsingMutationDocument()}
+                onSubmit={async function (formValues: FormValuesInterface) {
+                    console.log('Form onSubmit formValues:', formValues);
 
-                        // Variables to store the mutation response data and error
-                        let mutationResponseData = null;
-                        let mutationResponseError = null;
+                    // Variables to store the mutation response data and error
+                    let mutationResponseData = null;
+                    let mutationResponseError = null;
 
-                        // We need to map the formValues to the mutation variables
-                        // The form values are in the form of { 'input.name': 'value' }
-                        // The mutation variables are in the form of { input: { name: 'value' } }
-                        function assignNestedValue(object: any, keyPath: string[], value: any) {
-                            const lastKeyIndex = keyPath.length - 1;
-                            for(let i = 0; i < lastKeyIndex; ++i) {
-                                const key = keyPath[i];
-                                if(key) {
-                                    if(!(key in object)) object[key] = {};
-                                    object = object[key];
-                                }
-                            }
-                            if(keyPath[lastKeyIndex]) {
-                                object[keyPath[lastKeyIndex]!] = value;
+                    // We need to map the formValues to the mutation variables
+                    // The form values are in the form of { 'input.name': 'value' }
+                    // The mutation variables are in the form of { input: { name: 'value' } }
+                    function assignNestedValue(object: any, keyPath: string[], value: any) {
+                        const lastKeyIndex = keyPath.length - 1;
+                        for(let i = 0; i < lastKeyIndex; ++i) {
+                            const key = keyPath[i];
+                            if(key) {
+                                if(!(key in object)) object[key] = {};
+                                object = object[key];
                             }
                         }
-
-                        const mutationVariables: any = {};
-                        for(const [key, value] of Object.entries(formValues)) {
-                            console.log('key:', key, 'value:', value);
-
-                            let graphQlValue = value;
-
-                            const keyParts = key.split('.');
-
-                            // Handle booleans
-                            if(value == 'Checked') {
-                                graphQlValue = true;
-                            }
-                            else if(value == 'Unchecked') {
-                                graphQlValue = false;
-                            }
-
-                            // TODO: Remove this
-                            // Hard coding this fix for now
-                            if(key == 'input.topicIds' && value) {
-                                graphQlValue = [value];
-                            }
-
-                            assignNestedValue(mutationVariables, keyParts, graphQlValue);
+                        if(keyPath[lastKeyIndex]) {
+                            object[keyPath[lastKeyIndex]!] = value;
                         }
-                        console.log('mutationVariables:', mutationVariables);
-                        // return; // Debug
+                    }
 
-                        // Invoke the GraphQL mutation
-                        try {
-                            const mutationResponse = await mutation({
-                                variables: {
-                                    ...mutationVariables,
-                                },
-                            });
-                            mutationResponseData = mutationResponse.data;
+                    const mutationVariables: any = {};
+                    for(const [key, value] of Object.entries(formValues)) {
+                        console.log('key:', key, 'value:', value);
+
+                        let graphQlValue = value;
+
+                        const keyParts = key.split('.');
+
+                        // Handle booleans
+                        if(value == 'Checked') {
+                            graphQlValue = true;
                         }
-                        catch(error: any) {
-                            // Handle any errors
-                            console.log('mutationResponseError:', error);
-
-                            // Cast the error as an ApolloError
-                            mutationResponseError = error as ApolloError;
+                        else if(value == 'Unchecked') {
+                            graphQlValue = false;
                         }
 
-                        // Prepare the submitResponse
-                        let submitResponse: { success: boolean; message: any } = {
-                            success: !mutationResponseError,
-                            message: undefined,
-                        };
-
-                        // If an onSubmit property has been provided
-                        if(properties.onSubmit) {
-                            // Invoke the onSubmit property
-                            await properties.onSubmit(formValues, mutationResponseData, mutationResponseError);
+                        // TODO: Remove this
+                        // Hard coding this fix for now
+                        if(key == 'input.topicIds' && value) {
+                            graphQlValue = [value];
                         }
-                        // If no onSubmit property has been provided, infer the submitResponse from the mutation response
+
+                        assignNestedValue(mutationVariables, keyParts, graphQlValue);
+                    }
+                    console.log('mutationVariables:', mutationVariables);
+                    // return; // Debug
+
+                    // Invoke the GraphQL mutation
+                    try {
+                        const mutationResponse = await mutation({
+                            variables: {
+                                ...mutationVariables,
+                            },
+                        });
+                        mutationResponseData = mutationResponse.data;
+                    }
+                    catch(error: any) {
+                        // Handle any errors
+                        console.log('mutationResponseError:', error);
+
+                        // Cast the error as an ApolloError
+                        mutationResponseError = error as ApolloError;
+                    }
+
+                    // Prepare the submitResponse
+                    let submitResponse: { success: boolean; message: any } = {
+                        success: !mutationResponseError,
+                        message: undefined,
+                    };
+
+                    // If an onSubmit property has been provided
+                    if(properties.onSubmit) {
+                        // Invoke the onSubmit property
+                        await properties.onSubmit(formValues, mutationResponseData, mutationResponseError);
+                    }
+                    // If no onSubmit property has been provided, infer the submitResponse from the mutation response
+                    else {
+                        // The message to display
+                        let message = <></>;
+
+                        // If there's been an error
+                        if(mutationResponseError) {
+                            message = (
+                                <Alert variant="error" title="Error">
+                                    <p>There&apos;s been an error: {mutationResponseError.message}.</p>
+                                    <p>{JSON.stringify(mutationResponseError)}</p>
+                                </Alert>
+                            );
+                        }
                         else {
-                            // The message to display
-                            let message = <></>;
-
-                            // If there's been an error
-                            if(mutationResponseError) {
-                                message = (
-                                    <Alert variant="error" title="Error">
-                                        <p>There&apos;s been an error: {mutationResponseError.message}.</p>
-                                        <p>{JSON.stringify(mutationResponseError)}</p>
-                                    </Alert>
-                                );
-                            }
-                            else {
-                                message = (
-                                    <Alert icon={CheckCircledIcon} title={<b>Success!</b>}>
-                                        <p>The form was submitted successfully.</p>
-                                        <p>{JSON.stringify(mutationResponseData)}</p>
-                                    </Alert>
-                                );
-                            }
-
-                            submitResponse = {
-                                success: !mutationResponseError,
-                                message: message,
-                            };
+                            message = (
+                                <Alert icon={CheckCircledIcon} title={<b>Success!</b>}>
+                                    <p>The form was submitted successfully.</p>
+                                    <p>{JSON.stringify(mutationResponseData)}</p>
+                                </Alert>
+                            );
                         }
 
-                        return submitResponse;
-                    }}
-                />
-            )}
+                        submitResponse = {
+                            success: !mutationResponseError,
+                            message: message,
+                        };
+                    }
+
+                    return submitResponse;
+                }}
+            />
         </>
     );
 }

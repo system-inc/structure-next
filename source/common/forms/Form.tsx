@@ -430,10 +430,17 @@ export function Form(properties: FormInterface) {
     // Function to render form inputs
     const renderFormInputs = React.useMemo(
         function () {
+            // If the form is loading
             if(properties.loading) {
+                // Render placeholder animations for each form input
                 return (
                     <div className="space-y-4">
                         {properties.formInputs.map(function (formInput) {
+                            // Skip placeholder for hidden inputs
+                            if(formInput.props.className?.includes('hidden')) {
+                                return null;
+                            }
+
                             return <PlaceholderAnimation key={formInput.props.id} className="h-[64px] w-full" />;
                         })}
                     </div>
@@ -474,6 +481,7 @@ export function Form(properties: FormInterface) {
             });
         },
         [
+            properties.loading,
             properties.formInputs,
             formInputsValidating,
             formInputsValidationResults,
