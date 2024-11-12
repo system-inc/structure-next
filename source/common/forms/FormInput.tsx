@@ -144,7 +144,8 @@ export function FormInput({
             {component}
 
             {/* Errors */}
-            {properties.validationResult?.errors &&
+            {!properties.validating &&
+                properties.validationResult?.errors &&
                 properties.validationResult.errors.length > 0 &&
                 properties.validationResult.errors.map((validationError, validationErrorIndex) => (
                     <div key={validationErrorIndex} className="mt-1.5 flex items-center space-x-1 text-xs text-red-500">
@@ -153,7 +154,8 @@ export function FormInput({
                 ))}
 
             {/* Successes */}
-            {properties.showValidationSuccessResults &&
+            {!properties.validating &&
+                properties.showValidationSuccessResults &&
                 properties.validationResult?.successes &&
                 properties.validationResult.successes.length > 0 &&
                 properties.validationResult.successes.map((validationSuccess, validationSuccessIndex) => (
