@@ -161,6 +161,7 @@ export function SupportPage() {
                                 email={selectedTicket.userEmailAddress}
                                 status={selectedTicket.status}
                                 createdAt={selectedTicket.createdAt}
+                                // assignedTo={selectedTicket.assignedTo}
                             />
 
                             {/* Comments */}
