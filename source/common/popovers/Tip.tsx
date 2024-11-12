@@ -54,7 +54,7 @@ export function Tip(properties: TipInterface) {
         <RadixTooltip.Root open={open} onOpenChange={onOpenChange} delayDuration={properties.delayInMilliseconds}>
             <RadixTooltip.Trigger
                 asChild
-                tabIndex={properties.tabIndex ?? 1}
+                tabIndex={properties.tabIndex ?? 0}
                 onKeyDown={function (event) {
                     // console.log('Tip.tsx onKeyDown', event.code);
 
