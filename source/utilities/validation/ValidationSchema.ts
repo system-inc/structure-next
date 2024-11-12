@@ -455,7 +455,7 @@ export class ValidationSchema {
     }
 
     // Username
-    username() {
+    username(currentUsername?: string) {
         this.minimumLength(3);
         this.maximumLength(32);
         this.optionalSingleInternalPeriod();
@@ -482,6 +482,16 @@ export class ValidationSchema {
                     errors: [],
                     successes: [],
                 };
+
+                // If this is the current username, only show that message
+                if(currentUsername && value === currentUsername) {
+                    validationResult.successes.push({
+                        validationRule: validationRule,
+                        identifier: 'currentUsername',
+                        message: 'Current username.',
+                    });
+                    return validationResult;
+                }
 
                 // If the value is invalid
                 if(typeof value !== 'string') {
