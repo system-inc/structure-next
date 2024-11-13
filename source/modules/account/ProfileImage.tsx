@@ -27,20 +27,8 @@ export function ProfileImage(properties: ProfileImageInterface) {
         // Set the alternate text
         alternateText = properties.alternateText;
 
-        // Split the alternate text into words
-        const alternateTextSplitWords = alternateText.split(' ');
-
         // If the alternate text is a username, use the first letter of the first word only, omitting the '@' symbol
-        if(alternateTextSplitWords.length === 1 && properties.alternateText.includes('@')) {
-            shortHandMoniker = properties.alternateText.charAt(1).toUpperCase();
-        }
-        // Otherwise, if the alternate text is a full name, use the first letter of each word
-        else {
-            shortHandMoniker = alternateTextSplitWords
-                .map((word) => word[0])
-                .join('')
-                .toUpperCase();
-        }
+        shortHandMoniker = properties.alternateText.charAt(0).toUpperCase();
     }
 
     // Render the component
