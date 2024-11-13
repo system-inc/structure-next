@@ -20,9 +20,9 @@ export interface TicketInformationInterface {
     email: string;
     status: string;
     createdAt: string;
-    // assignedTo?: string | null;
-    // onAssign: (email: string) => void;
-    // ticketId: string;
+    assignedToProfileId?: string | null;
+    onAssign: (profileId: string) => void;
+    ticketId: string;
 }
 
 export function TicketInformation(properties: TicketInformationInterface) {
@@ -35,10 +35,10 @@ export function TicketInformation(properties: TicketInformationInterface) {
                     className="w-48"
                     placeholder="Assign ticket"
                     items={SUPPORT_AGENTS}
-                    // defaultValue={properties.assignedTo || ''}
-                    // onChange={function (value) {
-                    //     properties.onAssign(value || '');
-                    // }}
+                    defaultValue={properties.assignedToProfileId || undefined}
+                    onChange={function (value) {
+                        properties.onAssign(value || '');
+                    }}
                 />
             </div>
             <div className="mt-2">

@@ -111,7 +111,16 @@ query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: Ord
             type
             title
             userEmailAddress
-            createdAt
+            assignedToProfileId
+            assignedToProfile {
+                username
+                displayName
+                imageUrls {
+                    type
+                    url
+                    variant
+                }
+            }
             comments {
                 id
                 source
@@ -125,6 +134,7 @@ query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: Ord
                 }
                 createdAt
             }
+            createdAt
         }
         pagination {
             itemIndex
@@ -134,6 +144,23 @@ query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: Ord
             itemsTotal
             page
             pagesTotal
+        }
+    }
+}
+
+# Support Ticket Assign Mutation
+mutation SupportTicketAssign($ticketId: String!, $assignToProfileId: String) {
+    supportTicketAssign(ticketId: $ticketId, assignToProfileId: $assignToProfileId) {
+        id
+        assignedToProfileId
+        assignedToProfile {
+            username
+            displayName
+            imageUrls {
+                type
+                url
+                variant
+            }
         }
     }
 }

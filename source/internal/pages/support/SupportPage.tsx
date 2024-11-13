@@ -38,12 +38,14 @@ export function SupportPage() {
     const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
     const commentsContainerRef = React.useRef<HTMLDivElement>(null);
     const [selectedStatus, setSelectedStatus] = React.useState<string>('Open');
+    const [showMyTickets, setShowMyTickets] = React.useState<boolean>(false);
 
     // Hooks
-    const { ticketsQuery, createComment, isManuallyRefreshing, handleManualRefresh } = useSupportTickets(
+    const { ticketsQuery, createComment, assignTicket, isManuallyRefreshing, handleManualRefresh } = useSupportTickets(
         page,
         itemsPerPage,
         selectedStatus,
+        showMyTickets,
     );
 
     // Dialog state for image carousel
@@ -64,6 +66,21 @@ export function SupportPage() {
             router.replace(`?${newParams.toString()}`);
         },
         [router, urlSearchParameters],
+    );
+
+    // Function to handle ticket assignment
+    const handleTicketAssign = React.useCallback(
+        async function (profileId: string) {
+            if(!selectedTicketId) return;
+
+            await assignTicket({
+                variables: {
+                    ticketId: selectedTicketId,
+                    assignToProfileId: profileId || null,
+                },
+            });
+        },
+        [assignTicket, selectedTicketId],
     );
 
     // Modify the auto-select effect to respect URL parameter
@@ -161,7 +178,9 @@ export function SupportPage() {
                                 email={selectedTicket.userEmailAddress}
                                 status={selectedTicket.status}
                                 createdAt={selectedTicket.createdAt}
-                                // assignedTo={selectedTicket.assignedTo}
+                                assignedToProfileId={selectedTicket.assignedToProfileId}
+                                onAssign={handleTicketAssign}
+                                ticketId={selectedTicket.id}
                             />
 
                             {/* Comments */}

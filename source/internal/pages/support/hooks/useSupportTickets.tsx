@@ -8,12 +8,41 @@ import {
     OrderByDirection,
     SupportTicketsAdminDocument,
     SupportTicketCommentCreateAdminDocument,
+    SupportTicketAssignDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Function to use support tickets
-export function useSupportTickets(page: number, itemsPerPage: number, selectedStatus: string) {
+export function useSupportTickets(
+    page: number,
+    itemsPerPage: number,
+    selectedStatus: string,
+    assignedToMe: boolean = false,
+) {
     // Add loading state for manual refresh
     const [isManuallyRefreshing, setIsManuallyRefreshing] = React.useState(false);
+
+    // Add assign mutation
+    const [assignTicket] = useMutation(SupportTicketAssignDocument, {
+        refetchQueries: ['SupportTicketsAdmin'],
+    });
+
+    // Build filters
+    const filters = [
+        {
+            column: 'status',
+            operator: ColumnFilterConditionOperator.Equal,
+            value: selectedStatus,
+        },
+    ];
+
+    // Add assigned to me filter
+    if(assignedToMe) {
+        filters.push({
+            column: 'assignedToProfileId',
+            operator: ColumnFilterConditionOperator.Equal,
+            value: 'current', // The API will replace this with the current user's ID
+        });
+    }
 
     // Queries
     const ticketsQuery = useQuery(SupportTicketsAdminDocument, {
@@ -21,13 +50,7 @@ export function useSupportTickets(page: number, itemsPerPage: number, selectedSt
             pagination: {
                 itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
-                filters: [
-                    {
-                        column: 'status',
-                        operator: ColumnFilterConditionOperator.Equal,
-                        value: selectedStatus,
-                    },
-                ],
+                filters,
             },
             orderBy: {
                 key: 'createdAt',
@@ -57,6 +80,7 @@ export function useSupportTickets(page: number, itemsPerPage: number, selectedSt
     return {
         ticketsQuery,
         createComment,
+        assignTicket,
         isManuallyRefreshing,
         handleManualRefresh,
     };
