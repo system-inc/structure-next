@@ -79,80 +79,76 @@ export function Pagination(properties: PaginationInterface) {
     // Render the component
     return (
         <div className={mergeClassNames('flex items-center justify-end space-x-10 text-sm', properties.className)}>
-            <div className="flex items-center space-x-2">
-                {itemsPerPageControl && properties.itemsTotal && (
-                    <p className="mr-10">{properties.itemsTotal} records</p>
-                )}
+            {itemsPerPageControl && (
+                <div className="flex items-center space-x-2">
+                    {properties.itemsTotal && <p className="mr-10">{properties.itemsTotal} records</p>}
 
-                {itemsPerPageControl && (
-                    <>
-                        <p>Show</p>
-                        <InputSelect
-                            key={itemsPerPage}
-                            className="w-[102px]"
-                            items={[
-                                {
-                                    value: '10',
-                                },
-                                {
-                                    value: '25',
-                                },
-                                {
-                                    value: '50',
-                                },
-                                {
-                                    value: '100',
-                                },
-                                {
-                                    value: '250',
-                                },
-                                {
-                                    value: '500',
-                                },
-                                {
-                                    value: '1000',
-                                    content: '1,000',
-                                },
-                            ]}
-                            defaultValue={itemsPerPage.toString()}
-                            onChange={function (value) {
-                                if(value) {
-                                    const newItemsPerPage = parseInt(value);
-                                    setItemsPerPage(newItemsPerPage);
+                    <p>Show</p>
+                    <InputSelect
+                        key={itemsPerPage}
+                        className="w-[102px]"
+                        items={[
+                            {
+                                value: '10',
+                            },
+                            {
+                                value: '25',
+                            },
+                            {
+                                value: '50',
+                            },
+                            {
+                                value: '100',
+                            },
+                            {
+                                value: '250',
+                            },
+                            {
+                                value: '500',
+                            },
+                            {
+                                value: '1000',
+                                content: '1,000',
+                            },
+                        ]}
+                        defaultValue={itemsPerPage.toString()}
+                        onChange={function (value) {
+                            if(value) {
+                                const newItemsPerPage = parseInt(value);
+                                setItemsPerPage(newItemsPerPage);
 
-                                    // Test case #1
-                                    // There are 90 items
-                                    // I start on with 10 items per page
-                                    // I go to page 2
-                                    // I switch to 100 items per page
-                                    // I should be on page 1
+                                // Test case #1
+                                // There are 90 items
+                                // I start on with 10 items per page
+                                // I go to page 2
+                                // I switch to 100 items per page
+                                // I should be on page 1
 
-                                    // Test case #2
-                                    // There are 90 items
-                                    // I start with 100 items per page and there is 1 page
-                                    // I switch to 10 items per page
-                                    // I should go to page 1
+                                // Test case #2
+                                // There are 90 items
+                                // I start with 100 items per page and there is 1 page
+                                // I switch to 10 items per page
+                                // I should go to page 1
 
-                                    // Test case #3
-                                    // There are 90 items
-                                    // I start with 10 items per page
-                                    // I go to page 4, starting item is 31
-                                    // I switch to 25 items per page
-                                    // I should be on page 2 with starting item 26
-                                    // const newPage = Math.max(
-                                    //     1,
-                                    //     Math.min(page, Math.ceil(properties.pagesTotal / newItemsPerPage)),
-                                    // );
+                                // Test case #3
+                                // There are 90 items
+                                // I start with 10 items per page
+                                // I go to page 4, starting item is 31
+                                // I switch to 25 items per page
+                                // I should be on page 2 with starting item 26
+                                // const newPage = Math.max(
+                                //     1,
+                                //     Math.min(page, Math.ceil(properties.pagesTotal / newItemsPerPage)),
+                                // );
 
-                                    const currentItem = (properties.page - 1) * itemsPerPage + 1;
-                                    const newPage = Math.ceil(currentItem / newItemsPerPage);
-                                    onChangeIntercept(newItemsPerPage, newPage);
-                                }
-                            }}
-                        />
-                    </>
-                )}
-            </div>
+                                const currentItem = (properties.page - 1) * itemsPerPage + 1;
+                                const newPage = Math.ceil(currentItem / newItemsPerPage);
+                                onChangeIntercept(newItemsPerPage, newPage);
+                            }
+                        }}
+                    />
+                </div>
+            )}
 
             <div className="flex items-center space-x-2">
                 {pageInputControl && (

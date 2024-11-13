@@ -2,31 +2,412 @@
 query CommerceOrdersAdmin($pagination: PaginationInputWithFilters) {
     commerceOrdersAdmin(input: $pagination) {
         items {
-            id
-            status
             batchIdentifier
+            beneficiaryEmailAddress
+            # checkoutSessionId
+            createdAt
+            # discounts {
+            #     code
+            #     createdAt
+            #     endsAt
+            #     id
+            #     startsAt
+            #     type
+            #     updatedAt
+            #     usageCount
+            # }
+            emailAddress
+            fulfillmentSource
+            fulfillmentStatus
+            holdOnShipping
+            id
             identifier
-            source
             lineItems {
+                commerceOrderId
+                createdAt
+                fulfilledQuantity
                 id
+                indexId
+                productVariantId
                 quantity
-            }
-            paymentStatus
-            payment {
-                amount
+                status
+                shippedQuantity
+                statusDescription
+                updatedAt
             }
             metadata
+            orderLogs {
+                commerceOrderId
+                content
+                id
+                description
+                createdAt
+                source
+                visibility
+            }
+            payment {
+                amount
+                authorizedAt
+                cancelledAt
+                capturedAt
+                confirmedAt
+                createdAt
+                currencyCode
+                externalReferenceId
+                id
+                paymentMethod {
+                    externalResourceId
+                    paymentProcessorType
+                    type
+                    ... on PaymentMethodCreditCard {
+                        externalResourceId
+                        billingAddress {
+                            city
+                            company
+                            country
+                            firstName
+                            lastName
+                            line1
+                            line2
+                            postalCode
+                            state
+                            phoneNumber
+                        }
+                        cardType
+                        expirationMonth
+                        expirationYear
+                        last4
+                        paymentProcessorType
+                        type
+                    }
+                    ... on PaymentMethodAppleInAppPurchase {
+                        externalResourceId
+                        paymentProcessorType
+                        type
+                    }
+                }
+                paymentProcessorType
+                status
+                statusDescription
+                updatedAt
+                walletEntryId
+            }
+            paymentId
+            paymentStatus
+            priceInfo {
+                amount
+                currencyCode
+                lineItemPrices {
+                    amount
+                    indexId
+                    originalSubtotal
+                    subtotal
+                    tax
+                }
+                originalSubtotal
+                shippingRate {
+                    amount
+                    breakdown {
+                        freeShipping
+                        items {
+                            indexId
+                            quantity
+                        }
+                        originalShippingRate
+                        packageIndexId
+                        shippingRate
+                    }
+                    originalAmount
+                }
+                subtotal
+                tax {
+                    shipping
+                    total
+                }
+            }
+            shipments {
+                cancelledAt
+                createdAt
+                createdByAccountId
+                createdByProfileId
+                deliveredAt
+                deliveryStatus
+                id
+                orderIndexId
+                label {
+                    carrier
+                    labelId
+                    serviceType
+                    source
+                    trackingNumber
+                    trackingUrl
+                }
+                orderSlip {
+                    storedObjectUrl
+                }
+                shippedAt
+                source
+                status
+                statusDescription
+                toAddress {
+                    city
+                    company
+                    country
+                    firstName
+                    lastName
+                    line1
+                    line2
+                    phoneNumber
+                    state
+                    postalCode
+                }
+                updatedAt
+                updatedByAccountId
+                updatedByProfileId
+            }
+            shippingInfo {
+                shippingAddress {
+                    city
+                    country
+                    company
+                    lastName
+                    firstName
+                    line1
+                    line2
+                    phoneNumber
+                    postalCode
+                    state
+                }
+            }
+            source
+            statusDescription
+            status
             updatedAt
+        }
+    }
+}
+
+# Commerce Cart Query
+query GetBagItems {
+    commerceCart {
+        id
+        identifier
+        createdAt
+        title
+        description
+        items {
+            id
+            quantity
+            firstName
+            lastName
+            relationship
+            emailAddress
+            productBundle {
+                id
+                items {
+                    quantity
+                    productVariant {
+                        id
+                        price {
+                            currencyCode
+                            amount
+                        }
+                        description
+                        name
+                    }
+                }
+            }
+            shippingAddress {
+                company
+                line1
+                line2
+                city
+                state
+                postalCode
+                country
+                firstName
+                lastName
+                phoneNumber
+            }
+        }
+    }
+}
+
+# Commerce Cart Update Mutation
+mutation UpdateBagWithItems($input: [ShoppingBagItemInput!]!) {
+    commerceCartUpdate(items: $input) {
+        id
+        identifier
+        title
+        description
+        items {
+            id
+            quantity
+            firstName
+            lastName
+            relationship
+            emailAddress
+            productBundle {
+                id
+                items {
+                    quantity
+                    productVariant {
+                        id
+                        price {
+                            currencyCode
+                            amount
+                        }
+                        description
+                        name
+                    }
+                }
+            }
+            shippingAddress {
+                company
+                line1
+                line2
+                city
+                state
+                postalCode
+                country
+                firstName
+                lastName
+                phoneNumber
+            }
+        }
+    }
+}
+
+# Commerce Shopping Bag Price Estimate Query
+query EstimateOrderPrice($itemIds: [String!]!) {
+    commerceShoppingBagPriceEstimate(itemIds: $itemIds) {
+        amount
+        currencyCode
+        lineItemPrices {
+            amount
+            indexId
+            originalSubtotal
+            subtotal
+            tax
+        }
+        originalSubtotal
+        shippingRate {
+            amount
+            originalAmount
+            breakdown {
+                freeShipping
+                originalShippingRate
+                shippingRate
+                packageIndexId
+                items {
+                    indexId
+                    quantity
+                }
+            }
+        }
+        subtotal
+        tax {
+            shipping
+            total
+        }
+    }
+}
+
+# Commerce Shopping Bag Checkout Mutation
+mutation BagCheckout($input: ShoppingBagCheckoutInput!) {
+    commerceShoppingBagCheckout(input: $input) {
+        id
+        batchIdentifier
+        holdOnShipping
+        fulfillmentStatus
+        emailAddress
+        identifier
+        payment {
+            amount
+            authorizedAt
+            cancelledAt
+            capturedAt
+            confirmedAt
             createdAt
+            currencyCode
+            externalReferenceId
+            id
+            paymentProcessorType
+            status
+            statusDescription
+            updatedAt
+            walletEntryId
         }
-        pagination {
-            itemsTotal
-            itemsPerPage
-            page
-            pagesTotal
-            itemIndex
-            itemIndexForNextPage
-            itemIndexForPreviousPage
+        paymentId
+        paymentStatus
+        priceInfo {
+            amount
+            currencyCode
+            originalSubtotal
+            subtotal
+            lineItemPrices {
+                amount
+                indexId
+                originalSubtotal
+                subtotal
+                tax
+            }
+            shippingRate {
+                amount
+                originalAmount
+            }
+            tax {
+                shipping
+                total
+            }
         }
+        source
+        status
+        statusDescription
+        shippingInfo {
+            shippingAddress {
+                company
+                line1
+                line2
+                city
+                state
+                postalCode
+                country
+                firstName
+                lastName
+                phoneNumber
+            }
+        }
+        lineItems {
+            id
+            createdAt
+            updatedAt
+            indexId
+            quantity
+            fulfilledQuantity
+            shippedQuantity
+            status
+            statusDescription
+            productVariantId
+            commerceOrderId
+        }
+    }
+}
+
+# Commerce Checkout Session Create Mutation
+mutation CommerceCheckoutSessionCreate($input: CommerceCheckoutSessionCreateInput!) {
+    commerceCheckoutSessionCreate(input: $input) {
+        id
+        status
+        orders {
+            id
+            status
+            paymentStatus
+        }
+        externalMetadata
+        failedCount
+        closedAt
+        completedAt
+        createdAt
     }
 }
