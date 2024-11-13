@@ -1,0 +1,32 @@
+# Commerce Orders Admin Query
+query CommerceOrdersAdmin($pagination: PaginationInputWithFilters) {
+    commerceOrdersAdmin(input: $pagination) {
+        items {
+            id
+            status
+            batchIdentifier
+            identifier
+            source
+            lineItems {
+                id
+                quantity
+            }
+            paymentStatus
+            payment {
+                amount
+            }
+            metadata
+            updatedAt
+            createdAt
+        }
+        pagination {
+            itemsTotal
+            itemsPerPage
+            page
+            pagesTotal
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+        }
+    }
+}
