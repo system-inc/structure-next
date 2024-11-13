@@ -502,7 +502,7 @@ export class ValidationSchema {
                     });
                 }
                 // If the value has characters other than letters, numbers, underscores, international characters, or period, add an error
-                else if(!/^[a-zA-Z0-9_.\p{L}]+$/u.test(value)) {
+                else if(!/^[a-zA-Z0-9_.]+$/.test(value)) {
                     validationResult.errors.push({
                         validationRule: validationRule,
                         identifier: 'invalidUsername',

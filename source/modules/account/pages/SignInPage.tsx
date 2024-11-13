@@ -7,8 +7,7 @@ import React from 'react';
 import { AuthenticationPage } from '@structure/source/modules/account/pages/AuthenticationPage';
 
 // Component - SignInPage
-export interface SignInPageInterface {}
-export function SignInPage(properties: SignInPageInterface) {
+export function SignInPage() {
     // Render the component
     return <AuthenticationPage scope="SignIn" />;
 }

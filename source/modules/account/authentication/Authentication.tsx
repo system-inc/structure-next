@@ -191,12 +191,19 @@ export function Authentication(properties: AuthenticationInterface) {
         }
     }
     // Challenge - Email Verification
-    else if(authenticationSession?.currentChallenge?.challengeType == 'EmailVerification') {
+    else if(
+        authenticationSession?.currentChallenge?.challengeType == 'EmailVerification' &&
+        emailAddress !== undefined
+    ) {
         currentAuthenticationComponent = (
             <EmailVerificationChallenge
                 emailAddress={emailAddress!}
                 onSuccess={function (authenticationSession) {
                     setAuthenticationSession(authenticationSession);
+                }}
+                onChangeEmail={function () {
+                    setEmailAddress(undefined);
+                    setAuthenticationSession(undefined);
                 }}
             />
         );
