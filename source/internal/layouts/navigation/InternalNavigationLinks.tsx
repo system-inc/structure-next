@@ -1,8 +1,5 @@
-// Dependencies - React and Next.js
-import React from 'react';
-
 // Dependencies - Main Components
-import { InternalNavigationLinkInterface, InternalNavigationLink } from './InternalNavigationLink';
+import { InternalNavigationLinkInterface } from './InternalNavigationLink';
 
 // Dependencies - Assets
 import HomeIcon from '@structure/assets/icons/structures/HomeIcon.svg';
@@ -133,21 +130,26 @@ export const InternalNavigationLinks: InternalNavigationLinkInterface[] = [
             },
         ],
     },
-    // Customers Group
+    // Users Group
     {
-        title: 'Customers',
-        href: '/internal/customers',
+        title: 'Users',
+        href: '/internal/users',
         icon: UsersIcon,
         links: [
+            // Roles Page
+            {
+                title: 'Roles',
+                href: '/internal/users/roles',
+            },
             // Segments Page
             {
                 title: 'Segments',
-                href: '/internal/customers/segments',
+                href: '/internal/users/segments',
             },
             // Wait Lists
             {
                 title: 'Wait Lists',
-                href: '/internal/customers/wait-lists',
+                href: '/internal/users/wait-lists',
             },
         ],
     },

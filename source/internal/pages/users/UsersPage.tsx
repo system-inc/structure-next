@@ -4,17 +4,16 @@ import React from 'react';
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
-// Component - CustomersPage
-export type CustomersPageProperties = {};
-export function CustomersPage(properties: CustomersPageProperties) {
+// Component - UsersPage
+export function UsersPage() {
     // Render the component
     return (
         <div className="px-6 py-4">
             <InternalNavigationTrail />
-            <h1>Customers</h1>
+            <h1>Users</h1>
         </div>
     );
 }
 
 // Export - Default
-export default CustomersPage;
+export default UsersPage;

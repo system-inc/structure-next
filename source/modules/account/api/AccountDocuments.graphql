@@ -172,13 +172,9 @@ query AccountCurrent {
         }
         roles {
             id
-            expiresAt
             type
             status
-            createdByAccountId
-            updatedByAccountId
-            createdByProfileId
-            updatedByProfileId
+            expiresAt
             updatedAt
             createdAt
         }
@@ -228,5 +224,104 @@ query ProfilePublic($username: String!) {
             variant
         }
         createdAt
+    }
+}
+
+# Account Assignable Roles Query
+query AccountAssignableRoles {
+    accountAssignableRoles
+}
+
+# Account Roles Query
+query AccountRoles($statuses: [String!], $orderBy: OrderBy) {
+    accountRoles(statuses: $statuses, orderBy: $orderBy) {
+        id
+        type
+        status
+        profile {
+            username
+            displayName
+            imageUrls {
+                type
+                url
+                variant
+            }
+            createdAt
+        }
+        expiresAt
+        createdAt
+        updatedAt
+    }
+}
+
+# Account Role Revoke Mutation
+mutation AccountRoleRevoke($roleId: String!) {
+    accountRoleRevoke(roleId: $roleId) {
+        success
+    }
+}
+
+# Account Role Grant Mutation
+mutation AccountRoleGrant($input: GrantAccessRoleInput!) {
+    accountRoleGrant(input: $input) {
+        id
+        type
+        status
+        profile {
+            username
+            displayName
+            imageUrls {
+                type
+                url
+                variant
+            }
+            createdAt
+        }
+        expiresAt
+        createdAt
+        updatedAt
+    }
+}
+
+# Accounts Admin Query
+query AccountsAdmin($pagination: PaginationInput) {
+    accountsAdmin(pagination: $pagination) {
+        items {
+            emailAddress
+            profiles {
+                username
+                displayName
+                imageUrls {
+                    url
+                    variant
+                }
+                createdAt
+            }
+        }
+        pagination {
+            itemsTotal
+            itemsPerPage
+            page
+            pagesTotal
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+        }
+    }
+}
+
+# Account By Email Address Admin Query
+query AccountByEmailAddressAdmin($emailAddress: String!) {
+    accountByEmailAddressAdmin(emailAddress: $emailAddress) {
+        emailAddress
+        profiles {
+            username
+            displayName
+            imageUrls {
+                url
+                variant
+            }
+            createdAt
+        }
     }
 }

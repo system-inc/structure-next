@@ -13,7 +13,7 @@ import { useQuery, ApolloError, TypedDocumentNode } from '@apollo/client';
 
 // Dependencies - Utilities
 import { flattenObject } from '@structure/source/utilities/Object';
-import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
+import { titleCase } from '@structure/source/utilities/String';
 
 // Component - GraphQlMutationForm
 export interface GraphQlQueryTableInterface<VariableType>
@@ -83,7 +83,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
                 columnIdentifierForTitleCase = columnIdentifierForTitleCase.replaceAll('-', ' ');
                 columnIdentifierForTitleCase = columnIdentifierForTitleCase.replaceAll('__typename', 'TypeName');
 
-                let columnTitle = titleCase(columnIdentifierForTitleCase);
+                const columnTitle = titleCase(columnIdentifierForTitleCase);
 
                 columns.push({
                     identifier: columnIdentifier,

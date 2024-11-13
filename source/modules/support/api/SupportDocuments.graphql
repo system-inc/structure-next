@@ -149,8 +149,8 @@ query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: Ord
 }
 
 # Support Ticket Assign Mutation
-mutation SupportTicketAssign($ticketId: String!, $assignToProfileId: String) {
-    supportTicketAssign(ticketId: $ticketId, assignToProfileId: $assignToProfileId) {
+mutation SupportTicketAssign($ticketId: String!, $username: String) {
+    supportTicketAssign(ticketId: $ticketId, username: $username) {
         id
         assignedToProfileId
         assignedToProfile {
@@ -174,5 +174,18 @@ mutation SupportTicketCommentCreateAdmin($input: SupportTicketCommentCreateInput
         source
         visibility
         createdAt
+    }
+}
+
+# Support All Support Profiles Query
+query SupportAllSupportProfiles {
+    supportAllSupportProfiles {
+        username
+        displayName
+        imageUrls {
+            type
+            url
+            variant
+        }
     }
 }

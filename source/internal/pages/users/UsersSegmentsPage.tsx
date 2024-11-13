@@ -4,8 +4,8 @@ import React from 'react';
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
-// Component - CustomersSegmentsPage
-export function CustomersSegmentsPage() {
+// Component - UsersSegmentsPage
+export function UsersSegmentsPage() {
     // Render the component
     return (
         <div className="px-6 py-4">
@@ -16,4 +16,4 @@ export function CustomersSegmentsPage() {
 }
 
 // Export - Default
-export default CustomersSegmentsPage;
+export default UsersSegmentsPage;

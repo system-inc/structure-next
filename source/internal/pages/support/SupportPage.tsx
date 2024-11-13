@@ -41,12 +41,14 @@ export function SupportPage() {
     const [showMyTickets, setShowMyTickets] = React.useState<boolean>(false);
 
     // Hooks
-    const { ticketsQuery, createComment, assignTicket, isManuallyRefreshing, handleManualRefresh } = useSupportTickets(
-        page,
-        itemsPerPage,
-        selectedStatus,
-        showMyTickets,
-    );
+    const {
+        ticketsQuery,
+        createComment,
+        assignTicket,
+        isManuallyRefreshing,
+        handleManualRefresh,
+        supportProfilesQuery,
+    } = useSupportTickets(page, itemsPerPage, selectedStatus, showMyTickets);
 
     // Dialog state for image carousel
     const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -70,13 +72,13 @@ export function SupportPage() {
 
     // Function to handle ticket assignment
     const handleTicketAssign = React.useCallback(
-        async function (profileId: string) {
+        async function (username: string) {
             if(!selectedTicketId) return;
 
             await assignTicket({
                 variables: {
                     ticketId: selectedTicketId,
-                    assignToProfileId: profileId || null,
+                    username: username || null,
                 },
             });
         },
@@ -179,8 +181,11 @@ export function SupportPage() {
                                 status={selectedTicket.status}
                                 createdAt={selectedTicket.createdAt}
                                 assignedToProfileId={selectedTicket.assignedToProfileId}
+                                assignedToProfile={selectedTicket.assignedToProfile}
                                 onAssign={handleTicketAssign}
                                 ticketId={selectedTicket.id}
+                                supportProfiles={supportProfilesQuery.data?.supportAllSupportProfiles}
+                                isLoadingProfiles={supportProfilesQuery.loading}
                             />
 
                             {/* Comments */}

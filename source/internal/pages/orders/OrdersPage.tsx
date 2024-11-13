@@ -5,8 +5,7 @@ import React from 'react';
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
 // Component - OrdersPage
-export type OrdersPageProperties = {};
-export function OrdersPage(properties: OrdersPageProperties) {
+export function OrdersPage() {
     // Render the component
     return (
         <div className="px-6 py-4">

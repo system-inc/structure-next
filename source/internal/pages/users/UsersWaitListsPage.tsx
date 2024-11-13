@@ -11,22 +11,21 @@ import { GraphQlOperationForm } from '@structure/source/api/GraphQlOperationForm
 // Dependencies - API
 import { WaitListsDocument, WaitListCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
 
-// Component - CustomersWaitListsPage
-export type CustomersWaitListsPageProperties = {};
-export function CustomersWaitListsPage(properties: CustomersWaitListsPageProperties) {
+// Component - UsersWaitListsPage
+export function UsersWaitListsPage() {
     // Render the component
     return (
-        <>
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
 
             <h1 className="mb-6">Wait Lists</h1>
 
-            <GraphQlOperationForm operation={WaitListCreateOperation} />
+            <GraphQlOperationForm className="mb-12" operation={WaitListCreateOperation} />
 
-            <GraphQlQueryTable queryDocument={WaitListsDocument} />
-        </>
+            <GraphQlQueryTable className="" queryDocument={WaitListsDocument} />
+        </div>
     );
 }
 
 // Export - Default
-export default CustomersWaitListsPage;
+export default UsersWaitListsPage;

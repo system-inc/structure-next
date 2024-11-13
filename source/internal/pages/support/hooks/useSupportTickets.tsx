@@ -9,6 +9,7 @@ import {
     SupportTicketsAdminDocument,
     SupportTicketCommentCreateAdminDocument,
     SupportTicketAssignDocument,
+    SupportAllSupportProfilesDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Function to use support tickets
@@ -38,9 +39,9 @@ export function useSupportTickets(
     // Add assigned to me filter
     if(assignedToMe) {
         filters.push({
-            column: 'assignedToProfileId',
+            column: 'assignedToUsername',
             operator: ColumnFilterConditionOperator.Equal,
-            value: 'current', // The API will replace this with the current user's ID
+            value: 'current', // The API will replace this with the current user's username
         });
     }
 
@@ -66,6 +67,9 @@ export function useSupportTickets(
         refetchQueries: ['SupportTicketsAdmin'],
     });
 
+    // Query for support profiles
+    const supportProfilesQuery = useQuery(SupportAllSupportProfilesDocument);
+
     // Function to handle manual refresh
     const handleManualRefresh = React.useCallback(
         function () {
@@ -83,5 +87,6 @@ export function useSupportTickets(
         assignTicket,
         isManuallyRefreshing,
         handleManualRefresh,
+        supportProfilesQuery,
     };
 }
