@@ -201,6 +201,10 @@ export function Authentication(properties: AuthenticationInterface) {
                 onSuccess={function (authenticationSession) {
                     setAuthenticationSession(authenticationSession);
                 }}
+                onChangeEmail={function () {
+                    setEmailAddress(undefined);
+                    setAuthenticationSession(undefined);
+                }}
             />
         );
     }
