@@ -191,7 +191,10 @@ export function Authentication(properties: AuthenticationInterface) {
         }
     }
     // Challenge - Email Verification
-    else if(authenticationSession?.currentChallenge?.challengeType == 'EmailVerification') {
+    else if(
+        authenticationSession?.currentChallenge?.challengeType == 'EmailVerification' &&
+        emailAddress !== undefined
+    ) {
         currentAuthenticationComponent = (
             <EmailVerificationChallenge
                 emailAddress={emailAddress!}
