@@ -20,7 +20,7 @@ export function OrdersPage() {
     const urlSearchParameters = useUrlSearchParameters();
     const page = parseInt(urlSearchParameters.get('page') as string) || 1;
     const itemsPerPage = 10;
-    const [totalOrders, setTotalOrders] = React.useState<number>(0);
+    const [totalOrders] = React.useState<number>(0);
 
     // Query
     const ordersQueryState = useQuery(CommerceOrdersAdminDocument, {
@@ -100,7 +100,7 @@ export function OrdersPage() {
 
                                 {/* Desktop View */}
                                 <div className="hidden truncate md:block">
-                                    <Link href={`/orders/${order.identifier}`} className="hover:underline">
+                                    <Link href={`/internal/orders/${order.identifier}`} className="hover:underline">
                                         {order.identifier}
                                     </Link>
                                 </div>
