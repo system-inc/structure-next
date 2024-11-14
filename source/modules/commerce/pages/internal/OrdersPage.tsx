@@ -14,6 +14,9 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 import { useQuery } from '@apollo/client';
 import { CommerceOrdersAdminDocument } from '@project/source/api/GraphQlGeneratedCode';
 
+// Dependencies - Utilities
+import { timeAgo, dayNameWithFullDate } from '@structure/source/utilities/Time';
+
 // Component - OrdersPage
 export function OrdersPage() {
     // Hooks and State
@@ -86,7 +89,7 @@ export function OrdersPage() {
                         {ordersQueryState.data.commerceOrdersAdmin.items.map((order) => (
                             <div
                                 key={order.id}
-                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px]"
+                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px_400px]"
                             >
                                 {/* Mobile View */}
                                 <div className="md:hidden">
@@ -95,6 +98,10 @@ export function OrdersPage() {
                                     <div className="neutral text-sm">{order.status}</div>
                                     <div className="neutral text-sm">
                                         {order.priceInfo && formatCurrency(order.priceInfo.amount)}
+                                    </div>
+                                    <div className="mt-1 text-xs text-gray-500">
+                                        dayNameWithFullDate(new Date(order.createdAt)) (
+                                        {timeAgo(new Date(order.createdAt).getTime())})
                                     </div>
                                 </div>
 
@@ -108,6 +115,10 @@ export function OrdersPage() {
                                 <div className="neutral hidden truncate md:block">{order.status}</div>
                                 <div className="neutral hidden truncate md:block">
                                     {order.priceInfo && formatCurrency(order.priceInfo.amount)}
+                                </div>
+                                <div className="neutral hidden truncate md:block">
+                                    {dayNameWithFullDate(new Date(order.createdAt))} (
+                                    {timeAgo(new Date(order.createdAt).getTime())})
                                 </div>
                             </div>
                         ))}
