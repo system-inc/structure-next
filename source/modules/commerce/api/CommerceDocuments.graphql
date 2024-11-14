@@ -1,6 +1,6 @@
 # Commerce Orders Admin Query
-query CommerceOrdersAdmin($pagination: PaginationInputWithFilters) {
-    commerceOrdersAdmin(input: $pagination) {
+query CommerceOrdersAdmin($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
+    commerceOrdersAdmin(input: $pagination, orderBy: $orderBy) {
         items {
             batchIdentifier
             beneficiaryEmailAddress
@@ -183,6 +183,15 @@ query CommerceOrdersAdmin($pagination: PaginationInputWithFilters) {
             statusDescription
             status
             updatedAt
+        }
+        pagination {
+            itemsTotal
+            itemsPerPage
+            page
+            pagesTotal
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
         }
     }
 }

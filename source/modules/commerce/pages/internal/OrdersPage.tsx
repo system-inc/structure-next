@@ -12,7 +12,7 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { CommerceOrdersAdminDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { CommerceOrdersAdminDocument, OrderByDirection } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { timeAgo, dayNameWithFullDate } from '@structure/source/utilities/Time';
@@ -23,17 +23,31 @@ export function OrdersPage() {
     const urlSearchParameters = useUrlSearchParameters();
     const page = parseInt(urlSearchParameters.get('page') as string) || 1;
     const itemsPerPage = 10;
-    const [totalOrders] = React.useState<number>(0);
+    const [totalOrders, setTotalOrders] = React.useState<number>(0);
 
     // Query
     const ordersQueryState = useQuery(CommerceOrdersAdminDocument, {
         variables: {
+            orderBy: {
+                key: 'createdAt',
+                direction: OrderByDirection.Descending,
+            },
             pagination: {
                 itemsPerPage: itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
             },
         },
     });
+
+    // Effects
+    React.useEffect(
+        function () {
+            if(ordersQueryState.data?.commerceOrdersAdmin.pagination?.itemsTotal) {
+                setTotalOrders(ordersQueryState.data.commerceOrdersAdmin.pagination.itemsTotal);
+            }
+        },
+        [ordersQueryState.data?.commerceOrdersAdmin.pagination?.itemsTotal],
+    );
 
     // Functions
     function formatCurrency(amount: number): string {

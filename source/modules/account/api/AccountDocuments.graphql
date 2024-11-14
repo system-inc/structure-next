@@ -238,6 +238,7 @@ query AccountRoles($statuses: [String!], $orderBy: OrderBy) {
         id
         type
         status
+        primaryAccountEmailAddress
         profile {
             username
             displayName
@@ -323,5 +324,12 @@ query AccountByEmailAddressAdmin($emailAddress: String!) {
             }
             createdAt
         }
+    }
+}
+
+# Account Delete Admin Mutation
+mutation AccountDeleteAdmin($emailAddress: String!) {
+    accountDeleteAdmin(emailAddress: $emailAddress) {
+        success
     }
 }

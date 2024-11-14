@@ -10,10 +10,14 @@ import InternalNavigationTrail from '@structure/source/internal/layouts/navigati
 import { Pagination } from '@structure/source/common/navigation/Pagination';
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 import { ProfileImage } from '@structure/source/modules/account/ProfileImage';
+import { Dialog } from '@structure/source/common/dialogs/Dialog';
+import { Button } from '@structure/source/common/buttons/Button';
+import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { AccountsAdminDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { useQuery, useMutation } from '@apollo/client';
+import { AccountsAdminDocument, AccountDeleteAdminDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { apolloErrorToMessage } from '@structure/source/api/GraphQlUtilities';
 
 // Component - UsersPage
 export function UsersPage() {
@@ -22,6 +26,9 @@ export function UsersPage() {
     const page = parseInt(urlSearchParameters.get('page') as string) || 1;
     const itemsPerPage = 10;
     const [totalUsers, setTotalUsers] = React.useState<number>(0);
+    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+    const [selectedUser, setSelectedUser] = React.useState<{ emailAddress: string; username: string } | null>(null);
+    const [deleteSuccess, setDeleteSuccess] = React.useState(false);
 
     // Query
     const usersQueryState = useQuery(AccountsAdminDocument, {
@@ -33,6 +40,9 @@ export function UsersPage() {
         },
     });
 
+    // Mutation
+    const [deleteMutation, deleteMutationState] = useMutation(AccountDeleteAdminDocument);
+
     // Effects
     React.useEffect(
         function () {
@@ -42,6 +52,35 @@ export function UsersPage() {
         },
         [usersQueryState.data?.accountsAdmin.pagination?.itemsTotal],
     );
+
+    // Function to handle user deletion
+    async function handleDeleteConfirm() {
+        if(!selectedUser) return;
+
+        try {
+            const result = await deleteMutation({
+                variables: {
+                    emailAddress: selectedUser.emailAddress,
+                },
+            });
+
+            if(result.data?.accountDeleteAdmin.success) {
+                setDeleteSuccess(true);
+                // Refresh the users list
+                await usersQueryState.refetch();
+            }
+        }
+        catch(error) {
+            // Error is handled in the dialog via deleteMutationState.error
+        }
+    }
+
+    // Function to handle dialog close
+    function handleDialogClose() {
+        setDeleteDialogOpen(false);
+        setSelectedUser(null);
+        setDeleteSuccess(false);
+    }
 
     // Render the component
     return (
@@ -71,9 +110,9 @@ export function UsersPage() {
                                 </div>
 
                                 {/* Desktop: Column Info Placeholders */}
-                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
-                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
-                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
+                                <PlaceholderAnimation className="md/block hidden h-5 w-40" />
+                                <PlaceholderAnimation className="md/block hidden h-5 w-40" />
+                                <PlaceholderAnimation className="md/block hidden h-5 w-40" />
                             </div>
                         ))}
                     </div>
@@ -86,7 +125,7 @@ export function UsersPage() {
                         {usersQueryState.data.accountsAdmin.items.map((account) => (
                             <div
                                 key={account.emailAddress}
-                                className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_160px_160px_1fr]"
+                                className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_160px_160px_1fr_100px]"
                             >
                                 {/* Use ProfileImage instead of UserAvatar */}
                                 <div className="relative h-8 w-8">
@@ -116,6 +155,20 @@ export function UsersPage() {
                                         {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                     </div>
                                     <div className="neutral truncate text-sm">{account.emailAddress}</div>
+                                    <Button
+                                        variant="destructive"
+                                        size="sm"
+                                        className="mt-2"
+                                        onClick={() => {
+                                            setSelectedUser({
+                                                emailAddress: account.emailAddress,
+                                                username: account.profiles[0]?.username || '',
+                                            });
+                                            setDeleteDialogOpen(true);
+                                        }}
+                                    >
+                                        Delete
+                                    </Button>
                                 </div>
 
                                 {/* Desktop View */}
@@ -136,6 +189,20 @@ export function UsersPage() {
                                     {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                 </div>
                                 <div className="neutral hidden truncate text-sm md:block">{account.emailAddress}</div>
+                                <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    className="hidden md:block"
+                                    onClick={() => {
+                                        setSelectedUser({
+                                            emailAddress: account.emailAddress,
+                                            username: account.profiles[0]?.username || '',
+                                        });
+                                        setDeleteDialogOpen(true);
+                                    }}
+                                >
+                                    Delete
+                                </Button>
                             </div>
                         ))}
                     </>
@@ -159,6 +226,48 @@ export function UsersPage() {
                     </div>
                 )}
             </div>
+
+            {/* Delete User Dialog */}
+            <Dialog
+                open={deleteDialogOpen}
+                onOpenChange={handleDialogClose}
+                header={deleteSuccess ? 'User Deleted' : 'Confirm User Deletion'}
+                content={
+                    deleteSuccess ? (
+                        <p>The user has been successfully deleted.</p>
+                    ) : (
+                        <>
+                            <p>
+                                Are you sure you want to delete the user <b>@{selectedUser?.username}</b> with email{' '}
+                                <b>{selectedUser?.emailAddress}</b>?
+                            </p>
+                            {deleteMutationState.error && (
+                                <Alert
+                                    className="mt-4"
+                                    variant="error"
+                                    title={apolloErrorToMessage(deleteMutationState.error)}
+                                />
+                            )}
+                        </>
+                    )
+                }
+                footer={
+                    deleteSuccess ? (
+                        <Button onClick={handleDialogClose}>Close</Button>
+                    ) : (
+                        <div className="flex justify-end space-x-2">
+                            <Button onClick={handleDialogClose}>Cancel</Button>
+                            <Button
+                                variant="destructive"
+                                onClick={handleDeleteConfirm}
+                                processing={deleteMutationState.loading}
+                            >
+                                Delete User
+                            </Button>
+                        </div>
+                    )
+                }
+            />
         </div>
     );
 }

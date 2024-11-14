@@ -17,7 +17,12 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
-import { AccountRolesDocument, AccountRoleRevokeDocument } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    AccountRolesDocument,
+    AccountRolesQuery,
+    AccountRoleRevokeDocument,
+    OrderByDirection,
+} from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/GraphQlUtilities';
 
 // Dependencies - Utilities
@@ -34,6 +39,10 @@ export function UsersRolesPage() {
     const assignedRolesQueryState = useQuery(AccountRolesDocument, {
         variables: {
             statuses: ['Active'],
+            orderBy: {
+                key: 'createdAt',
+                direction: OrderByDirection.Descending,
+            },
         },
     });
     const [revokeMutation, revokeMutationState] = useMutation(AccountRoleRevokeDocument);
@@ -68,8 +77,8 @@ export function UsersRolesPage() {
     }
 
     // Utility function to group roles by type
-    function groupRolesByType(roles: any[]) {
-        return roles.reduce((groups: { [key: string]: any[] }, role) => {
+    function groupRolesByType(roles: AccountRolesQuery['accountRoles']) {
+        return roles.reduce((groups: { [key: string]: AccountRolesQuery['accountRoles'] }, role) => {
             const type = role.type;
             if(!groups[type]) {
                 groups[type] = [];
@@ -79,6 +88,7 @@ export function UsersRolesPage() {
         }, {});
     }
 
+    // Render
     return (
         <div className="px-6 py-4">
             <InternalNavigationTrail />
@@ -156,7 +166,7 @@ export function UsersRolesPage() {
                                                             @{role.profile?.username}
                                                         </div>
                                                         <div className="text-neutral-500 text-sm">
-                                                            Email {role.profile?.emailAddress}
+                                                            {role.primaryAccountEmailAddress}
                                                         </div>
                                                         <div className="text-neutral-500 text-sm">
                                                             Added {fullDate(new Date(role.createdAt))}
@@ -193,7 +203,7 @@ export function UsersRolesPage() {
                                                             @{role.profile?.username}
                                                         </div>
                                                         <div className="text-neutral-500 text-sm">
-                                                            Email {role.profile?.emailAddress}
+                                                            {role.primaryAccountEmailAddress}
                                                         </div>
                                                     </div>
 
