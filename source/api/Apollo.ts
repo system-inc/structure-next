@@ -36,15 +36,16 @@ const apolloClientCache = new InMemoryCache({
         },
     },
 });
+
+// Create a globally shared Apollo client for the browser
 export const apolloClient = new ApolloClient({
     link: getApolloClientHttpLink('Browser'),
     cache: apolloClientCache,
 });
 
-// Apollo client for server-side rendering
-// Attempting to fix an issue with Cloudflare Next on Pages
-// It is possible that having a globally shared Apollo client is causing issues with Cloudflare Next on Pages
-export const getServersideApolloClient = function () {
+// Function to get an Apollo client for server-side rendering
+// Having a globally shared Apollo client breaks Cloudflare, so we need to create a new Apollo client for each request
+export const getApolloClientForServerSideRendering = function () {
     return new ApolloClient({
         link: getApolloClientHttpLink('Server'),
         cache: new InMemoryCache(),
