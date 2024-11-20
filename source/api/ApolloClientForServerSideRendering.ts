@@ -8,10 +8,15 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 // Function to get an Apollo client for server-side rendering
 // Having a globally shared Apollo client breaks Cloudflare, so we need to create a new Apollo client for each request
 export const getApolloClientForServerSideRendering = function () {
-    console.log('process.env.NODE_ENV', process.env.NODE_ENV);
-
     // If in development environment or building for production
-    if(process.env.NODE_ENV === 'development' || process.env.NEXT_PHASE === 'phase-production-build') {
+    if(
+        // Node environment is development
+        process.env.NODE_ENV === 'development' ||
+        // Structure environment is development (as NODE_ENV is always set to production with `wrangler dev`)
+        process.env.STRUCTURE_ENV === 'development' ||
+        // Next.js phase is production-build
+        process.env.NEXT_PHASE === 'phase-production-build'
+    ) {
         // Return a standard Apollo client
         return new ApolloClient({
             ssrMode: true,
@@ -31,6 +36,8 @@ export const getApolloClientForServerSideRendering = function () {
             link: createHttpLink({
                 fetch: async function (uri, options) {
                     const cloudflareContext = await getCloudflareContext();
+
+                    // This is a special convention that tells Base to not create duplicate deviceIds for worker to worker requests
                     const url = 'https://website.base-internal' + uri;
 
                     // Run `npm run cf-typegen` to get the types for cloudflareContext
