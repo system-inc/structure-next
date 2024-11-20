@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
 // Dependencies - API
-import { apolloClient } from '@structure/source/api/Apollo';
+import { apolloClient } from '@structure/source/api/ApolloClient';
 import { ApolloProvider as ApolloClientProvider } from '@apollo/client';
 
 // Component - ApolloWrapper

@@ -1,5 +1,5 @@
 import { DocumentNode, OperationVariables, TypedDocumentNode } from '@apollo/client';
-import { apolloClient } from '@structure/source/api/Apollo';
+import { apolloClient } from '@structure/source/api/ApolloClient';
 import { Getter, atom } from 'jotai';
 import { atomWithObservable } from 'jotai/utils';
 import { Subject } from 'rxjs';
