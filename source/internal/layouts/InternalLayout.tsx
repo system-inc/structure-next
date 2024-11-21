@@ -41,9 +41,9 @@ export function InternalLayout(properties: InternalLayoutInterface) {
     // We want the navigation to be dark but the content to be a bit lighter
     React.useEffect(function () {
         // Remove the darker backgrounds and add a lighter one
-        document.body.classList.remove('dark:bg-dark');
-        document.body.classList.remove('dark:bg-dark-1');
-        document.body.classList.add('dark:bg-[#1C1C1C]');
+        // document.body.classList.remove('dark:bg-dark');
+        // document.body.classList.remove('dark:bg-dark-1');
+        // document.body.classList.add('dark:bg-[#1C1C1C]');
     }, []);
 
     // Render the component
