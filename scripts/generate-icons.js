@@ -6,6 +6,7 @@
 // Dependencies - Node
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // An array to store the icons
 const icons = [];
@@ -67,7 +68,7 @@ function readIcons(directory, source) {
     });
 }
 
-const scriptPath = path.dirname(__filename);
+const scriptPath = path.dirname(fileURLToPath(import.meta.url));
 // console.log('Script path:', scriptPath);
 
 const projectIconsPath = path.join(scriptPath, '../../../assets/icons');
