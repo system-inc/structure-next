@@ -364,7 +364,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             <animated.div
                 ref={containerDivReference}
                 className={mergeClassNames(
-                    'fixed top-0 z-20 flex h-full flex-col bg-light-1 dark:bg-dark-1',
+                    'fixed top-0 z-20 flex h-full flex-col bg-light dark:bg-dark-1',
                     // If there is no top bar or the window is less than the desktop minimum width and the side navigation is not closing by window resize
                     // add a border to the right
                     !topBar ||
