@@ -7,6 +7,7 @@ import React from 'react';
 import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 import ReactMarkdown from 'react-markdown';
 import remarkCustomHeaderId from 'remark-custom-header-id';
+import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { renderToString } from 'react-dom/server';
 
@@ -88,6 +89,22 @@ const components: ComponentsInterface = {
         <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
     ),
     hr: (properties) => <hr className="my-10 border-light-4 dark:border-dark-4" {...properties} />,
+    table: (properties) => <table className="relative mb-6 mt-6 w-full overflow-auto rounded border" {...properties} />,
+    thead: (properties) => <thead className="border-b bg-light-2 transition-colors dark:bg-dark" {...properties} />,
+    tbody: (properties) => <tbody className="" {...properties} />,
+    tr: (properties) => <tr className="border-b border-light-4 last:border-b-0 dark:border-dark-4" {...properties} />,
+    th: (properties) => (
+        <th
+            className="border-r border-light-4 px-4 py-2 text-[16px] font-medium leading-[28px] last:border-r-0 dark:border-dark-4"
+            {...properties}
+        />
+    ),
+    td: (properties) => (
+        <td
+            className="border-r border-light-4 px-4 py-2 text-[16px] font-light leading-[28px] last:border-r-0 dark:border-dark-4"
+            {...properties}
+        />
+    ),
 };
 
 // Component - Markdown
@@ -100,7 +117,7 @@ export function Markdown({ children, ...properties }: MarkdownInterface) {
         <div className="max-w-3xl" {...properties}>
             <ReactMarkdown
                 rehypePlugins={[rehypeHighlight]}
-                remarkPlugins={[remarkCustomHeaderId]}
+                remarkPlugins={[remarkCustomHeaderId, remarkGfm]}
                 components={components}
             >
                 {children}
