@@ -12,7 +12,7 @@ import { EngagementContainer } from '@structure/source/modules/engagement/Engage
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { EngagementEventCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { EngagementEventCreateDocument, DeviceOrientation } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/String';
@@ -103,9 +103,6 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             }
             // console.log('Load duration: ' + loadDurationInMillisecondsReference.current + ' milliseconds.');
 
-            // Get the locale
-            const locale = navigator.language || navigator.languages[0] || undefined;
-
             // The view identifier is the URL path
             let viewIdentifier = urlPath;
 
@@ -135,13 +132,25 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             }
             // console.log('previousViewDurationInMilliseconds', previousViewDurationInMilliseconds);
 
+            // Determine the device orientation
+            const windowScreenOrientationType = window.screen?.orientation?.type?.toLowerCase();
+            let orientation = undefined;
+            if(windowScreenOrientationType) {
+                if(windowScreenOrientationType.includes('portrait')) {
+                    orientation = DeviceOrientation.Portrait;
+                }
+                else if(windowScreenOrientationType.includes('landscape')) {
+                    orientation = DeviceOrientation.Landscape;
+                }
+            }
+
             // Perform the mutation
             engagementEventCreateMutation({
                 variables: {
                     input: {
                         name: 'PageView',
                         deviceProperties: {
-                            id: deviceId,
+                            orientation: orientation,
                         },
                         clientProperties: {
                             // Development or Production
@@ -151,14 +160,14 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                                     ? 'Development'
                                     : 'Production',
                         },
-                        locale: locale,
+                        // TODO: These commented out properties need to be added back in
                         eventContext: {
-                            loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
-                            sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
-                            previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
-                            viewTitle: viewTitle || undefined,
+                            // loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
+                            // sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
+                            // previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
+                            // viewTitle: viewTitle || undefined,
                             viewIdentifier: viewIdentifier,
-                            previousViewTitle: previousViewTitleReference.current || undefined,
+                            // previousViewTitle: previousViewTitleReference.current || undefined,
                             previousViewIdentifier: previousViewIdentifierReference.current || undefined,
                             referrer: document.referrer || undefined,
                         },

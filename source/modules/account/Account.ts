@@ -41,18 +41,8 @@ export class Account {
         return publicDisplayName;
     }
 
-    hasRole(type: string) {
-        let hasRole = false;
-
-        // Loop through the roles
-        for(let i = 0; i < this.roles.length; i++) {
-            if(this.roles[i]?.type === type) {
-                hasRole = true;
-                break;
-            }
-        }
-
-        return hasRole;
+    hasRole(role: string) {
+        return this.roles.includes(role);
     }
 
     isAdministator() {

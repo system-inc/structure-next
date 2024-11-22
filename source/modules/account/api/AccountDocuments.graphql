@@ -170,14 +170,7 @@ query AccountCurrent {
             updatedAt
             createdAt
         }
-        roles {
-            id
-            type
-            status
-            expiresAt
-            updatedAt
-            createdAt
-        }
+        roles
         currentSession {
             currentProfileId
             status

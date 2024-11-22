@@ -184,22 +184,30 @@ mutation PostDelete($id: String!) {
 
 # Post Vote
 mutation PostVote($postId: String!, $type: PostVoteType!) {
-    postVote(postId: $postId, type: $type)
+    postVote(postId: $postId, type: $type) {
+        success
+    }
 }
 
 # Post Unvote
 mutation PostUnvote($postId: String!) {
-    postUnvote(postId: $postId)
+    postUnvote(postId: $postId) {
+        success
+    }
 }
 
 # Post Reaction Create
 mutation PostReactionCreate($postId: String!, $content: String!) {
-    postReactionCreate(postId: $postId, content: $content)
+    postReactionCreate(postId: $postId, content: $content) {
+        success
+    }
 }
 
 # Post Reaction Delete
 mutation PostReactionDelete($postId: String!, $content: String!) {
-    postReactionDelete(postId: $postId, content: $content)
+    postReactionDelete(postId: $postId, content: $content) {
+        success
+    }
 }
 
 # Post Reaction Profiles
@@ -279,5 +287,7 @@ mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
 
 # Post Topic Delete Mutation
 mutation PostTopicDelete($id: String!) {
-    postTopicDelete(id: $id)
+    postTopicDelete(id: $id) {
+        success
+    }
 }
