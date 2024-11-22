@@ -91,5 +91,7 @@ mutation ContactFieldUpdate($contactId: String!, $input: ContactFieldUpdateInput
 
 # Delete a Contact
 mutation ContactDelete($id: String!) {
-    contactDelete(id: $id)
+    contactDelete(id: $id) {
+        success
+    }
 }
