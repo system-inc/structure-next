@@ -160,14 +160,13 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                                     ? 'Development'
                                     : 'Production',
                         },
-                        // TODO: These commented out properties need to be added back in
                         eventContext: {
-                            // loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
-                            // sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
-                            // previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
-                            // viewTitle: viewTitle || undefined,
+                            loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
+                            sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
+                            previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
+                            viewTitle: viewTitle || undefined,
                             viewIdentifier: viewIdentifier,
-                            // previousViewTitle: previousViewTitleReference.current || undefined,
+                            previousViewTitle: previousViewTitleReference.current || undefined,
                             previousViewIdentifier: previousViewIdentifierReference.current || undefined,
                             referrer: document.referrer || undefined,
                         },
