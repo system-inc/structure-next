@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { type DocumentNode, type OperationVariables, type TypedDocumentNode } from '@apollo/client';
-import { apolloClient } from '@structure/source/api/ApolloClient';
+import { apolloClient } from '@structure/source/api/apollo/ApolloClient';
 import { atomWithBroadcast } from './atomWithBroadcast';
 
 export function localSyncMutationAtom<TData, TVariables extends OperationVariables | undefined>(

@@ -19,7 +19,7 @@ import {
     AccountProfileUpdateDocument,
     AccountProfileUsernameValidateDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/GraphQlUtilities';
+import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Dependencies - Utilities
 import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';

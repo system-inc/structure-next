@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import Cookies from '@structure/source/utilities/cookies/Cookies';
 import CookiesProvider from '@structure/source/utilities/cookies/CookiesProvider';
-import ApolloProvider from '@structure/source/api/ApolloProvider';
+import ApolloProvider from '@structure/source/api/apollo/ApolloProvider';
 import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import AccountProvider from '@structure/source/modules/account/providers/AccountProvider';
 import SharedStateProvider from '@structure/source/utilities/shared-state/SharedStateProvider';

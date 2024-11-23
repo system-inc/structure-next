@@ -1,6 +1,6 @@
 // Dependencies
 import { CodegenConfig as GraphQlCodeGeneratorConfiguration } from '@graphql-codegen/cli';
-import { graphql } from './../../../../package.json';
+import { graphql } from '../../../../../package.json';
 
 // Configuration
 const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguration = {

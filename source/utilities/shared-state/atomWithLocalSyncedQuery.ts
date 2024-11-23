@@ -23,7 +23,7 @@
 // ```
 
 import { OperationVariables, QueryOptions, TypedDocumentNode } from '@apollo/client';
-import { apolloClient } from '@structure/source/api/ApolloClient';
+import { apolloClient } from '@structure/source/api/apollo/ApolloClient';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 

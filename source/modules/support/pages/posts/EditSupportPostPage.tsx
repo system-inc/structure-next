@@ -9,7 +9,7 @@ import React from 'react';
 // import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
 // import { PostControls } from '@structure/source/modules/post/controls/PostControls';
 import { Button } from '@structure/source/common/buttons/Button';
-import { GraphQlOperationForm } from '@structure/source/api/GraphQlOperationForm';
+import { GraphQlOperationForm } from '@structure/source/api/graphql/GraphQlOperationForm';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { DeletePostDialog } from '@structure/source/modules/post/DeletePostDialog';

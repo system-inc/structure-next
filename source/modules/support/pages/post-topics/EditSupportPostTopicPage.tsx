@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import GraphQlOperationForm from '@structure/source/api/GraphQlOperationForm';
+import GraphQlOperationForm from '@structure/source/api/graphql/GraphQlOperationForm';
 import { Button } from '@structure/source/common/buttons/Button';
 import { DeletePostTopicDialog } from '@structure/source/modules/post/DeletePostTopicDialog';
 

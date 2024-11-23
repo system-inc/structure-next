@@ -18,7 +18,7 @@ import {
     AccountByEmailAddressAdminDocument,
     AccountRoleGrantDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/GraphQlUtilities';
+import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Dependencies - Utilities
 import { isEmailAddress } from '@structure/source/utilities/validation/Validation';

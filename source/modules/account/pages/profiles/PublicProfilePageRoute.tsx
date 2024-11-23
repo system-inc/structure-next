@@ -5,7 +5,7 @@ import { getRequestCookiesHeaderString } from '@structure/source/utilities/next/
 import { PublicProfilePage } from '@structure/source/modules/account/pages/profiles/PublicProfilePage';
 
 // Dependencies - API
-import { getApolloClientForServerSideRendering } from '@structure/source/api/ApolloClientForServerSideRendering';
+import { getApolloClientForServerSideRendering } from '@structure/source/api/apollo/ApolloClientForServerSideRendering';
 import { ProfilePublicDocument } from '@project/source/api/graphql';
 
 // Function to get server-side properties

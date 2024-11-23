@@ -33,10 +33,10 @@ export interface GraphQlMutationFormInterface extends Omit<FormInterface, 'formI
     ) => Promise<FormSubmitResponseInterface>;
 }
 export function GraphQlMutationForm(properties: GraphQlMutationFormInterface) {
-    const [mutation, mutationState] = useMutation(properties.mutationDocument);
+    const [mutation] = useMutation(properties.mutationDocument);
 
     function renderFormInputsUsingMutationDocument() {
-        let formInputs = [];
+        const formInputs = [];
 
         // Loop through the mutation document
         for(const input of properties.mutationDocument.definitions[0].variableDefinitions) {
@@ -101,7 +101,7 @@ export function GraphQlMutationForm(properties: GraphQlMutationFormInterface) {
 
                 // Invoke the GraphQL mutation
                 try {
-                    let mutationResponse = await mutation({
+                    const mutationResponse = await mutation({
                         variables: {
                             ...formValues,
                         },

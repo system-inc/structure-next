@@ -3,7 +3,7 @@ import { ApolloError } from '@apollo/client';
 
 // Function to convert an Apollo error to a message
 export const apolloErrorToMessage = function (mutationError?: ApolloError) {
-    let errorObject = mutationError?.graphQLErrors;
+    const errorObject = mutationError?.graphQLErrors;
 
     if(errorObject && errorObject.length > 0) {
         const error = errorObject[0];
@@ -20,7 +20,7 @@ export const apolloErrorToMessage = function (mutationError?: ApolloError) {
                     if(property && constraints) {
                         const constraintKey = Object.keys(constraints)[0];
                         if(constraintKey) {
-                            const constraintValue = constraints[constraintKey];
+                            // const constraintValue = constraints[constraintKey];
 
                             return `Invalid ${property}.`;
                         }

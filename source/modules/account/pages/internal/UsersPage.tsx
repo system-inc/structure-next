@@ -17,7 +17,7 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import { AccountsAdminDocument, AccountDeleteAdminDocument } from '@project/source/api/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/GraphQlUtilities';
+import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Component - UsersPage
 export function UsersPage() {
