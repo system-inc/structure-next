@@ -8,7 +8,7 @@ import React from 'react';
 import NextImage from 'next/image';
 
 // Dependencies - Main Components
-import ProfileImage from '@structure/source/modules/account/ProfileImage';
+import ProfileImage from '@structure/source/modules/account/components/ProfileImage';
 import FormInputText from '@structure/source/common/forms/FormInputText';
 import Button from '@structure/source/common/buttons/Button';
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';

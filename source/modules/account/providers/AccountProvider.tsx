@@ -5,7 +5,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 // Dependencies - Main Components
-import { AuthenticationDialog } from '@structure/source/modules/account/authentication/AuthenticationDialog';
+import { AuthenticationDialog } from '@structure/source/modules/account/pages/authentication/components/AuthenticationDialog';
 
 // Dependencies - Account
 import { accountSignedInKey, Account } from '@structure/source/modules/account/Account';

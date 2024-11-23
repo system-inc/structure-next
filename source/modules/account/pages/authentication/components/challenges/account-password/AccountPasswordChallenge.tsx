@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { AccountPasswordForm } from '@structure/source/modules/account/authentication/challenges/account-password/AccountPasswordForm';
+import { AccountPasswordForm } from '@structure/source/modules/account/pages/authentication/components/challenges/account-password/AccountPasswordForm';
 
 // Dependencies - API
 import { AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';

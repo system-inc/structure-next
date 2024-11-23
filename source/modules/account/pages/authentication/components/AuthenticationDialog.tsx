@@ -8,7 +8,7 @@ import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog
 import {
     AuthenticationInterface,
     Authentication,
-} from '@structure/source/modules/account/authentication/Authentication';
+} from '@structure/source/modules/account/pages/authentication/components/Authentication';
 
 // Component - AuthenticationDialog
 export interface AuthenticationDialogInterface extends Omit<AuthenticationInterface, 'variant'>, DialogInterface {}

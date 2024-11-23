@@ -9,7 +9,7 @@ import { PostInterface } from '@structure/source/modules/post/Post';
 import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';

@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 // Dependencies - Main Components
 import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
-import { ProfileImage } from '@structure/source/modules/account/ProfileImage';
+import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - API
 import { ProfilePublicQuery } from '@project/source/api/graphql';

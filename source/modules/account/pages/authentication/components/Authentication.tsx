@@ -10,10 +10,10 @@ import { useRouter } from 'next/navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
-import { EmailForm } from '@structure/source/modules/account/authentication/EmailForm';
-import { EmailVerificationChallenge } from '@structure/source/modules/account/authentication/challenges/email-verification/EmailVerificationChallenge';
-import { AccountPasswordChallenge } from '@structure/source/modules/account/authentication/challenges/account-password/AccountPasswordChallenge';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { EmailForm } from '@structure/source/modules/account/pages/authentication/components/EmailForm';
+import { EmailVerificationChallenge } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationChallenge';
+import { AccountPasswordChallenge } from '@structure/source/modules/account/pages/authentication/components/challenges/account-password/AccountPasswordChallenge';
 import { Duration } from '@structure/source/common/time/Duration';
 
 // Dependencies - API

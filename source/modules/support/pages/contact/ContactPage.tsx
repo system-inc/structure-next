@@ -12,7 +12,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';

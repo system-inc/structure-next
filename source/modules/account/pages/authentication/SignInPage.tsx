@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { AuthenticationPage } from '@structure/source/modules/account/pages/AuthenticationPage';
+import { AuthenticationPage } from '@structure/source/modules/account/pages/authentication/AuthenticationPage';
 
 // Component - SignInPage
 export function SignInPage() {

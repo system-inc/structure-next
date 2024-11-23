@@ -9,8 +9,8 @@ import InternalNavigationTrail from '@structure/source/internal/layouts/navigati
 import { Button } from '@structure/source/common/buttons/Button';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';
-import { ProfileImage } from '@structure/source/modules/account/ProfileImage';
-import { AccountRoleGrantForm } from '@structure/source/modules/account/AccountRoleGrantForm';
+import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
+import { AccountRoleGrantForm } from '@structure/source/modules/account/components/AccountRoleGrantForm';
 
 // Dependencies - Animations
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
