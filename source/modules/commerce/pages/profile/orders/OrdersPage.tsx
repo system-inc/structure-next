@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 
 // Dependencies - Animation
-import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
+// import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
 
 // Dependencies - GraphQL
 import { GetMyOrdersDocument } from '@project/source/api/graphql';

@@ -420,3 +420,393 @@ mutation CommerceCheckoutSessionCreate($input: CommerceCheckoutSessionCreateInpu
         createdAt
     }
 }
+
+query GetMyOrders {
+    commerceOrders(
+        input: { filters: [{ column: "status", operator: NotEqual, value: "Cancelled" }], itemsPerPage: 10 }
+    ) {
+        pagination {
+            itemsTotal
+            itemIndex
+            page
+        }
+        items {
+            id
+            holdOnShipping
+            fulfillmentStatus
+            emailAddress
+            identifier
+            lineItems {
+                createdAt
+                fulfilledQuantity
+                id
+                indexId
+                commerceOrderId
+                productVariantId
+                quantity
+                shippedQuantity
+                status
+                statusDescription
+                updatedAt
+            }
+            discounts {
+                code
+                createdAt
+                endsAt
+                id
+                startsAt
+                updatedAt
+                usageCount
+            }
+            payment {
+                amount
+                authorizedAt
+                cancelledAt
+                capturedAt
+                confirmedAt
+                createdAt
+                currencyCode
+                externalReferenceId
+                id
+                paymentProcessorType
+                status
+                statusDescription
+                updatedAt
+                walletEntryId
+                paymentMethod {
+                    ... on PaymentMethodCreditCard {
+                        type
+                        paymentProcessorType
+                        externalResourceId
+                        last4
+                        expirationMonth
+                        expirationYear
+                        cardType
+                        billingAddress {
+                            company
+                            line1
+                            line2
+                            city
+                            state
+                            postalCode
+                            country
+                            firstName
+                            lastName
+                            phoneNumber
+                        }
+                    }
+                }
+            }
+            paymentId
+            paymentStatus
+            priceInfo {
+                amount
+                currencyCode
+                originalSubtotal
+                subtotal
+                lineItemPrices {
+                    amount
+                    indexId
+                    originalSubtotal
+                    subtotal
+                    tax
+                }
+                shippingRate {
+                    amount
+                    originalAmount
+                }
+                tax {
+                    shipping
+                    total
+                }
+            }
+            source
+            status
+            statusDescription
+            batchIdentifier
+            createdAt
+            updatedAt
+            shippingInfo {
+                shippingAddress {
+                    company
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                    firstName
+                    lastName
+                    phoneNumber
+                }
+            }
+            beneficiaryEmailAddress
+            shipments {
+                id
+                createdAt
+                updatedAt
+                createdByAccountId
+                createdByProfileId
+                updatedByAccountId
+                updatedByProfileId
+                status
+                statusDescription
+                shippedAt
+                deliveredAt
+                cancelledAt
+                orderIndexId
+                toAddress {
+                    company
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                    firstName
+                    lastName
+                    phoneNumber
+                }
+            }
+        }
+    }
+}
+
+query GetOrderByIdentifier($orderIdentifier: JSON!) {
+    commerceOrders(
+        input: { filters: [{ column: "identifier", operator: Equal, value: $orderIdentifier }], itemsPerPage: 1 }
+    ) {
+        pagination {
+            itemsTotal
+            itemIndex
+            page
+        }
+        items {
+            id
+            holdOnShipping
+            fulfillmentStatus
+            emailAddress
+            identifier
+            lineItems {
+                createdAt
+                fulfilledQuantity
+                id
+                indexId
+                commerceOrderId
+                productVariantId
+                quantity
+                shippedQuantity
+                status
+                statusDescription
+                updatedAt
+            }
+            discounts {
+                code
+                createdAt
+                endsAt
+                id
+                startsAt
+                updatedAt
+                usageCount
+            }
+            payment {
+                amount
+                authorizedAt
+                cancelledAt
+                capturedAt
+                confirmedAt
+                createdAt
+                currencyCode
+                externalReferenceId
+                id
+                paymentProcessorType
+                status
+                statusDescription
+                updatedAt
+                walletEntryId
+                paymentMethod {
+                    ... on PaymentMethodCreditCard {
+                        type
+                        paymentProcessorType
+                        externalResourceId
+                        last4
+                        expirationMonth
+                        expirationYear
+                        cardType
+                        billingAddress {
+                            company
+                            line1
+                            line2
+                            city
+                            state
+                            postalCode
+                            country
+                            firstName
+                            lastName
+                            phoneNumber
+                        }
+                    }
+                }
+            }
+            paymentId
+            paymentStatus
+            priceInfo {
+                amount
+                currencyCode
+                originalSubtotal
+                subtotal
+                lineItemPrices {
+                    amount
+                    indexId
+                    originalSubtotal
+                    subtotal
+                    tax
+                }
+                shippingRate {
+                    amount
+                    originalAmount
+                }
+                tax {
+                    shipping
+                    total
+                }
+            }
+            source
+            status
+            statusDescription
+            batchIdentifier
+            createdAt
+            updatedAt
+            shippingInfo {
+                shippingAddress {
+                    company
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                    firstName
+                    lastName
+                    phoneNumber
+                }
+            }
+            beneficiaryEmailAddress
+            shipments {
+                id
+                createdAt
+                updatedAt
+                createdByAccountId
+                createdByProfileId
+                updatedByAccountId
+                updatedByProfileId
+                status
+                statusDescription
+                shippedAt
+                deliveredAt
+                cancelledAt
+                orderIndexId
+                toAddress {
+                    company
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                    firstName
+                    lastName
+                    phoneNumber
+                }
+            }
+        }
+    }
+}
+
+query GetOrdersByGroupIdentifier($identifier: String!, $emailAddress: String) {
+    commerceOrdersByGroupIdentifier(identifier: $identifier, emailAddress: $emailAddress) {
+        ... on CommerceOrder {
+            id
+            batchIdentifier
+            holdOnShipping
+            fulfillmentStatus
+            emailAddress
+            identifier
+            lineItems {
+                createdAt
+                fulfilledQuantity
+                id
+                indexId
+                commerceOrderId
+                productVariantId
+                quantity
+                shippedQuantity
+                status
+                statusDescription
+                updatedAt
+            }
+            discounts {
+                code
+                createdAt
+                endsAt
+                id
+                startsAt
+                updatedAt
+                usageCount
+            }
+            payment {
+                amount
+                authorizedAt
+                cancelledAt
+                capturedAt
+                confirmedAt
+                createdAt
+                currencyCode
+                externalReferenceId
+                id
+                paymentProcessorType
+                status
+                statusDescription
+                updatedAt
+                walletEntryId
+            }
+            paymentId
+            paymentStatus
+            priceInfo {
+                amount
+                currencyCode
+                originalSubtotal
+                subtotal
+                lineItemPrices {
+                    amount
+                    indexId
+                    originalSubtotal
+                    subtotal
+                    tax
+                }
+                shippingRate {
+                    amount
+                    originalAmount
+                }
+                tax {
+                    shipping
+                    total
+                }
+            }
+            source
+            status
+            statusDescription
+            metadata
+            beneficiaryEmailAddress
+        }
+        ... on PublicCommerceOrder {
+            createdAt
+            identifier
+            batchIdentifier
+            status
+            paymentStatus
+            fulfillmentStatus
+            source
+        }
+    }
+}
