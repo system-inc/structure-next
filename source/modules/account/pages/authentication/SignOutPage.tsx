@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 
 // Dependencies - Main Components
@@ -10,9 +11,15 @@ import Button from '@structure/source/common/buttons/Button';
 // Dependencies - Accounts
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
+// Metadata
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: 'Sign Out',
+    };
+}
+
 // Component - SignOutPage
-export interface SignOutPageInterface {}
-export function SignOutPage(properties: SignOutPageInterface) {
+export function SignOutPage() {
     // Hooks
     const { signOut } = useAccount();
     const router = useRouter();
