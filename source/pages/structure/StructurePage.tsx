@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import { Metadata } from 'next';
 
 // Dependencies - Main Components
 import AccountMenuButton from '@structure/source/modules/account/components/AccountMenuButton';
@@ -27,9 +28,15 @@ import ChevronsUpDownIcon from '@structure/assets/icons/interface/ChevronsUpDown
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
+// Metadata
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: 'Structure',
+    };
+}
+
 // Component - StructurePage
-export interface StructurePageInterface {}
-export function StructurePage(properties: StructurePageInterface) {
+export function StructurePage() {
     const countries = [
         { content: 'Afghanistan', value: 'AF' },
         { content: 'Åland Islands', value: 'AX' },
