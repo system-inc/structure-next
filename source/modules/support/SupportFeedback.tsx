@@ -8,7 +8,7 @@ import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 import { SupportFeedbackDialog } from '@structure/source/modules/support/SupportFeedbackDialog';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

@@ -13,7 +13,7 @@ import NotSignedIn from '@structure/source/common/notifications/NotSignedIn';
 import LineLoadingAnimation from '@structure/source/common/animations/LineLoadingAnimation';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutInterface {

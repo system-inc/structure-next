@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { SideNavigationLayoutNavigationSideToggle } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationSideToggle';
-import AccountMenuButton from '@structure/source/modules/account/AccountMenuButton';
+import AccountMenuButton from '@structure/source/modules/account/components/AccountMenuButton';
 
 // Dependencies - Shared State
 import { useAtomValue } from 'jotai';

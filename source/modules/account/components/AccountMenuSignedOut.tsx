@@ -8,7 +8,7 @@ import React from 'react';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Accounts
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Component - AccountMenu
 export type AccountMenuSignedOutProperties = {};

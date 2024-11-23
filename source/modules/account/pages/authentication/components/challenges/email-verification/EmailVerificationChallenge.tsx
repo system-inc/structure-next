@@ -5,7 +5,7 @@ import React from 'react';
 
 import { Button } from '@structure/source/common/buttons/Button';
 // Dependencies - Main Components
-import { EmailVerificationVerifyForm } from '@structure/source/modules/account/authentication/challenges/email-verification/EmailVerificationVerifyForm';
+import { EmailVerificationVerifyForm } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationVerifyForm';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';

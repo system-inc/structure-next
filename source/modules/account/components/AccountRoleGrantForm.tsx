@@ -9,7 +9,7 @@ import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';
 import { InputText } from '@structure/source/common/forms/InputText';
 import { InputSelect } from '@structure/source/common/forms/InputSelect';
-import { ProfileImage } from '@structure/source/modules/account/ProfileImage';
+import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';

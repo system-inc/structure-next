@@ -7,7 +7,7 @@ import ProjectSettings from '@project/ProjectSettings';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import AccountMenuButton from '@structure/source/modules/account/AccountMenuButton';
+import AccountMenuButton from '@structure/source/modules/account/components/AccountMenuButton';
 import WaitListForm from '@structure/source/modules/wait-list/WaitListForm';
 
 // Component - WaitListPage

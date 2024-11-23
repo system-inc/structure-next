@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@structure/source/common/buttons/Button';
 
 // Dependencies - Accounts
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Component - SignOutPage
 export interface SignOutPageInterface {}

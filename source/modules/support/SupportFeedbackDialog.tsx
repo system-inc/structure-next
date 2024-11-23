@@ -5,7 +5,7 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Button } from '@structure/source/common/buttons/Button';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';

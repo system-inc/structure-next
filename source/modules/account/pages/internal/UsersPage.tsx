@@ -9,7 +9,7 @@ import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNav
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 import { Pagination } from '@structure/source/common/navigation/Pagination';
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
-import { ProfileImage } from '@structure/source/modules/account/ProfileImage';
+import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Button } from '@structure/source/common/buttons/Button';
 import { Alert } from '@structure/source/common/notifications/Alert';

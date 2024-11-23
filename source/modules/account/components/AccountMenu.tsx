@@ -2,14 +2,14 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import AccountMenuSignedIn from './AccountMenuSignedIn';
-import AccountMenuSignedOut from './AccountMenuSignedOut';
+import AccountMenuSignedIn from '@structure/source/modules/account/components/AccountMenuSignedIn';
+import AccountMenuSignedOut from '@structure/source/modules/account/components/AccountMenuSignedOut';
 import Button from '@structure/source/common/buttons/Button';
 import ThemeToggle from '@structure/source/theme/ThemeToggle';
 
 // Dependencies - Accounts
 import { Account } from '@structure/source/modules/account/Account';
-import { useAccount } from '@structure/source/modules/account/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

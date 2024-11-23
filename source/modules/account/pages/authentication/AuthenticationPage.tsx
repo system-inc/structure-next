@@ -2,7 +2,7 @@
 import {
     AuthenticationInterface,
     Authentication,
-} from '@structure/source/modules/account/authentication/Authentication';
+} from '@structure/source/modules/account/pages/authentication/components/Authentication';
 import { ThemeToggle } from '@structure/source/theme/ThemeToggle';
 
 // Component - AuthenticationPage
