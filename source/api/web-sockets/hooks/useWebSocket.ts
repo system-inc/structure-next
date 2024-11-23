@@ -5,7 +5,7 @@ import ProjectSettings from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Types
-import { WebSocketEvent } from '@project/source/api/sockets/WebSocketMessage';
+import { WebSocketEvent } from '@structure/source/api/web-sockets/types/WebSocketMessage';
 
 // Type - WebSocket message handler
 type WebSocketMessageHandler = (event: WebSocketEvent) => void;
