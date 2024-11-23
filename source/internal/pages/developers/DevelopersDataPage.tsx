@@ -10,8 +10,7 @@ import { DataInteractionTable } from '@structure/source/modules/data-interaction
 import { ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 
 // Component - DatabasePage
-export interface DevelopersDataPageInterface {}
-export function DevelopersDataPage(properties: DevelopersDataPageInterface) {
+export function DevelopersDataPage() {
     // URL parameters
     const [databaseNameUrlParameter, setDatabaseNameUrlParameter] = useUrlQueryState('databaseName');
     const [tableNameUrlParameter, setTableNameUrlParameter] = useUrlQueryState('tableName');
@@ -33,7 +32,7 @@ export function DevelopersDataPage(properties: DevelopersDataPageInterface) {
 
     // Render the component
     return (
-        <>
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
 
             <DataInteractionTable
@@ -60,7 +59,7 @@ export function DevelopersDataPage(properties: DevelopersDataPageInterface) {
                     },
                 }}
             />
-        </>
+        </div>
     );
 }
 

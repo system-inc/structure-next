@@ -16,8 +16,7 @@ import { DataInteractionDatabaseTablesDocument } from '@project/source/api/Graph
 import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - DatabasePage
-export interface DevelopersDatabasePageInterface {}
-export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterface) {
+export function DevelopersDatabasePage() {
     // Get the databases and tables from the GraphQL API
     const dataInteractionDatabaseTablesQueryState = useSuspenseQuery(DataInteractionDatabaseTablesDocument, {
         variables: {
@@ -34,19 +33,17 @@ export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterfa
             const databasesAndTablesObject: { [databaseName: string]: { tableName: string; rowCount: number }[] } = {};
 
             // Loop over the query results with a reference to the index
-            dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items.forEach(
-                function (item, index) {
-                    // Create the entry for the database if it doesn't exist
-                    if(!databasesAndTablesObject[item.databaseName]) {
-                        databasesAndTablesObject[item.databaseName] = [];
-                    }
+            dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items.forEach(function (item) {
+                // Create the entry for the database if it doesn't exist
+                if(!databasesAndTablesObject[item.databaseName]) {
+                    databasesAndTablesObject[item.databaseName] = [];
+                }
 
-                    databasesAndTablesObject[item.databaseName]?.push({
-                        tableName: item.tableName,
-                        rowCount: item.rowCount,
-                    });
-                },
-            );
+                databasesAndTablesObject[item.databaseName]?.push({
+                    tableName: item.tableName,
+                    rowCount: item.rowCount,
+                });
+            });
 
             return databasesAndTablesObject;
         },
@@ -57,7 +54,7 @@ export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterfa
 
     // Render the component
     return (
-        <>
+        <div className="px-6 py-4">
             <React.Suspense>
                 <InternalNavigationTrail />
 
@@ -111,7 +108,7 @@ export function DevelopersDatabasePage(properties: DevelopersDatabasePageInterfa
                     })
                 )}
             </React.Suspense>
-        </>
+        </div>
     );
 }
 

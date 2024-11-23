@@ -5,10 +5,13 @@ import React from 'react';
 import Metrics from '@structure/source/internal/pages/developers/metrics/Metrics';
 
 // Component - DevelopersMetricsPage
-export type DevelopersMetricsPageProperties = {};
-export function DevelopersMetricsPage(properties: DevelopersMetricsPageProperties) {
+export function DevelopersMetricsPage() {
     // Render the component
-    return <Metrics />;
+    return (
+        <div className="px-6 py-4">
+            <Metrics />
+        </div>
+    );
 }
 
 // Export - Default
