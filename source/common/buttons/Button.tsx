@@ -23,7 +23,7 @@ import { addCommas } from '@structure/source/utilities/Number';
 import { removeProperties } from '@structure/source/utilities/React';
 
 // Types
-type ButtonElementType = HTMLButtonElement | HTMLAnchorElement;
+export type ButtonElementType = HTMLButtonElement | HTMLAnchorElement;
 
 // Component - Button
 export interface ButtonInterface extends React.HTMLAttributes<ButtonElementType> {
