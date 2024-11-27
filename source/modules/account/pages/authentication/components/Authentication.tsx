@@ -274,13 +274,13 @@ export function Authentication(properties: AuthenticationInterface) {
             {/* The current authentication based on the authentication state */}
             {currentAuthenticationComponent}
 
-            <Duration
+            {/* Redirect & Redirect */}
+            {/* <Duration
                 className="neutral absolute bottom-5 right-5 font-mono text-sm"
                 startTimeInMilliseconds={authenticationSessionStartTime}
             >
-                {/* Redirect */}
-                {redirectUrl && <p>Redirecting to {redirectUrl}</p>}
-            </Duration>
+              {redirectUrl && <p>Redirecting to {redirectUrl}</p>}
+            </Duration> */}
         </div>
     );
 }
