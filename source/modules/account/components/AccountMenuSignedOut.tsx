@@ -11,8 +11,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Component - AccountMenu
-export type AccountMenuSignedOutProperties = {};
-export function AccountMenuSignedOut(properties: AccountMenuSignedOutProperties) {
+export function AccountMenuSignedOut() {
     // Hooks
     const { setAuthenticationDialogOpen } = useAccount();
 
