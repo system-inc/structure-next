@@ -10,7 +10,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { EmailVerificationVerifyDocument, AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountPasswordVerifyDocument, AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
@@ -21,15 +21,18 @@ export interface AccountPasswordFormInterface {
     onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
 }
 export function AccountPasswordForm(properties: AccountPasswordFormInterface) {
+    // Hooks - API - Mutations
+    const [accountPasswordVerifyMutation] = useMutation(AccountPasswordVerifyDocument);
+
     // Render the component
     return (
         <div>
             <div className="text-neutral-33 dark:text-neutral+3">
                 <p>
                     Enter the password for {properties.emailAddress}.{' '}
-                    <Link className="primary" href="/account/authentication/forgot-password">
+                    {/* <Link className="primary" href="/account/authentication/forgot-password">
                         Forgot your password?
-                    </Link>
+                    </Link> */}
                 </p>
             </div>
 
@@ -51,7 +54,7 @@ export function AccountPasswordForm(properties: AccountPasswordFormInterface) {
                     children: 'Submit',
                 }}
                 onSubmit={async function (formValues) {
-                    console.log('PasswordForm submit', formValues);
+                    // console.log(formValues);
 
                     // Create a variable to store the result
                     const result: FormSubmitResponseInterface = {
@@ -59,31 +62,30 @@ export function AccountPasswordForm(properties: AccountPasswordFormInterface) {
                     };
 
                     // Run the mutation
-                    // const currentEmailVerificationVerifyMutationState = await emailVerificationVerifyMutation({
-                    //     variables: {
-                    //         input: {
-                    //             code: formValues.password,
-                    //         },
-                    //     },
-                    // });
+                    const currentAccountPasswordVerifyMutationState = await accountPasswordVerifyMutation({
+                        variables: {
+                            input: {
+                                password: formValues.password,
+                            },
+                        },
+                    });
 
-                    // // Log the mutation state
-                    // console.log(
-                    //     'currentAccountRegistrationCreateMutationState',
-                    //     currentEmailVerificationVerifyMutationState,
-                    // );
+                    // Log the mutation state
+                    console.log('currentAccountPasswordVerifyMutationState', currentAccountPasswordVerifyMutationState);
 
-                    // // If there are errors
-                    // if(currentEmailVerificationVerifyMutationState.errors) {
-                    //     result.message = currentEmailVerificationVerifyMutationState.errors[0]?.message;
-                    // }
-                    // // If there is data
-                    // else {
-                    //     result.success = true;
+                    // If there are errors
+                    if(currentAccountPasswordVerifyMutationState.errors) {
+                        result.message = currentAccountPasswordVerifyMutationState.errors[0]?.message;
+                    }
+                    // If there is data
+                    else if(currentAccountPasswordVerifyMutationState.data) {
+                        result.success = true;
 
-                    //     // Run the success callback
-                    //     properties.onSuccess();
-                    // }
+                        // Run the success callback
+                        properties.onSuccess(
+                            currentAccountPasswordVerifyMutationState.data.accountPasswordVerify.authentication,
+                        );
+                    }
 
                     return result;
                 }}

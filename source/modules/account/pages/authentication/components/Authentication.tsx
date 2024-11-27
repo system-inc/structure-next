@@ -211,7 +211,7 @@ export function Authentication(properties: AuthenticationInterface) {
         );
     }
     // Challenge - Account Password
-    else if(authenticationSession?.currentChallenge?.challengeType == 'AccountPassword') {
+    else if(authenticationSession?.currentChallenge?.challengeType == 'AccountPassword' && emailAddress !== undefined) {
         currentAuthenticationComponent = (
             <AccountPasswordChallenge
                 emailAddress={emailAddress!}
