@@ -30,7 +30,7 @@ export function ProfileImageSection() {
             {accountState.loading ? (
                 <PlaceholderAnimation className="h-32 w-32" />
             ) : (
-                <Dialog content="Profile image">
+                <Dialog content="Profile Image Upload Coming Soon">
                     <div className="flex h-32 w-32 cursor-pointer">
                         <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
                     </div>

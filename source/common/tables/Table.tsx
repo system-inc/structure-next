@@ -87,7 +87,9 @@ export function Table(properties: TableInterface) {
                     // Emit the updateCheckboxes event
                 }
             });
-            window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+            if(typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+            }
 
             return initialSelectedRowsIndexesSet;
         },
@@ -103,7 +105,9 @@ export function Table(properties: TableInterface) {
                 }
             });
             // Emit the updateCheckboxes event
-            window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+            if(typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+            }
         },
         [properties.rows, selectedRowsIndexesSet],
     );
