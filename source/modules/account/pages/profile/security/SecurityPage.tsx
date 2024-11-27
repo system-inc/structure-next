@@ -4,8 +4,13 @@
 import React from 'react';
 import { Metadata } from 'next';
 
-// Dependencies - Animation
-import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
+// Dependencies - Main Components
+import { Button } from '@structure/source/common/buttons/Button';
+import { ManagePasswordDialog } from '@structure/source/modules/account/pages/profile/security/components/ManagePasswordDialog';
+
+// Dependencies - API
+import { useQuery } from '@apollo/client';
+import { AccountEnrolledChallengesDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,21 +21,42 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Component - SecurityPage
 export function SecurityPage() {
+    // State
+    const [managePasswordDialogOpen, setManagePasswordDialogOpen] = React.useState(false);
+
+    // Hooks - API - Queries
+    const accountEnrolledChallengesQueryState = useQuery(AccountEnrolledChallengesDocument, {
+        fetchPolicy: 'no-cache', // Do not use the cache as this overwrites the accountCurrent cache
+    });
+
+    // Check if the account has a password set
+    const accountHasPasswordSet =
+        (accountEnrolledChallengesQueryState.data?.accountCurrent.enrolledChallenges.length ?? 0) > 0 &&
+        accountEnrolledChallengesQueryState.data?.accountCurrent.enrolledChallenges.includes('AccountPassword');
+
     // Render the component
     return (
         <>
-            {false ? (
-                // Loading
-                <LoadingAnimation />
-            ) : (
-                // Data
-                <div>
-                    <h1>Security</h1>
-                </div>
-            )}
+            <h1>Security</h1>
+
+            <div className="mt-10">
+                {/* Set or Change Password Button */}
+                <Button
+                    onClick={function () {
+                        setManagePasswordDialogOpen(true);
+                    }}
+                >
+                    {accountHasPasswordSet ? 'Change Password' : 'Set Password'}
+                </Button>
+            </div>
+
+            <ManagePasswordDialog
+                open={managePasswordDialogOpen}
+                onOpenChange={setManagePasswordDialogOpen}
+                accountHasPasswordSet={accountHasPasswordSet || false}
+            />
         </>
     );
 }
 
-// Export - Default
 export default SecurityPage;

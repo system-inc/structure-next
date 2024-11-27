@@ -531,6 +531,105 @@ export class ValidationSchema {
         return this;
     }
 
+    // Password
+    password() {
+        this.minimumLength(8);
+        this.maximumLength(128);
+
+        // Create the validation rule
+        const validationRule: ValidationRule = {
+            identifier: 'password',
+            message:
+                'Must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.',
+        };
+
+        // Add the validation rule instance
+        this.validationRuleInstances.push({
+            validationRule: validationRule,
+            validate: function (value: any) {
+                // Throw an exception if the value is not a string
+                if(typeof value !== 'string') {
+                    throw new Error('Value is not a string.');
+                }
+
+                // Create the validation result
+                const validationResult: ValidationResult = {
+                    value: value,
+                    valid: true,
+                    errors: [],
+                    successes: [],
+                };
+
+                // If the value is invalid
+                if(typeof value !== 'string') {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'invalid',
+                        message: 'Invalid value.',
+                    });
+                }
+
+                // If the value does not have one uppercase letter, add an error
+                if(!/[A-Z]/.test(value)) {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'noUppercase',
+                        message: 'Must contain at least one uppercase letter.',
+                    });
+                }
+                else {
+                    validationResult.successes.push({
+                        validationRule: validationRule,
+                        identifier: 'hasUppercase',
+                        message: 'Contains at least one uppercase letter.',
+                    });
+                }
+
+                // If the value does not have a number, add an error
+                if(!/[0-9]/.test(value)) {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'noNumber',
+                        message: 'Must contain at least one number.',
+                    });
+                }
+                else {
+                    validationResult.successes.push({
+                        validationRule: validationRule,
+                        identifier: 'hasNumber',
+                        message: 'Contains at least one number.',
+                    });
+                }
+
+                // If the value does not have a special character, add an error
+                if(!/[^a-zA-Z0-9]/.test(value)) {
+                    validationResult.errors.push({
+                        validationRule: validationRule,
+                        identifier: 'noSpecialCharacter',
+                        message: 'Must contain at least one special character.',
+                    });
+                }
+                else {
+                    validationResult.successes.push({
+                        validationRule: validationRule,
+                        identifier: 'hasSpecialCharacter',
+                        message: 'Contains at least one special character.',
+                    });
+                }
+
+                // If there are errors, set the validation result to invalid
+                if(validationResult.errors.length) {
+                    validationResult.valid = false;
+                }
+
+                return validationResult;
+            },
+        });
+
+        // Return the validation schema for chaining
+        return this;
+    }
+
     // GraphQL query
     graphQlQuery(
         validateGraphQlQueryDocument: DocumentNode,

@@ -17,6 +17,21 @@ mutation AccountRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCr
     }
 }
 
+# Account Maintenance Session Create Mutation
+# This is used to create a session for maintenance purposes, like changing the password
+mutation AccountMaintenanceSessionCreate {
+    accountMaintenanceSessionCreate {
+        status
+        scopeType
+        currentChallenge {
+            challengeType
+            status
+        }
+        updatedAt
+        createdAt
+    }
+}
+
 # Account Registration Complete Mutation
 # After this is complete, use AccountCurrent query to get the current account
 mutation AccountRegistrationComplete($input: AccountRegistrationCompleteInput!) {
@@ -137,6 +152,14 @@ mutation AccountPasswordVerify($input: AccountPasswordVerifyInput!) {
     }
 }
 
+# Account Password Update Mutation
+# This is used to update the password of the account
+mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
+    accountPasswordUpdate(input: $input) {
+        success
+    }
+}
+
 # Account Sign Out Mutation
 mutation AccountSignOut {
     accountSignOut {
@@ -185,6 +208,13 @@ query AccountCurrent {
 # Account Profile Username Check Query
 query AccountProfileUsernameValidate($username: String!) {
     accountProfileUsernameValidate(username: $username)
+}
+
+# Account Enrolled Challenges Query
+query AccountEnrolledChallenges {
+    accountCurrent {
+        enrolledChallenges
+    }
 }
 
 # Account Profile Update Mutation

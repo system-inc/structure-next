@@ -8,17 +8,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { EmailVerificationVerifyForm } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationVerifyForm';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import {
-    EmailVerificationDocument,
-    // EmailVerificationSendDocument,
-    // EmailVerificationVerifyDocument,
-    // AuthenticationEmailVerification,
-    AuthenticationCurrentQuery,
-} from '@project/source/api/GraphQlGeneratedCode';
-
-// Dependencies - Assets
-// import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
+import { AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - EmailVerificationChallenge
 export interface EmailVerificationChallengeInterface {
@@ -32,12 +22,6 @@ export interface EmailVerificationChallengeInterface {
 }
 
 export function EmailVerificationChallenge(properties: EmailVerificationChallengeInterface) {
-    // Hooks - API - Queries
-    const emailVerificationQuery = useQuery(EmailVerificationDocument, {
-        skip: false,
-    });
-    console.log('emailVerificationQuery', emailVerificationQuery);
-
     // Render the component
     return (
         <div>
@@ -47,11 +31,13 @@ export function EmailVerificationChallenge(properties: EmailVerificationChalleng
             <EmailVerificationVerifyForm emailAddress={properties.emailAddress} onSuccess={properties.onSuccess} />
 
             {/* Change Email Button */}
-            <div className="mt-4 text-center">
-                <Button variant="ghost" onClick={properties.onChangeEmail} className="w-full">
-                    Use a different email
-                </Button>
-            </div>
+            {properties.onChangeEmail && (
+                <div className="mt-4 text-center">
+                    <Button variant="ghost" onClick={properties.onChangeEmail} className="w-full">
+                        Use a different email
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }

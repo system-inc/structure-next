@@ -114,3 +114,6 @@ export function ProfileInformationForm() {
         </div>
     );
 }
+
+// Export - Default
+export default ProfileInformationForm;

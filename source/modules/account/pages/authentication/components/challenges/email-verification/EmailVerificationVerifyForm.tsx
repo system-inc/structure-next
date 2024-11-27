@@ -4,12 +4,17 @@
 import React from 'react';
 
 // Dependencies - Main Components
+import { Button } from '@structure/source/common/buttons/Button';
 import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { EmailVerificationVerifyDocument, AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    EmailVerificationVerifyDocument,
+    EmailVerificationSendDocument,
+    AuthenticationCurrentQuery,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - EmailVerificationVerifyForm
 export interface EmailVerificationVerifyFormInterface {
@@ -17,8 +22,10 @@ export interface EmailVerificationVerifyFormInterface {
     onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
 }
 export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyFormInterface) {
-    // Hooks
+    // Hooks - API - Mutations
     const [emailVerificationVerifyMutation] = useMutation(EmailVerificationVerifyDocument);
+    const [emailVerificationSendMutation, emailVerificationSendMutationState] =
+        useMutation(EmailVerificationSendDocument);
 
     // State
     const [timeEmailSent] = React.useState<number>(Date.now());
@@ -62,13 +69,11 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
     // Render the component
     return (
         <div>
-            <div className="text-neutral-33 dark:text-neutral+3">
+            <div className="text-neutral-3 dark:text-neutral+3">
                 <p>
                     We sent a code to {properties.emailAddress} {timeAgoString}.
                 </p>
             </div>
-
-            {/* <p>Request another code?</p> */}
 
             {/* Email Verification Code Form */}
             <Form
@@ -133,6 +138,19 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
                     return result;
                 }}
             />
+
+            {/* Request Another Code */}
+            <div className="mt-8 flex justify-center">
+                <Button
+                    variant="ghost"
+                    loading={emailVerificationSendMutationState.loading}
+                    onClick={function () {
+                        emailVerificationSendMutation();
+                    }}
+                >
+                    Resend Verification Code
+                </Button>
+            </div>
         </div>
     );
 }
