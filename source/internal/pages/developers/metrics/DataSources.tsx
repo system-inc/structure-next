@@ -16,7 +16,7 @@ import useDragAnimation from '@structure/source/common/animations/useDragAnimati
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - Animation
-import { useSprings, animated, config, UseSpringProps as UseSpringProperties } from '@react-spring/web';
+import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 
 // Dependencies - Utilities
@@ -43,10 +43,10 @@ export interface DataSourcesInterface {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>; // Set the loading state
 }
 export function DataSources(properties: DataSourcesInterface) {
-    const dataSourcesContainerRef = React.useRef<HTMLDivElement>(null);
+    const dataSourcesContainerReference = React.useRef<HTMLDivElement>(null);
 
     // Store the original order of the data sources (before dragging) this will be used to update the visual order of the data sources
-    const visualOrder = React.useRef(Array.from(Array(properties.settings.dataSources.length).keys()));
+    const visualOrderReference = React.useRef(Array.from(Array(properties.settings.dataSources.length).keys()));
 
     // console.log("Data Order: ", properties.settings.dataSources);
     // console.log("Visual Order: ", visualOrder.current);
@@ -76,7 +76,7 @@ export function DataSources(properties: DataSourcesInterface) {
         ]);
 
         // Update the visual order
-        visualOrder.current = [...visualOrder.current, newIndex];
+        visualOrderReference.current = [...visualOrderReference.current, newIndex];
     };
 
     const handleRemoveDataSource = (id: string) => {
@@ -96,7 +96,7 @@ export function DataSources(properties: DataSourcesInterface) {
         });
 
         // Update the visual order
-        visualOrder.current = Array.from(Array(visualOrder.current.length - 1).keys());
+        visualOrderReference.current = Array.from(Array(visualOrderReference.current.length - 1).keys());
     };
 
     // Set the height of each row
@@ -104,15 +104,15 @@ export function DataSources(properties: DataSourcesInterface) {
 
     // Create springs, each corresponds to an item, controlling its transform, scale, etc.
     const [springs, springsApi] = useSprings(
-        visualOrder.current.length,
-        dragAnimation({ order: visualOrder.current, height: rowHeight }),
+        visualOrderReference.current.length,
+        dragAnimation({ order: visualOrderReference.current, height: rowHeight }),
     );
 
     // Bind the drag event to the row
     const dragEventListener = useDrag(
         ({ args: [originalIndex], active, movement: [x, y] }) => {
             // Find the current index of the row in the visual order (contained in visualOrder)
-            const visualIndex = visualOrder.current.indexOf(originalIndex);
+            const visualIndex = visualOrderReference.current.indexOf(originalIndex);
 
             // If the row is not found, return
             if(visualIndex === -1) return;
@@ -121,11 +121,11 @@ export function DataSources(properties: DataSourcesInterface) {
             const currentRow = clamp(
                 Math.round((visualIndex * rowHeight + y) / rowHeight),
                 0,
-                visualOrder.current.length - 1,
+                visualOrderReference.current.length - 1,
             );
 
             // Swap the order of the rows
-            const newOrder = swapArrayElements(visualOrder.current, visualIndex, currentRow);
+            const newOrder = swapArrayElements(visualOrderReference.current, visualIndex, currentRow);
 
             // Animate the new order
             springsApi.start(
@@ -162,30 +162,33 @@ export function DataSources(properties: DataSourcesInterface) {
             ); // Feed springs new style data, they'll animate the view without causing a single render
         },
         {
-            bounds: dataSourcesContainerRef,
+            bounds: dataSourcesContainerReference,
             axis: 'y',
         },
     );
 
     // Immediately animate to the new visual order when the data sources change
-    React.useEffect(() => {
-        // Update the visual order
-        visualOrder.current = Array.from(Array(properties.settings.dataSources.length).keys());
+    React.useEffect(
+        function () {
+            // Update the visual order
+            visualOrderReference.current = Array.from(Array(properties.settings.dataSources.length).keys());
 
-        // Animate the new order
-        springsApi.start(
-            dragAnimation({
-                order: visualOrder.current,
-                active: false,
-                originalIndex: 0,
-                currentIndex: 0,
-                y: 0,
-                height: rowHeight,
-                // This is an immediate animation, so it will not be animated
-                immediate: true,
-            }),
-        );
-    }, [properties.settings.dataSources, dragAnimation, springsApi]);
+            // Animate the new order
+            springsApi.start(
+                dragAnimation({
+                    order: visualOrderReference.current,
+                    active: false,
+                    originalIndex: 0,
+                    currentIndex: 0,
+                    y: 0,
+                    height: rowHeight,
+                    // This is an immediate animation, so it will not be animated
+                    immediate: true,
+                }),
+            );
+        },
+        [properties.settings.dataSources, dragAnimation, springsApi],
+    );
 
     // Render the component
     return (
@@ -225,7 +228,7 @@ export function DataSources(properties: DataSourcesInterface) {
                             height: properties.settings.dataSources.length * rowHeight,
                         }}
                         className="relative"
-                        ref={dataSourcesContainerRef}
+                        ref={dataSourcesContainerReference}
                     >
                         {springs.map(function ({ zIndex, y, scale }, index) {
                             const dataSource = properties.settings.dataSources[index];

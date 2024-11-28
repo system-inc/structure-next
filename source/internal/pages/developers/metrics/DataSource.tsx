@@ -15,7 +15,6 @@ import Tip from '@structure/source/common/popovers/Tip';
 import { useQuery } from '@apollo/client';
 import {
     DataInteractionDatabaseTableDocument,
-    DataInteractionDatabaseTablesDocument,
     DataInteractionDatabaseTableMetricsDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
@@ -165,7 +164,7 @@ export function DataSource(properties: DataSourceInterface) {
                 }
             });
         },
-        onError: (error) => {
+        onError: function () {
             properties.setDataSourcesWithMetrics((old) => {
                 return old.filter((old) => old.id !== properties.settings.id);
             });
@@ -463,7 +462,7 @@ export function DataSource(properties: DataSourceInterface) {
             const base = Math.floor(position);
             const rest = position - base;
 
-            let baseNumber = sortedData[base] as number;
+            const baseNumber = sortedData[base] as number;
             if(base < sortedData.length - 1) {
                 const nextValue = sortedData[base + 1] as number; // Asserting that the value is a number
                 return Math.round(baseNumber + rest * (nextValue - baseNumber));
@@ -474,7 +473,7 @@ export function DataSource(properties: DataSourceInterface) {
         };
 
         // Calculate specific percentiles (e.g., 25th, 50th, 75th, 95th)
-        let percentiles = new Map<number, number>();
+        const percentiles = new Map<number, number>();
         [0.05, 0.25, 0.5, 0.75, 0.95].forEach((percentage) => {
             percentiles.set(percentage * 100, getPercentile(sortedData, percentage));
         });
@@ -497,7 +496,9 @@ export function DataSource(properties: DataSourceInterface) {
     // Calculate the statistics
     const statistics = calculateStatistics(
         dataInteractionDatabaseTableMetricsQueryState.data?.dataInteractionDatabaseTableMetrics[0]?.data.map(
-            (d: any) => d[1],
+            function (d) {
+                return d[1];
+            },
         ) ?? [],
     );
 
@@ -547,7 +548,7 @@ export function DataSource(properties: DataSourceInterface) {
                                     <InputText
                                         id={'color-' + properties.settings.id}
                                         defaultValue={rgbStringToHexString(properties.settings.color).slice(1)}
-                                        onChange={function (value, event) {
+                                        onChange={function (value) {
                                             handleHexColorChange('#' + value);
                                         }}
                                         className="pl-7 font-mono"

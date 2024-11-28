@@ -33,6 +33,8 @@ export function UsersPage() {
     // Query
     const usersQueryState = useQuery(AccountsAdminDocument, {
         variables: {
+            // TODO: Add order by createdAt descending here
+            // Need a schema update
             pagination: {
                 itemsPerPage: itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,

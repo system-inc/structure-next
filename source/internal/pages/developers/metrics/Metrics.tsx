@@ -21,7 +21,7 @@ import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
 import { useApolloClient } from '@apollo/client';
-import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
+import { ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import MinusIcon from '@structure/assets/icons/interface/MinusIcon.svg';
@@ -96,8 +96,7 @@ export type DataSourceWithMetricsType = DataSourceType & {
 
 // Component - Metrics
 // The higher level component used to render both the chart and the controls
-export interface MetricsInterface {}
-export function Metrics(properties: MetricsInterface) {
+export function Metrics() {
     // Use the Apollo Client for refetching queries with the refresh button
     const apolloClient = useApolloClient();
 
@@ -153,11 +152,15 @@ export function Metrics(properties: MetricsInterface) {
 
     // Memoize the start and end dates from the date range
     const startTime = React.useMemo(
-        () => (timeRange.startTime ? new Date(timeRange.startTime) : startOfToday()),
+        function () {
+            return timeRange.startTime ? new Date(timeRange.startTime) : startOfToday();
+        },
         [timeRange.startTime],
     );
     const endTime = React.useMemo(
-        () => (timeRange.endTime ? new Date(timeRange.endTime) : undefined),
+        function () {
+            return timeRange.endTime ? new Date(timeRange.endTime) : undefined;
+        },
         [timeRange.endTime],
     );
     // console.log("startTime", startTime);
@@ -233,7 +236,7 @@ export function Metrics(properties: MetricsInterface) {
 
     // Sort dataSourcesWithMetrics by the order of the dataSources array
     const sortedDataSourcesWithMetrics = dataSources
-        .map((dataSources) => {
+        .map(function (dataSources) {
             const dataSourceWithMetrics = dataSourcesWithMetrics.find((dataSourceWithMetrics) => {
                 return dataSourceWithMetrics.id === dataSources.id;
             });
@@ -241,7 +244,9 @@ export function Metrics(properties: MetricsInterface) {
             return dataSourceWithMetrics;
         })
         // Filter out undefined values
-        .filter((dataSourceWithMetrics) => dataSourceWithMetrics !== undefined) as DataSourceWithMetricsType[];
+        .filter(function (dataSourceWithMetrics) {
+            return dataSourceWithMetrics !== undefined;
+        }) as DataSourceWithMetricsType[];
     // console.log('Metrics.tsx sortedDataSourcesWithMetrics', sortedDataSourcesWithMetrics);
 
     // Fill in missing zeroes for each metric
