@@ -30,7 +30,7 @@ export interface NoticeInterface {
 }
 export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function (properties, reference) {
     // State
-    const [hovered, setHovered] = React.useState(false);
+    const [hovered, setHovered] = React.useState(true);
 
     // Springs
     const [noticeSpring, noticeSpringControl] = useSpring(() => ({
@@ -115,20 +115,22 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
                 <CloseIcon className="h-4 w-4 text-neutral" />
             </AnimatedButton>
 
-            {/* Title and Content */}
-            <div className="items-center space-y-1 pr-2">
-                {properties.title && <div className="text-sm font-semibold">{properties.title}</div>}
-                {properties.content && <div className="text-sm text-neutral">{properties.content}</div>}
-            </div>
+            <div className="flex w-full items-center justify-between">
+                {/* Title and Content */}
+                <div className="items-center space-y-1 pr-4">
+                    {properties.title && <div className="text-sm font-semibold">{properties.title}</div>}
+                    {properties.content && <div className="text-sm text-neutral">{properties.content}</div>}
+                </div>
 
-            {/* Button */}
-            <Button
-                {...properties.buttonProperties} // Spread DOM properties
-                tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
-                onClick={handleRemoval}
-            >
-                {properties?.buttonProperties?.children ? properties.buttonProperties.children : 'Dismiss'}
-            </Button>
+                {/* Button */}
+                <Button
+                    {...properties.buttonProperties} // Spread DOM properties
+                    tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
+                    onClick={handleRemoval}
+                >
+                    {properties?.buttonProperties?.children ? properties.buttonProperties.children : 'Dismiss'}
+                </Button>
+            </div>
         </animated.div>
     );
 });
