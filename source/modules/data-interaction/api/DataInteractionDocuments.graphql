@@ -57,7 +57,7 @@ query DataInteractionDatabaseTables($databaseName: String, $pagination: Paginati
         items {
             databaseName
             tableName
-            rowCount
+            # rowCount
         }
         pagination {
             itemIndex

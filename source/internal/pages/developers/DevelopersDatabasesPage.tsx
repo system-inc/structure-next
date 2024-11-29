@@ -30,7 +30,12 @@ export function DevelopersDatabasePage() {
     const databasesAndTables = React.useMemo(
         function () {
             // Data structure for the databases and tables
-            const databasesAndTablesObject: { [databaseName: string]: { tableName: string; rowCount: number }[] } = {};
+            const databasesAndTablesObject: {
+                [databaseName: string]: {
+                    tableName: string;
+                    // rowCount: number; // This is expensive to compute
+                }[];
+            } = {};
 
             // Loop over the query results with a reference to the index
             dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items.forEach(function (item) {
@@ -41,7 +46,7 @@ export function DevelopersDatabasePage() {
 
                 databasesAndTablesObject[item.databaseName]?.push({
                     tableName: item.tableName,
-                    rowCount: item.rowCount,
+                    // rowCount: item.rowCount,
                 });
             });
 
@@ -77,10 +82,10 @@ export function DevelopersDatabasePage() {
                                             title: 'Table Name',
                                             identifier: 'tableName',
                                         },
-                                        {
-                                            title: 'Row Count',
-                                            identifier: 'rowCount',
-                                        },
+                                        // {
+                                        //     title: 'Row Count',
+                                        //     identifier: 'rowCount',
+                                        // },
                                     ]}
                                     rows={
                                         databasesAndTables[databaseName]?.map(function (table) {
@@ -91,10 +96,10 @@ export function DevelopersDatabasePage() {
                                                         url: `/internal/developers/data?page=1&databaseName=${databaseName}&tableName=${table.tableName}`,
                                                         openUrlInNewTab: true,
                                                     },
-                                                    {
-                                                        children: addCommas(table.rowCount),
-                                                        value: table.rowCount,
-                                                    },
+                                                    // {
+                                                    //     children: addCommas(table.rowCount),
+                                                    //     value: table.rowCount,
+                                                    // },
                                                 ],
                                             } as TableRowInterface;
                                         }) || []

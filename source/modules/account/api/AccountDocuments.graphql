@@ -308,8 +308,8 @@ mutation AccountRoleGrant($input: GrantAccessRoleInput!) {
 }
 
 # Accounts Admin Query
-query AccountsAdmin($pagination: PaginationInput) {
-    accountsAdmin(pagination: $pagination) {
+query AccountsAdmin($input: PaginationInputWithFilters, $orderBy: OrderBy) {
+    accountsAdmin(input: $input, orderBy: $orderBy) {
         items {
             emailAddress
             profiles {

@@ -16,7 +16,11 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
-import { AccountsAdminDocument, AccountDeleteAdminDocument } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    AccountsAdminDocument,
+    AccountDeleteAdminDocument,
+    OrderByDirection,
+} from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Component - UsersPage
@@ -33,11 +37,13 @@ export function UsersPage() {
     // Query
     const usersQueryState = useQuery(AccountsAdminDocument, {
         variables: {
-            // TODO: Add order by createdAt descending here
-            // Need a schema update
-            pagination: {
+            input: {
                 itemsPerPage: itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
+            },
+            orderBy: {
+                key: 'createdAt',
+                direction: OrderByDirection.Descending,
             },
         },
     });
