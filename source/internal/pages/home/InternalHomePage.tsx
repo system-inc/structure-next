@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import SimpleSvgMap from '@structure/source/common/maps/SimpleSvgMap';
-import PanAndZoomContainer from '@structure/source/common/maps/PanAndZoomContainer';
+// import PanAndZoomContainer from '@structure/source/common/maps/PanAndZoomContainer';
 import HomeMetricLink from '@structure/source/internal/common/dashboard/HomeMetricLink';
 import CardLink from '@structure/source/internal/common/dashboard/CardLink';
 import ActivityLink from '@structure/source/internal/common/dashboard/ActivityLink';
@@ -45,7 +45,7 @@ export function InternalHomePage() {
             {/* Left column */}
             <div className="flex flex-grow flex-col pr-6">
                 <div className="mb-10">
-                    <PanAndZoomContainer width={500} height={500} />
+                    {/* <PanAndZoomContainer width={500} height={500} /> */}
 
                     {/* Engagement */}
                     {engagementLiveQueryState.error && (
