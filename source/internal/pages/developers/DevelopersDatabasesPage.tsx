@@ -13,7 +13,7 @@ import { useSuspenseQuery } from '@apollo/client';
 import { DataInteractionDatabaseTablesDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { addCommas } from '@structure/source/utilities/Number';
+// import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - DatabasePage
 export function DevelopersDatabasePage() {

@@ -23,6 +23,9 @@ import {
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
+// Dependencies - Utilities
+import { iso8601Date, timeAgo } from '@structure/source/utilities/Time';
+
 // Component - UsersPage
 export function UsersPage() {
     // Hooks and State
@@ -133,7 +136,7 @@ export function UsersPage() {
                         {usersQueryState.data.accountsAdmin.items.map((account) => (
                             <div
                                 key={account.emailAddress}
-                                className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_160px_160px_1fr_100px]"
+                                className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_120px_200px_200px_1fr_100px]"
                             >
                                 {/* Use ProfileImage instead of UserAvatar */}
                                 <div className="relative h-8 w-8">
@@ -159,10 +162,10 @@ export function UsersPage() {
                                             account.profiles[0]?.displayName || '-'
                                         )}
                                     </div>
+                                    <div className="neutral truncate text-sm">{account.emailAddress}</div>
                                     <div className="neutral truncate text-sm">
                                         {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                     </div>
-                                    <div className="neutral truncate text-sm">{account.emailAddress}</div>
                                     <Button
                                         variant="destructive"
                                         size="sm"
@@ -193,10 +196,14 @@ export function UsersPage() {
                                         account.profiles[0]?.displayName || '-'
                                     )}
                                 </div>
+                                <div className="neutral hidden truncate text-sm md:block">{account.emailAddress}</div>
                                 <div className="neutral hidden truncate text-sm md:block">
                                     {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                 </div>
-                                <div className="neutral hidden truncate text-sm md:block">{account.emailAddress}</div>
+                                <div className="neutral hidden truncate text-sm md:block">
+                                    {iso8601Date(new Date(account.profiles[0]?.createdAt))} (
+                                    {timeAgo(new Date(account.profiles[0]?.createdAt).getTime(), true)})
+                                </div>
                                 <Button
                                     variant="destructive"
                                     size="sm"
