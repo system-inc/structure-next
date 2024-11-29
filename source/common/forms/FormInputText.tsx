@@ -212,6 +212,8 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                         onChange={onChangeIntercept}
                         onBlur={onBlurIntercept}
                         onFocus={properties.onFocus}
+                        onKeyDown={properties.onKeyDown}
+                        onKeyUp={properties.onKeyUp}
                         // Specific to InputText
                         type={type}
                         placeholder={properties.placeholder}

@@ -133,23 +133,58 @@ export function UsersPage() {
                 {/* Users List */}
                 {usersQueryState.data?.accountsAdmin.items && (
                     <>
-                        {usersQueryState.data.accountsAdmin.items.map((account) => (
-                            <div
-                                key={account.emailAddress}
-                                className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_120px_200px_200px_1fr_100px]"
-                            >
-                                {/* Use ProfileImage instead of UserAvatar */}
-                                <div className="relative h-8 w-8">
-                                    <ProfileImage
-                                        profileImageUrl={account.profiles[0]?.imageUrls?.[0]?.url}
-                                        alternateText={account.profiles[0]?.displayName || ''}
-                                        className="h-full w-full rounded-full object-cover"
-                                    />
-                                </div>
+                        {usersQueryState.data.accountsAdmin.items.map(function (account) {
+                            return (
+                                <div
+                                    key={account.emailAddress}
+                                    className="grid grid-cols-[40px_1fr] items-center gap-3 py-2 md:grid-cols-[40px_120px_200px_200px_16px_1fr_100px]"
+                                >
+                                    {/* Use ProfileImage instead of UserAvatar */}
+                                    <div className="relative h-8 w-8">
+                                        <ProfileImage
+                                            profileImageUrl={account.profiles[0]?.imageUrls?.[0]?.url}
+                                            alternateText={account.profiles[0]?.displayName || ''}
+                                            className="h-full w-full rounded-full object-cover"
+                                        />
+                                    </div>
 
-                                {/* Mobile View */}
-                                <div className="md:hidden">
-                                    <div className="truncate">
+                                    {/* Mobile View */}
+                                    <div className="md:hidden">
+                                        <div className="truncate">
+                                            {account.profiles[0]?.username ? (
+                                                <Link
+                                                    href={`/profiles/${account.profiles[0].username}`}
+                                                    target="_blank"
+                                                    className="hover:underline"
+                                                >
+                                                    {account.profiles[0]?.displayName || '-'}
+                                                </Link>
+                                            ) : (
+                                                account.profiles[0]?.displayName || '-'
+                                            )}
+                                        </div>
+                                        <div className="neutral truncate text-sm">{account.emailAddress}</div>
+                                        <div className="neutral truncate text-sm">
+                                            {account.profiles[0]?.username && `@${account.profiles[0].username}`}
+                                        </div>
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            className="mt-2"
+                                            onClick={() => {
+                                                setSelectedUser({
+                                                    emailAddress: account.emailAddress,
+                                                    username: account.profiles[0]?.username || '',
+                                                });
+                                                setDeleteDialogOpen(true);
+                                            }}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
+
+                                    {/* Desktop View */}
+                                    <div className="hidden truncate md:block">
                                         {account.profiles[0]?.username ? (
                                             <Link
                                                 href={`/profiles/${account.profiles[0].username}`}
@@ -162,14 +197,21 @@ export function UsersPage() {
                                             account.profiles[0]?.displayName || '-'
                                         )}
                                     </div>
-                                    <div className="neutral truncate text-sm">{account.emailAddress}</div>
-                                    <div className="neutral truncate text-sm">
+                                    <div className="neutral hidden truncate text-sm md:block">
+                                        {account.emailAddress}
+                                    </div>
+                                    <div className="neutral hidden truncate text-sm md:block">
                                         {account.profiles[0]?.username && `@${account.profiles[0].username}`}
+                                    </div>
+                                    <div className="neutral hidden truncate md:block">🇺🇸</div>
+                                    <div className="neutral hidden truncate text-sm md:block">
+                                        {iso8601Date(new Date(account.profiles[0]?.createdAt))} (
+                                        {timeAgo(new Date(account.profiles[0]?.createdAt).getTime(), true)})
                                     </div>
                                     <Button
                                         variant="destructive"
                                         size="sm"
-                                        className="mt-2"
+                                        className="hidden md:block"
                                         onClick={() => {
                                             setSelectedUser({
                                                 emailAddress: account.emailAddress,
@@ -181,45 +223,8 @@ export function UsersPage() {
                                         Delete
                                     </Button>
                                 </div>
-
-                                {/* Desktop View */}
-                                <div className="hidden truncate md:block">
-                                    {account.profiles[0]?.username ? (
-                                        <Link
-                                            href={`/profiles/${account.profiles[0].username}`}
-                                            target="_blank"
-                                            className="hover:underline"
-                                        >
-                                            {account.profiles[0]?.displayName || '-'}
-                                        </Link>
-                                    ) : (
-                                        account.profiles[0]?.displayName || '-'
-                                    )}
-                                </div>
-                                <div className="neutral hidden truncate text-sm md:block">{account.emailAddress}</div>
-                                <div className="neutral hidden truncate text-sm md:block">
-                                    {account.profiles[0]?.username && `@${account.profiles[0].username}`}
-                                </div>
-                                <div className="neutral hidden truncate text-sm md:block">
-                                    {iso8601Date(new Date(account.profiles[0]?.createdAt))} (
-                                    {timeAgo(new Date(account.profiles[0]?.createdAt).getTime(), true)})
-                                </div>
-                                <Button
-                                    variant="destructive"
-                                    size="sm"
-                                    className="hidden md:block"
-                                    onClick={() => {
-                                        setSelectedUser({
-                                            emailAddress: account.emailAddress,
-                                            username: account.profiles[0]?.username || '',
-                                        });
-                                        setDeleteDialogOpen(true);
-                                    }}
-                                >
-                                    Delete
-                                </Button>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </>
                 )}
 
