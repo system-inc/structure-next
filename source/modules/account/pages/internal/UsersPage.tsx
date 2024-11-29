@@ -156,6 +156,7 @@ export function UsersPage() {
                                                     href={`/profiles/${account.profiles[0].username}`}
                                                     target="_blank"
                                                     className="hover:underline"
+                                                    prefetch={false}
                                                 >
                                                     {account.profiles[0]?.displayName || '-'}
                                                 </Link>
@@ -190,6 +191,7 @@ export function UsersPage() {
                                                 href={`/profiles/${account.profiles[0].username}`}
                                                 target="_blank"
                                                 className="hover:underline"
+                                                prefetch={false}
                                             >
                                                 {account.profiles[0]?.displayName || '-'}
                                             </Link>

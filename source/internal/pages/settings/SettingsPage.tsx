@@ -8,10 +8,10 @@ import { InternalNavigationTrail } from '@structure/source/internal/layouts/navi
 export function SettingsPage() {
     // Render the component
     return (
-        <>
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
             <h1>Settings</h1>
-        </>
+        </div>
     );
 }
 

@@ -20,7 +20,7 @@ const [state, setState] = React.useState<string>('');`);
 
     // Render the component
     return (
-        <>
+        <div className="px-6 py-4">
             <InternalNavigationTrail />
 
             <h1>Developers</h1>
@@ -73,7 +73,7 @@ const [state, setState] = React.useState<string>('');`);
                     />
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
