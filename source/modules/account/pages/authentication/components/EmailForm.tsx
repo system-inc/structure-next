@@ -109,11 +109,11 @@ export function EmailForm(properties: EmailFormInterface) {
             {/* Disclaimer */}
             <p className="mt-6 text-sm leading-normal text-neutral+3">
                 By continuing, you agree to the{' '}
-                <Link className="primary" href="/legal/terms-of-service" target="_blank">
+                <Link className="primary" href="/legal/terms-of-service" target="_blank" prefetch={false}>
                     terms of service
                 </Link>{' '}
                 and{' '}
-                <Link className="primary" href="/legal/privacy-policy" target="_blank">
+                <Link className="primary" href="/legal/privacy-policy" target="_blank" prefetch={false}>
                     privacy policy
                 </Link>
                 .

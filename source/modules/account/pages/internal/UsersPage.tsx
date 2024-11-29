@@ -163,8 +163,8 @@ export function UsersPage() {
                                                 account.profiles[0]?.displayName || '-'
                                             )}
                                         </div>
-                                        <div className="neutral truncate text-sm">{account.emailAddress}</div>
-                                        <div className="neutral truncate text-sm">
+                                        <div className="truncate text-sm">{account.emailAddress}</div>
+                                        <div className="truncate text-sm">
                                             {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                         </div>
                                         <Button
@@ -197,14 +197,12 @@ export function UsersPage() {
                                             account.profiles[0]?.displayName || '-'
                                         )}
                                     </div>
-                                    <div className="neutral hidden truncate text-sm md:block">
-                                        {account.emailAddress}
-                                    </div>
-                                    <div className="neutral hidden truncate text-sm md:block">
+                                    <div className="hidden truncate text-sm md:block">{account.emailAddress}</div>
+                                    <div className="hidden truncate text-sm md:block">
                                         {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                     </div>
-                                    <div className="neutral hidden truncate md:block">🇺🇸</div>
-                                    <div className="neutral hidden truncate text-sm md:block">
+                                    <div className="hidden truncate md:block">🇺🇸</div>
+                                    <div className="hidden truncate text-sm md:block">
                                         {iso8601Date(new Date(account.profiles[0]?.createdAt))} (
                                         {timeAgo(new Date(account.profiles[0]?.createdAt).getTime(), true)})
                                     </div>
