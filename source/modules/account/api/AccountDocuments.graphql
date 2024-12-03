@@ -350,6 +350,13 @@ query AccountByEmailAddressAdmin($emailAddress: String!) {
     }
 }
 
+# Account Delete Mutation
+mutation AccountDelete($reason: String) {
+    accountDelete(reason: $reason) {
+        success
+    }
+}
+
 # Account Delete Admin Mutation
 mutation AccountDeleteAdmin($emailAddress: String!) {
     accountDeleteAdmin(emailAddress: $emailAddress) {

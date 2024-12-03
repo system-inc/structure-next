@@ -7,6 +7,7 @@ import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';
 // import CreditCardIcon from '@structure/assets/icons/finance/CreditCardIcon.svg';
 // import NotificationsIcon from '@structure/assets/icons/communication/NotificationsIcon.svg';
 import SignOutIcon from '@structure/assets/icons/security/SignOutIcon.svg';
+import GearIcon from '@structure/assets/icons/tools/GearIcon.svg';
 
 // Account Navigation Links
 export const AccountNavigationLinks = [
@@ -17,6 +18,7 @@ export const AccountNavigationLinks = [
     // { href: '/account/addresses', title: 'Addresses', icon: MapLocationIcon },
     // { href: '/account/payment-methods', title: 'Payment Methods', icon: CreditCardIcon },
     // { href: '/account/notifications', title: 'Notifications', icon: NotificationsIcon },
+    { href: '/account/settings', title: 'Settings', icon: GearIcon },
     { href: '/sign-out', title: 'Sign Out', icon: SignOutIcon },
 ];
 

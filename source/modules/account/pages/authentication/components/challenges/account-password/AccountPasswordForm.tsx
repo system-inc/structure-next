@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 
 // Dependencies - Main Components
 import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
@@ -13,7 +13,7 @@ import { useMutation } from '@apollo/client';
 import { AccountPasswordVerifyDocument, AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
+// import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
 
 // Component - AccountPasswordForm
 export interface AccountPasswordFormInterface {

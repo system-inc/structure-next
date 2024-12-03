@@ -7,7 +7,7 @@ import React from 'react';
 import { Button } from '@structure/source/common/buttons/Button';
 import { EmailVerificationChallenge } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationChallenge';
 import { AccountPasswordChallenge } from '@structure/source/modules/account/pages/authentication/components/challenges/account-password/AccountPasswordChallenge';
-import { ManagePasswordForm } from '@structure/source/modules/account/pages/profile/security/components/ManagePasswordForm';
+import { DeleteAccountForm } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccountForm';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
@@ -20,12 +20,11 @@ import {
     AuthenticationSessionStatus,
 } from '@project/source/api/GraphQlGeneratedCode';
 
-// Component - ManagePassword
-export interface ManagePasswordInterface {
-    accountHasPasswordSet: boolean;
+// Component - DeleteAccount
+export interface DeleteAccountInterface {
     onComplete?: () => void;
 }
-export function ManagePassword(properties: ManagePasswordInterface) {
+export function DeleteAccount(properties: DeleteAccountInterface) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
         AuthenticationCurrentQuery['authenticationCurrent'] | undefined
@@ -59,12 +58,7 @@ export function ManagePassword(properties: ManagePasswordInterface) {
         (authenticationSession?.status == AuthenticationSessionStatus.Authenticated &&
             authenticationSession?.scopeType == 'AccountMaintenance')
     ) {
-        currentAuthenticationComponent = (
-            <ManagePasswordForm
-                accountHasPasswordSet={properties.accountHasPasswordSet}
-                onComplete={properties.onComplete}
-            />
-        );
+        currentAuthenticationComponent = <DeleteAccountForm onComplete={properties.onComplete} />;
     }
     // Challenged
     else if(
@@ -104,12 +98,8 @@ export function ManagePassword(properties: ManagePasswordInterface) {
     else {
         currentAuthenticationComponent = (
             <div>
-                <h2 className="text-base font-medium">
-                    {properties.accountHasPasswordSet ? 'Change' : 'Set'} Password
-                </h2>
-                <p className="mt-4 text-sm">
-                    To {properties.accountHasPasswordSet ? 'change' : 'set'} your password, please verify your identity.
-                </p>
+                <h2 className="text-base font-medium">Delete Account</h2>
+                <p className="mt-4 text-sm">To delete your account, please verify your identity.</p>
                 <Button
                     loading={accountMaintenanceSessionCreateMutationState.loading}
                     className="mt-6"
@@ -128,4 +118,4 @@ export function ManagePassword(properties: ManagePasswordInterface) {
 }
 
 // Export - Default
-export default ManagePassword;
+export default DeleteAccount;

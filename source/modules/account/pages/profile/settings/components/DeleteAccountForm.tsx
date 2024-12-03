@@ -1,0 +1,99 @@
+'use client'; // This component uses client-only features
+
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Main Components
+import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
+import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { Alert } from '@structure/source/common/notifications/Alert';
+import { Button } from '@structure/source/common/buttons/Button';
+
+// Dependencies - API
+import { useMutation } from '@apollo/client';
+import { AccountDeleteDocument } from '@project/source/api/GraphQlGeneratedCode';
+
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
+// Component - DeleteAccountForm
+export interface DeleteAccountFormInterface {
+    className?: string;
+    onComplete?: () => void;
+}
+export function DeleteAccountForm(properties: DeleteAccountFormInterface) {
+    // Hooks
+    const [accountDeleteMutation] = useMutation(AccountDeleteDocument);
+
+    // State
+    const [success, setSuccess] = React.useState(false);
+
+    // Function to handle form submission
+    async function handleSubmit(formValues: { reason?: string }): Promise<FormSubmitResponseInterface> {
+        const reason = formValues.reason;
+
+        // If we have a valid maintenance session and no pending challenges, proceed with password update
+        try {
+            const result = await accountDeleteMutation({
+                variables: {
+                    reason: reason,
+                },
+            });
+
+            if(result.data?.accountDelete.success) {
+                setSuccess(true);
+
+                return {
+                    success: true,
+                };
+            }
+        }
+        catch(error) {
+            console.error('An error occurred while deleting your account.', error);
+        }
+
+        setSuccess(false);
+
+        return {
+            success: false,
+            message: <Alert variant="error" title="An error occurred while deleting your account." />,
+        };
+    }
+
+    // Render the component
+    return (
+        <div className={mergeClassNames('', properties.className)}>
+            {success && (
+                <>
+                    <Alert variant="success" title="Your account has been deleted." />
+                    <Button className="mt-4" onClick={properties.onComplete}>
+                        Close
+                    </Button>
+                </>
+            )}
+
+            {!success && (
+                <>
+                    <h2 className="text-xl font-medium">Delete Account</h2>
+                    <p className="mt-4">Are you sure you want to delete your account?</p>
+
+                    <Form
+                        className="mt-6"
+                        formInputs={[
+                            <FormInputText key="reason" id="reason" className="flex-grow" label="Reason (optional)" />,
+                        ]}
+                        buttonProperties={{
+                            children: 'Delete Account',
+                            processingText: 'Deleting account...',
+                        }}
+                        onSubmit={handleSubmit}
+                        resetOnSubmitSuccess={true}
+                    />
+                </>
+            )}
+        </div>
+    );
+}
+
+// Export - Default
+export default DeleteAccountForm;
