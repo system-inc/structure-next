@@ -1,4 +1,4 @@
-'use client'; // This component uses client-only features
+'use client';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -11,28 +11,24 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { SideNavigationLayout } from '@structure/source/layouts/side-navigation/SideNavigationLayout';
 import { SideNavigation } from '@structure/source/common/navigation/side-navigation/SideNavigation';
 import { ApiKeyFormDialog } from '@structure/source/modules/documentation/forms/ApiKeyFormDialog';
-import { DocumentationContent } from '@structure/source/modules/documentation/DocumentationContent';
 
 // Dependencies - Shared State
 import { useAtom } from 'jotai';
 import { apiKeyAtom } from '@structure/source/modules/documentation/forms/ApiKeyFormDialog';
 
-// Component - Documentation
-export interface DocumentationInterface {
+type DocumentationLayoutProps = {
+    children: React.ReactNode;
     specification: DocumentationSpecificationInterface;
-}
-export function Documentation(properties: DocumentationInterface) {
+};
+const DocumentationLayout = (props: DocumentationLayoutProps) => {
     // State
     const [isApiKeyDialogOpen, setIsApiKeyDialogOpen] = React.useState(false);
     const [apiKey] = useAtom(apiKeyAtom);
 
-    console.log('re-rendering Documentation');
-
-    // Render the component
     return (
         <SideNavigationLayout
             topBar={true}
-            identifier={properties.specification.identifier}
+            identifier={props.specification.identifier}
             navigation={
                 <nav className="px-4 py-4">
                     {/* API Key */}
@@ -47,7 +43,7 @@ export function Documentation(properties: DocumentationInterface) {
                         </Button>
                     </div>
 
-                    <SideNavigation categories={properties.specification.categories} />
+                    <SideNavigation categories={props.specification.categories} />
 
                     {/* API Key */}
                     <ApiKeyFormDialog
@@ -58,10 +54,9 @@ export function Documentation(properties: DocumentationInterface) {
                     />
                 </nav>
             }
-            contentBody={<DocumentationContent specification={properties.specification} />}
+            contentBody={props.children}
         />
     );
-}
+};
 
-// Export - Default
-export default Documentation;
+export default DocumentationLayout;
