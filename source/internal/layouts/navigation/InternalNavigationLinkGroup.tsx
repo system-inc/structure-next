@@ -63,7 +63,7 @@ export function InternalNavigationLinkGroup(properties: InternalNavigationLinkIn
                 </div>
             </div>
 
-            <Collapse key={properties.title} isOpen={isOpen} animationConfig={animationConfig}>
+            <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={animationConfig}>
                 <div className="ml-3 space-y-0.5 border-l border-l-light-4 pb-0.5 pl-4 pt-0.5 dark:border-l-dark-4">
                     {properties.links?.map((internalNavigationLink) => {
                         return (
