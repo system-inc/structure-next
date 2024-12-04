@@ -18,10 +18,10 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
-    AccountRolesDocument,
-    AccountRolesQuery,
-    AccountRoleRevokeDocument,
-    OrderByDirection,
+    AccountAssignedAccessRolesPrivilegedDocument,
+    AccountAssignedAccessRolesPrivilegedQuery,
+    AccountAccessRoleRevokePrivilegedDocument,
+    // OrderByDirection,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
@@ -36,16 +36,16 @@ export function UsersRolesPage() {
     const [revokeSuccess, setRevokeSuccess] = React.useState(false);
 
     // Hooks
-    const assignedRolesQueryState = useQuery(AccountRolesDocument, {
+    const assignedRolesQueryState = useQuery(AccountAssignedAccessRolesPrivilegedDocument, {
         variables: {
-            statuses: ['Active'],
-            orderBy: {
-                key: 'createdAt',
-                direction: OrderByDirection.Descending,
-            },
+            // statuses: ['Active'],
+            // orderBy: {
+            //     key: 'createdAt',
+            //     direction: OrderByDirection.Descending,
+            // },
         },
     });
-    const [revokeMutation, revokeMutationState] = useMutation(AccountRoleRevokeDocument);
+    const [revokeMutation, revokeMutationState] = useMutation(AccountAccessRoleRevokePrivilegedDocument);
 
     // Function to handle role revocation
     async function handleRevokeConfirm() {
@@ -54,11 +54,13 @@ export function UsersRolesPage() {
         try {
             const result = await revokeMutation({
                 variables: {
-                    roleId: selectedRole.id,
+                    input: {
+                        accessRoleId: selectedRole.id,
+                    },
                 },
             });
 
-            if(result.data?.accountRoleRevoke.success) {
+            if(result.data?.accountAccessRoleRevokePrivileged.success) {
                 setRevokeSuccess(true);
                 // Refresh the roles list
                 await assignedRolesQueryState.refetch();
@@ -77,15 +79,27 @@ export function UsersRolesPage() {
     }
 
     // Utility function to group roles by type
-    function groupRolesByType(roles: AccountRolesQuery['accountRoles']) {
-        return roles.reduce((groups: { [key: string]: AccountRolesQuery['accountRoles'] }, role) => {
-            const type = role.type;
-            if(!groups[type]) {
-                groups[type] = [];
-            }
-            groups[type].push(role);
-            return groups;
-        }, {});
+    function groupRolesByType(
+        accessRoles: AccountAssignedAccessRolesPrivilegedQuery['accountAssignedAccessRolesPrivileged']['items'],
+    ) {
+        return accessRoles.reduce(
+            (
+                groups: {
+                    [
+                        key: string
+                    ]: AccountAssignedAccessRolesPrivilegedQuery['accountAssignedAccessRolesPrivileged']['items'];
+                },
+                accessRole,
+            ) => {
+                const type = accessRole.type;
+                if(!groups[type]) {
+                    groups[type] = [];
+                }
+                groups[type].push(accessRole);
+                return groups;
+            },
+            {},
+        );
     }
 
     // Render
@@ -127,97 +141,56 @@ export function UsersRolesPage() {
                     )}
 
                     {/* Roles List Grouped by Type */}
-                    {assignedRolesQueryState.data?.accountRoles && (
+                    {assignedRolesQueryState.data?.accountAssignedAccessRolesPrivileged && (
                         <div className="space-y-8">
-                            {Object.entries(groupRolesByType(assignedRolesQueryState.data.accountRoles)).map(
-                                ([type, roles]) => (
-                                    <div key={type} className="space-y-4">
-                                        <h3 className="text-neutral-500 text-base font-medium">
-                                            {type} ({roles.length})
-                                        </h3>
-                                        <div className="divide-y divide-neutral/10">
-                                            {roles.map((role) => (
-                                                <div
-                                                    key={role.id}
-                                                    className="grid grid-cols-[40px_1fr] items-center gap-3 py-4 md:grid-cols-[40px_160px_1fr_100px]"
-                                                >
-                                                    {/* Profile Image */}
-                                                    <div className="relative h-10 w-10">
-                                                        <ProfileImage
-                                                            profileImageUrl={role.profile?.imageUrls?.[0]?.url}
-                                                            alternateText={
-                                                                role.profile?.displayName ||
-                                                                role.profile?.username ||
-                                                                ''
-                                                            }
-                                                            className="h-full w-full rounded-full object-cover"
-                                                        />
-                                                    </div>
+                            {Object.entries(
+                                groupRolesByType(
+                                    assignedRolesQueryState.data.accountAssignedAccessRolesPrivileged.items,
+                                ),
+                            ).map(([type, roles]) => (
+                                <div key={type} className="space-y-4">
+                                    <h3 className="text-neutral-500 text-base font-medium">
+                                        {type} ({roles.length})
+                                    </h3>
+                                    <div className="divide-y divide-neutral/10">
+                                        {roles.map((role) => (
+                                            <div
+                                                key={role.id}
+                                                className="grid grid-cols-[40px_1fr] items-center gap-3 py-4 md:grid-cols-[40px_160px_1fr_100px]"
+                                            >
+                                                {/* Profile Image */}
+                                                <div className="relative h-10 w-10">
+                                                    <ProfileImage
+                                                        profileImageUrl={role.profile?.images?.[0]?.url}
+                                                        alternateText={
+                                                            role.profile?.displayName || role.profile?.username || ''
+                                                        }
+                                                        className="h-full w-full rounded-full object-cover"
+                                                    />
+                                                </div>
 
-                                                    {/* Mobile View */}
-                                                    <div className="md:hidden">
-                                                        <Link
-                                                            href={`/profiles/${role.profile?.username}`}
-                                                            className="hover:text-blue-500 font-medium"
-                                                        >
-                                                            {role.profile?.displayName || role.profile?.username}
-                                                        </Link>
-                                                        <div className="text-neutral-500 text-sm">
-                                                            @{role.profile?.username}
-                                                        </div>
-                                                        <div className="text-neutral-500 text-sm">
-                                                            {role.primaryAccountEmailAddress}
-                                                        </div>
-                                                        <div className="text-neutral-500 text-sm">
-                                                            Added {fullDate(new Date(role.createdAt))}
-                                                            {role.expiresAt && (
-                                                                <div>Expires {fullDate(new Date(role.expiresAt))}</div>
-                                                            )}
-                                                        </div>
-                                                        <Button
-                                                            variant="destructive"
-                                                            size="sm"
-                                                            className="mt-2"
-                                                            onClick={() => {
-                                                                setSelectedRole({
-                                                                    id: role.id,
-                                                                    type: role.type,
-                                                                    username: role.profile?.username || '',
-                                                                });
-                                                                setRevokeDialogOpen(true);
-                                                            }}
-                                                        >
-                                                            Revoke
-                                                        </Button>
+                                                {/* Mobile View */}
+                                                <div className="md:hidden">
+                                                    <Link
+                                                        href={`/profiles/${role.profile?.username}`}
+                                                        className="hover:text-blue-500 font-medium"
+                                                    >
+                                                        {role.profile?.displayName || role.profile?.username}
+                                                    </Link>
+                                                    <div className="text-neutral-500 text-sm">
+                                                        @{role.profile?.username}
                                                     </div>
-
-                                                    {/* Desktop View */}
-                                                    <div className="hidden md:block">
-                                                        <Link
-                                                            href={`/profiles/${role.profile?.username}`}
-                                                            className="hover:text-blue-500 font-medium"
-                                                        >
-                                                            {role.profile?.displayName || role.profile?.username}
-                                                        </Link>
-                                                        <div className="text-neutral-500 text-sm">
-                                                            @{role.profile?.username}
-                                                        </div>
-                                                        <div className="text-neutral-500 text-sm">
-                                                            {role.primaryAccountEmailAddress}
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="text-neutral-500 hidden text-sm md:block">
+                                                    <div className="text-neutral-500 text-sm">{role.emailAddress}</div>
+                                                    <div className="text-neutral-500 text-sm">
                                                         Added {fullDate(new Date(role.createdAt))}
                                                         {role.expiresAt && (
                                                             <div>Expires {fullDate(new Date(role.expiresAt))}</div>
                                                         )}
                                                     </div>
-
                                                     <Button
                                                         variant="destructive"
                                                         size="sm"
-                                                        className="hidden md:block"
+                                                        className="mt-2"
                                                         onClick={() => {
                                                             setSelectedRole({
                                                                 id: role.id,
@@ -230,11 +203,48 @@ export function UsersRolesPage() {
                                                         Revoke
                                                     </Button>
                                                 </div>
-                                            ))}
-                                        </div>
+
+                                                {/* Desktop View */}
+                                                <div className="hidden md:block">
+                                                    <Link
+                                                        href={`/profiles/${role.profile?.username}`}
+                                                        className="hover:text-blue-500 font-medium"
+                                                    >
+                                                        {role.profile?.displayName || role.profile?.username}
+                                                    </Link>
+                                                    <div className="text-neutral-500 text-sm">
+                                                        @{role.profile?.username}
+                                                    </div>
+                                                    <div className="text-neutral-500 text-sm">{role.emailAddress}</div>
+                                                </div>
+
+                                                <div className="text-neutral-500 hidden text-sm md:block">
+                                                    Added {fullDate(new Date(role.createdAt))}
+                                                    {role.expiresAt && (
+                                                        <div>Expires {fullDate(new Date(role.expiresAt))}</div>
+                                                    )}
+                                                </div>
+
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    className="hidden md:block"
+                                                    onClick={() => {
+                                                        setSelectedRole({
+                                                            id: role.id,
+                                                            type: role.type,
+                                                            username: role.profile?.username || '',
+                                                        });
+                                                        setRevokeDialogOpen(true);
+                                                    }}
+                                                >
+                                                    Revoke
+                                                </Button>
+                                            </div>
+                                        ))}
                                     </div>
-                                ),
-                            )}
+                                </div>
+                            ))}
                         </div>
                     )}
                 </section>

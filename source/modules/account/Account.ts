@@ -2,47 +2,45 @@
 import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - API
-import { AccountCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Account variables shared across the application
 export const accountSignedInKey = ProjectSettings.identifier + 'AccountSignedIn';
 
 // Class - Account
 export class Account {
-    primaryAccountEmail: AccountCurrentQuery['accountCurrent']['primaryAccountEmail'] | null | undefined;
-    currentProfile: AccountCurrentQuery['accountCurrent']['currentProfile'];
-    roles: AccountCurrentQuery['accountCurrent']['roles'];
-    currentSession: AccountCurrentQuery['accountCurrent']['currentSession'];
+    emailAddress: AccountQuery['account']['emailAddress'] | null | undefined;
+    profile: AccountQuery['account']['profile'];
+    accessRoles: AccountQuery['account']['accessRoles'];
     createdAt: Date;
 
-    constructor(accountCurrentQueryData: AccountCurrentQuery['accountCurrent']) {
+    constructor(accountCurrentQueryData: AccountQuery['account']) {
         if(!accountCurrentQueryData) throw new Error('Invalid account data from GraphQL query.');
 
         this.createdAt = new Date(accountCurrentQueryData.createdAt);
-        this.primaryAccountEmail = accountCurrentQueryData.primaryAccountEmail;
-        this.currentSession = accountCurrentQueryData.currentSession;
-        this.currentProfile = accountCurrentQueryData.currentProfile;
-        this.roles = accountCurrentQueryData.roles;
+        this.emailAddress = accountCurrentQueryData.emailAddress;
+        this.profile = accountCurrentQueryData.profile;
+        this.accessRoles = accountCurrentQueryData.accessRoles;
     }
 
     getPublicDisplayName() {
         let publicDisplayName = '';
 
         // Use the display name from the profile
-        if(this.currentProfile?.displayName) {
-            publicDisplayName = this.currentProfile.displayName;
+        if(this.profile?.displayName) {
+            publicDisplayName = this.profile.displayName;
         }
         // If there is no display name, use username
-        else if(this.currentProfile?.username) {
+        else if(this.profile?.username) {
             // Use the username
-            publicDisplayName = '@' + this.currentProfile.username;
+            publicDisplayName = '@' + this.profile.username;
         }
 
         return publicDisplayName;
     }
 
     hasRole(role: string) {
-        return this.roles.includes(role);
+        return this.accessRoles.includes(role);
     }
 
     isAdministator() {

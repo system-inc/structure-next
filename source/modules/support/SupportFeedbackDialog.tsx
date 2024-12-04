@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
+// import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
@@ -13,14 +13,14 @@ import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextA
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
-import { useApolloClient, useMutation } from '@apollo/client';
-import // PrincipleMagicDiceDocument,
-// PrincipleMagicDiceQuery,
-// SupportFeedbackCreateDocument,
-'@project/source/api/GraphQlGeneratedCode';
+// import { useApolloClient } from '@apollo/client';
+// import // PrincipleMagicDiceDocument,
+// // PrincipleMagicDiceQuery,
+// // SupportFeedbackCreateDocument,
+// '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
+// import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Component - SupportFeedbackDialog
 export interface SupportFeedbackDialogInterface extends DialogInterface {}
@@ -30,8 +30,8 @@ export function SupportFeedbackDialog(properties: SupportFeedbackDialogInterface
 
     // Hooks
     const { accountState } = useAccount();
-    const urlPath = useUrlPath();
-    const apolloClient = useApolloClient();
+    // const urlPath = useUrlPath();
+    // const apolloClient = useApolloClient();
     // const [principleReviewCreateMutation] = useMutation(SupportFeedbackCreateDocument);
 
     // Effect to update the open state when the open property changes
@@ -94,7 +94,7 @@ export function SupportFeedbackDialog(properties: SupportFeedbackDialogInterface
                         // }
                         type="email"
                         placeholder="Email Address"
-                        defaultValue={accountState?.account?.primaryAccountEmail?.emailAddress}
+                        defaultValue={accountState?.account?.emailAddress}
                     />
 
                     {/* Quick feedback selection */}

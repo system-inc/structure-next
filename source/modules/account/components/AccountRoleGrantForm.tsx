@@ -14,9 +14,9 @@ import { ProfileImage } from '@structure/source/modules/account/components/Profi
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
-    AccountAssignableRolesDocument,
-    AccountByEmailAddressAdminDocument,
-    AccountRoleGrantDocument,
+    AccountAvailableAccessRolesPrivilegedDocument,
+    AccountPrivilegedDocument,
+    AccountAccessRoleGrantPrivilegedDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
@@ -50,12 +50,18 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
     const debouncedEmail = useDebounce(emailInput, 500);
 
     // Queries and Mutations
-    const assignableRolesQueryState = useQuery(AccountAssignableRolesDocument);
-    const accountByEmailQueryState = useQuery(AccountByEmailAddressAdminDocument, {
-        variables: { emailAddress: debouncedEmail },
+    const accountAvailableAccessRolesPrivilegedState = useQuery(AccountAvailableAccessRolesPrivilegedDocument);
+    const accountPrivilegedState = useQuery(AccountPrivilegedDocument, {
+        variables: {
+            input: {
+                emailAddress: debouncedEmail,
+            },
+        },
         skip: !debouncedEmail || !isEmailAddress(debouncedEmail),
     });
-    const [grantRoleMutation, grantRoleMutationState] = useMutation(AccountRoleGrantDocument);
+    const [accountAccessRoleGrantPrivilegedMutation, accountAccessRoleGrantPrivilegedMutationState] = useMutation(
+        AccountAccessRoleGrantPrivilegedDocument,
+    );
 
     // Effect to handle email validation
     React.useEffect(
@@ -81,7 +87,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
     // Function to handle role grant confirmation
     async function handleGrantConfirm() {
         try {
-            const result = await grantRoleMutation({
+            const result = await accountAccessRoleGrantPrivilegedMutation({
                 variables: {
                     input: {
                         username: selectedUsername,
@@ -91,7 +97,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 },
             });
 
-            if(result.data?.accountRoleGrant) {
+            if(result.data?.accountAccessRoleGrantPrivileged) {
                 setGrantSuccess({ username: selectedUsername, role: selectedRoleType });
                 setGrantDialogOpen(false);
                 if(properties.onRoleGranted) {
@@ -134,7 +140,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             </div>
 
             {/* Loading State */}
-            {isSearching && accountByEmailQueryState.loading && (
+            {isSearching && accountPrivilegedState.loading && (
                 <div className="flex items-center space-x-2 text-neutral">
                     <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     <span>Searching...</span>
@@ -142,74 +148,78 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             )}
 
             {/* Error State */}
-            {accountByEmailQueryState.error && (
-                <Alert variant="error" title={apolloErrorToMessage(accountByEmailQueryState.error)} />
+            {accountPrivilegedState.error && (
+                <Alert variant="error" title={apolloErrorToMessage(accountPrivilegedState.error)} />
             )}
 
             {/* Empty State */}
-            {!accountByEmailQueryState.loading &&
-                !accountByEmailQueryState.error &&
+            {!accountPrivilegedState.loading &&
+                !accountPrivilegedState.error &&
                 debouncedEmail &&
-                accountByEmailQueryState.data?.accountByEmailAddressAdmin?.profiles.length === 0 && (
-                    <Alert
-                        variant="warning"
-                        title="No user found"
-                        children="We couldn't find any user with this email address."
-                    />
+                accountPrivilegedState.data?.accountPrivileged?.profiles.length === 0 && (
+                    <Alert variant="warning" title="No user found">
+                        We couldn&apos;t find any user with this email address.
+                    </Alert>
                 )}
 
             {/* User Preview and Role Selection */}
-            {accountByEmailQueryState.data?.accountByEmailAddressAdmin?.profiles.map((profile) => (
-                <div
-                    key={profile.username}
-                    className="space-y-4 rounded-lg border border-light-6 p-4 dark:border-dark-4"
-                >
-                    {/* User Preview */}
-                    <div className="flex items-center space-x-3">
-                        <div className="h-10 w-10">
-                            <ProfileImage
-                                profileImageUrl={profile.imageUrls?.[0]?.url}
-                                alternateText={profile.displayName || ''}
-                                className="h-full w-full rounded-full object-cover"
-                            />
+            {accountPrivilegedState.data?.accountPrivileged?.profiles.map(function (profile) {
+                return (
+                    <div
+                        key={profile.username}
+                        className="space-y-4 rounded-lg border border-light-6 p-4 dark:border-dark-4"
+                    >
+                        {/* User Preview */}
+                        <div className="flex items-center space-x-3">
+                            <div className="h-10 w-10">
+                                <ProfileImage
+                                    profileImageUrl={profile.images?.[0]?.url}
+                                    alternateText={profile.displayName || ''}
+                                    className="h-full w-full rounded-full object-cover"
+                                />
+                            </div>
+                            <div>
+                                <div className="font-medium">{profile.displayName || '-'}</div>
+                                <div className="text-sm text-neutral">@{profile.username}</div>
+                            </div>
                         </div>
-                        <div>
-                            <div className="font-medium">{profile.displayName || '-'}</div>
-                            <div className="text-sm text-neutral">@{profile.username}</div>
-                        </div>
-                    </div>
 
-                    {/* Role Selection */}
-                    <div className="space-y-2">
-                        <InputSelect
-                            className="w-full"
-                            defaultValue={selectedRoleType}
-                            items={
-                                assignableRolesQueryState.data?.accountAssignableRoles.map((item) => ({
-                                    value: item,
-                                })) || []
-                            }
-                            onChange={(value) => setSelectedRoleType(value || '')}
-                        />
-                        {selectedRoleType && (
-                            <p className="text-sm text-neutral">
-                                {ROLE_INFORMATION[selectedRoleType as keyof typeof ROLE_INFORMATION]}
-                            </p>
-                        )}
-                        <Button
-                            className="w-full"
-                            variant="primary"
-                            onClick={() => {
-                                setSelectedUsername(profile.username);
-                                setGrantDialogOpen(true);
-                            }}
-                            disabled={!selectedRoleType}
-                        >
-                            Grant Role
-                        </Button>
+                        {/* Role Selection */}
+                        <div className="space-y-2">
+                            <InputSelect
+                                className="w-full"
+                                defaultValue={selectedRoleType}
+                                items={
+                                    accountAvailableAccessRolesPrivilegedState.data?.accountAvailableAccessRolesPrivileged.map(
+                                        function (item) {
+                                            return {
+                                                value: item,
+                                            };
+                                        },
+                                    ) || []
+                                }
+                                onChange={(value) => setSelectedRoleType(value || '')}
+                            />
+                            {selectedRoleType && (
+                                <p className="text-sm text-neutral">
+                                    {ROLE_INFORMATION[selectedRoleType as keyof typeof ROLE_INFORMATION]}
+                                </p>
+                            )}
+                            <Button
+                                className="w-full"
+                                variant="primary"
+                                onClick={() => {
+                                    setSelectedUsername(profile.username);
+                                    setGrantDialogOpen(true);
+                                }}
+                                disabled={!selectedRoleType}
+                            >
+                                Grant Role
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                );
+            })}
 
             {/* Grant Role Dialog */}
             <Dialog
@@ -222,11 +232,11 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             Are you sure you want to grant the <b>{selectedRoleType}</b> role to{' '}
                             <b>@{selectedUsername}</b>?
                         </p>
-                        {grantRoleMutationState.error && (
+                        {accountAccessRoleGrantPrivilegedMutationState.error && (
                             <Alert
                                 className="mt-4"
                                 variant="error"
-                                title={apolloErrorToMessage(grantRoleMutationState.error)}
+                                title={apolloErrorToMessage(accountAccessRoleGrantPrivilegedMutationState.error)}
                             />
                         )}
                     </>
@@ -234,7 +244,10 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 footer={
                     <div className="flex justify-end space-x-2">
                         <Button onClick={() => setGrantDialogOpen(false)}>Cancel</Button>
-                        <Button onClick={handleGrantConfirm} processing={grantRoleMutationState.loading}>
+                        <Button
+                            onClick={handleGrantConfirm}
+                            processing={accountAccessRoleGrantPrivilegedMutationState.loading}
+                        >
                             Grant Role
                         </Button>
                     </div>

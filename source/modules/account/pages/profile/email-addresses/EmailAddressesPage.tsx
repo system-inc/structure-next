@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export function EmailAddressesPage() {
     // Hooks
     const { accountState } = useAccount();
-    const primaryAccountEmail = accountState.account?.primaryAccountEmail;
+    const primaryAccountEmailAddress = accountState.account?.emailAddress;
 
     // Render the component
     return (
@@ -38,14 +38,14 @@ export function EmailAddressesPage() {
                 // Data
                 <div>
                     {/* Email Addresses List */}
-                    {primaryAccountEmail && (
+                    {primaryAccountEmailAddress && (
                         <div className="mt-10 space-y-6">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="font-medium">{primaryAccountEmail.emailAddress}</p>
+                                    <p className="font-medium">{primaryAccountEmailAddress}</p>
                                     <p className="neutral mt-1 text-sm">
-                                        {primaryAccountEmail.type === 'Primary' ? 'Primary Email' : 'Secondary Email'}
-                                        {primaryAccountEmail.isVerified ? ' • Verified' : ' • Not Verified'}
+                                        {'Primary' === 'Primary' ? 'Primary Email' : 'Secondary Email'}
+                                        {true ? ' • Verified' : ' • Not Verified'}
                                     </p>
                                 </div>
                             </div>

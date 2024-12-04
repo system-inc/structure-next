@@ -11,21 +11,25 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 // Dependencies - API
 import { useMutation } from '@apollo/client';
 import {
-    EmailVerificationVerifyDocument,
-    EmailVerificationSendDocument,
-    AuthenticationCurrentQuery,
+    AccountAuthenticationEmailVerificationVerifyDocument,
+    AccountAuthenticationEmailVerificationSendDocument,
+    AccountAuthenticationQuery,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - EmailVerificationVerifyForm
 export interface EmailVerificationVerifyFormInterface {
     emailAddress: string;
-    onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
+    onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
 }
 export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyFormInterface) {
     // Hooks - API - Mutations
-    const [emailVerificationVerifyMutation] = useMutation(EmailVerificationVerifyDocument);
-    const [emailVerificationSendMutation, emailVerificationSendMutationState] =
-        useMutation(EmailVerificationSendDocument);
+    const [accountAuthenticationEmailVerificationVerifyMutation] = useMutation(
+        AccountAuthenticationEmailVerificationVerifyDocument,
+    );
+    const [
+        accountAuthenticationEmailVerificationSendMutation,
+        accountAuthenticationEmailVerificationSendMutationState,
+    ] = useMutation(AccountAuthenticationEmailVerificationSendDocument);
 
     // State
     const [timeEmailSent] = React.useState<number>(Date.now());
@@ -107,13 +111,14 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
                     };
 
                     // Run the mutation
-                    const currentEmailVerificationVerifyMutationState = await emailVerificationVerifyMutation({
-                        variables: {
-                            input: {
-                                code: formValues.emailVerificationCode,
+                    const currentEmailVerificationVerifyMutationState =
+                        await accountAuthenticationEmailVerificationVerifyMutation({
+                            variables: {
+                                input: {
+                                    code: formValues.emailVerificationCode,
+                                },
                             },
-                        },
-                    });
+                        });
 
                     // Log the mutation state
                     console.log(
@@ -131,7 +136,8 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
 
                         // Run the success callback
                         properties.onSuccess(
-                            currentEmailVerificationVerifyMutationState.data.emailVerificationVerify.authentication,
+                            currentEmailVerificationVerifyMutationState.data
+                                .accountAuthenticationEmailVerificationVerify.authentication,
                         );
                     }
 
@@ -143,9 +149,9 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
             <div className="mt-8 flex justify-center">
                 <Button
                     variant="ghost"
-                    loading={emailVerificationSendMutationState.loading}
+                    loading={accountAuthenticationEmailVerificationSendMutationState.loading}
                     onClick={function () {
-                        emailVerificationSendMutation();
+                        accountAuthenticationEmailVerificationSendMutation();
                     }}
                 >
                     Resend Verification Code

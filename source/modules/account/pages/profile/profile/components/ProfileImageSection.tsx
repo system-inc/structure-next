@@ -19,9 +19,8 @@ export function ProfileImageSection() {
     const { accountState } = useAccount();
 
     // Get the profile image details
-    const profileImageUrl = accountState.account?.currentProfile?.imageUrls?.find(
-        (image) => image.variant === 'profile-image',
-    )?.url;
+    const profileImageUrl = accountState.account?.profile?.images?.find((image) => image.variant === 'profile-image')
+        ?.url;
     const profileImageAlternateText = accountState.account?.getPublicDisplayName();
 
     // Render the component

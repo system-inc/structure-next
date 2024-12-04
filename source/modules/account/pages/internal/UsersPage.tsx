@@ -17,9 +17,9 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
-    AccountsAdminDocument,
-    AccountDeleteAdminDocument,
-    OrderByDirection,
+    AccountsPrivilegedDocument,
+    AccountDeletePrivilegedDocument,
+    // OrderByDirection,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
@@ -38,30 +38,32 @@ export function UsersPage() {
     const [deleteSuccess, setDeleteSuccess] = React.useState(false);
 
     // Query
-    const usersQueryState = useQuery(AccountsAdminDocument, {
+    const accountsPrivilegedQueryState = useQuery(AccountsPrivilegedDocument, {
         variables: {
             input: {
                 itemsPerPage: itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
             },
-            orderBy: {
-                key: 'createdAt',
-                direction: OrderByDirection.Descending,
-            },
+            // orderBy: {
+            //     key: 'createdAt',
+            //     direction: OrderByDirection.Descending,
+            // },
         },
     });
 
     // Mutation
-    const [deleteMutation, deleteMutationState] = useMutation(AccountDeleteAdminDocument);
+    const [accountDeletePrivilegedMutation, accountDeletePrivilegedMutationState] = useMutation(
+        AccountDeletePrivilegedDocument,
+    );
 
     // Effects
     React.useEffect(
         function () {
-            if(usersQueryState.data?.accountsAdmin.pagination?.itemsTotal) {
-                setTotalUsers(usersQueryState.data.accountsAdmin.pagination.itemsTotal);
+            if(accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.itemsTotal) {
+                setTotalUsers(accountsPrivilegedQueryState.data.accountsPrivileged.pagination.itemsTotal);
             }
         },
-        [usersQueryState.data?.accountsAdmin.pagination?.itemsTotal],
+        [accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.itemsTotal],
     );
 
     // Function to handle user deletion
@@ -69,16 +71,18 @@ export function UsersPage() {
         if(!selectedUser) return;
 
         try {
-            const result = await deleteMutation({
+            const result = await accountDeletePrivilegedMutation({
                 variables: {
-                    emailAddress: selectedUser.emailAddress,
+                    input: {
+                        emailAddress: selectedUser.emailAddress,
+                    },
                 },
             });
 
-            if(result.data?.accountDeleteAdmin.success) {
+            if(result.data?.accountDeletePrivileged.success) {
                 setDeleteSuccess(true);
                 // Refresh the users list
-                await usersQueryState.refetch();
+                await accountsPrivilegedQueryState.refetch();
             }
         }
         catch(error) {
@@ -103,7 +107,7 @@ export function UsersPage() {
             {/* Content */}
             <div className="divide-y divide-neutral/10">
                 {/* Loading and Error States */}
-                {usersQueryState.loading && (
+                {accountsPrivilegedQueryState.loading && (
                     <div className="divide-y divide-neutral/10">
                         {[...Array(itemsPerPage)].map((_, index) => (
                             <div
@@ -128,12 +132,12 @@ export function UsersPage() {
                         ))}
                     </div>
                 )}
-                {usersQueryState.error && <div>Error: {usersQueryState.error.message}</div>}
+                {accountsPrivilegedQueryState.error && <div>Error: {accountsPrivilegedQueryState.error.message}</div>}
 
                 {/* Users List */}
-                {usersQueryState.data?.accountsAdmin.items && (
+                {accountsPrivilegedQueryState.data?.accountsPrivileged.items && (
                     <>
-                        {usersQueryState.data.accountsAdmin.items.map(function (account) {
+                        {accountsPrivilegedQueryState.data.accountsPrivileged.items.map(function (account) {
                             return (
                                 <div
                                     key={account.emailAddress}
@@ -142,7 +146,7 @@ export function UsersPage() {
                                     {/* Use ProfileImage instead of UserAvatar */}
                                     <div className="relative h-8 w-8">
                                         <ProfileImage
-                                            profileImageUrl={account.profiles[0]?.imageUrls?.[0]?.url}
+                                            profileImageUrl={account.profiles[0]?.images?.[0]?.url}
                                             alternateText={account.profiles[0]?.displayName || ''}
                                             className="h-full w-full rounded-full object-cover"
                                         />
@@ -229,14 +233,16 @@ export function UsersPage() {
                 )}
 
                 {/* Pagination */}
-                {(usersQueryState.loading || usersQueryState.data) && (
+                {(accountsPrivilegedQueryState.loading || accountsPrivilegedQueryState.data) && (
                     <div className="flex items-center space-x-4 pt-6">
                         <Pagination
                             className="justify-start"
                             page={page}
                             itemsPerPage={itemsPerPage}
                             itemsTotal={totalUsers}
-                            pagesTotal={usersQueryState.data?.accountsAdmin.pagination?.pagesTotal ?? 0}
+                            pagesTotal={
+                                accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.pagesTotal ?? 0
+                            }
                             useLinks={true}
                             itemsPerPageControl={false}
                             pageInputControl={false}
@@ -261,11 +267,11 @@ export function UsersPage() {
                                 Are you sure you want to delete the user <b>@{selectedUser?.username}</b> with email{' '}
                                 <b>{selectedUser?.emailAddress}</b>?
                             </p>
-                            {deleteMutationState.error && (
+                            {accountDeletePrivilegedMutationState.error && (
                                 <Alert
                                     className="mt-4"
                                     variant="error"
-                                    title={apolloErrorToMessage(deleteMutationState.error)}
+                                    title={apolloErrorToMessage(accountDeletePrivilegedMutationState.error)}
                                 />
                             )}
                         </>
@@ -280,7 +286,7 @@ export function UsersPage() {
                             <Button
                                 variant="destructive"
                                 onClick={handleDeleteConfirm}
-                                processing={deleteMutationState.loading}
+                                processing={accountDeletePrivilegedMutationState.loading}
                             >
                                 Delete User
                             </Button>

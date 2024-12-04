@@ -1,9 +1,113 @@
-# Account Registration or Sign In Create Mutation
+# Account Authentication Registration or Sign In Create Mutation
 # If the first challenge happens to be email, this will automatically send an email verification
 # saving us from having to do that manually
-mutation AccountRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
-    accountRegistrationOrSignInCreate(input: $input) {
+mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
+    accountAuthenticationRegistrationOrSignInCreate(input: $input) {
         emailAddress
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Account Authentication Query
+# This is used to get the current authentication status
+# Rather than parameters, this uses the authentication ID cookie to determine the current authentication status
+query AccountAuthentication {
+    accountAuthentication {
+        status
+        scopeType
+        currentChallenge {
+            challengeType
+            status
+        }
+        updatedAt
+        createdAt
+    }
+}
+
+# Challenge - Email Verification
+# Email Verification Query
+# This is used to get the status of the email verification challenge
+query AccountAuthenticationEmailVerification {
+    accountAuthenticationEmailVerification {
+        verification {
+            status
+            emailAddress
+            lastEmailSentAt
+        }
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Challenge - Email Verification
+# Email Verification Send Mutation
+# This is used to manually send an email verification email if the user requests another email
+mutation AccountAuthenticationEmailVerificationSend {
+    accountAuthenticationEmailVerificationSend {
+        verification {
+            status
+            emailAddress
+            lastEmailSentAt
+        }
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Challenge - Email Verification
+# Email Verification Verify Mutation
+# This is used to verify the email address with a code sent to the email address
+mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {
+    accountAuthenticationEmailVerificationVerify(input: $input) {
+        verification {
+            status
+            emailAddress
+            lastEmailSentAt
+        }
+        authentication {
+            status
+            scopeType
+            currentChallenge {
+                challengeType
+                status
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}
+
+# Challenge - Account Password
+# Account Password Verify Mutation
+# This is used to verify the password of the account
+mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
+    accountAuthenticationPasswordVerify(input: $input) {
+        success
         authentication {
             status
             scopeType
@@ -48,110 +152,6 @@ mutation AccountSignInComplete {
     }
 }
 
-# Account Authentication Query
-# This is used to get the current authentication status
-# Rather than parameters, this uses the authentication ID cookie to determine the current authentication status
-query AuthenticationCurrent {
-    authenticationCurrent {
-        status
-        scopeType
-        currentChallenge {
-            challengeType
-            status
-        }
-        updatedAt
-        createdAt
-    }
-}
-
-# Challenge - Email Verification
-# Email Verification Query
-# This is used to get the status of the email verification challenge
-query EmailVerification {
-    emailVerification {
-        verification {
-            status
-            emailAddress
-            lastEmailSentAt
-        }
-        authentication {
-            status
-            scopeType
-            currentChallenge {
-                challengeType
-                status
-            }
-            updatedAt
-            createdAt
-        }
-    }
-}
-
-# Challenge - Email Verification
-# Email Verification Send Mutation
-# This is used to manually send an email verification email if the user requests another email
-mutation EmailVerificationSend {
-    emailVerificationSend {
-        verification {
-            status
-            emailAddress
-            lastEmailSentAt
-        }
-        authentication {
-            status
-            scopeType
-            currentChallenge {
-                challengeType
-                status
-            }
-            updatedAt
-            createdAt
-        }
-    }
-}
-
-# Challenge - Email Verification
-# Email Verification Verify Mutation
-# This is used to verify the email address with a code sent to the email address
-mutation EmailVerificationVerify($input: EmailVerificationVerifyInput!) {
-    emailVerificationVerify(input: $input) {
-        verification {
-            status
-            emailAddress
-            lastEmailSentAt
-        }
-        authentication {
-            status
-            scopeType
-            currentChallenge {
-                challengeType
-                status
-            }
-            updatedAt
-            createdAt
-        }
-    }
-}
-
-# Challenge - Account Password
-# Account Password Verify Mutation
-# This is used to verify the password of the account
-mutation AccountPasswordVerify($input: AccountPasswordVerifyInput!) {
-    accountPasswordVerify(input: $input) {
-        success
-        authentication {
-            status
-            scopeType
-            currentChallenge {
-                challengeType
-                status
-            }
-            updatedAt
-            createdAt
-        }
-    }
-}
-
 # Account Password Update Mutation
 # This is used to update the password of the account
 mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
@@ -167,158 +167,65 @@ mutation AccountSignOut {
     }
 }
 
-# Account Current Query
-query AccountCurrent {
-    accountCurrent {
-        currentProfile {
+# Account Query
+query Account {
+    account {
+        emailAddress
+        profile {
             id
-            createdAt
-            updatedAt
             username
             displayName
             givenName
             familyName
-            phoneNumber
-            imageUrls {
+            images {
                 url
                 variant
             }
-        }
-        primaryAccountEmail {
-            id
-            type
-            isVerified
-            emailAddress
-            source
             updatedAt
             createdAt
         }
-        roles
-        currentSession {
-            currentProfileId
-            status
-            statusChangedAt
+        accessRoles
+        createdAt
+    }
+}
+
+# Account Privileged Query
+query AccountPrivileged($input: AccountInput!) {
+    accountPrivileged(input: $input) {
+        emailAddress
+        profiles {
+            username
+            displayName
+            givenName
+            familyName
+            images {
+                url
+                variant
+            }
             updatedAt
             createdAt
         }
+        accessRoles
         createdAt
     }
 }
 
-# Account Profile Username Check Query
-query AccountProfileUsernameValidate($username: String!) {
-    accountProfileUsernameValidate(username: $username)
-}
-
-# Account Enrolled Challenges Query
-query AccountEnrolledChallenges {
-    accountCurrent {
-        enrolledChallenges
-    }
-}
-
-# Account Profile Update Mutation
-mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
-    accountProfileUpdate(input: $input) {
-        id
-        username
-        givenName
-        preferredName
-        middleName
-        familyName
-        displayName
-        phoneNumber
-        imageUrls {
-            url
-            variant
-        }
-        updatedAt
-        createdAt
-    }
-}
-
-# Profile Public Query
-query ProfilePublic($username: String!) {
-    profilePublic(username: $username) {
-        username
-        displayName
-        imageUrls {
-            url
-            variant
-        }
-        createdAt
-    }
-}
-
-# Account Assignable Roles Query
-query AccountAssignableRoles {
-    accountAssignableRoles
-}
-
-# Account Roles Query
-query AccountRoles($statuses: [String!], $orderBy: OrderBy) {
-    accountRoles(statuses: $statuses, orderBy: $orderBy) {
-        id
-        type
-        status
-        primaryAccountEmailAddress
-        profile {
-            username
-            displayName
-            imageUrls {
-                type
-                url
-                variant
-            }
-            createdAt
-        }
-        expiresAt
-        createdAt
-        updatedAt
-    }
-}
-
-# Account Role Revoke Mutation
-mutation AccountRoleRevoke($roleId: String!) {
-    accountRoleRevoke(roleId: $roleId) {
-        success
-    }
-}
-
-# Account Role Grant Mutation
-mutation AccountRoleGrant($input: GrantAccessRoleInput!) {
-    accountRoleGrant(input: $input) {
-        id
-        type
-        status
-        profile {
-            username
-            displayName
-            imageUrls {
-                type
-                url
-                variant
-            }
-            createdAt
-        }
-        expiresAt
-        createdAt
-        updatedAt
-    }
-}
-
-# Accounts Admin Query
-query AccountsAdmin($input: PaginationInputWithFilters, $orderBy: OrderBy) {
-    accountsAdmin(input: $input, orderBy: $orderBy) {
+# Accounts Privileged Query
+# query AccountsPrivileged($input: PaginationInput) {
+query AccountsPrivileged($input: PaginationInputWithFilters) {
+    accountsPrivileged(input: $input) {
         items {
             emailAddress
             profiles {
                 username
                 displayName
-                imageUrls {
+                givenName
+                familyName
+                images {
                     url
                     variant
                 }
+                updatedAt
                 createdAt
             }
         }
@@ -334,19 +241,112 @@ query AccountsAdmin($input: PaginationInputWithFilters, $orderBy: OrderBy) {
     }
 }
 
-# Account By Email Address Admin Query
-query AccountByEmailAddressAdmin($emailAddress: String!) {
-    accountByEmailAddressAdmin(emailAddress: $emailAddress) {
-        emailAddress
-        profiles {
+# Account Profile Username Validate Query
+query AccountProfileUsernameValidate($username: String!) {
+    accountProfileUsernameValidate(username: $username)
+}
+
+# Account Enrolled Challenges Query
+query AccountEnrolledChallenges {
+    account {
+        enrolledChallenges
+    }
+}
+
+# Account Profile Update Mutation
+mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
+    accountProfileUpdate(input: $input) {
+        username
+        displayName
+        givenName
+        familyName
+        images {
+            url
+            variant
+        }
+        updatedAt
+        createdAt
+    }
+}
+
+# Account Profile Public Query
+query AccountProfilePublic($username: String!) {
+    accountProfilePublic(username: $username) {
+        username
+        displayName
+        images {
+            url
+            variant
+        }
+        createdAt
+    }
+}
+
+# Account Available Access Roles Privileged Query
+query AccountAvailableAccessRolesPrivileged {
+    accountAvailableAccessRolesPrivileged
+}
+
+# Account Assigned Access Roles Privileged Query
+# query AccountAssignedAccessRolesPrivileged($input: PaginationInput) {
+query AccountAssignedAccessRolesPrivileged($input: PaginationInputWithFilters) {
+    accountAssignedAccessRolesPrivileged(input: $input) {
+        items {
+            id
+            type
+            status
+            emailAddress
+            profile {
+                username
+                displayName
+                images {
+                    url
+                    variant
+                }
+                createdAt
+            }
+            expiresAt
+            createdAt
+            updatedAt
+        }
+        pagination {
+            itemsTotal
+            itemsPerPage
+            page
+            pagesTotal
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+        }
+    }
+}
+
+# Account Access Role Revoke Privileged Mutation
+mutation AccountAccessRoleRevokePrivileged($input: AccountAccessRoleRevokeInput!) {
+    accountAccessRoleRevokePrivileged(input: $input) {
+        success
+    }
+}
+
+# Account Access Role Grant Priveleged Mutation
+mutation AccountAccessRoleGrantPrivileged($input: AccountAccessRoleGrantInput!) {
+    accountAccessRoleGrantPrivileged(input: $input) {
+        id
+        type
+        status
+        profile {
             username
             displayName
-            imageUrls {
+            images {
+                type
                 url
                 variant
             }
             createdAt
         }
+        expiresAt
+        createdAt
+        updatedAt
     }
 }
 
@@ -357,9 +357,9 @@ mutation AccountDelete($reason: String) {
     }
 }
 
-# Account Delete Admin Mutation
-mutation AccountDeleteAdmin($emailAddress: String!) {
-    accountDeleteAdmin(emailAddress: $emailAddress) {
+# Account Delete Privileged Mutation
+mutation AccountDeletePrivileged($input: AccountDeleteInput!) {
+    accountDeletePrivileged(input: $input) {
         success
     }
 }

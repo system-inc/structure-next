@@ -68,7 +68,7 @@ export function ContactPage() {
                                     label="Your Email Address"
                                     placeholder="email@domain.com"
                                     required={true}
-                                    defaultValue={accountState.account?.primaryAccountEmail?.emailAddress}
+                                    defaultValue={accountState.account?.emailAddress}
                                 />,
                                 <FormInputText
                                     key="subject"

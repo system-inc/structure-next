@@ -15,8 +15,7 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 import { usePathname } from 'next/navigation';
 
 // Component - AccountMenuButton
-export interface AccountMenuButtonProperties {}
-export function AccountMenuButton(properties: AccountMenuButtonProperties) {
+export function AccountMenuButton() {
     // Hooks
     const pathname = usePathname();
     const { accountState } = useAccount();
@@ -25,7 +24,7 @@ export function AccountMenuButton(properties: AccountMenuButtonProperties) {
     const [open, setOpen] = React.useState(false);
 
     // Get the profile image URL
-    const profileImageUrl = accountState.account?.currentProfile?.imageUrls?.find(
+    const profileImageUrl = accountState.account?.profile?.images?.find(
         (image) => image.variant === 'profile-image-small',
     )?.url;
 

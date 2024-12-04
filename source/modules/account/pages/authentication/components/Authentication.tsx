@@ -13,7 +13,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { EmailForm } from '@structure/source/modules/account/pages/authentication/components/EmailForm';
 import { EmailVerificationChallenge } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationChallenge';
 import { AccountPasswordChallenge } from '@structure/source/modules/account/pages/authentication/components/challenges/account-password/AccountPasswordChallenge';
-import { Duration } from '@structure/source/common/time/Duration';
+// import { Duration } from '@structure/source/common/time/Duration';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
@@ -21,8 +21,8 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 // Dependencies - API
 import { useApolloClient, useQuery, useMutation } from '@apollo/client';
 import {
-    AuthenticationCurrentQuery,
-    AuthenticationCurrentDocument,
+    AccountAuthenticationQuery,
+    AccountAuthenticationDocument,
     AccountRegistrationCompleteDocument,
     AccountSignInCompleteDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
@@ -45,9 +45,9 @@ export interface AuthenticationInterface {
 export function Authentication(properties: AuthenticationInterface) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
-        AuthenticationCurrentQuery['authenticationCurrent'] | undefined
+        AccountAuthenticationQuery['accountAuthentication'] | undefined
     >(undefined);
-    const [authenticationSessionStartTime] = React.useState<number>(Date.now());
+    // const [authenticationSessionStartTime] = React.useState<number>(Date.now());
     const [authenticationSessionSuccess, setAuthenticationSessionSuccess] = React.useState<boolean>(false);
     const [authenticationSessionTimedOut] = React.useState<boolean>(false);
     const [emailAddress, setEmailAddress] = React.useState<string | undefined>(undefined);
@@ -60,11 +60,11 @@ export function Authentication(properties: AuthenticationInterface) {
     const apolloClient = useApolloClient();
 
     // Hooks - API - Queries
-    useQuery(AuthenticationCurrentDocument, {
+    useQuery(AccountAuthenticationDocument, {
         // Immediately run the query and see if we already have an authentication session
         onCompleted: function (data) {
-            if(data.authenticationCurrent) {
-                setAuthenticationSession(data.authenticationCurrent);
+            if(data.accountAuthentication) {
+                setAuthenticationSession(data.accountAuthentication);
             }
         },
     });
@@ -159,7 +159,7 @@ export function Authentication(properties: AuthenticationInterface) {
     if(accountState.account) {
         currentAuthenticationComponent = (
             <div>
-                <p>You are signed in as {accountState.account.primaryAccountEmail?.emailAddress}.</p>
+                <p>You are signed in as {accountState.account.emailAddress}.</p>
                 <div className="mt-8 flex flex-col space-y-4">
                     <Button
                         variant="destructive"

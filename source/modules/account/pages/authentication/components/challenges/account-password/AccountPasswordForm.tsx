@@ -10,7 +10,10 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { AccountPasswordVerifyDocument, AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    AccountAuthenticationPasswordVerifyDocument,
+    AccountAuthenticationQuery,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 // import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
@@ -18,11 +21,11 @@ import { AccountPasswordVerifyDocument, AuthenticationCurrentQuery } from '@proj
 // Component - AccountPasswordForm
 export interface AccountPasswordFormInterface {
     emailAddress: string;
-    onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
+    onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
 }
 export function AccountPasswordForm(properties: AccountPasswordFormInterface) {
     // Hooks - API - Mutations
-    const [accountPasswordVerifyMutation] = useMutation(AccountPasswordVerifyDocument);
+    const [accountAuthenticationPasswordVerifyMutation] = useMutation(AccountAuthenticationPasswordVerifyDocument);
 
     // Render the component
     return (
@@ -62,13 +65,15 @@ export function AccountPasswordForm(properties: AccountPasswordFormInterface) {
                     };
 
                     // Run the mutation
-                    const currentAccountPasswordVerifyMutationState = await accountPasswordVerifyMutation({
-                        variables: {
-                            input: {
-                                password: formValues.password,
+                    const currentAccountPasswordVerifyMutationState = await accountAuthenticationPasswordVerifyMutation(
+                        {
+                            variables: {
+                                input: {
+                                    password: formValues.password,
+                                },
                             },
                         },
-                    });
+                    );
 
                     // Log the mutation state
                     console.log('currentAccountPasswordVerifyMutationState', currentAccountPasswordVerifyMutationState);
@@ -83,7 +88,8 @@ export function AccountPasswordForm(properties: AccountPasswordFormInterface) {
 
                         // Run the success callback
                         properties.onSuccess(
-                            currentAccountPasswordVerifyMutationState.data.accountPasswordVerify.authentication,
+                            currentAccountPasswordVerifyMutationState.data.accountAuthenticationPasswordVerify
+                                .authentication,
                         );
                     }
 

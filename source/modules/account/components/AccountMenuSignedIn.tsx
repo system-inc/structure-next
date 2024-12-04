@@ -11,14 +11,14 @@ export type AccountMenuSignedInProperties = {
 };
 export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
     // Email
-    const primaryEmailAddress = properties.account.primaryAccountEmail?.emailAddress;
+    const emailAddress = properties.account.emailAddress;
 
     // Given and family names
-    const givenName = properties.account.currentProfile?.givenName;
-    const familyName = properties.account.currentProfile?.familyName;
+    const givenName = properties.account.profile?.givenName;
+    const familyName = properties.account.profile?.familyName;
 
     // Set the display name
-    let displayName = properties.account.currentProfile?.displayName;
+    let displayName = properties.account.profile?.displayName;
 
     // If there is display name
     if(!displayName) {
@@ -27,8 +27,8 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
             displayName = `${givenName} ${familyName}`;
         }
         // Otherwise use the primary email
-        else if(primaryEmailAddress) {
-            displayName = primaryEmailAddress;
+        else if(emailAddress) {
+            displayName = emailAddress;
         }
     }
 

@@ -9,7 +9,7 @@ import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayo
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - API
-import { ProfilePublicQuery } from '@project/source/api/graphql';
+import { AccountProfilePublicQuery } from '@project/source/api/graphql';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
@@ -19,12 +19,11 @@ import { monthYear, timeAgo } from '@structure/source/utilities/Time';
 
 // Component - PublicProfilePage
 export interface PublicProfilePageInterface {
-    profilePublic: ProfilePublicQuery['profilePublic'];
+    profilePublic: AccountProfilePublicQuery['accountProfilePublic'];
 }
 export function PublicProfilePage(properties: PublicProfilePageInterface) {
     // Get the profile image URL
-    const profileImageUrl = properties.profilePublic?.imageUrls?.find((image) => image.variant === 'profile-image')
-        ?.url;
+    const profileImageUrl = properties.profilePublic?.images?.find((image) => image.variant === 'profile-image')?.url;
 
     // Render the component
     return (

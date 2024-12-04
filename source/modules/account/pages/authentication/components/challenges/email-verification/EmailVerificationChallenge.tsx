@@ -8,16 +8,16 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { EmailVerificationVerifyForm } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationVerifyForm';
 
 // Dependencies - API
-import { AuthenticationCurrentQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountAuthenticationQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - EmailVerificationChallenge
 export interface EmailVerificationChallengeInterface {
     emailAddress: string;
-    onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
+    onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
 }
 export interface EmailVerificationChallengeInterface {
     emailAddress: string;
-    onSuccess: (authenticationSession: AuthenticationCurrentQuery['authenticationCurrent']) => void;
+    onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
     onChangeEmail?: () => void;
 }
 

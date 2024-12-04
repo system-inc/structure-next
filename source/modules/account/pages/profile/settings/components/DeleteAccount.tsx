@@ -15,7 +15,7 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 // Dependencies - API
 import { useMutation } from '@apollo/client';
 import {
-    AuthenticationCurrentQuery,
+    AccountAuthenticationQuery,
     AccountMaintenanceSessionCreateDocument,
     AuthenticationSessionStatus,
 } from '@project/source/api/GraphQlGeneratedCode';
@@ -27,12 +27,12 @@ export interface DeleteAccountInterface {
 export function DeleteAccount(properties: DeleteAccountInterface) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
-        AuthenticationCurrentQuery['authenticationCurrent'] | undefined
+        AccountAuthenticationQuery['accountAuthentication'] | undefined
     >(undefined);
 
     // Hooks
     const account = useAccount();
-    const emailAddress = account.accountState.account?.primaryAccountEmail?.emailAddress ?? '';
+    const emailAddress = account.accountState.account?.emailAddress ?? '';
 
     // Hooks - API - Mutations
     const [accountMaintenanceSessionCreateMutation, accountMaintenanceSessionCreateMutationState] = useMutation(

@@ -12,7 +12,7 @@ import { accountSignedInKey, Account } from '@structure/source/modules/account/A
 
 // Dependencies - API
 import { useQuery, useMutation, ApolloError } from '@apollo/client';
-import { AccountCurrentDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - AccountProvider
 export interface AccountProviderInterface {
@@ -32,12 +32,12 @@ export function AccountProvider(properties: AccountProviderInterface) {
     const [accountSignOutMutation] = useMutation(AccountSignOutDocument);
 
     // Queries
-    const accountQueryState = useQuery(AccountCurrentDocument, {
+    const accountQueryState = useQuery(AccountDocument, {
         // Do not run the query if the account is not signed in
         skip: !signedIn,
         onCompleted: function (data) {
             // If signed in
-            if(data.accountCurrent) {
+            if(data.account) {
                 // Update the signed in state
                 setSignedIn(true);
 
@@ -61,14 +61,14 @@ export function AccountProvider(properties: AccountProviderInterface) {
     const account = React.useMemo(
         function () {
             // If there is account data
-            if(accountQueryState.data?.accountCurrent) {
-                return new Account(accountQueryState.data.accountCurrent);
+            if(accountQueryState.data?.account) {
+                return new Account(accountQueryState.data.account);
             }
             else {
                 return null;
             }
         },
-        [accountQueryState.data?.accountCurrent],
+        [accountQueryState.data?.account],
     );
 
     // Function to update the signed in state

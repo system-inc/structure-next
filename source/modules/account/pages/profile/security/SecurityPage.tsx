@@ -31,8 +31,8 @@ export function SecurityPage() {
 
     // Check if the account has a password set
     const accountHasPasswordSet =
-        (accountEnrolledChallengesQueryState.data?.accountCurrent.enrolledChallenges.length ?? 0) > 0 &&
-        accountEnrolledChallengesQueryState.data?.accountCurrent.enrolledChallenges.includes('AccountPassword');
+        (accountEnrolledChallengesQueryState.data?.account.enrolledChallenges.length ?? 0) > 0 &&
+        accountEnrolledChallengesQueryState.data?.account.enrolledChallenges.includes('AccountPassword');
 
     // Render the component
     return (

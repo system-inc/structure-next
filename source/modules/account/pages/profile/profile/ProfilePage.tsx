@@ -48,8 +48,8 @@ export function ProfilePage() {
                     {accountState.loading ? (
                         <PlaceholderAnimation className="mt-2 h-4 w-32" />
                     ) : (
-                        accountState.account?.currentProfile?.username && (
-                            <p className="neutral mb-2 mt-1 text-sm">@{accountState.account.currentProfile.username}</p>
+                        accountState.account?.profile?.username && (
+                            <p className="neutral mb-2 mt-1 text-sm">@{accountState.account.profile.username}</p>
                         )
                     )}
 

@@ -29,14 +29,14 @@ export function ProfileInformationForm() {
     const [updateMutation] = useMutation(AccountProfileUpdateDocument);
 
     // Function to format phone number
-    function formatPhoneNumber(phoneNumber: string | null | undefined): string | undefined {
-        if(!phoneNumber) return undefined;
-        let formatted = phoneNumber.startsWith('+') ? phoneNumber : '+1' + phoneNumber;
-        if(formatted.startsWith('+1') && formatted.length === 12) {
-            formatted = `+1 (${formatted.substring(2, 5)}) ${formatted.substring(5, 8)}-${formatted.substring(8, 12)}`;
-        }
-        return formatted;
-    }
+    // function formatPhoneNumber(phoneNumber: string | null | undefined): string | undefined {
+    //     if(!phoneNumber) return undefined;
+    //     let formatted = phoneNumber.startsWith('+') ? phoneNumber : '+1' + phoneNumber;
+    //     if(formatted.startsWith('+1') && formatted.length === 12) {
+    //         formatted = `+1 (${formatted.substring(2, 5)}) ${formatted.substring(5, 8)}-${formatted.substring(8, 12)}`;
+    //     }
+    //     return formatted;
+    // }
 
     // Function to handle form submission
     async function handleSubmit(formValues: ProfileFormValues): Promise<FormSubmitResponseInterface> {
@@ -46,7 +46,7 @@ export function ProfileInformationForm() {
                     givenName: formValues.givenName as string,
                     familyName: formValues.familyName as string,
                     displayName: formValues.displayName as string,
-                    phoneNumber: formatPhoneNumber(formValues.phoneNumber as string),
+                    // phoneNumber: formatPhoneNumber(formValues.phoneNumber as string),
                 },
             },
         });
@@ -78,7 +78,7 @@ export function ProfileInformationForm() {
                         className="flex-grow"
                         label="First Name"
                         labelTip="This is also known as your given name."
-                        defaultValue={accountState.account?.currentProfile?.givenName}
+                        defaultValue={accountState.account?.profile?.givenName}
                     />,
                     <FormInputText
                         key="familyName"
@@ -86,7 +86,7 @@ export function ProfileInformationForm() {
                         className="flex-grow"
                         label="Last Name"
                         labelTip="This is also known as your family name."
-                        defaultValue={accountState.account?.currentProfile?.familyName}
+                        defaultValue={accountState.account?.profile?.familyName}
                     />,
                     <FormInputText
                         key="displayName"
@@ -94,16 +94,16 @@ export function ProfileInformationForm() {
                         className="mt-6"
                         label="Display Name"
                         labelTip="Your display name is how you will be identified on our platform."
-                        defaultValue={accountState.account?.currentProfile?.displayName}
+                        defaultValue={accountState.account?.profile?.displayName}
                     />,
-                    <FormInputText
-                        key="phoneNumber"
-                        id="phoneNumber"
-                        className="mt-6"
-                        label="Phone Number"
-                        placeholder="(555) 555-5555"
-                        defaultValue={accountState.account?.currentProfile?.phoneNumber}
-                    />,
+                    // <FormInputText
+                    //     key="phoneNumber"
+                    //     id="phoneNumber"
+                    //     className="mt-6"
+                    //     label="Phone Number"
+                    //     placeholder="(555) 555-5555"
+                    //     defaultValue={accountState.account?.profile?.phoneNumber}
+                    // />,
                 ]}
                 buttonProperties={{
                     children: 'Save Changes',

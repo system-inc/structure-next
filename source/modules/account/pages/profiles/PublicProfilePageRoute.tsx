@@ -6,14 +6,14 @@ import { PublicProfilePage } from '@structure/source/modules/account/pages/profi
 
 // Dependencies - API
 import { getApolloClientForServerSideRendering } from '@structure/source/api/apollo/ApolloClientForServerSideRendering';
-import { ProfilePublicDocument } from '@project/source/api/graphql';
+import { AccountProfilePublicDocument } from '@project/source/api/graphql';
 
 // Function to get server-side properties
 async function getServerSideProperties(username: string) {
     const apolloClientForServerSideRendering = getApolloClientForServerSideRendering();
 
     const profilePublicQueryState = await apolloClientForServerSideRendering.query({
-        query: ProfilePublicDocument,
+        query: AccountProfilePublicDocument,
         variables: {
             username: username,
         },
@@ -25,7 +25,7 @@ async function getServerSideProperties(username: string) {
     });
     // console.log('profilePublicQueryState', profilePublicQueryState);
 
-    return { profilePublic: profilePublicQueryState.data?.profilePublic };
+    return { profilePublic: profilePublicQueryState.data?.accountProfilePublic };
 }
 
 // Metadata

@@ -14,8 +14,8 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 // Dependencies - API
 import { useMutation } from '@apollo/client';
 import {
-    AccountRegistrationOrSignInCreateDocument,
-    AuthenticationCurrentQuery,
+    AccountAuthenticationRegistrationOrSignInCreateDocument,
+    AccountAuthenticationQuery,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
@@ -26,12 +26,14 @@ export interface EmailFormInterface {
     children?: React.ReactNode;
     onSuccess: (
         emailAddress: string,
-        authenticationSession: AuthenticationCurrentQuery['authenticationCurrent'],
+        authenticationSession: AccountAuthenticationQuery['accountAuthentication'],
     ) => void;
 }
 export function EmailForm(properties: EmailFormInterface) {
     // Hooks
-    const [accountRegistrationOrSignInCreateMutation] = useMutation(AccountRegistrationOrSignInCreateDocument);
+    const [accountAuthenticationRegistrationOrSignInCreateMutation] = useMutation(
+        AccountAuthenticationRegistrationOrSignInCreateDocument,
+    );
 
     // Render the component
     return (
@@ -71,7 +73,7 @@ export function EmailForm(properties: EmailFormInterface) {
 
                     // Run the mutation
                     const currentAccountRegistrationOrSignInCreateMutationState =
-                        await accountRegistrationOrSignInCreateMutation({
+                        await accountAuthenticationRegistrationOrSignInCreateMutation({
                             variables: {
                                 input: {
                                     emailAddress: formValues.emailAddress,
@@ -95,10 +97,10 @@ export function EmailForm(properties: EmailFormInterface) {
 
                         // Run the success callback
                         properties.onSuccess(
-                            currentAccountRegistrationOrSignInCreateMutationState.data.accountRegistrationOrSignInCreate
-                                .emailAddress,
-                            currentAccountRegistrationOrSignInCreateMutationState.data.accountRegistrationOrSignInCreate
-                                .authentication,
+                            currentAccountRegistrationOrSignInCreateMutationState.data
+                                .accountAuthenticationRegistrationOrSignInCreate.emailAddress,
+                            currentAccountRegistrationOrSignInCreateMutationState.data
+                                .accountAuthenticationRegistrationOrSignInCreate.authentication,
                         );
                     }
 

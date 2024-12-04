@@ -35,20 +35,20 @@ export function UsernameForm() {
 
     // State
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-    const [activeUsername, setActiveUsername] = React.useState(accountState.account?.currentProfile?.username || '');
+    const [activeUsername, setActiveUsername] = React.useState(accountState.account?.profile?.username || '');
     const [newUsername, setNewUsername] = React.useState(activeUsername);
     const [usernameUpdateSuccess, setUsernameUpdateSuccess] = React.useState(false);
 
     // Effect to sync activeUsername with account state on initial load
     React.useEffect(
         function () {
-            const currentUsername = accountState.account?.currentProfile?.username;
+            const currentUsername = accountState.account?.profile?.username;
             if(currentUsername) {
                 setActiveUsername(currentUsername);
                 setNewUsername(currentUsername);
             }
         },
-        [accountState.account?.currentProfile?.username],
+        [accountState.account?.profile?.username],
     );
 
     // Function to handle form submission
