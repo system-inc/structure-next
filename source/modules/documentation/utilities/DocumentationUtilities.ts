@@ -9,7 +9,7 @@ import { SideNavigationItemInterface } from '@structure/source/common/navigation
 import { SideNavigationSectionInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Function to build path from node to root
-function buildPathFromNode(node: DocumentationNodeWithParentInterface): string[] {
+export function buildPathFromNode(node: DocumentationNodeWithParentInterface): string[] {
     const parts: string[] = [];
     let current: DocumentationNodeWithParentInterface | null = node;
 

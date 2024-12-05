@@ -1,6 +1,15 @@
 // Dependencies - React
 import React from 'react';
 
+// Main Documentation Specification Interface
+export interface DocumentationSpecificationInterface {
+    identifier: string;
+    title: string;
+    baseUrlPath: string;
+    nodes: DocumentationNodeInterface[];
+    settings?: boolean;
+}
+
 // Base Interface for Documentation Nodes
 export interface DocumentationNodeBaseInterface {
     identifier: string;
@@ -117,12 +126,4 @@ export interface FormFieldInterface {
         max?: number;
         pattern?: string;
     };
-}
-
-// Main Documentation Specification Interface
-export interface DocumentationSpecificationInterface {
-    identifier: string;
-    title: string;
-    baseUrlPath: string;
-    nodes: DocumentationNodeInterface[];
 }
