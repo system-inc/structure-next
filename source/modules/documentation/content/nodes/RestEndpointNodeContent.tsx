@@ -5,6 +5,7 @@ import React from 'react';
 import { RestEndpointNodeInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
+import { Button } from '@structure/source/common/buttons/Button';
 import { Markdown } from '@structure/source/common/markdown/Markdown';
 
 // Component - RestEndpointNodeContent
@@ -13,6 +14,57 @@ export interface RestEndpointNodeContentInterface {
 }
 export function RestEndpointNodeContent(properties: RestEndpointNodeContentInterface) {
     const { endpoint } = properties.node;
+
+    // State
+    const [testOutputResponseHttpCode, setTestOutputResponseHttpCode] = React.useState<string | null>(null);
+    const [testOutputResponseHttpHeaders, setTestOutputResponseHttpHeaders] = React.useState<string | null>(null);
+    const [testOutputResponseBody, setTestOutputResponseBody] = React.useState<string | null>(null);
+
+    // Function to test the endpoint
+    const testEndpoint = async () => {
+        // Get 'apiKey' from local storage
+        let apiKey = localStorage.getItem('apiKey');
+
+        if(apiKey) {
+            apiKey = apiKey.trim().replaceAll('"', '');
+        }
+
+        // Fetch the endpoint
+        const response = await fetch(endpoint.url, {
+            method: endpoint.method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shopify-Admin-Access-Token': apiKey || 'test',
+                'X-Shopify-Idempotency-Key': 'test',
+            },
+        });
+        console.log('response', response);
+
+        // Set status code
+        setTestOutputResponseHttpCode(response.status.toString());
+
+        // Convert headers to object and stringify
+        const headers: { [key: string]: string } = {};
+        response.headers.forEach((value, key) => {
+            headers[key] = value;
+        });
+        setTestOutputResponseHttpHeaders(JSON.stringify(headers, null, 4));
+
+        // Get response data
+        let data;
+        if(response.headers.get('Content-Type')?.includes('application/json')) {
+            data = await response.json();
+
+            // Set response body
+            setTestOutputResponseBody(JSON.stringify(data, null, 4));
+        }
+        else {
+            data = await response.text();
+
+            // Set response body
+            setTestOutputResponseBody(data);
+        }
+    };
 
     // Render the component
     return (
@@ -24,6 +76,30 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                     {endpoint.method}
                 </span>
                 <code className="ml-2">{endpoint.url}</code>
+            </div>
+
+            {/* Test Endpoint */}
+            <div className="mb-8">
+                <div>
+                    <Button onClick={testEndpoint}>Test</Button>
+                </div>
+                {testOutputResponseBody && (
+                    <div className="mt-4 rounded-md border p-4">
+                        <h3>Test Output</h3>
+                        <div className="mt-4">
+                            <h4 className="mb-2">Response Code</h4>
+                            <pre className="rounded-md border p-4">{testOutputResponseHttpCode}</pre>
+                        </div>
+                        <div className="mt-4">
+                            <h4 className="mb-2">Response Headers</h4>
+                            <pre className="rounded-md border p-4">{testOutputResponseHttpHeaders}</pre>
+                        </div>
+                        <div className="mt-4">
+                            <h4 className="mb-2">Response Body</h4>
+                            <pre className="rounded-md border p-4">{testOutputResponseBody}</pre>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {endpoint.documentation?.overview && (
