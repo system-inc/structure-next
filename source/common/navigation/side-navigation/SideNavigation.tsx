@@ -5,28 +5,28 @@ import React from 'react';
 
 // Dependencies - Main Components
 import {
-    SideNavigationCategoryInterface,
-    SideNavigationCategory,
-} from '@structure/source/common/navigation/side-navigation/SideNavigationCategory';
+    SideNavigationSectionInterface,
+    SideNavigationSection,
+} from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Component - SideNavigation
 export interface SideNavigationInterface {
-    categories: SideNavigationCategoryInterface[];
+    sections: SideNavigationSectionInterface[];
 }
 export function SideNavigation(properties: SideNavigationInterface) {
     // Memoize the categories array to prevent unnecessary re-renders
-    const memoizedCategories = React.useMemo(
+    const memoizedSections = React.useMemo(
         function () {
-            return properties.categories;
+            return properties.sections;
         },
-        [properties.categories],
+        [properties.sections],
     );
 
     // Render the component
     return (
         <div className="space-y-4">
-            {memoizedCategories.map(function (category) {
-                return <SideNavigationCategory key={category.title} {...category} />;
+            {memoizedSections.map(function (section) {
+                return <SideNavigationSection key={section.title} {...section} />;
             })}
         </div>
     );

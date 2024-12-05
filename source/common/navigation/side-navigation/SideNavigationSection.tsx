@@ -17,15 +17,15 @@ const AnimatedChevronRightIcon = animated(ChevronRightIcon);
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
-// Component - SideNavigationCategory
-export interface SideNavigationCategoryInterface {
+// Component - SideNavigationSection
+export interface SideNavigationSectionInterface {
     title: string;
     href?: string;
     children?: SideNavigationItemInterface[];
     isHeader?: boolean;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
-export function SideNavigationCategory(properties: SideNavigationCategoryInterface) {
+export function SideNavigationSection(properties: SideNavigationSectionInterface) {
     // Hooks
     const urlPath = useUrlPath();
 
@@ -97,7 +97,7 @@ export function SideNavigationCategory(properties: SideNavigationCategoryInterfa
                     >
                         {properties.children.map((child) => (
                             <div key={child.title}>
-                                <SideNavigationCategory {...child} />
+                                <SideNavigationSection {...child} />
                             </div>
                         ))}
                     </div>
@@ -108,4 +108,4 @@ export function SideNavigationCategory(properties: SideNavigationCategoryInterfa
 }
 
 // Export - Default
-export default SideNavigationCategory;
+export default SideNavigationSection;

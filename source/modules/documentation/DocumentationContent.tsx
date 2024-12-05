@@ -5,12 +5,13 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
+import { Markdown } from '@structure/source/common/markdown/Markdown';
 
 // Dependencies - Types
-import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationSpecificationInterface';
+import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Utilities
-import { findDocumentationSpecificationCategoryByUrlPath } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
+import { findDocumentationNodeByUrlPath } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
 
 // Dependencies - Shared State
 // import { useAtom } from 'jotai';
@@ -25,13 +26,11 @@ export function DocumentationContent(properties: DocumentationContentInterface) 
     const urlPath = useUrlPath();
 
     // Get the content from the current category based on the URL path
-    const currentCategory = findDocumentationSpecificationCategoryByUrlPath(
-        properties.specification.categories,
-        urlPath,
-    );
+    const currentNode = findDocumentationNodeByUrlPath(properties.specification.nodes, urlPath);
     // console.log('currentCategory', currentCategory);
 
-    const content = currentCategory?.content || urlPath;
+    const content =
+        currentNode && currentNode.type == 'MarkdownPage' ? <Markdown>{currentNode.content}</Markdown> : urlPath;
 
     // Render the component
     return <div className="px-8 pb-28 pt-6">{content}</div>;

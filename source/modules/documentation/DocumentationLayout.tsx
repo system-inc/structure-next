@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Types
-import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationSpecificationInterface';
+import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -15,6 +15,9 @@ import { ApiKeyFormDialog } from '@structure/source/modules/documentation/forms/
 // Dependencies - Shared State
 import { useAtom } from 'jotai';
 import { apiKeyAtom } from '@structure/source/modules/documentation/forms/ApiKeyFormDialog';
+
+// Dependencies - Utilities
+import { getSideNavigationSectionsFromDocumentationSpecification } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
 
 // Component - DocumentationLayout
 export interface DocumentationLayoutInterface {
@@ -45,7 +48,9 @@ export function DocumentationLayout(properties: DocumentationLayoutInterface) {
                         </Button>
                     </div>
 
-                    <SideNavigation categories={properties.specification.categories} />
+                    <SideNavigation
+                        sections={getSideNavigationSectionsFromDocumentationSpecification(properties.specification)}
+                    />
 
                     {/* API Key */}
                     <ApiKeyFormDialog

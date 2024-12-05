@@ -1,48 +1,79 @@
 // Dependencies - Types
-import { DocumentationSpecificationCategoryInterface } from '@structure/source/modules/documentation/types/DocumentationSpecificationInterface';
+import {
+    DocumentationSpecificationInterface,
+    DocumentationNodeInterface,
+    DocumentationNodeWithParentInterface,
+    SectionNodeInterface,
+} from '@structure/source/modules/documentation/types/DocumentationTypes';
+import { SideNavigationItemInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
+import { SideNavigationSectionInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
-// Type - DocumentationSpecificationCategoryWithParent
-export interface DocumentationSpecificationCategoryWithParentInterface
-    extends DocumentationSpecificationCategoryInterface {
-    parent: DocumentationSpecificationCategoryWithParentInterface | null;
-}
-
-// Function to find a documentation specification category by URL path
-export function findDocumentationSpecificationCategoryByUrlPath(
-    categories: DocumentationSpecificationCategoryInterface[],
+// Function to find a documentation node by URL path
+export function findDocumentationNodeByUrlPath(
+    nodes: DocumentationNodeInterface[],
     urlPath: string,
-    parent?: DocumentationSpecificationCategoryWithParentInterface | null,
-): DocumentationSpecificationCategoryWithParentInterface | null {
-    // Base case - no categories
-    if(!categories || categories.length === 0) {
+    parent: DocumentationNodeWithParentInterface | null = null,
+): DocumentationNodeWithParentInterface | null {
+    // Base case - no nodes
+    if(!nodes || nodes.length === 0) {
         return null;
     }
 
-    // Search through each category
-    for(const category of categories) {
-        // Add parent reference to current category
-        const categoryWithParent: DocumentationSpecificationCategoryWithParentInterface = {
-            ...category,
-            parent: parent ?? null,
+    // Normalize URL path (remove trailing slash)
+    const normalizedUrlPath = urlPath.replace(/\/$/, '');
+
+    // Search through each node
+    for(const node of nodes) {
+        // Create node with parent
+        const nodeWithParent: DocumentationNodeWithParentInterface = {
+            ...node,
+            parent: parent,
         };
 
-        // Check if current category matches path
-        if(category.href === urlPath.replace(/\/$/, '')) {
-            return categoryWithParent;
+        // Check if current node matches path
+        if(node.href === normalizedUrlPath) {
+            return nodeWithParent;
         }
 
-        // If category has children, search them recursively
-        if(category.children && category.children.length > 0) {
-            const foundInChildren = findDocumentationSpecificationCategoryByUrlPath(
-                category.children,
-                urlPath,
-                categoryWithParent,
-            );
-            if(foundInChildren) {
-                return foundInChildren;
+        // If node is a section and has children, search them recursively
+        if(node.type === 'Section') {
+            const sectionNode = node as SectionNodeInterface;
+            if(sectionNode.children && sectionNode.children.length > 0) {
+                const foundInChildren = findDocumentationNodeByUrlPath(sectionNode.children, urlPath, nodeWithParent);
+                if(foundInChildren) {
+                    return foundInChildren;
+                }
             }
         }
     }
 
     return null;
+}
+
+// Function to generate SideNavigationSections from a DocumentationSpecification
+export function getSideNavigationSectionsFromDocumentationSpecification(
+    documentationSpecification: DocumentationSpecificationInterface,
+): SideNavigationSectionInterface[] {
+    // Helper function to process nodes recursively
+    function processNode(node: DocumentationNodeInterface): SideNavigationItemInterface {
+        const sideNavigationSection: SideNavigationSectionInterface = {
+            title: node.title,
+            href: node.href,
+            isHeader: node.isHeader,
+            icon: node.icon,
+        };
+
+        // If the node is a section and has children, process them recursively
+        if(node.type === 'Section') {
+            const sectionNode = node as SectionNodeInterface;
+            if(sectionNode.children && sectionNode.children.length > 0) {
+                sideNavigationSection.children = sectionNode.children.map(processNode);
+            }
+        }
+
+        return sideNavigationSection;
+    }
+
+    // Process the top-level nodes
+    return documentationSpecification.nodes.map(processNode);
 }

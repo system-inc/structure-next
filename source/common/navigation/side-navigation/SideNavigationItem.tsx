@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import { SideNavigationCategoryInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationCategory';
+import { SideNavigationSectionInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -13,7 +13,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export interface SideNavigationItemInterface {
     title: string;
     href?: string;
-    children?: SideNavigationCategoryInterface[];
+    children?: SideNavigationSectionInterface[];
     isHeader?: boolean;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
