@@ -1,4 +1,4 @@
-'use client';
+'use client'; // This component uses client-only features
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -16,19 +16,21 @@ import { ApiKeyFormDialog } from '@structure/source/modules/documentation/forms/
 import { useAtom } from 'jotai';
 import { apiKeyAtom } from '@structure/source/modules/documentation/forms/ApiKeyFormDialog';
 
-type DocumentationLayoutProps = {
+// Component - DocumentationLayout
+export interface DocumentationLayoutInterface {
     children: React.ReactNode;
     specification: DocumentationSpecificationInterface;
-};
-const DocumentationLayout = (props: DocumentationLayoutProps) => {
+}
+export function DocumentationLayout(properties: DocumentationLayoutInterface) {
     // State
     const [isApiKeyDialogOpen, setIsApiKeyDialogOpen] = React.useState(false);
     const [apiKey] = useAtom(apiKeyAtom);
 
+    // Render the component
     return (
         <SideNavigationLayout
             topBar={true}
-            identifier={props.specification.identifier}
+            identifier={properties.specification.identifier}
             navigation={
                 <nav className="px-4 py-4">
                     {/* API Key */}
@@ -43,7 +45,7 @@ const DocumentationLayout = (props: DocumentationLayoutProps) => {
                         </Button>
                     </div>
 
-                    <SideNavigation categories={props.specification.categories} />
+                    <SideNavigation categories={properties.specification.categories} />
 
                     {/* API Key */}
                     <ApiKeyFormDialog
@@ -54,9 +56,9 @@ const DocumentationLayout = (props: DocumentationLayoutProps) => {
                     />
                 </nav>
             }
-            contentBody={props.children}
+            contentBody={properties.children}
         />
     );
-};
+}
 
 export default DocumentationLayout;
