@@ -6,6 +6,7 @@ import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import { Markdown } from '@structure/source/common/markdown/Markdown';
+import { RestEndpointNodeContent } from '@structure/source/modules/documentation/content/nodes/RestEndpointNodeContent';
 
 // Dependencies - Types
 import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
@@ -26,11 +27,30 @@ export function DocumentationContent(properties: DocumentationContentInterface) 
     const urlPath = useUrlPath();
 
     // Get the content from the current category based on the URL path
-    const currentNode = findDocumentationNodeByUrlPath(properties.specification.nodes, urlPath);
+    const currentNode = findDocumentationNodeByUrlPath(
+        properties.specification.nodes,
+        properties.specification.baseUrlPath,
+        urlPath,
+    );
     // console.log('currentCategory', currentCategory);
 
-    const content =
-        currentNode && currentNode.type == 'MarkdownPage' ? <Markdown>{currentNode.content}</Markdown> : urlPath;
+    let content;
+    if(currentNode) {
+        switch(currentNode.type) {
+            case 'MarkdownPage':
+                content = <Markdown>{currentNode.content}</Markdown>;
+                break;
+            case 'RestEndpoint':
+                content = <RestEndpointNodeContent node={currentNode} />;
+                break;
+            // Add cases for other node types as needed
+            default:
+                content = <p>Content not available.</p>;
+        }
+    }
+    else {
+        content = <p>Page not found.</p>;
+    }
 
     // Render the component
     return <div className="px-8 pb-28 pt-6">{content}</div>;

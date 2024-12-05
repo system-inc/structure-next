@@ -5,7 +5,6 @@ import React from 'react';
 export interface DocumentationNodeBaseInterface {
     identifier: string;
     title: string;
-    href?: string; // URL path or identifier
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     isHeader?: boolean;
 }
@@ -124,5 +123,6 @@ export interface FormFieldInterface {
 export interface DocumentationSpecificationInterface {
     identifier: string;
     title: string;
+    baseUrlPath: string;
     nodes: DocumentationNodeInterface[];
 }

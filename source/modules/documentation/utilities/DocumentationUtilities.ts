@@ -8,9 +8,26 @@ import {
 import { SideNavigationItemInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
 import { SideNavigationSectionInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
+// Function to build path from node to root
+function buildPathFromNode(node: DocumentationNodeWithParentInterface): string[] {
+    const parts: string[] = [];
+    let current: DocumentationNodeWithParentInterface | null = node;
+
+    // Traverse up to root, collecting identifiers
+    while(current) {
+        if(current.identifier) {
+            parts.unshift(current.identifier);
+        }
+        current = current.parent;
+    }
+
+    return parts;
+}
+
 // Function to find a documentation node by URL path
 export function findDocumentationNodeByUrlPath(
     nodes: DocumentationNodeInterface[],
+    baseUrlPath: string,
     urlPath: string,
     parent: DocumentationNodeWithParentInterface | null = null,
 ): DocumentationNodeWithParentInterface | null {
@@ -30,8 +47,13 @@ export function findDocumentationNodeByUrlPath(
             parent: parent,
         };
 
+        // Build href by getting path from root to current node
+        const pathParts = buildPathFromNode(nodeWithParent);
+        const href = baseUrlPath + '/' + pathParts.join('/');
+        // console.log('href', href);
+
         // Check if current node matches path
-        if(node.href === normalizedUrlPath) {
+        if(href === normalizedUrlPath) {
             return nodeWithParent;
         }
 
@@ -39,7 +61,12 @@ export function findDocumentationNodeByUrlPath(
         if(node.type === 'Section') {
             const sectionNode = node as SectionNodeInterface;
             if(sectionNode.children && sectionNode.children.length > 0) {
-                const foundInChildren = findDocumentationNodeByUrlPath(sectionNode.children, urlPath, nodeWithParent);
+                const foundInChildren = findDocumentationNodeByUrlPath(
+                    sectionNode.children,
+                    baseUrlPath,
+                    urlPath,
+                    nodeWithParent,
+                );
                 if(foundInChildren) {
                     return foundInChildren;
                 }
@@ -55,10 +82,23 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
     documentationSpecification: DocumentationSpecificationInterface,
 ): SideNavigationSectionInterface[] {
     // Helper function to process nodes recursively
-    function processNode(node: DocumentationNodeInterface): SideNavigationItemInterface {
+    function processNode(
+        node: DocumentationNodeInterface,
+        parent: DocumentationNodeWithParentInterface | null = null,
+    ): SideNavigationItemInterface {
+        // Create node with parent for path building
+        const nodeWithParent: DocumentationNodeWithParentInterface = {
+            ...node,
+            parent: parent,
+        };
+
+        // Build href by getting path from root to current node
+        const pathParts = buildPathFromNode(nodeWithParent);
+        const href = documentationSpecification.baseUrlPath + '/' + pathParts.join('/');
+
         const sideNavigationSection: SideNavigationSectionInterface = {
             title: node.title,
-            href: node.href,
+            href: href,
             isHeader: node.isHeader,
             icon: node.icon,
         };
@@ -67,7 +107,9 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
         if(node.type === 'Section') {
             const sectionNode = node as SectionNodeInterface;
             if(sectionNode.children && sectionNode.children.length > 0) {
-                sideNavigationSection.children = sectionNode.children.map(processNode);
+                sideNavigationSection.children = sectionNode.children.map(function (child) {
+                    return processNode(child, nodeWithParent);
+                });
             }
         }
 
@@ -75,5 +117,7 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
     }
 
     // Process the top-level nodes
-    return documentationSpecification.nodes.map(processNode);
+    return documentationSpecification.nodes.map(function (node) {
+        return processNode(node, null);
+    });
 }
