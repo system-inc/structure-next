@@ -7,7 +7,7 @@ import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNav
 
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
-import { Pagination } from '@structure/source/common/navigation/Pagination';
+import { Pagination } from '@structure/source/common/navigation/pagination/Pagination';
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 
 // Dependencies - API

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import NavigationTrailSeparatorPopoverMenu from '@structure/source/common/navigation/NavigationTrailSeparatorPopoverMenu';
+import NavigationTrailSeparatorPopoverMenu from '@structure/source/common/navigation/trail/NavigationTrailSeparatorPopoverMenu';
 
 // Dependencies - Utilities
 import { slug, titleCase } from '@structure/source/utilities/String';

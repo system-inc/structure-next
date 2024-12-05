@@ -12,7 +12,7 @@ import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { InputText } from '@structure/source/common/forms/InputText';
 import { InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
-import { PaginationInterface, Pagination } from '@structure/source/common/navigation/Pagination';
+import { PaginationInterface, Pagination } from '@structure/source/common/navigation/pagination/Pagination';
 import { ColumnFilterGroup, ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
 

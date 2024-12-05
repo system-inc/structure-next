@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 // Dependencies - Main Components
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
-import { NavigationTrail } from '@structure/source/common/navigation/NavigationTrail';
+import { NavigationTrail } from '@structure/source/common/navigation/trail/NavigationTrail';
 import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
 import { postTopicIdentifierToIconObject } from '@structure/source/modules/support/pages/SupportPage';
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';

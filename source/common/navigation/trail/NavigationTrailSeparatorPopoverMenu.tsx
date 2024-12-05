@@ -1,18 +1,13 @@
-// 'use client'; // This component uses client-only features
-
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
 import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { NavigationTrailLinkInterface } from '@structure/source/common/navigation/NavigationTrail';
+import { NavigationTrailLinkInterface } from '@structure/source/common/navigation/trail/NavigationTrail';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
-
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - NavigationTrailSeparatorPopoverMenu
 export interface NavigationTrailSeparatorPopoverMenuProperties
@@ -22,7 +17,6 @@ export interface NavigationTrailSeparatorPopoverMenuProperties
 }
 export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailSeparatorPopoverMenuProperties) {
     // Hooks
-    const router = useRouter();
     const urlPathname = usePathname();
 
     // State for the PopoverMenu
@@ -42,7 +36,7 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
                     content: link.title,
                     href: link.href,
                     className: 'cursor-pointer w-full',
-                    onChange: (event) => {
+                    onChange: function () {
                         // console.log('selected me!', link.href, event);
                         // Close the popover immediately for a better navigation experience
                         setOpen(false);
@@ -56,7 +50,7 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
             popoverProperties={{
                 ...properties.popoverProperties,
                 open: open,
-                onOpenChange: (open) => {
+                onOpenChange: function (open) {
                     setOpen(open);
                 },
             }}
