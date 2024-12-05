@@ -9,7 +9,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Json
 export interface JsonInterface {
-    data: any;
+    data: unknown;
     defaultExpandLevel?: number;
     className?: string;
 }
