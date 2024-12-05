@@ -7,6 +7,7 @@ import { RestEndpointNodeInterface } from '@structure/source/modules/documentati
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
 import { Markdown } from '@structure/source/common/markdown/Markdown';
+import { Json } from '@structure/source/common/code/json/Json';
 
 // Component - RestEndpointNodeContent
 export interface RestEndpointNodeContentInterface {
@@ -17,8 +18,10 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
 
     // State
     const [testOutputResponseHttpCode, setTestOutputResponseHttpCode] = React.useState<string | null>(null);
-    const [testOutputResponseHttpHeaders, setTestOutputResponseHttpHeaders] = React.useState<string | null>(null);
-    const [testOutputResponseBody, setTestOutputResponseBody] = React.useState<string | null>(null);
+    const [testOutputResponseHttpHeaders, setTestOutputResponseHttpHeaders] = React.useState<
+        string | React.ReactNode | null
+    >(null);
+    const [testOutputResponseBody, setTestOutputResponseBody] = React.useState<string | React.ReactNode | null>(null);
 
     // Function to test the endpoint
     const testEndpoint = async () => {
@@ -48,7 +51,8 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         response.headers.forEach((value, key) => {
             headers[key] = value;
         });
-        setTestOutputResponseHttpHeaders(JSON.stringify(headers, null, 4));
+        // setTestOutputResponseHttpHeaders(JSON.stringify(headers, null, 4));
+        setTestOutputResponseHttpHeaders(<Json data={headers} />);
 
         // Get response data
         let data;
@@ -56,7 +60,8 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             data = await response.json();
 
             // Set response body
-            setTestOutputResponseBody(JSON.stringify(data, null, 4));
+            // setTestOutputResponseBody(JSON.stringify(data, null, 4));
+            setTestOutputResponseBody(<Json data={data} />);
         }
         else {
             data = await response.text();
@@ -130,11 +135,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                             <h4 className="mb-2 text-lg font-semibold">
                                 {status} - {response.description}
                             </h4>
-                            {response.body && (
-                                <pre className="rounded-md border p-2 text-sm">
-                                    <code>{JSON.stringify(response.body, null, 4)}</code>
-                                </pre>
-                            )}
+                            {response.body && <Json className="rounded-md border p-2 text-sm" data={response.body} />}
                         </div>
                     ))}
                 </div>
@@ -143,9 +144,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             {endpoint.exampleResponse !== undefined && (
                 <div className="mb-4">
                     <h3 className="mb-4 text-xl font-semibold">Example Response</h3>
-                    <pre className="rounded-md border p-2 text-sm">
-                        <code>{JSON.stringify(endpoint.exampleResponse, null, 4)}</code>
-                    </pre>
+                    <Json className="rounded-md border p-2 text-sm" data={endpoint.exampleResponse} />
                 </div>
             )}
         </div>

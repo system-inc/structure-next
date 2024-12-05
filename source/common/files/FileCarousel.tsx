@@ -53,14 +53,20 @@ export function FileCarousel(properties: FileCarouselInterface) {
     }, [properties.startIndex]);
 
     // Function to navigate to the previous file
-    function previousFile() {
-        setCurrentFileIndex((currentFileIndex - 1 + properties.files.length) % properties.files.length);
-    }
+    const previousFile = React.useCallback(
+        function () {
+            setCurrentFileIndex((currentFileIndex - 1 + properties.files.length) % properties.files.length);
+        },
+        [currentFileIndex, properties.files.length],
+    );
 
     // Function to navigate to the next file
-    function nextFile() {
-        setCurrentFileIndex((currentFileIndex + 1) % properties.files.length);
-    }
+    const nextFile = React.useCallback(
+        function () {
+            setCurrentFileIndex((currentFileIndex + 1) % properties.files.length);
+        },
+        [currentFileIndex, properties.files.length],
+    );
 
     // Effect to handle keyboard navigation
     React.useEffect(
@@ -79,7 +85,7 @@ export function FileCarousel(properties: FileCarouselInterface) {
                 window.removeEventListener('keydown', handleKeydown);
             };
         },
-        [currentFileIndex],
+        [currentFileIndex, nextFile, previousFile],
     );
 
     // Render the component
