@@ -121,3 +121,40 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
         return processNode(node, null);
     });
 }
+
+// Function to generate a title based on the current URL path and documentation specification
+export function getDocumentationHtmlTitle(
+    documentationSpecification: DocumentationSpecificationInterface,
+    currentUrlPath: string,
+    rootTitle: string,
+    separator = '•',
+): string {
+    // Find the node for the current URL path
+    const node = findDocumentationNodeByUrlPath(
+        documentationSpecification.nodes,
+        documentationSpecification.baseUrlPath,
+        currentUrlPath,
+    );
+
+    // Build title with parent categories
+    let title = rootTitle;
+    if(node) {
+        let currentCategory: DocumentationNodeWithParentInterface | null = node;
+        const titles = [];
+
+        // Collect all titles starting from current category up to parents
+        while(currentCategory) {
+            if(currentCategory.title) {
+                titles.push(currentCategory.title);
+            }
+            currentCategory = currentCategory.parent;
+        }
+
+        // Add titles to the page title if we have any
+        if(titles.length > 0) {
+            title = titles.join(' ' + separator + ' ') + ' • ' + title;
+        }
+    }
+
+    return title;
+}

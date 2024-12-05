@@ -84,7 +84,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                     <Button onClick={testEndpoint}>Test</Button>
                 </div>
                 {testOutputResponseBody && (
-                    <div className="mt-4 rounded-md border p-4">
+                    <div className="mt-4 rounded-md border p-4 text-sm">
                         <h3>Test Output</h3>
                         <div className="mt-4">
                             <h4 className="mb-2">Response Code</h4>
