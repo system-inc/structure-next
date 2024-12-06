@@ -51,11 +51,13 @@ export function useSupportTickets(
             pagination: {
                 itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
+                orderBy: [
+                    {
+                        key: 'createdAt',
+                        direction: OrderByDirection.Descending,
+                    },
+                ],
                 filters,
-            },
-            orderBy: {
-                key: 'createdAt',
-                direction: OrderByDirection.Descending,
             },
         },
         // Poll every minute

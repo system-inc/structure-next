@@ -1,6 +1,8 @@
 # Databases Query
-query DataInteractionDatabases($pagination: PaginationInput) {
-    dataInteractionDatabases(pagination: $pagination) {
+# query DataInteractionDatabases($pagination: PaginationInput!) {
+#     dataInteractionDatabases(pagination: $pagination) {
+query DataInteractionDatabases($input: PaginationInput!) {
+    dataInteractionDatabases(input: $input) {
         items {
             databaseName
         }
@@ -52,7 +54,7 @@ query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMe
 }
 
 # Database Tables Query
-query DataInteractionDatabaseTables($databaseName: String, $pagination: PaginationInput) {
+query DataInteractionDatabaseTables($databaseName: String, $pagination: PaginationInput!) {
     dataInteractionDatabaseTables(databaseName: $databaseName, pagination: $pagination) {
         items {
             databaseName
@@ -75,15 +77,13 @@ query DataInteractionDatabaseTables($databaseName: String, $pagination: Paginati
 query DataInteractionDatabaseTableRows(
     $databaseName: String!
     $tableName: String!
-    $pagination: PaginationInput
-    $orderBy: OrderBy
-    $filters: ColumnFilterGroup
+    $pagination: PaginationInput!
+    $filters: ColumnFilterGroupInput
 ) {
     dataInteractionDatabaseTableRows(
         databaseName: $databaseName
         tableName: $tableName
         pagination: $pagination
-        orderBy: $orderBy
         filters: $filters
     ) {
         items

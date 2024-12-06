@@ -1,6 +1,6 @@
 # Commerce Orders Admin Query
-query CommerceOrdersAdmin($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
-    commerceOrdersAdmin(input: $pagination, orderBy: $orderBy) {
+query CommerceOrdersAdmin($pagination: PaginationInput!) {
+    commerceOrdersAdmin(pagination: $pagination) {
         items {
             batchIdentifier
             beneficiaryEmailAddress
@@ -423,7 +423,7 @@ mutation CommerceCheckoutSessionCreate($input: CommerceCheckoutSessionCreateInpu
 
 query GetMyOrders {
     commerceOrders(
-        input: { filters: [{ column: "status", operator: NotEqual, value: "Cancelled" }], itemsPerPage: 10 }
+        pagination: { filters: [{ column: "status", operator: NotEqual, value: "Cancelled" }], itemsPerPage: 10 }
     ) {
         pagination {
             itemsTotal
@@ -574,7 +574,7 @@ query GetMyOrders {
 
 query GetOrderByIdentifier($orderIdentifier: JSON!) {
     commerceOrders(
-        input: { filters: [{ column: "identifier", operator: Equal, value: $orderIdentifier }], itemsPerPage: 1 }
+        pagination: { filters: [{ column: "identifier", operator: Equal, value: $orderIdentifier }], itemsPerPage: 1 }
     ) {
         pagination {
             itemsTotal

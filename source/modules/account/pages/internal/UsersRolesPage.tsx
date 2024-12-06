@@ -21,7 +21,8 @@ import {
     AccountAssignedAccessRolesPrivilegedDocument,
     AccountAssignedAccessRolesPrivilegedQuery,
     AccountAccessRoleRevokePrivilegedDocument,
-    // OrderByDirection,
+    AccessRoleStatus,
+    OrderByDirection,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
@@ -38,11 +39,16 @@ export function UsersRolesPage() {
     // Hooks
     const assignedRolesQueryState = useQuery(AccountAssignedAccessRolesPrivilegedDocument, {
         variables: {
-            // statuses: ['Active'],
-            // orderBy: {
-            //     key: 'createdAt',
-            //     direction: OrderByDirection.Descending,
-            // },
+            statuses: [AccessRoleStatus.Active],
+            pagination: {
+                itemsPerPage: 25,
+                orderBy: [
+                    {
+                        key: 'createdAt',
+                        direction: OrderByDirection.Descending,
+                    },
+                ],
+            },
         },
     });
     const [revokeMutation, revokeMutationState] = useMutation(AccountAccessRoleRevokePrivilegedDocument);

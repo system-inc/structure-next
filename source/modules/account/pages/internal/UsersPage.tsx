@@ -19,7 +19,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import {
     AccountsPrivilegedDocument,
     AccountDeletePrivilegedDocument,
-    // OrderByDirection,
+    OrderByDirection,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
 
@@ -40,14 +40,16 @@ export function UsersPage() {
     // Query
     const accountsPrivilegedQueryState = useQuery(AccountsPrivilegedDocument, {
         variables: {
-            input: {
+            pagination: {
                 itemsPerPage: itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
+                orderBy: [
+                    {
+                        key: 'createdAt',
+                        direction: OrderByDirection.Descending,
+                    },
+                ],
             },
-            // orderBy: {
-            //     key: 'createdAt',
-            //     direction: OrderByDirection.Descending,
-            // },
         },
     });
 

@@ -122,12 +122,12 @@ export function PostControls(properties: PostControlsInterface) {
                     username={properties.createdByProfile?.username ?? 'anonymous'}
                     displayName={properties.createdByProfile?.displayName ?? 'Anonymous'}
                     imageUrls={
-                        properties.createdByProfile?.imageUrls && properties.createdByProfile?.imageUrls.length
-                            ? properties.createdByProfile?.imageUrls.map(function (imageUrl) {
+                        properties.createdByProfile?.images && properties.createdByProfile?.images.length
+                            ? properties.createdByProfile?.images.map(function (image) {
                                   return {
-                                      url: imageUrl.url!,
+                                      url: image.url!,
                                       //   type: imageUrl.type,
-                                      variant: imageUrl.variant!,
+                                      variant: image.variant!,
                                   };
                               })
                             : undefined

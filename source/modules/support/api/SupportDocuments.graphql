@@ -12,8 +12,8 @@ query SupportPost($identifier: String!) {
     }
 }
 
-query SupportPosts($paginationInputWithFilters: PaginationInputWithFilters) {
-    posts(input: $paginationInputWithFilters) {
+query SupportPosts($pagination: PaginationInput!) {
+    posts(pagination: $pagination) {
         pagination {
             itemIndex
             itemIndexForPreviousPage
@@ -42,7 +42,7 @@ query SupportPosts($paginationInputWithFilters: PaginationInputWithFilters) {
 }
 
 # Support Post Topic Query
-query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInput) {
+query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInput!) {
     postTopic(slug: $slug, path: $path, type: "SupportArticle", pagination: $pagination) {
         topic {
             id
@@ -102,8 +102,8 @@ mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
 }
 
 # Support Tickets Admin Query
-query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
-    supportTicketsAdmin(pagination: $pagination, orderBy: $orderBy) {
+query SupportTicketsAdmin($pagination: PaginationInput!) {
+    supportTicketsAdmin(pagination: $pagination) {
         items {
             id
             identifier
@@ -115,7 +115,7 @@ query SupportTicketsAdmin($pagination: PaginationInputWithFilters, $orderBy: Ord
             assignedToProfile {
                 username
                 displayName
-                imageUrls {
+                images {
                     type
                     url
                     variant
@@ -156,7 +156,7 @@ mutation SupportTicketAssign($ticketId: String!, $username: String) {
         assignedToProfile {
             username
             displayName
-            imageUrls {
+            images {
                 type
                 url
                 variant
@@ -182,7 +182,7 @@ query SupportAllSupportProfiles {
     supportAllSupportProfiles {
         username
         displayName
-        imageUrls {
+        images {
             type
             url
             variant

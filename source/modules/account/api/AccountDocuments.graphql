@@ -136,18 +136,18 @@ mutation AccountMaintenanceSessionCreate {
     }
 }
 
-# Account Registration Complete Mutation
+# Account Authentication Registration Complete Mutation
 # After this is complete, use AccountCurrent query to get the current account
-mutation AccountRegistrationComplete($input: AccountRegistrationCompleteInput!) {
-    accountRegistrationComplete(input: $input) {
+mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
+    accountAuthenticationRegistrationComplete(input: $input) {
         success
     }
 }
 
-# Account Sign In Complete Mutation
+# Account Authentication Sign In Complete Mutation
 # After this is complete, use AccountCurrent query to get the current account
-mutation AccountSignInComplete {
-    accountSignInComplete {
+mutation AccountAuthenticationSignInComplete {
+    accountAuthenticationSignInComplete {
         success
     }
 }
@@ -211,9 +211,8 @@ query AccountPrivileged($input: AccountInput!) {
 }
 
 # Accounts Privileged Query
-# query AccountsPrivileged($input: PaginationInput) {
-query AccountsPrivileged($input: PaginationInputWithFilters) {
-    accountsPrivileged(input: $input) {
+query AccountsPrivileged($pagination: PaginationInput!) {
+    accountsPrivileged(pagination: $pagination) {
         items {
             emailAddress
             profiles {
@@ -288,9 +287,8 @@ query AccountAvailableAccessRolesPrivileged {
 }
 
 # Account Assigned Access Roles Privileged Query
-# query AccountAssignedAccessRolesPrivileged($input: PaginationInput) {
-query AccountAssignedAccessRolesPrivileged($input: PaginationInputWithFilters) {
-    accountAssignedAccessRolesPrivileged(input: $input) {
+query AccountAssignedAccessRolesPrivileged($statuses: [AccessRoleStatus!], $pagination: PaginationInput!) {
+    accountAssignedAccessRolesPrivileged(statuses: $statuses, pagination: $pagination) {
         items {
             id
             type

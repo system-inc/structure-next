@@ -28,13 +28,15 @@ export function OrdersPage() {
     // Query
     const ordersQueryState = useQuery(CommerceOrdersAdminDocument, {
         variables: {
-            orderBy: {
-                key: 'createdAt',
-                direction: OrderByDirection.Descending,
-            },
             pagination: {
                 itemsPerPage: itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
+                orderBy: [
+                    {
+                        key: 'createdAt',
+                        direction: OrderByDirection.Descending,
+                    },
+                ],
             },
         },
     });

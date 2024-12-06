@@ -1,6 +1,6 @@
 # Posts Query
-query Posts($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
-    posts(input: $pagination, orderBy: $orderBy) {
+query Posts($pagination: PaginationInput!) {
+    posts(pagination: $pagination) {
         items {
             id
             identifier
@@ -11,7 +11,7 @@ query Posts($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
             createdByProfile {
                 displayName
                 username
-                imageUrls {
+                images {
                     url
                     type
                     variant
@@ -51,8 +51,8 @@ query Posts($pagination: PaginationInputWithFilters, $orderBy: OrderBy) {
 }
 
 # Posts Mine Query
-query PostsMine($pagination: PaginationInputWithFilters) {
-    postsMine(input: $pagination) {
+query PostsMine($pagination: PaginationInput!) {
+    postsMine(pagination: $pagination) {
         items {
             id
             identifier
@@ -63,7 +63,7 @@ query PostsMine($pagination: PaginationInputWithFilters) {
             createdByProfile {
                 displayName
                 username
-                imageUrls {
+                images {
                     url
                     type
                     variant
@@ -114,7 +114,7 @@ query Post($identifier: String!) {
         createdByProfile {
             displayName
             username
-            imageUrls {
+            images {
                 url
                 type
                 variant
@@ -211,7 +211,7 @@ mutation PostReactionDelete($postId: String!, $content: String!) {
 }
 
 # Post Reaction Profiles
-query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput) {
+query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {
     postReactionProfiles(postId: $postId, content: $content, pagination: $pagination) {
         items {
             username

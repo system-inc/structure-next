@@ -1,6 +1,6 @@
 # Wait Lists Query
-query WaitLists {
-    waitLists {
+query WaitLists($pagination: PaginationInput!) {
+    waitLists(pagination: $pagination) {
         pagination {
             itemIndex
             itemIndexForNextPage
@@ -39,8 +39,8 @@ mutation WaitListCreate($data: WaitListCreationInput!) {
 # }
 
 # Wait List Entries Query
-query WaitListEntries($waitListIdentifier: String!, $itemsPerPage: Int! = 100) {
-    waitListEntries(input: { itemsPerPage: $itemsPerPage, waitListIdentifier: $waitListIdentifier }) {
+query WaitListEntries($waitListIdentifier: String!, $pagination: PaginationInput!) {
+    waitListEntries(waitListIdentifier: $waitListIdentifier, pagination: $pagination) {
         pagination {
             itemIndex
             itemIndexForNextPage

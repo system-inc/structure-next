@@ -23,8 +23,8 @@ import { useApolloClient, useQuery, useMutation } from '@apollo/client';
 import {
     AccountAuthenticationQuery,
     AccountAuthenticationDocument,
-    AccountRegistrationCompleteDocument,
-    AccountSignInCompleteDocument,
+    AccountAuthenticationRegistrationCompleteDocument,
+    AccountAuthenticationSignInCompleteDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Styles
@@ -70,8 +70,10 @@ export function Authentication(properties: AuthenticationInterface) {
     });
 
     // Hooks - API - Mutations
-    const [accountRegistrationCompleteMutation] = useMutation(AccountRegistrationCompleteDocument);
-    const [accountSignInCompleteMutation] = useMutation(AccountSignInCompleteDocument);
+    const [accountAuthenticationRegistrationCompleteMutation] = useMutation(
+        AccountAuthenticationRegistrationCompleteDocument,
+    );
+    const [accountAuthenticationSignInCompleteMutation] = useMutation(AccountAuthenticationSignInCompleteDocument);
 
     // Effect to run on mount
     React.useEffect(function () {
@@ -92,12 +94,12 @@ export function Authentication(properties: AuthenticationInterface) {
                     console.log('AccountRegistrationComplete');
 
                     // Run the accountRegistrationComplete mutation
-                    accountRegistrationCompleteMutation({
+                    accountAuthenticationRegistrationCompleteMutation({
                         variables: {
                             input: {},
                         },
                         onCompleted: function (data) {
-                            console.log('accountRegistrationCompleteMutation', data);
+                            console.log('accountAuthenticationRegistrationCompleteMutation', data);
 
                             // Set the authentication session success
                             setAuthenticationSessionSuccess(true);
@@ -112,9 +114,9 @@ export function Authentication(properties: AuthenticationInterface) {
                     console.log('AccountSignInComplete');
 
                     // Run the accountSignInComplete mutation
-                    accountSignInCompleteMutation({
+                    accountAuthenticationSignInCompleteMutation({
                         onCompleted: function (data) {
-                            console.log('accountSignInCompleteMutation', data);
+                            console.log('accountAuthenticationSignInCompleteMutation', data);
 
                             // Set the authentication session success
                             setAuthenticationSessionSuccess(true);
@@ -126,7 +128,12 @@ export function Authentication(properties: AuthenticationInterface) {
                 }
             }
         },
-        [authenticationSession, accountRegistrationCompleteMutation, accountSignInCompleteMutation, setSignedIn],
+        [
+            authenticationSession,
+            accountAuthenticationRegistrationCompleteMutation,
+            accountAuthenticationSignInCompleteMutation,
+            setSignedIn,
+        ],
     );
 
     // Effect to close the authentication dialog when the account is signed in

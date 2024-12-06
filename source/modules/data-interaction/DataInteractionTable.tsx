@@ -6,23 +6,20 @@ import React from 'react';
 // Dependencies - Main Components
 import { TableInterface, Table } from '@structure/source/common/tables/Table';
 import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
-import { TableRowInterface } from '@structure/source/common/tables/TableRow';
+// import { TableRowInterface } from '@structure/source/common/tables/TableRow';
 import DatabaseAndTableFormInputSelects from '@structure/source/internal/pages/developers/databases/DatabaseAndTableFormInputSelects';
 import Button from '@structure/source/common/buttons/Button';
 import RefreshButton from '@structure/source/common/buttons/RefreshButton';
-import { ColumnFilterGroupDataInterface, ColumnFilterGroup } from '@structure/source/common/tables/ColumnFilterGroup';
+import { ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 
 // Dependencies - Assets
 import BarGraphIcon from '@structure/assets/icons/analytics/BarGraphIcon.svg';
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - API
-import { useApolloClient, useQuery, ApolloError, TypedDocumentNode } from '@apollo/client';
+import { useApolloClient, useQuery, ApolloError } from '@apollo/client';
 import { DataInteractionDatabaseTableRowsDocument } from '@project/source/api/GraphQlGeneratedCode';
-import {
-    OrderByDirection,
-    ColumnFilterGroup as ColumnFilterGroupGraphQl,
-} from '@project/source/api/GraphQlGeneratedCode';
+import { OrderByDirection, ColumnFilterGroupInput } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
@@ -44,14 +41,14 @@ export interface DataInteractionTableInterface extends Omit<TableInterface, 'col
         onChange: (itemsPerPage: number, page: number) => Promise<void>;
     };
 }
-export function DataInteractionTable<VariableType>(properties: DataInteractionTableInterface) {
+export function DataInteractionTable(properties: DataInteractionTableInterface) {
     // Use the Apollo Client for refetching queries with the refresh button
     const apolloClient = useApolloClient();
 
     // State
     const [databaseName, setDatabaseName] = React.useState<string | undefined>(properties.databaseName);
     const [tableName, setTableName] = React.useState<string | undefined>(properties.tableName);
-    const [queryPagination, setQueryPaginationState] = React.useState({
+    const [queryPagination] = React.useState({
         page: properties.pagination?.page || 1,
         itemsPerPage: properties.pagination?.itemsPerPage || 10,
     });
@@ -68,7 +65,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
                     id: undefined,
                 };
             }),
-        } as ColumnFilterGroupGraphQl; // use the GraphQL definition of ColumnFilterGroup here
+        } as ColumnFilterGroupInput; // use the GraphQL definition of ColumnFilterGroup here
     }
 
     // Hooks
@@ -77,14 +74,16 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
         variables: {
             databaseName: databaseName!,
             tableName: tableName!,
-            // By default, order by createdAt descending
-            orderBy: {
-                direction: OrderByDirection.Descending,
-                key: 'createdAt',
-            },
             pagination: {
                 itemsPerPage: queryPagination.itemsPerPage,
                 itemIndex: queryPagination.itemsPerPage * (queryPagination.page - 1),
+                // By default, order by createdAt descending
+                orderBy: [
+                    {
+                        key: 'createdAt',
+                        direction: OrderByDirection.Descending,
+                    },
+                ],
             },
             filters,
         },
@@ -180,7 +179,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
             // console.log('item', item);
 
             return {
-                cells: columns.map(function (column, columnIndex) {
+                cells: columns.map(function (column) {
                     let cell = item[column.identifier];
 
                     // If the cell is not null
@@ -212,7 +211,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
 
                   // console.log('onChange called with', { itemsPerPage, page });
                   try {
-                      const queryStateData = await queryState.fetchMore({
+                      await queryState.fetchMore({
                           variables: {
                               pagination: {
                                   itemIndex: (page - 1) * itemsPerPage,
@@ -237,7 +236,7 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
     // Determine if there is a relations table as well
     const relations = queryState.data?.dataInteractionDatabaseTableRows?.relations;
     let relationsColumns: TableColumnInterface[] = [];
-    let relationsRows: TableRowInterface[] = [];
+    // let relationsRows: TableRowInterface[] = [];
     if(relations && relations[0]) {
         // Create the columns from the data
         relationsColumns = Object.keys(relations[0])
@@ -270,28 +269,28 @@ export function DataInteractionTable<VariableType>(properties: DataInteractionTa
         });
 
         // Create the rows from the data
-        relationsRows =
-            queryState.data?.dataInteractionDatabaseTableRows?.relations?.map(function (item: any) {
-                return {
-                    // Map over the columns
-                    cells: relationsColumns?.map(function (column, columnIndex) {
-                        // Get the value for the cell
-                        const value = item[column.identifier];
+        // relationsRows =
+        //     queryState.data?.dataInteractionDatabaseTableRows?.relations?.map(function (item: any) {
+        //         return {
+        //             // Map over the columns
+        //             cells: relationsColumns?.map(function (column, columnIndex) {
+        //                 // Get the value for the cell
+        //                 const value = item[column.identifier];
 
-                        // Create a URL if the column is a table name
-                        let url = undefined;
-                        if(value && (column.identifier === 'tableName' || column.identifier === 'inverseTableName')) {
-                            url = '/internal/developers/databases/' + databaseName + '/tables/' + value;
-                        }
+        //                 // Create a URL if the column is a table name
+        //                 let url = undefined;
+        //                 if(value && (column.identifier === 'tableName' || column.identifier === 'inverseTableName')) {
+        //                     url = '/internal/developers/databases/' + databaseName + '/tables/' + value;
+        //                 }
 
-                        // Return the cell
-                        return {
-                            value: value,
-                            url,
-                        };
-                    }),
-                };
-            }) ?? [];
+        //                 // Return the cell
+        //                 return {
+        //                     value: value,
+        //                     url,
+        //                 };
+        //             }),
+        //         };
+        //     }) ?? [];
     }
 
     // console.log('queryState', queryState);

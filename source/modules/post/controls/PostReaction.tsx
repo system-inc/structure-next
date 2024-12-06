@@ -44,6 +44,9 @@ export function PostReaction(properties: PostReactionInterface) {
         variables: {
             postId: properties.ideaId,
             content: properties.content,
+            pagination: {
+                itemsPerPage: 10,
+            },
         },
     });
     const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
