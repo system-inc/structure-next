@@ -6,8 +6,8 @@ import { useQuery, useMutation } from '@apollo/client';
 import {
     ColumnFilterConditionOperator,
     OrderByDirection,
-    SupportTicketsAdminDocument,
-    SupportTicketCommentCreateAdminDocument,
+    SupportTicketsPrivilegedDocument,
+    SupportTicketCommentCreatePrivilegedDocument,
     SupportTicketAssignDocument,
     SupportAllSupportProfilesDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
@@ -24,7 +24,7 @@ export function useSupportTickets(
 
     // Add assign mutation
     const [assignTicket] = useMutation(SupportTicketAssignDocument, {
-        refetchQueries: ['SupportTicketsAdmin'],
+        refetchQueries: ['SupportTicketsPrivileged'],
     });
 
     // Build filters
@@ -46,7 +46,7 @@ export function useSupportTickets(
     }
 
     // Queries
-    const ticketsQuery = useQuery(SupportTicketsAdminDocument, {
+    const ticketsQuery = useQuery(SupportTicketsPrivilegedDocument, {
         variables: {
             pagination: {
                 itemsPerPage,
@@ -65,8 +65,8 @@ export function useSupportTickets(
     });
 
     // Modify the createComment mutation to include refetch
-    const [createComment] = useMutation(SupportTicketCommentCreateAdminDocument, {
-        refetchQueries: ['SupportTicketsAdmin'],
+    const [createComment] = useMutation(SupportTicketCommentCreatePrivilegedDocument, {
+        refetchQueries: ['SupportTicketsPrivileged'],
     });
 
     // Query for support profiles

@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { isImageFile } from '@structure/source/utilities/File';
 
 // Dependencies - API
-import { SupportTicketsAdminQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - CommentAttachments
 export interface CommentAttachmentsInterface {
-    attachments: SupportTicketsAdminQuery['supportTicketsAdmin']['items'][0]['comments'][0]['attachments'];
+    attachments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'][0]['attachments'];
     isAgent: boolean;
     onImageClick?: (index: number) => void;
     globalAttachmentIndex?: (url: string) => number;

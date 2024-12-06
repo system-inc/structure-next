@@ -38,7 +38,7 @@ export function SupportPage() {
     const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
     const commentsContainerRef = React.useRef<HTMLDivElement>(null);
     const [selectedStatus, setSelectedStatus] = React.useState<string>('Open');
-    const [showMyTickets, setShowMyTickets] = React.useState<boolean>(false);
+    const [showMyTickets] = React.useState<boolean>(false);
 
     // Hooks
     const {
@@ -55,7 +55,7 @@ export function SupportPage() {
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
 
     // Selected Ticket
-    const selectedTicket = ticketsQuery.data?.supportTicketsAdmin?.items?.find(
+    const selectedTicket = ticketsQuery.data?.supportTicketsPrivileged?.items?.find(
         (ticket) => ticket.id === selectedTicketId,
     );
 
@@ -88,7 +88,7 @@ export function SupportPage() {
     // Modify the auto-select effect to respect URL parameter
     React.useEffect(
         function () {
-            const items = ticketsQuery.data?.supportTicketsAdmin?.items;
+            const items = ticketsQuery.data?.supportTicketsPrivileged?.items;
             const urlTicketId = urlSearchParameters.get('ticket');
 
             const firstTicket = items?.[0];
@@ -156,14 +156,14 @@ export function SupportPage() {
             <div className="grid h-full grid-cols-[390px_1fr] gap-6">
                 {/* Left Navigation */}
                 <TicketList
-                    tickets={ticketsQuery.data?.supportTicketsAdmin.items || []}
+                    tickets={ticketsQuery.data?.supportTicketsPrivileged.items || []}
                     selectedTicketId={selectedTicketId}
                     isLoading={ticketsQuery.loading}
                     isRefreshing={isManuallyRefreshing}
                     page={page}
                     itemsPerPage={itemsPerPage}
-                    totalItems={ticketsQuery.data?.supportTicketsAdmin.pagination?.itemsTotal ?? 0}
-                    totalPages={ticketsQuery.data?.supportTicketsAdmin.pagination?.pagesTotal ?? 0}
+                    totalItems={ticketsQuery.data?.supportTicketsPrivileged.pagination?.itemsTotal ?? 0}
+                    totalPages={ticketsQuery.data?.supportTicketsPrivileged.pagination?.pagesTotal ?? 0}
                     onRefresh={handleManualRefresh}
                     onStatusChange={setSelectedStatus}
                     onTicketSelect={handleTicketSelection}

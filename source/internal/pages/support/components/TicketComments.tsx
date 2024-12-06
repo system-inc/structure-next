@@ -8,7 +8,7 @@ import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { CommentAttachments } from './CommentAttachments';
 
 // Dependencies - API
-import { SupportTicketsAdminQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { extractLatestEmailContent } from '@structure/source/utilities/Email';
@@ -16,7 +16,7 @@ import { formatDateWithTimeIfToday } from '@structure/source/utilities/Time';
 
 // Component - TicketComments
 interface TicketCommentsInterface {
-    comments: SupportTicketsAdminQuery['supportTicketsAdmin']['items'][0]['comments'];
+    comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
     onImageClick: (index: number) => void;
     globalAttachmentIndex: (url: string) => number;
 }

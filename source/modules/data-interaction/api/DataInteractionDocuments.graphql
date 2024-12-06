@@ -1,8 +1,6 @@
 # Databases Query
-# query DataInteractionDatabases($pagination: PaginationInput!) {
-#     dataInteractionDatabases(pagination: $pagination) {
-query DataInteractionDatabases($input: PaginationInput!) {
-    dataInteractionDatabases(input: $input) {
+query DataInteractionDatabases($pagination: PaginationInput!) {
+    dataInteractionDatabases(pagination: $pagination) {
         items {
             databaseName
         }

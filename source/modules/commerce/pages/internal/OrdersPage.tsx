@@ -12,7 +12,7 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { CommerceOrdersAdminDocument, OrderByDirection } from '@project/source/api/GraphQlGeneratedCode';
+import { CommerceOrdersPrivilegedDocument, OrderByDirection } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { timeAgo, dayNameWithFullDate } from '@structure/source/utilities/Time';
@@ -26,7 +26,7 @@ export function OrdersPage() {
     const [totalOrders, setTotalOrders] = React.useState<number>(0);
 
     // Query
-    const ordersQueryState = useQuery(CommerceOrdersAdminDocument, {
+    const ordersQueryState = useQuery(CommerceOrdersPrivilegedDocument, {
         variables: {
             pagination: {
                 itemsPerPage: itemsPerPage,
@@ -44,11 +44,11 @@ export function OrdersPage() {
     // Effects
     React.useEffect(
         function () {
-            if(ordersQueryState.data?.commerceOrdersAdmin.pagination?.itemsTotal) {
-                setTotalOrders(ordersQueryState.data.commerceOrdersAdmin.pagination.itemsTotal);
+            if(ordersQueryState.data?.commerceOrdersPrivileged.pagination?.itemsTotal) {
+                setTotalOrders(ordersQueryState.data.commerceOrdersPrivileged.pagination.itemsTotal);
             }
         },
-        [ordersQueryState.data?.commerceOrdersAdmin.pagination?.itemsTotal],
+        [ordersQueryState.data?.commerceOrdersPrivileged.pagination?.itemsTotal],
     );
 
     // Functions
@@ -92,7 +92,7 @@ export function OrdersPage() {
                 {ordersQueryState.error && <div>Error: {ordersQueryState.error.message}</div>}
 
                 {/* Orders List */}
-                {ordersQueryState.data?.commerceOrdersAdmin.items && (
+                {ordersQueryState.data?.commerceOrdersPrivileged.items && (
                     <>
                         {/* Header Row */}
                         <div className="hidden grid-cols-[200px_200px_120px_120px] items-center gap-3 py-2 font-medium md:grid">
@@ -102,7 +102,7 @@ export function OrdersPage() {
                             <div>Amount</div>
                         </div>
 
-                        {ordersQueryState.data.commerceOrdersAdmin.items.map((order) => (
+                        {ordersQueryState.data.commerceOrdersPrivileged.items.map((order) => (
                             <div
                                 key={order.id}
                                 className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px_400px]"

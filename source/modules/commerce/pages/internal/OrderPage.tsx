@@ -17,7 +17,10 @@ import ReloadIcon from '@structure/assets/icons/interface/ReloadIcon.svg';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { CommerceOrdersAdminDocument, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    CommerceOrdersPrivilegedDocument,
+    ColumnFilterConditionOperator,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - OrderPage
 export interface OrderPageProperties {
@@ -28,7 +31,7 @@ export function OrderPage(properties: OrderPageProperties) {
     const [isJsonVisible, setIsJsonVisible] = React.useState(false);
 
     // Query
-    const orderQueryState = useQuery(CommerceOrdersAdminDocument, {
+    const orderQueryState = useQuery(CommerceOrdersPrivilegedDocument, {
         variables: {
             pagination: {
                 itemsPerPage: 1,
@@ -92,7 +95,7 @@ export function OrderPage(properties: OrderPageProperties) {
     }
 
     // Get the order from the response
-    const order = orderQueryState.data?.commerceOrdersAdmin.items[0];
+    const order = orderQueryState.data?.commerceOrdersPrivileged.items[0];
     if(!order) {
         return <div className="px-6 py-4">Order not found</div>;
     }

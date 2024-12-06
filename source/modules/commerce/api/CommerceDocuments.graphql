@@ -1,6 +1,6 @@
-# Commerce Orders Admin Query
-query CommerceOrdersAdmin($pagination: PaginationInput!) {
-    commerceOrdersAdmin(pagination: $pagination) {
+# Commerce Orders Privileged Query
+query CommerceOrdersPrivileged($pagination: PaginationInput!) {
+    commerceOrdersPrivileged(pagination: $pagination) {
         items {
             batchIdentifier
             beneficiaryEmailAddress

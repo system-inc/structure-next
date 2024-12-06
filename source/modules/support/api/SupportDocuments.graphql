@@ -101,9 +101,9 @@ mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
     }
 }
 
-# Support Tickets Admin Query
-query SupportTicketsAdmin($pagination: PaginationInput!) {
-    supportTicketsAdmin(pagination: $pagination) {
+# Support Tickets Privileged Query
+query SupportTicketsPrivileged($pagination: PaginationInput!) {
+    supportTicketsPrivileged(pagination: $pagination) {
         items {
             id
             identifier
@@ -165,9 +165,9 @@ mutation SupportTicketAssign($ticketId: String!, $username: String) {
     }
 }
 
-# Support Ticket Comment Create Admin Mutation
-mutation SupportTicketCommentCreateAdmin($input: SupportTicketCommentCreateInput!) {
-    supportTicketCommentCreateAdmin(input: $input) {
+# Support Ticket Comment Create Privileged Mutation
+mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreateInput!) {
+    supportTicketCommentCreatePrivileged(input: $input) {
         id
         content
         contentType

@@ -145,7 +145,7 @@ query Post($identifier: String!) {
 
 # Post Create
 mutation PostCreate($input: PostCreateInput!) {
-    postCreateAdmin(input: $input) {
+    postCreatePrivileged(input: $input) {
         id
         status
         title

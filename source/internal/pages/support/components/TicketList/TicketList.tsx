@@ -10,11 +10,11 @@ import { TicketListHeader } from './TicketListHeader';
 import { TicketListItem } from './TicketListItem';
 
 // Dependencies - API
-import { SupportTicketsAdminQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - TicketList
 interface TicketListInterface {
-    tickets: SupportTicketsAdminQuery['supportTicketsAdmin']['items'];
+    tickets: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'];
     selectedTicketId: string | null;
     isLoading: boolean;
     isRefreshing: boolean;
