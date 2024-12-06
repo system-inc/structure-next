@@ -190,8 +190,7 @@ export function JsonNode(properties: JsonNodeInterface) {
                 {isObject ? (
                     isExpanded ? (
                         // Expanded
-                        // <span>{isArray ? '[' : '{'}</span>
-                        <span></span>
+                        <span className="text-neutral">{isArray ? '(' + data.length + ')' : ''}</span>
                     ) : (
                         // Collapsed with preview
                         <span>{renderCollapsedPreview()},</span>
