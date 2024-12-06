@@ -10,19 +10,19 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - Json
 export interface JsonInterface {
     data: unknown;
-    defaultExpandLevel?: number;
+    initialExpansionDepth?: number;
     className?: string;
 }
 export function Json(properties: JsonInterface) {
     // Defaults
-    const defaultExpandLevel = properties.defaultExpandLevel || 3;
+    const defaultExpandLevel = properties.initialExpansionDepth || 4;
 
     const data = typeof properties.data === 'string' ? JSON.parse(properties.data) : properties.data;
 
     // Render the component
     return (
-        <pre className={mergeClassNames('font-mono text-sm', properties.className)}>
-            <JsonNode data={data} level={0} defaultExpandLevel={defaultExpandLevel} />
+        <pre className={mergeClassNames('font-mono', properties.className)}>
+            <JsonNode data={data} level={0} initialExpansionDepth={defaultExpandLevel} />
         </pre>
     );
 }

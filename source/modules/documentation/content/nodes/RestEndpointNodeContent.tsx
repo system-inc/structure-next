@@ -121,7 +121,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
 
             {endpoint.requestParameters && (
                 <div className="mb-4">
-                    <h3 className="mb-2 text-xl font-semibold">Request Parameters</h3>
+                    <h3 className="mb-2 font-semibold">Request Parameters</h3>
                     {/* Render request parameters based on their type */}
                     {/* You can create additional components or logic to display different parameter types */}
                 </div>
@@ -129,13 +129,13 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
 
             {endpoint.responses && (
                 <div className="mb-4">
-                    <h3 className="mb-4 text-xl font-semibold">Responses</h3>
+                    <h3 className="mb-4 font-semibold">Responses</h3>
                     {Object.entries(endpoint.responses).map(([status, response]) => (
                         <div key={status} className="response mb-4">
                             <h4 className="mb-2 text-lg font-semibold">
                                 {status} - {response.description}
                             </h4>
-                            {response.body && <Json className="rounded-md border p-2 text-sm" data={response.body} />}
+                            {response.body && <Json className="rounded-md border p-2 text-xs" data={response.body} />}
                         </div>
                     ))}
                 </div>
@@ -144,7 +144,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             {endpoint.exampleResponse !== undefined && (
                 <div className="mb-4">
                     <h3 className="mb-4 text-xl font-semibold">Example Response</h3>
-                    <Json className="rounded-md border p-2 text-sm" data={endpoint.exampleResponse} />
+                    <Json className="rounded-md border p-2 text-xs" data={endpoint.exampleResponse} />
                 </div>
             )}
         </div>
