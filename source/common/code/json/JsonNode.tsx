@@ -24,9 +24,10 @@ export function JsonNode(properties: JsonNodeInterface) {
     const isArray = Array.isArray(data);
     const isEmpty = isObject && (isArray ? (data as unknown[]).length === 0 : Object.keys(data as object).length === 0);
 
-    const indentationStyle = {
-        paddingLeft: level * 12,
-    };
+    // Remove the indentationStyle
+    // const indentationStyle = {
+    //     paddingLeft: level * 12,
+    // };
 
     // Toggles expansion state
     const toggleExpand = () => setIsExpanded(!isExpanded);
@@ -161,14 +162,14 @@ export function JsonNode(properties: JsonNodeInterface) {
     const hasChildren = isObject && !isEmpty;
 
     // Line classes for hover and click
-    const lineClasses = 'json-line hover:bg-dark-2 cursor-pointer select-none flex items-start items-center';
+    const lineClasses = 'json-line hover:bg-dark-2 cursor-pointer flex items-start items-center';
     const keyClasses = 'json-key text-sky-400';
     const toggleAreaClasses = 'items-center transform transition-transform mr-0.5';
     const placeholderToggleWidth = 6; // Same width as the toggle
 
     // Render the component
     return (
-        <div style={indentationStyle}>
+        <div className={mergeClassNames(level > 1 ? 'ml-3.5' : '')}>
             <div className={lineClasses} onClick={toggleExpand}>
                 {/* Toggle button or placeholder */}
                 <span
@@ -197,7 +198,7 @@ export function JsonNode(properties: JsonNodeInterface) {
                     )
                 ) : (
                     // Primitive
-                    <span>{renderPrimitiveValue(data)},</span>
+                    <span>{renderPrimitiveValue(data)}</span>
                 )}
             </div>
 
@@ -206,7 +207,7 @@ export function JsonNode(properties: JsonNodeInterface) {
 
             {/* Closing bracket if expanded */}
             {isExpanded && hasChildren && (
-                <div style={indentationStyle} className={lineClasses} onClick={toggleExpand}>
+                <div className={lineClasses} onClick={toggleExpand}>
                     <span
                         className={toggleAreaClasses}
                         style={{ display: 'inline-block', width: placeholderToggleWidth, marginRight: 4 }}

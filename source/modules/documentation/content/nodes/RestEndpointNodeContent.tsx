@@ -58,6 +58,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         let data;
         if(response.headers.get('Content-Type')?.includes('application/json')) {
             data = await response.json();
+            console.log(data);
 
             // Set response body
             // setTestOutputResponseBody(JSON.stringify(data, null, 4));
