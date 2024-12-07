@@ -15,8 +15,8 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - Code
 export interface CodeProperties extends React.HTMLAttributes<HTMLDivElement> {
     code: string;
-    setCode: React.Dispatch<React.SetStateAction<string>>;
-    language: string;
+    setCode?: React.Dispatch<React.SetStateAction<string>>;
+    language?: string;
     edit?: boolean;
     showLineNumbers?: boolean;
     loadLanguages?: { name: string; languageFunction: any }[];
@@ -45,28 +45,30 @@ export function Code({
 
     // Function to handle code change
     function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-        setCode(event.target.value);
+        if(setCode) setCode(event.target.value);
     }
 
     // Effect to handle tab key down
     React.useEffect(
         function () {
-            function handleKeyDown(event: KeyboardEvent) {
-                if(event.key === 'Tab') {
-                    event.preventDefault();
-                    const target = event.target as HTMLTextAreaElement;
-                    const start = target.selectionStart;
-                    const end = target.selectionEnd;
+            if(setCode) {
+                function handleKeyDown(event: KeyboardEvent) {
+                    if(event.key === 'Tab') {
+                        event.preventDefault();
+                        const target = event.target as HTMLTextAreaElement;
+                        const start = target.selectionStart;
+                        const end = target.selectionEnd;
 
-                    const value = code;
-                    setCode(value.substring(0, start) + '    ' + value.substring(end));
+                        const value = code;
+                        if(setCode) setCode(value.substring(0, start) + '    ' + value.substring(end));
 
-                    target.selectionStart = target.selectionEnd = start + 2;
+                        target.selectionStart = target.selectionEnd = start + 2;
+                    }
                 }
-            }
 
-            document.addEventListener('keydown', handleKeyDown);
-            return () => document.removeEventListener('keydown', handleKeyDown);
+                document.addEventListener('keydown', handleKeyDown);
+                return () => document.removeEventListener('keydown', handleKeyDown);
+            }
         },
         [code, setCode],
     );
