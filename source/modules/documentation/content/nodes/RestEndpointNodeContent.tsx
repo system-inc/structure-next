@@ -8,6 +8,7 @@ import { RestEndpointNodeInterface } from '@structure/source/modules/documentati
 import { Button } from '@structure/source/common/buttons/Button';
 import { Markdown } from '@structure/source/common/markdown/Markdown';
 import { Json } from '@structure/source/common/code/json/Json';
+import { RequestParametersTable } from '@structure/source/modules/documentation/content/nodes/RequestParametersTable';
 
 // Component - RestEndpointNodeContent
 export interface RestEndpointNodeContentInterface {
@@ -123,8 +124,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             {endpoint.requestParameters && (
                 <div className="mb-4">
                     <h3 className="mb-2 font-semibold">Request Parameters</h3>
-                    {/* Render request parameters based on their type */}
-                    {/* You can create additional components or logic to display different parameter types */}
+                    <RequestParametersTable requestParameters={endpoint.requestParameters} />
                 </div>
             )}
 
