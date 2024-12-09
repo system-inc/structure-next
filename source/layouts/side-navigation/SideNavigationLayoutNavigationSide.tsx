@@ -193,6 +193,45 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         setWindowInnerWidth(window.innerWidth);
     }, []);
 
+    // Effect to listen to double clicks on the resize handle
+    React.useEffect(
+        function () {
+            // Function to handle the double click event
+            function handleDoubleClick() {
+                // Reset the width to the default width
+                containerDivWidthReference.current = defaultNavigationWidth;
+
+                // Update the container width
+                if(containerDivReference.current) {
+                    containerDivReference.current.style.width = `${defaultNavigationWidth}px`;
+                }
+
+                // Update the shared state
+                setSideNavigationLayoutNavigationWidth(defaultNavigationWidth);
+
+                // Update the local storage
+                localStorage.setItem(
+                    getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
+                    defaultNavigationWidth.toString(),
+                );
+            }
+
+            // Get the resize handle reference and add the event listener
+            const resizeHandle = containerResizeHandleDivReference.current;
+            if(resizeHandle) {
+                resizeHandle.addEventListener('dblclick', handleDoubleClick);
+            }
+
+            // On unmount, remove the event listener
+            return function () {
+                if(resizeHandle) {
+                    resizeHandle.removeEventListener('dblclick', handleDoubleClick);
+                }
+            };
+        },
+        [setSideNavigationLayoutNavigationWidth, properties.layoutIdentifier],
+    );
+
     // Effect to animate the navigation when opening, closing, or resizing
     React.useEffect(
         function () {
