@@ -77,7 +77,11 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
     const propertiesOnChange = properties.onChange;
     const propertiesValidateOnChange = properties.validateOnChange;
     const onChangeIntercept = React.useCallback(
-        function (value: string | undefined, event?: Event, skipOnChangeCallback: boolean = false) {
+        function (
+            value: string | undefined,
+            event?: React.MouseEvent<HTMLElement>,
+            skipOnChangeCallback: boolean = false,
+        ) {
             // console.log('FormInputSelect.tsx Form input value changed:', value);
 
             // Update the value reference
@@ -102,7 +106,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
             getValue: function () {
                 return valueReference.current;
             },
-            setValue: function (value: string | undefined, event?: Event) {
+            setValue: function (value: string | undefined, event?: React.MouseEvent<HTMLElement>) {
                 onChangeIntercept(value, event, true);
             },
             focus: focus,

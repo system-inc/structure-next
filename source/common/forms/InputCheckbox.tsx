@@ -43,7 +43,7 @@ export interface InputCheckboxInterface extends Omit<InputInterface, 'defaultVal
     defaultValue?: InputCheckboxState;
 
     // Events
-    onChange?: (value: InputCheckboxState | undefined, event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+    onChange?: (value: InputCheckboxState | undefined, event?: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onBlur?: (value: InputCheckboxState | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     variant?: keyof typeof InputCheckboxVariants;

@@ -86,7 +86,11 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
         const propertiesOnChange = properties.onChange;
         const propertiesValidateOnChange = properties.validateOnChange;
         const onChangeIntercept = React.useCallback(
-            function (value: InputCheckboxState | undefined, event?: Event, skipOnChangeCallback: boolean = false) {
+            function (
+                value: InputCheckboxState | undefined,
+                event?: React.MouseEvent<HTMLElement, MouseEvent>,
+                skipOnChangeCallback: boolean = false,
+            ) {
                 // console.log('FormInputCheckbox.tsx Form input value changed:', value);
 
                 // Update the value reference
@@ -110,7 +114,10 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                 getValue: function () {
                     return valueReference.current;
                 },
-                setValue: function (value: InputCheckboxState | undefined, event?: Event) {
+                setValue: function (
+                    value: InputCheckboxState | undefined,
+                    event?: React.MouseEvent<HTMLElement, MouseEvent>,
+                ) {
                     onChangeIntercept(value, event, true);
                 },
                 click: click,
