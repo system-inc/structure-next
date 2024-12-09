@@ -42,7 +42,7 @@ export interface InputSelectInterface extends Omit<InputInterface, 'defaultValue
     allowNoSelection?: boolean;
 
     // Events
-    onChange?: (value: string | undefined, event: any) => void;
+    onChange?: (value: string | undefined, event?: React.MouseEvent<HTMLElement>) => void;
     onBlur?: (value: string | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     variant?: keyof typeof InputSelectVariants;
@@ -67,8 +67,8 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
     const buttonReference = React.useRef<HTMLButtonElement>(null);
 
     // Defaults
-    const variant = properties.variant || 'default';
-    const size = properties.size || 'default';
+    // const variant = properties.variant || 'default';
+    // const size = properties.size || 'default';
     const placeholder = properties.placeholder || 'Select...';
 
     // State
@@ -114,10 +114,15 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                     // Set the items
                     setItems(items);
                 }
-                catch(error: any) {
+                catch(error: unknown) {
                     console.log('Error loading menu items:', error);
                     // Set the loading error
-                    setLoadingItemsError(error.message ?? 'Error Loading Items');
+                    if(error instanceof Error) {
+                        setLoadingItemsError(error.message ?? 'Error Loading Items');
+                    }
+                    else {
+                        setLoadingItemsError('Error Loading Items');
+                    }
                 }
 
                 // console.log('Loaded menu items');
@@ -165,7 +170,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
     const propertiesOnChange = properties.onChange;
     const propertiesAllowNoSelection = properties.allowNoSelection;
     const onChangeIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: any) {
+        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) {
             // console.log('InputSelect.tsx value changed:', menuItem.value);
             let newValue = menuItem.value;
 
@@ -211,7 +216,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
             {...properties.popoverMenuProperties}
             className={mergeClassNames('', properties.popoverMenuProperties?.className)}
             title={properties.title}
-            items={items.map((item, index) => {
+            items={items.map(function (item) {
                 // Determine if the item is selected
                 const selected = item.value === value;
 

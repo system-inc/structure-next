@@ -7,7 +7,7 @@ export interface DocumentationSpecificationInterface {
     title: string;
     baseUrlPath: string;
     nodes: DocumentationNodeInterface[];
-    settings?: boolean;
+    settingsDialogEnabled?: boolean;
 }
 
 // Base Interface for Documentation Nodes
@@ -70,19 +70,19 @@ export interface RestApiEndpointInterface {
     description: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
     url: string;
-    documentation?: {
-        overview?: string;
-        parameters?: string;
-        examples?: string;
-    };
+    documentation?: string;
     requestParameters?: {
-        headers?: Record<string, ApiFieldTypeInterface>;
-        query?: Record<string, ApiFieldTypeInterface>;
-        path?: Record<string, ApiFieldTypeInterface>;
-        body?: Record<string, ApiFieldTypeInterface>;
+        headers?: RequestParameterInterface[];
+        query?: RequestParameterInterface[];
+        path?: RequestParameterInterface[];
+        body?: RequestParameterInterface[];
     };
-    responses?: Record<string, ApiResponseInterface>;
-    exampleResponse?: unknown;
+    exampleResponses?: {
+        statusCode: number;
+        description?: string;
+        headers?: ResponseFieldInterface[];
+        body?: ResponseFieldInterface[];
+    }[];
 }
 
 // GraphQL API Endpoint Interface
@@ -90,40 +90,62 @@ export interface GraphQLApiEndpointInterface {
     title: string;
     description: string;
     query: string; // GraphQL query or mutation string
-    variables?: Record<string, ApiFieldTypeInterface>;
-    responseFields?: Record<string, ApiFieldTypeInterface>;
-    exampleResponse?: unknown;
+    variables?: RequestParameterInterface[];
+    responseFields?: ResponseFieldInterface[];
+    exampleResponses?: {
+        statusCode: number;
+        description?: string;
+        headers?: ResponseFieldInterface[];
+        body?: ResponseFieldInterface[];
+    }[];
 }
 
-// API Response Interface
+// ApiResponse Interface
 export interface ApiResponseInterface {
     statusCode: number;
     description?: string;
-    headers?: Record<string, ApiFieldTypeInterface>;
-    body?: Record<string, ApiFieldTypeInterface>;
+    headers?: ResponseFieldInterface[];
+    body?: ResponseFieldInterface[];
 }
 
-// API Field Type Interface
-export interface ApiFieldTypeInterface {
-    type: 'String' | 'Number' | 'Boolean' | 'Object' | 'Array' | 'Null';
-    enum?: string[];
+// Response fields
+export interface ResponseFieldInterface {
+    name: string;
+    type: 'String' | 'Number' | 'Boolean' | 'DateTime' | 'Object' | 'Array';
     description?: string;
+    possibleValues?: string[];
     example?: unknown;
     nullable?: boolean;
-    fields?: Record<string, ApiFieldTypeInterface>; // For nested objects
-    items?: ApiFieldTypeInterface; // For arrays
-    formField?: FormFieldInterface;
+    fields?: Record<string, ResponseFieldInterface> | ResponseFieldInterface[]; // Nested fields
 }
 
-// Form Field Interface for Interactive Documentation
-export interface FormFieldInterface {
-    component: 'Text' | 'Select' | 'Number' | 'DateTime' | 'TextArea' | 'Checkbox' | 'Radio';
-    label: string;
-    placeholder?: string;
-    validation?: {
-        required?: boolean;
-        min?: number;
-        max?: number;
-        pattern?: string;
-    };
+// Request parameters
+export interface RequestParameterInterface {
+    name: string;
+    type: 'String' | 'Number' | 'Boolean' | 'DateTime' | 'Object' | 'Array';
+    description?: string;
+    possibleValues?: string[];
+    example?: unknown;
+    required?: boolean;
+    nullable?: boolean;
+    fields?: Record<string, ResponseFieldInterface> | ResponseFieldInterface[]; // Nested fields
+}
+
+// Function to convert a ResponseFieldInterface[] to an example JSON object
+export function responseFieldsToExampleJson(responseFields: ResponseFieldInterface[]): Record<string, unknown> {
+    const exampleJson: Record<string, unknown> = {};
+
+    responseFields.forEach(function (field) {
+        if(field.fields) {
+            exampleJson[field.name] =
+                field.type === 'Array'
+                    ? [responseFieldsToExampleJson(field.fields as ResponseFieldInterface[])]
+                    : responseFieldsToExampleJson(field.fields as ResponseFieldInterface[]);
+        }
+        else {
+            exampleJson[field.name] = field.example;
+        }
+    });
+
+    return exampleJson;
 }

@@ -35,7 +35,7 @@ export enum InputCheckboxState {
 // Interface - InputCheckboxReference
 export interface InputCheckboxReferenceInterface extends InputReferenceInterface {
     getValue: () => InputCheckboxState | undefined;
-    setValue: (value?: InputCheckboxState, event?: any) => void;
+    setValue: (value?: InputCheckboxState, event?: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 }
 
 // Component - InputCheckbox
@@ -43,7 +43,7 @@ export interface InputCheckboxInterface extends Omit<InputInterface, 'defaultVal
     defaultValue?: InputCheckboxState;
 
     // Events
-    onChange?: (value: InputCheckboxState | undefined, event: any) => void;
+    onChange?: (value: InputCheckboxState | undefined, event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
     onBlur?: (value: InputCheckboxState | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     variant?: keyof typeof InputCheckboxVariants;
@@ -59,8 +59,8 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
     const buttonReference = React.useRef<HTMLButtonElement>(null);
 
     // Defaults
-    const variant = properties.variant || 'default';
-    const size = properties.size || 'default';
+    // const variant = properties.variant || 'default';
+    // const size = properties.size || 'default';
 
     // State
     const [value, setValue] = React.useState<InputCheckboxState | undefined>(properties.defaultValue);
@@ -87,7 +87,7 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
     // Function to handle input value changes
     const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
-        function (inputCheckBoxState: InputCheckboxState, event: any) {
+        function (inputCheckBoxState: InputCheckboxState, event: React.MouseEvent<HTMLElement, MouseEvent>) {
             // console.log('InputCheckbox.tsx value changed:', inputCheckBoxState);
             const newInputCheckboxState = inputCheckBoxState;
 

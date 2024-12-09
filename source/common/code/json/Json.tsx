@@ -21,7 +21,7 @@ export function Json(properties: JsonInterface) {
 
     // Render the component
     return (
-        <pre className={mergeClassNames('font-mono', properties.className)}>
+        <pre className={mergeClassNames('overflow-x-auto font-mono', properties.className)}>
             <JsonNode data={data} level={0} initialExpansionDepth={defaultExpandLevel} />
         </pre>
     );

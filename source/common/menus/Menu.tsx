@@ -32,7 +32,7 @@ export interface MenuInterface extends Omit<React.HTMLAttributes<HTMLDivElement>
     itemsClassName?: string;
     search?: boolean;
     highlightItemOnMount?: boolean; // Highlight the first item or first selected item on mount
-    onItemSelected?: (item: MenuItemInterface, itemRenderIndex?: number, event?: unknown) => void;
+    onItemSelected?: (item: MenuItemInterface, itemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) => void;
 
     // Optional asynchronous loading of menu items
     loadItems?: () => Promise<MenuItemInterface[]>;
