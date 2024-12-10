@@ -23,6 +23,9 @@ import {
 // Dependencies - Assets
 import PlayIcon from '@structure/assets/icons/media/PlayIcon.svg';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
 // Component - RestEndpointNodeContent
 export interface RestEndpointNodeContentInterface {
     node: RestEndpointNodeInterface;
@@ -218,6 +221,35 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         );
     }
 
+    // Function to get status code color class
+    function getStatusCodeColorClass(statusCode: string | null): string {
+        if(!statusCode) {
+            return 'bg-gray-500'; // neutral color for no code
+        }
+
+        // Convert to number for proper comparison
+        const code = parseInt(statusCode, 10);
+
+        // Handle invalid/non-numeric status codes
+        if(isNaN(code)) {
+            return 'bg-gray-500'; // neutral color for invalid codes
+        }
+
+        // Map status code ranges to colors
+        switch(true) {
+            case code >= 200 && code < 300:
+                return 'bg-green-500'; // Success
+            case code >= 300 && code < 400:
+                return 'bg-cyan-500'; // Redirection
+            case code >= 400 && code < 500:
+                return 'bg-yellow-500'; // Client Error
+            case code >= 500:
+                return 'bg-red-500'; // Server Error
+            default:
+                return 'bg-gray-500'; // Unknown range
+        }
+    }
+
     // Function to test the endpoint
     const testEndpoint = async function () {
         setRunningRequest(true);
@@ -341,7 +373,12 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                 {testOutputResponseBody && !runningRequest && (
                     <div className="mt-4 rounded-md border p-4 text-sm">
                         <div className="">
-                            <span className="method rounded bg-green-500 px-2 py-1 font-mono text-light">
+                            <span
+                                className={mergeClassNames(
+                                    'method rounded px-2 py-1 font-mono text-light',
+                                    getStatusCodeColorClass(testOutputResponseHttpCode),
+                                )}
+                            >
                                 {testOutputResponseHttpCode}
                             </span>
                         </div>

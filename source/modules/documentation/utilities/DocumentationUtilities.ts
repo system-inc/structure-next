@@ -26,89 +26,137 @@ export function buildPathFromNode(node: DocumentationNodeWithParentInterface): s
 
 // Function to find a documentation node by URL path
 export function findDocumentationNodeByUrlPath(
-    nodes: DocumentationNodeInterface[],
+    documentationNodes: DocumentationNodeInterface[],
     baseUrlPath: string,
     urlPath: string,
     parent: DocumentationNodeWithParentInterface | null = null,
 ): DocumentationNodeWithParentInterface | null {
-    // Base case - no nodes
-    if(!nodes || nodes.length === 0) {
-        return null;
-    }
+    let foundDocumentationNode: DocumentationNodeWithParentInterface | null = null;
 
     // Normalize URL path (remove trailing slash)
     const normalizedUrlPath = urlPath.replace(/\/$/, '');
 
     // Search through each node
-    for(const node of nodes) {
+    for(const documentationNode of documentationNodes) {
         // Create node with parent
-        const nodeWithParent: DocumentationNodeWithParentInterface = {
-            ...node,
+        const documentationNodeWithParent: DocumentationNodeWithParentInterface = {
+            ...documentationNode,
             parent: parent,
         };
 
         // Build href by getting path from root to current node
-        const pathParts = buildPathFromNode(nodeWithParent);
+        const pathParts = buildPathFromNode(documentationNodeWithParent);
         const href = baseUrlPath + '/' + pathParts.join('/');
         // console.log('href', href);
 
         // Check if current node matches path
         if(href === normalizedUrlPath) {
-            return nodeWithParent;
+            foundDocumentationNode = documentationNodeWithParent;
         }
-
         // If node is a section and has children, search them recursively
-        if(node.type === 'Section') {
-            const sectionNode = node as SectionNodeInterface;
+        else if(documentationNode.type === 'Section') {
+            const sectionNode = documentationNode as SectionNodeInterface;
             if(sectionNode.children && sectionNode.children.length > 0) {
                 const foundInChildren = findDocumentationNodeByUrlPath(
                     sectionNode.children,
                     baseUrlPath,
                     urlPath,
-                    nodeWithParent,
+                    documentationNodeWithParent,
                 );
                 if(foundInChildren) {
-                    return foundInChildren;
+                    foundDocumentationNode = foundInChildren;
                 }
             }
         }
     }
 
-    return null;
+    // If no node is found, and the urlPath is the baseUrlPath, use the first node which has content
+    if(!foundDocumentationNode && normalizedUrlPath === baseUrlPath.replace(/\/$/, '')) {
+        foundDocumentationNode = getFirstDocumentationNodeWithParentWithContent(documentationNodes);
+    }
+
+    return foundDocumentationNode;
+}
+
+// Function to get the first documentation node with content
+export function getFirstDocumentationNodeWithParentWithContent(
+    documentationNodes: DocumentationNodeInterface[],
+    parent: DocumentationNodeWithParentInterface | null = null,
+): DocumentationNodeWithParentInterface | null {
+    let firstDocumentationNodeWithParentWithContent: DocumentationNodeWithParentInterface | null = null;
+
+    // Search through each node
+    for(const documentationNode of documentationNodes) {
+        // If the node is a section and has children, search them recursively
+        if(documentationNode.type === 'Section') {
+            const sectionNode = documentationNode as SectionNodeInterface;
+            if(sectionNode.children && sectionNode.children.length > 0) {
+                const foundInChildren = getFirstDocumentationNodeWithParentWithContent(sectionNode.children, {
+                    ...documentationNode,
+                    parent: parent,
+                });
+                if(foundInChildren) {
+                    firstDocumentationNodeWithParentWithContent = foundInChildren;
+                    break;
+                }
+            }
+        }
+        // If the node is a MarkdownPage and has content, return it
+        else if(documentationNode.type === 'MarkdownPage' && documentationNode.content) {
+            firstDocumentationNodeWithParentWithContent = {
+                ...documentationNode,
+                parent: parent,
+            };
+            break;
+        }
+    }
+
+    return firstDocumentationNodeWithParentWithContent;
 }
 
 // Function to generate SideNavigationSections from a DocumentationSpecification
 export function getSideNavigationSectionsFromDocumentationSpecification(
     documentationSpecification: DocumentationSpecificationInterface,
 ): SideNavigationSectionInterface[] {
+    let isFirstContentNode = true; // Track the first content node
+
     // Helper function to process nodes recursively
-    function processNode(
-        node: DocumentationNodeInterface,
-        parent: DocumentationNodeWithParentInterface | null = null,
+    function processDocumentationNode(
+        documentationNode: DocumentationNodeInterface,
+        parentDocumentationNode: DocumentationNodeWithParentInterface | null = null,
     ): SideNavigationItemInterface {
         // Create node with parent for path building
-        const nodeWithParent: DocumentationNodeWithParentInterface = {
-            ...node,
-            parent: parent,
+        const documentationNodeWithParent: DocumentationNodeWithParentInterface = {
+            ...documentationNode,
+            parent: parentDocumentationNode,
         };
 
-        // Build href by getting path from root to current node
-        const pathParts = buildPathFromNode(nodeWithParent);
-        const href = documentationSpecification.baseUrlPath + '/' + pathParts.join('/');
+        // Determine href
+        let href: string;
+        // If the node is the first content node, use the base URL path
+        if(isFirstContentNode && !documentationNode.isHeader) {
+            href = documentationSpecification.baseUrlPath;
+            isFirstContentNode = false;
+        }
+        // Otherwise, build the path from the node
+        else {
+            const pathParts = buildPathFromNode(documentationNodeWithParent);
+            href = documentationSpecification.baseUrlPath + '/' + pathParts.join('/');
+        }
 
         const sideNavigationSection: SideNavigationSectionInterface = {
-            title: node.title,
+            title: documentationNode.title,
             href: href,
-            isHeader: node.isHeader,
-            icon: node.icon,
+            isHeader: documentationNode.isHeader,
+            icon: documentationNode.icon,
         };
 
         // If the node is a section and has children, process them recursively
-        if(node.type === 'Section') {
-            const sectionNode = node as SectionNodeInterface;
+        if(documentationNode.type === 'Section') {
+            const sectionNode = documentationNode as SectionNodeInterface;
             if(sectionNode.children && sectionNode.children.length > 0) {
                 sideNavigationSection.children = sectionNode.children.map(function (child) {
-                    return processNode(child, nodeWithParent);
+                    return processDocumentationNode(child, documentationNodeWithParent);
                 });
             }
         }
@@ -118,7 +166,7 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
 
     // Process the top-level nodes
     return documentationSpecification.nodes.map(function (node) {
-        return processNode(node, null);
+        return processDocumentationNode(node, null);
     });
 }
 
@@ -130,7 +178,7 @@ export function getDocumentationHtmlTitle(
     separator = '•',
 ): string {
     // Find the node for the current URL path
-    const node = findDocumentationNodeByUrlPath(
+    const documentationNode = findDocumentationNodeByUrlPath(
         documentationSpecification.nodes,
         documentationSpecification.baseUrlPath,
         currentUrlPath,
@@ -138,8 +186,8 @@ export function getDocumentationHtmlTitle(
 
     // Build title with parent categories
     let title = rootTitle;
-    if(node) {
-        let currentCategory: DocumentationNodeWithParentInterface | null = node;
+    if(documentationNode) {
+        let currentCategory: DocumentationNodeWithParentInterface | null = documentationNode;
         const titles = [];
 
         // Collect all titles starting from current category up to parents
