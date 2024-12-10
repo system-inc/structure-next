@@ -179,7 +179,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                         return baseUrlPathPartIndex % 2 === 0 ? (
                             <span key={baseUrlPathPartIndex}>{baseUrlPathPart}</span>
                         ) : (
-                            <span key={baseUrlPathPartIndex} className="font-bold text-purple-500">
+                            <span key={baseUrlPathPartIndex} className="font-semibold text-purple-500">
                                 {baseUrlPathPart}
                             </span>
                         );
@@ -206,7 +206,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                                 {!isOriginalUrlQueryParameter ? (
                                     <span className={urlQueryParameterColors[urlQueryParameterKey]}>
                                         <span className="italic">{urlQueryParameterKey}</span>={''}
-                                        <span className="font-bold">{urlQueryParameterValue}</span>
+                                        <span className="font-semibold">{urlQueryParameterValue}</span>
                                     </span>
                                 ) : (
                                     <span>{`${urlQueryParameterKey}=${urlQueryParameterValue}`}</span>
@@ -287,7 +287,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
     // Render the component
     return (
         <div className="">
-            <h2 className="mb-4 text-2xl font-bold">{endpoint.title}</h2>
+            <h2 className="mb-4 text-2xl font-semibold">{endpoint.title}</h2>
             <p className="mb-4">{endpoint.description}</p>
             <div className="mb-5 text-sm">
                 <span className="method rounded bg-purple-500 px-2 py-1 font-mono text-light">{endpoint.method}</span>
@@ -308,7 +308,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             {endpoint.requestParameters && (
                 <div className="">
                     <hr className="mb-4 mt-6" />
-                    <h3 className="mb-2 text-lg font-semibold">Request Parameters</h3>
+                    <h3 className="mb-2 text-lg font-medium">Request Parameters</h3>
                     <RequestParametersTable
                         requestParameters={endpoint.requestParameters}
                         onRequestParameterRowStateChange={handleRequestParameterRowStateChange}
@@ -361,16 +361,16 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             {endpoint.exampleResponses && (
                 <div className="">
                     <hr className="my-12" />
-                    <h3 className="mb-4 text-lg font-semibold">Example Responses</h3>
+                    <h3 className="mb-4 text-lg font-medium">Example Responses</h3>
                     {endpoint.exampleResponses.map(function (exampleResponse) {
                         return (
                             <div key={exampleResponse.statusCode} className="response mb-4">
                                 {/* Title */}
                                 <div className="mb-2 flex items-center">
-                                    <div className="method rounded bg-green-500 px-2 py-1 text-sm font-semibold text-light">
+                                    <div className="method rounded bg-green-500 px-2 py-1 text-sm font-medium text-light">
                                         {exampleResponse.statusCode}
                                     </div>
-                                    <h4 className="ml-2 text-lg font-semibold">{exampleResponse.description}</h4>
+                                    <h4 className="ml-2 text-lg font-medium">{exampleResponse.description}</h4>
                                 </div>
 
                                 {/* Body JSON */}

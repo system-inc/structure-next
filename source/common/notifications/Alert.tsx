@@ -62,7 +62,7 @@ export function Alert(properties: AlertInterface) {
     // Variant title class names
     let titleClassNames = '';
     if(size === 'large') {
-        titleClassNames = 'text-base font-semibold';
+        titleClassNames = 'text-base font-medium';
     }
 
     // Variant text wrapper class names

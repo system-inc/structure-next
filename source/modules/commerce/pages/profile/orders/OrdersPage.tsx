@@ -39,13 +39,13 @@ export function OrdersPage() {
                         {orderData?.map((order) => (
                             <div key={order.id} className="mb-4 rounded-md border p-4">
                                 <Link href={`/order/${order.identifier}`} className="hover:underline">
-                                    <h2 className="text-xl font-semibold">Order #{order.identifier}</h2>
+                                    <h2 className="text-xl font-medium">Order #{order.identifier}</h2>
                                 </Link>
                                 <div className="mt-2 flex flex-wrap gap-2">
-                                    <span className="rounded-full bg-light-2 px-2 py-1 text-xs font-semibold">
+                                    <span className="rounded-full bg-light-2 px-2 py-1 text-xs font-medium">
                                         Status: {order.status}
                                     </span>
-                                    <span className="rounded-full bg-light-2 px-2 py-1 text-xs font-semibold text-dark-3">
+                                    <span className="rounded-full bg-light-2 px-2 py-1 text-xs font-medium text-dark-3">
                                         Created: {new Date(order.createdAt).toLocaleDateString()}
                                     </span>
                                 </div>

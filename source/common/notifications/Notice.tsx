@@ -118,7 +118,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             <div className="flex w-full items-center justify-between">
                 {/* Title and Content */}
                 <div className="items-center space-y-1 pr-4">
-                    {properties.title && <div className="text-sm font-semibold">{properties.title}</div>}
+                    {properties.title && <div className="text-sm font-medium">{properties.title}</div>}
                     {properties.content && <div className="text-sm text-neutral">{properties.content}</div>}
                 </div>
 

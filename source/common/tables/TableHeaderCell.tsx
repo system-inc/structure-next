@@ -123,7 +123,7 @@ export function TableHeaderCell(properties: TableHeaderCellInterface) {
                                                                             key={possibleValueIndex}
                                                                             className={mergeClassNames(
                                                                                 'bg-[' + possibleValue.hexColor + ']',
-                                                                                'inline-flex rounded-md border px-2.5 py-1 text-xs font-semibold',
+                                                                                'inline-flex rounded-md border px-2.5 py-1 text-xs font-medium',
                                                                             )}
                                                                         >
                                                                             {possibleValue.title || possibleValue.value}

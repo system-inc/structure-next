@@ -113,7 +113,7 @@ export function SupportPostTopicPage(properties: SupportPostTopicPageInterface) 
                             <div key={postTopicAndSubPostTopicsWithPostsIndex}>
                                 {postTopicAndSubPostTopicsWithPosts.postTopicTitle !== 'General' && (
                                     <Link href={postTopicHref}>
-                                        <h2 className="mb-8 text-2xl font-semibold">
+                                        <h2 className="mb-8 text-2xl font-medium">
                                             {postTopicAndSubPostTopicsWithPosts.postTopicTitle}
                                         </h2>
                                     </Link>

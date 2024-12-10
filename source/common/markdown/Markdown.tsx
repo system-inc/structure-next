@@ -61,7 +61,7 @@ const components: ComponentsInterface = {
         />
     ),
     p: (properties) => <p className="mt-6 text-[16px] font-light leading-[28px] first:mt-0" {...properties} />,
-    strong: (properties) => <strong className="font-semibold" {...properties} />,
+    strong: (properties) => <strong className="font-medium" {...properties} />,
     a: (properties) => <a className="primary hover:underline" {...properties} />,
     pre: (properties) => (
         <pre

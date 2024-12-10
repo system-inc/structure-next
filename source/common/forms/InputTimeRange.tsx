@@ -228,7 +228,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                             {/* Summary Header */}
                             <div className="border-b border-light-4 p-2 text-xs dark:border-dark-4">
                                 {/* Current Selection */}
-                                <p className="font-bold">{activeTimeRangePresetKey}</p>
+                                <p className="font-semibold">{activeTimeRangePresetKey}</p>
                                 {/* Date Display */}
                                 <div className="flex py-1 font-medium">
                                     {/* Buttons to control navigating forward and backwards through months */}

@@ -880,9 +880,9 @@ export const Chart = ({
 
             {/* Let's not show these as they are not necessary */}
             {/* <div className="absolute inset-y-0 left-2 flex items-center justify-center">
-                <p className="origin-center -rotate-90 text-sm font-semibold">Total</p>
+                <p className="origin-center -rotate-90 text-sm font-medium">Total</p>
             </div>
-            <p className="absolute inset-x-0 bottom-0 text-center text-sm font-semibold capitalize">
+            <p className="absolute inset-x-0 bottom-0 text-center text-sm font-medium capitalize">
                 <span className="relative left-7">{measurementInterval.toLowerCase()}</span>
             </p> */}
         </div>

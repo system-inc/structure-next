@@ -76,10 +76,10 @@ export function ResponseParametersTable(properties: ResponseParametersTableInter
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="border-b">
-                            <th className="px-4 py-3 text-left font-semibold">Field</th>
-                            <th className="px-4 py-3 text-left font-semibold">Type</th>
-                            <th className="px-4 py-3 text-left font-semibold">Description</th>
-                            <th className="px-4 py-3 text-left font-semibold">Example</th>
+                            <th className="px-4 py-3 text-left font-medium">Field</th>
+                            <th className="px-4 py-3 text-left font-medium">Type</th>
+                            <th className="px-4 py-3 text-left font-medium">Description</th>
+                            <th className="px-4 py-3 text-left font-medium">Example</th>
                         </tr>
                     </thead>
                     <tbody>{renderParameterRows(properties.responseBody)}</tbody>

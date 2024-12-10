@@ -40,7 +40,7 @@ export function ProfilePage() {
                         <PlaceholderAnimation className="h-8 w-48" />
                     ) : (
                         accountState.account?.getPublicDisplayName() && (
-                            <h2 className="text-2xl font-bold">{accountState.account.getPublicDisplayName()}</h2>
+                            <h2 className="text-2xl font-semibold">{accountState.account.getPublicDisplayName()}</h2>
                         )
                     )}
 

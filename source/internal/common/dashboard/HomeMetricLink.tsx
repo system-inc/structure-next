@@ -21,7 +21,7 @@ export function HomeMetricLink(properties: HomeMetricLinkProperties) {
             <div>
                 {properties.number !== undefined && (
                     <>
-                        <span className={`${properties.number === 0 ? '' : 'font-semibold'}`}>
+                        <span className={`${properties.number === 0 ? '' : 'font-medium'}`}>
                             {properties.number === 0 ? 'No' : properties.number}
                         </span>{' '}
                     </>

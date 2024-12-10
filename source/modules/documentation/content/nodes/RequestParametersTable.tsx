@@ -58,10 +58,10 @@ export function RequestParametersTable(properties: RequestParametersTableInterfa
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="border-b">
-                            <th className="px-4 py-3 text-left font-semibold">Parameter</th>
-                            <th className="px-4 py-3 text-left font-semibold">Type</th>
-                            <th className="px-4 py-3 text-left font-semibold">Description</th>
-                            <th className="px-4 py-3 text-left font-semibold">Value</th>
+                            <th className="px-4 py-3 text-left font-medium">Parameter</th>
+                            <th className="px-4 py-3 text-left font-medium">Type</th>
+                            <th className="px-4 py-3 text-left font-medium">Description</th>
+                            <th className="px-4 py-3 text-left font-medium">Value</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +78,7 @@ export function RequestParametersTable(properties: RequestParametersTableInterfa
                                 return (
                                     <React.Fragment key={requestParametersSection}>
                                         <tr className="">
-                                            <td colSpan={4} className="px-4 py-2 font-semibold">
+                                            <td colSpan={4} className="px-4 py-2 font-medium">
                                                 {requestParametersSectionAsType} Parameters
                                             </td>
                                         </tr>

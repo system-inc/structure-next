@@ -198,7 +198,7 @@ export function DataSources(properties: DataSourcesInterface) {
                 <div className="overflow-x-auto">
                     {/* Header */}
                     {properties.settings.dataSources.length > 0 && (
-                        <div className="mb-1 w-[520px] text-sm font-semibold">
+                        <div className="mb-1 w-[520px] text-sm font-medium">
                             <div className="relative top-2 flex">
                                 <div>
                                     <span className="ml-16">Database</span>
