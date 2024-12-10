@@ -14,6 +14,7 @@ import {
 } from '@structure/source/common/forms/InputCheckbox';
 
 // Types
+export type RequestParameterSectionType = 'Headers' | 'UrlPath' | 'UrlQuery' | 'Body';
 export interface RequestParameterStateInterface {
     enabled: boolean;
     value?: string;
@@ -21,10 +22,15 @@ export interface RequestParameterStateInterface {
 
 // Component - ParameterRow
 export interface RequestParameterRowInterface extends RequestParameterInterface {
+    section: RequestParameterSectionType;
     name: string;
     enabled: boolean;
     defaultValue?: string;
-    onStateChange: (requestParameterName: string, requestParameterState: RequestParameterStateInterface) => void;
+    onStateChange: (
+        requestParameterSection: RequestParameterSectionType,
+        requestParameterName: string,
+        requestParameterState: RequestParameterStateInterface,
+    ) => void;
 }
 export function RequestParameterRow(properties: RequestParameterRowInterface) {
     // References
@@ -41,7 +47,7 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
         if(!newValue) {
             inputCheckboxReference.current?.setValue?.(InputCheckboxState.Unchecked);
 
-            properties.onStateChange(properties.name, {
+            properties.onStateChange(properties.section, properties.name, {
                 value: newValue,
                 enabled: false,
             });
@@ -50,7 +56,7 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
         else {
             inputCheckboxReference.current?.setValue?.(InputCheckboxState.Checked);
 
-            properties.onStateChange(properties.name, {
+            properties.onStateChange(properties.section, properties.name, {
                 value: newValue,
                 enabled: true,
             });
@@ -119,7 +125,7 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                                   : InputCheckboxState.Unchecked
                         }
                         onChange={function (newValue) {
-                            properties.onStateChange(properties.name, {
+                            properties.onStateChange(properties.section, properties.name, {
                                 value: value,
                                 enabled: newValue === InputCheckboxState.Checked,
                             });

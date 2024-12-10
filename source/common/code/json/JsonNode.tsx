@@ -7,6 +7,29 @@ import ChevronRightFilledIcon from '@structure/assets/icons/interface/ChevronRig
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
+// const colors = {
+//     keys: {
+//         light: '#3B82F6',
+//         dark: '#93C5FD',
+//     },
+//     keysCollapsed: {
+//         light: '#1E293B',
+//         dark: '#94A3B8',
+//     },
+//     numbers: {
+//         light: '#0891B2',
+//         dark: '#22D3EE',
+//     },
+//     objects: {
+//         light: '#0891B2',
+//         dark: '#22D3EE',
+//     },
+//     strings: {
+//         light: '#D97706',
+//         dark: '#FCD34D',
+//     },
+// };
+
 // Component - JsonNode
 export interface JsonNodeInterface {
     data: unknown;
@@ -36,17 +59,24 @@ export function JsonNode(properties: JsonNodeInterface) {
     function renderPrimitiveValue(value: unknown) {
         switch(typeof value) {
             case 'string':
-                return <span className="json-string text-indigo-400">&quot;{value}&quot;</span>;
+                return (
+                    <span className={mergeClassNames('text-[#D97706] dark:text-[#FCD34D]')}>&quot;{value}&quot;</span>
+                );
             case 'number':
-                return <span className="json-number text-purple-500">{value}</span>;
+                return <span className={mergeClassNames('text-[#0891B2] dark:text-[#22D3EE]')}>{value}</span>;
             case 'boolean':
-                return <span className="json-boolean italic text-purple-500">{value.toString()}</span>;
+                return (
+                    <span className={mergeClassNames('italic text-[#0891B2] dark:text-[#22D3EE]')}>
+                        {value.toString()}
+                    </span>
+                );
             case 'object':
-                if(value === null) return <span className="json-null italic text-purple-500">null</span>;
+                if(value === null)
+                    return <span className={mergeClassNames('italic text-[#0891B2] dark:text-[#22D3EE]')}>null</span>;
                 // Objects/arrays handled separately
                 return null;
             default:
-                return <span className="json-unknown text-purple-500">{String(value)}</span>;
+                return <span className={mergeClassNames('text-[#0891B2] dark:text-[#22D3EE]')}>{String(value)}</span>;
         }
     }
 
@@ -78,7 +108,7 @@ export function JsonNode(properties: JsonNodeInterface) {
             }
             return (
                 <React.Fragment key={key}>
-                    <span className="text-neutral-3">{key}:</span> {renderPreviewValue(value)}
+                    <span className="text-[#1E293B] dark:text-[#94A3B8]">{key}:</span> {renderPreviewValue(value)}
                     {index < previewEntries.length - 1 ? ', ' : ''}
                 </React.Fragment>
             );
@@ -102,8 +132,12 @@ export function JsonNode(properties: JsonNodeInterface) {
     function renderPreviewValue(value: unknown) {
         if(typeof value === 'object' && value !== null) {
             if(Array.isArray(value))
-                return <span className="json-preview italic text-purple-500">Array({value.length})</span>;
-            return <span className="json-preview italic text-purple-500">Object</span>;
+                return (
+                    <span className="json-preview italic text-[#1E293B] dark:text-[#94A3B8]">
+                        Array({value.length})
+                    </span>
+                );
+            return <span className="json-preview italic text-[#1E293B] dark:text-[#94A3B8]">Object</span>;
         }
         return renderPrimitiveValue(value);
     }
@@ -163,7 +197,7 @@ export function JsonNode(properties: JsonNodeInterface) {
 
     // Line classes for hover and click
     const lineClasses = 'json-line hover:bg-dark-2 cursor-pointer flex items-start items-center';
-    const keyClasses = 'json-key text-sky-400';
+    const keyClasses = 'json-key text-[#3B82F6] dark:text-[#93C5FD]';
     const toggleAreaClasses = 'items-center transform transition-transform mr-0.5';
     const placeholderToggleWidth = 6; // Same width as the toggle
 
@@ -190,7 +224,9 @@ export function JsonNode(properties: JsonNodeInterface) {
                 {isObject ? (
                     isExpanded ? (
                         // Expanded
-                        <span className="text-neutral">{isArray ? 'Array(' + data.length + ')' : ''}</span>
+                        <span className="text-[#1E293B] dark:text-[#94A3B8]">
+                            {isArray ? 'Array(' + data.length + ')' : ''}
+                        </span>
                     ) : (
                         // Collapsed with preview
                         <span>{renderCollapsedPreview()},</span>

@@ -13,18 +13,15 @@ import { Markdown } from '@structure/source/common/markdown/Markdown';
 import { Json } from '@structure/source/common/code/json/Json';
 import { RequestParametersTable } from '@structure/source/modules/documentation/content/nodes/RequestParametersTable';
 import { ResponseParametersTable } from '@structure/source/modules/documentation/content/nodes/ResponseParametersTable';
+import {
+    RequestParameterSectionType,
+    RequestParameterStateInterface,
+} from '@structure/source/modules/documentation/content/nodes/RequestParameterRow';
 // import { InputCheckboxState } from '@structure/source/common/forms/InputCheckbox';
 // import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
 
 // Dependencies - Assets
 import PlayIcon from '@structure/assets/icons/media/PlayIcon.svg';
-
-// Types
-export interface RequestParameterStateInterface {
-    enabled: boolean;
-    value?: string;
-}
-export type RequestParameterStateMapType = Record<string, RequestParameterStateInterface>;
 
 // Component - RestEndpointNodeContent
 export interface RestEndpointNodeContentInterface {
@@ -35,7 +32,10 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
 
     // State
     const [runningRequest, setRunningRequest] = React.useState<boolean>(false);
-    const [requestParametersStateMap, setRequestParametersStateMap] = React.useState<RequestParameterStateMapType>({});
+    const [requestParametersStateMap, setRequestParametersStateMap] = React.useState<
+        // requestParameterSection (e.g., UrlQuery) -> requestParameterName (e.g., orderId) -> requestParameterState
+        Record<string, Record<string, RequestParameterStateInterface>>
+    >({});
     const [testOutputResponseHttpCode, setTestOutputResponseHttpCode] = React.useState<string | null>(null);
     const [testOutputResponseHttpHeaders, setTestOutputResponseHttpHeaders] = React.useState<
         string | React.ReactNode | null
@@ -44,71 +44,195 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
 
     // Function to handle parameter changes
     function handleRequestParameterRowStateChange(
+        requestParameterSection: RequestParameterSectionType,
         requestParameterName: string,
         requestParameterState: RequestParameterStateInterface,
     ) {
-        // console.log(requestParameterName, requestParameterState);
+        // console.log(requestParameterSection, requestParameterName, requestParameterState);
 
         // Set the state
         setRequestParametersStateMap(function (previousRequestParametersStateMap) {
             return {
                 ...previousRequestParametersStateMap,
-                [requestParameterName]: requestParameterState,
+                [requestParameterSection]: {
+                    ...previousRequestParametersStateMap[requestParameterSection],
+                    [requestParameterName]: requestParameterState,
+                },
             };
         });
     }
 
-    // Function to construct URL with parameters
-    function getEndpointUrlWithParameters(): string {
-        const queryParameters = new URLSearchParams();
-        const pathParameters: Record<string, string> = {};
+    // Function to get color class by index (cycles through the palette)
+    function getColorByIndex(index: number): string {
+        return [
+            'text-red-500',
+            'text-yellow-500',
+            'text-green-500',
+            'text-cyan-500',
+            'text-blue-500',
+            'text-purple-500',
+        ][index % 6]!;
+    }
 
-        Object.entries(requestParametersStateMap).forEach(function ([
-            currentRequestParameterName,
-            currentRequestParameterState,
-        ]) {
-            if(currentRequestParameterState.enabled) {
-                queryParameters.append(currentRequestParameterName, currentRequestParameterState.value ?? '');
-            }
+    // Function to parse URL parameters
+    function parseUrlParameters() {
+        const urlPathParameters: Record<string, string> = {};
+        const urlQueryParameters = new URLSearchParams();
+        const urlQueryParameterColors: Record<string, string> = {};
 
-            // const [section, paramName] = currentRequestParameterName.split('.');
+        // Keep track of parameter index for color assignment
+        let parameterIndex = 0;
 
-            // switch(section) {
-            //     case 'query':
-            //         queryParameters.append(paramName, state.value);
-            //         break;
-            //     case 'path':
-            //         pathParameters[paramName] = state.value;
-            //         break;
-            // }
+        // Loop through the request parameters state map
+        Object.entries(requestParametersStateMap).forEach(function ([requestParameterSection, requestParameters]) {
+            // Cast the section for safety
+            const requestParameterSectionTyped = requestParameterSection as RequestParameterSectionType;
+
+            // Loop through the request parameters
+            Object.entries(requestParameters).forEach(function ([requestParameterName, requestParameterState]) {
+                // If the parameter is enabled
+                if(requestParameterState.enabled) {
+                    // URL query parameters
+                    if(requestParameterSectionTyped === 'UrlQuery') {
+                        urlQueryParameters.append(requestParameterName, requestParameterState.value ?? '');
+                        urlQueryParameterColors[requestParameterName] = getColorByIndex(parameterIndex);
+                        parameterIndex++;
+                    }
+                    // URL path parameters
+                    else if(requestParameterSectionTyped === 'UrlPath') {
+                        urlPathParameters[requestParameterName] = requestParameterState.value ?? '';
+                    }
+                }
+            });
         });
 
-        // Replace path parameters in URL
-        let finalUrl = endpoint.url;
-        Object.entries(pathParameters).forEach(([key, value]) => {
-            finalUrl = finalUrl.replace(`{${key}}`, value);
+        return { urlPathParameters, urlQueryParameters, urlQueryParameterColors };
+    }
+
+    // Function to get the endpoint URL as a string
+    function getEndpointUrlString() {
+        const { urlPathParameters, urlQueryParameters } = parseUrlParameters();
+
+        // Replace URL path parameters in the endpoint URL string
+        let urlString = endpoint.url;
+        Object.entries(urlPathParameters).forEach(function ([urlPathParameterName, urlPathParameterValue]) {
+            urlString = urlString.replace(`{${urlPathParameterName}}`, urlPathParameterValue);
         });
 
-        const urlWithPath = new URL(finalUrl);
+        // Create URL object
+        const urlObject = new URL(urlString);
 
-        // Add query parameters
-        if(queryParameters.toString()) {
-            urlWithPath.search = queryParameters.toString();
-        }
+        // Get the original query parameters
+        const originalAndCustomUrlQueryParameters = new URLSearchParams(urlObject.search);
 
-        return urlWithPath.toString();
+        // Merge the original parameters with the custom parameters, custom take precedence if same key exists
+        urlQueryParameters.forEach(function (urlQueryParameterValue, urlQueryParameterKey) {
+            originalAndCustomUrlQueryParameters.set(urlQueryParameterKey, urlQueryParameterValue);
+        });
+        urlObject.search = originalAndCustomUrlQueryParameters.toString();
+
+        return decodeURIComponent(urlObject.toString());
+    }
+
+    // Function to get the endpoint URL as a JSX element
+    function getEndpointUrlElement() {
+        const { urlPathParameters, urlQueryParameters, urlQueryParameterColors } = parseUrlParameters();
+
+        // Mark all of the URL path parameters
+        let urlString = endpoint.url;
+        Object.entries(urlPathParameters).forEach(function ([urlPathParameterName, urlPathParameterValue]) {
+            urlString = urlString.replace(
+                `{${urlPathParameterName}}`,
+                `<PATH_PARAMETER>${urlPathParameterValue}</PATH_PARAMETER>`,
+            );
+        });
+
+        // Create URL object
+        const urlObject = new URL(urlString);
+
+        // Remember the original query parameters
+        const originalUrlQueryParameters = new URLSearchParams(urlObject.search);
+
+        // Create an object to store the original and custom query parameters
+        const originalAndCustomUrlQueryParameters = new URLSearchParams(urlObject.search);
+
+        // Merge the original parameters with the custom parameters, custom take precedence if same key exists
+        urlQueryParameters.forEach(function (urlQueryParameterValue, urlQueryParameterKey) {
+            originalAndCustomUrlQueryParameters.set(urlQueryParameterKey, urlQueryParameterValue);
+        });
+        urlObject.search = originalAndCustomUrlQueryParameters.toString();
+
+        // Decode the URL and get the base path and query string
+        const decodedUrl = decodeURIComponent(urlObject.toString());
+        const splitDecodedUrl = decodedUrl.split('?');
+        const baseUrlPath = splitDecodedUrl[0] ? splitDecodedUrl[0] : '';
+        const urlQueryString = splitDecodedUrl[1] ? splitDecodedUrl[1] : '';
+
+        // Render the component
+        return (
+            <>
+                {/* Handle URL path parameters */}
+                {baseUrlPath
+                    .split(/<PATH_PARAMETER>|<\/PATH_PARAMETER>/)
+                    .map(function (baseUrlPathPart, baseUrlPathPartIndex) {
+                        // Even indices are normal text, odd indices are path parameters
+                        return baseUrlPathPartIndex % 2 === 0 ? (
+                            <span key={baseUrlPathPartIndex}>{baseUrlPathPart}</span>
+                        ) : (
+                            <span key={baseUrlPathPartIndex} className="font-bold text-purple-500">
+                                {baseUrlPathPart}
+                            </span>
+                        );
+                    })}
+                {/* Handle URL query parameters */}
+                {urlQueryString && '?'}
+                {urlQueryString &&
+                    // Split the query string by '&' and render each query parameter
+                    urlQueryString.split('&').map(function (urlQueryParameter, urlQueryParameterIndex) {
+                        // Split the query parameter by '='
+                        const splitUrlQueryParameter = urlQueryParameter.split('=');
+
+                        // Parse the key and value
+                        const urlQueryParameterKey = splitUrlQueryParameter[0] ?? '';
+                        const urlQueryParameterValue = splitUrlQueryParameter[1] ?? '';
+
+                        // Check if the query parameter is custom
+                        const isOriginalUrlQueryParameter = originalUrlQueryParameters.has(urlQueryParameterKey);
+
+                        // Render the query parameter
+                        return (
+                            <React.Fragment key={urlQueryParameterIndex}>
+                                {urlQueryParameterIndex > 0 && '&'}
+                                {!isOriginalUrlQueryParameter ? (
+                                    <span className={urlQueryParameterColors[urlQueryParameterKey]}>
+                                        <span className="italic">{urlQueryParameterKey}</span>={''}
+                                        <span className="font-bold">{urlQueryParameterValue}</span>
+                                    </span>
+                                ) : (
+                                    <span>{`${urlQueryParameterKey}=${urlQueryParameterValue}`}</span>
+                                )}
+                            </React.Fragment>
+                        );
+                    })}
+            </>
+        );
     }
 
     // Function to test the endpoint
     const testEndpoint = async function () {
         setRunningRequest(true);
 
-        const requestBody: Record<string, any> = {};
-        // Object.entries(parameterStates).forEach(([key, state]) => {
-        //     if(state.enabled && state.value && key.startsWith('body')) {
-        //         requestBody[key.split('.')[1]] = state.value;
-        //     }
-        // });
+        const requestBody: Record<string, unknown> = {};
+
+        Object.entries(requestParametersStateMap).forEach(([section, parameters]) => {
+            Object.entries(parameters).forEach(([name, state]) => {
+                if(state.enabled && state.value) {
+                    if(section === 'body') {
+                        requestBody[name] = state.value;
+                    }
+                }
+            });
+        });
 
         // Get 'apiKey' from local storage
         let apiKey = localStorage.getItem('apiKey');
@@ -118,7 +242,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         }
 
         // Fetch the endpoint
-        const response = await fetch(getEndpointUrlWithParameters(), {
+        const response = await fetch(getEndpointUrlString(), {
             method: endpoint.method,
             headers: {
                 'Content-Type': 'application/json',
@@ -141,7 +265,6 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         response.headers.forEach((value, key) => {
             headers[key] = value;
         });
-        // setTestOutputResponseHttpHeaders(JSON.stringify(headers, null, 4));
         setTestOutputResponseHttpHeaders(<Json data={headers} />);
 
         // Get response data
@@ -151,7 +274,6 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             console.log(data);
 
             // Set response body
-            // setTestOutputResponseBody(JSON.stringify(data, null, 4));
             setTestOutputResponseBody(<Json data={data} />);
         }
         else {
@@ -169,7 +291,10 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             <p className="mb-4">{endpoint.description}</p>
             <div className="mb-5 text-sm">
                 <span className="method rounded bg-purple-500 px-2 py-1 font-mono text-light">{endpoint.method}</span>
-                <code className="ml-2">{getEndpointUrlWithParameters()}</code>
+                {/* <div>
+                    <code className="ml-2">{getEndpointUrlString()}</code>
+                </div> */}
+                <code className="ml-2">{getEndpointUrlElement()}</code>
             </div>
 
             {/* Documentation */}

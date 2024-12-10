@@ -73,8 +73,8 @@ export interface RestApiEndpointInterface {
     documentation?: string;
     requestParameters?: {
         headers?: RequestParameterInterface[];
-        query?: RequestParameterInterface[];
-        path?: RequestParameterInterface[];
+        urlPath?: RequestParameterInterface[];
+        urlQuery?: RequestParameterInterface[];
         body?: RequestParameterInterface[];
     };
     exampleResponses?: {

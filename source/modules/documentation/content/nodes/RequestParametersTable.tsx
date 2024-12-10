@@ -10,6 +10,7 @@ import {
 // Dependencies - Main Components
 import {
     RequestParameterRow,
+    RequestParameterSectionType,
     RequestParameterStateInterface,
 } from '@structure/source/modules/documentation/content/nodes/RequestParameterRow';
 
@@ -20,17 +21,22 @@ import { uppercaseFirstCharacter } from '@structure/source/utilities/String';
 export interface RequestParametersTableInterface {
     requestParameters: RestEndpointNodeInterface['endpoint']['requestParameters'];
     onRequestParameterRowStateChange: (
+        requestParameterSection: RequestParameterSectionType,
         requestParameterName: string,
         requestParameterState: RequestParameterStateInterface,
     ) => void;
 }
 export function RequestParametersTable(properties: RequestParametersTableInterface) {
     // Function to render parameter rows recursively
-    function renderParameterRows(requestParameters: RequestParameterInterface[]) {
+    function renderParameterRows(
+        requestParametersSection: RequestParameterSectionType,
+        requestParameters: RequestParameterInterface[],
+    ) {
         return requestParameters.map(function (requestParameter) {
             return (
                 <RequestParameterRow
                     key={requestParameter.name}
+                    section={requestParametersSection}
                     name={requestParameter.name}
                     type={requestParameter.type}
                     description={requestParameter.description}
@@ -62,17 +68,21 @@ export function RequestParametersTable(properties: RequestParametersTableInterfa
                         {/* Render the parameters grouped by parameter section (headers, query, path, body) */}
                         {properties.requestParameters &&
                             Object.entries(properties.requestParameters).map(function ([
-                                parametersSection,
-                                parameters,
+                                requestParametersSection,
+                                requestParameters,
                             ]) {
+                                const requestParametersSectionAsType = uppercaseFirstCharacter(
+                                    requestParametersSection,
+                                ) as RequestParameterSectionType;
+
                                 return (
-                                    <React.Fragment key={parametersSection}>
+                                    <React.Fragment key={requestParametersSection}>
                                         <tr className="">
                                             <td colSpan={4} className="px-4 py-2 font-semibold">
-                                                {uppercaseFirstCharacter(parametersSection)} Parameters
+                                                {requestParametersSectionAsType} Parameters
                                             </td>
                                         </tr>
-                                        {renderParameterRows(parameters)}
+                                        {renderParameterRows(requestParametersSectionAsType, requestParameters)}
                                     </React.Fragment>
                                 );
                             })}
