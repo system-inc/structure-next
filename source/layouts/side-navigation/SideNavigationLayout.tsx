@@ -30,13 +30,18 @@ export interface SideNavigationLayoutInterface {
     contentBody: React.ReactNode;
     children?: React.ReactNode;
     topBar?: boolean;
+    topTitle?: React.ReactNode;
 }
 export function SideNavigationLayout(properties: SideNavigationLayoutInterface) {
     // Render the component
     return (
         <>
             {/* Navigation */}
-            <SideNavigationLayoutNavigation layoutIdentifier={properties.identifier} topBar={properties.topBar}>
+            <SideNavigationLayoutNavigation
+                layoutIdentifier={properties.identifier}
+                topBar={properties.topBar}
+                topTitle={properties.topTitle}
+            >
                 {properties.navigation}
             </SideNavigationLayoutNavigation>
 

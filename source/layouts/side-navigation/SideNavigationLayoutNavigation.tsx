@@ -156,6 +156,7 @@ export interface SideNavigationLayoutNavigationInterface {
     className?: string;
     topClassName?: string;
     topBar?: boolean;
+    topTitle?: React.ReactNode;
 }
 export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutNavigationInterface) {
     // Defaults
@@ -169,6 +170,7 @@ export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutN
                 layoutIdentifier={properties.layoutIdentifier}
                 className={properties.topClassName}
                 topBar={topBar}
+                title={properties.topTitle}
             />
 
             {/* Side */}

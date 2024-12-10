@@ -23,8 +23,9 @@ export function DocumentationLayout(properties: DocumentationLayoutInterface) {
     // Render the component
     return (
         <SideNavigationLayout
-            topBar={true}
             identifier={properties.specification.identifier}
+            topBar={true}
+            topTitle={properties.specification.title}
             navigation={
                 <nav className="px-4 py-4">
                     {/* Settings */}
