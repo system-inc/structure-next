@@ -158,7 +158,7 @@ export const ButtonVariants = {
         // Active
         `active:bg-light-3 dark:active:bg-light ` +
         // Disabled
-        `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
+        // `disabled:hover:bg-dark-2 dark:disabled:data-[state=checked]:hover:bg-dark-2 ` +
         // Checked
         `dark:data-[state=checked]:bg-light dark:data-[state=checked]:text-dark ` +
         // Indeterminate

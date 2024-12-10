@@ -77,8 +77,21 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
 
     // Function to render the appropriate input based on parameter type
     function renderInput() {
+        // If the parameter is a boolean, render an InputCheckbox
+        if(properties.type === 'Boolean') {
+            return (
+                <InputCheckbox
+                    defaultValue={
+                        properties.defaultValue === 'true' ? InputCheckboxState.Checked : InputCheckboxState.Unchecked
+                    }
+                    onChange={function (newValue) {
+                        onValueChangeIntercept(newValue === InputCheckboxState.Checked ? 'true' : 'false');
+                    }}
+                />
+            );
+        }
         // If the parameter has a list of possible values, render an InputSelect
-        if(properties.possibleValues) {
+        else if(properties.possibleValues) {
             return (
                 <InputSelect
                     className="w-full"
@@ -95,17 +108,18 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                 />
             );
         }
-
         // Otherwise, render an InputText
-        return (
-            <InputText
-                id={properties.name}
-                className="w-full"
-                placeholder={typeof properties.example === 'string' ? properties.example : properties.name}
-                defaultValue={properties.defaultValue}
-                onChange={onValueChangeIntercept}
-            />
-        );
+        else {
+            return (
+                <InputText
+                    id={properties.name}
+                    className="w-full"
+                    placeholder={typeof properties.example === 'string' ? properties.example : properties.name}
+                    defaultValue={properties.defaultValue}
+                    onChange={onValueChangeIntercept}
+                />
+            );
+        }
     }
 
     // Render the component
@@ -118,12 +132,13 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                         ref={inputCheckboxReference}
                         // If the parameter is required, set the checkbox to checked no matter what
                         defaultValue={
-                            properties.nullable === false
+                            properties.required
                                 ? InputCheckboxState.Checked
                                 : properties.enabled
                                   ? InputCheckboxState.Checked
                                   : InputCheckboxState.Unchecked
                         }
+                        disabled={properties.required}
                         onChange={function (newValue) {
                             properties.onStateChange(properties.section, properties.name, {
                                 value: value,
