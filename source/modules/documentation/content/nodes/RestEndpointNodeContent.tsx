@@ -65,12 +65,12 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
     // Function to get color class by index (cycles through the palette)
     function getColorByIndex(index: number): string {
         return [
-            'text-red-500',
-            'text-yellow-500',
-            'text-green-500',
             'text-cyan-500',
-            'text-blue-500',
+            'text-green-500',
             'text-purple-500',
+            'text-teal-500',
+            'text-yellow-500',
+            'text-red-500',
         ][index % 6]!;
     }
 
@@ -179,7 +179,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                         return baseUrlPathPartIndex % 2 === 0 ? (
                             <span key={baseUrlPathPartIndex}>{baseUrlPathPart}</span>
                         ) : (
-                            <span key={baseUrlPathPartIndex} className="font-semibold text-purple-500">
+                            <span key={baseUrlPathPartIndex} className="font-medium text-purple-500">
                                 {baseUrlPathPart}
                             </span>
                         );
@@ -206,7 +206,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                                 {!isOriginalUrlQueryParameter ? (
                                     <span className={urlQueryParameterColors[urlQueryParameterKey]}>
                                         <span className="italic">{urlQueryParameterKey}</span>={''}
-                                        <span className="font-semibold">{urlQueryParameterValue}</span>
+                                        <span className="font-medium">{urlQueryParameterValue}</span>
                                     </span>
                                 ) : (
                                     <span>{`${urlQueryParameterKey}=${urlQueryParameterValue}`}</span>
@@ -287,7 +287,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
     // Render the component
     return (
         <div className="">
-            <h2 className="mb-4 text-2xl font-semibold">{endpoint.title}</h2>
+            <h2 className="mb-4 text-2xl font-medium">{endpoint.title}</h2>
             <p className="mb-4">{endpoint.description}</p>
             <div className="mb-5 text-sm">
                 <span className="method rounded bg-purple-500 px-2 py-1 font-mono text-light">{endpoint.method}</span>
@@ -358,11 +358,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             </div>
 
             {/* Example Responses */}
-            {endpoint.exampleResponses && (
+            {false && endpoint.exampleResponses && (
                 <div className="">
                     <hr className="my-12" />
                     <h3 className="mb-4 text-lg font-medium">Example Responses</h3>
-                    {endpoint.exampleResponses.map(function (exampleResponse) {
+                    {endpoint.exampleResponses?.map(function (exampleResponse) {
                         return (
                             <div key={exampleResponse.statusCode} className="response mb-4">
                                 {/* Title */}

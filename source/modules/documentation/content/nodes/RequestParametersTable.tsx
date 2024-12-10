@@ -15,7 +15,7 @@ import {
 } from '@structure/source/modules/documentation/content/nodes/RequestParameterRow';
 
 // Dependencies - Utilities
-import { uppercaseFirstCharacter } from '@structure/source/utilities/String';
+import { uppercaseFirstCharacter, titleCase } from '@structure/source/utilities/String';
 
 // Component - RequestParametersTable
 export interface RequestParametersTableInterface {
@@ -79,7 +79,7 @@ export function RequestParametersTable(properties: RequestParametersTableInterfa
                                     <React.Fragment key={requestParametersSection}>
                                         <tr className="">
                                             <td colSpan={4} className="px-4 py-2 font-medium">
-                                                {requestParametersSectionAsType} Parameters
+                                                {titleCase(requestParametersSectionAsType)} Parameters
                                             </td>
                                         </tr>
                                         {renderParameterRows(requestParametersSectionAsType, requestParameters)}
