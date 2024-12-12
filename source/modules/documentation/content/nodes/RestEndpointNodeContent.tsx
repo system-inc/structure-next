@@ -12,12 +12,11 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { Markdown } from '@structure/source/common/markdown/Markdown';
 import { Json } from '@structure/source/common/code/json/Json';
 import { RequestParametersTable } from '@structure/source/modules/documentation/content/nodes/RequestParametersTable';
-import { ResponseParametersTable } from '@structure/source/modules/documentation/content/nodes/ResponseParametersTable';
+import { ResponseParameters } from '@structure/source/modules/documentation/content/nodes/ResponseParameters';
 import {
     RequestParameterSectionType,
     RequestParameterStateInterface,
 } from '@structure/source/modules/documentation/content/nodes/RequestParameterRow';
-// import { InputCheckboxState } from '@structure/source/common/forms/InputCheckbox';
 // import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
 
 // Dependencies - Assets
@@ -51,7 +50,8 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         requestParameterName: string,
         requestParameterState: RequestParameterStateInterface,
     ) {
-        // console.log(requestParameterSection, requestParameterName, requestParameterState);
+        console.log(requestParameterSection, requestParameterName, requestParameterState);
+        console.log(requestParametersStateMap);
 
         // Set the state
         setRequestParametersStateMap(function (previousRequestParametersStateMap) {
@@ -250,28 +250,38 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         }
     }
 
+    // Function to get body object from state map
+    function getRequestBodyObjectFromRequestParametersStateMap() {
+        const requestBody: Record<string, unknown> = {};
+
+        // Loop through the request parameters
+        if(requestParametersStateMap?.Body) {
+            Object.entries(requestParametersStateMap?.Body).forEach(function ([
+                requestParameterName,
+                requestParameterState,
+            ]) {
+                // If the parameter is enabled
+                if(requestParameterState.enabled) {
+                    requestBody[requestParameterName] = requestParameterState.value;
+                }
+            });
+        }
+
+        return requestBody;
+    }
+
     // Function to test the endpoint
     const testEndpoint = async function () {
         setRunningRequest(true);
 
-        const requestBody: Record<string, unknown> = {};
-
-        Object.entries(requestParametersStateMap).forEach(([section, parameters]) => {
-            Object.entries(parameters).forEach(([name, state]) => {
-                if(state.enabled && state.value) {
-                    if(section === 'body') {
-                        requestBody[name] = state.value;
-                    }
-                }
-            });
-        });
-
         // Get 'apiKey' from local storage
         let apiKey = localStorage.getItem('apiKey');
-
         if(apiKey) {
             apiKey = apiKey.trim().replaceAll('"', '');
         }
+
+        // Get the request body object
+        const requestBodyObject = getRequestBodyObjectFromRequestParametersStateMap();
 
         // Fetch the endpoint
         const response = await fetch(getEndpointUrlString(), {
@@ -281,8 +291,8 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                 'X-Shopify-Admin-Access-Token': apiKey || 'test',
                 'X-Shopify-Idempotency-Key': 'test',
             },
-            ...(Object.keys(requestBody).length > 0 && {
-                body: JSON.stringify(requestBody),
+            ...(Object.keys(requestBodyObject).length > 0 && {
+                body: JSON.stringify(requestBodyObject),
             }),
         });
         console.log('response', response);
@@ -321,12 +331,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         <div className="">
             <h2 className="mb-4 text-2xl font-medium">{endpoint.title}</h2>
             <p className="mb-4">{endpoint.description}</p>
-            <div className="mb-5 text-sm">
+            <div className="mb-4 text-sm">
+                {/* HTTP Method */}
                 <span className="method rounded bg-purple-500 px-2 py-1 font-mono text-light">{endpoint.method}</span>
-                {/* <div>
-                    <code className="ml-2">{getEndpointUrlString()}</code>
-                </div> */}
-                <code className="ml-2">{getEndpointUrlElement()}</code>
+                {/* Endpoing URL */}
+                <code className="ml-2">{endpoint.url}</code>
             </div>
 
             {/* Documentation */}
@@ -345,6 +354,26 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                         requestParameters={endpoint.requestParameters}
                         onRequestParameterRowStateChange={handleRequestParameterRowStateChange}
                     />
+                </div>
+            )}
+
+            <hr className="mb-6 mt-6" />
+
+            {/* Request Url with Parameters */}
+            <div className="mb-4 text-sm">
+                {/* HTTP Method */}
+                <span className="method rounded bg-purple-500 px-2 py-1 font-mono text-light">{endpoint.method}</span>
+                {/* Endpoing URL */}
+                <code className="ml-2">{getEndpointUrlElement()}</code>
+            </div>
+
+            {/* Request Body Parameters */}
+            {requestParametersStateMap?.Body && (
+                <div className="">
+                    <h4 className="mb-2 text-sm font-medium">Request Body</h4>
+                    <pre className="text-xs text-purple-500">
+                        {JSON.stringify(getRequestBodyObjectFromRequestParametersStateMap(), null, 4)}
+                    </pre>
                 </div>
             )}
 
@@ -395,11 +424,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             </div>
 
             {/* Example Responses */}
-            {false && endpoint.exampleResponses && (
+            {endpoint.exampleResponses && (
                 <div className="">
                     <hr className="my-12" />
                     <h3 className="mb-4 text-lg font-medium">Example Responses</h3>
-                    {endpoint.exampleResponses?.map(function (exampleResponse) {
+                    {endpoint.exampleResponses.map(function (exampleResponse) {
                         return (
                             <div key={exampleResponse.statusCode} className="response mb-4">
                                 {/* Title */}
@@ -407,7 +436,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                                     <div className="method rounded bg-green-500 px-2 py-1 text-sm font-medium text-light">
                                         {exampleResponse.statusCode}
                                     </div>
-                                    <h4 className="ml-2 text-lg font-medium">{exampleResponse.description}</h4>
+                                    <h4 className="ml-2 text-lg font-medium">{exampleResponse.title}</h4>
                                 </div>
 
                                 {/* Body JSON */}
@@ -420,7 +449,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
 
                                 {/* Body Table */}
                                 {exampleResponse.body && (
-                                    <ResponseParametersTable responseBody={exampleResponse.body} />
+                                    <ResponseParameters className="mt-4" responseBody={exampleResponse.body} />
                                 )}
                             </div>
                         );

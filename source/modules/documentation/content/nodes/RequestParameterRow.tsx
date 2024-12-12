@@ -96,9 +96,9 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                 <InputSelect
                     className="w-full"
                     placeholder={`Select...`}
-                    items={properties.possibleValues.map(function (possibleValue: string) {
+                    items={properties.possibleValues.map(function (possibleValue: string | number) {
                         return {
-                            value: possibleValue,
+                            value: String(possibleValue),
                             content: possibleValue,
                         };
                     })}

@@ -78,8 +78,9 @@ export interface RestApiEndpointInterface {
         body?: RequestParameterInterface[];
     };
     exampleResponses?: {
-        statusCode: number;
+        title?: string;
         description?: string;
+        statusCode: number;
         headers?: ResponseFieldInterface[];
         body?: ResponseFieldInterface[];
     }[];
@@ -113,7 +114,7 @@ export interface ResponseFieldInterface {
     name: string;
     type: 'String' | 'Number' | 'Boolean' | 'DateTime' | 'Object' | 'Array';
     description?: string;
-    possibleValues?: string[];
+    possibleValues?: string[] | number[];
     example?: unknown;
     nullable?: boolean;
     fields?: Record<string, ResponseFieldInterface> | ResponseFieldInterface[]; // Nested fields
@@ -124,7 +125,7 @@ export interface RequestParameterInterface {
     name: string;
     type: 'String' | 'Number' | 'Boolean' | 'DateTime' | 'Object' | 'Array';
     description?: string;
-    possibleValues?: string[];
+    possibleValues?: string[] | number[];
     example?: unknown;
     required?: boolean;
     nullable?: boolean;
