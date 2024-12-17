@@ -8,6 +8,9 @@ import {
 import { SideNavigationItemInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
 import { SideNavigationSectionInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
 // Function to build path from node to root
 export function buildPathFromNode(node: DocumentationNodeWithParentInterface): string[] {
     const parts: string[] = [];
@@ -114,6 +117,57 @@ export function getFirstDocumentationNodeWithParentWithContent(
     return firstDocumentationNodeWithParentWithContent;
 }
 
+// Function to get status code color class
+export function getStatusCodeColorClass(statusCode: number | null): string {
+    // Handle invalid/non-numeric status codes
+    if(!statusCode || isNaN(statusCode)) {
+        return 'bg-gray-500 border-gray-600 dark:bg-gray-700 dark:border-gray-600';
+    }
+
+    // Map status code ranges to colors
+    switch(true) {
+        // Success
+        case statusCode >= 200 && statusCode < 300:
+            return 'bg-green-500 border-green-600 dark:bg-green-700 dark:border-green-600';
+        // Redirection
+        case statusCode >= 300 && statusCode < 400:
+            return 'bg-cyan-500 border-cyan-600 dark:bg-cyan-700 dark:border-cyan-600';
+        // Client Error
+        case statusCode >= 400 && statusCode < 500:
+            return 'bg-yellow-500 border-yellow-600 dark:bg-yellow-700 dark:border-yellow-600';
+        // Server Error
+        case statusCode >= 500:
+            return 'bg-red-500 border-red-600 dark:bg-red-700 dark:border-red-600';
+        // Unknown range
+        default:
+            return 'bg-gray-500 border-gray-600 dark:bg-gray-700 dark:border-gray-600';
+    }
+}
+
+// Function to get color class by HTTP method
+export function getMethodColorClass(method: string): string {
+    switch(method) {
+        // GET = Retrieve data
+        case 'GET':
+            return 'bg-sky-500 border-sky-600 dark:bg-sky-700 dark:border-sky-600';
+        // POST = Create data
+        case 'POST':
+            return 'bg-violet-500 border-violet-600 dark:bg-violet-700 dark:border-violet-600';
+        // PUT = Update data
+        case 'PUT':
+            return 'bg-fuchsia-500 border-fuchsia-600 dark:bg-fuchsia-700 dark:border-fuchsia-600';
+        // DELETE = Delete data
+        case 'DELETE':
+            return 'bg-red-500 border-red-600 dark:bg-red-700 dark:border-red-600';
+        // PATCH = Update part of data
+        case 'PATCH':
+            return 'bg-purple-500 border-purple-600 dark:bg-purple-700 dark:border-purple-600';
+        // Unknown method
+        default:
+            return 'bg-cyan-500 border-cyan-600 dark:bg-cyan-700 dark:border-cyan-600';
+    }
+}
+
 // Function to generate SideNavigationSections from a DocumentationSpecification
 export function getSideNavigationSectionsFromDocumentationSpecification(
     documentationSpecification: DocumentationSpecificationInterface,
@@ -144,8 +198,25 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
             href = documentationSpecification.baseUrlPath + '/' + pathParts.join('/');
         }
 
+        let title = <span>{documentationNode.title}</span>;
+        if(documentationNode.type === 'RestEndpoint') {
+            title = (
+                <span className="flex items-center space-x-1.5">
+                    <span
+                        className={mergeClassNames(
+                            'rounded-md border px-1 py-[1px] font-mono text-[10px] leading-4 text-light',
+                            getMethodColorClass(documentationNode.endpoint.method),
+                        )}
+                    >
+                        {documentationNode.endpoint.method}
+                    </span>
+                    <span>{documentationNode.title}</span>
+                </span>
+            );
+        }
+
         const sideNavigationSection: SideNavigationSectionInterface = {
-            title: documentationNode.title,
+            title: title,
             href: href,
             isHeader: documentationNode.isHeader,
             icon: documentationNode.icon,

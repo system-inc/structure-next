@@ -16,6 +16,7 @@ export interface DocumentationNodeBaseInterface {
     title: string;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     isHeader?: boolean;
+    description?: string;
 }
 
 // Discriminated Union Type for Different Node Types
@@ -66,8 +67,6 @@ export interface ReactComponentNodeInterface extends DocumentationNodeBaseInterf
 
 // REST API Endpoint Interface
 export interface RestApiEndpointInterface {
-    title: string;
-    description: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
     url: string;
     documentation?: string;
@@ -88,8 +87,6 @@ export interface RestApiEndpointInterface {
 
 // GraphQL API Endpoint Interface
 export interface GraphQLApiEndpointInterface {
-    title: string;
-    description: string;
     query: string; // GraphQL query or mutation string
     variables?: RequestParameterInterface[];
     responseFields?: ResponseFieldInterface[];

@@ -19,7 +19,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationSection
 export interface SideNavigationSectionInterface {
-    title: string;
+    title: React.ReactNode;
     href?: string;
     children?: SideNavigationItemInterface[];
     isHeader?: boolean;
@@ -95,11 +95,13 @@ export function SideNavigationSection(properties: SideNavigationSectionInterface
                             properties.isHeader ? '' : 'ml-3 border-l border-l-light-4 pl-4 dark:border-l-dark-4'
                         }`}
                     >
-                        {properties.children.map((child) => (
-                            <div key={child.title}>
-                                <SideNavigationSection {...child} />
-                            </div>
-                        ))}
+                        {properties.children.map(function (child, childIndex) {
+                            return (
+                                <div key={childIndex}>
+                                    <SideNavigationSection {...child} />
+                                </div>
+                            );
+                        })}
                     </div>
                 </Collapse>
             )}

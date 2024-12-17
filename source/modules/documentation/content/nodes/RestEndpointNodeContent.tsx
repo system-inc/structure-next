@@ -24,6 +24,10 @@ import PlayIcon from '@structure/assets/icons/media/PlayIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import {
+    getMethodColorClass,
+    getStatusCodeColorClass,
+} from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
 
 // Component - RestEndpointNodeContent
 export interface RestEndpointNodeContentInterface {
@@ -38,7 +42,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         // requestParameterSection (e.g., UrlQuery) -> requestParameterName (e.g., orderId) -> requestParameterState
         Record<string, Record<string, RequestParameterStateInterface>>
     >({});
-    const [testOutputResponseHttpCode, setTestOutputResponseHttpCode] = React.useState<string | null>(null);
+    const [testOutputResponseHttpStatusCode, setTestOutputResponseHttpStatusCode] = React.useState<number | null>(null);
     const [testOutputResponseHttpHeaders, setTestOutputResponseHttpHeaders] = React.useState<
         string | React.ReactNode | null
     >(null);
@@ -221,35 +225,6 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         );
     }
 
-    // Function to get status code color class
-    function getStatusCodeColorClass(statusCode: string | null): string {
-        if(!statusCode) {
-            return 'bg-gray-500'; // neutral color for no code
-        }
-
-        // Convert to number for proper comparison
-        const code = parseInt(statusCode, 10);
-
-        // Handle invalid/non-numeric status codes
-        if(isNaN(code)) {
-            return 'bg-gray-500'; // neutral color for invalid codes
-        }
-
-        // Map status code ranges to colors
-        switch(true) {
-            case code >= 200 && code < 300:
-                return 'bg-green-500'; // Success
-            case code >= 300 && code < 400:
-                return 'bg-cyan-500'; // Redirection
-            case code >= 400 && code < 500:
-                return 'bg-yellow-500'; // Client Error
-            case code >= 500:
-                return 'bg-red-500'; // Server Error
-            default:
-                return 'bg-gray-500'; // Unknown range
-        }
-    }
-
     // Function to get body object from state map
     function getRequestBodyObjectFromRequestParametersStateMap() {
         const requestBody: Record<string, unknown> = {};
@@ -300,7 +275,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
         setRunningRequest(false);
 
         // Set status code
-        setTestOutputResponseHttpCode(response.status.toString());
+        setTestOutputResponseHttpStatusCode(response.status);
 
         // Convert headers to object and stringify
         const headers: { [key: string]: string } = {};
@@ -329,13 +304,20 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
     // Render the component
     return (
         <div className="">
-            <h2 className="mb-4 text-2xl font-medium">{endpoint.title}</h2>
-            <p className="mb-4">{endpoint.description}</p>
-            <div className="mb-4 text-sm">
+            <h2 className="mb-4 text-2xl font-medium">{properties.node.title}</h2>
+            <p className="mb-4">{properties.node.description}</p>
+            <div className="mb-4 flex items-center">
                 {/* HTTP Method */}
-                <span className="method rounded bg-purple-500 px-2 py-1 font-mono text-light">{endpoint.method}</span>
+                <span
+                    className={mergeClassNames(
+                        'method rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                        getMethodColorClass(endpoint.method),
+                    )}
+                >
+                    {endpoint.method}
+                </span>
                 {/* Endpoing URL */}
-                <code className="ml-2">{endpoint.url}</code>
+                <code className="ml-1.5 text-sm">{endpoint.url}</code>
             </div>
 
             {/* Documentation */}
@@ -360,11 +342,18 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
             <hr className="mb-6 mt-6" />
 
             {/* Request Url with Parameters */}
-            <div className="mb-4 text-sm">
+            <div className="mb-4 flex items-center">
                 {/* HTTP Method */}
-                <span className="method rounded bg-purple-500 px-2 py-1 font-mono text-light">{endpoint.method}</span>
+                <span
+                    className={mergeClassNames(
+                        'method rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                        getMethodColorClass(endpoint.method),
+                    )}
+                >
+                    {endpoint.method}
+                </span>
                 {/* Endpoing URL */}
-                <code className="ml-2">{getEndpointUrlElement()}</code>
+                <code className="ml-1.5 text-sm">{getEndpointUrlElement()}</code>
             </div>
 
             {/* Request Body Parameters */}
@@ -389,7 +378,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                         <Button
                             className="ml-4"
                             onClick={function () {
-                                setTestOutputResponseHttpCode(null);
+                                setTestOutputResponseHttpStatusCode(null);
                                 setTestOutputResponseHttpHeaders(null);
                                 setTestOutputResponseBody(null);
                             }}
@@ -404,11 +393,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                         <div className="">
                             <span
                                 className={mergeClassNames(
-                                    'method rounded px-2 py-1 font-mono text-light',
-                                    getStatusCodeColorClass(testOutputResponseHttpCode),
+                                    'method rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                                    getStatusCodeColorClass(testOutputResponseHttpStatusCode),
                                 )}
                             >
-                                {testOutputResponseHttpCode}
+                                {testOutputResponseHttpStatusCode}
                             </span>
                         </div>
                         <div className="mt-4">
@@ -433,10 +422,16 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                             <div key={exampleResponse.statusCode} className="response mb-4">
                                 {/* Title */}
                                 <div className="mb-2 flex items-center">
-                                    <div className="method rounded bg-green-500 px-2 py-1 text-sm font-medium text-light">
+                                    <span
+                                        className={mergeClassNames(
+                                            'rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                                            getStatusCodeColorClass(exampleResponse.statusCode),
+                                        )}
+                                    >
                                         {exampleResponse.statusCode}
-                                    </div>
-                                    <h4 className="ml-2 text-lg font-medium">{exampleResponse.title}</h4>
+                                    </span>
+
+                                    <h4 className="ml-1.5 text-lg font-medium">{exampleResponse.title}</h4>
                                 </div>
 
                                 {/* Body JSON */}

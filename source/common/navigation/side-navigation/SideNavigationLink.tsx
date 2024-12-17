@@ -8,7 +8,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLink
 export interface SideNavigationLinkInterface {
-    title: string;
+    title: React.ReactNode;
     href?: string;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }

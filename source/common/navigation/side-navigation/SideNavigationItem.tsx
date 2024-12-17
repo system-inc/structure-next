@@ -11,7 +11,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationItem
 export interface SideNavigationItemInterface {
-    title: string;
+    title: React.ReactNode;
     href?: string;
     children?: SideNavigationSectionInterface[];
     isHeader?: boolean;

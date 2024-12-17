@@ -17,8 +17,8 @@ export function SideNavigation(properties: SideNavigationInterface) {
     // Render the component
     return (
         <div className="space-y-4">
-            {properties.sections.map(function (section) {
-                return <SideNavigationSection key={section.title} {...section} />;
+            {properties.sections.map(function (section, sectionIndex) {
+                return <SideNavigationSection key={sectionIndex} {...section} />;
             })}
         </div>
     );
