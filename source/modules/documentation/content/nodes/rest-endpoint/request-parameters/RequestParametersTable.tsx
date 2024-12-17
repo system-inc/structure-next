@@ -12,7 +12,7 @@ import {
     RequestParameterRow,
     RequestParameterSectionType,
     RequestParameterStateInterface,
-} from '@structure/source/modules/documentation/content/nodes/RequestParameterRow';
+} from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
 
 // Dependencies - Utilities
 import { uppercaseFirstCharacter, titleCase } from '@structure/source/utilities/String';
@@ -33,17 +33,12 @@ export function RequestParametersTable(properties: RequestParametersTableInterfa
         requestParameters: RequestParameterInterface[],
     ) {
         return requestParameters.map(function (requestParameter) {
+            // Render all parameters using RequestParameterRow, including Objects
             return (
                 <RequestParameterRow
                     key={requestParameter.name}
+                    {...requestParameter}
                     section={requestParametersSection}
-                    name={requestParameter.name}
-                    type={requestParameter.type}
-                    description={requestParameter.description}
-                    example={requestParameter.example}
-                    nullable={requestParameter.nullable}
-                    possibleValues={requestParameter.possibleValues}
-                    required={requestParameter.required}
                     enabled={requestParameter.required ? true : false}
                     onStateChange={properties.onRequestParameterRowStateChange}
                 />

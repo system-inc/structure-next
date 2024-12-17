@@ -11,12 +11,12 @@ import {
 import { Button } from '@structure/source/common/buttons/Button';
 import { Markdown } from '@structure/source/common/markdown/Markdown';
 import { Json } from '@structure/source/common/code/json/Json';
-import { RequestParametersTable } from '@structure/source/modules/documentation/content/nodes/RequestParametersTable';
-import { ResponseParameters } from '@structure/source/modules/documentation/content/nodes/ResponseParameters';
+import { RequestParametersTable } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParametersTable';
+import { ResponseParameters } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/response-parameters/ResponseParameters';
 import {
     RequestParameterSectionType,
     RequestParameterStateInterface,
-} from '@structure/source/modules/documentation/content/nodes/RequestParameterRow';
+} from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
 // import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
 
 // Dependencies - Assets
@@ -227,17 +227,64 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
 
     // Function to get body object from state map
     function getRequestBodyObjectFromRequestParametersStateMap() {
+        function createNestedArrayStructure(
+            parentObject: Record<string, unknown>,
+            path: string[],
+            value: unknown,
+        ): void {
+            let current = parentObject;
+
+            path.forEach(function (part, index) {
+                // Check if this part contains array notation
+                const arrayMatch = part.match(/(.+?)\[(\d+)\]/);
+                if(arrayMatch) {
+                    const [, arrayName, indexStr] = arrayMatch;
+                    if(arrayName !== undefined && indexStr !== undefined) {
+                        const arrayIndex = parseInt(indexStr, 10);
+
+                        // Initialize array if it doesn't exist
+                        if(!Array.isArray(current[arrayName])) {
+                            current[arrayName] = [];
+                        }
+
+                        // Ensure array has enough elements
+                        while((current[arrayName] as unknown[]).length <= arrayIndex) {
+                            (current[arrayName] as unknown[]).push({});
+                        }
+
+                        // Move to the array item with proper type assertions
+                        const array = current[arrayName] as Record<string, unknown>[];
+                        current = array[arrayIndex] as Record<string, unknown>;
+                    }
+                }
+                else if(index === path.length - 1) {
+                    // Last part - set the value
+                    current[part] = value;
+                }
+                else {
+                    // Create nested object if needed
+                    current[part] = current[part] || {};
+                    current = current[part] as Record<string, unknown>;
+                }
+            });
+        }
+
         const requestBody: Record<string, unknown> = {};
 
-        // Loop through the request parameters
         if(requestParametersStateMap?.Body) {
-            Object.entries(requestParametersStateMap?.Body).forEach(function ([
-                requestParameterName,
-                requestParameterState,
-            ]) {
-                // If the parameter is enabled
-                if(requestParameterState.enabled) {
-                    requestBody[requestParameterName] = requestParameterState.value;
+            // Sort keys to ensure parent paths are processed before children
+            const sortedKeys = Object.keys(requestParametersStateMap.Body).sort();
+
+            sortedKeys.forEach(function (key) {
+                if(!requestParametersStateMap?.Body) {
+                    return;
+                }
+
+                const state = requestParametersStateMap.Body[key];
+                if(state?.enabled && state.value !== undefined) {
+                    // Split the path and process array notation
+                    const pathParts = key.split('.');
+                    createNestedArrayStructure(requestBody, pathParts, state.value);
                 }
             });
         }

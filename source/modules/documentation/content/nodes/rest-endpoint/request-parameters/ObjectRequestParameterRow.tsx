@@ -1,0 +1,70 @@
+'use client'; // This component uses client-only features
+
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Types
+import { RequestParameterInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
+
+// Dependencies - Main Components
+import {
+    RequestParameterRow,
+    RequestParameterSectionType,
+    RequestParameterStateInterface,
+} from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
+
+// Component - ObjectRequestParameterRow
+export interface ObjectRequestParameterRowInterface extends RequestParameterInterface {
+    section: RequestParameterSectionType;
+    name: string;
+    enabled: boolean;
+    indentationLevel?: number;
+    fields?: RequestParameterInterface[];
+    onStateChange: (
+        requestParameterSection: RequestParameterSectionType,
+        requestParameterPath: string,
+        requestParameterState: RequestParameterStateInterface,
+    ) => void;
+}
+
+export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowInterface) {
+    // Function to handle state changes from nested fields
+    function handleNestedStateChange(
+        section: RequestParameterSectionType,
+        fieldPath: string,
+        state: RequestParameterStateInterface,
+    ) {
+        const fullPath = `${properties.name}.${fieldPath}`;
+        properties.onStateChange(section, fullPath, state);
+    }
+
+    // Render the component
+    return (
+        <div className="w-full overflow-hidden rounded-md border">
+            {/* Object properties table */}
+            <table className="min-w-full border-collapse">
+                <thead>
+                    <tr className="border-b">
+                        <th className="px-4 py-2 text-left font-medium">Parameter</th>
+                        <th className="px-4 py-2 text-left font-medium">Type</th>
+                        <th className="px-4 py-2 text-left font-medium">Description</th>
+                        <th className="px-4 py-2 text-left font-medium">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {properties.fields?.map((field) => (
+                        <RequestParameterRow
+                            key={field.name}
+                            {...field}
+                            section={properties.section}
+                            enabled={properties.enabled}
+                            onStateChange={handleNestedStateChange}
+                        />
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+export default ObjectRequestParameterRow;

@@ -114,7 +114,7 @@ export interface ResponseFieldInterface {
     possibleValues?: string[] | number[];
     example?: unknown;
     nullable?: boolean;
-    fields?: Record<string, ResponseFieldInterface> | ResponseFieldInterface[]; // Nested fields
+    fields?: Record<string, ResponseFieldInterface> | ResponseFieldInterface[];
 }
 
 // Request parameters
@@ -126,7 +126,7 @@ export interface RequestParameterInterface {
     example?: unknown;
     required?: boolean;
     nullable?: boolean;
-    fields?: Record<string, ResponseFieldInterface> | ResponseFieldInterface[]; // Nested fields
+    fields?: Record<string, RequestParameterInterface> | RequestParameterInterface[];
 }
 
 // Function to convert a ResponseFieldInterface[] to an example JSON object

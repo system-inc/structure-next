@@ -6,7 +6,7 @@ import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import { Markdown } from '@structure/source/common/markdown/Markdown';
-import { RestEndpointNodeContent } from '@structure/source/modules/documentation/content/nodes/RestEndpointNodeContent';
+import { RestEndpointNodeContent } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/RestEndpointNodeContent';
 
 // Dependencies - Types
 import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
