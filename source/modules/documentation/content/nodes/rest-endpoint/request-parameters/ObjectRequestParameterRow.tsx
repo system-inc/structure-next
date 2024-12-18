@@ -25,6 +25,7 @@ export interface ObjectRequestParameterRowInterface extends RequestParameterInte
         requestParameterPath: string,
         requestParameterState: RequestParameterStateInterface,
     ) => void;
+    onChildStateChange?: (childName: string, isEnabled: boolean) => void;
 }
 
 export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowInterface) {
@@ -36,6 +37,11 @@ export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowI
     ) {
         const fullPath = `${properties.name}.${fieldPath}`;
         properties.onStateChange(section, fullPath, state);
+
+        // Notify parent about child state change
+        if(properties.onChildStateChange) {
+            properties.onChildStateChange(fieldPath, state.enabled);
+        }
     }
 
     // Render the component

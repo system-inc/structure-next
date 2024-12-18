@@ -25,6 +25,7 @@ export interface ArrayRequestParameterRowInterface extends RequestParameterInter
         requestParameterPath: string,
         requestParameterState: RequestParameterStateInterface,
     ) => void;
+    onChildStateChange?: (childName: string, isEnabled: boolean) => void;
 }
 
 export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowInterface) {
@@ -75,6 +76,11 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowInt
         // For regular fields, use the standard array notation
         const fullPath = `${properties.name}[${index}].${fieldPath}`;
         properties.onStateChange(section, fullPath, state);
+
+        // Notify parent about child state change
+        if(properties.onChildStateChange) {
+            properties.onChildStateChange(`${index}.${fieldPath}`, state.enabled);
+        }
     }
 
     // Render the component

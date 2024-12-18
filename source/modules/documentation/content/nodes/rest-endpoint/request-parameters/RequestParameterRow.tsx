@@ -41,9 +41,47 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
 
     // State
     const [value, setValue] = React.useState(properties.defaultValue);
+    const [childStates, setChildStates] = React.useState<Map<string, boolean>>(new Map());
+    const [manuallyUnchecked, setManuallyUnchecked] = React.useState(false);
 
     // State for expand/collapse
     const [isExpanded, setIsExpanded] = React.useState(false);
+
+    // Effect to update checkbox state based on child states
+    React.useEffect(
+        function () {
+            if(properties.type === 'Object' || properties.type === 'Array') {
+                // Only update based on child states if not manually unchecked
+                if(!manuallyUnchecked) {
+                    const hasEnabledChildren = Array.from(childStates.values()).some((state) => state);
+                    const newState = hasEnabledChildren ? InputCheckboxState.Checked : InputCheckboxState.Unchecked;
+                    inputCheckboxReference.current?.setValue?.(newState);
+                }
+            }
+        },
+        [childStates, manuallyUnchecked, properties.type],
+    );
+
+    // Function to handle checkbox change
+    function handleCheckboxChange(newValue: InputCheckboxState | undefined) {
+        // If newValue is undefined, treat it as unchecked
+        const isChecked = newValue === InputCheckboxState.Checked;
+        setManuallyUnchecked(!isChecked);
+
+        properties.onStateChange(properties.section, properties.name, {
+            value: value,
+            enabled: isChecked,
+        });
+    }
+
+    // Function to handle child state changes
+    function handleChildStateChange(childName: string, isEnabled: boolean) {
+        setChildStates((prevStates) => {
+            const newStates = new Map(prevStates);
+            newStates.set(childName, isEnabled);
+            return newStates;
+        });
+    }
 
     // Function to intercept onValueChange
     function onValueChangeIntercept(newValue?: string) {
@@ -161,12 +199,7 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                                       : InputCheckboxState.Unchecked
                             }
                             disabled={properties.required}
-                            onChange={function (newValue) {
-                                properties.onStateChange(properties.section, properties.name, {
-                                    value: value,
-                                    enabled: newValue === InputCheckboxState.Checked,
-                                });
-                            }}
+                            onChange={handleCheckboxChange}
                         />
                         <span
                             className="font-mono"
@@ -214,6 +247,7 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                                 fields={properties.fields as RequestParameterInterface[]}
                                 indentationLevel={0}
                                 onStateChange={properties.onStateChange}
+                                onChildStateChange={handleChildStateChange}
                             />
                         )}
                     </td>
