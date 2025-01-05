@@ -6,6 +6,15 @@ export const useInView = (options: IntersectionObserverInit & { amount?: 'any' |
     const [inView, setInView] = React.useState<boolean | undefined>(undefined);
 
     const observer = React.useMemo(() => {
+        // If the IntersectionObserver API is not supported (or on the server), return a mock observer
+        if(typeof window === 'undefined' || !window.IntersectionObserver) {
+            return {
+                observe: () => {},
+                disconnect: () => {},
+            };
+        }
+
+        // Otherwise, return a new IntersectionObserver
         return new IntersectionObserver((entries) => {
             const isIntersecting =
                 options.amount === 'all'
