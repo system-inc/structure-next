@@ -15,12 +15,12 @@ const NextImageWithConditionalSources = ({ sources, ...props }: NextImageWithCon
 
     const { props: optimizedImgProps } = getImageProps({ ...baseProps, src: sources[0]!.path });
 
-    const optimizedSrcSets = sources.map((source) => {
-        const { props } = getImageProps({ ...baseProps, src: source.path });
+    // const optimizedSrcSets = sources.map((source) => {
+    //     const { props } = getImageProps({ ...baseProps, src: source.path });
 
-        console.log({ srcSet: props.srcSet, path: source.path });
-        return props;
-    });
+    //     // console.log({ srcSet: props.srcSet, path: source.path });
+    //     return props;
+    // });
 
     return (
         <picture>
@@ -29,7 +29,7 @@ const NextImageWithConditionalSources = ({ sources, ...props }: NextImageWithCon
 
                 return <source key={source.path} media={source.condition} srcSet={source.path} />;
             })}
-            <img {...optimizedImgProps} />
+            <img {...optimizedImgProps} alt={optimizedImgProps.alt ?? ''} />
         </picture>
     );
 };
