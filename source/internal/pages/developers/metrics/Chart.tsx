@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Configuration
-import tailwindConfiguration from '@project/tailwind.config';
+import tailwindConfiguration from '@project/tailwind.default.config';
 
 // Dependencies - Main Components
 import { DataSourceWithMetricsType } from './Metrics';
@@ -691,8 +691,8 @@ export const Chart = ({
                             }}
                             content={(values) => {
                                 return (
-                                    <div className="rounded-sm border border-light-4 bg-light dark:border-dark-4 dark:bg-dark">
-                                        <div className="border-b p-2 text-xs text-dark/60 dark:text-light-4/60">
+                                    <div className="border-light-4 bg-light dark:border-dark-4 dark:bg-dark rounded-sm border">
+                                        <div className="text-dark/60 dark:text-light-4/60 border-b p-2 text-xs">
                                             {tooltipHeaderColumn(timeInterval, values.label)}
                                         </div>
                                         <table className="">
@@ -872,7 +872,7 @@ export const Chart = ({
             {/* If there is an error message, show it */}
             {errorMessage && (
                 <div className="absolute inset-0 flex h-full w-full items-center justify-center">
-                    <p className="relative bottom-10 max-w-[75%] text-center text-dark-4/50 dark:text-light-4/50">
+                    <p className="text-dark-4/50 dark:text-light-4/50 relative bottom-10 max-w-[75%] text-center">
                         {errorMessage}
                     </p>
                 </div>
