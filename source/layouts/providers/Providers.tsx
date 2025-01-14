@@ -13,6 +13,7 @@ import SharedStateProvider from '@structure/source/utilities/shared-state/Shared
 import EngagementProvider from '@structure/source/modules/engagement/EngagementProvider';
 import NoticeProvider from '@structure/source/common/notifications/NoticeProvider';
 import TipProvider from '@structure/source/common/popovers/TipProvider';
+import { IconContext } from '@phosphor-icons/react';
 
 export interface ProvidersInterface {
     children: React.ReactNode;
@@ -25,15 +26,22 @@ export function Providers(properties: ProvidersInterface) {
         <CookiesProvider cookies={Cookies}>
             <ApolloProvider>
                 <ThemeProvider themeClassName={properties.themeClassName}>
-                    <AccountProvider signedIn={properties.accountSignedIn}>
-                        <SharedStateProvider>
-                            <EngagementProvider>
-                                <NoticeProvider>
-                                    <TipProvider delayDuration={100}>{properties.children}</TipProvider>
-                                </NoticeProvider>
-                            </EngagementProvider>
-                        </SharedStateProvider>
-                    </AccountProvider>
+                    <IconContext.Provider
+                        value={{
+                            weight: 'bold',
+                            color: 'currentColor',
+                        }}
+                    >
+                        <AccountProvider signedIn={properties.accountSignedIn}>
+                            <SharedStateProvider>
+                                <EngagementProvider>
+                                    <NoticeProvider>
+                                        <TipProvider delayDuration={100}>{properties.children}</TipProvider>
+                                    </NoticeProvider>
+                                </EngagementProvider>
+                            </SharedStateProvider>
+                        </AccountProvider>
+                    </IconContext.Provider>
                 </ThemeProvider>
             </ApolloProvider>
         </CookiesProvider>
