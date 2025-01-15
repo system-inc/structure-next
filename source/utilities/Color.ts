@@ -522,3 +522,153 @@ export function getRainbowHexColorForTheme(percent: number, theme?: 'dark' | 'li
     const saturation = theme === 'dark' ? 0.5 : 0.6;
     return hslToHexString(percent, saturation, 0.5);
 }
+
+// ----------------------------------------------------
+// 1) Hex <-> sRGB
+// ----------------------------------------------------
+export function hexToSrgb(hex: string): [number, number, number] {
+    let r = parseInt(hex.slice(1, 3), 16);
+    let g = parseInt(hex.slice(3, 5), 16);
+    let b = parseInt(hex.slice(5, 7), 16);
+
+    // clamp just in case
+    r = Math.min(255, Math.max(0, r));
+    g = Math.min(255, Math.max(0, g));
+    b = Math.min(255, Math.max(0, b));
+
+    return [r / 255, g / 255, b / 255];
+}
+
+export function srgbToHex(rSrgb: number, gSrgb: number, bSrgb: number): string {
+    // clamp [0..1]
+    rSrgb = Math.max(0, Math.min(1, rSrgb));
+    gSrgb = Math.max(0, Math.min(1, gSrgb));
+    bSrgb = Math.max(0, Math.min(1, bSrgb));
+
+    const r = Math.round(rSrgb * 255);
+    const g = Math.round(gSrgb * 255);
+    const b = Math.round(bSrgb * 255);
+
+    const toHex = (v: number) => v.toString(16).padStart(2, '0');
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+// ----------------------------------------------------
+// 2) sRGB <-> Linear RGB
+// ----------------------------------------------------
+// sRGB is gamma-compressed; we need to linearize for color math
+export function srgbToLinear(v: number): number {
+    // IEC 61966-2-1:2011
+    return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+}
+
+export function linearToSrgb(v: number): number {
+    // inverse of above
+    return v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+}
+
+export function srgbArrayToLinear(rgb: [number, number, number]): [number, number, number] {
+    return [srgbToLinear(rgb[0]), srgbToLinear(rgb[1]), srgbToLinear(rgb[2])];
+}
+
+export function linearArrayToSrgb(lin: [number, number, number]): [number, number, number] {
+    return [linearToSrgb(lin[0]), linearToSrgb(lin[1]), linearToSrgb(lin[2])];
+}
+
+// ----------------------------------------------------
+// 3) Linear RGB <-> OKLab
+// ----------------------------------------------------
+// Based on https://bottosson.github.io/posts/oklab/
+// forward transform
+export function linearRgbToOklab(rLin: number, gLin: number, bLin: number) {
+    // 3x3 matrix multiply to get LMS
+    const l_ = 0.4122214708 * rLin + 0.5363325363 * gLin + 0.0514459929 * bLin;
+    const m_ = 0.2119034982 * rLin + 0.6806995451 * gLin + 0.1073969566 * bLin;
+    const s_ = 0.0883024619 * rLin + 0.2817188376 * gLin + 0.6299787005 * bLin;
+
+    // then apply cube root
+    const l_c = Math.cbrt(l_);
+    const m_c = Math.cbrt(m_);
+    const s_c = Math.cbrt(s_);
+
+    // then transform to OKLab
+    return {
+        L: 0.2104542553 * l_c + 0.793617785 * m_c - 0.0040720468 * s_c,
+        a: 1.9779984951 * l_c - 2.428592205 * m_c + 0.4505937099 * s_c,
+        b: 0.0259040371 * l_c + 0.7827717662 * m_c - 0.808675766 * s_c,
+    };
+}
+
+// reverse transform
+export function oklabToLinearRgb(L: number, a: number, b: number) {
+    // convert OKLab -> LMS
+    const l_c = L + 0.3963377774 * a + 0.2158037573 * b;
+    const m_c = L - 0.1055613458 * a - 0.0638541728 * b;
+    const s_c = L - 0.0894841775 * a - 1.291485548 * b;
+
+    // then cube them
+    const l_ = l_c * l_c * l_c;
+    const m_ = m_c * m_c * m_c;
+    const s_ = s_c * s_c * s_c;
+
+    // 3x3 matrix multiply to get linear RGB
+    return {
+        rLin: +4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_,
+        gLin: -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_,
+        bLin: -0.0045164051 * l_ - 0.0058005361 * m_ + 1.0102965609 * s_,
+    };
+}
+
+// ----------------------------------------------------
+// 4) OKLab <-> OKLCH
+// ----------------------------------------------------
+export function oklabToOklch({ L, a, b }: { L: number; a: number; b: number }) {
+    const c = Math.sqrt(a * a + b * b);
+    let h = Math.atan2(b, a); // in radians
+    if(h < 0) {
+        h = h + 2.0 * Math.PI; // wrap
+    }
+    return { l: L, c, h }; // h in [0..2π)
+}
+
+export function oklchToOklab(l: number, c: number, h: number) {
+    return {
+        L: l,
+        a: c * Math.cos(h),
+        b: c * Math.sin(h),
+    };
+}
+
+// ----------------------------------------------------
+// 5) Exported "hexToOklch" and "oklchToHex" Helpers
+// ----------------------------------------------------
+/**
+ * Converts a hex color (e.g. "#ef4444") to OKLCH [l, c, h].
+ * l, c, h are in approximate ranges:
+ *   l in [0..1], c in [0..~0.32], h in [0..2π]
+ */
+export function hexToOklch(hex: string): [number, number, number] {
+    // step 1: hex -> sRGB
+    const srgb = hexToSrgb(hex);
+    // step 2: sRGB -> linear
+    const lin = srgbArrayToLinear(srgb);
+    // step 3: linear -> oklab
+    const lab = linearRgbToOklab(lin[0], lin[1], lin[2]);
+    // step 4: oklab -> oklch
+    const { l, c, h } = oklabToOklch(lab);
+    return [l, c, h];
+}
+
+/**
+ * Converts OKLCH [l, c, h] to a sRGB hex string (e.g. "#ef4444").
+ */
+export function oklchToHex(l: number, c: number, h: number): string {
+    // step 1: oklch -> oklab
+    const lab = oklchToOklab(l, c, h);
+    // step 2: oklab -> linear
+    const { rLin, gLin, bLin } = oklabToLinearRgb(lab.L, lab.a, lab.b);
+    // step 3: linear -> sRGB
+    const srgb = linearArrayToSrgb([rLin, gLin, bLin]);
+    // step 4: sRGB -> hex
+    return srgbToHex(srgb[0], srgb[1], srgb[2]);
+}
