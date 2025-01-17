@@ -1,6 +1,9 @@
+/* Import the theme */
+@import '../theme/styles/theme.css';
+
 /* Default font */
 :root {
-    --font-sans: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* For Webkit-based browsers (Chrome, Safari, and Opera) */
@@ -29,7 +32,7 @@ input:-webkit-autofill:active {
 }
 
 /* This allows full width and height for the ScrollArea component */
-.scrollAreaViewport> :first-child {
+.scrollAreaViewport > :first-child {
     height: 100%;
     width: 100%;
     table-layout: fixed;
