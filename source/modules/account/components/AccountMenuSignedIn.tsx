@@ -4,21 +4,28 @@ import Link from 'next/link';
 
 // Dependencies - Account
 import { Account } from '@structure/source/modules/account/Account';
+import { PopoverItem, PopoverSeparator } from '@project/source/ui/Popover';
+import { CrownSimple, User, Wrench } from '@phosphor-icons/react';
+import ProfileImage from './ProfileImage';
 
 // Component - AccountMenu
 export type AccountMenuSignedInProperties = {
     account: Account;
+    profileImage: {
+        url?: string;
+        alt?: string;
+    };
 };
-export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
+export function AccountMenuSignedIn({ account, profileImage }: AccountMenuSignedInProperties) {
     // Email
-    const emailAddress = properties.account.emailAddress;
+    const emailAddress = account.emailAddress;
 
     // Given and family names
-    const givenName = properties.account.profile?.givenName;
-    const familyName = properties.account.profile?.familyName;
+    const givenName = account.profile?.givenName;
+    const familyName = account.profile?.familyName;
 
     // Set the display name
-    let displayName = properties.account.profile?.displayName;
+    let displayName = account.profile?.displayName;
 
     // If there is display name
     if(!displayName) {
@@ -32,43 +39,67 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
         }
     }
 
+    const links = [
+        // Defaults
+        [
+            {
+                href: '/account/profile',
+                text: 'Profile',
+                icon: User,
+            },
+        ],
+        // If signed in
+        account.isAdministator()
+            ? [
+                  {
+                      href: '/internal',
+                      text: 'Internal',
+                      icon: Wrench,
+                  },
+              ]
+            : [],
+    ]
+        // Flatten the arrays
+        .flat();
+
     // Render the component
     return (
-        <div className="w-full">
+        <React.Fragment>
             {/* Email and role */}
-            <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
-                <Link
-                    tabIndex={1}
-                    className="whitespace-nowrap font-medium hover:cursor-pointer"
-                    href="/account/profile"
-                >
-                    {displayName}
-                </Link>
-                {/* If the account is an administrator */}
-                {properties.account.isAdministator() && (
-                    <p className="text-xs text-dark-4 dark:text-white/50">Administrator</p>
-                )}
-            </div>
+            <PopoverItem asChild>
+                <div className="flex items-center justify-between hover:cursor-auto hover:bg-opsis-background-tetriary active:bg-opsis-background-tetriary">
+                    <div className="flex items-center justify-start gap-3">
+                        <div className="aspect-square w-10">
+                            <ProfileImage profileImageUrl={profileImage.url} alternateText={profileImage.alt} />
+                        </div>
 
-            <div className="pt-4">
-                <Link
-                    className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-primary/5"
-                    href="/account/profile"
-                >
-                    Profile
-                </Link>
+                        <div>
+                            <p className="text-sm font-medium text-opsis-content-primary">{displayName}</p>
+                            <p className="text-xs font-normal text-opsis-content-secondary">
+                                @{account.profile.username}
+                            </p>
+                        </div>
+                    </div>
 
-                {/* If the account is an administrator */}
-                {properties.account.isAdministator() && (
-                    <Link
-                        className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-primary/5"
-                        href="/internal"
-                    >
-                        Internal
-                    </Link>
-                )}
-            </div>
-        </div>
+                    {/* Icon */}
+                    {account.isAdministator() && <CrownSimple className="h-4 w-4 text-opsis-content-secondary" />}
+                </div>
+            </PopoverItem>
+
+            <PopoverSeparator />
+
+            {/* Links */}
+            {links.map(function (link, index) {
+                return (
+                    <PopoverItem key={index} className="block" asChild>
+                        <Link href={link.href}>
+                            <link.icon className="mr-3" />
+                            <span>{link.text}</span>
+                        </Link>
+                    </PopoverItem>
+                );
+            })}
+        </React.Fragment>
     );
 }
 

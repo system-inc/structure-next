@@ -13,17 +13,16 @@ import { wrapForSlot } from '@structure/source/utilities/React';
 
 // Component - Tip
 export interface TipInterface extends PopoverInterface {}
-export function Tip(properties: TipInterface) {
+export function Tip({ open: externalOpen, onOpenChange: externalSetOpen, ...properties }: TipInterface) {
     // State
-    const [open, setOpen] = React.useState(properties.open ?? false);
+    const [internalOpen, internalSetOpen] = React.useState(false);
 
-    // On mount, set the open state
-    React.useEffect(
+    const [open, setOpen] = React.useMemo(
         function () {
-            setOpen(properties.open ?? false);
+            return externalOpen !== undefined ? [externalOpen, externalSetOpen] : [internalOpen, internalSetOpen];
         },
-        [properties.open],
-    ); // Listen for changes to the open property
+        [externalOpen, externalSetOpen, internalOpen, internalSetOpen],
+    );
 
     // Defaults
     const side = properties.side ?? 'top';
@@ -31,17 +30,6 @@ export function Tip(properties: TipInterface) {
     const align = properties.align ?? 'center';
     const alignOffset = properties.alignOffset ?? 0;
     const collisionPadding = properties.collisionPadding ?? 12;
-
-    // Function to handle on open change
-    function onOpenChange() {
-        // Call the onOpenChange callback
-        if(properties.onOpenChange) {
-            properties.onOpenChange(!open);
-        }
-
-        // Update the state
-        setOpen(!open);
-    }
 
     // If the content is a string, wrap it in a div
     let content = properties.content;
@@ -51,10 +39,9 @@ export function Tip(properties: TipInterface) {
 
     // Render the component
     return (
-        <RadixTooltip.Root open={open} onOpenChange={onOpenChange} delayDuration={properties.delayInMilliseconds}>
+        <RadixTooltip.Root open={open} onOpenChange={setOpen} delayDuration={properties.delayInMilliseconds}>
             <RadixTooltip.Trigger
                 asChild
-                tabIndex={properties.tabIndex ?? 0}
                 onKeyDown={function (event) {
                     // console.log('Tip.tsx onKeyDown', event.code);
 
@@ -64,7 +51,10 @@ export function Tip(properties: TipInterface) {
                         ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
                     ) {
                         event.preventDefault();
-                        setOpen(true);
+                        // If the setOpen function is provided, use it
+                        if(externalSetOpen) {
+                            externalSetOpen(true);
+                        }
                     }
                 }}
             >
@@ -79,7 +69,6 @@ export function Tip(properties: TipInterface) {
                     alignOffset={alignOffset}
                     collisionPadding={collisionPadding}
                     collisionBoundary={properties.collisionBoundary}
-                    tabIndex={properties.tabIndex ?? 1}
                     className={mergeClassNames(
                         // State instant-open is specific to Tip
                         'data-[state=instant-open]:animate-in data-[state=instant-open]:fade-in-0 data-[state=instant-open]:zoom-in-95',
