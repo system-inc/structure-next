@@ -11,12 +11,13 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 
 // Dependencies - Icons
 import { usePathname } from 'next/navigation';
-import { Popover, PopoverItem, PopoverSeparator } from '@project/source/ui/Popover';
+import { Popover, PopoverItem, PopoverLabel, PopoverLink, PopoverSeparator } from '@project/source/ui/Popover';
 import AccountMenuSignedIn from './AccountMenuSignedIn';
 import ThemeToggle from '@structure/source/theme/ThemeToggle';
-import { Button } from '@project/source/ui/Button';
+import { Button, buttonVariants } from '@project/source/ui/Button';
 import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
 import { SignOut } from '@phosphor-icons/react';
+import Link from 'next/link';
 
 // Component - AccountMenuButton
 export function AccountMenuButton() {
@@ -68,7 +69,7 @@ export function AccountMenuButton() {
                         />
                     ) : (
                         // Show welcome message
-                        <DropdownMenuLabel>Welcome to Phi</DropdownMenuLabel>
+                        <PopoverLabel>Welcome to Phi</PopoverLabel>
                     )}
 
                     {/* Divider */}
@@ -84,7 +85,7 @@ export function AccountMenuButton() {
                     <PopoverSeparator />
 
                     {/* If signed in */}
-                    {account && (
+                    {account ? (
                         <PopoverItem
                             className="w-full text-left"
                             onClick={async function () {
@@ -96,6 +97,13 @@ export function AccountMenuButton() {
                             <SignOut className="mr-3" />
                             Sign Out
                         </PopoverItem>
+                    ) : (
+                        // If not signed in
+                        <div className="px-2 py-1">
+                            <Link href="/sign-in" className={buttonVariants({ className: 'block w-full' })}>
+                                Sign In
+                            </Link>
+                        </div>
                     )}
                 </div>
             }

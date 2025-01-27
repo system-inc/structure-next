@@ -20,7 +20,7 @@ import {
 // Dependencies - Utilities
 import Cookies from '@structure/source/utilities/cookies/Cookies';
 import { useAtomValue } from 'jotai';
-import { readonlyThemeAtom, setThemeAtom } from './ThemeToggle';
+import { readonlySystemThemeAtom, readonlyThemeAtom, setThemeAtom } from './ThemeToggle';
 import { useHydrateAtoms } from 'jotai/utils';
 
 // Component - ThemeProvider
@@ -188,9 +188,12 @@ const ThemeProvider = ({ children, themeFromCookies }: ThemeProviderProps) => {
 // Hook - useTheme
 export function useTheme() {
     const theme = useAtomValue(readonlyThemeAtom);
+    const systemTheme = useAtomValue(readonlySystemThemeAtom);
 
     return {
         themeClassName: theme,
+        systemTheme: systemTheme,
+        resolvedTheme: theme ?? systemTheme,
     };
 }
 

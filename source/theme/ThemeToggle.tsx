@@ -29,15 +29,21 @@ const root_themeAtom = atomWithStorage<ThemeMode>(
         getOnInit: true, // Initialize atom prior to React initial hydration (prevents flashing)
     },
 );
+const root_systemThemeAtom = atom<ThemeMode | undefined>(undefined);
+
+export const readonlySystemThemeAtom = atom((get) => get(root_systemThemeAtom));
 
 // On mount, the theme atom will create a listener that changes the favicon based on the user's system theme preference.
 // Notably, this listener does not change the theme of the website, only the favicon.
-root_themeAtom.onMount = () => {
+root_systemThemeAtom.onMount = (setSystemThemeAtom) => {
     const abortController = new AbortController();
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     // Function to update the favicon
-    function updateFavicon() {
+    function updateFaviconAndRootClass() {
+        const systemPreference = mediaQuery.matches ? ThemeMode.Dark : ThemeMode.Light;
+        setSystemThemeAtom(systemPreference);
+
         const favicon = document.querySelector('link[rel="icon"]');
         if(favicon) {
             favicon.setAttribute(
@@ -57,10 +63,10 @@ root_themeAtom.onMount = () => {
     }
 
     // Update the favicon on load
-    updateFavicon();
+    updateFaviconAndRootClass();
 
     // Update the favicon when the system theme changes
-    mediaQuery.addEventListener('change', updateFavicon, {
+    mediaQuery.addEventListener('change', updateFaviconAndRootClass, {
         signal: abortController.signal,
     });
 

@@ -55,7 +55,7 @@ export function Authentication(properties: AuthenticationInterface) {
 
     // Hooks
     const router = useRouter();
-    const { themeClassName } = useTheme();
+    const { resolvedTheme } = useTheme();
     const { accountState, setSignedIn, signOut, setAuthenticationDialogOpen } = useAccount();
     const apolloClient = useApolloClient();
 
@@ -267,7 +267,7 @@ export function Authentication(properties: AuthenticationInterface) {
             <div className="mb-8">
                 <Image
                     src={
-                        themeClassName == 'dark'
+                        resolvedTheme == 'dark'
                             ? ProjectSettings.assets.favicon.dark.location
                             : ProjectSettings.assets.favicon.light.location
                     }
