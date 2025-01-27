@@ -44,6 +44,10 @@ export function AccountMenuButton() {
         setOpen(false);
     }
 
+    // Close the popover when the pathname changes
+    const pathname = usePathname();
+    React.useEffect(() => setOpen(false), [pathname]);
+
     // Render the component
     return (
         <Popover
