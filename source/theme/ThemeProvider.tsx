@@ -20,7 +20,7 @@ import {
 // Dependencies - Utilities
 import Cookies from '@structure/source/utilities/cookies/Cookies';
 import { useAtomValue } from 'jotai';
-import { readonlySystemThemeAtom, readonlyThemeAtom, setThemeAtom } from './ThemeToggle';
+import { readonlySystemThemeAtom, readonlyThemeAtom, root_systemThemeAtom, root_themeAtom } from './ThemeToggle';
 import { useHydrateAtoms } from 'jotai/utils';
 
 // Component - ThemeProvider
@@ -178,9 +178,12 @@ interface ThemeProviderProps {
     themeFromCookies?: ThemeMode;
 }
 const ThemeProvider = ({ children, themeFromCookies }: ThemeProviderProps) => {
-    const currentThemeFromLocalStorage = useAtomValue(readonlyThemeAtom);
+    const currentThemeFromLocalStorage = useAtomValue(root_themeAtom);
 
-    useHydrateAtoms([[setThemeAtom, currentThemeFromLocalStorage ?? themeFromCookies]]);
+    useHydrateAtoms([
+        [root_themeAtom, currentThemeFromLocalStorage ?? themeFromCookies],
+        [root_systemThemeAtom, themeFromCookies ?? 'dark'],
+    ]);
 
     return children;
 };
@@ -193,7 +196,6 @@ export function useTheme() {
     return {
         themeClassName: theme,
         systemTheme: systemTheme,
-        resolvedTheme: theme ?? systemTheme,
     };
 }
 

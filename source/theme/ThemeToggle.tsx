@@ -16,12 +16,13 @@ import { Laptop, Sun, Moon } from '@phosphor-icons/react';
 // Dependencies - Utilities
 import { TabItem, Tabs } from '@project/source/ui/Tabs';
 import { atomWithStorage } from 'jotai/utils';
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
 import Cookies from '../utilities/cookies/Cookies';
 import ProjectSettings from '@project/ProjectSettings';
 import { globalStore } from '../utilities/shared-state/SharedStateProvider';
+import ClientOnly from '../utilities/react/ClientOnly';
 
-const root_themeAtom = atomWithStorage<ThemeMode>(
+export const root_themeAtom = atomWithStorage<ThemeMode>(
     themeModeLocalStorageKey, // Local storage Key
     ThemeMode.System, // Initial value (overridden by local storage values)
     undefined, // custom storage (change if you want to use something other than localStorage)
@@ -29,12 +30,12 @@ const root_themeAtom = atomWithStorage<ThemeMode>(
         getOnInit: true, // Initialize atom prior to React initial hydration (prevents flashing)
     },
 );
-const root_systemThemeAtom = atom<ThemeMode | undefined>(undefined);
 
+export const root_systemThemeAtom = atom<NonNullable<ThemeMode>>(ProjectSettings.theme?.defaultClassName ?? 'light');
 export const readonlySystemThemeAtom = atom((get) => get(root_systemThemeAtom));
 
 // On mount, the theme atom will create a listener that changes the favicon based on the user's system theme preference.
-// Notably, this listener does not change the theme of the website, only the favicon.
+// This only updates the theme if the theme is set to system.
 root_systemThemeAtom.onMount = (setSystemThemeAtom) => {
     const abortController = new AbortController();
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -54,11 +55,19 @@ root_systemThemeAtom.onMount = (setSystemThemeAtom) => {
             );
         }
 
-        // If the theme mode is set to system, we need to update the theme class name as well
+        // If the theme mode is set to system, we need to update the theme class name and cookie as well
         if(globalStore.get(readonlyThemeAtom) === undefined) {
             document.documentElement.classList.remove(ThemeMode.Light);
             document.documentElement.classList.remove(ThemeMode.Dark);
             document.documentElement.classList.add(mediaQuery.matches ? ThemeMode.Dark : ThemeMode.Light);
+
+            // Set the cookie
+            Cookies.set(themeClassNameCookieKey, mediaQuery.matches ? ThemeMode.Dark : ThemeMode.Light, {
+                path: '/',
+                maxAge: 31536000, // 1 year
+                sameSite: 'strict',
+                secure: true,
+            });
         }
     }
 
@@ -89,9 +98,7 @@ export const setThemeAtom = atom(null, (get, set, theme: ThemeMode) => {
 
     if(typeof window !== 'undefined') {
         // System preference
-        const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? ThemeMode.Dark
-            : ThemeMode.Light;
+        const systemPreference = get(readonlySystemThemeAtom);
 
         // Set the cookie
         Cookies.set(themeClassNameCookieKey, theme ?? systemPreference, {
@@ -137,17 +144,30 @@ export function ThemeToggle() {
 
     // Render the component
     return (
-        <Tabs size="extra-small" defaultValue={tabsDefaultValue}>
-            <TabItem icon value={'system'} onClick={() => handleChangeThemeMode(ThemeMode.System)}>
-                <Laptop />
-            </TabItem>
-            <TabItem icon value={ThemeMode.Light} onClick={() => handleChangeThemeMode(ThemeMode.Light)}>
-                <Sun />
-            </TabItem>
-            <TabItem icon value={ThemeMode.Dark} onClick={() => handleChangeThemeMode(ThemeMode.Dark)}>
-                <Moon />
-            </TabItem>
-        </Tabs>
+        <ClientOnly>
+            <Tabs
+                size="extra-small"
+                value={tabsDefaultValue}
+                onValueChange={(value) => {
+                    if(value === 'system') {
+                        handleChangeThemeMode(ThemeMode.System);
+                    }
+                    else {
+                        handleChangeThemeMode(value as ThemeMode);
+                    }
+                }}
+            >
+                <TabItem icon value={'system'}>
+                    <Laptop />
+                </TabItem>
+                <TabItem icon value={ThemeMode.Light}>
+                    <Sun />
+                </TabItem>
+                <TabItem icon value={ThemeMode.Dark}>
+                    <Moon />
+                </TabItem>
+            </Tabs>
+        </ClientOnly>
     );
 }
 

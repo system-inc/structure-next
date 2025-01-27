@@ -266,15 +266,20 @@ export function Authentication(properties: AuthenticationInterface) {
             {/* Project Logo */}
             <div className="mb-8">
                 <Image
-                    src={
-                        resolvedTheme == 'dark'
-                            ? ProjectSettings.assets.favicon.dark.location
-                            : ProjectSettings.assets.favicon.light.location
-                    }
+                    src={ProjectSettings.assets.favicon.dark.location}
                     alt="Logo"
                     height={32}
                     width={32}
                     priority={true}
+                    className="hidden dark:block"
+                />
+                <Image
+                    src={ProjectSettings.assets.favicon.light.location}
+                    alt="Logo"
+                    height={32}
+                    width={32}
+                    priority={true}
+                    className="block dark:hidden"
                 />
             </div>
 
