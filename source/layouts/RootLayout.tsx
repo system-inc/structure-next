@@ -9,7 +9,8 @@ import { cookies } from 'next/headers';
 // Dependencies - Theme
 import '@project/source/styles/global.css';
 // import { accountSignedInKey } from '@structure/source/modules/account/Account';
-import { darkThemeClassName, themeClassNameCookieKey } from '@structure/source/theme/Theme';
+import { darkThemeClassName, themeClassNameCookieKey, ThemeMode } from '@structure/source/theme/Theme';
+import { preventThemeFlashOnFirstLoad } from '../theme/preventThemeFlashOnFirstLoad';
 
 // Dependencies - Main Components
 import Providers from '@structure/source/layouts/providers/Providers';
@@ -52,20 +53,22 @@ export async function RootLayout(properties: RootLayoutInterface) {
     const accountSignedIn = cookieStore.get('sessionId')?.value ? true : false;
     // console.log('sessionId:', cookieStore.get('sessionId')?.value);
 
-    // Get the theme class name from the cookies
-    const themeClassNameCookieValue = cookieStore.get(themeClassNameCookieKey)?.value;
+    // Get the user's selected color theme from the cookie
+    const userColorThemeCookieValue = cookieStore.get(themeClassNameCookieKey)?.value as ThemeMode;
 
     // The initial theme class name comes from the cookie or StructureSettings
-    const themeClassName = themeClassNameCookieValue
-        ? themeClassNameCookieValue
-        : ProjectSettings?.theme?.defaultClassName || undefined;
+    // If the user has a cookie set, use that, otherwise use the default theme class name
+    const userColorTheme = userColorThemeCookieValue
+        ? userColorThemeCookieValue
+        : ProjectSettings?.theme?.defaultClassName;
 
     // Defaults
     // const googleAnalyticsId = ProjectSettings.services?.google?.analytics?.id;
 
     // Render the component
     return (
-        <html lang="en" className={mergeClassNames(themeClassName, properties.className)}>
+        // Suppress hydration warning necessary for dynamic theme setting between the server and the client
+        <html lang="en" className={mergeClassNames(userColorTheme, properties.className)} suppressHydrationWarning>
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
             <head>
@@ -77,11 +80,15 @@ export async function RootLayout(properties: RootLayoutInterface) {
                     // Here we assume that if the cookie is set to dark, the system theme is also dark
                     // When the page loads we will use JavaScript to check the system theme and update the favicon
                     href={
-                        themeClassNameCookieValue === darkThemeClassName
+                        userColorThemeCookieValue === darkThemeClassName
                             ? ProjectSettings.assets.favicon.dark.location
                             : ProjectSettings.assets.favicon.light.location
                     }
                 />
+
+                {/* Preventing theme flashing on fist load (no cookie and system preference may not match) requires some tricky hacks */}
+                {/* See: https://github.com/vercel/next.js/discussions/53063#discussioncomment-6996549 */}
+                <script dangerouslySetInnerHTML={{ __html: preventThemeFlashOnFirstLoad }} />
             </head>
 
             <body className="h-full min-h-screen bg-light font-sans text-dark transition-colors dark:bg-dark-1 dark:text-white">
@@ -89,7 +96,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
                 <main className="relative isolate z-0">
                     {/* Providers pass properties down to children */}
                     {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
-                    <Providers accountSignedIn={accountSignedIn} themeClassName={themeClassName}>
+                    <Providers accountSignedIn={accountSignedIn}>
                         {/* Render children passed into the layout */}
                         {properties.children}
                     </Providers>

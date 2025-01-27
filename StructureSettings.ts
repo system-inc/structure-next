@@ -1,3 +1,5 @@
+import { ThemeMode } from './source/theme/Theme';
+
 // Types
 interface ApiService {
     url: string;
@@ -51,7 +53,7 @@ export interface StructureSettingsInterface {
         commerce: boolean;
     };
     theme?: {
-        defaultClassName: string;
+        defaultClassName: ThemeMode;
     };
     assets: {
         url: string;

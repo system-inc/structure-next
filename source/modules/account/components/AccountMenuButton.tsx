@@ -41,27 +41,20 @@ export function AccountMenuButton() {
         profileImageAlternateText = account.getPublicDisplayName();
     }
 
-    // Effect to close the popover when the pathname changes
-    React.useEffect(
-        function () {
-            setOpen(false);
-        },
-        [pathname],
-    );
+    function closePopover() {
+        setOpen(false);
+    }
 
     // Render the component
     return (
         <Popover
             open={open}
             onOpenChange={setOpen}
-            onOpenAutoFocus={(e) => {
-                e.preventDefault(); // Prevents the default behavior of focusing the first focusable button
-            }}
             align="end"
             trigger={
-                <div className="h-8 w-8 cursor-pointer">
+                <Button variant="secondary" size="small" icon>
                     <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
-                </div>
+                </Button>
             }
             content={
                 <div ref={containerRef}>
@@ -71,6 +64,7 @@ export function AccountMenuButton() {
                         <AccountMenuSignedIn
                             account={account}
                             profileImage={{ url: profileImageUrl, alt: profileImageAlternateText }}
+                            closePopover={closePopover}
                         />
                     ) : (
                         // Show welcome message
@@ -95,6 +89,7 @@ export function AccountMenuButton() {
                             className="w-full text-left"
                             onClick={async function () {
                                 await signOut();
+                                closePopover();
                             }}
                             // processingAnimation={true}
                         >

@@ -36,7 +36,7 @@ export function ProfileImage(properties: ProfileImageInterface) {
         <div
             className={mergeClassNames(
                 properties.className,
-                'relative flex h-full w-full items-center justify-center rounded-full border border-light-6 bg-light dark:border-dark-2 dark:bg-dark',
+                'relative flex h-full w-full items-center justify-center rounded-full',
             )}
             style={{
                 containerType: 'size',

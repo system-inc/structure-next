@@ -13,8 +13,9 @@ export const darkThemeMediaQuery = '(prefers-color-scheme: dark)';
  * Theme modes. System is the default, which uses the client's
  * operating system theme preference, which is either light or dark.
  */
-export enum ThemeMode {
-    System = 'System',
-    Light = 'Light',
-    Dark = 'Dark',
-}
+export const ThemeMode = {
+    System: undefined,
+    Light: 'light',
+    Dark: 'dark',
+} as const;
+export type ThemeMode = (typeof ThemeMode)[keyof typeof ThemeMode];

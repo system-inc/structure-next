@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 // Dependencies - Account
 import { Account } from '@structure/source/modules/account/Account';
-import { PopoverItem, PopoverSeparator } from '@project/source/ui/Popover';
+import { PopoverItem, PopoverLink, PopoverSeparator } from '@project/source/ui/Popover';
 import { CrownSimple, User, Wrench } from '@phosphor-icons/react';
 import ProfileImage from './ProfileImage';
 
@@ -15,8 +15,9 @@ export type AccountMenuSignedInProperties = {
         url?: string;
         alt?: string;
     };
+    closePopover: () => void;
 };
-export function AccountMenuSignedIn({ account, profileImage }: AccountMenuSignedInProperties) {
+export function AccountMenuSignedIn({ account, profileImage, closePopover }: AccountMenuSignedInProperties) {
     // Email
     const emailAddress = account.emailAddress;
 
@@ -91,12 +92,10 @@ export function AccountMenuSignedIn({ account, profileImage }: AccountMenuSigned
             {/* Links */}
             {links.map(function (link, index) {
                 return (
-                    <PopoverItem key={index} className="block" asChild>
-                        <Link href={link.href}>
-                            <link.icon className="mr-3" />
-                            <span>{link.text}</span>
-                        </Link>
-                    </PopoverItem>
+                    <PopoverLink key={index} href={link.href} onClick={closePopover}>
+                        <link.icon className="mr-3" />
+                        <span>{link.text}</span>
+                    </PopoverLink>
                 );
             })}
         </React.Fragment>
