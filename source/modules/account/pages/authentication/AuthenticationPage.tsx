@@ -19,7 +19,7 @@ export function AuthenticationPage(properties: AuthenticationPageInterface) {
             </div>
 
             {/* Authentication */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex h-full min-h-screen w-full flex-col items-center justify-center py-12">
                 <Authentication className="min-w-96 px-5 md:max-w-md" scope={properties.scope} />
             </div>
         </>
