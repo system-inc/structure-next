@@ -55,7 +55,6 @@ export function Authentication(properties: AuthenticationInterface) {
 
     // Hooks
     const router = useRouter();
-    const { resolvedTheme } = useTheme();
     const { accountState, setSignedIn, signOut, setAuthenticationDialogOpen } = useAccount();
     const apolloClient = useApolloClient();
 
