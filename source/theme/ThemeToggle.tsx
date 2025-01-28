@@ -14,13 +14,14 @@ import { themeModeLocalStorageKey, ThemeMode, themeClassNameCookieKey } from '@s
 import { Laptop, Sun, Moon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
-import { TabItem, Tabs } from '@project/source/ui/Tabs';
+import { TabItem, Tabs, tabsVariants } from '@project/source/ui/Tabs';
 import { atomWithStorage } from 'jotai/utils';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import Cookies from '../utilities/cookies/Cookies';
 import ProjectSettings from '@project/ProjectSettings';
 import { globalStore } from '../utilities/shared-state/SharedStateProvider';
 import ClientOnly from '../utilities/react/ClientOnly';
+import { VariantProps } from 'class-variance-authority';
 
 export const root_themeAtom = atomWithStorage<ThemeMode>(
     themeModeLocalStorageKey, // Local storage Key
@@ -126,10 +127,8 @@ export const setThemeAtom = atom(null, (get, set, theme: ThemeMode) => {
 });
 
 // Component - ThemeToggle
-export interface ThemeToggleProperties {
-    className?: string;
-}
-export function ThemeToggle() {
+type ThemeToggleProps = VariantProps<typeof tabsVariants>;
+export function ThemeToggle({ size = 'extra-small' }: ThemeToggleProps) {
     // State for the theme
     const themeMode = useAtomValue(readonlyThemeAtom);
     const setThemeMode = useSetAtom(setThemeAtom);
