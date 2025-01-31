@@ -91,9 +91,12 @@ export async function RootLayout(properties: RootLayoutInterface) {
                 <script dangerouslySetInnerHTML={{ __html: preventThemeFlashOnFirstLoad }} />
             </head>
 
-            <body className="bg-light font-sans text-dark transition-colors dark:bg-dark-1 dark:text-white">
+            <body className="bg-opsis-background-primary font-sans text-opsis-content-primary transition-colors">
                 {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content. Fixes any z-index issues with Popovers, etc. */}
-                <main className="relative isolate z-0 h-full min-h-screen ">
+                <main
+                    className="relative isolate z-0 h-full min-h-screen bg-opsis-background-primary text-opsis-content-primary"
+                    vaul-drawer-wrapper=""
+                >
                     {/* Providers pass properties down to children */}
                     {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
                     <Providers accountSignedIn={accountSignedIn}>
