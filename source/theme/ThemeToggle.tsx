@@ -14,7 +14,7 @@ import { themeModeLocalStorageKey, ThemeMode, themeClassNameCookieKey } from '@s
 import { Laptop, Sun, Moon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
-import { TabItem, Tabs, tabsVariants } from '@project/source/ui/Tabs';
+import { TabItem, Tabs, tabsVariants } from '@project/source/ui/base/Tabs';
 import { atomWithStorage } from 'jotai/utils';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import Cookies from '../utilities/cookies/Cookies';

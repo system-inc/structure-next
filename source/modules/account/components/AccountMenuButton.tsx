@@ -11,10 +11,10 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 
 // Dependencies - Icons
 import { usePathname } from 'next/navigation';
-import { Popover, PopoverItem, PopoverLabel, PopoverSeparator } from '@project/source/ui/Popover';
+import { Popover, PopoverItem, PopoverLabel, PopoverSeparator } from '@project/source/ui/base/Popover';
 import AccountMenuSignedIn from './AccountMenuSignedIn';
 import ThemeToggle from '@structure/source/theme/ThemeToggle';
-import { Button, buttonVariants } from '@project/source/ui/Button';
+import { Button, buttonVariants } from '@project/source/ui/base/Button';
 import { SignOut } from '@phosphor-icons/react';
 import Link from 'next/link';
 

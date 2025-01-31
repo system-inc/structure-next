@@ -1,10 +1,9 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Account
 import { Account } from '@structure/source/modules/account/Account';
-import { PopoverItem, PopoverLink, PopoverSeparator } from '@project/source/ui/Popover';
+import { PopoverItem, PopoverLink, PopoverSeparator } from '@project/source/ui/base/Popover';
 import { CrownSimple, User, Wrench } from '@phosphor-icons/react';
 import ProfileImage from './ProfileImage';
 
