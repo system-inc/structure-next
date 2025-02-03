@@ -15,7 +15,7 @@ import { Laptop, Sun, Moon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { TabItem, Tabs, tabsVariants } from '@project/source/ui/base/Tabs';
-import { atomWithStorage } from 'jotai/utils';
+import { atomWithStorage, RESET } from 'jotai/utils';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import Cookies from '../utilities/cookies/Cookies';
 import ProjectSettings from '@project/ProjectSettings';
@@ -57,7 +57,10 @@ root_systemThemeAtom.onMount = (setSystemThemeAtom) => {
         }
 
         // If the theme mode is set to system, we need to update the theme class name and cookie as well
+        console.log({ readonlyThemeAtom: globalStore.get(readonlyThemeAtom) });
         if(globalStore.get(readonlyThemeAtom) === undefined) {
+            console.log('Setting system theme');
+
             document.documentElement.classList.remove(ThemeMode.Light);
             document.documentElement.classList.remove(ThemeMode.Dark);
             document.documentElement.classList.add(mediaQuery.matches ? ThemeMode.Dark : ThemeMode.Light);
@@ -123,7 +126,7 @@ export const setThemeAtom = atom(null, (get, set, theme: ThemeMode) => {
             document.documentElement.classList.add(systemPreference);
         }
     }
-    set(root_themeAtom, theme);
+    set(root_themeAtom, theme ?? RESET);
 });
 
 // Component - ThemeToggle
@@ -145,7 +148,7 @@ export function ThemeToggle({ size = 'extra-small' }: ThemeToggleProps) {
     return (
         <ClientOnly>
             <Tabs
-                size="extra-small"
+                size={size}
                 value={tabsDefaultValue}
                 onValueChange={(value) => {
                     if(value === 'system') {

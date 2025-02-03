@@ -53,22 +53,13 @@ export async function RootLayout(properties: RootLayoutInterface) {
     const accountSignedIn = cookieStore.get('sessionId')?.value ? true : false;
     // console.log('sessionId:', cookieStore.get('sessionId')?.value);
 
-    // Get the user's selected color theme from the cookie
-    const userColorThemeCookieValue = cookieStore.get(themeClassNameCookieKey)?.value as ThemeMode;
-
-    // The initial theme class name comes from the cookie or StructureSettings
-    // If the user has a cookie set, use that, otherwise use the default theme class name
-    const userColorTheme = userColorThemeCookieValue
-        ? userColorThemeCookieValue
-        : ProjectSettings?.theme?.defaultClassName;
-
     // Defaults
     // const googleAnalyticsId = ProjectSettings.services?.google?.analytics?.id;
 
     // Render the component
     return (
         // Suppress hydration warning necessary for dynamic theme setting between the server and the client
-        <html lang="en" className={mergeClassNames(userColorTheme, properties.className)} suppressHydrationWarning>
+        <html lang="en" className={mergeClassNames(properties.className)} suppressHydrationWarning>
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
             <head>
@@ -77,13 +68,10 @@ export async function RootLayout(properties: RootLayoutInterface) {
                 {/* This is so it matches the browser tab colors */}
                 <link
                     rel="icon"
-                    // Here we assume that if the cookie is set to dark, the system theme is also dark
-                    // When the page loads we will use JavaScript to check the system theme and update the favicon
-                    href={
-                        userColorThemeCookieValue === darkThemeClassName
-                            ? ProjectSettings.assets.favicon.dark.location
-                            : ProjectSettings.assets.favicon.light.location
-                    }
+                    // Here we assume that the system theme is dark, but on the client, we will check the user's theme preference
+                    // and update the favicon accordingly
+                    href={ProjectSettings.assets.favicon.dark.location}
+                    suppressHydrationWarning
                 />
 
                 {/* Preventing theme flashing on fist load (no cookie and system preference may not match) requires some tricky hacks */}

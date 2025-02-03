@@ -56,7 +56,11 @@ export function AccountMenuButton() {
             align="end"
             trigger={
                 <Button variant="secondary" size="small" icon>
-                    <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
+                    <ProfileImage
+                        className="border-none"
+                        profileImageUrl={profileImageUrl}
+                        alternateText={profileImageAlternateText}
+                    />
                 </Button>
             }
             content={

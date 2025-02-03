@@ -8,17 +8,17 @@ import React from 'react';
 
 // Dependencies - Theme
 import {
-    themeModeLocalStorageKey,
-    themeModeChangeEventIdentifier,
-    themeClassNameCookieKey,
-    lightThemeClassName,
-    darkThemeClassName,
-    darkThemeMediaQuery,
+    // themeModeLocalStorageKey,
+    // themeModeChangeEventIdentifier,
+    // themeClassNameCookieKey,
+    // lightThemeClassName,
+    // darkThemeClassName,
+    // darkThemeMediaQuery,
     ThemeMode,
 } from '@structure/source/theme/Theme';
 
 // Dependencies - Utilities
-import Cookies from '@structure/source/utilities/cookies/Cookies';
+// import Cookies from '@structure/source/utilities/cookies/Cookies';
 import { useAtomValue } from 'jotai';
 import { readonlySystemThemeAtom, readonlyThemeAtom, root_systemThemeAtom, root_themeAtom } from './ThemeToggle';
 import { useHydrateAtoms } from 'jotai/utils';
@@ -184,6 +184,10 @@ const ThemeProvider = ({ children, themeFromCookies }: ThemeProviderProps) => {
         [root_themeAtom, currentThemeFromLocalStorage ?? themeFromCookies],
         [root_systemThemeAtom, themeFromCookies ?? 'dark'],
     ]);
+
+    // Unused, but we want to mount the atoms and keep them read.
+    useAtomValue(readonlyThemeAtom);
+    useAtomValue(readonlySystemThemeAtom);
 
     return children;
 };

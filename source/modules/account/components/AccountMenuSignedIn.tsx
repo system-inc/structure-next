@@ -4,8 +4,8 @@ import React from 'react';
 // Dependencies - Account
 import { Account } from '@structure/source/modules/account/Account';
 import { PopoverItem, PopoverLink, PopoverSeparator } from '@project/source/ui/base/Popover';
-import { CrownSimple, User, Wrench } from '@phosphor-icons/react';
-import ProfileImage from './ProfileImage';
+import { User, Wrench } from '@phosphor-icons/react';
+import AccountBannerButton from './AccountBannerButton';
 
 // Component - AccountMenu
 export type AccountMenuSignedInProperties = {
@@ -16,7 +16,7 @@ export type AccountMenuSignedInProperties = {
     };
     closePopover: () => void;
 };
-export function AccountMenuSignedIn({ account, profileImage, closePopover }: AccountMenuSignedInProperties) {
+export function AccountMenuSignedIn({ account, closePopover }: AccountMenuSignedInProperties) {
     // Email
     const emailAddress = account.emailAddress;
 
@@ -67,23 +67,7 @@ export function AccountMenuSignedIn({ account, profileImage, closePopover }: Acc
         <React.Fragment>
             {/* Email and role */}
             <PopoverItem asChild>
-                <div className="flex items-center justify-between hover:cursor-auto hover:bg-opsis-background-tetriary active:bg-opsis-background-tetriary">
-                    <div className="flex items-center justify-start gap-3">
-                        <div className="aspect-square w-10">
-                            <ProfileImage profileImageUrl={profileImage.url} alternateText={profileImage.alt} />
-                        </div>
-
-                        <div>
-                            <p className="text-sm font-medium text-opsis-content-primary">{displayName}</p>
-                            <p className="text-xs font-normal text-opsis-content-secondary">
-                                @{account.profile.username}
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Icon */}
-                    {account.isAdministator() && <CrownSimple className="h-4 w-4 text-opsis-content-secondary" />}
-                </div>
+                <AccountBannerButton />
             </PopoverItem>
 
             <PopoverSeparator />
