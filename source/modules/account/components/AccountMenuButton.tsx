@@ -55,9 +55,9 @@ export function AccountMenuButton() {
             onOpenChange={setOpen}
             align="end"
             trigger={
-                <Button variant="secondary" size="small" icon>
+                <Button variant="secondary" size="small" className="relative p-0" icon>
                     <ProfileImage
-                        className="border-none"
+                        className="absolute inset-0 h-full w-full border-none"
                         profileImageUrl={profileImageUrl}
                         alternateText={profileImageAlternateText}
                     />
