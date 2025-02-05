@@ -7,7 +7,7 @@ import Link from 'next/link';
 // Dependencies - Main Components
 import { useTheme } from '@structure/source/theme/ThemeProvider';
 // import { useAccount } from '@structure/source/modules/account/AccountProvider';
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@project/source/ui/base/Button';
 import { SupportSearch } from '@structure/source/modules/support/SupportSearch';
 
 // Dependencies - API
@@ -32,6 +32,7 @@ import BalanceScaleIcon from '@structure/assets/icons/tools/BalanceScaleIcon.svg
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { getRainbowHexColorForTheme, lightenColor } from '@structure/source/utilities/Color';
 import Divider from '@project/source/ui/base/Divider';
+import { ArrowRight, DiscordLogo, Question } from '@phosphor-icons/react';
 
 export const postTopicIdentifierToIconObject: {
     [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -71,7 +72,7 @@ export function SupportPage(properties: SupportPageInterface) {
 
     // Render the component
     return (
-        <div className="container pb-32 pt-8">
+        <div className="container pb-36 pt-8">
             {/* {accountState.account?.isAdministator() && (
                 <div className="float-end">
                     <Button
@@ -89,7 +90,7 @@ export function SupportPage(properties: SupportPageInterface) {
             <h1 className="text-2xl font-medium">Support</h1>
             <Divider className="mb-12 mt-6" />
 
-            <h2 className="mb-4 text-center text-4xl">How can we help you today?</h2>
+            <h2 className="mb-4 text-center text-4xl">How can we help?</h2>
             <p className="mb-6 text-center text-opsis-content-secondary">
                 Browse our articles or connect with our team—we&apos;re here to help!
             </p>
@@ -124,7 +125,7 @@ export function SupportPage(properties: SupportPageInterface) {
                             key={postTopicIndex}
                             href={'/support/' + postTopic.slug}
                             className={mergeClassNames(
-                                'flex flex-col rounded-lg border border-light-3 p-5 active:border-neutral+5 dark:border-dark-4 dark:active:border-neutral-5',
+                                'flex flex-col rounded-2xl border border-light-3 p-5 active:border-neutral+5 dark:border-dark-4 dark:active:border-neutral-5',
                                 // 'hover:border-light-6 dark:hover:border-dark-6',
                             )}
                             // We have to use the event handlers to change the colors because of the way Tailwind CSS works
@@ -164,14 +165,37 @@ export function SupportPage(properties: SupportPageInterface) {
                 })}
             </div>
 
-            <hr className="my-16" />
+            <Divider className="mb-14 mt-20" />
 
-            <div className="flex justify-center">
-                <div>
-                    <p className="mb-4">Need more help?</p>
-                    <Button size="lg" href="/contact">
-                        Contact Us
-                    </Button>
+            <div className="mx-auto max-w-[42.5rem]">
+                <h2 className="mb-12 text-center text-[2rem] font-medium">Need more help?</h2>
+
+                <div className="mb-12 rounded-2xl border border-opsis-border-primary bg-opsis-background-secondary p-8">
+                    <Question className="mx-auto mb-4 size-6" />
+                    <p className="mb-2 text-center font-medium">Contact Us</p>
+                    <p className="text-center text-sm font-normal text-opsis-content-secondary">
+                        We’d love to hear from you.
+                    </p>
+
+                    <div className="mt-8 flex flex-col items-center">
+                        <Button variant="secondary" iconRight={<ArrowRight />}>
+                            Contact Support
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="p-8">
+                    <DiscordLogo className="mx-auto mb-4 size-6" />
+                    <p className="mb-2 text-center font-medium">Join Our Discord</p>
+                    <p className="text-center text-sm font-normal text-opsis-content-secondary">
+                        Jump in and chat with our team and community.
+                    </p>
+
+                    <div className="mt-8 flex flex-col items-center">
+                        <Button variant="secondary" iconRight={<ArrowRight />}>
+                            Join Discord
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
