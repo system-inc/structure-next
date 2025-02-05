@@ -178,13 +178,13 @@ export function SupportPage(properties: SupportPageInterface) {
                     </p>
 
                     <div className="mt-8 flex flex-col items-center">
-                        <Button variant="secondary" iconRight={<ArrowRight />}>
-                            Contact Support
+                        <Button variant="secondary" iconRight={<ArrowRight />} asChild>
+                            <Link href="/contact">Contact Support</Link>
                         </Button>
                     </div>
                 </div>
 
-                <div className="p-8">
+                {/* <div className="p-8">
                     <DiscordLogo className="mx-auto mb-4 size-6" />
                     <p className="mb-2 text-center font-medium">Join Our Discord</p>
                     <p className="text-center text-sm font-normal text-opsis-content-secondary">
@@ -196,7 +196,7 @@ export function SupportPage(properties: SupportPageInterface) {
                             Join Discord
                         </Button>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );
