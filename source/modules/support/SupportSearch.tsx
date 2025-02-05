@@ -1,13 +1,10 @@
-'use client'; // This component uses client-only features
-
 // Dependencies - React and Next.js
 import React from 'react';
-
-// Dependencies - Main Components
-import { InputText } from '@structure/source/common/forms/InputText';
+import { useRouter } from 'next/navigation';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import SearchInput from '@project/source/ui/derived/SearchInput';
 
 // Component - SupportSearch
 export interface SupportSearchInterface {
@@ -15,24 +12,23 @@ export interface SupportSearchInterface {
     defaultValue?: string;
 }
 export function SupportSearch(properties: SupportSearchInterface) {
+    const router = useRouter();
+
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        const searchTerm = event.currentTarget.searchTerm.value;
+        console.log('redirecting to ', searchTerm);
+
+        // Redirect to the search page using next navigation for better routing handling
+        router.push(`/support/search?term=${encodeURIComponent(searchTerm)}`);
+    }
+
     // Render the component
     return (
-        <div className={mergeClassNames(properties.className)}>
-            <InputText
-                id="searchTerm"
-                variant="search"
-                className="w-full dark:bg-dark"
-                placeholder="Search for articles..."
-                defaultValue={properties.defaultValue}
-                // On enter key
-                onKeyDown={function (event) {
-                    if(event.key === 'Enter') {
-                        // Redirect to the search page
-                        window.location.href = '/support/search?term=' + encodeURIComponent(event.currentTarget.value);
-                    }
-                }}
-            />
-        </div>
+        <form className={mergeClassNames(properties.className, 'max-w-md')} onSubmit={handleSubmit}>
+            <SearchInput id="searchTerm" placeholder="Search for answers" defaultValue={properties.defaultValue} />
+        </form>
     );
 }
 

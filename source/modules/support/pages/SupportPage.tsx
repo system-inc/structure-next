@@ -31,6 +31,7 @@ import BalanceScaleIcon from '@structure/assets/icons/tools/BalanceScaleIcon.svg
 // Define - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { getRainbowHexColorForTheme, lightenColor } from '@structure/source/utilities/Color';
+import Divider from '@project/source/ui/base/Divider';
 
 export const postTopicIdentifierToIconObject: {
     [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -85,19 +86,18 @@ export function SupportPage(properties: SupportPageInterface) {
                 </div>
             )} */}
 
-            <div>
-                <div className="mb-6">
-                    <Link href="/support">
-                        <h1 className="inline text-3xl font-medium">Support</h1>
-                    </Link>
-                </div>
-                <p className="">How can we help?</p>
-            </div>
+            <h1 className="text-2xl font-medium">Support</h1>
+            <Divider className="mb-12 mt-6" />
 
-            <SupportSearch className="mt-5" />
+            <h2 className="mb-4 text-center text-4xl">How can we help you today?</h2>
+            <p className="mb-6 text-center text-opsis-content-secondary">
+                Browse our articles or connect with our team—we&apos;re here to help!
+            </p>
+
+            <SupportSearch className="mx-auto mb-16" />
 
             {/* Post Topics */}
-            <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {/* Data Loaded */}
                 {postTopics.map(function (postTopic, postTopicIndex) {
                     // const PostTopicIcon = postTopics.find(function (currentPostTopic) {
