@@ -838,12 +838,73 @@ query CommerceCheckoutSession($id: String!) {
         closedAt
         failedCount
         orders {
+            emailAddress
             id
             status
             identifier
             paymentStatus
             fulfillmentStatus
             fulfillmentSource
+            priceInfo {
+                amount
+                currencyCode
+                originalSubtotal
+                shippingRate {
+                    amount
+                    originalAmount
+                }
+                subtotal
+                tax {
+                    shipping
+                    total
+                }
+            }
+            shippingInfo {
+                shippingAddress {
+                    city
+                    company
+                    country
+                    firstName
+                    lastName
+                    line1
+                    line2
+                    phoneNumber
+                    postalCode
+                    state
+                }
+            }
+            lineItems {
+                id
+                commerceOrderId
+                productVariantId
+                quantity
+                fulfilledQuantity
+                shippedQuantity
+                status
+                statusDescription
+                createdAt
+                updatedAt
+            }
+            payment {
+                id
+                amount
+                paymentProcessorType
+                status
+                status
+                statusDescription
+                updatedAt
+                authorizedAt
+                currencyCode
+                paymentMethod {
+                    ... on PaymentMethodCreditCard {
+                        type
+                        paymentProcessorType
+                        last4
+                        cardType
+                    }
+                }
+            }
+            metadata
         }
     }
 }
