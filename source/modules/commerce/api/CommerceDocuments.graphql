@@ -810,3 +810,40 @@ query GetOrdersByGroupIdentifier($identifier: String!, $emailAddress: String) {
         }
     }
 }
+
+mutation CommerceCheckoutSessionCreateDirect($input: CommerceCheckoutSessionCreateDirectInput!) {
+    commerceCheckoutSessionCreateDirect(input: $input) {
+        id
+        createdAt
+        externalMetadata
+        status
+        completedAt
+        closedAt
+        failedCount
+        orders {
+            id
+            status
+            paymentStatus
+        }
+    }
+}
+
+query CommerceCheckoutSession($id: String!) {
+    commerceCheckoutSession(id: $id) {
+        id
+        createdAt
+        externalMetadata
+        status
+        completedAt
+        closedAt
+        failedCount
+        orders {
+            id
+            status
+            identifier
+            paymentStatus
+            fulfillmentStatus
+            fulfillmentSource
+        }
+    }
+}
