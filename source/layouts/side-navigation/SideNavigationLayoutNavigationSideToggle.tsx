@@ -37,9 +37,6 @@ export interface SideNavigationLayoutNavigationSideToggleInterface {
 export function SideNavigationLayoutNavigationSideToggle(
     properties: SideNavigationLayoutNavigationSideToggleInterface,
 ) {
-    // Hooks
-    const { themeClassName } = useTheme();
-
     // Shared State
     const [sideNavigationLayoutNavigationOpen, setSideNavigationLayoutNavigationOpen] = useAtom(
         getAtomForNavigationOpen(properties.layoutIdentifier),
@@ -72,15 +69,20 @@ export function SideNavigationLayoutNavigationSideToggle(
             {/* Logo */}
             <Link href="/">
                 <Image
-                    src={
-                        themeClassName == darkThemeClassName
-                            ? ProjectSettings.assets.favicon.dark.location
-                            : ProjectSettings.assets.favicon.light.location
-                    }
+                    src={ProjectSettings.assets.favicon.light.location}
                     alt="Logo"
                     height={28} // h-7 = 28px
                     width={28} // h-7 = 28px
                     priority={true}
+                    className="dark:hidden"
+                />
+                <Image
+                    src={ProjectSettings.assets.favicon.dark.location}
+                    alt="Logo"
+                    height={28}
+                    width={28}
+                    priority={true}
+                    className="hidden dark:block"
                 />
             </Link>
         </div>
