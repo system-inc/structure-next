@@ -908,3 +908,71 @@ query CommerceCheckoutSession($id: String!) {
         }
     }
 }
+
+query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
+    commerceOrdersByCheckoutSession(checkoutSessionId: $checkoutSessionId) {
+        ... on PublicCommerceOrder {
+            identifier
+            batchIdentifier
+            status
+            fulfillmentStatus
+            lineItems {
+                id
+                status
+                productVariantId
+                indexId
+                quantity
+                shippedQuantity
+                fulfilledQuantity
+            }
+            paymentStatus
+            source
+            createdAt
+        }
+    }
+}
+
+# query CommerceOrdersByCheckoutSessionSignedIn($checkoutSessionId: String!) {
+#     commerceOrdersByCheckoutSession(checkoutSessionId: $checkoutSessionId) {
+#         ... on CommerceOrder {
+#             identifier
+#             batchIdentifier
+#             status
+#             source
+#             fulfillmentStatus
+#             lineItems {
+#                 id
+#                 commerceOrderId
+#                 status
+#                 productVariantId
+#                 indexId
+#                 quantity
+#                 shippedQuantity
+#                 fulfilledQuantity
+#                 updatedAt
+#             }
+#             paymentStatus
+#             metadata
+#             payment {
+#                 id
+#                 amount
+#                 paymentProcessorType
+#                 status
+#                 status
+#                 statusDescription
+#                 updatedAt
+#                 authorizedAt
+#                 currencyCode
+#                 paymentMethod {
+#                     ... on PaymentMethodCreditCard {
+#                         type
+#                         paymentProcessorType
+#                         last4
+#                         cardType
+#                     }
+#                 }
+#             }
+#             createdAt
+#         }
+#     }
+# }
