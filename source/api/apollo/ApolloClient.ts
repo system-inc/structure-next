@@ -16,7 +16,7 @@ export const apolloClient = new ApolloClient({
 export const devApolloClient = new ApolloClient({
     cache: new InMemoryCache(),
     link: createHttpLink({
-        uri: ProjectSettings.apis.dev.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
+        uri: ProjectSettings.apis.dev?.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
         credentials: 'include', // Include HTTP Only cookies
     }),
 });
