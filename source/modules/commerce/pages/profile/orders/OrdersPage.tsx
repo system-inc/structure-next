@@ -10,7 +10,7 @@ import { useQuery } from '@apollo/client';
 // import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
 
 // Dependencies - GraphQL
-import { GetMyOrdersDocument } from '@project/source/api/graphql';
+import { CommerceOrdersDocument } from '@project/source/api/graphql';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Component - OrdersPage
 export function OrdersPage() {
-    const { data, loading } = useQuery(GetMyOrdersDocument);
+    const { data, loading } = useQuery(CommerceOrdersDocument);
 
     const orderData = data?.commerceOrders.items;
 
