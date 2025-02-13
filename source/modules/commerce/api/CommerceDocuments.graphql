@@ -1,4 +1,591 @@
+# Commerce Cart Query
+# query CommerceCart {
+#     commerceCart {
+#         id
+#         identifier
+#         createdAt
+#         title
+#         description
+#         items {
+#             id
+#             quantity
+#             firstName
+#             lastName
+#             relationship
+#             emailAddress
+#             productBundle {
+#                 id
+#                 items {
+#                     quantity
+#                     productVariant {
+#                         id
+#                         price {
+#                             currencyCode
+#                             amount
+#                         }
+#                         description
+#                         name
+#                     }
+#                 }
+#             }
+#             shippingAddress {
+#                 company
+#                 line1
+#                 line2
+#                 city
+#                 state
+#                 postalCode
+#                 country
+#                 firstName
+#                 lastName
+#                 phoneNumber
+#             }
+#         }
+#     }
+# }
+
+# Commerce Cart Update Mutation
+# mutation CommerceCartUpdate($input: [ShoppingBagItemInput!]!) {
+#     commerceCartUpdate(items: $input) {
+#         id
+#         identifier
+#         title
+#         description
+#         items {
+#             id
+#             quantity
+#             firstName
+#             lastName
+#             relationship
+#             emailAddress
+#             productBundle {
+#                 id
+#                 items {
+#                     quantity
+#                     productVariant {
+#                         id
+#                         price {
+#                             currencyCode
+#                             amount
+#                         }
+#                         description
+#                         name
+#                     }
+#                 }
+#             }
+#             shippingAddress {
+#                 company
+#                 line1
+#                 line2
+#                 city
+#                 state
+#                 postalCode
+#                 country
+#                 firstName
+#                 lastName
+#                 phoneNumber
+#             }
+#         }
+#     }
+# }
+
+# Commerce Shopping Bag Price Estimate Query
+# query CommerceShoppingBagPriceEstimate($itemIds: [String!]!) {
+#     commerceShoppingBagPriceEstimate(itemIds: $itemIds) {
+#         amount
+#         currencyCode
+#         lineItemPrices {
+#             amount
+#             indexId
+#             originalSubtotal
+#             subtotal
+#             tax
+#         }
+#         originalSubtotal
+#         shippingRate {
+#             amount
+#             originalAmount
+#             breakdown {
+#                 freeShipping
+#                 originalShippingRate
+#                 shippingRate
+#                 packageIndexId
+#                 items {
+#                     indexId
+#                     quantity
+#                 }
+#             }
+#         }
+#         subtotal
+#         tax {
+#             shipping
+#             total
+#         }
+#     }
+# }
+
+# Commerce Shopping Bag Checkout Mutation
+# mutation CommerceShoppingBagCheckout($input: ShoppingBagCheckoutInput!) {
+#     commerceShoppingBagCheckout(input: $input) {
+#         id
+#         batchIdentifier
+#         holdOnShipping
+#         fulfillmentStatus
+#         emailAddress
+#         identifier
+#         payment {
+#             amount
+#             authorizedAt
+#             cancelledAt
+#             capturedAt
+#             confirmedAt
+#             createdAt
+#             currencyCode
+#             externalReferenceId
+#             id
+#             paymentProcessorType
+#             status
+#             statusDescription
+#             updatedAt
+#             walletEntryId
+#         }
+#         paymentId
+#         paymentStatus
+#         priceInfo {
+#             amount
+#             currencyCode
+#             originalSubtotal
+#             subtotal
+#             lineItemPrices {
+#                 amount
+#                 indexId
+#                 originalSubtotal
+#                 subtotal
+#                 tax
+#             }
+#             shippingRate {
+#                 amount
+#                 originalAmount
+#             }
+#             tax {
+#                 shipping
+#                 total
+#             }
+#         }
+#         source
+#         status
+#         statusDescription
+#         shippingInfo {
+#             shippingAddress {
+#                 company
+#                 line1
+#                 line2
+#                 city
+#                 state
+#                 postalCode
+#                 country
+#                 firstName
+#                 lastName
+#                 phoneNumber
+#             }
+#         }
+#         lineItems {
+#             id
+#             createdAt
+#             updatedAt
+#             indexId
+#             quantity
+#             fulfilledQuantity
+#             shippedQuantity
+#             status
+#             statusDescription
+#             productVariantId
+#             commerceOrderId
+#         }
+#     }
+# }
+
+# Commerce Checkout Session Create Mutation
+# mutation CommerceCheckoutSessionCreate($input: CommerceCheckoutSessionCreateInput!) {
+#     commerceCheckoutSessionCreate(input: $input) {
+#         id
+#         status
+#         orders {
+#             id
+#             status
+#             paymentStatus
+#         }
+#         externalMetadata
+#         failedCount
+#         closedAt
+#         completedAt
+#         createdAt
+#     }
+# }
+
+# Used to create a checkout session for a direct purchase
+mutation CommerceCheckoutSessionCreateDirect($input: CommerceCheckoutSessionCreateDirectInput!) {
+    commerceCheckoutSessionCreateDirect(input: $input) {
+        id
+        externalMetadata
+        createdAt
+    }
+}
+
+# After the Stripe checkout session is complete, the returnUrl comes back with an ID for us to poll
+# This requires the user to have the same deviceId as the one that created the checkout session
+# Use the query below instead
+# query CommerceCheckoutSession($id: String!) {
+#     commerceCheckoutSession(id: $id) {
+#         id # The ID of the checkout session returned with the returnUrl
+#         status # Pending is when the embedded form is created, Complete when Stripe is done processing
+#         orders {
+#             # Array of orders
+#             identifier # The order identifier XXX-XXX-XXX
+#             status # The overall order status
+#             paymentStatus # The status of the payment, this should always be Captured
+#             fulfillmentStatus # The status of the fulfillment
+#             emailAddress # The email address for the order
+#             lineItems {
+#                 id
+#                 status
+#                 productVariantId # Use this for the product images, price, URLs, etc.
+#                 quantity # The quantity ordered
+#                 fulfilledQuantity
+#                 shippedQuantity
+#                 updatedAt
+#                 createdAt
+#             }
+#             shippingInfo {
+#                 shippingAddress {
+#                     firstName
+#                     lastName
+#                     company
+#                     phoneNumber
+#                     line1
+#                     line2
+#                     city
+#                     state
+#                     postalCode
+#                     country
+#                 }
+#             }
+#             payment {
+#                 paymentMethod {
+#                     ... on PaymentMethodCreditCard {
+#                         billingAddress {
+#                             firstName
+#                             lastName
+#                             company
+#                             phoneNumber
+#                             line1
+#                             line2
+#                             city
+#                             state
+#                             postalCode
+#                             country
+#                         }
+#                         type # Credit Card
+#                         last4 # Last 4 digits of the card
+#                         cardType # Visa or Mastercard, etc.
+#                     }
+#                 }
+#             }
+#             priceInfo {
+#                 currencyCode # USD
+#                 originalSubtotal # Before discount
+#                 shippingRate {
+#                     originalAmount # Before discount
+#                     amount # After discount
+#                 }
+#                 tax {
+#                     shipping
+#                     total # Total tax
+#                 }
+#                 subtotal # After discount
+#                 amount # Total amount billed to the card
+#             }
+#         }
+#         completedAt # When Stripe is done processing
+#         createdAt # When the checkout session was created
+#     }
+# }
+
+# This query fetches the order details for a checkout session
+# If the query includes the deviceId that created the session, more fields are returned
+# If the query is public, less fields are returned
+query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
+    commerceOrdersByCheckoutSession(checkoutSessionId: $checkoutSessionId) {
+        ... on CommerceOrder {
+            # Array of orders
+            identifier # The order identifier XXX-XXX-XXX
+            status # The overall order status
+            paymentStatus # The status of the payment, this should always be Captured
+            fulfillmentStatus # The status of the fulfillment
+            emailAddress # The email address for the order
+            lineItems {
+                id
+                status
+                productVariantId # Use this for the product images, price, URLs, etc.
+                quantity # The quantity ordered
+                fulfilledQuantity
+                shippedQuantity
+                updatedAt
+                createdAt
+            }
+            shippingInfo {
+                shippingAddress {
+                    firstName
+                    lastName
+                    company
+                    phoneNumber
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                }
+            }
+            payment {
+                paymentMethod {
+                    ... on PaymentMethodCreditCard {
+                        billingAddress {
+                            firstName
+                            lastName
+                            company
+                            phoneNumber
+                            line1
+                            line2
+                            city
+                            state
+                            postalCode
+                            country
+                        }
+                        type # Credit Card
+                        last4 # Last 4 digits of the card
+                        cardType # Visa or Mastercard, etc.
+                    }
+                }
+            }
+            priceInfo {
+                currencyCode # USD
+                originalSubtotal # Before discount
+                shippingRate {
+                    originalAmount # Before discount
+                    amount # After discount
+                }
+                tax {
+                    shipping
+                    total # Total tax
+                }
+                subtotal # After discount
+                amount # Total amount billed to the card
+            }
+            createdAt
+        }
+        ... on PublicCommerceOrder {
+            identifier
+            status
+            paymentStatus
+            fulfillmentStatus
+            lineItems {
+                id
+                status
+                productVariantId # Use this for the product images, price, URLs, etc.
+                quantity # The quantity ordered
+                fulfilledQuantity
+                shippedQuantity
+            }
+            priceInfo {
+                currencyCode # USD
+                originalSubtotal # Before discount
+                shippingRate {
+                    originalAmount # Before discount
+                    amount # After discount
+                }
+                tax {
+                    shipping
+                    total # Total tax
+                }
+                subtotal # After discount
+                amount # Total amount billed to the card
+            }
+            createdAt
+        }
+    }
+}
+
+# Commerce Orders Query
+# List orders with pagination
+query CommerceOrders($pagination: PaginationInput!) {
+    commerceOrders(pagination: $pagination) {
+        items {
+            id
+            identifier
+            status
+            paymentStatus
+            fulfillmentStatus
+            lineItems {
+                id
+                status
+                productVariantId # Use this for the product images, price, URLs, etc.
+                quantity # The quantity ordered
+                fulfilledQuantity
+                shippedQuantity
+            }
+            priceInfo {
+                amount
+            }
+            updatedAt
+            createdAt
+        }
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+            page
+            pagesTotal
+        }
+    }
+}
+
+# Commerce Order Query
+# Used to get a single order by identifier and email address
+query CommerceOrder($orderIdentifier: String!, $emailAddress: String) {
+    commerceOrder(identifier: $orderIdentifier, emailAddress: $emailAddress) {
+        ... on CommerceOrder {
+            identifier # The order identifier XXX-XXX-XXX
+            status # The overall order status
+            # Used to render the stepper
+            statusRecords {
+                status
+                timestamp
+                description
+            }
+            paymentStatus # The status of the payment, this should always be Captured
+            fulfillmentStatus # The status of the fulfillment
+            emailAddress # The email address for the order
+            lineItems {
+                id
+                indexId
+                status
+                productVariantId # Use this for the product images, price, URLs, etc.
+                quantity # The quantity ordered
+                fulfilledQuantity
+                shippedQuantity
+                updatedAt
+                createdAt
+            }
+            shipments {
+                id
+                orderIndexId
+                status
+                label {
+                    carrier
+                    serviceType
+                    trackingNumber
+                    trackingUrl
+                }
+                packageInfo {
+                    items {
+                        indexId # Ties to the linesItems[].indexId
+                        quantity
+                    }
+                }
+                shippedAt
+                deliveredAt
+                cancelledAt
+                updatedAt
+                createdAt
+            }
+            shippingInfo {
+                shippingAddress {
+                    firstName
+                    lastName
+                    company
+                    phoneNumber
+                    line1
+                    line2
+                    city
+                    state
+                    postalCode
+                    country
+                }
+            }
+            payment {
+                paymentMethod {
+                    ... on PaymentMethodCreditCard {
+                        billingAddress {
+                            firstName
+                            lastName
+                            company
+                            phoneNumber
+                            line1
+                            line2
+                            city
+                            state
+                            postalCode
+                            country
+                        }
+                        type # Credit Card
+                        last4 # Last 4 digits of the card
+                        cardType # Visa or Mastercard, etc.
+                    }
+                }
+            }
+            priceInfo {
+                currencyCode # USD
+                originalSubtotal # Before discount
+                shippingRate {
+                    originalAmount # Before discount
+                    amount # After discount
+                }
+                tax {
+                    shipping
+                    total # Total tax
+                }
+                subtotal # After discount
+                amount # Total amount billed to the card
+            }
+            createdAt
+        }
+        ... on PublicCommerceOrder {
+            identifier
+            status
+            paymentStatus
+            fulfillmentStatus
+            lineItems {
+                id
+                status
+                productVariantId # Use this for the product images, price, URLs, etc.
+                quantity # The quantity ordered
+                fulfilledQuantity
+                shippedQuantity
+            }
+            priceInfo {
+                currencyCode # USD
+                originalSubtotal # Before discount
+                shippingRate {
+                    originalAmount # Before discount
+                    amount # After discount
+                }
+                tax {
+                    shipping
+                    total # Total tax
+                }
+                subtotal # After discount
+                amount # Total amount billed to the card
+            }
+            createdAt
+        }
+    }
+}
+
 # Commerce Orders Privileged Query
+# For internal use only
 query CommerceOrdersPrivileged($pagination: PaginationInput!) {
     commerceOrdersPrivileged(pagination: $pagination) {
         items {
@@ -195,784 +782,3 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
         }
     }
 }
-
-# Commerce Cart Query
-query GetBagItems {
-    commerceCart {
-        id
-        identifier
-        createdAt
-        title
-        description
-        items {
-            id
-            quantity
-            firstName
-            lastName
-            relationship
-            emailAddress
-            productBundle {
-                id
-                items {
-                    quantity
-                    productVariant {
-                        id
-                        price {
-                            currencyCode
-                            amount
-                        }
-                        description
-                        name
-                    }
-                }
-            }
-            shippingAddress {
-                company
-                line1
-                line2
-                city
-                state
-                postalCode
-                country
-                firstName
-                lastName
-                phoneNumber
-            }
-        }
-    }
-}
-
-# Commerce Cart Update Mutation
-mutation UpdateBagWithItems($input: [ShoppingBagItemInput!]!) {
-    commerceCartUpdate(items: $input) {
-        id
-        identifier
-        title
-        description
-        items {
-            id
-            quantity
-            firstName
-            lastName
-            relationship
-            emailAddress
-            productBundle {
-                id
-                items {
-                    quantity
-                    productVariant {
-                        id
-                        price {
-                            currencyCode
-                            amount
-                        }
-                        description
-                        name
-                    }
-                }
-            }
-            shippingAddress {
-                company
-                line1
-                line2
-                city
-                state
-                postalCode
-                country
-                firstName
-                lastName
-                phoneNumber
-            }
-        }
-    }
-}
-
-# Commerce Shopping Bag Price Estimate Query
-query EstimateOrderPrice($itemIds: [String!]!) {
-    commerceShoppingBagPriceEstimate(itemIds: $itemIds) {
-        amount
-        currencyCode
-        lineItemPrices {
-            amount
-            indexId
-            originalSubtotal
-            subtotal
-            tax
-        }
-        originalSubtotal
-        shippingRate {
-            amount
-            originalAmount
-            breakdown {
-                freeShipping
-                originalShippingRate
-                shippingRate
-                packageIndexId
-                items {
-                    indexId
-                    quantity
-                }
-            }
-        }
-        subtotal
-        tax {
-            shipping
-            total
-        }
-    }
-}
-
-# Commerce Shopping Bag Checkout Mutation
-mutation BagCheckout($input: ShoppingBagCheckoutInput!) {
-    commerceShoppingBagCheckout(input: $input) {
-        id
-        batchIdentifier
-        holdOnShipping
-        fulfillmentStatus
-        emailAddress
-        identifier
-        payment {
-            amount
-            authorizedAt
-            cancelledAt
-            capturedAt
-            confirmedAt
-            createdAt
-            currencyCode
-            externalReferenceId
-            id
-            paymentProcessorType
-            status
-            statusDescription
-            updatedAt
-            walletEntryId
-        }
-        paymentId
-        paymentStatus
-        priceInfo {
-            amount
-            currencyCode
-            originalSubtotal
-            subtotal
-            lineItemPrices {
-                amount
-                indexId
-                originalSubtotal
-                subtotal
-                tax
-            }
-            shippingRate {
-                amount
-                originalAmount
-            }
-            tax {
-                shipping
-                total
-            }
-        }
-        source
-        status
-        statusDescription
-        shippingInfo {
-            shippingAddress {
-                company
-                line1
-                line2
-                city
-                state
-                postalCode
-                country
-                firstName
-                lastName
-                phoneNumber
-            }
-        }
-        lineItems {
-            id
-            createdAt
-            updatedAt
-            indexId
-            quantity
-            fulfilledQuantity
-            shippedQuantity
-            status
-            statusDescription
-            productVariantId
-            commerceOrderId
-        }
-    }
-}
-
-# Commerce Checkout Session Create Mutation
-mutation CommerceCheckoutSessionCreate($input: CommerceCheckoutSessionCreateInput!) {
-    commerceCheckoutSessionCreate(input: $input) {
-        id
-        status
-        orders {
-            id
-            status
-            paymentStatus
-        }
-        externalMetadata
-        failedCount
-        closedAt
-        completedAt
-        createdAt
-    }
-}
-
-query GetMyOrders {
-    commerceOrders(
-        pagination: { filters: [{ column: "status", operator: NotEqual, value: "Cancelled" }], itemsPerPage: 10 }
-    ) {
-        pagination {
-            itemsTotal
-            itemIndex
-            page
-        }
-        items {
-            id
-            holdOnShipping
-            fulfillmentStatus
-            emailAddress
-            identifier
-            lineItems {
-                createdAt
-                fulfilledQuantity
-                id
-                indexId
-                commerceOrderId
-                productVariantId
-                quantity
-                shippedQuantity
-                status
-                statusDescription
-                updatedAt
-            }
-            discounts {
-                code
-                createdAt
-                endsAt
-                id
-                startsAt
-                updatedAt
-                usageCount
-            }
-            payment {
-                amount
-                authorizedAt
-                cancelledAt
-                capturedAt
-                confirmedAt
-                createdAt
-                currencyCode
-                externalReferenceId
-                id
-                paymentProcessorType
-                status
-                statusDescription
-                updatedAt
-                walletEntryId
-                paymentMethod {
-                    ... on PaymentMethodCreditCard {
-                        type
-                        paymentProcessorType
-                        externalResourceId
-                        last4
-                        expirationMonth
-                        expirationYear
-                        cardType
-                        billingAddress {
-                            company
-                            line1
-                            line2
-                            city
-                            state
-                            postalCode
-                            country
-                            firstName
-                            lastName
-                            phoneNumber
-                        }
-                    }
-                }
-            }
-            paymentId
-            paymentStatus
-            priceInfo {
-                amount
-                currencyCode
-                originalSubtotal
-                subtotal
-                lineItemPrices {
-                    amount
-                    indexId
-                    originalSubtotal
-                    subtotal
-                    tax
-                }
-                shippingRate {
-                    amount
-                    originalAmount
-                }
-                tax {
-                    shipping
-                    total
-                }
-            }
-            source
-            status
-            statusDescription
-            batchIdentifier
-            createdAt
-            updatedAt
-            shippingInfo {
-                shippingAddress {
-                    company
-                    line1
-                    line2
-                    city
-                    state
-                    postalCode
-                    country
-                    firstName
-                    lastName
-                    phoneNumber
-                }
-            }
-            beneficiaryEmailAddress
-            shipments {
-                id
-                createdAt
-                updatedAt
-                createdByAccountId
-                createdByProfileId
-                updatedByAccountId
-                updatedByProfileId
-                status
-                statusDescription
-                shippedAt
-                deliveredAt
-                cancelledAt
-                orderIndexId
-                toAddress {
-                    company
-                    line1
-                    line2
-                    city
-                    state
-                    postalCode
-                    country
-                    firstName
-                    lastName
-                    phoneNumber
-                }
-            }
-        }
-    }
-}
-
-query GetOrderByIdentifier($orderIdentifier: JSON!) {
-    commerceOrders(
-        pagination: { filters: [{ column: "identifier", operator: Equal, value: $orderIdentifier }], itemsPerPage: 1 }
-    ) {
-        pagination {
-            itemsTotal
-            itemIndex
-            page
-        }
-        items {
-            id
-            holdOnShipping
-            fulfillmentStatus
-            emailAddress
-            identifier
-            lineItems {
-                createdAt
-                fulfilledQuantity
-                id
-                indexId
-                commerceOrderId
-                productVariantId
-                quantity
-                shippedQuantity
-                status
-                statusDescription
-                updatedAt
-            }
-            discounts {
-                code
-                createdAt
-                endsAt
-                id
-                startsAt
-                updatedAt
-                usageCount
-            }
-            payment {
-                amount
-                authorizedAt
-                cancelledAt
-                capturedAt
-                confirmedAt
-                createdAt
-                currencyCode
-                externalReferenceId
-                id
-                paymentProcessorType
-                status
-                statusDescription
-                updatedAt
-                walletEntryId
-                paymentMethod {
-                    ... on PaymentMethodCreditCard {
-                        type
-                        paymentProcessorType
-                        externalResourceId
-                        last4
-                        expirationMonth
-                        expirationYear
-                        cardType
-                        billingAddress {
-                            company
-                            line1
-                            line2
-                            city
-                            state
-                            postalCode
-                            country
-                            firstName
-                            lastName
-                            phoneNumber
-                        }
-                    }
-                }
-            }
-            paymentId
-            paymentStatus
-            priceInfo {
-                amount
-                currencyCode
-                originalSubtotal
-                subtotal
-                lineItemPrices {
-                    amount
-                    indexId
-                    originalSubtotal
-                    subtotal
-                    tax
-                }
-                shippingRate {
-                    amount
-                    originalAmount
-                }
-                tax {
-                    shipping
-                    total
-                }
-            }
-            source
-            status
-            statusDescription
-            batchIdentifier
-            createdAt
-            updatedAt
-            shippingInfo {
-                shippingAddress {
-                    company
-                    line1
-                    line2
-                    city
-                    state
-                    postalCode
-                    country
-                    firstName
-                    lastName
-                    phoneNumber
-                }
-            }
-            beneficiaryEmailAddress
-            shipments {
-                id
-                createdAt
-                updatedAt
-                createdByAccountId
-                createdByProfileId
-                updatedByAccountId
-                updatedByProfileId
-                status
-                statusDescription
-                shippedAt
-                deliveredAt
-                cancelledAt
-                orderIndexId
-                toAddress {
-                    company
-                    line1
-                    line2
-                    city
-                    state
-                    postalCode
-                    country
-                    firstName
-                    lastName
-                    phoneNumber
-                }
-            }
-        }
-    }
-}
-
-query GetOrdersByGroupIdentifier($identifier: String!, $emailAddress: String) {
-    commerceOrdersByGroupIdentifier(identifier: $identifier, emailAddress: $emailAddress) {
-        ... on CommerceOrder {
-            id
-            batchIdentifier
-            holdOnShipping
-            fulfillmentStatus
-            emailAddress
-            identifier
-            lineItems {
-                createdAt
-                fulfilledQuantity
-                id
-                indexId
-                commerceOrderId
-                productVariantId
-                quantity
-                shippedQuantity
-                status
-                statusDescription
-                updatedAt
-            }
-            discounts {
-                code
-                createdAt
-                endsAt
-                id
-                startsAt
-                updatedAt
-                usageCount
-            }
-            payment {
-                amount
-                authorizedAt
-                cancelledAt
-                capturedAt
-                confirmedAt
-                createdAt
-                currencyCode
-                externalReferenceId
-                id
-                paymentProcessorType
-                status
-                statusDescription
-                updatedAt
-                walletEntryId
-            }
-            paymentId
-            paymentStatus
-            priceInfo {
-                amount
-                currencyCode
-                originalSubtotal
-                subtotal
-                lineItemPrices {
-                    amount
-                    indexId
-                    originalSubtotal
-                    subtotal
-                    tax
-                }
-                shippingRate {
-                    amount
-                    originalAmount
-                }
-                tax {
-                    shipping
-                    total
-                }
-            }
-            source
-            status
-            statusDescription
-            metadata
-            beneficiaryEmailAddress
-        }
-        ... on PublicCommerceOrder {
-            createdAt
-            identifier
-            batchIdentifier
-            status
-            paymentStatus
-            fulfillmentStatus
-            source
-        }
-    }
-}
-
-mutation CommerceCheckoutSessionCreateDirect($input: CommerceCheckoutSessionCreateDirectInput!) {
-    commerceCheckoutSessionCreateDirect(input: $input) {
-        id
-        createdAt
-        externalMetadata
-        status
-        completedAt
-        closedAt
-        failedCount
-        orders {
-            id
-            status
-            paymentStatus
-        }
-    }
-}
-
-query CommerceCheckoutSession($id: String!) {
-    commerceCheckoutSession(id: $id) {
-        id
-        createdAt
-        externalMetadata
-        status
-        completedAt
-        closedAt
-        failedCount
-        orders {
-            emailAddress
-            id
-            status
-            identifier
-            paymentStatus
-            fulfillmentStatus
-            fulfillmentSource
-            priceInfo {
-                amount
-                currencyCode
-                originalSubtotal
-                shippingRate {
-                    amount
-                    originalAmount
-                }
-                subtotal
-                tax {
-                    shipping
-                    total
-                }
-            }
-            shippingInfo {
-                shippingAddress {
-                    city
-                    company
-                    country
-                    firstName
-                    lastName
-                    line1
-                    line2
-                    phoneNumber
-                    postalCode
-                    state
-                }
-            }
-            lineItems {
-                id
-                commerceOrderId
-                productVariantId
-                quantity
-                fulfilledQuantity
-                shippedQuantity
-                status
-                statusDescription
-                createdAt
-                updatedAt
-            }
-            payment {
-                id
-                amount
-                paymentProcessorType
-                status
-                status
-                statusDescription
-                updatedAt
-                authorizedAt
-                currencyCode
-                paymentMethod {
-                    ... on PaymentMethodCreditCard {
-                        type
-                        paymentProcessorType
-                        last4
-                        cardType
-                    }
-                }
-            }
-            metadata
-        }
-    }
-}
-
-query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
-    commerceOrdersByCheckoutSession(checkoutSessionId: $checkoutSessionId) {
-        ... on PublicCommerceOrder {
-            identifier
-            batchIdentifier
-            status
-            fulfillmentStatus
-            lineItems {
-                id
-                status
-                productVariantId
-                indexId
-                quantity
-                shippedQuantity
-                fulfilledQuantity
-            }
-            paymentStatus
-            source
-            createdAt
-        }
-    }
-}
-
-# query CommerceOrdersByCheckoutSessionSignedIn($checkoutSessionId: String!) {
-#     commerceOrdersByCheckoutSession(checkoutSessionId: $checkoutSessionId) {
-#         ... on CommerceOrder {
-#             identifier
-#             batchIdentifier
-#             status
-#             source
-#             fulfillmentStatus
-#             lineItems {
-#                 id
-#                 commerceOrderId
-#                 status
-#                 productVariantId
-#                 indexId
-#                 quantity
-#                 shippedQuantity
-#                 fulfilledQuantity
-#                 updatedAt
-#             }
-#             paymentStatus
-#             metadata
-#             payment {
-#                 id
-#                 amount
-#                 paymentProcessorType
-#                 status
-#                 status
-#                 statusDescription
-#                 updatedAt
-#                 authorizedAt
-#                 currencyCode
-#                 paymentMethod {
-#                     ... on PaymentMethodCreditCard {
-#                         type
-#                         paymentProcessorType
-#                         last4
-#                         cardType
-#                     }
-#                 }
-#             }
-#             createdAt
-#         }
-#     }
-# }
