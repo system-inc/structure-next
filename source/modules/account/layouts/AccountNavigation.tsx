@@ -20,22 +20,30 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Dependencies - Icons
 import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.svg';
+import { usePathname } from 'next/navigation';
 
 // Component - AccountNavigation
 interface AccountNavigationInterface extends React.HTMLProps<HTMLElement> {}
 export function AccountNavigation(properties: AccountNavigationInterface) {
+    const pathname = usePathname();
+
     // Render the component
     return (
-        <nav className={mergeClassNames('hidden flex-shrink-0 flex-col space-y-4 md:flex', properties.className)}>
+        <nav className={mergeClassNames('hidden min-w-52 flex-shrink-0 flex-col gap-1 md:flex', properties.className)}>
             {/* AccountNavigation Links */}
             {AccountNavigationLinks.map(function (accountNavigationLink, accountNavigationLinkIndex) {
+                const isActiveRoute = pathname.includes(accountNavigationLink.href);
                 return (
                     <Link
                         key={accountNavigationLinkIndex}
                         href={accountNavigationLink.href}
-                        className="flex items-center transition-opacity hover:opacity-70"
+                        className={mergeClassNames(
+                            'flex items-center rounded-small px-3 py-2 text-sm font-medium transition-opacity',
+                            'hover:bg-opsis-background-secondary',
+                            isActiveRoute && 'bg-opsis-background-secondary',
+                        )}
                     >
-                        {accountNavigationLink.icon && <accountNavigationLink.icon className="mr-2.5 h-4 w-4" />}{' '}
+                        {accountNavigationLink.icon && <accountNavigationLink.icon className="mr-2.5 size-4" />}{' '}
                         <span className="">{accountNavigationLink.title}</span>
                     </Link>
                 );
