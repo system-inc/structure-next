@@ -609,7 +609,6 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
                 quantity
                 status
                 shippedQuantity
-                statusDescription
                 updatedAt
             }
             metadata
@@ -665,7 +664,6 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
                 }
                 paymentProcessorType
                 status
-                statusDescription
                 updatedAt
                 walletEntryId
             }
@@ -725,7 +723,6 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
                 shippedAt
                 source
                 status
-                statusDescription
                 toAddress {
                     city
                     company
@@ -757,7 +754,6 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
                 }
             }
             source
-            statusDescription
             status
             updatedAt
         }

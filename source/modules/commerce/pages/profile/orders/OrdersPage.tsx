@@ -21,7 +21,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Component - OrdersPage
 export function OrdersPage() {
-    const { data, loading } = useQuery(CommerceOrdersDocument);
+    const { data, loading } = useQuery(CommerceOrdersDocument, {
+        variables: {
+            pagination: {
+                itemsPerPage: 10,
+                itemIndex: 0,
+            },
+        },
+    });
 
     const orderData = data?.commerceOrders.items;
 
