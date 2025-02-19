@@ -7,6 +7,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -55,6 +56,7 @@ export function Authentication(properties: AuthenticationInterface) {
 
     // Hooks
     const router = useRouter();
+    const urlPath = useUrlPath();
     const { accountState, setSignedIn, signOut, setAuthenticationDialogOpen } = useAccount();
     const apolloClient = useApolloClient();
 
@@ -189,13 +191,16 @@ export function Authentication(properties: AuthenticationInterface) {
     }
     // Authenticated session success
     else if(authenticationSessionSuccess) {
+        // console.log('urlPath', urlPath, 'redirectUrl', redirectUrl);
+
         // If a redirect URL is provided, redirect to that URL
         if(redirectUrl) {
-            console.log('redirecting to', redirectUrl);
+            console.log('Redirecting to', redirectUrl);
             router.push(redirectUrl);
         }
-        else {
-            // router.push('/'); // Default redirect if no specific URL is provided
+        // Otherwise, redirect to root if on sign-in page
+        else if(urlPath == '/sign-in') {
+            router.push('/'); // Default redirect if no specific URL is provided
         }
     }
     // Challenge - Email Verification
