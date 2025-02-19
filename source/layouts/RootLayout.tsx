@@ -59,7 +59,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
     // Render the component
     return (
         // Suppress hydration warning necessary for dynamic theme setting between the server and the client
-        <html lang="en" className={mergeClassNames(properties.className)} suppressHydrationWarning>
+        <html lang="en" className={mergeClassNames(properties.className, 'scroll-smooth')} suppressHydrationWarning>
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
             <head>
