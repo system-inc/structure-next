@@ -81,7 +81,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
             <body className="bg-opsis-background-primary font-sans text-opsis-content-primary transition-colors">
                 {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content. Fixes any z-index issues with Popovers, etc. */}
                 <main
-                    className="relative isolate z-0 h-full min-h-screen bg-opsis-background-primary text-opsis-content-primary transition-colors"
+                    className="relative isolate z-0 h-[100dvh] overflow-y-auto overflow-x-clip bg-opsis-background-primary text-opsis-content-primary transition-colors"
                     vaul-drawer-wrapper=""
                 >
                     {/* Providers pass properties down to children */}
