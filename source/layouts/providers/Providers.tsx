@@ -15,6 +15,7 @@ import TipProvider from '@structure/source/common/popovers/TipProvider';
 import { IconContext } from '@phosphor-icons/react';
 import ThemeProvider from '@structure/source/theme/ThemeProvider';
 import { ThemeMode } from '@structure/source/theme/Theme';
+import ReducedMotionProvider from '@structure/source/utilities/accessibility/ReducedMotionProvider';
 
 export interface ProvidersInterface {
     children: React.ReactNode;
@@ -33,15 +34,17 @@ export function Providers({ accountSignedIn, themeFromCookies, children }: Provi
                     }}
                 >
                     <SharedStateProvider>
-                        <ThemeProvider themeFromCookies={themeFromCookies}>
-                            <AccountProvider signedIn={accountSignedIn}>
-                                <EngagementProvider>
-                                    <NoticeProvider>
-                                        <TipProvider delayDuration={100}>{children}</TipProvider>
-                                    </NoticeProvider>
-                                </EngagementProvider>
-                            </AccountProvider>
-                        </ThemeProvider>
+                        <ReducedMotionProvider>
+                            <ThemeProvider themeFromCookies={themeFromCookies}>
+                                <AccountProvider signedIn={accountSignedIn}>
+                                    <EngagementProvider>
+                                        <NoticeProvider>
+                                            <TipProvider delayDuration={100}>{children}</TipProvider>
+                                        </NoticeProvider>
+                                    </EngagementProvider>
+                                </AccountProvider>
+                            </ThemeProvider>
+                        </ReducedMotionProvider>
                     </SharedStateProvider>
                 </IconContext.Provider>
             </ApolloProvider>
