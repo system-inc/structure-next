@@ -49,7 +49,7 @@ export function LineLoadingAnimation(properties: LineLoadingAnimationProperties)
     return (
         <div className="relative flex h-0.5 w-full items-center justify-center">
             <div ref={domElementReference} className="h-full w-full overflow-hidden bg-light-4/10 dark:bg-light/10">
-                <animated.div style={barSpring} className="h-full bg-gradient-to-r from-blue/50 to-blue" />
+                <animated.div style={barSpring} className="h-full bg-linear-to-r from-blue/50 to-blue" />
             </div>
         </div>
     );

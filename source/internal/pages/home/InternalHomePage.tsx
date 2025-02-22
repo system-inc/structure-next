@@ -43,7 +43,7 @@ export function InternalHomePage() {
     return (
         <div className="mx-auto flex flex-row px-8 py-6">
             {/* Left column */}
-            <div className="flex flex-grow flex-col pr-6">
+            <div className="flex grow flex-col pr-6">
                 <div className="mb-10">
                     {/* <PanAndZoomContainer width={500} height={500} /> */}
 
@@ -54,7 +54,7 @@ export function InternalHomePage() {
                     {engagementLiveQueryState.loading && <div>Loading...</div>}
                     {engagementLiveQueryState.data && (
                         <>
-                            <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                            <div className="grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                                 <div className="flex items-center justify-between">
                                     <h2 className="mb-1 text-base">Users</h2>
                                     <p className="text-base">
@@ -66,7 +66,7 @@ export function InternalHomePage() {
                                 </p>
                             </div>
 
-                            <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                            <div className="mt-4 grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                                 <div className="flex items-center justify-between">
                                     <h2 className="mb-1 text-base">Views</h2>
                                 </div>
@@ -87,7 +87,7 @@ export function InternalHomePage() {
                                 </div>
                             </div>
 
-                            <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                            <div className="mt-4 grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                                 <div className="flex items-center justify-between">
                                     <h2 className="mb-1 text-base">Locations</h2>
                                 </div>
@@ -126,7 +126,7 @@ export function InternalHomePage() {
                                 </div>
                             </div>
 
-                            <div className="mt-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                            <div className="mt-4 grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                                 <div className="flex items-center justify-between">
                                     <h2 className="mb-1 text-base">Device Categories</h2>
                                 </div>

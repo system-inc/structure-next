@@ -194,7 +194,7 @@ export function ImageUpload(properties: ImageUploadInterface) {
                                     }
                                 },
                             })}
-                            className="my-4 font-light text-dark-4 file:mr-8 file:rounded-md file:border-none file:bg-light-4 file:p-2 file:text-dark file:hover:cursor-pointer file:dark:text-white"
+                            className="my-4 font-light text-dark-4 file:mr-8 file:rounded-md file:border-none file:bg-light-4 file:p-2 file:text-dark file:hover:cursor-pointer dark:file:text-white"
                         />
 
                         {imageSource !== undefined && (

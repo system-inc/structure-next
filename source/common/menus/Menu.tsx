@@ -19,7 +19,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Class Names - Menu
 export const menuClassName =
     // Layout and sizing
-    `flex flex-col focus-visible:outline-none ` +
+    `flex flex-col focus-visible:outline-hidden ` +
     // Border
     `rounded-md border border-light-4 dark:border-dark-4 ` +
     // Background and text
@@ -383,7 +383,7 @@ export function Menu(properties: MenuInterface) {
             {/* Menu Items */}
             {loadingItems ? (
                 // Loading items
-                <div className="flex flex-grow items-center justify-center p-4">
+                <div className="flex grow items-center justify-center p-4">
                     <div className="mr-1.5 animate-spin">
                         <BrokenCircleIcon className="h-5 w-5" />
                     </div>
@@ -391,7 +391,7 @@ export function Menu(properties: MenuInterface) {
                 </div>
             ) : loadingItemsError ? (
                 // Error loading items
-                <div className="flex flex-grow items-center justify-center p-4">
+                <div className="flex grow items-center justify-center p-4">
                     <div className="mr-1.5">
                         <ErrorIcon className="h-5 w-5" />
                     </div>
@@ -457,7 +457,7 @@ export function Menu(properties: MenuInterface) {
                         </div>
                     ) : (
                         // If there are no menu items
-                        <div className="flex flex-grow flex-col items-center justify-center">
+                        <div className="flex grow flex-col items-center justify-center">
                             <div className="p-4 text-sm">No results found.</div>
                         </div>
                     )}

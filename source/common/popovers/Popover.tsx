@@ -13,7 +13,7 @@ import { wrapForSlot } from '@structure/source/utilities/React';
 // Class Names - Popover
 export const popoverClassName =
     // Focus
-    `outline-none ` +
+    `outline-hidden ` +
     // Background and text
     `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
     // Border

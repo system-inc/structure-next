@@ -157,7 +157,7 @@ export function SupportPage(properties: SupportPageInterface) {
 
                             <p className="mt-2 text-sm dark:text-light-6">{postTopic.description}</p>
 
-                            <span className="flex-grow" />
+                            <span className="grow" />
 
                             <p className="neutral mt-5 align-bottom text-sm">{postTopic.postCount} articles</p>
                         </Link>

@@ -96,7 +96,7 @@ export function Code({
         <div
             {...properties}
             className={mergeClassNames(
-                'relative h-max overflow-clip rounded border border-light/10 bg-dark-3 p-1.5 font-mono tracking-wide transition-all focus-within:outline focus-within:ring dark:bg-dark',
+                'relative h-max overflow-clip rounded border border-light/10 bg-dark-3 p-1.5 font-mono tracking-wide transition-all focus-within:outline focus-within:ring-3 dark:bg-dark',
                 properties.className,
             )}
         >
@@ -153,7 +153,7 @@ export function Code({
 
                 {edit && (
                     <textarea
-                        className="z-0 h-full w-full resize-none overflow-visible whitespace-pre rounded bg-transparent font-mono tracking-wide text-transparent caret-slate-100 selection:bg-slate-200/20 focus:outline-none focus:ring-0"
+                        className="z-0 h-full w-full resize-none overflow-visible whitespace-pre rounded bg-transparent font-mono tracking-wide text-transparent caret-slate-100 selection:bg-slate-200/20 focus:outline-hidden focus:ring-0"
                         rows={code.split('\n').length}
                         style={{
                             marginLeft: showLineNumbers ?? true ? '2rem' : undefined,

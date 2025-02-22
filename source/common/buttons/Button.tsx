@@ -326,7 +326,7 @@ export const Button = React.forwardRef<ButtonElementType, ButtonInterface>(funct
                 // If text is provided, the icon will be to the right of the text
                 <div className="flex w-full items-center justify-between">
                     <div className="invisible h-5 w-5" />
-                    <span className="flex-grow px-4 text-center">{properties.processingText}</span>
+                    <span className="grow px-4 text-center">{properties.processingText}</span>
                     <div className="relative h-5 w-5">{processingAnimatedDiv}</div>
                 </div>
             ) : (
@@ -382,20 +382,20 @@ export const Button = React.forwardRef<ButtonElementType, ButtonInterface>(funct
                 // The variant is form input select and the button is loading
                 loading ? (
                     <>
-                        <div className="flex-grow" />
+                        <div className="grow" />
                         <BrokenCircleIcon className="ml-4 h-4 w-4 animate-spin text-neutral+2 dark:text-neutral-2" />
                     </>
                 ) : (
                     // The variant is form input select and the button is not loading
                     <>
-                        <div className="flex-grow" />
+                        <div className="grow" />
                         <ChevronDownIcon className="ml-4 h-4 w-4 text-neutral+2 dark:text-neutral-2" />
                     </>
                 )
             ) : // The variant is not a form input select
             loading ? (
                 <>
-                    <div className="flex-grow" />
+                    <div className="grow" />
                     <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin text-inherit" />
                 </>
             ) : null}

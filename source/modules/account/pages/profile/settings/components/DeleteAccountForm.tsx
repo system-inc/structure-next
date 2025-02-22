@@ -80,7 +80,7 @@ export function DeleteAccountForm(properties: DeleteAccountFormInterface) {
                     <Form
                         className="mt-6"
                         formInputs={[
-                            <FormInputText key="reason" id="reason" className="flex-grow" label="Reason (optional)" />,
+                            <FormInputText key="reason" id="reason" className="grow" label="Reason (optional)" />,
                         ]}
                         buttonProperties={{
                             children: 'Delete Account',

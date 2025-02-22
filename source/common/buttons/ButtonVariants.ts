@@ -17,7 +17,7 @@ const centeredButton =
 // Focus styles
 const focusStyle =
     // Focus
-    `focus-visible:outline-none focus-visible:ring-0`;
+    `focus-visible:outline-hidden focus-visible:ring-0`;
 
 // Hover styles: background and text color changes on hover
 const hoverStyle =
@@ -67,7 +67,7 @@ export const ButtonVariants = {
         // Focus
         `focus:border-transparent dark:focus:border-transparent ` +
         // Disabled
-        `disabled:opacity-100 disabled:bg-theme-light-primary-disabled disabled:dark:bg-theme-dark-primary-disabled ` +
+        `disabled:opacity-100 disabled:bg-theme-light-primary-disabled dark:disabled:bg-theme-dark-primary-disabled ` +
         // Border matches background
         `border border-transparent`,
     // Light variant: light background and border with hover and active states
@@ -138,11 +138,11 @@ export const ButtonVariants = {
     menuItem:
         `relative flex items-center justify-start font-normal cursor-default rounded-sm ` +
         // Focus states
-        `focus-border-none focus-visible:outline-none ` +
+        `focus-border-none focus-visible:outline-hidden ` +
         // Highlighted states
-        `data-[highlighted=true]:bg-light-2 data-[highlighted=true]:dark:bg-dark-3 ` +
+        `data-[highlighted=true]:bg-light-2 dark:data-[highlighted=true]:bg-dark-3 ` +
         // Active states
-        `data-[highlighted=true]:active:bg-light-3 data-[highlighted=true]:dark:active:bg-dark-4 ` +
+        `data-[highlighted=true]:active:bg-light-3 dark:data-[highlighted=true]:active:bg-dark-4 ` +
         // Disabled states
         `disabled:opacity-50`,
     formInputCheckbox:
@@ -164,7 +164,7 @@ export const ButtonVariants = {
         // Indeterminate
         `dark:data-[state=indeterminate]:bg-light dark:data-[state=indeterminate]:text-dark ` +
         // Focus
-        `focus-visible:outline-none ring-offset-background focus-visible:ring-offset-2 focus-visible:ring focus-visible:ring-1 ring-light`,
+        `focus-visible:outline-hidden ring-offset-background focus-visible:ring-offset-2 focus-visible:ring-3 focus-visible:ring-1 ring-light`,
     // Form Input Select variant: styles for buttons which trigger a popover menu for selecting an option
     formInputSelect:
         `${commonButton} ` +
@@ -183,7 +183,7 @@ export const ButtonVariants = {
         // Disabled
         `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
         // Focus
-        `focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`,
+        `focus:border-neutral dark:focus:border-light focus-visible:outline-hidden focus-visible:ring-0`,
     tableHeaderCell:
         `${commonButton} ` +
         // Text

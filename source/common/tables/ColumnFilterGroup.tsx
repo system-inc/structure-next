@@ -288,7 +288,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
-                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md text-sm text-neutral">
+                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md text-sm text-neutral">
                                     Where
                                 </p>
                             ) : conditionIndex === 1 ? (
@@ -311,7 +311,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm text-muted-foreground">
+                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm text-muted-foreground">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -430,14 +430,14 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             }}
                         />
                     ) : (
-                        <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm text-muted-foreground">
+                        <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm text-muted-foreground">
                             {columnFilterGroupData.operator.toLowerCase()}
                         </p>
                     )}
 
                     {/* Nested Filter Group */}
                     <ColumnFilterGroup
-                        className="flex flex-grow"
+                        className="flex grow"
                         columns={properties.columns}
                         columnFilterGroupData={filter}
                         onChange={function (updatedColumnFilterGroup) {

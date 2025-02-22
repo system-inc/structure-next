@@ -35,7 +35,7 @@ export function TicketList(properties: TicketListInterface) {
                 onStatusChange={properties.onStatusChange}
             />
 
-            <ScrollArea className="flex-grow">
+            <ScrollArea className="grow">
                 {properties.isLoading ? (
                     <div className="flex h-32 items-center justify-center">
                         <p className="neutral">Loading tickets...</p>

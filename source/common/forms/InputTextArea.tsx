@@ -19,9 +19,9 @@ export const commonClassNames =
     // Placeholder
     `placeholder:opacity-70 dark:placeholder:opacity-70 ` +
     // Placeholder (disabled)
-    `disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20 ` +
+    `disabled:placeholder:opacity-20 dark:disabled:placeholder:opacity-20 ` +
     // Disabled
-    `disabled:cursor-not-allowed disabled:text-opacity-20 disabled:dark:text-opacity-20`;
+    `disabled:cursor-not-allowed disabled:text-opacity-20 dark:disabled:text-opacity-20`;
 
 // Background styles
 export const backgroundClassNames =
@@ -38,7 +38,7 @@ export const borderStyleClassNames =
 // Focus styles: background and text color changes on hover
 export const focusStyleClassNames =
     // Focus
-    `transition-colors focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`;
+    `transition-colors focus:border-neutral dark:focus:border-light focus-visible:outline-hidden focus-visible:ring-0`;
 
 // Autofill styles
 export const autofillStyleClassNames = `autofill:bg-transparent dark:autofill:bg-transparent`;
@@ -53,7 +53,7 @@ export const InputTextAreaVariants = {
     search:
         `${commonClassNames} ${backgroundClassNames} ${borderStyleClassNames} ${focusStyleClassNames} ${autofillStyleClassNames} ` +
         // Focus
-        `transition-colors focus-visible:outline-none focus-visible:ring-0 ` +
+        `transition-colors focus-visible:outline-hidden focus-visible:ring-0 ` +
         // Layout and sizing
         `pl-9 pr-4 py-2 ` +
         // Border
@@ -63,7 +63,7 @@ export const InputTextAreaVariants = {
     menuSearch:
         `${commonClassNames} ${autofillStyleClassNames} ` +
         // Focus
-        `transition-colors focus-visible:outline-none focus-visible:ring-0 ` +
+        `transition-colors focus-visible:outline-hidden focus-visible:ring-0 ` +
         // Layout and sizing
         `w-full pl-9 pr-4 py-3 ` +
         // Border

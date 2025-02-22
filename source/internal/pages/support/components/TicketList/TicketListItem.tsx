@@ -39,7 +39,7 @@ export function TicketListItem(properties: TicketListItemInterface) {
             </div>
             <h4 className="text-sm font-medium">{ticket.title}</h4>
             {lastTicketComment?.content && (
-                <p className="neutral mt-1.5 overflow-hidden overflow-ellipsis whitespace-nowrap text-xs">
+                <p className="neutral mt-1.5 overflow-hidden text-ellipsis whitespace-nowrap text-xs">
                     {extractLatestEmailContent(lastTicketComment?.content)}
                 </p>
             )}

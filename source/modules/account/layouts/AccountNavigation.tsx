@@ -29,7 +29,7 @@ export function AccountNavigation(properties: AccountNavigationInterface) {
 
     // Render the component
     return (
-        <nav className={mergeClassNames('hidden min-w-52 flex-shrink-0 flex-col gap-1 md:flex', properties.className)}>
+        <nav className={mergeClassNames('hidden min-w-52 shrink-0 flex-col gap-1 md:flex', properties.className)}>
             {/* AccountNavigation Links */}
             {AccountNavigationLinks.map(function (accountNavigationLink, accountNavigationLinkIndex) {
                 const isActiveRoute = pathname.includes(accountNavigationLink.href);

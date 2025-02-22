@@ -46,7 +46,7 @@ export function AccountLayout(properties: AccountLayoutInterface) {
                             </div>
                         }
                     >
-                        <div className="flex-grow">{properties.children}</div>
+                        <div className="grow">{properties.children}</div>
                     </React.Suspense>
                 </div>
             </div>

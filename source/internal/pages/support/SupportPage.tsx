@@ -189,8 +189,8 @@ export function SupportPage() {
                             />
 
                             {/* Comments */}
-                            <ScrollArea className="flex flex-grow" ref={commentsContainerRef}>
-                                <div className="flex flex-grow flex-col justify-end">
+                            <ScrollArea className="flex grow" ref={commentsContainerRef}>
+                                <div className="flex grow flex-col justify-end">
                                     <div className="flex flex-col space-y-2">
                                         {selectedTicket.comments.map(function (comment) {
                                             const latestEmailContent = extractLatestEmailContent(comment.content);

@@ -19,7 +19,7 @@ export function PlaceholderAnimation(properties: PlaceholderAnimationProperties)
                 properties.className,
             )}
         >
-            <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-light-4 to-transparent dark:via-dark-3"></div>
+            <div className="animate-shimmer absolute inset-0 bg-linear-to-r from-transparent via-light-4 to-transparent dark:via-dark-3"></div>
         </div>
     );
 }

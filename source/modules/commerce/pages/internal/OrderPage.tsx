@@ -123,7 +123,7 @@ export function OrderPage(properties: OrderPageProperties) {
 
             <div className="grid gap-6 md:grid-cols-2">
                 {/* Action Buttons */}
-                <div className="flex-grow rounded-lg border border-light-4 p-5 md:col-span-2 dark:border-dark-4 dark:shadow-dark-4/30">
+                <div className="grow rounded-lg border border-light-4 p-5 md:col-span-2 dark:border-dark-4 dark:shadow-dark-4/30">
                     <div className="flex gap-4">
                         <Button variant="primary">Mark as Fulfilled</Button>
                         <Button>Send Email</Button>
@@ -132,7 +132,7 @@ export function OrderPage(properties: OrderPageProperties) {
                 </div>
 
                 {/* Order Summary */}
-                <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                <div className="grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                     <h2 className="mb-4 text-lg font-medium">Order Summary</h2>
                     <div className="space-y-2">
                         <div className="flex justify-between">
@@ -157,7 +157,7 @@ export function OrderPage(properties: OrderPageProperties) {
                 </div>
 
                 {/* Customer Information */}
-                <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                <div className="grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                     <h2 className="mb-4 text-lg font-medium">Customer Information</h2>
                     <div className="space-y-4">
                         <div>
@@ -191,7 +191,7 @@ export function OrderPage(properties: OrderPageProperties) {
                 </div>
 
                 {/* Line Items */}
-                <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                <div className="grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                     <h2 className="mb-4 text-lg font-medium">Line Items</h2>
                     <div className="divide-y">
                         {order.lineItems?.map((item) => (
@@ -212,7 +212,7 @@ export function OrderPage(properties: OrderPageProperties) {
 
                 {/* Payment Details */}
                 {order.payment && (
-                    <div className="flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
+                    <div className="grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
                         <h2 className="mb-4 text-lg font-medium">Payment Details</h2>
                         <div className="space-y-2">
                             <div className="flex justify-between">
@@ -232,7 +232,7 @@ export function OrderPage(properties: OrderPageProperties) {
                 )}
 
                 {/* Order Timeline */}
-                <div className="flex-grow rounded-lg border border-light-4 p-5 md:col-span-2 dark:border-dark-4 dark:shadow-dark-4/30">
+                <div className="grow rounded-lg border border-light-4 p-5 md:col-span-2 dark:border-dark-4 dark:shadow-dark-4/30">
                     <h2 className="mb-4 text-lg font-medium">Order Timeline</h2>
                     <div className="ml-4 border-l-2 border-gray-200">
                         {[
@@ -254,7 +254,7 @@ export function OrderPage(properties: OrderPageProperties) {
                 </div>
 
                 {/* Raw Data Viewer */}
-                <div className="flex-grow rounded-lg border border-light-4 p-5 md:col-span-2 dark:border-dark-4 dark:shadow-dark-4/30">
+                <div className="grow rounded-lg border border-light-4 p-5 md:col-span-2 dark:border-dark-4 dark:shadow-dark-4/30">
                     <Button onClick={() => setIsJsonVisible(!isJsonVisible)}>
                         {isJsonVisible ? 'Hide' : 'Show'} Raw Data
                     </Button>

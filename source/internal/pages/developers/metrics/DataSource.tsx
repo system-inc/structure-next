@@ -510,7 +510,7 @@ export function DataSource(properties: DataSourceInterface) {
             {/* Drag Icon */}
             <div
                 {...properties.dragEventListener}
-                className={`relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab hover:bg-dark-4/10 active:cursor-grabbing hover:dark:bg-light-4/10 
+                className={`relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab hover:bg-dark-4/10 active:cursor-grabbing dark:hover:bg-light-4/10 
                 `}
             >
                 <DragIcon className="h-full w-full rotate-90" />
@@ -559,7 +559,7 @@ export function DataSource(properties: DataSourceInterface) {
                         }
                     >
                         <div
-                            className="h-6 w-6 flex-shrink-0 cursor-pointer rounded-md"
+                            className="h-6 w-6 shrink-0 cursor-pointer rounded-md"
                             style={{
                                 backgroundColor: properties.settings.color,
                             }}

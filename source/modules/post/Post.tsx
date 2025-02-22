@@ -192,7 +192,7 @@ export function Post(properties: PostInterface) {
                     />
                 )}
 
-                <div className="flex-grow">
+                <div className="grow">
                     {/* Title and Topics */}
                     <div className={mergeClassNames('', properties.titleContainerClassName)}>
                         {/* Node Before Title */}

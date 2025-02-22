@@ -24,9 +24,9 @@ export const commonInputText =
     // Placeholder
     `placeholder:opacity-70 dark:placeholder:opacity-70 ` +
     // Placeholder (disabled)
-    `disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20 ` +
+    `disabled:placeholder:opacity-20 dark:disabled:placeholder:opacity-20 ` +
     // Disabled
-    `disabled:cursor-not-allowed disabled:text-opacity-20 disabled:dark:text-opacity-20`;
+    `disabled:cursor-not-allowed disabled:text-opacity-20 dark:disabled:text-opacity-20`;
 
 // Background styles
 export const backgroundStyle =
@@ -43,7 +43,7 @@ export const borderStyle =
 // Focus styles: background and text color changes on hover
 export const focusStyle =
     // Focus
-    `transition-colors focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`;
+    `transition-colors focus:border-neutral dark:focus:border-light focus-visible:outline-hidden focus-visible:ring-0`;
 
 // Autofill styles
 export const autofillStyle = `autofill:bg-transparent dark:autofill:bg-transparent`;
@@ -58,7 +58,7 @@ export const InputTextVariants = {
     search:
         `${commonInputText} ${backgroundStyle} ${borderStyle} ${focusStyle} ${autofillStyle} ` +
         // Focus
-        `transition-colors focus-visible:outline-none focus-visible:ring-0 ` +
+        `transition-colors focus-visible:outline-hidden focus-visible:ring-0 ` +
         // Layout and sizing
         `pl-9 pr-4 h-9 ` +
         // Border
@@ -68,7 +68,7 @@ export const InputTextVariants = {
     menuSearch:
         `${commonInputText} ${autofillStyle} ` +
         // Focus
-        `transition-colors focus-visible:outline-none focus-visible:ring-0 ` +
+        `transition-colors focus-visible:outline-hidden focus-visible:ring-0 ` +
         // Layout and sizing
         `w-full pl-9 pr-4 py-3 ` +
         // Border

@@ -118,7 +118,7 @@ export function PostControls(properties: PostControlsInterface) {
 
             <div className="flex items-center space-x-2">
                 <ProfileLink
-                    className="flex-shrink-0"
+                    className="shrink-0"
                     username={properties.createdByProfile?.username ?? 'anonymous'}
                     displayName={properties.createdByProfile?.displayName ?? 'Anonymous'}
                     imageUrls={

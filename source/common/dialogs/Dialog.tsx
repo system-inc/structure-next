@@ -20,7 +20,7 @@ export const dialogOverlayClassName =
     // Position and z-index
     'fixed inset-0 z-50 ' +
     // Background and backdrop
-    'bg-background/80 backdrop-blur-sm ' +
+    'bg-background/80 backdrop-blur-xs ' +
     // Animation states
     'data-[state=open]:animate-in data-[state=open]:fade-in-0 ' +
     // Fade animation
@@ -33,7 +33,7 @@ export const dialogCloseClassName =
     // Border
     'rounded-sm  ' +
     // Hover and focus states
-    'cursor-pointer transition-opacity opacity-70 hover:opacity-100 ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ' +
+    'cursor-pointer transition-opacity opacity-70 hover:opacity-100 ring-offset-background focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 ' +
     // Disabled state
     'disabled:pointer-events-none ' +
     // State-specific styles
@@ -54,7 +54,7 @@ export const dialogFooterClassName =
 // Class Names - Dialog Content - Positioned Centered
 export const dialogContentPositionCenteredClassName =
     // Position, outline, and z-index
-    'outline-none fixed left-[50%] top-[50%] z-50 ' +
+    'outline-hidden fixed left-[50%] top-[50%] z-50 ' +
     // Flex layout and alignment
     'w-full max-w-[90vw] md:max-w-lg max-h-[95vh] translate-x-[-50%] translate-y-[-50%] ' +
     // Animation states
@@ -67,7 +67,7 @@ export const dialogContentPositionCenteredClassName =
 // Class Names - Dialog Content - Positioned Top Fixed
 export const dialogContentPositionTopFixedClassName =
     // Position, outline, and z-index
-    'outline-none fixed left-[50%] top-[10%] z-50 ' +
+    'outline-hidden fixed left-[50%] top-[10%] z-50 ' +
     // Grid layout and alignment
     'grid w-full max-w-lg translate-x-[-50%] translate-y-[0%] gap-4' +
     // Animation states

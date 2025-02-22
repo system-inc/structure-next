@@ -149,7 +149,7 @@ export function FormInput({
                 properties.validationResult.errors.length > 0 &&
                 properties.validationResult.errors.map((validationError, validationErrorIndex) => (
                     <div key={validationErrorIndex} className="mt-1.5 flex items-center space-x-1 text-xs text-red-500">
-                        <ErrorIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationError.message}</span>
+                        <ErrorIcon className="h-4 w-4 shrink-0" /> <span>{validationError.message}</span>
                     </div>
                 ))}
 
@@ -163,7 +163,7 @@ export function FormInput({
                         key={validationSuccessIndex}
                         className="mt-1.5 flex items-center space-x-1 text-xs text-green-600 dark:text-green-500"
                     >
-                        <CheckCircledIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationSuccess.message}</span>
+                        <CheckCircledIcon className="h-4 w-4 shrink-0" /> <span>{validationSuccess.message}</span>
                     </div>
                 ))}
 

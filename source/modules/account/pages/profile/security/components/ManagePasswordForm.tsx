@@ -93,7 +93,7 @@ export function ManagePasswordForm(properties: ManagePasswordFormInterface) {
                             <FormInputText
                                 key="newPassword"
                                 id="newPassword"
-                                className="flex-grow"
+                                className="grow"
                                 label="New Password"
                                 type="password"
                                 validationSchema={new ValidationSchema().required().password()}

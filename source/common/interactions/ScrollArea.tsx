@@ -16,7 +16,7 @@ export const scrollAreaScrollbarClassName =
     // Layout
     'flex touch-none select-none px-[4px] py-[2px] ' +
     // Hover - Only show the scrollbar on hover when the thumb is visible
-    'data-[state=visible]:hover:bg-neutral+6/30 data-[state=visible]:dark:hover:bg-dark-4/30 ' +
+    'data-[state=visible]:hover:bg-neutral+6/30 dark:data-[state=visible]:hover:bg-dark-4/30 ' +
     // Group
     'group ' +
     // Animation - Animate the hover colors
@@ -29,7 +29,7 @@ export const scrollAreaThumbClassName =
     // Layout
     'relative flex-1 rounded before:absolute before:left-1/2 before:top-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:translate-x-[50%] before:translate-y-[50%] ' +
     // Colors
-    'bg-dark/60 hover:bg-dark/75 dark:bg-neutral-6/60 hover:dark:bg-neutral-6/75 ' +
+    'bg-dark/60 hover:bg-dark/75 dark:bg-neutral-6/60 dark:hover:bg-neutral-6/75 ' +
     // Animation
     'duration-300 ease-out transition-opacity ' +
     // Animate in when the group is visible

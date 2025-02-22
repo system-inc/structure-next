@@ -392,12 +392,12 @@ const DraggableItem = ({
                     className={mergeClassNames(
                         grabHandle
                             ? 'flex items-center justify-start'
-                            : 'touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing',
+                            : 'touch-none select-none hover:cursor-grab active:cursor-grabbing active:**:cursor-grabbing',
                         'pointer-events-none absolute -z-10 w-full opacity-50',
                     )}
                 >
                     {grabHandle ? (
-                        <div className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing">
+                        <div className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing active:**:cursor-grabbing">
                             {grabHandle}
                         </div>
                     ) : null}
@@ -410,7 +410,7 @@ const DraggableItem = ({
                 className={mergeClassNames(
                     grabHandle
                         ? 'flex items-center justify-start'
-                        : 'touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing',
+                        : 'touch-none select-none hover:cursor-grab active:cursor-grabbing active:**:cursor-grabbing',
                     leaveGhost ? 'opacity-100' : '',
                 )}
                 // Must be applied to the element directly rather than through `useGesture` or in the `useDrag` hook
@@ -419,7 +419,7 @@ const DraggableItem = ({
                 {grabHandle ? (
                     <div
                         ref={handleRef}
-                        className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing"
+                        className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing active:**:cursor-grabbing"
                     >
                         {grabHandle}
                     </div>

@@ -35,8 +35,8 @@ export function TicketComments({ comments, onImageClick, globalAttachmentIndex }
 
     // Render the component
     return (
-        <ScrollArea className="flex flex-grow" ref={commentsContainerReference}>
-            <div className="flex flex-grow flex-col justify-end">
+        <ScrollArea className="flex grow" ref={commentsContainerReference}>
+            <div className="flex grow flex-col justify-end">
                 <div className="flex flex-col space-y-2">
                     {comments.map((comment) => (
                         <div key={comment.id}>
