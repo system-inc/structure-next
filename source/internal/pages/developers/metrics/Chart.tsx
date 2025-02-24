@@ -3,8 +3,6 @@
 // Dependencies - Core React Libraries
 import React from 'react';
 
-// Dependencies - Configuration
-import tailwindConfiguration from '@project/tailwind.config';
 
 // Dependencies - Main Components
 import { DataSourceWithMetricsType } from './Metrics';
@@ -651,7 +649,7 @@ export const Chart = ({
                 <CartesianGrid
                     // strokeDasharray="3 3"
                     stroke={
-                        themeClassName === 'light' ? undefined : tailwindConfiguration.theme.extend.colors['dark-4']
+                        themeClassName === 'light' ? undefined : 'var(--dark-4)'
                     }
                     vertical={errorMessage ? true : false}
                 />
@@ -681,7 +679,7 @@ export const Chart = ({
                                           ? // Bar chart stroke color
                                             'rgba(255, 255, 255, 0.05)'
                                           : // Other chart types stroke color
-                                            tailwindConfiguration.theme.extend.colors['dark-4'],
+                                            'var(--dark-4)',
                                 // If the chart is a bar chart, the stroke width is the number of data points divided by the width of the chart minus the margins
                                 strokeWidth:
                                     chartType === 'bar'
