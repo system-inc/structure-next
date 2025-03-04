@@ -12,7 +12,7 @@ import GearIcon from '@structure/assets/icons/tools/GearIcon.svg';
 // Account Navigation Links
 export const AccountNavigationLinks = [
     { href: '/account/profile', title: 'Profile', icon: UserIcon },
-    { href: '/account/orders', title: 'Orders', icon: BagIcon },
+    // { href: '/account/orders', title: 'Orders', icon: BagIcon },
     { href: '/account/email-addresses', title: 'Email Addresses', icon: MailIcon },
     { href: '/account/security', title: 'Security', icon: KeyIcon },
     // { href: '/account/addresses', title: 'Addresses', icon: MapLocationIcon },

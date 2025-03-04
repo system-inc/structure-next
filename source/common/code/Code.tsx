@@ -52,7 +52,7 @@ export function Code({
     React.useEffect(
         function () {
             if(setCode) {
-                function handleKeyDown(event: KeyboardEvent) {
+                const handleKeyDown = function (event: KeyboardEvent) {
                     if(event.key === 'Tab') {
                         event.preventDefault();
                         const target = event.target as HTMLTextAreaElement;
@@ -64,7 +64,7 @@ export function Code({
 
                         target.selectionStart = target.selectionEnd = start + 2;
                     }
-                }
+                };
 
                 document.addEventListener('keydown', handleKeyDown);
                 return () => document.removeEventListener('keydown', handleKeyDown);
