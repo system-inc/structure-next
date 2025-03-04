@@ -34,7 +34,7 @@ export function AccountLayout(properties: AccountLayoutInterface) {
         <AuthorizationLayout>
             <AccountNavigationMobile />
             <div className="container">
-                <div className="mb-20 mt-10 md:flex md:gap-12">
+                <div className="mb-20 mt-10 md:flex md:space-x-32">
                     {/* Account Navigation */}
                     <AccountNavigation className="" />
 
