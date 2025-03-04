@@ -5,8 +5,7 @@ import React from 'react';
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
 // Component - OrdersAbandonedCheckoutsPage
-export type OrdersAbandonedCheckoutsPageProperties = {};
-export function OrdersAbandonedCheckoutsPage(properties: OrdersAbandonedCheckoutsPageProperties) {
+export function OrdersAbandonedCheckoutsPage() {
     // Render the component
     return (
         <div className="px-6 py-4">
