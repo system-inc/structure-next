@@ -202,8 +202,8 @@ export function OrderPage(properties: OrderPageProperties) {
                                 </div>
                                 <div className="mt-1 text-sm">
                                     <div>Quantity: {item.quantity}</div>
-                                    <div>Fulfilled: {item.fulfilledQuantity}</div>
-                                    <div>Shipped: {item.shippedQuantity}</div>
+                                    {/* <div>Fulfilled: {item.fulfilledQuantity}</div> */}
+                                    {/* <div>Shipped: {item.shippedQuantity}</div> */}
                                 </div>
                             </div>
                         ))}
