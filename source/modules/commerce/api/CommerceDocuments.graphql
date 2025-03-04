@@ -448,8 +448,8 @@ query CommerceOrders($pagination: PaginationInput!) {
 
 # Commerce Order Query
 # Used to get a single order by identifier and email address
-query CommerceOrder($orderIdentifier: String!, $emailAddress: String) {
-    commerceOrder(identifier: $orderIdentifier, emailAddress: $emailAddress) {
+query CommerceOrder($orderIdentifier: String!) {
+    commerceOrder(identifier: $orderIdentifier) {
         ... on CommerceOrder {
             identifier # The order identifier XXX-XXX-XXX
             status # The overall order status
