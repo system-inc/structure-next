@@ -220,6 +220,7 @@ query AccountsPrivileged($pagination: PaginationInput!) {
                 displayName
                 givenName
                 familyName
+                countryCode
                 images {
                     url
                     variant

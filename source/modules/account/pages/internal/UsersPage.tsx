@@ -26,6 +26,30 @@ import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtili
 // Dependencies - Utilities
 import { iso8601Date, timeAgo } from '@structure/source/utilities/Time';
 
+// Function to convert a country code to a flag emoji
+function countryCodeToFlagEmoji(countryCode?: string | null): string {
+    if(!countryCode) return '🌐'; // Globe emoji for unknown country
+
+    // Country codes are two-letter ISO 3166-1 codes
+    // Flag emojis are created by converting each letter to regional indicator symbols
+    // Each letter is mapped to a Unicode regional indicator symbol (base + letter position)
+    const base = 127397; // Regional indicator symbol base (127462 - 65)
+
+    try {
+        const letterPair = countryCode.toUpperCase();
+        if(letterPair.length !== 2) return '🌐';
+
+        // Convert each letter to regional indicator symbol and join
+        return (
+            String.fromCodePoint(letterPair.charCodeAt(0) + base) +
+            String.fromCodePoint(letterPair.charCodeAt(1) + base)
+        );
+    }
+    catch(error) {
+        return '🌐'; // Fallback to globe emoji
+    }
+}
+
 // Component - UsersPage
 export function UsersPage() {
     // Hooks and State
@@ -209,7 +233,12 @@ export function UsersPage() {
                                     <div className="hidden truncate text-sm md:block">
                                         {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                     </div>
-                                    <div className="hidden truncate md:block">🇺🇸</div>
+                                    <div
+                                        className="hidden truncate md:block"
+                                        title={account.profiles[0]?.countryCode || 'Unknown'}
+                                    >
+                                        {countryCodeToFlagEmoji(account.profiles[0]?.countryCode)}
+                                    </div>
                                     <div className="hidden truncate text-sm md:block">
                                         {iso8601Date(new Date(account.profiles[0]?.createdAt))} (
                                         {timeAgo(new Date(account.profiles[0]?.createdAt).getTime(), true)})
