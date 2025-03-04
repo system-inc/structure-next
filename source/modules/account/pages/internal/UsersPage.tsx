@@ -3,7 +3,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import Link from 'next/link';
-import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNavigation';
+import { useRouter, useUrlPath, useUrlSearchParameters } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
@@ -53,9 +53,15 @@ function countryCodeToFlagEmoji(countryCode?: string | null): string {
 // Component - UsersPage
 export function UsersPage() {
     // Hooks and State
+    const router = useRouter();
+    const pathname = useUrlPath();
     const urlSearchParameters = useUrlSearchParameters();
+    
+    // Get pagination parameters from URL
     const page = parseInt(urlSearchParameters?.get('page') as string) || 1;
-    const itemsPerPage = 10;
+    const defaultItemsPerPage = 10;
+    const itemsPerPage = parseInt(urlSearchParameters?.get('itemsPerPage') as string) || defaultItemsPerPage;
+    
     const [totalUsers, setTotalUsers] = React.useState<number>(0);
     const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
     const [selectedUser, setSelectedUser] = React.useState<{ emailAddress: string; username: string } | null>(null);
@@ -91,6 +97,19 @@ export function UsersPage() {
         },
         [accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.itemsTotal],
     );
+
+    // Function to handle pagination changes
+    async function handlePaginationChange(newItemsPerPage: number, newPage: number) {
+        // Create new URLSearchParams
+        const newUrlSearchParams = new URLSearchParams(urlSearchParameters?.toString() || '');
+        
+        // Update the parameters
+        newUrlSearchParams.set('page', newPage.toString());
+        newUrlSearchParams.set('itemsPerPage', newItemsPerPage.toString());
+        
+        // Navigate to the new URL with updated parameters
+        router.push(`${pathname}?${newUrlSearchParams.toString()}`);
+    }
 
     // Function to handle user deletion
     async function handleDeleteConfirm() {
@@ -274,12 +293,11 @@ export function UsersPage() {
                             pagesTotal={
                                 accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.pagesTotal ?? 0
                             }
-                            useLinks={true}
-                            itemsPerPageControl={false}
-                            pageInputControl={false}
+                            useLinks={false}
+                            itemsPerPageControl={true}
+                            pageInputControl={true}
+                            onChange={handlePaginationChange}
                         />
-                        {/* Total Items */}
-                        {totalUsers !== 0 && <div>{totalUsers} users</div>}
                     </div>
                 )}
             </div>
