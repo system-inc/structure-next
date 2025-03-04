@@ -602,13 +602,11 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
             lineItems {
                 commerceOrderId
                 createdAt
-                fulfilledQuantity
                 id
                 indexId
                 productVariantId
                 quantity
                 status
-                shippedQuantity
                 updatedAt
             }
             metadata
