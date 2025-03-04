@@ -5,7 +5,7 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import { SupportFeedbackDialog } from '@structure/source/modules/support/SupportFeedbackDialog';
+import { SupportFeedbackDialog } from '@structure/source/modules/support/components/SupportFeedbackDialog';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

@@ -5,9 +5,9 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
+import { SupportFeedback } from '@structure/source/modules/support/components/SupportFeedback';
 import { Button } from '@structure/source/common/buttons/Button';
-import { SupportSearch } from '@structure/source/modules/support/SupportSearch';
+import { SupportSearch } from '@project/source/modules/support/components/SupportSearch';
 
 // Dependencies - API
 import { SupportPostQuery } from '@project/source/api/GraphQlGeneratedCode';

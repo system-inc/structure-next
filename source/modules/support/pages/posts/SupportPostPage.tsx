@@ -7,7 +7,7 @@ import Link from 'next/link';
 // Dependencies - Main Components
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 import { NavigationTrail } from '@structure/source/common/navigation/trail/NavigationTrail';
-import { SupportFeedback } from '@structure/source/modules/support/SupportFeedback';
+import { SupportFeedback } from '@structure/source/modules/support/components/SupportFeedback';
 import { Button } from '@structure/source/common/buttons/Button';
 import { Markdown } from '@structure/source/common/markdown/Markdown';
 
