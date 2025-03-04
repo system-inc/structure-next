@@ -23,11 +23,11 @@ import {
 import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';
 
 // Dependencies - Styles
-import { useTheme } from '@structure/source/theme/ThemeProvider';
+// import { useTheme } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { darkThemeClassName } from '@structure/source/theme/Theme';
+// import { darkThemeClassName } from '@structure/source/theme/Theme';
 
 // Component - SideNavigationLayoutNavigationSideToggle
 export interface SideNavigationLayoutNavigationSideToggleInterface {

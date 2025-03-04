@@ -28,9 +28,6 @@ import {
     AccountAuthenticationSignInCompleteDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
-// Dependencies - Styles
-// import { useTheme } from '@structure/source/theme/ThemeProvider';
-
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 

@@ -8,7 +8,7 @@ import React from 'react';
 // Component - NotSignedIn
 export function NotSignedIn() {
     // TODO: Clean this up. Just a quick solution for now.
-    const pathName = usePathname();
+    const pathName = usePathname() ?? '';
     const router = useRouter();
 
     // Redirect to sign in with the current path as the redirect path

@@ -30,7 +30,7 @@ import { iso8601Date, timeAgo } from '@structure/source/utilities/Time';
 export function UsersPage() {
     // Hooks and State
     const urlSearchParameters = useUrlSearchParameters();
-    const page = parseInt(urlSearchParameters.get('page') as string) || 1;
+    const page = parseInt(urlSearchParameters?.get('page') as string) || 1;
     const itemsPerPage = 10;
     const [totalUsers, setTotalUsers] = React.useState<number>(0);
     const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);

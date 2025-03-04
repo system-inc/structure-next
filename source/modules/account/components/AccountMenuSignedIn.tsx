@@ -1,31 +1,24 @@
 // Dependencies - React and Next.js
 import React from 'react';
+import Link from 'next/link';
 
 // Dependencies - Account
 import { Account } from '@structure/source/modules/account/Account';
-import { PopoverItem, PopoverLink, PopoverSeparator } from '@project/source/ui/base/Popover';
-import { User, Wrench } from '@phosphor-icons/react';
-import AccountBannerButton from './AccountBannerButton';
 
 // Component - AccountMenu
 export type AccountMenuSignedInProperties = {
     account: Account;
-    profileImage: {
-        url?: string;
-        alt?: string;
-    };
-    closePopover: () => void;
 };
-export function AccountMenuSignedIn({ account, closePopover }: AccountMenuSignedInProperties) {
+export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
     // Email
-    const emailAddress = account.emailAddress;
+    const emailAddress = properties.account.emailAddress;
 
     // Given and family names
-    const givenName = account.profile?.givenName;
-    const familyName = account.profile?.familyName;
+    const givenName = properties.account.profile?.givenName;
+    const familyName = properties.account.profile?.familyName;
 
     // Set the display name
-    let displayName = account.profile?.displayName;
+    let displayName = properties.account.profile?.displayName;
 
     // If there is display name
     if(!displayName) {
@@ -39,49 +32,43 @@ export function AccountMenuSignedIn({ account, closePopover }: AccountMenuSigned
         }
     }
 
-    const links = [
-        // Defaults
-        [
-            {
-                href: '/account/profile',
-                text: 'Profile',
-                icon: User,
-            },
-        ],
-        // If signed in
-        account.isAdministator()
-            ? [
-                  {
-                      href: '/internal',
-                      text: 'Internal',
-                      icon: Wrench,
-                  },
-              ]
-            : [],
-    ]
-        // Flatten the arrays
-        .flat();
-
     // Render the component
     return (
-        <React.Fragment>
+        <div className="w-full">
             {/* Email and role */}
-            <PopoverItem asChild>
-                <AccountBannerButton />
-            </PopoverItem>
+            <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
+                <Link
+                    tabIndex={1}
+                    className="whitespace-nowrap font-medium hover:cursor-pointer"
+                    href="/account/profile"
+                >
+                    {displayName}
+                </Link>
+                {/* If the account is an administrator */}
+                {properties.account.isAdministator() && (
+                    <p className="text-xs text-dark-4 dark:text-white/50">Administrator</p>
+                )}
+            </div>
 
-            <PopoverSeparator />
+            <div className="pt-4">
+                <Link
+                    className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-primary/5"
+                    href="/account/profile"
+                >
+                    Profile
+                </Link>
 
-            {/* Links */}
-            {links.map(function (link, index) {
-                return (
-                    <PopoverLink key={index} href={link.href} onClick={closePopover}>
-                        <link.icon className="mr-3" />
-                        <span>{link.text}</span>
-                    </PopoverLink>
-                );
-            })}
-        </React.Fragment>
+                {/* If the account is an administrator */}
+                {properties.account.isAdministator() && (
+                    <Link
+                        className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-primary/5"
+                        href="/internal"
+                    >
+                        Internal
+                    </Link>
+                )}
+            </div>
+        </div>
     );
 }
 

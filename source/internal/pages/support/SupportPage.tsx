@@ -27,14 +27,16 @@ import { formatDateWithTimeIfToday } from '@structure/source/utilities/Time';
 export function SupportPage() {
     // URL Parameters
     const urlSearchParameters = useUrlSearchParameters();
-    const page = parseInt(urlSearchParameters.get('page') as string) || 1;
+    const page = parseInt(urlSearchParameters?.get('page') as string) || 1;
     const itemsPerPage = 20;
 
     // Add router
     const router = useRouter();
 
     // State & Refs
-    const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(urlSearchParameters.get('ticket'));
+    const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(
+        urlSearchParameters?.get('ticket') ?? null,
+    );
     const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
     const commentsContainerRef = React.useRef<HTMLDivElement>(null);
     const [selectedStatus, setSelectedStatus] = React.useState<string>('Open');
@@ -63,7 +65,7 @@ export function SupportPage() {
     const handleTicketSelection = React.useCallback(
         function (ticketId: string) {
             setSelectedTicketId(ticketId);
-            const newParams = new URLSearchParams(urlSearchParameters);
+            const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
             newParams.set('ticket', ticketId);
             router.replace(`?${newParams.toString()}`);
         },
@@ -89,7 +91,7 @@ export function SupportPage() {
     React.useEffect(
         function () {
             const items = ticketsQuery.data?.supportTicketsPrivileged?.items;
-            const urlTicketId = urlSearchParameters.get('ticket');
+            const urlTicketId = urlSearchParameters?.get('ticket');
 
             const firstTicket = items?.[0];
 

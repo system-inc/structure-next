@@ -5,7 +5,7 @@ import React from 'react';
 import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
 
 // Dependencies - Styles
-import { useTheme } from '@structure/source/theme/ThemeProvider';
+// import { useTheme } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -105,7 +105,7 @@ export const InputTextArea = React.forwardRef<InputReferenceInterface, InputText
     reference: React.Ref<InputReferenceInterface>,
 ) {
     // Hooks
-    const { themeClassName } = useTheme();
+    // const { themeClassName } = useTheme();
 
     // References
     const inputReference = React.useRef<HTMLTextAreaElement>(null);
@@ -183,7 +183,7 @@ export const InputTextArea = React.forwardRef<InputReferenceInterface, InputText
         <div className={mergeClassNames('relative', properties.containerClassName)}>
             <textarea
                 ref={inputReference}
-                key={themeClassName} // Force the component to re-render when the theme changes, so that the autofill color is correct
+                // key={themeClassName} // Force the component to re-render when the theme changes, so that the autofill color is correct
                 className={mergeClassNames(
                     InputTextAreaVariants[variant],
                     InputTextAreaSizes[size],

@@ -31,7 +31,7 @@ export interface NavigationTrailInterface {
 }
 export function NavigationTrail(properties: NavigationTrailInterface) {
     // Hooks
-    const currentUrlPath = useUrlPath();
+    const currentUrlPath = useUrlPath() ?? '';
 
     // Defaults
     const urlPath = properties.urlPath || currentUrlPath;

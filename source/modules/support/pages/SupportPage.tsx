@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { useTheme } from '@structure/source/theme/ThemeProvider';
+// import { useTheme } from '@structure/source/theme/ThemeProvider';
 // import { useAccount } from '@structure/source/modules/account/AccountProvider';
 import { Button } from '@project/source/ui/base/Button';
 import { SupportSearch } from '@structure/source/modules/support/SupportSearch';
@@ -32,7 +32,7 @@ import BalanceScaleIcon from '@structure/assets/icons/tools/BalanceScaleIcon.svg
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { getRainbowHexColorForTheme, lightenColor } from '@structure/source/utilities/Color';
 import Divider from '@project/source/ui/base/Divider';
-import { ArrowRight, DiscordLogo, Question } from '@phosphor-icons/react';
+import { ArrowRight, Question } from '@phosphor-icons/react';
 
 export const postTopicIdentifierToIconObject: {
     [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -56,7 +56,8 @@ export interface SupportPageInterface {
 }
 export function SupportPage(properties: SupportPageInterface) {
     // Hooks
-    const { themeClassName } = useTheme();
+    // const { themeClassName } = useTheme();
+    const themeClassName = 'light';
     // const { accountState } = useAccount();
 
     // Hooks - API
@@ -117,7 +118,8 @@ export function SupportPage(properties: SupportPageInterface) {
                     const lightenedRainbowHexColorForTheme = lightenColor(
                         rainbowHexColorForTheme,
                         // Darken for dark theme, lighten for light theme
-                        0.2 * (themeClassName === 'dark' ? -1 : 1),
+                        // 0.2 * (themeClassName === 'dark' ? -1 : 1),
+                        0.2 * (themeClassName === 'light' ? -1 : 1),
                     );
 
                     return (

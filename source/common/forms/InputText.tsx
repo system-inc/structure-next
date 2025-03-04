@@ -7,7 +7,7 @@ import React from 'react';
 import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
 
 // Dependencies - Styles
-import { useTheme } from '@structure/source/theme/ThemeProvider';
+// import { useTheme } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Assets
 import SearchIcon from '@structure/assets/icons/navigation/SearchIcon.svg';
@@ -113,7 +113,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
     reference: React.Ref<InputReferenceInterface>,
 ) {
     // Hooks
-    const { themeClassName } = useTheme();
+    // const { themeClassName } = useTheme();
 
     // References
     const inputReference = React.useRef<HTMLInputElement>(null);
@@ -200,7 +200,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextInte
                 </div>
             )}
             <input
-                key={themeClassName} // Force the component to re-render when the theme changes, so that the autofill color is correct
+                // key={themeClassName} // Force the component to re-render when the theme changes, so that the autofill color is correct
                 ref={inputReference}
                 id={properties.id}
                 className={mergeClassNames(InputTextVariants[variant], InputTextSizes[size], properties.className)}

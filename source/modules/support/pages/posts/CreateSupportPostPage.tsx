@@ -16,7 +16,7 @@ import { PostCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
 export function CreateSupportPostPage() {
     // Hooks
     const urlSearchParameters = useUrlSearchParameters();
-    const postTopicId = urlSearchParameters.get('postTopicId');
+    const postTopicId = urlSearchParameters?.get('postTopicId');
 
     // Render the component
     return (

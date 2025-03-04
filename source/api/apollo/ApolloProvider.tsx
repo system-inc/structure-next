@@ -11,7 +11,7 @@ export interface ApolloProviderInterface {
 }
 export function ApolloProvider(properties: ApolloProviderInterface) {
     const searchParams = useSearchParams();
-    const isDev = searchParams.get('dev') === 'true';
+    const isDev = searchParams?.get('dev') === 'true';
 
     return (
         <ApolloClientProvider client={isDev ? devApolloClient : apolloClient}>

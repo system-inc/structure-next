@@ -16,7 +16,7 @@ import { PostTopicCreateOperation } from '@project/source/api/GraphQlGeneratedCo
 export function CreateSupportPostTopicPage() {
     // Hooks
     const urlSearchParameters = useUrlSearchParameters();
-    const parentPostTopicId = urlSearchParameters.get('parentPostTopicId');
+    const parentPostTopicId = urlSearchParameters?.get('parentPostTopicId');
 
     // Render the component
     return (

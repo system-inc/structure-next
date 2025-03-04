@@ -7,9 +7,11 @@ import { cookies } from 'next/headers';
 // import Script from 'next/script';
 
 // Dependencies - Theme
-import '@project/source/styles/global.css';
+import '@project/source/theme/styles/global.css';
+import '@structure/source/theme/styles/global.css';
+import '@structure/source/theme/styles/theme.css';
 // import { accountSignedInKey } from '@structure/source/modules/account/Account';
-import { preventThemeFlashOnFirstLoad } from '../theme/preventThemeFlashOnFirstLoad';
+import { darkThemeClassName, themeClassNameCookieKey } from '@structure/source/theme/Theme';
 
 // Dependencies - Main Components
 import Providers from '@structure/source/layouts/providers/Providers';
@@ -52,13 +54,20 @@ export async function RootLayout(properties: RootLayoutInterface) {
     const accountSignedIn = cookieStore.get('sessionId')?.value ? true : false;
     // console.log('sessionId:', cookieStore.get('sessionId')?.value);
 
+    // Get the theme class name from the cookies
+    const themeClassNameCookieValue = cookieStore.get(themeClassNameCookieKey)?.value;
+
+    // The initial theme class name comes from the cookie or StructureSettings
+    const themeClassName = themeClassNameCookieValue
+        ? themeClassNameCookieValue
+        : ProjectSettings?.theme?.defaultClassName || undefined;
+
     // Defaults
     // const googleAnalyticsId = ProjectSettings.services?.google?.analytics?.id;
 
     // Render the component
     return (
-        // Suppress hydration warning necessary for dynamic theme setting between the server and the client
-        <html lang="en" className={mergeClassNames(properties.className, '')} suppressHydrationWarning>
+        <html lang="en" className={mergeClassNames(themeClassName, properties.className)}>
             {/* Important: Do not use next/head here it will break dynamic favicons */}
             {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
             <head>
@@ -67,30 +76,23 @@ export async function RootLayout(properties: RootLayoutInterface) {
                 {/* This is so it matches the browser tab colors */}
                 <link
                     rel="icon"
-                    // Here we assume that the system theme is dark, but on the client, we will check the user's theme preference
-                    // and update the favicon accordingly
-                    href={ProjectSettings.assets.favicon.dark.location}
-                    suppressHydrationWarning
+                    // Here we assume that if the cookie is set to dark, the system theme is also dark
+                    // When the page loads we will use JavaScript to check the system theme and update the favicon
+                    href={
+                        themeClassNameCookieValue === darkThemeClassName
+                            ? ProjectSettings.assets.favicon.dark.location
+                            : ProjectSettings.assets.favicon.light.location
+                    }
                 />
-
-                {/* Preventing theme flashing on fist load (no cookie and system preference may not match) requires some tricky hacks */}
-                {/* See: https://github.com/vercel/next.js/discussions/53063#discussioncomment-6996549 */}
-                <script dangerouslySetInnerHTML={{ __html: preventThemeFlashOnFirstLoad }} />
             </head>
 
-            <body className="bg-opsis-background-primary font-sans text-opsis-content-primary transition-colors">
-                {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content. Fixes any z-index issues with Popovers, etc. */}
-                <main
-                    className="relative isolate z-0 h-[100dvh] overflow-y-auto overflow-x-clip bg-opsis-background-primary text-opsis-content-primary transition-colors"
-                    vaul-drawer-wrapper=""
-                >
-                    {/* Providers pass properties down to children */}
-                    {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
-                    <Providers accountSignedIn={accountSignedIn}>
-                        {/* Render children passed into the layout */}
-                        {properties.children}
-                    </Providers>
-                </main>
+            <body className="isolate h-full min-h-screen bg-light font-sans text-dark transition-colors dark:bg-dark-1 dark:text-white">
+                {/* Providers pass properties down to children */}
+                {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
+                <Providers accountSignedIn={accountSignedIn} themeClassName={themeClassName}>
+                    {/* Render children passed into the layout */}
+                    {properties.children}
+                </Providers>
             </body>
         </html>
     );

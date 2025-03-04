@@ -17,7 +17,7 @@ export interface NavigationTrailSeparatorPopoverMenuProperties
 }
 export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailSeparatorPopoverMenuProperties) {
     // Hooks
-    const urlPathname = usePathname();
+    const urlPathname = usePathname() ?? '';
 
     // State for the PopoverMenu
     const [open, setOpen] = React.useState(false);

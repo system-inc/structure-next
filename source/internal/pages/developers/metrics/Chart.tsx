@@ -23,7 +23,7 @@ import {
 } from 'recharts';
 
 // Dependencies - Styles
-import { useTheme } from '@structure/source/theme/ThemeProvider';
+// import { useTheme } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Utilities
 import useMeasure from 'react-use-measure';
@@ -531,7 +531,8 @@ export const Chart = ({
     onMouseDown,
 }: ChartInterface) => {
     // Use the theme hook
-    const { themeClassName } = useTheme();
+    // const { themeClassName } = useTheme();
+    const themeClassName = 'light';
 
     // Store a reference to the chart wrapper
     const [chartWrapperDomElementReference, wrapperDimensions] = useMeasure();

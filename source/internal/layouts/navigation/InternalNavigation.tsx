@@ -15,7 +15,7 @@ import { InternalNavigationLinkGroup } from '@structure/source/internal/layouts/
 // Component - InternalNavigation
 export function InternalNavigation() {
     // Get the current pathname from the URL using the usePathname hook
-    const urlPath = useUrlPath();
+    const urlPath = useUrlPath() ?? '';
 
     // Memoize the internal navigation links based on the current URL
     const memoizedInternalNavigationLinks = React.useMemo(

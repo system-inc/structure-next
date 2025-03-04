@@ -4,172 +4,107 @@
 import React from 'react';
 
 // Dependencies - Main Components
-// TODO: Implement accessible Tootltip component.
-// import Tip from '@structure/source/common/popovers/Tip';
+import Tip from '@structure/source/common/popovers/Tip';
 
 // Dependencies - Styles
-import { themeModeLocalStorageKey, ThemeMode, themeClassNameCookieKey } from '@structure/source/theme/Theme';
+import { themeModeLocalStorageKey, themeModeChangeEventIdentifier, ThemeMode } from '@structure/source/theme/Theme';
 
 // Dependencies - Assets
-import { Laptop, Sun, Moon } from '@phosphor-icons/react';
-
-// Dependencies - Utilities
-import { TabItem, Tabs, tabsVariants } from '@project/source/ui/base/Tabs';
-import { atomWithStorage, RESET } from 'jotai/utils';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
-import Cookies from '../utilities/cookies/Cookies';
-import ProjectSettings from '@project/ProjectSettings';
-import { globalStore } from '../utilities/shared-state/SharedStateProvider';
-import ClientOnly from '../utilities/react/ClientOnly';
-import { VariantProps } from 'class-variance-authority';
-
-export const root_themeAtom = atomWithStorage<ThemeMode>(
-    themeModeLocalStorageKey, // Local storage Key
-    ThemeMode.System, // Initial value (overridden by local storage values)
-    undefined, // custom storage (change if you want to use something other than localStorage)
-    {
-        getOnInit: true, // Initialize atom prior to React initial hydration (prevents flashing)
-    },
-);
-
-export const root_systemThemeAtom = atom<NonNullable<ThemeMode>>(ProjectSettings.theme?.defaultClassName ?? 'light');
-export const readonlySystemThemeAtom = atom((get) => get(root_systemThemeAtom));
-
-// On mount, the theme atom will create a listener that changes the favicon based on the user's system theme preference.
-// This only updates the theme if the theme is set to system.
-root_systemThemeAtom.onMount = (setSystemThemeAtom) => {
-    const abortController = new AbortController();
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    // Function to update the favicon
-    function updateFaviconAndRootClass() {
-        const systemPreference = mediaQuery.matches ? ThemeMode.Dark : ThemeMode.Light;
-        setSystemThemeAtom(systemPreference);
-
-        const favicon = document.querySelector('link[rel="icon"]');
-        if(favicon) {
-            favicon.setAttribute(
-                'href',
-                mediaQuery.matches
-                    ? ProjectSettings.assets.favicon.dark.location
-                    : ProjectSettings.assets.favicon.light.location,
-            );
-        }
-
-        // If the theme mode is set to system, we need to update the theme class name and cookie as well
-        console.log({ readonlyThemeAtom: globalStore.get(readonlyThemeAtom) });
-        if(globalStore.get(readonlyThemeAtom) === undefined) {
-            console.log('Setting system theme');
-
-            document.documentElement.classList.remove(ThemeMode.Light);
-            document.documentElement.classList.remove(ThemeMode.Dark);
-            document.documentElement.classList.add(mediaQuery.matches ? ThemeMode.Dark : ThemeMode.Light);
-
-            // Set the cookie
-            Cookies.set(themeClassNameCookieKey, mediaQuery.matches ? ThemeMode.Dark : ThemeMode.Light, {
-                path: '/',
-                maxAge: 31536000, // 1 year
-                sameSite: 'strict',
-                secure: true,
-            });
-        }
-    }
-
-    // Update the favicon on load
-    updateFaviconAndRootClass();
-
-    // Update the favicon when the system theme changes
-    mediaQuery.addEventListener('change', updateFaviconAndRootClass, {
-        signal: abortController.signal,
-    });
-
-    // Cleanup
-    return () => {
-        // Abort controller abort signal is a JavaScript signal object that can be used to remove/abort any listeners with the signal.
-        abortController.abort();
-    };
-};
-
-// The readonlyThemeAtom listens for changes to the original theme atom and updates accordingly
-// without giving other consumers of the atom a way to update the value accidentally.
-export const readonlyThemeAtom = atom((get) => get(root_themeAtom));
-
-// The setThemeAtom is used to update the theme atom with a new value.
-// But it also updates the theme cookie and appends/removes the theme class to/from the document element.
-export const setThemeAtom = atom(null, (get, set, theme: ThemeMode) => {
-    // When setting the theme, we need to update the theme cookie, for SSR, and append/remove the theme
-    // class to/from the document element.
-
-    if(typeof window !== 'undefined') {
-        // System preference
-        const systemPreference = get(readonlySystemThemeAtom);
-
-        // Set the cookie
-        Cookies.set(themeClassNameCookieKey, theme ?? systemPreference, {
-            path: '/',
-            maxAge: 31536000, // 1 year
-            sameSite: 'strict',
-            secure: true,
-        });
-
-        if(theme === ThemeMode.Dark) {
-            document.documentElement.classList.add(theme);
-            document.documentElement.classList.remove(ThemeMode.Light);
-        }
-        else if(theme === ThemeMode.Light) {
-            document.documentElement.classList.add(theme);
-            document.documentElement.classList.remove(ThemeMode.Dark);
-        }
-        else {
-            document.documentElement.classList.remove(ThemeMode.Light);
-            document.documentElement.classList.remove(ThemeMode.Dark);
-            document.documentElement.classList.add(systemPreference);
-        }
-    }
-    set(root_themeAtom, theme ?? RESET);
-});
+import DesktopIcon from '@structure/assets/icons/technology/DesktopIcon.svg';
+import SunIcon from '@structure/assets/icons/nature/SunIcon.svg';
+import MoonIcon from '@structure/assets/icons/nature/MoonIcon.svg';
 
 // Component - ThemeToggle
-type ThemeToggleProps = VariantProps<typeof tabsVariants>;
-export function ThemeToggle({ size = 'extra-small' }: ThemeToggleProps) {
+export interface ThemeToggleProperties {}
+export function ThemeToggle(properties: ThemeToggleProperties) {
     // State for the theme
-    const themeMode = useAtomValue(readonlyThemeAtom);
-    const setThemeMode = useSetAtom(setThemeAtom);
-
-    const tabsDefaultValue = themeMode ?? 'system';
+    const [themeMode, setThemeMode] = React.useState<ThemeMode>(ThemeMode.System);
 
     // Handle the client's input
     function handleChangeThemeMode(themeMode: ThemeMode) {
+        console.log('handleChangeTheme', themeMode);
+
         // Set the state to the input
         setThemeMode(themeMode);
+
+        // Store the client's preference in local storage
+        if(themeMode) {
+            localStorage.setItem(themeModeLocalStorageKey, themeMode);
+        }
+
+        // Emit the event to the browser
+        const event = new CustomEvent(themeModeChangeEventIdentifier, { detail: themeMode });
+        window.dispatchEvent(event);
+    }
+
+    // Handle another tab changing the theme mode
+    function handleLocalStorageChange(event: StorageEvent) {
+        // If the event is for the theme mode
+        if(event.key === themeModeLocalStorageKey) {
+            // Set the state to the new theme mode
+            setThemeMode(event.newValue as ThemeMode);
+        }
+    }
+
+    // On mount
+    React.useEffect(function () {
+        // Get the client's preference
+        const themeFromLocalStorage = localStorage.getItem(themeModeLocalStorageKey);
+
+        // If the client has a preference
+        if(themeFromLocalStorage) {
+            // Set the state to the client's preference
+            setThemeMode(themeFromLocalStorage as ThemeMode);
+        }
+        // If the client does not have a preference
+        else {
+            // Use the operating system's theme
+            setThemeMode(ThemeMode.System);
+        }
+
+        // Add a listener for changes in local storage
+        window.addEventListener('storage', handleLocalStorageChange);
+
+        // On unmount
+        return function () {
+            // Remove the listener for changes in local storage
+            window.removeEventListener('storage', handleLocalStorageChange);
+        };
+    }, []);
+
+    // Get a theme mode button for a given theme mode
+    function themeModeButton(currentThemeMode: ThemeMode) {
+        const IconComponent =
+            currentThemeMode === ThemeMode.Light
+                ? SunIcon
+                : currentThemeMode === ThemeMode.Dark
+                  ? MoonIcon
+                  : DesktopIcon;
+
+        return (
+            <Tip sideOffset={8} content={<div className="px-2 py-1 text-xs">{currentThemeMode} Theme</div>}>
+                <button
+                    className={`rounded-full transition-colors hover:text-dark dark:hover:text-light ${
+                        themeMode === currentThemeMode && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light'
+                    }`}
+                    tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
+                    onClick={function () {
+                        handleChangeThemeMode(currentThemeMode);
+                    }}
+                >
+                    <IconComponent className="m-1.5 h-3.5 w-3.5" />
+                </button>
+            </Tip>
+        );
     }
 
     // Render the component
     return (
-        <ClientOnly>
-            <Tabs
-                size={size}
-                value={tabsDefaultValue}
-                onValueChange={(value) => {
-                    if(value === 'system') {
-                        handleChangeThemeMode(ThemeMode.System);
-                    }
-                    else {
-                        handleChangeThemeMode(value as ThemeMode);
-                    }
-                }}
-            >
-                <TabItem icon value={'system'}>
-                    <Laptop />
-                </TabItem>
-                <TabItem icon value={ThemeMode.Light}>
-                    <Sun />
-                </TabItem>
-                <TabItem icon value={ThemeMode.Dark}>
-                    <Moon />
-                </TabItem>
-            </Tabs>
-        </ClientOnly>
+        <div className="transition-color flex w-min items-center justify-center space-x-0.5 rounded-full border border-dark-4/50 p-1 text-dark-4/50 dark:border-dark-4 dark:text-light-6">
+            {themeModeButton(ThemeMode.System)}
+            {themeModeButton(ThemeMode.Light)}
+            {themeModeButton(ThemeMode.Dark)}
+        </div>
     );
 }
 

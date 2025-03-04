@@ -20,7 +20,7 @@ export interface DocumentationContentInterface {
 }
 export function DocumentationContent(properties: DocumentationContentInterface) {
     // Hooks
-    const urlPath = useUrlPath();
+    const urlPath = useUrlPath() ?? '';
 
     // Get the content from the current category based on the URL path
     const currentNode = findDocumentationNodeByUrlPath(

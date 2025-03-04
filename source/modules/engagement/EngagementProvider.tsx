@@ -34,7 +34,7 @@ export interface EngagementProviderInterface {
 }
 export function EngagementProvider(properties: EngagementProviderInterface) {
     // Hooks
-    const urlPath = usePathname();
+    const urlPath = usePathname() ?? '';
     const urlSearchParameters = useSearchParams();
     const [engagementEventCreateMutation] = useMutation(EngagementEventCreateDocument);
 
@@ -107,7 +107,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             let viewIdentifier = urlPath;
 
             // If present, add the search parameters to the view identifier
-            const urlSearchParametersString = urlSearchParameters.toString();
+            const urlSearchParametersString = urlSearchParameters?.toString();
             if(urlSearchParametersString) {
                 viewIdentifier += '?' + urlSearchParametersString;
             }

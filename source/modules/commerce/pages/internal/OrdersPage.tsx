@@ -21,7 +21,7 @@ import { timeAgo, dayNameWithFullDate } from '@structure/source/utilities/Time';
 export function OrdersPage() {
     // Hooks and State
     const urlSearchParameters = useUrlSearchParameters();
-    const page = parseInt(urlSearchParameters.get('page') as string) || 1;
+    const page = parseInt(urlSearchParameters?.get('page') as string) || 1;
     const itemsPerPage = 10;
     const [totalOrders, setTotalOrders] = React.useState<number>(0);
 

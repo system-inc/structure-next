@@ -1,5 +1,5 @@
 /* Import the theme */
-@import '../theme/styles/theme.css';
+@import './theme.css';
 
 /* Default font */
 :root {
@@ -32,7 +32,7 @@ input:-webkit-autofill:active {
 }
 
 /* This allows full width and height for the ScrollArea component */
-.scrollAreaViewport > :first-child {
+.scrollAreaViewport> :first-child {
     height: 100%;
     width: 100%;
     table-layout: fixed;

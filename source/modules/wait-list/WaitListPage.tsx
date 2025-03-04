@@ -11,7 +11,7 @@ import AccountMenuButton from '@structure/source/modules/account/components/Acco
 import WaitListForm from '@structure/source/modules/wait-list/WaitListForm';
 
 // Component - WaitListPage
-export type WaitListPageProperties = {};
+export interface WaitListPageProperties {}
 export function WaitListPage() {
     const currentYear = new Date().getFullYear();
 

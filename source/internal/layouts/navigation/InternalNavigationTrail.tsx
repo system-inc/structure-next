@@ -19,7 +19,7 @@ import { titleCase } from '@structure/source/utilities/String';
 // Component - InternalNavigationTrail
 export function InternalNavigationTrail(properties: NavigationTrailInterface) {
     // Get the current pathname from the URL using the usePathname hook
-    const urlPath = useUrlPath();
+    const urlPath = useUrlPath() ?? '';
 
     // Function to get sibling navigation trail links for a given path
     const getSiblingNavigationTrailLinks = React.useCallback(function (

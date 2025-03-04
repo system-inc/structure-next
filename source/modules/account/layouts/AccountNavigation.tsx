@@ -25,7 +25,7 @@ import { usePathname } from 'next/navigation';
 // Component - AccountNavigation
 interface AccountNavigationInterface extends React.HTMLProps<HTMLElement> {}
 export function AccountNavigation(properties: AccountNavigationInterface) {
-    const pathname = usePathname();
+    const pathname = usePathname() ?? '';
 
     // Render the component
     return (
