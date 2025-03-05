@@ -362,3 +362,18 @@ mutation AccountDeletePrivileged($input: AccountDeleteInput!) {
         success
     }
 }
+
+# Account Profile Image Remove Mutation
+mutation AccountProfileImageRemove {
+    accountProfileImageRemove {
+        id
+        username
+        displayName
+        images {
+            url
+            variant
+        }
+        updatedAt
+        createdAt
+    }
+}
