@@ -74,7 +74,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
 
         try {
             // Upload image to server
-            const response = await fetch(ProjectSettings.apis.base.url + 'accounts/profiles/images', {
+            const response = await fetch('https://' + ProjectSettings.apis.base.host + '/accounts/profiles/images', {
                 method: 'POST',
                 body: imageBlob,
                 headers: {
@@ -111,86 +111,15 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
     }
 
     // Handle success (for both upload and remove)
-    function handleSuccess() {
-        // Reset uploading state after image is confirmed updated
-        // Note: We don't reset the uploading state here, as we want the loading indicator to continue
-        // until we've confirmed the image has updated
+    async function handleSuccess() {
+        // Refetch account data
+        await refetch();
 
-        // Wait before starting to poll - image processing takes time on the server
-        const startTime = Date.now();
-        const initialDelay = 1250;     // Wait 1.25 seconds before first check
-        const maxWaitTime = 6000;      // 6 seconds max wait time after starting polling
-        let pollInterval = 500;        // Start with 500ms checks after initial delay
-        let attemptCount = 0;
-        
-        // We'll use a smarter polling strategy based on actual server processing time:
-        // 1. Initial delay: Wait 1.25s to allow server processing to complete
-        // 2. First attempt: Check after server has had time to process (500ms interval)
-        // 3. Later attempts: Back off gradually to reduce load
-        
-        const pollForUpdatedImage = async () => {
-            attemptCount++;
-            
-            try {
-                // Refetch account data to check for updated profile image
-                const result = await refetch();
-                const updatedProfile = result.data.account?.profile;
-                const updatedImage = updatedProfile?.images?.find((img) => img.variant === 'profile-image');
-
-                // Check if the image has been updated (different URL)
-                const newImageUrl = updatedImage?.url;
-                const hasChanged = newImageUrl !== properties.profileImageUrl;
-
-                if(hasChanged) {
-                    console.log(`Profile image updated after ${attemptCount} attempts (${Date.now() - startTime}ms)`);
-                    // Image has been updated, reset uploading state and close dialog
-                    setUploading(false);
-                    handleDialogClose();
-                    // Notify parent component
-                    properties.onImageChange?.();
-                    return;
-                }
-
-                // Check if we've exceeded the max wait time
-                const elapsedTime = Date.now() - startTime;
-                if(elapsedTime > (initialDelay + maxWaitTime)) {
-                    console.warn(`Timed out waiting for profile image to update after ${attemptCount} attempts (${elapsedTime}ms)`);
-                    // Even on timeout, reset uploading state and close dialog
-                    setUploading(false);
-                    handleDialogClose();
-                    // Still call the callback
-                    properties.onImageChange?.();
-                    return;
-                }
-
-                // Adapt polling interval based on attempt count
-                // First attempt: After initial delay, check at 500ms
-                // Second attempt: Slightly longer (750ms)
-                // Remaining attempts: Back off to reduce load (1000ms)
-                if (attemptCount === 1) {
-                    pollInterval = 500;
-                } else if (attemptCount === 2) {
-                    pollInterval = 750;
-                } else {
-                    pollInterval = 1000;
-                }
-
-                // Continue polling with adaptive interval
-                setTimeout(pollForUpdatedImage, pollInterval);
-            }
-            catch(err) {
-                console.error('Error polling for profile image update:', err);
-                // On error, also reset uploading state and close dialog
-                setUploading(false);
-                handleDialogClose();
-                // Still call the callback despite error
-                properties.onImageChange?.();
-            }
-        };
-
-        // Wait for the initial delay before first check to allow server processing
-        console.log(`Waiting ${initialDelay}ms before first check`);
-        setTimeout(pollForUpdatedImage, initialDelay);
+        // Image has been updated, reset uploading state and close dialog
+        setUploading(false);
+        handleDialogClose();
+        // Notify parent component
+        properties.onImageChange?.();
     }
 
     // Dialog content
