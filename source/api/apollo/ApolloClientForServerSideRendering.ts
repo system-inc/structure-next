@@ -22,7 +22,7 @@ export const getApolloClientForServerSideRendering = function () {
             ssrMode: true,
             cache: new InMemoryCache(),
             link: createHttpLink({
-                uri: ProjectSettings.apis.base.url + 'graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
+                uri: 'https://' + ProjectSettings.apis.base.host + ProjectSettings.apis.base.graphQlPath,
             }),
         });
     }

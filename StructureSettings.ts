@@ -2,7 +2,9 @@ import { ThemeMode } from './source/theme/Theme';
 
 // Types
 interface ApiService {
-    url: string;
+    host: string;
+    graphQlPath?: string;
+    webSocketPath?: string;
 }
 
 interface AssetDetails {
@@ -87,7 +89,9 @@ export const StructureSettings: StructureSettingsInterface = {
     url: 'https://www.system.inc/',
     apis: {
         base: {
-            url: 'https://api.system.inc/graphql', // This needs to be an absolute url, as relative urls cannot be used in SSR
+            host: 'api.system.inc',
+            graphQlPath: '/graphql',
+            webSocketPath: '/web-socket/user/connect',
         },
     },
     assets: {
