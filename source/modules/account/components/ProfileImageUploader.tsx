@@ -7,11 +7,15 @@ import ProjectSettings from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
+import { Button } from '@structure/source/common/buttons/Button';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';
 import { ProfileImage } from './ProfileImage';
-import { ImageSelector } from '@structure/source/common/images/ImageSelector';
-import { ImageEditor } from '@structure/source/common/images/ImageEditor';
+import { ImageSelector } from '@structure/source/common/images/selector/ImageSelector';
+import { ImageEditor } from '@structure/source/common/images/editor/ImageEditor';
+
+// Dependencies - Assets
+import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Dependencies - API
 import { useMutation, useQuery } from '@apollo/client';
@@ -50,10 +54,14 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
         setDialogMode('select');
         setSelectedFile(null);
         setError(null);
+        // Always ensure uploading state is reset when closing the dialog
+        setUploading(false);
     }
 
     // Handle file selection
     function handleFileSelected(file: File) {
+        // Make sure uploading state is reset when selecting a new file
+        setUploading(false);
         setSelectedFile(file);
         setDialogMode('edit');
         setError(null);
@@ -104,14 +112,85 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
 
     // Handle success (for both upload and remove)
     function handleSuccess() {
-        // Close dialog and reset state
-        handleDialogClose();
+        // Reset uploading state after image is confirmed updated
+        // Note: We don't reset the uploading state here, as we want the loading indicator to continue
+        // until we've confirmed the image has updated
 
-        // Refetch account data to get updated profile image
-        refetch();
+        // Wait before starting to poll - image processing takes time on the server
+        const startTime = Date.now();
+        const initialDelay = 1250;     // Wait 1.25 seconds before first check
+        const maxWaitTime = 6000;      // 6 seconds max wait time after starting polling
+        let pollInterval = 500;        // Start with 500ms checks after initial delay
+        let attemptCount = 0;
+        
+        // We'll use a smarter polling strategy based on actual server processing time:
+        // 1. Initial delay: Wait 1.25s to allow server processing to complete
+        // 2. First attempt: Check after server has had time to process (500ms interval)
+        // 3. Later attempts: Back off gradually to reduce load
+        
+        const pollForUpdatedImage = async () => {
+            attemptCount++;
+            
+            try {
+                // Refetch account data to check for updated profile image
+                const result = await refetch();
+                const updatedProfile = result.data.account?.profile;
+                const updatedImage = updatedProfile?.images?.find((img) => img.variant === 'profile-image');
 
-        // Call the onImageChange callback if provided
-        properties.onImageChange?.();
+                // Check if the image has been updated (different URL)
+                const newImageUrl = updatedImage?.url;
+                const hasChanged = newImageUrl !== properties.profileImageUrl;
+
+                if(hasChanged) {
+                    console.log(`Profile image updated after ${attemptCount} attempts (${Date.now() - startTime}ms)`);
+                    // Image has been updated, reset uploading state and close dialog
+                    setUploading(false);
+                    handleDialogClose();
+                    // Notify parent component
+                    properties.onImageChange?.();
+                    return;
+                }
+
+                // Check if we've exceeded the max wait time
+                const elapsedTime = Date.now() - startTime;
+                if(elapsedTime > (initialDelay + maxWaitTime)) {
+                    console.warn(`Timed out waiting for profile image to update after ${attemptCount} attempts (${elapsedTime}ms)`);
+                    // Even on timeout, reset uploading state and close dialog
+                    setUploading(false);
+                    handleDialogClose();
+                    // Still call the callback
+                    properties.onImageChange?.();
+                    return;
+                }
+
+                // Adapt polling interval based on attempt count
+                // First attempt: After initial delay, check at 500ms
+                // Second attempt: Slightly longer (750ms)
+                // Remaining attempts: Back off to reduce load (1000ms)
+                if (attemptCount === 1) {
+                    pollInterval = 500;
+                } else if (attemptCount === 2) {
+                    pollInterval = 750;
+                } else {
+                    pollInterval = 1000;
+                }
+
+                // Continue polling with adaptive interval
+                setTimeout(pollForUpdatedImage, pollInterval);
+            }
+            catch(err) {
+                console.error('Error polling for profile image update:', err);
+                // On error, also reset uploading state and close dialog
+                setUploading(false);
+                handleDialogClose();
+                // Still call the callback despite error
+                properties.onImageChange?.();
+            }
+        };
+
+        // Wait for the initial delay before first check to allow server processing
+        console.log(`Waiting ${initialDelay}ms before first check`);
+        setTimeout(pollForUpdatedImage, initialDelay);
     }
 
     // Dialog content
@@ -129,10 +208,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
         if(dialogMode === 'select') {
             return (
                 <div className="flex flex-col gap-6">
-                    <p className="text-neutral-500 dark:text-neutral-400 text-center text-sm">
-                        Upload a profile picture to personalize your account. We recommend using a square image for best
-                        results.
-                    </p>
+                    <p className="text-sm">Upload a profile picture to personalize your account.</p>
 
                     <ImageSelector
                         variant="DropZone"
@@ -143,13 +219,14 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
 
                     {properties.profileImageUrl && (
                         <div className="flex justify-center pt-4">
-                            <button
+                            <Button
+                                variant="destructive"
                                 onClick={handleRemoveImage}
-                                disabled={uploading || removeProfileImageState.loading}
-                                className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                                disabled={uploading}
+                                loading={removeProfileImageState.loading}
                             >
-                                Remove current profile picture
-                            </button>
+                                Remove Current Profile Picture
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -171,6 +248,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
                         outputFormat="jpeg"
                         outputQuality={0.9}
                         maximumOutputSizeInBytes={1024 * 1024} // 1MB
+                        loading={uploading}
                     />
                 )}
             </div>
@@ -190,13 +268,12 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
                 <ProfileImage
                     profileImageUrl={properties.profileImageUrl || undefined}
                     alternateText={properties.alternateText}
-                    className="h-full w-full"
+                    className="h-full w-full border border-light-6 dark:border-dark-4"
                 />
 
-                <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black bg-opacity-0 transition-all hover:bg-opacity-50">
-                    <span className="text-sm font-medium text-white opacity-0 transition-opacity hover:opacity-100">
-                        {properties.profileImageUrl ? 'Change' : 'Upload'}
-                    </span>
+                {/* Edit icon overlay in bottom right corner */}
+                <div className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border border-light-6 dark:border-dark-4 dark:bg-dark-2">
+                    <EditIcon className="h-3.5 w-3.5" />
                 </div>
             </div>
 

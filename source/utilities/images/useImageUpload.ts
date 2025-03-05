@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Utilities
-import { cropImage, resizeImage } from '@structure/source/utilities/images/ImageProcessing';
+import { cropImage, resizeImage } from '@structure/source/utilities/images/ImageFile';
 
 // Dependencies - Types
 import { CropArea, ResizeOptions } from '@structure/source/utilities/images/Image';

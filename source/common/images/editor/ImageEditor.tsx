@@ -6,7 +6,8 @@ import React from 'react';
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
 import { Alert } from '@structure/source/common/notifications/Alert';
-import { ImageCropper } from './ImageCropper';
+import { Cropper, CropperRef, CropperPreviewRef } from 'react-advanced-cropper';
+import 'react-advanced-cropper/dist/style.css';
 
 // Dependencies - Utilities
 import { CropArea, CropShape } from '@structure/source/utilities/images/Image';
@@ -15,7 +16,7 @@ import {
     revokeImagePreview,
     cropImage,
     resizeImage,
-} from '@structure/source/utilities/images/ImageProcessing';
+} from '@structure/source/utilities/images/ImageFile';
 
 // Types used internally by the component
 interface ImageDimensions {
@@ -39,11 +40,14 @@ export interface ImageEditorInterface {
     maximumOutputSizeInBytes?: number;
     onCancel?: () => void;
     onSave?: (imageBlob: Blob) => void;
+    loading?: boolean; // Added loading prop to control Save button state
 }
 export function ImageEditor(properties: ImageEditorInterface) {
     // References
     const lastPreviewUrlReference = React.useRef<string | null>(null);
     const temporaryUrlsReference = React.useRef<string[]>([]);
+    const cropperRef = React.useRef<CropperRef>(null);
+    const previewRef = React.useRef<CropperPreviewRef>(null);
 
     // State
     const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
@@ -130,28 +134,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
     // Functions
     const handleCropChange = React.useCallback(function (area: CropArea) {
         setCropArea(area);
-    }, []);
-
-    const handleDimensionChange = React.useCallback(function (dimension: 'width' | 'height', value: string) {
-        const integerValue = parseInt(value);
-
-        if(isNaN(integerValue) || integerValue <= 0) {
-            return;
-        }
-
-        setDimensions(function (prev) {
-            if(!prev) {
-                return {
-                    width: dimension === 'width' ? integerValue : 0,
-                    height: dimension === 'height' ? integerValue : 0,
-                };
-            }
-
-            return {
-                ...prev,
-                [dimension]: integerValue,
-            };
-        });
+        // No need to call update() as the cropper manages its own updates
     }, []);
 
     const handleSave = React.useCallback(
@@ -205,60 +188,6 @@ export function ImageEditor(properties: ImageEditorInterface) {
         [previewUrl, cropArea, properties.allowResize, dimensions, properties.onSave, outputOptions],
     );
 
-    // Render components
-    const resizeControls = React.useMemo(
-        function () {
-            if(!properties.allowResize) return null;
-
-            return (
-                <div className="mb-4 grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label htmlFor="width" className="mb-1 block text-sm font-medium">
-                            Width
-                        </label>
-                        <input
-                            id="width"
-                            type="number"
-                            className="border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 w-full rounded-md border p-2"
-                            placeholder="Width in pixels"
-                            min={properties.minimumWidth}
-                            max={properties.maximumWidth}
-                            onChange={function (e) {
-                                handleDimensionChange('width', e.target.value);
-                            }}
-                            aria-label="Image width in pixels"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="height" className="mb-1 block text-sm font-medium">
-                            Height
-                        </label>
-                        <input
-                            id="height"
-                            type="number"
-                            className="border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 w-full rounded-md border p-2"
-                            placeholder="Height in pixels"
-                            min={properties.minimumHeight}
-                            max={properties.maximumHeight}
-                            onChange={function (e) {
-                                handleDimensionChange('height', e.target.value);
-                            }}
-                            aria-label="Image height in pixels"
-                        />
-                    </div>
-                </div>
-            );
-        },
-        [
-            properties.allowResize,
-            properties.minimumWidth,
-            properties.maximumWidth,
-            properties.minimumHeight,
-            properties.maximumHeight,
-            handleDimensionChange,
-        ],
-    );
-
     const actionButtons = React.useMemo(
         function () {
             return (
@@ -267,7 +196,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
                         <Button
                             variant="default"
                             onClick={properties.onCancel}
-                            disabled={loading}
+                            disabled={loading || properties.loading}
                             aria-label="Cancel image editing"
                         >
                             Cancel
@@ -276,8 +205,8 @@ export function ImageEditor(properties: ImageEditorInterface) {
                     <Button
                         variant="primary"
                         onClick={handleSave}
-                        loading={loading}
-                        disabled={loading || !cropArea}
+                        loading={loading || properties.loading}
+                        disabled={loading || properties.loading || !cropArea}
                         aria-label="Save edited image"
                     >
                         Save
@@ -285,7 +214,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
                 </div>
             );
         },
-        [properties.onCancel, loading, cropArea, handleSave],
+        [properties.onCancel, loading, properties.loading, cropArea, handleSave],
     );
 
     // Render the component
@@ -299,20 +228,43 @@ export function ImageEditor(properties: ImageEditorInterface) {
 
             {previewUrl ? (
                 <>
-                    {/* Image Cropper */}
-                    <ImageCropper
-                        image={previewUrl}
-                        aspectRatio={properties.cropAspectRatio}
-                        cropShape={properties.cropShape}
-                        onChange={handleCropChange}
-                        className="mb-4"
-                    />
+                    {/* Main editing area with cropper and previews */}
+                    <div className="mb-4 flex flex-col gap-4">
+                        {/* Cropper - takes most of the space */}
+                        <div className="flex-grow">
+                            <Cropper
+                                ref={cropperRef}
+                                src={previewUrl}
+                                stencilProps={{
+                                    aspectRatio: properties.cropAspectRatio
+                                        ? {
+                                              minimum: properties.cropAspectRatio,
+                                              maximum: properties.cropAspectRatio,
+                                          }
+                                        : undefined,
+                                    overlayClassName: properties.cropShape === 'Round' ? 'rounded-full' : 'rounded-md',
+                                }}
+                                className="border-neutral-200 dark:border-neutral-700 rounded-md border"
+                                onUpdate={function (cropper) {
+                                    // Update the preview
+                                    previewRef.current?.update(cropper);
 
-                    {/* Resize Controls (if enabled) */}
-                    {resizeControls}
-
-                    {/* Action Buttons */}
-                    {actionButtons}
+                                    // Convert cropper coordinates to our CropArea format
+                                    const coordinates = cropper.getCoordinates();
+                                    if(coordinates) {
+                                        handleCropChange({
+                                            x: coordinates.left,
+                                            y: coordinates.top,
+                                            width: coordinates.width,
+                                            height: coordinates.height,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        {/* Action Buttons */}
+                        {actionButtons}
+                    </div>
                 </>
             ) : (
                 <div

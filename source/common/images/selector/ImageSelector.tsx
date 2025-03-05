@@ -13,7 +13,7 @@ import { ButtonSizes } from '@structure/source/common/buttons/ButtonSizes';
 import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Utilities
-import { isImageFile } from '@structure/source/utilities/images/ImageProcessing';
+import { isImageFile } from '@structure/source/utilities/images/ImageFile';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ImageSelector
@@ -192,8 +192,6 @@ export function ImageSelector(properties: ImageSelectorInterface) {
     }
 
     // Get maximum file size with default
-    const maximumFileSizeInBytes =
-        properties.maximumFileSizeInBytes !== undefined ? properties.maximumFileSizeInBytes : 10 * 1024 * 1024; // 10MB default
     const acceptType = properties.accept || 'image/*';
     const isMultiple =
         properties.allowMultipleFileSelection !== undefined ? properties.allowMultipleFileSelection : false;
@@ -224,12 +222,8 @@ export function ImageSelector(properties: ImageSelectorInterface) {
             >
                 <div className="flex flex-col items-center justify-center text-center">
                     <ImageIcon className="text-neutral-400 dark:text-neutral-500 mb-2 h-10 w-10" />
-                    <p className="mb-1 text-sm font-medium">
-                        {dragActive ? 'Drop files here' : 'Drag and drop files here or click to browse'}
-                    </p>
-                    <p className="text-neutral-500 dark:text-neutral-400 text-xs">
-                        {isMultiple ? 'Upload images' : 'Upload an image'} {acceptType.replace('*', '')} (max{' '}
-                        {Math.round(maximumFileSizeInBytes / 1024 / 1024)}MB)
+                    <p className="mt-1 text-sm font-medium">
+                        {dragActive ? 'Drop files here.' : 'Drag and drop an image here or click to browse.'}
                     </p>
                 </div>
             </div>
