@@ -1,6 +1,6 @@
 # Contacts Query
-query Contacts($pagination: PaginationInputWithFilters!) {
-    contacts(input: $pagination) {
+query Contacts($pagination: PaginationInput!) {
+    contacts(pagination: $pagination) {
         items {
             name
             type
