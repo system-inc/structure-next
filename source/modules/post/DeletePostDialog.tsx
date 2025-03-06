@@ -6,15 +6,10 @@ import React from 'react';
 // Dependencies - Main Components
 import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Button } from '@structure/source/common/buttons/Button';
-import { InputReferenceInterface } from '@structure/source/common/forms/Input';
-import { InputText } from '@structure/source/common/forms/InputText';
 
 // Dependencies - API
-import { useQuery, useMutation, useApolloClient } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 import { PostDeleteDocument, PostDocument } from '@project/source/api/GraphQlGeneratedCode';
-
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - DeletePostDialog
 export interface DeletePostDialogInterface extends DialogInterface {
