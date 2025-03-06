@@ -18,7 +18,7 @@ export function useWebSocket() {
     // References
     const webSocketReference = React.useRef<WebSocket | null>(null);
     const messageHandlersReference = React.useRef<WebSocketMessageHandler[]>([]);
-    const reconnectAttemptsCount = React.useRef(0);
+    const reconnectAttemptsCountReference = React.useRef(0);
     const reconnectTimerReference = React.useRef<NodeJS.Timeout>();
     const isCleaningUpReference = React.useRef(false);
 
@@ -45,7 +45,8 @@ export function useWebSocket() {
         }
 
         // console.log('Creating new WebSocket');
-        const webSocketUrl = ProjectSettings.apis.base.url.replace('https', 'wss') + 'ws/user/connect';
+        // Use the dedicated webSocketUrl if available, otherwise fall back to the old method
+        const webSocketUrl = 'wss://' + ProjectSettings.apis.base.host + ProjectSettings.apis.base.webSocketPath;
         const webSocket = new WebSocket(webSocketUrl);
 
         // Only set the reference if we're not cleaning up
@@ -58,7 +59,7 @@ export function useWebSocket() {
             if(!isCleaningUpReference.current) {
                 console.log('WebSocket connected to ' + webSocketUrl);
                 setIsConnected(true);
-                reconnectAttemptsCount.current = 0;
+                reconnectAttemptsCountReference.current = 0;
             }
             else {
                 // If we're cleaning up, close the connection immediately
@@ -73,12 +74,12 @@ export function useWebSocket() {
 
             // Calculate reconnection delay using exponential backoff
             // Starts at 1s, doubles each attempt (1s, 2s, 4s, 8s...), caps at 30s
-            const backoffDelay = Math.min(1000 * Math.pow(2, reconnectAttemptsCount.current), 30000);
+            const backoffDelay = Math.min(1000 * Math.pow(2, reconnectAttemptsCountReference.current), 30000);
             // console.log(`Attempting to reconnect in ${backoffDelay}ms`);
 
             // Schedule reconnection attempt
             reconnectTimerReference.current = setTimeout(function () {
-                reconnectAttemptsCount.current += 1;
+                reconnectAttemptsCountReference.current += 1;
                 connect();
             }, backoffDelay);
         };
@@ -141,3 +142,6 @@ export function useWebSocket() {
         addMessageHandler,
     };
 }
+
+// Export - Default
+export default useWebSocket;
