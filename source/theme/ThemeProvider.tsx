@@ -6,187 +6,236 @@ import ProjectSettings from '@project/ProjectSettings';
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - Theme
-import {
-    themeModeLocalStorageKey,
-    themeModeChangeEventIdentifier,
-    themeClassNameCookieKey,
-    lightThemeClassName,
-    darkThemeClassName,
-    darkThemeMediaQuery,
-    ThemeMode,
-} from '@structure/source/theme/Theme';
+// Dependencies - Shared State
+import { atom, useAtomValue } from 'jotai';
+import { atomWithStorage, RESET as atomReset } from 'jotai/utils';
+import { globalStore } from '@structure/source/utilities/shared-state/SharedStateProvider';
 
 // Dependencies - Utilities
 import Cookies from '@structure/source/utilities/cookies/Cookies';
 
-// Component - ThemeProvider
-export interface ThemeProviderInterface {
-    children: React.ReactNode;
-    themeClassName?: string;
-}
-export function ThemeProvider(properties: ThemeProviderInterface) {
-    // State
-    const [themeClassName, setThemeClassName] = React.useState<string | undefined>(properties.themeClassName);
+// Theme variables shared across the app
+export const themeKey = ProjectSettings.identifier + 'Theme';
+export const operatingSystemThemeKey = ProjectSettings.identifier + 'OperatingSystemTheme';
+export const themeChangeEventIdentifier = ProjectSettings.identifier + 'Theme.change';
+export const darkThemeMediaQueryString = '(prefers-color-scheme: dark)';
 
-    // Function to update the theme
-    const updateThemeClassName = React.useCallback(
-        function () {
-            // console.log('updateTheme');
-            // console.log('localStorage[themeModeKey]', localStorage[themeModeKey]);
-            // console.log(
-            //     `window.matchMedia(darkThemeMediaQuery)`,
-            //     window.matchMedia(darkThemeMediaQuery),
-            // );
-
-            // Dark mode
-            if(
-                // If the current theme is dark and the local storage theme mode is not set (left to right order is important here)
-                (themeClassName === darkThemeClassName && localStorage[themeModeLocalStorageKey] === undefined) ||
-                // If local storage has the theme mode set to dark
-                localStorage[themeModeLocalStorageKey] === ThemeMode.Dark ||
-                // Or if local storage has the theme mode set to system and the client's operating system is set to dark mode
-                (localStorage[themeModeLocalStorageKey] === ThemeMode.System &&
-                    window.matchMedia(darkThemeMediaQuery).matches) ||
-                // Or if local storage does not have the theme mode set and the client's operating system is set to dark mode
-                (localStorage[themeModeLocalStorageKey] === undefined && window.matchMedia(darkThemeMediaQuery).matches)
-            ) {
-                // console.log('Switching to dark mode');
-
-                // Add the dark theme class to the document
-                document.documentElement.classList.add(darkThemeClassName);
-
-                // Set a cookie to remember the client is in dark mode
-                // We only store the theme class name (not the theme mode) on the cookie, this way
-                // when the page loads we can use the cookie to know if the client is in dark mode
-                // right away without needing to check the theme mode in local storage which
-                // would flash the page in light mode before switching to dark mode if the client
-                // is in dark mode
-                Cookies.set(themeClassNameCookieKey, darkThemeClassName, {
-                    path: '/',
-                    maxAge: 31536000, // 1 year
-                    sameSite: 'strict',
-                    secure: true,
-                });
-
-                // Update the theme class name state
-                setThemeClassName(darkThemeClassName);
-            }
-            // Light mode
-            else {
-                // console.log('Switching to light mode');
-
-                // Remove the dark theme class from the document
-                document.documentElement.classList.remove(darkThemeClassName);
-
-                // Set a cookie to remember the client is in light mode
-                Cookies.set(themeClassNameCookieKey, lightThemeClassName, {
-                    path: '/',
-                    maxAge: 31536000, // 1 year
-                    sameSite: 'strict',
-                    secure: true,
-                });
-
-                // Update the theme class name state
-                setThemeClassName(lightThemeClassName);
-            }
-        },
-        [themeClassName],
-    );
-
-    // Handle changes in local storage, sent by other tabs
-    const handleLocalStorageChange = React.useCallback(
-        function (event: StorageEvent) {
-            // console.log('handleLocalStorageChange', event);
-            if(event.key === themeModeLocalStorageKey) {
-                updateThemeClassName();
-            }
-        },
-        [updateThemeClassName],
-    );
-
-    // Function to update the favicon based on the operating system's theme
-    const applyOperatingSystemTheme = React.useCallback(
-        function () {
-            // console.log('handleOperatingSystemThemeChange');
-
-            // We change the favicon on operating system theme changes, not website theme changes
-            // If the operating system is set to dark mode,
-            if(window.matchMedia(darkThemeMediaQuery).matches) {
-                // Change the favicon to the dark favicon
-                document
-                    .querySelector<HTMLLinkElement>('link[rel="icon"]')
-                    ?.setAttribute('href', ProjectSettings.assets.favicon.dark.location);
-            }
-            // If the operating system is set to light mode
-            else {
-                // Change the favicon to the light favicon
-                document
-                    .querySelector<HTMLLinkElement>('link[rel="icon"]')
-                    ?.setAttribute('href', ProjectSettings.assets.favicon.light.location);
-            }
-
-            // Run the theme mode change handler
-            updateThemeClassName();
-        },
-        [updateThemeClassName],
-    );
-
-    // On mount
-    React.useEffect(
-        function () {
-            // Apply the operating system theme mode to the favicon and theme
-            applyOperatingSystemTheme();
-
-            // Add theme mode change event listener that calls updateTheme on theme change
-            window.addEventListener(themeModeChangeEventIdentifier, updateThemeClassName);
-
-            // Add a listener for changes in local storage
-            window.addEventListener('storage', handleLocalStorageChange);
-
-            // Add a listener for changes in the operating system's theme
-            window.matchMedia(darkThemeMediaQuery).addEventListener('change', applyOperatingSystemTheme);
-
-            // On unmount
-            return function () {
-                // Remove theme mode change event listener
-                window.removeEventListener(themeModeChangeEventIdentifier, updateThemeClassName);
-
-                // Remove the listener for changes in local storage
-                window.removeEventListener('storage', handleLocalStorageChange);
-
-                // Remove the listener for changes in the operating system's theme
-                window.matchMedia(darkThemeMediaQuery).removeEventListener('change', applyOperatingSystemTheme);
-            };
-        },
-        [handleLocalStorageChange, applyOperatingSystemTheme, updateThemeClassName],
-    );
-
-    // Render the component
-    return (
-        <ThemeContext.Provider value={{ themeClassName: themeClassName, setThemeClassName: updateThemeClassName }}>
-            {properties.children}
-        </ThemeContext.Provider>
-    );
+// Theme - The theme preference of the app.
+export enum Theme {
+    OperatingSystem = 'OperatingSystem',
+    Light = 'Light',
+    Dark = 'Dark',
 }
 
-// Context - Theme
-interface ThemeContextInterface {
-    themeClassName?: string | null;
-    setThemeClassName: (updatedThemeClassName: string | null) => void;
+// OperatingSystemTheme - The theme preference of the operating system.
+export enum OperatingSystemTheme {
+    Light = Theme.Light,
+    Dark = Theme.Dark,
 }
-const ThemeContext = React.createContext<ThemeContextInterface | null>(null);
+
+// ThemeClassName - The class names for the themes.
+export enum ThemeClassName {
+    Light = 'light',
+    Dark = 'dark',
+}
+
+// Function to set the theme class name on the DOM
+function setThemeClassName(themeClassName: ThemeClassName) {
+    // console.log('setThemeClassName', themeClassName);
+
+    // Light
+    if(themeClassName === ThemeClassName.Light) {
+        document.documentElement.classList.add(ThemeClassName.Light);
+        document.documentElement.classList.remove(ThemeClassName.Dark);
+    }
+    // Dark
+    else if(themeClassName === ThemeClassName.Dark) {
+        document.documentElement.classList.add(ThemeClassName.Dark);
+        document.documentElement.classList.remove(ThemeClassName.Light);
+    }
+}
+
+// Shared State - Theme (Synchronized with Local Storage)
+const themeAtomWithStorage = atomWithStorage<Theme>(
+    operatingSystemThemeKey, // Local storage Key
+    Theme.OperatingSystem, // Initial value (overridden by local storage values)
+    undefined, // Custom storage (change if you want to use something other than localStorage)
+    {
+        getOnInit: true, // Initialize atom prior to React initial hydration (prevents flashing)
+    },
+);
+
+// Shared State - Read-only Theme
+export const readOnlyThemeAtom = atom(function (get) {
+    return get(themeAtomWithStorage);
+});
+
+// Shared State - setThemeAtom
+export const setThemeAtom = atom(null, function (get, set, theme: Theme) {
+    if(typeof window !== 'undefined') {
+        // Light
+        if(theme === Theme.Light) {
+            setThemeClassName(ThemeClassName.Light);
+        }
+        // Dark
+        else if(theme === Theme.Dark) {
+            setThemeClassName(ThemeClassName.Dark);
+        }
+        // Operating System
+        else if(theme === Theme.OperatingSystem) {
+            const operatingSystemTheme = get(readOnlyOperatingSystemThemeAtom);
+            setThemeClassName(
+                operatingSystemTheme === OperatingSystemTheme.Light ? ThemeClassName.Light : ThemeClassName.Dark,
+            );
+        }
+    }
+
+    // Set the theme
+    set(themeAtomWithStorage, theme ?? atomReset);
+});
+
+// Shared State - Operating System Theme
+const operatingSystemThemeAtom = atom<OperatingSystemTheme>();
+operatingSystemThemeAtom.onMount = function (setOperatingSystemThemeAtom) {
+    // Query the operating system theme
+    const operatingSystemDarkThemeQuery = window.matchMedia(darkThemeMediaQueryString);
+
+    // Function to handle the operating system theme change
+    function handleOperatingSystemThemeChange() {
+        // console.log('handleOperatingSystemThemeChange');
+
+        // Get the operating system theme using the media query
+        const operatingSystemTheme = operatingSystemDarkThemeQuery.matches
+            ? OperatingSystemTheme.Dark
+            : OperatingSystemTheme.Light;
+        // console.log('operatingSystemTheme', operatingSystemTheme);
+
+        // Update the operatingSystemThemeAtom
+        setOperatingSystemThemeAtom(operatingSystemTheme);
+
+        // Get the favicon element
+        const favicon = document.querySelector('link[rel="icon"]');
+        // console.log('favicon', favicon);
+
+        // Determine if the favicon should be light or dark based on the operating system theme
+        const faviconHref =
+            operatingSystemTheme === OperatingSystemTheme.Dark
+                ? ProjectSettings.assets.favicon.dark.location
+                : ProjectSettings.assets.favicon.light.location;
+        // console.log('faviconHref', faviconHref);
+
+        // Set the favicon href
+        favicon?.setAttribute('href', faviconHref);
+
+        // If the theme is OperatingSystem, we need to update the theme class name
+        // console.log('globalStore.get(readOnlyThemeAtom)', globalStore.get(readOnlyThemeAtom));
+        if(globalStore.get(readOnlyThemeAtom) === Theme.OperatingSystem) {
+            // If the operating system theme is light
+            if(operatingSystemTheme === OperatingSystemTheme.Light) {
+                setThemeClassName(ThemeClassName.Light);
+            }
+            // If the operating system theme is dark
+            else if(operatingSystemTheme === OperatingSystemTheme.Dark) {
+                setThemeClassName(ThemeClassName.Dark);
+            }
+        }
+    }
+
+    // Update the favicon and DOM class on mount
+    handleOperatingSystemThemeChange();
+
+    // Listen for changes to the operating system theme and update the favicon and DOM class
+    const abortController = new AbortController();
+    operatingSystemDarkThemeQuery.addEventListener('change', handleOperatingSystemThemeChange, {
+        signal: abortController.signal,
+    });
+
+    // On unmount
+    return function () {
+        // Abort the event listener
+        abortController.abort();
+    };
+};
+
+// Shared State - Read-only Operating System Theme
+export const readOnlyOperatingSystemThemeAtom = atom(function (get) {
+    return get(operatingSystemThemeAtom);
+});
 
 // Hook - useTheme
 export function useTheme() {
-    const themeContext = React.useContext(ThemeContext);
-    if(themeContext === null) {
-        throw new Error('useTheme must be used within an ThemeProvider');
-    }
-    else {
-        return themeContext;
-    }
+    const theme = useAtomValue(readOnlyThemeAtom);
+    const operatingSystemTheme = useAtomValue(readOnlyOperatingSystemThemeAtom);
+
+    return {
+        theme: theme,
+        operatingSystemTheme: operatingSystemTheme,
+    };
 }
+
+// Hook - useForceLightTheme - Force light mode on the body element
+export function useForceLightTheme() {
+    return React.useLayoutEffect(function () {
+        // Add the light class to the body element
+        document.documentElement.classList.add('light');
+
+        // On unmount
+        return function () {
+            // Remove the light class from the body element
+            document.documentElement.classList.remove('light');
+        };
+    }, []);
+}
+
+// Component - ThemeProvider
+export interface ThemeProviderInterface {
+    children: React.ReactNode;
+}
+export const ThemeProvider = function (properties: ThemeProviderInterface) {
+    // Shared State
+    const theme = useAtomValue(readOnlyThemeAtom);
+    const operatingSystemTheme = useAtomValue(readOnlyOperatingSystemThemeAtom);
+
+    // We set cookies to track the theme and operating system theme so we can use them in
+    // server-side rendering to prevent the flash of the wrong theme
+
+    // Effect to set the theme cookie when the theme changes
+    React.useEffect(
+        function () {
+            if(theme) {
+                // console.log('Setting theme cookie', theme);
+
+                Cookies.set(themeKey, theme, {
+                    path: '/',
+                    maxAge: 31536000, // 1 year
+                    sameSite: 'strict',
+                    secure: true,
+                });
+            }
+        },
+        [theme],
+    );
+
+    // Effect to set the operating system theme cookie when the operating system theme changes
+    React.useEffect(
+        function () {
+            if(operatingSystemTheme) {
+                // console.log('Setting operating system theme cookie', operatingSystemTheme);
+
+                Cookies.set(operatingSystemThemeKey, operatingSystemTheme, {
+                    path: '/',
+                    maxAge: 31536000, // 1 year
+                    sameSite: 'strict',
+                    secure: true,
+                });
+            }
+        },
+        [operatingSystemTheme],
+    );
+
+    // Render the children
+    return properties.children;
+};
 
 // Export - Default
 export default ThemeProvider;

@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { clsx, ClassValue } from 'clsx';
 
 /**
- * Merges multiple class names into a single string using the `clsx` and `twMerge`.
+ * Merges multiple class names into a single string. Later parameters override earlier ones.
  *
  * `clsx` is used to concatenate class names, handling various types of input and
  * ignoring falsey values.

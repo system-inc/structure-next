@@ -1,4 +1,5 @@
-import { ThemeMode } from './source/theme/Theme';
+// Dependencies - Theme
+import { Theme } from '@structure/source/theme/ThemeProvider';
 
 // Types
 interface ApiService {
@@ -55,7 +56,7 @@ export interface StructureSettingsInterface {
         commerce: boolean;
     };
     theme?: {
-        defaultClassName: ThemeMode;
+        defaultTheme: Theme;
     };
     assets: {
         url: string;
@@ -131,7 +132,7 @@ export const StructureSettings: StructureSettingsInterface = {
         commerce: true,
     },
     theme: {
-        defaultClassName: 'light',
+        defaultTheme: Theme.OperatingSystem,
     },
     services: {
         google: {

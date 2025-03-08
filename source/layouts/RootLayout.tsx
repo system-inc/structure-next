@@ -4,27 +4,47 @@ import ProjectSettings from '@project/ProjectSettings';
 // Dependencies - React and Next.js
 import { Metadata, Viewport } from 'next';
 import { cookies } from 'next/headers';
-// import Script from 'next/script';
-
-// Dependencies - Theme
-import '@project/source/theme/styles/global.css';
-import '@structure/source/theme/styles/global.css';
-import '@structure/source/theme/styles/theme.css';
-// import { accountSignedInKey } from '@structure/source/modules/account/Account';
-import { darkThemeClassName, themeClassNameCookieKey } from '@structure/source/theme/Theme';
 
 // Dependencies - Main Components
 import Providers from '@structure/source/layouts/providers/Providers';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
+// Dependencies - Theme
+import '@project/source/theme/styles/global.css';
+import '@structure/source/theme/styles/global.css';
+import '@structure/source/theme/styles/theme.css';
+import {
+    themeKey,
+    operatingSystemThemeKey,
+    Theme,
+    OperatingSystemTheme,
+    ThemeClassName,
+} from '@structure/source/theme/ThemeProvider';
+
 // Next.js Metadata
 export async function generateMetadata(): Promise<Metadata> {
+    // Get the cookies from the response headers
+    const cookieStore = cookies();
+
+    // Read the operating system theme from the cookies
+    const operatingSystemTheme = cookieStore.get(operatingSystemThemeKey)?.value;
+    // console.log('generateMetadata: operatingSystemTheme', operatingSystemTheme);
+
+    // Determine the favicon based on the operating system theme
+    const favicon =
+        operatingSystemTheme === OperatingSystemTheme.Dark
+            ? ProjectSettings.assets.favicon.dark.location
+            : ProjectSettings.assets.favicon.light.location;
+
     return {
         title: {
             template: '%s • ' + ProjectSettings.title,
             default: ProjectSettings.title + ' • ' + ProjectSettings.tagline, // default is required when creating a template
         },
         description: ProjectSettings.description,
+        icons: {
+            icon: favicon,
+        },
     };
 }
 
@@ -37,62 +57,83 @@ export const viewport: Viewport = {
 };
 
 // Component - RootLayout
-export interface RootLayoutInterface {
+export interface RootLayoutInterface extends React.HTMLProps<HTMLHtmlElement> {
+    htmlClassName?: string;
+    bodyClassName?: string;
+    mainClassName?: string;
+    providersComponent?: React.ComponentType<{
+        accountSignedIn: boolean;
+        children: React.ReactNode;
+    }>;
     children: React.ReactNode;
-    className?: string;
 }
 export async function RootLayout(properties: RootLayoutInterface) {
-    // We need to get the theme class name from the response cookies in order to prevent a flash
-    // of light mode when the page first loads. We can't use the theme mode from local storage because
-    // we need to know the theme class name before the page completely loads.
+    // Use the default Providers component if one is not provided
+    const ProvidersComponent = properties.providersComponent || Providers;
 
     // Get the cookies from the response headers
     const cookieStore = cookies();
-    // console.log('cookieStore', cookieStore);
 
-    // Get the signed in cookie
+    // Determine if the account is signed in based on if the sessionId HTTP-only cookie is set
+    // We use this to prevent unnecessary client-side calls to the server to check if the account is signed in
     const accountSignedIn = cookieStore.get('sessionId')?.value ? true : false;
-    // console.log('sessionId:', cookieStore.get('sessionId')?.value);
+    // This will log to terminal, not the browser console, as it is server-side
+    // console.log('RootLayout: accountSignedIn', accountSignedIn, 'sessionId:', cookieStore.get('sessionId')?.value);
 
-    // Get the theme class name from the cookies
-    const themeClassNameCookieValue = cookieStore.get(themeClassNameCookieKey)?.value;
+    // Read the theme from the cookies, falling back to the project's default theme
+    const theme = cookieStore.get(themeKey)?.value ?? ProjectSettings.theme?.defaultTheme;
+    // console.log('RootLayout: theme from cookies or default', theme);
 
-    // The initial theme class name comes from the cookie or StructureSettings
-    const themeClassName = themeClassNameCookieValue
-        ? themeClassNameCookieValue
-        : ProjectSettings?.theme?.defaultClassName || undefined;
+    // Determine the theme class name
+    let themeClassName = undefined;
 
-    // Defaults
-    // const googleAnalyticsId = ProjectSettings.services?.google?.analytics?.id;
+    // If the theme is Light
+    if(theme === Theme.Light) {
+        themeClassName = ThemeClassName.Light;
+        // console.log('RootLayout: theme is Light, themeClassName', themeClassName);
+    }
+    // If the theme is Dark
+    else if(theme === Theme.Dark) {
+        themeClassName = ThemeClassName.Dark;
+        // console.log('RootLayout: theme is Dark, themeClassName', themeClassName);
+    }
+    // If the theme is OperatingSystem
+    else if(theme === Theme.OperatingSystem) {
+        // Get the operating system theme from the cookies
+        const operatingSystemTheme = cookieStore.get(operatingSystemThemeKey)?.value;
+
+        // If the operating system theme is Light
+        if(operatingSystemTheme === OperatingSystemTheme.Light) {
+            themeClassName = ThemeClassName.Light;
+        }
+        // If the operating system theme is Dark
+        else if(operatingSystemTheme === OperatingSystemTheme.Dark) {
+            themeClassName = ThemeClassName.Dark;
+        }
+        // console.log(
+        //     'RootLayout: theme is OperatingSystem',
+        //     'operatingSystemTheme',
+        //     operatingSystemTheme,
+        //     'themeClassName',
+        //     themeClassName,
+        // );
+    }
 
     // Render the component
     return (
-        <html lang="en" className={mergeClassNames(themeClassName, properties.className)}>
-            {/* Important: Do not use next/head here it will break dynamic favicons */}
-            {/* eslint-disable-next-line -- We want to use traditional <head> here because this is shimmed into a layout.tsx */}
-            <head>
-                {/* Favicon */}
-                {/* The favicon is based on the system theme mode not the user selected theme */}
-                {/* This is so it matches the browser tab colors */}
-                <link
-                    rel="icon"
-                    // Here we assume that if the cookie is set to dark, the system theme is also dark
-                    // When the page loads we will use JavaScript to check the system theme and update the favicon
-                    href={
-                        themeClassNameCookieValue === darkThemeClassName
-                            ? ProjectSettings.assets.favicon.dark.location
-                            : ProjectSettings.assets.favicon.light.location
-                    }
-                />
-            </head>
-
-            <body className="isolate h-full min-h-screen bg-light font-sans text-dark transition-colors dark:bg-dark-1 dark:text-white">
-                {/* Providers pass properties down to children */}
-                {/* Pass the theme class name into providers so anything using the useTheme hook instantly knows the theme from the cookies via the response headers */}
-                <Providers accountSignedIn={accountSignedIn} themeClassName={themeClassName}>
-                    {/* Render children passed into the layout */}
-                    {properties.children}
-                </Providers>
+        <html lang="en" className={mergeClassNames(properties.htmlClassName, themeClassName)}>
+            <body className={mergeClassNames('font-sans', properties.bodyClassName)}>
+                {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content */}
+                {/* Fixes any z-index issues with Popovers, etc. */}
+                <main
+                    className={mergeClassNames(
+                        'relative isolate z-0 h-[100dvh] overflow-y-auto overflow-x-clip',
+                        properties.mainClassName,
+                    )}
+                >
+                    {/* Providers use React's Context API to make values accessible to all components within their subtree */}
+                    <ProvidersComponent accountSignedIn={accountSignedIn}>{properties.children}</ProvidersComponent>
+                </main>
             </body>
         </html>
     );
