@@ -20,7 +20,7 @@ export const scrollAreaScrollbarClassName =
     // Group
     'group ' +
     // Animation - Animate the hover colors
-    'duration-500 ease-out transition-colors';
+    'duration-500 ease-out';
 export const scrollAreaVerticalScrollbarClassName =
     'w-[14px] data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
 export const scrollAreaHorizontalScrollbarClassName =

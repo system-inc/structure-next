@@ -170,7 +170,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
         return (
             <a
                 id={camelCase(properties.text)}
-                className={`cursor-pointer rounded-md p-1.5 text-xs dark:text-light-4 dark:hover:bg-dark-4 ${
+                className={`rounded-medium cursor-pointer p-1.5 text-xs dark:text-light-4 dark:hover:bg-dark-4 ${
                     properties.isActive ? 'bg-light-4/50 dark:bg-dark-4/50' : 'hover:bg-light-4'
                 }`}
                 onClick={properties.onClick}

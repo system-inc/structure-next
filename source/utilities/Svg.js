@@ -786,9 +786,9 @@ export const Svg = (function () {
                 const b = 256 * random() - 128;
                 const color = new Color(l, a, b, 'lab');
                 return color;
-            } else if(mode === 'grey') {
-                const grey = 255 * random();
-                const color = new Color(grey, grey, grey);
+            } else if(mode === 'gray') {
+                const gray = 255 * random();
+                const color = new Color(gray, gray, gray);
                 return color;
             } else {
                 throw new Error('Unsupported random color mode');
@@ -835,13 +835,13 @@ export const Svg = (function () {
 
             const max = Math.max(r, g, b);
             const min = Math.min(r, g, b);
-            const l = (max + min) / 2; // If the r, g, v values are identical then we are grey
+            const l = (max + min) / 2; // If the r, g, v values are identical then we are gray
 
-            const isGrey = max === min; // Calculate the hue and saturation
+            const isGray = max === min; // Calculate the hue and saturation
 
             const delta = max - min;
-            const s = isGrey ? 0 : l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
-            const h = isGrey ? 0 : max === r ? ((g - b) / delta + (g < b ? 6 : 0)) / 6 : max === g ? ((b - r) / delta + 2) / 6 : max === b ? ((r - g) / delta + 4) / 6 : 0; // Construct and return the new color
+            const s = isGray ? 0 : l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+            const h = isGray ? 0 : max === r ? ((g - b) / delta + (g < b ? 6 : 0)) / 6 : max === g ? ((b - r) / delta + 2) / 6 : max === b ? ((r - g) / delta + 4) / 6 : 0; // Construct and return the new color
 
             const color = new Color(360 * h, 100 * s, 100 * l, 'hsl');
             return color;
@@ -1048,7 +1048,7 @@ export const Svg = (function () {
                 } = this;
                 h /= 360;
                 s /= 100;
-                l /= 100; // If we are grey, then just make the color directly
+                l /= 100; // If we are gray, then just make the color directly
 
                 if(s === 0) {
                     l *= 255;

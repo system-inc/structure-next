@@ -49,7 +49,7 @@ export function RequestParametersTable(properties: RequestParametersTableInterfa
     // Render the component
     return (
         <div className="max-w-[1024px] overflow-x-auto text-sm">
-            <div className="overflow-hidden rounded-md border">
+            <div className="rounded-medium overflow-hidden border">
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="border-b">

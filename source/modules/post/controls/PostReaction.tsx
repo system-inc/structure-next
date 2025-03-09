@@ -137,8 +137,6 @@ export function PostReaction(properties: PostReactionInterface) {
                 className={mergeClassNames(
                     // Layout
                     'flex cursor-pointer select-none items-center space-x-1.5 rounded-lg border px-2.5 ' +
-                        // Animation
-                        'transition-colors ' +
                         // Light
                         'border-light-3 ' +
                         // Dark

@@ -279,7 +279,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
 
     // Render the component
     return (
-        <div className={mergeClassNames('mr-4 inline-flex flex-col rounded-md border p-4', properties.className)}>
+        <div className={mergeClassNames('rounded-medium mr-4 inline-flex flex-col border p-4', properties.className)}>
             <div className="flex flex-col space-y-2">
                 {/* Conditions */}
                 {columnFilterGroupData.conditions.map(function (condition, conditionIndex) {
@@ -288,7 +288,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
-                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md text-sm text-neutral">
+                                <p className="rounded-medium flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center text-sm text-neutral">
                                     Where
                                 </p>
                             ) : conditionIndex === 1 ? (
@@ -311,7 +311,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm text-muted-foreground">
+                                <p className="rounded-medium flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center px-4 text-sm text-muted-foreground">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -430,7 +430,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             }}
                         />
                     ) : (
-                        <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm text-muted-foreground">
+                        <p className="rounded-medium flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center px-4 text-sm text-muted-foreground">
                             {columnFilterGroupData.operator.toLowerCase()}
                         </p>
                     )}

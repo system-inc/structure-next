@@ -97,7 +97,7 @@ export function ResponseParameters(properties: ResponseParametersInterface) {
     // Function to render a table
     function renderTable(fields: ResponseFieldInterface[], tablePath = ''): React.ReactNode {
         return (
-            <div className="overflow-hidden rounded-md border">
+            <div className="rounded-medium overflow-hidden border">
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="border-b">

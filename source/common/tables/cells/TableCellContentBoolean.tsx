@@ -8,7 +8,7 @@ export interface TableCellContentBooleanInterface extends React.HTMLAttributes<H
 export function TableCellContentBoolean(properties: TableCellContentBooleanInterface) {
     // Render the component
     return (
-        <div className="inline-flex rounded-md border px-2.5 py-1 text-xs font-medium uppercase">
+        <div className="rounded-medium inline-flex border px-2.5 py-1 text-xs font-medium uppercase">
             {properties.value}
         </div>
     );

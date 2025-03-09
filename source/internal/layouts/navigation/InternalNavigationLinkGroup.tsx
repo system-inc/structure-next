@@ -50,7 +50,7 @@ export function InternalNavigationLinkGroup(properties: InternalNavigationLinkIn
                 />
                 <div className="absolute inset-y-0 right-2 flex items-center">
                     <button
-                        className="relative flex aspect-square w-6 items-center justify-center rounded text-dark transition-colors hover:bg-dark/10 dark:text-white dark:hover:bg-light/10"
+                        className="relative flex aspect-square w-6 items-center justify-center rounded text-dark hover:bg-dark/10 dark:text-white dark:hover:bg-light/10"
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         <AnimatedChevronRightIcon
