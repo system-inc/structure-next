@@ -42,7 +42,7 @@ function setThemeClassName(themeClassName: ThemeClassName) {
 
 // Shared State - Theme (Synchronized with Local Storage)
 const themeAtomWithStorage = atomWithStorage<Theme>(
-    operatingSystemThemeKey, // Local storage Key
+    themeKey, // Local storage Key
     Theme.OperatingSystem, // Initial value (overridden by local storage values)
     undefined, // Custom storage (change if you want to use something other than localStorage)
     {
