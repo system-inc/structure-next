@@ -22,11 +22,11 @@ export interface AccountProviderInterface {
 export function AccountProvider(properties: AccountProviderInterface) {
     // State
     const [signedIn, setSignedIn] = React.useState<boolean>(properties.signedIn); // Initialized using response header cookie
+    // console.log('AccountProvider: signedIn', signedIn);
     const [authenticationDialogOpen, setAuthenticationDialogOpen] = React.useState(false);
 
     // Hooks
     const router = useRouter();
-    // const apolloClient = useApolloClient();
 
     // Mutations
     const [accountSignOutMutation] = useMutation(AccountSignOutDocument);
@@ -108,6 +108,11 @@ export function AccountProvider(properties: AccountProviderInterface) {
         },
         [accountSignOutMutation, updateSignedIn, router],
     );
+
+    // Effect to update local storage on mount
+    React.useEffect(function () {
+        localStorage.setItem(accountSignedInKey, signedIn ? 'true' : 'false');
+    });
 
     // Effect to listen for changes in local storage
     React.useEffect(
