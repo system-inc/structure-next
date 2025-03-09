@@ -68,7 +68,7 @@ const components: ComponentsInterface = {
     ),
     pre: (properties) => (
         <pre
-            className="relative mb-6 rounded-md border border-light-4 bg-light-2 p-5 text-sm dark:border-dark-4 dark:bg-dark"
+            className="rounded-medium relative mb-6 border border-light-4 bg-light-2 p-5 text-sm dark:border-dark-4 dark:bg-dark"
             {...properties}
         >
             {properties.children}
@@ -93,7 +93,7 @@ const components: ComponentsInterface = {
     ),
     hr: (properties) => <hr className="my-10 border-light-4 dark:border-dark-4" {...properties} />,
     table: (properties) => <table className="relative mb-6 mt-6 w-full overflow-auto rounded border" {...properties} />,
-    thead: (properties) => <thead className="border-b bg-light-2 transition-colors dark:bg-dark" {...properties} />,
+    thead: (properties) => <thead className="border-b bg-light-2 dark:bg-dark" {...properties} />,
     tbody: (properties) => <tbody className="" {...properties} />,
     tr: (properties) => <tr className="border-b border-light-4 last:border-b-0 dark:border-dark-4" {...properties} />,
     th: (properties) => (

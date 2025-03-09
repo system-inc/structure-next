@@ -85,13 +85,13 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowInt
 
     // Render the component
     return (
-        <div className="w-full overflow-hidden rounded-md border">
+        <div className="rounded-medium w-full overflow-hidden border">
             {/* Header with description and add button */}
             <div className="flex items-center justify-between border-b px-4 py-3">
                 <div>
                     <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">Array Items</span>
-                        <span className="inline-block rounded-md bg-light-2 px-1.5 py-0.5 text-xs dark:bg-dark-3">
+                        <span className="rounded-medium inline-block bg-light-2 px-1.5 py-0.5 text-xs dark:bg-dark-3">
                             {properties.type}
                         </span>
                     </div>

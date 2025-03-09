@@ -432,7 +432,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 <div
                     ref={containerResizeHandleDivReference}
                     className={mergeClassNames(
-                        'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none select-none bg-transparent transition-colors duration-500 hover:bg-blue active:bg-purple-500',
+                        'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none select-none bg-transparent duration-500 hover:bg-blue active:bg-purple-500',
                         // If the top bar is enabled, offset the handle by the height of the top bar
                         topBar && windowInnerWidth >= desktopMinimumWidth ? 'top-16' : '',
                         // If the navigation is open, show the handle, otherwise disable interacting with it

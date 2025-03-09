@@ -662,7 +662,7 @@ export const Chart = ({
                     <>
                         <RechartsTooltip
                             animationDuration={0}
-                            wrapperClassName="rounded-md"
+                            wrapperClassName="rounded-medium"
                             // contentStyle={{
                             //     borderRadius: "8px",
                             // }}

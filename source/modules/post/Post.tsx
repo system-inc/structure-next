@@ -223,7 +223,7 @@ export function Post(properties: PostInterface) {
                                         key={topic}
                                         className={
                                             // Layout
-                                            'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 transition-colors ' +
+                                            'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 ' +
                                             // Light
                                             'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500 ' +
                                             // Dark

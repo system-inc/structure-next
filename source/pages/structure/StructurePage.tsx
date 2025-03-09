@@ -329,7 +329,7 @@ export function StructurePage() {
                     return (
                         <div
                             key={number}
-                            className="mb-2 rounded-md border p-3 text-xl"
+                            className="rounded-medium mb-2 border p-3 text-xl"
                             style={{
                                 borderColor: color,
                             }}

@@ -20,7 +20,7 @@ export function EngagementContainer(properties: EngagementContainerInterface) {
     // Render the component
     return (
         <div></div>
-        // <div className="fixed bottom-0 right-0 z-50 w-[420px] rounded-md border">Current path: {engagement.path}</div>
+        // <div className="fixed bottom-0 right-0 z-50 w-[420px] rounded-medium border">Current path: {engagement.path}</div>
     );
 }
 

@@ -559,7 +559,7 @@ export function DataSource(properties: DataSourceInterface) {
                         }
                     >
                         <div
-                            className="h-6 w-6 flex-shrink-0 cursor-pointer rounded-md"
+                            className="rounded-medium h-6 w-6 flex-shrink-0 cursor-pointer"
                             style={{
                                 backgroundColor: properties.settings.color,
                             }}

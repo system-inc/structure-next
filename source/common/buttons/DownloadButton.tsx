@@ -88,7 +88,7 @@ export function DownloadButton(properties: DownloadButtonType) {
     // Render the component
     return (
         <Button
-            className={`transition-colors ${
+            className={`${
                 downloadStarted
                     ? 'text-emerald-500 hover:text-emerald-500'
                     : 'text-neutral hover:text-dark dark:text-neutral+6 dark:hover:text-light'

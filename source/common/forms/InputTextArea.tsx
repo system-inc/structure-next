@@ -31,14 +31,14 @@ export const backgroundClassNames =
 // Border styles
 export const borderStyleClassNames =
     // Border
-    `rounded-md border border-light-6 dark:border-dark-4 ` +
+    `rounded-medium border border-light-6 dark:border-dark-4 ` +
     // Focus
     `focus:border-neutral dark:focus:border-neutral-3`;
 
 // Focus styles: background and text color changes on hover
 export const focusStyleClassNames =
     // Focus
-    `transition-colors focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`;
+    `focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`;
 
 // Autofill styles
 export const autofillStyleClassNames = `autofill:bg-transparent dark:autofill:bg-transparent`;
@@ -53,7 +53,7 @@ export const InputTextAreaVariants = {
     search:
         `${commonClassNames} ${backgroundClassNames} ${borderStyleClassNames} ${focusStyleClassNames} ${autofillStyleClassNames} ` +
         // Focus
-        `transition-colors focus-visible:outline-none focus-visible:ring-0 ` +
+        `focus-visible:outline-none focus-visible:ring-0 ` +
         // Layout and sizing
         `pl-9 pr-4 py-2 ` +
         // Border
@@ -63,7 +63,7 @@ export const InputTextAreaVariants = {
     menuSearch:
         `${commonClassNames} ${autofillStyleClassNames} ` +
         // Focus
-        `transition-colors focus-visible:outline-none focus-visible:ring-0 ` +
+        `focus-visible:outline-none focus-visible:ring-0 ` +
         // Layout and sizing
         `w-full pl-9 pr-4 py-3 ` +
         // Border

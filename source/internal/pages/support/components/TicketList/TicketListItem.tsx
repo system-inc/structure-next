@@ -51,7 +51,7 @@ export function TicketListItem(properties: TicketListItemInterface) {
     // Render the component
     return (
         <div
-            className={`relative cursor-pointer my-3 mx-4 py-3 pl-12 pr-3 rounded-lg transition-colors hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
+            className={`relative cursor-pointer my-3 mx-4 py-3 pl-12 pr-3 rounded-lg hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
                 isSelected ? 'bg-light-1 dark:bg-dark-2' : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
             }`}
             onClick={() => onSelect(ticket.identifier)}

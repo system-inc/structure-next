@@ -47,7 +47,7 @@ export function SupportFeedback(properties: SupportFeedbackInterface) {
         return mergeClassNames(
             'cursor-pointer transition-all duration-300 hover:scale-150 ease-in-out', // Base classes
             selectedEmoji === emoji ? 'scale-125' : 'scale-100', // Keep the selected emoji larger
-            selectedEmoji && selectedEmoji !== emoji ? 'grayscale opacity-10' : '', // Grey out unselected emojis
+            selectedEmoji && selectedEmoji !== emoji ? 'grayscale opacity-10' : '', // Gray out unselected emojis
         );
     }
 

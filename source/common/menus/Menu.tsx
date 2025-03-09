@@ -21,7 +21,7 @@ export const menuClassName =
     // Layout and sizing
     `flex flex-col focus-visible:outline-none ` +
     // Border
-    `rounded-md border border-light-4 dark:border-dark-4 ` +
+    `rounded-medium border border-light-4 dark:border-dark-4 ` +
     // Background and text
     `text-sm bg-light text-dark dark:bg-dark+2 dark:text-light`;
 
