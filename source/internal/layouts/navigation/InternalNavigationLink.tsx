@@ -1,5 +1,8 @@
 // Dependencies - React and Next.js
-import Link from 'next/link';
+import React from 'react';
+
+// Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

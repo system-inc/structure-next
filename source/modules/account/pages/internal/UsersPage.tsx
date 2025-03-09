@@ -2,11 +2,11 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 import { useRouter, useUrlPath, useUrlSearchParameters } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
+import { Link } from '@structure/source/common/navigation/Link';
+import { InternalNavigationTrail } from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 import { Pagination } from '@structure/source/common/navigation/pagination/Pagination';
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';

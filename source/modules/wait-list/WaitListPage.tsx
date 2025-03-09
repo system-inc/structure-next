@@ -4,14 +4,14 @@
 import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
-import Link from 'next/link';
+import React from 'react';
 
 // Dependencies - Main Components
-import AccountMenuButton from '@structure/source/modules/account/components/AccountMenuButton';
-import WaitListForm from '@structure/source/modules/wait-list/WaitListForm';
+import { Link } from '@structure/source/common/navigation/Link';
+import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
+import { WaitListForm } from '@structure/source/modules/wait-list/WaitListForm';
 
 // Component - WaitListPage
-export interface WaitListPageProperties {}
 export function WaitListPage() {
     const currentYear = new Date().getFullYear();
 

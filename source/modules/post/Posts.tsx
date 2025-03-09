@@ -2,7 +2,6 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
 import { Post, PostReactionsType } from '@structure/source/modules/post/Post';
@@ -20,8 +19,8 @@ import {
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Dependencies - Utilities
-import { fullDate } from '@structure/source/utilities/Time';
-import { addCommas } from '@structure/source/utilities/Number';
+// import { fullDate } from '@structure/source/utilities/Time';
+// import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - Posts
 export interface PostsInterface {

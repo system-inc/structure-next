@@ -2,10 +2,10 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-// import Link from 'next/link';
 // import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
+// import { Link } from '@structure/source/common/navigation/Link';
 
 // Dependencies - Assets
 import CurrentLocationIcon from '@structure/assets/icons/navigation/CurrentLocationIcon.svg';

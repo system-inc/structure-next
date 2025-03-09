@@ -2,9 +2,9 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 

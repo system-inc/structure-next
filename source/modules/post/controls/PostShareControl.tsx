@@ -2,9 +2,9 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';

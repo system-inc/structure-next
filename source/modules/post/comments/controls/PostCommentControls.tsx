@@ -2,7 +2,6 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
 import { PostInterface } from '@structure/source/modules/post/Post';

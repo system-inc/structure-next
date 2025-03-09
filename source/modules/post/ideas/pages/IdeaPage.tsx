@@ -2,12 +2,11 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { Post } from '@structure/source/modules/post/Post';
+// import { Button } from '@structure/source/common/buttons/Button';
+// import { Post } from '@structure/source/modules/post/Post';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
@@ -15,7 +14,7 @@ import { PostDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
-import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
+// import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - Utilities
 import { slug } from '@structure/source/utilities/String';

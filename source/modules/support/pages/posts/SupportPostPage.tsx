@@ -2,9 +2,9 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 import { NavigationTrail } from '@structure/source/common/navigation/trail/NavigationTrail';
 import { SupportFeedback } from '@structure/source/modules/support/components/SupportFeedback';
