@@ -5,9 +5,9 @@ import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 

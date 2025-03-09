@@ -2,10 +2,10 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
-import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
+import { Link } from '@structure/source/common/navigation/Link';
+import { InternalNavigationTrail } from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 import { Button } from '@structure/source/common/buttons/Button';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';

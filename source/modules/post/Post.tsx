@@ -2,9 +2,9 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
 import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
 import { PostControls } from '@structure/source/modules/post/controls/PostControls';

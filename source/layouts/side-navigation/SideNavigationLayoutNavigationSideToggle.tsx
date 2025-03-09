@@ -5,11 +5,11 @@ import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 
 // Dependencies - Main Components
-import Button from '@structure/source/common/buttons/Button';
+import { Link } from '@structure/source/common/navigation/Link';
+import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Shared State
 import { useAtom, useSetAtom } from 'jotai';

@@ -1,6 +1,8 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
+
+// Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 
 // Dependencies - Account
 import { Account } from '@structure/source/modules/account/Account';
