@@ -6,6 +6,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    /* Font */
+    --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
 /* Class to allow full width and height for the ScrollArea component */
 /* Fix for RadixScrollArea */
 .scroll-area-viewport> :first-child {
