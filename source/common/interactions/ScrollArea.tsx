@@ -76,7 +76,7 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
         >
             <RadixScrollArea.Viewport
                 ref={reference}
-                className={mergeClassNames(scrollAreaClassName, 'scrollAreaViewport', properties.className)}
+                className={mergeClassNames(scrollAreaClassName, 'scroll-area-viewport', properties.className)}
                 // asChild is causing major issues
                 // If it is enabled, the scroll area works but cannot have a height that
                 // fills the parent container

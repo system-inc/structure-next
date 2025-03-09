@@ -1,17 +1,25 @@
-/* Import the theme */
-@import './theme.css';
+/* Tailwind CSS Layer Imports */
+/* Base: Resets and foundational styles */
+/* Components: Pre-built component classes */
+/* Utilities: Atomic utility classes */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Default font */
-:root {
-    --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+/* Class to allow full width and height for the ScrollArea component */
+/* Fix for RadixScrollArea */
+.scroll-area-viewport> :first-child {
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
 }
 
-/* For Webkit-based browsers (Chrome, Safari, and Opera) */
+/* Class to hide the scroll bar - Webkit-based browsers (Chrome, Safari, and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
 
-/* For Internet Explorer, Edge and Firefox */
+/* Class to hide the scroll bar - Internet Explorer, Edge and Firefox */
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -29,11 +37,4 @@ input:-webkit-autofill:active {
         background-color 99999s,
         color 99999s;
     transition-delay: 99999s;
-}
-
-/* This allows full width and height for the ScrollArea component */
-.scrollAreaViewport> :first-child {
-    height: 100%;
-    width: 100%;
-    table-layout: fixed;
 }

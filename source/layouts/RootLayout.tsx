@@ -10,9 +10,6 @@ import Providers from '@structure/source/layouts/providers/Providers';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Dependencies - Theme
-import '@project/source/theme/styles/global.css';
-import '@structure/source/theme/styles/global.css';
-import '@structure/source/theme/styles/theme.css';
 import {
     themeKey,
     operatingSystemThemeKey,
@@ -20,6 +17,10 @@ import {
     OperatingSystemTheme,
     ThemeClassName,
 } from '@structure/source/theme/Theme';
+
+// Dependencies - Theme - Styles
+import '@structure/source/theme/styles/global.css';
+import '@project/source/theme/styles/theme.css';
 
 // Next.js Metadata
 export async function generateMetadata(): Promise<Metadata> {
