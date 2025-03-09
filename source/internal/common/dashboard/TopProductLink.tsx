@@ -1,7 +1,9 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+
+// Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 
 // Component - TopProductLink
 export type TopProductLinkProperties = {

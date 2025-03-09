@@ -1,9 +1,9 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import { SideNavigationSectionInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Dependencies - Utilities

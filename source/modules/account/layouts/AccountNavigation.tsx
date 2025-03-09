@@ -2,24 +2,23 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-// import Image from 'next/image';
-import Link from 'next/link';
-
-// Dependencies - React Spring
-import { useTrail, useSpring, animated } from '@react-spring/web';
-import useMeasure from 'react-use-measure';
 
 // Dependencies - Radix-UI
 import * as RadixAccordion from '@radix-ui/react-accordion';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import AccountNavigationLinks from '@structure/source/modules/account/layouts/AccountNavigationLinks';
+
+// Dependencies - Animation
+import { useTrail, useSpring, animated } from '@react-spring/web';
+import useMeasure from 'react-use-measure';
+
+// Dependencies - Assets
+import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-
-// Dependencies - Icons
-import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.svg';
 
 // Component - AccountNavigation
 interface AccountNavigationInterface extends React.HTMLProps<HTMLElement> {}

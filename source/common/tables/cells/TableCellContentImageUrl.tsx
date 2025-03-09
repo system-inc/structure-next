@@ -1,9 +1,9 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/common/navigation/Link';
 import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Assets
