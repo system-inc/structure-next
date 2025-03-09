@@ -37,7 +37,7 @@ export function ThemeToggle() {
         return (
             <Tip sideOffset={8} content={<div className="px-2 py-1 text-xs">{currentTheme} Theme</div>}>
                 <button
-                    className={`rounded-full transition-colors hover:text-dark dark:hover:text-light ${
+                    className={`rounded-full hover:text-dark dark:hover:text-light ${
                         theme === currentTheme && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light'
                     }`}
                     tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons

@@ -1,15 +1,10 @@
 /* Tailwind CSS Layer Imports */
 /* Base: Resets and foundational styles */
-/* Components: Pre-built component classes */
-/* Utilities: Atomic utility classes */
 @tailwind base;
+/* Components: Pre-built component classes */
 @tailwind components;
+/* Utilities: Atomic utility classes */
 @tailwind utilities;
-
-:root {
-    /* Font */
-    --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
 
 /* Class to allow full width and height for the ScrollArea component */
 /* Fix for RadixScrollArea */

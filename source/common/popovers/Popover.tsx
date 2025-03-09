@@ -17,7 +17,7 @@ export const popoverClassName =
     // Background and text
     `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
     // Border
-    `rounded-md border border-light-4 dark:border-dark-4 ` +
+    `rounded-small border border-light-4 dark:border-dark-4 ` +
     // Animations
     `data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 ` +
     // Base width and height

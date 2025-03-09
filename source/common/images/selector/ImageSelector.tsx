@@ -151,7 +151,7 @@ export function ImageSelector(properties: ImageSelectorInterface) {
                     accept={properties.accept || 'image/*'}
                     multiple={properties.allowMultipleFileSelection}
                     onChange={handleFileChange}
-                    className="border-neutral-200 dark:border-neutral-700 w-full cursor-pointer rounded-md border bg-transparent p-2 text-sm"
+                    className="border-neutral-200 dark:border-neutral-700 rounded-medium w-full cursor-pointer border bg-transparent p-2 text-sm"
                 />
                 {error && (
                     <Alert variant="error" className="mt-2">
@@ -209,7 +209,7 @@ export function ImageSelector(properties: ImageSelectorInterface) {
             />
             <div
                 className={mergeClassNames(
-                    'flex min-h-[120px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-4 transition-colors',
+                    'flex min-h-[120px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-4',
                     dragActive
                         ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-900/20'
                         : 'border-neutral-300 hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-600',

@@ -84,7 +84,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             ref={reference}
             style={{ ...properties.style, ...noticeSpring }}
             className={mergeClassNames(
-                'relative box-border flex h-auto touch-none items-center rounded-md border bg-light p-7 dark:bg-dark+2',
+                'rounded-medium relative box-border flex h-auto touch-none items-center border bg-light p-7 dark:bg-dark+2',
                 properties.className,
             )}
             onMouseEnter={function (event) {

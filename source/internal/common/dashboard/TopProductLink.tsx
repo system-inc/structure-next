@@ -16,7 +16,7 @@ export function TopProductLink(properties: TopProductLinkProperties) {
     return (
         <Link
             href={properties.href}
-            className="flex items-center justify-between p-4 font-light transition-colors hover:bg-light-4/30 dark:hover:bg-light-4/5"
+            className="flex items-center justify-between p-4 font-light hover:bg-light-4/30 dark:hover:bg-light-4/5"
         >
             {/* Image and identifier info */}
             <div className="flex items-center">

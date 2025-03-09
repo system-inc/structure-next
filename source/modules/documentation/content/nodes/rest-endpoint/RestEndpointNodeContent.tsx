@@ -357,7 +357,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                 {/* HTTP Method */}
                 <span
                     className={mergeClassNames(
-                        'method rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                        'method rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
                         getMethodColorClass(endpoint.method),
                     )}
                 >
@@ -393,7 +393,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                 {/* HTTP Method */}
                 <span
                     className={mergeClassNames(
-                        'method rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                        'method rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
                         getMethodColorClass(endpoint.method),
                     )}
                 >
@@ -436,11 +436,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                 </div>
                 {runningRequest && <p className="mt-4">Running request...</p>}
                 {testOutputResponseBody && !runningRequest && (
-                    <div className="mt-4 rounded-md border p-4 text-sm">
+                    <div className="rounded-medium mt-4 border p-4 text-sm">
                         <div className="">
                             <span
                                 className={mergeClassNames(
-                                    'method rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                                    'method rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
                                     getStatusCodeColorClass(testOutputResponseHttpStatusCode),
                                 )}
                             >
@@ -449,11 +449,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                         </div>
                         <div className="mt-4">
                             <h4 className="mb-2 text-sm">Response Headers</h4>
-                            <pre className="rounded-md border p-4">{testOutputResponseHttpHeaders}</pre>
+                            <pre className="rounded-medium border p-4">{testOutputResponseHttpHeaders}</pre>
                         </div>
                         <div className="mt-4">
                             <h4 className="mb-2 text-sm">Response Body</h4>
-                            <pre className="rounded-md border p-4">{testOutputResponseBody}</pre>
+                            <pre className="rounded-medium border p-4">{testOutputResponseBody}</pre>
                         </div>
                     </div>
                 )}
@@ -471,7 +471,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                                 <div className="mb-2 flex items-center">
                                     <span
                                         className={mergeClassNames(
-                                            'rounded-md border px-1 py-0.5 font-mono text-xs text-light',
+                                            'rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
                                             getStatusCodeColorClass(exampleResponse.statusCode),
                                         )}
                                     >
@@ -484,7 +484,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                                 {/* Body JSON */}
                                 {exampleResponse.body && (
                                     <Json
-                                        className="rounded-md border p-2 text-xs"
+                                        className="rounded-medium border p-2 text-xs"
                                         data={responseFieldsToExampleJson(exampleResponse.body)}
                                     />
                                 )}

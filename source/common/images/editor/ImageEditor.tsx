@@ -242,9 +242,10 @@ export function ImageEditor(properties: ImageEditorInterface) {
                                               maximum: properties.cropAspectRatio,
                                           }
                                         : undefined,
-                                    overlayClassName: properties.cropShape === 'Round' ? 'rounded-full' : 'rounded-md',
+                                    overlayClassName:
+                                        properties.cropShape === 'Round' ? 'rounded-full' : 'rounded-medium',
                                 }}
-                                className="border-neutral-200 dark:border-neutral-700 rounded-md border"
+                                className="border-neutral-200 dark:border-neutral-700 rounded-medium border"
                                 onUpdate={function (cropper) {
                                     // Update the preview
                                     previewRef.current?.update(cropper);
@@ -268,7 +269,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
                 </>
             ) : (
                 <div
-                    className="border-neutral-200 dark:border-neutral-700 flex h-64 items-center justify-center rounded-md border"
+                    className="border-neutral-200 dark:border-neutral-700 rounded-medium flex h-64 items-center justify-center border"
                     aria-live="polite"
                 >
                     <p className="text-neutral-500">Loading image...</p>

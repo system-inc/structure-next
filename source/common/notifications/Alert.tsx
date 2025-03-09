@@ -90,7 +90,7 @@ export function Alert(properties: AlertInterface) {
     return (
         <div
             className={mergeClassNames(
-                'flex max-w-3xl flex-col rounded-md border',
+                'rounded-medium flex max-w-3xl flex-col border',
                 AlertVariants[variant],
                 AlertSizes[size],
                 properties.className,

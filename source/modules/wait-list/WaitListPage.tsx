@@ -39,7 +39,7 @@ export function WaitListPage() {
     // Render the component
     return (
         <>
-            <div className="flex h-screen items-center transition-colors md:h-screen md:items-stretch dark:bg-dark dark:text-light-2">
+            <div className="flex h-screen items-center md:h-screen md:items-stretch dark:bg-dark dark:text-light-2">
                 {/* Show the account menu button */}
                 <div className="absolute right-4 top-4 z-20">{<AccountMenuButton />}</div>
 

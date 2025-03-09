@@ -1,0 +1,315 @@
+/* Global and Light Theme Variables */
+:root {
+    /* Fonts */
+    --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* Light Scale (Transparent Whites, Opacity 0 to 1) */
+    --light-0: rgba(255 255 255 / 0);
+    --light-50: rgba(255 255 255 / 0.05);
+    --light-100: rgba(255 255 255 / 0.1);
+    --light-150: rgba(255 255 255 / 0.15);
+    --light-200: rgba(255 255 255 / 0.2);
+    --light-250: rgba(255 255 255 / 0.25);
+    --light-300: rgba(255 255 255 / 0.3);
+    --light-350: rgba(255 255 255 / 0.35);
+    --light-400: rgba(255 255 255 / 0.4);
+    --light-450: rgba(255 255 255 / 0.45);
+    --light-500: rgba(255 255 255 / 0.5);
+    --light-550: rgba(255 255 255 / 0.55);
+    --light-600: rgba(255 255 255 / 0.6);
+    --light-650: rgba(255 255 255 / 0.65);
+    --light-700: rgba(255 255 255 / 0.7);
+    --light-750: rgba(255 255 255 / 0.75);
+    --light-800: rgba(255 255 255 / 0.8);
+    --light-850: rgba(255 255 255 / 0.85);
+    --light-900: rgba(255 255 255 / 0.9);
+    --light-950: rgba(255 255 255 / 0.95);
+    --light-1000: #ffffff;
+
+    /* Dark Scale (Transparent Blacks, Opacity 0 to 1) */
+    --dark-0: rgba(0 0 0 / 0);
+    --dark-50: rgba(0 0 0 / 0.05);
+    --dark-100: rgba(0 0 0 / 0.1);
+    --dark-150: rgba(0 0 0 / 0.15);
+    --dark-200: rgba(0 0 0 / 0.2);
+    --dark-250: rgba(0 0 0 / 0.25);
+    --dark-300: rgba(0 0 0 / 0.3);
+    --dark-350: rgba(0 0 0 / 0.35);
+    --dark-400: rgba(0 0 0 / 0.4);
+    --dark-450: rgba(0 0 0 / 0.45);
+    --dark-500: rgba(0 0 0 / 0.5);
+    --dark-550: rgba(0 0 0 / 0.55);
+    --dark-600: rgba(0 0 0 / 0.6);
+    --dark-650: rgba(0 0 0 / 0.65);
+    --dark-700: rgba(0 0 0 / 0.7);
+    --dark-750: rgba(0 0 0 / 0.75);
+    --dark-800: rgba(0 0 0 / 0.8);
+    --dark-850: rgba(0 0 0 / 0.85);
+    --dark-900: rgba(0 0 0 / 0.9);
+    --dark-950: rgba(0 0 0 / 0.95);
+    --dark-1000: var(--black-1000);
+
+    /* Black Scale (Lightest to Darkest) */
+    --black-0: #505050;
+    --black-50: #4c4c4c;
+    --black-100: #484848;
+    --black-150: #444444;
+    --black-200: #404040;
+    --black-250: #3c3c3c;
+    --black-300: #383838;
+    --black-350: #343434;
+    --black-400: #303030;
+    --black-450: #2c2c2c;
+    --black-500: #282828;
+    --black-550: #242424;
+    --black-600: #202020;
+    --black-650: #1c1c1c;
+    --black-700: #181818;
+    --black-750: #141414;
+    --black-800: #101010;
+    --black-850: #0c0c0c;
+    --black-900: #080808;
+    --black-950: #040404;
+    --black-1000: var(--black-1000);
+
+    /* Gray Scale (Lightest to Darkest) */
+    --gray-0: #a7a7a7;
+    --gray-50: #a3a3a3;
+    --gray-100: #9f9f9f;
+    --gray-150: #9b9b9b;
+    --gray-200: #979797;
+    --gray-250: #939393;
+    --gray-300: #8f8f8f;
+    --gray-350: #8b8b8b;
+    --gray-400: #878787;
+    --gray-450: #838383;
+    --gray-500: #808080;
+    --gray-550: #7c7c7c;
+    --gray-600: #787878;
+    --gray-650: #747474;
+    --gray-700: #707070;
+    --gray-750: #6c6c6c;
+    --gray-800: #686868;
+    --gray-850: #646464;
+    --gray-900: #606060;
+    --gray-950: #5c5c5c;
+    --gray-1000: #585858;
+
+    /* White Scale (Darkest to Lightest) */
+    --white-0: #afafaf;
+    --white-50: #b3b3b3;
+    --white-100: #b7b7b7;
+    --white-150: #bbbbbb;
+    --white-200: #bfbfbf;
+    --white-250: #c3c3c3;
+    --white-300: #c7c7c7;
+    --white-350: #cbcbcb;
+    --white-400: #cfcfcf;
+    --white-450: #d3d3d3;
+    --white-500: #d7d7d7;
+    --white-550: #dbdbdb;
+    --white-600: #dfdfdf;
+    --white-650: #e3e3e3;
+    --white-700: #e7e7e7;
+    --white-750: #ebebeb;
+    --white-800: #efefef;
+    --white-850: #f3f3f3;
+    --white-900: #f7f7f7;
+    --white-950: #fbfbfb;
+    --white-1000: #ffffff;
+
+    /* Blue Scale (Lightest to Darkest) */
+    --blue-0: #f0f7ff;
+    --blue-50: #e6f1ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+    --blue-950: #172554;
+    --blue-1000: #0f172a;
+
+    /* Border Radius */
+    --border-radius-none: 0rem;
+    --border-radius-extra-small: 0.25rem;
+    --border-radius-small: 0.5rem;
+    --border-radius-medium: 0.75rem;
+    --border-radius-large: 1rem;
+    --border-radius-extra-large: 1.25rem;
+    --border-radius-full: 62.4375rem;
+
+    /* Backgrounds (Light Theme) */
+    --background-primary: var(--white-1000);
+    --background-primary-subtle: var(--white-950);
+    --background-secondary: var(--white-900);
+    --background-tertiary: var(--white-1000);
+    --background-quartary: var(--white-800);
+    --background-overlay: var(--dark-400);
+
+    /* Foregrounds (Light Theme) */
+    --foreground-primary: var(--black-800);
+    --foreground-secondary: var(--gray-800);
+    --foreground-tertiary: var(--gray-600);
+    --foreground-placeholder: var(--gray-500);
+    --foreground-disabled: var(--gray-300);
+
+    /* Action - Primary (Light Theme) */
+    --action-primary-default: var(--black-800);
+    --action-primary-hover: var(--black-500);
+    --action-primary-pressed: var(--black-700);
+
+    /* Action - Primary - Contrast (Light Theme) */
+    --action-primary-contrast-default: var(--white-1000);
+    --action-primary-contrast-hover: var(--white-500);
+    --action-primary-contrast-pressed: var(--white-800);
+
+    /* Action - Ghost (Light Theme) */
+    --action-ghost-default: var(--light-0);
+    --action-ghost-hover: var(--white-900);
+    --action-ghost-pressed: var(--white-800);
+
+    /* Action - Destructive (Light Theme) */
+    --action-destructive-default: var(--black-1000);
+    --action-destructive-hover: var(--black-1000);
+    --action-destructive-pressed: var(--black-1000);
+
+    /* Action - General (Light Theme) */
+    --action-general-light: var(--light-1000);
+    --action-general-contrast-light: var(--white-1000);
+    --action-general-dark: var(--black-800);
+    --action-general-contrast-dark: var(--black-800);
+    --action-general-gray: var(--white-300);
+    --action-general-disabled: var(--dark-100);
+
+    /* Link - Primary (Light Theme) */
+    --link-primary-default: var(--black-800);
+    --link-primary-hover: var(--black-100);
+    --link-primary-pressed: var(--black-700);
+
+    /* Link - Primary - Disabled (Light Theme) */
+    --link-primary-disabled: var(--gray-300);
+    --link-primary-contrast-disabled: var(--white-700);
+
+    /* Link - Primary - Contrast (Light Theme) */
+    --link-primary-contrast-default: var(--white-1000);
+    --link-primary-contrast-hover: var(--white-1000);
+    --link-primary-contrast-pressed: var(--white-800);
+
+    /* Link - Secondary (Light Theme) */
+    --link-secondary-default: var(--gray-800);
+    --link-secondary-hover: var(--gray-550);
+    --link-secondary-pressed: var(--gray-900);
+
+    /* Link - Muted (Light Theme) */
+    --link-muted-default: var(--gray-600);
+    --link-muted-hover: var(--gray-400);
+    --link-muted-pressed: var(--gray-800);
+
+    /* Link - Blue (Light Theme) */
+    --link-blue-default: var(--blue-600);
+    --link-blue-hover: var(--blue-500);
+    --link-blue-pressed: var(--blue-700);
+
+    /* Borders (Light Theme) */
+    --border-primary: var(--white-700);
+    --border-contrast: var(--white-0);
+    --border-secondary: var(--white-900);
+    --border-tertiary: var(--white-500);
+
+    /* Effects (Light Theme) */
+    --effects-shadow-default: var(--dark-100);
+    --effects-shadow-default-dark: var(--dark-100);
+    --effects-shadow-subtle-dark: var(--dark-50);
+    --effects-shadow-strong: var(--dark-150);
+}
+
+/* Dark Theme Variables */
+.dark :not(:where(.light *, .light)) {
+    /* Backgrounds (Dark Theme) */
+    --background-primary: var(--black-700);
+    --background-primary-subtle: var(--black-650);
+    --background-secondary: var(--black-500);
+    --background-tertiary: var(--black-600);
+    --background-quartary: var(--black-600);
+    --background-overlay: var(--dark-600);
+
+    /* Foregrounds (Dark Theme) */
+    --foreground-primary: var(--white-1000);
+    --foreground-secondary: var(--gray-50);
+    --foreground-tertiary: var(--gray-400);
+    --foreground-placeholder: var(--gray-500);
+    --foreground-disabled: var(--gray-300);
+
+    /* Action - Primary (Dark Theme) */
+    --action-primary-default: var(--white-1000);
+    --action-primary-hover: var(--white-700);
+    --action-primary-pressed: var(--white-900);
+
+    /* Action - Primary - Contrast (Dark Theme) */
+    --action-primary-contrast-default: var(--white-1000);
+    --action-primary-contrast-hover: var(--white-500);
+    --action-primary-contrast-pressed: var(--white-700);
+
+    /* Action - Ghost (Dark Theme) */
+    --action-ghost-default: var(--light-0);
+    --action-ghost-hover: var(--light-50);
+    --action-ghost-pressed: var(--light-100);
+
+    /* Action - Destructive (Dark Theme) */
+    --action-destructive-default: var(--black-1000);
+    --action-destructive-hover: var(--black-1000);
+    --action-destructive-pressed: var(--black-1000);
+
+    /* Action - General (Dark Theme) */
+    --action-general-light: var(--black-800);
+    --action-general-contrast-light: var(--white-1000);
+    --action-general-dark: var(--white-1000);
+    --action-general-contrast-dark: var(--black-800);
+    --action-general-gray: var(--black-0);
+    --action-general-disabled: var(--light-100);
+
+    /* Link - Primary (Dark Theme) */
+    --link-primary-default: var(--white-1000);
+    --link-primary-hover: var(--white-400);
+    --link-primary-pressed: var(--white-900);
+
+    /* Link - Primary - Disabled (Dark Theme) */
+    --link-primary-disabled: var(--gray-300);
+    --link-primary-contrast-disabled: var(--white-800);
+
+    /* Link - Primary - Contrast (Dark Theme) */
+    --link-primary-contrast-default: var(--white-1000);
+    --link-primary-contrast-hover: var(--white-1000);
+    --link-primary-contrast-pressed: var(--white-800);
+
+    /* Link - Secondary (Dark Theme) */
+    --link-secondary-default: var(--gray-200);
+    --link-secondary-hover: var(--gray-50);
+    --link-secondary-pressed: var(--gray-300);
+
+    /* Link - Muted (Dark Theme) */
+    --link-muted-default: var(--gray-400);
+    --link-muted-hover: var(--gray-300);
+    --link-muted-pressed: var(--gray-500);
+
+    /* Link - Blue (Dark Theme) */
+    --link-blue-default: var(--blue-600);
+    --link-blue-hover: var(--blue-500);
+    --link-blue-pressed: var(--blue-400);
+
+    /* Borders (Dark Theme) */
+    --border-primary: var(--black-300);
+    --border-contrast: var(--white-0);
+    --border-secondary: var(--black-500);
+    --border-tertiary: var(--black-100);
+
+    /* Effects (Dark Theme) */
+    --effects-shadow-default: var(--dark-450);
+    --effects-shadow-default-dark: var(--dark-450);
+    --effects-shadow-subtle-dark: var(--dark-350);
+    --effects-shadow-strong: var(--dark-450);
+}

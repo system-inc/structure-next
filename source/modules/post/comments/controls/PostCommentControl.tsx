@@ -26,8 +26,6 @@ export function PostCommentControl(properties: PostCommentControlInterface) {
                 'mr-0.5 flex cursor-pointer items-center space-x-1 px-2 py-1.5',
                 // Border
                 'rounded-lg border border-transparent',
-                // Animation
-                'transition-colors',
                 // Hover - Light
                 'hover:border-light-3',
                 // Hover - Dark

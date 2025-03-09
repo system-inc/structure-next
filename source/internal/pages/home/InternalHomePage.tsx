@@ -165,8 +165,8 @@ export function InternalHomePage() {
                     <CardLink href="/internal/fulfillment" title="New Accounts" value={'+410'} date="Today" />
                 </div>
 
-                {/* List of full width links that have a bottom border and a right chevron. When you hover the link hover color is grey */}
-                <div className="mt-6 flex flex-col divide-y divide-light-4/75 transition-colors dark:divide-dark-4">
+                {/* List of full width links that have a bottom border and a right chevron. When you hover the link hover color is gray */}
+                <div className="mt-6 flex flex-col divide-y divide-light-4/75 dark:divide-dark-4">
                     {metricLinks.map((link, _id) => (
                         <HomeMetricLink key={_id} href={link.href} number={link.number} text={link.text} />
                     ))}
@@ -174,7 +174,7 @@ export function InternalHomePage() {
 
                 <div className="mt-6 flex flex-col">
                     <h2 className="mb-4 text-base font-normal">Top Products</h2>
-                    <div className="flex flex-col divide-y divide-light-4/75 transition-colors dark:divide-dark-4">
+                    <div className="trdark:divide-dark-4 flex flex-col divide-y divide-light-4/75">
                         <TopProductLink
                             href="/internal/fulfillment"
                             productName="Stack"
@@ -204,7 +204,7 @@ export function InternalHomePage() {
             </div>
 
             {/* Right column */}
-            <div className="flex min-w-[240px] flex-col border-l border-light-4 pl-6 transition-colors dark:border-l-dark-4">
+            <div className="flex min-w-[240px] flex-col border-l border-light-4 pl-6 dark:border-l-dark-4">
                 <h1 className="text-base">Activity</h1>
                 {/* List of activities */}
 

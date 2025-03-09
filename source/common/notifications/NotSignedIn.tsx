@@ -21,7 +21,7 @@ export function NotSignedIn() {
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
-            <div className="rounded-md border p-8">{/* <SignInForm className="mb-2 w-80" /> */}</div>
+            <div className="rounded-medium border p-8">{/* <SignInForm className="mb-2 w-80" /> */}</div>
         </div>
     );
 }

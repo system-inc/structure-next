@@ -564,7 +564,7 @@ export function Table(properties: TableInterface) {
             {/* Table Container */}
             <div
                 className={mergeClassNames(
-                    'overflow-scroll rounded-md border border-light-6 dark:border-dark-4',
+                    'rounded-medium overflow-scroll border border-light-6 dark:border-dark-4',
                     properties.containerClassName,
                 )}
             >

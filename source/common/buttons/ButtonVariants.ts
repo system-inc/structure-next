@@ -3,14 +3,12 @@ const commonButton =
     // Layout and container
     `inline-flex items-center whitespace-nowrap select-none ` +
     // Disabled states
-    `disabled:cursor-not-allowed disabled:opacity-75 ` +
-    // Animation
-    `transition-colors`;
+    `disabled:cursor-not-allowed disabled:opacity-75`;
 
 // Centered button styles: alignment, sizing, and shape
 const centeredButton =
     // Layout and container
-    `justify-center rounded-md ` +
+    `justify-center rounded-small ` +
     // Content
     `text-sm font-medium`;
 
@@ -92,11 +90,11 @@ export const ButtonVariants = {
     ghost:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Rounded and hover
-        `rounded-md hover:bg-accent border border-transparent hover:text-accent-foreground`,
+        `rounded-medium hover:bg-accent border border-transparent hover:text-accent-foreground`,
     ghostDestructive:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Rounded and hover
-        `rounded-md hover:bg-accent hover:text-accent-foreground ` +
+        `rounded-medium hover:bg-accent hover:text-accent-foreground ` +
         // Color, hover, and active states
         `text-neutral+6 hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
     // Destructive variant: styles for negative actions like delete or remove
@@ -128,12 +126,12 @@ export const ButtonVariants = {
     toggleOn:
         `${commonButton} ${centeredButton} ` +
         // Toggled on
-        `rounded-md border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
+        `rounded-medium border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
     // Toggle off
     toggleOff:
         `${commonButton} ${centeredButton} ` +
         // Toggled off
-        `rounded-md border border-light-6 dark:border-dark-4`,
+        `rounded-medium border border-light-6 dark:border-dark-4`,
     // Menu Item variant: styles for menu items
     menuItem:
         `relative flex items-center justify-start font-normal cursor-default rounded-sm ` +
@@ -173,7 +171,7 @@ export const ButtonVariants = {
         // Layout and sizing
         ` ` +
         // Border
-        `rounded-md border border-light-6 dark:border-dark-3 ` +
+        `rounded-medium border border-light-6 dark:border-dark-3 ` +
         // Light text on dark background
         `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
         // Hover

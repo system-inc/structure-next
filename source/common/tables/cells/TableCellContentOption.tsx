@@ -15,7 +15,7 @@ export function TableCellContentOption(properties: TableCellContentOptionInterfa
 
     // Render the component
     return (
-        <div className="inline-flex rounded-md border bg-light px-2.5 py-1 text-xs font-medium dark:bg-dark">
+        <div className="rounded-medium inline-flex border bg-light px-2.5 py-1 text-xs font-medium dark:bg-dark">
             {properties.value}
         </div>
     );
