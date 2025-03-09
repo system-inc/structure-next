@@ -10,13 +10,8 @@ import Providers from '@structure/source/layouts/providers/Providers';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Dependencies - Theme
-import {
-    themeKey,
-    operatingSystemThemeKey,
-    Theme,
-    OperatingSystemTheme,
-    ThemeClassName,
-} from '@structure/source/theme/Theme';
+import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
+import { themeKey, operatingSystemThemeKey } from '@structure/source/theme/ThemeSettings';
 
 // Dependencies - Theme - Styles
 import '@structure/source/theme/styles/global.css';

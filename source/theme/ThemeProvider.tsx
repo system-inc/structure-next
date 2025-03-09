@@ -12,14 +12,8 @@ import { atomWithStorage, RESET as atomReset } from 'jotai/utils';
 import { globalStore } from '@structure/source/utilities/shared-state/SharedStateProvider';
 
 // Dependencies - Theme
-import {
-    themeKey,
-    operatingSystemThemeKey,
-    darkThemeMediaQueryString,
-    Theme,
-    OperatingSystemTheme,
-    ThemeClassName,
-} from '@structure/source/theme/Theme';
+import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
+import { themeKey, operatingSystemThemeKey, darkThemeMediaQueryString } from '@structure/source/theme/ThemeSettings';
 
 // Dependencies - Utilities
 import Cookies from '@structure/source/utilities/cookies/Cookies';

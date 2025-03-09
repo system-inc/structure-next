@@ -7,7 +7,7 @@ import React from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 // Dependencies - Theme
-import { Theme } from '@structure/source/theme/Theme';
+import { Theme } from '@structure/source/theme/ThemeTypes';
 import { readOnlyThemeAtom, setThemeAtom } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Main Components

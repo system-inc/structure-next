@@ -1,5 +1,5 @@
 // Dependencies - Theme
-import { Theme } from '@structure/source/theme/Theme';
+import { Theme } from '@structure/source/theme/ThemeTypes';
 
 // Types
 interface ApiService {
