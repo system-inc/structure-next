@@ -19,7 +19,7 @@ import {
     Theme,
     OperatingSystemTheme,
     ThemeClassName,
-} from '@structure/source/theme/ThemeProvider';
+} from '@structure/source/theme/Theme';
 
 // Next.js Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,6 +73,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
 
     // Get the cookies from the response headers
     const cookieStore = cookies();
+    // console.log('cookieStore', cookieStore);
 
     // Determine if the account is signed in based on if the sessionId HTTP-only cookie is set
     // We use this to prevent unnecessary client-side calls to the server to check if the account is signed in
@@ -81,6 +82,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
     // console.log('RootLayout: accountSignedIn', accountSignedIn, 'sessionId:', cookieStore.get('sessionId')?.value);
 
     // Read the theme from the cookies, falling back to the project's default theme
+    // console.log('cookieStore.get(themeKey)?.value', cookieStore.get(themeKey)?.value);
     const theme = cookieStore.get(themeKey)?.value ?? ProjectSettings.theme?.defaultTheme;
     // console.log('RootLayout: theme from cookies or default', theme);
 

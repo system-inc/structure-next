@@ -7,7 +7,8 @@ import React from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 // Dependencies - Theme
-import { Theme, readOnlyThemeAtom, setThemeAtom } from '@structure/source/theme/ThemeProvider';
+import { Theme } from '@structure/source/theme/Theme';
+import { readOnlyThemeAtom, setThemeAtom } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Main Components
 import Tip from '@structure/source/common/popovers/Tip';

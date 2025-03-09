@@ -11,33 +11,18 @@ import { atom, useAtomValue } from 'jotai';
 import { atomWithStorage, RESET as atomReset } from 'jotai/utils';
 import { globalStore } from '@structure/source/utilities/shared-state/SharedStateProvider';
 
+// Dependencies - Theme
+import {
+    themeKey,
+    operatingSystemThemeKey,
+    darkThemeMediaQueryString,
+    Theme,
+    OperatingSystemTheme,
+    ThemeClassName,
+} from '@structure/source/theme/Theme';
+
 // Dependencies - Utilities
 import Cookies from '@structure/source/utilities/cookies/Cookies';
-
-// Theme variables shared across the app
-export const themeKey = ProjectSettings.identifier + 'Theme';
-export const operatingSystemThemeKey = ProjectSettings.identifier + 'OperatingSystemTheme';
-export const themeChangeEventIdentifier = ProjectSettings.identifier + 'Theme.change';
-export const darkThemeMediaQueryString = '(prefers-color-scheme: dark)';
-
-// Theme - The theme preference of the app.
-export enum Theme {
-    OperatingSystem = 'OperatingSystem',
-    Light = 'Light',
-    Dark = 'Dark',
-}
-
-// OperatingSystemTheme - The theme preference of the operating system.
-export enum OperatingSystemTheme {
-    Light = Theme.Light,
-    Dark = Theme.Dark,
-}
-
-// ThemeClassName - The class names for the themes.
-export enum ThemeClassName {
-    Light = 'light',
-    Dark = 'dark',
-}
 
 // Function to set the theme class name on the DOM
 function setThemeClassName(themeClassName: ThemeClassName) {
@@ -161,31 +146,6 @@ operatingSystemThemeAtom.onMount = function (setOperatingSystemThemeAtom) {
 export const readOnlyOperatingSystemThemeAtom = atom(function (get) {
     return get(operatingSystemThemeAtom);
 });
-
-// Hook - useTheme
-export function useTheme() {
-    const theme = useAtomValue(readOnlyThemeAtom);
-    const operatingSystemTheme = useAtomValue(readOnlyOperatingSystemThemeAtom);
-
-    return {
-        theme: theme,
-        operatingSystemTheme: operatingSystemTheme,
-    };
-}
-
-// Hook - useForceLightTheme - Force light mode on the body element
-export function useForceLightTheme() {
-    return React.useLayoutEffect(function () {
-        // Add the light class to the body element
-        document.documentElement.classList.add('light');
-
-        // On unmount
-        return function () {
-            // Remove the light class from the body element
-            document.documentElement.classList.remove('light');
-        };
-    }, []);
-}
 
 // Component - ThemeProvider
 export interface ThemeProviderInterface {
