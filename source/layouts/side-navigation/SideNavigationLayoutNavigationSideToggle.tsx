@@ -27,7 +27,6 @@ import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-// import { darkThemeClassName } from '@structure/source/theme/Theme';
 
 // Component - SideNavigationLayoutNavigationSideToggle
 export interface SideNavigationLayoutNavigationSideToggleInterface {
