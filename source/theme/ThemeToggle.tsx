@@ -33,9 +33,11 @@ export function ThemeToggle() {
     function themeModeButton(currentTheme: Theme) {
         const IconComponent =
             currentTheme === Theme.Light ? SunIcon : currentTheme === Theme.Dark ? MoonIcon : DesktopIcon;
+        const currentThemeText =
+            currentTheme === Theme.Light ? 'Light' : currentTheme === Theme.Dark ? 'Dark' : 'System';
 
         return (
-            <Tip sideOffset={8} content={<div className="px-2 py-1 text-xs">{currentTheme} Theme</div>}>
+            <Tip sideOffset={8} content={<div className="px-2 py-1 text-xs">{currentThemeText} Theme</div>}>
                 <button
                     className={`rounded-full hover:text-dark dark:hover:text-light ${
                         theme === currentTheme && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light'
