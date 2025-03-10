@@ -31,7 +31,7 @@ export const backgroundClassNames =
 // Border styles
 export const borderStyleClassNames =
     // Border
-    `rounded-medium border border-light-6 dark:border-dark-4 ` +
+    `rounded-small border border-light-6 dark:border-dark-4 ` +
     // Focus
     `focus:border-neutral dark:focus:border-neutral-3`;
 

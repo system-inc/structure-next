@@ -1,5 +1,8 @@
 /* Global and Light Theme Variables */
 :root {
+    /* Constants */
+    --phi: 1.618rem;
+
     /* Fonts */
     --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
@@ -140,7 +143,7 @@
     --border-radius-medium: 0.75rem;
     --border-radius-large: 1rem;
     --border-radius-extra-large: 1.25rem;
-    --border-radius-full: 62.4375rem;
+    --border-radius-full: 50%;
 
     /* Backgrounds (Light Theme) */
     --background-primary: var(--white-1000);

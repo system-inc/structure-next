@@ -301,7 +301,7 @@ export const InputMultipleSelect = React.forwardRef<
                             selectedItems.map((item, index) => (
                                 <div
                                     key={index}
-                                    className="rounded-medium flex px-2 py-1.5 text-xs text-dark-6 dark:bg-dark-4 dark:text-light-6"
+                                    className="rounded-small flex px-2 py-1.5 text-xs text-dark-6 dark:bg-dark-4 dark:text-light-6"
                                 >
                                     {item.content}
                                     <CloseIcon
