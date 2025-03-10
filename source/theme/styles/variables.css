@@ -235,9 +235,9 @@
     /* Backgrounds (Dark Theme) */
     --background-primary: var(--black-700);
     --background-primary-subtle: var(--black-650);
-    --background-secondary: var(--black-500);
-    --background-tertiary: var(--black-600);
-    --background-quartary: var(--black-600);
+    --background-secondary: var(--black-600);
+    --background-tertiary: var(--black-500);
+    --background-quartary: var(--black-400);
     --background-overlay: var(--dark-600);
 
     /* Foregrounds (Dark Theme) */
