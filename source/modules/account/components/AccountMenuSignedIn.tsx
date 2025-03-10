@@ -54,7 +54,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
 
             <div className="pt-4">
                 <Link
-                    className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-primary/5"
+                    className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
                     href="/account/profile"
                 >
                     Profile
@@ -63,7 +63,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                 {/* If the account is an administrator */}
                 {properties.account.isAdministator() && (
                     <Link
-                        className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-primary/5"
+                        className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
                         href="/internal"
                     >
                         Internal
