@@ -16,7 +16,7 @@ export interface LinkInterface
     children?: React.ReactNode;
     variant?: 'Primary' | 'Secondary' | 'Muted';
 }
-export function Link(properties: LinkInterface) {
+export const Link = React.forwardRef<HTMLAnchorElement, LinkInterface>(function (properties, reference) {
     // Determine base classes based on variant
     const baseClasses = React.useMemo(
         function () {
@@ -38,11 +38,14 @@ export function Link(properties: LinkInterface) {
 
     // Render the component
     return (
-        <NextLink {...properties} className={className}>
+        <NextLink {...properties} className={className} ref={reference}>
             {properties.children}
         </NextLink>
     );
-}
+});
+
+// Set the display name for the component for debugging
+Link.displayName = 'Link';
 
 // Export - Default
 export default Link;

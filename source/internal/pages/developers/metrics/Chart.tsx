@@ -692,7 +692,7 @@ export const Chart = ({
                             }}
                             content={(values) => {
                                 return (
-                                    <div className="rounded-sm border border-light-4 bg-light dark:border-dark-4 dark:bg-dark">
+                                    <div className="rounded-extra-small border border-light-4 bg-light dark:border-dark-4 dark:bg-dark">
                                         <div className="border-b p-2 text-xs text-dark/60 dark:text-light-4/60">
                                             {tooltipHeaderColumn(timeInterval, values.label)}
                                         </div>
@@ -723,7 +723,7 @@ export const Chart = ({
                                                                             ? lightenColor(payload.color || '', 0.2)
                                                                             : darkenColor(payload.color || '', 0.2),
                                                                 }}
-                                                                className="h-4 w-4 rounded-sm border"
+                                                                className="rounded-extra-small h-4 w-4 border"
                                                             />
                                                         </td>
                                                         {tooltipColumn(timeInterval, payload)}

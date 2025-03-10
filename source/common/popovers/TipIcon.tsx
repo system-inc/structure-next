@@ -20,7 +20,7 @@ import { removeProperties } from '@structure/source/utilities/React';
 // Variants - TipIcon
 export const TipIconVariants = {
     // Default variant
-    default: `select-none rounded-sm p-[5px] hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
+    default: `select-none rounded-extra-small p-[5px] hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
     // Unstyled variant
     unstyled: ``,
 };
@@ -28,7 +28,7 @@ export const TipIconVariants = {
 // Variants - TipIconContent
 export const TipIconContentVariants = {
     // Default variant
-    default: `max-w-xs rounded-sm px-2 py-1.5 text-xs`,
+    default: `max-w-xs rounded-extra-small px-2 py-1.5 text-xs`,
     // Unstyled variant
     unstyled: `border-none`,
 };
