@@ -51,8 +51,10 @@ export function ContactPage() {
 
     // Render the component
     return (
-        <div className="container pb-32 pt-12">
-            <h1 className="mb-6 text-3xl font-medium">Contact {ProjectSettings.title}</h1>
+        <div className="container pt-12">
+            <h1 className="text-3xl font-medium">Contact {ProjectSettings.title}</h1>
+
+            <hr className="my-6" />
 
             <div className="">
                 {/* Message Not Sent */}
