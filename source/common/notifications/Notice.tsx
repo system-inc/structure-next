@@ -107,8 +107,9 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             <AnimatedButton
                 {...properties.closeButtonProperties}
                 tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
+                variant="unstyled"
                 size="unstyled"
-                className="absolute -left-2 -top-2 rounded-full p-1 hover:text-dark dark:text-neutral+3 dark:hover:text-light"
+                className="absolute -left-2 -top-2 inline-flex select-none items-center justify-center whitespace-nowrap rounded-full border border-light-3 bg-light p-1 hover:bg-light-2 hover:text-dark focus-visible:outline-none focus-visible:ring-0 dark:border-dark-3 dark:bg-dark+2 dark:text-neutral+3 dark:hover:bg-dark-3 dark:hover:text-light"
                 style={buttonSpring}
                 data-show={hovered}
                 onClick={handleRemoval}
