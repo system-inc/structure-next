@@ -31,7 +31,7 @@ export const dialogCloseClassName =
     // Position
     'absolute right-4 top-4 ' +
     // Border
-    'rounded-sm  ' +
+    'rounded-extra-small  ' +
     // Hover and focus states
     'cursor-pointer transition-opacity opacity-70 hover:opacity-100 ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ' +
     // Disabled state

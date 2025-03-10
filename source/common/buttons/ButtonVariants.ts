@@ -134,7 +134,7 @@ export const ButtonVariants = {
         `rounded-medium border border-light-6 dark:border-dark-4`,
     // Menu Item variant: styles for menu items
     menuItem:
-        `relative flex items-center justify-start font-normal cursor-default rounded-sm ` +
+        `relative flex items-center justify-start font-normal cursor-default rounded-extra-small ` +
         // Focus states
         `focus-border-none focus-visible:outline-none ` +
         // Highlighted states
@@ -148,7 +148,7 @@ export const ButtonVariants = {
         // Layout and sizing
         `flex items-center justify-center content-center ` +
         // Border
-        `rounded-sm border border-light-6 dark:border-light ` +
+        `rounded-small border border-light-6 dark:border-light ` +
         // Text and background
         `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
         // Hover
@@ -171,7 +171,7 @@ export const ButtonVariants = {
         // Layout and sizing
         ` ` +
         // Border
-        `rounded-medium border border-light-6 dark:border-dark-3 ` +
+        `rounded-small border border-light-6 dark:border-dark-3 ` +
         // Light text on dark background
         `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
         // Hover

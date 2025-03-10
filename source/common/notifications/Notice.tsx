@@ -33,10 +33,12 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
     const [hovered, setHovered] = React.useState(true);
 
     // Springs
-    const [noticeSpring, noticeSpringControl] = useSpring(() => ({
-        opacity: 1,
-        x: 0,
-    }));
+    const [noticeSpring, noticeSpringControl] = useSpring(function () {
+        return {
+            opacity: 1,
+            x: 0,
+        };
+    });
     const buttonSpring = useSpring({
         opacity: hovered ? 1 : 0,
     });
@@ -87,16 +89,16 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
                 'rounded-medium relative box-border flex h-auto touch-none items-center border bg-light p-7 dark:bg-dark+2',
                 properties.className,
             )}
-            onMouseEnter={function (event) {
+            onMouseEnter={function () {
                 setHovered(true);
             }}
-            onMouseLeave={function (event) {
+            onMouseLeave={function () {
                 setHovered(false);
             }}
-            onFocusCapture={function (event) {
+            onFocusCapture={function () {
                 setHovered(true);
             }}
-            onBlurCapture={function (event) {
+            onBlurCapture={function () {
                 setHovered(false);
             }}
             {...bindDrag()}
