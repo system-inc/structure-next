@@ -113,14 +113,14 @@ export function FormInput({
             {properties.label && (
                 <div
                     className={mergeClassNames(
-                        'flex items-center text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-75',
+                        'flex items-center text-sm peer-disabled:cursor-not-allowed peer-disabled:opacity-75',
                         FormInputSizes[size],
                         properties.labelContainerClassName,
                     )}
                 >
                     <label
                         className={mergeClassNames(
-                            'pointer:cursor select-none whitespace-nowrap leading-none',
+                            'pointer:cursor select-none whitespace-nowrap font-medium leading-none',
                             properties.labelClassName,
                         )}
                         onClick={properties.focus instanceof Function ? properties.focus : undefined}
