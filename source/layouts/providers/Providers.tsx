@@ -70,11 +70,9 @@ export function Providers(properties: ProvidersInterface) {
                                             <EngagementProvider>
                                                 {/* Interaction Providers */}
                                                 <InteractionProviders>
-                                                    <NoticeProvider>
-                                                        <TipProvider delayDuration={100}>
-                                                            {properties.children}
-                                                        </TipProvider>
-                                                    </NoticeProvider>
+                                                    {/* <NoticeProvider> */}
+                                                    <TipProvider delayDuration={100}>{properties.children}</TipProvider>
+                                                    {/* </NoticeProvider> */}
                                                 </InteractionProviders>
                                             </EngagementProvider>
                                         </FeatureProviders>
