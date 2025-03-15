@@ -1,6 +1,19 @@
 // Constants
-const HEARTBEAT_INTERVAL_MS = 3000; // How often to check if clients are still alive (3 seconds)
-const HEARTBEAT_TIMEOUT_MS = 10000; // How long before considering a client disconnected (10 seconds)
+const HeartbeatIntervalInMilliseconds = 3000; // How often to check if clients are still alive (3 seconds)
+const HeartbeatTimeoutInMilliseconds = 10000; // How long before considering a client disconnected (10 seconds)
+
+// Client-to-Server Message Types (sent from the client, which is a tab or window, to the SharedWorker)
+const ClientToServerMessageType = {
+    Pong: 'Pong',
+    RequestClientConnections: 'RequestClientConnections'
+};
+
+// Server-to-Client Message Types (sent from SharedWorker to client)
+const ServerToClientMessageType = {
+    Ping: 'Ping',
+    ClientIdAssigned: 'ClientIdAssigned',
+    ClientConnections: 'ClientConnections'
+};
 
 // Class - SharedWorkerClientConnection
 // Represents a client connection (browser tab or window) connected to the SharedWorker
@@ -13,7 +26,7 @@ class SharedWorkerClientConnection {
         this.lastActive = Date.now();
     }
 
-    // Send a message to this client
+    // Function to send a message to this client
     sendMessage(message, onClientConnectionDisconnect) {
         console.log('sending message:', message, 'to', this.id);
 
@@ -28,13 +41,13 @@ class SharedWorkerClientConnection {
         }
     }
 
-    // Update the last active timestamp
+    // Function to update the last active timestamp
     updateLastActive() {
         this.lastActive = Date.now();
         return this.lastActive;
     }
 
-    // Handle disconnection and clean up resources
+    // Function to handle disconnection and clean up resources
     handleDisconnect() {
         if(this.heartbeatInterval) {
             clearInterval(this.heartbeatInterval);
@@ -47,7 +60,8 @@ class SharedWorkerClientConnection {
 // SharedWorker which communicates with tabs via the SharedWorker API
 class SharedWorkerServer {
     constructor() {
-        this.clientConnections = new Map(); // Map for all client connections (a tab or window)
+        // Map for all client connections (a tab or window)
+        this.clientConnections = new Map();
 
         // Add event listener for incoming connections (self here refers to the SharedWorkerGlobalScope)
         self.onconnect = this.onClientConnect.bind(this);
@@ -80,7 +94,7 @@ class SharedWorkerServer {
 
         // Send clientId to the client
         this.sendMessage(clientConnection, {
-            type: 'ClientIdAssigned',
+            type: ServerToClientMessageType.ClientIdAssigned,
             clientId: clientId
         });
 
@@ -125,9 +139,9 @@ class SharedWorkerServer {
     onClientConnectionMessage(clientConnection, event) {
         console.log('onClientMessage', clientConnection, event);
 
-        if(event.data && event.data.type === 'Pong') {
+        if(event.data && event.data.type === ClientToServerMessageType.Pong) {
             clientConnection.updateLastActive();
-        } else if(event.data && event.data.type === 'RequestClientConnections') {
+        } else if(event.data && event.data.type === ClientToServerMessageType.RequestClientConnections) {
             this.sendMessage(clientConnection, this.createClientConnectionsMessage());
         }
     }
@@ -137,17 +151,21 @@ class SharedWorkerServer {
         // Setup interval to check if client is still alive
         const heartbeatInterval = setInterval(function () {
             try {
-                // Get the client connection (it might have been deleted)
+                // Get the client connection
                 const currentClientConnection = this.clientConnections.get(clientConnection.id);
+
+                // If the client no longer exists
                 if(!currentClientConnection) {
                     console.log('Client no longer exists:', clientConnection.id);
+
+                    // Clear the heartbeat interval and return
                     clearInterval(heartbeatInterval);
                     return;
                 }
 
                 // Send heartbeat message with disconnect handler
                 const sendResult = currentClientConnection.sendMessage(
-                    { type: 'Ping' },
+                    { type: ServerToClientMessageType.Ping },
                     this.onClientConnectionDisconnect.bind(this)
                 );
 
@@ -156,20 +174,20 @@ class SharedWorkerServer {
                     return;
                 }
 
-                // Check if client has responded recently
+                // If the client has been inactive for too long, disconnect it
                 const inactiveTime = Date.now() - currentClientConnection.lastActive;
-                if(inactiveTime > HEARTBEAT_TIMEOUT_MS) {
-                    console.log('Client timed out:', clientConnection.id);
-                    this.removeClientConnection(clientConnection); // Correct function call
+                if(inactiveTime > HeartbeatTimeoutInMilliseconds) {
+                    console.log('Client timed out:', currentClientConnection.id);
+                    this.removeClientConnection(currentClientConnection); // Use currentClientConnection consistently
                     clearInterval(heartbeatInterval);
                 }
             } catch(error) {
                 // If any other error occurs, disconnect the client
-                console.log('Heartbeat error, client disconnected:', clientConnection.id, error);
-                this.removeClientConnection(clientConnection); // Correct function call
+                console.log('Heartbeat error, client disconnected:', currentClientConnection.id, error);
+                this.removeClientConnection(currentClientConnection); // Use currentClientConnection consistently
                 clearInterval(heartbeatInterval);
             }
-        }.bind(this), HEARTBEAT_INTERVAL_MS);
+        }.bind(this), HeartbeatIntervalInMilliseconds);
 
         // Store the interval ID in client connection
         clientConnection.heartbeatInterval = heartbeatInterval;
@@ -185,7 +203,7 @@ class SharedWorkerServer {
         }));
 
         return {
-            type: 'ClientConnections',
+            type: ServerToClientMessageType.ClientConnections,
             clientConnections: clientConnections
         };
     }
