@@ -277,6 +277,10 @@ export const InternalNavigationLinks: InternalNavigationLinkInterface[] = [
                 title: 'Logs',
                 href: '/internal/developers/logs',
             },
+            {
+                title: 'Web Sockets',
+                href: '/internal/developers/web-sockets',
+            },
         ],
     },
     // Settings Page
