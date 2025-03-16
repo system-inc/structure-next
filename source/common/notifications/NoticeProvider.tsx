@@ -17,18 +17,7 @@ interface NoticeContextInterface {
     removeAllNotices: () => void;
     notices: NoticeInterface[];
 }
-const NoticeContext = React.createContext<NoticeContextInterface>({
-    addNotice: (notice: Omit<NoticeInterface, 'id'>) => {
-        console.error('No NoticeProvider found.');
-    },
-    removeNotice: (id: string) => {
-        console.error('No NoticeProvider found.');
-    },
-    removeAllNotices: () => {
-        console.error('No NoticeProvider found.');
-    },
-    notices: [],
-});
+const NoticeContext = React.createContext<NoticeContextInterface | undefined>(undefined);
 
 // Component - NoticeProvider
 export interface NoticeProviderInterface {
@@ -66,8 +55,12 @@ export function NoticeProvider({ children }: NoticeProviderInterface) {
 }
 
 // Hook - useNotice
-export function useNotice() {
-    return React.useContext(NoticeContext);
+export function useNotice(): NoticeContextInterface {
+    const noticeContext = React.useContext(NoticeContext);
+    if(!noticeContext) {
+        throw new Error('useNotice must be used within a NoticeProvider.');
+    }
+    return React.useContext(NoticeContext) as NoticeContextInterface;
 }
 
 // Export - Default
