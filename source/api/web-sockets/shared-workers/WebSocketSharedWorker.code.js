@@ -65,7 +65,7 @@ class SharedWorkerServer {
         this.addClientConnection(clientId, event.ports[0]);
     }
 
-    // Function to add a client to the map
+    // Function to add a client connection
     addClientConnection(clientId, messagePort) {
         // Create client connection object
         const clientConnection = new SharedWorkerClientConnection(clientId, messagePort);
@@ -90,6 +90,8 @@ class SharedWorkerServer {
 
         // Log the total number of clients connected
         console.log('Total clients connected:', this.clientConnections.size);
+
+        return clientConnection;
     }
 
     // Function to handle client disconnection
@@ -264,13 +266,37 @@ class WebSocketSharedWorkerServer extends SharedWorkerServer {
         this.initializeWebSocket();
     }
 
-    // Initialize WebSocket functionality
+    // Function to initialize the WebSocket
     initializeWebSocket() {
         // Create WebSocket connection with message and state change handlers
         this.webSocketConnection = new WebSocketConnection(
             this.handleWebSocketMessage.bind(this),
-            this.handleWebSocketStateChange.bind(this)
+            this.handleWebSocketConnectionStateChange.bind(this)
         );
+    }
+
+    // Function to add a client connection
+    addClientConnection(clientId, messagePort) {
+        // Call the parent method to handle the basic client connection setup
+        const clientConnection = super.addClientConnection(clientId, messagePort);
+
+        // Create a comprehensive WebSocket state object
+        const webSocketState = this.webSocketConnection ? this.webSocketConnection.getState() : {
+            connectionState: this.webSocketState,
+            createdAt: Date.now()
+        };
+
+        // Send the current WebSocket state to the new client
+        console.log('[WebSocketSharedWorkerServer] Sending current WebSocket state to new client:', webSocketState);
+        this.sendMessage(
+            clientConnection,
+            {
+                type: WebSocketMessages.ServerToClient.WebSocketStateChanged,
+                ...webSocketState
+            }
+        );
+
+        return clientConnection;
     }
 
     // Function to handle an incoming message from a tab (overriding parent method)
@@ -399,16 +425,16 @@ class WebSocketSharedWorkerServer extends SharedWorkerServer {
     }
 
     // Handle WebSocket connection state changes
-    handleWebSocketStateChange(state) {
-        console.log('[WebSocketSharedWorkerServer] WebSocket state changed:', state);
+    handleWebSocketConnectionStateChange(webSocketState) {
+        console.log('[WebSocketSharedWorkerServer] WebSocket state changed:', webSocketState);
 
-        // Update internal state
-        this.webSocketState = state;
+        // Update internal connection state
+        this.webSocketState = webSocketState.connectionState;
 
-        // Broadcast state change to all clients
+        // Broadcast comprehensive state change to all clients
         this.broadcastMessage({
             type: WebSocketMessages.ServerToClient.WebSocketStateChanged,
-            state: state
+            ...webSocketState
         });
     }
 }
@@ -430,6 +456,23 @@ class WebSocketConnection {
         this.reconnectTimeout = null;
         this.reconnectBackoff = WebSocketReconnectDelayBaseInMilliseconds;
 
+        // Statistics and metrics
+        this.statistics = {
+            messagesSent: 0,
+            messagesReceived: 0,
+            bytesSent: 0,
+            bytesReceived: 0,
+            lastMessageSentAt: null,
+            lastMessageReceivedAt: null,
+            lastPingSentAt: null,
+            lastPongReceivedAt: null,
+            connectedAt: null,
+            averageLatencyInMilliseconds: null
+        };
+
+        // Error tracking
+        this.lastError = null;
+
         // Callbacks
         this.onMessage = onMessage;
         this.onStateChange = onStateChange;
@@ -444,6 +487,7 @@ class WebSocketConnection {
         this.handleClose = this.handleClose.bind(this);
         this.reconnect = this.reconnect.bind(this);
         this.updateConnectionState = this.updateConnectionState.bind(this);
+        this.getState = this.getState.bind(this);
     }
 
     // Connect to WebSocket server
@@ -513,6 +557,12 @@ class WebSocketConnection {
         // Check if socket is connected
         if(!this.socket || this.socket.readyState !== WebSocket.OPEN) {
             console.error('[WebSocketConnection] Cannot send message: WebSocket not connected');
+            this.lastError = {
+                message: 'Cannot send message: WebSocket not connected',
+                timestamp: Date.now()
+            };
+            // Notify about the error by updating state
+            this.updateConnectionState(this.connectionState);
             return false;
         }
 
@@ -522,28 +572,92 @@ class WebSocketConnection {
 
             // Send the message
             this.socket.send(message);
+
+            // Update statistics
+            this.statistics.messagesSent++;
+            this.statistics.bytesSent += message.length;
+            this.statistics.lastMessageSentAt = Date.now();
+
+            // Track ping messages for latency calculation
+            if(data && data.type === 'ping') {
+                this.statistics.lastPingSentAt = Date.now();
+            }
+
+            // Broadcast the updated state to notify about statistics changes
+            this.updateConnectionState(this.connectionState);
+
             return true;
         }
         catch(error) {
             console.error('[WebSocketConnection] Error sending message:', error);
+            this.lastError = {
+                message: `Error sending message: ${error.message}`,
+                timestamp: Date.now()
+            };
+            // Notify about the error by updating state
+            this.updateConnectionState(this.connectionState);
             return false;
         }
     }
 
     // Handle WebSocket open event
-    handleOpen(event) {
+    handleOpen() {
         console.log('[WebSocketConnection] Connected to', this.url);
 
         // Reset reconnection attempts and backoff
         this.reconnectAttempts = 0;
         this.reconnectBackoff = WebSocketReconnectDelayBaseInMilliseconds;
 
-        // Update state
+        // Update statistics
+        this.statistics.connectedAt = Date.now();
+
+        // Reset error tracking on successful connection
+        this.lastError = null;
+
+        // Update state - this will broadcast to all clients
         this.updateConnectionState(WebSocketConnectionState.Connected);
+    }
+
+    // Get comprehensive WebSocket state
+    getState() {
+        return {
+            // Basic connection state
+            connectionState: this.connectionState,
+            createdAt: Date.now(),
+
+            // Connection details
+            url: this.url,
+
+            // Socket status
+            readyState: this.socket ? this.socket.readyState : undefined,
+
+            // Reconnection details
+            reconnectAttempts: this.reconnectAttempts,
+            reconnecting: this.reconnectTimeout !== null,
+            reconnectDelayInMilliseconds: this.reconnectBackoff,
+            maximumReconnectDelayInMilliseconds: WebSocketMaximumReconnectDelayInMilliseconds,
+
+            // Statistics organized in a sub-object
+            statistics: { ...this.statistics },
+
+            // Error information
+            lastError: this.lastError
+        };
     }
 
     // Handle WebSocket message event
     handleMessage(event) {
+        // Update statistics
+        this.statistics.messagesReceived++;
+        this.statistics.lastMessageReceivedAt = Date.now();
+
+        // Track message size if available
+        if(event.data && typeof event.data === 'string') {
+            this.statistics.bytesReceived += event.data.length;
+        } else if(event.data instanceof Blob) {
+            this.statistics.bytesReceived += event.data.size;
+        }
+
         // Parse message data
         let data;
         try {
@@ -553,6 +667,25 @@ class WebSocketConnection {
                 (event.data.startsWith('{') || event.data.startsWith('['))
             ) {
                 data = JSON.parse(event.data);
+
+                // Check for pong messages to calculate latency
+                if(data && data.type === 'pong') {
+                    this.statistics.lastPongReceivedAt = Date.now();
+
+                    // Calculate latency if we have both ping and pong timestamps
+                    if(this.statistics.lastPingSentAt) {
+                        const latency = this.statistics.lastPongReceivedAt - this.statistics.lastPingSentAt;
+
+                        // Update average latency
+                        if(this.statistics.averageLatencyInMilliseconds === null) {
+                            this.statistics.averageLatencyInMilliseconds = latency;
+                        } else {
+                            // Simple moving average
+                            this.statistics.averageLatencyInMilliseconds =
+                                (this.statistics.averageLatencyInMilliseconds * 0.7) + (latency * 0.3);
+                        }
+                    }
+                }
             }
             else {
                 // Not JSON, use a structured format for non-JSON messages
@@ -578,18 +711,43 @@ class WebSocketConnection {
         if(this.onMessage) {
             this.onMessage(data);
         }
+
+        // Broadcast the updated state with new statistics to all clients
+        this.updateConnectionState(this.connectionState);
     }
 
     // Handle WebSocket error event
     handleError(event) {
         console.error('[WebSocketConnection] Error:', event);
+
+        // Track the error
+        this.lastError = {
+            message: event.message || 'WebSocket error',
+            code: event.code,
+            timestamp: Date.now()
+        };
+
+        // Broadcast the updated state with error information to all clients
+        this.updateConnectionState(this.connectionState);
     }
 
     // Handle WebSocket close event
     handleClose(event) {
         console.log('[WebSocketConnection] Disconnected:', event.code, event.reason);
 
-        // Update state
+        // Track the close event in lastError if not clean
+        if(!event.wasClean) {
+            this.lastError = {
+                message: `WebSocket closed unexpectedly${event.reason ? ': ' + event.reason : ''}`,
+                code: event.code,
+                timestamp: Date.now()
+            };
+        }
+
+        // Reset connection statistics
+        this.statistics.connectedAt = null;
+
+        // Update state - this will broadcast to all clients
         this.updateConnectionState(WebSocketConnectionState.Disconnected);
 
         // If connection was not closed cleanly, attempt to reconnect
@@ -615,6 +773,8 @@ class WebSocketConnection {
         );
 
         console.log(`[WebSocketConnection] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
+
+        // Update and broadcast reconnecting state
         this.updateConnectionState(WebSocketConnectionState.Reconnecting);
 
         // Set timeout for reconnection
@@ -622,7 +782,7 @@ class WebSocketConnection {
             function () {
                 this.reconnectTimeout = null;
                 this.connect(this.url, this.protocols);
-            },
+            }.bind(this),
             delay,
         );
     }
@@ -632,9 +792,12 @@ class WebSocketConnection {
         // Update internal state
         this.connectionState = state;
 
-        // Notify state change handler
+        // Get the complete state object
+        const currentState = this.getState();
+
+        // Notify state change handler with complete state object
         if(this.onStateChange) {
-            this.onStateChange(state);
+            this.onStateChange(currentState);
         }
     }
 }
