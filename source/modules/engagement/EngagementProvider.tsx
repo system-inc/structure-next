@@ -17,16 +17,14 @@ import { EngagementEventCreateDocument, DeviceOrientation } from '@project/sourc
 // Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/String';
 
+// Track if the provider is mounted in order to avoid sending two events in development mode
+let engagementProviderMounted = false;
+
 // Context - Engagement
 interface EngagementContextInterface {
     path: string;
 }
-const EngagementContext = React.createContext<EngagementContextInterface>({
-    path: '',
-});
-
-// Track if the provider is mounted in order to avoid sending two events in development mode
-let engagementProviderMounted = false;
+const EngagementContext = React.createContext<EngagementContextInterface | undefined>(undefined);
 
 // Component - EngagementProvider
 export interface EngagementProviderInterface {
@@ -200,8 +198,12 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
 }
 
 // Hook - useEngagement
-export function useEngagement() {
-    return React.useContext(EngagementContext);
+export function useEngagement(): EngagementContextInterface {
+    const engagementContext = React.useContext(EngagementContext);
+    if(engagementContext === undefined) {
+        throw new Error('useEngagement must be used within an EngagementProvider.');
+    }
+    return React.useContext(EngagementContext) as EngagementContextInterface;
 }
 
 // Export - Default

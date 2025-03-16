@@ -14,6 +14,20 @@ import { accountSignedInKey, Account } from '@structure/source/modules/account/A
 import { useQuery, useMutation, ApolloError } from '@apollo/client';
 import { AccountDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
 
+// Context - Account
+interface AccountContextInterface {
+    accountState: {
+        loading: boolean;
+        error: ApolloError | null;
+        account: Account | null; // If this is null, the account is not signed in
+    };
+    signedIn: boolean;
+    setSignedIn: (value: boolean) => void;
+    signOut: (redirectPath?: string) => Promise<boolean>;
+    setAuthenticationDialogOpen: (value: boolean) => void;
+}
+const AccountContext = React.createContext<AccountContextInterface | undefined>(undefined);
+
 // Component - AccountProvider
 export interface AccountProviderInterface {
     children: React.ReactNode;
@@ -165,29 +179,13 @@ export function AccountProvider(properties: AccountProviderInterface) {
     );
 }
 
-// Context - Account
-interface AccountContextInterface {
-    accountState: {
-        loading: boolean;
-        error: ApolloError | null;
-        account: Account | null; // If this is null, the account is not signed in
-    };
-    signedIn: boolean;
-    setSignedIn: (value: boolean) => void;
-    signOut: (redirectPath?: string) => Promise<boolean>;
-    setAuthenticationDialogOpen: (value: boolean) => void;
-}
-const AccountContext = React.createContext<AccountContextInterface | null>(null);
-
 // Hook - useAccount
-export function useAccount() {
+export function useAccount(): AccountContextInterface {
     const accountContext = React.useContext(AccountContext);
-    if(accountContext === null) {
-        throw new Error('useAccount must be used within an AccountProvider');
+    if(!accountContext) {
+        throw new Error('useAccount must be used within an AccountProvider.');
     }
-    else {
-        return accountContext;
-    }
+    return accountContext as AccountContextInterface;
 }
 
 // Export - Default
