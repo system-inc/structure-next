@@ -97,7 +97,7 @@ class SharedWorkerServer {
         console.log('handleClientDisconnection:', clientConnection);
 
         if(this.clientConnections.has(clientConnection.id)) {
-            console.log('Removing client:', clientConnection);
+            // console.log('Removing client:', clientConnection);
             clientConnection.handleDisconnect();
             this.clientConnections.delete(clientConnection.id);
             this.broadcastClientConnections();
@@ -118,9 +118,6 @@ class SharedWorkerServer {
                     // If the client no longer exists
                     if(!currentClientConnection) {
                         console.log('Client no longer exists:', clientConnection.id);
-
-                        // Clear the heartbeat interval and return
-                        clearInterval(heartbeatInterval);
                         return;
                     }
 
@@ -142,14 +139,12 @@ class SharedWorkerServer {
                     if(inactiveTime > SharedWorkerClientConnectionHeartbeatTimeoutInMilliseconds) {
                         console.log('Client timed out:', currentClientConnection.id);
                         this.handleClientDisconnection(currentClientConnection); // Use currentClientConnection consistently
-                        clearInterval(heartbeatInterval);
                     }
                 }
                 catch(error) {
                     // If any other error occurs, disconnect the client
-                    console.log('Heartbeat error, client disconnected:', currentClientConnection.id, error);
-                    this.handleClientDisconnection(currentClientConnection); // Use currentClientConnection consistently
-                    clearInterval(heartbeatInterval);
+                    console.log('Heartbeat error, client disconnected:', clientConnection.id, error);
+                    this.handleClientDisconnection(clientConnection);
                 }
             }.bind(this),
             SharedWorkerClientConnectionHeartbeatIntervalInMilliseconds,
