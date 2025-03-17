@@ -262,6 +262,9 @@ class WebSocketSharedWorkerServer extends SharedWorkerServer {
         // WebSocket connection state
         this.webSocketState = WebSocketConnectionState.Disconnected;
 
+        // Flag to track if we've handled an initial connection request
+        this.handledFirstConnectWebSocketRequest = false;
+
         // Initialize WebSocket related functionality
         this.initializeWebSocket();
     }
@@ -334,6 +337,19 @@ class WebSocketSharedWorkerServer extends SharedWorkerServer {
     handleConnectWebSocketRequest(clientConnection, message) {
         console.log('[WebSocketSharedWorkerServer] Connect WebSocket request:', message);
 
+        // If we've already handled an initial connection request, don't allow others
+        if(this.handledFirstConnectWebSocketRequest) {
+            console.log('[WebSocketSharedWorkerServer] Already handled initial connection, sending current state to client');
+
+            // Send the current state to the client
+            const webSocketState = this.webSocketConnection.getState();
+            this.sendMessage(clientConnection, {
+                type: WebSocketMessages.ServerToClient.WebSocketStateChanged,
+                ...webSocketState
+            });
+            return;
+        }
+
         // Extract connection details
         const url = message.url;
         const protocols = message.protocols;
@@ -347,6 +363,9 @@ class WebSocketSharedWorkerServer extends SharedWorkerServer {
             });
             return;
         }
+
+        // Mark that we've handled the first connection request
+        this.handledFirstConnectWebSocketRequest = true;
 
         // Connect to WebSocket server
         const result = this.webSocketConnection.connect(url, protocols);
@@ -371,6 +390,9 @@ class WebSocketSharedWorkerServer extends SharedWorkerServer {
 
         // Disconnect from WebSocket server
         this.webSocketConnection.disconnect(code, reason);
+
+        // Reset the connection request flag to allow reconnections
+        this.handledFirstConnectWebSocketRequest = false;
     }
 
     // Handle request to send a message to the WebSocket server
