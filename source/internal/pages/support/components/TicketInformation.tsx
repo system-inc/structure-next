@@ -56,8 +56,6 @@ export function TicketInformation(properties: TicketInformationInterface) {
         [properties.supportProfiles],
     );
 
-    console.log('Selected username:', selectedUsername);
-
     // Render the component
     return (
         <div className="mb-6 rounded-lg border border-light-3 p-2 text-sm dark:border-dark-3">
