@@ -3,6 +3,11 @@
  * 
  * This script compiles the TypeScript files for the WebSocket SharedWorker
  * and generates a single JavaScript file that can be used as a SharedWorker.
+ * 
+ * Add this script to your package.json scripts section:
+ * "build:websocketsharedworker": "node libraries/structure/source/api/web-sockets/shared-worker/scripts/BuildWebSocketSharedWorker.mjs"
+ * 
+ * Then use `npm run build:websocketsharedworker` to run the script.
  */
 
 // Dependencies - Node
