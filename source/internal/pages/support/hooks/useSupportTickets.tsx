@@ -14,6 +14,7 @@ import {
     SupportTicketAssignDocument,
     SupportAllSupportProfilesDocument,
     SupportTicketUpdateStatusPrivilegedDocument,
+    SupportTicketStatus,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Function to use support tickets

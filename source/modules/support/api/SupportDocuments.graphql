@@ -101,6 +101,14 @@ mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
     }
 }
 
+# Support Ticket Update Status Privileged Mutation
+mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {
+    supportTicketUpdateStatusPrivileged(id: $id, status: $status) {
+        id
+        status
+    }
+}
+
 # Support Tickets Privileged Query
 query SupportTicketsPrivileged($pagination: PaginationInput!) {
     supportTicketsPrivileged(pagination: $pagination) {
