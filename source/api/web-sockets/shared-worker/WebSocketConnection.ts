@@ -1,3 +1,5 @@
+// Note: After modifying this code you must manually run `npm run build:websocketsharedworker` to build the SharedWorker.
+
 // Dependencies - Constants
 import {
     WebSocketReconnectDelayBaseInMilliseconds,

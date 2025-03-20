@@ -1,3 +1,5 @@
+// Note: After modifying this code you must manually run `npm run build:websocketsharedworker` to build the SharedWorker.
+
 // Dependencies - Types
 import { ClientToSharedWorkerServerMessageType } from '@structure/source/api/web-sockets/shared-worker/types/SharedWorkerTypes';
 import {
