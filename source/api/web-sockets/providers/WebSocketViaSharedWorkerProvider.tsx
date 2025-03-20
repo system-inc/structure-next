@@ -21,13 +21,13 @@ import {
     ClientToWebSocketSharedWorkerServerMessageType,
 } from '@structure/source/api/web-sockets/shared-worker/types/WebSocketSharedWorkerTypes';
 
-// Types - WebSocketEventMessageInterface
-export interface WebSocketEventMessageInterface {
+// Types - WebSocketMessageEventInterface
+export interface WebSocketMessageEventInterface {
     data: unknown;
 }
 
 // Type - WebSocketMessageHandler
-export type WebSocketMessageHandler = (message: WebSocketEventMessageInterface) => void;
+export type WebSocketMessageHandler = (message: WebSocketMessageEventInterface) => void;
 
 // Context - WebSocketViaSharedWorkerContext
 export interface WebSocketViaSharedWorkerContextInterface {
@@ -139,7 +139,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                     );
 
                     // Create an event message object from the received data
-                    const eventMessage: WebSocketEventMessageInterface = {
+                    const eventMessage: WebSocketMessageEventInterface = {
                         data: messageEvent.data.data,
                     };
 
