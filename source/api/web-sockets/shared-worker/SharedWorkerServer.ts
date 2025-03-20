@@ -34,10 +34,10 @@ export class SharedWorkerServer {
         this.clientConnections = new Map<string, SharedWorkerClientConnection>();
 
         // Add event listener for incoming connections
-        // Self here refers to the SharedWorkerGlobalScope
+        // `self` here refers to the SharedWorkerGlobalScope
         // TypeScript doesn't know about self in the SharedWorker context, so we need to cast it
         if(typeof self !== 'undefined') {
-            console.log('SharedWorkerServer self:', self);
+            // console.log('SharedWorkerServer self:', self);
             (
                 self as unknown as {
                     onconnect: (event: SharedWorkerMessageEvent) => void;
@@ -45,7 +45,7 @@ export class SharedWorkerServer {
             ).onconnect = this.onClientConnect.bind(this);
         }
         else {
-            console.error('SharedWorkerServer: self is not defined');
+            // console.error('SharedWorkerServer: self is not defined');
         }
     }
 
