@@ -32,7 +32,7 @@ interface ComponentsInterface {
 const components: ComponentsInterface = {
     h1: (properties) => (
         <h1
-            className="mb-6 text-3xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="mb-6 text-3xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5 first:before:hidden"
             {...properties}
         />
     ),
