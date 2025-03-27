@@ -579,7 +579,7 @@ query CommerceOrder($orderIdentifier: String!) {
 query CommerceOrdersPrivileged($pagination: PaginationInput!) {
     commerceOrdersPrivileged(pagination: $pagination) {
         items {
-            batchIdentifier
+            # batchIdentifier
             beneficiaryEmailAddress
             # checkoutSessionId
             createdAt
@@ -596,11 +596,11 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
             emailAddress
             fulfillmentSource
             fulfillmentStatus
-            holdOnShipping
+            # holdOnShipping
             id
             identifier
             lineItems {
-                commerceOrderId
+                # commerceOrderId
                 createdAt
                 id
                 indexId
@@ -610,15 +610,15 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
                 updatedAt
             }
             metadata
-            orderLogs {
-                commerceOrderId
-                content
-                id
-                description
-                createdAt
-                source
-                visibility
-            }
+            # orderLogs {
+            #     commerceOrderId
+            #     content
+            #     id
+            #     description
+            #     createdAt
+            #     source
+            #     visibility
+            # }
             payment {
                 amount
                 authorizedAt
@@ -663,33 +663,33 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
                 paymentProcessorType
                 status
                 updatedAt
-                walletEntryId
+                # walletEntryId
             }
-            paymentId
+            # paymentId
             paymentStatus
             priceInfo {
                 amount
                 currencyCode
                 lineItemPrices {
-                    amount
+                    # amount
                     indexId
                     originalSubtotal
                     subtotal
-                    tax
+                    # tax
                 }
                 originalSubtotal
                 shippingRate {
                     amount
-                    breakdown {
-                        freeShipping
-                        items {
-                            indexId
-                            quantity
-                        }
-                        originalShippingRate
-                        packageIndexId
-                        shippingRate
-                    }
+                    # breakdown {
+                    #     freeShipping
+                    #     items {
+                    #         indexId
+                    #         quantity
+                    #     }
+                    #     originalShippingRate
+                    #     packageIndexId
+                    #     shippingRate
+                    # }
                     originalAmount
                 }
                 subtotal
@@ -709,15 +709,15 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
                 orderIndexId
                 label {
                     carrier
-                    labelId
+                    # labelId
                     serviceType
-                    source
+                    # source
                     trackingNumber
                     trackingUrl
                 }
-                orderSlip {
-                    storedObjectUrl
-                }
+                # orderSlip {
+                #     storedObjectUrl
+                # }
                 shippedAt
                 source
                 status
