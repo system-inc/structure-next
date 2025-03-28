@@ -73,7 +73,7 @@
     --black-850: #0c0c0c;
     --black-900: #080808;
     --black-950: #040404;
-    --black-1000: var(--black-1000);
+    --black-1000: #000000;
 
     /* Gray Scale (Lightest to Darkest) */
     --gray-0: #a7a7a7;
