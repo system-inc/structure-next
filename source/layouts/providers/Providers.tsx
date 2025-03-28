@@ -22,7 +22,7 @@ import { ThemeProvider } from '@structure/source/theme/ThemeProvider';
 import { EngagementProvider } from '@structure/source/modules/engagement/EngagementProvider';
 
 // Dependencies - Interaction Providers
-import { NoticeProvider } from '@structure/source/common/notifications/NoticeProvider';
+// import { NoticeProvider } from '@structure/source/common/notifications/NoticeProvider';
 import { TipProvider } from '@structure/source/common/popovers/TipProvider';
 
 // Component - Providers
@@ -58,9 +58,9 @@ export function Providers(properties: ProvidersInterface) {
         <FoundationProviders>
             <CookiesProvider cookies={Cookies}>
                 {/* State Providers */}
-                <StateProviders>
-                    <ApolloProvider>
-                        <SharedStateProvider>
+                <SharedStateProvider>
+                    <StateProviders>
+                        <ApolloProvider>
                             <AccountProvider signedIn={properties.accountSignedIn}>
                                 {/* Theme Providers */}
                                 <ThemeProviders>
@@ -79,9 +79,9 @@ export function Providers(properties: ProvidersInterface) {
                                     </ThemeProvider>
                                 </ThemeProviders>
                             </AccountProvider>
-                        </SharedStateProvider>
-                    </ApolloProvider>
-                </StateProviders>
+                        </ApolloProvider>
+                    </StateProviders>
+                </SharedStateProvider>
             </CookiesProvider>
         </FoundationProviders>
     );
