@@ -98,18 +98,18 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
                 <animated.div
                     ref={topBarBottomBorderDivReference}
                     style={topBarBottomBorderDivSpring}
-                    className="pointer-events-none fixed z-30 h-16 w-full border-b border-b-light-4 dark:border-b-dark-4"
+                    className="pointer-events-none fixed z-30 h-14 w-full border-b border-b-light-4 dark:border-b-dark-4"
                 />
             )}
 
             {/* Top Left */}
-            <div className="fixed left-4 z-30 flex h-[63px] items-center">
+            <div className="fixed left-4 z-30 flex h-14 items-center">
                 <SideNavigationLayoutNavigationSideToggle layoutIdentifier={properties.layoutIdentifier} />
                 {properties.title}
             </div>
 
             {/* Top Right */}
-            <div className="fixed right-4 z-30 flex h-[63px] items-center">
+            <div className="fixed right-4 z-30 flex h-14 items-center">
                 <AccountMenuButton />
             </div>
         </>

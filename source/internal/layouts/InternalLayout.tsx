@@ -55,7 +55,10 @@ export function InternalLayout(properties: InternalLayoutInterface) {
             </SideNavigationLayoutNavigation>
 
             {/* Content */}
-            <SideNavigationLayoutContent layoutIdentifier={internalLayoutIdentifier}>
+            <SideNavigationLayoutContent
+                layoutIdentifier={internalLayoutIdentifier}
+                topTitle="Internal"
+            >
                 <SideNavigationLayoutContentBody>{properties.children}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
 
