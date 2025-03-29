@@ -53,8 +53,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
     // Hooks
     const [mutation, mutationState] = useMutation(properties.operation.document);
     // Fetch default values if defaultValuesQuery is provided
-    const defaultValuesQueryDocument = properties.defaultValuesQuery?.document ?? gql(`query { __typename }`);
-    const defaultValuesQueryState = useQuery(defaultValuesQueryDocument, {
+    const defaultValuesQueryState = useQuery(properties.defaultValuesQuery!.document, {
         skip: !properties.defaultValuesQuery,
         variables: properties.defaultValuesQuery?.variables,
     });
@@ -162,7 +161,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
         This is what I want:
         {
         maxLength: 128
-        }    
+        }
         */
         function convertValidationToNice(
             validationArray?: {

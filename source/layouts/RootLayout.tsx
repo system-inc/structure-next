@@ -120,6 +120,12 @@ export async function RootLayout(properties: RootLayoutInterface) {
     // Render the component
     return (
         <html lang="en" className={mergeClassNames(properties.htmlClassName, themeClassName)}>
+            {/* eslint-disable-next-line -- 'next/head' is not necessary in server side component. We wouldn't get this eslint warning if we were not shimming... */}
+            <head>
+                {/* Removing this for now because it may be breaking the favicon behaviros we have set up for changing depending on system theme. */}
+                {/* <link rel="icon" href="/favicon.ico" /> */}
+            </head>
+
             <body className={mergeClassNames('font-sans overscroll-none', properties.bodyClassName)}>
                 {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content */}
                 {/* Fixes any z-index issues with Popovers, etc. */}
