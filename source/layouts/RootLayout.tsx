@@ -120,7 +120,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
     // Render the component
     return (
         <html lang="en" className={mergeClassNames(properties.htmlClassName, themeClassName)}>
-            <body className={mergeClassNames('font-sans', properties.bodyClassName)}>
+            <body className={mergeClassNames('font-sans overscroll-none', properties.bodyClassName)}>
                 {/* Add a <main> tag so that any Radix-UI Portal elements get appended outside the main content */}
                 {/* Fixes any z-index issues with Popovers, etc. */}
                 <main

@@ -28,9 +28,9 @@ export function TicketListItem(properties: TicketListItemInterface) {
     // Render the component
     return (
         <div
-            className={`cursor-pointer border-b py-2 pl-12 pr-3 transition-colors hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
+            className={`cursor-pointer my-3 mx-4 py-2 pl-12 pr-3 rounded-lg transition-colors hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
                 isSelected ? 'bg-light-1 dark:bg-dark-2' : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
-            } ${isFirst ? 'border-t' : ''}`}
+            }`}
             onClick={() => onSelect(ticket.id)}
         >
             <div className="mb-1.5 flex items-center justify-between">
