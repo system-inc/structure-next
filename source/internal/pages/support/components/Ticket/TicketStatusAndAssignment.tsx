@@ -34,13 +34,6 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
                     //     onStatusChange(value || 'Open');
                     // }}
                 />
-                {/* <Button
-                    variant="secondary"
-                    size="small"
-                    iconLeft={<PlusCircle />}
-                >
-                    Assign Person
-                </Button> */}
                 <Button
                     variant="light"
                     icon={PlusCircle}

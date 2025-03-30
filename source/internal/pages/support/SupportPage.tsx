@@ -4,26 +4,13 @@
 import React from 'react';
 import { useUrlSearchParameters, useRouter } from '@structure/source/utilities/next/NextNavigation';
 
-// Dependencies - Main Components
-// import { Form } from '@structure/source/common/forms/Form';
-// import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-// import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
-// import { FileCarouselInterface } from '@structure/source/common/files/FileCarousel';
-// import { FileCarouselDialog } from '@structure/source/common/files/FileCarouselDialog';
-
 // Dependencies - Internal Components
 import { TicketList } from './components/TicketList/TicketList';
 import { Ticket } from './components/Ticket/Ticket';
-// import { TicketInformation } from './components/TicketInformation';
 import { CustomerTicketDetails } from './components/CustomerTicketDetails/CustomerTicketDetails';
-// import { CommentAttachments } from './components/CommentAttachments';
 
 // Dependencies - Hooks
 import { useSupportTickets } from './hooks/useSupportTickets';
-
-// Dependencies - Utilities
-// import { extractLatestEmailContent } from '@structure/source/utilities/Email';
-// import { formatDateWithTimeIfToday } from '@structure/source/utilities/Time';
 
 // Dependencies - API
 // import { SupportTicket } from '@project/source/api/graphql';
@@ -282,14 +269,6 @@ export function SupportPage() {
                 {/* Right Sidebar */}
                 <CustomerTicketDetails ticket={selectedTicket} />
             </div>
-
-            {/* Image Carousel Dialog */}
-            {/* <FileCarouselDialog
-                open={dialogOpen}
-                onOpenChange={setDialogOpen}
-                files={allAttachments}
-                startIndex={selectedImageIndex}
-            /> */}
         </div>
     );
 }

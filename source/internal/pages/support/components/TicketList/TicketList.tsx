@@ -61,7 +61,6 @@ export function TicketList(properties: TicketListInterface) {
             </div>
 
             <Container border="t">
-            {/* <div className="border-t border-light-3 p-4 dark:border-dark-3"> */}
                 <Pagination
                     page={properties.page}
                     pagesTotal={properties.totalPages}
@@ -70,7 +69,6 @@ export function TicketList(properties: TicketListInterface) {
                     itemsPerPageControl={false}
                     pageInputControl={false}
                 />
-            {/* </div> */}
             </Container>
         </div>
     );
