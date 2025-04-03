@@ -46,7 +46,10 @@ export function SideNavigationLayout(properties: SideNavigationLayoutInterface) 
             </SideNavigationLayoutNavigation>
 
             {/* Content */}
-            <SideNavigationLayoutContent layoutIdentifier={properties.identifier}>
+            <SideNavigationLayoutContent
+                layoutIdentifier={properties.identifier}
+                topTitle={properties.topTitle}
+            >
                 <SideNavigationLayoutContentBody>{properties.contentBody}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
 

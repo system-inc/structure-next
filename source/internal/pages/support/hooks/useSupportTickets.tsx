@@ -7,7 +7,7 @@ import {
     ColumnFilterConditionOperator,
     OrderByDirection,
     SupportTicketsPrivilegedDocument,
-    SupportTicketCommentCreatePrivilegedDocument,
+    // SupportTicketCommentCreatePrivilegedDocument,
     SupportTicketAssignDocument,
     SupportAllSupportProfilesDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
@@ -65,9 +65,9 @@ export function useSupportTickets(
     });
 
     // Modify the createComment mutation to include refetch
-    const [createComment] = useMutation(SupportTicketCommentCreatePrivilegedDocument, {
-        refetchQueries: ['SupportTicketsPrivileged'],
-    });
+    // const [createComment] = useMutation(SupportTicketCommentCreatePrivilegedDocument, {
+    //     refetchQueries: ['SupportTicketsPrivileged'],
+    // });
 
     // Query for support profiles
     const supportProfilesQuery = useQuery(SupportAllSupportProfilesDocument);
@@ -85,7 +85,7 @@ export function useSupportTickets(
 
     return {
         ticketsQuery,
-        createComment,
+        // createComment,
         assignTicket,
         isManuallyRefreshing,
         handleManualRefresh,

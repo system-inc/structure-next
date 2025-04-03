@@ -417,7 +417,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             >
                 <ScrollArea
                     containerClassName={mergeClassNames(
-                        'mt-16 h-full',
+                        'mt-14 h-full',
                         // If there is a top bar and the window is at least the desktop minimum width
                         // add a border to the right
                         topBar && windowInnerWidth >= desktopMinimumWidth
