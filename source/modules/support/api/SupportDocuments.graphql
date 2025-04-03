@@ -110,6 +110,7 @@ query SupportTicketsPrivileged($pagination: PaginationInput!) {
             status
             type
             title
+            description
             userEmailAddress
             assignedToProfileId
             assignedToProfile {
@@ -135,6 +136,9 @@ query SupportTicketsPrivileged($pagination: PaginationInput!) {
                 createdAt
             }
             createdAt
+            lastUserCommentedAt
+            answeredAt
+            answered
         }
         pagination {
             itemIndex
@@ -186,6 +190,99 @@ query SupportAllSupportProfiles {
             type
             url
             variant
+        }
+    }
+}
+
+query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $pagination: PaginationInput!) {
+    accountPrivileged(
+        input: { emailAddress: $email }
+    ) {
+        defaultProfileId
+        defaultProfile {
+            id
+            images {
+                type
+                url
+                variant
+            }
+            displayName
+            givenName
+            familyName
+            preferredName
+            username
+            createdAt
+        }
+        emailAddress
+        status
+    }
+    commerceOrdersPrivileged(pagination: $pagination) {
+        items {
+            id
+            fulfillmentStatus
+            emailAddress
+            identifier
+            lineItems {
+                createdAt
+                id
+                indexId
+                productVariantId
+                quantity
+                status
+                updatedAt
+            }
+            paymentStatus
+            priceInfo {
+                amount
+                currencyCode
+                originalSubtotal
+                subtotal
+                lineItemPrices {
+                    indexId
+                    originalSubtotal
+                    subtotal
+                }
+                shippingRate {
+                    amount
+                    originalAmount
+                }
+                tax {
+                    shipping
+                    total
+                }
+            }
+            appliedDiscounts {
+                amount
+                codeReference
+            }
+            source
+            status
+            metadata
+            createdAt
+            updatedAt
+            shippingInfo {
+                shippingAddress {
+                    line1
+                    line2
+                    city
+                    company
+                    country
+                    firstName
+                    lastName
+                    phoneNumber
+                    postalCode
+                    state
+                }
+            }
+        }
+        pagination {
+            pagesTotal
+            page
+            itemsTotal
+            itemsPerPage
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemIndex
         }
     }
 }

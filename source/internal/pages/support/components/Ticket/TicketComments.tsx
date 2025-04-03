@@ -25,7 +25,9 @@ import {
 
 // Component - TicketComments
 interface TicketCommentsInterface {
+    userEmailAddress: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
+    userFullName?: string;
 }
 export function TicketComments(properties: TicketCommentsInterface) {
     // Properties
@@ -110,7 +112,7 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                             >
                                                 <div className="flex gap-2 text-xs font-medium">
                                                     {comment.source === 'User' ? (
-                                                        'Anakin Skywalker'
+                                                        <>{properties.userFullName ?? properties.userEmailAddress}</>
                                                     ) : (
                                                         <>
                                                             <Image

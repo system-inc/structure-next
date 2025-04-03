@@ -4,19 +4,21 @@
 import React from 'react';
 
 // Dependencies - CustomerTicket
-import { CustomerTicketDetailView } from './CustomerTicketDetailTypes';
+import { CustomerAndTicketSidePanelView } from './CustomerAndTicketSidePanelTypes';
 
 // Dependencies - Main Components
 import { SegmentedControl, SegmentedControlItem } from '@project/source/ui/base/SegmentedControl';
 import { Container } from '../Container';
 
 // Component - CustomerTicketHeader
-export function CustomerTicketHeader() {
-    const [selectedView, setSelectedView] = React.useState<CustomerTicketDetailView>(CustomerTicketDetailView.Customer);
-
+interface CustomerTicketHeaderInterface {
+    selectedView: CustomerAndTicketSidePanelView;
+    onViewChange: ( view: CustomerAndTicketSidePanelView ) => void;
+}
+export function CustomerTicketHeader(properties: CustomerTicketHeaderInterface) {
     // Function to handle the user changing the view
     function handleUpdateView(view: string) {
-        setSelectedView(view as CustomerTicketDetailView);
+        properties.onViewChange(view as CustomerAndTicketSidePanelView);
     }
 
     // Render the component
@@ -25,13 +27,13 @@ export function CustomerTicketHeader() {
             <SegmentedControl
                 size="default"
                 variant="default"
-                value={selectedView}
+                value={properties.selectedView}
                 onValueChange={handleUpdateView}
             >
-                <SegmentedControlItem value={CustomerTicketDetailView.Customer}>
+                <SegmentedControlItem value={CustomerAndTicketSidePanelView.Customer}>
                     Customer
                 </SegmentedControlItem>
-                <SegmentedControlItem value={CustomerTicketDetailView.Ticket}>
+                <SegmentedControlItem value={CustomerAndTicketSidePanelView.Ticket}>
                     Ticket
                 </SegmentedControlItem>
             </SegmentedControl>

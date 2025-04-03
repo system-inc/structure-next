@@ -6,7 +6,10 @@ import React from 'react';
 // Dependencies - Main Components
 import Badge from '@project/source/ui/base/Badge';
 import Button from '@structure/source/common/buttons/Button';
-import { Container } from '../Container';
+import { Container } from '../../Container';
+
+// Dependencies - API
+import { SupportTicketAccountAndCommerceOrdersPrivelegedQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import {
@@ -25,13 +28,8 @@ import { formatDateToShortDateWithTime } from '@structure/source/utilities/Time'
 import { useSpring, animated, easings } from '@react-spring/web';
 
 // Component - CustomerSelectedOrder
-export interface OrderInterface {
-    id: string;
-    date: string;
-    status: string;
-}
 export interface CustomerSelectedOrderInterface {
-    order?: OrderInterface;
+    order?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['commerceOrdersPrivileged']['items'][0]
     onClose: () => void;
 }
 export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrderInterface) {
@@ -40,7 +38,7 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
 
     // State
     const [isVisible, setIsVisible] = React.useState(!!order);
-    const [localOrder, setLocalOrder] = React.useState<OrderInterface | undefined>(order);
+    const [localOrder, setLocalOrder] = React.useState(order);
 
     // Hooks
     // Animation for the panel position
@@ -130,7 +128,7 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
                                 Created at
                             </span>
                             <span className="font-regular">
-                                {formatDateToShortDateWithTime(new Date(localOrder.date))}
+                                {formatDateToShortDateWithTime(new Date(localOrder.createdAt))}
                             </span>
                         </div>
                         <div className="flex flex-row gap-4">

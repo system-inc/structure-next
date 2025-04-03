@@ -7,10 +7,11 @@ import { useUrlSearchParameters, useRouter } from '@structure/source/utilities/n
 // Dependencies - Internal Components
 import { TicketList } from './components/TicketList/TicketList';
 import { Ticket } from './components/Ticket/Ticket';
-import { CustomerTicketDetails } from './components/CustomerTicketDetails/CustomerTicketDetails';
+import { CustomerAndTicketSidePanel } from './components/CustomerAndTicketSidePanel/CustomerAndTicketSidePanel';
 
 // Dependencies - Hooks
 import { useSupportTickets } from './hooks/useSupportTickets';
+import { useAccountAndCommerceOrdersByEmail } from './hooks/useAccountAndCommerceOrdersByEmail';
 
 // Dependencies - API
 // import { SupportTicket } from '@project/source/api/graphql';
@@ -53,6 +54,9 @@ export function SupportPage() {
     const selectedTicket = ticketsQuery.data?.supportTicketsPrivileged?.items?.find(
         (ticket) => ticket.id === selectedTicketId,
     );
+
+    // Get account and commerce orders by email
+    const { accountAndCommerceOrdersByEmailQuery } = useAccountAndCommerceOrdersByEmail(selectedTicket?.userEmailAddress)
 
     // Function to select ticket and update URL
     const handleTicketSelection = React.useCallback(
@@ -111,6 +115,8 @@ export function SupportPage() {
         [selectedTicket],
     );
 
+    
+
     // Get all attachments from comments
     // const allAttachments =
     //     selectedTicket?.comments.reduce((accumulatedAttachments: FileCarouselInterface['files'], comment) => {
@@ -156,7 +162,10 @@ export function SupportPage() {
                     onTicketSelect={handleTicketSelection}
                 />
 
-                <Ticket ticket={selectedTicket} />
+                <Ticket
+                    ticket={selectedTicket}
+                    account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
+                />
 
                 {/* Ticket Detail */}
                 {/* <div className="mt-3 flex h-full flex-col overflow-hidden pb-12" ref={ticketDetailsRef}>
@@ -267,7 +276,11 @@ export function SupportPage() {
                 </div> */}
 
                 {/* Right Sidebar */}
-                <CustomerTicketDetails ticket={selectedTicket} />
+                <CustomerAndTicketSidePanel
+                    ticket={selectedTicket}
+                    account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
+                    commerceOrders={accountAndCommerceOrdersByEmailQuery.data?.commerceOrdersPrivileged.items}
+                />
             </div>
         </div>
     );
