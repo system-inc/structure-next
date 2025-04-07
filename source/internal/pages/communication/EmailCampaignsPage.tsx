@@ -8,7 +8,7 @@ import InternalNavigationTrail from '@structure/source/internal/layouts/navigati
 import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
 
 // Dependencies - API
-import { EmailCampaignsDocument } from '@project/source/api/GraphQlGeneratedCode';
+// import { EmailCampaignsDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - EmailCampaignsPage
 export interface EmailCampaignsPageInterface {}
@@ -20,7 +20,7 @@ export function EmailCampaignsPage(properties: EmailCampaignsPageInterface) {
 
             <h1 className="mb-5">Email Campaigns</h1>
 
-            <GraphQlQueryTable queryDocument={EmailCampaignsDocument} />
+            {/* <GraphQlQueryTable queryDocument={EmailCampaignsDocument} /> */}
         </>
     );
 }
