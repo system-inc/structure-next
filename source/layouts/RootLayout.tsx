@@ -134,6 +134,7 @@ export async function RootLayout(properties: RootLayoutInterface) {
                         'relative isolate z-0 h-[100dvh] overflow-y-auto overflow-x-clip',
                         properties.mainClassName,
                     )}
+                    vaul-drawer-wrapper=""
                 >
                     {/* Providers use React's Context API to make values accessible to all components within their subtree */}
                     <ProvidersComponent accountSignedIn={accountSignedIn}>{properties.children}</ProvidersComponent>
