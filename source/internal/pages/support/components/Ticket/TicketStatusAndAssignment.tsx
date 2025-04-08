@@ -2,7 +2,7 @@
 // import { Button } from '@project/source/ui/base/Button';
 import Button from '@structure/source/common/buttons/Button';
 import { InputSelect } from '@structure/source/common/forms/InputSelect';
-import { Container } from '../Container';
+import { BorderContainer } from '../BorderContainer';
 
 // Dependencies - Assets
 import { Star, PlusCircle } from '@phosphor-icons/react';
@@ -24,7 +24,7 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
 
     // Render the component
     return (
-        <Container>
+        <BorderContainer>
             <div className="flex items-center gap-2 w-[140px]">
                 <InputSelect
                     className="w-full"

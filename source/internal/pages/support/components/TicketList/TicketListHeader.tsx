@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Container } from '../Container';
+import { BorderContainer } from '../BorderContainer';
 import { InputSelect } from '@structure/source/common/forms/InputSelect';
 
 // Dependencies - Assets
@@ -22,7 +22,7 @@ export function TicketListHeader(properties: TicketListHeaderInterface) {
 
     // Render the component
     return (
-        <Container>
+        <BorderContainer>
             <div className="flex items-center">
                 <div className="group flex cursor-pointer items-center" onClick={onRefresh}>
                     <h2 className="text-base font-medium">Tickets</h2>
@@ -40,6 +40,6 @@ export function TicketListHeader(properties: TicketListHeaderInterface) {
                     }}
                 />
             </div>
-        </Container>  
+        </BorderContainer>  
     );
 }

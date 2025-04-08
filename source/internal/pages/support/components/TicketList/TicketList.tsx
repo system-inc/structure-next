@@ -11,7 +11,7 @@ import { TicketListItem } from './TicketListItem';
 
 // Dependencies - API
 import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
-import { Container } from '../Container';
+import { BorderContainer } from '../BorderContainer';
 
 // Component - TicketList
 interface TicketListInterface {
@@ -60,7 +60,7 @@ export function TicketList(properties: TicketListInterface) {
                 </ScrollArea>
             </div>
 
-            <Container border="t">
+            <BorderContainer border="top">
                 <Pagination
                     page={properties.page}
                     pagesTotal={properties.totalPages}
@@ -69,7 +69,7 @@ export function TicketList(properties: TicketListInterface) {
                     itemsPerPageControl={false}
                     pageInputControl={false}
                 />
-            </Container>
+            </BorderContainer>
         </div>
     );
 }
