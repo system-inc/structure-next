@@ -73,6 +73,7 @@ export function TicketList(properties: TicketListInterface) {
                         itemsPerPage={properties.currentPagination.itemsPerPage}
                         itemsPerPageControl={false}
                         pageInputControl={false}
+                        firstAndLastPageControl={false}
                         onChange={(_, page) => properties.onPageChange(page)}
                     />
                 </Container>

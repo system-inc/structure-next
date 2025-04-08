@@ -10,14 +10,13 @@ export interface ContainerInterface {
 }
 export function Container(properties: ContainerInterface) {
     const {
-        height = '14',
         justify = 'between',
         border = 'b',
         children,
     } = properties;
 
     return (
-        <div className={`flex items-center justify-${justify} px-4 h-${height} border-${border} border-light-3 dark:border-dark-3`}>
+        <div className={`flex items-center justify-${justify} shrink-0 px-4 h-[56px] border-${border} border-light-3 dark:border-dark-3`}>
             {children}
         </div>
     );

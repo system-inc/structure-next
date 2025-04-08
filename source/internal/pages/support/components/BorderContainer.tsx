@@ -18,7 +18,7 @@ export function BorderContainer(properties: BorderContainerInterface) {
     } = properties;
 
     return (
-        <div className={`flex items-center justify-between px-4 h-14 ${borderVariants[border]} border-light-3 dark:border-dark-3`}>
+        <div className={`flex items-center justify-between px-4 h-[56px] ${borderVariants[border]} border-light-3 dark:border-dark-3`}>
             {children}
         </div>
     );

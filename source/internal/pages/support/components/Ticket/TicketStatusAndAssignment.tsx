@@ -33,7 +33,7 @@ export interface TicketStatusAndAssignmentInterface {
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles'];
     isLoadingProfiles: boolean;
     assignedToProfileId: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['assignedToProfileId'];
-    onTicketStatusChange: (status: SupportTicketStatus) => void;
+    onTicketStatusChange: (ticketId: string, status: SupportTicketStatus) => void;
 }
 export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentInterface) {
     // Properties
@@ -64,7 +64,7 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
                     items={ticketStatusOptions}
                     defaultValue={ticketStatus}
                     onChange={function (value) {
-                        onTicketStatusChange(value as SupportTicketStatus)
+                        onTicketStatusChange(ticketId, value as SupportTicketStatus)
                     }}
                 />
                 {/* <InputSelect

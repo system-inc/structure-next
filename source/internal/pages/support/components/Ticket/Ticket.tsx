@@ -23,7 +23,7 @@ export interface TicketInterface {
     account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged']
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles']
     isLoadingProfiles: boolean;
-    onTicketStatusChange: (status: SupportTicketStatus) => void;
+    onTicketStatusChange: (ticketId: string, status: SupportTicketStatus) => void;
 }
 export function Ticket(properties: TicketInterface) {
     // Properties
