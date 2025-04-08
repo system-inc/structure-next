@@ -45,6 +45,6 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
             <div className="relative h-4 w-4">
                 <Star />
             </div>
-        </Container>
+        </BorderContainer>
     );
 }
