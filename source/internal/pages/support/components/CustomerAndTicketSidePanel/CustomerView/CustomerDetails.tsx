@@ -25,15 +25,10 @@ export function CustomerDetails(properties: CustomerDetailsInterface) {
     // Properties
     const { account } = properties;
 
-    const getUserFullName = () => {
-        if (!account) return undefined;
-
-        if (account.defaultProfile.givenName && account.defaultProfile.familyName) {
-            return `${account.defaultProfile.givenName} ${account.defaultProfile.familyName}`;
-        }
-
-        return '-';
-    }
+    const userFullName = account ?
+        account.defaultProfile.givenName && account.defaultProfile.familyName ? 
+            `${account.defaultProfile.givenName} ${account.defaultProfile.familyName}` : '-'
+        : undefined;
     
     return (
         <>
@@ -48,7 +43,7 @@ export function CustomerDetails(properties: CustomerDetailsInterface) {
                             />
                         </div>
                         <div className="text-neutral-500 font-medium">
-                            { getUserFullName() }
+                            { userFullName }
                             <div className="truncate text-sm">
                                 {account.defaultProfile.username && `@${account.defaultProfile.username}`}
                             </div>
