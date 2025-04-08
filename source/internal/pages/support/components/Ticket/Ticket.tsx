@@ -13,16 +13,21 @@ import { TicketMessageForm } from './TicketMessageForm';
 import {
     SupportTicketsPrivilegedQuery,
     SupportTicketAccountAndCommerceOrdersPrivelegedQuery,
+    SupportTicketStatus,
+    SupportAllSupportProfilesQuery,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - Ticket
 export interface TicketInterface {
     ticket?: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]
     account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged']
+    supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles']
+    isLoadingProfiles: boolean;
+    onTicketStatusChange: (status: SupportTicketStatus) => void;
 }
 export function Ticket(properties: TicketInterface) {
     // Properties
-    const { ticket, account } = properties;
+    const { account } = properties;
     const defaultProfile = account?.defaultProfile;
     
     const getUserDisplayName = () => {
@@ -50,8 +55,12 @@ export function Ticket(properties: TicketInterface) {
                         status={properties.ticket.status}
                     />
                     <TicketStatusAndAssignment
-                        status={properties.ticket.status}
+                        ticketId={properties.ticket.id}
+                        ticketStatus={properties.ticket.status}
+                        supportProfiles={properties.supportProfiles}
+                        isLoadingProfiles={properties.isLoadingProfiles}
                         assignedToProfileId={properties.ticket.assignedToProfileId}
+                        onTicketStatusChange={properties.onTicketStatusChange}
                     />
                     <TicketComments
                         userEmailAddress={properties.ticket.userEmailAddress}

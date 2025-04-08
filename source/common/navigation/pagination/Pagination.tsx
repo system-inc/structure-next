@@ -49,15 +49,14 @@ export function Pagination(properties: PaginationInterface) {
     const pageInputControl = properties.pageInputControl ?? true;
 
     // Function to handle changes
-    const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
         async function (itemsPerPage: number, page: number) {
             // Update the input text page value
             inputTextPageReference.current?.setValue(page.toString());
 
-            await propertiesOnChange?.(itemsPerPage, page);
+            await properties.onChange?.(itemsPerPage, page);
         },
-        [propertiesOnChange],
+        [properties.onChange],
     );
 
     // console.log('pageIsValid', pageIsValid);

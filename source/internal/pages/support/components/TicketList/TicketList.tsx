@@ -4,33 +4,37 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Pagination } from '@structure/source/common/navigation/pagination/Pagination';
+import { Pagination as Paginator } from '@structure/source/common/navigation/pagination/Pagination';
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { TicketListHeader } from './TicketListHeader';
 import { TicketListItem } from './TicketListItem';
+import { Container } from '../Container';
 
 // Dependencies - API
-import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
-import { Container } from '../Container';
+import {
+    SupportTicketsPrivilegedQuery,
+    SupportTicketStatus,
+    Pagination,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - TicketList
 interface TicketListInterface {
     tickets: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'];
     selectedTicketId: string | null;
+    selectedStatus: SupportTicketStatus;
+    currentPagination: Pagination
     isLoading: boolean;
     isRefreshing: boolean;
-    page: number;
-    itemsPerPage: number;
-    totalItems: number;
-    totalPages: number;
     onRefresh: () => void;
-    onStatusChange: (status: string) => void;
+    onStatusChange: (status: SupportTicketStatus) => void;
+    onPageChange: (page: number) => void;
     onTicketSelect: (id: string) => void;
 }
 export function TicketList(properties: TicketListInterface) {
     return (
         <div className="flex flex-col h-[calc(100vh-3.5rem)] overflow-hidden border-r border-light-3 dark:border-dark-3">
             <TicketListHeader
+                selectedStatus={properties.selectedStatus}
                 isRefreshing={properties.isRefreshing}
                 onRefresh={properties.onRefresh}
                 onStatusChange={properties.onStatusChange}
@@ -60,16 +64,21 @@ export function TicketList(properties: TicketListInterface) {
                 </ScrollArea>
             </div>
 
-            <Container border="t">
-                <Pagination
-                    page={properties.page}
-                    pagesTotal={properties.totalPages}
-                    itemsTotal={properties.totalItems}
-                    itemsPerPage={properties.itemsPerPage}
-                    itemsPerPageControl={false}
-                    pageInputControl={false}
-                />
-            </Container>
+            { properties.currentPagination.pagesTotal > 1 && (
+                <Container border="t">
+                    <Paginator
+                        page={properties.currentPagination.page}
+                        pagesTotal={properties.currentPagination.pagesTotal}
+                        itemsTotal={properties.currentPagination.itemsTotal}
+                        itemsPerPage={properties.currentPagination.itemsPerPage}
+                        itemsPerPageControl={false}
+                        pageInputControl={false}
+                        onChange={(_, page) => properties.onPageChange(page)}
+                    />
+                </Container>
+            )}
+
+            
         </div>
     );
 }

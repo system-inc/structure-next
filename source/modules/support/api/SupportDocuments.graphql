@@ -181,6 +181,13 @@ mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreate
     }
 }
 
+mutation SupportTicketUpdateStatusPrivileged($ticketId: String!, $status: SupportTicketStatus!) {
+    supportTicketUpdateStatusPrivileged(id: $ticketId, status: $status) {
+        id
+        status
+    }
+}
+
 # Support All Support Profiles Query
 query SupportAllSupportProfiles {
     supportAllSupportProfiles {
