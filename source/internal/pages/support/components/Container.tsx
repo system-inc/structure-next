@@ -16,7 +16,7 @@ export function Container(properties: ContainerInterface) {
     } = properties;
 
     return (
-        <div className={`flex items-center justify-${justify} shrink-0 px-4 h-[56px] border-${border} border-light-3 dark:border-dark-3`}>
+        <div className={`flex items-center justify-${justify} shrink-0 px-4 h-14 border-${border} border-light-3 dark:border-dark-3`}>
             {children}
         </div>
     );
