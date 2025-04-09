@@ -15,7 +15,6 @@ import { useAccountAndCommerceOrdersByEmail } from './hooks/useAccountAndCommerc
 
 // Dependencies - API
 import { SupportTicketStatus, Pagination } from '@project/source/api/graphql';
-// import { SupportTicket } from '@project/source/api/graphql';
 
 // Component - SupportPage
 export function SupportPage() {
@@ -42,7 +41,6 @@ export function SupportPage() {
         page: pageParam,
         pagesTotal: 0,
     });
-
     const [showMyTickets] = React.useState<boolean>(false);
 
     // const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
@@ -129,9 +127,7 @@ export function SupportPage() {
                 const firstTicket = filteredTickets[0];
                 if (firstTicket) {
                     setSelectedTicketId(firstTicket.id); // Update the selected ticket ID in state
-                    
-                    console.log('FIRST TICKET', currentPagination)
-    
+
                     // Update the URL with the new ticket parameter and reset the page to 1
                     const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
                     newParams.set('status', selectedStatus);
@@ -139,9 +135,6 @@ export function SupportPage() {
                     newParams.set('ticket', firstTicket.id); // Set the first ticket ID
                     router.replace(`?${newParams.toString()}`);
                 } else {
-                    
-                    console.log('FIRST TICKET ELSE', currentPagination)
-
                     // If no tickets are available, clear the ticket parameter
                     setSelectedTicketId(null);
                     const newParams = new URLSearchParams(urlSearchParameters ?? undefined);

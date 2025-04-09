@@ -5,6 +5,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { Form, FormValuesInterface } from '@structure/source/common/forms/Form';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
+import { LexicalEditor } from '@project/source/ui/derived/TestLexical';
 
 // Dependencies - Hooks
 import { useSupportTicketCreateComment } from '../../hooks/useSupportTicketCreateComment';
@@ -42,23 +43,26 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
 
     // Render the component
     return (
-        <Form
-            className="py-5 px-10"
-            formInputs={[
-                <FormInputTextArea
-                    key="reply"
-                    id="reply"
-                    label="Reply"
-                    placeholder="Type your reply..."
-                    rows={4}
-                    required={true}
-                />,
-            ]}
-            buttonProperties={{
-                children: 'Send Reply',
-            }}
-            resetOnSubmitSuccess={true}
-            onSubmit={handleSubmit}
-        />
+        <div className="p-10">
+            <LexicalEditor />
+        </div>
+        // <Form
+        //     className="py-5 px-10"
+        //     formInputs={[
+        //         <FormInputTextArea
+        //             key="reply"
+        //             id="reply"
+        //             label="Reply"
+        //             placeholder="Type your reply..."
+        //             rows={4}
+        //             required={true}
+        //         />,
+        //     ]}
+        //     buttonProperties={{
+        //         children: 'Send Reply',
+        //     }}
+        //     resetOnSubmitSuccess={true}
+        //     onSubmit={handleSubmit}
+        // />
     )
 }
