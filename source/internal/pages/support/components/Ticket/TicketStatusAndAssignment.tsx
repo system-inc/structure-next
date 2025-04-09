@@ -5,7 +5,7 @@ import React from 'react';
 // import { Button } from '@project/source/ui/base/Button';
 import Button from '@structure/source/common/buttons/Button';
 import { InputSelect } from '@structure/source/common/forms/InputSelect';
-import { Container } from '../Container';
+import { BorderContainer } from '../BorderContainer';
 
 // Dependencies - Hooks
 // import { useSupportTicketAssign } from '../../hooks/useSupportTicketAssign';
@@ -57,7 +57,7 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
 
     // Render the component
     return (
-        <Container>
+        <BorderContainer>
             <div className="flex items-center gap-2 w-[140px]">
                 <InputSelect
                     className="w-full"
@@ -90,6 +90,6 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
             <div className="relative h-4 w-4">
                 <Star />
             </div>
-        </Container>
+        </BorderContainer>
     );
 }

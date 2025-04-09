@@ -1,6 +1,6 @@
 // Dependencies - Main Components
 import Badge from '@project/source/ui/base/Badge';
-import { Container } from '../Container';
+import { BorderContainer } from '../BorderContainer';
 
 // Component - TicketHeader
 export interface TicketHeaderInterface {
@@ -16,7 +16,7 @@ export function TicketHeader(properties: TicketHeaderInterface) {
 
     // Render the component
     return (
-        <Container>
+        <BorderContainer>
             <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-4">
                     <h2 className="text-base font-medium">{subject}</h2>
@@ -32,6 +32,6 @@ export function TicketHeader(properties: TicketHeaderInterface) {
 
                 </div> */}
             </div>
-        </Container>
+        </BorderContainer>
     )
 }

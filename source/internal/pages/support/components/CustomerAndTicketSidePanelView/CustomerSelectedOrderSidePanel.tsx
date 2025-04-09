@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import Badge from '@project/source/ui/base/Badge';
 import Button from '@structure/source/common/buttons/Button';
-import { BorderContainer } from '../../BorderContainer';
+import { BorderContainer } from '../BorderContainer';
 
 // Dependencies - API
 import { SupportTicketAccountAndCommerceOrdersPrivelegedQuery } from '@project/source/api/GraphQlGeneratedCode';

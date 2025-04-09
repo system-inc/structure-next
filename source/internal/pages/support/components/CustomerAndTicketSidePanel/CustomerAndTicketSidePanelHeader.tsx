@@ -8,7 +8,7 @@ import { CustomerAndTicketSidePanelView } from './CustomerAndTicketSidePanelType
 
 // Dependencies - Main Components
 import { SegmentedControl, SegmentedControlItem } from '@project/source/ui/base/SegmentedControl';
-import { Container } from '../Container';
+import { BorderContainer } from '../BorderContainer';
 
 // Component - CustomerTicketHeader
 interface CustomerTicketHeaderInterface {
@@ -23,7 +23,7 @@ export function CustomerTicketHeader(properties: CustomerTicketHeaderInterface) 
 
     // Render the component
     return (
-        <Container>
+        <BorderContainer>
             <SegmentedControl
                 size="default"
                 variant="default"
@@ -37,6 +37,6 @@ export function CustomerTicketHeader(properties: CustomerTicketHeaderInterface) 
                     Ticket
                 </SegmentedControlItem>
             </SegmentedControl>
-        </Container>
+        </BorderContainer>
     );
 }

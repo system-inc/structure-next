@@ -5,14 +5,14 @@ import React from 'react';
 
 // Dependencies - Main Components
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
-import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
+// import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
 
 // Dependencies - API
-import { EmailListsDocument } from '@project/source/api/GraphQlGeneratedCode';
+// import { EmailListsDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - EmailListsPage
-export type EmailListsPageProperties = {};
-export function EmailListsPage(properties: EmailListsPageProperties) {
+// export type EmailListsPageProperties = {};
+export function EmailListsPage() {
     // Render the component
     return (
         <>
@@ -20,7 +20,7 @@ export function EmailListsPage(properties: EmailListsPageProperties) {
 
             <h1 className="mb-5">Email Lists</h1>
 
-            <GraphQlQueryTable queryDocument={EmailListsDocument} />
+            {/* <GraphQlQueryTable queryDocument={EmailListsDocument} /> */}
         </>
     );
 }

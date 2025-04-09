@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import Badge from '@project/source/ui/base/Badge';
-import { Container } from '../../Container';
+import { BorderContainer } from '../../BorderContainer';
 
 // Dependencies - API
 import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
@@ -31,9 +31,9 @@ export function TicketDetails(properties: TicketDetailsInterface) {
 
     if (!ticket) {
         return (
-            <Container >
+            <BorderContainer>
                 <div className="text-neutral-500">No ticket selected</div>
-            </Container>
+            </BorderContainer>
         )
     }
     

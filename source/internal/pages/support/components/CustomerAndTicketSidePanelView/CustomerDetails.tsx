@@ -15,14 +15,13 @@ import {
     Envelope,
     // Phone
 } from '@phosphor-icons/react';
-import { BorderContainer } from '../../BorderContainer';
+import { BorderContainer } from '../BorderContainer';
 
 // Component - CustomerDetails
 interface CustomerDetailsInterface {
     account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged'];
 }
 export function CustomerDetails(properties: CustomerDetailsInterface) {
-    // Properties
     const { account } = properties;
 
     const userFullName = account ?

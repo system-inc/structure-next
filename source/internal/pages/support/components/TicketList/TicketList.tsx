@@ -8,7 +8,7 @@ import { Pagination as Paginator } from '@structure/source/common/navigation/pag
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { TicketListHeader } from './TicketListHeader';
 import { TicketListItem } from './TicketListItem';
-import { Container } from '../Container';
+import { BorderContainer } from '../BorderContainer';
 
 // Dependencies - API
 import {
@@ -65,7 +65,7 @@ export function TicketList(properties: TicketListInterface) {
             </div>
 
             { properties.currentPagination.pagesTotal > 1 && (
-                <Container border="t">
+                <BorderContainer border="top">
                     <Paginator
                         page={properties.currentPagination.page}
                         pagesTotal={properties.currentPagination.pagesTotal}
@@ -76,7 +76,7 @@ export function TicketList(properties: TicketListInterface) {
                         firstAndLastPageControl={false}
                         onChange={(_, page) => properties.onPageChange(page)}
                     />
-                </Container>
+                </BorderContainer>
             )}
 
             
