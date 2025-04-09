@@ -11,6 +11,7 @@ import { TicketListItem } from './TicketListItem';
 
 // Dependencies - API
 import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { BorderContainer } from '../BorderContainer';
 
 // Component - TicketList
 interface TicketListInterface {
@@ -28,36 +29,38 @@ interface TicketListInterface {
 }
 export function TicketList(properties: TicketListInterface) {
     return (
-        <div className="flex h-full flex-col overflow-hidden border-r border-light-3 dark:border-dark-3">
+        <div className="flex flex-col h-[calc(100vh-3.5rem)] overflow-hidden border-r border-light-3 dark:border-dark-3">
             <TicketListHeader
                 isRefreshing={properties.isRefreshing}
                 onRefresh={properties.onRefresh}
                 onStatusChange={properties.onStatusChange}
             />
 
-            <ScrollArea className="flex-grow">
-                {properties.isLoading ? (
-                    <div className="flex h-32 items-center justify-center">
-                        <p className="neutral">Loading tickets...</p>
-                    </div>
-                ) : properties.tickets.length === 0 ? (
-                    <div className="flex h-32 items-center justify-center">
-                        <p className="neutral">No tickets found.</p>
-                    </div>
-                ) : (
-                    properties.tickets.map((ticket, index) => (
-                        <TicketListItem
-                            key={ticket.id}
-                            ticket={ticket}
-                            isSelected={ticket.id === properties.selectedTicketId}
-                            isFirst={index === 0}
-                            onSelect={properties.onTicketSelect}
-                        />
-                    ))
-                )}
-            </ScrollArea>
+            <div className="h-full overflow-hidden">
+                <ScrollArea>
+                    {properties.isLoading ? (
+                        <div className="flex h-32 items-center justify-center">
+                            <p className="neutral">Loading tickets...</p>
+                        </div>
+                    ) : properties.tickets.length === 0 ? (
+                        <div className="flex h-32 items-center justify-center">
+                            <p className="neutral">No tickets found.</p>
+                        </div>
+                    ) : (
+                        properties.tickets.map((ticket, index) => (
+                            <TicketListItem
+                                key={ticket.id}
+                                ticket={ticket}
+                                isSelected={ticket.id === properties.selectedTicketId}
+                                isFirst={index === 0}
+                                onSelect={properties.onTicketSelect}
+                            />
+                        ))
+                    )}
+                </ScrollArea>
+            </div>
 
-            <div className="border-t border-light-3 p-4 dark:border-dark-3">
+            <BorderContainer border="top">
                 <Pagination
                     page={properties.page}
                     pagesTotal={properties.totalPages}
@@ -66,7 +69,7 @@ export function TicketList(properties: TicketListInterface) {
                     itemsPerPageControl={false}
                     pageInputControl={false}
                 />
-            </div>
+            </BorderContainer>
         </div>
     );
 }

@@ -4,24 +4,17 @@
 import React from 'react';
 import { useUrlSearchParameters, useRouter } from '@structure/source/utilities/next/NextNavigation';
 
-// Dependencies - Main Components
-import { Form } from '@structure/source/common/forms/Form';
-import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
-import { FileCarouselInterface } from '@structure/source/common/files/FileCarousel';
-import { FileCarouselDialog } from '@structure/source/common/files/FileCarouselDialog';
-
 // Dependencies - Internal Components
 import { TicketList } from './components/TicketList/TicketList';
-import { TicketInformation } from './components/TicketInformation';
-import { CommentAttachments } from './components/CommentAttachments';
+import { Ticket } from './components/Ticket/Ticket';
+import { CustomerAndTicketSidePanel } from './components/CustomerAndTicketSidePanel/CustomerAndTicketSidePanel';
 
 // Dependencies - Hooks
 import { useSupportTickets } from './hooks/useSupportTickets';
+import { useAccountAndCommerceOrdersByEmail } from './hooks/useAccountAndCommerceOrdersByEmail';
 
-// Dependencies - Utilities
-import { extractLatestEmailContent } from '@structure/source/utilities/Email';
-import { formatDateWithTimeIfToday } from '@structure/source/utilities/Time';
+// Dependencies - API
+// import { SupportTicket } from '@project/source/api/graphql';
 
 // Component - SupportPage
 export function SupportPage() {
@@ -37,29 +30,33 @@ export function SupportPage() {
     const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(
         urlSearchParameters?.get('ticket') ?? null,
     );
-    const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
-    const commentsContainerRef = React.useRef<HTMLDivElement>(null);
     const [selectedStatus, setSelectedStatus] = React.useState<string>('Open');
     const [showMyTickets] = React.useState<boolean>(false);
+
+    // Dialog state for image carousel
+    // const [dialogOpen, setDialogOpen] = React.useState(false);
+    // const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
+
+    const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
+    const commentsContainerRef = React.useRef<HTMLDivElement>(null);
 
     // Hooks
     const {
         ticketsQuery,
-        createComment,
+        // createComment,
         assignTicket,
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,
     } = useSupportTickets(page, itemsPerPage, selectedStatus, showMyTickets);
 
-    // Dialog state for image carousel
-    const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
-
     // Selected Ticket
     const selectedTicket = ticketsQuery.data?.supportTicketsPrivileged?.items?.find(
         (ticket) => ticket.id === selectedTicketId,
     );
+
+    // Get account and commerce orders by email
+    const { accountAndCommerceOrdersByEmailQuery } = useAccountAndCommerceOrdersByEmail(selectedTicket?.userEmailAddress)
 
     // Function to select ticket and update URL
     const handleTicketSelection = React.useCallback(
@@ -95,22 +92,14 @@ export function SupportPage() {
 
             const firstTicket = items?.[0];
 
-            if(firstTicket) {
-                if(urlTicketId) {
-                    // Check if the ticket from URL exists in the list
-                    const ticketExists = items.some((ticket) => ticket.id === urlTicketId);
-                    if(ticketExists) {
-                        setSelectedTicketId(urlTicketId);
-                    }
-                    else {
-                        // If ticket doesn't exist, select first one and update URL
-                        handleTicketSelection(firstTicket.id);
-                    }
-                }
-                else if(!selectedTicketId) {
-                    // No ticket in URL and none selected, select first one
-                    handleTicketSelection(firstTicket.id);
-                }
+            if (!firstTicket) return;
+
+            if (urlTicketId && items.some((ticket) => ticket.id === urlTicketId)) {
+                // If the ticket from the URL exists in the list, select it
+                setSelectedTicketId(urlTicketId);
+            } else if (!selectedTicketId) {
+                // If no ticket is selected, select the first one and update the URL
+                handleTicketSelection(firstTicket.id);
             }
         },
         [ticketsQuery.data, urlSearchParameters, handleTicketSelection, selectedTicketId],
@@ -126,36 +115,38 @@ export function SupportPage() {
         [selectedTicket],
     );
 
+    
+
     // Get all attachments from comments
-    const allAttachments =
-        selectedTicket?.comments.reduce((accumulatedAttachments: FileCarouselInterface['files'], comment) => {
-            const attachments = (comment.attachments || []).map(function (attachment) {
-                return {
-                    url: attachment.url || '',
-                    metadata: {
-                        Source: comment.source,
-                        Date: formatDateWithTimeIfToday(new Date(comment.createdAt)),
-                    },
-                };
-            });
-            return accumulatedAttachments.concat(attachments);
-        }, []) || [];
+    // const allAttachments =
+    //     selectedTicket?.comments.reduce((accumulatedAttachments: FileCarouselInterface['files'], comment) => {
+    //         const attachments = (comment.attachments || []).map(function (attachment) {
+    //             return {
+    //                 url: attachment.url || '',
+    //                 metadata: {
+    //                     Source: comment.source,
+    //                     Date: formatDateWithTimeIfToday(new Date(comment.createdAt)),
+    //                 },
+    //             };
+    //         });
+    //         return accumulatedAttachments.concat(attachments);
+    //     }, []) || [];
 
     // Function to get global index for an attachment URL
-    function getGlobalAttachmentIndex(url: string): number {
-        return allAttachments.findIndex((attachment) => attachment.url === url);
-    }
+    // function getGlobalAttachmentIndex(url: string): number {
+    //     return allAttachments.findIndex((attachment) => attachment.url === url);
+    // }
 
     // Handle image click
-    function handleImageClick(index: number) {
-        setSelectedImageIndex(index);
-        setDialogOpen(true);
-    }
+    // function handleImageClick(index: number) {
+    //     setSelectedImageIndex(index);
+    //     setDialogOpen(true);
+    // }
 
     // Render the component
     return (
-        <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
-            <div className="grid h-full grid-cols-[390px_1fr] gap-6">
+        <div className="relative h-[calc(100vh-3.5rem)] overflow-hidden">
+            <div className="grid h-full grid-cols-[390px_1fr_390px]">
                 {/* Left Navigation */}
                 <TicketList
                     tickets={ticketsQuery.data?.supportTicketsPrivileged.items || []}
@@ -171,13 +162,18 @@ export function SupportPage() {
                     onTicketSelect={handleTicketSelection}
                 />
 
+                <Ticket
+                    ticket={selectedTicket}
+                    account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
+                />
+
                 {/* Ticket Detail */}
-                <div className="mt-3 flex h-full flex-col overflow-hidden pb-12 pr-6" ref={ticketDetailsRef}>
+                {/* <div className="mt-3 flex h-full flex-col overflow-hidden pb-12" ref={ticketDetailsRef}>
                     {selectedTicket ? (
                         <div className="flex h-full flex-col">
                             <h2 className="mb-4 text-2xl font-medium">{selectedTicket.title}</h2>
 
-                            {/* Ticket Information */}
+                            {/* Ticket Information *
                             <TicketInformation
                                 email={selectedTicket.userEmailAddress}
                                 status={selectedTicket.status}
@@ -190,7 +186,7 @@ export function SupportPage() {
                                 isLoadingProfiles={supportProfilesQuery.loading}
                             />
 
-                            {/* Comments */}
+                            {/* Comments *
                             <ScrollArea className="flex flex-grow" ref={commentsContainerRef}>
                                 <div className="flex flex-grow flex-col justify-end">
                                     <div className="flex flex-col space-y-2">
@@ -239,7 +235,7 @@ export function SupportPage() {
                                 </div>
                             </ScrollArea>
 
-                            {/* Reply Form */}
+                            {/* Reply Form *
                             <Form
                                 className="mt-6"
                                 formInputs={[
@@ -277,16 +273,15 @@ export function SupportPage() {
                             <p className="neutral">Select a ticket to view details.</p>
                         </div>
                     )}
-                </div>
-            </div>
+                </div> */}
 
-            {/* Image Carousel Dialog */}
-            <FileCarouselDialog
-                open={dialogOpen}
-                onOpenChange={setDialogOpen}
-                files={allAttachments}
-                startIndex={selectedImageIndex}
-            />
+                {/* Right Sidebar */}
+                <CustomerAndTicketSidePanel
+                    ticket={selectedTicket}
+                    account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
+                    commerceOrders={accountAndCommerceOrdersByEmailQuery.data?.commerceOrdersPrivileged.items}
+                />
+            </div>
         </div>
     );
 }

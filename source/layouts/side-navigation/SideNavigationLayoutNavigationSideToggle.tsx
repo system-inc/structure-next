@@ -47,24 +47,6 @@ export function SideNavigationLayoutNavigationSideToggle(
     // Render the component
     return (
         <div className={mergeClassNames('mr-4 flex flex-shrink-0 items-center space-x-2', properties.className)}>
-            {/* Menu button */}
-            <Button
-                variant="ghost"
-                size="icon"
-                className="focus:border-0"
-                icon={MenuIcon}
-                onClick={async function () {
-                    // Toggle the navigation open state
-                    setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationOpen);
-
-                    // If on desktop
-                    if(window.innerWidth >= desktopMinimumWidth) {
-                        // Set the navigation manually closed state
-                        setSideNavigationLayoutNavigationManuallyClosed(sideNavigationLayoutNavigationOpen);
-                    }
-                }}
-            />
-
             {/* Logo */}
             <Link href="/">
                 <Image
@@ -84,6 +66,24 @@ export function SideNavigationLayoutNavigationSideToggle(
                     className="hidden dark:block"
                 />
             </Link>
+
+            {/* Menu button */}
+            <Button
+                variant="ghost"
+                size="icon"
+                className="focus:border-0"
+                icon={MenuIcon}
+                onClick={async function () {
+                    // Toggle the navigation open state
+                    setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationOpen);
+
+                    // If on desktop
+                    if(window.innerWidth >= desktopMinimumWidth) {
+                        // Set the navigation manually closed state
+                        setSideNavigationLayoutNavigationManuallyClosed(sideNavigationLayoutNavigationOpen);
+                    }
+                }}
+            />
         </div>
     );
 }
