@@ -195,9 +195,7 @@ query SupportAllSupportProfiles {
 }
 
 query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $pagination: PaginationInput!) {
-    accountPrivileged(
-        input: { emailAddress: $email }
-    ) {
+    accountPrivileged(input: { emailAddress: $email }) {
         defaultProfileId
         defaultProfile {
             id
@@ -253,7 +251,7 @@ query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $paginati
             }
             appliedDiscounts {
                 amount
-                codeReference
+                # codeReference
             }
             source
             status
