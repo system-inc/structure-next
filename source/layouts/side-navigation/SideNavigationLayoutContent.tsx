@@ -27,7 +27,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - SideNavigationLayoutContent
 export interface SideNavigationLayoutContentInterface {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
-    topTitle: React.ReactNode;
+    topTitle?: React.ReactNode;
     children: React.ReactNode;
     className?: string;
 }
@@ -95,23 +95,20 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
     return (
         <animated.div
             style={contentDivSpring}
-            className={mergeClassNames(
-                'relative h-screen w-screen overscroll-none',
-                properties.className
-            )}
+            className={mergeClassNames('relative h-screen w-screen overscroll-none', properties.className)}
             suppressHydrationWarning
         >
             {/* Show the line loading animation when the page is loading */}
             <React.Suspense
                 fallback={
-                    <div className="absolute inset-0 w-full h-full">
+                    <div className="absolute inset-0 h-full w-full">
                         <LineLoadingAnimation />
                     </div>
                 }
             >
                 {/* Page */}
-                <div className="flex items-center justify-center md:justify-start h-14 px-4">{properties.topTitle}</div>
-                <div className="flex flex-col w-full h-[calc(100vh-3.5rem)] overscroll-none">{properties.children}</div>
+                <div className="flex h-14 items-center justify-center px-4 md:justify-start">{properties.topTitle}</div>
+                <div className="flex h-[calc(100vh-3.5rem)] w-full flex-col overscroll-none">{properties.children}</div>
             </React.Suspense>
         </animated.div>
     );
