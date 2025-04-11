@@ -1,0 +1,93 @@
+# Forms Query
+query Form($identifier: String!) {
+    form(identifier: $identifier) {
+        identifier
+        title
+        description
+        status
+        metadata {
+            theme {
+                backgroundColor
+                primaryColor
+                header {
+                    fontFamily
+                    fontSize
+                }
+                question {
+                    fontFamily
+                    fontSize
+                }
+                text {
+                    fontFamily
+                    fontSize
+                }
+            }
+        }
+        components {
+            ... on FormComponentDataCheckbox {
+                id
+                position
+                section
+                type
+                title
+                description
+                required
+                options
+                maxSelections
+            }
+            ... on FormComponentDataDropdown {
+                id
+                position
+                section
+                type
+                title
+                description
+                required
+                options
+                placeholder
+                defaultOption
+            }
+            ... on FormComponentDataMultipleChoice {
+                id
+                position
+                section
+                type
+                title
+                description
+                required
+                options
+                defaultOption
+            }
+            ... on FormComponentDataShortAnswer {
+                id
+                position
+                section
+                type
+                title
+                description
+                required
+                placeholder
+            }
+            ... on FormComponentDataParagraph {
+                id
+                position
+                section
+                type
+                title
+                description
+                required
+                placeholder
+            }
+        }
+        updatedAt
+        createdAt
+    }
+}
+
+# Submit Form Mutation
+mutation SubmitForm($identifier: String!, $emailAddress: String, $data: JSON!) {
+    submitForm(identifier: $identifier, emailAddress: $emailAddress, data: $data) {
+        id
+        formId
+    }
+}
