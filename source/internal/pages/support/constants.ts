@@ -1,7 +1,9 @@
 // Description: Constants for the support page
+import { SupportTicketStatus } from "@project/source/api/graphql";
 
-export const STATUS_OPTIONS = [
-    { value: 'Open', content: 'Open' },
-    { value: 'Closed', content: 'Closed' },
-    { value: 'Deleted', content: 'Deleted' },
-];
+const ticketStatusOptions = Object.values(SupportTicketStatus).map((status) => ({
+    value: status,
+    label: status,
+}));
+
+export { ticketStatusOptions };
