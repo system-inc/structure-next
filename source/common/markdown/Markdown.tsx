@@ -10,6 +10,7 @@ import remarkCustomHeaderId from 'remark-custom-header-id';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { renderToString } from 'react-dom/server';
+import Link from 'next/link';
 
 // Dependencies - Styles
 // import '@project/source/modules/chat/styles/night-owl.css';
@@ -62,7 +63,9 @@ const components: ComponentsInterface = {
     ),
     p: (properties) => <p className="mt-6 text-[16px] font-light leading-[28px] first:mt-0" {...properties} />,
     strong: (properties) => <strong className="font-medium" {...properties} />,
-    a: (properties) => <a className="primary hover:underline" {...properties} />,
+    a: (properties: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <Link href={properties.href ?? ''} className="underline" {...properties} />
+    ),
     pre: (properties) => (
         <pre
             className="relative mb-6 rounded-md border border-light-4 bg-light-2 p-5 text-sm dark:border-dark-4 dark:bg-dark"
