@@ -14,7 +14,11 @@ import { useSupportTickets } from './hooks/useSupportTickets';
 import { useAccountAndCommerceOrdersByEmail } from './hooks/useAccountAndCommerceOrdersByEmail';
 
 // Dependencies - API
-import { SupportTicketStatus, Pagination } from '@project/source/api/graphql';
+import {
+    SupportTicketStatus,
+    Pagination,
+    SupportTicketCommentCreateInput,
+} from '@project/source/api/graphql';
 
 // Component - SupportPage
 export function SupportPage() {
@@ -49,9 +53,9 @@ export function SupportPage() {
     // Hooks
     const {
         ticketsQuery,
-        // createComment,
+        createComment,
         assignTicket,
-        updateTicketStatus,
+        // updateTicketStatus,
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,
@@ -186,15 +190,30 @@ export function SupportPage() {
     // );
 
     const handleTicketStatusChange = React.useCallback(
-        async function (ticketId: string, status: SupportTicketStatus) {
-            await updateTicketStatus({
-                variables: {
-                    ticketId,
-                    status,
-                },
-            })
+        // async function (ticketId: string, status: SupportTicketStatus) {
+        //     await updateTicketStatus({
+        //         variables: {
+        //             ticketId,
+        //             status,
+        //         },
+        //     })
+        // },
+        // [selectedTicket?.status]
+        function() {
+            console.log("Ticket status changed", selectedTicket?.status)
         },
-        [selectedTicket?.status]
+        []
+    );
+
+    const handleTicketCommentCreate = React.useCallback(
+        async function (input: SupportTicketCommentCreateInput) {
+            await createComment({
+                variables: {
+                    input,
+                },
+            });
+        },
+        [createComment]
     );
 
     // Render the component
@@ -222,6 +241,7 @@ export function SupportPage() {
                     supportProfiles={supportProfilesQuery.data?.supportAllSupportProfiles}
                     isLoadingProfiles={supportProfilesQuery.loading}
                     onTicketStatusChange={handleTicketStatusChange}
+                    onTicketCommentCreate={handleTicketCommentCreate}
                 />
 
                 {/* Right Sidebar */}

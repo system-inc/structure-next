@@ -15,6 +15,7 @@ import {
     SupportTicketAccountAndCommerceOrdersPrivelegedQuery,
     SupportTicketStatus,
     SupportAllSupportProfilesQuery,
+    SupportTicketCommentCreateInput,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - Ticket
@@ -24,6 +25,7 @@ export interface TicketInterface {
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles']
     isLoadingProfiles: boolean;
     onTicketStatusChange: (ticketId: string, status: SupportTicketStatus) => void;
+    onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
 }
 export function Ticket(properties: TicketInterface) {
     // Properties
@@ -70,6 +72,7 @@ export function Ticket(properties: TicketInterface) {
                     <TicketMessageForm
                         ticketId={properties.ticket.id}
                         comments={properties.ticket.comments}
+                        onTicketCommentCreate={properties.onTicketCommentCreate}
                     />
                 </>
             )}
