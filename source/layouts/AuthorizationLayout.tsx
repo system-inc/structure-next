@@ -18,7 +18,9 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutInterface {
     children: React.ReactNode;
-    mustBeAdministrator?: boolean;
+
+    // If the user has any one of these roles, they are authorized
+    requiredAccessRoles?: string[];
 }
 export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     // throw new Error('hi!');
@@ -29,7 +31,7 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     // return <ApiError />;
 
     // Defaults
-    const mustBeAdministrator = properties.mustBeAdministrator || false;
+    const requiredRoles = properties.requiredAccessRoles || [];
 
     // Hooks
     const { accountState, signedIn } = useAccount();
@@ -50,8 +52,8 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     else if(accountState.error) {
         return <ApiError error={accountState.error} />;
     }
-    // Not authorized
-    else if(mustBeAdministrator && accountState.account && !accountState.account.isAdministator()) {
+    // Not authorized - check both mustBeAdministrator and requiredRoles
+    else if(requiredRoles.length > 0 && (!accountState.account || !accountState.account.hasAnyRole(requiredRoles))) {
         return <NotAuthorized />;
     }
 

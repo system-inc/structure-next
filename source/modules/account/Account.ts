@@ -7,6 +7,8 @@ import { AccountQuery } from '@project/source/api/GraphQlGeneratedCode';
 // Account variables shared across the application
 export const accountSignedInKey = ProjectSettings.identifier + 'AccountSignedIn';
 
+const internalAccessRoles = ['Administrator'].concat(ProjectSettings.internalAccessRoles || []);
+
 // Class - Account
 export class Account {
     emailAddress: AccountQuery['account']['emailAddress'] | null | undefined;
@@ -43,8 +45,16 @@ export class Account {
         return this.accessRoles.includes(role);
     }
 
+    hasAnyRole(roles: string[]) {
+        return roles.some((role) => this.hasRole(role));
+    }
+
     isAdministator() {
         return this.hasRole('Administrator');
+    }
+
+    hasInternalRole() {
+        return this.hasAnyRole(internalAccessRoles);
     }
 }
 

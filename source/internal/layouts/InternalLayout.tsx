@@ -3,6 +3,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
 import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
@@ -36,7 +37,19 @@ export const internalLayoutIdentifier = 'Internal';
 export interface InternalLayoutInterface {
     children: React.ReactNode;
 }
+
+// TODO: This should not be in structure?
+const internalPathRoleMappings: { [key: string]: string[] } = {
+    '/internal/fulfillment': ['Fulfillment', 'Administrator'],
+    '/internal/orders': ['OrderViewer', 'Administrator'],
+    '/internal/support': ['Support', 'Administrator'],
+};
+
 export function InternalLayout(properties: InternalLayoutInterface) {
+    // Get the current path to determine required roles
+    const pathname = usePathname();
+    const requiredRoles = internalPathRoleMappings[pathname] || ['Administrator'];
+
     // Effect to adjust the background color of the body on mount
     // We want the navigation to be dark but the content to be a bit lighter
     React.useEffect(function () {
@@ -48,17 +61,14 @@ export function InternalLayout(properties: InternalLayoutInterface) {
 
     // Render the component
     return (
-        <AuthorizationLayout mustBeAdministrator={true}>
+        <AuthorizationLayout requiredAccessRoles={requiredRoles}>
             {/* Navigation */}
             <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier} topBar={true}>
                 <InternalNavigation />
             </SideNavigationLayoutNavigation>
 
             {/* Content */}
-            <SideNavigationLayoutContent
-                layoutIdentifier={internalLayoutIdentifier}
-                topTitle="Internal"
-            >
+            <SideNavigationLayoutContent layoutIdentifier={internalLayoutIdentifier} topTitle="Internal">
                 <SideNavigationLayoutContentBody>{properties.children}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
 
