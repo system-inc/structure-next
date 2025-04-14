@@ -30,23 +30,12 @@ export interface TicketInterface {
 export function Ticket(properties: TicketInterface) {
     // Properties
     const { account } = properties;
-    const defaultProfile = account?.defaultProfile;
-    
-    const getUserDisplayName = () => {
-        if (!properties.account) return undefined;
 
-        if (properties.account.defaultProfile.preferredName) {
-            return properties.account.defaultProfile.preferredName;
-        }
-        if (properties.account.defaultProfile.displayName) {
-            return properties.account.defaultProfile.displayName;
-        }
-        if (defaultProfile?.givenName && defaultProfile?.familyName) {
-            return `${defaultProfile?.givenName} ${defaultProfile?.familyName}`;
-        }
-
-        return defaultProfile?.username;
-    }
+    const userDisplayName = account?.defaultProfile.preferredName ||
+        account?.defaultProfile.displayName ||
+        (account?.defaultProfile.givenName && account?.defaultProfile.familyName
+            ? `${account.defaultProfile.givenName} ${account.defaultProfile.familyName}`
+            : undefined);
 
     return (
         <div className="flex flex-col w-full h-full overflow-hidden overscroll-none">
@@ -67,7 +56,7 @@ export function Ticket(properties: TicketInterface) {
                     <TicketComments
                         userEmailAddress={properties.ticket.userEmailAddress}
                         comments={properties.ticket.comments}
-                        userFullName={getUserDisplayName()}
+                        userFullName={userDisplayName}
                     />
                     <TicketMessageForm
                         ticketId={properties.ticket.id}
