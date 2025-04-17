@@ -17,38 +17,35 @@ import {
 
 // Component - Ticket
 export interface TicketInterface {
-    ticket?: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]
-    account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged']
+    ticket?: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0];
+    account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged'];
 }
 export function Ticket(properties: TicketInterface) {
     // Properties
     const { ticket, account } = properties;
     const defaultProfile = account?.defaultProfile;
-    
-    const getUserDisplayName = () => {
-        if (!properties.account) return undefined;
 
-        if (properties.account.defaultProfile.preferredName) {
+    const getUserDisplayName = () => {
+        if(!properties.account) return undefined;
+
+        if(properties.account.defaultProfile.preferredName) {
             return properties.account.defaultProfile.preferredName;
         }
-        if (properties.account.defaultProfile.displayName) {
+        if(properties.account.defaultProfile.displayName) {
             return properties.account.defaultProfile.displayName;
         }
-        if (defaultProfile?.givenName && defaultProfile?.familyName) {
+        if(defaultProfile?.givenName && defaultProfile?.familyName) {
             return `${defaultProfile?.givenName} ${defaultProfile?.familyName}`;
         }
 
         return defaultProfile?.username;
-    }
+    };
 
     return (
-        <div className="flex flex-col w-full h-full overflow-hidden overscroll-none">
-            { properties.ticket && (
+        <div className="flex h-full w-full flex-col overflow-hidden overscroll-none">
+            {properties.ticket && (
                 <>
-                    <TicketHeader
-                        subject={properties.ticket.title}
-                        status={properties.ticket.status}
-                    />
+                    <TicketHeader subject={properties.ticket.title} status={properties.ticket.status} />
                     <TicketStatusAndAssignment
                         status={properties.ticket.status}
                         assignedToProfileId={properties.ticket.assignedToProfileId}
@@ -58,10 +55,7 @@ export function Ticket(properties: TicketInterface) {
                         comments={properties.ticket.comments}
                         userFullName={getUserDisplayName()}
                     />
-                    <TicketMessageForm
-                        ticketId={properties.ticket.id}
-                        comments={properties.ticket.comments}
-                    />
+                    <TicketMessageForm ticketIdentifier={properties.ticket.id} comments={properties.ticket.comments} />
                 </>
             )}
         </div>

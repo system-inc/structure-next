@@ -1,4 +1,3 @@
-
 // Dependencies - React and Next.js
 import React from 'react';
 
@@ -14,22 +13,22 @@ import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGenera
 
 // Component - TicketMessageForm
 export interface TicketMessageFormInterface {
-    ticketId: string;
+    ticketIdentifier: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
 }
 export function TicketMessageForm(properties: TicketMessageFormInterface) {
     // Properties
-    const { ticketId, comments } = properties;
+    const { ticketIdentifier, comments } = properties;
 
     // Hooks
-    const {createComment} = useSupportTicketCreateComment();
+    const { createComment } = useSupportTicketCreateComment();
 
     async function handleSubmit(formValues: FormValuesInterface) {
         // Submit the form
         await createComment({
             variables: {
                 input: {
-                    ticketId,
+                    ticketIdentifier: ticketIdentifier,
                     content: formValues.reply,
                     replyToCommentId: comments[0]?.id || '',
                 },
@@ -43,7 +42,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
     // Render the component
     return (
         <Form
-            className="py-5 px-10"
+            className="px-10 py-5"
             formInputs={[
                 <FormInputTextArea
                     key="reply"
@@ -60,5 +59,5 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
             resetOnSubmitSuccess={true}
             onSubmit={handleSubmit}
         />
-    )
+    );
 }
