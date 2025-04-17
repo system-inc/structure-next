@@ -6,6 +6,7 @@ import {
     ClientToWebSocketSharedWorkerServerMessageType,
     ClientToWebSocketSharedWorkerServerMessageInterface,
     WebSocketConnectionInformationInterface,
+    WebSocketConnectionState,
     ConnectWebSocketMessageInterface,
     SendWebSocketMessageInterface,
     createWebSocketConnectionInformationMessage,
@@ -39,8 +40,16 @@ export class WebSocketSharedWorkerServer extends SharedWorkerServer {
         // Call the parent method to handle the basic client connection setup
         const clientConnection = super.addClientConnection(clientId, messagePort);
 
-        // Send the WebSocket information to the new client directly using the webSocketConnection
-        this.sendMessage(clientConnection, createWebSocketConnectionInformationMessage(this.webSocketConnection));
+        // Only send the initial state if
+        if(
+            // There are multiple clients (not the first client)
+            this.clientConnections.size > 1 ||
+            // OR the WebSocket is not in Disconnected state (already connecting/connected)
+            this.webSocketConnection.state !== WebSocketConnectionState.Disconnected
+        ) {
+            // Send the WebSocket information to the new client directly using the webSocketConnection
+            this.sendMessage(clientConnection, createWebSocketConnectionInformationMessage(this.webSocketConnection));
+        }
 
         return clientConnection;
     }
