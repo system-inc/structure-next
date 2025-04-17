@@ -181,6 +181,52 @@ export function formatDateToTimeWithTodayOrYesterday(date: Date): string {
     return `${prefix}${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
+// Function to format the date to show the date and time using date "at" time
+// If the date is today or yesterday, it will show "Today" or "Yesterday" in front of the time
+// If not today or yesterday, it will show the date in front of the time
+// Example: "Today at 12:45 am" or "Yesterday at 3:30 pm" or "Jan 12, 2025 at 3:30 pm"
+export function formatDateToDateAtTime(date: Date): string {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+    let prefix = "";
+    if (inputDate.getTime() === today.getTime()) {
+        prefix = "Today at ";
+    } else if (inputDate.getTime() === yesterday.getTime()) {
+        prefix = "Yesterday at ";
+    } else {
+        prefix = date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        }) + " at ";
+    }
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "pm" : "am";
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes.toString().padStart(2, "0");
+
+    return `${prefix}${formattedHours}:${formattedMinutes} ${ampm}`;
+}
+
+
+// Function to format the date to show the day of the ween and the date
+// Example: "Mon, Jan 12, 2025"
+export function formatDateToDayOfWeekAndDate(date: Date): string {
+    return date.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+}
+
 // Function to format the date to just show the time and am/pm
 // Example: "12:45 am" or "3:30 pm"
 export function formatDateOnlyTime(date: Date): string {
