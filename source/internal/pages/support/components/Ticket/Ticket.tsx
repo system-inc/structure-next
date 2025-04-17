@@ -38,13 +38,10 @@ export function Ticket(properties: TicketInterface) {
             : undefined);
 
     return (
-        <div className="flex flex-col w-full h-full overflow-hidden overscroll-none">
-            { properties.ticket && (
+        <div className="flex h-full w-full flex-col overflow-hidden overscroll-none">
+            {properties.ticket && (
                 <>
-                    <TicketHeader
-                        subject={properties.ticket.title}
-                        status={properties.ticket.status}
-                    />
+                    <TicketHeader subject={properties.ticket.title} status={properties.ticket.status} />
                     <TicketStatusAndAssignment
                         ticketId={properties.ticket.id}
                         ticketStatus={properties.ticket.status}
@@ -59,7 +56,7 @@ export function Ticket(properties: TicketInterface) {
                         userFullName={userDisplayName}
                     />
                     <TicketMessageForm
-                        ticketId={properties.ticket.id}
+                        ticketIdentifier={properties.ticket.id}
                         comments={properties.ticket.comments}
                         onTicketCommentCreate={properties.onTicketCommentCreate}
                     />

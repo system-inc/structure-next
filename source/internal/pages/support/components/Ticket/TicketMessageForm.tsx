@@ -1,4 +1,3 @@
-
 // Dependencies - React and Next.js
 import React from 'react';
 
@@ -10,7 +9,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 // Dependencies - Main Components
 import { Form, FormValuesInterface } from '@structure/source/common/forms/Form';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-import { RichTextEditor } from '@project/source/ui/derived/RichTextEditor';
+// import { RichTextEditor } from '@project/source/ui/derived/RichTextEditor';
 
 // Dependencies - Hooks
 import { useSupportTicketCreateComment } from '../../hooks/useSupportTicketCreateComment';
@@ -33,13 +32,13 @@ type TicketMessageFormValues = InferOutput<typeof TicketMessageFormSchema>;
 
 // Component - TicketMessageForm
 export interface TicketMessageFormInterface {
-    ticketId: string;
+    ticketIdentifier: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
 }
 export function TicketMessageForm(properties: TicketMessageFormInterface) {
     // Properties
-    const { ticketId, comments } = properties;
+    const { ticketIdentifier, comments } = properties;
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<TicketMessageFormValues>({
         resolver: valibotResolver(TicketMessageFormSchema),
@@ -69,7 +68,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
     async function handleFormSubmit(formValues: FormValuesInterface) {
         // Submit the form
         const input = {
-            ticketId,
+            ticketIdentifier,
             content: formValues.reply,
             replyToCommentId: comments[0]?.id || '',
         };
@@ -104,7 +103,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
         //     )}
         // </form>
         <Form
-            className="py-5 px-10"
+            className="px-10 py-5"
             formInputs={[
                 <FormInputTextArea
                     key="reply"
@@ -121,5 +120,5 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
             resetOnSubmitSuccess={true}
             onSubmit={handleFormSubmit}
         />
-    )
+    );
 }
