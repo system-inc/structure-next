@@ -55,7 +55,7 @@ export function SupportPage() {
         ticketsQuery,
         createComment,
         assignTicket,
-        // updateTicketStatus,
+        updateTicketStatus,
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,
@@ -190,19 +190,19 @@ export function SupportPage() {
     // );
 
     const handleTicketStatusChange = React.useCallback(
-        // async function (ticketId: string, status: SupportTicketStatus) {
-        //     await updateTicketStatus({
-        //         variables: {
-        //             ticketId,
-        //             status,
-        //         },
-        //     })
-        // },
-        // [selectedTicket?.status]
-        function() {
-            console.log("Ticket status changed", selectedTicket?.status)
+        async function (ticketId: string, status: SupportTicketStatus) {
+            await updateTicketStatus({
+                variables: {
+                    ticketId,
+                    status,
+                },
+            })
         },
-        []
+        [selectedTicket?.status]
+        // function() {
+        //     console.log("Ticket status changed", selectedTicket?.status)
+        // },
+        // []
     );
 
     const handleTicketCommentCreate = React.useCallback(

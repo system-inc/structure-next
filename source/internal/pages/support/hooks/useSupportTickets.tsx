@@ -13,7 +13,7 @@ import {
     SupportTicketCommentCreatePrivilegedDocument,
     SupportTicketAssignDocument,
     SupportAllSupportProfilesDocument,
-    // SupportTicketUpdateStatusPrivilegedDocument,
+    SupportTicketUpdateStatusPrivilegedDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Function to use support tickets
@@ -32,9 +32,9 @@ export function useSupportTickets(
     });
 
     // Add update status mutation
-    // const [updateTicketStatus] = useMutation(SupportTicketUpdateStatusPrivilegedDocument, {
-    //     refetchQueries: ['SupportTicketsPrivileged'],
-    // })
+    const [updateTicketStatus] = useMutation(SupportTicketUpdateStatusPrivilegedDocument, {
+        refetchQueries: ['SupportTicketsPrivileged'],
+    })
 
     // Build filters
     const filters = React.useMemo(() => {
@@ -99,7 +99,7 @@ export function useSupportTickets(
         ticketsQuery,
         createComment,
         assignTicket,
-        // updateTicketStatus,
+        updateTicketStatus,
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,
