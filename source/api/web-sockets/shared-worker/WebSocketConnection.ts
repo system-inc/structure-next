@@ -267,7 +267,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         }
     }
 
-    // Function to reconnect to the WebSocket server with exponential backoff
+    // Function to reconnect to the WebSocket server with exponential backoff and jitter
     reconnect(): void {
         // Only reconnect if not already reconnecting
         if(this.reconnectTimeout) {
@@ -277,11 +277,15 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         // Increment reconnect attempts
         this.reconnectAttempts++;
 
-        // Calculate delay with exponential backoff
-        const delay = Math.min(
+        // Calculate base delay with exponential backoff
+        const baseDelay = Math.min(
             this.reconnectDelayInMilliseconds * Math.pow(1.5, this.reconnectAttempts - 1),
             WebSocketMaximumReconnectDelayInMilliseconds,
         );
+
+        // Apply jitter, randomize between 80-120% of the base delay
+        const jitterFactor = 0.8 + Math.random() * 0.4; // Random value between 0.8 and 1.2
+        const delay = Math.floor(baseDelay * jitterFactor);
 
         console.log(`[WebSocketConnection] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
 
