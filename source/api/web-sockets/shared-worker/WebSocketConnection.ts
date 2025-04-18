@@ -25,22 +25,25 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
     protocols: string | string[] | null = null; // Protocols used for the WebSocket connection
     url: string | null = null; // URL of the WebSocket server
     state: WebSocketConnectionState = WebSocketConnectionState.Disconnected;
-    connectionTimeout: number | null = null; // Timeout ID for initial connection attempt
+    connectionTimeout: ReturnType<typeof setTimeout> | null = null; // Timeout ID for initial connection attempt
     reconnectAttempts: number = 0;
-    reconnectTimeout: number | null = null; // Timeout ID for reconnection
+    reconnectTimeout: ReturnType<typeof setTimeout> | null = null; // Timeout ID for reconnection
     nextReconnectAt: Date | null = null; // Timestamp of the next reconnection attempt
     maximumReconnectDelayInMilliseconds: number = WebSocketMaximumReconnectDelayInMilliseconds;
-    pingInterval: number | null = null; // Interval ID for sending ping messages
+    isReconnecting: boolean = false; // Flag to prevent multiple simultaneous reconnect calls
+    pingInterval: ReturnType<typeof setInterval> | null = null; // Interval ID for sending ping messages
     intentionallyDisconnected: boolean = false; // Flag to track if disconnection was intentional
     statistics: WebSocketConnectionStatisticsInterface;
-    // Internet connectivity status, default to true if navigator is not defined
-    internetAvailable: boolean = typeof navigator !== 'undefined' ? navigator.onLine : true;
     lastError: WebSocketErrorInformationInterface | null = null; // Last error information
     createdAt: number = Date.now();
 
     // Callbacks
     onMessage: (data: unknown) => void; // Callback for handling incoming messages
     onStateChange: (state: WebSocketConnectionInformationInterface) => void; // Callback for handling state changes
+
+    // Store bound event listener references to ensure we can properly remove them
+    private boundHandleInternetAvailable: EventListener | null = null;
+    private boundHandleInternetUnavailable: EventListener | null = null;
 
     constructor(
         onMessage: (data: unknown) => void,
@@ -63,85 +66,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         // Callbacks
         this.onMessage = onMessage;
         this.onStateChange = onStateChange;
-
-        // Get current internet availability status
-        if(typeof navigator !== 'undefined') {
-            this.internetAvailable = navigator.onLine;
-            console.log(
-                `[WebSocketConnection] Initial internet status: ${
-                    this.internetAvailable ? 'available' : 'unavailable'
-                }`,
-            );
-        }
-
-        // Bind Internet availability event listeners
-        this.bindInternetAvailabilityEvents();
     }
-
-    // Function to bind network connectivity event listeners
-    bindInternetAvailabilityEvents(): void {
-        // Only bind these events in a browser environment
-        if(typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-            window.addEventListener('online', this.handleInternetAvailable);
-            window.addEventListener('offline', this.handleInternetUnavailable);
-        }
-    }
-
-    // Function to unbind network connectivity event listeners
-    unbindInternetAvailabilityEvents(): void {
-        if(typeof window !== 'undefined') {
-            window.removeEventListener('online', this.handleInternetAvailable);
-            window.removeEventListener('offline', this.handleInternetUnavailable);
-        }
-    }
-
-    // Function to handle when the Internet is available, using arrow function to preserve 'this' context
-    handleInternetAvailable = (): void => {
-        console.log('[WebSocketConnection] Internet available');
-        this.internetAvailable = true;
-
-        // Clear any previous network-related error
-        if(this.lastError && this.lastError.code === WebSocketErrorCode.NetworkUnavailable) {
-            this.lastError = null;
-        }
-
-        // If we have a URL and the disconnection was not intentional, try to reconnect when in Disconnected or Failed state
-        if(
-            this.url &&
-            !this.intentionallyDisconnected &&
-            (this.state === WebSocketConnectionState.Disconnected || this.state === WebSocketConnectionState.Failed)
-        ) {
-            console.log('[WebSocketConnection] Reconnecting due to network becoming available');
-
-            // Clear any existing reconnect timeout
-            if(this.reconnectTimeout) {
-                clearTimeout(this.reconnectTimeout);
-                this.reconnectTimeout = null;
-            }
-
-            // Connect immediately
-            this.connect(this.url, this.protocols || undefined);
-        }
-        else if(this.intentionallyDisconnected) {
-            console.log('[WebSocketConnection] Not reconnecting, previous disconnection was intentional');
-        }
-    };
-
-    // Function to handle when the Internet is unavailable, using arrow function to preserve 'this' context
-    handleInternetUnavailable = (): void => {
-        console.log('[WebSocketConnection] Internet unavailable');
-        this.internetAvailable = false;
-
-        // Update state to reflect network status
-        this.updateState(WebSocketConnectionState.Disconnected);
-
-        // Clear any reconnect timeout since it's pointless to try reconnecting without network
-        if(this.reconnectTimeout) {
-            clearTimeout(this.reconnectTimeout);
-            this.reconnectTimeout = null;
-            this.nextReconnectAt = null; // Clear the next reconnect timestamp
-        }
-    };
 
     // Function to connect to WebSocket server
     connect(url: string, protocols?: string | string[]): boolean {
@@ -152,12 +77,8 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         // Reset intentional disconnect flag since we're trying to connect now
         this.intentionallyDisconnected = false;
 
-        // Don't attempt to connect if internet is unavailable
-        if(!this.internetAvailable) {
-            console.log('[WebSocketConnection] Cannot connect, Internet is unavailable');
-            this.updateState(WebSocketConnectionState.Disconnected);
-            return false;
-        }
+        // Reset reconnecting flag when starting a new connection
+        this.isReconnecting = false;
 
         // Clear any existing connection timeout
         if(this.connectionTimeout) {
@@ -177,11 +98,11 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
             // Create new WebSocket
             this.socket = protocols ? new WebSocket(url, protocols) : new WebSocket(url);
 
-            // Set up event handlers (using arrow functions, no need for bind)
-            this.socket.onopen = this.handleOpen;
-            this.socket.onmessage = this.handleMessage;
-            this.socket.onerror = this.handleError;
-            this.socket.onclose = this.handleClose;
+            // Set up event handlers
+            this.socket.onopen = this.handleOpen.bind(this);
+            this.socket.onmessage = this.handleMessage.bind(this);
+            this.socket.onerror = this.handleError.bind(this);
+            this.socket.onclose = this.handleClose.bind(this);
 
             // Set connection timeout
             this.connectionTimeout = setTimeout(() => {
@@ -200,8 +121,13 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
                     createdAt: new Date(),
                 };
 
-                // Close the socket if it exists
-                if(this.socket) {
+                // Close the socket only if it exists and is still in CONNECTING state
+                // This prevents race conditions where the socket connects successfully just as the timeout fires
+                if(this.socket && this.socket.readyState === WebSocket.CONNECTING) {
+                    console.log(
+                        '[WebSocketConnection] Closing socket that is still in CONNECTING state due to timeout',
+                    );
+
                     // Remove existing event handlers before closing
                     this.socket.onopen = null;
                     this.socket.onmessage = null;
@@ -217,13 +143,24 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
 
                     this.socket = null;
                 }
+                // Socket is already connected, don't close it, just clear the error and return without further action
+                else if(this.socket && this.socket.readyState === WebSocket.OPEN) {
+                    console.log(
+                        '[WebSocketConnection] Socket connected successfully despite timeout - keeping connection',
+                    );
 
+                    this.lastError = null;
+                    // Don't update state or attempt reconnect since we have a valid connection
+                    return;
+                }
+
+                // Only update state and reconnect if we haven't returned early due to successful connection
                 // Update state to failed
                 this.updateState(WebSocketConnectionState.Failed);
 
                 // Attempt to reconnect
                 this.reconnect();
-            }, WebSocketConnectionTimeoutInMilliseconds) as unknown as number;
+            }, WebSocketConnectionTimeoutInMilliseconds);
 
             console.log('[WebSocketConnection] Connecting to', url);
             return true;
@@ -257,6 +194,9 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
 
         // Mark this as an intentional disconnection
         this.intentionallyDisconnected = true;
+
+        // Reset reconnecting state when disconnecting
+        this.isReconnecting = false;
 
         // Clear any reconnection timeout and timestamp
         if(this.reconnectTimeout) {
@@ -301,6 +241,19 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         // Check if socket is connected
         if(!this.socket || this.socket.readyState !== WebSocket.OPEN) {
             console.error('[WebSocketConnection] Cannot send message: WebSocket not connected');
+
+            // Store error information for disconnected socket
+            this.lastError = {
+                message: 'Cannot send message: WebSocket not connected',
+                code: WebSocketErrorCode.ConnectionFailed,
+                data: {
+                    readyState: this.socket?.readyState,
+                    attempted_message_type: typeof data,
+                    timestamp: new Date().toISOString(),
+                },
+                createdAt: new Date(),
+            };
+
             return false;
         }
 
@@ -316,6 +269,14 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
             this.statistics.bytesSent += message.length;
             this.statistics.lastMessageSentAt = Date.now();
 
+            // Clear any previous send error
+            if(
+                this.lastError?.code === WebSocketErrorCode.ConnectionFailed &&
+                this.lastError?.message?.includes('sending WebSocket message')
+            ) {
+                this.lastError = null;
+            }
+
             // Broadcast the updated state
             this.updateState(this.state);
 
@@ -323,14 +284,34 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         }
         catch(error) {
             console.error('[WebSocketConnection] Error sending message:', error);
+
+            // Store detailed error information
+            this.lastError = {
+                message: 'Error sending WebSocket message',
+                code: WebSocketErrorCode.ConnectionFailed,
+                data: {
+                    error:
+                        error instanceof Error
+                            ? {
+                                  name: error.name,
+                                  message: error.message,
+                                  stack: error.stack,
+                              }
+                            : error,
+                    dataType: typeof data,
+                    timestamp: new Date().toISOString(),
+                },
+                createdAt: new Date(),
+            };
+
             // Broadcast the updated state
             this.updateState(this.state);
             return false;
         }
     }
 
-    // Function to handle WebSocket open event - using arrow function to preserve 'this' context
-    handleOpen = () => {
+    // Function to handle WebSocket open event
+    handleOpen() {
         console.log('[WebSocketConnection] Connected to', this.url);
 
         // Clear any connection timeout since we're now connected
@@ -349,12 +330,12 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         // Start sending ping messages
         this.startPingInterval();
 
-        // Update state - this will broadcast to all clients
+        // Update state, this will broadcast to all clients
         this.updateState(WebSocketConnectionState.Connected);
-    };
+    }
 
-    // Function to handle WebSocket message event - using arrow function to preserve 'this' context
-    handleMessage = (event: MessageEvent) => {
+    // Function to handle WebSocket message event
+    handleMessage(event: MessageEvent) {
         // Update statistics
         this.statistics.messagesReceived++;
         this.statistics.lastMessageReceivedAt = Date.now();
@@ -370,42 +351,48 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         // Parse message data
         let data: unknown;
         try {
-            // First check if the message is JSON
-            if(typeof event.data === 'string' && (event.data.startsWith('{') || event.data.startsWith('['))) {
-                data = JSON.parse(event.data);
+            // Check if the message is a string that might be JSON
+            if(typeof event.data === 'string') {
+                // Trim whitespace to handle messages with leading whitespace
+                const trimmedData = event.data.trim();
+                // Check if the trimmed message starts with { or [ which indicates JSON
+                if(trimmedData.startsWith('{') || trimmedData.startsWith('[')) {
+                    // Use the trimmed data for parsing to handle whitespace properly
+                    data = JSON.parse(trimmedData);
 
-                // Check for pong messages to calculate latency
-                if(
-                    data &&
-                    typeof data === 'object' &&
-                    'type' in data &&
-                    data.type === WebSocketServerToSharedWorkerServerMessageType.Pong
-                ) {
-                    this.statistics.lastPongReceivedAt = Date.now();
+                    // Check for pong messages to calculate latency
+                    if(
+                        data &&
+                        typeof data === 'object' &&
+                        'type' in data &&
+                        data.type === WebSocketServerToSharedWorkerServerMessageType.Pong
+                    ) {
+                        this.statistics.lastPongReceivedAt = Date.now();
 
-                    // Calculate latency if we have both ping and pong timestamps
-                    if(this.statistics.lastPingSentAt) {
-                        const latency = this.statistics.lastPongReceivedAt - this.statistics.lastPingSentAt;
+                        // Calculate latency if we have both ping and pong timestamps
+                        if(this.statistics.lastPingSentAt) {
+                            const latency = this.statistics.lastPongReceivedAt - this.statistics.lastPingSentAt;
 
-                        // Update average latency
-                        if(this.statistics.averageLatencyInMilliseconds === null) {
-                            this.statistics.averageLatencyInMilliseconds = latency;
-                        }
-                        else {
-                            // Simple moving average
-                            this.statistics.averageLatencyInMilliseconds =
-                                this.statistics.averageLatencyInMilliseconds * 0.7 + latency * 0.3;
+                            // Update average latency
+                            if(this.statistics.averageLatencyInMilliseconds === null) {
+                                this.statistics.averageLatencyInMilliseconds = latency;
+                            }
+                            else {
+                                // Simple moving average
+                                this.statistics.averageLatencyInMilliseconds =
+                                    this.statistics.averageLatencyInMilliseconds * 0.7 + latency * 0.3;
+                            }
                         }
                     }
                 }
-            }
-            else {
-                // Not JSON, use a structured format for non-JSON messages
-                data = {
-                    type: 'Raw',
-                    content: event.data,
-                    timestamp: Date.now(),
-                };
+                else {
+                    // Not JSON, use a structured format for non-JSON messages
+                    data = {
+                        type: 'Raw',
+                        content: event.data,
+                        createdAt: Date.now(),
+                    };
+                }
             }
         }
         catch(error) {
@@ -415,7 +402,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
                 type: 'Unparseable',
                 content: event.data,
                 error: error instanceof Error ? error.message : 'Unknown error',
-                timestamp: Date.now(),
+                createdAt: Date.now(),
             };
         }
 
@@ -426,10 +413,10 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
 
         // Broadcast the updated state with new statistics to all clients
         this.updateState(this.state);
-    };
+    }
 
-    // Function to handle WebSocket error event - using arrow function to preserve 'this' context
-    handleError = (event: Event) => {
+    // Function to handle WebSocket error event
+    handleError(event: Event) {
         console.error('[WebSocketConnection] Error:', event);
 
         // Store error information
@@ -451,10 +438,10 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
             console.log('[WebSocketConnection] Attempting reconnection after error');
             this.reconnect();
         }
-    };
+    }
 
-    // Function to handle WebSocket close event - using arrow function to preserve 'this' context
-    handleClose = (event: CloseEvent) => {
+    // Function to handle WebSocket close event
+    handleClose(event: CloseEvent) {
         console.log('[WebSocketConnection] Disconnected:', event.code, event.reason);
 
         // Reset connection statistics
@@ -485,7 +472,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
             this.lastError = null;
         }
 
-        // Update state - this will broadcast to all clients
+        // Update state, this will broadcast to all clients
         this.updateState(WebSocketConnectionState.Disconnected);
 
         // If connection was not closed cleanly and this wasn't an intentional disconnection, attempt to reconnect
@@ -496,24 +483,23 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         else if(this.intentionallyDisconnected) {
             console.log('[WebSocketConnection] Not reconnecting, disconnection was intentional');
         }
-    };
+    }
 
     // Function to reconnect to the WebSocket server with exponential backoff and jitter
     reconnect(): void {
-        // Only reconnect if not already reconnecting
-        if(this.reconnectTimeout) {
+        // Only reconnect if not already reconnecting (check both flag and timeout)
+        if(this.reconnectTimeout || this.isReconnecting) {
+            console.log('[WebSocketConnection] Reconnect already in progress, skipping duplicate attempt');
             return;
         }
 
-        // Don't attempt to reconnect if network is offline
-        if(!this.internetAvailable) {
-            console.log('[WebSocketConnection] Skipping reconnect attempt, Internet is unavailable');
-            return;
-        }
+        // Set flag to prevent race conditions from multiple event handlers
+        this.isReconnecting = true;
 
         // Don't attempt to reconnect if the disconnection was intentional
         if(this.intentionallyDisconnected) {
             console.log('[WebSocketConnection] Skipping reconnect attempt, disconnection was intentional');
+            this.isReconnecting = false;
             return;
         }
 
@@ -543,28 +529,13 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
             this.nextReconnectAt = null; // Clear the timestamp since we're attempting reconnection now
 
             // Check if internet is available before attempting to reconnect
-            if(this.url && this.internetAvailable) {
+            if(this.url) {
                 this.connect(this.url, this.protocols || undefined);
             }
-            else if(this.url && !this.internetAvailable) {
-                // Internet became unavailable during the timeout period
-                console.log('[WebSocketConnection] Internet unavailable when reconnection timeout fired');
 
-                // Store error information about the failed reconnection attempt
-                this.lastError = {
-                    message: 'Reconnection attempt failed - Internet unavailable',
-                    code: WebSocketErrorCode.NetworkUnavailable,
-                    data: {
-                        reconnectAttempts: this.reconnectAttempts,
-                        timestamp: new Date().toISOString(),
-                    },
-                    createdAt: new Date(),
-                };
-
-                // Update state to reflect the current situation
-                this.updateState(WebSocketConnectionState.Failed);
-            }
-        }, delay) as unknown as number;
+            // Reset reconnecting flag after attempt completes
+            this.isReconnecting = false;
+        }, delay);
     }
 
     getWebSocketConnectionInformation(): WebSocketConnectionInformationInterface {
@@ -582,7 +553,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
     }
 
     // Function for starting ping interval
-    startPingInterval = (): void => {
+    startPingInterval() {
         // Clear any existing ping interval first
         this.stopPingInterval();
 
@@ -592,24 +563,24 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
             if(this.socket && this.socket.readyState === WebSocket.OPEN) {
                 this.sendPing();
             }
-        }, WebSocketPingIntervalInMilliseconds) as unknown as number;
+        }, WebSocketPingIntervalInMilliseconds);
 
         console.log(
             `[WebSocketConnection] Started ping interval (every ${WebSocketPingIntervalInMilliseconds / 1000}s)`,
         );
-    };
+    }
 
     // Function for stopping ping interval
-    stopPingInterval = (): void => {
+    stopPingInterval() {
         if(this.pingInterval) {
             clearInterval(this.pingInterval);
             this.pingInterval = null;
             console.log('[WebSocketConnection] Stopped ping interval');
         }
-    };
+    }
 
     // Function to send a ping message
-    sendPing = (): void => {
+    sendPing() {
         if(!this.socket || this.socket.readyState !== WebSocket.OPEN) {
             return;
         }
@@ -630,7 +601,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         catch(error) {
             console.error('[WebSocketConnection] Error sending ping:', error);
         }
-    };
+    }
 
     // Function to update connection state and notify handler
     updateState(connectionState: WebSocketConnectionState): void {
