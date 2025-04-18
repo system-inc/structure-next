@@ -106,8 +106,6 @@ export function WebSocketsPage() {
                 return { color: 'bg-green-500', text: 'Connected' };
             case WebSocketConnectionState.Connecting:
                 return { color: 'bg-yellow-500', text: 'Connecting' };
-            case WebSocketConnectionState.Reconnecting:
-                return { color: 'bg-yellow-500', text: 'Reconnecting' };
             case WebSocketConnectionState.Failed:
                 return { color: 'bg-red-500', text: 'Failed' };
             case WebSocketConnectionState.Disconnected:
@@ -184,17 +182,10 @@ export function WebSocketsPage() {
                         </>
                     )}
 
-                    {webSocket.webSocketConnectionInformation.reconnecting !== undefined && (
+                    {webSocket.webSocketConnectionInformation.nextReconnectAt !== undefined && (
                         <>
-                            <p className="font-bold">Reconnecting</p>
-                            <p>{webSocket.webSocketConnectionInformation.reconnecting ? 'Yes' : 'No'}</p>
-                        </>
-                    )}
-
-                    {webSocket.webSocketConnectionInformation.reconnectDelayInMilliseconds !== undefined && (
-                        <>
-                            <p className="font-bold">Current Reconnect Delay</p>
-                            <p>{webSocket.webSocketConnectionInformation.reconnectDelayInMilliseconds}ms</p>
+                            <p className="font-bold">Next Reconnect At</p>
+                            <p>{webSocket.webSocketConnectionInformation.nextReconnectAt?.toLocaleString()}</p>
                         </>
                     )}
 
