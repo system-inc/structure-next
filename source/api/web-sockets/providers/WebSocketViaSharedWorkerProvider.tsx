@@ -40,8 +40,8 @@ export interface WebSocketViaSharedWorkerContextInterface {
     sharedWorkerServerClientConnections: SharedWorkerClientConnectionInterface[];
     requestSharedWorkerServerClientConnections: () => void;
 
-    // WebSocket connection
-    webSocketConnectionInformation: WebSocketConnectionInformationInterface; // Comprehensive WebSocket state object
+    // WebSocket connection information, use a getter to ensure we always access the latest state
+    readonly webSocketConnectionInformation: WebSocketConnectionInformationInterface; // Comprehensive WebSocket state object
 
     // WebSocket actions
     connectWebSocket: (url: string, protocols?: string | string[]) => void;
@@ -64,18 +64,18 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     const [sharedWorkerServerClientConnections, setSharedWorkerServerClientConnections] = React.useState<
         SharedWorkerClientConnectionInterface[]
     >([]);
-    const [webSocketConnectionInformation, setWebSocketConnectionInformation] =
-        React.useState<WebSocketConnectionInformationInterface>({
-            url: null,
-            state: WebSocketConnectionState.Disconnected,
-            createdAt: Date.now(),
-        });
 
     // References
     const isInitializedReference = React.useRef<boolean>(false);
     const sharedWorkerReference = React.useRef<SharedWorker>();
     const sharedWorkerClientIdAssignedFromServerReference = React.useRef<string>();
     const webSocketMessageHandlersReference = React.useRef<WebSocketMessageHandler[]>([]);
+    // Use a reference for web socket connection information to avoid React state update delays
+    const webSocketConnectionInformationReference = React.useRef<WebSocketConnectionInformationInterface>({
+        url: null,
+        state: WebSocketConnectionState.Disconnected,
+        createdAt: Date.now(),
+    });
 
     // Calculate the WebSocket URL from ProjectSettings
     const webSocketUrl =
@@ -95,8 +95,6 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     // Function to handle messages from the SharedWorker
     const handleMessage = React.useCallback(
         function (messageEvent: MessageEvent<SharedWorkerServerToClientMessageInterface>) {
-            // console.log('[SharedWorker] Received message:', messageEvent);
-
             if(!messageEvent.data) return;
 
             switch(messageEvent.data.type) {
@@ -108,52 +106,58 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
 
                 // Handle client ID assignment
                 case SharedWorkerServerToClientMessageType.ClientIdAssigned:
-                    console.log('[SharedWorker] Received client ID:', messageEvent.data.clientId);
+                    // console.log('[SharedWorker] Received client ID:', messageEvent.data.clientId);
                     sharedWorkerClientIdAssignedFromServerReference.current = messageEvent.data.clientId;
                     break;
 
                 // Handle client connections list
                 case SharedWorkerServerToClientMessageType.ClientConnections:
-                    console.log('[SharedWorker] Received client connections:', messageEvent.data.clientConnections);
+                    // console.log('[SharedWorker] Received client connections:', messageEvent.data.clientConnections);
                     setSharedWorkerServerClientConnections(messageEvent.data.clientConnections);
                     break;
 
                 // Handle WebSocket state changes
                 case WebSocketSharedWorkerServerToClientMessageType.WebSocketConnectionInformation:
-                    console.log('[SharedWorker] WebSocket state changed:', messageEvent.data);
+                    // Log WebSocket state change with detailed info
+                    // console.log(
+                    //     '[SharedWorker] WebSocket state updated:',
+                    //     'Old:',
+                    //     webSocketConnectionInformationReference.current.state,
+                    //     '→ New:',
+                    //     messageEvent.data.state,
+                    //     'Timestamp:',
+                    //     new Date().toISOString(),
+                    // );
 
-                    // The message extends WebSocketState, so we can set it directly
-                    setWebSocketConnectionInformation({
+                    // The message extends WebSocketState, so we can set it directly on the reference
+                    // This ensures immediate access to the latest state
+                    webSocketConnectionInformationReference.current = {
                         ...messageEvent.data,
                         // Make sure we always have at least these required fields
                         createdAt: messageEvent.data.createdAt || Date.now(),
-                    });
+                    };
                     break;
 
                 // Handle WebSocket messages
                 case WebSocketSharedWorkerServerToClientMessageType.WebSocketMessage:
-                    console.log('[SharedWorker] WebSocket message received:', messageEvent.data);
-                    console.log(
-                        '[SharedWorker] Registered message handlers:',
-                        webSocketMessageHandlersReference.current.length,
-                    );
+                    // console.log('[SharedWorker] WebSocket message received:', messageEvent.data);
+                    // console.log(
+                    //     '[SharedWorker] Registered message handlers:',
+                    //     webSocketMessageHandlersReference.current.length,
+                    // );
 
                     // Create an event message object from the received data
                     const eventMessage: WebSocketMessageEventInterface = {
                         data: messageEvent.data.data,
                     };
 
-                    console.log('[SharedWorker] Created event message:', eventMessage);
-
                     // Notify all registered handlers
                     const handlers = webSocketMessageHandlersReference.current;
                     if(handlers.length > 0) {
-                        console.log('[SharedWorker] Notifying handlers:', handlers.length);
-                        handlers.forEach(function (handler, index) {
+                        // console.log('[SharedWorker] Notifying handlers:', handlers.length);
+                        handlers.forEach(function (handler) {
                             try {
-                                console.log(`[SharedWorker] Calling handler ${index}...`);
                                 handler(eventMessage);
-                                console.log(`[SharedWorker] Handler ${index} completed`);
                             }
                             catch(error) {
                                 console.error('[WebSocketViaSharedWorkerProvider] Error in message handler:', error);
@@ -161,8 +165,12 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                         });
                     }
                     else {
-                        console.warn('[SharedWorker] No handlers registered for WebSocket messages');
+                        // console.warn('[SharedWorker] No handlers registered for WebSocket messages');
                     }
+                    break;
+                // Handle unknown message types
+                default:
+                    console.warn('[SharedWorker] Unknown message type:', messageEvent.data.type);
                     break;
             }
         },
@@ -172,7 +180,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     // Function to initialize SharedWorker
     const initialize = React.useCallback(
         function () {
-            console.log('[WebSocketViaSharedWorkerProvider] Initializing');
+            // console.log('[WebSocketViaSharedWorkerProvider] Initializing');
 
             // If the component is initialized, return
             if(isInitializedReference.current) {
@@ -195,7 +203,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                     const sharedWorker = new SharedWorker(
                         '/api/web-sockets/shared-workers/web-socket-shared-worker.js?v=2025-03-16-a',
                     );
-                    console.log('[WebSocketViaSharedWorkerProvider] Initialized');
+                    // console.log('[WebSocketViaSharedWorkerProvider] Initialized');
 
                     // Update the reference
                     sharedWorkerReference.current = sharedWorker;
@@ -207,7 +215,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                     setIsSharedWorkerConnected(true);
                 }
                 catch(error) {
-                    console.error('[SharedWorker] Failed to initialize:', error);
+                    console.error('[WebSocketViaSharedWorkerProvider] Failed to initialize:', error);
 
                     // Update connected state
                     setIsSharedWorkerConnected(false);
@@ -220,7 +228,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     // Function to request client connections from the SharedWorker
     const requestSharedWorkerServerClientConnections = React.useCallback(
         function () {
-            console.log('[SharedWorker] Requesting client connections');
+            console.log('[WebSocketViaSharedWorkerProvider] Asking SharedWorker for client connections');
             sendMessage({ type: ClientToSharedWorkerServerMessageType.RequestClientConnections });
         },
         [sendMessage],
@@ -229,7 +237,14 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     // Function to connect to a WebSocket server
     const connectWebSocket = React.useCallback(
         function (url: string, protocols?: string | string[]) {
-            console.log('[SharedWorker] Connecting to WebSocket:', url);
+            // console.log(
+            //     '[WebSocketViaSharedWorkerProvider] Sending WebSocket connect request:',
+            //     url,
+            //     'Current state:',
+            //     webSocketConnectionInformationReference.current.state,
+            //     'Timestamp:',
+            //     new Date().toISOString(),
+            // );
             sendMessage({
                 type: ClientToWebSocketSharedWorkerServerMessageType.ConnectWebSocket,
                 url,
@@ -242,7 +257,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     // Function to disconnect from the WebSocket server
     const disconnectWebSocket = React.useCallback(
         function (code?: number, reason?: string) {
-            console.log('[SharedWorker] Disconnecting from WebSocket');
+            console.log('[WebSocketViaSharedWorkerProvider] Asking SharedWorker to disconnect from WebSocket');
             sendMessage({
                 type: ClientToWebSocketSharedWorkerServerMessageType.DisconnectWebSocket,
                 code,
@@ -255,7 +270,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     // Function to send a message to the WebSocket server
     const sendWebSocketMessage = React.useCallback(
         function (data: unknown) {
-            console.log('[SharedWorker] Sending WebSocket message:', data);
+            console.log('[WebSocketViaSharedWorkerProvider] Asking SharedWorker to send message:', data);
             sendMessage({
                 type: ClientToWebSocketSharedWorkerServerMessageType.SendWebSocketMessage,
                 data,
@@ -297,17 +312,22 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
     React.useEffect(
         function () {
             if(isSharedWorkerConnected && webSocketUrl) {
-                console.log('[WebSocketViaSharedWorkerProvider] Auto-connecting to WebSocket:', webSocketUrl);
+                // console.log(
+                //     '[WebSocketViaSharedWorkerProvider] Auto-connecting to WebSocket:',
+                //     webSocketUrl,
+                //     'Current state:',
+                //     webSocketConnectionInformationReference.current.state,
+                //     'Timestamp:',
+                //     new Date().toISOString(),
+                // );
                 connectWebSocket(webSocketUrl);
 
-                // No clean up on unmount - WebSocket should remain connected in the SharedWorker
-                // even when individual tabs close
+                // No clean up on unmount - WebSocket should remain connected in the SharedWorker even when individual tabs close
                 return function () {
-                    // We intentionally do NOT disconnect the WebSocket here
-                    // This allows the connection to persist between tabs
-                    console.log(
-                        '[WebSocketViaSharedWorkerProvider] Tab closing, but keeping WebSocket alive in SharedWorker',
-                    );
+                    // We intentionally do NOT disconnect the WebSocket here, this allows the connection to persist between tabs
+                    // console.log(
+                    //     '[WebSocketViaSharedWorkerProvider] Tab closing, but keeping WebSocket alive in SharedWorker',
+                    // );
                 };
             }
         },
@@ -325,8 +345,10 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
         sharedWorkerServerClientConnections: sharedWorkerServerClientConnections,
         requestSharedWorkerServerClientConnections: requestSharedWorkerServerClientConnections,
 
-        // WebSocket state
-        webSocketConnectionInformation: webSocketConnectionInformation,
+        // Use a getter to ensure we always access the latest state
+        get webSocketConnectionInformation() {
+            return webSocketConnectionInformationReference.current;
+        },
 
         // WebSocket actions
         connectWebSocket: connectWebSocket,
