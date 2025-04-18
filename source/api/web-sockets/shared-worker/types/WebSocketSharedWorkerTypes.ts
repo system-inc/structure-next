@@ -37,7 +37,6 @@ export enum WebSocketConnectionState {
     Connecting = 'Connecting',
     Connected = 'Connected',
     Disconnected = 'Disconnected',
-    Reconnecting = 'Reconnecting',
     Failed = 'Failed',
 }
 
@@ -55,16 +54,36 @@ export interface WebSocketConnectionStatisticsInterface {
     connectedAt: number | null;
 }
 
+// WebSocket Error Codes Enum
+export enum WebSocketErrorCode {
+    // Standard WebSocket close codes are in range 1000-4999
+
+    // Custom error codes (5000+)
+    NetworkUnavailable = 5000,
+    ReconnectionFailed = 5001,
+    ConnectionTimeout = 5002,
+    ConnectionFailed = 5003,
+    UnexpectedClose = 5004,
+}
+
+// WebSocket Error Information Interface
+export interface WebSocketErrorInformationInterface {
+    message: string;
+    code: number;
+    data?: unknown;
+    createdAt: Date;
+}
+
 // WebSocket Connection Information Interface
 export interface WebSocketConnectionInformationInterface {
     url: string | null;
     state: WebSocketConnectionState;
     readyState?: number | null;
     reconnectAttempts?: number;
-    reconnecting?: boolean;
-    reconnectDelayInMilliseconds?: number;
+    nextReconnectAt?: Date | null; // Timestamp when the next reconnection will occur
     maximumReconnectDelayInMilliseconds?: number;
     statistics?: WebSocketConnectionStatisticsInterface;
+    lastError?: WebSocketErrorInformationInterface | null;
     createdAt: number;
 }
 
@@ -134,8 +153,7 @@ export function createWebSocketConnectionInformationMessage(
         state: webSocketConnection.state,
         readyState: webSocketConnection.readyState !== undefined ? webSocketConnection.readyState : null,
         reconnectAttempts: webSocketConnection.reconnectAttempts || 0,
-        reconnecting: webSocketConnection.reconnecting || false,
-        reconnectDelayInMilliseconds: webSocketConnection.reconnectDelayInMilliseconds || 1000,
+        nextReconnectAt: webSocketConnection.nextReconnectAt,
         maximumReconnectDelayInMilliseconds: webSocketConnection.maximumReconnectDelayInMilliseconds || 30000,
         statistics: webSocketConnection.statistics,
         createdAt: Date.now(),
