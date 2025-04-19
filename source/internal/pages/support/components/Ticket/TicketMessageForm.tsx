@@ -11,9 +11,6 @@ import { Form, FormValuesInterface } from '@structure/source/common/forms/Form';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 // import { RichTextEditor } from '@project/source/ui/derived/RichTextEditor';
 
-// Dependencies - Hooks
-import { useSupportTicketCreateComment } from '../../hooks/useSupportTicketCreateComment';
-
 // Dependencies - API
 import {
     SupportTicketsPrivilegedQuery,
