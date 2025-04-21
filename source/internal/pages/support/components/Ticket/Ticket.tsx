@@ -54,6 +54,7 @@ export function Ticket(properties: TicketInterface) {
                         userEmailAddress={properties.ticket.userEmailAddress}
                         comments={properties.ticket.comments}
                         userFullName={userDisplayName}
+                        viewer="Agent"
                     />
                     <TicketMessageForm
                         ticketIdentifier={properties.ticket.id}

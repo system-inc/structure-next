@@ -3,11 +3,7 @@ import React from 'react';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import {
-    ColumnFilterConditionOperator,
-    OrderByDirection,
-    ProfileSupportTicketsDocument
-} from '@project/source/api/GraphQlGeneratedCode';
+import { ProfileSupportTicketsDocument } from '@project/source/api/GraphQlGeneratedCode';
 
 export function useProfileSupportTickets(
     openTicketsPage: number,

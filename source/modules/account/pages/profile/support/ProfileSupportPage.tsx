@@ -4,6 +4,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 // Dependencies - Main Components
 import Badge from '@project/source/ui/base/Badge';
@@ -51,8 +52,8 @@ const emptyPaginationResult: PaginationSupportTicketResult = {
     },
 };
 
-// Component - SupportPage
-export function SupportPage() {
+// Component - ProfileSupportPage
+export function ProfileSupportPage() {
     // Hooks
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -71,12 +72,6 @@ export function SupportPage() {
     });
     const [openTickets, setOpenTickets] = React.useState<ProfileSupportTicketsQuery['openTickets']>({...emptyPaginationResult})
     const [closedTickets, setClosedTickets] = React.useState<ProfileSupportTicketsQuery['closedTickets']>({...emptyPaginationResult})
-
-    // Selected Ticket based on the selected status
-    // const selectedTicket =
-    //     selectedStatus === SupportTicketStatus.Open
-    //         ? ticketsQuery.data?.openTickets?.items[0]
-    //         : ticketsQuery.data?.closedTickets?.items[0];
 
     React.useEffect(
         function() {
@@ -106,6 +101,12 @@ export function SupportPage() {
         },
         [searchParams, router]
     );
+
+    if (ticketsQuery.loading) {
+        return (
+            'Loading...'
+        );
+    }
 
     // Render the component
     return (
@@ -154,7 +155,7 @@ export function SupportPage() {
         </div>
     );
 }
-export default SupportPage;
+export default ProfileSupportPage;
 
 interface ProfileSupportTicketCardInterface {
     status: SupportTicketStatus;
@@ -164,37 +165,38 @@ const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardInterface)
     const lastComment = properties.ticket.comments[properties.ticket.comments.length - 1];
     const commentContent = extractLatestEmailContent(lastComment?.content || '');
     return (
-        <div className="p-6 border rounded-xl">
-            <div className="flex items-center justify-between mb-4">
-                <Badge
-                    variant={properties.status === SupportTicketStatus.Open ? 'success' : 'info'}
-                    size="sm"
-                >
-                    {properties.status}
-                </Badge>
-                <ArrowRight size={16} />
+        <Link href={`/account/support/${properties.ticket.identifier}`}>
+            <div className="p-6 border rounded-xl">
+                <div className="flex items-center justify-between mb-4">
+                    <Badge
+                        variant={properties.status === SupportTicketStatus.Open ? 'success' : 'info'}
+                        size="sm"
+                    >
+                        {properties.status}
+                    </Badge>
+                    <ArrowRight size={16} />
+                </div>
+                <div className="flex items-center justify-start gap-2 mb-2">
+                    <h2 className="text-base font-medium m-0">{properties.ticket.title}</h2>
+                </div>
+                <div className="flex items-center justify-start gap-2 mb-2">
+                    <span className="text-sm text-opsis-content-secondary">
+                        Placed {formatDateToDayOfWeekAndDate(new Date(properties.ticket.createdAt))}
+                    </span>
+                    <span>&bull;</span>
+                    <span className="text-sm text-opsis-content-secondary">
+                        ID: {properties.ticket.identifier}
+                    </span>
+                    {/* <span>&bull;</span>
+                    <span className="text-sm text-opsis-content-secondary">
+                        Updated: {formatDateToDateAtTime(new Date(properties.ticket.updatedAt))}
+                    </span> */}
+                </div>
+                <p className="text-sm text-opsis-content-secondary truncate">
+                    {commentContent}
+                </p>
             </div>
-            <div className="flex items-center justify-start gap-2 mb-2">
-                <h2 className="text-base font-medium m-0">{properties.ticket.title}</h2>
-            </div>
-            <div className="flex items-center justify-start gap-2 mb-2">
-                <span className="text-sm text-opsis-content-secondary">
-                    Placed {formatDateToDayOfWeekAndDate(new Date(properties.ticket.createdAt))}
-                </span>
-                <span>&bull;</span>
-                <span className="text-sm text-opsis-content-secondary">
-                    ID: {properties.ticket.identifier}
-                </span>
-                {/* <span>&bull;</span>
-                <span className="text-sm text-opsis-content-secondary">
-                    Updated: {formatDateToDateAtTime(new Date(properties.ticket.updatedAt))}
-                </span> */}
-                
-            </div>
-            <p className="text-sm text-opsis-content-secondary truncate">
-                {commentContent}
-            </p>
-        </div>
+        </Link>
     )
 }
 

@@ -136,6 +136,7 @@ query SupportTicketsPrivileged($pagination: PaginationInput!) {
                 createdAt
             }
             createdAt
+            updatedAt
             lastUserCommentedAt
             answeredAt
             answered
@@ -293,40 +294,6 @@ query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $paginati
     }
 }
 
-# fragment SupportTicket on SupportTicket {
-#     id
-#     identifier
-#     status
-#     type
-#     title
-#     description
-#     userEmailAddress
-#     comments {
-#         id
-#         source
-#         visibility
-#         content
-#         contentType
-#         attachments {
-#             type
-#             url
-#             variant
-#         }
-#         createdAt
-#     }
-#     createdAt
-# }
-
-# fragment Pagination on Pagination {
-#     itemIndex
-#     itemIndexForNextPage
-#     itemIndexForPreviousPage
-#     itemsPerPage
-#     itemsTotal
-#     page
-#     pagesTotal
-# }
-
 # Support Ticket Query
 query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) {
     openTickets: supportTickets(pagination:  {
@@ -356,14 +323,10 @@ query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) 
                 visibility
                 content
                 contentType
-                attachments {
-                    type
-                    url
-                    variant
-                }
                 createdAt
             }
             createdAt
+            updatedAt
         }
         pagination {
             itemIndex
@@ -402,14 +365,10 @@ query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) 
                 visibility
                 content
                 contentType
-                attachments {
-                    type
-                    url
-                    variant
-                }
                 createdAt
             }
             createdAt
+            updatedAt
         }
         pagination {
             itemIndex
@@ -419,6 +378,35 @@ query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) 
             itemsTotal
             page
             pagesTotal
+        }
+    }
+}
+
+query ProfileSupportTicket($pagination: PaginationInput!) {
+    supportTickets(pagination: $pagination) {
+        items {
+            id
+            identifier
+            status
+            type
+            title
+            description
+            userEmailAddress
+            comments {
+                id
+                source
+                visibility
+                content
+                contentType
+                attachments {
+                    type
+                    url
+                    variant
+                }
+                createdAt
+            }
+            createdAt
+            updatedAt
         }
     }
 }
