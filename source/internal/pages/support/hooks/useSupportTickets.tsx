@@ -2,14 +2,18 @@
 import React from 'react';
 
 // Dependencies - API
-import { useQuery, useMutation } from '@apollo/client';
+import {
+    useQuery,
+    useMutation,
+} from '@apollo/client';
 import {
     ColumnFilterConditionOperator,
     OrderByDirection,
     SupportTicketsPrivilegedDocument,
-    // SupportTicketCommentCreatePrivilegedDocument,
+    SupportTicketCommentCreatePrivilegedDocument,
     SupportTicketAssignDocument,
     SupportAllSupportProfilesDocument,
+    SupportTicketUpdateStatusPrivilegedDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Function to use support tickets
@@ -27,23 +31,31 @@ export function useSupportTickets(
         refetchQueries: ['SupportTicketsPrivileged'],
     });
 
-    // Build filters
-    const filters = [
-        {
-            column: 'status',
-            operator: ColumnFilterConditionOperator.Equal,
-            value: selectedStatus,
-        },
-    ];
+    // Add update status mutation
+    const [updateTicketStatus] = useMutation(SupportTicketUpdateStatusPrivilegedDocument, {
+        refetchQueries: ['SupportTicketsPrivileged'],
+    })
 
-    // Add assigned to me filter
-    if(assignedToMe) {
-        filters.push({
-            column: 'assignedToUsername',
-            operator: ColumnFilterConditionOperator.Equal,
-            value: 'current', // The API will replace this with the current user's username
-        });
-    }
+    // Build filters
+    const filters = React.useMemo(() => {
+        const baseFilters = [
+            {
+                column: 'status',
+                operator: ColumnFilterConditionOperator.Equal,
+                value: selectedStatus,
+            },
+        ];
+
+        if (assignedToMe) {
+            baseFilters.push({
+                column: 'assignedToUsername',
+                operator: ColumnFilterConditionOperator.Equal,
+                value: 'current', // The API will replace this with the current user's username
+            });
+        }
+
+        return baseFilters;
+    }, [selectedStatus, assignedToMe]);
 
     // Queries
     const ticketsQuery = useQuery(SupportTicketsPrivilegedDocument, {
@@ -65,9 +77,9 @@ export function useSupportTickets(
     });
 
     // Modify the createComment mutation to include refetch
-    // const [createComment] = useMutation(SupportTicketCommentCreatePrivilegedDocument, {
-    //     refetchQueries: ['SupportTicketsPrivileged'],
-    // });
+    const [createComment] = useMutation(SupportTicketCommentCreatePrivilegedDocument, {
+        refetchQueries: ['SupportTicketsPrivileged'],
+    });
 
     // Query for support profiles
     const supportProfilesQuery = useQuery(SupportAllSupportProfilesDocument);
@@ -85,8 +97,9 @@ export function useSupportTickets(
 
     return {
         ticketsQuery,
-        // createComment,
+        createComment,
         assignTicket,
+        updateTicketStatus,
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,

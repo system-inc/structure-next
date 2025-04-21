@@ -27,13 +27,13 @@ const TicketMessageFormSchema = object({
 type TicketMessageFormValues = InferOutput<typeof TicketMessageFormSchema>;
 
 
-// Component - TicketMessageForm
-export interface TicketMessageFormInterface {
+// Component - ProfileSupportTicketMessageForm
+export interface ProfileSupportTicketMessageFormInterface {
     ticketIdentifier: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
 }
-export function TicketMessageForm(properties: TicketMessageFormInterface) {
+export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicketMessageFormInterface) {
     // Properties
     const { ticketIdentifier, comments } = properties;
 
@@ -100,12 +100,11 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
         //     )}
         // </form>
         <Form
-            className="px-10 py-5"
+            className="pt-20"
             formInputs={[
                 <FormInputTextArea
                     key="reply"
                     id="reply"
-                    label="Reply"
                     placeholder="Type your reply..."
                     rows={4}
                     required={true}

@@ -24,6 +24,7 @@ export interface PaginationInterface {
     useLinks?: boolean;
     itemsPerPageControl?: boolean;
     pageInputControl?: boolean;
+    firstAndLastPageControl?: boolean;
 
     // State
     page: number;
@@ -44,20 +45,25 @@ export function Pagination(properties: PaginationInterface) {
     const inputTextPageReference = React.useRef<InputReferenceInterface>(null);
 
     // Defaults
-    const useLinks = properties.useLinks ?? false;
-    const itemsPerPageControl = properties.itemsPerPageControl ?? true;
-    const pageInputControl = properties.pageInputControl ?? true;
+    const {
+        useLinks = false,
+        itemsPerPageControl = true,
+        pageInputControl = true,
+        firstAndLastPageControl = true,
+    } = properties;
+    // const useLinks = properties.useLinks ?? false;
+    // const itemsPerPageControl = properties.itemsPerPageControl ?? true;
+    // const pageInputControl = properties.pageInputControl ?? true;
 
     // Function to handle changes
-    const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
         async function (itemsPerPage: number, page: number) {
             // Update the input text page value
             inputTextPageReference.current?.setValue(page.toString());
 
-            await propertiesOnChange?.(itemsPerPage, page);
+            await properties.onChange?.(itemsPerPage, page);
         },
-        [propertiesOnChange],
+        [properties.onChange],
     );
 
     // console.log('pageIsValid', pageIsValid);
@@ -186,24 +192,26 @@ export function Pagination(properties: PaginationInterface) {
                 )}
                 <div className="flex items-center space-x-2">
                     {/* First Page */}
-                    <Button
-                        size="icon"
-                        icon={ChevronLeftDoubleIcon}
-                        disabled={properties.page === 1}
-                        href={
-                            useLinks && properties.page !== 1
-                                ? constructHrefWithExistingUrlSearchParameters(1)
-                                : undefined
-                        }
-                        onClick={
-                            useLinks
-                                ? undefined
-                                : async function () {
-                                      const newPage = 1;
-                                      await onChangeIntercept(itemsPerPage, newPage);
-                                  }
-                        }
-                    />
+                    { firstAndLastPageControl && (
+                        <Button
+                            size="icon"
+                            icon={ChevronLeftDoubleIcon}
+                            disabled={properties.page === 1}
+                            href={
+                                useLinks && properties.page !== 1
+                                    ? constructHrefWithExistingUrlSearchParameters(1)
+                                    : undefined
+                            }
+                            onClick={
+                                useLinks
+                                    ? undefined
+                                    : async function () {
+                                        const newPage = 1;
+                                        await onChangeIntercept(itemsPerPage, newPage);
+                                    }
+                            }
+                        />
+                    )}
 
                     {/* Previous Page */}
                     <Button
@@ -246,24 +254,26 @@ export function Pagination(properties: PaginationInterface) {
                     />
 
                     {/* Last Page */}
-                    <Button
-                        size="icon"
-                        icon={ChevronRightDoubleIcon}
-                        disabled={properties.page >= properties.pagesTotal}
-                        href={
-                            useLinks && properties.page < properties.pagesTotal
-                                ? constructHrefWithExistingUrlSearchParameters(properties.pagesTotal)
-                                : undefined
-                        }
-                        onClick={
-                            useLinks
-                                ? undefined
-                                : async function () {
-                                      const newPage = properties.pagesTotal;
-                                      await onChangeIntercept(itemsPerPage, newPage);
-                                  }
-                        }
-                    />
+                    { firstAndLastPageControl && (
+                        <Button
+                            size="icon"
+                            icon={ChevronRightDoubleIcon}
+                            disabled={properties.page >= properties.pagesTotal}
+                            href={
+                                useLinks && properties.page < properties.pagesTotal
+                                    ? constructHrefWithExistingUrlSearchParameters(properties.pagesTotal)
+                                    : undefined
+                            }
+                            onClick={
+                                useLinks
+                                    ? undefined
+                                    : async function () {
+                                        const newPage = properties.pagesTotal;
+                                        await onChangeIntercept(itemsPerPage, newPage);
+                                    }
+                            }
+                        />
+                    )}
                 </div>
             </div>
         </div>

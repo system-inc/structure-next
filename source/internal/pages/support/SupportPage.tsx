@@ -14,41 +14,52 @@ import { useSupportTickets } from './hooks/useSupportTickets';
 import { useAccountAndCommerceOrdersByEmail } from './hooks/useAccountAndCommerceOrdersByEmail';
 
 // Dependencies - API
-// import { SupportTicket } from '@project/source/api/graphql';
+import {
+    SupportTicketStatus,
+    Pagination,
+    SupportTicketCommentCreateInput,
+} from '@project/source/api/graphql';
 
 // Component - SupportPage
 export function SupportPage() {
-    // URL Parameters
-    const urlSearchParameters = useUrlSearchParameters();
-    const page = parseInt(urlSearchParameters?.get('page') as string) || 1;
-    const itemsPerPage = 20;
-
     // Add router
     const router = useRouter();
+    // URL Parameters
+    const urlSearchParameters = useUrlSearchParameters();
+
+    const pageParam = urlSearchParameters.get('page') ? parseInt(urlSearchParameters?.get('page') as string) : 1;
 
     // State & Refs
+    const [selectedStatus, setSelectedStatus] = React.useState<SupportTicketStatus>(
+        (urlSearchParameters?.get('status') as SupportTicketStatus) || SupportTicketStatus.Open,
+    );
     const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(
         urlSearchParameters?.get('ticket') ?? null,
     );
-    const [selectedStatus, setSelectedStatus] = React.useState<string>('Open');
+    const [currentPagination, setCurrentPagination] = React.useState<Pagination>({
+        itemIndex: 0, 
+        itemIndexForNextPage: null,
+        itemIndexForPreviousPage: null,
+        itemsPerPage: 20,
+        itemsTotal: 0,
+        page: pageParam,
+        pagesTotal: 0,
+    });
     const [showMyTickets] = React.useState<boolean>(false);
 
-    // Dialog state for image carousel
-    // const [dialogOpen, setDialogOpen] = React.useState(false);
-    // const [selectedImageIndex, setSelectedImageIndex] = React.useState(0);
-
-    const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
+    // const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
     const commentsContainerRef = React.useRef<HTMLDivElement>(null);
 
     // Hooks
     const {
         ticketsQuery,
-        // createComment,
+        createComment,
         assignTicket,
+        updateTicketStatus,
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,
-    } = useSupportTickets(page, itemsPerPage, selectedStatus, showMyTickets);
+    } = useSupportTickets(currentPagination.page, currentPagination.itemsPerPage, selectedStatus, showMyTickets);
 
     // Selected Ticket
     const selectedTicket = ticketsQuery.data?.supportTicketsPrivileged?.items?.find(
@@ -58,52 +69,100 @@ export function SupportPage() {
     // Get account and commerce orders by email
     const { accountAndCommerceOrdersByEmailQuery } = useAccountAndCommerceOrdersByEmail(selectedTicket?.userEmailAddress)
 
+    // Fix?: client-side-unvalidated-url-redirection Allowing unvalidated redirection based on user-specified URLs
+    function handleTicketStatusFilterChange(status: SupportTicketStatus) {
+        setSelectedStatus(status);
+
+        // Reset pagination state to page 1
+        setCurrentPagination((prev) => ({
+            ...prev,
+            page: 1,
+        }));
+    
+        // Update the URL parameters for status and reset the page
+        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
+        updatedParams.set('status', status);
+        updatedParams.set('page', '1'); // Reset to the first page when status changes
+        updatedParams.delete('ticket'); // Remove the ticket parameter temporarily
+    
+        router.replace(`?${updatedParams.toString()}`);
+    }
+
+    function handlePageChange(page: number) {
+        setCurrentPagination((prev) => ({
+            ...prev,
+            page,
+        }));
+
+        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
+        updatedParams.set('status', selectedStatus); // Preserve the current status
+        updatedParams.set('page', page.toString()); // Update the page
+        if (selectedTicketId) {
+            updatedParams.set('ticket', selectedTicketId); // Preserve the selected ticket
+        }
+    
+        // Update the URL
+        router.replace(`?${updatedParams.toString()}`);
+    }
+
     // Function to select ticket and update URL
-    const handleTicketSelection = React.useCallback(
-        function (ticketId: string) {
-            setSelectedTicketId(ticketId);
-            const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
-            newParams.set('ticket', ticketId);
-            router.replace(`?${newParams.toString()}`);
-        },
-        [router, urlSearchParameters],
-    );
+    function handleTicketSelection(ticketId: string) {
+        setSelectedTicketId(ticketId);
+        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
+        updatedParams.set('status', selectedStatus); // Preserve the current status
+        updatedParams.set('page', currentPagination.page.toString()); // Preserve the current page
+        updatedParams.set('ticket', ticketId); // Update the selected ticket
+        router.replace(`?${updatedParams.toString()}`);
+    }
 
-    // Function to handle ticket assignment
-    const handleTicketAssign = React.useCallback(
-        async function (username: string) {
-            if(!selectedTicketId) return;
-
-            await assignTicket({
-                variables: {
-                    ticketId: selectedTicketId,
-                    username: username || null,
-                },
-            });
-        },
-        [assignTicket, selectedTicketId],
-    );
-
-    // Modify the auto-select effect to respect URL parameter
     React.useEffect(
         function () {
-            const items = ticketsQuery.data?.supportTicketsPrivileged?.items;
-            const urlTicketId = urlSearchParameters?.get('ticket');
+            // Ensure ticketsQuery has data and the selectedStatus is set
+            if (!ticketsQuery.data || !selectedStatus) return;
+    
+            // Get the filtered tickets based on the current status
+            const filteredTickets = ticketsQuery.data.supportTicketsPrivileged?.items || [];
+    
+            // Check if the currently selected ticket exists in the filtered list
+            const ticketExists = filteredTickets.some((ticket) => ticket.id === selectedTicketId);
+    
+            // If no ticket is selected or the selected ticket is invalid, select the first ticket
+            if (!selectedTicketId || !ticketExists) {
+                const firstTicket = filteredTickets[0];
+                if (firstTicket) {
+                    setSelectedTicketId(firstTicket.id); // Update the selected ticket ID in state
 
-            const firstTicket = items?.[0];
-
-            if (!firstTicket) return;
-
-            if (urlTicketId && items.some((ticket) => ticket.id === urlTicketId)) {
-                // If the ticket from the URL exists in the list, select it
-                setSelectedTicketId(urlTicketId);
-            } else if (!selectedTicketId) {
-                // If no ticket is selected, select the first one and update the URL
-                handleTicketSelection(firstTicket.id);
+                    // Update the URL with the new ticket parameter and reset the page to 1
+                    const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
+                    newParams.set('status', selectedStatus);
+                    newParams.set('page', currentPagination.page.toString()); // Reset to the first page
+                    newParams.set('ticket', firstTicket.id); // Set the first ticket ID
+                    router.replace(`?${newParams.toString()}`);
+                } else {
+                    // If no tickets are available, clear the ticket parameter
+                    setSelectedTicketId(null);
+                    const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
+                    newParams.set('status', selectedStatus);
+                    newParams.set('page', currentPagination.page.toString());
+                    newParams.delete('ticket');
+                    router.replace(`?${newParams.toString()}`);
+                }
             }
         },
-        [ticketsQuery.data, urlSearchParameters, handleTicketSelection, selectedTicketId],
+        [ticketsQuery.data, selectedStatus, selectedTicketId, urlSearchParameters, router], // Dependencies
     );
+
+    React.useEffect(
+        function() {
+            if (!ticketsQuery.data) return;
+
+            const pagination = ticketsQuery.data.supportTicketsPrivileged.pagination;
+            if (pagination) {
+                setCurrentPagination(pagination);
+            }
+        },
+        [ticketsQuery.data]
+    )
 
     // Scroll to bottom when selecting ticket or when new comments appear
     React.useEffect(
@@ -115,165 +174,75 @@ export function SupportPage() {
         [selectedTicket],
     );
 
-    
+    // Function to handle ticket assignment
+    // const handleTicketAssign = React.useCallback(
+    //     async function (username: string) {
+    //         if (!ticketId) return;
 
-    // Get all attachments from comments
-    // const allAttachments =
-    //     selectedTicket?.comments.reduce((accumulatedAttachments: FileCarouselInterface['files'], comment) => {
-    //         const attachments = (comment.attachments || []).map(function (attachment) {
-    //             return {
-    //                 url: attachment.url || '',
-    //                 metadata: {
-    //                     Source: comment.source,
-    //                     Date: formatDateWithTimeIfToday(new Date(comment.createdAt)),
-    //                 },
-    //             };
+    //         await assignTicket({
+    //             variables: {
+    //                 ticketId,
+    //                 username,
+    //             },
     //         });
-    //         return accumulatedAttachments.concat(attachments);
-    //     }, []) || [];
+    //     },
+    //     [assignTicket, ticketId]
+    // );
 
-    // Function to get global index for an attachment URL
-    // function getGlobalAttachmentIndex(url: string): number {
-    //     return allAttachments.findIndex((attachment) => attachment.url === url);
-    // }
+    const handleTicketStatusChange = React.useCallback(
+        async function (ticketId: string, status: SupportTicketStatus) {
+            await updateTicketStatus({
+                variables: {
+                    ticketId,
+                    status,
+                },
+            })
+        },
+        [selectedTicket?.status]
+        // function() {
+        //     console.log("Ticket status changed", selectedTicket?.status)
+        // },
+        // []
+    );
 
-    // Handle image click
-    // function handleImageClick(index: number) {
-    //     setSelectedImageIndex(index);
-    //     setDialogOpen(true);
-    // }
+    const handleTicketCommentCreate = React.useCallback(
+        async function (input: SupportTicketCommentCreateInput) {
+            await createComment({
+                variables: {
+                    input,
+                },
+            });
+        },
+        [createComment]
+    );
 
     // Render the component
     return (
         <div className="relative h-[calc(100vh-3.5rem)] overflow-hidden">
             <div className="grid h-full grid-cols-[390px_1fr_390px]">
-                {/* Left Navigation */}
+
+                {/* Left Sidebar */}
                 <TicketList
                     tickets={ticketsQuery.data?.supportTicketsPrivileged.items || []}
                     selectedTicketId={selectedTicketId}
+                    selectedStatus={selectedStatus}
+                    currentPagination={currentPagination}
                     isLoading={ticketsQuery.loading}
                     isRefreshing={isManuallyRefreshing}
-                    page={page}
-                    itemsPerPage={itemsPerPage}
-                    totalItems={ticketsQuery.data?.supportTicketsPrivileged.pagination?.itemsTotal ?? 0}
-                    totalPages={ticketsQuery.data?.supportTicketsPrivileged.pagination?.pagesTotal ?? 0}
                     onRefresh={handleManualRefresh}
-                    onStatusChange={setSelectedStatus}
+                    onStatusChange={handleTicketStatusFilterChange}
+                    onPageChange={handlePageChange}
                     onTicketSelect={handleTicketSelection}
                 />
 
                 <Ticket
                     ticket={selectedTicket}
                     account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
+                    supportProfiles={supportProfilesQuery.data?.supportAllSupportProfiles}
+                    isLoadingProfiles={supportProfilesQuery.loading}
+                    onTicketStatusChange={handleTicketStatusChange}
+                    onTicketCommentCreate={handleTicketCommentCreate}
                 />
-
-                {/* Ticket Detail */}
-                {/* <div className="mt-3 flex h-full flex-col overflow-hidden pb-12" ref={ticketDetailsRef}>
-                    {selectedTicket ? (
-                        <div className="flex h-full flex-col">
-                            <h2 className="mb-4 text-2xl font-medium">{selectedTicket.title}</h2>
-
-                            {/* Ticket Information *
-                            <TicketInformation
-                                email={selectedTicket.userEmailAddress}
-                                status={selectedTicket.status}
-                                createdAt={selectedTicket.createdAt}
-                                assignedToProfileId={selectedTicket.assignedToProfileId}
-                                assignedToProfile={selectedTicket.assignedToProfile}
-                                onAssign={handleTicketAssign}
-                                ticketId={selectedTicket.id}
-                                supportProfiles={supportProfilesQuery.data?.supportAllSupportProfiles}
-                                isLoadingProfiles={supportProfilesQuery.loading}
-                            />
-
-                            {/* Comments *
-                            <ScrollArea className="flex flex-grow" ref={commentsContainerRef}>
-                                <div className="flex flex-grow flex-col justify-end">
-                                    <div className="flex flex-col space-y-2">
-                                        {selectedTicket.comments.map(function (comment) {
-                                            const latestEmailContent = extractLatestEmailContent(comment.content);
-
-                                            return (
-                                                <div key={comment.id}>
-                                                    {latestEmailContent.length > 0 && (
-                                                        <div
-                                                            className={`flex ${
-                                                                comment.source === 'Agent'
-                                                                    ? 'justify-end'
-                                                                    : 'justify-start'
-                                                            }`}
-                                                        >
-                                                            <div
-                                                                className={`min-w-96 max-w-[80%] rounded-lg p-2 text-sm
-                                                        ${
-                                                            comment.source === 'Agent'
-                                                                ? 'bg-blue text-light dark:bg-blue'
-                                                                : 'bg-light-1 dark:bg-dark-2'
-                                                        }`}
-                                                            >
-                                                                <p className="whitespace-pre-wrap">
-                                                                    {latestEmailContent}
-                                                                </p>
-                                                                <div className="dark:neutral mt-1 text-right text-xs">
-                                                                    {formatDateWithTimeIfToday(
-                                                                        new Date(comment.createdAt),
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                    <CommentAttachments
-                                                        attachments={comment.attachments}
-                                                        isAgent={comment.source === 'Agent'}
-                                                        onImageClick={handleImageClick}
-                                                        globalAttachmentIndex={getGlobalAttachmentIndex}
-                                                    />
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            </ScrollArea>
-
-                            {/* Reply Form *
-                            <Form
-                                className="mt-6"
-                                formInputs={[
-                                    <FormInputTextArea
-                                        key="reply"
-                                        id="reply"
-                                        label="Reply"
-                                        placeholder="Type your reply..."
-                                        rows={4}
-                                        required={true}
-                                    />,
-                                ]}
-                                buttonProperties={{
-                                    children: 'Send Reply',
-                                }}
-                                resetOnSubmitSuccess={true}
-                                onSubmit={async function (formValues) {
-                                    await createComment({
-                                        variables: {
-                                            input: {
-                                                ticketId: selectedTicket.id,
-                                                content: formValues.reply,
-                                                replyToCommentId: selectedTicket.comments[0]?.id || '',
-                                            },
-                                        },
-                                    });
-                                    return {
-                                        success: true,
-                                    };
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <div className="flex h-full items-center justify-center">
-                            <p className="neutral">Select a ticket to view details.</p>
-                        </div>
-                    )}
-                </div> */}
 
                 {/* Right Sidebar */}
                 <CustomerAndTicketSidePanel
