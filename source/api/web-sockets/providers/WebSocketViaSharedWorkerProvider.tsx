@@ -201,7 +201,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                 try {
                     // Create the SharedWorker
                     const sharedWorker = new SharedWorker(
-                        '/api/web-sockets/shared-workers/web-socket-shared-worker.js?v=2025-03-16-a',
+                        '/api/web-sockets/shared-workers/web-socket-shared-worker.js?v=2025-04-18-a',
                     );
                     // console.log('[WebSocketViaSharedWorkerProvider] Initialized');
 
