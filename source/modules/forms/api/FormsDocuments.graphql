@@ -127,7 +127,6 @@ query Form($identifier: String!) {
                 description
                 required
                 icon
-                min
                 max
                 allowHalf
                 allowZero
