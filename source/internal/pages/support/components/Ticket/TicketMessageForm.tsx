@@ -31,15 +31,6 @@ import {
     SupportTicketCommentVisibility
 } from '@project/source/api/GraphQlGeneratedCode';
 
-// Define valibot schema
-// const TicketMessageFormSchema = object({
-//     reply: pipe(
-//         string('Reply is required.'),
-//         minLength(1, 'Reply cannot be empty.')
-//     ),
-// });
-// type TicketMessageFormValues = InferOutput<typeof TicketMessageFormSchema>;
-
 const TicketMessageFormSchema = object({
     reply: pipe(string('Reply is required.'), minLength(1, 'Reply cannot be empty.')),
     attachments: optional(array(
@@ -71,7 +62,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
     // const [uploadProgress, setUploadProgress] = React.useState<number | null>(null);
     const [shouldResetEditor, setShouldResetEditor] = React.useState(false);
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<TicketMessageFormValues>({
+    const { handleSubmit, setValue, formState: { errors } } = useForm<TicketMessageFormValues>({
         resolver: valibotResolver(TicketMessageFormSchema),
         mode: 'onSubmit',
         defaultValues: {
@@ -140,39 +131,6 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
                     const filenameNoExt = file.name.replace(/\.[^/.]+$/, '');
                     formData.append(filenameNoExt, file);
                 });
-
-                // await new Promise<void>((resolve, reject) => {
-                //     const xhr = new XMLHttpRequest();
-                //     xhr.upload.onprogress = (event) => {
-                //         if (event.lengthComputable) {
-                //             const percentComplete = (event.loaded / event.total) * 100;
-                //             console.log('Upload progress:', percentComplete);
-                //             setUploadProgress(percentComplete);
-                //         }
-                //     };
-                      
-                //     xhr.onload = () => {
-                //         setUploadProgress(null);
-                //         if (xhr.status >= 200 && xhr.status < 300) {
-                //             handleSuccess();
-                //             resolve();
-                //         } else {
-                //             console.error('Upload failed');
-                //             setIsSubmitting(false);
-                //             reject(new Error('Upload failed'));
-                //         }
-                //     };
-                      
-                //     xhr.onerror = () => {
-                //         setUploadProgress(null);
-                //         setIsSubmitting(false);
-                //         reject(new Error('Upload error'));
-                //     };
-                      
-                //     xhr.open('POST', `https://${ProjectSettings.apis.base.host}/support/${ticketIdentifier}/commentCreatePrivileged`);
-                //     xhr.withCredentials = true;
-                //     xhr.send(formData);
-                // });
     
                 const response = await fetch(`https://${ProjectSettings.apis.base.host}/support/${ticketIdentifier}/commentCreatePrivileged`, {
                     method: 'POST',
@@ -212,7 +170,6 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
         >
             <RichTextEditor
                 type="markdown"
-                // isEditorEmpty={isEmpty}
                 onChange={handleEditorChange}
                 attachedFiles={attachedFiles}
                 onSaveFiles={handleSaveFiles}

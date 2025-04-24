@@ -200,10 +200,6 @@ export function SupportPage() {
             })
         },
         [selectedTicket?.status]
-        // function() {
-        //     console.log("Ticket status changed", selectedTicket?.status)
-        // },
-        // []
     );
 
     const handleTicketCommentCreate = React.useCallback(

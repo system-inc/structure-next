@@ -26,8 +26,6 @@ export function CommentAttachments({
 }: CommentAttachmentsInterface) {
     if(!attachments?.length) return null;
 
-    // console.log("ATTACHMENTS", attachments);
-
     // Render the component
     return (
         <div className={`flex ${isAgent ? 'justify-end' : 'justify-start'}`}>
