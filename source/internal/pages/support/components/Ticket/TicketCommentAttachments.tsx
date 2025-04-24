@@ -8,6 +8,9 @@ import { isImageFile } from '@structure/source/utilities/File';
 // Dependencies - API
 import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
 
+// Dependencies - Assets
+import { FilePdf } from '@phosphor-icons/react';
+
 // Component - CommentAttachments
 export interface CommentAttachmentsInterface {
     attachments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'][0]['attachments'];
@@ -22,6 +25,8 @@ export function CommentAttachments({
     globalAttachmentIndex,
 }: CommentAttachmentsInterface) {
     if(!attachments?.length) return null;
+
+    // console.log("ATTACHMENTS", attachments);
 
     // Render the component
     return (
@@ -44,20 +49,20 @@ export function CommentAttachments({
                                 <Image
                                     src={attachment.url}
                                     alt="Attachment"
-                                    width={200}
-                                    height={200}
-                                    className="rounded-lg object-cover"
+                                    width={154}
+                                    height={124}
+                                    className="h-[124px] w-[154px] rounded-lg object-cover"
                                 />
                             </div>
                         ) : (
-                            <a
-                                href={attachment.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block p-3 text-sm hover:underline"
+                            <div
+                                className="flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg bg-white p-4 text-center border border-opsis-border-primary"
+                                onClick={() => window.open(attachment.url, '_blank')}
                             >
-                                📎 Download {attachment.type}
-                            </a>
+                                {/* Opsis variable for this red? */}
+                                <FilePdf width={20} height={20} color="#DC2626" />
+                                <p className="mt-2 truncate text-xs text-black">{attachment.type}</p>
+                            </div>
                         )}
                     </div>
                 ))}

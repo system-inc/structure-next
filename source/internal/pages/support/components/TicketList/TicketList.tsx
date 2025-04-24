@@ -20,7 +20,7 @@ import {
 // Component - TicketList
 interface TicketListInterface {
     tickets: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'];
-    selectedTicketId: string | null;
+    selectedTicketIdentifier: string | null;
     selectedStatus: SupportTicketStatus;
     currentPagination: Pagination
     isLoading: boolean;
@@ -55,7 +55,7 @@ export function TicketList(properties: TicketListInterface) {
                             <TicketListItem
                                 key={ticket.id}
                                 ticket={ticket}
-                                isSelected={ticket.id === properties.selectedTicketId}
+                                isSelected={ticket.identifier === properties.selectedTicketIdentifier}
                                 isFirst={index === 0}
                                 onSelect={properties.onTicketSelect}
                             />

@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { FileCarouselInterface } from '@structure/source/common/files/FileCarousel';
 import { FileCarouselDialog } from '@structure/source/common/files/FileCarouselDialog';
-import { CommentAttachments } from '../CommentAttachments';
+import { CommentAttachments } from './TicketCommentAttachments';
 
 // Dependencies - API
 import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
@@ -110,10 +110,10 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                 const textAlignmentClasses = isAgentViewer
                                     ? isUserComment
                                         ? 'ml-4 text-left'
-                                        : 'mr-4 text-right'
+                                        : 'mr-4 text-right justify-end'
                                     : isAgentComment
-                                    ? 'ml-4 text-left'
-                                    : 'mr-4 text-right';
+                                        ? 'ml-4 text-left'
+                                        : 'mr-4 text-right';
 
                                 const backgroundColorClasses = isAgentViewer
                                     ? isAgentComment

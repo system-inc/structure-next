@@ -26,6 +26,7 @@ export interface TicketInterface {
     isLoadingProfiles: boolean;
     onTicketStatusChange: (ticketId: string, status: SupportTicketStatus) => void;
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
+    refetchTickets: () => void;
 }
 export function Ticket(properties: TicketInterface) {
     // Properties
@@ -57,9 +58,10 @@ export function Ticket(properties: TicketInterface) {
                         viewer="Agent"
                     />
                     <TicketMessageForm
-                        ticketIdentifier={properties.ticket.id}
+                        ticketIdentifier={properties.ticket.identifier}
                         comments={properties.ticket.comments}
                         onTicketCommentCreate={properties.onTicketCommentCreate}
+                        refetchTickets={properties.refetchTickets}
                     />
                 </>
             )}
