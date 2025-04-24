@@ -5,8 +5,7 @@ import React from 'react';
 import InternalNavigationTrail from '@structure/source/internal/layouts/navigation/InternalNavigationTrail';
 
 // Component - MarketingPage
-export type MarketingPageProperties = {};
-export function MarketingPage(properties: MarketingPageProperties) {
+export function MarketingPage() {
     // Render the component
     return (
         <div className="px-6 py-4">

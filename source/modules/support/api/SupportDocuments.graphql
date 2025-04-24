@@ -136,6 +136,7 @@ query SupportTicketsPrivileged($pagination: PaginationInput!) {
                 createdAt
             }
             createdAt
+            updatedAt
             lastUserCommentedAt
             answeredAt
             answered
@@ -181,6 +182,13 @@ mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreate
     }
 }
 
+mutation SupportTicketUpdateStatusPrivileged($ticketId: String!, $status: SupportTicketStatus!) {
+    supportTicketUpdateStatusPrivileged(id: $ticketId, status: $status) {
+        id
+        status
+    }
+}
+
 # Support All Support Profiles Query
 query SupportAllSupportProfiles {
     supportAllSupportProfiles {
@@ -194,6 +202,7 @@ query SupportAllSupportProfiles {
     }
 }
 
+# Account and Commerce Orders Related to Support Ticket Privileged Query
 query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $pagination: PaginationInput!) {
     accountPrivileged(input: { emailAddress: $email }) {
         defaultProfileId
@@ -281,6 +290,123 @@ query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $paginati
             itemIndexForPreviousPage
             itemIndexForNextPage
             itemIndex
+        }
+    }
+}
+
+# Support Ticket Query
+query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) {
+    openTickets: supportTickets(pagination:  {
+        itemsPerPage: 3,
+        itemIndex: $openTicketsIndex,
+        filters: [ {
+            column: "status",
+            operator: Equal,
+            value: "Open"
+        }]
+        orderBy: [ {
+           key: "createdAt",
+           direction: Descending
+        }]
+    }) {
+        items {
+            id
+            identifier
+            status
+            type
+            title
+            description
+            userEmailAddress
+            comments {
+                id
+                source
+                visibility
+                content
+                contentType
+                createdAt
+            }
+            createdAt
+            updatedAt
+        }
+        pagination {
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+            itemsPerPage
+            itemsTotal
+            page
+            pagesTotal
+        }
+    }
+    closedTickets: supportTickets(pagination:  {
+        itemsPerPage: 3,
+        itemIndex: $closedTicketsIndex,
+        filters: [ {
+            column: "status",
+            operator: Equal,
+            value: "Closed"
+        }]
+        orderBy: [ {
+           key: "createdAt",
+           direction: Descending
+        }]
+    }) {
+        items {
+            id
+            identifier
+            status
+            type
+            title
+            description
+            userEmailAddress
+            comments {
+                id
+                source
+                visibility
+                content
+                contentType
+                createdAt
+            }
+            createdAt
+            updatedAt
+        }
+        pagination {
+            itemIndex
+            itemIndexForNextPage
+            itemIndexForPreviousPage
+            itemsPerPage
+            itemsTotal
+            page
+            pagesTotal
+        }
+    }
+}
+
+query ProfileSupportTicket($pagination: PaginationInput!) {
+    supportTickets(pagination: $pagination) {
+        items {
+            id
+            identifier
+            status
+            type
+            title
+            description
+            userEmailAddress
+            comments {
+                id
+                source
+                visibility
+                content
+                contentType
+                attachments {
+                    type
+                    url
+                    variant
+                }
+                createdAt
+            }
+            createdAt
+            updatedAt
         }
     }
 }

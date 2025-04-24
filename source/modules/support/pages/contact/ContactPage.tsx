@@ -40,7 +40,7 @@ export function ContactPage() {
                     emailAddress: emailAddress,
                     title: subject,
                     initialComment: {
-                        ticketId: '<ignored-id>',
+                        ticketIdentifier: '<ignored-id>',
                         replyToCommentId: '<ignored-id>',
                         content: message,
                     },
