@@ -33,7 +33,7 @@ export function SupportPage() {
     const [selectedStatus, setSelectedStatus] = React.useState<SupportTicketStatus>(
         (urlSearchParameters?.get('status') as SupportTicketStatus) || SupportTicketStatus.Open,
     );
-    const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(
+    const [selectedTicketIdentifier, setSelectedTicketIdentifier] = React.useState<string | null>(
         urlSearchParameters?.get('ticket') ?? null,
     );
     const [currentPagination, setCurrentPagination] = React.useState<Pagination>({
@@ -59,11 +59,12 @@ export function SupportPage() {
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,
+        refetchTickets,
     } = useSupportTickets(currentPagination.page, currentPagination.itemsPerPage, selectedStatus, showMyTickets);
 
     // Selected Ticket
     const selectedTicket = ticketsQuery.data?.supportTicketsPrivileged?.items?.find(
-        (ticket) => ticket.id === selectedTicketId,
+        (ticket) => ticket.identifier === selectedTicketIdentifier,
     );
 
     // Get account and commerce orders by email
@@ -97,8 +98,8 @@ export function SupportPage() {
         const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
         updatedParams.set('status', selectedStatus); // Preserve the current status
         updatedParams.set('page', page.toString()); // Update the page
-        if (selectedTicketId) {
-            updatedParams.set('ticket', selectedTicketId); // Preserve the selected ticket
+        if (selectedTicketIdentifier) {
+            updatedParams.set('ticket', selectedTicketIdentifier); // Preserve the selected ticket
         }
     
         // Update the URL
@@ -106,12 +107,12 @@ export function SupportPage() {
     }
 
     // Function to select ticket and update URL
-    function handleTicketSelection(ticketId: string) {
-        setSelectedTicketId(ticketId);
+    function handleTicketSelection(ticketIdentifier: string) {
+        setSelectedTicketIdentifier(ticketIdentifier);
         const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
         updatedParams.set('status', selectedStatus); // Preserve the current status
         updatedParams.set('page', currentPagination.page.toString()); // Preserve the current page
-        updatedParams.set('ticket', ticketId); // Update the selected ticket
+        updatedParams.set('ticket', ticketIdentifier); // Update the selected ticket
         router.replace(`?${updatedParams.toString()}`);
     }
 
@@ -124,23 +125,23 @@ export function SupportPage() {
             const filteredTickets = ticketsQuery.data.supportTicketsPrivileged?.items || [];
     
             // Check if the currently selected ticket exists in the filtered list
-            const ticketExists = filteredTickets.some((ticket) => ticket.id === selectedTicketId);
+            const ticketExists = filteredTickets.some((ticket) => ticket.identifier === selectedTicketIdentifier);
     
             // If no ticket is selected or the selected ticket is invalid, select the first ticket
-            if (!selectedTicketId || !ticketExists) {
+            if (!selectedTicketIdentifier || !ticketExists) {
                 const firstTicket = filteredTickets[0];
                 if (firstTicket) {
-                    setSelectedTicketId(firstTicket.id); // Update the selected ticket ID in state
+                    setSelectedTicketIdentifier(firstTicket.identifier); // Update the selected ticket ID in state
 
                     // Update the URL with the new ticket parameter and reset the page to 1
                     const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
                     newParams.set('status', selectedStatus);
                     newParams.set('page', currentPagination.page.toString()); // Reset to the first page
-                    newParams.set('ticket', firstTicket.id); // Set the first ticket ID
+                    newParams.set('ticket', firstTicket.identifier); // Set the first ticket ID
                     router.replace(`?${newParams.toString()}`);
                 } else {
                     // If no tickets are available, clear the ticket parameter
-                    setSelectedTicketId(null);
+                    setSelectedTicketIdentifier(null);
                     const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
                     newParams.set('status', selectedStatus);
                     newParams.set('page', currentPagination.page.toString());
@@ -149,7 +150,7 @@ export function SupportPage() {
                 }
             }
         },
-        [ticketsQuery.data, selectedStatus, selectedTicketId, urlSearchParameters, router], // Dependencies
+        [ticketsQuery.data, selectedStatus, selectedTicketIdentifier, urlSearchParameters, router], // Dependencies
     );
 
     React.useEffect(
@@ -199,10 +200,6 @@ export function SupportPage() {
             })
         },
         [selectedTicket?.status]
-        // function() {
-        //     console.log("Ticket status changed", selectedTicket?.status)
-        // },
-        // []
     );
 
     const handleTicketCommentCreate = React.useCallback(
@@ -224,7 +221,7 @@ export function SupportPage() {
                 {/* Left Sidebar */}
                 <TicketList
                     tickets={ticketsQuery.data?.supportTicketsPrivileged.items || []}
-                    selectedTicketId={selectedTicketId}
+                    selectedTicketIdentifier={selectedTicketIdentifier}
                     selectedStatus={selectedStatus}
                     currentPagination={currentPagination}
                     isLoading={ticketsQuery.loading}
@@ -242,6 +239,7 @@ export function SupportPage() {
                     isLoadingProfiles={supportProfilesQuery.loading}
                     onTicketStatusChange={handleTicketStatusChange}
                     onTicketCommentCreate={handleTicketCommentCreate}
+                    refetchTickets={refetchTickets}
                 />
 
                 {/* Right Sidebar */}

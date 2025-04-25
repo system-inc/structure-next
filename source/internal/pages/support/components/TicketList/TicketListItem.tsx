@@ -11,7 +11,7 @@ import { useSpring, animated } from '@react-spring/web';
 // Component - TicketListItem
 export interface TicketListItemInterface {
     ticket: {
-        id: string;
+        identifier: string;
         userEmailAddress: string;
         title: string;
         answered: boolean;
@@ -22,7 +22,7 @@ export interface TicketListItemInterface {
     };
     isSelected: boolean;
     isFirst: boolean;
-    onSelect: (id: string) => void;
+    onSelect: (identifier: string) => void;
 }
 export function TicketListItem(properties: TicketListItemInterface) {
 
@@ -54,7 +54,7 @@ export function TicketListItem(properties: TicketListItemInterface) {
             className={`relative cursor-pointer my-3 mx-4 py-3 pl-12 pr-3 rounded-lg transition-colors hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
                 isSelected ? 'bg-light-1 dark:bg-dark-2' : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
             }`}
-            onClick={() => onSelect(ticket.id)}
+            onClick={() => onSelect(ticket.identifier)}
         >
             { !ticket.answered && (
                 <div className="absolute top-[18px] left-5 flex items-center justify-center">

@@ -103,5 +103,6 @@ export function useSupportTickets(
         isManuallyRefreshing,
         handleManualRefresh,
         supportProfilesQuery,
+        refetchTickets: ticketsQuery.refetch,
     };
 }
