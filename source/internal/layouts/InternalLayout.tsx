@@ -10,7 +10,6 @@ import dynamic from 'next/dynamic';
 // import { SideNavigationLayoutContentBody } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody';
 import { InternalNavigation } from '@structure/source/internal/layouts/navigation/InternalNavigation';
 import { InternalDialogMenu } from '@structure/source/internal/layouts/navigation/InternalDialogMenu';
-import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
 
 // Import SideNavigation components with next/dynamic to avoid server-side rendering
 // We can't SSR these because they use localStorage and window.innerWidth to render the navigation state
@@ -36,7 +35,6 @@ export const internalLayoutIdentifier = 'Internal';
 export interface InternalLayoutInterface {
     children: React.ReactNode;
 }
-
 export function InternalLayout(properties: InternalLayoutInterface) {
     // Effect to adjust the background color of the body on mount
     // We want the navigation to be dark but the content to be a bit lighter
