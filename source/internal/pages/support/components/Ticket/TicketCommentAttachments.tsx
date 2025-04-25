@@ -1,3 +1,5 @@
+'use client';
+
 // Dependencies - React and Next.js
 import React from 'react';
 import Image from 'next/image';
@@ -54,10 +56,10 @@ export function CommentAttachments({
                             </div>
                         ) : (
                             <div
-                                className="flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg bg-white p-4 text-center border border-opsis-border-primary"
+                                className="flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg border border-opsis-border-primary bg-white p-4 text-center"
                                 onClick={() => window.open(attachment.url, '_blank')}
                             >
-                                <FilePdf className='size-5 text-[--global-red-600]' />
+                                <FilePdf className="size-5 text-[--global-red-600]" />
                                 <p className="mt-2 truncate text-xs text-black">{attachment.type}</p>
                             </div>
                         )}
