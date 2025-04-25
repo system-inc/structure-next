@@ -49,9 +49,7 @@ export function InternalLayout(properties: InternalLayoutInterface) {
 
     // Render the component
     return (
-        <AuthorizationLayout
-            accessibleRoles={['Administrator', 'FulfillmentManager', 'OrderViewer', 'ProductManager', 'Support']}
-        >
+        <>
             {/* Navigation */}
             <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier} topBar={true}>
                 <InternalNavigation />
@@ -64,7 +62,7 @@ export function InternalLayout(properties: InternalLayoutInterface) {
 
             {/* Dialog Menu */}
             <InternalDialogMenu />
-        </AuthorizationLayout>
+        </>
     );
 }
 
