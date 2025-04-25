@@ -78,8 +78,6 @@ export interface StructureSettingsInterface {
     platforms: {
         [platformIdentifier: string]: Platform;
     };
-
-    internalAccessRoles?: string[];
 }
 
 // Default - StructureSettings
