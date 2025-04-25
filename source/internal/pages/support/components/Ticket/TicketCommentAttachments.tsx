@@ -57,8 +57,7 @@ export function CommentAttachments({
                                 className="flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg bg-white p-4 text-center border border-opsis-border-primary"
                                 onClick={() => window.open(attachment.url, '_blank')}
                             >
-                                {/* Opsis variable for this red? */}
-                                <FilePdf width={20} height={20} color="#DC2626" />
+                                <FilePdf className='size-5 text-[--global-red-600]' />
                                 <p className="mt-2 truncate text-xs text-black">{attachment.type}</p>
                             </div>
                         )}
