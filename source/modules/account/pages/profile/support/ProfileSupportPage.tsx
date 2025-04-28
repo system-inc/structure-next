@@ -102,11 +102,11 @@ export function ProfileSupportPage() {
         [searchParams, router]
     );
 
-    if (ticketsQuery.loading) {
-        return (
-            'Loading...'
-        );
-    }
+    // if (ticketsQuery.loading) {
+    //     return (
+    //         'Loading...'
+    //     );
+    // }
 
     // Render the component
     return (
