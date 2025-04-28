@@ -580,7 +580,7 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
     commerceOrdersPrivileged(pagination: $pagination) {
         items {
             # batchIdentifier
-            beneficiaryEmailAddress
+            # beneficiaryEmailAddress
             # checkoutSessionId
             createdAt
             # discounts {

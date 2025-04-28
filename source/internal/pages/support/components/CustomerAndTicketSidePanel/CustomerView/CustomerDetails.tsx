@@ -25,16 +25,17 @@ export function CustomerDetails(properties: CustomerDetailsInterface) {
     // Properties
     const { account } = properties;
 
-    const userFullName = account ?
-        account.defaultProfile.givenName && account.defaultProfile.familyName ? 
-            `${account.defaultProfile.givenName} ${account.defaultProfile.familyName}` : '-'
+    const userFullName = account
+        ? account.defaultProfile.givenName && account.defaultProfile.familyName
+            ? `${account.defaultProfile.givenName} ${account.defaultProfile.familyName}`
+            : '-'
         : undefined;
-    
+
     return (
         <>
-            { account ? (
-                <div className="flex flex-col gap-4 px-4 pt-3 pb-6 border-b">
-                    <div className="flex flex-row items-center justify-start gap-2 my-2">
+            {account ? (
+                <div className="flex flex-col gap-4 border-b px-4 pb-6 pt-3">
+                    <div className="my-2 flex flex-row items-center justify-start gap-2">
                         <div className="relative h-8 w-8">
                             <ProfileImage
                                 profileImageUrl={account.defaultProfile.images?.[0]?.url}
@@ -43,31 +44,28 @@ export function CustomerDetails(properties: CustomerDetailsInterface) {
                             />
                         </div>
                         <div className="text-neutral-500 font-medium">
-                            { userFullName }
+                            {userFullName}
                             <div className="truncate text-sm">
                                 {account.defaultProfile.username && `@${account.defaultProfile.username}`}
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row items-center justify-start gap-2 text-neutral-500">
+                    <div className="text-neutral-500 flex flex-row items-center justify-start gap-2">
                         <div className="relative h-4 w-4">
                             <Envelope />
                         </div>
                         {account.emailAddress}
                     </div>
-                    { (account.defaultProfile.preferredName || account.defaultProfile.displayName) && (
-                        <div className="flex flex-row items-center justify-start gap-4 text-neutral-500">
+                    {(account.defaultProfile.preferredName || account.defaultProfile.displayName) && (
+                        <div className="text-neutral-500 flex flex-row items-center justify-start gap-4">
                             <span className="font-regular">
                                 {account.defaultProfile.preferredName ? 'Preferred Name' : 'Display Name'}
                             </span>
                             {account.defaultProfile.preferredName || account.defaultProfile.displayName}
                         </div>
                     )}
-                    <div className="flex flex-row items-center justify-start gap-2 text-neutral-500">
-                        <Badge
-                            variant={account.status === 'Active' ? 'success' : 'info'}
-                            size="sm"
-                        >
+                    <div className="text-neutral-500 flex flex-row items-center justify-start gap-2">
+                        <Badge variant={account.status === 'Active' ? 'success' : 'info'} size="large">
                             {account.status}
                         </Badge>
                         {/* <Badge
@@ -85,10 +83,8 @@ export function CustomerDetails(properties: CustomerDetailsInterface) {
                     </div> */}
                 </div>
             ) : (
-                <BorderContainer>
-                    No account information found
-                </BorderContainer>
+                <BorderContainer>No account information found</BorderContainer>
             )}
         </>
     );
-};
+}
