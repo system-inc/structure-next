@@ -104,9 +104,12 @@ export function ProfileSupportPage() {
         [searchParams, router],
     );
 
-    if(ticketsQuery.loading) {
-        return 'Loading...';
-    }
+    // Loading state removed as it was causing layout shifts
+    // if (ticketsQuery.loading) {
+    //     return (
+    //         'Loading...'
+    //     );
+    // }
 
     // Render the component
     return (

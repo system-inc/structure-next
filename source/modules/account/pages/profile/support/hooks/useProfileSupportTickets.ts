@@ -1,6 +1,3 @@
-// Dependencies - React
-import React from 'react';
-
 // Dependencies - API
 import { useQuery } from '@apollo/client';
 import { ProfileSupportTicketsDocument } from '@project/source/api/GraphQlGeneratedCode';
@@ -23,5 +20,6 @@ export function useProfileSupportTickets(
 
     return {
         ticketsQuery,
+        refetchTickets: ticketsQuery.refetch,
     };
 }

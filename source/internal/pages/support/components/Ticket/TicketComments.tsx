@@ -12,7 +12,10 @@ import { FileCarouselDialog } from '@structure/source/common/files/FileCarouselD
 import { CommentAttachments } from './TicketCommentAttachments';
 
 // Dependencies - API
-import { SupportTicketsPrivilegedQuery } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    SupportTicketsPrivilegedQuery,
+    SupportTicketCommentSource,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { extractLatestEmailContent } from '@structure/source/utilities/Email';
@@ -27,15 +30,15 @@ import {
 interface TicketCommentsInterface {
     userEmailAddress: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
-    viewer: 'User' | 'Agent';
+    viewer: SupportTicketCommentSource;
     userFullName?: string;
 }
 export function TicketComments(properties: TicketCommentsInterface) {
     // Properties
     const { comments } = properties;
 
-    const isAgentViewer = properties.viewer === 'Agent';
-    const isUserViewer = properties.viewer === 'User';
+    const isAgentViewer = properties.viewer === SupportTicketCommentSource.Agent;
+    const isUserViewer = properties.viewer === SupportTicketCommentSource.User;
 
     // Dialog state for image carousel
     const [showInternalComments, setShowInternalComments] = React.useState(false);
@@ -82,7 +85,7 @@ export function TicketComments(properties: TicketCommentsInterface) {
 
     // Render the component
     return (
-        <div className={`flex flex-col flex-1 overflow-hidden ${isAgentViewer && 'p-10'}`}>
+        <div className={`flex flex-col flex-1 overflow-hidden${isAgentViewer ? ' p-10' : ''}`}>
             <ScrollArea className="flex flex-grow" ref={commentsContainerReference}>
                 <div className="flex flex-grow flex-col justify-end">
                     <div className="flex flex-col space-y-4">
@@ -95,31 +98,21 @@ export function TicketComments(properties: TicketCommentsInterface) {
 
                                 const commentContent = extractLatestEmailContent(comment.content);
 
-                                // Determine classes based on viewer and comment source
-                                const isAgentComment = comment.source === 'Agent';
-                                const isUserComment = comment.source === 'User';
+                                const isViewerComment =
+                                    (isAgentViewer && comment.source === SupportTicketCommentSource.Agent) ||
+                                    (isUserViewer && comment.source === SupportTicketCommentSource.User);
 
-                                const alignmentClasses = isAgentViewer
-                                    ? isAgentComment
-                                        ? 'justify-end items-end'
-                                        : 'justify-start items-start'
-                                    : isUserComment
+                                const isOtherComment = !isViewerComment;
+
+                                const alignmentClasses = isViewerComment
                                     ? 'justify-end items-end'
                                     : 'justify-start items-start';
 
-                                const textAlignmentClasses = isAgentViewer
-                                    ? isUserComment
-                                        ? 'ml-4 text-left'
-                                        : 'mr-4 text-right justify-end'
-                                    : isAgentComment
-                                        ? 'ml-4 text-left'
-                                        : 'mr-4 text-right';
+                                const textAlignmentClasses = isViewerComment
+                                    ? 'mr-4 text-right justify-end'
+                                    : 'ml-4 text-left';
 
-                                const backgroundColorClasses = isAgentViewer
-                                    ? isAgentComment
-                                        ? 'bg-blue text-light dark:bg-blue rounded-br-none'
-                                        : 'bg-light-1 dark:bg-dark-2 rounded-bl-none'
-                                    : isUserComment
+                                const backgroundColorClasses = isViewerComment
                                     ? 'bg-blue text-light dark:bg-blue rounded-br-none'
                                     : 'bg-light-1 dark:bg-dark-2 rounded-bl-none';
 
@@ -136,11 +129,11 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                             </div>
                                         )}
                                         <div className={`flex ${alignmentClasses}`}>
-                                            <div className="flex flex-col">
+                                            <div className={`flex flex-col${isViewerComment ? ' items-end' : ''}`}>
                                                 <div className={`flex gap-2 dark:neutral my-2 text-xs ${textAlignmentClasses}`}>
-                                                    {!(isUserViewer && isUserComment) && (
+                                                    {!(isUserViewer && comment.source === 'User') && (
                                                         <div className="flex gap-2 text-xs font-medium">
-                                                            {isUserComment ? (
+                                                            {comment.source === 'User' ? (
                                                                 <>{properties.userFullName ?? properties.userEmailAddress}</>
                                                             ) : (
                                                                 <>
@@ -176,7 +169,8 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                         </div>
                                         <CommentAttachments
                                             attachments={comment.attachments}
-                                            isAgent={isAgentComment}
+                                            viewer={properties.viewer}
+                                            commenter={comment.source}
                                             onImageClick={handleImageClick}
                                             globalAttachmentIndex={getGlobalAttachmentIndex}
                                         />
