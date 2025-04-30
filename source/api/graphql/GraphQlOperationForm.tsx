@@ -18,7 +18,7 @@ import Alert from '@structure/source/common/notifications/Alert';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - API
-import { useQuery, useMutation, ApolloError, DocumentNode, gql } from '@apollo/client';
+import { useQuery, useMutation, ApolloError, DocumentNode } from '@apollo/client';
 import {
     GraphQLOperationMetadata,
     GraphQLOperationParameterMetadata,
@@ -52,8 +52,29 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
 
     // Hooks
     const [mutation, mutationState] = useMutation(properties.operation.document);
+
+    // Create a minimal valid query document for when defaultValuesQuery is not provided
+    const noOpDocument = React.useMemo(
+        () =>
+            ({
+                kind: 'Document',
+                definitions: [
+                    {
+                        kind: 'OperationDefinition',
+                        operation: 'query',
+                        name: { kind: 'Name', value: 'NoOp' },
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [{ kind: 'Field', name: { kind: 'Name', value: '__typename' } }],
+                        },
+                    },
+                ],
+            }) as DocumentNode,
+        [],
+    );
+
     // Fetch default values if defaultValuesQuery is provided
-    const defaultValuesQueryState = useQuery(properties.defaultValuesQuery!.document, {
+    const defaultValuesQueryState = useQuery(properties.defaultValuesQuery?.document || noOpDocument, {
         skip: !properties.defaultValuesQuery,
         variables: properties.defaultValuesQuery?.variables,
     });
