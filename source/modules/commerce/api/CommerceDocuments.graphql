@@ -380,6 +380,10 @@ query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
                 subtotal # After discount
                 amount # Total amount billed to the card
             }
+            appliedDiscounts {
+                amount
+                code
+            }
             createdAt
         }
         ... on PublicCommerceOrder {
