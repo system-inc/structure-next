@@ -18,7 +18,7 @@ import {
     AccountPrivilegedDocument,
     AccountAccessRoleGrantPrivilegedDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
+import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities
 import { isEmailAddress } from '@structure/source/utilities/validation/Validation';

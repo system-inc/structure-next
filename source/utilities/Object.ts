@@ -51,25 +51,51 @@ export function getValueForKeyRecursively(object: Record<string, unknown>, key: 
     return undefined;
 }
 
+// Sets a value at a dotted path location in an object, creating the nested structure if needed
+export function setValueAtDottedPathInObject(object: Record<string, unknown>, keyPath: string[], value: unknown): void {
+    const lastKeyIndex = keyPath.length - 1;
+    let current = object;
+
+    // Navigate to the right nesting level
+    for(let i = 0; i < lastKeyIndex; ++i) {
+        const key = keyPath[i];
+        if(!key) continue; // Skip empty keys
+
+        // Create nested object if it doesn't exist
+        if(!(key in current)) {
+            current[key] = {};
+        }
+
+        // Need to assert that the value is an object we can navigate into
+        current = current[key] as Record<string, unknown>;
+    }
+
+    // Set the value at the final key
+    const lastKey = keyPath[lastKeyIndex];
+    if(lastKey) {
+        current[lastKey] = value;
+    }
+}
+
 // Function to check if two objects are equal
-export function isEqual(obj1: any, obj2: any): boolean {
+export function isEqual(objectA: any, objectB: any): boolean {
     // If both objects have different types or are null/undefined, they're not equal
-    if(typeof obj1 !== typeof obj2 || obj1 === null || obj2 === null) {
+    if(typeof objectA !== typeof objectB || objectA === null || objectB === null) {
         return false;
     }
 
     // Check for reference equality first (i.e., do the two variables point to the same object in memory?)
-    if(obj1 === obj2) {
+    if(objectA === objectB) {
         return true; // If they are the same object, they're equal
     }
 
     // If one of the objects is an array and both have values in them:
-    if(Array.isArray(obj1) && Array.isArray(obj2)) {
-        if(obj1.length !== obj2.length) {
+    if(Array.isArray(objectA) && Array.isArray(objectB)) {
+        if(objectA.length !== objectB.length) {
             return false;
         }
-        for(let i = 0; i < obj1.length; i++) {
-            if(!isEqual(obj1[i], obj2[i])) {
+        for(let i = 0; i < objectA.length; i++) {
+            if(!isEqual(objectA[i], objectB[i])) {
                 return false;
             }
         }
@@ -77,8 +103,8 @@ export function isEqual(obj1: any, obj2: any): boolean {
     }
 
     // If neither is an array, we can assume they are both objects
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
+    const keys1 = Object.keys(objectA);
+    const keys2 = Object.keys(objectB);
 
     // If the number of properties is different, they're not equal
     if(keys1.length !== keys2.length) {
@@ -87,11 +113,11 @@ export function isEqual(obj1: any, obj2: any): boolean {
 
     // Check each key in the first object against the corresponding value in the second object.
     for(const key of keys1) {
-        if(!(key in obj2)) {
+        if(!(key in objectB)) {
             return false; // If a key is missing, the objects are not equal
         }
-        const valueInObj1 = obj1[key];
-        const valueInObj2 = obj2[key];
+        const valueInObj1 = objectA[key];
+        const valueInObj2 = objectB[key];
 
         // Use our isEqual function to check each property recursively.
         if(!isEqual(valueInObj1, valueInObj2)) {
