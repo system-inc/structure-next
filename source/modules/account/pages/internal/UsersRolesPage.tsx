@@ -24,7 +24,7 @@ import {
     AccessRoleStatus,
     OrderByDirection,
 } from '@project/source/api/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
+import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities
 import { fullDate } from '@structure/source/utilities/Time';

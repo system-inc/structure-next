@@ -1,19 +1,35 @@
 // Dependencies - API
 import { ApolloError } from '@apollo/client';
 
-// Function to convert an Apollo error to a message
-export const apolloErrorToMessage = function (mutationError?: ApolloError) {
-    const errorObject = mutationError?.graphQLErrors;
+// Interface - GraphQlValidationErrorConstraint
+interface GraphQlValidationErrorConstraint {
+    [constraintKey: string]: string;
+}
 
+// Interface - GraphQlValidationError
+interface GraphQlValidationError {
+    property: string;
+    constraints: GraphQlValidationErrorConstraint;
+    value?: unknown;
+    children?: GraphQlValidationError[];
+}
+
+// Function to convert an Apollo error to a message
+export const apolloErrorToMessage = function (apolloError?: ApolloError) {
+    let errorMessage = 'Unknown error.';
+
+    // If we have an error
+    const errorObject = apolloError?.graphQLErrors;
     if(errorObject && errorObject.length > 0) {
         const error = errorObject[0];
 
         if(error) {
             if(error.extensions && error.extensions.validationErrors) {
-                const validationErrors = error.extensions.validationErrors as Array<any>;
+                const validationErrors = error.extensions.validationErrors as GraphQlValidationError[];
                 // console.log('validationErrors', validationErrors);
 
-                if(validationErrors.length > 0) {
+                // If we have a validation error
+                if(validationErrors[0]) {
                     const property = validationErrors[0].property;
                     const constraints = validationErrors[0].constraints;
 
@@ -21,8 +37,7 @@ export const apolloErrorToMessage = function (mutationError?: ApolloError) {
                         const constraintKey = Object.keys(constraints)[0];
                         if(constraintKey) {
                             // const constraintValue = constraints[constraintKey];
-
-                            return `Invalid ${property}.`;
+                            errorMessage = `Invalid ${property}.`;
                         }
                     }
                 }
@@ -32,5 +47,5 @@ export const apolloErrorToMessage = function (mutationError?: ApolloError) {
         }
     }
 
-    return 'Unknown error.';
+    return errorMessage;
 };

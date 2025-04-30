@@ -19,13 +19,13 @@ import {
     AccountProfileUpdateDocument,
     AccountProfileUsernameValidateDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
+import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities
 import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
 
 // Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+// import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 
 // Component - UsernameForm
 export function UsernameForm() {

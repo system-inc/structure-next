@@ -1,71 +1,89 @@
-// 'use client'; // This component uses client-only features
-
 // Dependencies - React and Next.js
 import React from 'react';
 
 // Dependencies - Main Components
-import GraphQlMutationForm from '@structure/source/api/graphql/GraphQlMutationForm';
-import Alert from '@structure/source/common/notifications/Alert';
+import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
+import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - API
-import { WaitListEntryCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { WaitListEntryCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+
+// Type for validation error
+interface ValidationError {
+    constraints?: {
+        isUnique?: boolean;
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+}
 
 // Component - WaitListForm
 export interface WaitListFormInterface {}
 export function WaitListForm() {
+    // Message state to display custom message
+    const [formMessage, setFormMessage] = React.useState<React.ReactNode | null>(null);
+
     // Render the component
     return (
-        <GraphQlMutationForm
-            mutationDocument={WaitListEntryCreateDocument}
-            className="relative w-full max-w-[380px]"
-            description={<p className="font-light">Enter your email to register for early access.</p>}
-            buttonProperties={{
-                className: 'w-full',
-                children: 'Register for Early Access',
-            }}
-            onSubmit={async function (formValues: any, data: any, error: any) {
-                // Prepare the message
-                let message = null;
+        <>
+            {formMessage && <div className="mb-4">{formMessage}</div>}
+            <GraphQlOperationForm
+                operation={WaitListEntryCreateOperation}
+                className="relative w-full max-w-[380px]"
+                description={<p className="font-light">Enter your email to register for early access.</p>}
+                buttonProperties={{
+                    className: 'w-full',
+                    children: 'Register for Early Access',
+                }}
+                onSubmit={async function (formValues, mutationResponseData, mutationResponseError) {
+                    // Prepare the message
+                    let message = null;
 
-                // If there has been an error
-                if(error) {
-                    if(error.graphQLErrors[0]?.extensions?.validationErrors[0]?.constraints?.isUnique) {
-                        message = (
-                            <Alert icon={CheckCircledIcon} title={<b>Already Signed Up</b>}>
-                                <b>{formValues.emailAddress}</b> is already signed up! Please check your spam folder if
-                                you haven&apos;t received the confirmation email yet.
-                            </Alert>
-                        );
+                    // If there has been an error
+                    if(mutationResponseError) {
+                        // Check for unique constraint error
+                        const graphQLError = mutationResponseError.graphQLErrors?.[0];
+                        const extensions = graphQLError?.extensions as Record<string, unknown> | undefined;
+                        const validationErrors = extensions?.validationErrors as ValidationError[] | undefined;
+                        const isUniqueConstraint = validationErrors?.[0]?.constraints?.isUnique;
+
+                        // If the error is a unique constraint error, the email is already signed up
+                        if(isUniqueConstraint) {
+                            message = (
+                                <Alert icon={CheckCircledIcon} title={<b>Already Signed Up</b>}>
+                                    <b>{formValues.emailAddress}</b> is already signed up! Please check your spam folder
+                                    if you haven&apos;t received the confirmation email yet.
+                                </Alert>
+                            );
+                        }
+                        // If there's been another error
+                        else {
+                            message = (
+                                <Alert variant="error" title="Error">
+                                    There&apos;s been an error: {mutationResponseError.message}.
+                                </Alert>
+                            );
+                        }
                     }
-                    // If there's been another error
+                    // If there was no error
                     else {
                         message = (
-                            <Alert variant="error" title="Error">
-                                There&apos;s been an error: {error.message}.
+                            <Alert icon={CheckCircledIcon} title={<b>Signed Up!</b>}>
+                                Thank you for signing up! You will receive a confirmation email at{' '}
+                                <b>{formValues.emailAddress}</b> soon.
                             </Alert>
                         );
                     }
-                }
-                // If there was no error
-                else {
-                    message = (
-                        <Alert icon={CheckCircledIcon} title={<b>Signed Up!</b>}>
-                            Thank you for signing up! You will receive a confirmation email at{' '}
-                            <b>{formValues.emailAddress}</b> soon.
-                        </Alert>
-                    );
-                }
 
-                return {
-                    success: !error,
-                    message: message,
-                };
-            }}
-            resetOnSubmitSuccess={true}
-        />
+                    // Set the message in state to display it
+                    setFormMessage(message);
+                }}
+                resetOnSubmitSuccess={true}
+            />
+        </>
     );
 }
 

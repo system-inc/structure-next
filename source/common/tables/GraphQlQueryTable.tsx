@@ -15,7 +15,7 @@ import { useQuery, ApolloError, TypedDocumentNode } from '@apollo/client';
 import { flattenObject } from '@structure/source/utilities/Object';
 import { titleCase } from '@structure/source/utilities/String';
 
-// Component - GraphQlMutationForm
+// Component - GraphQlQueryTable
 export interface GraphQlQueryTableInterface<VariableType>
     extends Omit<TableInterface, 'columns' | 'rows' | 'pagination'> {
     queryDocument: TypedDocumentNode<any, VariableType>;
