@@ -75,6 +75,8 @@ export async function GraphQlFormSubmissionHandler<
     TGraphQlMutationResponseData,
     TGraphQlMutationVariables
 >): Promise<FormSubmitResponseInterface> {
+    console.log('formValues in GraphQlFormSubmissionHandler:', formValues);
+
     // Variables to store the mutation response data and error
     let mutationResponseData: TGraphQlMutationResponseData | null = null;
     let mutationResponseError: ApolloError | null = null;
@@ -84,6 +86,9 @@ export async function GraphQlFormSubmissionHandler<
 
     // Invoke the GraphQL mutation
     try {
+        // Debug log to see what's being sent
+        console.log('mutationVariables:', JSON.stringify(mutationVariables, null, 4));
+
         const mutationResponse = await mutationFunction({
             variables: mutationVariables,
         });
