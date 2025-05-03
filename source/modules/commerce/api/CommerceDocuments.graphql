@@ -547,6 +547,10 @@ query CommerceOrder($orderIdentifier: String!) {
                 amount # Total amount billed to the card
             }
             createdAt
+            appliedDiscounts {
+                amount
+                code
+            }
         }
         ... on PublicCommerceOrder {
             identifier
