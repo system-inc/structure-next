@@ -12,6 +12,7 @@ import {
 } from '@structure/source/common/forms/Form';
 import { FormInputReferenceInterface } from '@structure/source/common/forms/FormInput';
 import { Alert } from '@structure/source/common/notifications/Alert';
+import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
 import { useQuery, useMutation, ApolloError, DocumentNode } from '@apollo/client';
@@ -19,8 +20,11 @@ import { GraphQLOperationMetadata } from '@project/source/api/GraphQlGeneratedCo
 
 // Dependencies - Utilities
 import { generateFormInputs } from '@structure/source/api/graphql/forms/GraphQlFormUtilities';
-import { extractGraphQlFormInputMetadataFromGraphQlParameters } from '@structure/source/api/graphql/forms/GraphQlFormUtilities';
-import { GraphQlFormSubmissionHandler } from '@structure/source/api/graphql/forms/GraphQlFormSubmissionHandler';
+import { extractGraphQlFormInputMetadataArrayFromGraphQlParameterMetadataArray } from '@structure/source/api/graphql/forms/GraphQlFormUtilities';
+import {
+    GraphQlFormSubmissionHandler,
+    convertFormValuesToGraphQlMutationVariables,
+} from '@structure/source/api/graphql/forms/GraphQlFormSubmissionHandler';
 
 // Type - FormInputsProperties
 export interface FormInputsProperties {
@@ -56,10 +60,13 @@ export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'form
         mutationResponseData: unknown,
         mutationResponseError: ApolloError | null,
     ) => void | Promise<void>;
+    showPreviewGraphQlMutationButton?: boolean;
 }
 export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) {
     // State
     const [defaultValues, setDefaultValues] = React.useState<Record<string, unknown> | null>(null);
+    const [previewFormValues, setPreviewFormValues] = React.useState<FormValuesInterface>({});
+    const [isPreviewGraphQlMutationShown, setIsPreviewGraphQlMutationShown] = React.useState(false);
 
     // References
     const formInputsReferencesMap = React.useRef(new Map<string, FormInputReferenceInterface>()).current;
@@ -87,13 +94,13 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
     const formInputs = React.useMemo(
         function () {
             // Generate the input metadata array from the operation parameters
-            const inputMetadataArray = extractGraphQlFormInputMetadataFromGraphQlParameters(
+            const graphQlFormInputMetadataArray = extractGraphQlFormInputMetadataArrayFromGraphQlParameterMetadataArray(
                 properties.operation.parameters,
             );
 
             // Generate the form inputs
             return generateFormInputs(
-                inputMetadataArray,
+                graphQlFormInputMetadataArray,
                 formInputsReferencesMap,
                 defaultValues,
                 properties.inputComponentsProperties,
@@ -102,16 +109,45 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
         [properties.operation.parameters, properties.inputComponentsProperties, defaultValues, formInputsReferencesMap],
     );
 
+    // Handle preview button click
+    const handlePreviewGraphQlMutationClick = React.useCallback(
+        function () {
+            // Collect current form values
+            const currentFormValues: FormValuesInterface = {};
+            formInputsReferencesMap.forEach(function (reference, id) {
+                currentFormValues[id] = reference.getValue();
+            });
+
+            // Log the form values being used for preview
+            console.log('Form values used for preview:', currentFormValues);
+
+            setPreviewFormValues(currentFormValues);
+            setIsPreviewGraphQlMutationShown(true);
+        },
+        [formInputsReferencesMap],
+    );
+
     // Handle form submission
     const handleSubmit = React.useCallback(
         async function (formValues: FormValuesInterface): Promise<FormSubmitResponseInterface> {
+            // Debug the raw form values that are sent directly from the form
+            console.log('Form values from form submission:', JSON.stringify(formValues));
+
+            // Collect current form values
+            // Ideally we do not do this and the form values should just be passed in here
+            const currentFormValues: FormValuesInterface = {};
+            formInputsReferencesMap.forEach(function (reference, id) {
+                currentFormValues[id] = reference.getValue();
+            });
+
+            // Use the form values directly for submission
             return GraphQlFormSubmissionHandler({
-                formValues,
+                formValues: currentFormValues,
                 mutationFunction: mutation,
                 onSubmit: properties.onSubmit,
             });
         },
-        [mutation, properties.onSubmit],
+        [mutation, properties.onSubmit, formInputsReferencesMap],
     );
 
     // Render the component
@@ -131,6 +167,22 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) 
                 formInputs={formInputs}
                 onSubmit={handleSubmit}
             />
+
+            {/* Preview Button */}
+            {properties.showPreviewGraphQlMutationButton && (
+                <Button className="mt-4" onClick={handlePreviewGraphQlMutationClick}>
+                    Preview GraphQL Mutation
+                </Button>
+            )}
+
+            {/* GraphQL Operation Preview Alert */}
+            {isPreviewGraphQlMutationShown && (
+                <div>
+                    <pre className="rounded p-2 text-xs">
+                        {JSON.stringify(convertFormValuesToGraphQlMutationVariables(previewFormValues), null, 4)}
+                    </pre>
+                </div>
+            )}
         </>
     );
 }

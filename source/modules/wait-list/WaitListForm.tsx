@@ -11,14 +11,8 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 // Dependencies - API
 import { WaitListEntryCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
 
-// Type for validation error
-interface ValidationError {
-    constraints?: {
-        isUnique?: boolean;
-        [key: string]: unknown;
-    };
-    [key: string]: unknown;
-}
+// Dependencies - API
+import { isUniqueConstraintError } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Component - WaitListForm
 export interface WaitListFormInterface {}
@@ -44,14 +38,8 @@ export function WaitListForm() {
 
                     // If there has been an error
                     if(mutationResponseError) {
-                        // Check for unique constraint error
-                        const graphQLError = mutationResponseError.graphQLErrors?.[0];
-                        const extensions = graphQLError?.extensions as Record<string, unknown> | undefined;
-                        const validationErrors = extensions?.validationErrors as ValidationError[] | undefined;
-                        const isUniqueConstraint = validationErrors?.[0]?.constraints?.isUnique;
-
                         // If the error is a unique constraint error, the email is already signed up
-                        if(isUniqueConstraint) {
+                        if(isUniqueConstraintError(mutationResponseError)) {
                             message = (
                                 <Alert icon={CheckCircledIcon} title={<b>Already Signed Up</b>}>
                                     <b>{formValues.emailAddress}</b> is already signed up! Please check your spam folder
