@@ -1,18 +1,6 @@
 // Dependencies - API
 import { ApolloError } from '@apollo/client';
-
-// Interface - GraphQlValidationErrorConstraint
-interface GraphQlValidationErrorConstraint {
-    [constraintKey: string]: string;
-}
-
-// Interface - GraphQlValidationError
-interface GraphQlValidationError {
-    property: string;
-    constraints: GraphQlValidationErrorConstraint;
-    value?: unknown;
-    children?: GraphQlValidationError[];
-}
+import { extractValidationErrorsFromApolloError } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Function to convert an Apollo error to a message
 export const apolloErrorToMessage = function (apolloError?: ApolloError) {
@@ -24,21 +12,18 @@ export const apolloErrorToMessage = function (apolloError?: ApolloError) {
         const error = errorObject[0];
 
         if(error) {
-            if(error.extensions && error.extensions.validationErrors) {
-                const validationErrors = error.extensions.validationErrors as GraphQlValidationError[];
-                // console.log('validationErrors', validationErrors);
+            const validationErrors = extractValidationErrorsFromApolloError(apolloError);
 
-                // If we have a validation error
-                if(validationErrors[0]) {
-                    const property = validationErrors[0].property;
-                    const constraints = validationErrors[0].constraints;
+            // If we have validation errors
+            if(validationErrors && validationErrors[0]) {
+                const property = validationErrors[0].property;
+                const constraints = validationErrors[0].constraints;
 
-                    if(property && constraints) {
-                        const constraintKey = Object.keys(constraints)[0];
-                        if(constraintKey) {
-                            // const constraintValue = constraints[constraintKey];
-                            errorMessage = `Invalid ${property}.`;
-                        }
+                if(property && constraints) {
+                    const constraintKey = Object.keys(constraints)[0];
+                    if(constraintKey) {
+                        // const constraintValue = constraints[constraintKey];
+                        errorMessage = `Invalid ${property}.`;
                     }
                 }
             }
