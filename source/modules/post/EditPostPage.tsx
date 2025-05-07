@@ -8,7 +8,7 @@ import React from 'react';
 // import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
 // import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
 // import { PostControls } from '@structure/source/modules/post/controls/PostControls';
-import { GraphQlOperationForm } from '@structure/source/api/graphql/GraphQlOperationForm';
+import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 

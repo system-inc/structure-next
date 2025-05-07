@@ -1,36 +1,43 @@
 // Dependencies - API
 import { ApolloError } from '@apollo/client';
 
-// Function to convert an Apollo error to a message
-export const apolloErrorToMessage = function (mutationError?: ApolloError) {
-    const errorObject = mutationError?.graphQLErrors;
+// Interface - GraphQL Validation Error
+export interface GraphQLValidationError {
+    property?: string;
+    constraints?: GraphQLValidationErrorConstraint;
+    value?: unknown;
+    children?: GraphQLValidationError[];
+    [key: string]: unknown;
+}
 
-    if(errorObject && errorObject.length > 0) {
-        const error = errorObject[0];
+// Interface - GraphQL Validation Error Constraint
+export interface GraphQLValidationErrorConstraint {
+    isUnique?: boolean;
+    [constraintKey: string]: unknown;
+}
 
-        if(error) {
-            if(error.extensions && error.extensions.validationErrors) {
-                const validationErrors = error.extensions.validationErrors as Array<any>;
-                // console.log('validationErrors', validationErrors);
+// Interface - GraphQL Error Extensions
+export interface GraphQLErrorExtensions {
+    code?: string;
+    validationErrors?: GraphQLValidationError[];
+    exception?: {
+        stacktrace?: string[];
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+}
 
-                if(validationErrors.length > 0) {
-                    const property = validationErrors[0].property;
-                    const constraints = validationErrors[0].constraints;
+// Function to extract validation errors from an ApolloError
+export function extractValidationErrorsFromApolloError(
+    apolloError?: ApolloError,
+): GraphQLValidationError[] | undefined {
+    const graphQlError = apolloError?.graphQLErrors?.[0];
+    const extensions = graphQlError?.extensions as GraphQLErrorExtensions | undefined;
+    return extensions?.validationErrors;
+}
 
-                    if(property && constraints) {
-                        const constraintKey = Object.keys(constraints)[0];
-                        if(constraintKey) {
-                            // const constraintValue = constraints[constraintKey];
-
-                            return `Invalid ${property}.`;
-                        }
-                    }
-                }
-            }
-
-            return error.message;
-        }
-    }
-
-    return 'Unknown error.';
-};
+// Function to check if the error is a unique constraint error
+export function isUniqueConstraintError(error?: ApolloError): boolean {
+    const validationErrors = extractValidationErrorsFromApolloError(error);
+    return !!validationErrors?.[0]?.constraints?.isUnique;
+}

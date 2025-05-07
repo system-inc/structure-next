@@ -21,7 +21,7 @@ import {
     AccountDeletePrivilegedDocument,
     OrderByDirection,
 } from '@project/source/api/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/graphql/GraphQlUtilities';
+import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities
 import { iso8601Date, timeAgo } from '@structure/source/utilities/Time';
@@ -56,12 +56,12 @@ export function UsersPage() {
     const router = useRouter();
     const pathname = useUrlPath();
     const urlSearchParameters = useUrlSearchParameters();
-    
+
     // Get pagination parameters from URL
     const page = parseInt(urlSearchParameters?.get('page') as string) || 1;
     const defaultItemsPerPage = 10;
     const itemsPerPage = parseInt(urlSearchParameters?.get('itemsPerPage') as string) || defaultItemsPerPage;
-    
+
     const [totalUsers, setTotalUsers] = React.useState<number>(0);
     const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
     const [selectedUser, setSelectedUser] = React.useState<{ emailAddress: string; username: string } | null>(null);
@@ -102,11 +102,11 @@ export function UsersPage() {
     async function handlePaginationChange(newItemsPerPage: number, newPage: number) {
         // Create new URLSearchParams
         const newUrlSearchParams = new URLSearchParams(urlSearchParameters?.toString() || '');
-        
+
         // Update the parameters
         newUrlSearchParams.set('page', newPage.toString());
         newUrlSearchParams.set('itemsPerPage', newItemsPerPage.toString());
-        
+
         // Navigate to the new URL with updated parameters
         router.push(`${pathname}?${newUrlSearchParams.toString()}`);
     }
