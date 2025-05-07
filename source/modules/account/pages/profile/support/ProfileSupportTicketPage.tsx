@@ -14,56 +14,70 @@ import {
     ColumnFilterConditionOperator,
     ProfileSupportTicketDocument,
     SupportTicketStatus,
+    SupportTicketCommentSource,
+    SupportTicketCommentCreateInput,
 } from '@project/source/api/GraphQlGeneratedCode';
 
+// Dependencies - Hooks
+import { useProfileSupportTicket } from './hooks/useProfileSupportTicket';
+
 interface ProfileSupportTicketPageInterface {
-    ticketId: string;
+    ticketIdentifier: string;
 }
-const ProfileSupportTicketPage = ({ ticketId }: ProfileSupportTicketPageInterface) => {
+const ProfileSupportTicketPage = (properties: ProfileSupportTicketPageInterface) => {
 
-    const pagination = {
-        itemsPerPage: 1,
-        filters: [{
-            column: 'identifier',
-            operator: ColumnFilterConditionOperator.Equal,
-            value: ticketId,
-        }],
-    }
+    const {
+        ticketQuery,
+        createComment,
+        refetchTicket,
+    } = useProfileSupportTicket(properties.ticketIdentifier)
 
-    const { data } = useQuery(ProfileSupportTicketDocument, {
-        variables: { pagination },
-        // fetchPolicy: 'cache-and-network',
-        // notifyOnNetworkStatusChange: true,
-        // Poll every minute
-        pollInterval: 60000,
-    })
+    const ticket = ticketQuery.data?.supportTickets.items[0];
+    
+    const handleTicketCommentCreate = React.useCallback(
+        async function (input: SupportTicketCommentCreateInput) {
+            await createComment({
+                variables: {
+                    input,
+                },
+            });
+        },
+        [createComment]
+    );
 
-    const ticket = data?.supportTickets?.items[0];
 
     if (!ticket) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div className="relative h-full">
+        <div className="flex flex-col flex-1 min-h-0">
+
+            {/* Header */}
             <div className="flex items-center gap-4 mb-8">
                 <h2 className="text-xl font-medium">{ticket.title}</h2>
                 <Badge variant={ticket.status === SupportTicketStatus.Open ? 'success' : 'info'} size="md" className="whitespace-nowrap">
                     {ticket.status}
                 </Badge>
             </div>
+
+            {/* Scrollable comments */}
             <TicketComments
                 userEmailAddress={ticket.userEmailAddress}
                 comments={ticket.comments}
-                viewer="User"
+                viewer={SupportTicketCommentSource.User}
             />
-            <ProfileSupportTicketMessageForm
-                ticketIdentifier={ticket.identifier}
-                comments={ticket.comments}
-                onTicketCommentCreate={(input) => {
-                    console.log("TICKET COMMENT CREATE", input);
-                }}
-            />
+            
+            {/* Text input form */}
+            <div className="mt-10">
+                <ProfileSupportTicketMessageForm
+                    ticketIdentifier={ticket.identifier}
+                    comments={ticket.comments}
+                    onTicketCommentCreate={createComment}
+                    refetch={refetchTicket}
+                />
+            </div>
+            
         </div>
     )
 }
