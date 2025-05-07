@@ -188,7 +188,7 @@ export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicket
                     onSaveFiles={handleSaveFiles}
                     onRemoveFile={handleRemoveFile}
                     isDisabled={isSubmitting}
-                    showLoading={isSubmitting}
+                    isSubmitting={isSubmitting}
                     shouldReset={shouldResetEditor}
                     onResetComplete={() => setShouldResetEditor(false)}
                 />

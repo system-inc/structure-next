@@ -117,7 +117,7 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                     : 'bg-light-1 dark:bg-dark-2 rounded-bl-none';
 
                                 return (
-                                    <div key={comment.id}>
+                                    <div key={comment.id} className={index === comments.length - 1 ? 'pb-2' : ''}>
                                         {shouldRenderDate && (
                                             <div className={`flex justify-center text-xs font-medium ${index !== 0 && 'mt-6'}`}>
                                                 {messageDate}
