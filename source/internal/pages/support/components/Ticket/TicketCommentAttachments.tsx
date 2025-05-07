@@ -7,14 +7,15 @@ import Image from 'next/image';
 // Dependencies - Main Components
 import { isImageFile } from '@structure/source/utilities/File';
 
+// Dependencies - Assets
+import { FilePdf, FileText } from '@phosphor-icons/react';
+
 // Dependencies - API
 import {
     SupportTicketsPrivilegedQuery,
     SupportTicketCommentSource,
 } from '@project/source/api/GraphQlGeneratedCode';
-
-// Dependencies - Assets
-import { FilePdf } from '@phosphor-icons/react';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - CommentAttachments
 export interface CommentAttachmentsInterface {
@@ -65,11 +66,18 @@ export function CommentAttachments({
                             </div>
                         ) : (
                             <div
-                                className="flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg border border-opsis-border-primary bg-white p-4 text-center"
-                                onClick={() => window.open(attachment.url, '_blank')}
+                                className={mergeClassNames([
+                                    'flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg',
+                                    'bg-white dark:bg-dark-3 border border-opsis-border-primary shadow-01',
+                                    'p-4 text-center',
+                                ])}
                             >
-                                <FilePdf className="size-5 text-[--global-red-600]" weight="fill" />
-                                <p className="mt-2 truncate text-xs text-black">{attachment.type}</p>
+                                {attachment.url.includes('.pdf') ? (
+                                    <FilePdf className="size-5 text-[--global-red-600]" />
+                                ) : attachment.url.includes('.json') ? (
+                                    <FileText className="size-5 text-[--global-grey-600]" />
+                                ) : null}
+                                <span className="text-sm truncate max-w-[120px]">{attachment.type}</span>
                             </div>
                         )}
                     </div>
