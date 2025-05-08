@@ -163,11 +163,11 @@ export function OrderPage(properties: OrderPageProperties) {
                         <div>
                             <div className="font-medium">Email</div>
                             <div>{order.emailAddress}</div>
-                            {order.beneficiaryEmailAddress && (
+                            {/* {order.beneficiaryEmailAddress && (
                                 <div className="text-neutral-500 mt-1 text-sm">
                                     Beneficiary: {order.beneficiaryEmailAddress}
                                 </div>
-                            )}
+                            )} */}
                         </div>
                         {order.shippingInfo?.shippingAddress && (
                             <div>

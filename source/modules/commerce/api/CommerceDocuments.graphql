@@ -380,6 +380,10 @@ query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
                 subtotal # After discount
                 amount # Total amount billed to the card
             }
+            appliedDiscounts {
+                amount
+                code
+            }
             createdAt
         }
         ... on PublicCommerceOrder {
@@ -543,6 +547,10 @@ query CommerceOrder($orderIdentifier: String!) {
                 amount # Total amount billed to the card
             }
             createdAt
+            appliedDiscounts {
+                amount
+                code
+            }
         }
         ... on PublicCommerceOrder {
             identifier
@@ -580,7 +588,7 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
     commerceOrdersPrivileged(pagination: $pagination) {
         items {
             # batchIdentifier
-            beneficiaryEmailAddress
+            # beneficiaryEmailAddress
             # checkoutSessionId
             createdAt
             # discounts {
