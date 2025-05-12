@@ -3,7 +3,6 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import { Metadata } from 'next';
-import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 // Dependencies - Main Components
@@ -19,6 +18,9 @@ import {
     formatDateToDayOfWeekAndDate,
     // formatDateToDateAtTime,
 } from '@structure/source/utilities/Time';
+
+// Dependencies - URL State
+import { useQueryState, parseAsStringEnum } from 'nuqs';
 
 // Dependencies - API
 import {
@@ -51,14 +53,13 @@ const emptyPaginationResult: PaginationSupportTicketResult = {
 
 // Component - ProfileSupportPage
 export function ProfileSupportPage() {
-    // Hooks
-    const searchParams = useSearchParams();
-    const router = useRouter();
+    const { ticketsQuery } = useProfileSupportTickets({
+        openTicketsPage: 1,
+        closedTicketsPage: 1,
+    });
 
-    const { ticketsQuery } = useProfileSupportTickets(1, 1);
-
-    const [selectedStatus, setSelectedStatus] = React.useState<string | null>(
-        searchParams.get('status') || SupportTicketStatus.Open,
+    const [selectedStatus] = useQueryState<SupportTicketStatus>('status',
+        parseAsStringEnum<SupportTicketStatus>(Object.values(SupportTicketStatus)).withDefault(SupportTicketStatus.Open)
     );
     const [_supportTickets, _setSupportTickets] = React.useState<{
         openTickets: ProfileSupportTicketsQuery['openTickets']['items'];
@@ -84,24 +85,6 @@ export function ProfileSupportPage() {
             setClosedTickets(closedTicketResult);
         },
         [ticketsQuery.data],
-    );
-
-    React.useEffect(
-        function () {
-            const statusParam = searchParams.get('status');
-            if(!statusParam) {
-                // If no status param, set it to 'open' and update the URL
-                const newSearchParams = new URLSearchParams(window.location.search);
-                newSearchParams.set('status', 'open');
-                router.replace(`?${newSearchParams.toString()}`);
-                setSelectedStatus(SupportTicketStatus.Open);
-            }
-            else {
-                // If status param exists, set the selectedStatus
-                setSelectedStatus(statusParam);
-            }
-        },
-        [searchParams, router],
     );
 
     if(ticketsQuery.loading) {
