@@ -12,14 +12,7 @@ import { BorderContainer } from '../BorderContainer';
 import { SupportTicketAccountAndCommerceOrdersPrivelegedQuery } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import {
-    ArrowLeft,
-    Bag,
-    CaretRight,
-    Copy,
-    HouseLine,
-    MoneyWavy,
-} from '@phosphor-icons/react';
+import { ArrowLeft, Bag, CaretRight, Copy, HouseLine, MoneyWavy } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { formatDateToShortDateWithTime } from '@structure/source/utilities/Time';
@@ -29,7 +22,7 @@ import { useSpring, animated, easings } from '@react-spring/web';
 
 // Component - CustomerSelectedOrder
 export interface CustomerSelectedOrderInterface {
-    order?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['commerceOrdersPrivileged']['items'][0]
+    order?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['commerceOrdersPrivileged']['items'][0];
     onClose: () => void;
 }
 export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrderInterface) {
@@ -50,7 +43,7 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
         },
         onRest: () => {
             // Clear the local order only when the panel is fully hidden
-            if (!isVisible) {
+            if(!isVisible) {
                 setLocalOrder(undefined);
                 onClose();
             }
@@ -59,10 +52,11 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
 
     // Effect to update visibility and local order when `order` changes
     React.useEffect(() => {
-        if (order) {
+        if(order) {
             setLocalOrder(order); // Update local order when a new order is provided
             setIsVisible(true); // Show the panel
-        } else {
+        }
+        else {
             setIsVisible(false); // Hide the panel
         }
     }, [order]);
@@ -71,7 +65,7 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
     return (
         <animated.div
             style={{ ...panelStyles }}
-            className="fixed top-0 right-0 w-[390px] h-[calc(100vh-3.5rem)] mt-14 flex flex-col bg-opsis-background-primary border-l border-light-3 dark:border-dark-3"
+            className="fixed right-0 top-0 mt-14 flex h-[calc(100vh-3.5rem)] w-[390px] flex-col border-l border-light-3 bg-opsis-background-primary dark:border-dark-3"
         >
             <BorderContainer>
                 <Button
@@ -82,109 +76,63 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
             </BorderContainer>
             {localOrder && (
                 <>
-                    <div className="flex flex-col gap-2 px-4 py-6 border-b">
-                        <div className="text-neutral-500 font-medium">
-                            Order {localOrder.id}
-                        </div>
+                    <div className="flex flex-col gap-2 border-b px-4 py-6">
+                        <div className="text-neutral-500 font-medium">Order {localOrder.id}</div>
                         <div className="flex gap-2">
-                            <Badge
-                                variant="success"
-                                size="sm"
-                            >
+                            <Badge variant="success" size="large">
                                 Paid
                             </Badge>
-                            <Badge
-                                variant="info"
-                                size="sm"
-                            >
+                            <Badge variant="info" size="large">
                                 Unfulfilled
                             </Badge>
                         </div>
-                        <div className="flex gap-2 mt-4">
-                            <Button
-                                variant="light"
-                                icon={Copy}
-                                iconPosition="left"
-                            >
+                        <div className="mt-4 flex gap-2">
+                            <Button variant="light" icon={Copy} iconPosition="left">
                                 Duplicate
                             </Button>
-                            <Button
-                                variant="light"
-                                icon={MoneyWavy}
-                                iconPosition="left"
-                            >
+                            <Button variant="light" icon={MoneyWavy} iconPosition="left">
                                 Refund
                             </Button>
-                            <Button
-                                variant="light"
-                            >
-                                Cancel
-                            </Button>
+                            <Button variant="light">Cancel</Button>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 px-4 py-6 border-b">
+                    <div className="flex flex-col gap-2 border-b px-4 py-6">
                         <div className="flex flex-row gap-4">
-                            <span className="font-regular">
-                                Created at
-                            </span>
+                            <span className="font-regular">Created at</span>
                             <span className="font-regular">
                                 {formatDateToShortDateWithTime(new Date(localOrder.createdAt))}
                             </span>
                         </div>
                         <div className="flex flex-row gap-4">
-                            <span className="font-regular">
-                                Total
-                            </span>
-                            <span className="font-regular">
-                                $320
-                            </span>
+                            <span className="font-regular">Total</span>
+                            <span className="font-regular">$320</span>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 px-4 py-6 border-b">
-                        <div className="flex gap-2 items-center mb-4">
+                    <div className="flex flex-col gap-2 border-b px-4 py-6">
+                        <div className="mb-4 flex items-center gap-2">
                             <div className="relative h-4 w-4">
                                 <HouseLine />
                             </div>
-                            <span className="font-regular">
-                                Shipping Address
-                            </span>
+                            <span className="font-regular">Shipping Address</span>
                         </div>
                         <div className="grid grid-cols-[90px_1fr] gap-2">
-                            <span className="font-regular">
-                                Name
-                            </span>
-                            <span className="font-regular">
-                                Anakin Skywalker
-                            </span>
-                            <span className="font-regular">
-                                City
-                            </span>
-                            <span className="font-regular">
-                                Wroclaw
-                            </span>
-                            <span className="font-regular">
-                                Street
-                            </span>
-                            <span className="font-regular">
-                                Komedy 26/24
-                            </span>
-                            <span className="font-regular">
-                                Code
-                            </span>
-                            <span className="font-regular">
-                                22-424
-                            </span>
+                            <span className="font-regular">Name</span>
+                            <span className="font-regular">Anakin Skywalker</span>
+                            <span className="font-regular">City</span>
+                            <span className="font-regular">Wroclaw</span>
+                            <span className="font-regular">Street</span>
+                            <span className="font-regular">Komedy 26/24</span>
+                            <span className="font-regular">Code</span>
+                            <span className="font-regular">22-424</span>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 px-4 py-6 border-b">
-                        <div className="flex justify-between items-center">
-                            <div className="flex gap-2 items-center">
+                    <div className="flex flex-col gap-2 border-b px-4 py-6">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
                                 <div className="relative h-4 w-4">
                                     <Bag />
                                 </div>
-                                <span className="font-regular">
-                                    Detailed Bag
-                                </span>
+                                <span className="font-regular">Detailed Bag</span>
                             </div>
                             <div className="relative h-4 w-4">
                                 <CaretRight />

@@ -106,18 +106,18 @@ export function validationObjectFromGraphQlValidationArray(
     return undefined;
 }
 
-// Function to extract GraphQlFormInputMetadata from GraphQLOperationParameterMetadata
-export function extractGraphQlFormInputMetadataFromGraphQlParameters(
-    parameters?: readonly GraphQLOperationParameterMetadata[],
+// Function to extract GraphQlFormInputMetadataArray from GraphQLOperationParameterMetadata
+export function extractGraphQlFormInputMetadataArrayFromGraphQlParameterMetadataArray(
+    graphQLOperationParameterMetadataArray?: readonly GraphQLOperationParameterMetadata[],
     parentParameter: string = '',
 ): GraphQlFormInputMetadata[] {
     // The input meta data
     const inputMetadata: GraphQlFormInputMetadata[] = [];
 
     // If we have parameters
-    if(parameters) {
+    if(graphQLOperationParameterMetadataArray) {
         // Loop through the parameters
-        for(const parameter of parameters) {
+        for(const parameter of graphQLOperationParameterMetadataArray) {
             // If the parameter is an object
             if(parameter.kind === 'object') {
                 // Get the fields as input metadata
