@@ -18,11 +18,11 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
-    AccountAssignedAccessRolesPrivilegedDocument,
-    AccountAssignedAccessRolesPrivilegedQuery,
-    AccountAccessRoleRevokePrivilegedDocument,
     AccessRoleStatus,
     OrderByDirection,
+    AccountAccessRoleAssignmentsPrivilegedDocument,
+    AccountAccessRoleAssignmentRevokePrivilegedDocument,
+    AccountAccessRoleAssignmentsPrivilegedQuery,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
@@ -33,11 +33,16 @@ import { fullDate } from '@structure/source/utilities/Time';
 export function UsersRolesPage() {
     // State
     const [revokeDialogOpen, setRevokeDialogOpen] = React.useState(false);
-    const [selectedRole, setSelectedRole] = React.useState<{ id: string; type: string; username: string } | null>(null);
+    const [selectedRole, setSelectedRole] = React.useState<{
+        id: string;
+        type: string;
+        username: string;
+        emailAddress: string;
+    } | null>(null);
     const [revokeSuccess, setRevokeSuccess] = React.useState(false);
 
     // Hooks
-    const assignedRolesQueryState = useQuery(AccountAssignedAccessRolesPrivilegedDocument, {
+    const assignedRolesQueryState = useQuery(AccountAccessRoleAssignmentsPrivilegedDocument, {
         variables: {
             statuses: [AccessRoleStatus.Active],
             pagination: {
@@ -51,7 +56,7 @@ export function UsersRolesPage() {
             },
         },
     });
-    const [revokeMutation, revokeMutationState] = useMutation(AccountAccessRoleRevokePrivilegedDocument);
+    const [revokeMutation, revokeMutationState] = useMutation(AccountAccessRoleAssignmentRevokePrivilegedDocument);
 
     // Function to handle role revocation
     async function handleRevokeConfirm() {
@@ -61,12 +66,14 @@ export function UsersRolesPage() {
             const result = await revokeMutation({
                 variables: {
                     input: {
-                        accessRoleId: selectedRole.id,
+                        accessRole: selectedRole.type,
+                        emailAddress: selectedRole.emailAddress,
+                        username: selectedRole.username,
                     },
                 },
             });
 
-            if(result.data?.accountAccessRoleRevokePrivileged.success) {
+            if(result.data?.accountAccessRoleAssignmentRevokePrivileged.success) {
                 setRevokeSuccess(true);
                 // Refresh the roles list
                 await assignedRolesQueryState.refetch();
@@ -84,24 +91,24 @@ export function UsersRolesPage() {
         setRevokeSuccess(false);
     }
 
-    // Utility function to group roles by type
-    function groupRolesByType(
-        accessRoles: AccountAssignedAccessRolesPrivilegedQuery['accountAssignedAccessRolesPrivileged']['items'],
+    // Utility function to group role assignments by type
+    function groupAssignmentsByType(
+        accessRoleAssignments: AccountAccessRoleAssignmentsPrivilegedQuery['accountAccessRoleAssignmentsPrivileged']['items'],
     ) {
-        return accessRoles.reduce(
+        return accessRoleAssignments.reduce(
             (
                 groups: {
                     [
                         key: string
-                    ]: AccountAssignedAccessRolesPrivilegedQuery['accountAssignedAccessRolesPrivileged']['items'];
+                    ]: AccountAccessRoleAssignmentsPrivilegedQuery['accountAccessRoleAssignmentsPrivileged']['items'];
                 },
-                accessRole,
+                accessRoleAssignment,
             ) => {
-                const type = accessRole.type;
+                const type = accessRoleAssignment.accessRole.type;
                 if(!groups[type]) {
                     groups[type] = [];
                 }
-                groups[type].push(accessRole);
+                groups[type].push(accessRoleAssignment);
                 return groups;
             },
             {},
@@ -147,11 +154,11 @@ export function UsersRolesPage() {
                     )}
 
                     {/* Roles List Grouped by Type */}
-                    {assignedRolesQueryState.data?.accountAssignedAccessRolesPrivileged && (
+                    {assignedRolesQueryState.data?.accountAccessRoleAssignmentsPrivileged && (
                         <div className="space-y-8">
                             {Object.entries(
-                                groupRolesByType(
-                                    assignedRolesQueryState.data.accountAssignedAccessRolesPrivileged.items,
+                                groupAssignmentsByType(
+                                    assignedRolesQueryState.data.accountAccessRoleAssignmentsPrivileged.items,
                                 ),
                             ).map(([type, roles]) => (
                                 <div key={type} className="space-y-4">
@@ -200,7 +207,8 @@ export function UsersRolesPage() {
                                                         onClick={() => {
                                                             setSelectedRole({
                                                                 id: role.id,
-                                                                type: role.type,
+                                                                type: role.accessRole.type,
+                                                                emailAddress: role.emailAddress || '',
                                                                 username: role.profile?.username || '',
                                                             });
                                                             setRevokeDialogOpen(true);
@@ -238,8 +246,9 @@ export function UsersRolesPage() {
                                                     onClick={() => {
                                                         setSelectedRole({
                                                             id: role.id,
-                                                            type: role.type,
+                                                            type: role.accessRole.type,
                                                             username: role.profile?.username || '',
+                                                            emailAddress: role.emailAddress || '',
                                                         });
                                                         setRevokeDialogOpen(true);
                                                     }}

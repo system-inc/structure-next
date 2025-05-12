@@ -283,16 +283,24 @@ query AccountProfilePublic($username: String!) {
 }
 
 # Account Available Access Roles Privileged Query
-query AccountAvailableAccessRolesPrivileged {
-    accountAvailableAccessRolesPrivileged
+query AccountAccessRolesPrivileged {
+    accountAccessRolesPrivileged {
+        id
+        type
+        description
+    }
 }
 
 # Account Assigned Access Roles Privileged Query
-query AccountAssignedAccessRolesPrivileged($statuses: [AccessRoleStatus!], $pagination: PaginationInput!) {
-    accountAssignedAccessRolesPrivileged(statuses: $statuses, pagination: $pagination) {
+query AccountAccessRoleAssignmentsPrivileged($statuses: [AccessRoleStatus!], $pagination: PaginationInput!) {
+    accountAccessRoleAssignmentsPrivileged(statuses: $statuses, pagination: $pagination) {
         items {
             id
-            type
+            accessRole {
+                id
+                type
+                description
+            }
             status
             emailAddress
             profile {
@@ -321,17 +329,21 @@ query AccountAssignedAccessRolesPrivileged($statuses: [AccessRoleStatus!], $pagi
 }
 
 # Account Access Role Revoke Privileged Mutation
-mutation AccountAccessRoleRevokePrivileged($input: AccountAccessRoleRevokeInput!) {
-    accountAccessRoleRevokePrivileged(input: $input) {
+mutation AccountAccessRoleAssignmentRevokePrivileged($input: AccessRoleAssignmentRevokeInput!) {
+    accountAccessRoleAssignmentRevokePrivileged(input: $input) {
         success
     }
 }
 
-# Account Access Role Grant Priveleged Mutation
-mutation AccountAccessRoleGrantPrivileged($input: AccountAccessRoleGrantInput!) {
-    accountAccessRoleGrantPrivileged(input: $input) {
+# Account Access Role Create Privileged Mutation
+mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
+    accountAccessRoleAssignmentCreatePrivileged(input: $input) {
         id
-        type
+        accessRole {
+            id
+            type
+            description
+        }
         status
         profile {
             username
