@@ -89,6 +89,18 @@ export function iso8601Date(date: Date) {
     return date.toISOString().split('T')[0];
 }
 
+// Function to convert a date object into the format 2020-01-12 12:30 PM
+export function iso8601DateWithTime(date: Date) {
+    return (
+        date.toISOString().split('T')[0] +
+        ' ' +
+        date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+        })
+    );
+}
+
 // Function to convert a date object into January 2024
 export function monthYear(date: Date) {
     return date.toLocaleDateString('en-US', {
