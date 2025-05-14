@@ -434,6 +434,11 @@ query CommerceOrders($pagination: PaginationInput!) {
             }
             priceInfo {
                 amount
+                originalSubtotal
+            }
+            appliedDiscounts {
+                amount
+                code
             }
             updatedAt
             createdAt
