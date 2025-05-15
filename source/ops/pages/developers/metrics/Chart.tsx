@@ -542,8 +542,9 @@ export const Chart = ({
         return (
             dataSourcesWithMetrics
                 // First, we need to flatten the data
-                .flatMap((element) =>
-                    element.metrics.data.map((data: [string, number]) => {
+                .flatMap((element) => {
+                    const metricsData = element.metrics?.data as Array<[string, number]> | undefined;
+                    return (metricsData || []).map((data) => {
                         const formattedData = {} as {
                             [k: string]: number | string | undefined;
                             metricIndex: string | undefined;
@@ -555,14 +556,13 @@ export const Chart = ({
                         formattedData.metricIndex = data[0];
 
                         return formattedData;
-                    }),
-                )
+                    });
+                })
+
                 // Combine all data points with the same metricIndex
                 .reduce(
                     (accumulator, currentValue) => {
-                        const index = accumulator.findIndex(
-                            (data) => data.metricIndex === currentValue.metricIndex,
-                        );
+                        const index = accumulator.findIndex((data) => data.metricIndex === currentValue.metricIndex);
                         if(index === -1) {
                             return [...accumulator, currentValue];
                         }
@@ -615,7 +615,10 @@ export const Chart = ({
                     }
 
                     if(onMouseDown) {
-                        onMouseDown(chartEvent, mouseEvent);
+                        onMouseDown(
+                            chartEvent as unknown as React.MouseEvent,
+                            mouseEvent as unknown as React.MouseEvent,
+                        );
                     }
                 }}
                 onMouseMove={function (chartEvent) {
@@ -687,7 +690,8 @@ export const Chart = ({
                                 strokeWidth:
                                     chartType === 'bar'
                                         ? (wrapperDimensions.width - 90) /
-                                          (dataSourcesWithMetrics[0]?.metrics.data.length ?? 1)
+                                          ((dataSourcesWithMetrics[0]?.metrics?.data as Array<unknown> | undefined)
+                                              ?.length ?? 1)
                                         : 1,
                             }}
                             content={(values) => {
@@ -726,7 +730,11 @@ export const Chart = ({
                                                                 className="h-4 w-4 rounded-extra-small border"
                                                             />
                                                         </td>
-                                                        {tooltipColumn(timeInterval, payload)}
+                                                        {tooltipColumn(timeInterval, {
+                                                            dataKey: payload.dataKey?.toString(),
+                                                            color: payload.color,
+                                                            value: payload.value as number | undefined,
+                                                        })}
                                                     </tr>
                                                 ))}
                                             </tbody>

@@ -19,7 +19,7 @@ export interface MenuItemInterface extends Omit<ButtonInterface, 'content'> {
     content?: React.ReactNode;
     highlighted?: boolean;
     selected?: boolean;
-    onSelected?: (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: any) => void;
+    onSelected?: (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: React.SyntheticEvent) => void;
     closeMenuOnSelected?: boolean; // Used anytime the Menu is closable (e.g., in a popover or context menu)
 }
 export const MenuItem = React.memo(

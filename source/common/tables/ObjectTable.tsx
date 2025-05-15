@@ -12,6 +12,7 @@ import { titleCase } from '@structure/source/utilities/String';
 // Component - Table
 export interface ObjectTableInterface extends Omit<TableInterface, 'columns' | 'rows'> {
     object: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: any;
     };
 }
@@ -79,6 +80,7 @@ export function ObjectTable(properties: ObjectTableInterface) {
     // If the object is an array of objects
     if(isArrayOfSimilarObjects) {
         // Add a row for each object
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         properties.object.forEach(function (item: any, itemIndex: number) {
             const row: TableRowInterface = {
                 cells: [],

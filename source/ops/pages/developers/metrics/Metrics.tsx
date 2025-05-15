@@ -251,8 +251,8 @@ export function Metrics() {
     // Fill in missing zeroes for each metric
     const dataSourcesWithMetricsFilledWithZeroes = sortedDataSourcesWithMetrics.map((data) => {
         const filledInMetricData = fillMissingIntervalValuesWithZeroes(
-            data.metrics.timeInterval,
-            data.metrics.data,
+            data.metrics.timeInterval as TimeInterval,
+            data.metrics.data as [string, number][],
             startTime,
             endTime,
         );
@@ -965,7 +965,7 @@ export function Metrics() {
                     onMouseDown={function (chartEvent, mouseEvent) {
                         console.log('chartEvent', chartEvent);
                         console.log('mouseEvent', mouseEvent);
-                        setChartActiveLabel(chartEvent.activeLabel);
+                        setChartActiveLabel((chartEvent as unknown as { activeLabel: string }).activeLabel);
                     }}
                 />
             </ContextMenu>
