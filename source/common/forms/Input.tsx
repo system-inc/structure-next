@@ -1,6 +1,8 @@
 // Interface - InputReference
 export interface InputReferenceInterface {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getValue: () => any | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setValue: (value: any, event?: any) => void;
     focus: () => void;
     click?: () => void;
@@ -9,6 +11,7 @@ export interface InputReferenceInterface {
 // Interface - InputInterface
 export interface InputInterface {
     className?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     defaultValue?: any;
     required?: boolean;
     disabled?: boolean;
@@ -18,6 +21,8 @@ export interface InputInterface {
     focus?: () => void;
 
     // Events
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange?: (value: any | undefined, event?: any) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onBlur?: (value: any | undefined, event?: any) => void;
 }

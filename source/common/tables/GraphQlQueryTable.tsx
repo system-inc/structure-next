@@ -18,7 +18,9 @@ import { titleCase } from '@structure/source/utilities/String';
 // Component - GraphQlQueryTable
 export interface GraphQlQueryTableInterface<VariableType>
     extends Omit<TableInterface, 'columns' | 'rows' | 'pagination'> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     queryDocument: TypedDocumentNode<any, VariableType>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     variables?: any;
     skip?: boolean;
     pagination?: {
@@ -64,6 +66,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
     // First, loop through the data and see if there is a property that has an items property
     // If there is, then we will use that items property for our table, otherwise, we use nothing
     const data = Object.keys(queryState.data || {}).flatMap(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (key) => queryState.data[key].items?.map((item: any) => flattenObject({ ...item })) ?? [],
     );
     // console.log('data', data);
@@ -169,8 +172,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
                           },
                       });
                       //   console.log('fetchMore resolved');
-                  }
-                  catch {
+                  } catch {
                       //   console.error('fetchMore failed');
                   }
               },

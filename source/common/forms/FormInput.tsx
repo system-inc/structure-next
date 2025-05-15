@@ -54,6 +54,7 @@ export const FormInputSizes = {
 
 // Type - Form Input Reference
 export interface FormInputReferenceInterface extends InputReferenceInterface {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     validate: (value: any) => ValidationResult | Promise<ValidationResult | undefined | void> | undefined | void;
 }
 
@@ -73,6 +74,7 @@ export interface FormInputInterface extends InputInterface {
 
     // Validation
     validate?: (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value: any,
         concurrentValidationResult?: ValidationResult,
     ) => Promise<ValidationResult | undefined | void> | ValidationResult | undefined | void;

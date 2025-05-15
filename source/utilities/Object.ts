@@ -1,11 +1,11 @@
 // Function to flatten an object
-export function flattenObject(object: any, parentKey = '', result: any = {}): any {
+export function flattenObject(object: Record<string, unknown>, parentKey = '', result: Record<string, unknown> = {}): Record<string, unknown> {
     for(const key in object) {
         if(Object.prototype.hasOwnProperty.call(object, key)) {
             const newKey = parentKey ? `${parentKey}-${key}` : key;
 
             if(typeof object[key] === 'object' && object[key] !== null && !Array.isArray(object[key])) {
-                flattenObject(object[key], newKey, result);
+                flattenObject(object[key] as Record<string, unknown>, newKey, result);
             }
             else {
                 result[newKey] = object[key];
@@ -16,15 +16,26 @@ export function flattenObject(object: any, parentKey = '', result: any = {}): an
 }
 
 // Function to merge two objects deeply
-export function mergeDeep<T extends Record<string, any>>(original: T, updates: Partial<T> | Record<string, any>): T {
-    const result: any = { ...original };
+export function mergeDeep<T extends Record<string, unknown>>(original: T, updates: Partial<T> | Record<string, unknown>): T {
+    const result = { ...original } as T;
 
     for(const key in updates) {
         if(typeof updates[key] === 'object' && original[key]) {
-            result[key] = mergeDeep(original[key], updates[key] ?? {});
+            // Use type assertion to fix the index access issue
+            const keyAsString = key as string;
+            Reflect.set(
+                result, 
+                keyAsString, 
+                mergeDeep(
+                    original[keyAsString] as Record<string, unknown>, 
+                    (updates[keyAsString] ?? {}) as Record<string, unknown>
+                )
+            );
         }
         else {
-            result[key] = updates[key];
+            // Use type assertion to fix the index access issue
+            const keyAsString = key as string;
+            Reflect.set(result, keyAsString, updates[keyAsString]);
         }
     }
 
@@ -78,7 +89,7 @@ export function setValueAtDottedPathInObject(object: Record<string, unknown>, ke
 }
 
 // Function to check if two objects are equal
-export function isEqual(objectA: any, objectB: any): boolean {
+export function isEqual(objectA: unknown, objectB: unknown): boolean {
     // If both objects have different types or are null/undefined, they're not equal
     if(typeof objectA !== typeof objectB || objectA === null || objectB === null) {
         return false;
@@ -102,29 +113,37 @@ export function isEqual(objectA: any, objectB: any): boolean {
         return true;
     }
 
-    // If neither is an array, we can assume they are both objects
-    const keys1 = Object.keys(objectA);
-    const keys2 = Object.keys(objectB);
+    // If neither is an array but both are objects (excluding null which was checked earlier)
+    if(typeof objectA === 'object' && typeof objectB === 'object') {
+        const objectATyped = objectA as Record<string, unknown>;
+        const objectBTyped = objectB as Record<string, unknown>;
+        
+        const keys1 = Object.keys(objectATyped);
+        const keys2 = Object.keys(objectBTyped);
 
-    // If the number of properties is different, they're not equal
-    if(keys1.length !== keys2.length) {
-        return false;
-    }
-
-    // Check each key in the first object against the corresponding value in the second object.
-    for(const key of keys1) {
-        if(!(key in objectB)) {
-            return false; // If a key is missing, the objects are not equal
-        }
-        const valueInObj1 = objectA[key];
-        const valueInObj2 = objectB[key];
-
-        // Use our isEqual function to check each property recursively.
-        if(!isEqual(valueInObj1, valueInObj2)) {
+        // If the number of properties is different, they're not equal
+        if(keys1.length !== keys2.length) {
             return false;
         }
+
+        // Check each key in the first object against the corresponding value in the second object.
+        for(const key of keys1) {
+            if(!(key in objectBTyped)) {
+                return false; // If a key is missing, the objects are not equal
+            }
+            const valueInObj1 = objectATyped[key];
+            const valueInObj2 = objectBTyped[key];
+
+            // Use our isEqual function to check each property recursively.
+            if(!isEqual(valueInObj1, valueInObj2)) {
+                return false;
+            }
+        }
+
+        // If we've reached this point, it means all the properties in both objects were equal
+        return true;
     }
 
-    // If we've reached this point, it means all the properties in both objects were equal
-    return true;
+    // For primitive types, the strict equality check above already returned true if they were equal
+    return false;
 }

@@ -10,7 +10,7 @@ import { ResolvingMetadata } from 'next';
 export function getUrlPathFromMetadata(metadata: ResolvingMetadata): string | undefined {
     const result = Object.getOwnPropertySymbols(metadata || {})
         .map(function (propertySymbol) {
-            return metadata[propertySymbol];
+            return Reflect.get(metadata, propertySymbol);
         })
         .find(function (state) {
             return state && Object.prototype.hasOwnProperty.call(state, 'urlPathname');

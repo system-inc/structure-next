@@ -726,15 +726,15 @@ export class ValidationSchema {
     }
 
     toJson() {
-        const object: Record<string, unknown> = {};
+        const object: Record<string, Record<string, unknown>> = {};
 
         // Loop over the validation rule instances
         for(const validationRuleInstance of this.validationRuleInstances) {
-            object[validationRuleInstance.validationRule.identifier] = {};
+            const identifier = validationRuleInstance.validationRule.identifier;
+            object[identifier] = {};
             // object[validationRuleInstance.validationRule.identifier] = validationRuleInstance.validationRule;
             if(validationRuleInstance.validationRule.parameters) {
-                object[validationRuleInstance.validationRule.identifier].parameters =
-                    validationRuleInstance.validationRule.parameters;
+                object[identifier].parameters = validationRuleInstance.validationRule.parameters;
             }
         }
 

@@ -65,7 +65,8 @@ export function TableCell(properties: TableCellInterface) {
             typeof properties.value == 'string' &&
             properties.value.length == 36
         ) {
-            let url = properties.column?.meta?.url;
+            const meta = properties.column?.meta as Record<string, string> | undefined;
+            let url = meta?.url;
             if(url) {
                 url += properties.value;
             }

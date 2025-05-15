@@ -66,10 +66,14 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
     const propertiesOnItemSelected = properties.onItemSelected;
     const propertiesCloseOnItemSelected = properties.closeOnItemSelected;
     const onItemSelectedIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: any) {
+        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: React.SyntheticEvent) {
             // Call the onSelected callback
             if(propertiesOnItemSelected) {
-                propertiesOnItemSelected(menuItem, menuItemRenderIndex, event);
+                propertiesOnItemSelected(
+                    menuItem,
+                    menuItemRenderIndex,
+                    event as unknown as React.MouseEvent<HTMLElement, MouseEvent>,
+                );
             }
 
             // Close the popover if closePopoverOnSelect is true

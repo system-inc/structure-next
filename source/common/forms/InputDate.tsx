@@ -19,6 +19,7 @@ import { format, startOfToday } from 'date-fns';
 // Interface - InputDateReference
 export interface InputDateReferenceInterface {
     getValue: () => Date | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setValue: (value?: Date, event?: any) => void;
     focus: () => void;
 }
