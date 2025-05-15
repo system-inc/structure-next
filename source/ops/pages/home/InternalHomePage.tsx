@@ -217,7 +217,7 @@ export function InternalHomePage() {
 
                         // TODO: Move this to the right file
                         const characters = '234567CDFGHJKLMNPQRTVWXYZ';
-                        function getLuhnCheckDigit(partialIdentifier: { [x: string]: any }) {
+                        function getLuhnCheckDigit(partialIdentifier: Record<string, string | number>) {
                             // Create a mapping of characters to their index values
                             const valueMapping = characters
                                 .split('')

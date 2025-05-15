@@ -23,7 +23,11 @@ const NoStructureProjectImportsRule = {
         const isInBaseLibrary = normalizedPath.includes('/libraries/structure/');
 
         // Whitelist specific imports
-        const whitelistedImports = ['@project/ProjectSettings'];
+        const whitelistedImports = [
+            '@project/ProjectSettings',
+            '@project/source/theme/styles/theme.css',
+            '@project/tailwind.config'
+        ];
 
         return {
             ImportDeclaration(node) {

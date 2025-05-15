@@ -16,7 +16,7 @@ export class ValidationSchema {
     private validationRuleInstances: ValidationRuleInstance[] = [];
 
     // Validate the rule instances and return a validation result
-    async validate(value: any) {
+    async validate(value: unknown) {
         // Create the validation result
         const validationResult: ValidationResult = {
             value: value,
@@ -57,7 +57,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -107,7 +107,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -157,7 +157,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -210,7 +210,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Throw an exception if the value is not a string
                 if(typeof value !== 'string') {
                     throw new Error('Value is not a string.');
@@ -276,7 +276,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Throw an exception if the value is not a string
                 if(typeof value !== 'string') {
                     throw new Error('Value is not a string.');
@@ -339,7 +339,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Throw an exception if the value is not a string
                 if(typeof value !== 'string') {
                     throw new Error('Value is not a string.');
@@ -401,7 +401,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Throw an exception if the value is not a string
                 if(typeof value !== 'string') {
                     throw new Error('Value is not a string.');
@@ -469,7 +469,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Throw an exception if the value is not a string
                 if(typeof value !== 'string') {
                     throw new Error('Value is not a string.');
@@ -546,7 +546,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: function (value: any) {
+            validate: function (value: unknown) {
                 // Throw an exception if the value is not a string
                 if(typeof value !== 'string') {
                     throw new Error('Value is not a string.');
@@ -633,8 +633,8 @@ export class ValidationSchema {
     // GraphQL query
     graphQlQuery(
         validateGraphQlQueryDocument: DocumentNode,
-        variables: (value: any) => any,
-        skip?: (value: any) => boolean,
+        variables: (value: unknown) => Record<string, unknown>,
+        skip?: (value: unknown) => boolean,
     ) {
         // Create the validation rule
         const validationRule: ValidationRule = {
@@ -645,7 +645,7 @@ export class ValidationSchema {
         // Add the validation rule instance
         this.validationRuleInstances.push({
             validationRule: validationRule,
-            validate: async function (value: any) {
+            validate: async function (value: unknown) {
                 // Create the validation result
                 const validationResult: ValidationResult = {
                     value: value,
@@ -726,7 +726,7 @@ export class ValidationSchema {
     }
 
     toJson() {
-        const object: any = {};
+        const object: Record<string, unknown> = {};
 
         // Loop over the validation rule instances
         for(const validationRuleInstance of this.validationRuleInstances) {
