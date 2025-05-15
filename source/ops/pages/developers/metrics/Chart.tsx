@@ -496,7 +496,7 @@ const tooltipHeaderColumn = (timeInterval: string, label: string) => {
 };
 
 // Component - TooltipColumn
-const tooltipColumn = (timeInterval: string, payload: any) => {
+const tooltipColumn = (timeInterval: string, payload: { dataKey?: string; color?: string; value?: number }) => {
     const columnTitle = payload.dataKey?.toString().split('-').slice(1).join(' ').replace('total', '');
 
     return (
@@ -519,7 +519,7 @@ export interface ChartInterface {
     sortOrder: string;
     handleReferenceAreaSelection: (left: string, right: string) => void;
     errorMessage?: string;
-    onMouseDown?: (chartEvent: any, mouseEvent: any) => void;
+    onMouseDown?: (chartEvent: React.MouseEvent, mouseEvent: React.MouseEvent) => void;
 }
 export const Chart = ({
     dataSourcesWithMetrics,
@@ -543,7 +543,7 @@ export const Chart = ({
             dataSourcesWithMetrics
                 // First, we need to flatten the data
                 .flatMap((element) =>
-                    element.metrics.data.map((data: any) => {
+                    element.metrics.data.map((data: [string, number]) => {
                         const formattedData = {} as {
                             [k: string]: number | string | undefined;
                             metricIndex: string | undefined;
@@ -561,7 +561,7 @@ export const Chart = ({
                 .reduce(
                     (accumulator, currentValue) => {
                         const index = accumulator.findIndex(
-                            (data: any) => data.metricIndex === currentValue.metricIndex,
+                            (data) => data.metricIndex === currentValue.metricIndex,
                         );
                         if(index === -1) {
                             return [...accumulator, currentValue];
@@ -575,7 +575,7 @@ export const Chart = ({
                     [] as { [k: string]: number | string | undefined; metricIndex: string | undefined }[],
                 )
                 // Sort the data by the metricIndex
-                .sort((a: any, b: any) => {
+                .sort((a, b) => {
                     if(a.metricIndex === undefined || b.metricIndex === undefined) return 1;
 
                     // sort based on sortOrder
@@ -618,7 +618,7 @@ export const Chart = ({
                         onMouseDown(chartEvent, mouseEvent);
                     }
                 }}
-                onMouseMove={function (chartEvent, mouseEvent) {
+                onMouseMove={function (chartEvent) {
                     // console.log("onMouseMove", event);
 
                     // If the reference area left is set, set the reference area right
@@ -736,7 +736,7 @@ export const Chart = ({
                             }}
                         />
                         {/* Render the bars or lines */}
-                        {dataSourcesWithMetrics.map((dataSourceWithMetrics, index) => {
+                        {dataSourcesWithMetrics.map((dataSourceWithMetrics) => {
                             // console.log("index", index, "rendering", dataSourceWithMetrics);
 
                             switch(chartType) {
@@ -813,7 +813,7 @@ export const Chart = ({
                     dataKey="metricIndex"
                     className="text-sm"
                     interval={timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
-                    tickFormatter={(value: any, index: number) => {
+                    tickFormatter={(value: string, index: number) => {
                         return tickFormatter(
                             'primary',
                             timeInterval,
@@ -835,7 +835,7 @@ export const Chart = ({
                         dataKey="metricIndex"
                         className="text-sm"
                         interval={timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
-                        tickFormatter={(value: any, index: number) => {
+                        tickFormatter={(value: string, index: number) => {
                             return tickFormatter(
                                 'secondary',
                                 timeInterval,

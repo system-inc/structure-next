@@ -27,7 +27,7 @@ export function CustomerOrdersList(properties: CustomerOrdersListInterface) {
 
     return (
         <ScrollArea className="flex-grow py-1">
-            {!!properties.orders?.length ? (
+            {properties.orders?.length ? (
                 <>
                     {properties.orders?.map((order) => (
                         <div

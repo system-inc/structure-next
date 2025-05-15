@@ -24,7 +24,7 @@ export interface ValidationSuccess {
 
 // Type - ValidationResult
 export type ValidationResult = {
-    value: any;
+    value: unknown;
     valid: boolean;
     errors: ValidationError[];
     successes: ValidationSuccess[];
@@ -33,7 +33,7 @@ export type ValidationResult = {
 // Type - ValidationRuleInstance
 export type ValidationRuleInstance = {
     validationRule: ValidationRule;
-    validate: (value: any) => ValidationResult | Promise<ValidationResult>;
+    validate: (value: unknown) => ValidationResult | Promise<ValidationResult>;
 };
 
 // Function to merge n-number of validation results

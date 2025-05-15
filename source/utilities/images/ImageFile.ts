@@ -280,8 +280,8 @@ export async function cropImage(
     // If cropArea is provided by react-advanced-cropper, it might have different property names
     // We need to normalize them to our expected format
     const normalizedCropArea: CropArea = {
-        x: 'left' in cropArea ? (cropArea as any).left : cropArea.x,
-        y: 'top' in cropArea ? (cropArea as any).top : cropArea.y,
+        x: 'left' in cropArea ? (cropArea as { left: number }).left : cropArea.x,
+        y: 'top' in cropArea ? (cropArea as { top: number }).top : cropArea.y,
         width: cropArea.width,
         height: cropArea.height,
     };
