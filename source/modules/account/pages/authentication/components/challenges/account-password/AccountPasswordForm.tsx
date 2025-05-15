@@ -13,7 +13,7 @@ import { useMutation } from '@apollo/client';
 import {
     AccountAuthenticationPasswordVerifyDocument,
     AccountAuthenticationQuery,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 // import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';

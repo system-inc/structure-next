@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import Badge from '@project/source/ui/base/Badge';
+import Badge from '@structure/source/common/notifications/Badge';
 import { AccountSupportTicketStatusTabs } from './components/AccountSupportTicketStatusTabs';
 
 // Dependencies - Hooks
@@ -25,7 +25,7 @@ import {
     SupportTicketStatus,
     ProfileSupportTicketsQuery,
     PaginationSupportTicketResult,
-} from '@project/source/api/graphql';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import { ArrowRight, Smiley } from '@phosphor-icons/react';
@@ -60,13 +60,13 @@ export function ProfileSupportPage() {
     const [selectedStatus, setSelectedStatus] = React.useState<string | null>(
         searchParams.get('status') || SupportTicketStatus.Open,
     );
-    const [_supportTickets, _setSupportTickets] = React.useState<{
-        openTickets: ProfileSupportTicketsQuery['openTickets']['items'];
-        closedTickets: ProfileSupportTicketsQuery['closedTickets']['items'];
-    }>({
-        openTickets: ticketsQuery.data?.openTickets?.items || [],
-        closedTickets: ticketsQuery.data?.closedTickets?.items || [],
-    });
+    // const [_supportTickets, _setSupportTickets] = React.useState<{
+    //     openTickets: ProfileSupportTicketsQuery['openTickets']['items'];
+    //     closedTickets: ProfileSupportTicketsQuery['closedTickets']['items'];
+    // }>({
+    //     openTickets: ticketsQuery.data?.openTickets?.items || [],
+    //     closedTickets: ticketsQuery.data?.closedTickets?.items || [],
+    // });
     const [openTickets, setOpenTickets] = React.useState<ProfileSupportTicketsQuery['openTickets']>({
         ...emptyPaginationResult,
     });
@@ -179,17 +179,17 @@ const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardInterface)
                     <h2 className="m-0 text-base font-medium">{properties.ticket.title}</h2>
                 </div>
                 <div className="mb-2 flex items-center justify-start gap-2">
-                    <span className="text-sm text-opsis-content-secondary">
+                    <span className="text-opsis-content-secondary text-sm">
                         Placed {formatDateToDayOfWeekAndDate(new Date(properties.ticket.createdAt))}
                     </span>
                     <span>&bull;</span>
-                    <span className="text-sm text-opsis-content-secondary">ID: {properties.ticket.identifier}</span>
+                    <span className="text-opsis-content-secondary text-sm">ID: {properties.ticket.identifier}</span>
                     {/* <span>&bull;</span>
                     <span className="text-sm text-opsis-content-secondary">
                         Updated: {formatDateToDateAtTime(new Date(properties.ticket.updatedAt))}
                     </span> */}
                 </div>
-                <p className="truncate text-sm text-opsis-content-secondary">{commentContent}</p>
+                <p className="text-opsis-content-secondary truncate text-sm">{commentContent}</p>
             </div>
         </Link>
     );

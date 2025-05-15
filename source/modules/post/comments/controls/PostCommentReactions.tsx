@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 // import { PostCommentReactionsType } from '@structure/source/modules/post/Post';
-import { PostReaction } from '@structure/source/modules/post/controls/PostReaction';
+// import { PostReaction } from '@structure/source/modules/post/controls/PostReaction';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
 // Dependencies - React and Next.js
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixAccordion from '@radix-ui/react-accordion';
@@ -30,14 +30,17 @@ export interface AccordionInterface {
 }
 export function Accordion(properties: AccordionInterface) {
     // State
-    const [items, setItems] = useState(
-        properties.items.map((item) => ({
-            title: item.title,
-            identifier: item.identifier,
-            content: item.content,
-            expanded: item.expanded || false,
-            height: 0,
-        })),
+    const items = React.useMemo(
+        function() {
+            return properties.items.map((item) => ({
+                title: item.title,
+                identifier: item.identifier,
+                content: item.content,
+                expanded: item.expanded || false,
+                height: 0,
+            }));
+        },
+        [properties.items]
     );
 
     // Defaults

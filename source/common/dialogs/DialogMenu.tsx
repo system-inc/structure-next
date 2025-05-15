@@ -64,7 +64,7 @@ export function DialogMenu(properties: DialogMenuInterface) {
                 <Menu
                     {...properties}
                     className={mergeClassNames('max-h-[30vh]', properties.className)}
-                    onItemSelected={function (item, itemIndex) {
+                    onItemSelected={function () {
                         setOpen(false);
                     }}
                 />

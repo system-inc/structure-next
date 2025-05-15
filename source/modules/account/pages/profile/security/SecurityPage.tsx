@@ -10,7 +10,7 @@ import { ManagePasswordDialog } from '@structure/source/modules/account/pages/pr
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { AccountEnrolledChallengesDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountEnrolledChallengesDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {

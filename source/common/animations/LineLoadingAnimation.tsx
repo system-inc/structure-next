@@ -9,7 +9,7 @@ import { useSpring, animated, easings } from '@react-spring/web';
 
 // Component - LineLoadingAnimation
 export interface LineLoadingAnimationProperties {}
-export function LineLoadingAnimation(properties: LineLoadingAnimationProperties) {
+export function LineLoadingAnimation() {
     // The percentage of the bar that is filled
     const [progressPercentage, setProgressPercentage] = React.useState(0.5);
 

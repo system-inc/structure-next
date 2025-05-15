@@ -84,7 +84,7 @@ export function ObjectTable(properties: ObjectTableInterface) {
                 cells: [],
             };
 
-            columns.forEach(function (column, columnIndex) {
+            columns.forEach(function (column) {
                 let value = item[column.identifier];
                 if(column.identifier === 'index') {
                     value = String(itemIndex);

@@ -8,7 +8,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { EmailVerificationVerifyForm } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationVerifyForm';
 
 // Dependencies - API
-import { AccountAuthenticationQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - EmailVerificationChallenge
 export interface EmailVerificationChallengeInterface {

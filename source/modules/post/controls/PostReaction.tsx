@@ -12,7 +12,7 @@ import {
     PostReactionProfilesDocument,
     PostReactionCreateDocument,
     PostReactionDeleteDocument,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

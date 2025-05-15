@@ -12,7 +12,7 @@ import { EngagementContainer } from '@structure/source/modules/engagement/Engage
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { EngagementEventCreateDocument, DeviceOrientation } from '@project/source/api/GraphQlGeneratedCode';
+import { EngagementEventCreateDocument, DeviceOrientation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/String';

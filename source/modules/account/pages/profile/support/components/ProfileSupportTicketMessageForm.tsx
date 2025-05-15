@@ -1,7 +1,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - 
+// Dependencies -
 import { useForm } from 'react-hook-form';
 import { object, string, minLength, pipe, InferOutput } from 'valibot';
 import { valibotResolver } from '@hookform/resolvers/valibot';
@@ -14,18 +14,14 @@ import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextA
 // Dependencies - API
 import {
     SupportTicketsPrivilegedQuery,
-    SupportTicketCommentCreateInput
-} from '@project/source/api/GraphQlGeneratedCode';
+    SupportTicketCommentCreateInput,
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Define valibot schema
 const TicketMessageFormSchema = object({
-    reply: pipe(
-        string('Reply is required.'),
-        minLength(1, 'Reply cannot be empty.')
-    ),
+    reply: pipe(string('Reply is required.'), minLength(1, 'Reply cannot be empty.')),
 });
 type TicketMessageFormValues = InferOutput<typeof TicketMessageFormSchema>;
-
 
 // Component - ProfileSupportTicketMessageForm
 export interface ProfileSupportTicketMessageFormInterface {
@@ -37,14 +33,19 @@ export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicket
     // Properties
     const { ticketIdentifier, comments } = properties;
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<TicketMessageFormValues>({
+    // const {
+    //     register,
+    //     handleSubmit,
+    //     setValue,
+    //     formState: { errors },
+    // } =
+    useForm<TicketMessageFormValues>({
         resolver: valibotResolver(TicketMessageFormSchema),
         mode: 'onSubmit',
         defaultValues: {
             reply: '',
         },
     });
-
 
     // async function handleSubmitForm(formValues: TicketMessageFormValues) {
     //     const input = {
@@ -87,9 +88,9 @@ export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicket
         };
     }
 
-    const isEmpty = (empty: boolean) => {
-        console.log("IS EMPTY", empty)
-    }
+    // const isEmpty = (empty: boolean) => {
+    //     console.log('IS EMPTY', empty);
+    // };
 
     // Render the component
     return (
@@ -102,13 +103,7 @@ export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicket
         <Form
             className="pt-20"
             formInputs={[
-                <FormInputTextArea
-                    key="reply"
-                    id="reply"
-                    placeholder="Type your reply..."
-                    rows={4}
-                    required={true}
-                />,
+                <FormInputTextArea key="reply" id="reply" placeholder="Type your reply..." rows={4} required={true} />,
             ]}
             buttonProperties={{
                 children: 'Send Reply',

@@ -111,9 +111,9 @@ function convertRowsIntoObject(
     });
 
     // Loop over all of the rows
-    let rowsForJson = rows.map(function (row) {
+    const rowsForJson = rows.map(function (row) {
         // Loop over all of the cells in the row
-        let cellsForJson = row.cells
+        const cellsForJson = row.cells
             // Filter out the cells that are for hidden columns
             .filter(function (cell, cellIndex) {
                 return onlyVisibleColumns ? !columns[cellIndex]?.hidden : true;
@@ -158,9 +158,9 @@ function convertRowsIntoCsv(
 
 // Function to download a file
 function downloadFile(fileName: string, content: string, contentType: string) {
-    let blob = new Blob([content], { type: contentType });
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement('a');
+    const blob = new Blob([content], { type: contentType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
     a.href = url;
     a.download = fileName;
     a.click();
@@ -169,7 +169,7 @@ function downloadFile(fileName: string, content: string, contentType: string) {
 
 // Function to copy rows as JSON to clipboard
 export async function copyRowsAsJsonToClipboard(rows: TableRowInterface[], columns: TableColumnInterface[]) {
-    let json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
+    const json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
     console.log('json', json);
     await navigator.clipboard.writeText(json);
 }
@@ -179,14 +179,14 @@ export async function copyRowsAsJsonToClipboardVisibleColumns(
     rows: TableRowInterface[],
     columns: TableColumnInterface[],
 ) {
-    let json = JSON.stringify(convertRowsIntoObject(rows, columns, true), null, 4);
+    const json = JSON.stringify(convertRowsIntoObject(rows, columns, true), null, 4);
     console.log('json', json);
     await navigator.clipboard.writeText(json);
 }
 
 // Function to export rows as JSON file
 export async function exportRowsAsJsonFile(rows: TableRowInterface[], columns: TableColumnInterface[]) {
-    let json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
+    const json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
     console.log('json', json);
     downloadFile('rows.json', json, 'application/json');
 }
@@ -196,14 +196,14 @@ export async function exportRowsAsJsonFileVisibleColumnsOnly(
     rows: TableRowInterface[],
     columns: TableColumnInterface[],
 ) {
-    let json = JSON.stringify(convertRowsIntoObject(rows, columns, true), null, 4);
+    const json = JSON.stringify(convertRowsIntoObject(rows, columns, true), null, 4);
     console.log('json', json);
     downloadFile('rows.json', json, 'application/json');
 }
 
 // Function to copy rows as CSV to clipboard
 export async function copyRowsAsCsvToClipboard(rows: TableRowInterface[], columns: TableColumnInterface[]) {
-    let csv = convertRowsIntoCsv(rows, columns);
+    const csv = convertRowsIntoCsv(rows, columns);
     console.log('csv', csv);
     await navigator.clipboard.writeText(csv);
 }
@@ -213,14 +213,14 @@ export async function copyRowsAsCsvToClipboardVisibleColumns(
     rows: TableRowInterface[],
     columns: TableColumnInterface[],
 ) {
-    let csv = convertRowsIntoCsv(rows, columns, true);
+    const csv = convertRowsIntoCsv(rows, columns, true);
     console.log('csv', csv);
     await navigator.clipboard.writeText(csv);
 }
 
 // Function to export rows as CSV file
 export async function exportRowsAsCsvFile(rows: TableRowInterface[], columns: TableColumnInterface[]) {
-    let csv = convertRowsIntoCsv(rows, columns);
+    const csv = convertRowsIntoCsv(rows, columns);
     console.log('csv', csv);
     downloadFile('rows.csv', csv, 'text/csv');
 }
@@ -230,7 +230,7 @@ export async function exportRowsAsCsvFileVisibleColumnsOnly(
     rows: TableRowInterface[],
     columns: TableColumnInterface[],
 ) {
-    let csv = convertRowsIntoCsv(rows, columns, true);
+    const csv = convertRowsIntoCsv(rows, columns, true);
     console.log('csv', csv);
     downloadFile('rows.csv', csv, 'text/csv');
 }

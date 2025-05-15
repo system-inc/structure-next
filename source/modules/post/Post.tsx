@@ -11,7 +11,7 @@ import { PostControls } from '@structure/source/modules/post/controls/PostContro
 import { PostComments } from '@structure/source/modules/post/comments/PostComments';
 
 // Dependencies - API
-import { PostVoteType, PostsQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { PostVoteType, PostsQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

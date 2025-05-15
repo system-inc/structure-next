@@ -12,7 +12,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { AccountPasswordUpdateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountPasswordUpdateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

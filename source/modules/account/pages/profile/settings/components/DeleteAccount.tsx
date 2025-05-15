@@ -18,7 +18,7 @@ import {
     AccountAuthenticationQuery,
     AccountMaintenanceSessionCreateDocument,
     AuthenticationSessionStatus,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - DeleteAccount
 export interface DeleteAccountInterface {

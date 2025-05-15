@@ -10,7 +10,7 @@ export function getUrlPathFromMetadata(metadata: any): string | undefined {
             return metadata[propertySymbol];
         })
         .find(function (state) {
-            return state?.hasOwnProperty?.('urlPathname');
+            return state && Object.prototype.hasOwnProperty.call(state, 'urlPathname');
         });
 
     return result?.urlPathname.replace(/\?.+/, '');

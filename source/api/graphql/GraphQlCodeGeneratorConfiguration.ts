@@ -5,10 +5,11 @@ import { graphql } from '../../../../../package.json';
 // Configuration
 const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguration = {
     schema: graphql.projects.app.schema,
-    documents: graphql.projects.app.documents,
     generates: {
-        './source/api/': {
+        // Structure GraphQL files (using structure module documents)
+        './libraries/structure/source/api/graphql/generated/': {
             preset: 'client',
+            documents: ['./libraries/structure/source/modules/**/api/**/*.graphql'],
             plugins: [
                 {
                     'typescript-operation-metadata': {
@@ -16,6 +17,24 @@ const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguration = {
                     },
                 },
             ],
+            config: {
+                useTypeImports: true,
+            },
+        },
+        // Project GraphQL files (using project module documents)
+        './source/api/graphql/generated/': {
+            preset: 'client',
+            documents: ['./source/modules/**/api/**/*.graphql'],
+            plugins: [
+                {
+                    'typescript-operation-metadata': {
+                        metadata: ['./source/api/schemas/**/*.json'],
+                    },
+                },
+            ],
+            config: {
+                useTypeImports: true,
+            },
         },
     },
 };

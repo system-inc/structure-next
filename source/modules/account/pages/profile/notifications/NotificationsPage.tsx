@@ -5,7 +5,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 // Dependencies - Animation
-import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
+// import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -19,7 +19,7 @@ export function NotificationsPage() {
     // Render the component
     return (
         <>
-            {false ? (
+            {/* {false ? (
                 // Loading
                 <LoadingAnimation />
             ) : (
@@ -27,7 +27,7 @@ export function NotificationsPage() {
                 <div>
                     <h1>Notifications</h1>
                 </div>
-            )}
+            )} */}
         </>
     );
 }

@@ -1,14 +1,8 @@
-// Dependencies - React
-import React from 'react';
-
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { ProfileSupportTicketsDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { ProfileSupportTicketsDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-export function useProfileSupportTickets(
-    openTicketsPage: number,
-    closedTicketsPage: number,
-) {
+export function useProfileSupportTickets(openTicketsPage: number, closedTicketsPage: number) {
     // Queries
     const ticketsQuery = useQuery(ProfileSupportTicketsDocument, {
         variables: {

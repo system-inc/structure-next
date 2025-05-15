@@ -13,7 +13,7 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@project/source/api/GraphQlGeneratedCode';
+import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
@@ -122,7 +122,7 @@ export function PostVoteControl(properties: PostVoteControlInterface) {
                     {/* Votes */}
                     <div
                         className={mergeClassNames(
-                            'rounded-medium w-full border border-light-4 bg-light-1 p-4 text-center dark:border-dark-4 dark:bg-dark-2',
+                            'w-full rounded-medium border border-light-4 bg-light-1 p-4 text-center dark:border-dark-4 dark:bg-dark-2',
                             voteType ? 'border-purple-500 dark:border-purple-500' : '',
                         )}
                     >

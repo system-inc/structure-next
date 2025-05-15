@@ -26,7 +26,7 @@ import {
     AccountAuthenticationDocument,
     AccountAuthenticationRegistrationCompleteDocument,
     AccountAuthenticationSignInCompleteDocument,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

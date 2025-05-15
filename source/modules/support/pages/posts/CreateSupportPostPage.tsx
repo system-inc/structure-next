@@ -8,7 +8,7 @@ import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNav
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - API
-import { PostCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+import { PostCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 

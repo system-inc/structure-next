@@ -9,7 +9,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { DeletePostTopicDialog } from '@structure/source/modules/post/DeletePostTopicDialog';
 
 // Dependencies - API
-import { PostTopicUpdateOperation, PostTopicByIdDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostTopicUpdateOperation, PostTopicByIdDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 

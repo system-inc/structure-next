@@ -5,7 +5,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 // Dependencies - Animation
-import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
+// import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,12 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Component - AddressesPage
-export interface AddressesPageInterface {}
-export function AddressesPage(properties: AddressesPageInterface) {
+export function AddressesPage() {
     // Render the component
     return (
         <>
-            {false ? (
+            {/* {false ? (
                 // Loading
                 <LoadingAnimation />
             ) : (
@@ -28,7 +27,7 @@ export function AddressesPage(properties: AddressesPageInterface) {
                 <div>
                     <h1>Addresses</h1>
                 </div>
-            )}
+            )} */}
         </>
     );
 }

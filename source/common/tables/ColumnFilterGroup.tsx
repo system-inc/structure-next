@@ -14,7 +14,10 @@ import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - API
-import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    ColumnFilterGroupOperator,
+    ColumnFilterConditionOperator,
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -215,7 +218,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
     }
 
     // Function to get an input component for a condition
-    function getInputComponentForCondition(condition: ColumnFilterConditionDataInterface, conditionIndex: number) {
+    function getInputComponentForCondition(condition: ColumnFilterConditionDataInterface) {
         let inputComponent = null;
 
         const column = properties.columns.find((column) => column.identifier === condition.column);
@@ -279,7 +282,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
 
     // Render the component
     return (
-        <div className={mergeClassNames('rounded-medium mr-4 inline-flex flex-col border p-4', properties.className)}>
+        <div className={mergeClassNames('mr-4 inline-flex flex-col rounded-medium border p-4', properties.className)}>
             <div className="flex flex-col space-y-2">
                 {/* Conditions */}
                 {columnFilterGroupData.conditions.map(function (condition, conditionIndex) {
@@ -288,7 +291,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
-                                <p className="rounded-medium flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center text-sm text-neutral">
+                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium text-sm text-neutral">
                                     Where
                                 </p>
                             ) : conditionIndex === 1 ? (
@@ -311,7 +314,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="rounded-medium flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center px-4 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -386,7 +389,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             />
 
                             {/* Value */}
-                            {getInputComponentForCondition(condition, conditionIndex)}
+                            {getInputComponentForCondition(condition)}
 
                             {/* Remove Condition Button */}
                             <Button
@@ -430,7 +433,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
                             }}
                         />
                     ) : (
-                        <p className="rounded-medium flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center px-4 text-sm text-muted-foreground">
+                        <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
                             {columnFilterGroupData.operator.toLowerCase()}
                         </p>
                     )}

@@ -9,7 +9,7 @@ import {
 // Dependencies - API
 import { DocumentNode } from '@apollo/client';
 import { apolloClient } from '@structure/source/api/apollo/ApolloClient';
-import { UniqueFieldValidationResult } from '@project/source/api/GraphQlGeneratedCode';
+import { UniqueFieldValidationResult } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Interface - ValidationSchema
 export class ValidationSchema {
@@ -708,7 +708,7 @@ export class ValidationSchema {
                         validationResult.valid = false;
                     }
                 }
-                catch(error) {
+                catch {
                     // Handle any errors that occur during the GraphQL query
                     validationResult.errors.push({
                         validationRule: validationRule,

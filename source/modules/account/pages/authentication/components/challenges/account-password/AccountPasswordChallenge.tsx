@@ -7,7 +7,7 @@ import React from 'react';
 import { AccountPasswordForm } from '@structure/source/modules/account/pages/authentication/components/challenges/account-password/AccountPasswordForm';
 
 // Dependencies - API
-import { AccountAuthenticationQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - AccountPasswordChallenge
 export interface AccountPasswordChallengeInterface {

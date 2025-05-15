@@ -16,7 +16,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
 import { useQuery, useMutation, ApolloError, DocumentNode } from '@apollo/client';
-import { GraphQLOperationMetadata } from '@project/source/api/GraphQlGeneratedCode';
+import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { generateFormInputs } from '@structure/source/api/graphql/forms/GraphQlFormUtilities';

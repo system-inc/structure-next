@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /*!
 
 JSZip v3.10.1 - A JavaScript class for generating and reading zip files
@@ -3321,10 +3323,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     e.strstart++;
                                 }
                                 else(e.strstart += e.match_length),
-                                        (e.match_length = 0),
-                                        (e.ins_h = e.window[e.strstart]),
-                                        (e.ins_h =
-                                            ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + 1]) & e.hash_mask);
+                                    (e.match_length = 0),
+                                    (e.ins_h = e.window[e.strstart]),
+                                    (e.ins_h =
+                                        ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + 1]) & e.hash_mask);
                             else(n = u._tr_tally(e, 0, e.window[e.strstart])), e.lookahead--, e.strstart++;
                             if(n && (N(e, !1), 0 === e.strm.avail_out)) return A;
                         }

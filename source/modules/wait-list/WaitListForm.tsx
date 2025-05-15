@@ -9,7 +9,7 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - API
-import { WaitListEntryCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+import { WaitListEntryCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - API
 import { isUniqueConstraintError } from '@structure/source/api/graphql/GraphQlUtilities';

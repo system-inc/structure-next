@@ -9,23 +9,23 @@ import { InputSelectItemInterface, InputSelect } from '@structure/source/common/
 import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
 
 // Dependencies - Assets
-import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';
-import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
+// import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';
+// import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';
-import SingleLineTextIcon from '@structure/assets/icons/interface/SingleLineTextIcon.svg';
+// import SingleLineTextIcon from '@structure/assets/icons/interface/SingleLineTextIcon.svg';
 import MultipleLineTextIcon from '@structure/assets/icons/interface/MultipleLineTextIcon.svg';
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
 import LinkIcon from '@structure/assets/icons/interface/LinkIcon.svg';
 import OptionIcon from '@structure/assets/icons/interface/OptionIcon.svg';
-import ObjectIcon from '@structure/assets/icons/code/ObjectIcon.svg';
+// import ObjectIcon from '@structure/assets/icons/code/ObjectIcon.svg';
 import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';
 
 // Dependencies - API
-import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
+import { ColumnFilterConditionOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { uniqueIdentifier } from '@structure/source/utilities/String';
+// import { mergeClassNames } from '@structure/source/utilities/Style';
+// import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - ColumnFilterCondition
 export interface ColumnFilterConditionInterface {

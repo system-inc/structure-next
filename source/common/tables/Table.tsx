@@ -14,7 +14,7 @@ import { InputMultipleSelect } from '@structure/source/common/forms/InputMultipl
 import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 import { PaginationInterface, Pagination } from '@structure/source/common/navigation/pagination/Pagination';
 import { ColumnFilterGroup, ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
-import { ColumnFilterGroupOperator, ColumnFilterConditionOperator } from '@project/source/api/GraphQlGeneratedCode';
+import { ColumnFilterGroupOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import FilterIcon from '@structure/assets/icons/interface/FilterIcon.svg';
@@ -23,7 +23,7 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { uniqueIdentifier } from '@structure/source/utilities/String';
+// import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - Table
 export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
@@ -165,7 +165,7 @@ export function Table(properties: TableInterface) {
     const propertiesColumns = properties.columns;
     const propertiesSortable = properties.sortable;
     const [columns, setColumns] = React.useState(function () {
-        return propertiesColumns.map(function (column, columnIndex) {
+        return propertiesColumns.map(function (column) {
             // If the column is not hidden already and not excluded from the default visible columns
             // add it to the visibleColumnsIndexesSet
             return {
@@ -183,7 +183,7 @@ export function Table(properties: TableInterface) {
                     return previousColumns;
                 }
 
-                return propertiesColumns.map(function (column, columnIndex) {
+                return propertiesColumns.map(function (column) {
                     return {
                         ...column,
                         sortable: propertiesSortable,
@@ -478,7 +478,7 @@ export function Table(properties: TableInterface) {
                                     placeholder="Filter visible rows..."
                                     autoComplete="off"
                                     defaultValue={properties.searchTerm}
-                                    onChange={function (value, event) {
+                                    onChange={function (value) {
                                         setSearchTerm(value || '');
                                     }}
                                 />
@@ -564,7 +564,7 @@ export function Table(properties: TableInterface) {
             {/* Table Container */}
             <div
                 className={mergeClassNames(
-                    'rounded-medium overflow-scroll border border-light-6 dark:border-dark-4',
+                    'overflow-scroll rounded-medium border border-light-6 dark:border-dark-4',
                     properties.containerClassName,
                 )}
             >
@@ -608,7 +608,7 @@ export function Table(properties: TableInterface) {
                         ) : rows && rows.length > 0 ? (
                             <tbody>
                                 {rows
-                                    .filter(function (row, rowIndex) {
+                                    .filter(function (row) {
                                         return row.visible;
                                     })
                                     .map(function (row, rowIndex) {

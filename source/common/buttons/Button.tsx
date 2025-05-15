@@ -81,10 +81,10 @@ export const Button = React.forwardRef<ButtonElementType, ButtonInterface>(funct
     const processingAnimationEnabled = React.useMemo(
         function () {
             return (
-                properties.processingAnimation ??
-                properties.processingIcon ??
-                properties.processingText ??
-                properties.processing !== undefined ??
+                properties.processingAnimation ||
+                properties.processingIcon ||
+                properties.processingText ||
+                properties.processing !== undefined ||
                 false
             );
         },

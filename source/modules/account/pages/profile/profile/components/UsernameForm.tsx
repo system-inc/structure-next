@@ -18,7 +18,7 @@ import { useMutation } from '@apollo/client';
 import {
     AccountProfileUpdateDocument,
     AccountProfileUsernameValidateDocument,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities

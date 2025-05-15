@@ -7,14 +7,14 @@ import React from 'react';
 import { Tip } from '@structure/source/common/popovers/Tip';
 
 // Dependencies - API
-import { useQuery, useMutation } from '@apollo/client';
-import // PostCommentReactionProfilesDocument,
-// PostCommentReactionCreateDocument,
-// PostCommentReactionDeleteDocument,
-'@project/source/api/GraphQlGeneratedCode';
+// import { useQuery, useMutation } from '@apollo/client';
+// import // PostCommentReactionProfilesDocument,
+// // PostCommentReactionCreateDocument,
+// // PostCommentReactionDeleteDocument,
+// '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
+// import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -31,7 +31,11 @@ export interface PostCommentReactionInterface {
 }
 export function PostCommentReaction(properties: PostCommentReactionInterface) {
     // State
-    const [tipOpen, setTipOpen] = React.useState<boolean>(false);
+    const [
+        ,
+        // tipOpen,
+        setTipOpen,
+    ] = React.useState<boolean>(false);
 
     // Hooks
     // const ideaReactionProfilesQueryState = useQuery(PostCommentReactionProfilesDocument, {

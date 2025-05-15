@@ -4,18 +4,19 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useEngagement } from '@structure/source/modules/engagement/EngagementProvider';
+// import { useEngagement } from '@structure/source/modules/engagement/EngagementProvider';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+// import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - EngagementContainer
 export interface EngagementContainerInterface extends React.HTMLAttributes<HTMLDivElement> {
     path: string;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function EngagementContainer(properties: EngagementContainerInterface) {
     // Hooks
-    const engagement = useEngagement();
+    // const engagement = useEngagement();
 
     // Render the component
     return (

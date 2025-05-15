@@ -13,7 +13,7 @@ import {
     PostVoteType,
     PostsDocument,
     ColumnFilterConditionOperator,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -61,7 +61,7 @@ export function Posts(properties: PostsInterface) {
         downvoteCount: number;
         views: number;
         reactions: PostReactionsType;
-        metadata: any;
+        metadata: unknown;
         updatedAt: string;
         createdAt: string;
     }[] = [];

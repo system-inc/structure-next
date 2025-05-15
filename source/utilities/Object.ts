@@ -1,7 +1,7 @@
 // Function to flatten an object
 export function flattenObject(object: any, parentKey = '', result: any = {}): any {
     for(const key in object) {
-        if(object.hasOwnProperty(key)) {
+        if(Object.prototype.hasOwnProperty.call(object, key)) {
             const newKey = parentKey ? `${parentKey}-${key}` : key;
 
             if(typeof object[key] === 'object' && object[key] !== null && !Array.isArray(object[key])) {
@@ -33,7 +33,7 @@ export function mergeDeep<T extends Record<string, any>>(original: T, updates: P
 
 // Function to get a key value from an object recursively
 export function getValueForKeyRecursively(object: Record<string, unknown>, key: string): unknown {
-    if(object.hasOwnProperty(key)) {
+    if(Object.prototype.hasOwnProperty.call(object, key)) {
         return object[key];
     }
 

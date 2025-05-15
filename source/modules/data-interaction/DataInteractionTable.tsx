@@ -7,7 +7,7 @@ import React from 'react';
 import { TableInterface, Table } from '@structure/source/common/tables/Table';
 import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
 // import { TableRowInterface } from '@structure/source/common/tables/TableRow';
-import DatabaseAndTableFormInputSelects from '@structure/source/internal/pages/developers/databases/DatabaseAndTableFormInputSelects';
+import DatabaseAndTableFormInputSelects from '@structure/source/ops/pages/developers/databases/DatabaseAndTableFormInputSelects';
 import Button from '@structure/source/common/buttons/Button';
 import RefreshButton from '@structure/source/common/buttons/RefreshButton';
 import { ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
@@ -18,8 +18,11 @@ import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - API
 import { useApolloClient, useQuery, ApolloError } from '@apollo/client';
-import { DataInteractionDatabaseTableRowsDocument } from '@project/source/api/GraphQlGeneratedCode';
-import { OrderByDirection, ColumnFilterGroupInput } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    DataInteractionDatabaseTableRowsDocument,
+    OrderByDirection,
+    ColumnFilterGroupInput,
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
@@ -133,7 +136,7 @@ export function DataInteractionTable(properties: DataInteractionTableInterface) 
                         meta['tableName'] = keyTableName;
 
                         // Add the URL to the meta object
-                        meta['url'] = `/internal/developers/databases/${databaseName}/tables/${keyTableName}/rows/`;
+                        meta['url'] = `/ops/developers/databases/${databaseName}/tables/${keyTableName}/rows/`;
                     }
                 }
 
@@ -224,8 +227,7 @@ export function DataInteractionTable(properties: DataInteractionTableInterface) 
                           },
                       });
                       //   console.log('fetchMore resolved', queryStateData.data);
-                  }
-                  catch(error) {
+                  } catch {
                       //   console.error('fetchMore failed', error);
                   }
               },
@@ -280,7 +282,7 @@ export function DataInteractionTable(properties: DataInteractionTableInterface) 
         //                 // Create a URL if the column is a table name
         //                 let url = undefined;
         //                 if(value && (column.identifier === 'tableName' || column.identifier === 'inverseTableName')) {
-        //                     url = '/internal/developers/databases/' + databaseName + '/tables/' + value;
+        //                     url = '/ops/developers/databases/' + databaseName + '/tables/' + value;
         //                 }
 
         //                 // Return the cell
@@ -350,7 +352,7 @@ export function DataInteractionTable(properties: DataInteractionTableInterface) 
                         iconClassName="h-[17px] w-[17px]"
                         tip="Metrics"
                         href={
-                            `/internal/developers/metrics/?dataSources={"databaseName":"` +
+                            `/ops/developers/metrics/?dataSources={"databaseName":"` +
                             databaseName +
                             `","tableName":"` +
                             tableName +

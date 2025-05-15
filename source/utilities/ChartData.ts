@@ -4,25 +4,25 @@
 import {
     // Adding and subtracting time
     addHours,
-    subHours,
+    // subHours,
     addDays,
-    subDays,
+    // subDays,
     addMonths,
-    subMonths,
+    // subMonths,
     addYears,
-    subYears,
+    // subYears,
 
     // Marking the start of a period
     startOfHour,
     startOfDay,
-    startOfToday,
+    // startOfToday,
     startOfMonth,
     startOfYear,
 
     // Marking the end of a period
     endOfHour,
     endOfDay,
-    endOfToday,
+    // endOfToday,
     endOfMonth,
     endOfYear,
 
@@ -33,7 +33,7 @@ import {
     differenceInYears,
 } from 'date-fns';
 
-import { TimeInterval } from '@project/source/api/GraphQlGeneratedCode';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Fills in missing interval values with zeroes
 export function fillMissingIntervalValuesWithZeroes(
@@ -57,7 +57,7 @@ export function fillMissingIntervalValuesWithZeroes(
     // console.log(`End interval value: ${endIntervalValue}`);
 
     if(!startTimeIntervalValue || !endTimeIntervalValue) {
-        [startTimeIntervalValue, endTimeIntervalValue] = determineStartAndEndIntervalValues(data, timeInterval);
+        [startTimeIntervalValue, endTimeIntervalValue] = determineStartAndEndIntervalValues(data);
     }
     // console.log(`startIntervalValue: ${startIntervalValue}, endIntervalValue: ${endIntervalValue}`);
 
@@ -76,7 +76,7 @@ export function fillMissingIntervalValuesWithZeroes(
 }
 
 // Determine the start and end interval values
-const determineStartAndEndIntervalValues = (data: [string, number][], interval: TimeInterval): [string, string] => {
+const determineStartAndEndIntervalValues = (data: [string, number][]): [string, string] => {
     // Sort the data to get minimum and maximum values
     const sortedData = [...data].sort((a, b) => a[0].localeCompare(b[0]));
     return [sortedData[0]?.[0] ?? '', sortedData[sortedData.length - 1]?.[0] ?? ''];
@@ -96,12 +96,12 @@ const generateCompleteIntervalList = (
                 completeList.push(i.toString());
             }
             break;
-        case TimeInterval.Quarter:
+        case TimeInterval.Quarter: {
             let currentYearForQuarter = parseInt(startTimeIntervalValue.split('-')[0]!, 10);
             let currentQuarter = parseInt(startTimeIntervalValue.split('-Q')[1]!, 10);
 
-            let endYearForQuarter = parseInt(endTimeIntervalValue.split('-')[0]!, 10);
-            let endQuarter = parseInt(endTimeIntervalValue.split('-Q')[1]!, 10);
+            const endYearForQuarter = parseInt(endTimeIntervalValue.split('-')[0]!, 10);
+            const endQuarter = parseInt(endTimeIntervalValue.split('-Q')[1]!, 10);
 
             while(
                 currentYearForQuarter < endYearForQuarter ||
@@ -116,13 +116,14 @@ const generateCompleteIntervalList = (
                 }
             }
             break;
+        }
 
-        case TimeInterval.Month:
+        case TimeInterval.Month: {
             let currentYearForMonth = parseInt(startTimeIntervalValue.split('-')[0]!, 10);
             let currentMonth = parseInt(startTimeIntervalValue.split('-')[1]!, 10);
 
-            let endYearForMonth = parseInt(endTimeIntervalValue.split('-')[0]!, 10);
-            let endMonth = parseInt(endTimeIntervalValue.split('-')[1]!, 10);
+            const endYearForMonth = parseInt(endTimeIntervalValue.split('-')[0]!, 10);
+            const endMonth = parseInt(endTimeIntervalValue.split('-')[1]!, 10);
 
             while(
                 currentYearForMonth < endYearForMonth ||
@@ -137,8 +138,9 @@ const generateCompleteIntervalList = (
                 }
             }
             break;
-        case TimeInterval.Day:
-            let currentDate = new Date(startTimeIntervalValue);
+        }
+        case TimeInterval.Day: {
+            const currentDate = new Date(startTimeIntervalValue);
             const endDate = new Date(endTimeIntervalValue);
 
             // Set to the very end of the day, this fixes an issue where the last day was not being included
@@ -151,8 +153,9 @@ const generateCompleteIntervalList = (
                 currentDate.setDate(currentDate.getDate() + 1);
             }
             break;
-        case TimeInterval.Hour:
-            let currentHour = new Date(startTimeIntervalValue);
+        }
+        case TimeInterval.Hour: {
+            const currentHour = new Date(startTimeIntervalValue);
             const endHour = new Date(endTimeIntervalValue);
 
             // Set the endHour to the end of the hour (59 minutes, 59 seconds, 999 milliseconds)
@@ -168,6 +171,7 @@ const generateCompleteIntervalList = (
                 currentHour.setHours(currentHour.getHours() + 1);
             }
             break;
+        }
         case TimeInterval.MonthOfYear:
             // Assume a fixed list of months in a year, 01 to 12
             for(let i = 1; i <= 12; i++) {
@@ -254,8 +258,8 @@ export function convertIntervalValueToDate(timeIntervalValue: string, timeInterv
                 parseInt(timeIntervalValue.split('-')[1]!, 10) - 1,
                 parseInt(timeIntervalValue.split('-')[2]!, 10),
             );
-        case TimeInterval.Hour:
-            let date = new Date(timeIntervalValue);
+        case TimeInterval.Hour: {
+            const date = new Date(timeIntervalValue);
             // TODO: need to adjust this to client timezone
             // Get the hour in the local time zone, we multiply by 60000 to convert minutes to milliseconds
             const timeZoneOffset = date.getTimezoneOffset() * 60000;
@@ -264,6 +268,7 @@ export function convertIntervalValueToDate(timeIntervalValue: string, timeInterv
             const localDate = new Date(date.getTime() - timeZoneOffset);
 
             return localDate;
+        }
         case TimeInterval.MonthOfYear:
             return new Date(0, parseInt(timeIntervalValue, 10) - 1, 1);
         case TimeInterval.DayOfMonth:
@@ -285,7 +290,7 @@ export function convertIntervalValueToDate(timeIntervalValue: string, timeInterv
  * @param {string} timeInterval - The interval type ('hour', 'day', 'month', 'year').
  * @returns {number} The calculated range in the units of the specified interval.
  */
-function calculateRange(from: Date, to: Date, timeInterval: string) {
+export function calculateRange(from: Date, to: Date, timeInterval: string) {
     let range;
     switch(timeInterval) {
         case TimeInterval.Hour:

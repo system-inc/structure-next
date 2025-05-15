@@ -29,17 +29,17 @@ export interface ContextMenuInterface extends MenuInterface {
     collisionBoundary?: HTMLElement[];
 }
 export function ContextMenu(properties: ContextMenuInterface) {
-    // Get the menu properties to spread onto the Menu component
-    const {
-        modal,
-        onOpenChange,
-        onCloseAutoFocus,
-        alignOffset,
-        avoidCollisions,
-        collisionPadding,
-        collisionBoundary,
-        ...menuProperties
-    } = properties;
+    // Create a copy of properties for Menu component, excluding Radix Context Menu specific props
+    const menuProperties = { ...properties };
+    
+    // Delete Radix Context Menu specific properties
+    delete menuProperties.modal;
+    delete menuProperties.onOpenChange;
+    delete menuProperties.onCloseAutoFocus;
+    delete menuProperties.alignOffset;
+    delete menuProperties.avoidCollisions;
+    delete menuProperties.collisionPadding;
+    delete menuProperties.collisionBoundary;
 
     // Render the component
     return (

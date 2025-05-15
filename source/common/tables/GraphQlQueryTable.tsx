@@ -31,13 +31,13 @@ export interface GraphQlQueryTableInterface<VariableType>
 }
 export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInterface<VariableType>) {
     // State
-    const [queryPagination, setQueryPaginationState] = React.useState({
+    const [queryPagination] = React.useState({
         page: properties.pagination?.page || 1,
         itemsPerPage: properties.pagination?.itemsPerPage || 10,
     });
 
     // Defaults
-    const hideTypeColumns = properties.hideTypeColumns ?? true;
+    // const hideTypeColumns = properties.hideTypeColumns ?? true;
 
     // Hooks
     const queryState = useQuery(properties.queryDocument, {
@@ -78,7 +78,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
             // console.log('columnIdentifiers', columnIdentifiers);
 
             // Loop through the column identifiers and create the columns
-            columnIdentifiers.forEach(function (columnIdentifier, columnIdentifierIndex) {
+            columnIdentifiers.forEach(function (columnIdentifier) {
                 let columnIdentifierForTitleCase = columnIdentifier;
                 columnIdentifierForTitleCase = columnIdentifierForTitleCase.replaceAll('-', ' ');
                 columnIdentifierForTitleCase = columnIdentifierForTitleCase.replaceAll('__typename', 'TypeName');
@@ -115,7 +115,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
             // console.log('item', item);
 
             return {
-                cells: columns.map(function (column, columnIndex) {
+                cells: columns.map(function (column) {
                     let cell = item[column.identifier];
 
                     // If the cell is not null
@@ -156,7 +156,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
 
                   //   console.log('onChange called with', { itemsPerPage, page });
                   try {
-                      const queryStateData = await queryState.fetchMore({
+                      await queryState.fetchMore({
                           variables: {
                               pagination: {
                                   itemIndex: (page - 1) * itemsPerPage,
@@ -168,10 +168,10 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
                               return fetchMoreResult;
                           },
                       });
-                      //   console.log('fetchMore resolved', queryStateData.data);
+                      //   console.log('fetchMore resolved');
                   }
-                  catch(error) {
-                      //   console.error('fetchMore failed', error);
+                  catch {
+                      //   console.error('fetchMore failed');
                   }
               },
           }

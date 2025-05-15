@@ -11,7 +11,7 @@ import { useNotice } from '@structure/source/common/notifications/NoticeProvider
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 import { useMutation } from '@apollo/client';
-import { AccountProfileUpdateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountProfileUpdateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Interface - ProfileFormValues
 interface ProfileFormValues {
