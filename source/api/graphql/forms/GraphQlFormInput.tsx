@@ -18,6 +18,7 @@ export interface GraphQlFormInputInterface {
 export const GraphQlFormInput = React.forwardRef<FormInputReferenceInterface, GraphQlFormInputInterface>(
     function (properties, wrapperReference) {
         // TODO: Using any here for now only because I couldn't figure out how not to without making a huge mess
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const Component = properties.formInputComponentAndProperties.component as React.ComponentType<any>;
 
         // Render the component

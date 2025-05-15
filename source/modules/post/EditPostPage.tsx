@@ -18,7 +18,7 @@ import {
     PostDocument,
     // PostVoteType,
     // PostsQuery,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

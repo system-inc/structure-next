@@ -14,7 +14,7 @@ import {
     AccountAuthenticationEmailVerificationVerifyDocument,
     AccountAuthenticationEmailVerificationSendDocument,
     AccountAuthenticationQuery,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - EmailVerificationVerifyForm
 export interface EmailVerificationVerifyFormInterface {

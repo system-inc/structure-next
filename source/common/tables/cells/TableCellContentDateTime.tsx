@@ -12,7 +12,7 @@ export interface TableCellContentDateTimeInterface extends React.HTMLAttributes<
     value: string | null;
 }
 export function TableCellContentDateTime(properties: TableCellContentDateTimeInterface) {
-    let value = properties.value;
+    const value = properties.value;
     let date = null;
 
     // If we have a value
@@ -38,7 +38,7 @@ export function TableCellContentDateTime(properties: TableCellContentDateTimeInt
 
     // Prepare the formatted dates
     let formattedDateInLocalTime = '';
-    let formattedDateInUtc = '';
+    // let formattedDateInUtc = '';
 
     // If we have a date
     if(date !== null) {
@@ -58,15 +58,15 @@ export function TableCellContentDateTime(properties: TableCellContentDateTimeInt
         formattedDateInLocalTime = formattedDateInLocalTime.replace(',', '');
 
         // Splitting the date part and time part to rearrange them
-        let [datePart, timePart, amPm, timeZone] = formattedDateInLocalTime.split(' ');
-        let [month, day, year] = datePart!.split('/');
+        const [datePart, timePart, amPm, timeZone] = formattedDateInLocalTime.split(' ');
+        const [month, day, year] = datePart!.split('/');
 
         // Reconstruct the date string in "YYYY-MM-DD h:mm A" format
         // If you decided to keep the timezone name (e.g., "MDT"), concatenate it back here.
         formattedDateInLocalTime = `${year}-${month}-${day} ${timePart} ${amPm} ${timeZone}`;
 
         // Format the date in UTC like: "2024-07-05 7:30 AM UTC"
-        formattedDateInUtc = date.toUTCString();
+        // formattedDateInUtc = date.toUTCString();
     }
 
     // console.log(formattedDate);

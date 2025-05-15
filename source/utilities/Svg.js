@@ -1,3 +1,6 @@
+/* eslint-disable */
+
+
 /*!
 * @svgdotjs/svg.js - A lightweight library for manipulating and animating SVG.
 * @version 3.2.0
@@ -738,7 +741,6 @@ export const Svg = (function () {
         /*
         Generating random colors
         */
-
 
         static random(mode = 'vibrant', t, u) {
             // Get the math modules

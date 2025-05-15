@@ -11,7 +11,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { AccountDeleteDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountDeleteDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

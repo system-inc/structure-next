@@ -9,7 +9,7 @@ import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayo
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - API
-import { AccountProfilePublicQuery } from '@project/source/api/graphql';
+import { AccountProfilePublicQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';

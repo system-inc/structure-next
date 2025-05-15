@@ -1,6 +1,6 @@
 // Dependencies - Assets
 import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
-import BagIcon from '@structure/assets/icons/commerce/BagIcon.svg';
+// import BagIcon from '@structure/assets/icons/commerce/BagIcon.svg';
 import MailIcon from '@structure/assets/icons/communication/MailIcon.svg';
 // import MapLocationIcon from '@structure/assets/icons/navigation/MapLocationIcon.svg';
 import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';

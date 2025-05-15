@@ -43,10 +43,7 @@ export function EmailAddressesPage() {
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="font-medium">{primaryAccountEmailAddress}</p>
-                                    <p className="neutral mt-1 text-sm">
-                                        {'Primary' === 'Primary' ? 'Primary Email' : 'Secondary Email'}
-                                        {true ? ' • Verified' : ' • Not Verified'}
-                                    </p>
+                                    <p className="neutral mt-1 text-sm">Primary Email • Verified</p>
                                 </div>
                             </div>
                         </div>

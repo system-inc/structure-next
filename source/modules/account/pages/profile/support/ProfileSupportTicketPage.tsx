@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Badge from '@project/source/ui/base/Badge';
-import { TicketComments } from '@structure/source/internal/pages/support/components/Ticket/TicketComments';
+import Badge from '@structure/source/common/notifications/Badge';
+import { TicketComments } from '@structure/source/ops/pages/support/components/Ticket/TicketComments';
 import { ProfileSupportTicketMessageForm } from './components/ProfileSupportTicketMessageForm';
 
 // Dependencies - API
@@ -14,7 +14,7 @@ import {
     ColumnFilterConditionOperator,
     ProfileSupportTicketDocument,
     SupportTicketStatus,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 interface ProfileSupportTicketPageInterface {
     ticketId: string;

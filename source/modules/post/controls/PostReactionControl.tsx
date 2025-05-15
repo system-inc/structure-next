@@ -12,13 +12,13 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { PostReactionCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostReactionCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+// import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostReactionControl
 export interface PostReactionControlInterface {
@@ -29,7 +29,7 @@ export interface PostReactionControlInterface {
 export function PostReactionControl(properties: PostReactionControlInterface) {
     // Hooks
     const { accountState, setAuthenticationDialogOpen } = useAccount();
-    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(PostReactionCreateDocument);
+    const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
 
     // Function to handle a reaction
     async function handleReaction(content: string) {

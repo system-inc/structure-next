@@ -99,7 +99,7 @@ export function PostControls(properties: PostControlsInterface) {
                     >
                         <CommentIcon className="h-4 w-4" />
                         {/* Comment Count */}
-                        {true ? <div className="">0</div> : null}
+                        {<div className="">0</div>}
                     </PostControl>
                 )}
 

@@ -117,7 +117,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                     break;
 
                 // Handle WebSocket state changes
-                case WebSocketSharedWorkerServerToClientMessageType.WebSocketConnectionInformation:
+                case WebSocketSharedWorkerServerToClientMessageType.WebSocketConnectionInformation: {
                     // Log WebSocket state change with detailed info
                     // console.log(
                     //     '[SharedWorker] WebSocket state updated:',
@@ -137,9 +137,10 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                         createdAt: messageEvent.data.createdAt || Date.now(),
                     };
                     break;
+                }
 
                 // Handle WebSocket messages
-                case WebSocketSharedWorkerServerToClientMessageType.WebSocketMessage:
+                case WebSocketSharedWorkerServerToClientMessageType.WebSocketMessage: {
                     // console.log('[SharedWorker] WebSocket message received:', messageEvent.data);
                     // console.log(
                     //     '[SharedWorker] Registered message handlers:',
@@ -168,6 +169,7 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
                         // console.warn('[SharedWorker] No handlers registered for WebSocket messages');
                     }
                     break;
+                }
                 // Handle unknown message types
                 default:
                     console.warn('[SharedWorker] Unknown message type:', messageEvent.data.type);

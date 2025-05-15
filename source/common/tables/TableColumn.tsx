@@ -1,6 +1,3 @@
-// Dependencies - React and Next.js
-import React from 'react';
-
 // Interface - TableColumnPossibleValueInterface
 export interface TableColumnPossibleValueInterface {
     value: string;
@@ -30,7 +27,7 @@ export interface TableColumnInterface {
     type?: TableColumnType;
     sortable?: boolean;
     hidden?: boolean;
-    meta?: any;
+    meta?: unknown;
 }
 
 // Function to infer the table column type from the identifier or data

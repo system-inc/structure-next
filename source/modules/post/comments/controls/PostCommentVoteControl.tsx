@@ -13,7 +13,7 @@ import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@project/source/api/GraphQlGeneratedCode';
+import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -33,8 +33,8 @@ export function PostCommentVoteControl(properties: PostCommentVoteControlInterfa
     const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);
 
     // Hooks
-    const [ideaVoteMutation, ideaVoteMutationState] = useMutation(PostVoteDocument);
-    const [ideaUnvoteMutation, ideaUnvoteMutationState] = useMutation(PostUnvoteDocument);
+    const [ideaVoteMutation] = useMutation(PostVoteDocument);
+    const [ideaUnvoteMutation] = useMutation(PostUnvoteDocument);
 
     // Function to handle voting
     function handleVote() {
@@ -108,7 +108,7 @@ export function PostCommentVoteControl(properties: PostCommentVoteControlInterfa
                     {/* Votes */}
                     <div
                         className={mergeClassNames(
-                            'rounded-medium w-full border border-light-4 bg-light-1 p-4 text-center dark:border-dark-3 dark:bg-dark-1',
+                            'w-full rounded-medium border border-light-4 bg-light-1 p-4 text-center dark:border-dark-3 dark:bg-dark-1',
                             voteType ? 'border-purple-500 dark:border-purple-500' : '',
                         )}
                     >

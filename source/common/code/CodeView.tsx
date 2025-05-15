@@ -16,7 +16,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
     language: string;
     edit?: boolean;
     showLineNumbers?: boolean;
-    loadLanguages?: { name: string; languageFunction: any }[];
+    loadLanguages?: { name: string; languageFunction: unknown }[];
 }
 
 /**

@@ -443,12 +443,13 @@ async function adaptiveQualityBlob(
 
     // For JPEG, adapt quality to meet size constraint
     let quality = initialQuality;
-    let blob: Blob;
+    let blob!: Blob;
+    let continueSizeReduction = true;
 
-    do {
+    while(continueSizeReduction) {
         blob = await new Promise<Blob>(function (resolve) {
             canvas.toBlob(
-                (result) => {
+                function (result) {
                     resolve(result!);
                 },
                 mimeType,
@@ -461,9 +462,9 @@ async function adaptiveQualityBlob(
             quality -= 0.1;
         }
         else {
-            break;
+            continueSizeReduction = false;
         }
-    } while(true);
+    }
 
     return blob;
 }

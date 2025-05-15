@@ -17,7 +17,7 @@ import {
     AccountAccessRoleAssignmentCreatePrivilegedDocument,
     AccountAccessRolesPrivilegedDocument,
     AccountPrivilegedDocument,
-} from '@project/source/api/GraphQlGeneratedCode';
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities
@@ -108,8 +108,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 // Reset success message after 5 seconds
                 setTimeout(() => setGrantSuccess(null), 5000);
             }
-        }
-        catch(error) {
+        } catch {
             // Error is handled in the dialog via grantRoleMutationState.error
         }
     }

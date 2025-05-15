@@ -10,6 +10,9 @@ import { usePathname, useSearchParams } from 'next/navigation';
 // Dependencies - Main Components
 import { EngagementContainer } from '@structure/source/modules/engagement/EngagementContainer';
 
+// Dependencies - API
+import { useMutation } from '@apollo/client';
+import { EngagementEventCreateDocument, DeviceOrientation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 // Dependencies - Utilities
 import { createEngagementEvent } from '@structure/source/modules/engagement/createEngagementEvent';
 import { sessionManager } from '@structure/source/modules/engagement/SessionManager';

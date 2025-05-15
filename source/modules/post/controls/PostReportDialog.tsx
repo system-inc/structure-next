@@ -9,11 +9,11 @@ import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog
 import { Form } from '@structure/source/common/forms/Form';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
+// import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { PostReportCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostReportCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';

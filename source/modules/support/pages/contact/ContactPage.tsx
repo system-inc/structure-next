@@ -16,7 +16,7 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { SupportTicketCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { SupportTicketCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import SendIcon from '@structure/assets/icons/communication/SendIcon.svg';

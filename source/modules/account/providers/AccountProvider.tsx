@@ -12,7 +12,7 @@ import { accountSignedInKey, Account } from '@structure/source/modules/account/A
 
 // Dependencies - API
 import { useQuery, useMutation, ApolloError } from '@apollo/client';
-import { AccountDocument, AccountSignOutDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountDocument, AccountSignOutDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Context - Account
 interface AccountContextInterface {

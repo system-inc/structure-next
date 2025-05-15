@@ -8,7 +8,7 @@ import GraphQlOperationForm from '@structure/source/api/graphql/forms/GraphQlOpe
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 
 // Dependencies - API
-import { PostCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+import { PostCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 

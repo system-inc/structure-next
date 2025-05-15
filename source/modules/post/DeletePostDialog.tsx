@@ -9,7 +9,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
 import { useMutation, useApolloClient } from '@apollo/client';
-import { PostDeleteDocument, PostDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostDeleteDocument, PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - DeletePostDialog
 export interface DeletePostDialogInterface extends DialogInterface {

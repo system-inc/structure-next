@@ -13,7 +13,7 @@ import { Markdown } from '@structure/source/common/markdown/Markdown';
 
 // Dependencies - API
 // import { useQuery } from '@apollo/client';
-import { SupportPostQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { SupportPostQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';

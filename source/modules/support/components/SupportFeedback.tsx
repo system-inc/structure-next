@@ -2,13 +2,13 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
+// import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
 import { SupportFeedbackDialog } from '@structure/source/modules/support/components/SupportFeedbackDialog';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+// import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -20,8 +20,8 @@ export interface SupportFeedbackInterface {
 }
 export function SupportFeedback(properties: SupportFeedbackInterface) {
     // Hooks
-    const { accountState } = useAccount();
-    const urlPath = useUrlPath();
+    // const { accountState } = useAccount();
+    // const urlPath = useUrlPath();
 
     // State
     const [dialogOpen, setDialogOpen] = React.useState(false);

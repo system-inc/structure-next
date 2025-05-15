@@ -19,7 +19,7 @@ import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Dependencies - API
 import { useMutation, useApolloClient } from '@apollo/client';
-import { AccountProfileImageRemoveDocument, AccountDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountProfileImageRemoveDocument, AccountDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Types - Profile Image Upload Response
 interface StoredObject {
@@ -133,8 +133,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderInterface) 
         try {
             await removeProfileImage();
             // Success is handled by onCompleted callback
-        }
-        catch(err) {
+        } catch {
             // Error is handled by onError callback
         }
     }
