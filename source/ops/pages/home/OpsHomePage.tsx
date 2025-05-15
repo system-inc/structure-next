@@ -15,8 +15,8 @@ import TopProductLink from '@structure/source/ops/common/dashboard/TopProductLin
 import { useQuery } from '@apollo/client';
 import { EngagementOverviewDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-// Component - InternalPage
-export function InternalHomePage() {
+// Component - OpsHomePage
+export function OpsHomePage() {
     // Hooks
     const engagementLiveQueryState = useQuery(EngagementOverviewDocument);
 
@@ -217,7 +217,7 @@ export function InternalHomePage() {
 
                         // TODO: Move this to the right file
                         const characters = '234567CDFGHJKLMNPQRTVWXYZ';
-                        function getLuhnCheckDigit(partialIdentifier: Record<string, string | number>) {
+                        function getLuhnCheckDigit(partialIdentifier: string) {
                             // Create a mapping of characters to their index values
                             const valueMapping = characters
                                 .split('')
@@ -231,7 +231,8 @@ export function InternalHomePage() {
 
                             // Iterate through the partialIdentifier characters in reverse order
                             for(let index = partialIdentifier.length - 1; index >= 0; index--) {
-                                let number = valueMapping[partialIdentifier[index]];
+                                const char = partialIdentifier[index];
+                                let number = char && valueMapping[char];
                                 if(!number) return; // If the character isn't in the character set, return
 
                                 // If it's an alternate character, double its value
@@ -262,7 +263,7 @@ export function InternalHomePage() {
                                 part3 += characters.charAt(Math.floor(Math.random() * characters.length));
                             }
                             const partialIdentifier = `${part1}-${part2}-${part3}`;
-                            const checkDigit = getLuhnCheckDigit(partialIdentifier.split(''));
+                            const checkDigit = getLuhnCheckDigit(partialIdentifier);
                             return `${partialIdentifier}${checkDigit ?? '0'}`;
                         }
                         const orderID = generateOrderIdentifier();
@@ -283,4 +284,4 @@ export function InternalHomePage() {
 }
 
 // Export - Default
-export default InternalHomePage;
+export default OpsHomePage;

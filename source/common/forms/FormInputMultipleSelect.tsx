@@ -75,13 +75,13 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
         const propertiesOnChange = properties.onChange;
         const propertiesValidateOnChange = properties.validateOnChange;
         const onChangeIntercept = React.useCallback(
-            function (value: string[] | undefined, event?: Event, skipOnChangeCallback: boolean = false) {
+            function (value: string[] | undefined, event?: React.SyntheticEvent | Event | unknown, skipOnChangeCallback: boolean = false) {
                 // Update the value reference
                 setValue(value);
 
                 // Optionally run the provided onChange function if provided
                 if(!skipOnChangeCallback && propertiesOnChange) {
-                    propertiesOnChange(value, event);
+                    propertiesOnChange(value, event as React.SyntheticEvent);
                 }
 
                 // Optionally run validation if properties.validateOnChange is true
@@ -98,7 +98,7 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
                 getValue: function () {
                     return valueReference.current;
                 },
-                setValue: function (value: string[] | undefined, event?: Event) {
+                setValue: function (value: string[] | undefined, event?: React.SyntheticEvent | Event | unknown) {
                     onChangeIntercept(value, event, true);
                 },
                 focus: focus,

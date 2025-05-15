@@ -26,7 +26,7 @@ import { camelCase } from '@structure/source/utilities/String';
 // Interface - InputTimeRangeReference
 export interface InputTimeRangeReferenceInterface {
     getValue: () => TimeRangeType | undefined;
-    setValue: (value?: TimeRangeType, event?: any) => void;
+    setValue: (value?: TimeRangeType, event?: React.MouseEvent | React.KeyboardEvent | unknown) => void;
     focus: () => void;
 }
 

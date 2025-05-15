@@ -31,6 +31,7 @@ export const InputMultipleSelectSizes = {
 // Interface - InputMultipleSelectReference
 export interface InputMultipleSelectReferenceInterface {
     getValue: () => string[] | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setValue: (value?: string[], event?: any) => void;
     focus: () => void;
 }
@@ -49,7 +50,7 @@ export interface InputMultipleSelectInterface extends Omit<InputInterface, 'defa
     closeOnItemSelected?: boolean;
 
     // Events
-    onChange?: (value: string[] | undefined, event: any) => void;
+    onChange?: (value: string[] | undefined, event: React.MouseEvent | React.KeyboardEvent | unknown) => void;
     onBlur?: (value: string[] | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     variant?: keyof typeof InputMultipleSelectVariants;
@@ -118,10 +119,11 @@ export const InputMultipleSelect = React.forwardRef<
                     // Set the items
                     setItems(items);
                 }
-                catch(error: any) {
+                catch(error) {
                     console.error('Error loading menu items:', error);
                     // Set the loading error
-                    setLoadingItemsError(error.message ?? 'Error Loading Items');
+                    const errorMessage = error instanceof Error ? error.message : 'Error Loading Items';
+                    setLoadingItemsError(errorMessage);
                 }
 
                 // console.log('Loaded menu items');
@@ -169,7 +171,7 @@ export const InputMultipleSelect = React.forwardRef<
     const propertiesItems = properties.items;
     const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: any) {
+        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: React.MouseEvent | React.KeyboardEvent | unknown) {
             // console.log('InputMultipleSelect.tsx value changed:', menuItem.value);
 
             let newValue: string[] = [];

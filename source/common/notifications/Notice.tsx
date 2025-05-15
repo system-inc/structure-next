@@ -45,9 +45,9 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
 
     // Function to handle removal
     const handleRemoval = React.useCallback(
-        async function handleRemoval(event: any) {
+        async function handleRemoval(event: unknown) {
             if(properties.closeButtonProperties?.onClick) {
-                properties.closeButtonProperties.onClick(event);
+                properties.closeButtonProperties.onClick(event as React.MouseEvent<HTMLElement, MouseEvent>);
             }
         },
         [properties.closeButtonProperties],
@@ -86,7 +86,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             ref={reference}
             style={{ ...properties.style, ...noticeSpring }}
             className={mergeClassNames(
-                'rounded-medium relative box-border flex h-auto touch-none items-center border bg-light p-7 dark:bg-dark+2',
+                'relative box-border flex h-auto touch-none items-center rounded-medium border bg-light p-7 dark:bg-dark+2',
                 properties.className,
             )}
             onMouseEnter={function () {

@@ -50,6 +50,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Interface - Form Values
 export interface FormValuesInterface {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
 }
 
