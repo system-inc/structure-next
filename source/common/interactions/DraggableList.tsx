@@ -235,7 +235,6 @@ export default DraggableList;
 /**
  * ARRAY
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function swap<T>(array: T[], from: number, to: number) {
     // console.log({ array });
     // console.log('Swapping ', array[from], ' with ', array[to], ' from index ', from, ' to index ', to);

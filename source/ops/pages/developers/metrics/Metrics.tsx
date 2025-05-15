@@ -90,7 +90,7 @@ export type DataSourceType = {
 
 // Types - Data Source - The settings for each data source with the metrics data
 export type DataSourceWithMetricsType = DataSourceType & {
-    metrics: any;
+    metrics: Record<string, unknown>;
 };
 
 // Component - Metrics
@@ -979,8 +979,8 @@ export function Metrics() {
                 settings={{
                     timeInterval: timeInterval,
                     dataSources: dataSources,
-                    endTime: new Date(timeRange.endTime ?? '') ?? new Date(),
-                    startTime: new Date(timeRange.startTime ?? '') ?? addDays(new Date(), -30),
+                    endTime: timeRange.endTime ? new Date(timeRange.endTime) : new Date(),
+                    startTime: timeRange.startTime ? new Date(timeRange.startTime) : addDays(new Date(), -30),
                     chartType: chartType,
                 }}
                 setDataSources={setDataSources}
