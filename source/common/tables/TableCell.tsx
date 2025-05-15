@@ -125,8 +125,7 @@ export function TableCell(properties: TableCellInterface) {
             let json = null;
             try {
                 json = JSON.parse(properties.value);
-            }
-            catch(error) {
+            } catch {
                 // Do nothing
             }
 

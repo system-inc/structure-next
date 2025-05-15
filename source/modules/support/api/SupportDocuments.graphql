@@ -190,13 +190,6 @@ mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreate
     }
 }
 
-mutation SupportTicketUpdateStatusPrivileged($ticketId: String!, $status: SupportTicketStatus!) {
-    supportTicketUpdateStatusPrivileged(id: $ticketId, status: $status) {
-        id
-        status
-    }
-}
-
 # Support All Support Profiles Query
 query SupportAllSupportProfiles {
     supportAllSupportProfiles {
@@ -266,8 +259,7 @@ query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $paginati
                     total
                 }
             }
-            appliedDiscounts {
-                amount
+            discounts {
                 code
             }
             source
@@ -304,19 +296,14 @@ query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $paginati
 
 # Support Ticket Query
 query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) {
-    openTickets: supportTickets(pagination:  {
-        itemsPerPage: 3,
-        itemIndex: $openTicketsIndex,
-        filters: [ {
-            column: "status",
-            operator: Equal,
-            value: "Open"
-        }]
-        orderBy: [ {
-           key: "createdAt",
-           direction: Descending
-        }]
-    }) {
+    openTickets: supportTickets(
+        pagination: {
+            itemsPerPage: 3
+            itemIndex: $openTicketsIndex
+            filters: [{ column: "status", operator: Equal, value: "Open" }]
+            orderBy: [{ key: "createdAt", direction: Descending }]
+        }
+    ) {
         items {
             id
             identifier
@@ -346,19 +333,14 @@ query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) 
             pagesTotal
         }
     }
-    closedTickets: supportTickets(pagination:  {
-        itemsPerPage: 3,
-        itemIndex: $closedTicketsIndex,
-        filters: [ {
-            column: "status",
-            operator: Equal,
-            value: "Closed"
-        }]
-        orderBy: [ {
-           key: "createdAt",
-           direction: Descending
-        }]
-    }) {
+    closedTickets: supportTickets(
+        pagination: {
+            itemsPerPage: 3
+            itemIndex: $closedTicketsIndex
+            filters: [{ column: "status", operator: Equal, value: "Closed" }]
+            orderBy: [{ key: "createdAt", direction: Descending }]
+        }
+    ) {
         items {
             id
             identifier

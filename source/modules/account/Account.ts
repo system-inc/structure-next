@@ -2,7 +2,7 @@
 import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - API
-import { AccountQuery } from '@project/source/api/GraphQlGeneratedCode';
+import { AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Account variables shared across the application
 export const accountSignedInKey = ProjectSettings.identifier + 'AccountSignedIn';

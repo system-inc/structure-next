@@ -74,8 +74,8 @@ export const InputMultipleSelect = React.forwardRef<
     const buttonReference = React.useRef<HTMLButtonElement>(null);
 
     // Defaults
-    const variant = properties.variant || 'default';
-    const size = properties.size || 'default';
+    // const variant = properties.variant || 'default';
+    // const size = properties.size || 'default';
     const placeholder = properties.placeholder || 'Select...';
     const closeOnItemSelected = properties.closeOnItemSelected ?? true;
 
@@ -184,7 +184,7 @@ export const InputMultipleSelect = React.forwardRef<
                 // Otherwise, if the item is not already selected
                 else {
                     // Calculate the new value preserving the order of the items for the value
-                    propertiesItems?.forEach(function (item, itemIndex) {
+                    propertiesItems?.forEach(function (item) {
                         if(item.value) {
                             // If the item is the selected item, add it to the new value
                             if(item.value === menuItem.value) {
@@ -238,7 +238,7 @@ export const InputMultipleSelect = React.forwardRef<
             {...properties.popoverMenuProperties}
             className={mergeClassNames('', properties.popoverMenuProperties?.className)}
             title={properties.title}
-            items={items.map((item, index) => {
+            items={items.map(function (item) {
                 // Determine if the item is selected
                 const selected = Boolean(item.value && value?.includes(item.value));
 
@@ -301,7 +301,7 @@ export const InputMultipleSelect = React.forwardRef<
                             selectedItems.map((item, index) => (
                                 <div
                                     key={index}
-                                    className="rounded-small flex px-2 py-1.5 text-xs text-dark-6 dark:bg-dark-4 dark:text-light-6"
+                                    className="flex rounded-small px-2 py-1.5 text-xs text-dark-6 dark:bg-dark-4 dark:text-light-6"
                                 >
                                     {item.content}
                                     <CloseIcon

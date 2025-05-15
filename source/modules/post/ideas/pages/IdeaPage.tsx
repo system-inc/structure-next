@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
-import { PostDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

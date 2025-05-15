@@ -5,7 +5,7 @@ import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 // Dependencies - Main Components
-import { TabItem, Tabs } from '@project/source/ui/base/Tabs';
+import { TabItem, Tabs } from '@structure/source/common/navigation/tabs/Tabs';
 
 // Component - AccountSupportTicketStatusTabs
 interface AccountSupportTicketStatusTabsInterface {
@@ -22,7 +22,7 @@ export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketS
         const updatedParams = new URLSearchParams(searchParams ?? undefined);
         updatedParams.set('status', value);
         router.replace(`?${updatedParams.toString()}`);
-    }
+    };
 
     // Render the component
     return (
@@ -31,16 +31,20 @@ export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketS
                 <TabItem value="open">
                     <div className="flex items-center">
                         <span>Open Requests</span>
-                        { !!properties.openTicketsCount && (
-                            <span className="px-2 py-0.5 ml-2 rounded-full border text-xs text-opsis-content-primary bg-opsis-background-primary">{properties.openTicketsCount}</span>
+                        {!!properties.openTicketsCount && (
+                            <span className="text-opsis-content-primary bg-opsis-background-primary ml-2 rounded-full border px-2 py-0.5 text-xs">
+                                {properties.openTicketsCount}
+                            </span>
                         )}
                     </div>
                 </TabItem>
                 <TabItem value="closed">
                     <div className="flex items-center">
                         <span>Closed Requests</span>
-                        { !!properties.closedTicketsCount && (
-                            <span className="px-2 py-0.5 ml-2 rounded-full border text-xs text-opsis-content-primary bg-opsis-background-primary">{properties.closedTicketsCount}</span>
+                        {!!properties.closedTicketsCount && (
+                            <span className="text-opsis-content-primary bg-opsis-background-primary ml-2 rounded-full border px-2 py-0.5 text-xs">
+                                {properties.closedTicketsCount}
+                            </span>
                         )}
                     </div>
                 </TabItem>

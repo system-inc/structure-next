@@ -51,7 +51,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
             // Initialize the notices animateable properties
             from: { opacity: 0, height: 0, scale: 1, x: 0 },
             // We can return a function that returns a promise with sequenced animations for the enter phase
-            enter: (notice) => async (next, cancel) => {
+            enter: (notice) => async (next) => {
                 const noticeReference = noticeReferences.get(notice);
 
                 // If the notice reference is not available, skip the animation
@@ -77,7 +77,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
                 // Animate the notice
                 await next({ opacity: 1, height: height, scale: 1 });
             },
-            leave: (notice) => async (next, cancel) => {
+            leave: () => async (next) => {
                 // If clearing all, animate out to the righ
                 if(isClearingAllReference.current) {
                     await next({
@@ -139,7 +139,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
                 return;
             }
 
-            noticesTransitionControl.current.map(function (springControl, index, controllers) {
+            noticesTransitionControl.current.map(function (springControl, index) {
                 const indexOfNotice = noticesState.findIndex((notice) => notice.id === springControl.item.id);
 
                 if(indexOfNotice === -1) return;
@@ -222,7 +222,7 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
             noticesTransitionControl.start();
 
             // Clear the transition of all springs that are not in the noticesState anymore
-            noticesTransitionControl.current.map(function (springControl, index) {
+            noticesTransitionControl.current.map(function (springControl) {
                 if(!noticesState.includes(springControl.item)) {
                     noticesTransitionControl.delete(springControl);
                 }
@@ -383,17 +383,19 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
                         >
                             <Notice
                                 ref={function (reference) {
-                                    reference && noticeReferences.set(notice, reference);
+                                    if(reference) {
+                                        noticeReferences.set(notice, reference);
+                                    }
                                 }}
                                 {...notice}
                                 closeButtonProperties={{
-                                    onClick: async function (event) {
+                                    onClick: async function () {
                                         handleRemoval(notice.id);
                                     },
                                 }}
                                 buttonProperties={{
                                     content: 'Dismiss',
-                                    onClick: async function (event) {
+                                    onClick: async function () {
                                         handleRemoval(notice.id);
                                     },
                                 }}

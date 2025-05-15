@@ -6,7 +6,7 @@ import { PublicProfilePage } from '@structure/source/modules/account/pages/profi
 
 // Dependencies - API
 import { getApolloClientForServerSideRendering } from '@structure/source/api/apollo/ApolloClientForServerSideRendering';
-import { AccountProfilePublicDocument } from '@project/source/api/graphql';
+import { AccountProfilePublicDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Function to get server-side properties
 async function getServerSideProperties(username: string) {

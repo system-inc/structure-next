@@ -147,7 +147,7 @@ function TableRowInputCheckbox(properties: TableRowInterface) {
             ref={checkboxRef}
             tabIndex={0}
             defaultValue={properties.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
-            onChange={function (value, event) {
+            onChange={function (value) {
                 if(properties.onSelectChange) {
                     properties.onSelectChange(properties, value === InputCheckboxState.Checked ? true : false);
                 }

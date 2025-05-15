@@ -137,6 +137,10 @@ export function ImageEditor(properties: ImageEditorInterface) {
         // No need to call update() as the cropper manages its own updates
     }, []);
 
+    // Extract properties used in useCallback to variables
+    const propertiesAllowResize = properties.allowResize;
+    const propertiesOnSave = properties.onSave;
+    
     const handleSave = React.useCallback(
         async function () {
             if(!previewUrl || !cropArea) {
@@ -155,7 +159,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
                 processedImage = await cropImage(previewUrl, cropArea, outputOptions);
 
                 // Then resize if needed
-                if(properties.allowResize && dimensions && dimensions.width && dimensions.height) {
+                if(propertiesAllowResize && dimensions && dimensions.width && dimensions.height) {
                     // Create a temporary object URL for the cropped image
                     const tempUrl = URL.createObjectURL(processedImage);
                     // Keep track of temporary URLs for cleanup
@@ -177,7 +181,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
                 }
 
                 // Call the onSave callback with the processed image
-                properties.onSave?.(processedImage);
+                propertiesOnSave?.(processedImage);
             }
             catch(err) {
                 setError(err instanceof Error ? err.message : 'An error occurred while processing the image');
@@ -185,7 +189,9 @@ export function ImageEditor(properties: ImageEditorInterface) {
                 setLoading(false);
             }
         },
-        [previewUrl, cropArea, properties.allowResize, dimensions, properties.onSave, outputOptions],
+        // Extracted properties for dependencies
+        [previewUrl, cropArea, dimensions, outputOptions, 
+         propertiesAllowResize, propertiesOnSave],
     );
 
     const actionButtons = React.useMemo(

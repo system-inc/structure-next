@@ -4,7 +4,10 @@
 import React from 'react';
 
 // Dependencies - Types
-import { GraphQLInputTypeMetadata, GraphQLOperationParameterMetadata } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    GraphQLInputTypeMetadata,
+    GraphQLOperationParameterMetadata,
+} from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { FormInputReferenceInterface, FormInputInterface } from '@structure/source/common/forms/FormInput';
 import { FormInputsProperties } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
@@ -378,7 +381,7 @@ export function generateFormInputs(
         }
 
         // If there is a special configuration for this input
-        if(inputComponentsProperties?.hasOwnProperty(input.name)) {
+        if(inputComponentsProperties && Object.prototype.hasOwnProperty.call(inputComponentsProperties, input.name)) {
             // Merge the configuration with the component properties
             Object.assign(componentProperties, inputComponentsProperties[input.name]);
         }

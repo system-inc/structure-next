@@ -12,10 +12,10 @@ import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 
 // Dependencies - API
 import { useMutation } from '@apollo/client';
-import { PostReactionCreateDocument } from '@project/source/api/GraphQlGeneratedCode';
+import { PostReactionCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+// import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostCommentReactionControl
 export interface PostCommentReactionControlInterface {
@@ -25,7 +25,7 @@ export interface PostCommentReactionControlInterface {
 }
 export function PostCommentReactionControl(properties: PostCommentReactionControlInterface) {
     // Hooks
-    const [ideaReactionCreateMutation, ideaReactionCreateMutationState] = useMutation(PostReactionCreateDocument);
+    const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
 
     // Function to handle a reaction
     async function handleReaction(content: string) {

@@ -223,20 +223,22 @@ export function convertColorString(
             return `rgb(${red}, ${green}, ${blue})`;
         case 'rgba':
             return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-        case 'hsl':
+        case 'hsl': {
             const [h, s, l] = hexStringToHsl(
                 `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue
                     .toString(16)
                     .padStart(2, '0')}`,
             );
             return `hsl(${h * 360}, ${s * 100}%, ${l * 100}%)`;
-        case 'hsla':
+        }
+        case 'hsla': {
             const [h2, s2, l2] = hexStringToHsl(
                 `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue
                     .toString(16)
                     .padStart(2, '0')}`,
             );
             return `hsla(${h2 * 360}, ${s2 * 100}%, ${l2 * 100}%, ${alpha})`;
+        }
         default:
             return anyColorString;
     }

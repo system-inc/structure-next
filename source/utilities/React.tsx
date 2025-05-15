@@ -1,10 +1,13 @@
+// Dependencies - React and Next.js
+import React from 'react';
+
 // Function to wrap function components and SVGs in a span so they can be interacted with
 export function wrapForSlot(children: React.ReactElement, className?: string) {
     // Determine if the child needs to be wrapped
     let needsToBeWrapped = false;
     if(children && children.type) {
         // Determine if the child is an SVG
-        const constructorName = (children.type as React.JSXElementConstructor<any>).name;
+        const constructorName = (children.type as React.JSXElementConstructor<unknown>).name;
         if(constructorName) {
             needsToBeWrapped = constructorName.startsWith('Svg');
         }
@@ -33,4 +36,17 @@ export function removeProperties<T extends object, K extends keyof T>(
     const result = { ...object };
     propertiesToExclude.forEach((key) => delete result[key]);
     return result as Omit<T, K>;
+}
+
+// Function to get the previous value of a state variable
+export function usePrevious<T>(value: T): T | undefined {
+    // Create a reference to store the previous value
+    const reference = React.useRef<T>();
+
+    // Store the current value in the reference
+    React.useEffect(function () {
+        reference.current = value;
+    });
+
+    return reference.current;
 }

@@ -64,9 +64,9 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                 {properties.account.isAdministator() && (
                     <Link
                         className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
-                        href="/internal"
+                        href="/ops"
                     >
-                        Internal
+                        Ops
                     </Link>
                 )}
             </div>

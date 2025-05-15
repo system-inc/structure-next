@@ -118,7 +118,7 @@ export function ImageUploader(properties: ImageUploaderInterface) {
                                                     // Clear the selected files after successful upload
                                                     clearSelectedFiles();
                                                 }
-                                                catch(err) {
+                                                catch {
                                                     // Error will be handled by the onUploadError callback
                                                 }
                                             }}

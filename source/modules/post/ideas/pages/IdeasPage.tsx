@@ -11,8 +11,7 @@ import { Posts } from '@structure/source/modules/post/Posts';
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Component - IdeasPage
-export interface IdeasPageInterface {}
-export function IdeasPage(properties: IdeasPageInterface) {
+export function IdeasPage() {
     // Render the component
     return (
         <div className="container items-center justify-center pb-32 pt-12">

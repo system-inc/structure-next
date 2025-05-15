@@ -15,8 +15,10 @@ export function ToggleButton(properties: ToggleButtonProperties) {
     // State
     const [pressed, setPressed] = React.useState<boolean>(properties.pressed ? true : false);
 
-    // Isolate the Button properties from the ToggleButton properties to spread onto the Button component
-    const { pressed: pressedProperty, onPressedChange: onPressedChangeProperty, ...buttonProperties } = properties;
+    // Create a new object for button properties, excluding ToggleButton-specific props
+    const buttonProperties = { ...properties };
+    delete buttonProperties.pressed;
+    delete buttonProperties.onPressedChange;
 
     // Render the component
     return (
