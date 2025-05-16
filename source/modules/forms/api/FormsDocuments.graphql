@@ -108,18 +108,18 @@ query Form($identifier: String!) {
                 columns
                 rows
             }
-            # ... on FormComponentDataNumber {
-            #     id
-            #     position
-            #     section
-            #     type
-            #     title
-            #     description
-            #     required
-            #     numberMin: min
-            #     numberMax: max
-            #     allowFloat
-            # }
+            ... on FormComponentDataNumber {
+                id
+                position
+                section
+                type
+                title
+                description
+                required
+                numberMin: min
+                numberMax: max
+                allowFloat
+            }
             ... on FormComponentDataParagraph {
                 id
                 position
