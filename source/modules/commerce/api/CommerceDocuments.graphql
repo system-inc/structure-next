@@ -450,6 +450,13 @@ query CommerceOrders($pagination: PaginationInput!) {
             priceInfo {
                 amount
                 originalSubtotal
+                lineItemPrices {
+                    indexId
+                    originalSubtotal
+                    originalUnitPrice
+                    subtotal
+                    unitPrice
+                }
             }
             appliedDiscounts {
                 amount
@@ -570,6 +577,13 @@ query CommerceOrder($orderIdentifier: String!) {
                 }
                 subtotal # After discount
                 amount # Total amount billed to the card
+                lineItemPrices {
+                    indexId
+                    originalSubtotal
+                    originalUnitPrice
+                    subtotal
+                    unitPrice
+                }
             }
             createdAt
             appliedDiscounts {
@@ -607,6 +621,13 @@ query CommerceOrder($orderIdentifier: String!) {
                 }
                 subtotal # After discount
                 amount # Total amount billed to the card
+                lineItemPrices {
+                    indexId
+                    originalSubtotal
+                    originalUnitPrice
+                    subtotal
+                    unitPrice
+                }
             }
             appliedDiscounts {
                 amount
