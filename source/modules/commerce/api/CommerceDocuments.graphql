@@ -442,6 +442,7 @@ query CommerceOrders($pagination: PaginationInput!) {
             fulfillmentStatus
             lineItems {
                 id
+                indexId
                 status
                 productVariantId # Use this for the product images, price, URLs, etc.
                 quantity # The quantity ordered
@@ -453,6 +454,11 @@ query CommerceOrders($pagination: PaginationInput!) {
             appliedDiscounts {
                 amount
                 code
+                items {
+                    indexId
+                    unitAmount
+                    amount
+                }
             }
             updatedAt
             createdAt
@@ -569,6 +575,11 @@ query CommerceOrder($orderIdentifier: String!) {
             appliedDiscounts {
                 amount
                 code
+                items {
+                    indexId
+                    unitAmount
+                    amount
+                }
             }
         }
         ... on PublicCommerceOrder {
