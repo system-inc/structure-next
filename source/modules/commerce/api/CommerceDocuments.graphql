@@ -589,6 +589,7 @@ query CommerceOrder($orderIdentifier: String!) {
             fulfillmentStatus
             lineItems {
                 id
+                indexId
                 status
                 productVariantId # Use this for the product images, price, URLs, etc.
                 quantity # The quantity ordered
@@ -606,6 +607,15 @@ query CommerceOrder($orderIdentifier: String!) {
                 }
                 subtotal # After discount
                 amount # Total amount billed to the card
+            }
+            appliedDiscounts {
+                amount
+                code
+                items {
+                    indexId
+                    unitAmount
+                    amount
+                }
             }
             createdAt
         }
