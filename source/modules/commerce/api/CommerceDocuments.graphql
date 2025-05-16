@@ -325,11 +325,10 @@ query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
             emailAddress # The email address for the order
             lineItems {
                 id
+                indexId
                 status
                 productVariantId # Use this for the product images, price, URLs, etc.
                 quantity # The quantity ordered
-                updatedAt
-                createdAt
             }
             shippingInfo {
                 shippingAddress {
@@ -383,6 +382,11 @@ query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
             appliedDiscounts {
                 amount
                 code
+                items {
+                    indexId
+                    unitAmount
+                    amount
+                }
             }
             createdAt
         }
@@ -393,6 +397,7 @@ query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
             fulfillmentStatus
             lineItems {
                 id
+                indexId
                 status
                 productVariantId # Use this for the product images, price, URLs, etc.
                 quantity # The quantity ordered
@@ -410,6 +415,15 @@ query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
                 }
                 subtotal # After discount
                 amount # Total amount billed to the card
+            }
+            appliedDiscounts {
+                amount
+                code
+                items {
+                    indexId
+                    unitAmount
+                    amount
+                }
             }
             createdAt
         }
