@@ -447,6 +447,26 @@ query CommerceOrders($pagination: PaginationInput!) {
                 productVariantId # Use this for the product images, price, URLs, etc.
                 quantity # The quantity ordered
             }
+            shipments {
+                id
+                orderIndexId
+                status
+                label {
+                    carrier
+                    serviceType
+                    trackingNumber
+                    trackingUrl
+                }
+                packageInfo {
+                    items {
+                        indexId
+                        quantity
+                    }
+                }
+                shippedAt
+                deliveredAt
+                cancelledAt
+            }
             priceInfo {
                 amount
                 originalSubtotal
