@@ -23,10 +23,7 @@ import { useProfileSupportTickets } from './hooks/useProfileSupportTickets';
 
 // Dependencies - Utilities
 import { extractLatestEmailContent } from '@structure/source/utilities/Email';
-import {
-    formatDateToDayOfWeekAndDate,
-    formatDateToDateAtTime,
-} from '@structure/source/utilities/Time';
+import { formatDateToDayOfWeekAndDate, formatDateToDateAtTime } from '@structure/source/utilities/Time';
 
 // Dependencies - API
 import {
@@ -41,8 +38,8 @@ import { ArrowRight, Smiley } from '@phosphor-icons/react';
 function getPaginationPages(current: number, total: number): (number | '...')[] {
     const pages: (number | '...')[] = [];
 
-    if (total <= 4) {
-        for (let i = 1; i <= total; i++) {
+    if(total <= 4) {
+        for(let i = 1; i <= total; i++) {
             pages.push(i);
         }
         return pages;
@@ -50,18 +47,18 @@ function getPaginationPages(current: number, total: number): (number | '...')[] 
 
     pages.push(1);
 
-    if (current > 3) {
+    if(current > 3) {
         pages.push('...');
     }
 
     const start = Math.max(2, current - 1);
     const end = Math.min(total - 1, current + 1);
 
-    for (let i = start; i <= end; i++) {
+    for(let i = start; i <= end; i++) {
         pages.push(i);
     }
 
-    if (current < total - 2) {
+    if(current < total - 2) {
         pages.push('...');
     }
 
@@ -78,15 +75,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // Component - ProfileSupportPage
 export function ProfileSupportPage() {
-
     const [openTicketsPage, setOpenTicketsPage] = React.useState<number>(1);
     const [closedTicketsPage, setClosedTicketsPage] = React.useState<number>(1);
 
-    const ticketPaginationParams = React.useMemo(() => ({
-        openTicketsPage,
-        closedTicketsPage,
-    }), [openTicketsPage, closedTicketsPage]);
-    
+    const ticketPaginationParams = React.useMemo(
+        () => ({
+            openTicketsPage,
+            closedTicketsPage,
+        }),
+        [openTicketsPage, closedTicketsPage],
+    );
+
     const { ticketsQuery } = useProfileSupportTickets(ticketPaginationParams);
 
     const [selectedStatus, setSelectedStatus] = React.useState<SupportTicketStatus>(SupportTicketStatus.Open);
@@ -102,10 +101,10 @@ export function ProfileSupportPage() {
         selectedStatus === SupportTicketStatus.Open
             ? supportTickets.openTickets?.pagination
             : supportTickets.closedTickets?.pagination;
-        
+
     React.useEffect(() => {
-        if (!ticketsQuery.data) return;
-        
+        if(!ticketsQuery.data) return;
+
         const { openTickets, closedTickets } = ticketsQuery.data;
 
         setSupportTickets({
@@ -115,16 +114,15 @@ export function ProfileSupportPage() {
     }, [ticketsQuery.data]);
 
     const handlePageChange = (pageNumber: PageNumber) => {
-        if (!selectedTicketsPagination) return;
+        if(!selectedTicketsPagination) return;
 
         const page: number =
-            pageNumber === 'first' ? 1 :
-            pageNumber === 'last' ? selectedTicketsPagination.pagesTotal :
-            pageNumber;
+            pageNumber === 'first' ? 1 : pageNumber === 'last' ? selectedTicketsPagination.pagesTotal : pageNumber;
 
-        if (selectedStatus === SupportTicketStatus.Open) {
+        if(selectedStatus === SupportTicketStatus.Open) {
             setOpenTicketsPage(page);
-        } else if (selectedStatus === SupportTicketStatus.Closed) {
+        }
+        else if(selectedStatus === SupportTicketStatus.Closed) {
             setClosedTicketsPage(page);
         }
     };
@@ -137,17 +135,17 @@ export function ProfileSupportPage() {
                 // closedTicketsCount={supportTickets.closedTickets?.pagination.itemsTotal}
                 onStatusChange={(status: SupportTicketStatus) => {
                     setSelectedStatus((prev) => {
-                        if (prev === status) {
+                        if(prev === status) {
                             return prev;
                         }
 
                         return status;
-                    })
+                    });
                 }}
             />
-            <div className="flex flex-col h-full w-full">
-                { !supportTickets.openTickets && !supportTickets.closedTickets ? (
-                    <div className="flex items-center justify-center w-full h-full">
+            <div className="flex h-full w-full flex-col">
+                {!supportTickets.openTickets && !supportTickets.closedTickets ? (
+                    <div className="flex h-full w-full items-center justify-center">
                         <p className="text-neutral-500">Loading...</p>
                     </div>
                 ) : (
@@ -190,13 +188,13 @@ export function ProfileSupportPage() {
                     </React.Fragment>
                 )}
             </div>
-            { (selectedTicketsPagination && selectedTicketsPagination.pagesTotal > 1) && (
+            {selectedTicketsPagination && selectedTicketsPagination.pagesTotal > 1 && (
                 <Pagination
                     size="extra-small"
                     page={selectedTicketsPagination.page} // Adjusted to use 1-based indexing
                     onPageChange={(pageNumber) => handlePageChange(pageNumber)} // Ensure consistency
                     numberOfPages={selectedTicketsPagination.pagesTotal}
-                    className="justify-center mt-4"
+                    className="mt-4 justify-center"
                 >
                     <PaginationContent>
                         <PaginationPrevious
@@ -204,17 +202,17 @@ export function ProfileSupportPage() {
                             disabled={selectedTicketsPagination.page <= 1} // Adjusted to match 1-based indexing
                         />
 
-                        {getPaginationPages(selectedTicketsPagination.page, selectedTicketsPagination.pagesTotal).map((item, index) => (
-                            <PaginationItem key={index}>
-                                {item === '...' ? (
-                                    <span className="px-2 text-neutral-400">...</span>
-                                ) : (
-                                    <PaginationButton pageNumber={item}>
-                                        {item}
-                                    </PaginationButton>
-                                )}
-                            </PaginationItem>
-                        ))}
+                        {getPaginationPages(selectedTicketsPagination.page, selectedTicketsPagination.pagesTotal).map(
+                            (item, index) => (
+                                <PaginationItem key={index}>
+                                    {item === '...' ? (
+                                        <span className="text-neutral-400 px-2">...</span>
+                                    ) : (
+                                        <PaginationButton pageNumber={item}>{item}</PaginationButton>
+                                    )}
+                                </PaginationItem>
+                            ),
+                        )}
 
                         <PaginationNext
                             pageNumber={selectedTicketsPagination.page + 1}
@@ -240,11 +238,8 @@ const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardInterface)
     return (
         <Link href={`/account/support/${properties.ticket.identifier}`}>
             <div className="grid w-full overflow-hidden rounded-xl border p-6">
-                <div className="flex items-center justify-between mb-4">
-                    <Badge
-                        variant={properties.status === SupportTicketStatus.Open ? 'success' : 'info'}
-                        size="sm"
-                    >
+                <div className="mb-4 flex items-center justify-between">
+                    <Badge variant={properties.status === SupportTicketStatus.Open ? 'success' : 'info'} size="medium">
                         {properties.status}
                     </Badge>
                     <ArrowRight size={16} />
@@ -252,23 +247,19 @@ const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardInterface)
                 <div className="mb-2 flex items-center justify-start gap-2">
                     <h2 className="m-0 text-base font-medium">{properties.ticket.title}</h2>
                 </div>
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-2 mb-2">
+                <div className="mb-2 flex flex-col items-start justify-start gap-2 lg:flex-row lg:items-center">
                     <span className="text-sm text-opsis-content-secondary">
                         Placed {formatDateToDayOfWeekAndDate(new Date(properties.ticket.createdAt))}
                     </span>
                     <span className="hidden lg:block">&bull;</span>
-                    <span className="text-sm text-opsis-content-secondary">
-                        Id: {properties.ticket.identifier}
-                    </span>
+                    <span className="text-sm text-opsis-content-secondary">Id: {properties.ticket.identifier}</span>
                     <span className="hidden lg:block">&bull;</span>
                     <span className="text-sm text-opsis-content-secondary">
                         Updated: {formatDateToDateAtTime(new Date(properties.ticket.updatedAt))}
                     </span>
                 </div>
                 <div className="max-w-full overflow-hidden">
-                    <p className="truncate break-words text-sm text-opsis-content-secondary">
-                        {commentContent}
-                    </p>
+                    <p className="truncate break-words text-sm text-opsis-content-secondary">{commentContent}</p>
                 </div>
             </div>
         </Link>
@@ -283,7 +274,7 @@ const ProfileEmptySupportTickets = (properties: ProfileEmptySupportTicketsInterf
         <div className="flex h-full w-full flex-col items-center justify-center">
             <Smiley size={24} className="text-neutral-500" />
             <h2 className="text-neutral-500 mt-4 text-xl font-medium">
-                No {properties.status.toLowerCase()} requests—we're here when you need us.
+                No {properties.status.toLowerCase()} requests, we&apos;re here when you need us.
             </h2>
             <p className="text-neutral-400 mt-2 text-sm">Reach out anytime by creating a new request.</p>
         </div>
