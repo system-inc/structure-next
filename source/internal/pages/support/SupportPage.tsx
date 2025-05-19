@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Internal Components
 import { TicketList } from './components/TicketList/TicketList';
 import { Ticket } from './components/Ticket/Ticket';
-import { CustomerAndTicketSidePanel } from './components/CustomerAndTicketSidePanel/CustomerAndTicketSidePanel';
+// import { CustomerAndTicketSidePanel } from './components/CustomerAndTicketSidePanel/CustomerAndTicketSidePanel';
 
 // Dependencies - Hooks
 import { useSupportTickets } from './hooks/useSupportTickets';
@@ -155,21 +155,6 @@ export function SupportPage() {
         },
         [selectedTicket],
     );
-
-    // Function to handle ticket assignment
-    // const handleTicketAssign = React.useCallback(
-    //     async function (username: string) {
-    //         if (!ticketId) return;
-
-    //         await assignTicket({
-    //             variables: {
-    //                 ticketId,
-    //                 username,
-    //             },
-    //         });
-    //     },
-    //     [assignTicket, ticketId]
-    // );
 
     const handleTicketStatusChange = React.useCallback(
         async function ({ ticketId, status }: { ticketId: string; status: SupportTicketStatus }) {

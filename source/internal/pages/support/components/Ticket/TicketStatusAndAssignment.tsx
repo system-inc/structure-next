@@ -1,17 +1,12 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import Image from 'next/image';
 
 // Dependencies - Main Components
 // import { Button } from '@project/source/ui/base/Button';
 import Button from '@structure/source/common/buttons/Button';
 import ProfileImage from '@structure/source/modules/account/components/ProfileImage';
 import { Popover } from '@structure/source/common/popovers/Popover';
-import { InputSelect } from '@structure/source/common/forms/InputSelect';
 import { BorderContainer } from '../BorderContainer';
-
-// Dependencies - Hooks
-// import { useSupportTicketAssign } from '../../hooks/useSupportTicketAssign';
 
 // Dependencies - Assets
 import {
@@ -28,7 +23,6 @@ import {
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Constants
-import { ticketStatusOptions } from '@structure/source/internal/pages/support/constants';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TicketStatusAndAssignment
