@@ -21,11 +21,17 @@ import {
 // Component - Ticket
 export interface TicketInterface {
     ticket?: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]
+    ticketIndex?: number;
     account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged']
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles']
     isLoadingProfiles: boolean;
-    onTicketStatusChange: (ticketId: string, status: SupportTicketStatus) => void;
+    onTicketStatusChange: ({ ticketId, status }: { ticketId: string; status: SupportTicketStatus; }) => void;
+    onTicketAssignSupportProfile: ({ ticketId, supportProfileUsername }: {
+        ticketId: string;
+        supportProfileUsername: string;
+    }) => void;
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
+    onTicketIndexChange: (ticketIndex: number) => void;
     refetchTickets: () => void;
 }
 export function Ticket(properties: TicketInterface) {
@@ -42,14 +48,19 @@ export function Ticket(properties: TicketInterface) {
         <div className="flex h-full w-full flex-col overflow-hidden overscroll-none">
             {properties.ticket && (
                 <>
-                    <TicketHeader subject={properties.ticket.title} status={properties.ticket.status} />
+                    <TicketHeader
+                        subject={properties.ticket.title}
+                        ticketIndex={properties.ticketIndex}
+                        onTicketIndexChange={properties.onTicketIndexChange}
+                    />
                     <TicketStatusAndAssignment
                         ticketId={properties.ticket.id}
                         ticketStatus={properties.ticket.status}
                         supportProfiles={properties.supportProfiles}
                         isLoadingProfiles={properties.isLoadingProfiles}
-                        assignedToProfileId={properties.ticket.assignedToProfileId}
+                        assignedToProfile={properties.ticket.assignedToProfile}
                         onTicketStatusChange={properties.onTicketStatusChange}
+                        onTicketAssignSupportProfile={properties.onTicketAssignSupportProfile}
                     />
                     <TicketComments
                         userEmailAddress={properties.ticket.userEmailAddress}

@@ -57,9 +57,14 @@ export function SupportPage() {
     } = useSupportTickets(currentPagination.page, currentPagination.itemsPerPage, selectedStatus, showMyTickets);
 
     // Selected Ticket
-    const selectedTicket = ticketsQuery.data?.supportTicketsPrivileged?.items?.find(
-        (ticket) => ticket.identifier === selectedTicketIdentifier,
-    );
+    const { selectedTicket, selectedTicketIndex } = React.useMemo(() => {
+        const items = ticketsQuery.data?.supportTicketsPrivileged?.items || [];
+        const index = items.findIndex((ticket) => ticket.identifier === selectedTicketIdentifier);
+        return {
+            selectedTicket: index !== -1 ? items[index] : undefined,
+            selectedTicketIndex: index,
+        };
+    }, [ticketsQuery.data, selectedTicketIdentifier]);
 
     // Get account and commerce orders by email
     const { accountAndCommerceOrdersByEmailQuery } = useAccountAndCommerceOrdersByEmail(selectedTicket?.userEmailAddress)
@@ -88,6 +93,16 @@ export function SupportPage() {
 
         setPageIndex(page);
     }
+
+    function handleTicketIndexChange(ticketIndex: number) {
+        const items = ticketsQuery.data?.supportTicketsPrivileged?.items || [];
+        const ticket = items[ticketIndex];
+
+        if (ticket) {
+            setSelectedTicketIdentifier(ticket.identifier);
+        }
+    }
+
 
     // Function to select ticket and update URL
     function handleTicketSelection(ticketIdentifier: string) {
@@ -157,7 +172,7 @@ export function SupportPage() {
     // );
 
     const handleTicketStatusChange = React.useCallback(
-        async function (ticketId: string, status: SupportTicketStatus) {
+        async function ({ ticketId, status }: { ticketId: string; status: SupportTicketStatus }) {
             await updateTicketStatus({
                 variables: {
                     ticketId,
@@ -166,6 +181,21 @@ export function SupportPage() {
             })
         },
         [selectedTicket?.status]
+    );
+
+    const handleTicketAssignSupportProfile = React.useCallback(
+        function ({ ticketId, supportProfileUsername }: { ticketId: string; supportProfileUsername: string }) {
+            
+            if (!ticketId || !supportProfileUsername) return;
+
+            assignTicket({
+                variables: {
+                    ticketId,
+                    username: supportProfileUsername,
+                },
+            });
+        },
+        []
     );
 
     const handleTicketCommentCreate = React.useCallback(
@@ -181,8 +211,8 @@ export function SupportPage() {
 
     // Render the component
     return (
-        <div className="relative h-[calc(100vh-3.5rem)] overflow-hidden">
-            <div className="grid h-full grid-cols-[390px_1fr_390px]">
+        <div className="relative h-[calc(100vh-3.5rem)]">
+            <div className="grid h-full grid-cols-[390px_1fr]">
 
                 {/* Left Sidebar */}
                 <TicketList
@@ -200,20 +230,23 @@ export function SupportPage() {
 
                 <Ticket
                     ticket={selectedTicket}
+                    ticketIndex={selectedTicketIndex}
                     account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
                     supportProfiles={supportProfilesQuery.data?.supportAllSupportProfiles}
                     isLoadingProfiles={supportProfilesQuery.loading}
                     onTicketStatusChange={handleTicketStatusChange}
+                    onTicketAssignSupportProfile={handleTicketAssignSupportProfile}
                     onTicketCommentCreate={handleTicketCommentCreate}
+                    onTicketIndexChange={handleTicketIndexChange}
                     refetchTickets={refetchTickets}
                 />
 
                 {/* Right Sidebar */}
-                <CustomerAndTicketSidePanel
+                {/* <CustomerAndTicketSidePanel
                     ticket={selectedTicket}
                     account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
                     commerceOrders={accountAndCommerceOrdersByEmailQuery.data?.commerceOrdersPrivileged.items}
-                />
+                /> */}
             </div>
         </div>
     );

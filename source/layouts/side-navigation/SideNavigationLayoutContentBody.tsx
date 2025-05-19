@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
+// import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -20,17 +20,22 @@ export interface SideNavigationLayoutContentBodyInterface {
 export function SideNavigationLayoutContentBody(properties: SideNavigationLayoutContentBodyInterface) {
     // Render the component
     return (
-        <ScrollArea
-            ref={properties.scrollAreaReference}
-            containerClassName={mergeClassNames('h-full', properties.containerClassName)}
-        >
-            {/* This child div is necessary for easily managing multiple page layouts */}
-            <div className={mergeClassNames('h-full max-h-[calc(100vh-3.5rem)]', properties.className)}>
-                {properties.children}
-            </div>
-        </ScrollArea>
+        <div className={mergeClassNames('h-full max-h-[calc(100vh-3.5rem)] overflow-y-hidden', properties.className)}>
+            {properties.children}
+        </div>
     );
 }
 
 // Export - Default
 export default SideNavigationLayoutContentBody;
+
+
+{/* <ScrollArea
+    ref={properties.scrollAreaReference}
+    containerClassName={mergeClassNames('h-full', properties.containerClassName)}
+>
+    {/* This child div is necessary for easily managing multiple page layouts *
+    <div className={mergeClassNames('h-full max-h-[calc(100vh-3.5rem)]', properties.className)}>
+        {properties.children}
+    </div>
+</ScrollArea> */}

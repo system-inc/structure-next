@@ -50,15 +50,12 @@ export function InternalLayout(properties: InternalLayoutInterface) {
     return (
         <AuthorizationLayout mustBeAdministrator={true}>
             {/* Navigation */}
-            <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier} topBar={true}>
+            <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier}>
                 <InternalNavigation />
             </SideNavigationLayoutNavigation>
 
             {/* Content */}
-            <SideNavigationLayoutContent
-                layoutIdentifier={internalLayoutIdentifier}
-                topTitle="Internal"
-            >
+            <SideNavigationLayoutContent layoutIdentifier={internalLayoutIdentifier}>
                 <SideNavigationLayoutContentBody>{properties.children}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
 
