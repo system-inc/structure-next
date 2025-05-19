@@ -14,9 +14,9 @@ import { ProfileImage } from '@structure/source/modules/account/components/Profi
 // Dependencies - API
 import { useQuery, useMutation } from '@apollo/client';
 import {
-    AccountAvailableAccessRolesPrivilegedDocument,
+    AccountAccessRoleAssignmentCreatePrivilegedDocument,
+    AccountAccessRolesPrivilegedDocument,
     AccountPrivilegedDocument,
-    AccountAccessRoleGrantPrivilegedDocument,
 } from '@project/source/api/GraphQlGeneratedCode';
 import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
@@ -50,7 +50,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
     const debouncedEmail = useDebounce(emailInput, 500);
 
     // Queries and Mutations
-    const accountAvailableAccessRolesPrivilegedState = useQuery(AccountAvailableAccessRolesPrivilegedDocument);
+    const accountAvailableAccessRolesPrivilegedState = useQuery(AccountAccessRolesPrivilegedDocument);
     const accountPrivilegedState = useQuery(AccountPrivilegedDocument, {
         variables: {
             input: {
@@ -59,9 +59,10 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
         },
         skip: !debouncedEmail || !isEmailAddress(debouncedEmail),
     });
-    const [accountAccessRoleGrantPrivilegedMutation, accountAccessRoleGrantPrivilegedMutationState] = useMutation(
-        AccountAccessRoleGrantPrivilegedDocument,
-    );
+    const [
+        accountAccessRoleAssignmentCreatePrivilegedMutation,
+        accountAccessRoleAssignmentCreatePrivilegedMutationState,
+    ] = useMutation(AccountAccessRoleAssignmentCreatePrivilegedDocument);
 
     // Effect to handle email validation
     React.useEffect(
@@ -87,17 +88,17 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
     // Function to handle role grant confirmation
     async function handleGrantConfirm() {
         try {
-            const result = await accountAccessRoleGrantPrivilegedMutation({
+            const result = await accountAccessRoleAssignmentCreatePrivilegedMutation({
                 variables: {
                     input: {
                         username: selectedUsername,
                         emailAddress: emailInput,
-                        type: selectedRoleType,
+                        accessRole: selectedRoleType,
                     },
                 },
             });
 
-            if(result.data?.accountAccessRoleGrantPrivileged) {
+            if(result.data?.accountAccessRoleAssignmentCreatePrivileged) {
                 setGrantSuccess({ username: selectedUsername, role: selectedRoleType });
                 setGrantDialogOpen(false);
                 if(properties.onRoleGranted) {
@@ -190,10 +191,10 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                                 className="w-full"
                                 defaultValue={selectedRoleType}
                                 items={
-                                    accountAvailableAccessRolesPrivilegedState.data?.accountAvailableAccessRolesPrivileged.map(
+                                    accountAvailableAccessRolesPrivilegedState.data?.accountAccessRolesPrivileged.map(
                                         function (item) {
                                             return {
-                                                value: item,
+                                                value: item.type,
                                             };
                                         },
                                     ) || []
@@ -232,11 +233,13 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             Are you sure you want to grant the <b>{selectedRoleType}</b> role to{' '}
                             <b>@{selectedUsername}</b>?
                         </p>
-                        {accountAccessRoleGrantPrivilegedMutationState.error && (
+                        {accountAccessRoleAssignmentCreatePrivilegedMutationState.error && (
                             <Alert
                                 className="mt-4"
                                 variant="error"
-                                title={apolloErrorToMessage(accountAccessRoleGrantPrivilegedMutationState.error)}
+                                title={apolloErrorToMessage(
+                                    accountAccessRoleAssignmentCreatePrivilegedMutationState.error,
+                                )}
                             />
                         )}
                     </>
@@ -246,7 +249,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                         <Button onClick={() => setGrantDialogOpen(false)}>Cancel</Button>
                         <Button
                             onClick={handleGrantConfirm}
-                            processing={accountAccessRoleGrantPrivilegedMutationState.loading}
+                            processing={accountAccessRoleAssignmentCreatePrivilegedMutationState.loading}
                         >
                             Grant Role
                         </Button>

@@ -44,6 +44,14 @@ export interface StructureSettingsInterface {
     tagline: string;
     description: string;
     url: string;
+    environments?: {
+        production: {
+            hosts: string[];
+        };
+        [key: string]: {
+            hosts: string[];
+        };
+    };
     apis: {
         base: ApiService;
         [key: string]: ApiService;
@@ -71,7 +79,6 @@ export interface StructureSettingsInterface {
             url: string;
         };
     };
-
     services?: {
         [providerIdentifier: string]: Service;
     };

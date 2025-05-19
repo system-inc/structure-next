@@ -65,8 +65,8 @@ query WaitListEntries($waitListIdentifier: String!, $pagination: PaginationInput
 }
 
 # Wait List Entry Create Mutation
-mutation WaitListEntryCreate($emailAddress: String!) {
-    waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: "earlyAccess") {
+mutation WaitListEntryCreate($emailAddress: String!, $waitlistIdentifier: String! = "earlyAccess") {
+    waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: $waitlistIdentifier) {
         id
         emailAddress
     }
