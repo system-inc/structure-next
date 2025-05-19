@@ -2,16 +2,18 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useUrlSearchParameters, useRouter } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Internal Components
 import { TicketList } from './components/TicketList/TicketList';
 import { Ticket } from './components/Ticket/Ticket';
-import { CustomerAndTicketSidePanel } from './components/CustomerAndTicketSidePanel/CustomerAndTicketSidePanel';
+// import { CustomerAndTicketSidePanel } from './components/CustomerAndTicketSidePanel/CustomerAndTicketSidePanel';
 
 // Dependencies - Hooks
 import { useSupportTickets } from './hooks/useSupportTickets';
 import { useAccountAndCommerceOrdersByEmail } from './hooks/useAccountAndCommerceOrdersByEmail';
+
+// Dependencies - URL State
+import { parseAsInteger, parseAsStringEnum, parseAsString, useQueryState } from 'nuqs';
 
 // Dependencies - API
 import {
@@ -22,27 +24,19 @@ import {
 
 // Component - SupportPage
 export function SupportPage() {
-    // Add router
-    const router = useRouter();
-    // URL Parameters
-    const urlSearchParameters = useUrlSearchParameters();
-
-    const pageParam = urlSearchParameters.get('page') ? parseInt(urlSearchParameters?.get('page') as string) : 1;
-
-    // State & Refs
-    const [selectedStatus, setSelectedStatus] = React.useState<SupportTicketStatus>(
-        (urlSearchParameters?.get('status') as SupportTicketStatus) || SupportTicketStatus.Open,
+    const [pageIndex, setPageIndex] = useQueryState('page', parseAsInteger.withDefault(1));
+    const [selectedStatus, setSelectedStatus] = useQueryState<SupportTicketStatus>('status',
+        parseAsStringEnum<SupportTicketStatus>(Object.values(SupportTicketStatus)).withDefault(SupportTicketStatus.Open)
     );
-    const [selectedTicketIdentifier, setSelectedTicketIdentifier] = React.useState<string | null>(
-        urlSearchParameters?.get('ticket') ?? null,
-    );
+    const [selectedTicketIdentifier, setSelectedTicketIdentifier] = useQueryState('ticket', parseAsString.withDefault(''));
+
     const [currentPagination, setCurrentPagination] = React.useState<Pagination>({
         itemIndex: 0, 
         itemIndexForNextPage: null,
         itemIndexForPreviousPage: null,
         itemsPerPage: 20,
         itemsTotal: 0,
-        page: pageParam,
+        page: pageIndex,
         pagesTotal: 0,
     });
     const [showMyTickets] = React.useState<boolean>(false);
@@ -63,9 +57,14 @@ export function SupportPage() {
     } = useSupportTickets(currentPagination.page, currentPagination.itemsPerPage, selectedStatus, showMyTickets);
 
     // Selected Ticket
-    const selectedTicket = ticketsQuery.data?.supportTicketsPrivileged?.items?.find(
-        (ticket) => ticket.identifier === selectedTicketIdentifier,
-    );
+    const { selectedTicket, selectedTicketIndex } = React.useMemo(() => {
+        const items = ticketsQuery.data?.supportTicketsPrivileged?.items || [];
+        const index = items.findIndex((ticket) => ticket.identifier === selectedTicketIdentifier);
+        return {
+            selectedTicket: index !== -1 ? items[index] : undefined,
+            selectedTicketIndex: index,
+        };
+    }, [ticketsQuery.data, selectedTicketIdentifier]);
 
     // Get account and commerce orders by email
     const { accountAndCommerceOrdersByEmailQuery } = useAccountAndCommerceOrdersByEmail(selectedTicket?.userEmailAddress)
@@ -81,12 +80,9 @@ export function SupportPage() {
         }));
     
         // Update the URL parameters for status and reset the page
-        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
-        updatedParams.set('status', status);
-        updatedParams.set('page', '1'); // Reset to the first page when status changes
-        updatedParams.delete('ticket'); // Remove the ticket parameter temporarily
-    
-        router.replace(`?${updatedParams.toString()}`);
+        setSelectedStatus(status);
+        setPageIndex(1);
+        setSelectedTicketIdentifier(null);
     }
 
     function handlePageChange(page: number) {
@@ -95,25 +91,22 @@ export function SupportPage() {
             page,
         }));
 
-        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
-        updatedParams.set('status', selectedStatus); // Preserve the current status
-        updatedParams.set('page', page.toString()); // Update the page
-        if (selectedTicketIdentifier) {
-            updatedParams.set('ticket', selectedTicketIdentifier); // Preserve the selected ticket
-        }
-    
-        // Update the URL
-        router.replace(`?${updatedParams.toString()}`);
+        setPageIndex(page);
     }
+
+    function handleTicketIndexChange(ticketIndex: number) {
+        const items = ticketsQuery.data?.supportTicketsPrivileged?.items || [];
+        const ticket = items[ticketIndex];
+
+        if (ticket) {
+            setSelectedTicketIdentifier(ticket.identifier);
+        }
+    }
+
 
     // Function to select ticket and update URL
     function handleTicketSelection(ticketIdentifier: string) {
         setSelectedTicketIdentifier(ticketIdentifier);
-        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
-        updatedParams.set('status', selectedStatus); // Preserve the current status
-        updatedParams.set('page', currentPagination.page.toString()); // Preserve the current page
-        updatedParams.set('ticket', ticketIdentifier); // Update the selected ticket
-        router.replace(`?${updatedParams.toString()}`);
     }
 
     React.useEffect(
@@ -131,26 +124,14 @@ export function SupportPage() {
             if (!selectedTicketIdentifier || !ticketExists) {
                 const firstTicket = filteredTickets[0];
                 if (firstTicket) {
-                    setSelectedTicketIdentifier(firstTicket.identifier); // Update the selected ticket ID in state
-
-                    // Update the URL with the new ticket parameter and reset the page to 1
-                    const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
-                    newParams.set('status', selectedStatus);
-                    newParams.set('page', currentPagination.page.toString()); // Reset to the first page
-                    newParams.set('ticket', firstTicket.identifier); // Set the first ticket ID
-                    router.replace(`?${newParams.toString()}`);
+                    setSelectedTicketIdentifier(firstTicket.identifier);
                 } else {
                     // If no tickets are available, clear the ticket parameter
                     setSelectedTicketIdentifier(null);
-                    const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
-                    newParams.set('status', selectedStatus);
-                    newParams.set('page', currentPagination.page.toString());
-                    newParams.delete('ticket');
-                    router.replace(`?${newParams.toString()}`);
                 }
             }
         },
-        [ticketsQuery.data, selectedStatus, selectedTicketIdentifier, urlSearchParameters, router], // Dependencies
+        [ticketsQuery.data, selectedStatus, selectedTicketIdentifier], // Dependencies
     );
 
     React.useEffect(
@@ -175,23 +156,8 @@ export function SupportPage() {
         [selectedTicket],
     );
 
-    // Function to handle ticket assignment
-    // const handleTicketAssign = React.useCallback(
-    //     async function (username: string) {
-    //         if (!ticketId) return;
-
-    //         await assignTicket({
-    //             variables: {
-    //                 ticketId,
-    //                 username,
-    //             },
-    //         });
-    //     },
-    //     [assignTicket, ticketId]
-    // );
-
     const handleTicketStatusChange = React.useCallback(
-        async function (ticketId: string, status: SupportTicketStatus) {
+        async function ({ ticketId, status }: { ticketId: string; status: SupportTicketStatus }) {
             await updateTicketStatus({
                 variables: {
                     ticketId,
@@ -200,6 +166,21 @@ export function SupportPage() {
             })
         },
         [selectedTicket?.status]
+    );
+
+    const handleTicketAssignSupportProfile = React.useCallback(
+        function ({ ticketId, supportProfileUsername }: { ticketId: string; supportProfileUsername: string }) {
+            
+            if (!ticketId || !supportProfileUsername) return;
+
+            assignTicket({
+                variables: {
+                    ticketId,
+                    username: supportProfileUsername,
+                },
+            });
+        },
+        []
     );
 
     const handleTicketCommentCreate = React.useCallback(
@@ -215,8 +196,8 @@ export function SupportPage() {
 
     // Render the component
     return (
-        <div className="relative h-[calc(100vh-3.5rem)] overflow-hidden">
-            <div className="grid h-full grid-cols-[390px_1fr_390px]">
+        <div className="relative h-[calc(100vh-3.5rem)]">
+            <div className="grid h-full grid-cols-[390px_1fr]">
 
                 {/* Left Sidebar */}
                 <TicketList
@@ -234,20 +215,23 @@ export function SupportPage() {
 
                 <Ticket
                     ticket={selectedTicket}
+                    ticketIndex={selectedTicketIndex}
                     account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
                     supportProfiles={supportProfilesQuery.data?.supportAllSupportProfiles}
                     isLoadingProfiles={supportProfilesQuery.loading}
                     onTicketStatusChange={handleTicketStatusChange}
+                    onTicketAssignSupportProfile={handleTicketAssignSupportProfile}
                     onTicketCommentCreate={handleTicketCommentCreate}
+                    onTicketIndexChange={handleTicketIndexChange}
                     refetchTickets={refetchTickets}
                 />
 
                 {/* Right Sidebar */}
-                <CustomerAndTicketSidePanel
+                {/* <CustomerAndTicketSidePanel
                     ticket={selectedTicket}
                     account={accountAndCommerceOrdersByEmailQuery.data?.accountPrivileged}
                     commerceOrders={accountAndCommerceOrdersByEmailQuery.data?.commerceOrdersPrivileged.items}
-                />
+                /> */}
             </div>
         </div>
     );

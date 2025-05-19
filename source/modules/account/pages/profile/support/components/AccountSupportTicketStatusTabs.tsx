@@ -1,11 +1,16 @@
-'use client'; // This component uses client-only features
+'use client';
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 
 // Dependencies - Main Components
 import { TabItem, Tabs } from '@project/source/ui/base/Tabs';
+
+// Dependencies - URL State
+import { useQueryState, parseAsStringEnum } from 'nuqs';
+
+// Dependencies - API
+import { SupportTicketStatus } from '@project/source/api/graphql';
 
 // Component - AccountSupportTicketStatusTabs
 interface AccountSupportTicketStatusTabsInterface {
@@ -13,15 +18,12 @@ interface AccountSupportTicketStatusTabsInterface {
     closedTicketsCount: number;
 }
 export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketStatusTabsInterface) {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-
-    const activeTab = searchParams.get('status') || 'open';
+    const [activeTab, setActiveTab] = useQueryState<SupportTicketStatus>('status',
+        parseAsStringEnum<SupportTicketStatus>(Object.values(SupportTicketStatus)).withDefault(SupportTicketStatus.Open)
+    );
 
     const handleTabChange = (value: string) => {
-        const updatedParams = new URLSearchParams(searchParams ?? undefined);
-        updatedParams.set('status', value);
-        router.replace(`?${updatedParams.toString()}`);
+        setActiveTab(value as SupportTicketStatus);
     }
 
     // Render the component

@@ -5,8 +5,6 @@ import React from 'react';
 import { usePathname as useUrlPath, useParams as useUrlParameters } from 'next/navigation';
 
 // Dependencies - Main Components
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
-import { useDrag } from '@use-gesture/react';
 import {
     desktopMinimumWidth,
     defaultNavigationWidth,
@@ -27,6 +25,9 @@ import {
     sideNavigationLayoutNavigationSpringConfiguration,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
+// Dependencies - Hooks
+import { useDrag } from '@use-gesture/react';
+
 // Dependencies - Animation
 import { useSpring, animated } from '@react-spring/web';
 
@@ -38,11 +39,8 @@ export interface SideNavigationLayoutNavigationSideInterface {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     children: React.ReactNode;
     className?: string;
-    topBar?: boolean;
 }
 export function SideNavigationLayoutNavigationSide(properties: SideNavigationLayoutNavigationSideInterface) {
-    // Defaults
-    const topBar = properties.topBar ?? false;
 
     // Hooks
     const urlPath = useUrlPath();
@@ -404,9 +402,8 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 ref={containerDivReference}
                 className={mergeClassNames(
                     'fixed top-0 z-20 flex h-full flex-col bg-light dark:bg-dark-1',
-                    // If there is no top bar or the window is less than the desktop minimum width and the side navigation is not closing by window resize
+                    // If the window is less than the desktop minimum width and the side navigation is not closing by window resize
                     // add a border to the right
-                    !topBar ||
                         (windowInnerWidth < desktopMinimumWidth &&
                             !sideNavigationLayoutNavigationIsClosingByWindowResize)
                         ? 'border-r border-r-light-4 dark:border-r-dark-4'
@@ -415,18 +412,8 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 )}
                 style={{ width: sideNavigationLayoutNavigationWidth + 'px', ...containerSpring }}
             >
-                <ScrollArea
-                    containerClassName={mergeClassNames(
-                        'mt-14 h-full',
-                        // If there is a top bar and the window is at least the desktop minimum width
-                        // add a border to the right
-                        topBar && windowInnerWidth >= desktopMinimumWidth
-                            ? 'border-r border-r-light-4 dark:border-r-dark-4'
-                            : '',
-                    )}
-                >
-                    {properties.children}
-                </ScrollArea>
+
+                {properties.children}
 
                 {/* Navigation Resize Handle */}
                 <div
@@ -434,11 +421,11 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     className={mergeClassNames(
                         'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none select-none bg-transparent transition-colors duration-500 hover:bg-blue active:bg-purple-500',
                         // If the top bar is enabled, offset the handle by the height of the top bar
-                        topBar && windowInnerWidth >= desktopMinimumWidth ? 'top-16' : '',
+                        windowInnerWidth >= desktopMinimumWidth ? 'top-16' : '',
                         // If the navigation is open, show the handle, otherwise disable interacting with it
                         sideNavigationLayoutNavigationOpen ? 'pointer-events-auto' : 'pointer-events-none',
                     )}
-                ></div>
+                />
             </animated.div>
 
             {/* Dimmed Overlay (mobile only) */}

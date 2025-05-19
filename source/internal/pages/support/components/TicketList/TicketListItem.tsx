@@ -73,9 +73,9 @@ export function TicketListItem(properties: TicketListItemInterface) {
                 <p className="neutral text-xs">{ticket.userEmailAddress}</p>
                 <p className="neutral text-xs">{formatDateWithTimeIfToday(createdAtDate)}</p>
             </div> */}
-            <div className="flex items-center justify-between mb-1">
-                <h4 className="text-sm font-medium">{ticket.title}</h4>
-                <p className="text-xs text-opsis-content-tetriary font-medium">{formatDateWithTimeIfToday(createdAtDate)}</p>
+            <div className="flex items-center gap-2 justify-between mb-1">
+                <h4 className="flex-shrink-1 text-sm font-medium">{ticket.title}</h4>
+                <p className="flex-shrink-0 text-xs text-opsis-content-tetriary font-medium">{formatDateWithTimeIfToday(createdAtDate)}</p>
             </div>
             {/* <p className="text-xs text-opsis-content-tetriary font-medium">
                 {ticket.userEmailAddress}

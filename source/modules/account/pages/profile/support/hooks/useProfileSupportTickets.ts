@@ -5,10 +5,13 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { ProfileSupportTicketsDocument } from '@project/source/api/GraphQlGeneratedCode';
 
-export function useProfileSupportTickets(
-    openTicketsPage: number,
-    closedTicketsPage: number,
-) {
+export function useProfileSupportTickets({
+    openTicketsPage,
+    closedTicketsPage,
+}: {
+    openTicketsPage: number;
+    closedTicketsPage: number;
+}) {
     // Queries
     const ticketsQuery = useQuery(ProfileSupportTicketsDocument, {
         variables: {

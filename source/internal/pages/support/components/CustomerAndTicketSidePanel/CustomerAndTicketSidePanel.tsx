@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 // Dependencies - Main Components
 import { CustomerTicketHeader } from './CustomerAndTicketSidePanelHeader';
@@ -29,27 +30,33 @@ export interface CustomerTicketDetailsInterface {
 }
 export function CustomerAndTicketSidePanel(properties: CustomerTicketDetailsInterface) {
     const previousTicketId = usePrevious(properties.ticket?.id);
-
     const [selectedView, setSelectedView] = React.useState<CustomerAndTicketSidePanelView>(CustomerAndTicketSidePanelView.Customer);
 
     return (
-        <div className="relative h-full overflow-hidden border-l border-light-3 dark:border-dark-3">
-            <CustomerTicketHeader
-                selectedView={selectedView}
-                onViewChange={setSelectedView}
-            />
-            { selectedView === CustomerAndTicketSidePanelView.Customer && (
-                <>
-                    <CustomerDetails account={properties.account} />
-                    <CustomerOrdersList
-                        orders={properties.commerceOrders}
-                        changed={properties.ticket?.id !== previousTicketId}
+        <DialogPrimitive.Root open={!!properties.ticket}>
+            <DialogPrimitive.Portal>
+                <DialogPrimitive.Content
+                    className="fixed right-0 top-[3.5rem] h-[calc(100vw - 3.5rem)] w-[390px] border-l border-light-3 dark:border-dark-3 bg-white dark:bg-dark-1 focus:outline-none transition-transform data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full"
+                    forceMount
+                >
+                    <CustomerTicketHeader
+                        selectedView={selectedView}
+                        onViewChange={setSelectedView}
                     />
-                </>
-            )}
-            { selectedView === CustomerAndTicketSidePanelView.Ticket && (
-                <TicketDetails ticket={properties.ticket} />
-            )}
-        </div>
+                    {selectedView === CustomerAndTicketSidePanelView.Customer && (
+                        <>
+                            <CustomerDetails account={properties.account} />
+                            <CustomerOrdersList
+                                orders={properties.commerceOrders}
+                                changed={properties.ticket?.id !== previousTicketId}
+                            />
+                        </>
+                    )}
+                    {selectedView === CustomerAndTicketSidePanelView.Ticket && (
+                        <TicketDetails ticket={properties.ticket} />
+                    )}
+                </DialogPrimitive.Content>
+            </DialogPrimitive.Portal>
+        </DialogPrimitive.Root>
     );
 }

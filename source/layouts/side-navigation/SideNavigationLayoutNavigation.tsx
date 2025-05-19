@@ -2,12 +2,17 @@
 import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - Main Components
-import SideNavigationLayoutNavigationTop from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationTop';
+import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import SideNavigationLayoutNavigationSide from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationSide';
+import SideNavigationLayoutNavigationSideTop from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationSideTop';
+import SideNavigationLayoutNavigationSideBottom from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationSideBottom';
 
 // Dependencies - Shared State
 import { atom } from 'jotai';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
+
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Dependencies - Animation
 import { easings } from '@react-spring/web';
@@ -155,33 +160,31 @@ export interface SideNavigationLayoutNavigationInterface {
     children: React.ReactNode;
     className?: string;
     topClassName?: string;
-    topBar?: boolean;
     topTitle?: React.ReactNode;
 }
 export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutNavigationInterface) {
-    // Defaults
-    const topBar = properties.topBar ?? false;
 
     // Render the component
     return (
-        <>
-            {/* Top */}
-            <SideNavigationLayoutNavigationTop
-                layoutIdentifier={properties.layoutIdentifier}
-                className={properties.topClassName}
-                topBar={topBar}
-                title={properties.topTitle}
-            />
-
-            {/* Side */}
-            <SideNavigationLayoutNavigationSide
-                layoutIdentifier={properties.layoutIdentifier}
-                className={properties.className}
-                topBar={topBar}
+        <SideNavigationLayoutNavigationSide
+            layoutIdentifier={properties.layoutIdentifier}
+            className={properties.className}
+        >
+            <SideNavigationLayoutNavigationSideTop layoutIdentifier={properties.layoutIdentifier} />
+            <ScrollArea
+                containerClassName={mergeClassNames(
+                    'h-full bg-opsis-background-secondary',
+                    // If there is a top bar and the window is at least the desktop minimum width
+                    // add a border to the right
+                    // windowInnerWidth >= desktopMinimumWidth
+                    //     ? 'border-r border-r-light-4 dark:border-r-dark-4'
+                    //     : '',
+                )}
             >
                 {properties.children}
-            </SideNavigationLayoutNavigationSide>
-        </>
+            </ScrollArea>
+            <SideNavigationLayoutNavigationSideBottom layoutIdentifier={properties.layoutIdentifier} />
+        </SideNavigationLayoutNavigationSide>
     );
 }
 
