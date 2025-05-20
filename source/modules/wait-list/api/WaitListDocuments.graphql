@@ -65,16 +65,16 @@ query WaitListEntriesPrivileged($waitListIdentifier: String!, $pagination: Pagin
 }
 
 # Wait List Entry Create Mutation
-mutation WaitListEntryCreate($emailAddress: String!, $waitlistIdentifier: String! = "earlyAccess") {
-    waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: $waitlistIdentifier) {
+mutation WaitListEntryCreate($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
+    waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: $waitListIdentifier) {
         id
         emailAddress
     }
 }
 
 # Wait List Entry Delete Mutation
-mutation WaitListEntryDelete($emailAddress: String!, $waitlistIdentifier: String! = "earlyAccess") {
-    waitListEntryDelete(emailAddress: $emailAddress, waitListIdentifier: $waitlistIdentifier) {
+mutation WaitListEntryDelete($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
+    waitListEntryDelete(emailAddress: $emailAddress, waitListIdentifier: $waitListIdentifier) {
         success
     }
 }
