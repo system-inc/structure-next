@@ -31,31 +31,33 @@ type CommandPluginProps = {
     onSelect: (command: CommandType) => void;
 };
 
-export function CommandPlugin({ prefix, commands, onSelect }: CommandPluginProps) {
+export function CommandPlugin(properties: CommandPluginProps) {
     const [editor] = useLexicalComposerContext();
     const [isShowingMenu, setIsShowingMenu] = React.useState(false);
-    const [matchingCommands, setMatchingCommands] = React.useState<CommandType[]>(commands);
+    const [matchingCommands, setMatchingCommands] = React.useState<CommandType[]>(properties.commands);
     const [selectedCommandIndex, setSelectedCommandIndex] = React.useState(0);
     const [text, setText] = React.useState('');
     const menuRef = React.useRef<HTMLUListElement>(null);
 
     const closeMenu = React.useCallback(() => {
         setIsShowingMenu(false);
-        setMatchingCommands(commands);
+        setMatchingCommands(properties.commands);
         setText('');
         setSelectedCommandIndex(0);
-    }, [commands]);
+    }, [properties.commands]);
 
-    const memoizedCommands = React.useMemo(() => commands, [commands]);
+    const memoizedCommands = React.useMemo(() => properties.commands, [properties.commands]);
 
+    const propertiesPrefix = properties.prefix;
+    const propertiesOnSelect = properties.onSelect;
     const insertCommand = React.useCallback(
-        (command: CommandType) => {
+        function (command: CommandType) {
             editor.update(() => {
                 const selection = $getSelection();
                 if(!$isRangeSelection(selection)) return;
 
                 // Delete the current prefix + search text
-                const prefixLength = prefix.length;
+                const prefixLength = propertiesPrefix.length;
                 const anchorNode = selection.anchor.getNode();
                 if($isTextNode(anchorNode)) {
                     anchorNode.spliceText(0, prefixLength + text.length, '', true);
@@ -86,16 +88,16 @@ export function CommandPlugin({ prefix, commands, onSelect }: CommandPluginProps
                     }
                 });
 
-                onSelect(command);
+                propertiesOnSelect(command);
             });
         },
-        [editor, prefix, text, onSelect],
+        [editor, propertiesPrefix, text, propertiesOnSelect],
     );
 
     const updateMatchingCommands = React.useCallback(
         (searchText: string) => {
             if(!searchText) {
-                setMatchingCommands(commands);
+                setMatchingCommands(properties.commands);
                 return;
             }
 
@@ -106,7 +108,7 @@ export function CommandPlugin({ prefix, commands, onSelect }: CommandPluginProps
             setMatchingCommands(matches);
             setSelectedCommandIndex(0);
         },
-        [memoizedCommands, commands],
+        [memoizedCommands, properties.commands],
     );
 
     // Handle keyboard events
@@ -189,7 +191,8 @@ export function CommandPlugin({ prefix, commands, onSelect }: CommandPluginProps
 
     // Track text changes and detect command prefix
     React.useEffect(() => {
-        const removeUpdateListener = editor.registerUpdateListener(({ editorState }) => {
+        const removeUpdateListener = editor.registerUpdateListener((updateState) => {
+            const editorState = updateState.editorState;
             editorState.read(() => {
                 const selection = $getSelection();
                 if(!$isRangeSelection(selection)) return;
@@ -201,10 +204,13 @@ export function CommandPlugin({ prefix, commands, onSelect }: CommandPluginProps
                 const cursorPosition = selection.anchor.offset;
 
                 // Find the last occurrence of the prefix before the cursor
-                const prefixBeforeCursor = textContent.substring(0, cursorPosition).lastIndexOf(prefix);
+                const prefixBeforeCursor = textContent.substring(0, cursorPosition).lastIndexOf(properties.prefix);
 
                 if(prefixBeforeCursor >= 0) {
-                    const searchText = textContent.substring(prefixBeforeCursor + prefix.length, cursorPosition);
+                    const searchText = textContent.substring(
+                        prefixBeforeCursor + properties.prefix.length,
+                        cursorPosition,
+                    );
 
                     setIsShowingMenu(true);
                     setText(searchText);
@@ -217,7 +223,7 @@ export function CommandPlugin({ prefix, commands, onSelect }: CommandPluginProps
         });
 
         return removeUpdateListener;
-    }, [editor, prefix, updateMatchingCommands]);
+    }, [editor, properties.prefix, updateMatchingCommands]);
 
     // Click outside to close menu
     React.useEffect(() => {

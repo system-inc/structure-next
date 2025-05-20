@@ -105,8 +105,8 @@ export default function ToolbarPlugin(properties: ToolbarPluginProps) {
 
     React.useEffect(() => {
         return mergeRegister(
-            editor.registerUpdateListener(({ editorState }) => {
-                editorState.read(() => {
+            editor.registerUpdateListener((listener) => {
+                listener.editorState.read(() => {
                     $updateToolbar();
                     const isNowEmpty = $getRoot().getTextContent().trim() === '';
                     setIsEmpty(isNowEmpty);
