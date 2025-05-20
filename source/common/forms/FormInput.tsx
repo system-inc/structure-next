@@ -85,11 +85,10 @@ export interface FormInputInterface extends InputInterface {
     validationResult?: ValidationResult;
     showValidationSuccessResults?: boolean;
     onValidate?: (validationResult: ValidationResult) => void;
+
+    component: React.ReactElement<FormInputInterface>;
 }
-export function FormInput({
-    component,
-    ...properties
-}: { component: React.ReactElement<FormInputInterface> } & FormInputInterface) {
+export function FormInput(properties: FormInputInterface) {
     // State
     const [validating, setValidating] = React.useState(properties.validating || false);
 
@@ -143,7 +142,7 @@ export function FormInput({
             )}
 
             {/* Component */}
-            {component}
+            {properties.component}
 
             {/* Errors */}
             {!properties.validating &&

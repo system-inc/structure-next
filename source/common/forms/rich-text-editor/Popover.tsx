@@ -26,7 +26,7 @@ const popoverVariants = cva(
     },
 );
 
-interface PopoverProps
+interface PopoverProperties
     extends VariantProps<typeof popoverVariants>,
         Omit<React.ComponentPropsWithoutRef<typeof RadixPopoverPrimitive.Content>, 'content'> {
     open?: boolean;
@@ -37,17 +37,13 @@ interface PopoverProps
     content: React.ReactNode;
     modal?: boolean;
 }
-const Popover = ({
-    align = 'center',
-    sideOffset = 5,
-    open: externalOpen,
-    onOpenChange: externalSetOpen,
-    content,
-    trigger,
-    modal = false,
-    onOpenAutoFocus = undefined,
-    ...props
-}: PopoverProps) => {
+function Popover(properties: PopoverProperties) {
+    const align = properties.align ?? 'center';
+    const sideOffset = properties.sideOffset ?? 5;
+    const externalOpen = properties.open;
+    const externalSetOpen = properties.onOpenChange;
+    const modal = properties.modal ?? false;
+
     const popoverId = React.useId(); // Create a unique ID for the popover
 
     const [internalOpen, setInternalOpen] = React.useState(false);
@@ -79,39 +75,62 @@ const Popover = ({
         },
     });
 
+    // Properties to spread on AnimatedContent
+    const animatedContentProperties = { ...properties };
+    delete animatedContentProperties.open;
+    delete animatedContentProperties.onOpenChange;
+    delete animatedContentProperties.onOpenAutoFocus;
+    delete animatedContentProperties.align;
+    delete animatedContentProperties.sideOffset;
+    delete animatedContentProperties.trigger;
+    delete animatedContentProperties.content;
+    delete animatedContentProperties.modal;
+
+    // const {
+    //     open,
+    //     onOpenChange,
+    //     onOpenAutoFocus,
+    //     align,
+    //     sideOffset,
+    //     trigger,
+    //     content,
+    //     modal,
+    //     ...animatedContentProperties
+    // } = properties;
+
     return (
         <RadixPopoverPrimitive.Root open={open} onOpenChange={setOpen} modal={modal}>
-            <RadixPopoverPrimitive.Trigger asChild>{trigger}</RadixPopoverPrimitive.Trigger>
+            <RadixPopoverPrimitive.Trigger asChild>{properties.trigger}</RadixPopoverPrimitive.Trigger>
             {transition(
                 (style, show) =>
                     show && (
                         <RadixPopoverPrimitive.Portal forceMount>
                             <AnimatedContent
-                                {...props}
+                                {...(animatedContentProperties as Omit<PopoverProperties, 'content'>)}
                                 align={align}
                                 sideOffset={sideOffset}
                                 style={{ ...style, transformOrigin: 'var(--radix-popover-content-transform-origin)' }}
-                                className={popoverVariants({ className: props.className })}
-                                onOpenAutoFocus={(e) => {
-                                    e.preventDefault(); // Prevent the default behavior of focusing the first focusable element
+                                className={popoverVariants({ className: properties.className })}
+                                onOpenAutoFocus={(event) => {
+                                    event.preventDefault(); // Prevent the default behavior of focusing the first focusable element
 
                                     // We want to use our own logic to focus the first focusable element (including links)
                                     focusFirstFocusableElement(`[data-popover-id="${popoverId}"]`);
 
-                                    if(onOpenAutoFocus) {
-                                        onOpenAutoFocus(e);
+                                    if(properties.onOpenAutoFocus) {
+                                        properties.onOpenAutoFocus(event);
                                     }
                                 }}
                                 data-popover-id={popoverId}
                             >
-                                {content}
+                                {properties.content}
                             </AnimatedContent>
                         </RadixPopoverPrimitive.Portal>
                     ),
             )}
         </RadixPopoverPrimitive.Root>
     );
-};
+}
 
 // DROPDOWN ITEM
 const popoverItemVariants = cva(
@@ -146,35 +165,55 @@ const popoverItemVariants = cva(
     },
 );
 
-interface PopoverItemProps extends VariantProps<typeof popoverItemVariants>, React.HTMLAttributes<HTMLButtonElement> {
+interface PopoverItemProperties
+    extends VariantProps<typeof popoverItemVariants>,
+        React.HTMLAttributes<HTMLButtonElement> {
     asChild?: boolean;
 }
-const PopoverItem = React.forwardRef<HTMLButtonElement, PopoverItemProps>(
-    ({ className, asChild, children, ...props }, ref) => {
-        const Component = asChild ? Slot : 'button';
+const PopoverItem = React.forwardRef<HTMLButtonElement, PopoverItemProperties>((properties, reference) => {
+    const Component = properties.asChild ? Slot : 'button';
 
-        return (
-            <Component ref={ref} className={mergeClassNames(popoverItemVariants({ className }))} {...props}>
-                {children}
-            </Component>
-        );
-    },
-);
+    // Component properties to spread
+    const componentProperties = { ...properties } as Partial<PopoverItemProperties>;
+    delete componentProperties.asChild;
+    delete componentProperties.className;
+    delete componentProperties.children;
+
+    return (
+        <Component
+            ref={reference}
+            className={mergeClassNames(popoverItemVariants({ className: properties.className }))}
+            {...componentProperties}
+        >
+            {properties.children}
+        </Component>
+    );
+});
 PopoverItem.displayName = 'PopoverItem';
 
 // POPOVER LINK
 
-const PopoverLink = React.forwardRef<
-    HTMLAnchorElement,
-    Omit<PopoverItemProps, 'asChild'> & {
-        href: string;
-        linkProps?: Omit<LinkProps, 'href' | 'passHref' | 'legacyBehavior'>;
-    }
->(({ href, linkProps, className, children, ...props }, ref) => {
+interface PopoverLinkProperties extends Omit<PopoverItemProperties, 'asChild'> {
+    href: string;
+    linkProps?: Omit<LinkProps, 'href' | 'passHref' | 'legacyBehavior'>;
+}
+
+const PopoverLink = React.forwardRef<HTMLAnchorElement, PopoverLinkProperties>(function (properties, reference) {
+    // PopoverItem properties to spread
+    const popoverItemProperties = { ...properties } as Partial<PopoverLinkProperties>;
+    delete popoverItemProperties.href;
+    delete popoverItemProperties.linkProps;
+    delete popoverItemProperties.className;
+    delete popoverItemProperties.children;
+
     return (
-        <PopoverItem className={mergeClassNames(className, 'block w-full text-left')} {...props} asChild>
-            <Link ref={ref} href={href} {...linkProps}>
-                {children}
+        <PopoverItem
+            className={mergeClassNames(properties.className, 'block w-full text-left')}
+            {...popoverItemProperties}
+            asChild
+        >
+            <Link ref={reference} href={properties.href} {...properties.linkProps}>
+                {properties.children}
             </Link>
         </PopoverItem>
     );
@@ -187,9 +226,17 @@ const popoverLabelVariants = cva(['text-opsis-content-primary text-base font-med
     defaultVariants: {},
 });
 
-interface PopoverLabelProps extends VariantProps<typeof popoverLabelVariants>, React.HTMLAttributes<HTMLDivElement> {}
-const PopoverLabel = React.forwardRef<HTMLDivElement, PopoverLabelProps>(({ className, ...props }, ref) => {
-    return <div ref={ref} className={popoverLabelVariants({ className })} {...props} />;
+interface PopoverLabelProperties
+    extends VariantProps<typeof popoverLabelVariants>,
+        React.HTMLAttributes<HTMLDivElement> {}
+const PopoverLabel = React.forwardRef<HTMLDivElement, PopoverLabelProperties>(function (properties, reference) {
+    // Properties to spread on the div
+    const divProperties = { ...properties } as Partial<PopoverLabelProperties>;
+    delete divProperties.className;
+
+    return (
+        <div ref={reference} className={popoverLabelVariants({ className: properties.className })} {...divProperties} />
+    );
 });
 PopoverLabel.displayName = 'PopoverLabel';
 
