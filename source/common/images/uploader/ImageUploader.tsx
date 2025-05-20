@@ -99,7 +99,7 @@ export function ImageUploader(properties: ImageUploaderInterface) {
                         onUploadError={handleUploadError}
                         withCredentials={properties.withCredentials !== undefined ? properties.withCredentials : true}
                     >
-                        {function ({ upload, isUploading, progress, error }) {
+                        {function (childProperties) {
                             return (
                                 <div>
                                     <div className="flex items-center space-x-2">
@@ -112,41 +112,46 @@ export function ImageUploader(properties: ImageUploaderInterface) {
                                                         const processedFile = properties.processFile
                                                             ? await properties.processFile(file)
                                                             : file;
-                                                        await upload(processedFile);
+                                                        await childProperties.upload(processedFile);
                                                     }
 
                                                     // Clear the selected files after successful upload
                                                     clearSelectedFiles();
-                                                }
-                                                catch {
+                                                } catch {
                                                     // Error will be handled by the onUploadError callback
                                                 }
                                             }}
-                                            loading={isUploading}
-                                            disabled={isUploading}
+                                            loading={childProperties.isUploading}
+                                            disabled={childProperties.isUploading}
                                         >
-                                            {isUploading ? `Uploading ${progress}%` : 'Upload'}
+                                            {childProperties.isUploading
+                                                ? `Uploading ${childProperties.progress}%`
+                                                : 'Upload'}
                                         </Button>
 
-                                        <Button variant="default" onClick={clearSelectedFiles} disabled={isUploading}>
+                                        <Button
+                                            variant="default"
+                                            onClick={clearSelectedFiles}
+                                            disabled={childProperties.isUploading}
+                                        >
                                             Cancel
                                         </Button>
                                     </div>
 
                                     {/* Progress bar */}
-                                    {isUploading && progress > 0 && (
+                                    {childProperties.isUploading && childProperties.progress > 0 && (
                                         <div className="bg-neutral-200 dark:bg-neutral-700 mt-2 h-2 w-full overflow-hidden rounded-full">
                                             <div
                                                 className="bg-blue-500 h-full rounded-full"
-                                                style={{ width: `${progress}%` }}
+                                                style={{ width: `${childProperties.progress}%` }}
                                             />
                                         </div>
                                     )}
 
                                     {/* Error message */}
-                                    {error && (
+                                    {childProperties.error && (
                                         <Alert variant="error" className="mt-2">
-                                            {error.message}
+                                            {childProperties.error.message}
                                         </Alert>
                                     )}
 
