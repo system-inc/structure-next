@@ -35,25 +35,19 @@ type FileDropProps = {
     onDragChange?: (isDragging: boolean) => void;
 };
 
-const FileDrop: React.FC<FileDropProps> = ({
-    children,
-    files: externalFilesState,
-    onFilesChange: externalOnFilesChange,
-    maxFiles = Infinity,
-    accept,
-    isDragging: externalDraggingState,
-    onDragChange: externalOnDragChange,
-}) => {
-    const [internalFiles, internalSetFiles] = React.useState<File[]>(externalFilesState);
+const FileDrop: React.FC<FileDropProps> = function (properties) {
+    const maxFiles = properties.maxFiles ?? Infinity;
+
+    const [internalFiles, internalSetFiles] = React.useState<File[]>(properties.files);
     const [files, onFilesChange] = [
-        externalFilesState ?? internalFiles,
-        externalOnFilesChange ?? internalSetFiles,
+        properties.files ?? internalFiles,
+        properties.onFilesChange ?? internalSetFiles,
     ] as const;
 
-    const [dragging, setDragging] = React.useState(externalDraggingState ?? false);
+    const [dragging, setDragging] = React.useState(properties.isDragging ?? false);
     const [isDragging, onDragChange] = [
-        externalDraggingState ?? dragging,
-        externalOnDragChange ?? setDragging,
+        properties.isDragging ?? dragging,
+        properties.onDragChange ?? setDragging,
     ] as const;
 
     const addFiles = React.useCallback(
@@ -61,13 +55,14 @@ const FileDrop: React.FC<FileDropProps> = ({
             let filteredFiles = newFiles;
 
             // Filter by accepted file types if specified
-            if(accept && accept.length > 0) {
-                filteredFiles = newFiles.filter((file) =>
-                    accept.some(
-                        (type) =>
-                            file.type === type ||
-                            (type.endsWith('/*') && file.type.startsWith(type.replace('/*', '/'))),
-                    ),
+            if(properties.accept && properties.accept.length > 0) {
+                filteredFiles = newFiles.filter(
+                    (file) =>
+                        properties.accept?.some(
+                            (type) =>
+                                file.type === type ||
+                                (type.endsWith('/*') && file.type.startsWith(type.replace('/*', '/'))),
+                        ),
                 );
             }
 
@@ -81,7 +76,7 @@ const FileDrop: React.FC<FileDropProps> = ({
             const result = [...updatedFiles, ...filesToAdd];
             onFilesChange(result);
         },
-        [maxFiles, accept, files, onFilesChange],
+        [maxFiles, properties.accept, files, onFilesChange],
     );
 
     const removeFile = React.useCallback(
@@ -94,8 +89,10 @@ const FileDrop: React.FC<FileDropProps> = ({
     );
 
     return (
-        <FileContext.Provider value={{ files, addFiles, removeFile, isDragging, onDragChange, accept }}>
-            {children}
+        <FileContext.Provider
+            value={{ files, addFiles, removeFile, isDragging, onDragChange, accept: properties.accept }}
+        >
+            {properties.children}
         </FileContext.Provider>
     );
 };
@@ -107,7 +104,8 @@ type FileInputProps = {
     className?: string;
 };
 
-const FileInput: React.FC<FileInputProps> = ({ multiple = false, children, className }) => {
+const FileInput: React.FC<FileInputProps> = (properties) => {
+    const multiple = properties.multiple ?? false;
     const { addFiles, onDragChange, accept } = useFileContext();
     const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -147,7 +145,7 @@ const FileInput: React.FC<FileInputProps> = ({ multiple = false, children, class
 
     return (
         <div
-            className={mergeClassNames(`relative`, className)}
+            className={mergeClassNames(`relative`, properties.className)}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -161,7 +159,7 @@ const FileInput: React.FC<FileInputProps> = ({ multiple = false, children, class
                 accept={`${accept?.join(',')}`}
                 multiple={multiple}
             />
-            {children}
+            {properties.children}
         </div>
     );
 };
@@ -183,16 +181,16 @@ type FileListProps = {
     component: React.ComponentType<{ file: File; removeFile: (index: number) => void; index: number }>;
 };
 
-const FileList: React.FC<FileListProps> = ({ className, component }) => {
+const FileList: React.FC<FileListProps> = (properties) => {
     const { files, removeFile } = useFileContext();
-    const Component = component;
+    const Component = properties.component;
 
     if(files.length === 0) {
         return null;
     }
 
     return (
-        <ul className={mergeClassNames('', className)}>
+        <ul className={mergeClassNames('', properties.className)}>
             {files.map((file, index) => (
                 <li key={index}>
                     <Component file={file} removeFile={removeFile} index={index} />

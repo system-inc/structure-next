@@ -45,13 +45,25 @@ const inputVariants = cva(
 );
 
 type InputProps = React.ComponentPropsWithoutRef<'input'> & VariantProps<typeof inputVariants>;
-const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, size, rounded, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>((properties, reference) => {
+    // Properties to spread onto the component
+    const inputProperties = { ...properties };
+    delete inputProperties.className;
+    delete inputProperties.size;
+    delete inputProperties.rounded;
+
+    // Render the component
     return (
         <input
-            ref={ref}
-            type={type}
-            className={mergeClassNames(inputVariants({ className, size, rounded }))}
-            {...props}
+            ref={reference}
+            className={mergeClassNames(
+                inputVariants({
+                    className: properties.className,
+                    size: properties.size,
+                    rounded: properties.rounded,
+                }),
+            )}
+            {...inputProperties}
         />
     );
 });

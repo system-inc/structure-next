@@ -23,7 +23,7 @@ const checkboxFieldVariants = cva([], {
 });
 
 // Component - CheckboxField
-export interface CheckboxFieldProps extends React.ComponentPropsWithoutRef<typeof Checkbox> {
+export interface CheckboxFieldProperties extends React.ComponentPropsWithoutRef<typeof Checkbox> {
     /** The label for the checkbox */
     label: string;
     /** Indicates if the field is optional */
@@ -36,16 +36,27 @@ export interface CheckboxFieldProps extends React.ComponentPropsWithoutRef<typeo
     layout?: 'horizontal' | 'vertical';
 }
 
-export const CheckboxField = React.forwardRef<React.ElementRef<typeof Checkbox>, CheckboxFieldProps>(function (
-    { label, optional, caption, error, id, className, layout = 'horizontal', ...props }: CheckboxFieldProps,
+export const CheckboxField = React.forwardRef<React.ElementRef<typeof Checkbox>, CheckboxFieldProperties>(function (
+    properties: CheckboxFieldProperties,
     reference: React.Ref<React.ElementRef<typeof Checkbox>>,
 ) {
+    const layout = properties.layout || 'horizontal';
     // Generate a unique ID for this checkbox if one isn't provided
     const internalId = React.useId();
-    const checkboxId = id ?? internalId;
+    const checkboxId = properties.id ?? internalId;
+
+    // Properties to spread onto the checkbox element
+    const checkboxProperties = { ...properties } as Partial<CheckboxFieldProperties>;
+    delete checkboxProperties.label;
+    delete checkboxProperties.optional;
+    delete checkboxProperties.caption;
+    delete checkboxProperties.error;
+    delete checkboxProperties.id;
+    delete checkboxProperties.className;
+    delete checkboxProperties.layout;
 
     return (
-        <div className={mergeClassNames('flex w-full flex-col gap-2', className)}>
+        <div className={mergeClassNames('flex w-full flex-col gap-2', properties.className)}>
             <div
                 className={mergeClassNames(
                     'flex items-center gap-2',
@@ -54,19 +65,19 @@ export const CheckboxField = React.forwardRef<React.ElementRef<typeof Checkbox>,
                 )}
             >
                 {/* Checkbox Control */}
-                <Checkbox id={checkboxId} {...props} ref={reference} />
+                <Checkbox id={checkboxId} ref={reference} {...checkboxProperties} />
 
                 {/* Label */}
                 <label
                     htmlFor={checkboxId}
                     className={mergeClassNames(
                         'inline-flex items-center justify-start gap-1',
-                        checkboxFieldVariants({ size: props.size }),
+                        checkboxFieldVariants({ size: properties.size }),
                         'cursor-pointer', // Make label clickable
                     )}
                 >
-                    {label}{' '}
-                    {optional && (
+                    {properties.label}{' '}
+                    {properties.optional && (
                         <span className="text-opsis-content-tetriary text-xs font-normal transition-colors">
                             (optional)
                         </span>
@@ -75,13 +86,13 @@ export const CheckboxField = React.forwardRef<React.ElementRef<typeof Checkbox>,
             </div>
 
             {/* Caption */}
-            {(caption || error) && (
+            {(properties.caption || properties.error) && (
                 <div className="text-content-secondary pl-6 text-xs">
                     {' '}
                     {/* Add left padding to align with label */}
-                    {caption && <p>{caption}</p>}
+                    {properties.caption && <p>{properties.caption}</p>}
                     {/* Error */}
-                    {error && <p className="whitespace-pre-line text-red-500">{error}</p>}
+                    {properties.error && <p className="whitespace-pre-line text-red-500">{properties.error}</p>}
                 </div>
             )}
         </div>
