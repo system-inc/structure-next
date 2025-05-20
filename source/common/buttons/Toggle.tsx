@@ -29,13 +29,27 @@ export const toggleVariants = cva(
 export const Toggle = React.forwardRef<
     React.ElementRef<typeof TogglePrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>
->(({ className, variant, size, ...props }, ref) => (
-    <TogglePrimitive.Root
-        ref={ref}
-        className={mergeClassNames(toggleVariants({ variant, size, className }))}
-        {...props}
-    />
-));
+>(function (properties, reference) {
+    // Create a clone of properties for remaining HTML attributes
+    const rootElementProperties = { ...properties };
+    delete rootElementProperties.variant;
+    delete rootElementProperties.size;
+    delete rootElementProperties.className;
+
+    return (
+        <TogglePrimitive.Root
+            ref={reference}
+            className={mergeClassNames(
+                toggleVariants({
+                    variant: properties.variant,
+                    size: properties.size,
+                    className: properties.className,
+                }),
+            )}
+            {...rootElementProperties}
+        />
+    );
+});
 
 Toggle.displayName = TogglePrimitive.Root.displayName;
 
