@@ -27,17 +27,28 @@ const cardVariants = cva(
 );
 
 type CardProps = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof cardVariants> & { asChild?: boolean };
-const Card = React.forwardRef<HTMLDivElement, CardProps>(
-    ({ className, children, asChild, interactive, ...props }, ref) => {
-        const Component = asChild ? Slot : 'div';
+const Card = React.forwardRef<HTMLDivElement, CardProps>(function (properties, reference) {
+    const Component = properties.asChild ? Slot : 'div';
 
-        return (
-            <Component ref={ref} className={mergeClassNames(cardVariants({ className, interactive }))} {...props}>
-                {children}
-            </Component>
-        );
-    },
-);
+    // Properties to spread onto the component
+    const componentProperties = { ...properties };
+    delete componentProperties.className;
+    delete componentProperties.children;
+    delete componentProperties.asChild;
+    delete componentProperties.interactive;
+
+    return (
+        <Component
+            ref={reference}
+            className={mergeClassNames(
+                cardVariants({ className: properties.className, interactive: properties.interactive }),
+            )}
+            {...componentProperties}
+        >
+            {properties.children}
+        </Component>
+    );
+});
 Card.displayName = 'Card';
 
 export { Card, cardVariants };
