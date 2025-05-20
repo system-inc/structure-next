@@ -166,9 +166,9 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
                                   itemsPerPage: itemsPerPage,
                               },
                           },
-                          updateQuery: function (previousResult, { fetchMoreResult }) {
-                              //   console.log('updateQuery called with', { previousResult, fetchMoreResult });
-                              return fetchMoreResult;
+                          updateQuery: function (previousResult, options) {
+                              //   console.log('updateQuery called with', { previousResult, fetchMoreResult: options.fetchMoreResult });
+                              return options.fetchMoreResult;
                           },
                       });
                       //   console.log('fetchMore resolved');

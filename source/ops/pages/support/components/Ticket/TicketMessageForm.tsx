@@ -42,9 +42,6 @@ export interface TicketMessageFormInterface {
     refetchTickets: () => void;
 }
 export function TicketMessageForm(properties: TicketMessageFormInterface) {
-    // Properties
-    const { ticketIdentifier, comments } = properties;
-
     const formRef = React.useRef<HTMLFormElement>(null);
 
     const [attachedFiles, setAttachedFiles] = React.useState<File[]>([]);
@@ -65,8 +62,8 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
         },
     });
 
-    const handleEditorChange = ({ markdown }: { markdown: string }) => {
-        setValue('reply', markdown, { shouldValidate: true });
+    const handleEditorChange = (options: { markdown: string }) => {
+        setValue('reply', options.markdown, { shouldValidate: true });
     };
 
     const handleSaveFiles = (files: File[]) => {
@@ -102,10 +99,10 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
         const hasAttachments = attachedFiles.length > 0;
 
         const input = {
-            ticketIdentifier,
+            ticketIdentifier: properties.ticketIdentifier,
             content: formValues.reply,
             contentType: RichContentFormat.Markdown,
-            replyToCommentId: comments[0]?.id || '',
+            replyToCommentId: properties.comments[0]?.id || '',
             visibility: SupportTicketCommentVisibility.Public,
         };
 
@@ -125,7 +122,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
                 });
 
                 const response = await fetch(
-                    `https://${ProjectSettings.apis.base.host}/support/${ticketIdentifier}/commentCreatePrivileged`,
+                    `https://${ProjectSettings.apis.base.host}/support/${properties.ticketIdentifier}/commentCreatePrivileged`,
                     {
                         method: 'POST',
                         body: formData,

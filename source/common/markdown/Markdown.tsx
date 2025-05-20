@@ -68,7 +68,7 @@ const components: ComponentsInterface = {
     ),
     pre: (properties) => (
         <pre
-            className="rounded-medium relative mb-6 border border-light-4 bg-light-2 p-5 text-sm dark:border-dark-4 dark:bg-dark"
+            className="relative mb-6 rounded-medium border border-light-4 bg-light-2 p-5 text-sm dark:border-dark-4 dark:bg-dark"
             {...properties}
         >
             {properties.children}
@@ -114,16 +114,20 @@ const components: ComponentsInterface = {
 export interface MarkdownInterface extends React.HTMLAttributes<HTMLDivElement> {
     children: string;
 }
-export function Markdown({ children, ...properties }: MarkdownInterface) {
+export function Markdown(properties: MarkdownInterface) {
+    // Properties to spread onto the div element
+    const divProperties = { ...properties } as Partial<MarkdownInterface>;
+    delete divProperties.children;
+
     // Render the component
     return (
-        <div className="max-w-3xl" {...properties}>
+        <div className="max-w-3xl" {...divProperties}>
             <ReactMarkdown
                 rehypePlugins={[rehypeHighlight]}
                 remarkPlugins={[remarkCustomHeaderId, remarkGfm]}
                 components={components}
             >
-                {children}
+                {properties.children}
             </ReactMarkdown>
         </div>
     );
