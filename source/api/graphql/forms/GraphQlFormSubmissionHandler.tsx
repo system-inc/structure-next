@@ -67,29 +67,26 @@ export interface GraphQlFormSubmissionHandlerInterface<
 export async function GraphQlFormSubmissionHandler<
     TGraphQlMutationResponseData = Record<string, unknown>,
     TGraphQlMutationVariables = Record<string, unknown>,
->({
-    formValues,
-    mutationFunction,
-    onSubmit,
-}: GraphQlFormSubmissionHandlerInterface<
-    TGraphQlMutationResponseData,
-    TGraphQlMutationVariables
->): Promise<FormSubmitResponseInterface> {
-    console.log('formValues in GraphQlFormSubmissionHandler:', formValues);
+>(
+    properties: GraphQlFormSubmissionHandlerInterface<TGraphQlMutationResponseData, TGraphQlMutationVariables>,
+): Promise<FormSubmitResponseInterface> {
+    console.log('formValues in GraphQlFormSubmissionHandler:', properties.formValues);
 
     // Variables to store the mutation response data and error
     let mutationResponseData: TGraphQlMutationResponseData | null = null;
     let mutationResponseError: ApolloError | null = null;
 
     // Convert form values to mutation variables
-    const mutationVariables = convertFormValuesToGraphQlMutationVariables(formValues) as TGraphQlMutationVariables;
+    const mutationVariables = convertFormValuesToGraphQlMutationVariables(
+        properties.formValues,
+    ) as TGraphQlMutationVariables;
 
     // Invoke the GraphQL mutation
     try {
         // Debug log to see what's being sent
         console.log('mutationVariables:', JSON.stringify(mutationVariables, null, 4));
 
-        const mutationResponse = await mutationFunction({
+        const mutationResponse = await properties.mutationFunction({
             variables: mutationVariables,
         });
         mutationResponseData = mutationResponse.data || null;
@@ -106,9 +103,9 @@ export async function GraphQlFormSubmissionHandler<
     };
 
     // If an onSubmit property has been provided
-    if(onSubmit) {
+    if(properties.onSubmit) {
         // Invoke the onSubmit property
-        await onSubmit(formValues, mutationResponseData, mutationResponseError);
+        await properties.onSubmit(properties.formValues, mutationResponseData, mutationResponseError);
     }
     // If no onSubmit property has been provided, infer the submitResponse from the mutation response
     else {
