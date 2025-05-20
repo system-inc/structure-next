@@ -119,30 +119,45 @@ export interface ButtonProps
     iconRight?: React.ReactNode;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant, size, icon, asChild = false, children, iconLeft, iconRight, ...props }, ref) => {
-        if((iconLeft || iconRight) && icon) {
-            throw new Error(
-                'Button: Cannot use both iconLeft/iconRight and icon props at the same time\n\nButton Content: ' +
-                    children,
-            );
-        }
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function (properties, reference) {
+    const asChild = properties.asChild !== undefined ? properties.asChild : false;
 
-        const Component = asChild ? Slot : 'button';
-        return (
-            <Component
-                className={mergeClassNames(buttonVariants({ variant, size, icon }), className)}
-                ref={ref}
-                type="button" // Default to button type (avoids accidental form submissions)
-                {...props}
-            >
-                {iconLeft}
-                <Slottable>{children}</Slottable>
-                {iconRight}
-            </Component>
+    if((properties.iconLeft || properties.iconRight) && properties.icon) {
+        throw new Error(
+            'Button: Cannot use both iconLeft/iconRight and icon props at the same time\n\nButton Content: ' +
+                properties.children,
         );
-    },
-);
+    }
+
+    const Component = asChild ? Slot : 'button';
+
+    // Properties to spread onto the button element
+    const buttonElementProperties = { ...properties };
+    delete buttonElementProperties.className;
+    delete buttonElementProperties.variant;
+    delete buttonElementProperties.size;
+    delete buttonElementProperties.icon;
+    delete buttonElementProperties.asChild;
+    delete buttonElementProperties.children;
+    delete buttonElementProperties.iconLeft;
+    delete buttonElementProperties.iconRight;
+
+    return (
+        <Component
+            className={mergeClassNames(
+                buttonVariants({ variant: properties.variant, size: properties.size, icon: properties.icon }),
+                properties.className,
+            )}
+            ref={reference}
+            type="button" // Default to button type (avoids accidental form submissions)
+            {...buttonElementProperties}
+        >
+            {properties.iconLeft}
+            <Slottable>{properties.children}</Slottable>
+            {properties.iconRight}
+        </Component>
+    );
+});
 Button.displayName = 'Button';
 
 export { Button, buttonVariants };
