@@ -2,7 +2,7 @@ import { Label } from '@radix-ui/react-label';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import React from 'react';
 
-interface FormFieldProps<T extends HTMLElement> extends React.HTMLAttributes<T> {
+interface FormFieldProperties<T extends HTMLElement> extends React.HTMLAttributes<T> {
     label: string;
     optional?: boolean;
     caption?: string;
@@ -10,42 +10,34 @@ interface FormFieldProps<T extends HTMLElement> extends React.HTMLAttributes<T> 
     htmlFor?: string;
     children?: React.ReactNode;
 }
-const FormField = <T extends HTMLElement>({
-    label,
-    optional,
-    caption,
-    error,
-    htmlFor,
-    children,
-    className,
-}: FormFieldProps<T>) => {
+const FormField = function <T extends HTMLElement>(properties: FormFieldProperties<T>) {
     return (
-        <div className={mergeClassNames('flex w-full flex-col gap-2', className)}>
+        <div className={mergeClassNames('flex w-full flex-col gap-2', properties.className)}>
             {/* Label */}
             <Label
                 // Default to the internalId if no id is provided
-                htmlFor={htmlFor}
+                htmlFor={properties.htmlFor}
                 className="inline-flex items-center justify-start gap-1 text-sm font-medium"
             >
-                {label}{' '}
-                {optional && (
-                    <span className="text-xs font-normal text-opsis-content-tetriary transition-colors">
+                {properties.label}{' '}
+                {properties.optional && (
+                    <span className="text-opsis-content-tetriary text-xs font-normal transition-colors">
                         (optional)
                     </span>
                 )}
             </Label>
 
             {/* Form Element */}
-            <div className="relative">{children}</div>
+            <div className="relative">{properties.children}</div>
 
             {/* Caption */}
             <div className="text-content-secondary text-xs">
-                {caption && <p>{caption}</p>}
+                {properties.caption && <p>{properties.caption}</p>}
                 {/* Error */}
-                {error && <p className="whitespace-pre-line text-red-500">{error}</p>}
+                {properties.error && <p className="whitespace-pre-line text-red-500">{properties.error}</p>}
             </div>
         </div>
     );
 };
 
-export { FormField, type FormFieldProps };
+export { FormField, type FormFieldProperties };
