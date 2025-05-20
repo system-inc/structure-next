@@ -29,16 +29,28 @@ const checkboxVariants = cva(
     },
 );
 
+// Component - Checkbox
 const Checkbox = React.forwardRef<
     React.ElementRef<typeof CheckboxPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & VariantProps<typeof checkboxVariants>
->(({ className, size, ...props }, ref) => (
-    <CheckboxPrimitive.Root ref={ref} className={mergeClassNames(checkboxVariants({ size }), className)} {...props}>
-        <CheckboxPrimitive.Indicator className={mergeClassNames('flex items-center justify-center text-current')}>
-            <CheckIcon className="h-full w-full" />
-        </CheckboxPrimitive.Indicator>
-    </CheckboxPrimitive.Root>
-));
+>(function (properties, reference) {
+    // Properties to spread onto the component
+    const checkboxProperties = { ...properties };
+    delete checkboxProperties.className;
+    delete checkboxProperties.size;
+
+    return (
+        <CheckboxPrimitive.Root
+            ref={reference}
+            className={mergeClassNames(checkboxVariants({ size: properties.size }), properties.className)}
+            {...checkboxProperties}
+        >
+            <CheckboxPrimitive.Indicator className={mergeClassNames('flex items-center justify-center text-current')}>
+                <CheckIcon className="h-full w-full" />
+            </CheckboxPrimitive.Indicator>
+        </CheckboxPrimitive.Root>
+    );
+});
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
 export { Checkbox };
