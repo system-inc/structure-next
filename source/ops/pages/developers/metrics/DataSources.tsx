@@ -110,15 +110,10 @@ export function DataSources(properties: DataSourcesInterface) {
 
     // Bind the drag event to the row
     const dragEventListener = useDrag(
-        ({
-            args: [originalIndex],
-            active,
-            movement: [
-                ,
-                // x,
-                y,
-            ],
-        }) => {
+        function (event) {
+            const originalIndex = event.args[0];
+            const active = event.active;
+            const y = event.movement[1]; // Second element of movement array
             // Find the current index of the row in the visual order (contained in visualOrder)
             const visualIndex = visualOrderReference.current.indexOf(originalIndex);
 
@@ -238,7 +233,7 @@ export function DataSources(properties: DataSourcesInterface) {
                         className="relative"
                         ref={dataSourcesContainerReference}
                     >
-                        {springs.map(function ({ zIndex, y, scale }, index) {
+                        {springs.map(function (animationProperties, index) {
                             const dataSource = properties.settings.dataSources[index];
 
                             // If the data source is not found, return null
@@ -247,9 +242,9 @@ export function DataSources(properties: DataSourcesInterface) {
                             return (
                                 <animated.div
                                     style={{
-                                        zIndex,
-                                        y,
-                                        scale,
+                                        zIndex: animationProperties.zIndex,
+                                        y: animationProperties.y,
+                                        scale: animationProperties.scale,
                                     }}
                                     key={dataSource.id + '-' + index}
                                     className={'absolute'}

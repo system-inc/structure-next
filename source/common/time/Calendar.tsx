@@ -16,12 +16,14 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Calendar
 export type CalendarInterface = React.ComponentProps<typeof ReactDayPicker>;
-export function Calendar({ className, classNames, showOutsideDays = true, ...properties }: CalendarInterface) {
+export function Calendar(properties: CalendarInterface) {
+    const showOutsideDays = properties.showOutsideDays !== undefined ? properties.showOutsideDays : true;
+
     // Render the component
     return (
         <ReactDayPicker
             showOutsideDays={showOutsideDays}
-            className={mergeClassNames('p-3', className)}
+            className={mergeClassNames('p-3', properties.className)}
             classNames={{
                 months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
                 month: 'space-y-4',
@@ -54,7 +56,7 @@ export function Calendar({ className, classNames, showOutsideDays = true, ...pro
                 day_disabled: 'text-muted-foreground opacity-50',
                 day_range_middle: 'aria-selected:bg-accent aria-selected:text-accent-foreground',
                 day_hidden: 'invisible',
-                ...classNames,
+                ...properties.classNames,
             }}
             components={{
                 IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,

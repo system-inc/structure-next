@@ -521,15 +521,7 @@ export interface ChartInterface {
     errorMessage?: string;
     onMouseDown?: (chartEvent: React.MouseEvent, mouseEvent: React.MouseEvent) => void;
 }
-export const Chart = ({
-    dataSourcesWithMetrics,
-    timeInterval: timeInterval,
-    chartType,
-    sortOrder,
-    handleReferenceAreaSelection,
-    errorMessage,
-    onMouseDown,
-}: ChartInterface) => {
+export const Chart = function (properties: ChartInterface) {
     // Use the theme hook
     // const { themeClassName } = useTheme();
     const themeClassName = 'light';
@@ -540,7 +532,7 @@ export const Chart = ({
     // Memoized data to be used by the chart
     const formattedDataSourceWithMetrics = React.useMemo(() => {
         return (
-            dataSourcesWithMetrics
+            properties.dataSourcesWithMetrics
                 // First, we need to flatten the data
                 .flatMap((element) => {
                     const metricsData = element.metrics?.data as Array<[string, number]> | undefined;
@@ -579,7 +571,7 @@ export const Chart = ({
                     if(a.metricIndex === undefined || b.metricIndex === undefined) return 1;
 
                     // sort based on sortOrder
-                    if(sortOrder === 'ASC') {
+                    if(properties.sortOrder === 'ASC') {
                         return a.metricIndex.localeCompare(b.metricIndex);
                     }
                     else {
@@ -587,7 +579,7 @@ export const Chart = ({
                     }
                 })
         );
-    }, [dataSourcesWithMetrics, sortOrder]);
+    }, [properties.dataSourcesWithMetrics, properties.sortOrder]);
     // console.log("dataSourcesWithMetrics", dataSourcesWithMetrics);
     // console.log("formattedDataSourceWithMetrics", formattedDataSourceWithMetrics);
 
@@ -614,8 +606,8 @@ export const Chart = ({
                         }
                     }
 
-                    if(onMouseDown) {
-                        onMouseDown(
+                    if(properties.onMouseDown) {
+                        properties.onMouseDown(
                             chartEvent as unknown as React.MouseEvent,
                             mouseEvent as unknown as React.MouseEvent,
                         );
@@ -643,7 +635,10 @@ export const Chart = ({
 
                         // If reference areas are set, invoke the handler
                         if(currentReferenceAreaLeft && currentReferenceAreaRight) {
-                            handleReferenceAreaSelection(currentReferenceAreaLeft, currentReferenceAreaRight);
+                            properties.handleReferenceAreaSelection(
+                                currentReferenceAreaLeft,
+                                currentReferenceAreaRight,
+                            );
                         }
 
                         // Clear the references
@@ -657,11 +652,11 @@ export const Chart = ({
                     stroke={
                         themeClassName === 'light' ? undefined : tailwindConfiguration.theme.extend.colors['dark-4']
                     }
-                    vertical={errorMessage ? true : false}
+                    vertical={properties.errorMessage ? true : false}
                 />
 
                 {/* If there are data sources */}
-                {dataSourcesWithMetrics.length > 0 && (
+                {properties.dataSourcesWithMetrics.length > 0 && (
                     <>
                         <RechartsTooltip
                             animationDuration={0}
@@ -675,30 +670,33 @@ export const Chart = ({
                                     // If the theme is light
                                     themeClassName === 'light'
                                         ? // And the chart type is bar
-                                          chartType === 'bar'
+                                          properties.chartType === 'bar'
                                             ? // Bar chart stroke color
                                               'rgba(0, 0, 0, 0.05)'
                                             : // Other chart types stroke color
                                               '#CCCCCC'
                                         : // If the theme is dark
-                                          chartType === 'bar'
+                                          properties.chartType === 'bar'
                                           ? // Bar chart stroke color
                                             'rgba(255, 255, 255, 0.05)'
                                           : // Other chart types stroke color
                                             tailwindConfiguration.theme.extend.colors['dark-4'],
                                 // If the chart is a bar chart, the stroke width is the number of data points divided by the width of the chart minus the margins
                                 strokeWidth:
-                                    chartType === 'bar'
+                                    properties.chartType === 'bar'
                                         ? (wrapperDimensions.width - 90) /
-                                          ((dataSourcesWithMetrics[0]?.metrics?.data as Array<unknown> | undefined)
-                                              ?.length ?? 1)
+                                          ((
+                                              properties.dataSourcesWithMetrics[0]?.metrics?.data as
+                                                  | Array<unknown>
+                                                  | undefined
+                                          )?.length ?? 1)
                                         : 1,
                             }}
                             content={(values) => {
                                 return (
                                     <div className="rounded-extra-small border border-light-4 bg-light dark:border-dark-4 dark:bg-dark">
                                         <div className="border-b p-2 text-xs text-dark/60 dark:text-light-4/60">
-                                            {tooltipHeaderColumn(timeInterval, values.label)}
+                                            {tooltipHeaderColumn(properties.timeInterval, values.label)}
                                         </div>
                                         <table className="">
                                             <tbody className="">
@@ -730,7 +728,7 @@ export const Chart = ({
                                                                 className="h-4 w-4 rounded-extra-small border"
                                                             />
                                                         </td>
-                                                        {tooltipColumn(timeInterval, {
+                                                        {tooltipColumn(properties.timeInterval, {
                                                             dataKey: payload.dataKey?.toString(),
                                                             color: payload.color,
                                                             value: payload.value as number | undefined,
@@ -744,10 +742,10 @@ export const Chart = ({
                             }}
                         />
                         {/* Render the bars or lines */}
-                        {dataSourcesWithMetrics.map((dataSourceWithMetrics) => {
+                        {properties.dataSourcesWithMetrics.map((dataSourceWithMetrics) => {
                             // console.log("index", index, "rendering", dataSourceWithMetrics);
 
-                            switch(chartType) {
+                            switch(properties.chartType) {
                                 case 'bar':
                                     return (
                                         <Bar
@@ -820,11 +818,11 @@ export const Chart = ({
                     xAxisId="0"
                     dataKey="metricIndex"
                     className="text-sm"
-                    interval={timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
+                    interval={properties.timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
                     tickFormatter={(value: string, index: number) => {
                         return tickFormatter(
                             'primary',
-                            timeInterval,
+                            properties.timeInterval,
                             value,
                             index,
                             formattedDataSourceWithMetrics[index - 1]?.metricIndex ?? '',
@@ -836,17 +834,17 @@ export const Chart = ({
                 {/* The second x-axis is the category of the time interval, e.g., "2021" */}
                 {/* Only render this axis if the time interval is quarter, month, day, or hour */}
                 {[TimeInterval.Quarter, TimeInterval.Month, TimeInterval.Day, TimeInterval.Hour].includes(
-                    timeInterval as TimeInterval,
+                    properties.timeInterval as TimeInterval,
                 ) && (
                     <XAxis
                         xAxisId="1"
                         dataKey="metricIndex"
                         className="text-sm"
-                        interval={timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
+                        interval={properties.timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
                         tickFormatter={(value: string, index: number) => {
                             return tickFormatter(
                                 'secondary',
-                                timeInterval,
+                                properties.timeInterval,
                                 value,
                                 index,
                                 formattedDataSourceWithMetrics[index - 1]?.metricIndex ?? '',
@@ -879,10 +877,10 @@ export const Chart = ({
             </ComposedChart>
 
             {/* If there is an error message, show it */}
-            {errorMessage && (
+            {properties.errorMessage && (
                 <div className="absolute inset-0 flex h-full w-full items-center justify-center">
                     <p className="relative bottom-10 max-w-[75%] text-center text-dark-4/50 dark:text-light-4/50">
-                        {errorMessage}
+                        {properties.errorMessage}
                     </p>
                 </div>
             )}

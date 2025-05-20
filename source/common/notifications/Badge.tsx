@@ -81,27 +81,33 @@ export const badgeVariants = cva(
     },
 );
 
-type BadgeProps = VariantProps<typeof badgeVariants> & React.HTMLAttributes<HTMLDivElement>;
-const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
-    ({ variant, size, type, className, children, ...props }, ref) => {
-        return (
-            <div
-                ref={ref}
-                className={mergeClassNames(
-                    badgeVariants({
-                        size,
-                        variant,
-                        type,
-                        className,
-                    }),
-                )}
-                {...props}
-            >
-                {children}
-            </div>
-        );
-    },
-);
+type BadgeProperties = VariantProps<typeof badgeVariants> & React.HTMLAttributes<HTMLDivElement>;
+const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(properties, reference) {
+    // Create a clone of properties for remaining HTML attributes
+    const divProperties = { ...properties };
+    delete divProperties.variant;
+    delete divProperties.size;
+    delete divProperties.type;
+    delete divProperties.className;
+    delete divProperties.children;
+
+    return (
+        <div
+            ref={reference}
+            className={mergeClassNames(
+                badgeVariants({
+                    size: properties.size,
+                    variant: properties.variant,
+                    type: properties.type,
+                    className: properties.className,
+                }),
+            )}
+            {...divProperties}
+        >
+            {properties.children}
+        </div>
+    );
+});
 Badge.displayName = 'Badge';
 
 export default Badge;

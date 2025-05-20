@@ -624,13 +624,13 @@ export function oklabToLinearRgb(L: number, a: number, b: number) {
 // ----------------------------------------------------
 // 4) OKLab <-> OKLCH
 // ----------------------------------------------------
-export function oklabToOklch({ L, a, b }: { L: number; a: number; b: number }) {
-    const c = Math.sqrt(a * a + b * b);
-    let h = Math.atan2(b, a); // in radians
+export function oklabToOklch(properties: { L: number; a: number; b: number }) {
+    const c = Math.sqrt(properties.a * properties.a + properties.b * properties.b);
+    let h = Math.atan2(properties.b, properties.a); // in radians
     if(h < 0) {
         h = h + 2.0 * Math.PI; // wrap
     }
-    return { l: L, c, h }; // h in [0..2π)
+    return { l: properties.L, c, h }; // h in [0..2π)
 }
 
 export function oklchToOklab(l: number, c: number, h: number) {

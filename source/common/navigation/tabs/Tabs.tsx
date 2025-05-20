@@ -31,15 +31,31 @@ const TabsContext = React.createContext<
 const Tabs = React.forwardRef<
     React.ElementRef<typeof RadixTabPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Root> & VariantProps<typeof tabsVariants>
->(({ className, size, activationMode = 'manual', ...props }, ref) => {
+>(function (properties, reference) {
+    const activationMode = properties.activationMode || 'manual';
+
     const tabGroupId = React.useId();
+
+    // Properties to spread to the the context provider
+    const tabsContextProviderProperties = { ...properties };
+    delete tabsContextProviderProperties.className;
+    delete tabsContextProviderProperties.size;
+    delete tabsContextProviderProperties.activationMode;
 
     return (
         <AnimatePresence mode="popLayout">
-            <TabsContext.Provider value={{ size, tabGroupId, currentValue: props.value }}>
-                <RadixTabPrimitive.Root ref={ref} activationMode={activationMode} {...props}>
-                    <RadixTabPrimitive.List className={mergeClassNames(tabsVariants({ className }))}>
-                        {props.children}
+            <TabsContext.Provider
+                value={{ size: properties.size, tabGroupId, currentValue: tabsContextProviderProperties.value }}
+            >
+                <RadixTabPrimitive.Root
+                    ref={reference}
+                    activationMode={activationMode}
+                    {...tabsContextProviderProperties}
+                >
+                    <RadixTabPrimitive.List
+                        className={mergeClassNames(tabsVariants({ className: properties.className }))}
+                    >
+                        {tabsContextProviderProperties.children}
                     </RadixTabPrimitive.List>
                 </RadixTabPrimitive.Root>
             </TabsContext.Provider>
@@ -92,13 +108,22 @@ interface TabItemProps
     extends Omit<VariantProps<typeof tabItemVariants>, 'size'>,
         React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Trigger> {}
 const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProps>(
-    ({ className, icon, ...props }, ref) => {
+    function (properties, reference) {
         const { size, tabGroupId, currentValue } = React.useContext(TabsContext);
-        const isActive = currentValue === props.value;
+        const isActive = currentValue === properties.value;
+
+        // Properties to spread onto the Radix tab primitive trigger
+        const radixTabPrimitiveTriggerProperties = { ...properties };
+        delete radixTabPrimitiveTriggerProperties.className;
+        delete radixTabPrimitiveTriggerProperties.icon;
 
         return (
-            <RadixTabPrimitive.Trigger ref={ref} {...props} asChild>
-                <motion.button className={mergeClassNames(tabItemVariants({ size, icon, className }))}>
+            <RadixTabPrimitive.Trigger ref={reference} {...radixTabPrimitiveTriggerProperties} asChild>
+                <motion.button
+                    className={mergeClassNames(
+                        tabItemVariants({ size, icon: properties.icon, className: properties.className }),
+                    )}
+                >
                     {isActive && (
                         <motion.div
                             layoutId={`tab-${tabGroupId}`}
@@ -112,7 +137,7 @@ const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigg
                         />
                     )}
 
-                    <div className="z-10">{props.children}</div>
+                    <div className="z-10">{radixTabPrimitiveTriggerProperties.children}</div>
                 </motion.button>
             </RadixTabPrimitive.Trigger>
         );

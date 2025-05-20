@@ -13,7 +13,11 @@ import { wrapForSlot } from '@structure/source/utilities/React';
 
 // Component - Tip
 export interface TipInterface extends PopoverInterface {}
-export function Tip({ open: externalOpen, onOpenChange: externalSetOpen, ...properties }: TipInterface) {
+export function Tip(properties: TipInterface) {
+    // Extract properties
+    const externalOpen = properties.open;
+    const externalSetOpen = properties.onOpenChange;
+
     // State
     const [internalOpen, internalSetOpen] = React.useState(false);
 
