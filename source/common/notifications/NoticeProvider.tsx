@@ -23,7 +23,7 @@ const NoticeContext = React.createContext<NoticeContextInterface | undefined>(un
 export interface NoticeProviderInterface {
     children: React.ReactNode;
 }
-export function NoticeProvider({ children }: NoticeProviderInterface) {
+export function NoticeProvider(properties: NoticeProviderInterface) {
     // State
     const [notices, setNotices] = React.useState<NoticeInterface[]>([]);
 
@@ -48,7 +48,7 @@ export function NoticeProvider({ children }: NoticeProviderInterface) {
     // Render the component
     return (
         <NoticeContext.Provider value={{ addNotice, removeNotice, removeAllNotices, notices }}>
-            {children}
+            {properties.children}
             <NoticeContainer notices={notices} />
         </NoticeContext.Provider>
     );

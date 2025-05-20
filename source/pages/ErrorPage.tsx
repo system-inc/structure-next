@@ -9,23 +9,23 @@ import Button from '@structure/source/common/buttons/Button';
 
 // Component - Error
 export type ErrorPageProperties = { error: Error & { digest?: string }; reset: () => void };
-export function ErrorPage({ error, reset }: ErrorPageProperties) {
+export function ErrorPage(properties: ErrorPageProperties) {
     // On mount
     React.useEffect(() => {
         // TODO: Log the error to an error reporting service
-        console.error(error);
-    }, [error]);
+        console.error(properties.error);
+    }, [properties.error]);
 
     // Render the component
     return (
         <div className="flex h-screen w-full items-center justify-center">
             <Alert variant={'error'} size={'large'} title="Error" className="md:min-w-96">
                 <div className="space-y-2">
-                    {error.message && <p className="break-all">{error.message}</p>}
-                    {error.digest && (
+                    {properties.error.message && <p className="break-all">{properties.error.message}</p>}
+                    {properties.error.digest && (
                         <p>
                             <i>
-                                Identifier: <b>{error.digest}</b>
+                                Identifier: <b>{properties.error.digest}</b>
                             </i>
                         </p>
                     )}
@@ -35,7 +35,7 @@ export function ErrorPage({ error, reset }: ErrorPageProperties) {
                         className="w-24"
                         variant={'light'}
                         onClick={async function () {
-                            reset();
+                            properties.reset();
                         }}
                     >
                         Reset

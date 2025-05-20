@@ -12,13 +12,14 @@ export interface BorderContainerInterface {
     border?: keyof typeof borderVariants;
     children: React.ReactNode;
 }
-export function BorderContainer({
-    border = 'bottom',
-    children
-}: BorderContainerInterface) {
+export function BorderContainer(properties: BorderContainerInterface) {
+    const border = properties.border !== undefined ? properties.border : 'bottom';
+
     return (
-        <div className={`flex items-center justify-between shrink-0 px-4 h-14 ${borderVariants[border]} border-light-3 dark:border-dark-3`}>
-            {children}
+        <div
+            className={`flex h-14 shrink-0 items-center justify-between px-4 ${borderVariants[border]} border-light-3 dark:border-dark-3`}
+        >
+            {properties.children}
         </div>
     );
 }

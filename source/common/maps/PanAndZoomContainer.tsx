@@ -1,5 +1,5 @@
 // Dependencies - React and Next.js
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 import WorldMapMercator from '@structure/source/common/maps/WorldMapMercator.svg';
 
 // Component - PanAndZoomContainer
@@ -10,16 +10,16 @@ export interface PanAndZoomContainerInterface {
 
 export function PanAndZoomContainer(properties: PanAndZoomContainerInterface) {
     const { width, height } = properties;
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [scale, setScale] = useState(1);
-    const [translateX, setTranslateX] = useState(0);
-    const [translateY, setTranslateY] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
-    const [dragStartX, setDragStartX] = useState(0);
-    const [dragStartY, setDragStartY] = useState(0);
-    const [dragStartTranslateX, setDragStartTranslateX] = useState(0);
-    const [dragStartTranslateY, setDragStartTranslateY] = useState(0);
-    useEffect(() => {
+    const containerRef = React.useRef<HTMLDivElement>(null);
+    const [scale, setScale] = React.useState(1);
+    const [translateX, setTranslateX] = React.useState(0);
+    const [translateY, setTranslateY] = React.useState(0);
+    const [isDragging, setIsDragging] = React.useState(false);
+    const [dragStartX, setDragStartX] = React.useState(0);
+    const [dragStartY, setDragStartY] = React.useState(0);
+    const [dragStartTranslateX, setDragStartTranslateX] = React.useState(0);
+    const [dragStartTranslateY, setDragStartTranslateY] = React.useState(0);
+    React.useEffect(() => {
         const handleWheel = (event: WheelEvent) => {
             event.preventDefault();
             const delta = event.deltaY > 0 ? 0.9 : 1.1;

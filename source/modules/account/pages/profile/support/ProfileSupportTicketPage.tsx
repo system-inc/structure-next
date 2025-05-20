@@ -19,14 +19,14 @@ import {
 interface ProfileSupportTicketPageInterface {
     ticketId: string;
 }
-const ProfileSupportTicketPage = ({ ticketId }: ProfileSupportTicketPageInterface) => {
+const ProfileSupportTicketPage = function (properties: ProfileSupportTicketPageInterface) {
     const pagination = {
         itemsPerPage: 1,
         filters: [
             {
                 column: 'identifier',
                 operator: ColumnFilterConditionOperator.Equal,
-                value: ticketId,
+                value: properties.ticketId,
             },
         ],
     };
