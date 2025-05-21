@@ -1,6 +1,6 @@
 // Dependencies - Project
 // Have to use relative paths for tailwind.config.js
-import ProjectSettings from './../../../../ProjectSettings';
+import { ProjectSettings } from './../../../../ProjectSettings';
 
 // Dependencies - Theme
 import type { Config as TailwindConfigurationInterface } from 'tailwindcss';

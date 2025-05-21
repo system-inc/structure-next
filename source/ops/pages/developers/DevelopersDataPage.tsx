@@ -5,7 +5,7 @@ import React from 'react';
 import { useQueryState as useUrlQueryState, parseAsInteger, parseAsJson } from 'nuqs';
 
 // Dependencies - Main Components
-import OpsNavigationTrail from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 import { DataInteractionTable } from '@structure/source/modules/data-interaction/DataInteractionTable';
 import { ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 
