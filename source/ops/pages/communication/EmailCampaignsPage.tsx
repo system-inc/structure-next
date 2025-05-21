@@ -23,6 +23,3 @@ export function EmailCampaignsPage() {
         </>
     );
 }
-
-// Export - Default
-export default EmailCampaignsPage;

@@ -235,6 +235,3 @@ export function ImageSelector(properties: ImageSelectorProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ImageSelector;

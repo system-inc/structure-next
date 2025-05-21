@@ -730,6 +730,3 @@ export function DataSource(properties: DataSourceProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default DataSource;

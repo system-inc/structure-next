@@ -54,6 +54,3 @@ export function SignOutPage() {
         </div>
     );
 }
-
-// Export - Default
-export default SignOutPage;

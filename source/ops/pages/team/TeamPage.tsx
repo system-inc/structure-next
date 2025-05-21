@@ -59,6 +59,3 @@ export function TeamPage() {
         </div>
     );
 }
-
-// Export - Default
-export default TeamPage;

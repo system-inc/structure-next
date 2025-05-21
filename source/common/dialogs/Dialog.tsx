@@ -261,6 +261,3 @@ export function Dialog(properties: DialogProperties) {
         </RadixDialog.Root>
     );
 }
-
-// Export - Default
-export default Dialog;

@@ -164,6 +164,3 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
 
 // Set the display name for debugging purposes
 FormInputMultipleSelect.displayName = 'FormInputMultipleSelect';
-
-// Export - Default
-export default FormInputMultipleSelect;

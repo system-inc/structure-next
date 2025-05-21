@@ -14,6 +14,3 @@ export function ProductsCategoriesPage() {
         </div>
     );
 }
-
-// Export - Default
-export default ProductsCategoriesPage;

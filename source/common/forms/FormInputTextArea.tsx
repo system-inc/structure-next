@@ -206,6 +206,3 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
 
 // Set the display name for debugging purposes
 FormInputTextArea.displayName = 'FormInputTextArea';
-
-// Export - Default
-export default FormInputTextArea;

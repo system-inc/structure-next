@@ -30,6 +30,3 @@ export function ResetPlugin(properties: ResetPluginProperties) {
 
     return null;
 }
-
-// Export - Default
-export default ResetPlugin;

@@ -28,6 +28,3 @@ export function ActivityLink(properties: ActivityLinkProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default ActivityLink;

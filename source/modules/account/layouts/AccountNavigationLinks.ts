@@ -21,6 +21,3 @@ export const AccountNavigationLinks = [
     { href: '/account/settings', title: 'Settings', icon: GearIcon },
     { href: '/sign-out', title: 'Sign Out', icon: SignOutIcon },
 ];
-
-// Export - Default
-export default AccountNavigationLinks;

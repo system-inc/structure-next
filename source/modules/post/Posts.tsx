@@ -148,6 +148,3 @@ export function Posts(properties: PostsProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Posts;

@@ -11,6 +11,3 @@ export interface ApolloProviderProperties {
 export function ApolloProvider(properties: ApolloProviderProperties) {
     return <ApolloClientProvider client={apolloClient}>{properties.children}</ApolloClientProvider>;
 }
-
-// Export - Default
-export default ApolloProvider;

@@ -20,7 +20,7 @@ import {
 export interface ProfileSupportTicketPageProperties {
     ticketId: string;
 }
-export const ProfileSupportTicketPage = function (properties: ProfileSupportTicketPageProperties) {
+export function ProfileSupportTicketPage(properties: ProfileSupportTicketPageProperties) {
     const pagination = {
         itemsPerPage: 1,
         filters: [
@@ -68,7 +68,4 @@ export const ProfileSupportTicketPage = function (properties: ProfileSupportTick
             />
         </div>
     );
-};
-
-// Export - Default
-export default ProfileSupportTicketPage;
+}

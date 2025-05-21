@@ -14,6 +14,3 @@ export function FinancesPage() {
         </div>
     );
 }
-
-// Export - Default
-export default FinancesPage;

@@ -161,6 +161,3 @@ export const StructureSettings: StructureSettingsInterface = {
         },
     },
 };
-
-// Export - Default
-export default StructureSettings;

@@ -139,6 +139,3 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
 
 // Set the display name for debugging purposes
 Notice.displayName = 'Notice';
-
-// Export - Default
-export default Notice;

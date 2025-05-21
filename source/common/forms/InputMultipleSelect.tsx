@@ -332,6 +332,3 @@ export const InputMultipleSelect = React.forwardRef<
 
 // Set the display name for the component for debugging
 InputMultipleSelect.displayName = 'InputMultipleSelect';
-
-// Export - Default
-export default InputMultipleSelect;

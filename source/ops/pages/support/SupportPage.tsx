@@ -261,6 +261,3 @@ export function SupportPage() {
         </div>
     );
 }
-
-// Export - Default
-export default SupportPage;

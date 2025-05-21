@@ -46,6 +46,3 @@ export function AuthenticationDialog(properties: AuthenticationDialogProperties)
         />
     );
 }
-
-// Export - Default
-export default AuthenticationDialog;

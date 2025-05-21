@@ -166,6 +166,3 @@ export function ImageUploaderBase(properties: ImageUploaderBaseProperties) {
         </>
     );
 }
-
-// Export - Default
-export default ImageUploaderBase;

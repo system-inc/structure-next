@@ -192,4 +192,5 @@ const ReactPropertiesTypeNamingRule = {
     }
 };
 
+// Export - Default
 export default ReactPropertiesTypeNamingRule;

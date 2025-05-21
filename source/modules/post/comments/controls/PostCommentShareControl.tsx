@@ -51,6 +51,3 @@ export function PostCommentShareControl(properties: PostCommentShareControlPrope
         </PopoverMenu>
     );
 }
-
-// Export - Default
-export default PostCommentShareControl;

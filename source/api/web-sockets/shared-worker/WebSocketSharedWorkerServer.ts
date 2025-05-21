@@ -173,6 +173,3 @@ export class WebSocketSharedWorkerServer extends SharedWorkerServer {
         this.broadcastMessage(createWebSocketErrorMessage(message));
     }
 }
-
-// Export - Default
-export default WebSocketSharedWorkerServer;

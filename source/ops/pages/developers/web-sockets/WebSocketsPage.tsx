@@ -385,6 +385,3 @@ export function WebSocketsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default WebSocketsPage;

@@ -70,4 +70,5 @@ const NoInternalImportsRule = {
     },
 };
 
+// Export - Default
 export default NoInternalImportsRule;

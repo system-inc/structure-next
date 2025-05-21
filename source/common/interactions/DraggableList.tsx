@@ -41,7 +41,7 @@ type DraggableListProperties = {
     onReorder?: (originalOrder: React.ReactNode[], newOrder: React.ReactNode[]) => void;
     onDrag?: (activeIndex: number, currentRow: number) => void;
 } & Omit<React.HTMLAttributes<HTMLUListElement>, 'children' | 'onDrag'>;
-function DraggableList(properties: DraggableListProperties) {
+export function DraggableList(properties: DraggableListProperties) {
     // Defaults
     const iconPosition = properties.iconPosition || 'left';
     const iconAlignment = properties.iconAlignment || 'center';
@@ -273,6 +273,3 @@ function DraggableList(properties: DraggableListProperties) {
         </ul>
     );
 }
-
-// Export - Default
-export default DraggableList;

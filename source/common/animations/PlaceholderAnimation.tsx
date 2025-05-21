@@ -15,7 +15,7 @@ export function PlaceholderAnimation(properties: PlaceholderAnimationProperties)
     return (
         <div
             className={mergeClassNames(
-                'rounded-small relative overflow-hidden bg-light-3 dark:bg-dark-2',
+                'relative overflow-hidden rounded-small bg-light-3 dark:bg-dark-2',
                 properties.className,
             )}
         >
@@ -23,6 +23,3 @@ export function PlaceholderAnimation(properties: PlaceholderAnimationProperties)
         </div>
     );
 }
-
-// Export - Default
-export default PlaceholderAnimation;

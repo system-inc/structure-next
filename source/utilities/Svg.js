@@ -7177,5 +7177,3 @@ export const Svg = (function () {
 
 })();
 
-// Export - Default
-export default Svg;

@@ -32,6 +32,3 @@ export function NotAuthorized(properties: NotAuthorizedProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default NotAuthorized;

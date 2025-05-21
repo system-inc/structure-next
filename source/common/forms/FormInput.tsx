@@ -187,6 +187,3 @@ export function FormInput(properties: FormInputProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default FormInput;

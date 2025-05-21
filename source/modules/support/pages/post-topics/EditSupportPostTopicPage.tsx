@@ -67,6 +67,3 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
         </div>
     );
 }
-
-// Export - Default
-export default EditSupportPostTopicPage;

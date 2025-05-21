@@ -155,6 +155,3 @@ export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterf
 
 // Set the display name for debugging purposes
 FormInputTimeRange.displayName = 'FormInputTimeRange';
-
-// Export - Default
-export default FormInputTimeRange;

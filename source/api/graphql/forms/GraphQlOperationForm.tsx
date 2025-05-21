@@ -186,6 +186,3 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
         </>
     );
 }
-
-// Export - Default
-export default GraphQlOperationForm;

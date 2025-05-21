@@ -271,6 +271,3 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
         icon: GearIcon,
     },
 ];
-
-// Export - Default
-export default OpsNavigationLinks;

@@ -58,6 +58,3 @@ export function IdeaSubmitPage() {
         </div>
     );
 }
-
-// Export - Default
-export default IdeaSubmitPage;

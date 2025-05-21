@@ -54,6 +54,3 @@ export function PostReportControl(properties: PostReportControlProperties) {
         </>
     );
 }
-
-// Export - Default
-export default PostReportControl;

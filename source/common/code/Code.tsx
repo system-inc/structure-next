@@ -184,6 +184,3 @@ export function Code(properties: CodeProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Code;

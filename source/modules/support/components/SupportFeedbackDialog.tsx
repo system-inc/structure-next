@@ -140,6 +140,3 @@ export function SupportFeedbackDialog(properties: SupportFeedbackDialogPropertie
         />
     );
 }
-
-// Export - Default
-export default SupportFeedbackDialog;

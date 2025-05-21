@@ -68,7 +68,7 @@ const ReactPropertiesParameterNameRule = {
 
         // Function to check if a variable name ends with 'Props'
         function checkVariableEndsWithProps(node) {
-            if (node.id && node.id.type === 'Identifier' && node.id.name.endsWith('Props')) {
+            if(node.id && node.id.type === 'Identifier' && node.id.name.endsWith('Props')) {
                 context.report({
                     node: node.id,
                     message: `Variable name should not end with 'Props'. Use 'properties' naming convention instead.`,
@@ -98,7 +98,7 @@ const ReactPropertiesParameterNameRule = {
             },
             // Check interface and type declarations for names ending with 'Props'
             TSInterfaceDeclaration(node) {
-                if (node.id && node.id.name.endsWith('Props')) {
+                if(node.id && node.id.name.endsWith('Props')) {
                     context.report({
                         node: node.id,
                         message: `Interface name should not end with 'Props'. Use 'Properties' or 'Interface' suffix instead.`,
@@ -111,7 +111,7 @@ const ReactPropertiesParameterNameRule = {
                 }
             },
             TSTypeAliasDeclaration(node) {
-                if (node.id && node.id.name.endsWith('Props')) {
+                if(node.id && node.id.name.endsWith('Props')) {
                     context.report({
                         node: node.id,
                         message: `Type name should not end with 'Props'. Use 'Properties' suffix instead.`,
@@ -127,4 +127,5 @@ const ReactPropertiesParameterNameRule = {
     }
 };
 
+// Export - Default
 export default ReactPropertiesParameterNameRule;

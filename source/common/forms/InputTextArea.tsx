@@ -209,6 +209,3 @@ export const InputTextArea = React.forwardRef<InputReferenceInterface, InputText
 
 // Set the display name for the component for debugging
 InputTextArea.displayName = 'InputTextArea';
-
-// Export - Default
-export default InputTextArea;

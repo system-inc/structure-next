@@ -43,6 +43,3 @@ export function TopProductLink(properties: TopProductLinkProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default TopProductLink;

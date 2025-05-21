@@ -86,6 +86,3 @@ export function OpsNavigation() {
     // Render the component
     return <div className="flex flex-1 flex-col px-5 py-3">{navigationList}</div>;
 }
-
-// Export - Default
-export default OpsNavigation;

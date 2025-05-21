@@ -132,6 +132,3 @@ export function Markdown(properties: MarkdownProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Markdown;

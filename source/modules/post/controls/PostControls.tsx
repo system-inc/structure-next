@@ -147,6 +147,3 @@ export function PostControls(properties: PostControlsProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default PostControls;

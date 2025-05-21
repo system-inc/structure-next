@@ -290,6 +290,3 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
 
 // Set the display name for the component for debugging
 InputSelect.displayName = 'InputSelect';
-
-// Export - Default
-export default InputSelect;

@@ -64,6 +64,3 @@ export function InternalLayout(properties: InternalLayoutProperties) {
         </AuthorizationLayout>
     );
 }
-
-// Export - Default
-export default InternalLayout;

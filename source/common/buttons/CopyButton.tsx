@@ -73,6 +73,3 @@ export function CopyButton(properties: CopyButtonProperties) {
         />
     );
 }
-
-// Export - Default
-export default CopyButton;

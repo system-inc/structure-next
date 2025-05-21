@@ -14,6 +14,3 @@ export function MarketingAutomationsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default MarketingAutomationsPage;

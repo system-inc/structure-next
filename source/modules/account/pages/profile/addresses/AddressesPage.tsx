@@ -31,6 +31,3 @@ export function AddressesPage() {
         </>
     );
 }
-
-// Export - Default
-export default AddressesPage;

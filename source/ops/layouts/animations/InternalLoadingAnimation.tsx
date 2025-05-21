@@ -14,6 +14,3 @@ export function InternalLoading() {
         </div>
     );
 }
-
-// Export - Default
-export default InternalLoading;

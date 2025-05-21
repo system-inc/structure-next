@@ -162,6 +162,3 @@ export function PostReaction(properties: PostReactionProperties) {
         </Tip>
     );
 }
-
-// Export - Default
-export default PostReaction;

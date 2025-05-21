@@ -25,6 +25,3 @@ export function AuthenticationPage(properties: AuthenticationPageProperties) {
         </>
     );
 }
-
-// Export - Default
-export default AuthenticationPage;

@@ -34,6 +34,3 @@ export function HomeMetricLink(properties: HomeMetricLinkProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default HomeMetricLink;

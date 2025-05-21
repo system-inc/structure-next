@@ -470,6 +470,3 @@ export function Menu(properties: MenuProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Menu;

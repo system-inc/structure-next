@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -53,6 +53,3 @@ export function AccountLayout(properties: AccountLayoutProperties) {
         </AuthorizationLayout>
     );
 }
-
-// Export - Default
-export default AccountLayout;

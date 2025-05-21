@@ -14,6 +14,3 @@ export function UsersSegmentsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default UsersSegmentsPage;

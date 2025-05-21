@@ -129,6 +129,3 @@ export const ScrollArea = React.forwardRef(function ScrollArea(
 
 // Set displayName for debugging purposes
 ScrollArea.displayName = 'ScrollArea';
-
-// Export - Default
-export default ScrollArea;

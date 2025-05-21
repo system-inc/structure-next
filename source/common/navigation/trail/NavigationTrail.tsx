@@ -114,6 +114,3 @@ export function NavigationTrail(properties: NavigationTrailProperties) {
         </ol>
     );
 }
-
-// Export - Default
-export default NavigationTrail;

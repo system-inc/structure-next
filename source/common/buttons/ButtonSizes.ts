@@ -11,6 +11,3 @@ export const ButtonSizes = {
     formInputIcon: 'relative h-9 w-9',
     tableHeaderCell: 'h-8',
 };
-
-// Export - Default
-export default ButtonSizes;

@@ -282,6 +282,3 @@ export function Pagination(properties: PaginationProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Pagination;

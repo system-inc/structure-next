@@ -187,6 +187,3 @@ export function useAccount(): AccountContextInterface {
     }
     return accountContext as AccountContextInterface;
 }
-
-// Export - Default
-export default AccountProvider;

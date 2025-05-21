@@ -50,6 +50,3 @@ export function TimeAgo(properties: TimeAgoProperties) {
         </span>
     );
 }
-
-// Export - Default
-export default TimeAgo;

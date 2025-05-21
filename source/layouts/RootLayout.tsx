@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import { Metadata, Viewport } from 'next';
@@ -142,6 +142,3 @@ export async function RootLayout(properties: RootLayoutProperties) {
         </html>
     );
 }
-
-// Export - Default
-export default RootLayout;

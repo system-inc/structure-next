@@ -158,6 +158,3 @@ export function PostCommentReactionControl(properties: PostCommentReactionContro
         </PopoverMenu>
     );
 }
-
-// Export - Default
-export default PostCommentReactionControl;

@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -198,6 +198,3 @@ export function TableCell(properties: TableCellProperties) {
         </td>
     );
 }
-
-// Export - Default
-export default TableCell;

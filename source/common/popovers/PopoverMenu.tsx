@@ -117,6 +117,3 @@ export function PopoverMenu(properties: PopoverMenuProperties) {
         </Popover>
     );
 }
-
-// Export - Default
-export default PopoverMenu;

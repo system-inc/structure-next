@@ -116,6 +116,3 @@ export function DevelopersDatabasePage() {
         </div>
     );
 }
-
-// Export - Default
-export default DevelopersDatabasePage;

@@ -409,6 +409,3 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
         </>
     );
 }
-
-// Export - Default
-export default DataInteractionTable;

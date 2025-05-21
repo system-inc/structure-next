@@ -280,6 +280,3 @@ export function DataSources(properties: DataSourcesProperties) {
         </>
     );
 }
-
-// Export - Default
-export default DataSources;

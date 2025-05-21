@@ -43,6 +43,3 @@ export function useDragAnimation() {
     };
     return getDragAnimationProperties;
 }
-
-// Export - Default
-export default useDragAnimation;

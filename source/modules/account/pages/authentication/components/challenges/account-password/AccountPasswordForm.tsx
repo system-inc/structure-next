@@ -99,6 +99,3 @@ export function AccountPasswordForm(properties: AccountPasswordFormProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default AccountPasswordForm;

@@ -31,6 +31,3 @@ export function NotificationsPage() {
         </>
     );
 }
-
-// Export - Default
-export default NotificationsPage;

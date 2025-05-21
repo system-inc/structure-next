@@ -14,6 +14,3 @@ export function TeamInvestorsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default TeamInvestorsPage;

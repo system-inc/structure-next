@@ -90,6 +90,3 @@ export function DialogMenu(properties: DialogMenuProperties) {
         />
     );
 }
-
-// Export - Default
-export default DialogMenu;

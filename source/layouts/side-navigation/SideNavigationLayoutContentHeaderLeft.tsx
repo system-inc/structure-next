@@ -77,6 +77,3 @@ export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigation
         </div>
     );
 }
-
-// Export - Default
-export default SideNavigationLayoutContentHeaderLeft;

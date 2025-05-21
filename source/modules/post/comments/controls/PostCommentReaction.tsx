@@ -154,6 +154,3 @@ export function PostCommentReaction(properties: PostCommentReactionProperties) {
         </Tip>
     );
 }
-
-// Export - Default
-export default PostCommentReaction;

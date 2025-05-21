@@ -87,5 +87,3 @@ export function RequestParametersTable(properties: RequestParametersTablePropert
         </div>
     );
 }
-
-export default RequestParametersTable;

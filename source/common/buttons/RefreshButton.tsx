@@ -25,6 +25,3 @@ export function RefreshButton(properties: RefreshButtonProperties) {
         />
     );
 }
-
-// Export - Default
-export default RefreshButton;

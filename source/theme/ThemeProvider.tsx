@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -16,7 +16,7 @@ import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/t
 import { themeKey, operatingSystemThemeKey, darkThemeMediaQueryString } from '@structure/source/theme/ThemeSettings';
 
 // Dependencies - Utilities
-import Cookies from '@structure/source/utilities/cookies/Cookies';
+import { Cookies } from '@structure/source/utilities/cookies/Cookies';
 
 // Function to set the theme class name on the DOM
 function setThemeClassName(themeClassName: ThemeClassName) {
@@ -145,7 +145,7 @@ export const readOnlyOperatingSystemThemeAtom = atom(function (get) {
 export interface ThemeProviderProperties {
     children: React.ReactNode;
 }
-export const ThemeProvider = function (properties: ThemeProviderProperties) {
+export function ThemeProvider(properties: ThemeProviderProperties) {
     // Shared State
     const theme = useAtomValue(readOnlyThemeAtom);
     const operatingSystemTheme = useAtomValue(readOnlyOperatingSystemThemeAtom);
@@ -189,7 +189,4 @@ export const ThemeProvider = function (properties: ThemeProviderProperties) {
 
     // Render the children
     return properties.children;
-};
-
-// Export - Default
-export default ThemeProvider;
+}

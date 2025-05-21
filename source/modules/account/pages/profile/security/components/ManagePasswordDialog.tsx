@@ -52,6 +52,3 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
         />
     );
 }
-
-// Export - Default
-export default ManagePasswordDialog;

@@ -113,6 +113,3 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
         </animated.div>
     );
 }
-
-// Export - Default
-export default SideNavigationLayoutContent;

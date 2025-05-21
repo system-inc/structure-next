@@ -197,6 +197,3 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
         />
     );
 }
-
-// Export - Default
-export default PostReportDialog;

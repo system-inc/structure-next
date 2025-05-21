@@ -101,6 +101,3 @@ export function PostCommentControls(properties: PostCommentControlsProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default PostCommentControls;

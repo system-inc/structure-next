@@ -14,6 +14,3 @@ export function OrdersDraftsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default OrdersDraftsPage;

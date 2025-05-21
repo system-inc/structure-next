@@ -221,6 +221,3 @@ export class SharedWorkerServer {
         this.broadcastMessage(clientListMessage);
     }
 }
-
-// Export - Default
-export default SharedWorkerServer;

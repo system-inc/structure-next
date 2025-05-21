@@ -411,6 +411,3 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default NoticeContainer;

@@ -110,6 +110,3 @@ export function Alert(properties: AlertProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Alert;

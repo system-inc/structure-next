@@ -497,6 +497,3 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ColumnFilterGroup;

@@ -707,8 +707,7 @@ export class ValidationSchema {
                         });
                         validationResult.valid = false;
                     }
-                }
-                catch {
+                } catch {
                     // Handle any errors that occur during the GraphQL query
                     validationResult.errors.push({
                         validationRule: validationRule,
@@ -741,6 +740,3 @@ export class ValidationSchema {
         return JSON.stringify(object, null, 4);
     }
 }
-
-// Export - Default
-export default ValidationSchema;

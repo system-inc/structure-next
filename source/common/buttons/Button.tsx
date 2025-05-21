@@ -441,6 +441,3 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
 
 // Set the display name for the component for debugging
 Button.displayName = 'Button';
-
-// Export - Default
-export default Button;

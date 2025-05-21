@@ -72,5 +72,3 @@ export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowP
         </div>
     );
 }
-
-export default ObjectRequestParameterRow;

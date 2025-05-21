@@ -56,6 +56,3 @@ export function PostShareControl(properties: PostShareControlProperties) {
         </PopoverMenu>
     );
 }
-
-// Export - Default
-export default PostShareControl;

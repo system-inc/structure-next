@@ -428,7 +428,7 @@ interface DropAreaProperties extends React.HTMLAttributes<HTMLDivElement> {
     onItemIsHovering?: () => void;
     asChild?: boolean;
 }
-const DropArea = (properties: DropAreaProperties) => {
+export function DropArea(properties: DropAreaProperties) {
     const asChild = properties.asChild;
     const children = properties.children;
     const onItemIsHovering = properties.onItemIsHovering;
@@ -477,6 +477,6 @@ const DropArea = (properties: DropAreaProperties) => {
             <Slottable>{children}</Slottable>
         </Component>
     );
-};
+}
 
 export { DragAndDropRoot as Root, DraggableItem as Item, DropArea as Area };

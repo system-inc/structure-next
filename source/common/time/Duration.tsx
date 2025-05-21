@@ -44,6 +44,3 @@ export function Duration(properties: DurationProperties) {
         </span>
     );
 }
-
-// Export - Default
-export default Duration;

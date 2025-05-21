@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React
 import React from 'react';
@@ -375,6 +375,3 @@ export function useWebSocketViaSharedWorker(): WebSocketViaSharedWorkerContextIn
     }
     return useWebSocketViaSharedWorkerContext as WebSocketViaSharedWorkerContextInterface;
 }
-
-// Export - Default
-export default WebSocketViaSharedWorkerProvider;

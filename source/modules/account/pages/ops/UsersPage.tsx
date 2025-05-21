@@ -344,6 +344,3 @@ export function UsersPage() {
         </div>
     );
 }
-
-// Export - Default
-export default UsersPage;

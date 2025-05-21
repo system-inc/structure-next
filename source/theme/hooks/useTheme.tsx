@@ -22,6 +22,3 @@ export function useTheme() {
         operatingSystemTheme: operatingSystemTheme,
     };
 }
-
-// Export - Default
-export default useTheme;

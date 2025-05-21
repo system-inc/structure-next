@@ -283,6 +283,3 @@ export function ImageEditor(properties: ImageEditorProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ImageEditor;

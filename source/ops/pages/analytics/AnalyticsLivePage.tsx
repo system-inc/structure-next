@@ -14,6 +14,3 @@ export function AnalyticsLivePage() {
         </div>
     );
 }
-
-// Export - Default
-export default AnalyticsLivePage;

@@ -139,5 +139,3 @@ export function ResponseParameters(properties: ResponseParametersProperties) {
         </div>
     );
 }
-
-export default ResponseParameters;

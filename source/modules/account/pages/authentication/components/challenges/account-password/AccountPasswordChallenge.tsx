@@ -24,6 +24,3 @@ export function AccountPasswordChallenge(properties: AccountPasswordChallengePro
         </div>
     );
 }
-
-// Export - Default
-export default AccountPasswordChallenge;

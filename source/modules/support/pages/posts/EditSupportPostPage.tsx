@@ -111,6 +111,3 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default EditSupportPostPage;

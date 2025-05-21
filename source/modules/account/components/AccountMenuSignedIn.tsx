@@ -73,6 +73,3 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default AccountMenuSignedIn;

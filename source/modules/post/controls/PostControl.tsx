@@ -49,6 +49,3 @@ export function PostControl(properties: PostControlProperties) {
         </Component>
     );
 }
-
-// Export - Default
-export default PostControl;

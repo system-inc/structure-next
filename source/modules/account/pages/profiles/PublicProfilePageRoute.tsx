@@ -56,11 +56,12 @@ export async function generateMetadata(properties: {
 }
 
 // Page
-export default async function Page(properties: {
+export interface PublicProfilePageRouteProperties {
     params: {
         username: string;
     };
-}) {
+}
+export async function PublicProfilePageRoute(properties: PublicProfilePageRouteProperties) {
     // Get the server-side properties
     const serverSideProperties = await getServerSideProperties(properties.params.username);
 

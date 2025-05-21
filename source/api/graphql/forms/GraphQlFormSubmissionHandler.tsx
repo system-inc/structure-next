@@ -139,6 +139,3 @@ export async function GraphQlFormSubmissionHandler<
 
     return submitResponse;
 }
-
-// Export - Default
-export default GraphQlFormSubmissionHandler;

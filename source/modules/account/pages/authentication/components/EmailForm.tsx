@@ -123,6 +123,3 @@ export function EmailForm(properties: EmailFormProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default EmailForm;

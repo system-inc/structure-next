@@ -197,6 +197,3 @@ export function PostCommentReportDialog(properties: PostCommentReportDialogPrope
         />
     );
 }
-
-// Export - Default
-export default PostCommentReportDialog;

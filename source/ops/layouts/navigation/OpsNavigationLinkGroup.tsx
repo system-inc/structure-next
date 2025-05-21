@@ -85,6 +85,3 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
         </div>
     );
 }
-
-// Export - Default
-export default OpsNavigationLinkGroup;

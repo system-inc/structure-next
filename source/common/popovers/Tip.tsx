@@ -96,6 +96,3 @@ export function Tip(properties: TipProperties) {
         </RadixTooltip.Root>
     );
 }
-
-// Export - Default
-export default Tip;

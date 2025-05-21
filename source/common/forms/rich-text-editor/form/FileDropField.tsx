@@ -25,7 +25,7 @@ type FileDropFieldProperties<T extends HTMLElement> = FormFieldProperties<T> &
     Omit<React.ComponentPropsWithoutRef<typeof FileDrop>, 'children'> & {
         multiple?: boolean;
     };
-const FileDropField = <T extends HTMLElement>(properties: FileDropFieldProperties<T>) => {
+export function FileDropField<T extends HTMLElement>(properties: FileDropFieldProperties<T>) {
     const multiple = properties.multiple ?? false;
     const [dragging, setDragging] = React.useState(false);
 
@@ -97,9 +97,7 @@ const FileDropField = <T extends HTMLElement>(properties: FileDropFieldPropertie
             </FileDrop>
         </FormField>
     );
-};
-
-export default FileDropField;
+}
 
 export function getFileTypeIconFromType(type: string): Icon {
     switch(true) {
@@ -126,7 +124,7 @@ export function getFileTypeIconFromType(type: string): Icon {
 type FileListItemProperties = React.ComponentPropsWithoutRef<
     React.ComponentPropsWithoutRef<typeof FileList>['component']
 >;
-function FileListItem(properties: FileListItemProperties) {
+export function FileListItem(properties: FileListItemProperties) {
     const FileTypeIcon = getFileTypeIconFromType(properties.file.type);
 
     return (

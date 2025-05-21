@@ -14,6 +14,3 @@ export function DevelopersLogsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default DevelopersLogsPage;

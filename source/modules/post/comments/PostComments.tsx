@@ -58,6 +58,3 @@ export function PostComments(properties: PostCommentsProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default PostComments;

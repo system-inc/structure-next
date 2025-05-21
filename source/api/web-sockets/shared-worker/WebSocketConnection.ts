@@ -614,6 +614,3 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         }
     }
 }
-
-// Export - Default
-export default WebSocketConnection;
