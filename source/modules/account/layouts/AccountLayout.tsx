@@ -9,10 +9,10 @@ import { Metadata } from 'next';
 
 // Dependencies - Main Components
 import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
-import AccountNavigation, { AccountNavigationMobile } from './AccountNavigation';
+import { AccountNavigation, AccountNavigationMobile } from './AccountNavigation';
 
 // Dependencies - Animation
-import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
+import { LoadingAnimation } from '@structure/source/common/animations/LoadingAnimation';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {

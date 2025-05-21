@@ -20,10 +20,10 @@ import { $generateNodesFromDOM, $generateHtmlFromNodes } from '@lexical/html';
 import { $convertFromMarkdownString, $convertToMarkdownString, TRANSFORMERS } from '@lexical/markdown';
 
 // Dependencies - Components
-import ToolbarPlugin from './ToolbarPlugin';
-import ResetPlugin from './ResetPlugin';
+import { ToolbarPlugin } from './ToolbarPlugin';
+import { ResetPlugin } from './ResetPlugin';
 // import FloatingLinkEditor from './FloatingLinkEditor';
-import Card from '@structure/source/common/containers/Card';
+import { Card } from '@structure/source/common/containers/Card';
 
 // Nodes
 import { SlashSnippetCommandPlugin } from './SlashCommandPlugin';

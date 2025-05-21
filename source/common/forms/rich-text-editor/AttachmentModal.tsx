@@ -8,7 +8,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 
 // Dependencies - Main Components
 import { Button } from './Button';
-import FileDropField from './form/FileDropField';
+import { FileDropField } from './form/FileDropField';
 
 // Component - AttachmentModal
 export interface AttachmentModalProperties {

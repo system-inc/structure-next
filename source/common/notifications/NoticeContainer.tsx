@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 import { NoticeInterface, Notice } from '@structure/source/common/notifications/Notice';
-import ClearAllNoticesButton from '@structure/source/common/notifications/NoticesClearAllButton';
+import { NoticesClearAllButton } from '@structure/source/common/notifications/NoticesClearAllButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -340,7 +340,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                     'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pb-0 pr-4 md:pr-8',
                 )}
             >
-                <ClearAllNoticesButton
+                <NoticesClearAllButton
                     xSpringFunction={function (x: number, onRestFn: () => void) {
                         isClearingAllReference.current = true;
 

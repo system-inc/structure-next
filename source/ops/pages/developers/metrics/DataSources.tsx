@@ -4,13 +4,13 @@ import { Options as NextUseQueryStateOptions } from 'nuqs';
 
 // Dependencies - Main Components
 import { DataSourceType, DataSourceWithMetricsType } from './Metrics';
-import DataSource from './DataSource';
+import { DataSource } from './DataSource';
 
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Supporting Components
 import { Button } from '@structure/source/common/buttons/Button';
-import useDragAnimation from '@structure/source/common/animations/useDragAnimation';
+import { useDragAnimation } from '@structure/source/common/animations/useDragAnimation';
 
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';

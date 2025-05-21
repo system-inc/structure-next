@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Animation
-import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
+import { LoadingAnimation } from '@structure/source/common/animations/LoadingAnimation';
 
 // Component - Suspense
 export type SuspenseProperties = {

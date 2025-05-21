@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import OpsNavigationTrail from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
-import Table from '@structure/source/common/tables/Table';
+import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { Table } from '@structure/source/common/tables/Table';
 import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API

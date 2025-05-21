@@ -6,7 +6,7 @@ import * as RadixPopoverPrimitive from '@radix-ui/react-popover';
 import { useTransition, animated } from '@react-spring/web';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { Slot } from '@radix-ui/react-slot';
-import Link, { LinkProps } from 'next/link';
+import Link, { LinkProps as LinkProperties } from 'next/link';
 import { focusFirstFocusableElement } from './utilities/focusFirstFocusableElement';
 
 const AnimatedContent = animated(RadixPopoverPrimitive.Content);
@@ -198,7 +198,7 @@ PopoverItem.displayName = 'PopoverItem';
 
 interface PopoverLinkProperties extends Omit<PopoverItemProperties, 'asChild'> {
     href: string;
-    linkProps?: Omit<LinkProps, 'href' | 'passHref' | 'legacyBehavior'>;
+    linkProps?: Omit<LinkProperties, 'href' | 'passHref' | 'legacyBehavior'>;
 }
 
 const PopoverLink = React.forwardRef<HTMLAnchorElement, PopoverLinkProperties>(function (properties, reference) {

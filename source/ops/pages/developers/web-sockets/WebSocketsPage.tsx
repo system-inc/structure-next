@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import OpsNavigationTrail from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 
 // Dependencies - Provider
 import { useWebSocketViaSharedWorker } from '@structure/source/api/web-sockets/providers/WebSocketViaSharedWorkerProvider';

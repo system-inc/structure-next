@@ -5,7 +5,7 @@ import React from 'react';
 import { useUrlSearchParameters } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import GraphQlOperationForm from '@structure/source/api/graphql/forms/GraphQlOperationForm';
+import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - API
 import { PostTopicCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
