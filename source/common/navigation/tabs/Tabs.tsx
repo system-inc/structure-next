@@ -104,10 +104,11 @@ const tabItemVariants = cva(
     },
 );
 
-interface TabItemProps
+// Component - TabItem
+interface TabItemProperties
     extends Omit<VariantProps<typeof tabItemVariants>, 'size'>,
         React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Trigger> {}
-const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProps>(
+const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
     function (properties, reference) {
         const { size, tabGroupId, currentValue } = React.useContext(TabsContext);
         const isActive = currentValue === properties.value;

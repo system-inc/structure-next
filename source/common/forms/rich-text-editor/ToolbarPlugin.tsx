@@ -1,11 +1,3 @@
-/**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- * @link(https://github.com/facebook/lexical/blob/5bb4f7565974b0c91c0ea9d321a699ecd64c2efc/examples/react-rich/src/plugins/ToolbarPlugin.tsx)
- */
-
 // Dependencies - React and Next.js
 import React from 'react';
 
@@ -58,7 +50,8 @@ function Divider() {
     return <div className="divider" />;
 }
 
-interface ToolbarPluginProps {
+// Component - ToolbarPlugin
+interface ToolbarPluginProperties {
     attachedFiles?: File[];
     onSaveFiles?: (files: File[]) => void;
     onRemoveFile?: (index: number) => void;
@@ -66,7 +59,7 @@ interface ToolbarPluginProps {
     showLoading?: boolean;
     // loadingProgress?: number | null;
 }
-export default function ToolbarPlugin(properties: ToolbarPluginProps) {
+export function ToolbarPlugin(properties: ToolbarPluginProperties) {
     const { attachedFiles = [], onSaveFiles, onRemoveFile } = properties;
 
     const [editor] = useLexicalComposerContext();
@@ -287,3 +280,6 @@ export default function ToolbarPlugin(properties: ToolbarPluginProps) {
         </div>
     );
 }
+
+// Export - Default
+export default ToolbarPlugin;

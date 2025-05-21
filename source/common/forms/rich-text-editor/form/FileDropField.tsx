@@ -122,8 +122,11 @@ export function getFileTypeIconFromType(type: string): Icon {
     }
 }
 
-type FileListItemProps = React.ComponentPropsWithoutRef<React.ComponentPropsWithoutRef<typeof FileList>['component']>;
-function FileListItem(properties: FileListItemProps) {
+// Component - FileListItem
+type FileListItemProperties = React.ComponentPropsWithoutRef<
+    React.ComponentPropsWithoutRef<typeof FileList>['component']
+>;
+function FileListItem(properties: FileListItemProperties) {
     const FileTypeIcon = getFileTypeIconFromType(properties.file.type);
 
     return (
