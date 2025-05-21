@@ -1,9 +1,14 @@
+// Dependencies - React and Next.js
 import React from 'react';
+
+// Dependencies - Main Components
 import { Input } from './Input';
-import { cva } from 'class-variance-authority';
 import { TextInputWithIcon } from './TextInputWithIcon';
-import { mergeClassNames } from '@structure/source/utilities/Style';
 import { FormField } from './FormField';
+
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+import { cva } from 'class-variance-authority';
 
 const textFieldVariants = cva([], {
     variants: {
@@ -17,7 +22,8 @@ const textFieldVariants = cva([], {
     },
 });
 
-interface TextFieldProps extends React.ComponentPropsWithoutRef<typeof Input> {
+// Component - TextField
+interface TextFieldProperties extends React.ComponentPropsWithoutRef<typeof Input> {
     label: string;
     optional?: boolean;
     info?: string;
@@ -26,49 +32,82 @@ interface TextFieldProps extends React.ComponentPropsWithoutRef<typeof Input> {
     error?: string;
     placeholder: string; // Enforce placeholder
 }
-const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-    ({ label, optional, info, icon, caption, error, id, className, size, ...props }: TextFieldProps, ref) => {
-        const internalId = React.useId();
+const TextField = React.forwardRef<HTMLInputElement, TextFieldProperties>(function (
+    properties: TextFieldProperties,
+    reference,
+) {
+    const internalId = React.useId();
 
-        return (
-            <FormField
-                label={label}
-                optional={optional}
-                // info={info}
-                caption={caption}
-                error={error}
-                htmlFor={id ?? internalId}
-                className={mergeClassNames(textFieldVariants({ className, size }))}
-                // size={size}
-            >
-                {/* Input */}
-                {!icon ? (
-                    <Input
-                        ref={ref}
-                        id={id ?? internalId}
-                        className={mergeClassNames(textFieldVariants({ className, size }))}
-                        size={size}
-                        {...props}
-                    />
-                ) : (
-                    <TextInputWithIcon
-                        ref={ref}
-                        icon={icon}
-                        id={id ?? internalId}
-                        className={mergeClassNames(textFieldVariants({ className, size }))}
-                        size={size}
-                        {...props}
-                    />
-                )}
+    // Clone the properties object and remove properties we handle separately
+    // Get the properties to spread onto the Input element
+    const inputProperties = { ...properties } as Partial<TextFieldProperties>;
+    delete inputProperties.label;
+    delete inputProperties.optional;
+    delete inputProperties.info;
+    delete inputProperties.icon;
+    delete inputProperties.caption;
+    delete inputProperties.error;
+    delete inputProperties.id;
+    delete inputProperties.className;
 
-                {/* InfoIcon */}
-                {info && (
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">{info}</div>
-                )}
-            </FormField>
-        );
-    },
-);
+    // Render the component
+    return (
+        <FormField
+            label={properties.label}
+            optional={properties.optional}
+            // info={properties.info}
+            caption={properties.caption}
+            error={properties.error}
+            htmlFor={properties.id ?? internalId}
+            className={mergeClassNames(
+                textFieldVariants({
+                    className: properties.className,
+                    size: properties.size,
+                }),
+            )}
+            // size={properties.size}
+        >
+            {/* Input */}
+            {!properties.icon ? (
+                <Input
+                    ref={reference}
+                    id={properties.id ?? internalId}
+                    className={mergeClassNames(
+                        textFieldVariants({
+                            className: properties.className,
+                            size: properties.size,
+                        }),
+                    )}
+                    {...inputProperties}
+                />
+            ) : (
+                <TextInputWithIcon
+                    ref={reference}
+                    icon={properties.icon}
+                    id={properties.id ?? internalId}
+                    className={mergeClassNames(
+                        textFieldVariants({
+                            className: properties.className,
+                            size: properties.size,
+                        }),
+                    )}
+                    size={properties.size}
+                    {...inputProperties}
+                />
+            )}
+
+            {/* InfoIcon */}
+            {properties.info && (
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    {properties.info}
+                </div>
+            )}
+        </FormField>
+    );
+});
+
+// Set the display name for the component
 TextField.displayName = 'TextField';
 
-export { TextField, type TextFieldProps, textFieldVariants };
+// Export
+export { TextField, type TextFieldProperties as TextFieldProps, textFieldVariants };

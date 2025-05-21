@@ -44,9 +44,10 @@ const inputVariants = cva(
     },
 );
 
-type InputProps = React.ComponentPropsWithoutRef<'input'> & VariantProps<typeof inputVariants>;
-const Input = React.forwardRef<HTMLInputElement, InputProps>((properties, reference) => {
-    // Properties to spread onto the component
+// Component - Input
+type InputProperties = React.ComponentPropsWithoutRef<'input'> & VariantProps<typeof inputVariants>;
+const Input = React.forwardRef<HTMLInputElement, InputProperties>(function (properties, reference) {
+    // Get properties to spread onto the input element
     const inputProperties = { ...properties };
     delete inputProperties.className;
     delete inputProperties.size;
@@ -67,6 +68,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((properties, refere
         />
     );
 });
+
+// Set the display name for the component
 Input.displayName = 'Input';
 
-export { Input, type InputProps, inputVariants };
+// Export
+export { Input, type InputProperties, inputVariants };

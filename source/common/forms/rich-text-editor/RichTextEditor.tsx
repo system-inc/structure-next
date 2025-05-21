@@ -25,11 +25,11 @@ import ResetPlugin from './ResetPlugin';
 // import FloatingLinkEditor from './FloatingLinkEditor';
 import Card from '@structure/source/common/containers/Card';
 
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-
 // Nodes
 import { SlashSnippetCommandPlugin } from './SlashCommandPlugin';
+
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 const theme = {
     ltr: 'ltr',
@@ -108,7 +108,9 @@ const theme = {
 function onError(error: Error) {
     console.error(error);
 }
-interface RichTextEditorProps {
+
+// Component - RichTextEditor
+interface RichTextEditorProperties {
     type: 'markdown' | 'html' | 'json';
     className?: string;
     initialContent?: string;
@@ -123,21 +125,7 @@ interface RichTextEditorProps {
     shouldReset?: boolean;
     onResetComplete?: () => void;
 }
-export function RichTextEditor({
-    type,
-    className,
-    initialContent,
-    onChange,
-    // isEditorEmpty,
-    attachedFiles,
-    onSaveFiles,
-    onRemoveFile,
-    isDisabled,
-    showLoading,
-    // loadingProgress,
-    shouldReset,
-    onResetComplete,
-}: RichTextEditorProps) {
+export function RichTextEditor(properties: RichTextEditorProperties) {
     // const [linkUrl, setLinkUrl] = useState('');
     // const [isLinkActive, setIsLinkActive] = useState(false);
 
@@ -148,21 +136,21 @@ export function RichTextEditor({
         nodes: [HorizontalRuleNode, CodeNode, LinkNode, ListNode, ListItemNode, HeadingNode, QuoteNode],
         editorState: () => {
             // Handle initial content values
-            if(initialContent) {
-                if(type === 'markdown') {
-                    $convertFromMarkdownString(initialContent, TRANSFORMERS); // Generate the nodes from the markdown string
+            if(properties.initialContent) {
+                if(properties.type === 'markdown') {
+                    $convertFromMarkdownString(properties.initialContent, TRANSFORMERS); // Generate the nodes from the markdown string
                 }
-                else if(type === 'html') {
+                else if(properties.type === 'html') {
                     const editor = $getEditor();
                     const parser = new DOMParser();
-                    const dom = parser.parseFromString(initialContent, 'text/html');
+                    const dom = parser.parseFromString(properties.initialContent, 'text/html');
                     const nodes = $generateNodesFromDOM(editor, dom);
                     $getRoot().select();
 
                     $insertNodes(nodes);
                 }
-                else if(type === 'json') {
-                    $getRoot().updateFromJSON(JSON.parse(initialContent));
+                else if(properties.type === 'json') {
+                    $getRoot().updateFromJSON(JSON.parse(properties.initialContent));
                 }
 
                 $getRoot().selectEnd(); // Move selection to the end of the content.
@@ -182,14 +170,18 @@ export function RichTextEditor({
 
             // const root = $getRoot();
             // const isEmpty = root.getChildrenSize() === 1 && root.getFirstChild()?.getTextContent() === '';
-            onChange?.({ markdown, html, json });
+            properties.onChange?.({ markdown, html, json });
             // isEditorEmpty?.(isEmpty);
         });
     }
 
+    // Render the component
     return (
         <Card
-            className={mergeClassNames('flex flex-col items-stretch gap-0 overflow-clip rounded-small p-0', className)}
+            className={mergeClassNames(
+                'flex flex-col items-stretch gap-0 overflow-clip rounded-small p-0',
+                properties.className,
+            )}
         >
             <LexicalComposer initialConfig={initialConfig}>
                 <div className="relative h-full w-full overflow-y-auto">
@@ -200,18 +192,18 @@ export function RichTextEditor({
                                 placeholder={<span />}
                                 className="relative h-full max-h-80 min-h-40 w-full p-4 focus-visible:outline-none"
                                 spellCheck
-                                contentEditable={!isDisabled}
+                                contentEditable={!properties.isDisabled}
                             />
                         }
                         ErrorBoundary={LexicalErrorBoundary}
                     />
                 </div>
                 <ToolbarPlugin
-                    attachedFiles={attachedFiles}
-                    onSaveFiles={onSaveFiles}
-                    onRemoveFile={onRemoveFile}
-                    isDisabled={isDisabled}
-                    showLoading={showLoading}
+                    attachedFiles={properties.attachedFiles}
+                    onSaveFiles={properties.onSaveFiles}
+                    onRemoveFile={properties.onRemoveFile}
+                    isDisabled={properties.isDisabled}
+                    showLoading={properties.showLoading}
                     // loadingProgress={loadingProgress}
                 />
                 <HistoryPlugin />
@@ -219,8 +211,11 @@ export function RichTextEditor({
                 <MarkdownShortcutPlugin />
                 <OnChangePlugin onChange={handleOnChange} />
                 <SlashSnippetCommandPlugin />
-                <ResetPlugin shouldReset={shouldReset} onResetComplete={onResetComplete} />
+                <ResetPlugin shouldReset={properties.shouldReset} onResetComplete={properties.onResetComplete} />
             </LexicalComposer>
         </Card>
     );
 }
+
+// Export - Default
+export default RichTextEditor;
