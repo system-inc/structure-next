@@ -1,5 +1,5 @@
 // Dependencies - React and Next.js
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 
 // Dependencies - Main Components
 import { Slot, Slottable } from '@radix-ui/react-slot';
@@ -363,7 +363,7 @@ const DraggableItem = (properties: DraggableItemProperties) => {
     );
 
     // Function to prevent children from being clicked when the item is being dragged
-    const handleClickCapture: MouseEventHandler<HTMLDivElement> = (event) => {
+    const handleClickCapture: React.MouseEventHandler<HTMLDivElement> = (event) => {
         if(isDraggingReference.current) {
             event.preventDefault();
             event.stopPropagation();
