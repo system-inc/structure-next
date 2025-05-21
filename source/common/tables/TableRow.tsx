@@ -81,9 +81,6 @@ export function TableRow(properties: TableRowProperties) {
     );
 }
 
-// Export - Default
-export default TableRow;
-
 /**
  * Extracted sub-components to prevent re-rendering the whole table row when a cell is updated.
  */

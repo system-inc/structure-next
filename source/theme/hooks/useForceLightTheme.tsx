@@ -14,6 +14,3 @@ export function useForceLightTheme() {
         };
     }, []);
 }
-
-// Export - Default
-export default useForceLightTheme;

@@ -73,6 +73,3 @@ export function ProfileImage(properties: ProfileImageProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ProfileImage;

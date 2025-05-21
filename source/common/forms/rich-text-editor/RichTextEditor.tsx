@@ -216,6 +216,3 @@ export function RichTextEditor(properties: RichTextEditorProperties) {
         </Card>
     );
 }
-
-// Export - Default
-export default RichTextEditor;

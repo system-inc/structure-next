@@ -52,4 +52,3 @@ export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketS
         </div>
     );
 }
-export default AccountSupportTicketStatusTabs;

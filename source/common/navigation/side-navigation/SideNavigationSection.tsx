@@ -108,6 +108,3 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
         </div>
     );
 }
-
-// Export - Default
-export default SideNavigationSection;

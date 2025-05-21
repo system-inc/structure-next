@@ -134,6 +134,3 @@ export function Popover(properties: PopoverProperties) {
         </RadixPopover.Root>
     );
 }
-
-// Export - Default
-export default Popover;

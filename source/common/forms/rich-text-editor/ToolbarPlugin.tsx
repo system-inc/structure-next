@@ -283,6 +283,3 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ToolbarPlugin;

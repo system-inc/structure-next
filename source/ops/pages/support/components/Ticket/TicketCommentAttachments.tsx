@@ -66,6 +66,3 @@ export function CommentAttachments(properties: CommentAttachmentsProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default CommentAttachments;

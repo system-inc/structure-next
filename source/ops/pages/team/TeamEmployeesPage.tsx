@@ -14,6 +14,3 @@ export function TeamEmployeesPage() {
         </div>
     );
 }
-
-// Export - Default
-export default TeamEmployeesPage;

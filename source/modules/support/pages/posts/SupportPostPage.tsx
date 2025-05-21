@@ -113,6 +113,3 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default SupportPostPage;

@@ -19,7 +19,7 @@ interface CodeEditorProperties extends React.HTMLAttributes<HTMLDivElement> {
     showLineNumbers?: boolean;
     loadLanguages?: { name: string; languageFunction: unknown }[];
 }
-const CodeEditor = (properties: CodeEditorProperties) => {
+export function CodeEditor(properties: CodeEditorProperties) {
     // Extract properties
     const language = properties.language || 'js';
 
@@ -168,6 +168,4 @@ const CodeEditor = (properties: CodeEditorProperties) => {
             </div>
         </div>
     );
-};
-
-export default CodeEditor;
+}

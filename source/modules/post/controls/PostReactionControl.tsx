@@ -170,6 +170,3 @@ export function PostReactionControl(properties: PostReactionControlProperties) {
         </PopoverMenu>
     );
 }
-
-// Export - Default
-export default PostReactionControl;

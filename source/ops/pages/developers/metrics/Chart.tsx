@@ -521,7 +521,7 @@ export interface ChartProperties {
     errorMessage?: string;
     onMouseDown?: (chartEvent: React.MouseEvent, mouseEvent: React.MouseEvent) => void;
 }
-export const Chart = function (properties: ChartProperties) {
+export function Chart(properties: ChartProperties) {
     // Use the theme hook
     // const { themeClassName } = useTheme();
     const themeClassName = 'light';
@@ -899,7 +899,4 @@ export const Chart = function (properties: ChartProperties) {
             </p> */}
         </div>
     );
-};
-
-// Export - Default
-export default Chart;
+}

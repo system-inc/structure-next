@@ -13,6 +13,3 @@ export function TableCellContentBoolean(properties: TableCellContentBooleanPrope
         </div>
     );
 }
-
-// Export - Default
-export default TableCellContentBoolean;

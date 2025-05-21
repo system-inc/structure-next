@@ -57,6 +57,3 @@ export const MenuItem = React.memo(
 
 // Set displayName for debugging purposes
 MenuItem.displayName = 'MenuItem';
-
-// Export - Default
-export default MenuItem;

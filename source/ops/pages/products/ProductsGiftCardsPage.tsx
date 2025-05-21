@@ -14,6 +14,3 @@ export function ProductsGiftCardsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default ProductsGiftCardsPage;

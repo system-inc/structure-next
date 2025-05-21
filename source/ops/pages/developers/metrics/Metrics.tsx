@@ -994,6 +994,3 @@ export function Metrics() {
         </>
     );
 }
-
-// Export - Default
-export default Metrics;

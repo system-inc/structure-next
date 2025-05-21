@@ -62,6 +62,3 @@ export function useNotice(): NoticeContextInterface {
     }
     return React.useContext(NoticeContext) as NoticeContextInterface;
 }
-
-// Export - Default
-export default NoticeProvider;

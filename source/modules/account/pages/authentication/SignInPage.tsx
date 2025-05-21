@@ -19,6 +19,3 @@ export function SignInPage() {
     // Render the component
     return <AuthenticationPage scope="SignIn" />;
 }
-
-// Export - Default
-export default SignInPage;

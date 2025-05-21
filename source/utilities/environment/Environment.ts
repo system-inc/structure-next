@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Function to check if the current environment is a production environment
 export function inProductionEnvironment(): boolean {

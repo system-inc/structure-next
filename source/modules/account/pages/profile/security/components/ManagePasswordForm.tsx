@@ -115,6 +115,3 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ManagePasswordForm;

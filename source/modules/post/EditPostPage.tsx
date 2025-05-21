@@ -86,6 +86,3 @@ export function EditPostPage(properties: EditPostPageProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default EditPostPage;

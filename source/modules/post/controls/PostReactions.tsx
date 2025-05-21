@@ -38,6 +38,3 @@ export function PostReactions(properties: PostReactionsProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default PostReactions;

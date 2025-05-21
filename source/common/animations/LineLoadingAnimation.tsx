@@ -54,6 +54,3 @@ export function LineLoadingAnimation() {
         </div>
     );
 }
-
-// Export - Default
-export default LineLoadingAnimation;

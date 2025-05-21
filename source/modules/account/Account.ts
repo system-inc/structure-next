@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - API
 import { AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
@@ -106,6 +106,3 @@ export class Account {
         return this.hasRole('Administrator');
     }
 }
-
-// Export - Default
-export default Account;

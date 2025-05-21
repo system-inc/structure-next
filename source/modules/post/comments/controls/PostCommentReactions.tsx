@@ -38,6 +38,3 @@ export function PostCommentReactions(properties: PostCommentReactionsProperties)
         </div>
     );
 }
-
-// Export - Default
-export default PostCommentReactions;

@@ -107,6 +107,3 @@ export function SupportFeedback(properties: SupportFeedbackProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default SupportFeedback;

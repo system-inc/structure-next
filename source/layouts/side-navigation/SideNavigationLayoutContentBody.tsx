@@ -31,6 +31,3 @@ export function SideNavigationLayoutContentBody(properties: SideNavigationLayout
         </ScrollArea>
     );
 }
-
-// Export - Default
-export default SideNavigationLayoutContentBody;

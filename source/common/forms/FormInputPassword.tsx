@@ -49,6 +49,3 @@ export const FormInputPassword = React.forwardRef(function (
 
 // Set the display name for debugging purposes
 FormInputPassword.displayName = 'FormInputPassword';
-
-// Export - Default
-export default FormInputPassword;

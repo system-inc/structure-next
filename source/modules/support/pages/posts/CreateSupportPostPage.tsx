@@ -80,6 +80,3 @@ export function CreateSupportPostPage() {
         </div>
     );
 }
-
-// Export - Default
-export default CreateSupportPostPage;

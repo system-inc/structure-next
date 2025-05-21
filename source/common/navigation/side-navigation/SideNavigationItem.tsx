@@ -44,6 +44,3 @@ export function SideNavigationItem(properties: SideNavigationItemProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default SideNavigationItem;

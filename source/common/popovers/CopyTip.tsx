@@ -40,6 +40,3 @@ export function CopyTip(properties: CopyTipProperties) {
         </Tip>
     );
 }
-
-// Export - Default
-export default CopyTip;

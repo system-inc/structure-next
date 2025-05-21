@@ -34,6 +34,3 @@ export function ToggleButton(properties: ToggleButtonProperties) {
         />
     );
 }
-
-// Export - Default
-export default ToggleButton;

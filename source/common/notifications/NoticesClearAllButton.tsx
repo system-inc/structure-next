@@ -67,6 +67,3 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
 
 // Set the display name for debugging purposes
 NoticesClearAllButton.displayName = 'ClearAllNoticesButton';
-
-// Export - Default
-export default NoticesClearAllButton;

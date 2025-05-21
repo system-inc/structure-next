@@ -1,7 +1,7 @@
 'use client'; // This component uses client-only features
 
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React
 import React from 'react';
@@ -306,6 +306,3 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
         </>
     );
 }
-
-// Export - Default
-export default ProfileImageUploader;

@@ -54,6 +54,3 @@ export function LoadingAnimation(properties: LoadingAnimationProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default LoadingAnimation;

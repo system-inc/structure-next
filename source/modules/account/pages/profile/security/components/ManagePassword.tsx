@@ -126,6 +126,3 @@ export function ManagePassword(properties: ManagePasswordProperties) {
     // Render the component
     return <div>{currentAuthenticationComponent}</div>;
 }
-
-// Export - Default
-export default ManagePassword;

@@ -14,6 +14,3 @@ export function SettingsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default SettingsPage;

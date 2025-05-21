@@ -74,6 +74,3 @@ export function TipIcon(properties: TipIconProperties) {
         </Component>
     );
 }
-
-// Export - Default
-export default TipIcon;

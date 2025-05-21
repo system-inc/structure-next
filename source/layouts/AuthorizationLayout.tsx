@@ -70,6 +70,3 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     // Render the component
     return properties.children;
 }
-
-// Export - Default
-export default AuthorizationLayout;

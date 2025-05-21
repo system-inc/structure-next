@@ -63,6 +63,3 @@ export function InternalLayout(properties: InternalLayoutProperties) {
         </>
     );
 }
-
-// Export - Default
-export default InternalLayout;

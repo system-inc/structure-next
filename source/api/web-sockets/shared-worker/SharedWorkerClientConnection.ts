@@ -59,6 +59,3 @@ export class SharedWorkerClientConnection implements SharedWorkerClientConnectio
         }
     }
 }
-
-// Export - Default
-export default SharedWorkerClientConnection;

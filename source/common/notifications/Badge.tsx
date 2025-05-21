@@ -82,7 +82,7 @@ export const badgeVariants = cva(
 );
 
 type BadgeProperties = VariantProps<typeof badgeVariants> & React.HTMLAttributes<HTMLDivElement>;
-const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(properties, reference) {
+export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(properties, reference) {
     // Create a clone of properties for remaining HTML attributes
     const divProperties = { ...properties };
     delete divProperties.variant;
@@ -108,6 +108,5 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(p
         </div>
     );
 });
-Badge.displayName = 'Badge';
 
-export default Badge;
+Badge.displayName = 'Badge';

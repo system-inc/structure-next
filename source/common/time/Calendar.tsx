@@ -66,6 +66,3 @@ export function Calendar(properties: CalendarProperties) {
         />
     );
 }
-
-// Export - Default
-export default Calendar;

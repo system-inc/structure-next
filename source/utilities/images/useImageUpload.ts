@@ -373,6 +373,3 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
         abort,
     };
 }
-
-// Export - Default
-export default useImageUpload;

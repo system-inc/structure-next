@@ -94,6 +94,3 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default DeleteAccountForm;

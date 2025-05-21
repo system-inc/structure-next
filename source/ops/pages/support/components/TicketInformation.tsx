@@ -88,6 +88,3 @@ export function TicketInformation(properties: TicketInformationProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default TicketInformation;

@@ -99,6 +99,3 @@ export function TableCellContentDateTime(properties: TableCellContentDateTimePro
         properties.value
     );
 }
-
-// Export - Default
-export default TableCellContentDateTime;

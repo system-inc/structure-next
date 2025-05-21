@@ -62,6 +62,3 @@ export function DevelopersDataPage() {
         </div>
     );
 }
-
-// Export - Default
-export default DevelopersDataPage;

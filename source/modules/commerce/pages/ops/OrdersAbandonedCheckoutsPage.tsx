@@ -14,6 +14,3 @@ export function OrdersAbandonedCheckoutsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default OrdersAbandonedCheckoutsPage;

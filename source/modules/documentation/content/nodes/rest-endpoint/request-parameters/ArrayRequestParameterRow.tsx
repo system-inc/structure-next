@@ -144,5 +144,3 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowPro
         </div>
     );
 }
-
-export default ArrayRequestParameterRow;

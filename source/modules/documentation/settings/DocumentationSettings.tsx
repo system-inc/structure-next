@@ -40,6 +40,3 @@ export function DocumentationSettings(properties: DocumentationSettingsPropertie
         </div>
     );
 }
-
-// Export - Default
-export default DocumentationSettings;

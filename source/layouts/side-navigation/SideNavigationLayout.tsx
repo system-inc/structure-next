@@ -55,6 +55,3 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
         </>
     );
 }
-
-// Export - Default
-export default SideNavigationLayout;

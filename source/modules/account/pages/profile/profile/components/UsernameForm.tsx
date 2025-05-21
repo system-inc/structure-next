@@ -177,6 +177,3 @@ export function UsernameForm() {
         </div>
     );
 }
-
-// Export - Default
-export default UsernameForm;

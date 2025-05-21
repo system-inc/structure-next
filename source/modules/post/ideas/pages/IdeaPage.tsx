@@ -69,6 +69,3 @@ export function IdeaPage(properties: IdeaPageProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default IdeaPage;

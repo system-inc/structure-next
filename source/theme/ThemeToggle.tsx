@@ -55,13 +55,10 @@ export function ThemeToggle() {
 
     // Render the component
     return (
-        <div className="transition-color rounded-extra-large flex w-min items-center justify-center space-x-0.5 border border-dark-4/50 p-1 text-dark-4/50 dark:border-dark-4 dark:text-light-6">
+        <div className="transition-color flex w-min items-center justify-center space-x-0.5 rounded-extra-large border border-dark-4/50 p-1 text-dark-4/50 dark:border-dark-4 dark:text-light-6">
             {themeModeButton(Theme.OperatingSystem)}
             {themeModeButton(Theme.Light)}
             {themeModeButton(Theme.Dark)}
         </div>
     );
 }
-
-// Export - Default
-export default ThemeToggle;

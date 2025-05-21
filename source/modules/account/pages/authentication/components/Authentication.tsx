@@ -297,6 +297,3 @@ export function Authentication(properties: AuthenticationProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Authentication;

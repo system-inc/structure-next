@@ -4,7 +4,7 @@ import { $getSelection, $isRangeSelection } from 'lexical';
 import { TOGGLE_LINK_COMMAND, $isLinkNode, LinkNode } from '@lexical/link';
 import { $getNearestNodeOfType } from '@lexical/utils';
 
-const FloatingLinkEditor = () => {
+export function FloatingLinkEditor() {
     const [editor] = useLexicalComposerContext();
     const [linkUrl, setLinkUrl] = React.useState('');
     const [isVisible, setIsVisible] = React.useState(false);
@@ -60,6 +60,4 @@ const FloatingLinkEditor = () => {
             <button onClick={removeLink}>Remove</button>
         </div>
     );
-};
-
-export default FloatingLinkEditor;
+}

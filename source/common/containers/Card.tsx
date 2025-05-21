@@ -3,7 +3,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { Slot } from '@radix-ui/react-slot';
 
-const cardVariants = cva(
+export const cardVariants = cva(
     [
         // Base styles
         'p-8 rounded-2xl border border-opsis-border-primary bg-opsis-background-tetriary flex flex-col items-start justify-start gap-6 transition-all shadow-02',
@@ -27,7 +27,7 @@ const cardVariants = cva(
 );
 
 type CardProperties = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof cardVariants> & { asChild?: boolean };
-const Card = React.forwardRef<HTMLDivElement, CardProperties>(function (properties, reference) {
+export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function (properties, reference) {
     const Component = properties.asChild ? Slot : 'div';
 
     // Properties to spread onto the component
@@ -50,6 +50,3 @@ const Card = React.forwardRef<HTMLDivElement, CardProperties>(function (properti
     );
 });
 Card.displayName = 'Card';
-
-export { Card, cardVariants };
-export default Card;

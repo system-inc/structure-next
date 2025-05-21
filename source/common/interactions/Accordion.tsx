@@ -88,6 +88,3 @@ export function Accordion(properties: AccordionProperties) {
         </RadixAccordion.Root>
     );
 }
-
-// Export - Default
-export default Accordion;

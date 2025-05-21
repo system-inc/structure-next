@@ -24,6 +24,3 @@ export function EmailListsPage() {
         </>
     );
 }
-
-// Export - Default
-export default EmailListsPage;

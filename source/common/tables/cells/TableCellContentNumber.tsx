@@ -29,6 +29,3 @@ export function TableCellContentNumber(properties: TableCellContentNumberPropert
         </CopyTip>
     );
 }
-
-// Export - Default
-export default TableCellContentNumber;

@@ -142,6 +142,3 @@ export function ObjectTable(properties: ObjectTableProperties) {
     // Render the component
     return <Table columns={columns} rows={rows} {...properties} />;
 }
-
-// Export - Default
-export default ObjectTable;

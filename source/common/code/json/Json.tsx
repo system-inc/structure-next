@@ -26,6 +26,3 @@ export function Json(properties: JsonProperties) {
         </pre>
     );
 }
-
-// Export - Default
-export default Json;

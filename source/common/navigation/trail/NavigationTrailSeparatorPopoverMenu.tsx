@@ -65,6 +65,3 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
         </PopoverMenu>
     );
 }
-
-// Export - Default
-export default NavigationTrailSeparatorPopoverMenu;

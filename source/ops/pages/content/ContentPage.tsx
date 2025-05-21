@@ -29,6 +29,3 @@ export function ContentPage() {
         </div>
     );
 }
-
-// Export - Default
-export default ContentPage;

@@ -655,6 +655,3 @@ export function StructurePage() {
         </>
     );
 }
-
-// Export - Default
-export default StructurePage;

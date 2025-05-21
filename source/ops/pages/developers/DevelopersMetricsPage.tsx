@@ -13,6 +13,3 @@ export function DevelopersMetricsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default DevelopersMetricsPage;

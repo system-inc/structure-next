@@ -288,6 +288,3 @@ export function Post(properties: PostProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Post;

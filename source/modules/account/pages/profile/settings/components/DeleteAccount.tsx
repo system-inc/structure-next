@@ -116,6 +116,3 @@ export function DeleteAccount(properties: DeleteAccountProperties) {
     // Render the component
     return <div>{currentAuthenticationComponent}</div>;
 }
-
-// Export - Default
-export default DeleteAccount;

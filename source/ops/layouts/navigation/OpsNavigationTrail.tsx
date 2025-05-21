@@ -101,6 +101,3 @@ export function OpsNavigationTrail(properties: NavigationTrailProperties) {
         />
     );
 }
-
-// Export - Default
-export default OpsNavigationTrail;

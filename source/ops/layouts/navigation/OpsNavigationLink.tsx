@@ -43,6 +43,3 @@ export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default OpsNavigationLink;

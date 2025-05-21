@@ -63,6 +63,3 @@ export function AccountMenu(properties: AccountMenuProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default AccountMenu;

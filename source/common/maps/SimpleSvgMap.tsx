@@ -92,6 +92,3 @@ export function SimpleSvgMap(properties: SimpleSvgMapProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default SimpleSvgMap;

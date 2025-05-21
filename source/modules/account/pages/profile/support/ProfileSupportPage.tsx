@@ -208,6 +208,3 @@ export function ProfileSupportPage() {
         </div>
     );
 }
-
-// Export - Default
-export default ProfileSupportPage;

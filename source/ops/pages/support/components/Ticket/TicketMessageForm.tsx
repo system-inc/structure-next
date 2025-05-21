@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - Forms and Validation
 import { useForm } from 'react-hook-form';

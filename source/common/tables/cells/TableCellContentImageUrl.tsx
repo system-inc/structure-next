@@ -75,6 +75,3 @@ export function TableCellContentImageUrl(properties: TableCellContentImageUrlPro
         </div>
     );
 }
-
-// Export - Default
-export default TableCellContentImageUrl;

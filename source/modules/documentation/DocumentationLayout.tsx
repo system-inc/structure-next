@@ -41,6 +41,3 @@ export function DocumentationLayout(properties: DocumentationLayoutProperties) {
         />
     );
 }
-
-// Export - Default
-export default DocumentationLayout;

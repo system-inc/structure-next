@@ -326,6 +326,3 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
 
 // Set the display name for the component for debugging
 InputTimeRange.displayName = 'InputTimeRange';
-
-// Export - Default
-export default InputTimeRange;

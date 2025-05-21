@@ -3,7 +3,7 @@ import { CodegenConfig as GraphQlCodeGeneratorConfiguration } from '@graphql-cod
 import { graphql } from '../../../../../package.json';
 
 // Configuration
-const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguration = {
+export const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguration = {
     schema: graphql.projects.app.schema,
     generates: {
         // Structure GraphQL files (using structure module documents)

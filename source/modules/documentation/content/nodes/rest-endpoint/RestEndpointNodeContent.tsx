@@ -501,6 +501,3 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
         </div>
     );
 }
-
-// Export - Default
-export default RestEndpointNodeContent;

@@ -49,6 +49,3 @@ export function PostCommentControl(properties: PostCommentControlProperties) {
         </Component>
     );
 }
-
-// Export - Default
-export default PostCommentControl;

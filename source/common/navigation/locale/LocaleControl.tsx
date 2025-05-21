@@ -30,6 +30,3 @@ export function LocaleControl(properties: LocaleControlProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default LocaleControl;

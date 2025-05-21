@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
@@ -32,6 +32,3 @@ export function NotConnected(properties: NotConnectedProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default NotConnected;

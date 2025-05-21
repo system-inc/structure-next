@@ -20,6 +20,3 @@ export function TableCellContentOption(properties: TableCellContentOptionPropert
         </div>
     );
 }
-
-// Export - Default
-export default TableCellContentOption;
