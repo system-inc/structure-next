@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
-import { PostInterface } from '@structure/source/modules/post/Post';
+import { PostProperties } from '@structure/source/modules/post/Post';
 import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 
 // Dependencies - Assets
@@ -19,15 +19,15 @@ import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@structure/s
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostCommentVoteControl
-export interface PostCommentVoteControlInterface {
+export interface PostCommentVoteControlProperties {
     className?: string;
     display: 'Mobile' | 'Desktop';
     ideaId: string;
     upvoteCount: number;
     voteType?: PostVoteType | null;
-    onVoteChange: (newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) => void;
+    onVoteChange: (newUpvoteCount: PostProperties['upvoteCount'], newVoteType: PostProperties['voteType']) => void;
 }
-export function PostCommentVoteControl(properties: PostCommentVoteControlInterface) {
+export function PostCommentVoteControl(properties: PostCommentVoteControlProperties) {
     // State
     const [upvoteCount, setUpvoteCount] = React.useState<number>(properties.upvoteCount);
     const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);

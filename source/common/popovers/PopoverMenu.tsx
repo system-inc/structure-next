@@ -4,21 +4,21 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
-import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
+import { MenuProperties, Menu } from '@structure/source/common/menus/Menu';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PopoverMenu
-export interface PopoverMenuInterface extends Omit<MenuInterface, 'items'> {
+export interface PopoverMenuProperties extends Omit<MenuProperties, 'items'> {
     children: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
-    items: MenuItemInterface[];
+    items: MenuItemProperties[];
     closeOnItemSelected?: boolean;
-    popoverProperties?: Omit<PopoverInterface, 'children' | 'content'>;
+    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
 }
-export function PopoverMenu(properties: PopoverMenuInterface) {
+export function PopoverMenu(properties: PopoverMenuProperties) {
     // State
     const [open, setOpen] = React.useState<boolean>(properties.popoverProperties?.open ?? false);
 
@@ -66,7 +66,7 @@ export function PopoverMenu(properties: PopoverMenuInterface) {
     const propertiesOnItemSelected = properties.onItemSelected;
     const propertiesCloseOnItemSelected = properties.closeOnItemSelected;
     const onItemSelectedIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: React.SyntheticEvent) {
+        function (menuItem: MenuItemProperties, menuItemRenderIndex?: number, event?: React.SyntheticEvent) {
             // Call the onSelected callback
             if(propertiesOnItemSelected) {
                 propertiesOnItemSelected(

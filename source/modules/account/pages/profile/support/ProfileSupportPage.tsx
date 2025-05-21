@@ -49,6 +49,59 @@ const emptyPaginationResult: PaginationSupportTicketResult = {
     },
 };
 
+interface ProfileSupportTicketCardProperties {
+    status: SupportTicketStatus;
+    ticket:
+        | ProfileSupportTicketsQuery['openTickets']['items'][0]
+        | ProfileSupportTicketsQuery['closedTickets']['items'][0];
+}
+const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardProperties) => {
+    const lastComment = properties.ticket.comments[properties.ticket.comments.length - 1];
+    const commentContent = extractLatestEmailContent(lastComment?.content || '');
+    return (
+        <Link href={`/account/support/${properties.ticket.identifier}`}>
+            <div className="rounded-xl border p-6">
+                <div className="mb-4 flex items-center justify-between">
+                    <Badge variant={properties.status === SupportTicketStatus.Open ? 'success' : 'info'} size="large">
+                        {properties.status}
+                    </Badge>
+                    <ArrowRight size={16} />
+                </div>
+                <div className="mb-2 flex items-center justify-start gap-2">
+                    <h2 className="m-0 text-base font-medium">{properties.ticket.title}</h2>
+                </div>
+                <div className="mb-2 flex items-center justify-start gap-2">
+                    <span className="text-opsis-content-secondary text-sm">
+                        Placed {formatDateToDayOfWeekAndDate(new Date(properties.ticket.createdAt))}
+                    </span>
+                    <span>&bull;</span>
+                    <span className="text-opsis-content-secondary text-sm">ID: {properties.ticket.identifier}</span>
+                    {/* <span>&bull;</span>
+                    <span className="text-sm text-opsis-content-secondary">
+                        Updated: {formatDateToDateAtTime(new Date(properties.ticket.updatedAt))}
+                    </span> */}
+                </div>
+                <p className="text-opsis-content-secondary truncate text-sm">{commentContent}</p>
+            </div>
+        </Link>
+    );
+};
+
+interface ProfileEmptySupportTicketsProperties {
+    status: SupportTicketStatus;
+}
+const ProfileEmptySupportTickets = (properties: ProfileEmptySupportTicketsProperties) => {
+    return (
+        <div className="flex h-full w-full flex-col items-center justify-center">
+            <Smiley size={24} className="text-neutral-500" />
+            <h2 className="text-neutral-500 mt-4 text-xl font-medium">
+                No {properties.status.toLowerCase()} requests—we're here when you need us.
+            </h2>
+            <p className="text-neutral-400 mt-2 text-sm">Reach out anytime by creating a new request.</p>
+        </div>
+    );
+};
+
 // Component - ProfileSupportPage
 export function ProfileSupportPage() {
     // Hooks
@@ -155,57 +208,6 @@ export function ProfileSupportPage() {
         </div>
     );
 }
+
+// Export - Default
 export default ProfileSupportPage;
-
-interface ProfileSupportTicketCardInterface {
-    status: SupportTicketStatus;
-    ticket:
-        | ProfileSupportTicketsQuery['openTickets']['items'][0]
-        | ProfileSupportTicketsQuery['closedTickets']['items'][0];
-}
-const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardInterface) => {
-    const lastComment = properties.ticket.comments[properties.ticket.comments.length - 1];
-    const commentContent = extractLatestEmailContent(lastComment?.content || '');
-    return (
-        <Link href={`/account/support/${properties.ticket.identifier}`}>
-            <div className="rounded-xl border p-6">
-                <div className="mb-4 flex items-center justify-between">
-                    <Badge variant={properties.status === SupportTicketStatus.Open ? 'success' : 'info'} size="large">
-                        {properties.status}
-                    </Badge>
-                    <ArrowRight size={16} />
-                </div>
-                <div className="mb-2 flex items-center justify-start gap-2">
-                    <h2 className="m-0 text-base font-medium">{properties.ticket.title}</h2>
-                </div>
-                <div className="mb-2 flex items-center justify-start gap-2">
-                    <span className="text-opsis-content-secondary text-sm">
-                        Placed {formatDateToDayOfWeekAndDate(new Date(properties.ticket.createdAt))}
-                    </span>
-                    <span>&bull;</span>
-                    <span className="text-opsis-content-secondary text-sm">ID: {properties.ticket.identifier}</span>
-                    {/* <span>&bull;</span>
-                    <span className="text-sm text-opsis-content-secondary">
-                        Updated: {formatDateToDateAtTime(new Date(properties.ticket.updatedAt))}
-                    </span> */}
-                </div>
-                <p className="text-opsis-content-secondary truncate text-sm">{commentContent}</p>
-            </div>
-        </Link>
-    );
-};
-
-interface ProfileEmptySupportTicketsInterface {
-    status: SupportTicketStatus;
-}
-const ProfileEmptySupportTickets = (properties: ProfileEmptySupportTicketsInterface) => {
-    return (
-        <div className="flex h-full w-full flex-col items-center justify-center">
-            <Smiley size={24} className="text-neutral-500" />
-            <h2 className="text-neutral-500 mt-4 text-xl font-medium">
-                No {properties.status.toLowerCase()} requests—we're here when you need us.
-            </h2>
-            <p className="text-neutral-400 mt-2 text-sm">Reach out anytime by creating a new request.</p>
-        </div>
-    );
-};

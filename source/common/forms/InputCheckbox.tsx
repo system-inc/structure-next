@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
@@ -39,7 +39,7 @@ export interface InputCheckboxReferenceInterface extends InputReferenceInterface
 }
 
 // Component - InputCheckbox
-export interface InputCheckboxInterface extends Omit<InputInterface, 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface InputCheckboxProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {
     defaultValue?: InputCheckboxState;
 
     // Events
@@ -49,10 +49,10 @@ export interface InputCheckboxInterface extends Omit<InputInterface, 'defaultVal
     variant?: keyof typeof InputCheckboxVariants;
     size?: keyof typeof InputCheckboxSizes;
 
-    buttonProperties?: ButtonInterface;
+    buttonProperties?: ButtonProperties;
 }
-export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, InputCheckboxInterface>(function (
-    properties: InputCheckboxInterface,
+export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, InputCheckboxProperties>(function (
+    properties: InputCheckboxProperties,
     reference: React.Ref<InputCheckboxReferenceInterface>,
 ) {
     // References

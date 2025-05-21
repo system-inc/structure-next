@@ -9,16 +9,16 @@ import { Markdown } from '@structure/source/common/markdown/Markdown';
 import { RestEndpointNodeContent } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/RestEndpointNodeContent';
 
 // Dependencies - Types
-import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
+import { DocumentationSpecificationProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Utilities
 import { findDocumentationNodeByUrlPath } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
 
 // Component - DocumentationContent
-export interface DocumentationContentInterface {
-    specification: DocumentationSpecificationInterface;
+export interface DocumentationContentProperties {
+    specification: DocumentationSpecificationProperties;
 }
-export function DocumentationContent(properties: DocumentationContentInterface) {
+export function DocumentationContent(properties: DocumentationContentProperties) {
     // Hooks
     const urlPath = useUrlPath() ?? '';
 

@@ -3,15 +3,15 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
-import { FileCarousel, FileCarouselInterface } from './FileCarousel';
+import { FileCarousel, FileCarouselProperties } from './FileCarousel';
 
 // Component - FileCarouselDialog
-export interface FileCarouselDialogInterface extends FileCarouselInterface {
+export interface FileCarouselDialogProperties extends FileCarouselProperties {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     startIndex?: number;
 }
-export function FileCarouselDialog(properties: FileCarouselDialogInterface) {
+export function FileCarouselDialog(properties: FileCarouselDialogProperties) {
     return (
         <Dialog
             variant="fullScreenWithMargin"

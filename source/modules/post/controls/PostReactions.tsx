@@ -11,14 +11,14 @@ import { PostReaction } from '@structure/source/modules/post/controls/PostReacti
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostReactions
-export interface PostReactionsInterface {
+export interface PostReactionsProperties {
     className?: string;
     ideaId: string;
     reactions: PostReactionsType;
     onReactionCreate: (content: string) => void;
     onReactionDelete: (content: string) => void;
 }
-export function PostReactions(properties: PostReactionsInterface) {
+export function PostReactions(properties: PostReactionsProperties) {
     // Render the component
     return (
         <div className={mergeClassNames('flex space-x-1.5', properties.className)}>

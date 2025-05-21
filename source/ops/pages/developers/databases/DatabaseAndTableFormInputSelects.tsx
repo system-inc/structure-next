@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputSelectInterface, FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { FormInputSelectProperties, FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';
@@ -15,16 +15,16 @@ import { DataInteractionDatabaseTablesDocument } from '@structure/source/api/gra
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - DatabaseAndTableFormInputSelects
-export interface DatabaseAndTableFormInputSelectsInterface {
+export interface DatabaseAndTableFormInputSelectsProperties {
     className?: string;
-    databaseNameFormInputSelectProperties?: Omit<FormInputSelectInterface, 'id' | 'items'>;
-    tableNameFormInputSelectProperties?: Omit<FormInputSelectInterface, 'id' | 'items'>;
+    databaseNameFormInputSelectProperties?: Omit<FormInputSelectProperties, 'id' | 'items'>;
+    tableNameFormInputSelectProperties?: Omit<FormInputSelectProperties, 'id' | 'items'>;
     onChange?: (databaseName?: string, tableName?: string) => void;
 }
-export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFormInputSelectsInterface) {
+export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFormInputSelectsProperties) {
     // State
-    const [databaseItems, setDatabaseItems] = React.useState<MenuItemInterface[]>([]);
-    const [tableItems, setTableItems] = React.useState<MenuItemInterface[]>([]);
+    const [databaseItems, setDatabaseItems] = React.useState<MenuItemProperties[]>([]);
+    const [tableItems, setTableItems] = React.useState<MenuItemProperties[]>([]);
     const [selectedDatabaseName, setSelectedDatabaseName] = React.useState<string | undefined>(undefined);
     const [selectedTableName, setSelectedTableName] = React.useState<string | undefined>(undefined);
 
@@ -45,7 +45,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
             const databasesAndTablesObject: { [databaseName: string]: string[] } = {};
 
             // Items for the database select
-            const databaseItems: MenuItemInterface[] = [];
+            const databaseItems: MenuItemProperties[] = [];
 
             // Determine the selected database default value
             let databaseNameDefaultValue = properties.databaseNameFormInputSelectProperties?.defaultValue;
@@ -110,7 +110,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     React.useEffect(
         function () {
             // Items for the table select
-            const tableItems: MenuItemInterface[] = [];
+            const tableItems: MenuItemProperties[] = [];
 
             if(selectedDatabaseName !== undefined) {
                 // Get the tables for the selected database

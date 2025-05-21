@@ -19,11 +19,11 @@ import {
 // import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
 
 // Component - AccountPasswordForm
-export interface AccountPasswordFormInterface {
+export interface AccountPasswordFormProperties {
     emailAddress: string;
     onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
 }
-export function AccountPasswordForm(properties: AccountPasswordFormInterface) {
+export function AccountPasswordForm(properties: AccountPasswordFormProperties) {
     // Hooks - API - Mutations
     const [accountAuthenticationPasswordVerifyMutation] = useMutation(AccountAuthenticationPasswordVerifyDocument);
 

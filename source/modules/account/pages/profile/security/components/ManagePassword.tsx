@@ -21,11 +21,11 @@ import {
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - ManagePassword
-export interface ManagePasswordInterface {
+export interface ManagePasswordProperties {
     accountHasPasswordSet: boolean;
     onComplete?: () => void;
 }
-export function ManagePassword(properties: ManagePasswordInterface) {
+export function ManagePassword(properties: ManagePasswordProperties) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
         AccountAuthenticationQuery['accountAuthentication'] | undefined

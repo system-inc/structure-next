@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 import { NoticeInterface } from '@structure/source/common/notifications/Notice';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import DownloadIcon from '@structure/assets/icons/interface/DownloadIcon.svg';
@@ -14,7 +14,7 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Interface - DownloadButtonInterface
-export interface DownloadButtonInterface extends Omit<ButtonInterface, 'type'> {
+export interface DownloadButtonInterface extends Omit<ButtonProperties, 'type'> {
     fileName?: string;
     fileExtension?: string;
     notice?: Omit<NoticeInterface, 'id'>;
@@ -33,8 +33,8 @@ export interface DownloadUrlButtonInterface extends DownloadButtonInterface {
 }
 
 // Component - DownloadButton
-export type DownloadButtonType = DownloadDataButtonInterface | DownloadUrlButtonInterface;
-export function DownloadButton(properties: DownloadButtonType) {
+export type DownloadButtonProperties = DownloadDataButtonInterface | DownloadUrlButtonInterface;
+export function DownloadButton(properties: DownloadButtonProperties) {
     // Hooks
     const { addNotice } = useNotice();
 

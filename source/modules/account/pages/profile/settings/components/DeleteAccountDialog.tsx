@@ -5,12 +5,12 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 // Dependencies - Main Components
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { DeleteAccount } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccount';
 
 // Component - DeleteAccountDialog
-export interface DeleteAccountDialogInterface extends DialogInterface {}
-export function DeleteAccountDialog(properties: DeleteAccountDialogInterface) {
+export interface DeleteAccountDialogProperties extends DialogProperties {}
+export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

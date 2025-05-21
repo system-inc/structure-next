@@ -10,11 +10,11 @@ import { AccountPasswordForm } from '@structure/source/modules/account/pages/aut
 import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - AccountPasswordChallenge
-export interface AccountPasswordChallengeInterface {
+export interface AccountPasswordChallengeProperties {
     emailAddress: string;
     onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
 }
-export function AccountPasswordChallenge(properties: AccountPasswordChallengeInterface) {
+export function AccountPasswordChallenge(properties: AccountPasswordChallengeProperties) {
     // Render the component
     return (
         <div>

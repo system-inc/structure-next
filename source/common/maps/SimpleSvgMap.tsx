@@ -9,7 +9,7 @@ import WorldMapMercator from '@structure/source/common/maps/WorldMapMercator.svg
 import CircleFilledIcon from '@structure/assets/icons/shapes/CircleFilledIcon.svg';
 
 // Component - SimpleSvgMap
-export interface SimpleSvgMapInterface {
+export interface SimpleSvgMapProperties {
     points: {
         latitude: number;
         longitude: number;
@@ -17,7 +17,7 @@ export interface SimpleSvgMapInterface {
     }[];
 }
 
-export function SimpleSvgMap(properties: SimpleSvgMapInterface) {
+export function SimpleSvgMap(properties: SimpleSvgMapProperties) {
     const { points } = properties;
 
     const mapWidth = 2000; // Width of the map image in pixels

@@ -9,14 +9,14 @@ import type { LinkProps as NextLinkInterface } from 'next/link';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Link
-export interface LinkInterface
+export interface LinkProperties
     extends NextLinkInterface,
         Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkInterface> {
     className?: string;
     children?: React.ReactNode;
     variant?: 'Primary' | 'Secondary' | 'Muted';
 }
-export const Link = React.forwardRef<HTMLAnchorElement, LinkInterface>(function (properties, reference) {
+export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function (properties, reference) {
     // Determine base classes based on variant
     const baseClasses = React.useMemo(
         function () {

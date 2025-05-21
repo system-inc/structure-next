@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from '@structure/source/common/navigation/Link';
 
 // Dependencies - Types
-import { ResponseFieldInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
+import { ResponseFieldProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -16,20 +16,20 @@ function getTableId(path: string): string {
 }
 
 // Component - ResponseParameters
-export interface ResponseParametersInterface {
-    responseBody: ResponseFieldInterface[];
+export interface ResponseParametersProperties {
+    responseBody: ResponseFieldProperties[];
     className?: string;
 }
-export function ResponseParameters(properties: ResponseParametersInterface) {
+export function ResponseParameters(properties: ResponseParametersProperties) {
     // State to track complex fields that need their own tables
-    const [complexTables, setComplexTables] = React.useState<Map<string, ResponseFieldInterface[]>>(new Map());
+    const [complexTables, setComplexTables] = React.useState<Map<string, ResponseFieldProperties[]>>(new Map());
 
     // Effect to collect complex fields on mount
     React.useEffect(
         function () {
-            const tables = new Map<string, ResponseFieldInterface[]>();
+            const tables = new Map<string, ResponseFieldProperties[]>();
 
-            function processFields(fields: ResponseFieldInterface[], parentPath = '') {
+            function processFields(fields: ResponseFieldProperties[], parentPath = '') {
                 fields.forEach(function (field) {
                     if(typeof field !== 'object') return;
 
@@ -59,7 +59,7 @@ export function ResponseParameters(properties: ResponseParametersInterface) {
     );
 
     // Function to render a single parameter row
-    function renderParameterRow(field: ResponseFieldInterface, parentPath = '', level = 0): React.ReactNode {
+    function renderParameterRow(field: ResponseFieldProperties, parentPath = '', level = 0): React.ReactNode {
         if(typeof field !== 'object') return null;
 
         const currentPath = parentPath ? `${parentPath}.${field.name}` : field.name;
@@ -97,9 +97,9 @@ export function ResponseParameters(properties: ResponseParametersInterface) {
     }
 
     // Function to render a table
-    function renderTable(fields: ResponseFieldInterface[], tablePath = ''): React.ReactNode {
+    function renderTable(fields: ResponseFieldProperties[], tablePath = ''): React.ReactNode {
         return (
-            <div className="rounded-medium overflow-hidden border">
+            <div className="overflow-hidden rounded-medium border">
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="border-b">

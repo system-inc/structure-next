@@ -15,8 +15,8 @@ import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Calendar
-export type CalendarInterface = React.ComponentProps<typeof ReactDayPicker>;
-export function Calendar(properties: CalendarInterface) {
+export type CalendarProperties = React.ComponentProps<typeof ReactDayPicker>;
+export function Calendar(properties: CalendarProperties) {
     const showOutsideDays = properties.showOutsideDays !== undefined ? properties.showOutsideDays : true;
 
     // Render the component

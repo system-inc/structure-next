@@ -6,7 +6,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/common/navigation/Link';
-import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
+import { TableColumnType, TableColumnProperties } from '@structure/source/common/tables/TableColumn';
 import { TableCellContentId } from '@structure/source/common/tables/cells/TableCellContentId';
 import { TableCellContentOption } from '@structure/source/common/tables/cells/TableCellContentOption';
 import { TableCellContentImageUrl } from '@structure/source/common/tables/cells/TableCellContentImageUrl';
@@ -25,13 +25,13 @@ import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TableCell
-export interface TableCellInterface extends React.HTMLAttributes<HTMLTableCellElement> {
+export interface TableCellProperties extends React.HTMLAttributes<HTMLTableCellElement> {
     value?: string;
-    column?: TableColumnInterface;
+    column?: TableColumnProperties;
     url?: string;
     openUrlInNewTab?: boolean;
 }
-export function TableCell(properties: TableCellInterface) {
+export function TableCell(properties: TableCellProperties) {
     // console.log('properties.value', properties.value);
     // console.log('properties.children', properties.children);
 

@@ -3,11 +3,11 @@ import Badge from '@structure/source/common/notifications/Badge';
 import { BorderContainer } from '../BorderContainer';
 
 // Component - TicketHeader
-export interface TicketHeaderInterface {
+export interface TicketHeaderProperties {
     subject: string;
     status: string;
 }
-export function TicketHeader(properties: TicketHeaderInterface) {
+export function TicketHeader(properties: TicketHeaderProperties) {
     // Properties
     const { subject, status } = properties;
 

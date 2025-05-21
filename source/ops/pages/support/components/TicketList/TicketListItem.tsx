@@ -9,7 +9,7 @@ import { formatDateWithTimeIfToday } from '@structure/source/utilities/Time';
 import { useSpring, animated } from '@react-spring/web';
 
 // Component - TicketListItem
-export interface TicketListItemInterface {
+export interface TicketListItemProperties {
     ticket: {
         identifier: string;
         userEmailAddress: string;
@@ -24,7 +24,7 @@ export interface TicketListItemInterface {
     isFirst: boolean;
     onSelect: (identifier: string) => void;
 }
-export function TicketListItem(properties: TicketListItemInterface) {
+export function TicketListItem(properties: TicketListItemProperties) {
     // Properties
     const {
         ticket,

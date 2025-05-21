@@ -7,7 +7,7 @@ import React from 'react';
 import {
     FormValuesInterface,
     FormSubmitResponseInterface,
-    FormInterface,
+    FormProperties,
     Form,
 } from '@structure/source/common/forms/Form';
 import { FormInputReferenceInterface } from '@structure/source/common/forms/FormInput';
@@ -48,7 +48,7 @@ const noOpDocument = {
 } as DocumentNode;
 
 // Component - GraphQlOperationForm
-export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'formInputs' | 'onSubmit'> {
+export interface GraphQlOperationFormProperties extends Omit<FormProperties, 'formInputs' | 'onSubmit'> {
     operation: GraphQLOperationMetadata<DocumentNode>;
     defaultValuesQuery?: {
         document: DocumentNode;
@@ -62,7 +62,7 @@ export interface GraphQlOperationFormInterface extends Omit<FormInterface, 'form
     ) => void | Promise<void>;
     showPreviewGraphQlMutationButton?: boolean;
 }
-export function GraphQlOperationForm(properties: GraphQlOperationFormInterface) {
+export function GraphQlOperationForm(properties: GraphQlOperationFormProperties) {
     // State
     const [defaultValues, setDefaultValues] = React.useState<Record<string, unknown> | null>(null);
     const [previewFormValues, setPreviewFormValues] = React.useState<FormValuesInterface>({});

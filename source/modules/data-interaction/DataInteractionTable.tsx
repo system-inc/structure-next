@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableInterface, Table } from '@structure/source/common/tables/Table';
-import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
+import { TableProperties, Table } from '@structure/source/common/tables/Table';
+import { TableColumnType, TableColumnProperties } from '@structure/source/common/tables/TableColumn';
 // import { TableRowInterface } from '@structure/source/common/tables/TableRow';
 import DatabaseAndTableFormInputSelects from '@structure/source/ops/pages/developers/databases/DatabaseAndTableFormInputSelects';
 import Button from '@structure/source/common/buttons/Button';
@@ -28,7 +28,7 @@ import {
 import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
 
 // Component - DataInteractionTable
-export interface DataInteractionTableInterface extends Omit<TableInterface, 'columns' | 'rows' | 'pagination'> {
+export interface DataInteractionTableProperties extends Omit<TableProperties, 'columns' | 'rows' | 'pagination'> {
     databaseName?: string;
     onDatabaseNameChange?: (databaseName?: string) => void;
 
@@ -44,7 +44,7 @@ export interface DataInteractionTableInterface extends Omit<TableInterface, 'col
         onChange: (itemsPerPage: number, page: number) => Promise<void>;
     };
 }
-export function DataInteractionTable(properties: DataInteractionTableInterface) {
+export function DataInteractionTable(properties: DataInteractionTableProperties) {
     // Use the Apollo Client for refetching queries with the refresh button
     const apolloClient = useApolloClient();
 
@@ -93,9 +93,9 @@ export function DataInteractionTable(properties: DataInteractionTableInterface) 
     });
 
     // Memoize the columns
-    const columns = React.useMemo<TableColumnInterface[]>(
+    const columns = React.useMemo<TableColumnProperties[]>(
         function () {
-            const columns: TableColumnInterface[] = [];
+            const columns: TableColumnProperties[] = [];
             queryState.data?.dataInteractionDatabaseTableRows?.columns?.forEach(function (column) {
                 // Determine the column type
                 let columnType: TableColumnType = TableColumnType.String;
@@ -237,7 +237,7 @@ export function DataInteractionTable(properties: DataInteractionTableInterface) 
 
     // Determine if there is a relations table as well
     const relations = queryState.data?.dataInteractionDatabaseTableRows?.relations;
-    let relationsColumns: TableColumnInterface[] = [];
+    let relationsColumns: TableColumnProperties[] = [];
     // let relationsRows: TableRowInterface[] = [];
     if(relations && relations[0]) {
         // Create the columns from the data

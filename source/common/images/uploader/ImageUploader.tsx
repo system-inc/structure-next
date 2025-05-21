@@ -10,7 +10,7 @@ import { ImageSelector } from '../selector/ImageSelector';
 import { ImageUploaderBase } from './ImageUploaderBase';
 
 // Component - ImageUploader
-export interface ImageUploaderInterface {
+export interface ImageUploaderProperties {
     className?: string;
     children?: React.ReactNode;
     buttonVariant?: 'primary' | 'default' | 'destructive';
@@ -29,7 +29,7 @@ export interface ImageUploaderInterface {
     onProgress?: (progress: number) => void;
     processFile?: (file: File) => Promise<Blob | File>;
 }
-export function ImageUploader(properties: ImageUploaderInterface) {
+export function ImageUploader(properties: ImageUploaderProperties) {
     // State
     const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
     const [uploadSuccess, setUploadSuccess] = React.useState(false);

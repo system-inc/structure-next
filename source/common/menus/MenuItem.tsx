@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -14,16 +14,16 @@ import { removeProperties } from '@structure/source/utilities/React';
 export const menuItemClassName = '';
 
 // Component - MenuItem
-export interface MenuItemInterface extends Omit<ButtonInterface, 'content'> {
+export interface MenuItemProperties extends Omit<ButtonProperties, 'content'> {
     value?: string; // Used for search and typeahead
     content?: React.ReactNode;
     highlighted?: boolean;
     selected?: boolean;
-    onSelected?: (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: React.SyntheticEvent) => void;
+    onSelected?: (menuItem: MenuItemProperties, menuItemRenderIndex: number, event: React.SyntheticEvent) => void;
     closeMenuOnSelected?: boolean; // Used anytime the Menu is closable (e.g., in a popover or context menu)
 }
 export const MenuItem = React.memo(
-    React.forwardRef<HTMLButtonElement, MenuItemInterface>(function (properties, reference) {
+    React.forwardRef<HTMLButtonElement, MenuItemProperties>(function (properties, reference) {
         // Separate the non-Button properties from the Button properties
         const buttonProperties = removeProperties(properties, [
             'value',

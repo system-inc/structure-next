@@ -8,15 +8,15 @@ import {
     GraphQLInputTypeMetadata,
     GraphQLOperationParameterMetadata,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { FormInputReferenceInterface, FormInputInterface } from '@structure/source/common/forms/FormInput';
+import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/common/forms/FormInput';
 import { FormInputsProperties } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - Main Components
-import { FormInputTextInterface, FormInputText } from '@structure/source/common/forms/FormInputText';
+import { FormInputTextProperties, FormInputText } from '@structure/source/common/forms/FormInputText';
 import { FormInputPassword } from '@structure/source/common/forms/FormInputPassword';
-import { FormInputTextAreaInterface, FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
+import { FormInputTextAreaProperties, FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
 import { FormInputCheckbox } from '@structure/source/common/forms/FormInputCheckbox';
-import { FormInputSelectInterface, FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
+import { FormInputSelectProperties, FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 import { FormInputMultipleSelect } from '@structure/source/common/forms/FormInputMultipleSelect';
 import { GraphQlFormInput } from '@structure/source/api/graphql/forms/GraphQlFormInput';
 
@@ -36,9 +36,9 @@ export type FormInputComponentUnion =
 // Type for component properties
 export type FormInputComponentProperties =
     // Make id required while keeping other FormInputInterface properties optional
-    Omit<Partial<FormInputInterface>, 'id'> & { id: string } & Partial<FormInputSelectInterface> &
-        Partial<FormInputTextInterface> &
-        Partial<FormInputTextAreaInterface> & {
+    Omit<Partial<FormInputProperties>, 'id'> & { id: string } & Partial<FormInputSelectProperties> &
+        Partial<FormInputTextProperties> &
+        Partial<FormInputTextAreaProperties> & {
             component?: FormInputComponentUnion;
             key?: string; // React key property
         };
@@ -346,7 +346,7 @@ export function generateFormInputs(
     formInputsReferencesMap: Map<string, FormInputReferenceInterface>,
     defaultValues: Record<string, unknown> | null,
     inputComponentsProperties?: FormInputsProperties,
-): React.ReactElement<FormInputInterface>[] {
+): React.ReactElement<FormInputProperties>[] {
     // Store the form inputs component and properties
     const formInputsComponentAndProperties: FormInputComponentAndProperties[] = [];
 

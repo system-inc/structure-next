@@ -24,12 +24,12 @@ const TicketMessageFormSchema = object({
 type TicketMessageFormValues = InferOutput<typeof TicketMessageFormSchema>;
 
 // Component - ProfileSupportTicketMessageForm
-export interface ProfileSupportTicketMessageFormInterface {
+export interface ProfileSupportTicketMessageFormProperties {
     ticketIdentifier: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
 }
-export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicketMessageFormInterface) {
+export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicketMessageFormProperties) {
     // Properties
     const { ticketIdentifier, comments } = properties;
 

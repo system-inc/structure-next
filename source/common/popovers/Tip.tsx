@@ -5,15 +5,15 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixTooltip from '@radix-ui/react-tooltip';
-import { PopoverInterface, popoverClassName } from '@structure/source/common/popovers/Popover';
+import { PopoverProperties, popoverClassName } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { wrapForSlot } from '@structure/source/utilities/React';
 
 // Component - Tip
-export interface TipInterface extends PopoverInterface {}
-export function Tip(properties: TipInterface) {
+export interface TipProperties extends PopoverProperties {}
+export function Tip(properties: TipProperties) {
     // Extract properties
     const externalOpen = properties.open;
     const externalSetOpen = properties.onOpenChange;

@@ -512,7 +512,7 @@ const tooltipColumn = (timeInterval: string, payload: { dataKey?: string; color?
 // Component - Chart
 // This is a lower level component that renders the chart based on the data provided
 // Data is provided by the higher level component which is processed and memoized by this component to prevent unnecessary re-renders
-export interface ChartInterface {
+export interface ChartProperties {
     dataSourcesWithMetrics: DataSourceWithMetricsType[];
     timeInterval: string;
     chartType: 'bar' | 'line' | 'area';
@@ -521,7 +521,7 @@ export interface ChartInterface {
     errorMessage?: string;
     onMouseDown?: (chartEvent: React.MouseEvent, mouseEvent: React.MouseEvent) => void;
 }
-export const Chart = function (properties: ChartInterface) {
+export const Chart = function (properties: ChartProperties) {
     // Use the theme hook
     // const { themeClassName } = useTheme();
     const themeClassName = 'light';

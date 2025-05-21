@@ -150,7 +150,7 @@ export const sideNavigationLayoutNavigationSpringConfiguration = {
 };
 
 // Component - SideNavigationLayoutNavigation
-export interface SideNavigationLayoutNavigationInterface {
+export interface SideNavigationLayoutNavigationProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     children: React.ReactNode;
     className?: string;
@@ -158,7 +158,7 @@ export interface SideNavigationLayoutNavigationInterface {
     topBar?: boolean;
     topTitle?: React.ReactNode;
 }
-export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutNavigationInterface) {
+export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutNavigationProperties) {
     // Defaults
     const topBar = properties.topBar ?? false;
 

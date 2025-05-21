@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputInterface } from '@structure/source/common/forms/Input';
+import { InputProperties } from '@structure/source/common/forms/Input';
 import { Calendar } from '@structure/source/common/time/Calendar';
-import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
@@ -25,7 +25,7 @@ export interface InputDateReferenceInterface {
 }
 
 // Component - InputDate
-export interface InputDateInterface extends Omit<InputInterface, 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface InputDateProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {
     defaultValue?: Date;
     placeholder?: string;
     closeOnSelect?: boolean;
@@ -34,10 +34,10 @@ export interface InputDateInterface extends Omit<InputInterface, 'defaultValue' 
     onChange?: (value: Date | undefined) => void;
     onBlur?: (value: Date | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
-    popoverProperties?: Omit<PopoverInterface, 'children' | 'content'>;
-    buttonProperties?: ButtonInterface;
+    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    buttonProperties?: ButtonProperties;
 }
-export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDateInterface>(
+export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDateProperties>(
     function (properties, reference) {
         // References
         const buttonReference = React.useRef<HTMLButtonElement>(null);

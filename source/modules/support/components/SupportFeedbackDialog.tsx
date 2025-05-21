@@ -6,7 +6,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Button } from '@structure/source/common/buttons/Button';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
@@ -23,8 +23,8 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 // import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Component - SupportFeedbackDialog
-export interface SupportFeedbackDialogInterface extends DialogInterface {}
-export function SupportFeedbackDialog(properties: SupportFeedbackDialogInterface) {
+export interface SupportFeedbackDialogProperties extends DialogProperties {}
+export function SupportFeedbackDialog(properties: SupportFeedbackDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

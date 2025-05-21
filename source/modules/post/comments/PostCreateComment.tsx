@@ -7,10 +7,10 @@ import React from 'react';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostCreateComment
-export interface PostCreateCommentInterface {
+export interface PostCreateCommentProperties {
     className?: string;
 }
-export function PostCreateComment(properties: PostCreateCommentInterface) {
+export function PostCreateComment(properties: PostCreateCommentProperties) {
     // Render the component
     return <div className={mergeClassNames('', properties.className)}>Create comment</div>;
 }

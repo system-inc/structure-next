@@ -4,13 +4,13 @@ import React from 'react';
 // Dependencies - Main Components
 import {
     FormInputReferenceInterface,
-    FormInputInterface,
+    FormInputProperties,
     FormInput,
     useFormInputValue,
 } from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { InputTextInterface, InputText } from '@structure/source/common/forms/InputText';
+import { InputTextProperties, InputText } from '@structure/source/common/forms/InputText';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -19,9 +19,9 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputText
-export interface FormInputTextInterface
-    extends Omit<InputTextInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface FormInputTextProperties
+    extends Omit<InputTextProperties, 'validate'>,
+        Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
     type?: React.InputHTMLAttributes<HTMLInputElement>['type'];
     placeholder?: React.InputHTMLAttributes<HTMLInputElement>['placeholder'];
     autoComplete?: React.InputHTMLAttributes<HTMLInputElement>['autoComplete'];
@@ -29,8 +29,8 @@ export interface FormInputTextInterface
     onChange?: (value: string | undefined, event?: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (value: string | undefined, event?: React.ChangeEvent<HTMLInputElement>) => void;
 }
-export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormInputTextInterface>(function (
-    properties: FormInputTextInterface,
+export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormInputTextProperties>(function (
+    properties: FormInputTextProperties,
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
     // State

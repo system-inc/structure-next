@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Types
-import { RequestParameterInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
+import { RequestParameterProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -15,7 +15,7 @@ import {
 } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
 
 // Component - ArrayRequestParameterRow
-export interface ArrayRequestParameterRowInterface extends RequestParameterInterface {
+export interface ArrayRequestParameterRowProperties extends RequestParameterProperties {
     section: RequestParameterSectionType;
     name: string;
     enabled: boolean;
@@ -28,7 +28,7 @@ export interface ArrayRequestParameterRowInterface extends RequestParameterInter
     onChildStateChange?: (childName: string, isEnabled: boolean) => void;
 }
 
-export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowInterface) {
+export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowProperties) {
     // State
     const [items, setItems] = React.useState<number[]>([0]);
 
@@ -43,7 +43,7 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowInt
 
         // Clear state for removed item
         if(properties.fields) {
-            (properties.fields as RequestParameterInterface[]).forEach((field) => {
+            (properties.fields as RequestParameterProperties[]).forEach((field) => {
                 const path = `${properties.name}[${index}].${field.name}`;
                 properties.onStateChange(properties.section, path, {
                     enabled: false,
@@ -85,13 +85,13 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowInt
 
     // Render the component
     return (
-        <div className="rounded-medium w-full overflow-hidden border">
+        <div className="w-full overflow-hidden rounded-medium border">
             {/* Header with description and add button */}
             <div className="flex items-center justify-between border-b px-4 py-3">
                 <div>
                     <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">Array Items</span>
-                        <span className="rounded-medium inline-block bg-light-2 px-1.5 py-0.5 text-xs dark:bg-dark-3">
+                        <span className="inline-block rounded-medium bg-light-2 px-1.5 py-0.5 text-xs dark:bg-dark-3">
                             {properties.type}
                         </span>
                     </div>
@@ -126,7 +126,7 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowInt
                             </tr>
                         </thead>
                         <tbody>
-                            {(properties.fields as RequestParameterInterface[]).map((field) => (
+                            {(properties.fields as RequestParameterProperties[]).map((field) => (
                                 <RequestParameterRow
                                     key={field.name}
                                     {...field}

@@ -15,7 +15,6 @@ import { WaitListEntryCreateOperation } from '@structure/source/api/graphql/Grap
 import { isUniqueConstraintError } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Component - WaitListForm
-export interface WaitListFormInterface {}
 export function WaitListForm() {
     // Message state to display custom message
     const [formMessage, setFormMessage] = React.useState<React.ReactNode | null>(null);

@@ -16,10 +16,10 @@ import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostComments
-export interface PostCommentsInterface {
+export interface PostCommentsProperties {
     className?: string;
 }
-export function PostComments(properties: PostCommentsInterface) {
+export function PostComments(properties: PostCommentsProperties) {
     // Render the component
     return (
         <div id="comments" className={mergeClassNames('text-sm', properties.className)}>

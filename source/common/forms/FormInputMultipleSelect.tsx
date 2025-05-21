@@ -2,28 +2,28 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 import {
     FormInputReferenceInterface,
-    FormInputInterface,
+    FormInputProperties,
     FormInput,
     useFormInputValue,
 } from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
-import { InputMultipleSelectInterface, InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
+import { InputMultipleSelectProperties, InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputMultipleSelect
-export interface FormInputMultipleSelectInterface
-    extends Omit<InputMultipleSelectInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
-    items: MenuItemInterface[];
+export interface FormInputMultipleSelectProperties
+    extends Omit<InputMultipleSelectProperties, 'validate'>,
+        Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
+    items: MenuItemProperties[];
     sibling?: React.ReactNode;
 }
-export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterface, FormInputMultipleSelectInterface>(
-    function (properties: FormInputMultipleSelectInterface, reference: React.Ref<FormInputReferenceInterface>) {
+export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterface, FormInputMultipleSelectProperties>(
+    function (properties: FormInputMultipleSelectProperties, reference: React.Ref<FormInputReferenceInterface>) {
         // State
         const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
             properties.validationResult,
@@ -75,7 +75,11 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
         const propertiesOnChange = properties.onChange;
         const propertiesValidateOnChange = properties.validateOnChange;
         const onChangeIntercept = React.useCallback(
-            function (value: string[] | undefined, event?: React.SyntheticEvent | Event | unknown, skipOnChangeCallback: boolean = false) {
+            function (
+                value: string[] | undefined,
+                event?: React.SyntheticEvent | Event | unknown,
+                skipOnChangeCallback: boolean = false,
+            ) {
                 // Update the value reference
                 setValue(value);
 

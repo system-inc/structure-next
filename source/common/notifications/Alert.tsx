@@ -25,7 +25,7 @@ export const AlertSizes = {
 };
 
 // Component - Alert
-export interface AlertInterface {
+export interface AlertProperties {
     variant?: keyof typeof AlertVariants;
     size?: keyof typeof AlertSizes;
     className?: string;
@@ -33,7 +33,7 @@ export interface AlertInterface {
     title?: React.ReactNode;
     children?: React.ReactNode;
 }
-export function Alert(properties: AlertInterface) {
+export function Alert(properties: AlertProperties) {
     // Defaults
     const variant = properties.variant || 'default';
     const size = properties.size || 'default';
@@ -90,7 +90,7 @@ export function Alert(properties: AlertInterface) {
     return (
         <div
             className={mergeClassNames(
-                'rounded-medium flex max-w-3xl flex-col border',
+                'flex max-w-3xl flex-col rounded-medium border',
                 AlertVariants[variant],
                 AlertSizes[size],
                 properties.className,

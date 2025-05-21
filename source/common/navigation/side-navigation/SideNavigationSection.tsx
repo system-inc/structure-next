@@ -3,7 +3,7 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import { SideNavigationItemInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
+import { SideNavigationItemProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
 import { SideNavigationLink } from '@structure/source/common/navigation/side-navigation/SideNavigationLink';
 
 // Dependencies - Animation
@@ -18,14 +18,14 @@ const AnimatedChevronRightIcon = animated(ChevronRightIcon);
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationSection
-export interface SideNavigationSectionInterface {
+export interface SideNavigationSectionProperties {
     title: React.ReactNode;
     href?: string;
-    children?: SideNavigationItemInterface[];
+    children?: SideNavigationItemProperties[];
     isHeader?: boolean;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
-export function SideNavigationSection(properties: SideNavigationSectionInterface) {
+export function SideNavigationSection(properties: SideNavigationSectionProperties) {
     // Hooks
     const urlPath = useUrlPath();
 

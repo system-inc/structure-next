@@ -3,8 +3,8 @@ import React from 'react';
 
 // Dependencies - Types
 import {
-    RestEndpointNodeInterface,
-    RequestParameterInterface,
+    RestEndpointNodeProperties,
+    RequestParameterProperties,
 } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
@@ -18,19 +18,19 @@ import {
 import { uppercaseFirstCharacter, titleCase } from '@structure/source/utilities/String';
 
 // Component - RequestParametersTable
-export interface RequestParametersTableInterface {
-    requestParameters: RestEndpointNodeInterface['endpoint']['requestParameters'];
+export interface RequestParametersTableProperties {
+    requestParameters: RestEndpointNodeProperties['endpoint']['requestParameters'];
     onRequestParameterRowStateChange: (
         requestParameterSection: RequestParameterSectionType,
         requestParameterName: string,
         requestParameterState: RequestParameterStateInterface,
     ) => void;
 }
-export function RequestParametersTable(properties: RequestParametersTableInterface) {
+export function RequestParametersTable(properties: RequestParametersTableProperties) {
     // Function to render parameter rows recursively
     function renderParameterRows(
         requestParametersSection: RequestParameterSectionType,
-        requestParameters: RequestParameterInterface[],
+        requestParameters: RequestParameterProperties[],
     ) {
         return requestParameters.map(function (requestParameter) {
             // Render all parameters using RequestParameterRow, including Objects
@@ -49,7 +49,7 @@ export function RequestParametersTable(properties: RequestParametersTableInterfa
     // Render the component
     return (
         <div className="max-w-[1024px] overflow-x-auto text-sm">
-            <div className="rounded-medium overflow-hidden border">
+            <div className="overflow-hidden rounded-medium border">
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="border-b">

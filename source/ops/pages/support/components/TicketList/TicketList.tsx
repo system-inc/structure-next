@@ -18,7 +18,7 @@ import {
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - TicketList
-interface TicketListInterface {
+interface TicketListProperties {
     tickets: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'];
     selectedTicketIdentifier: string | null;
     selectedStatus: SupportTicketStatus;
@@ -30,7 +30,7 @@ interface TicketListInterface {
     onPageChange: (page: number) => void;
     onTicketSelect: (id: string) => void;
 }
-export function TicketList(properties: TicketListInterface) {
+export function TicketList(properties: TicketListProperties) {
     return (
         <div className="flex h-[calc(100vh-3.5rem)] flex-col overflow-hidden border-r border-light-3 dark:border-dark-3">
             <TicketListHeader

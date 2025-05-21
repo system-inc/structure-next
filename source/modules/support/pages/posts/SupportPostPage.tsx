@@ -23,12 +23,12 @@ import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 import { timeAgo } from '@structure/source/utilities/Time';
 
 // Component - SupportPostPage
-export interface SupportPostPageInterface {
+export interface SupportPostPageProperties {
     postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
     post: SupportPostQuery['post'];
 }
-export function SupportPostPage(properties: SupportPostPageInterface) {
+export function SupportPostPage(properties: SupportPostPageProperties) {
     console.log('SupportPostPage', properties);
 
     // Hooks

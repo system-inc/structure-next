@@ -5,7 +5,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
-import { OpsNavigationLinkInterface, OpsNavigationLink } from './OpsNavigationLink';
+import { OpsNavigationLinkProperties, OpsNavigationLink } from './OpsNavigationLink';
 
 // Dependencies - Assets
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
@@ -17,7 +17,7 @@ import { easings, useSpring, animated } from '@react-spring/web';
 const AnimatedChevronRightIcon = animated(ChevronRightIcon);
 
 // Component - NavigationGroup
-export function OpsNavigationLinkGroup(properties: OpsNavigationLinkInterface) {
+export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) {
     // Default active to false
     const active = properties.active ?? false;
 

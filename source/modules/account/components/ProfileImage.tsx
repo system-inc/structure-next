@@ -9,12 +9,12 @@ import UserIcon from '@structure/assets/icons/people/UserIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ProfileImage
-export interface ProfileImageInterface {
+export interface ProfileImageProperties {
     className?: string;
     profileImageUrl?: string;
     alternateText?: string;
 }
-export function ProfileImage(properties: ProfileImageInterface) {
+export function ProfileImage(properties: ProfileImageProperties) {
     // State
     const [imageError, setImageError] = React.useState(false);
 
@@ -36,7 +36,7 @@ export function ProfileImage(properties: ProfileImageInterface) {
         <div
             className={mergeClassNames(
                 properties.className,
-                !properties.profileImageUrl && 'border border-opsis-border-primary', // If no profile image is available, show a border
+                !properties.profileImageUrl && 'border-opsis-border-primary border', // If no profile image is available, show a border
                 'relative flex h-full w-full items-center justify-center rounded-full',
             )}
             style={{

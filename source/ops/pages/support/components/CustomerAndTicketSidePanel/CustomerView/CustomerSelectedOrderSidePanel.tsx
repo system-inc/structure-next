@@ -21,11 +21,11 @@ import { formatDateToShortDateWithTime } from '@structure/source/utilities/Time'
 import { useSpring, animated, easings } from '@react-spring/web';
 
 // Component - CustomerSelectedOrder
-export interface CustomerSelectedOrderInterface {
+export interface CustomerSelectedOrderProperties {
     order?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['commerceOrdersPrivileged']['items'][0];
     onClose: () => void;
 }
-export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrderInterface) {
+export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrderProperties) {
     // Properties
     const { order, onClose } = properties;
 

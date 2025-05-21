@@ -18,10 +18,10 @@ import {
 import { BorderContainer } from '../BorderContainer';
 
 // Component - CustomerDetails
-interface CustomerDetailsInterface {
+interface CustomerDetailsProperties {
     account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged'];
 }
-export function CustomerDetails(properties: CustomerDetailsInterface) {
+export function CustomerDetails(properties: CustomerDetailsProperties) {
     const { account } = properties;
 
     const userFullName = account

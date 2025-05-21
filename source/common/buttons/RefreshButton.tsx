@@ -4,14 +4,14 @@
 import React from 'react';
 
 // Dependencies - Supporting Components
-import { Button, ButtonInterface } from '@structure/source/common/buttons/Button';
+import { Button, ButtonProperties } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 import ReloadIcon from '@structure/assets/icons/interface/ReloadIcon.svg';
 
 // Component - RefreshButton
-export interface RefreshButtonProperties extends ButtonInterface {}
+export interface RefreshButtonProperties extends ButtonProperties {}
 export function RefreshButton(properties: RefreshButtonProperties) {
     // Render the component
     return (

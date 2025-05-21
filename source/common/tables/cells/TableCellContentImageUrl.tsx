@@ -12,12 +12,12 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Component - TableCellContentImageUrl
-export interface TableCellContentImageUrlInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentImageUrlProperties extends React.HTMLAttributes<HTMLElement> {
     value: string;
     url: string;
     openUrlInNewTab?: boolean;
 }
-export function TableCellContentImageUrl(properties: TableCellContentImageUrlInterface) {
+export function TableCellContentImageUrl(properties: TableCellContentImageUrlProperties) {
     // State
     const [imageLoaded, setImageLoaded] = React.useState(false);
     const [imageFailedToLoad, setImageFailedToLoad] = React.useState(false);
@@ -33,12 +33,12 @@ export function TableCellContentImageUrl(properties: TableCellContentImageUrlInt
                 content={
                     <div className="relative min-h-[80px] w-96">
                         {!imageLoaded && !imageFailedToLoad && (
-                            <div className="rounded-medium absolute inset-0 flex items-center justify-center border">
+                            <div className="absolute inset-0 flex items-center justify-center rounded-medium border">
                                 <BrokenCircleIcon className="h-8 w-8 animate-spin" />
                             </div>
                         )}
                         {imageFailedToLoad ? (
-                            <div className="rounded-medium absolute inset-0 flex items-center justify-center border border-red-500">
+                            <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-red-500">
                                 <ErrorIcon className="mr-1.5 h-5 w-5 text-red-500" />
                                 <p>Image failed to load.</p>
                             </div>

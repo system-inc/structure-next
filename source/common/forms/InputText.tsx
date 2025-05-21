@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
+import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
 
 // Dependencies - Styles
 // import { useTheme } from '@structure/source/theme/ThemeProvider';
@@ -84,7 +84,7 @@ export const InputTextSizes = {
 };
 
 // Component - InputText
-export interface InputTextInterface extends Omit<InputInterface, 'onChange' | 'onBlur'> {
+export interface InputTextProperties extends Omit<InputProperties, 'onChange' | 'onBlur'> {
     containerClassName?: string;
 
     // <input /> tag properties
@@ -108,8 +108,8 @@ export interface InputTextInterface extends Omit<InputInterface, 'onChange' | 'o
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     iconPosition?: 'left' | 'right';
 }
-export const InputText = React.forwardRef<InputReferenceInterface, InputTextInterface>(function (
-    properties: InputTextInterface,
+export const InputText = React.forwardRef<InputReferenceInterface, InputTextProperties>(function (
+    properties: InputTextProperties,
     reference: React.Ref<InputReferenceInterface>,
 ) {
     // Hooks

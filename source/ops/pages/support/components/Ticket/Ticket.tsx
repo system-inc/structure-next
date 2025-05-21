@@ -19,7 +19,7 @@ import {
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - Ticket
-export interface TicketInterface {
+export interface TicketProperties {
     ticket?: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0];
     account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged'];
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles'];
@@ -28,7 +28,7 @@ export interface TicketInterface {
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
     refetchTickets: () => void;
 }
-export function Ticket(properties: TicketInterface) {
+export function Ticket(properties: TicketProperties) {
     // Properties
     const { account } = properties;
 

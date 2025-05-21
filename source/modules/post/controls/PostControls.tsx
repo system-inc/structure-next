@@ -5,7 +5,7 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
 
 // Dependencies - Main Components
-import { PostInterface } from '@structure/source/modules/post/Post';
+import { PostProperties } from '@structure/source/modules/post/Post';
 import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
 import { PostReactionControl } from '@structure/source/modules/post/controls/PostReactionControl';
@@ -24,18 +24,18 @@ import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostControls
-export interface PostControlsInterface {
+export interface PostControlsProperties {
     className?: string;
-    id: PostInterface['id'];
-    identifier: PostInterface['identifier'];
-    title: PostInterface['title'];
-    urlPath: PostInterface['urlPath'];
+    id: PostProperties['id'];
+    identifier: PostProperties['identifier'];
+    title: PostProperties['title'];
+    urlPath: PostProperties['urlPath'];
     editUrlPath?: string;
-    createdByProfileId: PostInterface['createdByProfileId'];
-    createdByProfile: PostInterface['createdByProfile'];
-    upvoteCount: PostInterface['upvoteCount'];
-    voteType: PostInterface['voteType'];
-    createdAt: PostInterface['createdAt'];
+    createdByProfileId: PostProperties['createdByProfileId'];
+    createdByProfile: PostProperties['createdByProfile'];
+    upvoteCount: PostProperties['upvoteCount'];
+    voteType: PostProperties['voteType'];
+    createdAt: PostProperties['createdAt'];
 
     // Control Visibility
     largeVoteControl?: boolean;
@@ -45,10 +45,10 @@ export interface PostControlsInterface {
     shareControl?: boolean;
     reportControl?: boolean;
 
-    onVoteChange: (newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) => void;
+    onVoteChange: (newUpvoteCount: PostProperties['upvoteCount'], newVoteType: PostProperties['voteType']) => void;
     onReactionCreate: (content: string) => void;
 }
-export function PostControls(properties: PostControlsInterface) {
+export function PostControls(properties: PostControlsProperties) {
     // Hooks
     const { accountState } = useAccount();
     const urlPath = useUrlPath();

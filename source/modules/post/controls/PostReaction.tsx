@@ -24,7 +24,7 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostReaction
-export interface PostReactionInterface {
+export interface PostReactionProperties {
     className?: string;
     ideaId: string;
     content: string;
@@ -33,7 +33,7 @@ export interface PostReactionInterface {
     onReactionCreate: (content: string) => void;
     onReactionDelete: (content: string) => void;
 }
-export function PostReaction(properties: PostReactionInterface) {
+export function PostReaction(properties: PostReactionProperties) {
     // State
     const [tipOpen, setTipOpen] = React.useState<boolean>(false);
 

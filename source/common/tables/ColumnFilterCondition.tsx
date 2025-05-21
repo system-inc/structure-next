@@ -5,8 +5,8 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputText } from '@structure/source/common/forms/InputText';
-import { InputSelectItemInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
-import { TableColumnType, TableColumnInterface } from '@structure/source/common/tables/TableColumn';
+import { InputSelectItemProperties, InputSelect } from '@structure/source/common/forms/InputSelect';
+import { TableColumnType, TableColumnProperties } from '@structure/source/common/tables/TableColumn';
 
 // Dependencies - Assets
 // import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';
@@ -28,15 +28,15 @@ import { ColumnFilterConditionOperator } from '@structure/source/api/graphql/Gra
 // import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - ColumnFilterCondition
-export interface ColumnFilterConditionInterface {
+export interface ColumnFilterConditionProperties {
     id: string;
-    columns: TableColumnInterface[];
+    columns: TableColumnProperties[];
     column: string;
     operator: ColumnFilterConditionOperator;
     value?: string;
     caseSensitive?: boolean;
 }
-export function ColumnFilterCondition(properties: ColumnFilterConditionInterface) {
+export function ColumnFilterCondition(properties: ColumnFilterConditionProperties) {
     // Operators
     const operators = {
         Equal: {
@@ -77,7 +77,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionInterface
         },
     };
     // Loop over the operators
-    const operatorsItems: InputSelectItemInterface[] = [];
+    const operatorsItems: InputSelectItemProperties[] = [];
     for(const operatorKey in operators) {
         operatorsItems.push({
             value: operatorKey,

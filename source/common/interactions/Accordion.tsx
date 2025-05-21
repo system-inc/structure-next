@@ -13,7 +13,7 @@ import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.s
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Accordion
-export interface AccordionInterface {
+export interface AccordionProperties {
     className?: string;
     titleContainerClassName?: string;
     titleClassName?: string;
@@ -28,10 +28,10 @@ export interface AccordionInterface {
         expanded?: boolean;
     }[];
 }
-export function Accordion(properties: AccordionInterface) {
+export function Accordion(properties: AccordionProperties) {
     // State
     const items = React.useMemo(
-        function() {
+        function () {
             return properties.items.map((item) => ({
                 title: item.title,
                 identifier: item.identifier,
@@ -40,7 +40,7 @@ export function Accordion(properties: AccordionInterface) {
                 height: 0,
             }));
         },
-        [properties.items]
+        [properties.items],
     );
 
     // Defaults

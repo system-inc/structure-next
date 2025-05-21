@@ -3,16 +3,16 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
-import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
-import { TableRowInterface, TableRow } from '@structure/source/common/tables/TableRow';
+import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
+import { TableRowProperties, TableRow } from '@structure/source/common/tables/TableRow';
 import { defaultTableRowsActions } from '@structure/source/common/tables/TableRowsActions';
 import { Button } from '@structure/source/common/buttons/Button';
 import { ToggleButton } from '@structure/source/common/buttons/ToggleButton';
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { InputText } from '@structure/source/common/forms/InputText';
 import { InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
-import { PaginationInterface, Pagination } from '@structure/source/common/navigation/pagination/Pagination';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { PaginationProperties, Pagination } from '@structure/source/common/navigation/pagination/Pagination';
 import { ColumnFilterGroup, ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 import { ColumnFilterGroupOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
@@ -26,20 +26,20 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - Table
-export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
+export interface TableProperties extends React.HTMLAttributes<HTMLTableElement> {
     containerClassName?: string;
 
     // Data
-    columns: TableColumnInterface[];
-    rows: TableRowInterface[];
+    columns: TableColumnProperties[];
+    rows: TableRowProperties[];
 
     // Sorting
     sortable?: boolean;
 
     // Row selection
     rowSelection?: boolean;
-    rowSelectionActions?: MenuItemInterface[];
-    rowsSelectionActions?: MenuItemInterface[];
+    rowSelectionActions?: MenuItemProperties[];
+    rowsSelectionActions?: MenuItemProperties[];
 
     // Search
     search?: boolean;
@@ -55,7 +55,7 @@ export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
     defaultVisibleColumnsIdentifiers?: string[]; // Array of column identifiers
 
     // Pagination
-    pagination?: PaginationInterface;
+    pagination?: PaginationProperties;
 
     // States
     loading?: boolean;
@@ -65,7 +65,7 @@ export interface TableInterface extends React.HTMLAttributes<HTMLTableElement> {
         url?: string;
     };
 }
-export function Table(properties: TableInterface) {
+export function Table(properties: TableProperties) {
     // Hooks
     const { addNotice } = useNotice();
 
@@ -215,7 +215,7 @@ export function Table(properties: TableInterface) {
                         }),
                     selection: propertiesRowSelection,
                     selected: selectedRowsIndexesSet.has(rowIndex),
-                    onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
+                    onSelectChange: function (row: TableRowProperties, rowSelected: boolean) {
                         // If the row is selected
                         if(rowSelected) {
                             selectedRowsIndexesSet.add(rowIndex);
@@ -308,7 +308,7 @@ export function Table(properties: TableInterface) {
                 cells: cells,
                 selection: propertiesRowSelection,
                 selected: selected,
-                onSelectChange: function (row: TableRowInterface, rowSelected: boolean) {
+                onSelectChange: function (row: TableRowProperties, rowSelected: boolean) {
                     // If the header row is selected, select all visible rows
                     if(rowSelected) {
                         rows.forEach(function (row, rowIndex) {
@@ -333,7 +333,7 @@ export function Table(properties: TableInterface) {
     );
 
     // Defaults
-    const rowsSelectionActions: MenuItemInterface[] = React.useMemo(
+    const rowsSelectionActions: MenuItemProperties[] = React.useMemo(
         function () {
             return (
                 properties.rowsSelectionActions ||
