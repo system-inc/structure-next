@@ -6,6 +6,3 @@ import UniversalCookies from 'universal-cookie';
  * cookies such as getting, setting, and removing cookies.
  */
 export const Cookies = new UniversalCookies();
-
-// Export - Default
-export default Cookies;

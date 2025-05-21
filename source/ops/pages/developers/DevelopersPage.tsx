@@ -76,6 +76,3 @@ const [state, setState] = React.useState<string>('');`);
         </div>
     );
 }
-
-// Export - Default
-export default DevelopersPage;

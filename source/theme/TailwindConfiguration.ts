@@ -224,6 +224,3 @@ export const TailwindConfiguration = {
     // Base plugins that would be used across projects
     plugins: [TailwindCssAnimate, ContainerQueryPlugin],
 } satisfies TailwindConfigurationInterface;
-
-// Export - Default
-export default TailwindConfiguration;

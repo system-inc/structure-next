@@ -61,6 +61,3 @@ export function Collapse(properties: CollapseProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default Collapse;

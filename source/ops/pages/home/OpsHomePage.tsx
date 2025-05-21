@@ -282,6 +282,3 @@ export function OpsHomePage() {
         </div>
     );
 }
-
-// Export - Default
-export default OpsHomePage;

@@ -87,6 +87,3 @@ export function SideNavigationLayoutNavigationSideToggle(
         </div>
     );
 }
-
-// Export - Default
-export default SideNavigationLayoutNavigationSideToggle;

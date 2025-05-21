@@ -67,6 +67,3 @@ export function extractLatestEmailContent(threadHtml: string): string {
 
     return latestEmailContent;
 }
-
-// Export - Default
-export default extractLatestEmailContent;

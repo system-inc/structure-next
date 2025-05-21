@@ -147,6 +147,3 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
         </th>
     );
 }
-
-// Export - Default
-export default TableHeaderCell;

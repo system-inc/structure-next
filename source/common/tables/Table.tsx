@@ -649,6 +649,3 @@ export function Table(properties: TableProperties) {
         </>
     );
 }
-
-// Export - Default
-export default Table;

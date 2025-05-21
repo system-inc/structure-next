@@ -41,6 +41,3 @@ export function CreateSupportPostTopicPage() {
         </div>
     );
 }
-
-// Export - Default
-export default CreateSupportPostTopicPage;

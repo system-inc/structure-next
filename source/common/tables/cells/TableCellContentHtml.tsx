@@ -37,6 +37,3 @@ export function TableCellContentHtml(properties: TableCellContentHtmlProperties)
         </div>
     );
 }
-
-// Export - Default
-export default TableCellContentHtml;

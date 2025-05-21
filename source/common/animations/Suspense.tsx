@@ -15,6 +15,3 @@ export function Suspense(properties: SuspenseProperties) {
 
     return <React.Suspense fallback={fallback}>{properties.children}</React.Suspense>;
 }
-
-// Export - Default
-export default Suspense;

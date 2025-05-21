@@ -14,6 +14,3 @@ export function DiscountsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default DiscountsPage;

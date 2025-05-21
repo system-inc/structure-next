@@ -14,6 +14,3 @@ export function FinancesPayoutPage() {
         </div>
     );
 }
-
-// Export - Default
-export default FinancesPayoutPage;

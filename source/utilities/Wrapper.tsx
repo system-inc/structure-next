@@ -9,6 +9,3 @@ export function Wrapper(properties: WrapperProperties) {
     // Render the component
     return properties.children;
 }
-
-// Export - Default
-export default Wrapper;

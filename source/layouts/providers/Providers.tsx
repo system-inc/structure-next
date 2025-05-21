@@ -91,6 +91,3 @@ export function Providers(properties: ProvidersProperties) {
         </FoundationProviders>
     );
 }
-
-// Export - Default
-export default Providers;

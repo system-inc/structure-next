@@ -28,6 +28,3 @@ export function NotSignedIn() {
         </div>
     );
 }
-
-// Export - Default
-export default NotSignedIn;

@@ -104,6 +104,3 @@ export function DownloadButton(properties: DownloadButtonProperties) {
         />
     );
 }
-
-// Export - Default
-export default DownloadButton;

@@ -33,6 +33,3 @@ export function IdeasPage() {
         </div>
     );
 }
-
-// Export - Default
-export default IdeasPage;

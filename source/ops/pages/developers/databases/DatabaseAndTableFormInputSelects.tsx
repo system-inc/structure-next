@@ -206,6 +206,3 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
         </>
     );
 }
-
-// Export - Default
-export default DatabaseAndTableFormInputSelects;

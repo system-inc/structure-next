@@ -41,6 +41,3 @@ export function EmailVerificationChallenge(properties: EmailVerificationChalleng
         </div>
     );
 }
-
-// Export - Default
-export default EmailVerificationChallenge;

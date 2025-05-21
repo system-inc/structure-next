@@ -144,6 +144,3 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
         </>
     );
 }
-
-// Export - Default
-export default PostVoteControl;

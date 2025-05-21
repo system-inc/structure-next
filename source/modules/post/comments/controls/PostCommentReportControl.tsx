@@ -54,6 +54,3 @@ export function PostCommentReportControl(properties: PostCommentReportControlPro
         </>
     );
 }
-
-// Export - Default
-export default PostCommentReportControl;

@@ -170,6 +170,3 @@ export function ImageUploader(properties: ImageUploaderProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ImageUploader;

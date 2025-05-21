@@ -29,6 +29,3 @@ export function UsersWaitListsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default UsersWaitListsPage;

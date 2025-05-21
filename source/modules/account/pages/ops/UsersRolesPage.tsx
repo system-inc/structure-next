@@ -308,6 +308,3 @@ export function UsersRolesPage() {
         </div>
     );
 }
-
-// Export - Default
-export default UsersRolesPage;

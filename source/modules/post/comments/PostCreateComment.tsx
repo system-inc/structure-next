@@ -14,6 +14,3 @@ export function PostCreateComment(properties: PostCreateCommentProperties) {
     // Render the component
     return <div className={mergeClassNames('', properties.className)}>Create comment</div>;
 }
-
-// Export - Default
-export default PostCreateComment;

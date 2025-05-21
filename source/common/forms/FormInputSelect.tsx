@@ -167,6 +167,3 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
 
 // Set the display name for debugging purposes
 FormInputSelect.displayName = 'FormInputSelect';
-
-// Export - Default
-export default FormInputSelect;

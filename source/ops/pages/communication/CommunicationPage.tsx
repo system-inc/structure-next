@@ -14,6 +14,3 @@ export function CommunicationPage() {
         </div>
     );
 }
-
-// Export - Default
-export default CommunicationPage;

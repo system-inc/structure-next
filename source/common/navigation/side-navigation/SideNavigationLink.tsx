@@ -43,6 +43,3 @@ export function SideNavigationLink(properties: SideNavigationLinkProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default SideNavigationLink;

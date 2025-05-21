@@ -14,6 +14,3 @@ export function FulfillmentHeldOrdersPage() {
         </div>
     );
 }
-
-// Export - Default
-export default FulfillmentHeldOrdersPage;

@@ -162,6 +162,3 @@ export function OrdersPage() {
         </div>
     );
 }
-
-// Export - Default
-export default OrdersPage;

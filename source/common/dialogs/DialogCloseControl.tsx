@@ -14,6 +14,3 @@ export function DialogCloseControl(properties: DialogCloseControlProperties) {
     // Render the component
     return <RadixDialogClose asChild>{properties.children}</RadixDialogClose>;
 }
-
-// Export - Default
-export default DialogCloseControl;

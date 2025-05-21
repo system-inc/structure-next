@@ -256,6 +256,3 @@ export function RequestParameterRow(properties: RequestParameterRowProperties) {
         </>
     );
 }
-
-// Export - Default
-export default RequestParameterRow;

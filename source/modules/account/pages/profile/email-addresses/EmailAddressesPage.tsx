@@ -53,6 +53,3 @@ export function EmailAddressesPage() {
         </>
     );
 }
-
-// Export - Default
-export default EmailAddressesPage;

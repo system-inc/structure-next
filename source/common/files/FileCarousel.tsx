@@ -142,6 +142,3 @@ export function FileCarousel(properties: FileCarouselProperties) {
         </>
     );
 }
-
-// Export - Default
-export default FileCarousel;

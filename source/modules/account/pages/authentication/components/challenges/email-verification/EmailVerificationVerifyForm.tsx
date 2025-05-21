@@ -160,6 +160,3 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
         </div>
     );
 }
-
-// Export - Default
-export default EmailVerificationVerifyForm;

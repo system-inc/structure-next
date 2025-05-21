@@ -56,6 +56,3 @@ export function AccountMenuButton() {
         </Popover>
     );
 }
-
-// Export - Default
-export default AccountMenuButton;

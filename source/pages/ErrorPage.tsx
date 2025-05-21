@@ -48,6 +48,3 @@ export function ErrorPage(properties: ErrorPageProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ErrorPage;

@@ -14,6 +14,3 @@ export function FulfillmentShippingLabelsPage() {
         </div>
     );
 }
-
-// Export - Default
-export default FulfillmentShippingLabelsPage;

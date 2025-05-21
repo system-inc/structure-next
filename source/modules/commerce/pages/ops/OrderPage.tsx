@@ -266,6 +266,3 @@ export function OrderPage(properties: OrderPageProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default OrderPage;

@@ -14,6 +14,3 @@ export function ContentFilesPage() {
         </div>
     );
 }
-
-// Export - Default
-export default ContentFilesPage;

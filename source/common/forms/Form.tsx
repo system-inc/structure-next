@@ -526,6 +526,3 @@ export function Form(properties: FormProperties) {
         </form>
     );
 }
-
-// Export - Default
-export default Form;

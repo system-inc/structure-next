@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - API
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';

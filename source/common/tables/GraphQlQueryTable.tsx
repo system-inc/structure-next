@@ -211,6 +211,3 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTablePro
         </>
     );
 }
-
-// Export - Default
-export default GraphQlQueryTable;

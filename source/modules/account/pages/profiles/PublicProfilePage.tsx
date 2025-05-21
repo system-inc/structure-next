@@ -51,6 +51,3 @@ export function PublicProfilePage(properties: PublicProfilePageProperties) {
         </AuthorizationLayout>
     );
 }
-
-// Export - Default
-export default PublicProfilePage;

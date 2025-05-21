@@ -6,6 +6,8 @@ import ReactNoDestructuringImport from './ReactNoDestructuringImport.mjs';
 import ReactPropertiesParameterNameRule from './ReactPropertiesParameterNameRule.mjs';
 import ReactNoArrowFunctionsAsHookParameters from './ReactNoArrowFunctionsAsHookParameters.mjs';
 import ReactPropertiesTypeNamingRule from './ReactPropertiesTypeNamingRule.mjs';
+import ReactFunctionStyleRule from './ReactFunctionStyleRule.mjs';
+import ReactNoDefaultExportRule from './ReactNoDefaultExportRule.mjs';
 
 // ESLint Structure Lint Rules
 const StructureLintRules = {
@@ -17,6 +19,8 @@ const StructureLintRules = {
         'react-properties-parameter-name': ReactPropertiesParameterNameRule,
         'react-no-arrow-functions-as-hook-parameters': ReactNoArrowFunctionsAsHookParameters,
         'react-properties-type-naming': ReactPropertiesTypeNamingRule,
+        'react-function-style': ReactFunctionStyleRule,
+        'react-no-default-export': ReactNoDefaultExportRule,
     },
 };
 

@@ -23,9 +23,9 @@ const ReactNoArrowFunctionsAsHookParameters = {
                     // Check if it's React.forwardRef or any React hook
                     if(object.type === 'Identifier' && object.name === 'React' &&
                         property.type === 'Identifier' &&
-                        (property.name === 'forwardRef' || 
-                         // Catch any React hook (methods starting with 'use')
-                         property.name.startsWith('use'))) {
+                        (property.name === 'forwardRef' ||
+                            // Catch any React hook (methods starting with 'use')
+                            property.name.startsWith('use'))) {
 
                         // Check if the first argument is an arrow function
                         if(node.arguments.length > 0 && node.arguments[0].type === 'ArrowFunctionExpression') {
@@ -58,4 +58,5 @@ const ReactNoArrowFunctionsAsHookParameters = {
     }
 };
 
+// Export - Default
 export default ReactNoArrowFunctionsAsHookParameters;

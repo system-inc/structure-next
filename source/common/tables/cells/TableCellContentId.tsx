@@ -48,6 +48,3 @@ export function TableCellContentId(properties: TableCellContentIdProperties) {
         </CopyTip>
     );
 }
-
-// Export - Default
-export default TableCellContentId;

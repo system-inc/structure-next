@@ -14,6 +14,3 @@ export function DevelopersObjectStoragePage() {
         </div>
     );
 }
-
-// Export - Default
-export default DevelopersObjectStoragePage;

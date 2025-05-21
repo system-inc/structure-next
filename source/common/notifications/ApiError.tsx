@@ -31,6 +31,3 @@ export function ApiError(properties: ApiErrorProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default ApiError;

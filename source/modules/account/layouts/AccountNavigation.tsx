@@ -8,7 +8,7 @@ import * as RadixAccordion from '@radix-ui/react-accordion';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/common/navigation/Link';
-import AccountNavigationLinks from '@structure/source/modules/account/layouts/AccountNavigationLinks';
+import { AccountNavigationLinks } from '@structure/source/modules/account/layouts/AccountNavigationLinks';
 
 // Dependencies - Animation
 import { useTrail, useSpring, animated } from '@react-spring/web';
@@ -42,8 +42,6 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
         </nav>
     );
 }
-
-export default AccountNavigation;
 
 export function AccountNavigationMobile() {
     const [navigationOpen, setNavigationOpen] = React.useState<string>();

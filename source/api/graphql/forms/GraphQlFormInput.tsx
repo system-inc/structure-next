@@ -50,6 +50,3 @@ export const GraphQlFormInput = React.forwardRef<FormInputReferenceInterface, Gr
 
 // Set the display name for debugging purposes
 GraphQlFormInput.displayName = 'GraphQlFormInput';
-
-// Export - Default
-export default GraphQlFormInput;

@@ -18,6 +18,3 @@ export function SharedStateProvider(properties: SharedStateProviderProperties) {
     // Render the component
     return <JotaiProvider store={globalStore}>{properties.children}</JotaiProvider>;
 }
-
-// Export - Default
-export default SharedStateProvider;

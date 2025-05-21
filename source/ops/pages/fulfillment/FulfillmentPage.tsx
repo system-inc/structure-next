@@ -14,6 +14,3 @@ export function FulfillmentPage() {
         </div>
     );
 }
-
-// Export - Default
-export default FulfillmentPage;

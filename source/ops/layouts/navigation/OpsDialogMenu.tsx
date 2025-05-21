@@ -60,6 +60,3 @@ export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
     // Render the component
     return <DialogMenu {...properties} items={menuItems} search={true} />;
 }
-
-// Export - Default
-export default OpsDialogMenu;

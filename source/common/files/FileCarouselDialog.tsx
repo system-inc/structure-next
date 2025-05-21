@@ -30,6 +30,3 @@ export function FileCarouselDialog(properties: FileCarouselDialogProperties) {
         />
     );
 }
-
-// Export - Default
-export default FileCarouselDialog;

@@ -26,6 +26,3 @@ export function CardLink(properties: CardLinkProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default CardLink;

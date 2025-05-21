@@ -93,6 +93,3 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
         />
     );
 }
-
-// Export - Default
-export default DeletePostDialog;

@@ -14,6 +14,3 @@ export function InventoryTransfersPage() {
         </div>
     );
 }
-
-// Export - Default
-export default InventoryTransfersPage;

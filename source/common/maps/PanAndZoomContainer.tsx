@@ -134,6 +134,3 @@ export function PanAndZoomContainer(properties: PanAndZoomContainerProperties) {
         </div>
     );
 }
-
-// Export - Default
-export default PanAndZoomContainer;

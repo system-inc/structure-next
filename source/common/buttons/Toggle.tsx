@@ -52,6 +52,3 @@ export const Toggle = React.forwardRef<
 });
 
 Toggle.displayName = TogglePrimitive.Root.displayName;
-
-// Export - Default
-export default Toggle;

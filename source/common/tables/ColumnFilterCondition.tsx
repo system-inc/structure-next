@@ -235,6 +235,3 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionPropertie
         </>
     );
 }
-
-// Export - Default
-export default ColumnFilterCondition;

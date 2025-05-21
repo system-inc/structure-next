@@ -130,6 +130,3 @@ export function PostCommentVoteControl(properties: PostCommentVoteControlPropert
         </>
     );
 }
-
-// Export - Default
-export default PostCommentVoteControl;

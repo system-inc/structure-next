@@ -51,6 +51,3 @@ export function DocumentationContent(properties: DocumentationContentProperties)
     // Render the component
     return <div className="px-8 pb-28 pt-6">{content}</div>;
 }
-
-// Export - Default
-export default DocumentationContent;

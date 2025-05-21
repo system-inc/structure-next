@@ -24,6 +24,3 @@ export function EngagementContainer(properties: EngagementContainerProperties) {
         // <div className="fixed bottom-0 right-0 z-50 w-[420px] rounded-medium border">Current path: {engagement.path}</div>
     );
 }
-
-// Export - Default
-export default EngagementContainer;

@@ -233,6 +233,3 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
 
 // Set the display name for debugging purposes
 FormInputText.displayName = 'FormInputText';
-
-// Export - Default
-export default FormInputText;

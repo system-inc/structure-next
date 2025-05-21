@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Theme variables shared across the app
 export const themeKey = ProjectSettings.identifier + 'Theme';

@@ -16,6 +16,3 @@ export function NotFoundPage() {
         </div>
     );
 }
-
-// Export - Default
-export default NotFoundPage;

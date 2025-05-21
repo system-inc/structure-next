@@ -53,6 +53,3 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
         />
     );
 }
-
-// Export - Default
-export default DeleteAccountDialog;

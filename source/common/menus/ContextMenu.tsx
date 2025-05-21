@@ -65,6 +65,3 @@ export function ContextMenu(properties: ContextMenuProperties) {
         </RadixContextMenu.Root>
     );
 }
-
-// Export - Default
-export default ContextMenu;

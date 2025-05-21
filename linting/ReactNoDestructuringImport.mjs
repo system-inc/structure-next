@@ -97,4 +97,5 @@ const ReactNoDestructuringImport = {
     }
 };
 
+// Export - Default
 export default ReactNoDestructuringImport;

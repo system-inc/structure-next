@@ -46,6 +46,3 @@ export function ProfileLink(properties: ProfileLinkProperties) {
         </Link>
     );
 }
-
-// Export - Default
-export default ProfileLink;
