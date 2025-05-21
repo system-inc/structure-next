@@ -26,8 +26,8 @@ const cardVariants = cva(
     },
 );
 
-type CardProps = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof cardVariants> & { asChild?: boolean };
-const Card = React.forwardRef<HTMLDivElement, CardProps>(function (properties, reference) {
+type CardProperties = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof cardVariants> & { asChild?: boolean };
+const Card = React.forwardRef<HTMLDivElement, CardProperties>(function (properties, reference) {
     const Component = properties.asChild ? Slot : 'div';
 
     // Properties to spread onto the component

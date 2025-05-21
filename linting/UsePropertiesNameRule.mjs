@@ -1,10 +1,11 @@
 // ESLint rule to enforce using the name 'properties' for React component props
 // This ensures that all component props are named 'properties' instead of 'props'
+// and no variables end with 'Props'
 const UsePropertiesNameRule = {
     meta: {
         type: 'problem',
         docs: {
-            description: 'Enforce naming React component props as "properties" instead of "props"',
+            description: 'Enforce naming React component props as "properties" instead of "props" and ensure no variables end with "Props"',
             category: 'Stylistic Issues',
             recommended: true,
         },
@@ -65,6 +66,21 @@ const UsePropertiesNameRule = {
             }
         }
 
+        // Function to check if a variable name ends with 'Props'
+        function checkVariableEndsWithProps(node) {
+            if (node.id && node.id.type === 'Identifier' && node.id.name.endsWith('Props')) {
+                context.report({
+                    node: node.id,
+                    message: `Variable name should not end with 'Props'. Use 'properties' naming convention instead.`,
+                    fix(fixer) {
+                        // Replace 'FooProps' with 'FooProperties'
+                        const newName = node.id.name.replace(/Props$/, 'Properties');
+                        return fixer.replaceText(node.id, newName);
+                    }
+                });
+            }
+        }
+
         return {
             // Check all function-like nodes
             FunctionDeclaration(node) {
@@ -75,6 +91,37 @@ const UsePropertiesNameRule = {
             },
             FunctionExpression(node) {
                 checkPropsParameter(node);
+            },
+            // Check variable declarations for names ending with 'Props'
+            VariableDeclarator(node) {
+                checkVariableEndsWithProps(node);
+            },
+            // Check interface and type declarations for names ending with 'Props'
+            TSInterfaceDeclaration(node) {
+                if (node.id && node.id.name.endsWith('Props')) {
+                    context.report({
+                        node: node.id,
+                        message: `Interface name should not end with 'Props'. Use 'Properties' or 'Interface' suffix instead.`,
+                        fix(fixer) {
+                            // Replace 'FooProps' with 'FooProperties'
+                            const newName = node.id.name.replace(/Props$/, 'Properties');
+                            return fixer.replaceText(node.id, newName);
+                        }
+                    });
+                }
+            },
+            TSTypeAliasDeclaration(node) {
+                if (node.id && node.id.name.endsWith('Props')) {
+                    context.report({
+                        node: node.id,
+                        message: `Type name should not end with 'Props'. Use 'Properties' suffix instead.`,
+                        fix(fixer) {
+                            // Replace 'FooProps' with 'FooProperties'
+                            const newName = node.id.name.replace(/Props$/, 'Properties');
+                            return fixer.replaceText(node.id, newName);
+                        }
+                    });
+                }
             }
         };
     }

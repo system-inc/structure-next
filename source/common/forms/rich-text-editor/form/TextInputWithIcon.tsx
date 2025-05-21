@@ -30,9 +30,9 @@ type TextInputWithIconProperties = React.ComponentPropsWithoutRef<'input'> &
 const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconProperties>(
     function (properties, reference) {
         // Get the properties to spread onto the Input component
-        const inputProps = { ...properties };
-        delete inputProps.className;
-        delete inputProps.icon;
+        const inputProperties = { ...properties };
+        delete inputProperties.className;
+        delete inputProperties.icon;
 
         // Render the component
         return (
@@ -40,7 +40,7 @@ const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconPr
                 <Input
                     ref={reference}
                     className={mergeClassNames(textInputWithIconVariants({ size: properties.size }))}
-                    {...inputProps}
+                    {...inputProperties}
                 />
                 <div className="text-opsis-content-tetriary pointer-events-none absolute inset-y-0 left-5 flex h-full w-5 items-center">
                     {properties.icon}

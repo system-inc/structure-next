@@ -25,13 +25,13 @@ type CommandType = {
     value: string;
 };
 
-type CommandPluginProps = {
+// Component - CommandPlugin
+type CommandPluginProperties = {
     prefix: string;
     commands: CommandType[];
     onSelect: (command: CommandType) => void;
 };
-
-export function CommandPlugin(properties: CommandPluginProps) {
+export function CommandPlugin(properties: CommandPluginProperties) {
     const [editor] = useLexicalComposerContext();
     const [isShowingMenu, setIsShowingMenu] = React.useState(false);
     const [matchingCommands, setMatchingCommands] = React.useState<CommandType[]>(properties.commands);
