@@ -21,9 +21,12 @@ export interface CustomerOrdersListInterface {
 export function CustomerOrdersList(properties: CustomerOrdersListInterface) {
     const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(null);
 
-    React.useEffect(() => {
-        setSelectedOrderId(null);
-    }, [properties.changed]);
+    React.useEffect(
+        function () {
+            setSelectedOrderId(null);
+        },
+        [properties.changed],
+    );
 
     return (
         <ScrollArea className="flex-grow py-1">

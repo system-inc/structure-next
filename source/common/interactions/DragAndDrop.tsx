@@ -113,9 +113,9 @@ function DragAndDropRoot(properties: DragAndDropRootProperties) {
 
     // State
     const [dropContainers, setDropContainers] = React.useState<DropContainer[]>(properties.dropContainers ?? []);
-    const [dropBounds, setDropBounds] = React.useState<DragAndDropContextInterface['dropBounds']>(() =>
-        calculateBoundsFromDropContainers(dropContainers),
-    );
+    const [dropBounds, setDropBounds] = React.useState<DragAndDropContextInterface['dropBounds']>(function () {
+        return calculateBoundsFromDropContainers(dropContainers);
+    });
     const [currentlyHoveredDropArea, setCurrentlyHoveredDropArea] = React.useState<DropContainer | null>(null);
 
     // Effect to update the drop bounds when the drop containers change
@@ -442,24 +442,30 @@ const DropArea = (properties: DropAreaProperties) => {
     const { setDropContainers, currentlyHoveredDropArea } = useDragAndDrop();
     const [isHovering, setIsHovering] = React.useState(false);
 
-    React.useEffect(() => {
-        setDropContainers((prev) => [...prev, dropContainerRef]);
+    React.useEffect(
+        function () {
+            setDropContainers((prev) => [...prev, dropContainerRef]);
 
-        return () => {
-            setDropContainers((prev) => prev.filter((container) => container !== dropContainerRef));
-        };
-    }, [setDropContainers]);
+            return () => {
+                setDropContainers((prev) => prev.filter((container) => container !== dropContainerRef));
+            };
+        },
+        [setDropContainers],
+    );
 
-    React.useEffect(() => {
-        if(currentlyHoveredDropArea === dropContainerRef) {
-            onItemIsHovering?.();
+    React.useEffect(
+        function () {
+            if(currentlyHoveredDropArea === dropContainerRef) {
+                onItemIsHovering?.();
 
-            if(dropContainerRef.current) setIsHovering(true);
-        }
-        else {
-            if(dropContainerRef.current) setIsHovering(false);
-        }
-    }, [currentlyHoveredDropArea, onItemIsHovering]);
+                if(dropContainerRef.current) setIsHovering(true);
+            }
+            else {
+                if(dropContainerRef.current) setIsHovering(false);
+            }
+        },
+        [currentlyHoveredDropArea, onItemIsHovering],
+    );
 
     return (
         <Component

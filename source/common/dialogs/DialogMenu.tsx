@@ -23,22 +23,25 @@ export function DialogMenu(properties: DialogMenuInterface) {
     const keyboardShortcutKey = properties.keyboardShortcutKey ?? 'k';
 
     // On mount
-    React.useEffect(() => {
-        // Listen for the keyboard shortcut
-        const down = (event: KeyboardEvent) => {
-            // If the user presses CMD+key or CTRL+key, toggle the dialog
-            if(event.key === keyboardShortcutKey && (event.metaKey || event.ctrlKey)) {
-                event.preventDefault();
-                setOpen((open) => !open);
-            }
-        };
+    React.useEffect(
+        function () {
+            // Listen for the keyboard shortcut
+            const down = (event: KeyboardEvent) => {
+                // If the user presses CMD+key or CTRL+key, toggle the dialog
+                if(event.key === keyboardShortcutKey && (event.metaKey || event.ctrlKey)) {
+                    event.preventDefault();
+                    setOpen((open) => !open);
+                }
+            };
 
-        // Add the event listener to the document
-        document.addEventListener('keydown', down);
+            // Add the event listener to the document
+            document.addEventListener('keydown', down);
 
-        // Remove the event listener on unmount
-        return () => document.removeEventListener('keydown', down);
-    }, [keyboardShortcutKey]);
+            // Remove the event listener on unmount
+            return () => document.removeEventListener('keydown', down);
+        },
+        [keyboardShortcutKey],
+    );
 
     // Function to focus on the search input on open
     const onOpenAutoFocus = React.useCallback(function (event: Event) {

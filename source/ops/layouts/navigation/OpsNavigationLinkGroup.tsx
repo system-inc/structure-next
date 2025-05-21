@@ -28,9 +28,12 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkInterface) {
     const urlPathname = usePathname();
 
     // Open or close the group when the path, active state, or properties change
-    React.useEffect(() => {
-        setIsOpen(active);
-    }, [urlPathname, active]); // Listen to changes to the pathname and active state
+    React.useEffect(
+        function () {
+            setIsOpen(active);
+        },
+        [urlPathname, active],
+    ); // Listen to changes to the pathname and active state
 
     const animationConfig = { duration: 500, easing: easings.easeOutExpo };
     const rotationSpring = useSpring({

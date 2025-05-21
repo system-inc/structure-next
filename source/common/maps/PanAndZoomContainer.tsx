@@ -19,41 +19,44 @@ export function PanAndZoomContainer(properties: PanAndZoomContainerInterface) {
     const [dragStartY, setDragStartY] = React.useState(0);
     const [dragStartTranslateX, setDragStartTranslateX] = React.useState(0);
     const [dragStartTranslateY, setDragStartTranslateY] = React.useState(0);
-    React.useEffect(() => {
-        const handleWheel = (event: WheelEvent) => {
-            event.preventDefault();
-            const delta = event.deltaY > 0 ? 0.9 : 1.1;
-            const newScale = scale * delta;
-            const { offsetX, offsetY } = event;
-            const offsetXRatio = offsetX / width;
-            const offsetYRatio = offsetY / height;
-            const newTranslateX = translateX - (offsetX - width / 2) * (delta - 1);
-            const newTranslateY = translateY - (offsetY - height / 2) * (delta - 1);
-            setScale(newScale);
-            setTranslateX(newTranslateX);
-            setTranslateY(newTranslateY);
-            console.log('Wheel Event:', {
-                offsetX,
-                offsetY,
-                offsetXRatio,
-                offsetYRatio,
-                newTranslateX,
-                newTranslateY,
-                newScale,
-            });
-        };
+    React.useEffect(
+        function () {
+            const handleWheel = (event: WheelEvent) => {
+                event.preventDefault();
+                const delta = event.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = scale * delta;
+                const { offsetX, offsetY } = event;
+                const offsetXRatio = offsetX / width;
+                const offsetYRatio = offsetY / height;
+                const newTranslateX = translateX - (offsetX - width / 2) * (delta - 1);
+                const newTranslateY = translateY - (offsetY - height / 2) * (delta - 1);
+                setScale(newScale);
+                setTranslateX(newTranslateX);
+                setTranslateY(newTranslateY);
+                console.log('Wheel Event:', {
+                    offsetX,
+                    offsetY,
+                    offsetXRatio,
+                    offsetYRatio,
+                    newTranslateX,
+                    newTranslateY,
+                    newScale,
+                });
+            };
 
-        const container = containerRef.current;
-        if(container) {
-            container.addEventListener('wheel', handleWheel);
-        }
-
-        return () => {
+            const container = containerRef.current;
             if(container) {
-                container.removeEventListener('wheel', handleWheel);
+                container.addEventListener('wheel', handleWheel);
             }
-        };
-    }, [scale, translateX, translateY, width, height]);
+
+            return () => {
+                if(container) {
+                    container.removeEventListener('wheel', handleWheel);
+                }
+            };
+        },
+        [scale, translateX, translateY, width, height],
+    );
 
     const handleMouseDown = (event: React.MouseEvent) => {
         setIsDragging(true);
