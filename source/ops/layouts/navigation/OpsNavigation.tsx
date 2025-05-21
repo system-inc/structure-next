@@ -5,7 +5,7 @@ import React from 'react';
 import { usePathname as useUrlPath } from 'next/navigation';
 
 // Dependencies - Main Components
-import OpsNavigationLinks from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
+import { OpsNavigationLinks } from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
 import {
     OpsNavigationLinkProperties,
     OpsNavigationLink,

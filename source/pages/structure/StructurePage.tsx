@@ -5,7 +5,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 // Dependencies - Main Components
-import AccountMenuButton from '@structure/source/modules/account/components/AccountMenuButton';
+import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
 // import Button from '@structure/source/common/buttons/Button';
 // import Menu from '@structure/source/common/menus/Menu';
 // import PopoverMenu from '@structure/source/common/popovers/PopoverMenu';

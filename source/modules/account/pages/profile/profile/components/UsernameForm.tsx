@@ -22,7 +22,7 @@ import {
 import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities
-import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
+import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
 // Dependencies - Animations
 // import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';

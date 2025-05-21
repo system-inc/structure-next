@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Tip from '@structure/source/common/popovers/Tip';
+import { Tip } from '@structure/source/common/popovers/Tip';
 import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Assets

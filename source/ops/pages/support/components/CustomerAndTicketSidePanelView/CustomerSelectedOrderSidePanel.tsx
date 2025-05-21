@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Badge from '@structure/source/common/notifications/Badge';
-import Button from '@structure/source/common/buttons/Button';
+import { Badge } from '@structure/source/common/notifications/Badge';
+import { Button } from '@structure/source/common/buttons/Button';
 import { BorderContainer } from '../BorderContainer';
 
 // Dependencies - API

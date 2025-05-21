@@ -12,7 +12,7 @@ import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { ValidationResult } from '@structure/source/utilities/validation/Validation';
-import ValidationSchema from '@structure/source/utilities/validation/ValidationSchema';
+import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
 // Hook - useFormInputValue
 export function useFormInputValue<T>(

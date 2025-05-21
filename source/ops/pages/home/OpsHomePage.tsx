@@ -4,12 +4,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import SimpleSvgMap from '@structure/source/common/maps/SimpleSvgMap';
+import { SimpleSvgMap } from '@structure/source/common/maps/SimpleSvgMap';
 // import PanAndZoomContainer from '@structure/source/common/maps/PanAndZoomContainer';
-import HomeMetricLink from '@structure/source/ops/common/dashboard/HomeMetricLink';
-import CardLink from '@structure/source/ops/common/dashboard/CardLink';
-import ActivityLink from '@structure/source/ops/common/dashboard/ActivityLink';
-import TopProductLink from '@structure/source/ops/common/dashboard/TopProductLink';
+import { HomeMetricLink } from '@structure/source/ops/common/dashboard/HomeMetricLink';
+import { CardLink } from '@structure/source/ops/common/dashboard/CardLink';
+import { ActivityLink } from '@structure/source/ops/common/dashboard/ActivityLink';
+import { TopProductLink } from '@structure/source/ops/common/dashboard/TopProductLink';
 
 // Dependencies - API
 import { useQuery } from '@apollo/client';

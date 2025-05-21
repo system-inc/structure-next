@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Badge from '@structure/source/common/notifications/Badge';
+import { Badge } from '@structure/source/common/notifications/Badge';
 import { TicketComments } from '@structure/source/ops/pages/support/components/Ticket/TicketComments';
 import { ProfileSupportTicketMessageForm } from './components/ProfileSupportTicketMessageForm';
 

@@ -2,8 +2,8 @@
 import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - Main Components
-import SideNavigationLayoutNavigationTop from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationTop';
-import SideNavigationLayoutNavigationSide from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationSide';
+import { SideNavigationLayoutNavigationTop } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationTop';
+import { SideNavigationLayoutNavigationSide } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationSide';
 
 // Dependencies - Shared State
 import { atom } from 'jotai';

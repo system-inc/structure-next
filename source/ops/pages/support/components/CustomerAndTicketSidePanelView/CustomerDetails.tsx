@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Badge from '@structure/source/common/notifications/Badge';
+import { Badge } from '@structure/source/common/notifications/Badge';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - API
