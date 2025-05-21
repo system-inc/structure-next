@@ -1,10 +1,14 @@
-/**
- * Import required libraries.
- */
+// Dependencies - React and Next.js
 import React, { MouseEventHandler } from 'react';
-import { useDrag, useMove } from '@use-gesture/react';
-import { useSpring, animated } from '@react-spring/web';
+
+// Dependencies - Main Components
 import { Slot, Slottable } from '@radix-ui/react-slot';
+import { useDrag, useMove } from '@use-gesture/react';
+
+// Dependencies - Animation
+import { useSpring, animated } from '@react-spring/web';
+
+// Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 type DropBounds = {
@@ -24,17 +28,13 @@ interface DragAndDropContextInterface {
     onDragItemStart?: () => void;
     onDragItemEnd?: () => void;
     resetPositionOnDrop?: boolean;
-    recalcDropBounds: () => void;
+    recalculateDropBounds: () => void;
 }
 
-/**
- * Create a context for the drag and drop functionality.
- */
+// Create a context for the drag and drop functionality.
 const DragAndDropContext = React.createContext<DragAndDropContextInterface | undefined>(undefined);
 
-/**
- * A hook to use the drag and drop context.
- */
+// A hook to use the drag and drop context.
 const useDragAndDrop = () => {
     const context = React.useContext(DragAndDropContext);
     if(!context) {
@@ -43,6 +43,7 @@ const useDragAndDrop = () => {
     return context;
 };
 
+// Function to calculate the bounds of the drop containers
 function calculateBoundsFromDropContainers(dropContainers: DropContainer[]) {
     {
         return dropContainers?.map((container) => {
@@ -91,8 +92,11 @@ function calculateBoundsFromDropContainers(dropContainers: DropContainer[]) {
     }
 }
 
+// Type for the drop container
 type DropContainer = HTMLDivElement | string | React.RefObject<HTMLDivElement>;
-interface DragAndDropRootProps {
+
+// Type for the properties of the DragAndDropRoot component
+interface DragAndDropRootProperties {
     children: React.ReactNode;
     dropContainers?: DropContainer[];
     onEnterDropArea?: (dropArea: DropContainer) => void;
@@ -103,83 +107,85 @@ interface DragAndDropRootProps {
     resetItemsPositionOnDrop?: boolean;
 }
 
-/**
- * The root component for the drag and drop functionality.
- */
-const DragAndDropRoot = ({
-    children,
-    onEnterDropArea,
-    onLeaveDropArea,
-    onDrop,
-    onDragItemStart,
-    onDragItemEnd,
-    dropContainers: initialDropContainers,
-    resetItemsPositionOnDrop = false,
-}: DragAndDropRootProps) => {
-    const [dropContainers, setDropContainers] = React.useState<DropContainer[]>(initialDropContainers ?? []);
+// Component - DragAndDropRoot
+function DragAndDropRoot(properties: DragAndDropRootProperties) {
+    const resetItemsPositionOnDrop = properties.resetItemsPositionOnDrop ?? false;
+
+    // State
+    const [dropContainers, setDropContainers] = React.useState<DropContainer[]>(properties.dropContainers ?? []);
     const [dropBounds, setDropBounds] = React.useState<DragAndDropContextInterface['dropBounds']>(() =>
         calculateBoundsFromDropContainers(dropContainers),
     );
     const [currentlyHoveredDropArea, setCurrentlyHoveredDropArea] = React.useState<DropContainer | null>(null);
 
-    React.useEffect(() => {
-        // Update drop bounds when drop containers change
-        setDropBounds(calculateBoundsFromDropContainers(dropContainers));
-
-        // Add event listeners for window resize
-        window.addEventListener('resize', () => {
+    // Effect to update the drop bounds when the drop containers change
+    React.useEffect(
+        function () {
+            // Update drop bounds when drop containers change
             setDropBounds(calculateBoundsFromDropContainers(dropContainers));
-        });
 
-        return () => {
-            window.removeEventListener('resize', () => {
+            // Add event listeners for window resize
+            window.addEventListener('resize', function () {
                 setDropBounds(calculateBoundsFromDropContainers(dropContainers));
             });
-        };
-    }, [dropContainers]);
 
+            return () => {
+                window.removeEventListener('resize', function () {
+                    setDropBounds(calculateBoundsFromDropContainers(dropContainers));
+                });
+            };
+        },
+        [dropContainers],
+    );
+
+    // Function to handle the enter drop area event
     function onEnterDropAreaCallback(container: DropContainer) {
-        onEnterDropArea?.(container);
+        properties.onEnterDropArea?.(container);
 
         setCurrentlyHoveredDropArea(container);
     }
 
+    // Function to handle the leave drop area event
     function onLeaveDropAreaCallback() {
-        onLeaveDropArea?.();
+        properties.onLeaveDropArea?.();
 
         setCurrentlyHoveredDropArea(null);
     }
 
-    function recalcDropBounds() {
+    // Function to recalculate the drop bounds
+    function recalculateDropBounds() {
         setDropBounds(calculateBoundsFromDropContainers(dropContainers));
     }
 
+    // Render the component
     return (
         <DragAndDropContext.Provider
             value={{
                 dropBounds,
-                recalcDropBounds,
+                recalculateDropBounds,
                 dropContainers,
                 setDropContainers,
                 onEnterDropArea: onEnterDropAreaCallback,
                 onLeaveDropArea: onLeaveDropAreaCallback,
                 currentlyHoveredDropArea,
-                onDrop,
-                onDragItemStart,
-                onDragItemEnd,
+                onDrop: properties.onDrop,
+                onDragItemStart: properties.onDragItemStart,
+                onDragItemEnd: properties.onDragItemEnd,
                 resetPositionOnDrop: resetItemsPositionOnDrop,
             }}
         >
-            {children}
+            {properties.children}
         </DragAndDropContext.Provider>
     );
-};
+}
 
+// Function to check if the coordinates are within the bounds of a drop area
 function checkIfXyInDropBounds(xy: [number, number], bounds: DropBounds) {
     return xy[0] >= bounds.left && xy[0] <= bounds.right && xy[1] >= bounds.top && xy[1] <= bounds.bottom;
 }
 
-interface DraggableItemProps {
+// Component - DraggableItem
+interface DraggableItemProperties {
     children: React.ReactNode;
     onDrop?: (container: DropContainer) => void;
     onEnterDropArea?: (container: DropContainer) => void;
@@ -191,29 +197,11 @@ interface DraggableItemProps {
     leaveGhost?: boolean;
     // asChild?: boolean;
 }
-/**
- * A component for a draggable item.
- */
-const DraggableItem = ({
-    children,
-    onDrop: onItemDrop,
-    onRemove: onItemRemove,
-    onDragStart,
-    onDragEnd,
-    onEnterDropArea,
-    onLeaveDropArea,
-    grabHandle,
-    leaveGhost,
-    // asChild,
-}: DraggableItemProps) => {
-    // const Component = asChild ? Slot : 'div';
-    // const AnimatedComponent = animated(Component);
-
-    const handleRef = React.useRef<HTMLDivElement>(null);
-    const containerRef = React.useRef<HTMLDivElement>(null);
-    const ghostSpacerRef = React.useRef<HTMLDivElement>(null);
-
-    const isDragging = React.useRef(false); // Used to prevent children from being clicked when the item is being dragged
+const DraggableItem = (properties: DraggableItemProperties) => {
+    const handleReference = React.useRef<HTMLDivElement>(null);
+    const containerReference = React.useRef<HTMLDivElement>(null);
+    const ghostSpacerReference = React.useRef<HTMLDivElement>(null);
+    const isDraggingReference = React.useRef(false); // Used to prevent children from being clicked when the item is being dragged
 
     const {
         onDragItemStart,
@@ -223,8 +211,9 @@ const DraggableItem = ({
         onLeaveDropArea: onItemLeaveDropArea,
         onDrop,
         resetPositionOnDrop,
-        recalcDropBounds,
+        recalculateDropBounds: recalcDropBounds,
     } = useDragAndDrop();
+
     const [spring, api] = useSpring(() => ({
         x: 0,
         y: 0,
@@ -233,45 +222,45 @@ const DraggableItem = ({
 
     const hoverCoords = React.useRef<[number, number]>([0, 0]);
     useMove(
-        (state) => {
+        function (state) {
             // Calculate the position of the cursor so it can be used to position the dragged item.
             if(!state.down) {
                 // Get the current bounds of the container so that it can be positioned fixed without resizing the container
-                const currentBounds = containerRef.current?.getBoundingClientRect();
+                const currentBounds = containerReference.current?.getBoundingClientRect();
 
                 // Update the hover coords
                 hoverCoords.current = [state.xy[0] - (currentBounds?.x ?? 0), state.xy[1] - (currentBounds?.y ?? 0)];
             }
         },
         {
-            target: containerRef,
+            target: containerReference,
         },
     );
 
     useDrag(
-        (state) => {
+        function (state) {
             if(!state.intentional) {
                 return;
             }
 
             if(state.first) {
                 // Set the dragging flag to true
-                isDragging.current = true;
-                if(containerRef.current && ghostSpacerRef.current) {
-                    containerRef.current.style.zIndex = '1000';
+                isDraggingReference.current = true;
+                if(containerReference.current && ghostSpacerReference.current) {
+                    containerReference.current.style.zIndex = '1000';
                     // Get the current bounds of the container so that it can be positioned fixed without resizing the container
-                    const currentBounds = containerRef.current.getBoundingClientRect();
+                    const currentBounds = containerReference.current.getBoundingClientRect();
 
                     // Set the position of the container to fixed
-                    containerRef.current.style.position = 'fixed';
+                    containerReference.current.style.position = 'fixed';
 
                     // Set the height and width of the container to the current width (needed for updating to fixed position)
-                    containerRef.current.style.width = `${currentBounds.width}px`;
-                    containerRef.current.style.height = `${currentBounds.height}px`;
+                    containerReference.current.style.width = `${currentBounds.width}px`;
+                    containerReference.current.style.height = `${currentBounds.height}px`;
 
                     // Set the ghost spacer to the same height and width as the container (needed for the container to not resize when the position is set to fixed)
-                    ghostSpacerRef.current.style.width = `${currentBounds.width}px`;
-                    ghostSpacerRef.current.style.height = `${currentBounds.height}px`;
+                    ghostSpacerReference.current.style.width = `${currentBounds.width}px`;
+                    ghostSpacerReference.current.style.height = `${currentBounds.height}px`;
                 }
 
                 recalcDropBounds();
@@ -283,13 +272,13 @@ const DraggableItem = ({
                 }
 
                 onDragItemStart?.();
-                onDragStart?.();
+                properties.onDragStart?.();
 
                 // Check if the item is inside a drop area
-                const inDropArea = dropBounds.some(({ bounds }) => checkIfXyInDropBounds(state.xy, bounds));
+                const inDropArea = dropBounds.some((dropBound) => checkIfXyInDropBounds(state.xy, dropBound.bounds));
 
                 if(inDropArea) {
-                    onItemRemove?.();
+                    properties.onRemove?.();
                 }
             }
 
@@ -297,67 +286,67 @@ const DraggableItem = ({
             api.start({
                 x: state.offset[0] + hoverCoords.current[0],
                 y: state.offset[1] + hoverCoords.current[1],
-                opacity: state.dragging && leaveGhost ? 0.8 : 1,
+                opacity: state.dragging && properties.leaveGhost ? 0.8 : 1,
                 immediate: state.down,
             });
 
             // If the item is inside the drop area, handle the enter drop area event
-            const currentDropArea = dropBounds.find(({ bounds }) => {
-                return checkIfXyInDropBounds(state.xy, bounds);
+            const currentDropArea = dropBounds.find((dropBound) => {
+                return checkIfXyInDropBounds(state.xy, dropBound.bounds);
             });
 
             if(currentDropArea) {
                 onItemEnterDropArea?.(currentDropArea.container);
-                onEnterDropArea?.(currentDropArea.container);
+                properties.onEnterDropArea?.(currentDropArea.container);
 
                 // If the item is dropped inside the drop area, handle the drop event
                 if(state.last) {
-                    onItemDrop?.(currentDropArea.container);
+                    properties.onDrop?.(currentDropArea.container);
                     onDrop?.();
                 }
             }
             else {
                 onItemLeaveDropArea?.();
-                onLeaveDropArea?.();
+                properties.onLeaveDropArea?.();
             }
 
             if(state.last) {
                 onDragItemEnd?.();
-                onDragEnd?.();
+                properties.onDragEnd?.();
                 onItemLeaveDropArea?.();
-                onLeaveDropArea?.();
+                properties.onLeaveDropArea?.();
 
                 // If the item was dropped outside the drop area, reset its position
-                const inDropArea = dropBounds.some(({ bounds }) => checkIfXyInDropBounds(state.xy, bounds));
+                const inDropArea = dropBounds.some((dropBound) => checkIfXyInDropBounds(state.xy, dropBound.bounds));
                 if(!inDropArea) {
                     api.start({
                         x: 0,
                         y: 0,
                         onRest: () => {
-                            if(containerRef.current) {
-                                containerRef.current.style.zIndex = '';
-                                containerRef.current.style.position = '';
-                                containerRef.current.style.width = '100%';
-                                containerRef.current.style.height = '100%';
+                            if(containerReference.current) {
+                                containerReference.current.style.zIndex = '';
+                                containerReference.current.style.position = '';
+                                containerReference.current.style.width = '100%';
+                                containerReference.current.style.height = '100%';
                             }
-                            if(ghostSpacerRef.current) {
-                                ghostSpacerRef.current.style.width = '100%';
-                                ghostSpacerRef.current.style.height = '100%';
+                            if(ghostSpacerReference.current) {
+                                ghostSpacerReference.current.style.width = '100%';
+                                ghostSpacerReference.current.style.height = '100%';
                             }
                         },
                     });
                 }
                 else if(resetPositionOnDrop) {
                     api.set({ x: 0, y: 0 });
-                    if(containerRef.current) {
-                        containerRef.current.style.zIndex = '';
-                        containerRef.current.style.position = '';
-                        containerRef.current.style.width = '100%';
-                        containerRef.current.style.height = '100%';
+                    if(containerReference.current) {
+                        containerReference.current.style.zIndex = '';
+                        containerReference.current.style.position = '';
+                        containerReference.current.style.width = '100%';
+                        containerReference.current.style.height = '100%';
                     }
-                    if(ghostSpacerRef.current) {
-                        ghostSpacerRef.current.style.width = '100%';
-                        ghostSpacerRef.current.style.height = '100%';
+                    if(ghostSpacerReference.current) {
+                        ghostSpacerReference.current.style.width = '100%';
+                        ghostSpacerReference.current.style.height = '100%';
                     }
                 }
 
@@ -366,7 +355,7 @@ const DraggableItem = ({
         },
         {
             from: () => [spring.x.get(), spring.y.get()],
-            target: grabHandle ? handleRef : containerRef,
+            target: properties.grabHandle ? handleReference : containerReference,
 
             // Prevents clicks from being treated as drags
             filterTaps: true,
@@ -375,73 +364,78 @@ const DraggableItem = ({
 
     // Function to prevent children from being clicked when the item is being dragged
     const handleClickCapture: MouseEventHandler<HTMLDivElement> = (event) => {
-        if(isDragging.current) {
+        if(isDraggingReference.current) {
             event.preventDefault();
             event.stopPropagation();
 
             // Reset the dragging flag
-            isDragging.current = false;
+            isDraggingReference.current = false;
         }
     };
 
+    // Render the component
     return (
-        <div ref={ghostSpacerRef} className="relative">
+        <div ref={ghostSpacerReference} className="relative">
             {/* Spacer */}
-            {leaveGhost && (
+            {properties.leaveGhost && (
                 <div
                     className={mergeClassNames(
-                        grabHandle
+                        properties.grabHandle
                             ? 'flex items-center justify-start'
                             : 'touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing',
                         'pointer-events-none absolute -z-10 w-full opacity-50',
                     )}
                 >
-                    {grabHandle ? (
+                    {properties.grabHandle ? (
                         <div className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing">
-                            {grabHandle}
+                            {properties.grabHandle}
                         </div>
                     ) : null}
-                    {children}
+                    {properties.children}
                 </div>
             )}
             <animated.div
-                ref={containerRef}
+                ref={containerReference}
                 style={spring}
                 className={mergeClassNames(
-                    grabHandle
+                    properties.grabHandle
                         ? 'flex items-center justify-start'
                         : 'touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing',
-                    leaveGhost ? 'opacity-100' : '',
+                    properties.leaveGhost ? 'opacity-100' : '',
                 )}
                 // Must be applied to the element directly rather than through `useGesture` or in the `useDrag` hook
                 onClickCapture={handleClickCapture}
             >
-                {grabHandle ? (
+                {properties.grabHandle ? (
                     <div
-                        ref={handleRef}
+                        ref={handleReference}
                         className="mr-2 touch-none select-none hover:cursor-grab active:cursor-grabbing [&_*]:active:cursor-grabbing"
                     >
-                        {grabHandle}
+                        {properties.grabHandle}
                     </div>
                 ) : null}
                 {/* <Slottable> */}
-                {children}
+                {properties.children}
                 {/* </Slottable> */}
             </animated.div>
         </div>
     );
 };
 
-interface DropAreaProps extends React.HTMLAttributes<HTMLDivElement> {
+// Component - DropArea
+interface DropAreaProperties extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     onItemIsHovering?: () => void;
     asChild?: boolean;
 }
-
-/**
- * A component for the drop area.
- */
-const DropArea = ({ asChild, children, onItemIsHovering, ...props }: DropAreaProps) => {
+const DropArea = (properties: DropAreaProperties) => {
+    const asChild = properties.asChild;
+    const children = properties.children;
+    const onItemIsHovering = properties.onItemIsHovering;
+    const props = { ...properties };
+    delete props.asChild;
+    delete props.children;
+    delete props.onItemIsHovering;
     const Component = asChild ? Slot : 'div';
 
     const dropContainerRef = React.useRef<HTMLDivElement>(null);
