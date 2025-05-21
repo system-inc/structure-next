@@ -96,14 +96,13 @@ const FileDrop: React.FC<FileDropProperties> = function (properties) {
     );
 };
 
-// FileInput component for handling file selection
-type FileInputProps = {
+// Component - FileInput
+type FileInputProperties = {
     multiple?: boolean;
     children?: React.ReactNode;
     className?: string;
 };
-
-const FileInput: React.FC<FileInputProps> = (properties) => {
+const FileInput: React.FC<FileInputProperties> = (properties) => {
     const multiple = properties.multiple ?? false;
     const { addFiles, onDragChange, accept } = useFileContext();
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -174,13 +173,12 @@ export const formatFileSize = (bytes: number): string => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
-// FileList component for displaying selected files
-type FileListProps = {
+// Component - FileList
+type FileListProperties = {
     className?: string;
     component: React.ComponentType<{ file: File; removeFile: (index: number) => void; index: number }>;
 };
-
-const FileList: React.FC<FileListProps> = (properties) => {
+const FileList: React.FC<FileListProperties> = (properties) => {
     const { files, removeFile } = useFileContext();
     const Component = properties.component;
 

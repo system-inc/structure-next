@@ -111,15 +111,15 @@ const buttonVariants = cva(
     },
 );
 
-export interface ButtonProps
+// Component - Button
+export interface ButtonProperties
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
         VariantProps<typeof buttonVariants> {
     asChild?: boolean;
     iconLeft?: React.ReactNode;
     iconRight?: React.ReactNode;
 }
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function (properties, reference) {
+const Button = React.forwardRef<HTMLButtonElement, ButtonProperties>(function (properties, reference) {
     const asChild = properties.asChild !== undefined ? properties.asChild : false;
 
     if((properties.iconLeft || properties.iconRight) && properties.icon) {
