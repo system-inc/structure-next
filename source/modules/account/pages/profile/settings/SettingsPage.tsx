@@ -15,8 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
     };
 }
 
-// Component - SecurityPage
-export function SecurityPage() {
+// Component - SettingsPage
+export function SettingsPage() {
     // State
     const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = React.useState(false);
 

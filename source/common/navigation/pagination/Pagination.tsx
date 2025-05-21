@@ -7,7 +7,7 @@ import React from 'react';
 import { Button } from '@structure/source/common/buttons/Button';
 import { InputReferenceInterface } from '@structure/source/common/forms/Input';
 import { InputText } from '@structure/source/common/forms/InputText';
-import InputSelect from '@structure/source/common/forms/InputSelect';
+import { InputSelect } from '@structure/source/common/forms/InputSelect';
 
 // Dependencies - Assets
 import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.svg';

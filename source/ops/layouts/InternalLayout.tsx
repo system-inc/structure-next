@@ -16,15 +16,24 @@ import { OpsDialogMenu } from '@structure/source/ops/layouts/navigation/OpsDialo
 // The side and top navigation components cause hydration mismatch errors if they are SSR'd
 // Dependencies - Side Navigation Components
 const SideNavigationLayoutContent = dynamic(
-    () => import('@structure/source/layouts/side-navigation/SideNavigationLayoutContent'),
+    async function () {
+        return (await import('@structure/source/layouts/side-navigation/SideNavigationLayoutContent'))
+            .SideNavigationLayoutContent;
+    },
     { ssr: false },
 );
 const SideNavigationLayoutContentBody = dynamic(
-    () => import('@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody'),
+    async function () {
+        return (await import('@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody'))
+            .SideNavigationLayoutContentBody;
+    },
     { ssr: false },
 );
 const SideNavigationLayoutNavigation = dynamic(
-    () => import('@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation'),
+    async function () {
+        return (await import('@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation'))
+            .SideNavigationLayoutNavigation;
+    },
     { ssr: false },
 );
 

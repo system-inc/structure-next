@@ -10,7 +10,7 @@ import {
     NavigationTrailProperties,
     NavigationTrail,
 } from '@structure/source/common/navigation/trail/NavigationTrail';
-import OpsNavigationLinks from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
+import { OpsNavigationLinks } from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import Metrics from '@structure/source/ops/pages/developers/metrics/Metrics';
+import { Metrics } from '@structure/source/ops/pages/developers/metrics/Metrics';
 
 // Component - DevelopersMetricsPage
 export function DevelopersMetricsPage() {

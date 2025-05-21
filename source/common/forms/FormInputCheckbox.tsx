@@ -15,7 +15,7 @@ import {
     InputCheckboxProperties,
     InputCheckbox,
 } from '@structure/source/common/forms/InputCheckbox';
-import TipIcon from '@structure/source/common/popovers/TipIcon';
+import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

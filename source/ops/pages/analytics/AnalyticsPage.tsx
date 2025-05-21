@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import OpsNavigationTrail from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 
 // Component - AnalyticsPage
 export function AnalyticsPage() {

@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import OpsNavigationTrail from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
+import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 import { Button } from '@structure/source/common/buttons/Button';
 

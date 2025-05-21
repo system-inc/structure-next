@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import Badge from '@structure/source/common/notifications/Badge';
+import { Badge } from '@structure/source/common/notifications/Badge';
 import { AccountSupportTicketStatusTabs } from './components/AccountSupportTicketStatusTabs';
 
 // Dependencies - Hooks
