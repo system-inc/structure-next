@@ -20,7 +20,7 @@ import { Tip } from '@structure/source/common/popovers/Tip';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostCommentReaction
-export interface PostCommentReactionInterface {
+export interface PostCommentReactionProperties {
     className?: string;
     ideaId: string;
     content: string;
@@ -29,7 +29,7 @@ export interface PostCommentReactionInterface {
     onReactionCreate: (content: string) => void;
     onReactionDelete: (content: string) => void;
 }
-export function PostCommentReaction(properties: PostCommentReactionInterface) {
+export function PostCommentReaction(properties: PostCommentReactionProperties) {
     // State
     const [
         ,

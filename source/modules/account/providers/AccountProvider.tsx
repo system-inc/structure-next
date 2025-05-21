@@ -29,11 +29,11 @@ interface AccountContextInterface {
 const AccountContext = React.createContext<AccountContextInterface | undefined>(undefined);
 
 // Component - AccountProvider
-export interface AccountProviderInterface {
+export interface AccountProviderProperties {
     children: React.ReactNode;
     signedIn: boolean;
 }
-export function AccountProvider(properties: AccountProviderInterface) {
+export function AccountProvider(properties: AccountProviderProperties) {
     // State
     const [signedIn, setSignedIn] = React.useState<boolean>(properties.signedIn); // Initialized using response header cookie
     // console.log('AccountProvider: signedIn', signedIn);

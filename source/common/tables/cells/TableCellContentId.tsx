@@ -9,12 +9,12 @@ import { CopyTip } from '@structure/source/common/popovers/CopyTip';
 import { truncateUniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - TableCellContentId
-export interface TableCellContentIdInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentIdProperties extends React.HTMLAttributes<HTMLElement> {
     value: string;
     url?: string;
     openUrlInNewTab?: boolean;
 }
-export function TableCellContentId(properties: TableCellContentIdInterface) {
+export function TableCellContentId(properties: TableCellContentIdProperties) {
     // console.log('truncating!', properties.value);
     const content = truncateUniqueIdentifier(properties.value);
 

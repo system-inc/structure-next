@@ -4,14 +4,14 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { AlertInterface, Alert } from '@structure/source/common/notifications/Alert';
+import { AlertProperties, Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Assets
 import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';
 
 // Component - NotAuthorized
 export type NotAuthorizedProperties = {
-    alertProperties?: AlertInterface;
+    alertProperties?: AlertProperties;
 };
 export function NotAuthorized(properties: NotAuthorizedProperties) {
     // Render the component

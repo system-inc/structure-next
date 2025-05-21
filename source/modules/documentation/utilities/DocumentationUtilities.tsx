@@ -1,20 +1,20 @@
 // Dependencies - Types
 import {
-    DocumentationSpecificationInterface,
-    DocumentationNodeInterface,
-    DocumentationNodeWithParentInterface,
-    SectionNodeInterface,
+    DocumentationSpecificationProperties,
+    DocumentationNodeProperties,
+    DocumentationNodeWithParentProperties,
+    SectionNodeProperties,
 } from '@structure/source/modules/documentation/types/DocumentationTypes';
-import { SideNavigationItemInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
-import { SideNavigationSectionInterface } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
+import { SideNavigationItemProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
+import { SideNavigationSectionProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Function to build path from node to root
-export function buildPathFromNode(node: DocumentationNodeWithParentInterface): string[] {
+export function buildPathFromNode(node: DocumentationNodeWithParentProperties): string[] {
     const parts: string[] = [];
-    let current: DocumentationNodeWithParentInterface | null = node;
+    let current: DocumentationNodeWithParentProperties | null = node;
 
     // Traverse up to root, collecting identifiers
     while(current) {
@@ -29,12 +29,12 @@ export function buildPathFromNode(node: DocumentationNodeWithParentInterface): s
 
 // Function to find a documentation node by URL path
 export function findDocumentationNodeByUrlPath(
-    documentationNodes: DocumentationNodeInterface[],
+    documentationNodes: DocumentationNodeProperties[],
     baseUrlPath: string,
     urlPath: string,
-    parent: DocumentationNodeWithParentInterface | null = null,
-): DocumentationNodeWithParentInterface | null {
-    let foundDocumentationNode: DocumentationNodeWithParentInterface | null = null;
+    parent: DocumentationNodeWithParentProperties | null = null,
+): DocumentationNodeWithParentProperties | null {
+    let foundDocumentationNode: DocumentationNodeWithParentProperties | null = null;
 
     // Normalize URL path (remove trailing slash)
     const normalizedUrlPath = urlPath.replace(/\/$/, '');
@@ -42,7 +42,7 @@ export function findDocumentationNodeByUrlPath(
     // Search through each node
     for(const documentationNode of documentationNodes) {
         // Create node with parent
-        const documentationNodeWithParent: DocumentationNodeWithParentInterface = {
+        const documentationNodeWithParent: DocumentationNodeWithParentProperties = {
             ...documentationNode,
             parent: parent,
         };
@@ -58,7 +58,7 @@ export function findDocumentationNodeByUrlPath(
         }
         // If node is a section and has children, search them recursively
         else if(documentationNode.type === 'Section') {
-            const sectionNode = documentationNode as SectionNodeInterface;
+            const sectionNode = documentationNode as SectionNodeProperties;
             if(sectionNode.children && sectionNode.children.length > 0) {
                 const foundInChildren = findDocumentationNodeByUrlPath(
                     sectionNode.children,
@@ -83,16 +83,16 @@ export function findDocumentationNodeByUrlPath(
 
 // Function to get the first documentation node with content
 export function getFirstDocumentationNodeWithParentWithContent(
-    documentationNodes: DocumentationNodeInterface[],
-    parent: DocumentationNodeWithParentInterface | null = null,
-): DocumentationNodeWithParentInterface | null {
-    let firstDocumentationNodeWithParentWithContent: DocumentationNodeWithParentInterface | null = null;
+    documentationNodes: DocumentationNodeProperties[],
+    parent: DocumentationNodeWithParentProperties | null = null,
+): DocumentationNodeWithParentProperties | null {
+    let firstDocumentationNodeWithParentWithContent: DocumentationNodeWithParentProperties | null = null;
 
     // Search through each node
     for(const documentationNode of documentationNodes) {
         // If the node is a section and has children, search them recursively
         if(documentationNode.type === 'Section') {
-            const sectionNode = documentationNode as SectionNodeInterface;
+            const sectionNode = documentationNode as SectionNodeProperties;
             if(sectionNode.children && sectionNode.children.length > 0) {
                 const foundInChildren = getFirstDocumentationNodeWithParentWithContent(sectionNode.children, {
                     ...documentationNode,
@@ -170,17 +170,17 @@ export function getMethodColorClass(method: string): string {
 
 // Function to generate SideNavigationSections from a DocumentationSpecification
 export function getSideNavigationSectionsFromDocumentationSpecification(
-    documentationSpecification: DocumentationSpecificationInterface,
-): SideNavigationSectionInterface[] {
+    documentationSpecification: DocumentationSpecificationProperties,
+): SideNavigationSectionProperties[] {
     let isFirstContentNode = true; // Track the first content node
 
     // Helper function to process nodes recursively
     function processDocumentationNode(
-        documentationNode: DocumentationNodeInterface,
-        parentDocumentationNode: DocumentationNodeWithParentInterface | null = null,
-    ): SideNavigationItemInterface {
+        documentationNode: DocumentationNodeProperties,
+        parentDocumentationNode: DocumentationNodeWithParentProperties | null = null,
+    ): SideNavigationItemProperties {
         // Create node with parent for path building
-        const documentationNodeWithParent: DocumentationNodeWithParentInterface = {
+        const documentationNodeWithParent: DocumentationNodeWithParentProperties = {
             ...documentationNode,
             parent: parentDocumentationNode,
         };
@@ -215,7 +215,7 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
             );
         }
 
-        const sideNavigationSection: SideNavigationSectionInterface = {
+        const sideNavigationSection: SideNavigationSectionProperties = {
             title: title,
             href: href,
             isHeader: documentationNode.isHeader,
@@ -224,7 +224,7 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
 
         // If the node is a section and has children, process them recursively
         if(documentationNode.type === 'Section') {
-            const sectionNode = documentationNode as SectionNodeInterface;
+            const sectionNode = documentationNode as SectionNodeProperties;
             if(sectionNode.children && sectionNode.children.length > 0) {
                 sideNavigationSection.children = sectionNode.children.map(function (child) {
                     return processDocumentationNode(child, documentationNodeWithParent);
@@ -243,7 +243,7 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
 
 // Function to generate a title based on the current URL path and documentation specification
 export function getDocumentationHtmlTitle(
-    documentationSpecification: DocumentationSpecificationInterface,
+    documentationSpecification: DocumentationSpecificationProperties,
     currentUrlPath: string,
     rootTitle: string,
     separator = '•',
@@ -258,7 +258,7 @@ export function getDocumentationHtmlTitle(
     // Build title with parent categories
     let title = rootTitle;
     if(documentationNode) {
-        let currentCategory: DocumentationNodeWithParentInterface | null = documentationNode;
+        let currentCategory: DocumentationNodeWithParentProperties | null = documentationNode;
         const titles = [];
 
         // Collect all titles starting from current category up to parents

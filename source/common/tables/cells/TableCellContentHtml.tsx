@@ -8,10 +8,10 @@ import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 import WebIcon from '@structure/assets/icons/content/WebIcon.svg';
 
 // Component - TableCellContentHtml
-export interface TableCellContentHtmlInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentHtmlProperties extends React.HTMLAttributes<HTMLElement> {
     value: string;
 }
-export function TableCellContentHtml(properties: TableCellContentHtmlInterface) {
+export function TableCellContentHtml(properties: TableCellContentHtmlProperties) {
     // Render the component
     return (
         <div className="flex items-center">

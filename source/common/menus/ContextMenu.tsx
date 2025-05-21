@@ -5,13 +5,13 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixContextMenu from '@radix-ui/react-context-menu';
-import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
+import { MenuProperties, Menu } from '@structure/source/common/menus/Menu';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ContextMenu
-export interface ContextMenuInterface extends MenuInterface {
+export interface ContextMenuProperties extends MenuProperties {
     containerClassName?: string;
 
     // Menu
@@ -28,10 +28,10 @@ export interface ContextMenuInterface extends MenuInterface {
     collisionPadding?: number;
     collisionBoundary?: HTMLElement[];
 }
-export function ContextMenu(properties: ContextMenuInterface) {
+export function ContextMenu(properties: ContextMenuProperties) {
     // Create a copy of properties for Menu component, excluding Radix Context Menu specific props
     const menuProperties = { ...properties };
-    
+
     // Delete Radix Context Menu specific properties
     delete menuProperties.modal;
     delete menuProperties.onOpenChange;

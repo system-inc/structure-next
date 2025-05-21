@@ -23,13 +23,13 @@ export interface NavigationTrailLinkInterface {
 }
 
 // Component - NavigationTrail
-export interface NavigationTrailInterface {
+export interface NavigationTrailProperties {
     className?: string;
     urlPath?: string; // Optional, will take preference over the current URL path
     links?: NavigationTrailLinkInterface[];
     separator?: React.ReactNode;
 }
-export function NavigationTrail(properties: NavigationTrailInterface) {
+export function NavigationTrail(properties: NavigationTrailProperties) {
     // Hooks
     const currentUrlPath = useUrlPath() ?? '';
 

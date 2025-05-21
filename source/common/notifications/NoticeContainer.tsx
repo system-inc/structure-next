@@ -13,10 +13,10 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 import { animated, useTransition } from '@react-spring/web';
 
 // Component - NoticeContainer
-export interface NoticeContainerInterface extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface NoticeContainerProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     notices?: NoticeInterface[];
 }
-export function NoticeContainer(properties: NoticeContainerInterface) {
+export function NoticeContainer(properties: NoticeContainerProperties) {
     // Constants
     const NOTICES_MARGIN_PX = 16;
     const COLLAPSED_OFFSET_PX = 24;

@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TipInterface, Tip } from '@structure/source/common/popovers/Tip';
+import { TipProperties, Tip } from '@structure/source/common/popovers/Tip';
 import { NoticeInterface } from '@structure/source/common/notifications/Notice';
 import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 
@@ -10,11 +10,11 @@ import { CopyButton } from '@structure/source/common/buttons/CopyButton';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - CopyTip
-export interface CopyTipInterface extends Omit<TipInterface, 'content'> {
+export interface CopyTipProperties extends Omit<TipProperties, 'content'> {
     value: string;
     notice?: Omit<NoticeInterface, 'id'>;
 }
-export function CopyTip(properties: CopyTipInterface) {
+export function CopyTip(properties: CopyTipProperties) {
     const { children, notice, value, className, ...tipProperties } = properties;
 
     // Render the component

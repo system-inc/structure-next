@@ -25,7 +25,7 @@ interface ImageDimensions {
 }
 
 // Component - ImageEditor
-export interface ImageEditorInterface {
+export interface ImageEditorProperties {
     className?: string;
     image: File | string; // File or URL
     cropAspectRatio?: number;
@@ -42,7 +42,7 @@ export interface ImageEditorInterface {
     onSave?: (imageBlob: Blob) => void;
     loading?: boolean; // Added loading prop to control Save button state
 }
-export function ImageEditor(properties: ImageEditorInterface) {
+export function ImageEditor(properties: ImageEditorProperties) {
     // References
     const lastPreviewUrlReference = React.useRef<string | null>(null);
     const temporaryUrlsReference = React.useRef<string[]>([]);
@@ -140,7 +140,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
     // Extract properties used in useCallback to variables
     const propertiesAllowResize = properties.allowResize;
     const propertiesOnSave = properties.onSave;
-    
+
     const handleSave = React.useCallback(
         async function () {
             if(!previewUrl || !cropArea) {
@@ -190,8 +190,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
             }
         },
         // Extracted properties for dependencies
-        [previewUrl, cropArea, dimensions, outputOptions, 
-         propertiesAllowResize, propertiesOnSave],
+        [previewUrl, cropArea, dimensions, outputOptions, propertiesAllowResize, propertiesOnSave],
     );
 
     const actionButtons = React.useMemo(
@@ -275,7 +274,7 @@ export function ImageEditor(properties: ImageEditorInterface) {
                 </>
             ) : (
                 <div
-                    className="border-neutral-200 dark:border-neutral-700 rounded-medium flex h-64 items-center justify-center border"
+                    className="border-neutral-200 dark:border-neutral-700 flex h-64 items-center justify-center rounded-medium border"
                     aria-live="polite"
                 >
                     <p className="text-neutral-500">Loading image...</p>

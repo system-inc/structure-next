@@ -35,13 +35,13 @@ const TicketMessageFormSchema = object({
 type TicketMessageFormValues = InferOutput<typeof TicketMessageFormSchema>;
 
 // Component - TicketMessageForm
-export interface TicketMessageFormInterface {
+export interface TicketMessageFormProperties {
     ticketIdentifier: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
     refetchTickets: () => void;
 }
-export function TicketMessageForm(properties: TicketMessageFormInterface) {
+export function TicketMessageForm(properties: TicketMessageFormProperties) {
     const formRef = React.useRef<HTMLFormElement>(null);
 
     const [attachedFiles, setAttachedFiles] = React.useState<File[]>([]);

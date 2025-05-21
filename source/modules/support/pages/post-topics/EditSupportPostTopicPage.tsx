@@ -14,10 +14,10 @@ import { PostTopicUpdateOperation, PostTopicByIdDocument } from '@structure/sour
 // Dependencies - Assets
 
 // Component - EditSupportPostTopicPage
-export interface EditSupportPostTopicPageInterface {
+export interface EditSupportPostTopicPageProperties {
     postTopicId: string;
 }
-export function EditSupportPostTopicPage(properties: EditSupportPostTopicPageInterface) {
+export function EditSupportPostTopicPage(properties: EditSupportPostTopicPageProperties) {
     // State
     const [deletePostTopicDialogOpen, setDeletePostTopicDialogOpen] = React.useState(false);
 

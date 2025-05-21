@@ -3,7 +3,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
-import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
+import { PopoverMenuProperties, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { NavigationTrailLinkInterface } from '@structure/source/common/navigation/trail/NavigationTrail';
 
 // Dependencies - Assets
@@ -11,7 +11,7 @@ import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 
 // Component - NavigationTrailSeparatorPopoverMenu
 export interface NavigationTrailSeparatorPopoverMenuProperties
-    extends Omit<PopoverMenuInterface, 'items' | 'children'> {
+    extends Omit<PopoverMenuProperties, 'items' | 'children'> {
     separator: React.ReactNode;
     links: NavigationTrailLinkInterface[];
 }
@@ -58,7 +58,7 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
             {/* Separator */}
             <div
                 tabIndex={1}
-                className="rounded-extra-small mx-1 h-4 w-4 cursor-pointer select-none hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4"
+                className="mx-1 h-4 w-4 cursor-pointer select-none rounded-extra-small hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4"
             >
                 {properties.separator}
             </div>

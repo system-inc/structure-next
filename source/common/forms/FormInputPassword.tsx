@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { FormInputReferenceInterface } from '@structure/source/common/forms/FormInput';
-import { FormInputTextInterface, FormInputText } from '@structure/source/common/forms/FormInputText';
+import { FormInputTextProperties, FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - Assets
 import EyeIcon from '@structure/assets/icons/security/EyeIcon.svg';
@@ -14,7 +14,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputPassword
 export const FormInputPassword = React.forwardRef(function (
-    properties: FormInputTextInterface,
+    properties: FormInputTextProperties,
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
     const [showPassword, setShowPassword] = React.useState(false);

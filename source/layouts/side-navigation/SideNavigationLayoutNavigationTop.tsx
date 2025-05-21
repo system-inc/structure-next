@@ -21,13 +21,13 @@ import {
 import { useSpring, animated } from '@react-spring/web';
 
 // Component - SideNavigationLayoutNavigationTop
-export interface SideNavigationLayoutNavigationTopInterface {
+export interface SideNavigationLayoutNavigationTopProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     title?: React.ReactNode;
     className?: string;
     topBar?: boolean;
 }
-export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayoutNavigationTopInterface) {
+export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayoutNavigationTopProperties) {
     // Defaults
     const topBar = properties.topBar ?? false;
 

@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { PostInterface } from '@structure/source/modules/post/Post';
+import { PostProperties } from '@structure/source/modules/post/Post';
 import { PostCommentControl } from '@structure/source/modules/post/comments/controls/PostCommentControl';
 import { PostCommentVoteControl } from '@structure/source/modules/post/comments/controls/PostCommentVoteControl';
 import { PostCommentReactionControl } from '@structure/source/modules/post/comments/controls/PostCommentReactionControl';
@@ -18,14 +18,14 @@ import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostCommentControls
-export interface PostCommentControlsInterface {
+export interface PostCommentControlsProperties {
     className?: string;
-    id: PostInterface['id'];
-    identifier: PostInterface['identifier'];
-    title: PostInterface['title'];
-    upvoteCount: PostInterface['upvoteCount'];
+    id: PostProperties['id'];
+    identifier: PostProperties['identifier'];
+    title: PostProperties['title'];
+    upvoteCount: PostProperties['upvoteCount'];
     // downvoteCount: PostInterface['downvoteCount'];
-    voteType: PostInterface['voteType'];
+    voteType: PostProperties['voteType'];
     // createdAt: PostInterface['createdAt'];
     // submittedByUsername: PostInterface['submittedByUsername'];
 
@@ -36,10 +36,10 @@ export interface PostCommentControlsInterface {
     shareControl?: boolean;
     reportControl?: boolean;
 
-    onVoteChange: (newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) => void;
+    onVoteChange: (newUpvoteCount: PostProperties['upvoteCount'], newVoteType: PostProperties['voteType']) => void;
     onReactionCreate: (content: string) => void;
 }
-export function PostCommentControls(properties: PostCommentControlsInterface) {
+export function PostCommentControls(properties: PostCommentControlsProperties) {
     const windowLocationOrigin = React.useMemo(function () {
         if(typeof window === 'undefined') return '';
         return window.location.origin;

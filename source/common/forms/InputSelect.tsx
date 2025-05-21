@@ -2,11 +2,11 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
-import { PopoverInterface } from '@structure/source/common/popovers/Popover';
-import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
+import { PopoverProperties } from '@structure/source/common/popovers/Popover';
+import { PopoverMenuProperties, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
@@ -30,14 +30,14 @@ export const InputSelectSizes = {
 
 // Interface InputSelectItemInterface
 // We use property.defaultValue and value state to manage the selected items
-export interface InputSelectItemInterface extends Omit<MenuItemInterface, 'selected'> {}
+export interface InputSelectItemProperties extends Omit<MenuItemProperties, 'selected'> {}
 
 // Component - InputSelect
-export interface InputSelectInterface extends Omit<InputInterface, 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface InputSelectProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {
     defaultValue?: string;
 
     title?: string | React.ReactNode;
-    items?: InputSelectItemInterface[];
+    items?: InputSelectItemProperties[];
     placeholder?: string;
     allowNoSelection?: boolean;
 
@@ -49,18 +49,18 @@ export interface InputSelectInterface extends Omit<InputInterface, 'defaultValue
     size?: keyof typeof InputSelectSizes;
     search?: boolean;
 
-    popoverMenuProperties?: PopoverMenuInterface;
-    popoverProperties?: Omit<PopoverInterface, 'children' | 'content'>;
-    buttonProperties?: ButtonInterface;
+    popoverMenuProperties?: PopoverMenuProperties;
+    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    buttonProperties?: ButtonProperties;
 
     // Optional asynchronous loading of menu items
-    loadItems?: () => Promise<MenuItemInterface[]>;
+    loadItems?: () => Promise<MenuItemProperties[]>;
     loadingItems?: boolean;
     loadingItemsMessage?: React.ReactNode;
     loadingItemsError?: React.ReactNode;
 }
-export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelectInterface>(function (
-    properties: InputSelectInterface,
+export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelectProperties>(function (
+    properties: InputSelectProperties,
     reference: React.Ref<InputReferenceInterface>,
 ) {
     // References
@@ -107,7 +107,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                 setLoadingItems(true);
 
                 // Load the items
-                let items: InputSelectItemInterface[] = [];
+                let items: InputSelectItemProperties[] = [];
                 try {
                     items = await propertiesLoadItems();
 
@@ -170,7 +170,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
     const propertiesOnChange = properties.onChange;
     const propertiesAllowNoSelection = properties.allowNoSelection;
     const onChangeIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) {
+        function (menuItem: MenuItemProperties, menuItemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) {
             // console.log('InputSelect.tsx value changed:', menuItem.value);
             let newValue = menuItem.value;
 

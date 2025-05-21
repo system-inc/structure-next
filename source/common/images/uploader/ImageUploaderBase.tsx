@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Component - ImageUploadBase
-export interface ImageUploaderBaseInterface {
+export interface ImageUploaderBaseProperties {
     children: (properties: {
         upload: (file: Blob | File) => Promise<Response>;
         isUploading: boolean;
@@ -20,7 +20,7 @@ export interface ImageUploaderBaseInterface {
     onUploadSuccess?: (response: Response) => void;
     onUploadError?: (error: Error) => void;
 }
-export function ImageUploaderBase(properties: ImageUploaderBaseInterface) {
+export function ImageUploaderBase(properties: ImageUploaderBaseProperties) {
     // State
     const [isUploading, setIsUploading] = React.useState(false);
     const [progress, setProgress] = React.useState(0);

@@ -8,11 +8,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { TabItem, Tabs } from '@structure/source/common/navigation/tabs/Tabs';
 
 // Component - AccountSupportTicketStatusTabs
-interface AccountSupportTicketStatusTabsInterface {
+interface AccountSupportTicketStatusTabsProperties {
     openTicketsCount: number;
     closedTicketsCount: number;
 }
-export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketStatusTabsInterface) {
+export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketStatusTabsProperties) {
     const router = useRouter();
     const searchParams = useSearchParams();
 

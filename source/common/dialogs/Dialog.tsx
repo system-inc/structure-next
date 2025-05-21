@@ -102,7 +102,7 @@ export const DialogVariants = {
 };
 
 // Component - Dialog
-export interface DialogInterface {
+export interface DialogProperties {
     variant?: keyof typeof DialogVariants;
     children?: React.ReactElement; // The trigger
     overlayClassName?: string; // The class names for the overlay
@@ -122,7 +122,7 @@ export interface DialogInterface {
     onOpenAutoFocus?: (event: Event) => void; // The callback for when the dialog opens
     modal?: boolean; // Whether the dialog is a modal
 }
-export function Dialog(properties: DialogInterface) {
+export function Dialog(properties: DialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

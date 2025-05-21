@@ -1,5 +1,5 @@
 // Dependencies - Main Components
-import { OpsNavigationLinkInterface } from './OpsNavigationLink';
+import { OpsNavigationLinkProperties } from './OpsNavigationLink';
 
 // Dependencies - Assets
 import HomeIcon from '@structure/assets/icons/structures/HomeIcon.svg';
@@ -21,7 +21,7 @@ import CodeIcon from '@structure/assets/icons/technology/CodeIcon.svg';
 
 // TODO: This should use access control
 // Internal Navigation Links
-export const OpsNavigationLinks: OpsNavigationLinkInterface[] = [
+export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
     // Home
     {
         title: 'Home',

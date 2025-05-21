@@ -5,14 +5,14 @@ import ProjectSettings from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { AlertInterface, Alert } from '@structure/source/common/notifications/Alert';
+import { AlertProperties, Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Assets
 import CloudErrorIcon from '@structure/assets/icons/status/CloudErrorIcon.svg';
 
 // Component - NotSignedIn
 export type NotConnectedProperties = {
-    alertProperties?: AlertInterface;
+    alertProperties?: AlertProperties;
 };
 export function NotConnected(properties: NotConnectedProperties) {
     // Render the component

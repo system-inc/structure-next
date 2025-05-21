@@ -10,12 +10,12 @@ import { FormInputComponentAndProperties } from '@structure/source/api/graphql/f
 // Component - GraphQlFormInput
 // Registers a form input component instance in a shared reference map allowing other
 // components to programmatically access and manipulate these inputs
-export interface GraphQlFormInputInterface {
+export interface GraphQlFormInputProperties {
     key: string;
     formInputComponentAndProperties: FormInputComponentAndProperties;
     formInputsReferencesMap: Map<string, FormInputReferenceInterface>;
 }
-export const GraphQlFormInput = React.forwardRef<FormInputReferenceInterface, GraphQlFormInputInterface>(
+export const GraphQlFormInput = React.forwardRef<FormInputReferenceInterface, GraphQlFormInputProperties>(
     function (properties, wrapperReference) {
         // TODO: Using any here for now only because I couldn't figure out how not to without making a huge mess
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

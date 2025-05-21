@@ -17,11 +17,11 @@ import { AccountDeleteDocument } from '@structure/source/api/graphql/GraphQlGene
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - DeleteAccountForm
-export interface DeleteAccountFormInterface {
+export interface DeleteAccountFormProperties {
     className?: string;
     onComplete?: () => void;
 }
-export function DeleteAccountForm(properties: DeleteAccountFormInterface) {
+export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
     // Hooks
     const [accountDeleteMutation] = useMutation(AccountDeleteDocument);
 

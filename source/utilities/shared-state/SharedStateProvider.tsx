@@ -10,11 +10,11 @@ import { Provider as JotaiProvider, createStore as jotaiCreateStore } from 'jota
 export const globalStore = jotaiCreateStore();
 
 // Interface
-export interface SharedStateProviderInterface {
+export interface SharedStateProviderProperties {
     children: React.ReactNode;
 }
 // State Provider
-export function SharedStateProvider(properties: SharedStateProviderInterface) {
+export function SharedStateProvider(properties: SharedStateProviderProperties) {
     // Render the component
     return <JotaiProvider store={globalStore}>{properties.children}</JotaiProvider>;
 }

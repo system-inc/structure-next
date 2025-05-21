@@ -16,12 +16,12 @@ import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
 // import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostReportControl
-export interface PostReportControlInterface {
+export interface PostReportControlProperties {
     className?: string;
     ideaId: string;
     ideaTitle: string;
 }
-export function PostReportControl(properties: PostReportControlInterface) {
+export function PostReportControl(properties: PostReportControlProperties) {
     // State
     const [reportDialogOpen, setReportDialogOpen] = React.useState(false);
 

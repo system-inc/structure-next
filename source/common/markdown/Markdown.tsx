@@ -27,10 +27,10 @@ function getInnerText(node: React.ReactNode): string {
     return div.textContent || div.innerText || '';
 }
 
-interface ComponentsInterface {
+interface ComponentsProperties {
     [key: string]: (properties: React.HTMLAttributes<HTMLElement>) => JSX.Element;
 }
-const components: ComponentsInterface = {
+const components: ComponentsProperties = {
     h1: (properties) => (
         <h1
             className="mb-6 text-3xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5 first:before:hidden"
@@ -111,12 +111,12 @@ const components: ComponentsInterface = {
 };
 
 // Component - Markdown
-export interface MarkdownInterface extends React.HTMLAttributes<HTMLDivElement> {
+export interface MarkdownProperties extends React.HTMLAttributes<HTMLDivElement> {
     children: string;
 }
-export function Markdown(properties: MarkdownInterface) {
+export function Markdown(properties: MarkdownProperties) {
     // Properties to spread onto the div element
-    const divProperties = { ...properties } as Partial<MarkdownInterface>;
+    const divProperties = { ...properties } as Partial<MarkdownProperties>;
     delete divProperties.children;
 
     // Render the component

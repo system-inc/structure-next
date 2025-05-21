@@ -18,7 +18,7 @@ import { useSpring, animated } from '@react-spring/web';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutContentHeaderLeft
-export interface SideNavigationLayoutContentHeaderLeftInterface {
+export interface SideNavigationLayoutContentHeaderLeftProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     children: React.ReactNode;
     className?: string;
@@ -26,7 +26,7 @@ export interface SideNavigationLayoutContentHeaderLeftInterface {
     leftPaddingWhenNavigationClosed?: number;
     leftPaddingWhenNavigationOpen?: number;
 }
-export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigationLayoutContentHeaderLeftInterface) {
+export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigationLayoutContentHeaderLeftProperties) {
     // Defaults
     const leftPaddingWhenNavigationClosed = properties.leftPaddingWhenNavigationClosed ?? 104;
     const leftPaddingWhenNavigationOpen = properties.leftPaddingWhenNavigationOpen ?? 16;

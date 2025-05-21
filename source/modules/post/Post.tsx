@@ -20,7 +20,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export type PostReactionsType = NonNullable<PostsQuery['posts']['items'][0]['reactions']>;
 
 // Component - Post
-export interface PostInterface {
+export interface PostProperties {
     className?: string;
     titleContainerClassName?: string;
     titleAndTopicsContainerClassName?: string;
@@ -59,7 +59,7 @@ export interface PostInterface {
     // Comments
     showComments?: boolean;
 }
-export function Post(properties: PostInterface) {
+export function Post(properties: PostProperties) {
     // State
     const [upvoteCount, setUpvoteCount] = React.useState<number>(properties.upvoteCount);
     const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);
@@ -76,7 +76,7 @@ export function Post(properties: PostInterface) {
 
     // Function to handle a change in vote count and type
     // We need to do this because we have two vote controls that need to stay synchronized
-    function onVoteChange(newUpvoteCount: PostInterface['upvoteCount'], newVoteType: PostInterface['voteType']) {
+    function onVoteChange(newUpvoteCount: PostProperties['upvoteCount'], newVoteType: PostProperties['voteType']) {
         setUpvoteCount(newUpvoteCount);
         setVoteType(newVoteType);
     }

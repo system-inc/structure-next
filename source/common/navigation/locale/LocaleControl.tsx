@@ -14,10 +14,10 @@ import CurrentLocationIcon from '@structure/assets/icons/navigation/CurrentLocat
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - LocaleControl
-export interface LocaleControlInterface {
+export interface LocaleControlProperties {
     className?: string;
 }
-export function LocaleControl(properties: LocaleControlInterface) {
+export function LocaleControl(properties: LocaleControlProperties) {
     // Hooks
     // const urlPathname = usePathname();
 

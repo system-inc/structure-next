@@ -14,11 +14,11 @@ import { SupportFeedbackDialog } from '@structure/source/modules/support/compone
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SupportFeedback
-export interface SupportFeedbackInterface {
+export interface SupportFeedbackProperties {
     className?: string;
     prompt?: string;
 }
-export function SupportFeedback(properties: SupportFeedbackInterface) {
+export function SupportFeedback(properties: SupportFeedbackProperties) {
     // Hooks
     // const { accountState } = useAccount();
     // const urlPath = useUrlPath();

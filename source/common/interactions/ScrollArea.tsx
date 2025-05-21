@@ -39,7 +39,7 @@ export const scrollAreaThumbClassName =
 export const scrollAreaCornerClassName = '';
 
 // Component - ScrollArea
-export interface ScrollAreaInterface {
+export interface ScrollAreaProperties {
     children: React.ReactNode;
     className?: string;
     containerClassName?: string;
@@ -55,7 +55,7 @@ export interface ScrollAreaInterface {
     horizontalScrollbar?: boolean;
 }
 export const ScrollArea = React.forwardRef(function ScrollArea(
-    properties: ScrollAreaInterface,
+    properties: ScrollAreaProperties,
     reference: React.Ref<HTMLDivElement>,
 ) {
     // Defaults

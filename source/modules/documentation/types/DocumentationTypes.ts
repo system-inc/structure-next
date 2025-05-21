@@ -2,16 +2,16 @@
 import React from 'react';
 
 // Main Documentation Specification Interface
-export interface DocumentationSpecificationInterface {
+export interface DocumentationSpecificationProperties {
     identifier: string;
     title: string;
     baseUrlPath: string;
-    nodes: DocumentationNodeInterface[];
+    nodes: DocumentationNodeProperties[];
     settingsDialogEnabled?: boolean;
 }
 
 // Base Interface for Documentation Nodes
-export interface DocumentationNodeBaseInterface {
+export interface DocumentationNodeBaseProperties {
     identifier: string;
     title: string;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -20,105 +20,105 @@ export interface DocumentationNodeBaseInterface {
 }
 
 // Discriminated Union Type for Different Node Types
-export type DocumentationNodeInterface =
-    | SectionNodeInterface
-    | RestEndpointNodeInterface
-    | GraphQlEndpointNodeInterface
-    | MarkdownPageNodeInterface
-    | ReactComponentNodeInterface;
+export type DocumentationNodeProperties =
+    | SectionNodeProperties
+    | RestEndpointNodeProperties
+    | GraphQlEndpointNodeProperties
+    | MarkdownPageNodeProperties
+    | ReactComponentNodeProperties;
 
 // Type - DocumentationNodeWithParent
-export type DocumentationNodeWithParentInterface =
-    | (SectionNodeInterface & { parent: DocumentationNodeWithParentInterface | null })
-    | (RestEndpointNodeInterface & { parent: DocumentationNodeWithParentInterface | null })
-    | (GraphQlEndpointNodeInterface & { parent: DocumentationNodeWithParentInterface | null })
-    | (MarkdownPageNodeInterface & { parent: DocumentationNodeWithParentInterface | null })
-    | (ReactComponentNodeInterface & { parent: DocumentationNodeWithParentInterface | null });
+export type DocumentationNodeWithParentProperties =
+    | (SectionNodeProperties & { parent: DocumentationNodeWithParentProperties | null })
+    | (RestEndpointNodeProperties & { parent: DocumentationNodeWithParentProperties | null })
+    | (GraphQlEndpointNodeProperties & { parent: DocumentationNodeWithParentProperties | null })
+    | (MarkdownPageNodeProperties & { parent: DocumentationNodeWithParentProperties | null })
+    | (ReactComponentNodeProperties & { parent: DocumentationNodeWithParentProperties | null });
 
 // Section Node Interface
-export interface SectionNodeInterface extends DocumentationNodeBaseInterface {
+export interface SectionNodeProperties extends DocumentationNodeBaseProperties {
     type: 'Section';
-    children: DocumentationNodeInterface[];
+    children: DocumentationNodeProperties[];
 }
 
 // REST Endpoint Node Interface
-export interface RestEndpointNodeInterface extends DocumentationNodeBaseInterface {
+export interface RestEndpointNodeProperties extends DocumentationNodeBaseProperties {
     type: 'RestEndpoint';
-    endpoint: RestApiEndpointInterface;
+    endpoint: RestApiEndpointProperties;
 }
 
 // GraphQL Endpoint Node Interface
-export interface GraphQlEndpointNodeInterface extends DocumentationNodeBaseInterface {
+export interface GraphQlEndpointNodeProperties extends DocumentationNodeBaseProperties {
     type: 'GraphQlEndpoint';
-    endpoint: GraphQLApiEndpointInterface;
+    endpoint: GraphQLApiEndpointProperties;
 }
 
 // Markdown Page Node Interface
-export interface MarkdownPageNodeInterface extends DocumentationNodeBaseInterface {
+export interface MarkdownPageNodeProperties extends DocumentationNodeBaseProperties {
     type: 'MarkdownPage';
     content: string; // Markdown content as string
 }
 
 // React Component Node Interface
-export interface ReactComponentNodeInterface extends DocumentationNodeBaseInterface {
+export interface ReactComponentNodeProperties extends DocumentationNodeBaseProperties {
     type: 'ReactComponent';
     component: React.ReactNode;
 }
 
 // REST API Endpoint Interface
-export interface RestApiEndpointInterface {
+export interface RestApiEndpointProperties {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
     url: string;
     documentation?: string;
     requestParameters?: {
-        headers?: RequestParameterInterface[];
-        urlPath?: RequestParameterInterface[];
-        urlQuery?: RequestParameterInterface[];
-        body?: RequestParameterInterface[];
+        headers?: RequestParameterProperties[];
+        urlPath?: RequestParameterProperties[];
+        urlQuery?: RequestParameterProperties[];
+        body?: RequestParameterProperties[];
     };
     exampleResponses?: {
         title?: string;
         description?: string;
         statusCode: number;
-        headers?: ResponseFieldInterface[];
-        body?: ResponseFieldInterface[];
+        headers?: ResponseFieldProperties[];
+        body?: ResponseFieldProperties[];
     }[];
 }
 
 // GraphQL API Endpoint Interface
-export interface GraphQLApiEndpointInterface {
+export interface GraphQLApiEndpointProperties {
     query: string; // GraphQL query or mutation string
-    variables?: RequestParameterInterface[];
-    responseFields?: ResponseFieldInterface[];
+    variables?: RequestParameterProperties[];
+    responseFields?: ResponseFieldProperties[];
     exampleResponses?: {
         statusCode: number;
         description?: string;
-        headers?: ResponseFieldInterface[];
-        body?: ResponseFieldInterface[];
+        headers?: ResponseFieldProperties[];
+        body?: ResponseFieldProperties[];
     }[];
 }
 
 // ApiResponse Interface
-export interface ApiResponseInterface {
+export interface ApiResponseProperties {
     statusCode: number;
     description?: string;
-    headers?: ResponseFieldInterface[];
-    body?: ResponseFieldInterface[];
+    headers?: ResponseFieldProperties[];
+    body?: ResponseFieldProperties[];
 }
 
 // Response fields
-export interface ResponseFieldInterface {
+export interface ResponseFieldProperties {
     name: string;
     type: 'String' | 'Number' | 'Boolean' | 'DateTime' | 'Object' | 'Array';
     description?: string;
     possibleValues?: string[] | number[];
     example?: unknown;
     nullable?: boolean;
-    fields?: Record<string, ResponseFieldInterface> | ResponseFieldInterface[];
+    fields?: Record<string, ResponseFieldProperties> | ResponseFieldProperties[];
 }
 
 // Request parameters
-export interface RequestParameterInterface {
+export interface RequestParameterProperties {
     name: string;
     type: 'String' | 'Number' | 'Boolean' | 'DateTime' | 'Object' | 'Array';
     description?: string;
@@ -126,19 +126,19 @@ export interface RequestParameterInterface {
     example?: unknown;
     required?: boolean;
     nullable?: boolean;
-    fields?: Record<string, RequestParameterInterface> | RequestParameterInterface[];
+    fields?: Record<string, RequestParameterProperties> | RequestParameterProperties[];
 }
 
 // Function to convert a ResponseFieldInterface[] to an example JSON object
-export function responseFieldsToExampleJson(responseFields: ResponseFieldInterface[]): Record<string, unknown> {
+export function responseFieldsToExampleJson(responseFields: ResponseFieldProperties[]): Record<string, unknown> {
     const exampleJson: Record<string, unknown> = {};
 
     responseFields.forEach(function (field) {
         if(field.fields) {
             exampleJson[field.name] =
                 field.type === 'Array'
-                    ? [responseFieldsToExampleJson(field.fields as ResponseFieldInterface[])]
-                    : responseFieldsToExampleJson(field.fields as ResponseFieldInterface[]);
+                    ? [responseFieldsToExampleJson(field.fields as ResponseFieldProperties[])]
+                    : responseFieldsToExampleJson(field.fields as ResponseFieldProperties[]);
         }
         else {
             exampleJson[field.name] = field.example;

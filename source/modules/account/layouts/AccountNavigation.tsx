@@ -21,8 +21,8 @@ import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.s
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - AccountNavigation
-interface AccountNavigationInterface extends React.HTMLProps<HTMLElement> {}
-export function AccountNavigation(properties: AccountNavigationInterface) {
+interface AccountNavigationProperties extends React.HTMLProps<HTMLElement> {}
+export function AccountNavigation(properties: AccountNavigationProperties) {
     // Render the component
     return (
         <nav className={mergeClassNames('hidden flex-shrink-0 flex-col space-y-4 md:flex', properties.className)}>

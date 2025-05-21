@@ -24,7 +24,7 @@ export const popoverClassName =
     `w-full`;
 
 // Component - Popover
-export interface PopoverInterface {
+export interface PopoverProperties {
     children?: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
     content: React.ReactNode;
     className?: string;
@@ -43,7 +43,7 @@ export interface PopoverInterface {
     anchor?: HTMLElement;
     tabIndex?: number;
 }
-export function Popover(properties: PopoverInterface) {
+export function Popover(properties: PopoverProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

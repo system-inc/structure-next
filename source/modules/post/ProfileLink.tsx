@@ -11,7 +11,7 @@ import { ProfileImage } from '@structure/source/modules/account/components/Profi
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ProfileLink
-export interface ProfileLinkInterface {
+export interface ProfileLinkProperties {
     className?: string;
     username: string;
     displayName?: string;
@@ -20,7 +20,7 @@ export interface ProfileLinkInterface {
         variant?: string;
     }[];
 }
-export function ProfileLink(properties: ProfileLinkInterface) {
+export function ProfileLink(properties: ProfileLinkProperties) {
     // Defaults
     const displayName = properties.displayName || properties.username;
 

@@ -21,12 +21,12 @@ import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 // import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostReactionControl
-export interface PostReactionControlInterface {
+export interface PostReactionControlProperties {
     ideaId: string;
     className?: string;
     onReactionCreate: (content: string) => void;
 }
-export function PostReactionControl(properties: PostReactionControlInterface) {
+export function PostReactionControl(properties: PostReactionControlProperties) {
     // Hooks
     const { accountState, setAuthenticationDialogOpen } = useAccount();
     const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);

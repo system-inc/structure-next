@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -15,11 +15,11 @@ import { useNotice } from './NoticeProvider';
 const AnimatedButton = animated(Button);
 
 // Component - Notice
-export interface NoticesClearAllButtonInterface extends ButtonInterface {
+export interface NoticesClearAllButtonProperties extends ButtonProperties {
     show?: boolean;
     xSpringFunction: (x: number, onRestFunction: () => void) => void;
 }
-export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, NoticesClearAllButtonInterface>(
+export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, NoticesClearAllButtonProperties>(
     function (properties, reference) {
         // Hooks
         const { removeAllNotices } = useNotice();

@@ -3,12 +3,11 @@ import React from 'react';
 import WorldMapMercator from '@structure/source/common/maps/WorldMapMercator.svg';
 
 // Component - PanAndZoomContainer
-export interface PanAndZoomContainerInterface {
+export interface PanAndZoomContainerProperties {
     width: number;
     height: number;
 }
-
-export function PanAndZoomContainer(properties: PanAndZoomContainerInterface) {
+export function PanAndZoomContainer(properties: PanAndZoomContainerProperties) {
     const { width, height } = properties;
     const containerRef = React.useRef<HTMLDivElement>(null);
     const [scale, setScale] = React.useState(1);

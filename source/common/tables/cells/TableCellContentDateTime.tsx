@@ -8,10 +8,10 @@ import { Tip } from '@structure/source/common/popovers/Tip';
 import { timeAgo } from '@structure/source/utilities/Time';
 
 // Component - TableCellContentDateTime
-export interface TableCellContentDateTimeInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentDateTimeProperties extends React.HTMLAttributes<HTMLElement> {
     value: string | null;
 }
-export function TableCellContentDateTime(properties: TableCellContentDateTimeInterface) {
+export function TableCellContentDateTime(properties: TableCellContentDateTimeProperties) {
     const value = properties.value;
     let date = null;
 

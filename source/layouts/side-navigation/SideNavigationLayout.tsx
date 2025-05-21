@@ -24,7 +24,7 @@ const SideNavigationLayoutNavigation = dynamic(
 );
 
 // Component - SideNavigationLayout
-export interface SideNavigationLayoutInterface {
+export interface SideNavigationLayoutProperties {
     identifier: string;
     navigation: React.ReactNode;
     contentBody: React.ReactNode;
@@ -32,7 +32,7 @@ export interface SideNavigationLayoutInterface {
     topBar?: boolean;
     topTitle?: React.ReactNode;
 }
-export function SideNavigationLayout(properties: SideNavigationLayoutInterface) {
+export function SideNavigationLayout(properties: SideNavigationLayoutProperties) {
     // Render the component
     return (
         <>
@@ -46,10 +46,7 @@ export function SideNavigationLayout(properties: SideNavigationLayoutInterface) 
             </SideNavigationLayoutNavigation>
 
             {/* Content */}
-            <SideNavigationLayoutContent
-                layoutIdentifier={properties.identifier}
-                topTitle={properties.topTitle}
-            >
+            <SideNavigationLayoutContent layoutIdentifier={properties.identifier} topTitle={properties.topTitle}>
                 <SideNavigationLayoutContentBody>{properties.contentBody}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
 

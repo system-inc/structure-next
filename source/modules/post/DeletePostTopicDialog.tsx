@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
@@ -12,10 +12,10 @@ import { useMutation } from '@apollo/client';
 import { PostTopicDeleteDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - DeletePostTopicDialog
-export interface DeletePostTopicDialogInterface extends DialogInterface {
+export interface DeletePostTopicDialogProperties extends DialogProperties {
     postTopicId: string;
 }
-export function DeletePostTopicDialog(properties: DeletePostTopicDialogInterface) {
+export function DeletePostTopicDialog(properties: DeletePostTopicDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

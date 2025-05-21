@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
@@ -24,8 +24,8 @@ export interface NoticeInterface {
     style?: React.CSSProperties;
     title?: React.ReactNode;
     content?: React.ReactNode;
-    closeButtonProperties?: ButtonInterface;
-    buttonProperties?: ButtonInterface;
+    closeButtonProperties?: ButtonProperties;
+    buttonProperties?: ButtonProperties;
     dismissTimeout?: number | boolean;
 }
 export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function (properties, reference) {

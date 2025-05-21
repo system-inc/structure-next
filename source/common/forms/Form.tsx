@@ -36,9 +36,9 @@ export function useForm<T extends FieldValues>(properties?: UseFormProperties<T>
 }
 
 // Dependencies - Main Components
-import { FormInputReferenceInterface, FormInputInterface } from '@structure/source/common/forms/FormInput';
+import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/common/forms/FormInput';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Animations
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
@@ -70,14 +70,14 @@ export interface FormSubmitResponseInterface {
 }
 
 // Component - Form
-export interface FormInterface {
-    formInputs: React.ReactElement<FormInputInterface>[];
+export interface FormProperties {
+    formInputs: React.ReactElement<FormInputProperties>[];
     onSubmit: (values: FormValuesInterface) => FormSubmitResponseInterface | Promise<FormSubmitResponseInterface>;
     onSubmitSuccess?: (response: FormSubmitResponseInterface) => void;
     className?: string;
     title?: React.ReactNode;
     description?: React.ReactNode;
-    buttonProperties?: ButtonInterface;
+    buttonProperties?: ButtonProperties;
     footer?: React.ReactNode;
     error?: React.ReactNode;
     loading?: boolean;
@@ -86,7 +86,7 @@ export interface FormInterface {
     submitResponse?: FormSubmitResponseInterface;
     resetOnSubmitSuccess?: boolean;
 }
-export function Form(properties: FormInterface) {
+export function Form(properties: FormProperties) {
     // References
     const formInputsReferencesMap = React.useRef(new Map<string, FormInputReferenceInterface>()).current;
 
@@ -104,7 +104,7 @@ export function Form(properties: FormInterface) {
     const resetOnSubmitSuccess = properties.resetOnSubmitSuccess ?? false;
 
     // Memoized button properties
-    const buttonProperties: ButtonInterface = React.useMemo(
+    const buttonProperties: ButtonProperties = React.useMemo(
         function () {
             return {
                 ...properties.buttonProperties,
@@ -142,7 +142,7 @@ export function Form(properties: FormInterface) {
     const validateFormInput = React.useCallback(
         async function (
             formInputValue: unknown,
-            formInput: React.ReactElement<FormInputInterface>,
+            formInput: React.ReactElement<FormInputProperties>,
         ): Promise<ValidationResult | undefined> {
             // console.log('Form.tsx - validateFormInput id:', formInput.props.id, 'value:', formInputValue);
 
@@ -391,7 +391,7 @@ export function Form(properties: FormInterface) {
 
     // Function to handle form input changes
     const onFormInputChangeIntercept = React.useCallback(
-        function (formInputValue: unknown, formInput: React.ReactElement<FormInputInterface>, event?: Event) {
+        function (formInputValue: unknown, formInput: React.ReactElement<FormInputProperties>, event?: Event) {
             // console.log('Form input onChange formInputValue', formInputValue, 'formInput', formInput, 'event', event);
 
             // If the form input is FormInputText, we delay the validation until the input is idle

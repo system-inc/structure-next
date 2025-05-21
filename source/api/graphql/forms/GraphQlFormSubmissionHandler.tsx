@@ -50,7 +50,7 @@ export function convertFormValuesToGraphQlMutationVariables(formValues: FormValu
 }
 
 // Function to handle form submission
-export interface GraphQlFormSubmissionHandlerInterface<
+export interface GraphQlFormSubmissionHandlerProperties<
     TGraphQlMutationResponseData = Record<string, unknown>,
     TGraphQlMutationVariables = Record<string, unknown>,
 > {
@@ -68,7 +68,7 @@ export async function GraphQlFormSubmissionHandler<
     TGraphQlMutationResponseData = Record<string, unknown>,
     TGraphQlMutationVariables = Record<string, unknown>,
 >(
-    properties: GraphQlFormSubmissionHandlerInterface<TGraphQlMutationResponseData, TGraphQlMutationVariables>,
+    properties: GraphQlFormSubmissionHandlerProperties<TGraphQlMutationResponseData, TGraphQlMutationVariables>,
 ): Promise<FormSubmitResponseInterface> {
     console.log('formValues in GraphQlFormSubmissionHandler:', properties.formValues);
 

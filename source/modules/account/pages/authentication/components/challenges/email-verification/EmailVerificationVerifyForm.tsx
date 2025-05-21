@@ -17,11 +17,11 @@ import {
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - EmailVerificationVerifyForm
-export interface EmailVerificationVerifyFormInterface {
+export interface EmailVerificationVerifyFormProperties {
     emailAddress: string;
     onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
 }
-export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyFormInterface) {
+export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyFormProperties) {
     // Hooks - API - Mutations
     const [accountAuthenticationEmailVerificationVerifyMutation] = useMutation(
         AccountAuthenticationEmailVerificationVerifyDocument,

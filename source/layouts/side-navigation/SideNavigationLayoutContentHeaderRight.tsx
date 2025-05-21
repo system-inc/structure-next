@@ -7,11 +7,11 @@ import React from 'react';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutContentHeaderRight
-export interface SideNavigationLayoutContentHeaderRightInterface {
+export interface SideNavigationLayoutContentHeaderRightProperties {
     children: React.ReactNode;
     className?: string;
 }
-export function SideNavigationLayoutContentHeaderRight(properties: SideNavigationLayoutContentHeaderRightInterface) {
+export function SideNavigationLayoutContentHeaderRight(properties: SideNavigationLayoutContentHeaderRightProperties) {
     // Render the component
     return (
         // Wrapping the animated.div in another div to prevent the Next JS warning:

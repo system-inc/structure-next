@@ -2,10 +2,10 @@
 import React from 'react';
 
 // Component - Wrapper
-export interface WrapperInterface {
+export interface WrapperProperties {
     children: React.ReactNode;
 }
-export function Wrapper(properties: WrapperInterface) {
+export function Wrapper(properties: WrapperProperties) {
     // Render the component
     return properties.children;
 }

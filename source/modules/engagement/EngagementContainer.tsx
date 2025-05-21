@@ -10,11 +10,11 @@ import React from 'react';
 // import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - EngagementContainer
-export interface EngagementContainerInterface extends React.HTMLAttributes<HTMLDivElement> {
+export interface EngagementContainerProperties extends React.HTMLAttributes<HTMLDivElement> {
     path: string;
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function EngagementContainer(properties: EngagementContainerInterface) {
+export function EngagementContainer(properties: EngagementContainerProperties) {
     // Hooks
     // const engagement = useEngagement();
 

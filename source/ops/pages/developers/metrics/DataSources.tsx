@@ -26,7 +26,7 @@ import { swapArrayElements } from '@structure/source/utilities/Array';
 
 // Component - DataSources
 // This component is responsible for fetching the data and passing it up to the higher level component
-export interface DataSourcesInterface {
+export interface DataSourcesProperties {
     settings: {
         dataSources: DataSourceType[];
         timeInterval: TimeInterval;
@@ -42,7 +42,7 @@ export interface DataSourcesInterface {
     error?: boolean; // If there is an error, don't fetch the data
     setLoading: React.Dispatch<React.SetStateAction<boolean>>; // Set the loading state
 }
-export function DataSources(properties: DataSourcesInterface) {
+export function DataSources(properties: DataSourcesProperties) {
     const dataSourcesContainerReference = React.useRef<HTMLDivElement>(null);
 
     // Store the original order of the data sources (before dragging) this will be used to update the visual order of the data sources

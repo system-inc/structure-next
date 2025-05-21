@@ -4,13 +4,13 @@ import React from 'react';
 // Dependencies - Main Components
 import {
     FormInputReferenceInterface,
-    FormInputInterface,
+    FormInputProperties,
     FormInput,
     useFormInputValue,
 } from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 // import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { InputTextAreaInterface, InputTextArea } from '@structure/source/common/forms/InputTextArea';
+import { InputTextAreaProperties, InputTextArea } from '@structure/source/common/forms/InputTextArea';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -19,17 +19,17 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputTextArea
-export interface FormInputTextAreaInterface
-    extends Omit<InputTextAreaInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
+export interface FormInputTextAreaProperties
+    extends Omit<InputTextAreaProperties, 'validate'>,
+        Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
     placeholder?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['placeholder'];
     autoComplete?: React.TextareaHTMLAttributes<HTMLTextAreaElement>['autoComplete'];
     sibling?: React.ReactNode;
     onChange?: (value: string | undefined, event?: React.ChangeEvent<HTMLTextAreaElement>) => void;
     onBlur?: (value: string | undefined, event?: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
-export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, FormInputTextAreaInterface>(function (
-    properties: FormInputTextAreaInterface,
+export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, FormInputTextAreaProperties>(function (
+    properties: FormInputTextAreaProperties,
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
     // State

@@ -5,15 +5,15 @@ import React from 'react';
 
 // Dependencies - Main Components
 import {
-    SideNavigationSectionInterface,
+    SideNavigationSectionProperties,
     SideNavigationSection,
 } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Component - SideNavigation
-export interface SideNavigationInterface {
-    sections: SideNavigationSectionInterface[];
+export interface SideNavigationProperties {
+    sections: SideNavigationSectionProperties[];
 }
-export function SideNavigation(properties: SideNavigationInterface) {
+export function SideNavigation(properties: SideNavigationProperties) {
     // Render the component
     return (
         <div className="space-y-4">

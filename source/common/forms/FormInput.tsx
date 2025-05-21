@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
-import { TipIconInterface, TipIcon } from '@structure/source/common/popovers/TipIcon';
+import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
+import { TipIconProperties, TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
@@ -59,7 +59,7 @@ export interface FormInputReferenceInterface extends InputReferenceInterface {
 }
 
 // Component - FormInput
-export interface FormInputInterface extends InputInterface {
+export interface FormInputProperties extends InputProperties {
     ref?: (instance: FormInputReferenceInterface) => void;
     id: string;
     size?: keyof typeof FormInputSizes;
@@ -68,7 +68,7 @@ export interface FormInputInterface extends InputInterface {
     labelContainerClassName?: string;
     labelClassName?: string;
     labelTip?: React.ReactNode;
-    labelTipIconProperties?: Omit<TipIconInterface, 'content'>;
+    labelTipIconProperties?: Omit<TipIconProperties, 'content'>;
     description?: React.ReactNode;
     descriptionClassName?: string;
 
@@ -86,9 +86,9 @@ export interface FormInputInterface extends InputInterface {
     showValidationSuccessResults?: boolean;
     onValidate?: (validationResult: ValidationResult) => void;
 
-    component: React.ReactElement<FormInputInterface>;
+    component: React.ReactElement<FormInputProperties>;
 }
-export function FormInput(properties: FormInputInterface) {
+export function FormInput(properties: FormInputProperties) {
     // State
     const [validating, setValidating] = React.useState(properties.validating || false);
 

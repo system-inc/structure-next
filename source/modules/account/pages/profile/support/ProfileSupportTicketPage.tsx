@@ -16,10 +16,11 @@ import {
     SupportTicketStatus,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-interface ProfileSupportTicketPageInterface {
+// Component - ProfileSupportTicketPage
+export interface ProfileSupportTicketPageProperties {
     ticketId: string;
 }
-const ProfileSupportTicketPage = function (properties: ProfileSupportTicketPageInterface) {
+export const ProfileSupportTicketPage = function (properties: ProfileSupportTicketPageProperties) {
     const pagination = {
         itemsPerPage: 1,
         filters: [
@@ -68,4 +69,6 @@ const ProfileSupportTicketPage = function (properties: ProfileSupportTicketPageI
         </div>
     );
 };
+
+// Export - Default
 export default ProfileSupportTicketPage;

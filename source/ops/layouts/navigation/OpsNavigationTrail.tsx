@@ -7,7 +7,7 @@ import { usePathname as useUrlPath } from 'next/navigation';
 // Dependencies - Main Components
 import {
     NavigationTrailLinkInterface,
-    NavigationTrailInterface,
+    NavigationTrailProperties,
     NavigationTrail,
 } from '@structure/source/common/navigation/trail/NavigationTrail';
 import OpsNavigationLinks from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
@@ -17,7 +17,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 import { titleCase } from '@structure/source/utilities/String';
 
 // Component - OpsNavigationTrail
-export function OpsNavigationTrail(properties: NavigationTrailInterface) {
+export function OpsNavigationTrail(properties: NavigationTrailProperties) {
     // Get the current pathname from the URL using the usePathname hook
     const urlPath = useUrlPath() ?? '';
 

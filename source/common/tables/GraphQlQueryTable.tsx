@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableInterface, Table } from '@structure/source/common/tables/Table';
-import { TableColumnInterface, inferTableColumnType } from '@structure/source/common/tables/TableColumn';
-import { TableRowInterface } from '@structure/source/common/tables/TableRow';
+import { TableProperties, Table } from '@structure/source/common/tables/Table';
+import { TableColumnProperties, inferTableColumnType } from '@structure/source/common/tables/TableColumn';
+import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
 import { useQuery, ApolloError, TypedDocumentNode } from '@apollo/client';
@@ -16,8 +16,8 @@ import { flattenObject } from '@structure/source/utilities/Object';
 import { titleCase } from '@structure/source/utilities/String';
 
 // Component - GraphQlQueryTable
-export interface GraphQlQueryTableInterface<VariableType>
-    extends Omit<TableInterface, 'columns' | 'rows' | 'pagination'> {
+export interface GraphQlQueryTableProperties<VariableType>
+    extends Omit<TableProperties, 'columns' | 'rows' | 'pagination'> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     queryDocument: TypedDocumentNode<any, VariableType>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +31,7 @@ export interface GraphQlQueryTableInterface<VariableType>
 
     hideTypeColumns?: boolean;
 }
-export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInterface<VariableType>) {
+export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableProperties<VariableType>) {
     // State
     const [queryPagination] = React.useState({
         page: properties.pagination?.page || 1,
@@ -72,9 +72,9 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
     // console.log('data', data);
 
     // Memoize the columns
-    const columns = React.useMemo<TableColumnInterface[]>(
+    const columns = React.useMemo<TableColumnProperties[]>(
         function () {
-            const columns: TableColumnInterface[] = [];
+            const columns: TableColumnProperties[] = [];
 
             // Create the columns using the keys of the first item
             const columnIdentifiers = data.length > 0 ? Object.keys(data[0]) : [];
@@ -113,7 +113,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableInt
     // console.log('columns', columns);
 
     // Create the rows from the data
-    const rows: TableRowInterface[] =
+    const rows: TableRowProperties[] =
         data.map(function (item) {
             // console.log('item', item);
 

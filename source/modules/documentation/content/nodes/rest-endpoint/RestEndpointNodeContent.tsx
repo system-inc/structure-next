@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Types
 import {
-    RestEndpointNodeInterface,
+    RestEndpointNodeProperties,
     responseFieldsToExampleJson,
 } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
@@ -30,10 +30,10 @@ import {
 } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
 
 // Component - RestEndpointNodeContent
-export interface RestEndpointNodeContentInterface {
-    node: RestEndpointNodeInterface;
+export interface RestEndpointNodeContentProperties {
+    node: RestEndpointNodeProperties;
 }
-export function RestEndpointNodeContent(properties: RestEndpointNodeContentInterface) {
+export function RestEndpointNodeContent(properties: RestEndpointNodeContentProperties) {
     const { endpoint } = properties.node;
 
     // State
@@ -436,7 +436,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentInter
                 </div>
                 {runningRequest && <p className="mt-4">Running request...</p>}
                 {testOutputResponseBody && !runningRequest && (
-                    <div className="rounded-medium mt-4 border p-4 text-sm">
+                    <div className="mt-4 rounded-medium border p-4 text-sm">
                         <div className="">
                             <span
                                 className={mergeClassNames(

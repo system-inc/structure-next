@@ -4,14 +4,14 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { ManagePassword } from '@structure/source/modules/account/pages/profile/security/components/ManagePassword';
 
 // Component - ManagePasswordDialog
-export interface ManagePasswordDialogInterface extends DialogInterface {
+export interface ManagePasswordDialogProperties extends DialogProperties {
     accountHasPasswordSet: boolean;
 }
-export function ManagePasswordDialog(properties: ManagePasswordDialogInterface) {
+export function ManagePasswordDialog(properties: ManagePasswordDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

@@ -17,11 +17,11 @@ import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
 // import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostShareControl
-export interface PostShareControlInterface {
+export interface PostShareControlProperties {
     className?: string;
     url: string;
 }
-export function PostShareControl(properties: PostShareControlInterface) {
+export function PostShareControl(properties: PostShareControlProperties) {
     // Hooks
     const { addNotice } = useNotice();
 

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { ButtonVariants } from '@structure/source/common/buttons/ButtonVariants';
 import { ButtonSizes } from '@structure/source/common/buttons/ButtonSizes';
 import { Tip } from '@structure/source/common/popovers/Tip';
-import { PopoverInterface } from '@structure/source/common/popovers/Popover';
+import { PopoverProperties } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Animations
 import { useSpring, animated, easings, useTransition } from '@react-spring/web';
@@ -26,7 +26,7 @@ import { removeProperties } from '@structure/source/utilities/React';
 export type ButtonElementType = HTMLButtonElement | HTMLAnchorElement;
 
 // Component - Button
-export interface ButtonInterface extends React.HTMLAttributes<ButtonElementType> {
+export interface ButtonProperties extends React.HTMLAttributes<ButtonElementType> {
     variant?: keyof typeof ButtonVariants;
     size?: keyof typeof ButtonSizes;
     disabled?: boolean;
@@ -39,7 +39,7 @@ export interface ButtonInterface extends React.HTMLAttributes<ButtonElementType>
     processingAnimation?: boolean;
     showProcessedTimeTip?: boolean;
     tip?: string | React.ReactNode;
-    tipProperties?: Omit<PopoverInterface, 'children' | 'content'>;
+    tipProperties?: Omit<PopoverProperties, 'children' | 'content'>;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     iconPosition?: 'left' | 'right';
     iconClassName?: string;
@@ -48,8 +48,8 @@ export interface ButtonInterface extends React.HTMLAttributes<ButtonElementType>
     type?: 'button' | 'submit' | 'reset' | undefined; // For form buttons, type should be set to submit
     onClick?: (event: React.MouseEvent<HTMLElement>) => void | Promise<void>;
 }
-export const Button = React.forwardRef<ButtonElementType, ButtonInterface>(function Button(
-    properties: ButtonInterface,
+export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(function Button(
+    properties: ButtonProperties,
     reference: React.Ref<ButtonElementType>,
 ) {
     // References

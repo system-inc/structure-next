@@ -5,15 +5,15 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { DateRange as ReactDayPickerDateRange } from 'react-day-picker';
-import { InputInterface } from '@structure/source/common/forms/Input';
+import { InputProperties } from '@structure/source/common/forms/Input';
 import { Calendar } from '@structure/source/common/time/Calendar';
 import {
     TimeRangeType,
     getTimeRangePresets,
     getMatchingTimeRangePresetKey,
 } from '@structure/source/common/time/TimeRange';
-import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
@@ -31,7 +31,7 @@ export interface InputTimeRangeReferenceInterface {
 }
 
 // Component - InputTimeRange
-export interface InputTimeRangeInterface extends Omit<InputInterface, 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface InputTimeRangeProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {
     defaultValue?: TimeRangeType;
     placeholder?: string;
     showTimeRangePresets?: boolean;
@@ -40,11 +40,11 @@ export interface InputTimeRangeInterface extends Omit<InputInterface, 'defaultVa
     onChange?: (value: TimeRangeType | undefined) => void;
     onBlur?: (value: TimeRangeType | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
-    popoverProperties?: Omit<PopoverInterface, 'children' | 'content'>;
-    buttonProperties?: ButtonInterface;
+    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    buttonProperties?: ButtonProperties;
 }
-export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface, InputTimeRangeInterface>(function (
-    properties: InputTimeRangeInterface,
+export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface, InputTimeRangeProperties>(function (
+    properties: InputTimeRangeProperties,
     reference: React.Ref<InputTimeRangeReferenceInterface>,
 ) {
     // References
@@ -170,7 +170,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
         return (
             <a
                 id={camelCase(properties.text)}
-                className={`rounded-medium cursor-pointer p-1.5 text-xs dark:text-light-4 dark:hover:bg-dark-4 ${
+                className={`cursor-pointer rounded-medium p-1.5 text-xs dark:text-light-4 dark:hover:bg-dark-4 ${
                     properties.isActive ? 'bg-light-4/50 dark:bg-dark-4/50' : 'hover:bg-light-4'
                 }`}
                 onClick={properties.onClick}

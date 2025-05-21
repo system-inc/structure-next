@@ -27,7 +27,7 @@ import {
 import { ticketStatusOptions } from '@structure/source/ops/pages/support/constants';
 
 // Component - TicketStatusAndAssignment
-export interface TicketStatusAndAssignmentInterface {
+export interface TicketStatusAndAssignmentProperties {
     ticketId: string;
     ticketStatus: SupportTicketStatus;
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles'];
@@ -35,7 +35,7 @@ export interface TicketStatusAndAssignmentInterface {
     assignedToProfileId: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['assignedToProfileId'];
     onTicketStatusChange: (ticketId: string, status: SupportTicketStatus) => void;
 }
-export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentInterface) {
+export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentProperties) {
     // Support Profile options
     // an array of all support profiles options with "Unassigned" as the first option
     // const supportProfileOptions = supportProfiles

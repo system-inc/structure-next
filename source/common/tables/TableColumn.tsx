@@ -1,5 +1,5 @@
 // Interface - TableColumnPossibleValueInterface
-export interface TableColumnPossibleValueInterface {
+export interface TableColumnPossibleValueProperties {
     value: string;
     title?: string;
     hexColor?: string;
@@ -19,11 +19,11 @@ export enum TableColumnType {
 }
 
 // Interface - TableColumn
-export interface TableColumnInterface {
+export interface TableColumnProperties {
     identifier: string;
     title: string;
     description?: string;
-    possibleValues?: TableColumnPossibleValueInterface[];
+    possibleValues?: TableColumnPossibleValueProperties[];
     type?: TableColumnType;
     sortable?: boolean;
     hidden?: boolean;

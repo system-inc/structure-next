@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import OpsNavigationTrail from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 import Table from '@structure/source/common/tables/Table';
-import { TableRowInterface } from '@structure/source/common/tables/TableRow';
+import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
 import { useSuspenseQuery } from '@apollo/client';
@@ -101,7 +101,7 @@ export function DevelopersDatabasePage() {
                                                     //     value: table.rowCount,
                                                     // },
                                                 ],
-                                            } as TableRowInterface;
+                                            } as TableRowProperties;
                                         }) || []
                                     }
                                     search={true}

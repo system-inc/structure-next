@@ -7,7 +7,7 @@ import { usePathname as useUrlPath } from 'next/navigation';
 // Dependencies - Main Components
 import OpsNavigationLinks from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
 import {
-    OpsNavigationLinkInterface,
+    OpsNavigationLinkProperties,
     OpsNavigationLink,
 } from '@structure/source/ops/layouts/navigation/OpsNavigationLink';
 import { OpsNavigationLinkGroup } from '@structure/source/ops/layouts/navigation/OpsNavigationLinkGroup';
@@ -20,7 +20,7 @@ export function OpsNavigation() {
     // Memoize the internal navigation links based on the current URL
     const memoizedOpsNavigationLinks = React.useMemo(
         function () {
-            function setActiveFlag(opsNavigationLink: OpsNavigationLinkInterface): OpsNavigationLinkInterface {
+            function setActiveFlag(opsNavigationLink: OpsNavigationLinkProperties): OpsNavigationLinkProperties {
                 // Check if the link is active, and handle a special case for the root link
                 if(opsNavigationLink.title === 'Home') {
                     opsNavigationLink.active = urlPath === '/ops';

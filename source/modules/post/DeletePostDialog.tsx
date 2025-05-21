@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
@@ -12,10 +12,10 @@ import { useMutation, useApolloClient } from '@apollo/client';
 import { PostDeleteDocument, PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - DeletePostDialog
-export interface DeletePostDialogInterface extends DialogInterface {
+export interface DeletePostDialogProperties extends DialogProperties {
     postIdentifier: string;
 }
-export function DeletePostDialog(properties: DeletePostDialogInterface) {
+export function DeletePostDialog(properties: DeletePostDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

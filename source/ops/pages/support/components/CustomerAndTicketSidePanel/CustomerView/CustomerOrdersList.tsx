@@ -14,11 +14,11 @@ import { SupportTicketAccountAndCommerceOrdersPrivelegedQuery } from '@structure
 import { ArrowRight } from '@phosphor-icons/react';
 
 // Component - CustomerOrdersList
-export interface CustomerOrdersListInterface {
+export interface CustomerOrdersListProperties {
     orders?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['commerceOrdersPrivileged']['items'];
     changed?: boolean;
 }
-export function CustomerOrdersList(properties: CustomerOrdersListInterface) {
+export function CustomerOrdersList(properties: CustomerOrdersListProperties) {
     const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(null);
 
     React.useEffect(

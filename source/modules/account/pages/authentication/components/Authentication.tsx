@@ -35,12 +35,12 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Authentication
-export interface AuthenticationInterface {
+export interface AuthenticationProperties {
     className?: string;
     variant?: 'Page' | 'Dialog' | 'App';
     scope: 'SignIn' | 'Maintenance';
 }
-export function Authentication(properties: AuthenticationInterface) {
+export function Authentication(properties: AuthenticationProperties) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
         AccountAuthenticationQuery['accountAuthentication'] | undefined

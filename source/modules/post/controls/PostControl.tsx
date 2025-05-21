@@ -10,13 +10,13 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostControl
-export interface PostControlInterface {
+export interface PostControlProperties {
     className?: string;
     children?: React.ReactNode;
     href?: string;
     onClick?: () => void;
 }
-export function PostControl(properties: PostControlInterface) {
+export function PostControl(properties: PostControlProperties) {
     const Component = properties.href ? Link : 'div';
 
     // Render the component

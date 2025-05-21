@@ -54,10 +54,10 @@ const WebSocketViaSharedWorkerContext = React.createContext<WebSocketViaSharedWo
 );
 
 // Component - WebSocketViaSharedWorkerProvider
-export interface WebSocketViaSharedWorkerProviderInterface {
+export interface WebSocketViaSharedWorkerProviderProperties {
     children: React.ReactNode;
 }
-export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedWorkerProviderInterface) {
+export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedWorkerProviderProperties) {
     // State
     const [isSharedWorkerSupported, setIsSharedWorkerSupported] = React.useState<boolean>(false);
     const [isSharedWorkerConnected, setIsSharedWorkerConnected] = React.useState<boolean>(false);

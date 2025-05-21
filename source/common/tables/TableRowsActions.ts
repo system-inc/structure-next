@@ -1,6 +1,6 @@
 // Dependencies - Main Components
-import { TableRowInterface } from '@structure/source/common/tables/TableRow';
-import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
+import { TableRowProperties } from '@structure/source/common/tables/TableRow';
+import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
 
 // Copy as JSON Action
 export const copyAsJsonAction = {
@@ -97,8 +97,8 @@ export const defaultTableRowsActions = [
 
 // Function to convert rows into an object
 function convertRowsIntoObject(
-    rows: TableRowInterface[],
-    columns: TableColumnInterface[],
+    rows: TableRowProperties[],
+    columns: TableColumnProperties[],
     onlyVisibleColumns: boolean = false,
 ) {
     // console.log('rows', rows);
@@ -132,8 +132,8 @@ function convertRowsIntoObject(
 
 // Function to convert rows into comma-separated values
 function convertRowsIntoCsv(
-    rows: TableRowInterface[],
-    columns: TableColumnInterface[],
+    rows: TableRowProperties[],
+    columns: TableColumnProperties[],
     onlyVisibleColumns: boolean = false,
 ) {
     let csv = '';
@@ -168,7 +168,7 @@ function downloadFile(fileName: string, content: string, contentType: string) {
 }
 
 // Function to copy rows as JSON to clipboard
-export async function copyRowsAsJsonToClipboard(rows: TableRowInterface[], columns: TableColumnInterface[]) {
+export async function copyRowsAsJsonToClipboard(rows: TableRowProperties[], columns: TableColumnProperties[]) {
     const json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
     console.log('json', json);
     await navigator.clipboard.writeText(json);
@@ -176,8 +176,8 @@ export async function copyRowsAsJsonToClipboard(rows: TableRowInterface[], colum
 
 // Function to copy rows as JSON to clipboard (visible columns only)
 export async function copyRowsAsJsonToClipboardVisibleColumns(
-    rows: TableRowInterface[],
-    columns: TableColumnInterface[],
+    rows: TableRowProperties[],
+    columns: TableColumnProperties[],
 ) {
     const json = JSON.stringify(convertRowsIntoObject(rows, columns, true), null, 4);
     console.log('json', json);
@@ -185,7 +185,7 @@ export async function copyRowsAsJsonToClipboardVisibleColumns(
 }
 
 // Function to export rows as JSON file
-export async function exportRowsAsJsonFile(rows: TableRowInterface[], columns: TableColumnInterface[]) {
+export async function exportRowsAsJsonFile(rows: TableRowProperties[], columns: TableColumnProperties[]) {
     const json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
     console.log('json', json);
     downloadFile('rows.json', json, 'application/json');
@@ -193,8 +193,8 @@ export async function exportRowsAsJsonFile(rows: TableRowInterface[], columns: T
 
 // Function to export rows as JSON file (visible columns only)
 export async function exportRowsAsJsonFileVisibleColumnsOnly(
-    rows: TableRowInterface[],
-    columns: TableColumnInterface[],
+    rows: TableRowProperties[],
+    columns: TableColumnProperties[],
 ) {
     const json = JSON.stringify(convertRowsIntoObject(rows, columns, true), null, 4);
     console.log('json', json);
@@ -202,7 +202,7 @@ export async function exportRowsAsJsonFileVisibleColumnsOnly(
 }
 
 // Function to copy rows as CSV to clipboard
-export async function copyRowsAsCsvToClipboard(rows: TableRowInterface[], columns: TableColumnInterface[]) {
+export async function copyRowsAsCsvToClipboard(rows: TableRowProperties[], columns: TableColumnProperties[]) {
     const csv = convertRowsIntoCsv(rows, columns);
     console.log('csv', csv);
     await navigator.clipboard.writeText(csv);
@@ -210,8 +210,8 @@ export async function copyRowsAsCsvToClipboard(rows: TableRowInterface[], column
 
 // Function to copy rows as CSV to clipboard (visible columns only)
 export async function copyRowsAsCsvToClipboardVisibleColumns(
-    rows: TableRowInterface[],
-    columns: TableColumnInterface[],
+    rows: TableRowProperties[],
+    columns: TableColumnProperties[],
 ) {
     const csv = convertRowsIntoCsv(rows, columns, true);
     console.log('csv', csv);
@@ -219,7 +219,7 @@ export async function copyRowsAsCsvToClipboardVisibleColumns(
 }
 
 // Function to export rows as CSV file
-export async function exportRowsAsCsvFile(rows: TableRowInterface[], columns: TableColumnInterface[]) {
+export async function exportRowsAsCsvFile(rows: TableRowProperties[], columns: TableColumnProperties[]) {
     const csv = convertRowsIntoCsv(rows, columns);
     console.log('csv', csv);
     downloadFile('rows.csv', csv, 'text/csv');
@@ -227,8 +227,8 @@ export async function exportRowsAsCsvFile(rows: TableRowInterface[], columns: Ta
 
 // Function to export rows as CSV file (visible columns only)
 export async function exportRowsAsCsvFileVisibleColumnsOnly(
-    rows: TableRowInterface[],
-    columns: TableColumnInterface[],
+    rows: TableRowProperties[],
+    columns: TableColumnProperties[],
 ) {
     const csv = convertRowsIntoCsv(rows, columns, true);
     console.log('csv', csv);

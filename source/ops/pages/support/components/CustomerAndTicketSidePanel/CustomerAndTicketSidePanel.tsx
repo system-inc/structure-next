@@ -22,12 +22,12 @@ import {
 import { usePrevious } from '@structure/source/utilities/React';
 
 // Component - CustomerTicketDetails
-export interface CustomerTicketDetailsInterface {
+export interface CustomerTicketDetailsProperties {
     ticket?: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0];
     account?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['accountPrivileged'];
     commerceOrders?: SupportTicketAccountAndCommerceOrdersPrivelegedQuery['commerceOrdersPrivileged']['items'];
 }
-export function CustomerAndTicketSidePanel(properties: CustomerTicketDetailsInterface) {
+export function CustomerAndTicketSidePanel(properties: CustomerTicketDetailsProperties) {
     const previousTicketId = usePrevious(properties.ticket?.id);
 
     const [selectedView, setSelectedView] = React.useState<CustomerAndTicketSidePanelView>(

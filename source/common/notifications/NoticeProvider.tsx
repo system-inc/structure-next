@@ -20,10 +20,10 @@ interface NoticeContextInterface {
 const NoticeContext = React.createContext<NoticeContextInterface | undefined>(undefined);
 
 // Component - NoticeProvider
-export interface NoticeProviderInterface {
+export interface NoticeProviderProperties {
     children: React.ReactNode;
 }
-export function NoticeProvider(properties: NoticeProviderInterface) {
+export function NoticeProvider(properties: NoticeProviderProperties) {
     // State
     const [notices, setNotices] = React.useState<NoticeInterface[]>([]);
 

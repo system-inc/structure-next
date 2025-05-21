@@ -16,11 +16,11 @@ import LineLoadingAnimation from '@structure/source/common/animations/LineLoadin
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Component - AuthorizationLayout
-export interface AuthorizationLayoutInterface {
+export interface AuthorizationLayoutProperties {
     children: React.ReactNode;
     mustBeAdministrator?: boolean;
 }
-export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
+export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     // throw new Error('hi!');
     // return <NotAuthorized />;
     // return <NotConnected />;

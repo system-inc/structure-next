@@ -17,7 +17,7 @@ import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect'
 import RefreshButton from '@structure/source/common/buttons/RefreshButton';
 import Dialog from '@structure/source/common/dialogs/Dialog';
 import { ContextMenu } from '@structure/source/common/menus/ContextMenu';
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
 import { useApolloClient } from '@apollo/client';
@@ -770,7 +770,7 @@ export function Metrics() {
     });
 
     // Create the context menu items
-    const contextMenuItems: MenuItemInterface[] = [];
+    const contextMenuItems: MenuItemProperties[] = [];
     // Create a list of items for the context menu that will allow the user to click and view the records for each data source
     if(chartActiveLabel) {
         const timeIntervalValueStartAndEndDate = calculateTimeIntervalValueStartAndEndDate(

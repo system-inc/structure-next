@@ -8,7 +8,6 @@ import ProjectSettings from '@project/ProjectSettings';
 // Dependencies - Main Components
 
 // Component - HomePage
-export interface HomePageInterface {}
 export function HomePage() {
     // Render the component
     return (

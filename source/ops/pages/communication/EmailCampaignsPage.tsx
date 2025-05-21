@@ -11,7 +11,6 @@ import OpsNavigationTrail from '@structure/source/ops/layouts/navigation/OpsNavi
 // import { EmailCampaignsDocument } from '@project/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - EmailCampaignsPage
-export interface EmailCampaignsPageInterface {}
 export function EmailCampaignsPage() {
     // Render the component
     return (

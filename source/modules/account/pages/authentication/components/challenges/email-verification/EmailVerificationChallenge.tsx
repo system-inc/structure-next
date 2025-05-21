@@ -11,17 +11,17 @@ import { EmailVerificationVerifyForm } from '@structure/source/modules/account/p
 import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - EmailVerificationChallenge
-export interface EmailVerificationChallengeInterface {
+export interface EmailVerificationChallengeProperties {
     emailAddress: string;
     onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
 }
-export interface EmailVerificationChallengeInterface {
+export interface EmailVerificationChallengeProperties {
     emailAddress: string;
     onSuccess: (authenticationSession: AccountAuthenticationQuery['accountAuthentication']) => void;
     onChangeEmail?: () => void;
 }
 
-export function EmailVerificationChallenge(properties: EmailVerificationChallengeInterface) {
+export function EmailVerificationChallenge(properties: EmailVerificationChallengeProperties) {
     // Render the component
     return (
         <div>

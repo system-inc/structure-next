@@ -48,13 +48,13 @@ interface ProfileImageUploadResponse {
 }
 
 // Component - ProfileImageUploader
-export interface ProfileImageUploaderInterface {
+export interface ProfileImageUploaderProperties {
     className?: string;
     profileImageUrl?: string | null;
     alternateText?: string;
     onImageChange?: () => void;
 }
-export function ProfileImageUploader(properties: ProfileImageUploaderInterface) {
+export function ProfileImageUploader(properties: ProfileImageUploaderProperties) {
     // State
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [dialogMode, setDialogMode] = React.useState<'select' | 'edit'>('select');

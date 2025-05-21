@@ -142,10 +142,10 @@ export const readOnlyOperatingSystemThemeAtom = atom(function (get) {
 });
 
 // Component - ThemeProvider
-export interface ThemeProviderInterface {
+export interface ThemeProviderProperties {
     children: React.ReactNode;
 }
-export const ThemeProvider = function (properties: ThemeProviderInterface) {
+export const ThemeProvider = function (properties: ThemeProviderProperties) {
     // Shared State
     const theme = useAtomValue(readOnlyThemeAtom);
     const operatingSystemTheme = useAtomValue(readOnlyOperatingSystemThemeAtom);

@@ -4,18 +4,18 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { MenuInterface, Menu } from '@structure/source/common/menus/Menu';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { MenuProperties, Menu } from '@structure/source/common/menus/Menu';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - CommandDialog
-export interface DialogMenuInterface extends MenuInterface {
+export interface DialogMenuProperties extends MenuProperties {
     keyboardShortcutKey?: string;
-    dialogProperties?: DialogInterface;
+    dialogProperties?: DialogProperties;
 }
-export function DialogMenu(properties: DialogMenuInterface) {
+export function DialogMenu(properties: DialogMenuProperties) {
     // State
     const [open, setOpen] = React.useState(false);
 

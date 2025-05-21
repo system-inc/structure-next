@@ -18,12 +18,12 @@ import { AccountPasswordUpdateDocument } from '@structure/source/api/graphql/Gra
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ManagePasswordForm
-export interface ManagePasswordFormInterface {
+export interface ManagePasswordFormProperties {
     accountHasPasswordSet: boolean;
     className?: string;
     onComplete?: () => void;
 }
-export function ManagePasswordForm(properties: ManagePasswordFormInterface) {
+export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
     // Hooks
     const [updateMutation] = useMutation(AccountPasswordUpdateDocument);
 

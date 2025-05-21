@@ -4,24 +4,24 @@ import React from 'react';
 // Dependencies - Main Components
 import {
     FormInputReferenceInterface,
-    FormInputInterface,
+    FormInputProperties,
     FormInput,
     useFormInputValue,
 } from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
-import { InputDateReferenceInterface, InputDateInterface, InputDate } from '@structure/source/common/forms/InputDate';
+import { InputDateReferenceInterface, InputDateProperties, InputDate } from '@structure/source/common/forms/InputDate';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputDate
-export interface FormInputDateInterface
-    extends Omit<InputDateInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface FormInputDateProperties
+    extends Omit<InputDateProperties, 'validate'>,
+        Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
     sibling?: React.ReactNode;
 }
-export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormInputDateInterface>(function (
-    properties: FormInputDateInterface,
+export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormInputDateProperties>(function (
+    properties: FormInputDateProperties,
     reference: React.Ref<InputDateReferenceInterface>,
 ) {
     // State

@@ -10,14 +10,14 @@ import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutContentBody
-export interface SideNavigationLayoutContentBodyInterface {
+export interface SideNavigationLayoutContentBodyProperties {
     className?: string;
     containerClassName?: string;
     children: React.ReactNode;
     // FIXME: Change to React.forwardRef passing refs like this will create problems.
     scrollAreaReference?: React.RefObject<HTMLDivElement>;
 }
-export function SideNavigationLayoutContentBody(properties: SideNavigationLayoutContentBodyInterface) {
+export function SideNavigationLayoutContentBody(properties: SideNavigationLayoutContentBodyProperties) {
     // Render the component
     return (
         <ScrollArea

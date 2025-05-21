@@ -29,12 +29,12 @@ import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutNavigationSideToggle
-export interface SideNavigationLayoutNavigationSideToggleInterface {
+export interface SideNavigationLayoutNavigationSideToggleProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     className?: string;
 }
 export function SideNavigationLayoutNavigationSideToggle(
-    properties: SideNavigationLayoutNavigationSideToggleInterface,
+    properties: SideNavigationLayoutNavigationSideToggleProperties,
 ) {
     // Shared State
     const [sideNavigationLayoutNavigationOpen, setSideNavigationLayoutNavigationOpen] = useAtom(

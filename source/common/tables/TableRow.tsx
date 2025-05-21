@@ -2,30 +2,30 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableCellInterface, TableCell } from '@structure/source/common/tables/TableCell';
-import { TableHeaderCellInterface, TableHeaderCell } from '@structure/source/common/tables/TableHeaderCell';
+import { TableCellProperties, TableCell } from '@structure/source/common/tables/TableCell';
+import { TableHeaderCellProperties, TableHeaderCell } from '@structure/source/common/tables/TableHeaderCell';
 import { InputCheckboxState, InputCheckbox } from '@structure/source/common/forms/InputCheckbox';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TableRow
-export interface TableRowInterface extends React.HTMLAttributes<HTMLTableRowElement> {
-    cells: TableHeaderCellInterface[] | TableCellInterface[];
+export interface TableRowProperties extends React.HTMLAttributes<HTMLTableRowElement> {
+    cells: TableHeaderCellProperties[] | TableCellProperties[];
     type?: 'Header' | 'Body' | 'Footer';
     visible?: boolean;
 
     // Selection
     selection?: boolean;
     selected?: boolean;
-    onSelectChange?: (row: TableRowInterface, rowSelected: boolean) => void;
+    onSelectChange?: (row: TableRowProperties, rowSelected: boolean) => void;
 
     // Selected rows
     selectedRowsIndexesSet?: Set<number>;
     rowsLength?: number;
     rowIndex?: number;
 }
-export function TableRow(properties: TableRowInterface) {
+export function TableRow(properties: TableRowProperties) {
     const cells = properties.cells;
 
     // Defaults
@@ -88,7 +88,7 @@ export default TableRow;
  * Extracted sub-components to prevent re-rendering the whole table row when a cell is updated.
  */
 
-function TableRowInputCheckbox(properties: TableRowInterface) {
+function TableRowInputCheckbox(properties: TableRowProperties) {
     const checkboxRef = React.useRef<React.ElementRef<typeof InputCheckbox> | null>(null);
     const [forceSafeRerender, setForceSafeRerender] = React.useState<number>(0);
     const propertiesRowsLength = properties.rowsLength ?? 0;

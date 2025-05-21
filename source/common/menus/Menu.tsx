@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemInterface, MenuItem } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties, MenuItem } from '@structure/source/common/menus/MenuItem';
 import { InputReferenceInterface } from '@structure/source/common/forms/Input';
 import { InputText } from '@structure/source/common/forms/InputText';
 // import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
@@ -26,21 +26,25 @@ export const menuClassName =
     `text-sm bg-light text-dark dark:bg-dark+2 dark:text-light`;
 
 // Component - Menu
-export interface MenuInterface extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+export interface MenuProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     title?: string | React.ReactNode;
-    items?: MenuItemInterface[];
+    items?: MenuItemProperties[];
     itemsClassName?: string;
     search?: boolean;
     highlightItemOnMount?: boolean; // Highlight the first item or first selected item on mount
-    onItemSelected?: (item: MenuItemInterface, itemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) => void;
+    onItemSelected?: (
+        item: MenuItemProperties,
+        itemRenderIndex?: number,
+        event?: React.MouseEvent<HTMLElement>,
+    ) => void;
 
     // Optional asynchronous loading of menu items
-    loadItems?: () => Promise<MenuItemInterface[]>;
+    loadItems?: () => Promise<MenuItemProperties[]>;
     loadingItems?: boolean;
     loadingItemsMessage?: React.ReactNode;
     loadingItemsError?: React.ReactNode;
 }
-export function Menu(properties: MenuInterface) {
+export function Menu(properties: MenuProperties) {
     // References
     const itemDomElementReferences = React.useRef<(HTMLButtonElement | null)[]>([]);
     const searchInputTextReference = React.useRef<InputReferenceInterface>(null);
@@ -54,7 +58,7 @@ export function Menu(properties: MenuInterface) {
     let firstSelectedItemIndex = -1;
 
     // State
-    const [items, setItems] = React.useState<MenuItemInterface[]>(
+    const [items, setItems] = React.useState<MenuItemProperties[]>(
         (properties.items || []).map(function (item, itemIndex) {
             // If value is undefined, set it to the content if the content is a string
             if(item.value === undefined && typeof item.content === 'string') {
@@ -69,7 +73,7 @@ export function Menu(properties: MenuInterface) {
             return item;
         }),
     );
-    const [itemsToRender, setItemsToRender] = React.useState<MenuItemInterface[]>(items);
+    const [itemsToRender, setItemsToRender] = React.useState<MenuItemProperties[]>(items);
     const [itemsToRenderHighlightIndex, setItemsToRenderHighlightIndex] = React.useState(
         highlightItemOnMount ? (firstSelectedItemIndex !== -1 ? firstSelectedItemIndex : 0) : -1,
     );
@@ -107,7 +111,7 @@ export function Menu(properties: MenuInterface) {
     // Intercept the onClick events for items
     const propertiesOnItemSelected = properties.onItemSelected;
     const itemOnClickIntercept = React.useCallback(
-        function (item: MenuItemInterface, itemRenderIndex: number, event: React.MouseEvent<HTMLElement, MouseEvent>) {
+        function (item: MenuItemProperties, itemRenderIndex: number, event: React.MouseEvent<HTMLElement, MouseEvent>) {
             // console.log('itemOnClickIntercept', itemRenderIndex, event.currentTarget);
 
             // Manage highlight
@@ -128,7 +132,7 @@ export function Menu(properties: MenuInterface) {
 
     // Intercept the onMouseMove events for items
     const itemOnMouseMoveIntercept = React.useCallback(function (
-        item: MenuItemInterface,
+        item: MenuItemProperties,
         itemIndex: number,
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) {
@@ -237,7 +241,7 @@ export function Menu(properties: MenuInterface) {
             const searchPattern = new RegExp(string, 'i');
 
             // Collect all of the indexes of the items that match the search
-            const foundMenuItems: MenuItemInterface[] = [];
+            const foundMenuItems: MenuItemProperties[] = [];
 
             // Loop through the items
             for(let i = 0; i < items.length; i++) {
@@ -326,7 +330,7 @@ export function Menu(properties: MenuInterface) {
                 setLoadingItems(true);
 
                 // Load the items
-                let items: MenuItemInterface[] = [];
+                let items: MenuItemProperties[] = [];
                 try {
                     items = await propertiesLoadItems();
 

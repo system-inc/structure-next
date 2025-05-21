@@ -19,10 +19,10 @@ import // Envelope,
 '@phosphor-icons/react';
 
 // Component - TicketDetails
-interface TicketDetailsInterface {
+export interface TicketDetailsProperties {
     ticket?: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0];
 }
-export function TicketDetails(properties: TicketDetailsInterface) {
+export function TicketDetails(properties: TicketDetailsProperties) {
     console.log('TICKET DETAILS - TICKET', properties.ticket);
 
     // Properties

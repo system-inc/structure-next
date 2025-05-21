@@ -25,13 +25,13 @@ import { LineLoadingAnimation } from '@structure/source/common/animations/LineLo
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLayoutContent
-export interface SideNavigationLayoutContentInterface {
+export interface SideNavigationLayoutContentProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     topTitle?: React.ReactNode;
     children: React.ReactNode;
     className?: string;
 }
-export function SideNavigationLayoutContent(properties: SideNavigationLayoutContentInterface) {
+export function SideNavigationLayoutContent(properties: SideNavigationLayoutContentProperties) {
     // References
     const firstMount = React.useRef(true);
 

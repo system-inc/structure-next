@@ -11,7 +11,7 @@ import { fullDate } from '@structure/source/utilities/Time';
 import { SupportAllSupportProfilesQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - TicketInfo
-export interface TicketInformationInterface {
+export interface TicketInformationProperties {
     email: string;
     status: string;
     createdAt: string;
@@ -23,7 +23,7 @@ export interface TicketInformationInterface {
     isLoadingProfiles?: boolean;
 }
 
-export function TicketInformation(properties: TicketInformationInterface) {
+export function TicketInformation(properties: TicketInformationProperties) {
     // State for selected username
     const [selectedUsername, setSelectedUsername] = React.useState<string | undefined>(
         properties.assignedToProfile?.username,

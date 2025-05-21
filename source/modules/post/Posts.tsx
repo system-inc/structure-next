@@ -23,11 +23,11 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 // import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - Posts
-export interface PostsInterface {
+export interface PostsProperties {
     type: 'Post' | 'Article' | 'Idea' | 'Question' | 'Principle';
     itemsPerPage?: number;
 }
-export function Posts(properties: PostsInterface) {
+export function Posts(properties: PostsProperties) {
     // Hooks
     const postsQueryState = useQuery(PostsDocument, {
         variables: {

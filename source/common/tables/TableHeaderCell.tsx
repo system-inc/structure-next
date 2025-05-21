@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
-import { TableCellInterface } from '@structure/source/common/tables/TableCell';
+import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
+import { TableCellProperties } from '@structure/source/common/tables/TableCell';
 import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 import { Button } from '@structure/source/common/buttons/Button';
@@ -19,13 +19,13 @@ import HideIcon from '@structure/assets/icons/security/HideIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TableHeaderCell
-export interface TableHeaderCellInterface extends TableCellInterface {
+export interface TableHeaderCellProperties extends TableCellProperties {
     menu?: boolean;
 
-    onColumnSortChange?: (sort: 'Ascending' | 'Descending' | 'None', column: TableColumnInterface) => void;
-    onColumnVisibilityChange?: (visible: boolean, column?: TableColumnInterface) => void;
+    onColumnSortChange?: (sort: 'Ascending' | 'Descending' | 'None', column: TableColumnProperties) => void;
+    onColumnVisibilityChange?: (visible: boolean, column?: TableColumnProperties) => void;
 }
-export function TableHeaderCell(properties: TableHeaderCellInterface) {
+export function TableHeaderCell(properties: TableHeaderCellProperties) {
     // console.log('properties', properties);
 
     // Render the component
@@ -123,7 +123,7 @@ export function TableHeaderCell(properties: TableHeaderCellInterface) {
                                                                             key={possibleValueIndex}
                                                                             className={mergeClassNames(
                                                                                 'bg-[' + possibleValue.hexColor + ']',
-                                                                                'rounded-medium inline-flex border px-2.5 py-1 text-xs font-medium',
+                                                                                'inline-flex rounded-medium border px-2.5 py-1 text-xs font-medium',
                                                                             )}
                                                                         >
                                                                             {possibleValue.title || possibleValue.value}

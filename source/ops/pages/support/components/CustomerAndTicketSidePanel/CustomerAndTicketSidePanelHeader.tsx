@@ -11,11 +11,11 @@ import { SegmentedControl, SegmentedControlItem } from '@structure/source/common
 import { BorderContainer } from '../BorderContainer';
 
 // Component - CustomerTicketHeader
-interface CustomerTicketHeaderInterface {
+interface CustomerTicketHeaderProperties {
     selectedView: CustomerAndTicketSidePanelView;
     onViewChange: (view: CustomerAndTicketSidePanelView) => void;
 }
-export function CustomerTicketHeader(properties: CustomerTicketHeaderInterface) {
+export function CustomerTicketHeader(properties: CustomerTicketHeaderProperties) {
     // Function to handle the user changing the view
     function handleUpdateView(view: string) {
         properties.onViewChange(view as CustomerAndTicketSidePanelView);
