@@ -5,11 +5,11 @@ import React from 'react';
 // import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 
 // Component - TableCellContentOption
-export interface TableCellContentOptionInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentOptionProperties extends React.HTMLAttributes<HTMLElement> {
     value: string;
     possibleValues?: string[];
 }
-export function TableCellContentOption(properties: TableCellContentOptionInterface) {
+export function TableCellContentOption(properties: TableCellContentOptionProperties) {
     // Hooks
     // const { addNotice } = useNotice();
 

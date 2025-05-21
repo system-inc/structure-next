@@ -18,12 +18,12 @@ import { PostReactionCreateDocument } from '@structure/source/api/graphql/GraphQ
 // import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - PostCommentReactionControl
-export interface PostCommentReactionControlInterface {
+export interface PostCommentReactionControlProperties {
     ideaId: string;
     className?: string;
     onReactionCreate: (content: string) => void;
 }
-export function PostCommentReactionControl(properties: PostCommentReactionControlInterface) {
+export function PostCommentReactionControl(properties: PostCommentReactionControlProperties) {
     // Hooks
     const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
 

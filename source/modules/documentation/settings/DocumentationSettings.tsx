@@ -11,10 +11,10 @@ import { DocumentationSettingsDialog } from '@structure/source/modules/documenta
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - DocumentationSettings
-export interface DocumentationSettingsInterface {
+export interface DocumentationSettingsProperties {
     className?: string;
 }
-export function DocumentationSettings(properties: DocumentationSettingsInterface) {
+export function DocumentationSettings(properties: DocumentationSettingsProperties) {
     // State
     const [isSettingsDialogOpen, setIsSettingsDialogOpen] = React.useState(false);
 

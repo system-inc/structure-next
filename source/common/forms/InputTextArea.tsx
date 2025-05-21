@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputInterface } from '@structure/source/common/forms/Input';
+import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
 
 // Dependencies - Styles
 // import { useTheme } from '@structure/source/theme/ThemeProvider';
@@ -78,7 +78,7 @@ export const InputTextAreaSizes = {
 };
 
 // Component - InputTextArea
-export interface InputTextAreaInterface extends Omit<InputInterface, 'onChange' | 'onBlur'> {
+export interface InputTextAreaProperties extends Omit<InputProperties, 'onChange' | 'onBlur'> {
     containerClassName?: string;
 
     // <textarea /> tag properties
@@ -100,8 +100,8 @@ export interface InputTextAreaInterface extends Omit<InputInterface, 'onChange' 
     variant?: keyof typeof InputTextAreaVariants;
     size?: keyof typeof InputTextAreaSizes;
 }
-export const InputTextArea = React.forwardRef<InputReferenceInterface, InputTextAreaInterface>(function (
-    properties: InputTextAreaInterface,
+export const InputTextArea = React.forwardRef<InputReferenceInterface, InputTextAreaProperties>(function (
+    properties: InputTextAreaProperties,
     reference: React.Ref<InputReferenceInterface>,
 ) {
     // Hooks

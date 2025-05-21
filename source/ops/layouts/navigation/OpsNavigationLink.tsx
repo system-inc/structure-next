@@ -8,14 +8,14 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // NavigationLink
-export interface OpsNavigationLinkInterface {
+export interface OpsNavigationLinkProperties {
     title: string;
     href: string;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     active?: boolean;
-    links?: OpsNavigationLinkInterface[];
+    links?: OpsNavigationLinkProperties[];
 }
-export function OpsNavigationLink(properties: OpsNavigationLinkInterface) {
+export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
     // console.log('OpsNavigationLink', properties.title, 'active', properties.active);
 
     // The icon component to use

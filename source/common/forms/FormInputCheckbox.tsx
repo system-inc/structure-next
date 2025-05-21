@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import {
     FormInputReferenceInterface,
-    FormInputInterface,
+    FormInputProperties,
     FormInput,
     useFormInputValue,
 } from '@structure/source/common/forms/FormInput';
@@ -12,7 +12,7 @@ import { ValidationResult, mergeValidationResults } from '@structure/source/util
 import {
     InputCheckboxState,
     InputCheckboxReferenceInterface,
-    InputCheckboxInterface,
+    InputCheckboxProperties,
     InputCheckbox,
 } from '@structure/source/common/forms/InputCheckbox';
 import TipIcon from '@structure/source/common/popovers/TipIcon';
@@ -21,13 +21,13 @@ import TipIcon from '@structure/source/common/popovers/TipIcon';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputCheckbox
-export interface FormInputCheckboxInterface
-    extends Omit<InputCheckboxInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
+export interface FormInputCheckboxProperties
+    extends Omit<InputCheckboxProperties, 'validate'>,
+        Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur' | 'size'> {
     sibling?: React.ReactNode;
 }
-export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, FormInputCheckboxInterface>(
-    function (properties: FormInputCheckboxInterface, reference: React.Ref<InputCheckboxReferenceInterface>) {
+export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, FormInputCheckboxProperties>(
+    function (properties: FormInputCheckboxProperties, reference: React.Ref<InputCheckboxReferenceInterface>) {
         // State
         const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
             properties.validationResult,

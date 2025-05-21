@@ -17,7 +17,7 @@ import { isImageFile } from '@structure/source/utilities/images/ImageFile';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - ImageSelector
-export interface ImageSelectorInterface {
+export interface ImageSelectorProperties {
     className?: string;
     children?: React.ReactNode;
     variant?: 'Button' | 'DropZone' | 'Simple';
@@ -28,7 +28,7 @@ export interface ImageSelectorInterface {
     allowMultipleFileSelection?: boolean;
     onFileSelected: (file: File) => void;
 }
-export function ImageSelector(properties: ImageSelectorInterface) {
+export function ImageSelector(properties: ImageSelectorProperties) {
     // References
     const fileInputReference = React.useRef<HTMLInputElement>(null);
 
@@ -151,7 +151,7 @@ export function ImageSelector(properties: ImageSelectorInterface) {
                     accept={properties.accept || 'image/*'}
                     multiple={properties.allowMultipleFileSelection}
                     onChange={handleFileChange}
-                    className="border-neutral-200 dark:border-neutral-700 rounded-medium w-full cursor-pointer border bg-transparent p-2 text-sm"
+                    className="border-neutral-200 dark:border-neutral-700 w-full cursor-pointer rounded-medium border bg-transparent p-2 text-sm"
                 />
                 {error && (
                     <Alert variant="error" className="mt-2">

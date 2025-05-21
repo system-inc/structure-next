@@ -8,11 +8,11 @@ const borderVariants = {
 };
 
 // Component - Container
-export interface BorderContainerInterface {
+export interface BorderContainerProperties {
     border?: keyof typeof borderVariants;
     children: React.ReactNode;
 }
-export function BorderContainer(properties: BorderContainerInterface) {
+export function BorderContainer(properties: BorderContainerProperties) {
     const border = properties.border !== undefined ? properties.border : 'bottom';
 
     return (

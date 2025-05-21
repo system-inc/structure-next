@@ -1,15 +1,15 @@
 // Dependencies - Main Components
 import {
-    AuthenticationInterface,
+    AuthenticationProperties,
     Authentication,
 } from '@structure/source/modules/account/pages/authentication/components/Authentication';
 import { ThemeToggle } from '@structure/source/theme/ThemeToggle';
 
 // Component - AuthenticationPage
-export interface AuthenticationPageInterface {
-    scope: AuthenticationInterface['scope'];
+export interface AuthenticationPageProperties {
+    scope: AuthenticationProperties['scope'];
 }
-export function AuthenticationPage(properties: AuthenticationPageInterface) {
+export function AuthenticationPage(properties: AuthenticationPageProperties) {
     // Render the component
     return (
         <>

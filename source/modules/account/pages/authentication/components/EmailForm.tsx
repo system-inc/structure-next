@@ -22,14 +22,14 @@ import {
 import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
 
 // Component - EmailForm
-export interface EmailFormInterface {
+export interface EmailFormProperties {
     children?: React.ReactNode;
     onSuccess: (
         emailAddress: string,
         authenticationSession: AccountAuthenticationQuery['accountAuthentication'],
     ) => void;
 }
-export function EmailForm(properties: EmailFormInterface) {
+export function EmailForm(properties: EmailFormProperties) {
     // Hooks
     const [accountAuthenticationRegistrationOrSignInCreateMutation] = useMutation(
         AccountAuthenticationRegistrationOrSignInCreateDocument,

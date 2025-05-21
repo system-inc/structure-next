@@ -4,15 +4,15 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
 import {
-    AuthenticationInterface,
+    AuthenticationProperties,
     Authentication,
 } from '@structure/source/modules/account/pages/authentication/components/Authentication';
 
 // Component - AuthenticationDialog
-export interface AuthenticationDialogInterface extends Omit<AuthenticationInterface, 'variant'>, DialogInterface {}
-export function AuthenticationDialog(properties: AuthenticationDialogInterface) {
+export interface AuthenticationDialogProperties extends Omit<AuthenticationProperties, 'variant'>, DialogProperties {}
+export function AuthenticationDialog(properties: AuthenticationDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 

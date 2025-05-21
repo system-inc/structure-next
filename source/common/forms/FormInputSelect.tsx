@@ -2,28 +2,28 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 import {
     FormInputReferenceInterface,
-    FormInputInterface,
+    FormInputProperties,
     FormInput,
     useFormInputValue,
 } from '@structure/source/common/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
-import { InputSelectInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
+import { InputSelectProperties, InputSelect } from '@structure/source/common/forms/InputSelect';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputSelect
-export interface FormInputSelectInterface
-    extends Omit<InputSelectInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
-    items: MenuItemInterface[];
+export interface FormInputSelectProperties
+    extends Omit<InputSelectProperties, 'validate'>,
+        Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
+    items: MenuItemProperties[];
     sibling?: React.ReactNode;
 }
-export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, FormInputSelectInterface>(function (
-    properties: FormInputSelectInterface,
+export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, FormInputSelectProperties>(function (
+    properties: FormInputSelectProperties,
     reference: React.Ref<FormInputReferenceInterface>,
 ) {
     // State

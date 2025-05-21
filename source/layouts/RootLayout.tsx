@@ -54,7 +54,7 @@ export const viewport: Viewport = {
 };
 
 // Component - RootLayout
-export interface RootLayoutInterface extends React.HTMLProps<HTMLHtmlElement> {
+export interface RootLayoutProperties extends React.HTMLProps<HTMLHtmlElement> {
     htmlClassName?: string;
     bodyClassName?: string;
     mainClassName?: string;
@@ -64,7 +64,7 @@ export interface RootLayoutInterface extends React.HTMLProps<HTMLHtmlElement> {
     }>;
     children: React.ReactNode;
 }
-export async function RootLayout(properties: RootLayoutInterface) {
+export async function RootLayout(properties: RootLayoutProperties) {
     // Use the default Providers component if one is not provided
     const ProvidersComponent = properties.providersComponent || Providers;
 

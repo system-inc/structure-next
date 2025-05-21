@@ -32,10 +32,10 @@ const SideNavigationLayoutNavigation = dynamic(
 export const internalLayoutIdentifier = 'Internal';
 
 // Component - InternalLayout
-export interface InternalLayoutInterface {
+export interface InternalLayoutProperties {
     children: React.ReactNode;
 }
-export function InternalLayout(properties: InternalLayoutInterface) {
+export function InternalLayout(properties: InternalLayoutProperties) {
     // Effect to adjust the background color of the body on mount
     // We want the navigation to be dark but the content to be a bit lighter
     // React.useEffect(function () {

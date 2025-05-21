@@ -14,7 +14,7 @@ import { ObjectRequestParameterRow } from '@structure/source/modules/documentati
 import { ArrayRequestParameterRow } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/ArrayRequestParameterRow';
 
 // Dependencies - Types
-import { RequestParameterInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
+import { RequestParameterProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Types
 export type RequestParameterSectionType = 'Headers' | 'UrlPath' | 'UrlQuery' | 'Body';
@@ -24,7 +24,7 @@ export interface RequestParameterStateInterface {
 }
 
 // Component - ParameterRow
-export interface RequestParameterRowInterface extends RequestParameterInterface {
+export interface RequestParameterRowProperties extends RequestParameterProperties {
     section: RequestParameterSectionType;
     name: string;
     enabled: boolean;
@@ -35,7 +35,7 @@ export interface RequestParameterRowInterface extends RequestParameterInterface 
         requestParameterState: RequestParameterStateInterface,
     ) => void;
 }
-export function RequestParameterRow(properties: RequestParameterRowInterface) {
+export function RequestParameterRow(properties: RequestParameterRowProperties) {
     // References
     const inputCheckboxReference = React.useRef<InputCheckboxReferenceInterface>(null);
 
@@ -215,7 +215,7 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                 {/* Type */}
                 <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                        <span className="rounded-medium inline-block bg-light-2 px-1.5 py-0.5 text-sm dark:bg-dark-3">
+                        <span className="inline-block rounded-medium bg-light-2 px-1.5 py-0.5 text-sm dark:bg-dark-3">
                             {properties.type}
                         </span>
                     </div>
@@ -244,7 +244,7 @@ export function RequestParameterRow(properties: RequestParameterRowInterface) {
                         ) : (
                             <ObjectRequestParameterRow
                                 {...properties}
-                                fields={properties.fields as RequestParameterInterface[]}
+                                fields={properties.fields as RequestParameterProperties[]}
                                 indentationLevel={0}
                                 onStateChange={properties.onStateChange}
                                 onChildStateChange={handleChildStateChange}

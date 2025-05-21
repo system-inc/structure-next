@@ -22,16 +22,16 @@ import { initializeThirdPartyAttribution } from '@structure/source/modules/engag
 let engagementProviderMounted = false;
 
 // Context - Engagement
-interface EngagementContextInterface {
+interface EngagementContextProperties {
     path: string;
 }
-const EngagementContext = React.createContext<EngagementContextInterface | undefined>(undefined);
+const EngagementContext = React.createContext<EngagementContextProperties | undefined>(undefined);
 
 // Component - EngagementProvider
-export interface EngagementProviderInterface {
+export interface EngagementProviderProperties {
     children: React.ReactNode;
 }
-export function EngagementProvider(properties: EngagementProviderInterface) {
+export function EngagementProvider(properties: EngagementProviderProperties) {
     // Hooks
     const urlPath = usePathname() ?? '';
     const urlSearchParameters = useSearchParams();
@@ -135,12 +135,12 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
 }
 
 // Hook - useEngagement
-export function useEngagement(): EngagementContextInterface {
+export function useEngagement(): EngagementContextProperties {
     const engagementContext = React.useContext(EngagementContext);
     if(engagementContext === undefined) {
         throw new Error('useEngagement must be used within an EngagementProvider.');
     }
-    return React.useContext(EngagementContext) as EngagementContextInterface;
+    return React.useContext(EngagementContext) as EngagementContextProperties;
 }
 
 // Export - Default

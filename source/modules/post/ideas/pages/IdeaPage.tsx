@@ -20,13 +20,13 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import { slug } from '@structure/source/utilities/String';
 
 // Component - IdeaPage
-export interface IdeaPageInterface {
+export interface IdeaPageProperties {
     params: {
         ideaIdentifier: string;
         ideaSlug?: string;
     };
 }
-export function IdeaPage(properties: IdeaPageInterface) {
+export function IdeaPage(properties: IdeaPageProperties) {
     // Hooks
     const ideaQueryState = useQuery(PostDocument, {
         variables: {

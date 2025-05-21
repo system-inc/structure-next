@@ -8,13 +8,13 @@ import useMeasure from 'react-use-measure';
 import { animated, SpringConfig as SpringConfiguration, useSpring } from '@react-spring/web';
 
 // Component - Collapse
-export interface CollapseInterface {
+export interface CollapseProperties {
     children: React.ReactNode;
     isOpen: boolean;
     doNotUnmount?: boolean;
     animationConfiguration?: SpringConfiguration;
 }
-export function Collapse(properties: CollapseInterface) {
+export function Collapse(properties: CollapseProperties) {
     // Hooks
     const [domElementReference, { height }] = useMeasure();
 

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
-import { DialogInterface, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Form } from '@structure/source/common/forms/Form';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
@@ -19,11 +19,11 @@ import { PostReportCreateDocument } from '@structure/source/api/graphql/GraphQlG
 import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
 
 // Component - PostCommentReportDialog
-export interface PostCommentReportDialogInterface extends DialogInterface {
+export interface PostCommentReportDialogProperties extends DialogProperties {
     ideaId: string;
     ideaTitle: string;
 }
-export function PostCommentReportDialog(properties: PostCommentReportDialogInterface) {
+export function PostCommentReportDialog(properties: PostCommentReportDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
     const [reportError, setReportError] = React.useState(false);

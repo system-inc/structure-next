@@ -8,12 +8,12 @@ import { JsonNode } from '@structure/source/common/code/json/JsonNode';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Json
-export interface JsonInterface {
+export interface JsonProperties {
     data: unknown;
     initialExpansionDepth?: number;
     className?: string;
 }
-export function Json(properties: JsonInterface) {
+export function Json(properties: JsonProperties) {
     // Defaults
     const defaultExpandLevel = properties.initialExpansionDepth || 4;
 

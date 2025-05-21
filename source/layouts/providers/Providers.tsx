@@ -27,7 +27,7 @@ import { NoticeProvider } from '@structure/source/common/notifications/NoticePro
 import { TipProvider } from '@structure/source/common/popovers/TipProvider';
 
 // Component - Providers
-export interface ProvidersInterface {
+export interface ProvidersProperties {
     accountSignedIn: boolean;
     foundationProviders?: React.ComponentType<{
         children: React.ReactNode;
@@ -46,7 +46,7 @@ export interface ProvidersInterface {
     }>;
     children: React.ReactNode;
 }
-export function Providers(properties: ProvidersInterface) {
+export function Providers(properties: ProvidersProperties) {
     const FoundationProviders = properties.foundationProviders || Wrapper;
     const StateProviders = properties.stateProviders || Wrapper;
     const ThemeProviders = properties.themeProviders || Wrapper;

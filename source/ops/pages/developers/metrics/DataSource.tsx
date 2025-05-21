@@ -30,7 +30,7 @@ import { rgbStringToHexString, hexStringToRgb } from '@structure/source/utilitie
 import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - DataSource
-export interface DataSourceInterface {
+export interface DataSourceProperties {
     settings: DataSourceType & {
         startTime?: Date;
         endTime?: Date;
@@ -48,7 +48,7 @@ export interface DataSourceInterface {
     error?: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export function DataSource(properties: DataSourceInterface) {
+export function DataSource(properties: DataSourceProperties) {
     // Query the API for the available columns for the current table table
     const dataInteractionDatabaseTableQueryState = useQuery(DataInteractionDatabaseTableDocument, {
         variables: {

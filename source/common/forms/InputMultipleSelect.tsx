@@ -2,11 +2,11 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputInterface } from '@structure/source/common/forms/Input';
-import { PopoverInterface } from '@structure/source/common/popovers/Popover';
-import { PopoverMenuInterface, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { InputProperties } from '@structure/source/common/forms/Input';
+import { PopoverProperties } from '@structure/source/common/popovers/Popover';
+import { PopoverMenuProperties, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
@@ -29,7 +29,7 @@ export const InputMultipleSelectSizes = {
 };
 
 // Interface - InputMultipleSelectReference
-export interface InputMultipleSelectReferenceInterface {
+export interface InputMultipleSelectReferenceProperties {
     getValue: () => string[] | undefined;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setValue: (value?: string[], event?: any) => void;
@@ -38,14 +38,14 @@ export interface InputMultipleSelectReferenceInterface {
 
 // Interface InputMultipleSelectItemInterface
 // We use property.defaultValue and value state to manage the selected items
-export interface InputMultipleSelectItemInterface extends Omit<MenuItemInterface, 'selected'> {}
+export interface InputMultipleSelectItemProperties extends Omit<MenuItemProperties, 'selected'> {}
 
 // Component - InputMultipleSelect
-export interface InputMultipleSelectInterface extends Omit<InputInterface, 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface InputMultipleSelectProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {
     defaultValue?: string[];
 
     title?: string | React.ReactNode;
-    items?: InputMultipleSelectItemInterface[];
+    items?: InputMultipleSelectItemProperties[];
     placeholder?: string;
     closeOnItemSelected?: boolean;
 
@@ -57,20 +57,20 @@ export interface InputMultipleSelectInterface extends Omit<InputInterface, 'defa
     size?: keyof typeof InputMultipleSelectSizes;
     search?: boolean;
 
-    popoverMenuProperties?: PopoverMenuInterface;
-    popoverProperties?: Omit<PopoverInterface, 'children' | 'content'>;
-    buttonProperties?: ButtonInterface;
+    popoverMenuProperties?: PopoverMenuProperties;
+    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    buttonProperties?: ButtonProperties;
 
     // Optional asynchronous loading of menu items
-    loadItems?: () => Promise<MenuItemInterface[]>;
+    loadItems?: () => Promise<MenuItemProperties[]>;
     loadingItems?: boolean;
     loadingItemsMessage?: React.ReactNode;
     loadingItemsError?: React.ReactNode;
 }
 export const InputMultipleSelect = React.forwardRef<
-    InputMultipleSelectReferenceInterface,
-    InputMultipleSelectInterface
->(function (properties: InputMultipleSelectInterface, reference: React.Ref<InputMultipleSelectReferenceInterface>) {
+    InputMultipleSelectReferenceProperties,
+    InputMultipleSelectProperties
+>(function (properties: InputMultipleSelectProperties, reference: React.Ref<InputMultipleSelectReferenceProperties>) {
     // References
     const buttonReference = React.useRef<HTMLButtonElement>(null);
 
@@ -112,7 +112,7 @@ export const InputMultipleSelect = React.forwardRef<
                 setLoadingItems(true);
 
                 // Load the items
-                let items: InputMultipleSelectItemInterface[] = [];
+                let items: InputMultipleSelectItemProperties[] = [];
                 try {
                     items = await propertiesLoadItems();
 
@@ -171,7 +171,11 @@ export const InputMultipleSelect = React.forwardRef<
     const propertiesItems = properties.items;
     const propertiesOnChange = properties.onChange;
     const onChangeIntercept = React.useCallback(
-        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: React.MouseEvent | React.KeyboardEvent | unknown) {
+        function (
+            menuItem: MenuItemProperties,
+            menuItemRenderIndex?: number,
+            event?: React.MouseEvent | React.KeyboardEvent | unknown,
+        ) {
             // console.log('InputMultipleSelect.tsx value changed:', menuItem.value);
 
             let newValue: string[] = [];

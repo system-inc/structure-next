@@ -2,23 +2,23 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableInterface, Table } from '@structure/source/common/tables/Table';
-import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
-import { TableRowInterface } from '@structure/source/common/tables/TableRow';
+import { TableProperties, Table } from '@structure/source/common/tables/Table';
+import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
+import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - Utilities
 import { titleCase } from '@structure/source/utilities/String';
 
 // Component - Table
-export interface ObjectTableInterface extends Omit<TableInterface, 'columns' | 'rows'> {
+export interface ObjectTableProperties extends Omit<TableProperties, 'columns' | 'rows'> {
     object: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key: string]: any;
     };
 }
-export function ObjectTable(properties: ObjectTableInterface) {
+export function ObjectTable(properties: ObjectTableProperties) {
     // Columns
-    let columns: TableColumnInterface[] = [];
+    let columns: TableColumnProperties[] = [];
 
     // Determine if the object is an array of objects and every item has the same keys
     let isArrayOfSimilarObjects = false;
@@ -75,14 +75,14 @@ export function ObjectTable(properties: ObjectTableInterface) {
         ];
     }
 
-    const rows: TableRowInterface[] = [];
+    const rows: TableRowProperties[] = [];
 
     // If the object is an array of objects
     if(isArrayOfSimilarObjects) {
         // Add a row for each object
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         properties.object.forEach(function (item: any, itemIndex: number) {
-            const row: TableRowInterface = {
+            const row: TableRowProperties = {
                 cells: [],
             };
 

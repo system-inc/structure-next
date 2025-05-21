@@ -8,10 +8,10 @@ import { CopyTip } from '@structure/source/common/popovers/CopyTip';
 import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - TableCellContentNumber
-export interface TableCellContentNumberInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentNumberProperties extends React.HTMLAttributes<HTMLElement> {
     value: string;
 }
-export function TableCellContentNumber(properties: TableCellContentNumberInterface) {
+export function TableCellContentNumber(properties: TableCellContentNumberProperties) {
     // Render the component
     return (
         <CopyTip

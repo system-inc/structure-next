@@ -19,7 +19,7 @@ import ChevronRightDoubleIcon from '@structure/assets/icons/interface/ChevronRig
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Pagination
-export interface PaginationInterface {
+export interface PaginationProperties {
     className?: string;
     useLinks?: boolean;
     itemsPerPageControl?: boolean;
@@ -34,7 +34,7 @@ export interface PaginationInterface {
     pagesTotal: number;
     onChange?: (itemsPerPage: number, page: number) => Promise<void> | void;
 }
-export function Pagination(properties: PaginationInterface) {
+export function Pagination(properties: PaginationProperties) {
     // console.log('Pagination', properties);
 
     // State
@@ -57,7 +57,7 @@ export function Pagination(properties: PaginationInterface) {
 
     // Extract property to avoid dependency on the whole properties object
     const propertiesOnChange = properties.onChange;
-    
+
     // Function to handle changes
     const onChangeIntercept = React.useCallback(
         async function (itemsPerPage: number, page: number) {
@@ -195,7 +195,7 @@ export function Pagination(properties: PaginationInterface) {
                 )}
                 <div className="flex items-center space-x-2">
                     {/* First Page */}
-                    { firstAndLastPageControl && (
+                    {firstAndLastPageControl && (
                         <Button
                             size="icon"
                             icon={ChevronLeftDoubleIcon}
@@ -209,9 +209,9 @@ export function Pagination(properties: PaginationInterface) {
                                 useLinks
                                     ? undefined
                                     : async function () {
-                                        const newPage = 1;
-                                        await onChangeIntercept(itemsPerPage, newPage);
-                                    }
+                                          const newPage = 1;
+                                          await onChangeIntercept(itemsPerPage, newPage);
+                                      }
                             }
                         />
                     )}
@@ -257,7 +257,7 @@ export function Pagination(properties: PaginationInterface) {
                     />
 
                     {/* Last Page */}
-                    { firstAndLastPageControl && (
+                    {firstAndLastPageControl && (
                         <Button
                             size="icon"
                             icon={ChevronRightDoubleIcon}
@@ -271,9 +271,9 @@ export function Pagination(properties: PaginationInterface) {
                                 useLinks
                                     ? undefined
                                     : async function () {
-                                        const newPage = properties.pagesTotal;
-                                        await onChangeIntercept(itemsPerPage, newPage);
-                                    }
+                                          const newPage = properties.pagesTotal;
+                                          await onChangeIntercept(itemsPerPage, newPage);
+                                      }
                             }
                         />
                     )}

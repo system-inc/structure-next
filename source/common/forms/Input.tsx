@@ -9,7 +9,7 @@ export interface InputReferenceInterface {
 }
 
 // Interface - InputInterface
-export interface InputInterface {
+export interface InputProperties {
     className?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     defaultValue?: any;

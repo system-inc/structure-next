@@ -6,8 +6,8 @@ import React from 'react';
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
 import { InputText } from '@structure/source/common/forms/InputText';
-import { InputSelectItemInterface, InputSelect } from '@structure/source/common/forms/InputSelect';
-import { TableColumnInterface } from '@structure/source/common/tables/TableColumn';
+import { InputSelectItemProperties, InputSelect } from '@structure/source/common/forms/InputSelect';
+import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
 
 // Dependencies - Assets
 import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';
@@ -41,14 +41,14 @@ export interface ColumnFilterGroupDataInterface {
 }
 
 // Component - ColumnFilterGroup
-export interface ColumnFilterGroupInterface {
+export interface ColumnFilterGroupProperties {
     className?: string;
-    columns: TableColumnInterface[];
+    columns: TableColumnProperties[];
     columnFilterGroupData: ColumnFilterGroupDataInterface;
     onChange: (columnFilterGroupData: ColumnFilterGroupDataInterface) => void;
     onRemove?: () => void;
 }
-export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
+export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     // State
     const [columnFilterGroupData, setColumnFilterGroupData] = React.useState<ColumnFilterGroupDataInterface>(
         // If there are no conditions, create a new one
@@ -135,7 +135,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupInterface) {
         },
     };
     // Loop over the operators
-    const operatorsItems: InputSelectItemInterface[] = [];
+    const operatorsItems: InputSelectItemProperties[] = [];
     for(const operatorKey in operators) {
         operatorsItems.push({
             value: operatorKey,

@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import {
     FormInputReferenceInterface,
-    FormInputInterface,
+    FormInputProperties,
     FormInput,
     useFormInputValue,
 } from '@structure/source/common/forms/FormInput';
@@ -12,7 +12,7 @@ import { ValidationResult, mergeValidationResults } from '@structure/source/util
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import {
     InputTimeRangeReferenceInterface,
-    InputTimeRangeInterface,
+    InputTimeRangeProperties,
     InputTimeRange,
 } from '@structure/source/common/forms/InputTimeRange';
 
@@ -20,13 +20,13 @@ import {
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - FormInputTimeRange
-export interface FormInputTimeRangeInterface
-    extends Omit<InputTimeRangeInterface, 'validate'>,
-        Omit<FormInputInterface, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
+export interface FormInputTimeRangeProperties
+    extends Omit<InputTimeRangeProperties, 'validate'>,
+        Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
     sibling?: React.ReactNode;
 }
-export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface, FormInputTimeRangeInterface>(
-    function (properties: FormInputTimeRangeInterface, reference: React.Ref<InputTimeRangeReferenceInterface>) {
+export const FormInputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface, FormInputTimeRangeProperties>(
+    function (properties: FormInputTimeRangeProperties, reference: React.Ref<InputTimeRangeReferenceInterface>) {
         // State
         const [validationResult, setValidationResult] = React.useState<ValidationResult | undefined>(
             properties.validationResult,

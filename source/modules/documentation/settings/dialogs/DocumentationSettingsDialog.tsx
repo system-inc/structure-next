@@ -28,11 +28,11 @@ export const apiKeyAtom = atomWithStorage<string>(
 );
 
 // Component - DocumentationSettingsDialog
-export interface DocumentationSettingsDialogInterface {
+export interface DocumentationSettingsDialogProperties {
     isOpen: boolean;
     onClose: () => void;
 }
-export function DocumentationSettingsDialog(properties: DocumentationSettingsDialogInterface) {
+export function DocumentationSettingsDialog(properties: DocumentationSettingsDialogProperties) {
     // State
     const [apiKey, setApiKey] = useAtom(apiKeyAtom);
     const [newApiKey, setNewApiKey] = React.useState(apiKey);

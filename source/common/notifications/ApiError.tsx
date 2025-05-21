@@ -4,15 +4,15 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { AlertInterface, Alert } from '@structure/source/common/notifications/Alert';
+import { AlertProperties, Alert } from '@structure/source/common/notifications/Alert';
 import { ApolloError } from '@apollo/client';
 
 // Component - NotAuthorized
-export interface ApiErrorInterface {
+export interface ApiErrorProperties {
     error?: ApolloError | Error;
-    alertProperties?: AlertInterface;
+    alertProperties?: AlertProperties;
 }
-export function ApiError(properties: ApiErrorInterface) {
+export function ApiError(properties: ApiErrorProperties) {
     console.error(properties.error);
 
     // Render the component

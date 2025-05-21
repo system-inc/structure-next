@@ -25,10 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Component - AccountLayout
-export interface AccountLayoutInterface {
+export interface AccountLayoutProperties {
     children: React.ReactNode;
 }
-export function AccountLayout(properties: AccountLayoutInterface) {
+export function AccountLayout(properties: AccountLayoutProperties) {
     // Render the component
     return (
         <AuthorizationLayout>

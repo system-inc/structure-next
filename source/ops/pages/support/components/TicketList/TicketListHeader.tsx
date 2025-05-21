@@ -15,13 +15,13 @@ import { SupportTicketStatus } from '@structure/source/api/graphql/GraphQlGenera
 import { ticketStatusOptions } from '@structure/source/ops/pages/support/constants';
 
 // Component - TicketListHeader
-export interface TicketListHeaderInterface {
+export interface TicketListHeaderProperties {
     selectedStatus: SupportTicketStatus;
     isRefreshing: boolean;
     onRefresh: () => void;
     onStatusChange: (value: SupportTicketStatus) => void;
 }
-export function TicketListHeader(properties: TicketListHeaderInterface) {
+export function TicketListHeader(properties: TicketListHeaderProperties) {
     const { isRefreshing, onRefresh, onStatusChange } = properties;
 
     // Render the component

@@ -5,11 +5,11 @@ import React from 'react';
 import { Link } from '@structure/source/common/navigation/Link';
 
 // Component - TableCellContentUrl
-export interface TableCellContentUrlInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentUrlProperties extends React.HTMLAttributes<HTMLElement> {
     value: string;
     openUrlInNewTab?: boolean;
 }
-export function TableCellContentUrl(properties: TableCellContentUrlInterface) {
+export function TableCellContentUrl(properties: TableCellContentUrlProperties) {
     // Render the component
     return (
         <Link

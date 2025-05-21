@@ -24,11 +24,11 @@ import {
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - EditPostPage
-export interface EditPostPageInterface {
+export interface EditPostPageProperties {
     postIdentifier: string;
     className?: string;
 }
-export function EditPostPage(properties: EditPostPageInterface) {
+export function EditPostPage(properties: EditPostPageProperties) {
     // State
 
     // Render the component

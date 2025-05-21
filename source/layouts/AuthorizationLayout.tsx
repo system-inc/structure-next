@@ -16,9 +16,9 @@ import LineLoadingAnimation from '@structure/source/common/animations/LineLoadin
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Component - AuthorizationLayout
-export interface AuthorizationLayoutInterface {
+export interface AuthorizationLayoutProperties {
     children: React.ReactNode;
-
+    mustBeAdministrator?: boolean;
     // If defined, further restrictions are applied and the user is only
     // authorized if the user has any one of these roles.
     accessibleRoles?: string[];
@@ -27,7 +27,7 @@ export interface AuthorizationLayoutInterface {
 /**
  * Component that validates the user's authorization (logged in state) and renders the children if authorized.
  */
-export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
+export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     // Defaults
     const accessibleRoles = properties.accessibleRoles || [];
 

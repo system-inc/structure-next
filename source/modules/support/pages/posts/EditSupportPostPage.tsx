@@ -26,11 +26,11 @@ import {
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - EditSupportPostPage
-export interface EditSupportPostPageInterface {
+export interface EditSupportPostPageProperties {
     postIdentifier: string;
     className?: string;
 }
-export function EditSupportPostPage(properties: EditSupportPostPageInterface) {
+export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
     // State
     const [deletePostDialogOpen, setDeletePostDialogOpen] = React.useState(false);
 

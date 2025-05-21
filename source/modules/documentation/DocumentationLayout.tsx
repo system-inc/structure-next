@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Types
-import { DocumentationSpecificationInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
+import { DocumentationSpecificationProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
 import { SideNavigationLayout } from '@structure/source/layouts/side-navigation/SideNavigationLayout';
@@ -15,11 +15,11 @@ import { DocumentationSettings } from '@structure/source/modules/documentation/s
 import { getSideNavigationSectionsFromDocumentationSpecification } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
 
 // Component - DocumentationLayout
-export interface DocumentationLayoutInterface {
+export interface DocumentationLayoutProperties {
     children: React.ReactNode;
-    specification: DocumentationSpecificationInterface;
+    specification: DocumentationSpecificationProperties;
 }
-export function DocumentationLayout(properties: DocumentationLayoutInterface) {
+export function DocumentationLayout(properties: DocumentationLayoutProperties) {
     // Render the component
     return (
         <SideNavigationLayout

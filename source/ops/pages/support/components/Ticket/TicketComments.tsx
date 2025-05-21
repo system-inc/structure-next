@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 // Dependencies - Main Components
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
-import { FileCarouselInterface } from '@structure/source/common/files/FileCarousel';
+import { FileCarouselProperties } from '@structure/source/common/files/FileCarousel';
 import { FileCarouselDialog } from '@structure/source/common/files/FileCarouselDialog';
 import { CommentAttachments } from './TicketCommentAttachments';
 
@@ -24,13 +24,13 @@ import {
 } from '@structure/source/utilities/Time';
 
 // Component - TicketComments
-interface TicketCommentsInterface {
+interface TicketCommentsProperties {
     userEmailAddress: string;
     comments: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['comments'];
     viewer: 'User' | 'Agent';
     userFullName?: string;
 }
-export function TicketComments(properties: TicketCommentsInterface) {
+export function TicketComments(properties: TicketCommentsProperties) {
     // Properties
     const { comments } = properties;
 
@@ -56,7 +56,7 @@ export function TicketComments(properties: TicketCommentsInterface) {
 
     const allAttachments = React.useMemo(
         function () {
-            return comments.reduce((acc: FileCarouselInterface['files'], comment) => {
+            return comments.reduce((acc: FileCarouselProperties['files'], comment) => {
                 const attachments = (comment.attachments || []).map((attachment) => ({
                     url: attachment.url || '',
                     metadata: {

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import Tip from '@structure/source/common/popovers/Tip';
-import { PopoverInterface, Popover } from '@structure/source/common/popovers/Popover';
+import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Assets
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
@@ -34,7 +34,7 @@ export const TipIconContentVariants = {
 };
 
 // Component - TipIcon
-export interface TipIconInterface extends Omit<PopoverInterface, 'children'> {
+export interface TipIconProperties extends Omit<PopoverProperties, 'children'> {
     variant?: keyof typeof TipIconVariants;
     contentVariant?: keyof typeof TipIconContentVariants;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -43,7 +43,7 @@ export interface TipIconInterface extends Omit<PopoverInterface, 'children'> {
     openOnPress?: boolean;
     tabIndex?: number;
 }
-export function TipIcon(properties: TipIconInterface) {
+export function TipIcon(properties: TipIconProperties) {
     // Defaults
     const openOnPress = properties.openOnPress ?? false;
     const Icon = properties.icon ?? InformationCircledIcon;

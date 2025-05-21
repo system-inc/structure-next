@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 import { NoticeInterface } from '@structure/source/common/notifications/Notice';
-import { ButtonInterface, Button } from '@structure/source/common/buttons/Button';
+import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
 import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
@@ -15,12 +15,12 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 import { removeProperties } from '@structure/source/utilities/React';
 
 // Component - CopyButton
-export interface CopyButtonInterface extends ButtonInterface {
+export interface CopyButtonProperties extends ButtonProperties {
     className?: string;
     value: string;
     notice?: Omit<NoticeInterface, 'id'>;
 }
-export function CopyButton(properties: CopyButtonInterface) {
+export function CopyButton(properties: CopyButtonProperties) {
     // Hooks
     const { addNotice } = useNotice();
 

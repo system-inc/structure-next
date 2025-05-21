@@ -31,13 +31,13 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // };
 
 // Component - JsonNode
-export interface JsonNodeInterface {
+export interface JsonNodeProperties {
     data: unknown;
     level: number;
     initialExpansionDepth: number;
     keyName?: string;
 }
-export function JsonNode(properties: JsonNodeInterface) {
+export function JsonNode(properties: JsonNodeProperties) {
     const { data, level, initialExpansionDepth, keyName } = properties;
     const [isExpanded, setIsExpanded] = React.useState(level < initialExpansionDepth);
 

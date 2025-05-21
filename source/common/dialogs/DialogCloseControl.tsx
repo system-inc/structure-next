@@ -7,10 +7,10 @@ import React from 'react';
 import { DialogClose as RadixDialogClose } from '@radix-ui/react-dialog';
 
 // Component - DialogClose
-export interface DialogCloseControlInterface {
+export interface DialogCloseControlProperties {
     children: React.ReactNode;
 }
-export function DialogCloseControl(properties: DialogCloseControlInterface) {
+export function DialogCloseControl(properties: DialogCloseControlProperties) {
     // Render the component
     return <RadixDialogClose asChild>{properties.children}</RadixDialogClose>;
 }

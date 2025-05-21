@@ -21,10 +21,10 @@ import {
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - DeleteAccount
-export interface DeleteAccountInterface {
+export interface DeleteAccountProperties {
     onComplete?: () => void;
 }
-export function DeleteAccount(properties: DeleteAccountInterface) {
+export function DeleteAccount(properties: DeleteAccountProperties) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
         AccountAuthenticationQuery['accountAuthentication'] | undefined

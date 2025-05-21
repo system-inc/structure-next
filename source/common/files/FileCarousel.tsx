@@ -16,10 +16,10 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 import { isImageFile } from '@structure/source/utilities/File';
 
 // Component - MetadataContent
-export interface MetadataContentInterface {
+export interface MetadataContentProperties {
     metadata: { [key: string]: string | number };
 }
-export function MetadataContent(properties: MetadataContentInterface) {
+export function MetadataContent(properties: MetadataContentProperties) {
     return (
         <div className="p-2 text-sm">
             {Object.entries(properties.metadata).map(([key, value]) => (
@@ -32,7 +32,7 @@ export function MetadataContent(properties: MetadataContentInterface) {
 }
 
 // Component - FileCarousel
-export interface FileCarouselInterface {
+export interface FileCarouselProperties {
     files: {
         url: string;
         metadata?: { [key: string]: string | number };
@@ -40,7 +40,7 @@ export interface FileCarouselInterface {
     className?: string;
     startIndex?: number;
 }
-export function FileCarousel(properties: FileCarouselInterface) {
+export function FileCarousel(properties: FileCarouselProperties) {
     // State
     const [currentFileIndex, setCurrentFileIndex] = React.useState(properties.startIndex || 0);
     const currentFile = properties.files[currentFileIndex];

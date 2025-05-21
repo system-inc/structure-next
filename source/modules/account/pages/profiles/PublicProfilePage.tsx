@@ -18,10 +18,10 @@ import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
 import { monthYear, timeAgo } from '@structure/source/utilities/Time';
 
 // Component - PublicProfilePage
-export interface PublicProfilePageInterface {
+export interface PublicProfilePageProperties {
     profilePublic: AccountProfilePublicQuery['accountProfilePublic'];
 }
-export function PublicProfilePage(properties: PublicProfilePageInterface) {
+export function PublicProfilePage(properties: PublicProfilePageProperties) {
     // Get the profile image URL
     const profileImageUrl = properties.profilePublic?.images?.find((image) => image.variant === 'profile-image')?.url;
 

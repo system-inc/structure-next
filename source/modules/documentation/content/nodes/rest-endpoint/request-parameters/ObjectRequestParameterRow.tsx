@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Types
-import { RequestParameterInterface } from '@structure/source/modules/documentation/types/DocumentationTypes';
+import { RequestParameterProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
 import {
@@ -14,12 +14,12 @@ import {
 } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
 
 // Component - ObjectRequestParameterRow
-export interface ObjectRequestParameterRowInterface extends RequestParameterInterface {
+export interface ObjectRequestParameterRowProperties extends RequestParameterProperties {
     section: RequestParameterSectionType;
     name: string;
     enabled: boolean;
     indentationLevel?: number;
-    fields?: RequestParameterInterface[];
+    fields?: RequestParameterProperties[];
     onStateChange: (
         requestParameterSection: RequestParameterSectionType,
         requestParameterPath: string,
@@ -28,7 +28,7 @@ export interface ObjectRequestParameterRowInterface extends RequestParameterInte
     onChildStateChange?: (childName: string, isEnabled: boolean) => void;
 }
 
-export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowInterface) {
+export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowProperties) {
     // Function to handle state changes from nested fields
     function handleNestedStateChange(
         section: RequestParameterSectionType,
@@ -46,7 +46,7 @@ export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowI
 
     // Render the component
     return (
-        <div className="rounded-medium w-full overflow-hidden border">
+        <div className="w-full overflow-hidden rounded-medium border">
             {/* Object properties table */}
             <table className="min-w-full border-collapse">
                 <thead>

@@ -9,12 +9,12 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - SideNavigationLink
-export interface SideNavigationLinkInterface {
+export interface SideNavigationLinkProperties {
     title: React.ReactNode;
     href?: string;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
-export function SideNavigationLink(properties: SideNavigationLinkInterface) {
+export function SideNavigationLink(properties: SideNavigationLinkProperties) {
     // Hooks
     const urlPath = useUrlPath();
 
@@ -28,7 +28,7 @@ export function SideNavigationLink(properties: SideNavigationLinkInterface) {
         <Link
             href={properties.href || '#'}
             className={mergeClassNames(
-                'rounded-medium group flex items-center gap-x-2 px-2 py-1 text-[13px] leading-6 hover:bg-light-2 dark:hover:bg-dark-3 dark:active:bg-dark-3',
+                'group flex items-center gap-x-2 rounded-medium px-2 py-1 text-[13px] leading-6 hover:bg-light-2 dark:hover:bg-dark-3 dark:active:bg-dark-3',
                 isActive
                     ? 'bg-light-1 text-dark dark:bg-dark-2 dark:text-light'
                     : 'text-dark hover:text-dark dark:bg-transparent dark:text-light-4',

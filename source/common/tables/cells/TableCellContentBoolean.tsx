@@ -2,13 +2,13 @@
 import React from 'react';
 
 // Component - TableCellContentBoolean
-export interface TableCellContentBooleanInterface extends React.HTMLAttributes<HTMLElement> {
+export interface TableCellContentBooleanProperties extends React.HTMLAttributes<HTMLElement> {
     value: string;
 }
-export function TableCellContentBoolean(properties: TableCellContentBooleanInterface) {
+export function TableCellContentBoolean(properties: TableCellContentBooleanProperties) {
     // Render the component
     return (
-        <div className="rounded-medium inline-flex border px-2.5 py-1 text-xs font-medium uppercase">
+        <div className="inline-flex rounded-medium border px-2.5 py-1 text-xs font-medium uppercase">
             {properties.value}
         </div>
     );

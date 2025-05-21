@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { OpsNavigationLinkInterface } from './OpsNavigationLink';
+import { OpsNavigationLinkProperties } from './OpsNavigationLink';
 import OpsNavigationLinks from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
-import { DialogMenuInterface, DialogMenu } from '@structure/source/common/dialogs/DialogMenu';
-import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
+import { DialogMenuProperties, DialogMenu } from '@structure/source/common/dialogs/DialogMenu';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Assets
 
@@ -15,16 +15,16 @@ import { MenuItemInterface } from '@structure/source/common/menus/MenuItem';
 // import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - OpsDialogMenu
-export interface OpsDialogMenuInterface extends Omit<DialogMenuInterface, 'menuItems'> {}
-export function OpsDialogMenu(properties: OpsDialogMenuInterface) {
+export interface OpsDialogMenuProperties extends Omit<DialogMenuProperties, 'menuItems'> {}
+export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
     // Function to get the menu items from the internal navigation links
     function getMenuItemsFromOpsNavigationLinks(
-        internalNavigationLink: OpsNavigationLinkInterface[],
+        internalNavigationLink: OpsNavigationLinkProperties[],
         prefix?: string,
         icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>,
     ) {
         // A variable to store the menu items
-        let menuItems: MenuItemInterface[] = [];
+        let menuItems: MenuItemProperties[] = [];
 
         // Set the prefix string
         const prefixString = prefix ? prefix : '';
