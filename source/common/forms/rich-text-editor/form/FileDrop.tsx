@@ -24,8 +24,8 @@ const useFileContext = () => {
     return context;
 };
 
-// FileDrop component that provides context and handles drag/drop
-type FileDropProps = {
+// Component - FileDrop
+type FileDropProperties = {
     children: React.ReactNode;
     files: File[];
     onFilesChange?: (files: File[]) => void;
@@ -34,8 +34,7 @@ type FileDropProps = {
     isDragging?: boolean;
     onDragChange?: (isDragging: boolean) => void;
 };
-
-const FileDrop: React.FC<FileDropProps> = function (properties) {
+const FileDrop: React.FC<FileDropProperties> = function (properties) {
     const maxFiles = properties.maxFiles ?? Infinity;
 
     const [internalFiles, internalSetFiles] = React.useState<File[]>(properties.files);
@@ -200,4 +199,4 @@ const FileList: React.FC<FileListProps> = (properties) => {
     );
 };
 
-export { FileDrop, FileInput, FileList, useFileContext, type FileDropProps };
+export { FileDrop, FileInput, FileList, useFileContext, type FileDropProperties };

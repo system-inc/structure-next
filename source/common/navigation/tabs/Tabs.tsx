@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import React from 'react';
 import * as RadixTabPrimitive from '@radix-ui/react-tabs';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
