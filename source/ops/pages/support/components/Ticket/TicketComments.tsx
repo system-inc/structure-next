@@ -54,18 +54,21 @@ export function TicketComments(properties: TicketCommentsInterface) {
         [comments],
     );
 
-    const allAttachments = React.useMemo(() => {
-        return comments.reduce((acc: FileCarouselInterface['files'], comment) => {
-            const attachments = (comment.attachments || []).map((attachment) => ({
-                url: attachment.url || '',
-                metadata: {
-                    Source: comment.source,
-                    Date: formatDateWithTimeIfToday(new Date(comment.createdAt)),
-                },
-            }));
-            return acc.concat(attachments);
-        }, []);
-    }, [comments]);
+    const allAttachments = React.useMemo(
+        function () {
+            return comments.reduce((acc: FileCarouselInterface['files'], comment) => {
+                const attachments = (comment.attachments || []).map((attachment) => ({
+                    url: attachment.url || '',
+                    metadata: {
+                        Source: comment.source,
+                        Date: formatDateWithTimeIfToday(new Date(comment.createdAt)),
+                    },
+                }));
+                return acc.concat(attachments);
+            }, []);
+        },
+        [comments],
+    );
 
     // Function to get global index for an attachment URL
     function getGlobalAttachmentIndex(url: string): number {

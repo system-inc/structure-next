@@ -35,25 +35,28 @@ export function useSupportTickets(
     });
 
     // Build filters
-    const filters = React.useMemo(() => {
-        const baseFilters = [
-            {
-                column: 'status',
-                operator: ColumnFilterConditionOperator.Equal,
-                value: selectedStatus,
-            },
-        ];
+    const filters = React.useMemo(
+        function () {
+            const baseFilters = [
+                {
+                    column: 'status',
+                    operator: ColumnFilterConditionOperator.Equal,
+                    value: selectedStatus,
+                },
+            ];
 
-        if(assignedToMe) {
-            baseFilters.push({
-                column: 'assignedToUsername',
-                operator: ColumnFilterConditionOperator.Equal,
-                value: 'current', // The API will replace this with the current user's username
-            });
-        }
+            if(assignedToMe) {
+                baseFilters.push({
+                    column: 'assignedToUsername',
+                    operator: ColumnFilterConditionOperator.Equal,
+                    value: 'current', // The API will replace this with the current user's username
+                });
+            }
 
-        return baseFilters;
-    }, [selectedStatus, assignedToMe]);
+            return baseFilters;
+        },
+        [selectedStatus, assignedToMe],
+    );
 
     // Queries
     const ticketsQuery = useQuery(SupportTicketsPrivilegedDocument, {

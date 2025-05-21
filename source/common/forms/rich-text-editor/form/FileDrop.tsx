@@ -50,7 +50,7 @@ const FileDrop: React.FC<FileDropProperties> = function (properties) {
     ] as const;
 
     const addFiles = React.useCallback(
-        (newFiles: File[]) => {
+        function (newFiles: File[]) {
             let filteredFiles = newFiles;
 
             // Filter by accepted file types if specified
@@ -79,7 +79,7 @@ const FileDrop: React.FC<FileDropProperties> = function (properties) {
     );
 
     const removeFile = React.useCallback(
-        (index: number) => {
+        function (index: number) {
             const currentFiles = [...files];
             currentFiles.splice(index, 1);
             onFilesChange(currentFiles);

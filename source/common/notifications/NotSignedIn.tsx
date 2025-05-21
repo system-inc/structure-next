@@ -12,11 +12,14 @@ export function NotSignedIn() {
     const router = useRouter();
 
     // Redirect to sign in with the current path as the redirect path
-    React.useEffect(() => {
-        if(pathName !== '/sign-in') {
-            router.push(`/sign-in?redirectUrl=${encodeURIComponent(pathName)}`);
-        }
-    }, [pathName, router]);
+    React.useEffect(
+        function () {
+            if(pathName !== '/sign-in') {
+                router.push(`/sign-in?redirectUrl=${encodeURIComponent(pathName)}`);
+            }
+        },
+        [pathName, router],
+    );
 
     // Render the component
     return (

@@ -51,15 +51,18 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
     });
 
     // Effect to update visibility and local order when `order` changes
-    React.useEffect(() => {
-        if(order) {
-            setLocalOrder(order); // Update local order when a new order is provided
-            setIsVisible(true); // Show the panel
-        }
-        else {
-            setIsVisible(false); // Hide the panel
-        }
-    }, [order]);
+    React.useEffect(
+        function () {
+            if(order) {
+                setLocalOrder(order); // Update local order when a new order is provided
+                setIsVisible(true); // Show the panel
+            }
+            else {
+                setIsVisible(false); // Hide the panel
+            }
+        },
+        [order],
+    );
 
     // Render the component
     return (

@@ -131,9 +131,12 @@ export function Dialog(properties: DialogInterface) {
     const accessibilityDescription = properties.accessibilityDescription || '';
 
     // On mount, set the open state
-    React.useEffect(() => {
-        setOpen(properties.open ?? false);
-    }, [properties.open]); // Listen for changes to the open property
+    React.useEffect(
+        function () {
+            setOpen(properties.open ?? false);
+        },
+        [properties.open],
+    ); // Listen for changes to the open property
 
     // Function to handle the open state change
     function onOpenChange() {

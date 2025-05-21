@@ -178,60 +178,63 @@ export function Metrics() {
     const chartError = React.useMemo<{
         message: string;
         type: 'error' | 'warning';
-    } | null>(() => {
-        // Use the interval and start and end dates to determine how many data points will be generated
-        let numberOfDataPoints = 0;
-        if(startTime && endTime) {
-            if(timeInterval === TimeInterval.Year) {
-                numberOfDataPoints = endTime.getFullYear() - startTime.getFullYear() + 1;
+    } | null>(
+        function () {
+            // Use the interval and start and end dates to determine how many data points will be generated
+            let numberOfDataPoints = 0;
+            if(startTime && endTime) {
+                if(timeInterval === TimeInterval.Year) {
+                    numberOfDataPoints = endTime.getFullYear() - startTime.getFullYear() + 1;
+                }
+                else if(timeInterval === TimeInterval.Quarter) {
+                    numberOfDataPoints = 4 * (endTime.getFullYear() - startTime.getFullYear()) + 4;
+                }
+                else if(timeInterval === TimeInterval.Month) {
+                    numberOfDataPoints = 12 * (endTime.getFullYear() - startTime.getFullYear()) + 12;
+                }
+                else if(timeInterval === TimeInterval.Day) {
+                    numberOfDataPoints = Math.ceil((endTime.getTime() - startTime.getTime()) / (1000 * 3600 * 24));
+                }
+                else if(timeInterval === TimeInterval.Hour) {
+                    numberOfDataPoints = Math.ceil((endTime.getTime() - startTime.getTime()) / (1000 * 3600));
+                }
             }
-            else if(timeInterval === TimeInterval.Quarter) {
-                numberOfDataPoints = 4 * (endTime.getFullYear() - startTime.getFullYear()) + 4;
-            }
-            else if(timeInterval === TimeInterval.Month) {
-                numberOfDataPoints = 12 * (endTime.getFullYear() - startTime.getFullYear()) + 12;
-            }
-            else if(timeInterval === TimeInterval.Day) {
-                numberOfDataPoints = Math.ceil((endTime.getTime() - startTime.getTime()) / (1000 * 3600 * 24));
-            }
-            else if(timeInterval === TimeInterval.Hour) {
-                numberOfDataPoints = Math.ceil((endTime.getTime() - startTime.getTime()) / (1000 * 3600));
-            }
-        }
 
-        // If there are more than 1,000 data points, display an error message
-        if(numberOfDataPoints >= 1000) {
-            setDataSourcesWithMetrics([]);
+            // If there are more than 1,000 data points, display an error message
+            if(numberOfDataPoints >= 1000) {
+                setDataSourcesWithMetrics([]);
 
-            return {
-                message: 'Too many data points to display. Select a smaller date range or change your interval.',
-                type: 'error',
-            };
-        }
-        // If there are no data sources, display a warning message
-        else if(dataSources.length <= 0) {
-            return {
-                message: 'No data to display. Add a data source.',
-                type: 'warning',
-            };
-        }
-        // By default show a loading state
-        else if(chartLoading) {
-            return {
-                message: 'Loading...',
-                type: 'warning',
-            };
-        }
-        // If there are no data points, display a warning message
-        else if(dataSourcesWithMetricsLength <= 0) {
-            return {
-                message: 'No data to display. Select a different date range, table, or column.',
-                type: 'warning',
-            };
-        }
+                return {
+                    message: 'Too many data points to display. Select a smaller date range or change your interval.',
+                    type: 'error',
+                };
+            }
+            // If there are no data sources, display a warning message
+            else if(dataSources.length <= 0) {
+                return {
+                    message: 'No data to display. Add a data source.',
+                    type: 'warning',
+                };
+            }
+            // By default show a loading state
+            else if(chartLoading) {
+                return {
+                    message: 'Loading...',
+                    type: 'warning',
+                };
+            }
+            // If there are no data points, display a warning message
+            else if(dataSourcesWithMetricsLength <= 0) {
+                return {
+                    message: 'No data to display. Select a different date range, table, or column.',
+                    type: 'warning',
+                };
+            }
 
-        return null;
-    }, [endTime, timeInterval, startTime, dataSourcesWithMetricsLength, chartLoading, dataSources.length]);
+            return null;
+        },
+        [endTime, timeInterval, startTime, dataSourcesWithMetricsLength, chartLoading, dataSources.length],
+    );
 
     // Sort dataSourcesWithMetrics by the order of the dataSources array
     const sortedDataSourcesWithMetrics = dataSources

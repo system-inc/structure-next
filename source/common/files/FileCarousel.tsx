@@ -46,11 +46,14 @@ export function FileCarousel(properties: FileCarouselInterface) {
     const currentFile = properties.files[currentFileIndex];
 
     // Update currentFileIndex when startIndex changes
-    React.useEffect(() => {
-        if(properties.startIndex !== undefined) {
-            setCurrentFileIndex(properties.startIndex);
-        }
-    }, [properties.startIndex]);
+    React.useEffect(
+        function () {
+            if(properties.startIndex !== undefined) {
+                setCurrentFileIndex(properties.startIndex);
+            }
+        },
+        [properties.startIndex],
+    );
 
     // Function to navigate to the previous file
     const previousFile = React.useCallback(

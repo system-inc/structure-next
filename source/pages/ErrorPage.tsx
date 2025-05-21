@@ -11,10 +11,13 @@ import Button from '@structure/source/common/buttons/Button';
 export type ErrorPageProperties = { error: Error & { digest?: string }; reset: () => void };
 export function ErrorPage(properties: ErrorPageProperties) {
     // On mount
-    React.useEffect(() => {
-        // TODO: Log the error to an error reporting service
-        console.error(properties.error);
-    }, [properties.error]);
+    React.useEffect(
+        function () {
+            // TODO: Log the error to an error reporting service
+            console.error(properties.error);
+        },
+        [properties.error],
+    );
 
     // Render the component
     return (

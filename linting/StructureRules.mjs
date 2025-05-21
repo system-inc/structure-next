@@ -4,6 +4,7 @@ import NoStructureProjectImportsRule from './NoStructureProjectImportsRule.mjs';
 import NoPropertiesDestructuringRule from './NoPropertiesDestructuringRule.mjs';
 import NoReactDestructuringRule from './NoReactDestructuringRule.mjs';
 import UsePropertiesNameRule from './UsePropertiesNameRule.mjs';
+import NoArrowFunctionsInReactHooksRule from './NoArrowFunctionsInReactHooksRule.mjs';
 
 // ESLint Structure Rules
 const StructureRules = {
@@ -13,6 +14,7 @@ const StructureRules = {
         'no-properties-destructuring': NoPropertiesDestructuringRule,
         'no-react-destructuring': NoReactDestructuringRule,
         'use-properties-name': UsePropertiesNameRule,
+        'no-arrow-functions-in-react-hooks': NoArrowFunctionsInReactHooksRule,
     },
 };
 
