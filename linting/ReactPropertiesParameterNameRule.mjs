@@ -1,7 +1,7 @@
 // ESLint rule to enforce using the name 'properties' for React component props
 // This ensures that all component props are named 'properties' instead of 'props'
 // and no variables end with 'Props'
-const UsePropertiesNameRule = {
+const ReactPropertiesParameterNameRule = {
     meta: {
         type: 'problem',
         docs: {
@@ -127,4 +127,4 @@ const UsePropertiesNameRule = {
     }
 };
 
-export default UsePropertiesNameRule;
+export default ReactPropertiesParameterNameRule;
