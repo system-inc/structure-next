@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { FormField, FormFieldProps } from './FormField';
-import { FileDrop, FileInput, FileList, formatFileSize } from './FileDrop';
+import { FormField, FormFieldProperties } from './FormField';
+import { FileDropProperties, FileDrop, FileInput, FileList, formatFileSize } from './FileDrop';
 import { useSpring, animated } from '@react-spring/web';
 import { Button, buttonVariants } from './../Button';
 import {
@@ -21,20 +21,12 @@ import {
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { getClassNamesByModifier } from './../utilities/getClassNamesByModifier';
 
-type FileDropFieldProps<T extends HTMLElement> = FormFieldProps<T> &
+type FileDropFieldProperties<T extends HTMLElement> = FormFieldProperties<T> &
     Omit<React.ComponentPropsWithoutRef<typeof FileDrop>, 'children'> & {
         multiple?: boolean;
     };
-const FileDropField = <T extends HTMLElement>({
-    label,
-    caption,
-    error,
-    optional,
-    files,
-    onFilesChange,
-    multiple = false,
-    ...props
-}: FileDropFieldProps<T>) => {
+const FileDropField = <T extends HTMLElement>(properties: FileDropFieldProperties<T>) => {
+    const multiple = properties.multiple ?? false;
     const [dragging, setDragging] = React.useState(false);
 
     const borderSpring = useSpring({
@@ -50,15 +42,31 @@ const FileDropField = <T extends HTMLElement>({
         .map((cn) => `group-hover:${cn}`)
         .join(' ');
 
+    // Ensure files property is present as it's required by FileDrop
+    const files = properties.files ?? [];
+
+    // Properties to spread onto the FileDrop element
+    const fileDropProperties = { ...properties } as Partial<FileDropFieldProperties<T>>;
+    delete fileDropProperties.label;
+    delete fileDropProperties.caption;
+    delete fileDropProperties.error;
+    delete fileDropProperties.optional;
+    delete fileDropProperties.multiple;
+
     return (
-        <FormField label={label} caption={caption} error={error} optional={optional}>
+        <FormField
+            label={properties.label}
+            caption={properties.caption}
+            error={properties.error}
+            optional={properties.optional}
+        >
             <FileDrop
                 files={files}
-                onFilesChange={onFilesChange}
                 isDragging={dragging}
                 onDragChange={setDragging}
-                {...props}
+                {...(fileDropProperties as Omit<FileDropProperties, 'files' | 'isDragging' | 'onDragChange'>)}
             >
+                {/* File input */}
                 <FileInput
                     multiple={multiple}
                     className="select-none rounded-medium transition focus-within:outline-none focus-within:ring-1 focus-within:ring-blue focus-within:ring-offset-1 hover:cursor-pointer"
@@ -115,19 +123,19 @@ export function getFileTypeIconFromType(type: string): Icon {
 }
 
 type FileListItemProps = React.ComponentPropsWithoutRef<React.ComponentPropsWithoutRef<typeof FileList>['component']>;
-function FileListItem({ file, removeFile, index }: FileListItemProps) {
-    const FileTypeIcon = getFileTypeIconFromType(file.type);
+function FileListItem(properties: FileListItemProps) {
+    const FileTypeIcon = getFileTypeIconFromType(properties.file.type);
 
     return (
         <div className={'bg-opsis-background-secondary flex items-center justify-between rounded-medium px-5 py-3'}>
             <FileTypeIcon className="mr-4 size-5" weight="regular" />
 
             <div className="min-w-0 flex-1">
-                <p className="text-opsis-content-primary truncate text-sm font-medium">{file.name}</p>
+                <p className="text-opsis-content-primary truncate text-sm font-medium">{properties.file.name}</p>
             </div>
 
             <div className="flex items-center gap-4 pl-2">
-                <p className="text-opsis-content-secondary text-sm">{formatFileSize(file.size)}</p>
+                <p className="text-opsis-content-secondary text-sm">{formatFileSize(properties.file.size)}</p>
                 <Button
                     variant="ghost"
                     icon
@@ -135,7 +143,7 @@ function FileListItem({ file, removeFile, index }: FileListItemProps) {
                     type="button"
                     onClick={(e) => {
                         e.stopPropagation();
-                        removeFile(index);
+                        properties.removeFile(properties.index);
                     }}
                     className="flexitems-center justify-center hover:text-red-500 focus:text-red-500"
                     aria-label="Remove file"

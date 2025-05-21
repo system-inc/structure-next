@@ -1,6 +1,9 @@
+// Dependencies - React and Next.js
 import React from 'react';
-import { cva, VariantProps } from 'class-variance-authority';
+
+// Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { cva, VariantProps } from 'class-variance-authority';
 
 const textAreaVariants = cva(
     [
@@ -32,34 +35,51 @@ const textAreaVariants = cva(
     },
 );
 
-type TextAreaProps = React.ComponentPropsWithoutRef<'textarea'> & VariantProps<typeof textAreaVariants>;
-
-const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(({ className, size, resize, ...props }, ref) => {
+// Component - TextArea
+type TextAreaProperties = React.ComponentPropsWithoutRef<'textarea'> & VariantProps<typeof textAreaVariants>;
+const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>((properties, reference) => {
     const resizeId = React.useId();
 
     // Create an event handler to resize the textarea to the size of the content unless the resize value is none
-    React.useEffect(() => {
-        const textarea = document.querySelector(`[data-resize-id="${resizeId}"]`) as HTMLTextAreaElement | null;
-        if(!textarea || resize === 'none') return;
-        const inputListener = () => {
-            const scrollHeightAdjustment = 2;
-            textarea.style.height = 'auto';
-            textarea.style.height = `${textarea.scrollHeight + scrollHeightAdjustment}px`;
-        };
-        textarea.addEventListener('input', inputListener);
-        return () => textarea.removeEventListener('input', inputListener);
-    }, [resizeId, resize]);
+    React.useEffect(
+        function () {
+            const textarea = document.querySelector(`[data-resize-id="${resizeId}"]`) as HTMLTextAreaElement | null;
+            if(!textarea || properties.resize === 'none') return;
+            const inputListener = () => {
+                const scrollHeightAdjustment = 2;
+                textarea.style.height = 'auto';
+                textarea.style.height = `${textarea.scrollHeight + scrollHeightAdjustment}px`;
+            };
+            textarea.addEventListener('input', inputListener);
+            return () => textarea.removeEventListener('input', inputListener);
+        },
+        [resizeId, properties.resize],
+    );
 
+    // Get the properties to spread onto the textarea element
+    const textAreaProperties = { ...properties };
+    delete textAreaProperties.className;
+    delete textAreaProperties.size;
+    delete textAreaProperties.resize;
+
+    // Render the component
     return (
         <textarea
             data-resize-id={resizeId}
-            ref={ref}
-            className={mergeClassNames(textAreaVariants({ className, size, resize }))}
-            {...props}
+            ref={reference}
+            className={mergeClassNames(
+                textAreaVariants({
+                    className: properties.className,
+                    size: properties.size,
+                    resize: properties.resize,
+                }),
+            )}
+            {...textAreaProperties}
         />
     );
 });
 
 TextArea.displayName = 'TextArea';
 
-export { TextArea, type TextAreaProps };
+// Export
+export { TextArea, type TextAreaProperties as TextAreaProps };
