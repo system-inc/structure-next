@@ -1,45 +1,65 @@
-import { useSprings, animated } from '@react-spring/web';
-import { useDrag } from '@use-gesture/react';
+// Dependencies - React and Next.js
 import React from 'react';
 
-type DraggableListProps = {
-    // List of items to be displayed
+// Dependencies - Main Components
+import { useDrag } from '@use-gesture/react';
+
+// Dependencies - Animation
+import { useSprings, animated } from '@react-spring/web';
+
+// Function to swap two items in an array
+function swap<T>(array: T[], from: number, to: number) {
+    // console.log({ array });
+    // console.log('Swapping ', array[from], ' with ', array[to], ' from index ', from, ' to index ', to);
+
+    if(from === to) {
+        return array;
+    }
+
+    const newArray = [...array];
+    const item = newArray.splice(from, 1)[0];
+    if(item !== undefined) {
+        newArray.splice(to, 0, item);
+    }
+    else {
+        throw new Error('Item not found');
+    }
+    return newArray;
+}
+
+// Function to clamp a value between a minimum and maximum value
+function clamp(value: number, min: number, max: number) {
+    return Math.min(Math.max(value, min), max);
+}
+
+// Component - DraggableList
+type DraggableListProperties = {
     items: React.ReactNode[];
-
-    // Callback that is called when the order of the items changes
-    onReorder?: (originalOrder: React.ReactNode[], newOrder: React.ReactNode[]) => void;
-
-    // Callback that is called when an item is dragged
-    onDrag?: (activeIndex: number, currentRow: number) => void;
-
-    // Icon
     icon?: React.ReactNode;
     iconAlignment?: 'top' | 'bottom' | 'center';
     iconPosition?: 'left' | 'right';
+    onReorder?: (originalOrder: React.ReactNode[], newOrder: React.ReactNode[]) => void;
+    onDrag?: (activeIndex: number, currentRow: number) => void;
 } & Omit<React.HTMLAttributes<HTMLUListElement>, 'children' | 'onDrag'>;
+function DraggableList(properties: DraggableListProperties) {
+    // Defaults
+    const iconPosition = properties.iconPosition || 'left';
+    const iconAlignment = properties.iconAlignment || 'center';
 
-function DraggableList({
-    items,
-    onReorder,
-    onDrag,
-    icon,
-    iconPosition = 'left',
-    iconAlignment = 'center',
-    ...props
-}: DraggableListProps) {
-    /**
-     * STATE
-     */
-    // This ref is used to store the original order of the items
-    const originalItemOrder = React.useRef<number[]>(items.map((_, i) => i));
-    // This map is used to store the height of each item (set by the ref callback in the li element)
-    const heightMap = React.useMemo(() => new Map<React.ReactNode, number>(items.map((item) => [item, 50])), [items]);
+    // Remember the original order of the items
+    const originalItemOrder = React.useRef<number[]>(properties.items.map((_, i) => i));
 
-    /**
-     * ANIMATION
-     */
-    const [springs, springsApi] = useSprings(items.length, (index: number) => {
-        const itemHeight = heightMap.get(items[index])!;
+    // Store the height of each item in a map
+    const heightMap = React.useMemo(
+        function () {
+            return new Map<React.ReactNode, number>(properties.items.map((item) => [item, 50]));
+        },
+        [properties.items],
+    );
+
+    // Create a spring for each item in the list
+    const [springs, springsApi] = useSprings(properties.items.length, function (index: number) {
+        const itemHeight = heightMap.get(properties.items[index])!;
 
         return {
             y: originalItemOrder.current.indexOf(index) * itemHeight,
@@ -50,10 +70,11 @@ function DraggableList({
         };
     });
 
-    /**
-     * GESTURE
-     */
-    const bindDrag = useDrag(({ args: [originalIndex], active, movement: [, y] }) => {
+    // This is a custom hook that is used to bind the drag event to the items
+    const bindDrag = useDrag(function (state) {
+        const originalIndex = state.args[0];
+        const active = state.active;
+        const y = state.movement[1];
         // Calculate the new order of the items based on the current drag position
         // The current index of the item being dragged
         const curIndex = originalItemOrder.current.indexOf(originalIndex);
@@ -67,13 +88,11 @@ function DraggableList({
                     40, // divided by the height of the item
             ),
             0, // Clamp the row to be at least 0
-            items.length - 1, // Clamp the row to be at most the length of the items
+            properties.items.length - 1, // Clamp the row to be at most the length of the items
         );
 
         // Call the onDrag callback when an item is dragged
-        if(onDrag) {
-            onDrag(originalIndex, curRow);
-        }
+        properties.onDrag?.(originalIndex, curRow);
 
         // Calculate the new order of the items
         const newOrder = swap(originalItemOrder.current, curIndex, curRow);
@@ -83,12 +102,12 @@ function DraggableList({
         springsApi.start((index: number) => {
             const startingYForDraggingItem = originalItemOrder.current
                 .slice(0, originalIndex)
-                .reduce((sum, index) => sum + heightMap.get(items[index])!, 0);
+                .reduce((sum, index) => sum + heightMap.get(properties.items[index])!, 0);
 
             // Calculate the sum of the heights of the items before the current item
             const sumOfPreviousItemsHeights = newOrder
                 .slice(0, newOrder.indexOf(index))
-                .reduce((sum, index) => sum + heightMap.get(items[index])!, 0);
+                .reduce((sum, index) => sum + heightMap.get(properties.items[index])!, 0);
 
             // If the item is being dragged, apply the drag effect
             if(active && index === originalIndex) {
@@ -112,12 +131,10 @@ function DraggableList({
                         if(!active) {
                             // Update the items based on the new order if the animation is complete
                             // console.log("Updating items");
-                            if(onReorder) {
-                                onReorder(
-                                    items,
-                                    newOrder.map((index) => items[index]),
-                                );
-                            }
+                            properties.onReorder?.(
+                                properties.items,
+                                newOrder.map((index) => properties.items[index]),
+                            );
                         }
                     },
                 };
@@ -131,32 +148,111 @@ function DraggableList({
     });
 
     // Keep the original order of the items in sync with the items prop
-    React.useEffect(() => {
-        originalItemOrder.current = items.map((_, i) => i);
-        springsApi.start((index: number) => {
-            const sumOfPreviousItemsHeights = originalItemOrder.current
-                .slice(0, index)
-                .reduce((sum, index) => sum + heightMap.get(items[index])!, 0);
+    React.useEffect(
+        function () {
+            originalItemOrder.current = properties.items.map((_, i) => i);
+            springsApi.start((index: number) => {
+                const sumOfPreviousItemsHeights = originalItemOrder.current
+                    .slice(0, index)
+                    .reduce((sum, index) => sum + heightMap.get(properties.items[index])!, 0);
 
-            return {
-                y: sumOfPreviousItemsHeights,
-                scale: 1,
-                zIndex: 0,
-                shadow: 1,
-                immediate: true,
-            };
-        });
-    }, [items, springsApi, heightMap]);
+                return {
+                    y: sumOfPreviousItemsHeights,
+                    scale: 1,
+                    zIndex: 0,
+                    shadow: 1,
+                    immediate: true,
+                };
+            });
+        },
+        [properties.items, springsApi, heightMap],
+    );
 
-    if(icon) {
+    // Get the properties to spread to the ul element
+    const ulProperties = { ...properties } as Partial<DraggableListProperties>;
+    delete ulProperties.className;
+    delete ulProperties.items;
+    delete ulProperties.icon;
+    delete ulProperties.iconPosition;
+    delete ulProperties.iconAlignment;
+    delete ulProperties.onReorder;
+    delete ulProperties.onDrag;
+
+    // If there is an icon, render the icon and the items
+    if(properties.icon) {
         return (
-            <ul className={'relative ' + props.className} {...props}>
-                {springs.map(({ y, scale, zIndex }, index) => (
+            <ul
+                className={'relative ' + ulProperties.className}
+                {...(ulProperties as React.HTMLAttributes<HTMLUListElement>)}
+            >
+                {springs.map((springProps, index) => {
+                    const y = springProps.y;
+                    const scale = springProps.scale;
+                    const zIndex = springProps.zIndex;
+                    return (
+                        <animated.li
+                            key={index}
+                            ref={(el) => {
+                                if(el) {
+                                    heightMap.set(properties.items[index], el.clientHeight);
+                                }
+                            }}
+                            style={{
+                                zIndex,
+                                // boxShadow: shadow.to(
+                                //   (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`,
+                                // ),
+                                y,
+                                scale,
+                            }}
+                            className={`absolute flex justify-start ${
+                                iconAlignment === 'top'
+                                    ? 'items-start'
+                                    : iconAlignment === 'bottom'
+                                      ? 'items-end'
+                                      : 'items-center'
+                            }`}
+                        >
+                            {iconPosition === 'left' && (
+                                <div
+                                    className="touch-none select-none hover:cursor-grab active:cursor-grabbing"
+                                    {...bindDrag(index)}
+                                >
+                                    {properties.icon}
+                                </div>
+                            )}
+                            {properties.items[index]}
+                            {iconPosition === 'right' && (
+                                <div
+                                    className="touch-none select-none hover:cursor-grab active:cursor-grabbing"
+                                    {...bindDrag(index)}
+                                >
+                                    {properties.icon}
+                                </div>
+                            )}
+                        </animated.li>
+                    );
+                })}
+            </ul>
+        );
+    }
+
+    // Render the component
+    return (
+        <ul
+            className={'relative ' + ulProperties.className}
+            {...(ulProperties as React.HTMLAttributes<HTMLUListElement>)}
+        >
+            {springs.map(function (springProperties, index) {
+                const y = springProperties.y;
+                const scale = springProperties.scale;
+                const zIndex = springProperties.zIndex;
+                return (
                     <animated.li
                         key={index}
-                        ref={(el) => {
-                            if(el) {
-                                heightMap.set(items[index], el.clientHeight);
+                        ref={(element) => {
+                            if(element) {
+                                heightMap.set(properties.items[index], element.clientHeight);
                             }
                         }}
                         style={{
@@ -167,96 +263,16 @@ function DraggableList({
                             y,
                             scale,
                         }}
-                        className={`absolute flex justify-start ${
-                            iconAlignment === 'top'
-                                ? 'items-start'
-                                : iconAlignment === 'bottom'
-                                  ? 'items-end'
-                                  : 'items-center'
-                        }`}
+                        className={'absolute touch-none select-none hover:cursor-grab active:cursor-grabbing '}
+                        {...bindDrag(index)}
                     >
-                        {iconPosition === 'left' && (
-                            <div
-                                className="touch-none select-none hover:cursor-grab active:cursor-grabbing"
-                                {...bindDrag(index)}
-                            >
-                                {icon}
-                            </div>
-                        )}
-                        {items[index]}
-                        {iconPosition === 'right' && (
-                            <div
-                                className="touch-none select-none hover:cursor-grab active:cursor-grabbing"
-                                {...bindDrag(index)}
-                            >
-                                {icon}
-                            </div>
-                        )}
+                        {properties.items[index]}
                     </animated.li>
-                ))}
-            </ul>
-        );
-    }
-
-    return (
-        <ul className={'relative ' + props.className} {...props}>
-            {springs.map(({ y, scale, zIndex }, index) => (
-                <animated.li
-                    key={index}
-                    ref={(el) => {
-                        if(el) {
-                            heightMap.set(items[index], el.clientHeight);
-                        }
-                    }}
-                    style={{
-                        zIndex,
-                        // boxShadow: shadow.to(
-                        //   (s) => `rgba(0, 0, 0, 0.15) 0px ${s}px ${2 * s}px 0px`,
-                        // ),
-                        y,
-                        scale,
-                    }}
-                    className={'absolute touch-none select-none hover:cursor-grab active:cursor-grabbing '}
-                    {...bindDrag(index)}
-                >
-                    {items[index]}
-                </animated.li>
-            ))}
+                );
+            })}
         </ul>
     );
 }
 
+// Export - Default
 export default DraggableList;
-
-/**
- * UTILTIY FUNCTIONS
- */
-
-/**
- * ARRAY
- */
-function swap<T>(array: T[], from: number, to: number) {
-    // console.log({ array });
-    // console.log('Swapping ', array[from], ' with ', array[to], ' from index ', from, ' to index ', to);
-
-    if(from === to) {
-        return array;
-    }
-
-    const newArray = [...array];
-    const item = newArray.splice(from, 1)[0];
-    if(item !== undefined) {
-        newArray.splice(to, 0, item);
-    }
-    else {
-        throw new Error('Item not found');
-    }
-    return newArray;
-}
-
-/**
- * NUMBER
- */
-function clamp(value: number, min: number, max: number) {
-    return Math.min(Math.max(value, min), max);
-}
