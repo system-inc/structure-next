@@ -39,14 +39,22 @@ export function CommandPlugin(properties: CommandPluginProperties) {
     const [text, setText] = React.useState('');
     const menuRef = React.useRef<HTMLUListElement>(null);
 
-    const closeMenu = React.useCallback(() => {
-        setIsShowingMenu(false);
-        setMatchingCommands(properties.commands);
-        setText('');
-        setSelectedCommandIndex(0);
-    }, [properties.commands]);
+    const closeMenu = React.useCallback(
+        function () {
+            setIsShowingMenu(false);
+            setMatchingCommands(properties.commands);
+            setText('');
+            setSelectedCommandIndex(0);
+        },
+        [properties.commands],
+    );
 
-    const memoizedCommands = React.useMemo(() => properties.commands, [properties.commands]);
+    const memoizedCommands = React.useMemo(
+        function () {
+            return properties.commands;
+        },
+        [properties.commands],
+    );
 
     const propertiesPrefix = properties.prefix;
     const propertiesOnSelect = properties.onSelect;
@@ -95,7 +103,7 @@ export function CommandPlugin(properties: CommandPluginProperties) {
     );
 
     const updateMatchingCommands = React.useCallback(
-        (searchText: string) => {
+        function (searchText: string) {
             if(!searchText) {
                 setMatchingCommands(properties.commands);
                 return;
@@ -112,154 +120,166 @@ export function CommandPlugin(properties: CommandPluginProperties) {
     );
 
     // Handle keyboard events
-    React.useEffect(() => {
-        return mergeRegister(
-            editor.registerCommand(
-                KEY_ARROW_DOWN_COMMAND,
-                (event) => {
-                    if(!isShowingMenu) return false;
-                    event.preventDefault();
-                    setSelectedCommandIndex((prev) => (prev < matchingCommands.length - 1 ? prev + 1 : prev));
-                    return true;
-                },
-                COMMAND_PRIORITY_HIGH,
-            ),
-
-            editor.registerCommand(
-                KEY_ARROW_UP_COMMAND,
-                (event) => {
-                    if(!isShowingMenu) return false;
-                    event.preventDefault();
-                    setSelectedCommandIndex((prev) => (prev > 0 ? prev - 1 : 0));
-                    return true;
-                },
-                COMMAND_PRIORITY_HIGH,
-            ),
-
-            editor.registerCommand(
-                KEY_ENTER_COMMAND,
-                (event) => {
-                    if(!isShowingMenu) return false;
-                    if(
-                        matchingCommands.length > 0 &&
-                        selectedCommandIndex >= 0 &&
-                        selectedCommandIndex < matchingCommands.length
-                    ) {
-                        event?.preventDefault();
-                        const selectedCommand = matchingCommands[selectedCommandIndex];
-                        if(!selectedCommand) return false;
-                        insertCommand(selectedCommand);
-                        closeMenu();
-                    }
-                    return true;
-                },
-                COMMAND_PRIORITY_HIGH,
-            ),
-
-            editor.registerCommand(
-                KEY_TAB_COMMAND,
-                (event) => {
-                    if(!isShowingMenu) return false;
-                    if(
-                        matchingCommands.length > 0 &&
-                        selectedCommandIndex >= 0 &&
-                        selectedCommandIndex < matchingCommands.length
-                    ) {
+    React.useEffect(
+        function () {
+            return mergeRegister(
+                editor.registerCommand(
+                    KEY_ARROW_DOWN_COMMAND,
+                    (event) => {
+                        if(!isShowingMenu) return false;
                         event.preventDefault();
-                        const selectedCommand = matchingCommands[selectedCommandIndex];
-                        if(!selectedCommand) return false;
-                        insertCommand(selectedCommand);
-                        closeMenu();
-                    }
-                    return true;
-                },
-                COMMAND_PRIORITY_HIGH,
-            ),
+                        setSelectedCommandIndex((prev) => (prev < matchingCommands.length - 1 ? prev + 1 : prev));
+                        return true;
+                    },
+                    COMMAND_PRIORITY_HIGH,
+                ),
 
-            editor.registerCommand(
-                KEY_ESCAPE_COMMAND,
-                (event) => {
-                    if(!isShowingMenu) return false;
-                    event.preventDefault();
-                    closeMenu();
-                    return true;
-                },
-                COMMAND_PRIORITY_HIGH,
-            ),
-        );
-    }, [editor, isShowingMenu, matchingCommands, selectedCommandIndex, insertCommand, closeMenu]);
+                editor.registerCommand(
+                    KEY_ARROW_UP_COMMAND,
+                    (event) => {
+                        if(!isShowingMenu) return false;
+                        event.preventDefault();
+                        setSelectedCommandIndex((prev) => (prev > 0 ? prev - 1 : 0));
+                        return true;
+                    },
+                    COMMAND_PRIORITY_HIGH,
+                ),
+
+                editor.registerCommand(
+                    KEY_ENTER_COMMAND,
+                    (event) => {
+                        if(!isShowingMenu) return false;
+                        if(
+                            matchingCommands.length > 0 &&
+                            selectedCommandIndex >= 0 &&
+                            selectedCommandIndex < matchingCommands.length
+                        ) {
+                            event?.preventDefault();
+                            const selectedCommand = matchingCommands[selectedCommandIndex];
+                            if(!selectedCommand) return false;
+                            insertCommand(selectedCommand);
+                            closeMenu();
+                        }
+                        return true;
+                    },
+                    COMMAND_PRIORITY_HIGH,
+                ),
+
+                editor.registerCommand(
+                    KEY_TAB_COMMAND,
+                    (event) => {
+                        if(!isShowingMenu) return false;
+                        if(
+                            matchingCommands.length > 0 &&
+                            selectedCommandIndex >= 0 &&
+                            selectedCommandIndex < matchingCommands.length
+                        ) {
+                            event.preventDefault();
+                            const selectedCommand = matchingCommands[selectedCommandIndex];
+                            if(!selectedCommand) return false;
+                            insertCommand(selectedCommand);
+                            closeMenu();
+                        }
+                        return true;
+                    },
+                    COMMAND_PRIORITY_HIGH,
+                ),
+
+                editor.registerCommand(
+                    KEY_ESCAPE_COMMAND,
+                    (event) => {
+                        if(!isShowingMenu) return false;
+                        event.preventDefault();
+                        closeMenu();
+                        return true;
+                    },
+                    COMMAND_PRIORITY_HIGH,
+                ),
+            );
+        },
+        [editor, isShowingMenu, matchingCommands, selectedCommandIndex, insertCommand, closeMenu],
+    );
 
     // Track text changes and detect command prefix
-    React.useEffect(() => {
-        const removeUpdateListener = editor.registerUpdateListener((updateState) => {
-            const editorState = updateState.editorState;
-            editorState.read(() => {
-                const selection = $getSelection();
-                if(!$isRangeSelection(selection)) return;
+    React.useEffect(
+        function () {
+            const removeUpdateListener = editor.registerUpdateListener((updateState) => {
+                const editorState = updateState.editorState;
+                editorState.read(() => {
+                    const selection = $getSelection();
+                    if(!$isRangeSelection(selection)) return;
 
-                const anchorNode = selection.anchor.getNode();
-                if(!(anchorNode instanceof TextNode)) return;
+                    const anchorNode = selection.anchor.getNode();
+                    if(!(anchorNode instanceof TextNode)) return;
 
-                const textContent = anchorNode.getTextContent();
-                const cursorPosition = selection.anchor.offset;
+                    const textContent = anchorNode.getTextContent();
+                    const cursorPosition = selection.anchor.offset;
 
-                // Find the last occurrence of the prefix before the cursor
-                const prefixBeforeCursor = textContent.substring(0, cursorPosition).lastIndexOf(properties.prefix);
+                    // Find the last occurrence of the prefix before the cursor
+                    const prefixBeforeCursor = textContent.substring(0, cursorPosition).lastIndexOf(properties.prefix);
 
-                if(prefixBeforeCursor >= 0) {
-                    const searchText = textContent.substring(
-                        prefixBeforeCursor + properties.prefix.length,
-                        cursorPosition,
-                    );
+                    if(prefixBeforeCursor >= 0) {
+                        const searchText = textContent.substring(
+                            prefixBeforeCursor + properties.prefix.length,
+                            cursorPosition,
+                        );
 
-                    setIsShowingMenu(true);
-                    setText(searchText);
-                    updateMatchingCommands(searchText);
-                }
-                else {
-                    setIsShowingMenu(false);
-                }
+                        setIsShowingMenu(true);
+                        setText(searchText);
+                        updateMatchingCommands(searchText);
+                    }
+                    else {
+                        setIsShowingMenu(false);
+                    }
+                });
             });
-        });
 
-        return removeUpdateListener;
-    }, [editor, properties.prefix, updateMatchingCommands]);
+            return removeUpdateListener;
+        },
+        [editor, properties.prefix, updateMatchingCommands],
+    );
 
     // Click outside to close menu
-    React.useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if(menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                closeMenu();
-            }
-        };
+    React.useEffect(
+        function () {
+            const handleClickOutside = (event: MouseEvent) => {
+                if(menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                    closeMenu();
+                }
+            };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [closeMenu]);
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        },
+        [closeMenu],
+    );
 
-    React.useEffect(() => {
-        // Get the position of the cursor and update the menu position
-        const updateMenuPosition = () => {
-            if(!menuRef.current) return;
-            let anchorKey;
-            editor.read(() => {
-                const selection = $getSelection();
-                if(!selection || !$isRangeSelection(selection)) return;
-                anchorKey = selection.anchor.key;
-            });
-            if(!anchorKey) return;
-            const anchorElement = editor.getElementByKey(anchorKey);
-            if(!anchorElement) return;
+    React.useEffect(
+        function () {
+            // Get the position of the cursor and update the menu position
+            const updateMenuPosition = () => {
+                if(!menuRef.current) return;
+                let anchorKey;
+                editor.read(() => {
+                    const selection = $getSelection();
+                    if(!selection || !$isRangeSelection(selection)) return;
+                    anchorKey = selection.anchor.key;
+                });
+                if(!anchorKey) return;
+                const anchorElement = editor.getElementByKey(anchorKey);
+                if(!anchorElement) return;
 
-            const { top, left } = anchorElement.getBoundingClientRect();
-            menuRef.current.style.top = `${top + anchorElement.offsetHeight}px`;
-            menuRef.current.style.left = `${left}px`;
-        };
+                const { top, left } = anchorElement.getBoundingClientRect();
+                menuRef.current.style.top = `${top + anchorElement.offsetHeight}px`;
+                menuRef.current.style.left = `${left}px`;
+            };
 
-        updateMenuPosition();
-    }, [editor]);
+            updateMenuPosition();
+        },
+        [editor],
+    );
 
     if(!isShowingMenu || matchingCommands.length === 0) {
         return null;

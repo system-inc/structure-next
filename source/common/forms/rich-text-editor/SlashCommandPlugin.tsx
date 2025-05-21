@@ -31,7 +31,9 @@ export function SlashSnippetCommandPlugin() {
     // const [editor] = useLexicalComposerContext();
 
     // Memoize snippets to prevent unnecessary re-renders
-    const snippets = React.useMemo(() => PREDEFINED_SNIPPETS, []);
+    const snippets = React.useMemo(function () {
+        return PREDEFINED_SNIPPETS;
+    }, []);
 
     const handleSnippetSelect = (snippet: Snippet) => {
         console.log(`Selected snippet: ${snippet.key}`);

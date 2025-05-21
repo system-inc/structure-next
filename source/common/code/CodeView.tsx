@@ -32,35 +32,41 @@ const CodeEditor = (properties: CodeEditorProperties) => {
     // Handle 'tab' key press
     const propertiesCode = properties.code;
     const propertiesSetCode = properties.setCode;
-    React.useEffect(() => {
-        function handleKeyDown(event: KeyboardEvent) {
-            if(event.key === 'Tab') {
-                event.preventDefault();
-                const target = event.target as HTMLTextAreaElement;
-                const start = target.selectionStart;
-                const end = target.selectionEnd;
+    React.useEffect(
+        function () {
+            function handleKeyDown(event: KeyboardEvent) {
+                if(event.key === 'Tab') {
+                    event.preventDefault();
+                    const target = event.target as HTMLTextAreaElement;
+                    const start = target.selectionStart;
+                    const end = target.selectionEnd;
 
-                propertiesSetCode(propertiesCode.substring(0, start) + '    ' + propertiesCode.substring(end));
+                    propertiesSetCode(propertiesCode.substring(0, start) + '    ' + propertiesCode.substring(end));
 
-                target.selectionStart = target.selectionEnd = start + 2;
+                    target.selectionStart = target.selectionEnd = start + 2;
+                }
             }
-        }
 
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [propertiesCode, propertiesSetCode]);
+            document.addEventListener('keydown', handleKeyDown);
+            return () => document.removeEventListener('keydown', handleKeyDown);
+        },
+        [propertiesCode, propertiesSetCode],
+    );
 
-    React.useLayoutEffect(() => {
-        // Register additional languages
-        if(properties.loadLanguages) {
-            properties.loadLanguages.forEach((language) =>
-                SyntaxHighlighter.registerLanguage(language.name, language.languageFunction),
-            );
-        }
-    }, [properties.loadLanguages]);
+    React.useLayoutEffect(
+        function () {
+            // Register additional languages
+            if(properties.loadLanguages) {
+                properties.loadLanguages.forEach((language) =>
+                    SyntaxHighlighter.registerLanguage(language.name, language.languageFunction),
+                );
+            }
+        },
+        [properties.loadLanguages],
+    );
 
     // Register languages (defaults)
-    React.useLayoutEffect(() => {
+    React.useLayoutEffect(function () {
         SyntaxHighlighter.registerLanguage('jsx', jsx);
         SyntaxHighlighter.registerLanguage('typescript', typescript);
         SyntaxHighlighter.registerLanguage('ts', typescript);

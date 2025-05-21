@@ -47,9 +47,12 @@ function Popover(properties: PopoverProperties) {
     const popoverId = React.useId(); // Create a unique ID for the popover
 
     const [internalOpen, setInternalOpen] = React.useState(false);
-    const [open, setOpen] = React.useMemo(() => {
-        return externalOpen !== undefined ? [externalOpen, externalSetOpen] : [internalOpen, setInternalOpen];
-    }, [externalOpen, externalSetOpen, internalOpen, setInternalOpen]);
+    const [open, setOpen] = React.useMemo(
+        function () {
+            return externalOpen !== undefined ? [externalOpen, externalSetOpen] : [internalOpen, setInternalOpen];
+        },
+        [externalOpen, externalSetOpen, internalOpen, setInternalOpen],
+    );
 
     const transition = useTransition(open, {
         initial: {
@@ -170,7 +173,7 @@ interface PopoverItemProperties
         React.HTMLAttributes<HTMLButtonElement> {
     asChild?: boolean;
 }
-const PopoverItem = React.forwardRef<HTMLButtonElement, PopoverItemProperties>((properties, reference) => {
+const PopoverItem = React.forwardRef<HTMLButtonElement, PopoverItemProperties>(function (properties, reference) {
     const Component = properties.asChild ? Slot : 'button';
 
     // Component properties to spread

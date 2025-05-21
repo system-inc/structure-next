@@ -10,7 +10,7 @@ const FloatingLinkEditor = () => {
     const [isVisible, setIsVisible] = React.useState(false);
     const [position, setPosition] = React.useState({ top: 0, left: 0 });
 
-    const updateLinkEditor = React.useCallback(() => {
+    const updateLinkEditor = React.useCallback(function () {
         const selection = $getSelection();
         if($isRangeSelection(selection)) {
             const node = $getNearestNodeOfType(selection.anchor.getNode(), LinkNode);
@@ -32,11 +32,14 @@ const FloatingLinkEditor = () => {
         }
     }, []);
 
-    React.useEffect(() => {
-        return editor.registerUpdateListener((listener) => {
-            listener.editorState.read(updateLinkEditor);
-        });
-    }, [editor, updateLinkEditor]);
+    React.useEffect(
+        function () {
+            return editor.registerUpdateListener((listener) => {
+                listener.editorState.read(updateLinkEditor);
+            });
+        },
+        [editor, updateLinkEditor],
+    );
 
     const updateLink = () => {
         editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);

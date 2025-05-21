@@ -78,7 +78,7 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
     const [isEmpty, setIsEmpty] = React.useState(true);
     const [isAttachmentModalOpen, setIsAttachmentModalOpen] = React.useState(false);
 
-    const $updateToolbar = React.useCallback(() => {
+    const $updateToolbar = React.useCallback(function () {
         const selection = $getSelection();
         if($isRangeSelection(selection)) {
             setIsBold(selection.hasFormat('bold'));
@@ -96,41 +96,44 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
         }
     }, []);
 
-    React.useEffect(() => {
-        return mergeRegister(
-            editor.registerUpdateListener((listener) => {
-                listener.editorState.read(() => {
-                    $updateToolbar();
-                    const isNowEmpty = $getRoot().getTextContent().trim() === '';
-                    setIsEmpty(isNowEmpty);
-                });
-            }),
-            editor.registerCommand(
-                SELECTION_CHANGE_COMMAND,
-                () => {
-                    $updateToolbar();
-                    return false;
-                },
-                LowPriority,
-            ),
-            editor.registerCommand(
-                CAN_UNDO_COMMAND,
-                (payload) => {
-                    setCanUndo(payload);
-                    return false;
-                },
-                LowPriority,
-            ),
-            editor.registerCommand(
-                CAN_REDO_COMMAND,
-                (payload) => {
-                    setCanRedo(payload);
-                    return false;
-                },
-                LowPriority,
-            ),
-        );
-    }, [editor, $updateToolbar]);
+    React.useEffect(
+        function () {
+            return mergeRegister(
+                editor.registerUpdateListener((listener) => {
+                    listener.editorState.read(() => {
+                        $updateToolbar();
+                        const isNowEmpty = $getRoot().getTextContent().trim() === '';
+                        setIsEmpty(isNowEmpty);
+                    });
+                }),
+                editor.registerCommand(
+                    SELECTION_CHANGE_COMMAND,
+                    () => {
+                        $updateToolbar();
+                        return false;
+                    },
+                    LowPriority,
+                ),
+                editor.registerCommand(
+                    CAN_UNDO_COMMAND,
+                    (payload) => {
+                        setCanUndo(payload);
+                        return false;
+                    },
+                    LowPriority,
+                ),
+                editor.registerCommand(
+                    CAN_REDO_COMMAND,
+                    (payload) => {
+                        setCanRedo(payload);
+                        return false;
+                    },
+                    LowPriority,
+                ),
+            );
+        },
+        [editor, $updateToolbar],
+    );
 
     // Function to handle saving files
     function handleSaveFiles(files: File[]) {

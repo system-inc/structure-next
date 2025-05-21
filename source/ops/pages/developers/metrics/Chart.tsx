@@ -530,56 +530,61 @@ export const Chart = function (properties: ChartInterface) {
     const [chartWrapperDomElementReference, wrapperDimensions] = useMeasure();
 
     // Memoized data to be used by the chart
-    const formattedDataSourceWithMetrics = React.useMemo(() => {
-        return (
-            properties.dataSourcesWithMetrics
-                // First, we need to flatten the data
-                .flatMap((element) => {
-                    const metricsData = element.metrics?.data as Array<[string, number]> | undefined;
-                    return (metricsData || []).map((data) => {
-                        const formattedData = {} as {
-                            [k: string]: number | string | undefined;
-                            metricIndex: string | undefined;
-                            intervalValue: string | undefined;
-                            intervalValueCategory: string | undefined;
-                        };
-                        // Set the key that will be used to identify the data point is set to the data total
-                        formattedData[`${element.id}-${element.tableName}-${element.columnName}-total`] = data[1];
-                        formattedData.metricIndex = data[0];
+    const formattedDataSourceWithMetrics = React.useMemo(
+        function () {
+            return (
+                properties.dataSourcesWithMetrics
+                    // First, we need to flatten the data
+                    .flatMap((element) => {
+                        const metricsData = element.metrics?.data as Array<[string, number]> | undefined;
+                        return (metricsData || []).map((data) => {
+                            const formattedData = {} as {
+                                [k: string]: number | string | undefined;
+                                metricIndex: string | undefined;
+                                intervalValue: string | undefined;
+                                intervalValueCategory: string | undefined;
+                            };
+                            // Set the key that will be used to identify the data point is set to the data total
+                            formattedData[`${element.id}-${element.tableName}-${element.columnName}-total`] = data[1];
+                            formattedData.metricIndex = data[0];
 
-                        return formattedData;
-                    });
-                })
+                            return formattedData;
+                        });
+                    })
 
-                // Combine all data points with the same metricIndex
-                .reduce(
-                    (accumulator, currentValue) => {
-                        const index = accumulator.findIndex((data) => data.metricIndex === currentValue.metricIndex);
-                        if(index === -1) {
-                            return [...accumulator, currentValue];
+                    // Combine all data points with the same metricIndex
+                    .reduce(
+                        (accumulator, currentValue) => {
+                            const index = accumulator.findIndex(
+                                (data) => data.metricIndex === currentValue.metricIndex,
+                            );
+                            if(index === -1) {
+                                return [...accumulator, currentValue];
+                            }
+                            else {
+                                const newData = [...accumulator];
+                                newData[index] = { ...newData[index], ...currentValue };
+                                return newData;
+                            }
+                        },
+                        [] as { [k: string]: number | string | undefined; metricIndex: string | undefined }[],
+                    )
+                    // Sort the data by the metricIndex
+                    .sort((a, b) => {
+                        if(a.metricIndex === undefined || b.metricIndex === undefined) return 1;
+
+                        // sort based on sortOrder
+                        if(properties.sortOrder === 'ASC') {
+                            return a.metricIndex.localeCompare(b.metricIndex);
                         }
                         else {
-                            const newData = [...accumulator];
-                            newData[index] = { ...newData[index], ...currentValue };
-                            return newData;
+                            return b.metricIndex.localeCompare(a.metricIndex);
                         }
-                    },
-                    [] as { [k: string]: number | string | undefined; metricIndex: string | undefined }[],
-                )
-                // Sort the data by the metricIndex
-                .sort((a, b) => {
-                    if(a.metricIndex === undefined || b.metricIndex === undefined) return 1;
-
-                    // sort based on sortOrder
-                    if(properties.sortOrder === 'ASC') {
-                        return a.metricIndex.localeCompare(b.metricIndex);
-                    }
-                    else {
-                        return b.metricIndex.localeCompare(a.metricIndex);
-                    }
-                })
-        );
-    }, [properties.dataSourcesWithMetrics, properties.sortOrder]);
+                    })
+            );
+        },
+        [properties.dataSourcesWithMetrics, properties.sortOrder],
+    );
     // console.log("dataSourcesWithMetrics", dataSourcesWithMetrics);
     // console.log("formattedDataSourceWithMetrics", formattedDataSourceWithMetrics);
 

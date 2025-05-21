@@ -40,7 +40,7 @@ export interface PostCommentControlsInterface {
     onReactionCreate: (content: string) => void;
 }
 export function PostCommentControls(properties: PostCommentControlsInterface) {
-    const windowLocationOrigin = React.useMemo(() => {
+    const windowLocationOrigin = React.useMemo(function () {
         if(typeof window === 'undefined') return '';
         return window.location.origin;
     }, []);

@@ -29,8 +29,12 @@ export function NoticeContainer(properties: NoticeContainerInterface) {
 
     // References
     // Weakmap of notices and their refs to calculate the height of the notices
-    const noticeReferences = React.useMemo(() => new WeakMap<NoticeInterface, HTMLDivElement>(), []);
-    const fadeReferencesMap = React.useMemo(() => new WeakMap<NoticeInterface, NodeJS.Timeout>(), []);
+    const noticeReferences = React.useMemo(function () {
+        return new WeakMap<NoticeInterface, HTMLDivElement>();
+    }, []);
+    const fadeReferencesMap = React.useMemo(function () {
+        return new WeakMap<NoticeInterface, NodeJS.Timeout>();
+    }, []);
     const isClearingAllReference = React.useRef(false);
     const collapseTimeoutReference: React.MutableRefObject<NodeJS.Timeout | undefined> = React.useRef(undefined);
 

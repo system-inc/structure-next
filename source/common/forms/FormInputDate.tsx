@@ -34,7 +34,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
     const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputDateReference);
 
     // Function to focus on the component
-    const focus = React.useCallback(() => {
+    const focus = React.useCallback(function () {
         inputDateReference.current?.focus();
     }, []);
 

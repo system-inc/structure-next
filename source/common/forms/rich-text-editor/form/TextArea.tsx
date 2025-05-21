@@ -37,7 +37,7 @@ const textAreaVariants = cva(
 
 // Component - TextArea
 type TextAreaProperties = React.ComponentPropsWithoutRef<'textarea'> & VariantProps<typeof textAreaVariants>;
-const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>((properties, reference) => {
+const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(function (properties, reference) {
     const resizeId = React.useId();
 
     // Create an event handler to resize the textarea to the size of the content unless the resize value is none
