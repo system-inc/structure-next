@@ -2,24 +2,24 @@
 import { ApolloError } from '@apollo/client';
 
 // Interface - GraphQL Validation Error
-export interface GraphQLValidationError {
+export interface GraphQlValidationError {
     property?: string;
-    constraints?: GraphQLValidationErrorConstraint;
+    constraints?: GraphQlValidationErrorConstraint;
     value?: unknown;
-    children?: GraphQLValidationError[];
+    children?: GraphQlValidationError[];
     [key: string]: unknown;
 }
 
 // Interface - GraphQL Validation Error Constraint
-export interface GraphQLValidationErrorConstraint {
+export interface GraphQlValidationErrorConstraint {
     isUnique?: boolean;
     [constraintKey: string]: unknown;
 }
 
 // Interface - GraphQL Error Extensions
-export interface GraphQLErrorExtensions {
+export interface GraphQlErrorExtensions {
     code?: string;
-    validationErrors?: GraphQLValidationError[];
+    validationErrors?: GraphQlValidationError[];
     exception?: {
         stacktrace?: string[];
         [key: string]: unknown;
@@ -30,9 +30,9 @@ export interface GraphQLErrorExtensions {
 // Function to extract validation errors from an ApolloError
 export function extractValidationErrorsFromApolloError(
     apolloError?: ApolloError,
-): GraphQLValidationError[] | undefined {
+): GraphQlValidationError[] | undefined {
     const graphQlError = apolloError?.graphQLErrors?.[0];
-    const extensions = graphQlError?.extensions as GraphQLErrorExtensions | undefined;
+    const extensions = graphQlError?.extensions as GraphQlErrorExtensions | undefined;
     return extensions?.validationErrors;
 }
 
@@ -51,7 +51,7 @@ export const apolloErrorToMessage = function (mutationError?: ApolloError) {
 
         if(error) {
             if(error.extensions && error.extensions.validationErrors) {
-                const validationErrors = error.extensions.validationErrors as GraphQLValidationError[];
+                const validationErrors = error.extensions.validationErrors as GraphQlValidationError[];
 
                 if(validationErrors && validationErrors.length > 0 && validationErrors[0]) {
                     const property = validationErrors[0].property;
