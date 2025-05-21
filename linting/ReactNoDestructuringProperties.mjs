@@ -1,6 +1,6 @@
 // ESLint rule to prevent destructuring in function parameters for React components
 // This enforces using direct property access (properties.propName) instead of destructuring
-const NoPropertiesDestructuringRule = {
+const ReactNoDestructuringProperties = {
     meta: {
         type: 'problem',
         docs: {
@@ -80,4 +80,4 @@ function isReactHookDestructuring(node) {
     return false;
 }
 
-export default NoPropertiesDestructuringRule;
+export default ReactNoDestructuringProperties;

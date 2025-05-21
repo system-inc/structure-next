@@ -1,6 +1,6 @@
 // ESLint rule to enforce React component property interfaces/types ending with "Properties"
 // This ensures consistency in component property type naming
-const ReactComponentPropertiesTypeNamingRule = {
+const ReactPropertiesTypeNamingRule = {
     meta: {
         type: 'suggestion',
         docs: {
@@ -192,4 +192,4 @@ const ReactComponentPropertiesTypeNamingRule = {
     }
 };
 
-export default ReactComponentPropertiesTypeNamingRule;
+export default ReactPropertiesTypeNamingRule;
