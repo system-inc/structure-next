@@ -12,6 +12,12 @@ const ReactPropertiesTypeNamingRule = {
         schema: [],
     },
     create(context) {
+        // Only apply this rule to TSX files (React components)
+        const filename = context.getFilename();
+        if(!filename.endsWith('.tsx')) {
+            return {};
+        }
+
         // Track component property types that need to be renamed
         const componentPropTypes = new Set();
 
