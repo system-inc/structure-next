@@ -7,7 +7,7 @@ import ReactPropertiesParameterNameRule from './ReactPropertiesParameterNameRule
 import ReactNoArrowFunctionsAsHookParameters from './ReactNoArrowFunctionsAsHookParameters.mjs';
 import ReactPropertiesTypeNamingRule from './ReactPropertiesTypeNamingRule.mjs';
 import ReactFunctionStyleRule from './ReactFunctionStyleRule.mjs';
-import ReactNoDefaultExportRule from './ReactNoDefaultExportRule.mjs';
+import ReactExportRules from './ReactExportRules.mjs';
 
 // ESLint Structure Lint Rules
 const StructureLintRules = {
@@ -20,7 +20,7 @@ const StructureLintRules = {
         'react-no-arrow-functions-as-hook-parameters': ReactNoArrowFunctionsAsHookParameters,
         'react-properties-type-naming': ReactPropertiesTypeNamingRule,
         'react-function-style': ReactFunctionStyleRule,
-        'react-no-default-export': ReactNoDefaultExportRule,
+        'react-export-rules': ReactExportRules,
     },
 };
 

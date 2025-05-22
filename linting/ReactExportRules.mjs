@@ -1,10 +1,11 @@
-// ESLint rule to prevent default exports in React component files
-// This enforces using named exports only
-const ReactNoDefaultExportRule = {
+// ESLint rule to enforce export patterns for React component files
+// - Enforces named exports for most React components
+// - Requires default exports for Next.js page files (page.tsx)
+const ReactExportRules = {
     meta: {
         type: 'suggestion',
         docs: {
-            description: 'Prevent default exports in React component files, enforcing named exports only',
+            description: 'Enforce named exports for most components and default exports for page.tsx files',
             category: 'Best Practices',
             recommended: true,
         },
@@ -15,9 +16,26 @@ const ReactNoDefaultExportRule = {
         // Track if we have identified a React component in the file
         let componentName = null;
         let hasNamedExport = false;
+        let hasDefaultExport = false;
 
         // Track actual component implementations we find
         const implementedComponents = new Set();
+
+        // Determine if this is a page.tsx file that requires default export
+        const filename = context.getFilename();
+        const isPageFile = filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx');
+
+        // Other Next.js special files which have their own export patterns
+        const specialNextJsFiles = [
+            '/error.tsx',
+            '/error.jsx',
+            '/layout.tsx',
+            '/layout.jsx',
+            '/not-found.tsx',
+            '/not-found.jsx'
+        ];
+
+        const isSpecialNextJsFile = specialNextJsFiles.some(pattern => filename.endsWith(pattern));
 
         return {
             // Detect React components with React.forwardRef
@@ -40,11 +58,11 @@ const ReactNoDefaultExportRule = {
                         if(!componentName) {
                             componentName = node.id.name;
                         }
-                        
+
                         // Check if this is already a named export via 'export const X = React.forwardRef(...)'
-                        if(node.parent && 
-                           node.parent.parent && 
-                           node.parent.parent.type === 'ExportNamedDeclaration') {
+                        if(node.parent &&
+                            node.parent.parent &&
+                            node.parent.parent.type === 'ExportNamedDeclaration') {
                             hasNamedExport = true;
                         }
                     }
@@ -55,8 +73,17 @@ const ReactNoDefaultExportRule = {
             FunctionDeclaration(node) {
                 const functionName = node.id && node.id.name;
 
-                // Skip functions without names or with non-component naming
-                if(!functionName || !/^[A-Z]/.test(functionName)) {
+                // Skip functions without names
+                if(!functionName) {
+                    return;
+                }
+
+                // Special check for Next.js page components
+                const isPageFunction = functionName === 'Page' &&
+                    (filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx'));
+
+                // For regular components, require uppercase first letter
+                if(!isPageFunction && !/^[A-Z]/.test(functionName)) {
                     return;
                 }
 
@@ -92,8 +119,12 @@ const ReactNoDefaultExportRule = {
                     }
                 }
 
-                // If this is a component, record it
-                if(isReactComponent) {
+                // Check if this is a Next.js Page component by name
+                const isNextJsPageFunction = functionName === 'Page' &&
+                    (filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx'));
+
+                // Mark it as a component if it's either a React component or a Page function
+                if(isReactComponent || isNextJsPageFunction) {
                     implementedComponents.add(functionName);
 
                     // Set as the main component if we don't have one yet
@@ -149,37 +180,16 @@ const ReactNoDefaultExportRule = {
                 }
             },
 
-            // Check for default exports and report errors
+            // Check for default exports and track/report depending on file type
             ExportDefaultDeclaration(node) {
-                // Only apply to potential component files
-                const filename = context.getFilename();
-
-                // Skip non-React files, node_modules, and special Next.js files
+                // Skip non-React files and node_modules
                 if(!(/\.(tsx|jsx)$/i.test(filename)) ||
                     filename.includes('node_modules')) {
                     return;
                 }
 
-                // Skip Next.js special files which have their own export patterns
-                const specialNextJsFiles = [
-                    '/page.tsx',
-                    '/page.jsx',
-                    '/error.tsx',
-                    '/error.jsx',
-                    '/layout.tsx',
-                    '/layout.jsx',
-                    '/not-found.tsx',
-                    '/not-found.jsx'
-                ];
-
-                if(specialNextJsFiles.some(pattern => filename.endsWith(pattern))) {
-                    return;
-                }
-
-                // Only report for real components we've identified
-                if(implementedComponents.size === 0 && !componentName) {
-                    return;
-                }
+                // Track that we found a default export
+                hasDefaultExport = true;
 
                 // Get the name of what's being exported
                 let exportedName = '';
@@ -189,8 +199,22 @@ const ReactNoDefaultExportRule = {
                     node.declaration.type === 'FunctionDeclaration' &&
                     node.declaration.id) {
                     exportedName = node.declaration.id.name;
+
+                    // If this is a page.tsx file and we're exporting "function Page()", record it
+                    if(isPageFile && exportedName === 'Page') {
+                        implementedComponents.add('Page');
+                        if(!componentName) {
+                            componentName = 'Page';
+                        }
+                    }
                 }
 
+                // For page.tsx files, default exports are required
+                if(isPageFile || isSpecialNextJsFile) {
+                    return; // Default exports are allowed for page.tsx
+                }
+
+                // For regular component files, default exports are not allowed
                 // Only report if it's a known component
                 if(implementedComponents.has(exportedName) || exportedName === componentName) {
                     context.report({
@@ -206,7 +230,7 @@ const ReactNoDefaultExportRule = {
                 }
             },
 
-            // Ensure components have a named export
+            // Final checks when we've seen the whole file
             'Program:exit'(node) {
                 // Get all the components we found in the file
                 const allComponents = new Set([...implementedComponents]);
@@ -216,8 +240,6 @@ const ReactNoDefaultExportRule = {
                 if(allComponents.size === 0) {
                     return;
                 }
-
-                const filename = context.getFilename();
 
                 // Skip non-React files
                 if(!(/\.(tsx|jsx)$/i.test(filename))) {
@@ -229,25 +251,46 @@ const ReactNoDefaultExportRule = {
                     return;
                 }
 
-                // Skip Next.js special files
-                const specialNextJsFiles = [
-                    '/page.tsx',
-                    '/page.jsx',
-                    '/error.tsx',
-                    '/error.jsx',
-                    '/layout.tsx',
-                    '/layout.jsx',
-                    '/not-found.tsx',
-                    '/not-found.jsx'
-                ];
+                // For page.tsx files, check that a default export exists
+                if(isPageFile && !hasDefaultExport) {
+                    // Try to find the Page function specifically for page.tsx files
+                    let pageComponentName = componentName;
+                    if(!componentName || componentName !== 'Page') {
+                        // If we haven't found a component yet, or it's not the Page component,
+                        // check if 'Page' exists in the implemented components
+                        if(implementedComponents.has('Page')) {
+                            pageComponentName = 'Page';
+                        }
+                    }
 
-                if(specialNextJsFiles.some(pattern => filename.endsWith(pattern))) {
+                    if(pageComponentName) {
+                        context.report({
+                            node: node,
+                            message: `Next.js page files must have a default export. Add "export default ${pageComponentName};" to the end of the file.`,
+                            fix(fixer) {
+                                return fixer.insertTextAfterRange(
+                                    [0, context.getSourceCode().getText().length],
+                                    `\n\n// Export - Default (required for Next.js pages)\nexport default ${pageComponentName};\n`
+                                );
+                            }
+                        });
+                    } else {
+                        context.report({
+                            node: node,
+                            message: 'Next.js page files must have a default export.',
+                        });
+                    }
                     return;
                 }
 
-                // For each component we've identified, ensure it has a named export
-                if(!hasNamedExport && componentName) {
-                    // Named export is required
+                // Skip other Next.js special files
+                if(isSpecialNextJsFile) {
+                    return;
+                }
+
+                // For regular component files (not Next.js special files), check that a named export exists
+                if(!hasNamedExport && componentName && !isPageFile && !isSpecialNextJsFile) {
+                    // Named export is required for regular components
                     context.report({
                         node: node,
                         message: `Component "${componentName}" is missing a named export. Add "export { ${componentName} };" or export the function directly with "export function ${componentName}".`,
@@ -264,4 +307,4 @@ const ReactNoDefaultExportRule = {
     },
 };
 
-export default ReactNoDefaultExportRule;
+export default ReactExportRules;
