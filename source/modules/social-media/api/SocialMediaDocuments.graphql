@@ -16,6 +16,11 @@ query GetSocialResponse($id: String!) {
         mention {
             id
             platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
         }
     }
 }
@@ -39,6 +44,11 @@ query GetSocialResponses($pagination: PaginationInput!) {
             mention {
                 id
                 platform
+                mentionPost {
+                    postedAt
+                    postUrl
+                    text
+                }
             }
         }
         pagination {
