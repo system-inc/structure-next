@@ -14,13 +14,15 @@ export interface LinkProperties
         Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkInterface> {
     className?: string;
     children?: React.ReactNode;
-    variant?: 'Primary' | 'Secondary' | 'Muted';
+    variant?: 'Primary' | 'Secondary' | 'Muted' | 'Unstyled';
 }
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function (properties, reference) {
     // Determine base classes based on variant
     const baseClasses = React.useMemo(
         function () {
             switch(properties.variant) {
+                case 'Unstyled':
+                    return '';
                 case 'Secondary':
                     return 'link-secondary';
                 case 'Muted':
