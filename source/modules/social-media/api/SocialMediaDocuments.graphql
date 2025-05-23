@@ -1,7 +1,6 @@
 query GetSocialResponse($id: String!) {
     socialResponse(id: $id) {
         id
-        mentionId
         text
         status
         postUrl
@@ -14,6 +13,10 @@ query GetSocialResponse($id: String!) {
         generatedAt
         createdAt
         updatedAt
+        mention {
+            id
+            platform
+        }
     }
 }
 
@@ -21,7 +24,6 @@ query GetSocialResponses($pagination: PaginationInput!) {
     socialResponses(pagination: $pagination) {
         items {
             id
-            mentionId
             text
             status
             postUrl
@@ -34,6 +36,10 @@ query GetSocialResponses($pagination: PaginationInput!) {
             generatedAt
             createdAt
             updatedAt
+            mention {
+                id
+                platform
+            }
         }
         pagination {
             itemIndex
@@ -85,7 +91,6 @@ mutation UpdateSocialMediaPlatformSettings($input: UpdateSocialMediaPlatformSett
 mutation ApproveSocialResponse($id: String!) {
     socialResponseApprove(id: $id) {
         id
-        mentionId
         text
         status
         postUrl
@@ -98,13 +103,16 @@ mutation ApproveSocialResponse($id: String!) {
         generatedAt
         createdAt
         updatedAt
+        mention {
+            id
+            platform
+        }
     }
 }
 
 mutation RejectSocialResponse($id: String!) {
     socialResponseReject(id: $id) {
         id
-        mentionId
         text
         status
         postUrl
@@ -117,13 +125,16 @@ mutation RejectSocialResponse($id: String!) {
         generatedAt
         createdAt
         updatedAt
+        mention {
+            id
+            platform
+        }
     }
 }
 
 mutation UpdateSocialResponse($input: UpdateSocialResponseInput!) {
     socialResponseUpdate(input: $input) {
         id
-        mentionId
         text
         status
         postUrl
@@ -136,5 +147,9 @@ mutation UpdateSocialResponse($input: UpdateSocialResponseInput!) {
         generatedAt
         createdAt
         updatedAt
+        mention {
+            id
+            platform
+        }
     }
 }
