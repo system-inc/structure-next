@@ -52,7 +52,8 @@ export function ContactPage() {
     // Render the component
     return (
         <div className="container pt-12">
-            <h1 className="text-3xl font-medium">Contact {ProjectSettings.title}</h1>
+            <h1>Contact {ProjectSettings.title}</h1>
+            <p className="mt-4 text-foreground-secondary">We look forward to hearing from you.</p>
 
             <hr className="my-6" />
 
@@ -60,7 +61,6 @@ export function ContactPage() {
                 {/* Message Not Sent */}
                 {!supportTicketCreateMutationState.data && (
                     <div>
-                        <p className="">We look forward to hearing from you.</p>
                         <Form
                             className="mt-10"
                             formInputs={[
