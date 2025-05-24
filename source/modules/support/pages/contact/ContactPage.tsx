@@ -22,8 +22,14 @@ import { SupportTicketCreateDocument } from '@structure/source/api/graphql/Graph
 import SendIcon from '@structure/assets/icons/communication/SendIcon.svg';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
 // Component - ContactPage
-export function ContactPage() {
+export interface ContactPageProperties {
+    className?: string;
+}
+export function ContactPage(properties: ContactPageProperties) {
     // Hooks
     const { accountState } = useAccount();
     const [supportTicketCreateMutation, supportTicketCreateMutationState] = useMutation(SupportTicketCreateDocument);
@@ -51,13 +57,13 @@ export function ContactPage() {
 
     // Render the component
     return (
-        <div className="container pt-12">
+        <div className={mergeClassNames('container pt-12', properties.className)}>
             <h1>Contact {ProjectSettings.title}</h1>
-            <p className="mt-4 text-foreground-secondary">We look forward to hearing from you.</p>
+            <p className="mt-4 text-sm text-foreground-secondary">We look forward to hearing from you.</p>
 
             <hr className="my-6" />
 
-            <div className="">
+            <div className="mx-auto max-w-screen-md">
                 {/* Message Not Sent */}
                 {!supportTicketCreateMutationState.data && (
                     <div>
