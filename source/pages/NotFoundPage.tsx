@@ -8,9 +8,11 @@ export function NotFoundPage() {
     // Render the component
     return (
         <div>
-            <h1 className="mb-6 text-3xl font-medium">Not Found</h1>
+            <h1>Page Not Found</h1>
 
-            <div className="mb-4">
+            <hr className="my-6" />
+
+            <div className="">
                 <p>The page you are looking for could not be found.</p>
             </div>
         </div>
