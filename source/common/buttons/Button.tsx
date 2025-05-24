@@ -372,7 +372,7 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
     // Determine the component children
     const componentChildren = (
         <>
-            {Icon && properties.iconPosition == 'left' && (
+            {Icon && properties.iconPosition == 'left' && !processing && (
                 <Icon className={mergeClassNames('mr-2 h-4 w-4', properties.iconClassName)} />
             )}
 
@@ -400,7 +400,7 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
                 </>
             ) : null}
 
-            {Icon && properties.iconPosition == 'right' && (
+            {Icon && properties.iconPosition == 'right' && !processing && (
                 <Icon className={mergeClassNames('ml-2 h-4 w-4', properties.iconClassName)} />
             )}
         </>
