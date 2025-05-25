@@ -22,8 +22,8 @@ query WaitLists($pagination: PaginationInput!) {
 }
 
 # Wait List Create Mutation
-mutation WaitListCreate($data: WaitListCreationInput!) {
-    waitListCreate(data: $data) {
+mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
+    waitListCreatePrivileged(data: $data) {
         id
         identifier
         title
@@ -39,8 +39,8 @@ mutation WaitListCreate($data: WaitListCreationInput!) {
 # }
 
 # Wait List Entries Query
-query WaitListEntries($waitListIdentifier: String!, $pagination: PaginationInput!) {
-    waitListEntries(waitListIdentifier: $waitListIdentifier, pagination: $pagination) {
+query WaitListEntriesPrivileged($waitListIdentifier: String, $pagination: PaginationInput!) {
+    waitListEntriesPrivileged(waitListIdentifier: $waitListIdentifier, pagination: $pagination) {
         pagination {
             itemIndex
             itemIndexForNextPage
