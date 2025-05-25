@@ -39,7 +39,7 @@ mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
 # }
 
 # Wait List Entries Query
-query WaitListEntriesPrivileged($waitListIdentifier: String!, $pagination: PaginationInput!) {
+query WaitListEntriesPrivileged($waitListIdentifier: String, $pagination: PaginationInput!) {
     waitListEntriesPrivileged(waitListIdentifier: $waitListIdentifier, pagination: $pagination) {
         pagination {
             itemIndex

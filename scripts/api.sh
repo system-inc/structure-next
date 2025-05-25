@@ -1,16 +1,49 @@
-# Store the projet directory
+# Store the project directory
 projectDirectory=$PWD
+
+# Extract project title from ProjectSettings.ts
+echo "Reading project title from ProjectSettings.ts..."
+projectTitle=$(grep "title:" $projectDirectory/ProjectSettings.ts | head -1 | sed "s/.*title: '//" | sed "s/',.*//")
+echo "Project title: $projectTitle"
+
+# Set defaults
+apiDirectory="api"
+projectBranch="main"
+baseBranch="main"
+
+# Parse named arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --api-directory)
+      apiDirectory="$2"
+      shift 2
+      ;;
+    --project-branch)
+      projectBranch="$2"
+      shift 2
+      ;;
+    --base-branch)
+      baseBranch="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+  esac
+done
+
 
 # Echo
 echo "Updating GraphQL generated code..."
 
 # Change to the api directory and pull the latest code
-echo "Changing to the api directory..."
-cd ../api
+echo "Changing to the $apiDirectory directory..."
+cd ../$apiDirectory
 apiDirectory=$PWD
 
 echo "Pulling the latest api code..."
-git checkout main
+git checkout $projectBranch
 git pull
 
 # Change to the base directory and pull the latest code
@@ -36,9 +69,22 @@ node base.js graphql schema:generate -w api -e Production -s -m
 echo "Copying the generated GraphQL files to the project directory..."
 cp -r $apiDirectory/workers/api/graphql/schemas $projectDirectory/source/api/
 
-# Change back to the project directory
-echo "Changing back to the project directory..."
+# Rename api.graphql and api.json to use project title
+echo "Renaming api files to use project title ($projectTitle)..."
+cd $projectDirectory/source/api/schemas
+if [ -f "api.graphql" ]; then
+    mv api.graphql "$projectTitle.graphql"
+    echo "Renamed api.graphql to $projectTitle.graphql"
+fi
+if [ -f "api.json" ]; then
+    mv api.json "$projectTitle.json"
+    echo "Renamed api.json to $projectTitle.json"
+fi
+
+# Format the schema files
+echo "Formatting GraphQL schema files..."
 cd $projectDirectory
+npx @system-inc/prettier@3.2.1 --write "./source/api/schemas/**/*"
 
 # Generate GraphQL code
 echo "Generating project GraphQL code..."
