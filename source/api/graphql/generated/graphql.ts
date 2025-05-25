@@ -584,7 +584,7 @@ export type Contact = {
   createdByProfileId: Scalars['String']['output'];
   fields?: Maybe<Array<ContactField>>;
   id: Scalars['String']['output'];
-  metadata: Scalars['JSON']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
   name: Scalars['String']['output'];
   note?: Maybe<Scalars['String']['output']>;
   source: Scalars['String']['output'];
@@ -1010,6 +1010,19 @@ export enum DiscountType {
 export enum DiscountValueType {
   FixedAmount = 'FixedAmount',
   Percentage = 'Percentage'
+}
+
+/** DNS Record Types */
+export enum DnsRecordType {
+  A = 'A',
+  Aaaa = 'AAAA',
+  Cname = 'CNAME',
+  Mx = 'MX',
+  Ns = 'NS',
+  Ptr = 'PTR',
+  Soa = 'SOA',
+  Srv = 'SRV',
+  Txt = 'TXT'
 }
 
 export type EmailAutomation = {
@@ -1469,6 +1482,7 @@ export type FlowExecution = {
   createdByAccountId: Scalars['String']['output'];
   createdByProfileId: Scalars['String']['output'];
   elapsedTimeMs?: Maybe<Scalars['Float']['output']>;
+  entryPointId: Scalars['String']['output'];
   errors?: Maybe<Array<Scalars['JSON']['output']>>;
   flowEntity?: Maybe<FlowEntity>;
   flowType: FlowType;
@@ -2472,7 +2486,12 @@ export type Mutation = {
   gridTaskProviderSupportDeletePrivileged: OperationResult;
   /** Update a task. */
   gridTaskUpdatePrivileged: GridTask;
-  portCheckCreate: Scalars['String']['output'];
+  networkToolDnsCreate: Scalars['String']['output'];
+  networkToolPingCreate: Scalars['String']['output'];
+  networkToolPortCheckCreate: Scalars['String']['output'];
+  networkToolTlsCertificateCreate: Scalars['String']['output'];
+  networkToolTracerouteCreate: Scalars['String']['output'];
+  networkToolWhoisCreate: Scalars['String']['output'];
   postCommentCreate: PostComment;
   postCommentDelete: OperationResult;
   postCreatePrivileged: Post;
@@ -2497,17 +2516,23 @@ export type Mutation = {
   productVariantRemoveGalleryAsset: ProductVariant;
   productVariantReorderGallery: ProductVariant;
   sendEmail: Scalars['String']['output'];
+  /** Create a new billable action. */
+  stripeBillableActionCreatePrivileged: StripeBillableAction;
+  /** Delete a billable action. */
+  stripeBillableActionDeletePrivileged: OperationResult;
+  /** Update a billable action. */
+  stripeBillableActionUpdatePrivileged: StripeBillableAction;
   submitForm: FormUserData;
   supportTicketAssign: SupportTicket;
   supportTicketCommentCreatePrivileged: SupportTicketComment;
   supportTicketCreate: SupportTicket;
   supportTicketUpdatePrivileged: SupportTicket;
   supportTicketUpdateStatusPrivileged: SupportTicket;
-  waitListCreate: WaitList;
-  waitListDelete: OperationResult;
+  waitListCreatePrivileged: WaitList;
+  waitListDeletePrivileged: OperationResult;
   waitListEntryCreate: WaitListEntry;
   waitListEntryDelete: OperationResult;
-  waitListUpdate: WaitList;
+  waitListUpdatePrivileged: WaitList;
   warehouseCreate: Warehouse;
   warehouseDelete: OperationResult;
   warehouseInventoryCreate: WarehouseInventory;
@@ -3025,8 +3050,33 @@ export type MutationGridTaskUpdatePrivilegedArgs = {
 };
 
 
-export type MutationPortCheckCreateArgs = {
-  input: PortCheckCreateInput;
+export type MutationNetworkToolDnsCreateArgs = {
+  input: NetworkToolDnsCreateInput;
+};
+
+
+export type MutationNetworkToolPingCreateArgs = {
+  input: NetworkToolPingCreateInput;
+};
+
+
+export type MutationNetworkToolPortCheckCreateArgs = {
+  input: NetworkToolPortCheckCreateInput;
+};
+
+
+export type MutationNetworkToolTlsCertificateCreateArgs = {
+  input: NetworkToolTlsCertificateCreateInput;
+};
+
+
+export type MutationNetworkToolTracerouteCreateArgs = {
+  input: NetworkToolTracerouteCreateInput;
+};
+
+
+export type MutationNetworkToolWhoisCreateArgs = {
+  input: NetworkToolWhoisCreateInput;
 };
 
 
@@ -3169,6 +3219,21 @@ export type MutationSendEmailArgs = {
 };
 
 
+export type MutationStripeBillableActionCreatePrivilegedArgs = {
+  input: StripeBillableActionCreateInput;
+};
+
+
+export type MutationStripeBillableActionDeletePrivilegedArgs = {
+  input: StripeBillableActionInput;
+};
+
+
+export type MutationStripeBillableActionUpdatePrivilegedArgs = {
+  input: StripeBillableActionUpdateInput;
+};
+
+
 export type MutationSubmitFormArgs = {
   data: Scalars['JSON']['input'];
   emailAddress?: InputMaybe<Scalars['String']['input']>;
@@ -3203,12 +3268,12 @@ export type MutationSupportTicketUpdateStatusPrivilegedArgs = {
 };
 
 
-export type MutationWaitListCreateArgs = {
+export type MutationWaitListCreatePrivilegedArgs = {
   data: WaitListCreationInput;
 };
 
 
-export type MutationWaitListDeleteArgs = {
+export type MutationWaitListDeletePrivilegedArgs = {
   forceDelete?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['String']['input'];
 };
@@ -3227,8 +3292,8 @@ export type MutationWaitListEntryDeleteArgs = {
 };
 
 
-export type MutationWaitListUpdateArgs = {
-  data: WaitListUpdateInput;
+export type MutationWaitListUpdatePrivilegedArgs = {
+  input: WaitListUpdateInput;
 };
 
 
@@ -3259,6 +3324,52 @@ export type MutationWarehouseInventoryUpdateArgs = {
 
 export type MutationWarehouseUpdateArgs = {
   input: WarehouseUpdateInput;
+};
+
+export type NetworkToolDnsCreateInput = {
+  domain: Scalars['String']['input'];
+  region: GridRegionLevelsInput;
+  types?: InputMaybe<Array<DnsRecordType>>;
+};
+
+export type NetworkToolHistoryInput = {
+  networkTool: Scalars['String']['input'];
+};
+
+export type NetworkToolPingCreateInput = {
+  count: Scalars['Float']['input'];
+  host: Scalars['String']['input'];
+  region: GridRegionLevelsInput;
+  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type NetworkToolPortCheckCreateInput = {
+  host: Scalars['String']['input'];
+  port: Scalars['Float']['input'];
+  region: GridRegionLevelsInput;
+  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type NetworkToolTlsCertificateCreateInput = {
+  host: Scalars['String']['input'];
+  port: Scalars['Float']['input'];
+  region: GridRegionLevelsInput;
+  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type NetworkToolTracerouteCreateInput = {
+  host: Scalars['String']['input'];
+  maxHops?: InputMaybe<Scalars['Float']['input']>;
+  queryCount?: InputMaybe<Scalars['Float']['input']>;
+  region: GridRegionLevelsInput;
+  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
+  waitTime?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type NetworkToolWhoisCreateInput = {
+  host: Scalars['String']['input'];
+  region: GridRegionLevelsInput;
+  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type OperationResult = {
@@ -3409,15 +3520,15 @@ export type PaginationInputWithFilters = {
   itemsPerPage: Scalars['Int']['input'];
 };
 
-export type PaginationOrderResult = {
-  __typename?: 'PaginationOrderResult';
-  items: Array<CommerceOrder>;
+export type PaginationNetworkToolHistoryResult = {
+  __typename?: 'PaginationNetworkToolHistoryResult';
+  items: Array<FlowExecution>;
   pagination: Pagination;
 };
 
-export type PaginationPortCheckResult = {
-  __typename?: 'PaginationPortCheckResult';
-  items: Array<FlowExecution>;
+export type PaginationOrderResult = {
+  __typename?: 'PaginationOrderResult';
+  items: Array<CommerceOrder>;
   pagination: Pagination;
 };
 
@@ -3499,16 +3610,6 @@ export enum PaymentStatus {
   FailToAuthorize = 'FailToAuthorize',
   Pending = 'Pending'
 }
-
-export type PortCheckCreateInput = {
-  host: Scalars['String']['input'];
-  port: Scalars['Float']['input'];
-  region: GridRegionLevelsInput;
-};
-
-export type PortCheckInput = {
-  executionId: Scalars['String']['input'];
-};
 
 export type Post = {
   __typename?: 'Post';
@@ -4085,8 +4186,7 @@ export type Query = {
   gridTaskProviderSupportPrivileged: Array<GridTaskProviderSupport>;
   /** Get all task types. */
   gridTasksPrivileged: Array<GridTask>;
-  portCheck?: Maybe<FlowExecution>;
-  portCheckHistory: PaginationPortCheckResult;
+  networkToolHistory: PaginationNetworkToolHistoryResult;
   post: Post;
   postComments: PagedPostComments;
   postPrivileged: Post;
@@ -4100,11 +4200,16 @@ export type Query = {
   postsMine: PagedPosts;
   postsPrivileged: PagedPosts;
   queryOrderPrice: QueryCommerceOrderPriceResult;
+  /** Get a single billable action by ID or billableAction. */
+  stripeBillableActionPrivileged?: Maybe<StripeBillableAction>;
+  /** List all billable actions. */
+  stripeBillableActionsPrivileged: Array<StripeBillableAction>;
   supportAllSupportProfiles: Array<PublicProfile>;
   supportTickets: PaginationSupportTicketResult;
   supportTicketsPrivileged: PaginationSupportTicketResult;
-  waitListEntries: WaitListEntriesResult;
+  waitListEntriesPrivileged: WaitListEntriesResult;
   waitLists: WaitListResult;
+  waitListsPrivileged: WaitListResult;
   warehouse: Warehouse;
   warehouses: Array<Warehouse>;
 };
@@ -4503,12 +4608,8 @@ export type QueryGridTasksPrivilegedArgs = {
 };
 
 
-export type QueryPortCheckArgs = {
-  input: PortCheckInput;
-};
-
-
-export type QueryPortCheckHistoryArgs = {
+export type QueryNetworkToolHistoryArgs = {
+  input: NetworkToolHistoryInput;
   pagination: PaginationInput;
 };
 
@@ -4592,6 +4693,16 @@ export type QueryQueryOrderPriceArgs = {
 };
 
 
+export type QueryStripeBillableActionPrivilegedArgs = {
+  input: StripeBillableActionInput;
+};
+
+
+export type QueryStripeBillableActionsPrivilegedArgs = {
+  input?: InputMaybe<StripeBillableActionListInput>;
+};
+
+
 export type QuerySupportTicketsArgs = {
   pagination: PaginationInput;
 };
@@ -4602,7 +4713,7 @@ export type QuerySupportTicketsPrivilegedArgs = {
 };
 
 
-export type QueryWaitListEntriesArgs = {
+export type QueryWaitListEntriesPrivilegedArgs = {
   pagination: PaginationInput;
   waitListId?: InputMaybe<Scalars['String']['input']>;
   waitListIdentifier?: InputMaybe<Scalars['String']['input']>;
@@ -4610,6 +4721,11 @@ export type QueryWaitListEntriesArgs = {
 
 
 export type QueryWaitListsArgs = {
+  pagination: PaginationInput;
+};
+
+
+export type QueryWaitListsPrivilegedArgs = {
   pagination: PaginationInput;
 };
 
@@ -4786,6 +4902,88 @@ export type StreetAddressObject = {
   postalCode: Scalars['String']['output'];
   state: Scalars['String']['output'];
 };
+
+export type StripeBillableAction = {
+  __typename?: 'StripeBillableAction';
+  billableAction: Scalars['String']['output'];
+  billableActionLogs: Array<StripeBillableActionLog>;
+  createdAt: Scalars['DateTimeISO']['output'];
+  createdByAccountId: Scalars['String']['output'];
+  createdByProfileId: Scalars['String']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  stripeEventName: Scalars['String']['output'];
+  unitValue: Scalars['Float']['output'];
+  updatedAt: Scalars['DateTimeISO']['output'];
+  updatedByAccountId?: Maybe<Scalars['String']['output']>;
+  updatedByProfileId?: Maybe<Scalars['String']['output']>;
+};
+
+export type StripeBillableActionCreateInput = {
+  billableAction: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  stripeEventName: Scalars['String']['input'];
+  unitValue: Scalars['Float']['input'];
+};
+
+export type StripeBillableActionInput = {
+  billableAction?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type StripeBillableActionListInput = {
+  stripeEventName?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type StripeBillableActionLog = {
+  __typename?: 'StripeBillableActionLog';
+  billableAction: StripeBillableAction;
+  billableActionId: Scalars['String']['output'];
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['String']['output'];
+  meteredEventLog: StripeMeteredEventLog;
+  meteredEventLogId: Scalars['String']['output'];
+  sourceId: Scalars['String']['output'];
+  sourceType: Scalars['String']['output'];
+  timestamp: Scalars['DateTimeISO']['output'];
+  value: Scalars['Float']['output'];
+};
+
+export type StripeBillableActionUpdateInput = {
+  billableAction?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  stripeEventName?: InputMaybe<Scalars['String']['input']>;
+  unitValue?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type StripeCustomer = {
+  __typename?: 'StripeCustomer';
+  createdAt: Scalars['DateTimeISO']['output'];
+  id: Scalars['String']['output'];
+  stripeCustomerId: Scalars['String']['output'];
+};
+
+export type StripeMeteredEventLog = {
+  __typename?: 'StripeMeteredEventLog';
+  createdAt: Scalars['DateTimeISO']['output'];
+  customerId: Scalars['String']['output'];
+  eventName: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  idempotencyKey: Scalars['String']['output'];
+  requestId: Scalars['String']['output'];
+  status: StripeMeteredEventLogStatus;
+  stripeCustomer: StripeCustomer;
+  timestamp: Scalars['DateTimeISO']['output'];
+  value: Scalars['Float']['output'];
+};
+
+/** The status of the Stripe metered event log. */
+export enum StripeMeteredEventLogStatus {
+  Failed = 'Failed',
+  Pending = 'Pending',
+  Success = 'Success'
+}
 
 export type SupportTicket = {
   __typename?: 'SupportTicket';
@@ -5032,11 +5230,11 @@ export type WaitList = {
   updatedAt: Scalars['DateTimeISO']['output'];
   updatedByAccountId?: Maybe<Scalars['String']['output']>;
   updatedByProfileId?: Maybe<Scalars['String']['output']>;
+  userEnrolled?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type WaitListCreationInput = {
   description?: InputMaybe<Scalars['String']['input']>;
-  emailAutomationKey?: InputMaybe<Scalars['String']['input']>;
   identifier?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
 };
@@ -5075,7 +5273,6 @@ export type WaitListResult = {
 
 export type WaitListUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
-  emailAutomationKey?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   identifier?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -5621,20 +5818,20 @@ export type WaitListsQueryVariables = Exact<{
 
 export type WaitListsQuery = { __typename?: 'Query', waitLists: { __typename?: 'WaitListResult', pagination: { __typename?: 'Pagination', itemIndex: number, itemIndexForNextPage?: number | null, itemIndexForPreviousPage?: number | null, itemsPerPage: number, itemsTotal: number, page: number, pagesTotal: number }, items: Array<{ __typename?: 'WaitList', id: string, identifier: string, title: string, description?: string | null, updatedAt: any, createdAt: any }> } };
 
-export type WaitListCreateMutationVariables = Exact<{
+export type WaitListCreatePrivilegedMutationVariables = Exact<{
   data: WaitListCreationInput;
 }>;
 
 
-export type WaitListCreateMutation = { __typename?: 'Mutation', waitListCreate: { __typename?: 'WaitList', id: string, identifier: string, title: string, description?: string | null, updatedAt: any, createdAt: any } };
+export type WaitListCreatePrivilegedMutation = { __typename?: 'Mutation', waitListCreatePrivileged: { __typename?: 'WaitList', id: string, identifier: string, title: string, description?: string | null, updatedAt: any, createdAt: any } };
 
-export type WaitListEntriesQueryVariables = Exact<{
-  waitListIdentifier: Scalars['String']['input'];
+export type WaitListEntriesPrivilegedQueryVariables = Exact<{
+  waitListIdentifier?: InputMaybe<Scalars['String']['input']>;
   pagination: PaginationInput;
 }>;
 
 
-export type WaitListEntriesQuery = { __typename?: 'Query', waitListEntries: { __typename?: 'WaitListEntriesResult', pagination: { __typename?: 'Pagination', itemIndex: number, itemIndexForNextPage?: number | null, itemIndexForPreviousPage?: number | null, itemsPerPage: number, itemsTotal: number, page: number, pagesTotal: number }, items: Array<{ __typename?: 'WaitListEntry', id: string, emailAddress: string, message?: string | null, userAgent?: string | null, countryCode?: string | null, referredBy?: string | null, contactedAt?: any | null, updatedAt: any, createdAt: any }> } };
+export type WaitListEntriesPrivilegedQuery = { __typename?: 'Query', waitListEntriesPrivileged: { __typename?: 'WaitListEntriesResult', pagination: { __typename?: 'Pagination', itemIndex: number, itemIndexForNextPage?: number | null, itemIndexForPreviousPage?: number | null, itemsPerPage: number, itemsTotal: number, page: number, pagesTotal: number }, items: Array<{ __typename?: 'WaitListEntry', id: string, emailAddress: string, message?: string | null, userAgent?: string | null, countryCode?: string | null, referredBy?: string | null, contactedAt?: any | null, updatedAt: any, createdAt: any }> } };
 
 export type WaitListEntryCreateMutationVariables = Exact<{
   emailAddress: Scalars['String']['input'];
@@ -5715,8 +5912,8 @@ export const SupportTicketAccountAndCommerceOrdersPrivelegedDocument = {"kind":"
 export const ProfileSupportTicketsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ProfileSupportTickets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"openTicketsIndex"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"closedTicketsIndex"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"openTickets"},"name":{"kind":"Name","value":"supportTickets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"itemsPerPage"},"value":{"kind":"IntValue","value":"3"}},{"kind":"ObjectField","name":{"kind":"Name","value":"itemIndex"},"value":{"kind":"Variable","name":{"kind":"Name","value":"openTicketsIndex"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"filters"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"column"},"value":{"kind":"StringValue","value":"status","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"operator"},"value":{"kind":"EnumValue","value":"Equal"}},{"kind":"ObjectField","name":{"kind":"Name","value":"value"},"value":{"kind":"StringValue","value":"Open","block":false}}]}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"StringValue","value":"createdAt","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"direction"},"value":{"kind":"EnumValue","value":"Descending"}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"userEmailAddress"}},{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemIndex"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsTotal"}},{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"pagesTotal"}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"closedTickets"},"name":{"kind":"Name","value":"supportTickets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"itemsPerPage"},"value":{"kind":"IntValue","value":"3"}},{"kind":"ObjectField","name":{"kind":"Name","value":"itemIndex"},"value":{"kind":"Variable","name":{"kind":"Name","value":"closedTicketsIndex"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"filters"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"column"},"value":{"kind":"StringValue","value":"status","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"operator"},"value":{"kind":"EnumValue","value":"Equal"}},{"kind":"ObjectField","name":{"kind":"Name","value":"value"},"value":{"kind":"StringValue","value":"Closed","block":false}}]}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"StringValue","value":"createdAt","block":false}},{"kind":"ObjectField","name":{"kind":"Name","value":"direction"},"value":{"kind":"EnumValue","value":"Descending"}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"userEmailAddress"}},{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemIndex"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsTotal"}},{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"pagesTotal"}}]}}]}}]}}]} as unknown as DocumentNode<ProfileSupportTicketsQuery, ProfileSupportTicketsQueryVariables>;
 export const ProfileSupportTicketDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ProfileSupportTicket"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PaginationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"supportTickets"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"userEmailAddress"}},{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"contentType"}},{"kind":"Field","name":{"kind":"Name","value":"attachments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"variant"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<ProfileSupportTicketQuery, ProfileSupportTicketQueryVariables>;
 export const WaitListsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WaitLists"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PaginationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"waitLists"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemIndex"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsTotal"}},{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"pagesTotal"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]} as unknown as DocumentNode<WaitListsQuery, WaitListsQueryVariables>;
-export const WaitListCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"WaitListCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WaitListCreationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"waitListCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<WaitListCreateMutation, WaitListCreateMutationVariables>;
-export const WaitListEntriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WaitListEntries"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"waitListIdentifier"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PaginationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"waitListEntries"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"waitListIdentifier"},"value":{"kind":"Variable","name":{"kind":"Name","value":"waitListIdentifier"}}},{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemIndex"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsTotal"}},{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"pagesTotal"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"emailAddress"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"userAgent"}},{"kind":"Field","name":{"kind":"Name","value":"countryCode"}},{"kind":"Field","name":{"kind":"Name","value":"referredBy"}},{"kind":"Field","name":{"kind":"Name","value":"contactedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]} as unknown as DocumentNode<WaitListEntriesQuery, WaitListEntriesQueryVariables>;
+export const WaitListCreatePrivilegedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"WaitListCreatePrivileged"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WaitListCreationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"waitListCreatePrivileged"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<WaitListCreatePrivilegedMutation, WaitListCreatePrivilegedMutationVariables>;
+export const WaitListEntriesPrivilegedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WaitListEntriesPrivileged"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"waitListIdentifier"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PaginationInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"waitListEntriesPrivileged"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"waitListIdentifier"},"value":{"kind":"Variable","name":{"kind":"Name","value":"waitListIdentifier"}}},{"kind":"Argument","name":{"kind":"Name","value":"pagination"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pagination"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemIndex"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemIndexForPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsPerPage"}},{"kind":"Field","name":{"kind":"Name","value":"itemsTotal"}},{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"pagesTotal"}}]}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"emailAddress"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"userAgent"}},{"kind":"Field","name":{"kind":"Name","value":"countryCode"}},{"kind":"Field","name":{"kind":"Name","value":"referredBy"}},{"kind":"Field","name":{"kind":"Name","value":"contactedAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]} as unknown as DocumentNode<WaitListEntriesPrivilegedQuery, WaitListEntriesPrivilegedQueryVariables>;
 export const WaitListEntryCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"WaitListEntryCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"emailAddress"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"waitlistIdentifier"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"defaultValue":{"kind":"StringValue","value":"earlyAccess","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"waitListEntryCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"emailAddress"},"value":{"kind":"Variable","name":{"kind":"Name","value":"emailAddress"}}},{"kind":"Argument","name":{"kind":"Name","value":"waitListIdentifier"},"value":{"kind":"Variable","name":{"kind":"Name","value":"waitlistIdentifier"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"emailAddress"}}]}}]}}]} as unknown as DocumentNode<WaitListEntryCreateMutation, WaitListEntryCreateMutationVariables>;
 export type GraphQLInputTypeMetadata =
   GraphQLInputScalarTypeMetadata |
@@ -5837,20 +6034,6 @@ export namespace GraphQLInputTypes {
             type: 'maxLength',
             constraints: [
               512
-            ],
-          }
-        ],
-      },
-      {
-        name: 'emailAutomationKey',
-        kind: 'scalar',
-        type: 'String',
-        required: false,
-        validation: [
-          {
-            type: 'maxLength',
-            constraints: [
-              64
             ],
           }
         ],
@@ -8479,10 +8662,10 @@ export const WaitListsOperation: GraphQLOperationMetadata<typeof WaitListsDocume
   ],
 }
   
-export const WaitListCreateOperation: GraphQLOperationMetadata<typeof WaitListCreateDocument> = {
-  operation: 'WaitListCreate',
+export const WaitListCreatePrivilegedOperation: GraphQLOperationMetadata<typeof WaitListCreatePrivilegedDocument> = {
+  operation: 'WaitListCreatePrivileged',
   operationType: 'mutation',
-  document: WaitListCreateDocument,
+  document: WaitListCreatePrivilegedDocument,
   parameters: [
     {
       parameter: 'data',
@@ -8493,14 +8676,14 @@ export const WaitListCreateOperation: GraphQLOperationMetadata<typeof WaitListCr
   ],
 }
   
-export const WaitListEntriesOperation: GraphQLOperationMetadata<typeof WaitListEntriesDocument> = {
-  operation: 'WaitListEntries',
+export const WaitListEntriesPrivilegedOperation: GraphQLOperationMetadata<typeof WaitListEntriesPrivilegedDocument> = {
+  operation: 'WaitListEntriesPrivileged',
   operationType: 'query',
-  document: WaitListEntriesDocument,
+  document: WaitListEntriesPrivilegedDocument,
   parameters: [
     {
       parameter: 'waitListIdentifier',
-      required: true,
+      required: false,
       kind: 'scalar',
       type: 'String',
     },
