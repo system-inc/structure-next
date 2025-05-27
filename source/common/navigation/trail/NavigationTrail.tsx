@@ -101,9 +101,7 @@ export function NavigationTrail(properties: NavigationTrailProperties) {
                             <Link
                                 tabIndex={1}
                                 href={navigationTrailLink.href}
-                                className={`hover:text-dark dark:hover:text-light ${
-                                    index === lastTitleIndex ? 'text-dark dark:text-light' : 'text-neutral '
-                                }`}
+                                className={index === lastTitleIndex ? 'link-primary' : 'link-secondary'}
                             >
                                 {navigationTrailLink.title}
                             </Link>
