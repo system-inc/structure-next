@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Pagination as Paginator } from '@structure/source/common/navigation/pagination/Pagination';
+import { Pagination } from '@structure/source/common/navigation/pagination/Pagination';
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { TicketListHeader } from './TicketListHeader';
 import { TicketListItem } from './TicketListItem';
@@ -14,7 +14,7 @@ import { BorderContainer } from '../BorderContainer';
 import {
     SupportTicketsPrivilegedQuery,
     SupportTicketStatus,
-    Pagination,
+    Pagination as PaginationType,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - TicketList
@@ -22,7 +22,7 @@ interface TicketListInterface {
     tickets: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'];
     selectedTicketIdentifier: string | null;
     selectedStatus: SupportTicketStatus;
-    currentPagination: Pagination
+    currentPagination: PaginationType
     isLoading: boolean;
     isRefreshing: boolean;
     onRefresh: () => void;
@@ -66,7 +66,7 @@ export function TicketList(properties: TicketListInterface) {
 
             { properties.currentPagination.pagesTotal > 1 && (
                 <BorderContainer border="top">
-                    <Paginator
+                    <Pagination
                         page={properties.currentPagination.page}
                         pagesTotal={properties.currentPagination.pagesTotal}
                         itemsTotal={properties.currentPagination.itemsTotal}
@@ -79,7 +79,6 @@ export function TicketList(properties: TicketListInterface) {
                 </BorderContainer>
             )}
 
-            
         </div>
     );
 }

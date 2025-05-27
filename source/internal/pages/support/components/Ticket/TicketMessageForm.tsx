@@ -22,6 +22,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 
 // Dependencies - Main Components
 import { RichTextEditor } from '@project/source/ui/derived/RichTextEditor';
+import AgentToolbarPlugin from '@project/source/ui/derived/RichTextEditor/AgentToolbarPlugin';
 
 // Dependencies - API
 import {
@@ -170,13 +171,13 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
         >
             <RichTextEditor
                 type="markdown"
+                toolbarPlugin={AgentToolbarPlugin}
                 onChange={handleEditorChange}
                 attachedFiles={attachedFiles}
                 onSaveFiles={handleSaveFiles}
                 onRemoveFile={handleRemoveFile}
                 isDisabled={isSubmitting}
                 showLoading={isSubmitting}
-                // loadingProgress={uploadProgress}
                 shouldReset={shouldResetEditor}
                 onResetComplete={() => setShouldResetEditor(false)}
             />

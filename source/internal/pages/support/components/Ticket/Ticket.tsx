@@ -16,6 +16,7 @@ import {
     SupportTicketStatus,
     SupportAllSupportProfilesQuery,
     SupportTicketCommentCreateInput,
+    SupportTicketCommentSource,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - Ticket
@@ -55,7 +56,7 @@ export function Ticket(properties: TicketInterface) {
                         userEmailAddress={properties.ticket.userEmailAddress}
                         comments={properties.ticket.comments}
                         userFullName={userDisplayName}
-                        viewer="Agent"
+                        viewer={SupportTicketCommentSource.Agent}
                     />
                     <TicketMessageForm
                         ticketIdentifier={properties.ticket.identifier}
