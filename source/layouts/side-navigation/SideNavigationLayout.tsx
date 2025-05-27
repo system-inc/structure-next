@@ -29,7 +29,6 @@ export interface SideNavigationLayoutInterface {
     navigation: React.ReactNode;
     contentBody: React.ReactNode;
     children?: React.ReactNode;
-    topBar?: boolean;
     topTitle?: React.ReactNode;
 }
 export function SideNavigationLayout(properties: SideNavigationLayoutInterface) {
@@ -39,7 +38,6 @@ export function SideNavigationLayout(properties: SideNavigationLayoutInterface) 
             {/* Navigation */}
             <SideNavigationLayoutNavigation
                 layoutIdentifier={properties.identifier}
-                topBar={properties.topBar}
                 topTitle={properties.topTitle}
             >
                 {properties.navigation}

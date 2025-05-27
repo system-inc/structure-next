@@ -8,9 +8,10 @@ import Button from '@structure/source/common/buttons/Button';
 import { desktopMinimumWidth } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Shared State
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
     getAtomForNavigationOpen,
+    getAtomForNavigationManuallyClosed,
     getAtomForNavigationWidth,
     getAtomForNavigationIsResizing,
     getAtomForNavigationIsOpeningByDrag,
@@ -29,7 +30,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 import { useInternalNavigationMetadata } from '@structure/source/internal/layouts/navigation/hooks/useInternalNavigationMetadata';
 
 // Dependencies - Assets
-import { Bell } from '@phosphor-icons/react';
+import { Bell, SidebarSimple } from '@phosphor-icons/react';
 
 // Component - SideNavigationLayoutContent
 export interface SideNavigationLayoutContentInterface {
@@ -44,7 +45,12 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
     const { title: pageTitle, icon: Icon } = useInternalNavigationMetadata();
 
     // Shared State
-    const sideNavigationLayoutNavigationOpen = useAtomValue(getAtomForNavigationOpen(properties.layoutIdentifier));
+    const [sideNavigationLayoutNavigationOpen, setSideNavigationLayoutNavigationOpen] = useAtom(
+        getAtomForNavigationOpen(properties.layoutIdentifier),
+    );
+    const setSideNavigationLayoutNavigationManuallyClosed = useSetAtom(
+        getAtomForNavigationManuallyClosed(properties.layoutIdentifier),
+    );
     const sideNavigationLayoutNavigationWidth = useAtomValue(getAtomForNavigationWidth(properties.layoutIdentifier));
     const sideNavigationLayoutNavigationIsResizing = useAtomValue(
         getAtomForNavigationIsResizing(properties.layoutIdentifier),
@@ -99,6 +105,8 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
         [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 
+    const showSidebarToggleIcon = !sideNavigationLayoutNavigationOpen && window.innerWidth >= desktopMinimumWidth;
+
     // Render the component
     return (
         <animated.div
@@ -117,6 +125,27 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
                 {/* Top Bar */}
                 <div className="flex items-center justify-between h-14 px-4 py-2 border-b border-opsis-border-primary">
                     <div className="flex items-center justify-center md:justify-start gap-2">
+                        
+                        {showSidebarToggleIcon && (
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="focus:border-0"
+                                icon={SidebarSimple}
+                                onClick={async function () {
+                                    // Toggle the navigation open state
+                                    setSideNavigationLayoutNavigationOpen(true);
+                
+                                    // If on desktop
+                                    if(window.innerWidth >= desktopMinimumWidth) {
+                                        // Set the navigation manually closed state
+                                        setSideNavigationLayoutNavigationManuallyClosed(sideNavigationLayoutNavigationOpen);
+                                    }
+                                }}
+                            />
+                        )}
+
+                        
                         {/* Top Bar Page Icon */}
                         {Icon && (
                             <Icon className="h-5 w-5 text-opsis-content-secondary" />

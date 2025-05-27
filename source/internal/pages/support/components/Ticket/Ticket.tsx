@@ -55,6 +55,7 @@ export function Ticket(properties: TicketInterface) {
                     />
                     <TicketStatusAndAssignment
                         ticketId={properties.ticket.id}
+                        ticketIdentifier={properties.ticket.identifier}
                         ticketStatus={properties.ticket.status}
                         supportProfiles={properties.supportProfiles}
                         isLoadingProfiles={properties.isLoadingProfiles}

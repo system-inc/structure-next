@@ -10,9 +10,10 @@ import { BorderContainer } from '../BorderContainer';
 
 // Dependencies - Assets
 import {
-    Star,
     Circle,
+    Export,
     PlusCircle,
+    Star,
 } from '@phosphor-icons/react';
 
 // Dependencies - API
@@ -28,6 +29,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - TicketStatusAndAssignment
 export interface TicketStatusAndAssignmentInterface {
     ticketId: string;
+    ticketIdentifier: string;
     ticketStatus: SupportTicketStatus;
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles'];
     isLoadingProfiles: boolean;
@@ -42,6 +44,7 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
     // Properties
     const {
         ticketId,
+        ticketIdentifier,
         ticketStatus,
         supportProfiles,
         isLoadingProfiles,
@@ -167,16 +170,39 @@ export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentI
                 </Button>
             </div>
 
-            {/* Star Icon */}
-            <Button
-                variant="ghost"
-                size="icon"
-                className="focus:border-0"
-                icon={Star}
-                onClick={async function () {
-                    alert('Star clicked');
-                }}
-            />
+            <div>
+                {/* Share Icon */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="focus:border-0"
+                    icon={Export}
+                    onClick={
+                        // Function to copy the ticket URL to the clipboard
+                        async function () {
+                            const ticketUrl = `${window.location.origin}/support/ticket/${properties.ticketIdentifier}`;
+                            try {
+                                await navigator.clipboard.writeText(ticketUrl);
+                                alert('Ticket URL copied to clipboard!');
+                            } catch (error) {
+                                console.error('Failed to copy ticket URL:', error);
+                                alert('Failed to copy the ticket URL. Please try again.');
+                            }
+                        }
+                    }
+                />
+
+                {/* Star Icon */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="focus:border-0"
+                    icon={Star}
+                    onClick={async function () {
+                        alert('Star clicked');
+                    }}
+                />
+            </div>
         </BorderContainer>
     );
 }
