@@ -22,6 +22,7 @@ import {
     formatDateToTimeWithTodayOrYesterday,
     formatDateOnlyTime,
 } from '@structure/source/utilities/Time';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TicketComments
 interface TicketCommentsInterface {
@@ -53,6 +54,10 @@ export function TicketComments(properties: TicketCommentsInterface) {
         },
         [comments],
     );
+    
+    const filteredComments = React.useMemo(() => {
+        return comments.filter(comment => showInternalComments || comment.visibility !== 'Internal');
+    }, [comments, showInternalComments]);
 
     const allAttachments = React.useMemo(() => {
         return comments.reduce((acc: FileCarouselInterface['files'], comment) => {
@@ -82,12 +87,14 @@ export function TicketComments(properties: TicketCommentsInterface) {
 
     // Render the component
     return (
-        <div className={`flex flex-col flex-1 overflow-hidden ${isAgentViewer && 'p-10'}`}>
-            <ScrollArea className="flex flex-grow" ref={commentsContainerReference}>
+        <div className={mergeClassNames(
+            'flex flex-col flex-1 overflow-hidden',
+            isAgentViewer && 'p-10',
+        )}>
+            <ScrollArea ref={commentsContainerReference} className="flex flex-grow">
                 <div className="flex flex-grow flex-col justify-end">
                     <div className="flex flex-col space-y-4">
-                        {comments
-                            .filter(comment => showInternalComments || comment.visibility !== 'Internal')
+                        {filteredComments
                             .map((comment, index) => {
                                 const messageDate = formatDateToTodayYesterdayOrDate(new Date(comment.createdAt));
                                 const shouldRenderDate = lastRenderedDate !== messageDate;
@@ -104,8 +111,8 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                         ? 'justify-end items-end'
                                         : 'justify-start items-start'
                                     : isUserComment
-                                    ? 'justify-end items-end'
-                                    : 'justify-start items-start';
+                                        ? 'justify-end items-end'
+                                        : 'justify-start items-start';
 
                                 const textAlignmentClasses = isAgentViewer
                                     ? isUserComment
@@ -120,13 +127,16 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                         ? 'bg-blue text-light dark:bg-blue rounded-br-none'
                                         : 'bg-light-1 dark:bg-dark-2 rounded-bl-none'
                                     : isUserComment
-                                    ? 'bg-blue text-light dark:bg-blue rounded-br-none'
-                                    : 'bg-light-1 dark:bg-dark-2 rounded-bl-none';
+                                        ? 'bg-blue text-light dark:bg-blue rounded-br-none'
+                                        : 'bg-light-1 dark:bg-dark-2 rounded-bl-none';
 
                                 return (
                                     <div key={comment.id}>
                                         {shouldRenderDate && (
-                                            <div className={`flex justify-center text-xs font-medium ${index !== 0 && 'mt-6'}`}>
+                                            <div className={mergeClassNames(
+                                                'flex justify-center text-xs font-medium',
+                                                index !== 0 && 'mt-6',
+                                            )}>
                                                 {messageDate}
                                             </div>
                                         )}
@@ -135,44 +145,42 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                                 Conversation started at {formatDateOnlyTime(new Date(comment.createdAt))}
                                             </div>
                                         )}
-                                        <div className={`flex ${alignmentClasses}`}>
-                                            <div className="flex flex-col">
-                                                <div className={`flex gap-2 dark:neutral my-2 text-xs ${textAlignmentClasses}`}>
-                                                    {!(isUserViewer && isUserComment) && (
-                                                        <div className="flex gap-2 text-xs font-medium">
-                                                            {isUserComment ? (
-                                                                <>{properties.userFullName ?? properties.userEmailAddress}</>
-                                                            ) : (
-                                                                <>
-                                                                    <Image
-                                                                        src={ProjectSettings.assets.favicon.light.location}
-                                                                        alt="Logo"
-                                                                        height={16} // h-7 = 28px
-                                                                        width={16} // h-7 = 28px
-                                                                        priority={true}
-                                                                        className="dark:hidden"
-                                                                    />
-                                                                    <Image
-                                                                        src={ProjectSettings.assets.favicon.dark.location}
-                                                                        alt="Logo"
-                                                                        height={16}
-                                                                        width={16}
-                                                                        priority={true}
-                                                                        className="hidden dark:block"
-                                                                    />
-                                                                    Phi
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                    {formatDateToTimeWithTodayOrYesterday(new Date(comment.createdAt))}
-                                                </div>
-                                                {!!commentContent && (
-                                                    <div className={`min-w-96 max-w-[80%] rounded-lg p-4 text-xs ${backgroundColorClasses}`}>
-                                                        <p className="whitespace-pre-wrap">{commentContent}</p>
+                                        <div className={mergeClassNames('flex flex-col', alignmentClasses)}>
+                                            <div className={mergeClassNames('flex gap-2 dark:neutral my-2 text-xs', textAlignmentClasses)}>
+                                                {!(isUserViewer && isUserComment) && (
+                                                    <div className="flex gap-2 text-xs font-medium">
+                                                        {isUserComment ? (
+                                                            <>{properties.userFullName ?? properties.userEmailAddress}</>
+                                                        ) : (
+                                                            <>
+                                                                <Image
+                                                                    src={ProjectSettings.assets.favicon.light.location}
+                                                                    alt="Logo"
+                                                                    height={16}
+                                                                    width={16}
+                                                                    priority={true}
+                                                                    className="dark:hidden"
+                                                                />
+                                                                <Image
+                                                                    src={ProjectSettings.assets.favicon.dark.location}
+                                                                    alt="Logo"
+                                                                    height={16}
+                                                                    width={16}
+                                                                    priority={true}
+                                                                    className="hidden dark:block"
+                                                                />
+                                                                Phi
+                                                            </>
+                                                        )}
                                                     </div>
                                                 )}
+                                                {formatDateToTimeWithTodayOrYesterday(new Date(comment.createdAt))}
                                             </div>
+                                            {!!commentContent && (
+                                                <div className={mergeClassNames('min-w-96 max-w-[80%] rounded-lg p-4 text-xs', backgroundColorClasses)}>
+                                                    <p className="whitespace-pre-wrap">{commentContent}</p>
+                                                </div>
+                                            )}
                                         </div>
                                         <CommentAttachments
                                             attachments={comment.attachments}

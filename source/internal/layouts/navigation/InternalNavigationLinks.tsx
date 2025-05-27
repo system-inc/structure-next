@@ -10,7 +10,7 @@ import ShippingBoxIcon from '@structure/assets/icons/commerce/ShippingBoxIcon.sv
 import BeakerIcon from '@structure/assets/icons/science/BeakerIcon.svg';
 import TruckIcon from '@structure/assets/icons/transportation/TruckIcon.svg';
 import UsersIcon from '@structure/assets/icons/people/UsersIcon.svg';
-import SupportIcon from '@structure/assets/icons/communication/SupportIcon.svg';
+// import SupportIcon from '@structure/assets/icons/communication/SupportIcon.svg';
 import TextAlignLeftIcon from '@structure/assets/icons/content/TextAlignLeftIcon.svg';
 import BankIcon from '@structure/assets/icons/finance/BankIcon.svg';
 import LineGraphIcon from '@structure/assets/icons/analytics/LineGraphIcon.svg';
@@ -19,6 +19,8 @@ import CoinsIcon from '@structure/assets/icons/finance/CoinsIcon.svg';
 import GearIcon from '@structure/assets/icons/tools/GearIcon.svg';
 import TagIcon from '@structure/assets/icons/commerce/TagIcon.svg';
 import CodeIcon from '@structure/assets/icons/technology/CodeIcon.svg';
+
+import { Lifebuoy } from '@phosphor-icons/react';
 
 // TODO: This should use access control
 // Internal Navigation Links
@@ -157,7 +159,7 @@ export const InternalNavigationLinks: InternalNavigationLinkInterface[] = [
     {
         title: 'Support',
         href: '/internal/support',
-        icon: SupportIcon,
+        icon: Lifebuoy,
     },
     // Content Group
     {

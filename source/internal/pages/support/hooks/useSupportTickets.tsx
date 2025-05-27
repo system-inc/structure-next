@@ -1,4 +1,3 @@
-// Dependencies - React and Next.js
 import React from 'react';
 
 // Dependencies - API

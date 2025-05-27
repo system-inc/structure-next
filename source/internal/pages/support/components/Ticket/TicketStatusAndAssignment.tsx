@@ -4,16 +4,16 @@ import React from 'react';
 // Dependencies - Main Components
 // import { Button } from '@project/source/ui/base/Button';
 import Button from '@structure/source/common/buttons/Button';
-import { InputSelect } from '@structure/source/common/forms/InputSelect';
+import ProfileImage from '@structure/source/modules/account/components/ProfileImage';
+import { Popover } from '@structure/source/common/popovers/Popover';
 import { BorderContainer } from '../BorderContainer';
-
-// Dependencies - Hooks
-// import { useSupportTicketAssign } from '../../hooks/useSupportTicketAssign';
 
 // Dependencies - Assets
 import {
-    Star,
+    Circle,
+    Export,
     PlusCircle,
+    Star,
 } from '@phosphor-icons/react';
 
 // Dependencies - API
@@ -24,71 +24,184 @@ import {
 } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Constants
-import { ticketStatusOptions } from '@structure/source/internal/pages/support/constants';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TicketStatusAndAssignment
 export interface TicketStatusAndAssignmentInterface {
     ticketId: string;
+    ticketIdentifier: string;
     ticketStatus: SupportTicketStatus;
     supportProfiles?: SupportAllSupportProfilesQuery['supportAllSupportProfiles'];
     isLoadingProfiles: boolean;
-    assignedToProfileId: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['assignedToProfileId'];
-    onTicketStatusChange: (ticketId: string, status: SupportTicketStatus) => void;
+    assignedToProfile: SupportTicketsPrivilegedQuery['supportTicketsPrivileged']['items'][0]['assignedToProfile'];
+    onTicketStatusChange: ({ ticketId, status }: { ticketId: string; status: SupportTicketStatus; }) => void;
+    onTicketAssignSupportProfile: ({ ticketId, supportProfileUsername }: {
+        ticketId: string;
+        supportProfileUsername: string;
+    }) => void;
 }
 export function TicketStatusAndAssignment(properties: TicketStatusAndAssignmentInterface) {
     // Properties
     const {
         ticketId,
+        ticketIdentifier,
         ticketStatus,
         supportProfiles,
         isLoadingProfiles,
-        assignedToProfileId,
+        assignedToProfile,
         onTicketStatusChange,
+        onTicketAssignSupportProfile,
     } = properties;
 
-    // Support Profile options
-    // an array of all support profiles options with "Unassigned" as the first option
-    // const supportProfileOptions = supportProfiles
-    //     ? supportProfiles.map((profile) => ({
-    //             label: profile.displayName,
-    //             value: profile.username,
-    //         }))
-    //     : [];
+    const supportProfileOptions = React.useMemo(() => {
+        if (!supportProfiles) return [];
+
+        const options =
+            supportProfiles
+                .filter((profile) => profile.username !== assignedToProfile?.username)
+                .map((profile) => {
+                    const profileImage = profile.images?.find((img) => img.variant === 'profile-image-small')?.url || '';
+                    return {
+                        label: profile.displayName ?? profile.username,
+                        value: profile.username,
+                        image: profileImage,
+                    };
+                });
+
+        return options;
+    }, [supportProfiles, assignedToProfile?.username]);
+
+    const assignedProfile = React.useMemo(() => {
+        if (!assignedToProfile) return undefined;
+        const profileImage = assignedToProfile.images?.find((img) => img.variant === 'profile-image-small')?.url || '';
+        return {
+            label: assignedToProfile.displayName ?? assignedToProfile.username,
+            value: assignedToProfile.username,
+            image: profileImage,
+        };
+    }, [assignedToProfile]);
 
     // Render the component
     return (
         <BorderContainer>
-            <div className="flex items-center gap-2 w-[140px]">
-                <InputSelect
-                    className="w-full"
-                    items={ticketStatusOptions}
-                    defaultValue={ticketStatus}
-                    onChange={function (value) {
-                        onTicketStatusChange(ticketId, value as SupportTicketStatus)
+            <div className="flex items-center gap-4 w-[140px]">
+
+                {/* Ticket Status */}
+                <div className="flex items-center gap-2">
+                    <Circle
+                        className={mergeClassNames(
+                            'h-4 w-4',
+                            ticketStatus === SupportTicketStatus.Open ? 'text-[--global-blue-600]' : 'text-[--global-red-600]',
+                        )}
+                    />
+                    <p className="text-sm font-medium text-opsis-content-primary">
+                        {ticketStatus === SupportTicketStatus.Open ? 'Open' : 'Closed'}
+                    </p>
+                </div>
+
+                {/* Ticket Assignment */}
+                <Popover
+                    align="start"
+                    content={
+                        <div className="flex flex-col gap-1 w-48">
+                            {supportProfileOptions.map((option) => (
+                                <button
+                                    key={option.value}
+                                    onClick={() =>
+                                        onTicketAssignSupportProfile({
+                                            ticketId,
+                                            supportProfileUsername: option.value,
+                                        })
+                                    }
+                                    className={mergeClassNames(
+                                        "flex items-center gap-2 px-3 mt-2 hover:bg-muted rounded text-left last:mb-2",
+                                        assignedToProfile?.username === option.value ? "bg-muted" : ""
+                                    )}
+                                >
+                                    <div className="relative h-8 w-8">
+                                        <ProfileImage
+                                            profileImageUrl={option.image}
+                                            alternateText={option.label}
+                                            className="h-full w-full rounded-full object-cover"
+                                        />
+                                    </div>
+                                    <span className="text-sm">{option.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    }
+                >
+                    <Button
+                        icon={!assignedProfile ? PlusCircle : undefined}
+                        iconPosition={!assignedProfile ? 'left' : undefined}
+                        loading={isLoadingProfiles}
+                    >
+                        {assignedProfile ? (
+                            <div className="flex items-center gap-2">
+                                <span>Assigned To:</span>
+                                <div className="relative h-6 w-6">
+                                    <ProfileImage
+                                        profileImageUrl={assignedProfile.image}
+                                        alternateText={assignedProfile.label}
+                                        className="h-full w-full rounded-full object-cover"
+                                    />
+                                </div>
+                                <span className="text-sm">{assignedProfile.label}</span>
+                            </div>
+                        ) : 'Assign Person'}
+                    </Button>
+                </Popover>
+
+                {/* Ticket Status Update */}
+                <Button
+                    variant="light"
+                    onClick={
+                        async function () {
+                            onTicketStatusChange({
+                                ticketId,
+                                status: ticketStatus === SupportTicketStatus.Open
+                                    ? SupportTicketStatus.Closed
+                                    : SupportTicketStatus.Open,
+                        });
+                        }
+                    }
+                >
+                    {ticketStatus === SupportTicketStatus.Open ? 'Close Ticket' : 'Reopen Ticket'}
+                </Button>
+            </div>
+
+            <div>
+                {/* Share Icon */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="focus:border-0"
+                    icon={Export}
+                    onClick={
+                        // Function to copy the ticket URL to the clipboard
+                        async function () {
+                            const ticketUrl = `${window.location.origin}/support/ticket/${properties.ticketIdentifier}`;
+                            try {
+                                await navigator.clipboard.writeText(ticketUrl);
+                                alert('Ticket URL copied to clipboard!');
+                            } catch (error) {
+                                console.error('Failed to copy ticket URL:', error);
+                                alert('Failed to copy the ticket URL. Please try again.');
+                            }
+                        }
+                    }
+                />
+
+                {/* Star Icon */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="focus:border-0"
+                    icon={Star}
+                    onClick={async function () {
+                        alert('Star clicked');
                     }}
                 />
-                {/* <InputSelect
-                    className="w-full"
-                    items={[
-                        { label: 'Unassigned', value: '' },
-                        ...(supportProfileOptions || []),
-                    ]}
-                    defaultValue={assignedToProfileId}
-                    loadingItems={properties.isLoadingProfiles}
-                    onChange={function (value) {
-                        console.log('Assigned to:', value);
-                    }}
-                /> */}
-                {/* <Button
-                    variant="light"
-                    icon={PlusCircle}
-                    iconPosition="left"
-                >
-                    Assign Person
-                </Button> */}
-            </div>
-            <div className="relative h-4 w-4">
-                <Star />
             </div>
         </BorderContainer>
     );
