@@ -18,18 +18,18 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutInterface {
     children: React.ReactNode;
-    mustBeAdministrator?: boolean;
-}
-export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
-    // throw new Error('hi!');
-    // return <NotAuthorized />;
-    // return <NotConnected />;
-    // return <NotSignedIn />;
-    // return <LineLoadingAnimation />;
-    // return <ApiError />;
 
+    // If defined, further restrictions are applied and the user is only
+    // authorized if the user has any one of these roles.
+    accessibleRoles?: string[];
+}
+
+/**
+ * Component that validates the user's authorization (logged in state) and renders the children if authorized.
+ */
+export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     // Defaults
-    const mustBeAdministrator = properties.mustBeAdministrator || false;
+    const accessibleRoles = properties.accessibleRoles || [];
 
     // Hooks
     const { accountState, signedIn } = useAccount();
@@ -50,11 +50,23 @@ export function AuthorizationLayout(properties: AuthorizationLayoutInterface) {
     else if(accountState.error) {
         return <ApiError error={accountState.error} />;
     }
-    // Not authorized
-    else if(mustBeAdministrator && accountState.account && !accountState.account.isAdministator()) {
-        return <NotAuthorized />;
-    }
+    // If accessibleRoles are defined, check if the user has any of those roles
+    else if(accessibleRoles.length > 0) {
+        // Account info is still loading, wait
+        if(accountState.loading) {
+            return <LineLoadingAnimation />;
+        }
 
+        // Account info insufficient to authorize
+        if(!accountState.account) {
+            return <NotAuthorized />;
+        }
+
+        // Check if the account has any of the accessible roles
+        if(!accountState.account.isAdministator() && !accountState.account.hasAnyRole(accessibleRoles)) {
+            return <NotAuthorized />;
+        }
+    }
     // Render the component
     return properties.children;
 }

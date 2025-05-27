@@ -1,6 +1,6 @@
 # Wait Lists Query
-query WaitLists($pagination: PaginationInput!) {
-    waitLists(pagination: $pagination) {
+query WaitListsPrivileged($pagination: PaginationInput!) {
+    waitListsPrivileged(pagination: $pagination) {
         pagination {
             itemIndex
             itemIndexForNextPage
@@ -22,8 +22,8 @@ query WaitLists($pagination: PaginationInput!) {
 }
 
 # Wait List Create Mutation
-mutation WaitListCreate($data: WaitListCreationInput!) {
-    waitListCreate(data: $data) {
+mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
+    waitListCreatePrivileged(data: $data) {
         id
         identifier
         title
@@ -39,8 +39,8 @@ mutation WaitListCreate($data: WaitListCreationInput!) {
 # }
 
 # Wait List Entries Query
-query WaitListEntries($waitListIdentifier: String!, $pagination: PaginationInput!) {
-    waitListEntries(waitListIdentifier: $waitListIdentifier, pagination: $pagination) {
+query WaitListEntriesPrivileged($waitListIdentifier: String!, $pagination: PaginationInput!) {
+    waitListEntriesPrivileged(waitListIdentifier: $waitListIdentifier, pagination: $pagination) {
         pagination {
             itemIndex
             itemIndexForNextPage
@@ -65,9 +65,16 @@ query WaitListEntries($waitListIdentifier: String!, $pagination: PaginationInput
 }
 
 # Wait List Entry Create Mutation
-mutation WaitListEntryCreate($emailAddress: String!, $waitlistIdentifier: String! = "earlyAccess") {
-    waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: $waitlistIdentifier) {
+mutation WaitListEntryCreate($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
+    waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: $waitListIdentifier) {
         id
         emailAddress
+    }
+}
+
+# Wait List Entry Delete Mutation
+mutation WaitListEntryDelete($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
+    waitListEntryDelete(emailAddress: $emailAddress, waitListIdentifier: $waitListIdentifier) {
+        success
     }
 }

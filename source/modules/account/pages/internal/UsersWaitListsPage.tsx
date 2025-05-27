@@ -9,7 +9,10 @@ import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryT
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - API
-import { WaitListsDocument, WaitListCreateOperation } from '@project/source/api/GraphQlGeneratedCode';
+import {
+    WaitListsPrivilegedDocument,
+    WaitListCreatePrivilegedOperation,
+} from '@project/source/api/GraphQlGeneratedCode';
 
 // Component - UsersWaitListsPage
 export function UsersWaitListsPage() {
@@ -20,9 +23,9 @@ export function UsersWaitListsPage() {
 
             <h1 className="mb-6">Wait Lists</h1>
 
-            <GraphQlOperationForm className="mb-12" operation={WaitListCreateOperation} />
+            <GraphQlOperationForm className="mb-12" operation={WaitListCreatePrivilegedOperation} />
 
-            <GraphQlQueryTable className="" queryDocument={WaitListsDocument} />
+            <GraphQlQueryTable className="" queryDocument={WaitListsPrivilegedDocument} />
         </div>
     );
 }

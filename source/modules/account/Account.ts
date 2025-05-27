@@ -43,6 +43,10 @@ export class Account {
         return this.accessRoles.includes(role);
     }
 
+    hasAnyRole(roles: string[]) {
+        return roles.some((role) => this.hasRole(role));
+    }
+
     isAdministator() {
         return this.hasRole('Administrator');
     }
