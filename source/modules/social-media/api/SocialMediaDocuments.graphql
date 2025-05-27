@@ -116,6 +116,11 @@ mutation ApproveSocialResponse($id: String!) {
         mention {
             id
             platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
         }
     }
 }
@@ -138,6 +143,11 @@ mutation RejectSocialResponse($id: String!) {
         mention {
             id
             platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
         }
     }
 }
@@ -160,6 +170,11 @@ mutation UpdateSocialResponse($input: UpdateSocialResponseInput!) {
         mention {
             id
             platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
         }
     }
 }
