@@ -15,6 +15,7 @@ import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 import { PaginationProperties, Pagination } from '@structure/source/common/navigation/pagination/Pagination';
 import { ColumnFilterGroup, ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
 import { ColumnFilterGroupOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 
 // Dependencies - Assets
 import FilterIcon from '@structure/assets/icons/interface/FilterIcon.svg';
@@ -597,13 +598,24 @@ export function Table(properties: TableProperties) {
                         {properties.loading ? (
                             // Loading but have the table headers
                             <tbody>
-                                <tr>
-                                    <td colSpan={visibleColumnsIndexesSet.size + 1}>
-                                        <div className="flex items-center justify-center">
-                                            <div className="p-8 text-sm">Loading...</div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {Array.from({ length: 5 }).map(function (row, rowIndex) {
+                                    return (
+                                        <tr key={rowIndex} className="border-b border-light-6 dark:border-dark-4">
+                                            {properties.rowSelection && (
+                                                <td className="w-4 p-2">
+                                                    <PlaceholderAnimation className="h-4 w-4" />
+                                                </td>
+                                            )}
+                                            {Array.from(visibleColumnsIndexesSet).map(function (columnIndex) {
+                                                return (
+                                                    <td key={columnIndex} className="p-2">
+                                                        <PlaceholderAnimation className="h-4 w-full max-w-32" />
+                                                    </td>
+                                                );
+                                            })}
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         ) : rows && rows.length > 0 ? (
                             <tbody>
