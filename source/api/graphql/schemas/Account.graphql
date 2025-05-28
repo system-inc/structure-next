@@ -1,0 +1,576 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type AccessRole {
+    assignments: AccessRoleAssignment!
+    createdAt: DateTimeISO!
+    createdByAccountId: String!
+    createdByProfileId: String!
+    description: String
+    id: String!
+    type: String!
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+type AccessRoleAssignment {
+    accessRole: AccessRole!
+    accessRoleId: String!
+    createdAt: DateTimeISO!
+    createdByAccountId: String!
+    createdByProfileId: String!
+    emailAddress: String
+    expiresAt: DateTimeISO
+    id: String!
+    profile: Profile!
+    status: AccessRoleStatus!
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+input AccessRoleAssignmentCreateInput {
+    accessRole: String!
+    emailAddress: String!
+    expiresAt: DateTimeISO
+    username: String!
+}
+
+input AccessRoleAssignmentRevokeInput {
+    accessRole: String!
+    emailAddress: String!
+    username: String!
+}
+
+input AccessRoleCreateInput {
+    description: String!
+    type: String!
+}
+
+input AccessRoleInput {
+    id: String
+    type: String
+}
+
+input AccessRoleListInput {
+    type: String
+}
+
+"""
+The status of an access role for an account/profile
+"""
+enum AccessRoleStatus {
+    Active
+    Expired
+    Revoked
+}
+
+input AccessRoleUpdateInput {
+    description: String
+    id: String!
+    type: String
+}
+
+type Account {
+    accessRoles: [String!]!
+    createdAt: DateTimeISO!
+    defaultProfile: Profile!
+    defaultProfileId: String!
+    emailAddress: String!
+    emails: [AccountEmail!]!
+    enrolledChallenges: [String!]!
+    profile: Profile!
+    profiles: [Profile!]!
+    session: AccountSession
+    status: AccountStatus!
+    updatedAt: DateTimeISO!
+}
+
+input AccountDeleteInput {
+    emailAddress: String!
+    reason: String
+}
+
+type AccountEmail {
+    createdAt: DateTimeISO!
+    emailAddress: String!
+    id: String!
+    isVerified: Boolean!
+    source: String!
+    type: AccountEmailType!
+    updatedAt: DateTimeISO!
+}
+
+type AccountEmailAddressesResult {
+    count: Float!
+    emailAddresses: [AccountEmail!]!
+}
+
+"""
+The type of an account email
+"""
+enum AccountEmailType {
+    Primary
+    Secondary
+}
+
+input AccountEmailVerificationCompleteInput {
+    code: String!
+    makePrimary: Boolean
+}
+
+input AccountEmailVerificationSendInput {
+    emailAddress: String!
+}
+
+input AccountEmailVerificationVerifyInput {
+    code: String!
+}
+
+input AccountEncryptionConfiguration {
+    publicKey: String!
+    transitKeyId: String!
+}
+
+input AccountInput {
+    emailAddress: String!
+}
+
+input AccountPasswordUpdateInput {
+    newPassword: String!
+}
+
+input AccountPasswordVerifyInput {
+    password: String!
+}
+
+input AccountProfileUpdateInput {
+    birthday: DateTimeISO
+    displayName: String
+    familyName: String
+    gender: String
+    givenName: String
+    middleName: String
+    phoneNumber: String
+    preferredName: String
+    username: String
+}
+
+input AccountRegistrationCompleteInput {
+    displayName: String
+    encryptionConfiguration: AccountEncryptionConfiguration
+    familyName: String
+    givenName: String
+    password: String
+    phoneNumber: String
+    username: String
+}
+
+input AccountRegistrationOrSignInCreateInput {
+    emailAddress: String!
+}
+
+type AccountSession {
+    accessRoles: AccessRoleAssignment!
+    createdAt: DateTimeISO!
+    id: String!
+    lastUsed: DateTimeISO
+    profile: Profile!
+    profileId: String!
+    status: AccountSessionStatus!
+    statusChangedAt: DateTimeISO
+    updatedAt: DateTimeISO!
+}
+
+input AccountSessionDeleteInput {
+    sessionIds: [String!]!
+}
+
+"""
+The status of an account session
+"""
+enum AccountSessionStatus {
+    Active
+    Expired
+    Revoked
+}
+
+"""
+The status of an account
+"""
+enum AccountStatus {
+    Active
+    Archived
+    Locked
+}
+
+type AuthenticationChallenge {
+    challengeType: String!
+    status: AuthenticationChallengeStatus!
+}
+
+"""
+The status of an authentication challenge.
+"""
+enum AuthenticationChallengeStatus {
+    Failed
+    Open
+    Success
+}
+
+type AuthenticationEmailVerification {
+    authentication: AuthenticationSession!
+    verification: EmailVerification!
+}
+
+type AuthenticationOperationResult {
+    authentication: AuthenticationSession!
+    success: Boolean!
+}
+
+type AuthenticationRegistrationOrSignIn {
+    authentication: AuthenticationSession!
+    emailAddress: String!
+}
+
+type AuthenticationSession {
+    createdAt: DateTimeISO!
+    currentChallenge: AuthenticationChallenge
+    scopeType: String!
+    status: AuthenticationSessionStatus!
+    updatedAt: DateTimeISO!
+}
+
+"""
+The status of the authentication session.
+"""
+enum AuthenticationSessionStatus {
+    Authenticated
+    AuthenticationExpired
+    AuthenticationUsed
+    ChallengeExpired
+    ChallengeFailed
+    Challenged
+    canTransition
+    isChallengeFailure
+    isOpen
+    openStatuses
+}
+
+"""
+The operator of a field filter
+"""
+enum ColumnFilterConditionOperator {
+    Equal
+    GreaterThan
+    GreaterThanOrEqual
+    In
+    IsNotNull
+    IsNull
+    LessThan
+    LessThanOrEqual
+    Like
+    NotEqual
+    NotIn
+    NotLike
+}
+
+input ColumnFilterInput {
+    caseSensitive: Boolean
+    column: String!
+    operator: ColumnFilterConditionOperator!
+    value: JSON!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+type EmailVerification {
+    emailAddress: String!
+    lastEmailSentAt: DateTimeISO
+    status: EmailVerificationStatus!
+}
+
+"""
+The verification status of an email address.
+"""
+enum EmailVerificationStatus {
+    Failed
+    Pending
+    Verified
+}
+
+type Entitlement {
+    createdAt: DateTimeISO!
+    createdByAccountId: String!
+    createdByProfileId: String!
+    description: String!
+    featureKey: String!
+    id: String!
+    profiles: [ProfileEntitlement!]!
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+input EntitlementCreateInput {
+    description: String!
+    featureKey: String!
+}
+
+input EntitlementInput {
+    featureKey: String
+    id: String
+}
+
+input EntitlementListInput {
+    featureKey: String
+}
+
+input EntitlementUpdateInput {
+    description: String
+    featureKey: String
+    id: String!
+}
+
+type ImageObject {
+    type: MediaObjectType!
+    url: String!
+    variant: String
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+enum MediaObjectType {
+    File
+    Image
+    Video
+}
+
+type Mutation {
+    """
+    Grant an access role to an account.
+    """
+    accountAccessRoleAssignmentCreatePrivileged(input: AccessRoleAssignmentCreateInput!): AccessRoleAssignment!
+    """
+    Revoke an access role from an account.
+    """
+    accountAccessRoleAssignmentRevokePrivileged(input: AccessRoleAssignmentRevokeInput!): OperationResult!
+    """
+    Create a new access role.
+    """
+    accountAccessRoleCreatePrivileged(input: AccessRoleCreateInput!): AccessRole!
+    """
+    Delete an access role.
+    """
+    accountAccessRoleDeletePrivileged(input: AccessRoleInput!): OperationResult!
+    """
+    Update an access role.
+    """
+    accountAccessRoleUpdatePrivileged(input: AccessRoleUpdateInput!): AccessRole!
+    accountAdministratorSessionCreate: AuthenticationSession!
+    accountAuthenticationEmailVerificationSend: AuthenticationEmailVerification!
+    accountAuthenticationEmailVerificationVerify(
+        input: AccountEmailVerificationVerifyInput!
+    ): AuthenticationEmailVerification!
+    accountAuthenticationPasswordVerify(input: AccountPasswordVerifyInput!): AuthenticationOperationResult!
+    accountAuthenticationRegistrationComplete(input: AccountRegistrationCompleteInput!): AuthenticationOperationResult!
+    accountAuthenticationRegistrationOrSignInCreate(
+        input: AccountRegistrationOrSignInCreateInput!
+    ): AuthenticationRegistrationOrSignIn!
+    accountAuthenticationSignInComplete: AuthenticationOperationResult!
+    accountDelete(reason: String): OperationResult!
+    accountDeletePrivileged(input: AccountDeleteInput!): OperationResult!
+    accountEmailDelete(accountEmailId: String!): OperationResult!
+    accountEmailMakePrimary(accountEmailId: String!): AccountEmail!
+    accountEmailVerificationComplete(input: AccountEmailVerificationCompleteInput!): AccountEmail!
+    accountEmailVerificationSend(input: AccountEmailVerificationSendInput!): EmailVerification!
+    """
+    Create a new entitlement.
+    """
+    accountEntitlementCreatePrivileged(input: EntitlementCreateInput!): Entitlement!
+    """
+    Delete an entitlement.
+    """
+    accountEntitlementDeletePrivileged(input: EntitlementInput!): OperationResult!
+    """
+    Update an entitlement.
+    """
+    accountEntitlementUpdatePrivileged(input: EntitlementUpdateInput!): Entitlement!
+    accountMaintenanceSessionCreate: AuthenticationSession!
+    accountPasswordUpdate(input: AccountPasswordUpdateInput!): OperationResult!
+    """
+    Manually grant an entitlement to a profile.
+    """
+    accountProfileEntitlementCreatePrivileged(input: ProfileEntitlementCreateInput!): ProfileEntitlement!
+    """
+    Revoke a profile entitlement.
+    """
+    accountProfileEntitlementDeletePrivileged(input: ProfileEntitlementInput!): OperationResult!
+    accountProfileImageRemove: Profile!
+    accountProfileUpdate(input: AccountProfileUpdateInput!): Profile!
+    accountSessionDelete(input: AccountSessionDeleteInput!): OperationResult!
+    accountSignOut: OperationResult!
+}
+
+type OperationResult {
+    success: Boolean!
+}
+
+"""
+The order direction of a query
+"""
+enum OrderByDirection {
+    Ascending
+    Descending
+}
+
+input OrderByInput {
+    direction: OrderByDirection
+    key: String!
+}
+
+type PagedAccessRoleAssignments {
+    items: [AccessRoleAssignment!]!
+    pagination: Pagination!
+}
+
+type PagedAccounts {
+    items: [Account!]!
+    pagination: Pagination!
+}
+
+type Pagination {
+    itemIndex: Int!
+    itemIndexForNextPage: Int
+    itemIndexForPreviousPage: Int
+    itemsPerPage: Int!
+    itemsTotal: Int!
+    page: Int!
+    pagesTotal: Int!
+}
+
+input PaginationInput {
+    filters: [ColumnFilterInput!]
+    itemIndex: Int
+    itemsPerPage: Int!
+    orderBy: [OrderByInput!]
+}
+
+type Profile {
+    birthday: DateTimeISO
+    countryCode: String
+    createdAt: DateTimeISO!
+    displayName: String
+    entitlements: [ProfileEntitlement!]
+    familyName: String
+    gender: String
+    givenName: String
+    id: String!
+    """
+    Profile asset URL
+    """
+    images: [ImageObject!]
+    locale: String
+    middleName: String
+    preferredName: String
+    timezone: String
+    updatedAt: DateTimeISO!
+    username: String!
+}
+
+type ProfileEntitlement {
+    createdAt: DateTimeISO!
+    createdByAccountId: String!
+    createdByProfileId: String!
+    entitlement: Entitlement!
+    entitlementId: String!
+    expiresAt: DateTimeISO
+    id: String!
+    profile: Profile!
+    profileId: String!
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+input ProfileEntitlementCreateInput {
+    entitlementId: String!
+    expiresAt: DateTimeISO
+    profileId: String!
+}
+
+input ProfileEntitlementInput {
+    id: String!
+}
+
+input ProfileEntitlementListInput {
+    entitlementId: String
+    profileId: String
+}
+
+type PublicProfile {
+    createdAt: DateTimeISO
+    displayName: String
+    images: [ImageObject!]
+    username: String!
+}
+
+type Query {
+    account: Account!
+    """
+    Get all access roles assigned to an account.
+    """
+    accountAccessRoleAssignmentsPrivileged(
+        pagination: PaginationInput!
+        statuses: [AccessRoleStatus!]
+    ): PagedAccessRoleAssignments!
+    """
+    Get a single access role by ID or type.
+    """
+    accountAccessRolePrivileged(input: AccessRoleInput!): AccessRole
+    """
+    Get all access roles.
+    """
+    accountAccessRolesPrivileged(input: AccessRoleListInput): [AccessRole!]!
+    accountAuthentication: AuthenticationSession
+    accountAuthenticationEmailVerification: AuthenticationEmailVerification
+    accountEmailAddresses: AccountEmailAddressesResult!
+    accountEmailVerification: EmailVerification!
+    """
+    Get a single entitlement by ID or featureKey.
+    """
+    accountEntitlementPrivileged(input: EntitlementInput!): Entitlement
+    """
+    Get all entitlements.
+    """
+    accountEntitlementsPrivileged(input: EntitlementListInput): [Entitlement!]!
+    accountPrivileged(input: AccountInput!): Account
+    """
+    Get a single profile entitlement by ID.
+    """
+    accountProfileEntitlementPrivileged(input: ProfileEntitlementInput!): ProfileEntitlement
+    """
+    Get all profile entitlements.
+    """
+    accountProfileEntitlementsPrivileged(input: ProfileEntitlementListInput): [ProfileEntitlement!]!
+    accountProfilePublic(username: String!): PublicProfile
+    accountProfileUsernameValidate(username: String!): UniqueFieldValidationResult!
+    accountSessions: [AccountSession!]!
+    accountsPrivileged(pagination: PaginationInput!): PagedAccounts!
+}
+
+enum UniqueFieldValidationResult {
+    Available
+    Forbidden
+    Invalid
+    Taken
+}
