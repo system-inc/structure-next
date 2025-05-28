@@ -10,8 +10,8 @@ import { usePathname, useSearchParams } from 'next/navigation';
 // Dependencies - Main Components
 import { EngagementContainer } from '@structure/source/modules/engagement/EngagementContainer';
 
-// Dependencies - Engagement
-import { useEngagementEvent } from '@structure/source/modules/engagement/useEngagementEvent';
+// Dependencies - Utilities
+import { createEngagementEvent } from '@structure/source/modules/engagement/createEngagementEvent';
 
 // Context - Engagement
 interface EngagementContextInterface {
@@ -34,18 +34,23 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     // Hooks
     const urlPath = usePathname() ?? '';
     const urlSearchParameters = useSearchParams();
-    const { sendEngagementEvent } = useEngagementEvent();
 
     // Function to get current session duration
-    const getSessionDurationInMilliseconds = React.useCallback(() => {
-        let sessionDurationInMilliseconds = Date.now() - sessionStartTimeReference.current;
-
-        // If the session duration is greater than 30 minutes, reset the session start time
-        if(sessionDurationInMilliseconds > 30 * 60 * 1000) {
-            sessionStartTimeReference.current = Date.now();
-            sessionDurationInMilliseconds = 0;
+    const getSessionDurationInMilliseconds = React.useCallback(function () {
+        // Return 0 if session start time is not initialized yet
+        if(sessionStartTimeReference.current === undefined) {
+            return 0;
         }
 
+        const sessionDurationInMilliseconds = Date.now() - sessionStartTimeReference.current;
+
+        // If the session duration is greater than 30 minutes, reset the session start time for future calls
+        if(sessionDurationInMilliseconds > 30 * 60 * 1000) {
+            sessionStartTimeReference.current = Date.now();
+            return 0; // Return 0 for the reset session
+        }
+
+        // console.log('🕐 Session duration calculated:', sessionDurationInMilliseconds);
         return sessionDurationInMilliseconds;
     }, []);
 
@@ -54,8 +59,16 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     const previousViewIdentifierReference = React.useRef('');
     const previousViewTitleReference = React.useRef('');
     const loadDurationInMillisecondsReference = React.useRef(0);
-    const sessionStartTimeReference = React.useRef(Date.now());
+    const sessionStartTimeReference = React.useRef<number>();
     const currentViewStartTimeReference = React.useRef(Date.now());
+
+    // Initialize session start time once
+    React.useEffect(function () {
+        if(sessionStartTimeReference.current === undefined) {
+            sessionStartTimeReference.current = Date.now();
+            // console.log('🚀 Session initialized at:', sessionStartTimeReference.current);
+        }
+    }, []);
 
     // Trigger whenever the URL changes
     React.useEffect(
@@ -98,7 +111,6 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             }
             // console.log('Load duration: ' + loadDurationInMillisecondsReference.current + ' milliseconds.');
 
-
             // Get the time on the previous view
             let previousViewDurationInMilliseconds = Date.now() - currentViewStartTimeReference.current;
             if(engagementEventsSentReference.current === 0) {
@@ -107,7 +119,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             // console.log('previousViewDurationInMilliseconds', previousViewDurationInMilliseconds);
 
             // Send the PageView engagement event with timing data
-            sendEngagementEvent('PageView', 'Navigation', {
+            createEngagementEvent(getSessionDurationInMilliseconds, 'PageView', 'Navigation', {
                 loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
                 previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
                 previousViewTitle: previousViewTitleReference.current || undefined,
@@ -127,7 +139,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                 // console.log('Cleaning up after route change...');
             };
         },
-        [urlPath, urlSearchParameters, sendEngagementEvent, getSessionDurationInMilliseconds],
+        [urlPath, urlSearchParameters, getSessionDurationInMilliseconds],
     );
 
     // Render the component
