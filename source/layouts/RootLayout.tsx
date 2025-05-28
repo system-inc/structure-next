@@ -16,7 +16,7 @@ import { themeKey, operatingSystemThemeKey } from '@structure/source/theme/Theme
 // Dependencies - Theme - Styles
 import '@structure/source/theme/styles/variables.css';
 import '@structure/source/theme/styles/global.css';
-import '@project/source/theme/styles/theme.css';
+import '@project/app/_theme/styles/theme.css';
 
 // Next.js Metadata
 export async function generateMetadata(): Promise<Metadata> {

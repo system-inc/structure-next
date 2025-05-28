@@ -22,14 +22,14 @@ export const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguratio
             },
         },
         // Project GraphQL files (using project schemas and documents)
-        './source/api/graphql/generated/': {
+        './app/_api/graphql/generated/': {
             preset: 'client',
             schema: graphql.projects.app.schema,
             documents: graphql.projects.app.documents,
             plugins: [
                 {
                     'typescript-operation-metadata': {
-                        metadata: ['./source/api/graphql/schemas/**/*.json'],
+                        metadata: ['./app/_api/graphql/schemas/**/*.json'],
                     },
                 },
             ],

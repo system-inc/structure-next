@@ -33,9 +33,9 @@ function readIcons(directory, source) {
         else {
             const directoryName = path.dirname(fullPath);
             if(item.endsWith('.svg')) {
-                // File in the project are imported using @project/assets/icons
+                // File in the project are imported using @project/app/_assets/icons
                 // Files in structure are imported using @structure/assets/icons
-                let importPath = source === 'Project' ? '@project/assets/icons' : '@structure/assets/icons';
+                let importPath = source === 'Project' ? '@project/app/_assets/icons' : '@structure/assets/icons';
                 importPath += directoryName.replace(/^.*assets\/icons/, '') + '/' + item;
                 // console.log('importPath', importPath);
 
