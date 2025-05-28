@@ -1,7 +1,7 @@
 // ESLint rule to enforce export patterns for React component files
 // - Enforces named exports for most React components
 // - Requires default exports for Next.js page files (page.tsx)
-const ReactExportRules = {
+const ReactExportRule = {
     meta: {
         type: 'suggestion',
         docs: {
@@ -307,4 +307,4 @@ const ReactExportRules = {
     },
 };
 
-export default ReactExportRules;
+export default ReactExportRule;
