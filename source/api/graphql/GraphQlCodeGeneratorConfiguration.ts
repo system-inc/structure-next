@@ -29,7 +29,7 @@ export const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguratio
             plugins: [
                 {
                     'typescript-operation-metadata': {
-                        metadata: ['./source/api/schemas/**/*.json'],
+                        metadata: ['./source/api/graphql/schemas/**/*.json'],
                     },
                 },
             ],
