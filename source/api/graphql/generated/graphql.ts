@@ -1012,19 +1012,6 @@ export enum DiscountValueType {
   Percentage = 'Percentage'
 }
 
-/** DNS Record Types */
-export enum DnsRecordType {
-  A = 'A',
-  Aaaa = 'AAAA',
-  Cname = 'CNAME',
-  Mx = 'MX',
-  Ns = 'NS',
-  Ptr = 'PTR',
-  Soa = 'SOA',
-  Srv = 'SRV',
-  Txt = 'TXT'
-}
-
 export type EmailAutomation = {
   __typename?: 'EmailAutomation';
   automationKey: Scalars['String']['output'];
@@ -1367,13 +1354,6 @@ export enum EmailVerificationStatus {
   Verified = 'Verified'
 }
 
-/** Enabled filter type */
-export enum EnabledFilterType {
-  All = 'All',
-  Disabled = 'Disabled',
-  Enabled = 'Enabled'
-}
-
 export type EngagementEvent = {
   __typename?: 'EngagementEvent';
   createdAt: Scalars['DateTimeISO']['output'];
@@ -1456,123 +1436,6 @@ export type EntitlementUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   featureKey?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
-};
-
-export type FlowEntity = {
-  __typename?: 'FlowEntity';
-  activeVersion?: Maybe<FlowVersionEntity>;
-  activeVersionId?: Maybe<Scalars['String']['output']>;
-  createdAt: Scalars['DateTimeISO']['output'];
-  createdByAccountId: Scalars['String']['output'];
-  createdByProfileId: Scalars['String']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  executions: Array<FlowExecution>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
-  updatedByAccountId?: Maybe<Scalars['String']['output']>;
-  updatedByProfileId?: Maybe<Scalars['String']['output']>;
-  versions: Array<FlowVersionEntity>;
-};
-
-export type FlowExecution = {
-  __typename?: 'FlowExecution';
-  completedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  createdAt: Scalars['DateTimeISO']['output'];
-  createdByAccountId: Scalars['String']['output'];
-  createdByProfileId: Scalars['String']['output'];
-  elapsedTimeMs?: Maybe<Scalars['Float']['output']>;
-  entryPointId: Scalars['String']['output'];
-  errors?: Maybe<Array<Scalars['JSON']['output']>>;
-  flowEntity?: Maybe<FlowEntity>;
-  flowType: FlowType;
-  flowTypeId: Scalars['String']['output'];
-  flowVersionEntity?: Maybe<FlowVersionEntity>;
-  flowVersionId?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  input?: Maybe<Scalars['JSON']['output']>;
-  logs?: Maybe<Array<Scalars['JSON']['output']>>;
-  metadata?: Maybe<Scalars['JSON']['output']>;
-  output?: Maybe<Scalars['JSON']['output']>;
-  startedAt: Scalars['DateTimeISO']['output'];
-  status: FlowExecutionStatus;
-  stepExecutions: Array<FlowStepExecution>;
-  triggerId?: Maybe<Scalars['String']['output']>;
-  triggerType: FlowTriggerType;
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type FlowExecutionHistoryInput = {
-  flowId?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Array<FlowExecutionStatus>>;
-  triggerId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type FlowExecutionInput = {
-  executionId: Scalars['String']['input'];
-};
-
-export enum FlowExecutionStatus {
-  Canceled = 'Canceled',
-  Failed = 'Failed',
-  NotStarted = 'NotStarted',
-  Running = 'Running',
-  Success = 'Success'
-}
-
-export type FlowStepExecution = {
-  __typename?: 'FlowStepExecution';
-  actionType: Scalars['String']['output'];
-  attempt: Scalars['Float']['output'];
-  completedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  createdAt: Scalars['DateTimeISO']['output'];
-  elapsedTimeMs?: Maybe<Scalars['Float']['output']>;
-  errors?: Maybe<Scalars['JSON']['output']>;
-  flowExecution: FlowExecution;
-  flowExecutionId: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  input?: Maybe<Scalars['JSON']['output']>;
-  logs?: Maybe<Array<Scalars['JSON']['output']>>;
-  output?: Maybe<Scalars['JSON']['output']>;
-  startedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  status: FlowStepExecutionStatus;
-  stepId: Scalars['String']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export enum FlowStepExecutionStatus {
-  Failed = 'Failed',
-  NotStarted = 'NotStarted',
-  Running = 'Running',
-  Success = 'Success'
-}
-
-export type FlowSubscribeInput = {
-  triggerId: Scalars['String']['input'];
-};
-
-export enum FlowTriggerType {
-  Manual = 'Manual',
-  Recurring = 'Recurring',
-  Webhook = 'Webhook'
-}
-
-export enum FlowType {
-  Custom = 'Custom',
-  Entity = 'Entity',
-  Static = 'Static'
-}
-
-export type FlowVersionEntity = {
-  __typename?: 'FlowVersionEntity';
-  createdAt: Scalars['DateTimeISO']['output'];
-  createdByAccountId: Scalars['String']['output'];
-  createdByProfileId: Scalars['String']['output'];
-  executions: Array<FlowExecution>;
-  flow: FlowEntity;
-  flowId: Scalars['String']['output'];
-  graph: Scalars['JSON']['output'];
-  id: Scalars['String']['output'];
 };
 
 export type FontConfig = {
@@ -1910,406 +1773,6 @@ export type FulfillmentProductVariant = {
   sku?: Maybe<Scalars['String']['output']>;
 };
 
-export type GridCapability = {
-  __typename?: 'GridCapability';
-  createdAt: Scalars['DateTimeISO']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type GridCapabilityCreateInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-};
-
-export type GridCapabilityInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridCapabilityUpdateInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridCloudProvider = {
-  __typename?: 'GridCloudProvider';
-  adapter: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  note?: Maybe<Scalars['String']['output']>;
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type GridCloudProviderCreateInput = {
-  adapter: Scalars['String']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-  note?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridCloudProviderInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridCloudProviderListInput = {
-  adapter?: InputMaybe<Scalars['String']['input']>;
-  enabledOnly?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type GridCloudProviderUpdateInput = {
-  adapter?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  id: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  note?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridNode = {
-  __typename?: 'GridNode';
-  createdAt: Scalars['DateTimeISO']['output'];
-  enabled: Scalars['Boolean']['output'];
-  healthEndpoint: Scalars['String']['output'];
-  host: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  lastSeenAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  name: Scalars['String']['output'];
-  note?: Maybe<Scalars['String']['output']>;
-  online: Scalars['Boolean']['output'];
-  providerRegionId: Scalars['String']['output'];
-  settings?: Maybe<Scalars['JSON']['output']>;
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type GridNodeCapability = {
-  __typename?: 'GridNodeCapability';
-  capabilityId: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  id: Scalars['String']['output'];
-  nodeId: Scalars['String']['output'];
-};
-
-export type GridNodeCapabilityAssignInput = {
-  capabilityId: Scalars['String']['input'];
-  nodeId: Scalars['String']['input'];
-};
-
-export type GridNodeCapabilityListInput = {
-  capabilityId?: InputMaybe<Scalars['String']['input']>;
-  nodeId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridNodeCapabilityRemoveInput = {
-  capabilityId: Scalars['String']['input'];
-  nodeId: Scalars['String']['input'];
-};
-
-export type GridNodeCreateInput = {
-  host: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  port?: InputMaybe<Scalars['Float']['input']>;
-  providerRegionId: Scalars['String']['input'];
-};
-
-export type GridNodeInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridNodeListInput = {
-  providerRegionId?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridNodeUpdateInput = {
-  id: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridProviderRegion = {
-  __typename?: 'GridProviderRegion';
-  cloudProviderId: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  healthEndpoint?: Maybe<Scalars['String']['output']>;
-  host?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  key?: Maybe<Scalars['String']['output']>;
-  note?: Maybe<Scalars['String']['output']>;
-  online: Scalars['Boolean']['output'];
-  providerRegionCode: Scalars['String']['output'];
-  regionId: Scalars['String']['output'];
-  secure: Scalars['Boolean']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type GridProviderRegionCapability = {
-  __typename?: 'GridProviderRegionCapability';
-  capabilityId: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  id: Scalars['String']['output'];
-  providerRegionId: Scalars['String']['output'];
-};
-
-export type GridProviderRegionCapabilityAssignInput = {
-  capabilityId: Scalars['String']['input'];
-  providerRegionId: Scalars['String']['input'];
-};
-
-export type GridProviderRegionCapabilityListInput = {
-  capabilityId?: InputMaybe<Scalars['String']['input']>;
-  providerRegionId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridProviderRegionCapabilityRemoveInput = {
-  capabilityId: Scalars['String']['input'];
-  providerRegionId: Scalars['String']['input'];
-};
-
-export type GridProviderRegionCreateInput = {
-  cloudProviderId: Scalars['String']['input'];
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  healthEndpoint?: InputMaybe<Scalars['String']['input']>;
-  host?: InputMaybe<Scalars['String']['input']>;
-  key?: InputMaybe<Scalars['String']['input']>;
-  online?: InputMaybe<Scalars['Boolean']['input']>;
-  providerRegionCode: Scalars['String']['input'];
-  regionId: Scalars['String']['input'];
-  secure?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type GridProviderRegionInput = {
-  cloudProviderId?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  providerRegionCode?: InputMaybe<Scalars['String']['input']>;
-  regionId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridProviderRegionListInput = {
-  cloudProviderId?: InputMaybe<Scalars['String']['input']>;
-  enabledOnly?: InputMaybe<Scalars['Boolean']['input']>;
-  regionId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridProviderRegionUpdateInput = {
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  id: Scalars['String']['input'];
-  providerRegionCode?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridRegion = {
-  __typename?: 'GridRegion';
-  country: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  division: Scalars['String']['output'];
-  enabled: Scalars['Boolean']['output'];
-  id: Scalars['String']['output'];
-  locality: Scalars['String']['output'];
-  note?: Maybe<Scalars['String']['output']>;
-  region: Scalars['String']['output'];
-  site?: Maybe<Scalars['String']['output']>;
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type GridRegionCreateInput = {
-  country: Scalars['String']['input'];
-  division: Scalars['String']['input'];
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  locality: Scalars['String']['input'];
-  region: Scalars['String']['input'];
-  site?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridRegionInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** Grid region level */
-export enum GridRegionLevel {
-  Country = 'Country',
-  Division = 'Division',
-  Locality = 'Locality',
-  Region = 'Region',
-  Site = 'Site'
-}
-
-export type GridRegionLevels = {
-  __typename?: 'GridRegionLevels';
-  country?: Maybe<Scalars['String']['output']>;
-  division?: Maybe<Scalars['String']['output']>;
-  locality?: Maybe<Scalars['String']['output']>;
-  region?: Maybe<Scalars['String']['output']>;
-  site?: Maybe<Scalars['String']['output']>;
-};
-
-export type GridRegionLevelsInput = {
-  country?: InputMaybe<Scalars['String']['input']>;
-  division?: InputMaybe<Scalars['String']['input']>;
-  locality?: InputMaybe<Scalars['String']['input']>;
-  region?: InputMaybe<Scalars['String']['input']>;
-  site?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridRegionLevelsListInput = {
-  level: GridRegionLevel;
-};
-
-export type GridRegionListInput = {
-  enabled?: InputMaybe<EnabledFilterType>;
-};
-
-export type GridRegionUpdateInput = {
-  country?: InputMaybe<Scalars['String']['input']>;
-  division?: InputMaybe<Scalars['String']['input']>;
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  id: Scalars['String']['input'];
-  locality?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  note?: InputMaybe<Scalars['String']['input']>;
-  region?: InputMaybe<Scalars['String']['input']>;
-  site?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridTask = {
-  __typename?: 'GridTask';
-  allowAsync: Scalars['Boolean']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  note?: Maybe<Scalars['String']['output']>;
-  timeoutMs: Scalars['Float']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type GridTaskCapability = {
-  __typename?: 'GridTaskCapability';
-  capabilityId: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  id: Scalars['String']['output'];
-  required: Scalars['Boolean']['output'];
-  taskId: Scalars['String']['output'];
-};
-
-export type GridTaskCapabilityCreateInput = {
-  capabilityId: Scalars['String']['input'];
-  required?: InputMaybe<Scalars['Boolean']['input']>;
-  taskId: Scalars['String']['input'];
-};
-
-export type GridTaskCapabilityDeleteInput = {
-  capabilityId: Scalars['String']['input'];
-  taskId: Scalars['String']['input'];
-};
-
-export type GridTaskCapabilityListInput = {
-  capabilityId?: InputMaybe<Scalars['String']['input']>;
-  taskId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridTaskCapabilityUpdateInput = {
-  capabilityId: Scalars['String']['input'];
-  required: Scalars['Boolean']['input'];
-  taskId: Scalars['String']['input'];
-};
-
-export type GridTaskCreateInput = {
-  allowAsync?: InputMaybe<Scalars['Boolean']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type GridTaskExecution = {
-  __typename?: 'GridTaskExecution';
-  attempt: Scalars['Float']['output'];
-  completedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  createdAt: Scalars['DateTimeISO']['output'];
-  error?: Maybe<Scalars['JSON']['output']>;
-  flowId?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  inputData?: Maybe<Scalars['JSON']['output']>;
-  isAsync?: Maybe<Scalars['Boolean']['output']>;
-  maxAttempts?: Maybe<Scalars['Float']['output']>;
-  nodeId?: Maybe<Scalars['String']['output']>;
-  outputData?: Maybe<Scalars['JSON']['output']>;
-  providerRegionId?: Maybe<Scalars['String']['output']>;
-  startedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-  status: GridTaskExecutionStatus;
-  taskTypeId: Scalars['String']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type GridTaskExecutionInput = {
-  flowId?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  nodeId?: InputMaybe<Scalars['String']['input']>;
-  providerRegionId?: InputMaybe<Scalars['String']['input']>;
-  taskTypeId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridTaskExecutionListInput = {
-  flowId?: InputMaybe<Scalars['String']['input']>;
-  nodeId?: InputMaybe<Scalars['String']['input']>;
-  providerRegionId?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<GridTaskExecutionStatus>;
-  taskTypeId?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** The possible states of a task ran on the Grid. */
-export enum GridTaskExecutionStatus {
-  Failed = 'Failed',
-  Pending = 'Pending',
-  Retry = 'Retry',
-  Running = 'Running',
-  Success = 'Success'
-}
-
-export type GridTaskInput = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GridTaskListInput = {
-  enabledOnly?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-export type GridTaskProviderSupport = {
-  __typename?: 'GridTaskProviderSupport';
-  cloudProviderId: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  id: Scalars['String']['output'];
-  taskId: Scalars['String']['output'];
-};
-
-export type GridTaskProviderSupportCreateInput = {
-  cloudProviderId: Scalars['String']['input'];
-  taskId: Scalars['String']['input'];
-};
-
-export type GridTaskProviderSupportDeleteInput = {
-  cloudProviderId: Scalars['String']['input'];
-  taskId: Scalars['String']['input'];
-};
-
-export type GridTaskUpdateInput = {
-  allowAsync?: InputMaybe<Scalars['Boolean']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  id: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
-};
-
 export type ImageObject = {
   __typename?: 'ImageObject';
   type: MediaObjectType;
@@ -2421,77 +1884,11 @@ export type Mutation = {
   emailTemplateUpdate: EmailTemplate;
   engagementEventCreate: OperationResult;
   engagementEventsCreate: OperationResult;
-  flowAbortPrivileged: OperationResult;
-  flowCancelPrivileged: OperationResult;
-  flowPurgeByDatePrivileged: OperationResult;
-  flowPurgePrivileged: OperationResult;
-  flowSubscribe: FlowExecution;
-  flowUnsubscribe: FlowExecution;
   formArchive: Form;
   formCreate: Form;
   formFork: Form;
   formPublish: Form;
   formUpdate: Form;
-  /** Create a new capability. */
-  gridCapabilityCreatePrivileged: GridCapability;
-  /** Delete a capability. */
-  gridCapabilityDeletePrivileged: OperationResult;
-  /** Update a capability. */
-  gridCapabilityUpdatePrivileged: GridCapability;
-  /** Create a new grid cloud provider. */
-  gridCloudProviderCreatePrivileged: GridCloudProvider;
-  /** Delete a grid cloud provider. */
-  gridCloudProviderDeletePrivileged: OperationResult;
-  /** Update a grid cloud provider. */
-  gridCloudProviderUpdatePrivileged: GridCloudProvider;
-  /** Assign a capability to a node. */
-  gridNodeCapabilityCreatePrivileged: GridNodeCapability;
-  /** Remove a capability from a node. */
-  gridNodeCapabilityDeletePrivileged: OperationResult;
-  /** Create a new node. */
-  gridNodeCreatePrivileged: GridNode;
-  /** Delete a node. */
-  gridNodeDeletePrivileged: OperationResult;
-  /** Update a node. */
-  gridNodeUpdatePrivileged: GridNode;
-  /** Assign a capability to a provider region. */
-  gridProviderRegionCapabilityCreatePrivileged: GridProviderRegionCapability;
-  /** Remove a capability from a provider region. */
-  gridProviderRegionCapabilityDeletePrivileged: OperationResult;
-  /** Create a new provider region. */
-  gridProviderRegionCreatePrivileged: GridProviderRegion;
-  /** Delete a provider region. */
-  gridProviderRegionDeletePrivileged: OperationResult;
-  /** Update a provider region. */
-  gridProviderRegionUpdatePrivileged: GridProviderRegion;
-  /** Create a new region. */
-  gridRegionCreatePrivileged: GridRegion;
-  /** Delete a region. */
-  gridRegionDeletePrivileged: OperationResult;
-  /** Update a region. */
-  gridRegionUpdatePrivileged: GridRegion;
-  /** Assign a capability to a task type. */
-  gridTaskCapabilityCreatePrivileged: GridTaskCapability;
-  /** Remove a capability from a task type. */
-  gridTaskCapabilityDeletePrivileged: OperationResult;
-  /** Update a task type capability. */
-  gridTaskCapabilityUpdatePrivileged: GridTaskCapability;
-  /** Create a new task type. */
-  gridTaskCreatePrivileged: GridTask;
-  /** Delete a task type. */
-  gridTaskDeletePrivileged: OperationResult;
-  /** Assign a task type to a cloud provider. */
-  gridTaskProviderSupportCreatePrivileged: GridTaskProviderSupport;
-  /** Remove a task type from a cloud provider. */
-  gridTaskProviderSupportDeletePrivileged: OperationResult;
-  /** Update a task. */
-  gridTaskUpdatePrivileged: GridTask;
-  networkToolDnsCreate: Scalars['String']['output'];
-  networkToolPingCreate: Scalars['String']['output'];
-  networkToolPortCheckCreate: Scalars['String']['output'];
-  networkToolTlsCertificateCreate: Scalars['String']['output'];
-  networkToolTracerouteCreate: Scalars['String']['output'];
-  networkToolWhoisCreate: Scalars['String']['output'];
   postCommentCreate: PostComment;
   postCommentDelete: OperationResult;
   postCreatePrivileged: Post;
@@ -2516,12 +1913,6 @@ export type Mutation = {
   productVariantRemoveGalleryAsset: ProductVariant;
   productVariantReorderGallery: ProductVariant;
   sendEmail: Scalars['String']['output'];
-  /** Create a new billable action. */
-  stripeBillableActionCreatePrivileged: StripeBillableAction;
-  /** Delete a billable action. */
-  stripeBillableActionDeletePrivileged: OperationResult;
-  /** Update a billable action. */
-  stripeBillableActionUpdatePrivileged: StripeBillableAction;
   submitForm: FormUserData;
   supportTicketAssign: SupportTicket;
   supportTicketCommentCreatePrivileged: SupportTicketComment;
@@ -2858,37 +2249,6 @@ export type MutationEngagementEventsCreateArgs = {
 };
 
 
-export type MutationFlowAbortPrivilegedArgs = {
-  objectId: Scalars['String']['input'];
-};
-
-
-export type MutationFlowCancelPrivilegedArgs = {
-  objectId: Scalars['String']['input'];
-  timeout?: InputMaybe<Scalars['Float']['input']>;
-};
-
-
-export type MutationFlowPurgeByDatePrivilegedArgs = {
-  date: Scalars['DateTimeISO']['input'];
-};
-
-
-export type MutationFlowPurgePrivilegedArgs = {
-  objectId: Scalars['String']['input'];
-};
-
-
-export type MutationFlowSubscribeArgs = {
-  input: FlowSubscribeInput;
-};
-
-
-export type MutationFlowUnsubscribeArgs = {
-  input: FlowSubscribeInput;
-};
-
-
 export type MutationFormArchiveArgs = {
   id: Scalars['String']['input'];
 };
@@ -2912,171 +2272,6 @@ export type MutationFormPublishArgs = {
 export type MutationFormUpdateArgs = {
   id: Scalars['String']['input'];
   input: FormUpdateInput;
-};
-
-
-export type MutationGridCapabilityCreatePrivilegedArgs = {
-  input: GridCapabilityCreateInput;
-};
-
-
-export type MutationGridCapabilityDeletePrivilegedArgs = {
-  input: GridCapabilityInput;
-};
-
-
-export type MutationGridCapabilityUpdatePrivilegedArgs = {
-  input: GridCapabilityUpdateInput;
-};
-
-
-export type MutationGridCloudProviderCreatePrivilegedArgs = {
-  input: GridCloudProviderCreateInput;
-};
-
-
-export type MutationGridCloudProviderDeletePrivilegedArgs = {
-  input: GridCloudProviderInput;
-};
-
-
-export type MutationGridCloudProviderUpdatePrivilegedArgs = {
-  input: GridCloudProviderUpdateInput;
-};
-
-
-export type MutationGridNodeCapabilityCreatePrivilegedArgs = {
-  input: GridNodeCapabilityAssignInput;
-};
-
-
-export type MutationGridNodeCapabilityDeletePrivilegedArgs = {
-  input: GridNodeCapabilityRemoveInput;
-};
-
-
-export type MutationGridNodeCreatePrivilegedArgs = {
-  input: GridNodeCreateInput;
-};
-
-
-export type MutationGridNodeDeletePrivilegedArgs = {
-  input: GridNodeInput;
-};
-
-
-export type MutationGridNodeUpdatePrivilegedArgs = {
-  input: GridNodeUpdateInput;
-};
-
-
-export type MutationGridProviderRegionCapabilityCreatePrivilegedArgs = {
-  input: GridProviderRegionCapabilityAssignInput;
-};
-
-
-export type MutationGridProviderRegionCapabilityDeletePrivilegedArgs = {
-  input: GridProviderRegionCapabilityRemoveInput;
-};
-
-
-export type MutationGridProviderRegionCreatePrivilegedArgs = {
-  input: GridProviderRegionCreateInput;
-};
-
-
-export type MutationGridProviderRegionDeletePrivilegedArgs = {
-  input: GridProviderRegionInput;
-};
-
-
-export type MutationGridProviderRegionUpdatePrivilegedArgs = {
-  input: GridProviderRegionUpdateInput;
-};
-
-
-export type MutationGridRegionCreatePrivilegedArgs = {
-  input: GridRegionCreateInput;
-};
-
-
-export type MutationGridRegionDeletePrivilegedArgs = {
-  input: GridRegionInput;
-};
-
-
-export type MutationGridRegionUpdatePrivilegedArgs = {
-  input: GridRegionUpdateInput;
-};
-
-
-export type MutationGridTaskCapabilityCreatePrivilegedArgs = {
-  input: GridTaskCapabilityCreateInput;
-};
-
-
-export type MutationGridTaskCapabilityDeletePrivilegedArgs = {
-  input: GridTaskCapabilityDeleteInput;
-};
-
-
-export type MutationGridTaskCapabilityUpdatePrivilegedArgs = {
-  input: GridTaskCapabilityUpdateInput;
-};
-
-
-export type MutationGridTaskCreatePrivilegedArgs = {
-  input: GridTaskCreateInput;
-};
-
-
-export type MutationGridTaskDeletePrivilegedArgs = {
-  input: GridTaskInput;
-};
-
-
-export type MutationGridTaskProviderSupportCreatePrivilegedArgs = {
-  input: GridTaskProviderSupportCreateInput;
-};
-
-
-export type MutationGridTaskProviderSupportDeletePrivilegedArgs = {
-  input: GridTaskProviderSupportDeleteInput;
-};
-
-
-export type MutationGridTaskUpdatePrivilegedArgs = {
-  input: GridTaskUpdateInput;
-};
-
-
-export type MutationNetworkToolDnsCreateArgs = {
-  input: NetworkToolDnsCreateInput;
-};
-
-
-export type MutationNetworkToolPingCreateArgs = {
-  input: NetworkToolPingCreateInput;
-};
-
-
-export type MutationNetworkToolPortCheckCreateArgs = {
-  input: NetworkToolPortCheckCreateInput;
-};
-
-
-export type MutationNetworkToolTlsCertificateCreateArgs = {
-  input: NetworkToolTlsCertificateCreateInput;
-};
-
-
-export type MutationNetworkToolTracerouteCreateArgs = {
-  input: NetworkToolTracerouteCreateInput;
-};
-
-
-export type MutationNetworkToolWhoisCreateArgs = {
-  input: NetworkToolWhoisCreateInput;
 };
 
 
@@ -3219,21 +2414,6 @@ export type MutationSendEmailArgs = {
 };
 
 
-export type MutationStripeBillableActionCreatePrivilegedArgs = {
-  input: StripeBillableActionCreateInput;
-};
-
-
-export type MutationStripeBillableActionDeletePrivilegedArgs = {
-  input: StripeBillableActionInput;
-};
-
-
-export type MutationStripeBillableActionUpdatePrivilegedArgs = {
-  input: StripeBillableActionUpdateInput;
-};
-
-
 export type MutationSubmitFormArgs = {
   data: Scalars['JSON']['input'];
   emailAddress?: InputMaybe<Scalars['String']['input']>;
@@ -3324,52 +2504,6 @@ export type MutationWarehouseInventoryUpdateArgs = {
 
 export type MutationWarehouseUpdateArgs = {
   input: WarehouseUpdateInput;
-};
-
-export type NetworkToolDnsCreateInput = {
-  domain: Scalars['String']['input'];
-  region: GridRegionLevelsInput;
-  types?: InputMaybe<Array<DnsRecordType>>;
-};
-
-export type NetworkToolHistoryInput = {
-  networkTool: Scalars['String']['input'];
-};
-
-export type NetworkToolPingCreateInput = {
-  count: Scalars['Float']['input'];
-  host: Scalars['String']['input'];
-  region: GridRegionLevelsInput;
-  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type NetworkToolPortCheckCreateInput = {
-  host: Scalars['String']['input'];
-  port: Scalars['Float']['input'];
-  region: GridRegionLevelsInput;
-  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type NetworkToolTlsCertificateCreateInput = {
-  host: Scalars['String']['input'];
-  port: Scalars['Float']['input'];
-  region: GridRegionLevelsInput;
-  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type NetworkToolTracerouteCreateInput = {
-  host: Scalars['String']['input'];
-  maxHops?: InputMaybe<Scalars['Float']['input']>;
-  queryCount?: InputMaybe<Scalars['Float']['input']>;
-  region: GridRegionLevelsInput;
-  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
-  waitTime?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type NetworkToolWhoisCreateInput = {
-  host: Scalars['String']['input'];
-  region: GridRegionLevelsInput;
-  timeoutMs?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type OperationResult = {
@@ -3483,12 +2617,6 @@ export type Pagination = {
   pagesTotal: Scalars['Int']['output'];
 };
 
-export type PaginationFlowExecutionResult = {
-  __typename?: 'PaginationFlowExecutionResult';
-  items: Array<FlowExecution>;
-  pagination: Pagination;
-};
-
 export type PaginationFormResult = {
   __typename?: 'PaginationFormResult';
   items: Array<Form>;
@@ -3498,12 +2626,6 @@ export type PaginationFormResult = {
 export type PaginationFulfillmentOrderResult = {
   __typename?: 'PaginationFulfillmentOrderResult';
   items: Array<FulfillmentOrder>;
-  pagination: Pagination;
-};
-
-export type PaginationGridCapability = {
-  __typename?: 'PaginationGridCapability';
-  items: Array<GridCapability>;
   pagination: Pagination;
 };
 
@@ -3518,12 +2640,6 @@ export type PaginationInputWithFilters = {
   filters?: InputMaybe<Array<ColumnFilter>>;
   itemIndex?: InputMaybe<Scalars['Int']['input']>;
   itemsPerPage: Scalars['Int']['input'];
-};
-
-export type PaginationNetworkToolHistoryResult = {
-  __typename?: 'PaginationNetworkToolHistoryResult';
-  items: Array<FlowExecution>;
-  pagination: Pagination;
 };
 
 export type PaginationOrderResult = {
@@ -4142,51 +3258,9 @@ export type Query = {
   emailTemplates: EmailTemplatesResult;
   engagementEvents: Array<EngagementEvent>;
   engagementOverview: EngagementOverview;
-  flowExecution?: Maybe<FlowExecution>;
-  flowExecutionHistory: PaginationFlowExecutionResult;
-  flowInfoPrivileged: Scalars['JSON']['output'];
   form: Form;
   formPrivileged: Form;
   formsPrivileged: PaginationFormResult;
-  /** Get all capabilities. */
-  gridCapabilitiesPrivileged: Array<PaginationGridCapability>;
-  /** Get a capability by ID or name. */
-  gridCapabilityPrivileged?: Maybe<GridCapability>;
-  /** Get a grid cloud provider by ID or name. */
-  gridCloudProviderPrivileged?: Maybe<GridCloudProvider>;
-  /** Get all grid cloud providers. */
-  gridCloudProvidersPrivileged: Array<GridCloudProvider>;
-  /** Get all node capabilities. */
-  gridNodeCapabilitiesPrivileged: Array<GridNodeCapability>;
-  /** Get a node by ID or name. */
-  gridNodePrivileged?: Maybe<GridNode>;
-  /** Get all nodes. */
-  gridNodesPrivileged: Array<GridNode>;
-  /** Get all provider region capabilities. */
-  gridProviderRegionCapabilitiesPrivileged: Array<GridProviderRegionCapability>;
-  /** Get a provider region by ID or other criteria. */
-  gridProviderRegionPrivleged?: Maybe<GridProviderRegion>;
-  /** Get all provider regions. */
-  gridProviderRegionsPrivileged: Array<GridProviderRegion>;
-  /** Get all regions. */
-  gridRegionLevels: Array<GridRegionLevels>;
-  /** Get a region by ID or name. */
-  gridRegionPrivileged?: Maybe<GridRegion>;
-  /** Get all regions. */
-  gridRegionsPrivileged: Array<GridRegion>;
-  /** Get all task type capabilities. */
-  gridTaskCapabilitiesPrivileged: Array<GridTaskCapability>;
-  /** Get a specific task execution. */
-  gridTaskExecutionPrivileged?: Maybe<GridTaskExecution>;
-  /** Get task executions. */
-  gridTaskExecutionsPrivileged: Array<GridTaskExecution>;
-  /** Get a task type by ID, name, or name and version. */
-  gridTaskPrivileged?: Maybe<GridTask>;
-  /** Get all task provider supports. */
-  gridTaskProviderSupportPrivileged: Array<GridTaskProviderSupport>;
-  /** Get all task types. */
-  gridTasksPrivileged: Array<GridTask>;
-  networkToolHistory: PaginationNetworkToolHistoryResult;
   post: Post;
   postComments: PagedPostComments;
   postPrivileged: Post;
@@ -4200,10 +3274,6 @@ export type Query = {
   postsMine: PagedPosts;
   postsPrivileged: PagedPosts;
   queryOrderPrice: QueryCommerceOrderPriceResult;
-  /** Get a single billable action by ID or billableAction. */
-  stripeBillableActionPrivileged?: Maybe<StripeBillableAction>;
-  /** List all billable actions. */
-  stripeBillableActionsPrivileged: Array<StripeBillableAction>;
   supportAllSupportProfiles: Array<PublicProfile>;
   supportTickets: PaginationSupportTicketResult;
   supportTicketsPrivileged: PaginationSupportTicketResult;
@@ -4478,22 +3548,6 @@ export type QueryEngagementOverviewArgs = {
 };
 
 
-export type QueryFlowExecutionArgs = {
-  input: FlowExecutionInput;
-};
-
-
-export type QueryFlowExecutionHistoryArgs = {
-  input: FlowExecutionHistoryInput;
-  pagination: PaginationInput;
-};
-
-
-export type QueryFlowInfoPrivilegedArgs = {
-  objectId: Scalars['String']['input'];
-};
-
-
 export type QueryFormArgs = {
   identifier: Scalars['String']['input'];
 };
@@ -4506,110 +3560,6 @@ export type QueryFormPrivilegedArgs = {
 
 
 export type QueryFormsPrivilegedArgs = {
-  pagination: PaginationInput;
-};
-
-
-export type QueryGridCapabilitiesPrivilegedArgs = {
-  pagination: PaginationInput;
-};
-
-
-export type QueryGridCapabilityPrivilegedArgs = {
-  input: GridCapabilityInput;
-};
-
-
-export type QueryGridCloudProviderPrivilegedArgs = {
-  input: GridCloudProviderInput;
-};
-
-
-export type QueryGridCloudProvidersPrivilegedArgs = {
-  input?: InputMaybe<GridCloudProviderListInput>;
-};
-
-
-export type QueryGridNodeCapabilitiesPrivilegedArgs = {
-  input?: InputMaybe<GridNodeCapabilityListInput>;
-  pagination: PaginationInput;
-};
-
-
-export type QueryGridNodePrivilegedArgs = {
-  input: GridNodeInput;
-};
-
-
-export type QueryGridNodesPrivilegedArgs = {
-  input?: InputMaybe<GridNodeListInput>;
-  pagination: PaginationInput;
-};
-
-
-export type QueryGridProviderRegionCapabilitiesPrivilegedArgs = {
-  input?: InputMaybe<GridProviderRegionCapabilityListInput>;
-};
-
-
-export type QueryGridProviderRegionPrivlegedArgs = {
-  input: GridProviderRegionInput;
-};
-
-
-export type QueryGridProviderRegionsPrivilegedArgs = {
-  input?: InputMaybe<GridProviderRegionListInput>;
-};
-
-
-export type QueryGridRegionLevelsArgs = {
-  input: GridRegionLevelsListInput;
-};
-
-
-export type QueryGridRegionPrivilegedArgs = {
-  input: GridRegionInput;
-};
-
-
-export type QueryGridRegionsPrivilegedArgs = {
-  input?: InputMaybe<GridRegionListInput>;
-};
-
-
-export type QueryGridTaskCapabilitiesPrivilegedArgs = {
-  input?: InputMaybe<GridTaskCapabilityListInput>;
-};
-
-
-export type QueryGridTaskExecutionPrivilegedArgs = {
-  input: GridTaskExecutionInput;
-};
-
-
-export type QueryGridTaskExecutionsPrivilegedArgs = {
-  input?: InputMaybe<GridTaskExecutionListInput>;
-  pagination: PaginationInput;
-};
-
-
-export type QueryGridTaskPrivilegedArgs = {
-  input: GridTaskInput;
-};
-
-
-export type QueryGridTaskProviderSupportPrivilegedArgs = {
-  input?: InputMaybe<TaskProviderSupportListInput>;
-};
-
-
-export type QueryGridTasksPrivilegedArgs = {
-  input?: InputMaybe<GridTaskListInput>;
-};
-
-
-export type QueryNetworkToolHistoryArgs = {
-  input: NetworkToolHistoryInput;
   pagination: PaginationInput;
 };
 
@@ -4690,16 +3640,6 @@ export type QueryPostsPrivilegedArgs = {
 
 export type QueryQueryOrderPriceArgs = {
   input: QueryCommerceOrderPriceInput;
-};
-
-
-export type QueryStripeBillableActionPrivilegedArgs = {
-  input: StripeBillableActionInput;
-};
-
-
-export type QueryStripeBillableActionsPrivilegedArgs = {
-  input?: InputMaybe<StripeBillableActionListInput>;
 };
 
 
@@ -4903,88 +3843,6 @@ export type StreetAddressObject = {
   state: Scalars['String']['output'];
 };
 
-export type StripeBillableAction = {
-  __typename?: 'StripeBillableAction';
-  billableAction: Scalars['String']['output'];
-  billableActionLogs: Array<StripeBillableActionLog>;
-  createdAt: Scalars['DateTimeISO']['output'];
-  createdByAccountId: Scalars['String']['output'];
-  createdByProfileId: Scalars['String']['output'];
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  stripeEventName: Scalars['String']['output'];
-  unitValue: Scalars['Float']['output'];
-  updatedAt: Scalars['DateTimeISO']['output'];
-  updatedByAccountId?: Maybe<Scalars['String']['output']>;
-  updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type StripeBillableActionCreateInput = {
-  billableAction: Scalars['String']['input'];
-  description: Scalars['String']['input'];
-  stripeEventName: Scalars['String']['input'];
-  unitValue: Scalars['Float']['input'];
-};
-
-export type StripeBillableActionInput = {
-  billableAction?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type StripeBillableActionListInput = {
-  stripeEventName?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type StripeBillableActionLog = {
-  __typename?: 'StripeBillableActionLog';
-  billableAction: StripeBillableAction;
-  billableActionId: Scalars['String']['output'];
-  createdAt: Scalars['DateTimeISO']['output'];
-  id: Scalars['String']['output'];
-  meteredEventLog: StripeMeteredEventLog;
-  meteredEventLogId: Scalars['String']['output'];
-  sourceId: Scalars['String']['output'];
-  sourceType: Scalars['String']['output'];
-  timestamp: Scalars['DateTimeISO']['output'];
-  value: Scalars['Float']['output'];
-};
-
-export type StripeBillableActionUpdateInput = {
-  billableAction?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  stripeEventName?: InputMaybe<Scalars['String']['input']>;
-  unitValue?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type StripeCustomer = {
-  __typename?: 'StripeCustomer';
-  createdAt: Scalars['DateTimeISO']['output'];
-  id: Scalars['String']['output'];
-  stripeCustomerId: Scalars['String']['output'];
-};
-
-export type StripeMeteredEventLog = {
-  __typename?: 'StripeMeteredEventLog';
-  createdAt: Scalars['DateTimeISO']['output'];
-  customerId: Scalars['String']['output'];
-  eventName: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  idempotencyKey: Scalars['String']['output'];
-  requestId: Scalars['String']['output'];
-  status: StripeMeteredEventLogStatus;
-  stripeCustomer: StripeCustomer;
-  timestamp: Scalars['DateTimeISO']['output'];
-  value: Scalars['Float']['output'];
-};
-
-/** The status of the Stripe metered event log. */
-export enum StripeMeteredEventLogStatus {
-  Failed = 'Failed',
-  Pending = 'Pending',
-  Success = 'Success'
-}
-
 export type SupportTicket = {
   __typename?: 'SupportTicket';
   answered: Scalars['Boolean']['output'];
@@ -5055,11 +3913,6 @@ export type SupportTicketUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   title?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type TaskProviderSupportListInput = {
-  cloudProviderId?: InputMaybe<Scalars['String']['input']>;
-  taskId?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Possible time intervals used to group time series data. */
