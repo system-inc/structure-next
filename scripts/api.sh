@@ -65,27 +65,47 @@ npm i
 echo "Generating base library GraphQL code..."
 node base.js graphql schema:generate -w api -e Production -s -m
 
-# Copy the files from apiDirectory/workers/graphql/graphql/schemas to projectDirectory/source/api/schemas
-echo "Copying the generated GraphQL files to the project directory..."
-cp -r $apiDirectory/workers/api/graphql/schemas $projectDirectory/source/api/
+# Copy the files from apiDirectory/workers/graphql/graphql/schemas intelligently
+echo "Copying the generated GraphQL files to the appropriate directory..."
+cp -r $apiDirectory/workers/api/graphql/schemas /tmp/api_schemas_temp
 
-# Rename api.graphql and api.json to use project title
-echo "Renaming api files to use project title ($projectTitle)..."
-cd $projectDirectory/source/api/schemas
-if [ -f "api.graphql" ]; then
-    mv api.graphql "$projectTitle.graphql"
-    echo "Renamed api.graphql to $projectTitle.graphql"
-fi
-if [ -f "api.json" ]; then
-    mv api.json "$projectTitle.json"
-    echo "Renamed api.json to $projectTitle.json"
-fi
+# Function to determine where each schema file should go
+place_schema_file() {
+    local filename="$1"
+    local structure_path="$projectDirectory/libraries/structure/source/api/graphql/schemas/$filename"
+    local project_path="$projectDirectory/source/api/graphql/schemas/$filename"
+    
+    if [ -f "$structure_path" ]; then
+        echo "  → $filename exists in structure, updating structure location"
+        cp "/tmp/api_schemas_temp/$filename" "$structure_path"
+    else
+        echo "  → $filename not in structure, placing in project location"
+        cp "/tmp/api_schemas_temp/$filename" "$project_path"
+    fi
+}
 
-# Format the schema files
-echo "Formatting GraphQL schema files..."
+# Process each schema file intelligently
+echo "Processing schema files..."
+cd /tmp/api_schemas_temp
+for file in *.graphql *.json; do
+    if [ -f "$file" ]; then
+        if [ "$file" = "api.graphql" ] || [ "$file" = "api.json" ]; then
+            # Handle project-specific api files
+            extension="${file##*.}"
+            project_filename="$projectTitle.$extension"
+            echo "  → Renaming $file to $project_filename for project"
+            cp "$file" "$projectDirectory/source/api/graphql/schemas/$project_filename"
+        else
+            # Handle other schema files intelligently
+            place_schema_file "$file"
+        fi
+    fi
+done
+
+# Clean up temp directory
+rm -rf /tmp/api_schemas_temp
+
+# Generate GraphQL code (which includes formatting)
+echo "Generating GraphQL code and formatting..."
 cd $projectDirectory
-npx @system-inc/prettier@3.2.1 --write "./source/api/schemas/**/*"
-
-# Generate GraphQL code
-echo "Generating project GraphQL code..."
 npm run graphql:generate
