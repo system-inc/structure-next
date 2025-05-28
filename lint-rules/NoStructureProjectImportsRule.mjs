@@ -25,7 +25,7 @@ const NoStructureProjectImportsRule = {
         // Whitelist specific imports
         const whitelistedImports = [
             '@project/ProjectSettings',
-            '@project/source/theme/styles/theme.css',
+            '@project/app/_theme/styles/theme.css',
             '@project/tailwind.config'
         ];
 
