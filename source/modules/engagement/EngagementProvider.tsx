@@ -12,15 +12,14 @@ import { EngagementContainer } from '@structure/source/modules/engagement/Engage
 
 // Dependencies - Utilities
 import { createEngagementEvent } from '@structure/source/modules/engagement/createEngagementEvent';
+import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
 
 // Context - Engagement
 interface EngagementContextInterface {
     path: string;
-    getSessionDurationInMilliseconds: () => number;
 }
 const EngagementContext = React.createContext<EngagementContextInterface>({
     path: '',
-    getSessionDurationInMilliseconds: () => 0,
 });
 
 // Track if the provider is mounted in order to avoid sending two events in development mode
@@ -35,39 +34,18 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
     const urlPath = usePathname() ?? '';
     const urlSearchParameters = useSearchParams();
 
-    // Function to get current session duration
-    const getSessionDurationInMilliseconds = React.useCallback(function () {
-        // Return 0 if session start time is not initialized yet
-        if(sessionStartTimeReference.current === undefined) {
-            return 0;
-        }
-
-        const sessionDurationInMilliseconds = Date.now() - sessionStartTimeReference.current;
-
-        // If the session duration is greater than 30 minutes, reset the session start time for future calls
-        if(sessionDurationInMilliseconds > 30 * 60 * 1000) {
-            sessionStartTimeReference.current = Date.now();
-            return 0; // Return 0 for the reset session
-        }
-
-        // console.log('🕐 Session duration calculated:', sessionDurationInMilliseconds);
-        return sessionDurationInMilliseconds;
-    }, []);
-
     // References
     const engagementEventsSentReference = React.useRef(0);
     const previousViewIdentifierReference = React.useRef('');
     const previousViewTitleReference = React.useRef('');
     const loadDurationInMillisecondsReference = React.useRef(0);
-    const sessionStartTimeReference = React.useRef<number>();
     const currentViewStartTimeReference = React.useRef(Date.now());
 
     // Initialize session start time once
     React.useEffect(function () {
-        if(sessionStartTimeReference.current === undefined) {
-            sessionStartTimeReference.current = Date.now();
-            // console.log('🚀 Session initialized at:', sessionStartTimeReference.current);
-        }
+        // Initialize the global session manager
+        sessionManager.initializeSession();
+        // console.log('🚀 Session initialized');
     }, []);
 
     // Trigger whenever the URL changes
@@ -119,7 +97,7 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
             // console.log('previousViewDurationInMilliseconds', previousViewDurationInMilliseconds);
 
             // Send the PageView engagement event with timing data
-            createEngagementEvent(getSessionDurationInMilliseconds, 'PageView', 'Navigation', {
+            createEngagementEvent('PageView', 'Navigation', {
                 loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
                 previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
                 previousViewTitle: previousViewTitleReference.current || undefined,
@@ -139,12 +117,12 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
                 // console.log('Cleaning up after route change...');
             };
         },
-        [urlPath, urlSearchParameters, getSessionDurationInMilliseconds],
+        [urlPath, urlSearchParameters],
     );
 
     // Render the component
     return (
-        <EngagementContext.Provider value={{ path: urlPath, getSessionDurationInMilliseconds }}>
+        <EngagementContext.Provider value={{ path: urlPath }}>
             {properties.children}
             <EngagementContainer path={urlPath} />
         </EngagementContext.Provider>

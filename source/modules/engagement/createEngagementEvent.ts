@@ -10,9 +10,11 @@ import { EngagementEventCreateDocument, DeviceOrientation } from '@project/sourc
 // Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/String';
 
+// Dependencies - Session Management
+import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
+
 // Function - createEngagementEvent
 export function createEngagementEvent(
-    getSessionDurationInMilliseconds: () => number,
     eventName: string,
     eventCategory?: string,
     eventSpecificData?: Record<string, unknown>,
@@ -59,7 +61,7 @@ export function createEngagementEvent(
     const viewTitle = document.title;
 
     // Get session duration
-    const sessionDurationInMilliseconds = getSessionDurationInMilliseconds();
+    const sessionDurationInMilliseconds = sessionManager.getSessionDurationInMilliseconds();
     // console.log('📊 Session duration for GraphQL:', sessionDuration);
 
     // Perform the mutation
