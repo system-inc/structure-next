@@ -1,6 +1,6 @@
 // ESLint rule to prevent destructuring React and enforce React.useState, React.useEffect, etc.
 // This ensures that all React imports/exports are prefixed with React.
-const ReactNoDestructuringImport = {
+const ReactNoDestructuringReactRule = {
     meta: {
         type: 'problem',
         docs: {
@@ -98,4 +98,4 @@ const ReactNoDestructuringImport = {
 };
 
 // Export - Default
-export default ReactNoDestructuringImport;
+export default ReactNoDestructuringReactRule;

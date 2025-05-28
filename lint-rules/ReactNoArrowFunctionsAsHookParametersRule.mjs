@@ -1,6 +1,6 @@
 // ESLint rule to prevent arrow functions in React.forwardRef, React hooks, and event listeners
 // This ensures that regular functions are used instead of arrow functions in these specific contexts
-const ReactNoArrowFunctionsAsHookParameters = {
+const ReactNoArrowFunctionsAsHookParametersRule = {
     meta: {
         type: 'problem',
         docs: {
@@ -59,4 +59,4 @@ const ReactNoArrowFunctionsAsHookParameters = {
 };
 
 // Export - Default
-export default ReactNoArrowFunctionsAsHookParameters;
+export default ReactNoArrowFunctionsAsHookParametersRule;
