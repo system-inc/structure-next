@@ -57,8 +57,8 @@ export function TableCell(properties: TableCellProperties) {
         }
     }
 
-    // If we have a value
-    if(properties.value) {
+    // If we have a value and no children (children take precedence for display)
+    if(properties.value && !properties.children) {
         // Cell Content - ID
         if(
             properties.column?.type === TableColumnType.Id &&
