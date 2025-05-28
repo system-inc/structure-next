@@ -73,7 +73,7 @@ cp -r $apiDirectory/workers/api/graphql/schemas /tmp/api_schemas_temp
 place_schema_file() {
     local filename="$1"
     local structure_path="$projectDirectory/libraries/structure/source/api/graphql/schemas/$filename"
-    local project_path="$projectDirectory/source/api/graphql/schemas/$filename"
+    local project_path="$projectDirectory/app/_api/graphql/schemas/$filename"
     
     if [ -f "$structure_path" ]; then
         echo "  → $filename exists in structure, updating structure location"
@@ -94,7 +94,7 @@ for file in *.graphql *.json; do
             extension="${file##*.}"
             project_filename="$projectTitle.$extension"
             echo "  → Renaming $file to $project_filename for project"
-            cp "$file" "$projectDirectory/source/api/graphql/schemas/$project_filename"
+            cp "$file" "$projectDirectory/app/_api/graphql/schemas/$project_filename"
         else
             # Handle other schema files intelligently
             place_schema_file "$file"
