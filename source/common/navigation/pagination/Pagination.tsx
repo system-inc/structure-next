@@ -2,6 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -17,6 +18,7 @@ import ChevronRightDoubleIcon from '@structure/assets/icons/interface/ChevronRig
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { addCommas } from '@structure/source/utilities/Number';
 
 // Component - Pagination
 export interface PaginationProperties {
@@ -37,8 +39,12 @@ export interface PaginationProperties {
 export function Pagination(properties: PaginationProperties) {
     // console.log('Pagination', properties);
 
+    // Hooks
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     // State
-    const [itemsPerPage, setItemsPerPage] = React.useState(properties.itemsPerPage || 10);
+    const [localItemsPerPage, setLocalItemsPerPage] = React.useState(properties.itemsPerPage || 10);
     const [pageIsValid, setPageIsValid] = React.useState(true);
 
     // References
@@ -51,6 +57,11 @@ export function Pagination(properties: PaginationProperties) {
         pageInputControl = true,
         firstAndLastPageControl = true,
     } = properties;
+
+    // Get current itemsPerPage - from URL if using links, otherwise from local state
+    const itemsPerPage = useLinks
+        ? parseInt(searchParams.get('itemsPerPage') || (properties.itemsPerPage || 10).toString())
+        : localItemsPerPage;
     // const useLinks = properties.useLinks ?? false;
     // const itemsPerPageControl = properties.itemsPerPageControl ?? true;
     // const pageInputControl = properties.pageInputControl ?? true;
@@ -75,12 +86,14 @@ export function Pagination(properties: PaginationProperties) {
     function constructHrefWithExistingUrlSearchParameters(page: number) {
         // Server
         if(typeof window === 'undefined') {
-            return `?page=${page}`;
+            return `?page=${page}&itemsPerPage=${itemsPerPage}`;
         }
         // Client
         else {
             const urlSearchParameters = new URLSearchParams(window.location.search);
             urlSearchParameters.set('page', page.toString());
+            // Use current itemsPerPage value (which is now read from URL when useLinks=true)
+            urlSearchParameters.set('itemsPerPage', itemsPerPage.toString());
             return `?${urlSearchParameters.toString()}`;
         }
     }
@@ -90,7 +103,7 @@ export function Pagination(properties: PaginationProperties) {
         <div className={mergeClassNames('flex items-center justify-end space-x-10 text-sm', properties.className)}>
             {itemsPerPageControl && (
                 <div className="flex items-center space-x-2">
-                    {properties.itemsTotal && <p className="mr-10">{properties.itemsTotal} records</p>}
+                    {properties.itemsTotal && <p className="mr-10">{addCommas(properties.itemsTotal)} records</p>}
 
                     <p>Show</p>
                     <InputSelect
@@ -124,7 +137,7 @@ export function Pagination(properties: PaginationProperties) {
                         onChange={function (value) {
                             if(value) {
                                 const newItemsPerPage = parseInt(value);
-                                setItemsPerPage(newItemsPerPage);
+                                setLocalItemsPerPage(newItemsPerPage);
 
                                 // Test case #1
                                 // There are 90 items
@@ -152,7 +165,26 @@ export function Pagination(properties: PaginationProperties) {
 
                                 const currentItem = (properties.page - 1) * itemsPerPage + 1;
                                 const newPage = Math.ceil(currentItem / newItemsPerPage);
-                                onChangeIntercept(newItemsPerPage, newPage);
+
+                                // If using links, navigate directly to the new URL
+                                if(useLinks) {
+                                    // Server
+                                    if(typeof window === 'undefined') {
+                                        const newHref = `?page=${newPage}&itemsPerPage=${newItemsPerPage}`;
+                                        router.push(newHref);
+                                    }
+                                    // Client
+                                    else {
+                                        const urlSearchParameters = new URLSearchParams(window.location.search);
+                                        urlSearchParameters.set('page', newPage.toString());
+                                        urlSearchParameters.set('itemsPerPage', newItemsPerPage.toString());
+                                        router.push(`?${urlSearchParameters.toString()}`);
+                                    }
+                                }
+                                // Otherwise use the callback
+                                else {
+                                    onChangeIntercept(newItemsPerPage, newPage);
+                                }
                             }
                         }}
                     />
@@ -190,7 +222,7 @@ export function Pagination(properties: PaginationProperties) {
                                 event.currentTarget.select();
                             }}
                         />
-                        <p>of {properties.pagesTotal}</p>
+                        <p>of {addCommas(properties.pagesTotal)}</p>
                     </>
                 )}
                 <div className="flex items-center space-x-2">
