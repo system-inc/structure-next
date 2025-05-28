@@ -1,0 +1,425 @@
+schema {
+    query: Query
+}
+
+type AppleStoreTransactionOrderMapping {
+    commerceOrder: CommerceOrder!
+    commerceOrderId: String!
+    createdAt: DateTimeISO!
+    id: String!
+    transactionId: String!
+}
+
+type CommerceOrder {
+    batchIdentifier: String!
+    beneficiaryEmailAddress: String
+    checkoutSessionId: String!
+    createdAt: DateTimeISO!
+    discounts: [Discount!]
+    emailAddress: String!
+    fulfillmentSource: String
+    fulfillmentStatus: CommerceOrderFulfillmentStatus!
+    holdOnShipping: Boolean!
+    id: String!
+    identifier: String!
+    lineItems: [CommerceOrderLineItem!]
+    metadata: JSON
+    orderLogs: [CommerceOrderLog!]
+    payment: Payment
+    paymentId: String
+    paymentStatus: PaymentStatus
+    priceInfo: CommerceOrderPrice!
+    shipments: [Shipment!]
+    shippingInfo: CommerceOrderShippingInfo
+    source: String!
+    status: CommerceOrderStatus!
+    statusDescription: String
+    updatedAt: DateTimeISO!
+}
+
+"""
+The fulfillment status of the order
+"""
+enum CommerceOrderFulfillmentStatus {
+    Cancelled
+    Fulfilled
+    NotStart
+    PartiallyFulfilled
+    Shipped
+    Unfulfilled
+}
+
+type CommerceOrderLineItem {
+    commerceOrderId: String!
+    createdAt: DateTimeISO!
+    fulfilledQuantity: Int!
+    id: String!
+    indexId: Int!
+    productVariantId: String!
+    quantity: Int!
+    shippedQuantity: Int!
+    status: CommerceOrderLineItemStatus!
+    statusDescription: String
+    updatedAt: DateTimeISO!
+}
+
+type CommerceOrderLineItemPrice {
+    amount: MonetaryDecimal!
+    indexId: Int!
+    originalSubtotal: MonetaryDecimal!
+    subtotal: MonetaryDecimal!
+    tax: MonetaryDecimal!
+}
+
+"""
+The status of the order line item
+"""
+enum CommerceOrderLineItemStatus {
+    Cancelled
+    Pending
+    Shipped
+}
+
+type CommerceOrderLog {
+    commerceOrderId: String!
+    content: JSON
+    createdAt: DateTimeISO!
+    description: String
+    id: String!
+    source: CommerceOrderLogSource!
+    visibility: CommerceOrderLogVisibility!
+}
+
+"""
+The source of the order log.
+"""
+enum CommerceOrderLogSource {
+    CustomerSupport
+    System
+    User
+}
+
+"""
+The visibility of the order log.
+"""
+enum CommerceOrderLogVisibility {
+    Internal
+    Public
+}
+
+type CommerceOrderPrice {
+    amount: MonetaryDecimal!
+    currencyCode: String!
+    lineItemPrices: [CommerceOrderLineItemPrice!]!
+    originalSubtotal: MonetaryDecimal!
+    shippingRate: CommerceOrderShippingRate!
+    subtotal: MonetaryDecimal!
+    tax: CommerceOrderTax!
+}
+
+type CommerceOrderShippingInfo {
+    shippingAddress: StreetAddressObject!
+}
+
+type CommerceOrderShippingRate {
+    amount: MonetaryDecimal!
+    breakdown: [CommerceOrderShippingRateBreakdown!]!
+    originalAmount: MonetaryDecimal!
+}
+
+type CommerceOrderShippingRateBreakdown {
+    freeShipping: Boolean!
+    items: [CommerceOrderShippingRateBreakdownItem!]!
+    originalShippingRate: MonetaryDecimal!
+    packageIndexId: Int!
+    shippingRate: MonetaryDecimal!
+}
+
+type CommerceOrderShippingRateBreakdownItem {
+    indexId: Int!
+    quantity: Int!
+}
+
+"""
+The status of the order
+"""
+enum CommerceOrderStatus {
+    Archived
+    Cancelled
+    Complete
+    FailToConfirm
+    Open
+    OutOfStock
+    Pending
+    WaitPayment
+}
+
+type CommerceOrderTax {
+    shipping: MonetaryDecimal!
+    total: MonetaryDecimal!
+}
+
+enum CreditCardType {
+    Amex
+    Discover
+    Mastercard
+    Unknown
+    Visa
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+"""
+The status of the delivery
+"""
+enum DeliveryStatus {
+    AttemptedDelivery
+    Delivered
+    InTransit
+    OutForDelivery
+    ReadyForPickup
+}
+
+type Discount {
+    code: String
+    conditions: [DiscountCondition!]!
+    createdAt: DateTimeISO!
+    endsAt: DateTimeISO
+    id: String!
+    rule: DiscountRule
+    startsAt: DateTimeISO
+    type: DiscountType!
+    updatedAt: DateTimeISO!
+    usageCount: Int!
+}
+
+enum DiscountAllocationMethod {
+    BuyXGetFollowing
+    BuyXGetY
+    Flat
+}
+
+type DiscountAllocationObject {
+    buyThisGetY: Int
+    buyThisGetYAmount: MonetaryDecimal
+    buyXAmountGetThis: MonetaryDecimal
+    buyXGetThis: Int
+    maxAllocationLimit: Float!
+    method: DiscountAllocationMethod!
+    target: DiscountAllocationTarget!
+    value: MonetaryDecimal!
+    valueType: DiscountValueType!
+}
+
+enum DiscountAllocationTarget {
+    Across
+    Each
+    ShippingAmount
+    ShippingBreakdown
+}
+
+type DiscountCondition {
+    createdAt: DateTimeISO!
+    discountRuleId: String
+    id: String!
+    quantityRequirement: DiscountConditionRequirementObject
+    referenceId: String!
+    subtotalRequirement: DiscountConditionRequirementObject
+    target: DiscountConditionTarget!
+    type: DiscountConditionType!
+    updatedAt: DateTimeISO!
+}
+
+type DiscountConditionRequirementObject {
+    maxValue: Int
+    minValue: Int
+    requiredValue: Int
+}
+
+enum DiscountConditionTarget {
+    EntireOrder
+    LineItem
+}
+
+enum DiscountConditionType {
+    ProductVariants
+    Products
+    Vendors
+}
+
+type DiscountRule {
+    allocation: DiscountAllocationObject!
+    conditions: [DiscountCondition!]!
+    createdAt: DateTimeISO!
+    displayTitle: String!
+    id: String!
+    oncePerCustomer: Boolean!
+    title: String!
+    updatedAt: DateTimeISO!
+}
+
+"""
+The type of the discount.
+"""
+enum DiscountType {
+    Automatic
+    Code
+}
+
+enum DiscountValueType {
+    FixedAmount
+    Percentage
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""
+Monetary decimal custom scalar type, we stored and operate the value in cents, and this scalar will convert the value to dollar when read and convert the value to cents when write.
+"""
+scalar MonetaryDecimal
+
+type Payment {
+    amount: MonetaryDecimal!
+    authorizedAt: DateTimeISO
+    cancelledAt: DateTimeISO
+    capturedAt: DateTimeISO
+    confirmedAt: DateTimeISO
+    createdAt: DateTimeISO!
+    currencyCode: String!
+    externalReferenceId: String
+    id: String!
+    paymentMethod: PaymentMethod
+    paymentProcessorType: PaymentProcessorType!
+    status: PaymentStatus!
+    statusDescription: String
+    updatedAt: DateTimeISO!
+    walletEntryId: String
+}
+
+interface PaymentMethod {
+    externalResourceId: String
+    paymentProcessorType: PaymentProcessorType!
+    type: PaymentMethodType!
+}
+
+type PaymentMethodAppleInAppPurchase implements PaymentMethod {
+    externalResourceId: String
+    paymentProcessorType: PaymentProcessorType!
+    type: PaymentMethodType!
+}
+
+type PaymentMethodCreditCard implements PaymentMethod {
+    billingAddress: StreetAddressObject!
+    cardType: CreditCardType!
+    expirationMonth: Int!
+    expirationYear: Int!
+    externalResourceId: String
+    last4: String!
+    paymentProcessorType: PaymentProcessorType!
+    type: PaymentMethodType!
+}
+
+enum PaymentMethodType {
+    AppleInAppPurchase
+    CreditCard
+}
+
+enum PaymentProcessorType {
+    AppleInAppPurchase
+    StripeEmbedded
+    StripeProxy
+}
+
+"""
+The status of the payment
+"""
+enum PaymentStatus {
+    Authorized
+    Cancelled
+    Captured
+    Confirmed
+    FailToAuthorize
+    Pending
+}
+
+type Query {
+    appleStoreTransactionWithOrderInfo(transactionId: String!): AppleStoreTransactionOrderMapping
+}
+
+type Shipment {
+    cancelledAt: DateTimeISO
+    createdAt: DateTimeISO!
+    createdByAccountId: String
+    createdByProfileId: String
+    deliveredAt: DateTimeISO
+    deliveryStatus: DeliveryStatus!
+    id: String!
+    label: ShippingLabel
+    orderIndexId: Int!
+    orderSlip: ShippingOrderSlip
+    shippedAt: DateTimeISO
+    source: String!
+    status: ShipmentStatus!
+    statusDescription: String
+    toAddress: StreetAddressObject!
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+"""
+The status of the shipping
+"""
+enum ShipmentStatus {
+    Cancelled
+    Delivered
+    LabelPrinted
+    LabelPurchased
+    Pending
+    Shipped
+}
+
+type ShippingLabel {
+    carrier: String!
+    labelId: String!
+    serviceType: ShippingServiceType!
+    source: ShippingLabelSource!
+    trackingNumber: String!
+    trackingUrl: String
+}
+
+enum ShippingLabelSource {
+    Others
+    Stamps
+}
+
+type ShippingOrderSlip {
+    storedObjectUrl: String
+}
+
+enum ShippingServiceType {
+    USPSFirstClassMail
+    USPSMediaMail
+    USPSParcelSelect
+    USPSPriorityMail
+    USPSPriorityMailExpress
+}
+
+type StreetAddressObject {
+    city: String!
+    company: String
+    country: String!
+    firstName: String!
+    lastName: String!
+    line1: String!
+    line2: String
+    phoneNumber: String
+    postalCode: String!
+    state: String!
+}

@@ -1,0 +1,397 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"""
+The operator of a field filter
+"""
+enum ColumnFilterConditionOperator {
+    Equal
+    GreaterThan
+    GreaterThanOrEqual
+    In
+    IsNotNull
+    IsNull
+    LessThan
+    LessThanOrEqual
+    Like
+    NotEqual
+    NotIn
+    NotLike
+}
+
+input ColumnFilterInput {
+    caseSensitive: Boolean
+    column: String!
+    operator: ColumnFilterConditionOperator!
+    value: JSON!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+"""
+Decimal custom scalar type
+"""
+scalar Decimal
+
+type FontConfig {
+    fontFamily: String!
+    fontSize: Int!
+}
+
+input FontConfigInput {
+    fontFamily: String!
+    fontSize: Int!
+}
+
+type Form {
+    archivedAt: DateTimeISO
+    components: [FormComponent!]
+    createdAt: DateTimeISO!
+    createdByAccountId: String!
+    createdByProfileId: String!
+    description: String
+    id: String!
+    identifier: String!
+    metadata: FormMetadata
+    originalFormId: String
+    publishedAt: DateTimeISO
+    status: FormStatus!
+    title: String
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+union FormComponent =
+      FormComponentDataCheckbox
+    | FormComponentDataCheckboxGrid
+    | FormComponentDataDate
+    | FormComponentDataDropdown
+    | FormComponentDataLinearScale
+    | FormComponentDataMultipleChoice
+    | FormComponentDataMultipleChoiceGrid
+    | FormComponentDataParagraph
+    | FormComponentDataRating
+    | FormComponentDataSectionHeader
+    | FormComponentDataShortAnswer
+    | FormComponentDataTime
+    | FormComponentDataTitleAndDescription
+
+input FormComponentCreateInput {
+    data: JSON
+    description: String
+    metadata: JSON
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataCheckbox {
+    description: String
+    id: String!
+    maxSelections: Int
+    metadata: JSON
+    options: [String!]!
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataCheckboxGrid {
+    allowEmpty: Boolean
+    columns: [String!]!
+    description: String
+    id: String!
+    maxSelectionsPerRow: Int
+    metadata: JSON
+    position: Int!
+    required: Boolean!
+    rows: [String!]!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataDate {
+    description: String
+    id: String!
+    initialDate: DateTimeISO
+    maxDate: DateTimeISO
+    metadata: JSON
+    minDate: DateTimeISO
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataDropdown {
+    defaultOption: Int
+    description: String
+    id: String!
+    metadata: JSON
+    options: [String!]!
+    placeholder: String
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataLinearScale {
+    description: String
+    id: String!
+    leftLabel: String
+    max: Int!
+    metadata: JSON
+    min: Int!
+    position: Int!
+    required: Boolean!
+    rightLabel: String
+    section: Int!
+    step: Decimal!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataMultipleChoice {
+    defaultOption: Int
+    description: String
+    id: String!
+    metadata: JSON
+    options: [String!]!
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataMultipleChoiceGrid {
+    columns: [String!]!
+    description: String
+    id: String!
+    metadata: JSON
+    position: Int!
+    required: Boolean!
+    rows: [String!]!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataParagraph {
+    description: String
+    id: String!
+    metadata: JSON
+    placeholder: String
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataRating {
+    allowHalf: Boolean
+    allowZero: Boolean
+    description: String
+    icon: String!
+    id: String!
+    max: Int!
+    metadata: JSON
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataSectionHeader {
+    description: String
+    id: String!
+    metadata: JSON
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataShortAnswer {
+    description: String
+    id: String!
+    metadata: JSON
+    placeholder: String
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataTime {
+    allowSeconds: Boolean
+    ampm: Boolean
+    description: String
+    id: String!
+    initialTime: DateTimeISO
+    maxTime: DateTimeISO
+    metadata: JSON
+    minTime: DateTimeISO
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataTitleAndDescription {
+    description: String
+    id: String!
+    metadata: JSON
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+"""
+The type of component in a form
+"""
+enum FormComponentType {
+    Checkbox
+    CheckboxGrid
+    Date
+    Dropdown
+    LinearScale
+    MultipleChoice
+    MultipleChoiceGrid
+    Paragraph
+    Rating
+    SectionHeader
+    ShortAnswer
+    Time
+    TitleAndDescription
+}
+
+input FormCreateInput {
+    components: [FormComponentCreateInput!]
+    description: String
+    identifier: String
+    metadata: FormMetadataInput
+    title: String
+}
+
+type FormMetadata {
+    theme: FormThemeMetadata
+}
+
+input FormMetadataInput {
+    theme: FormThemeMetadataInput
+}
+
+enum FormStatus {
+    Archived
+    Draft
+    Published
+}
+
+type FormThemeMetadata {
+    backgroundColor: String
+    header: FontConfig
+    primaryColor: String
+    question: FontConfig
+    text: FontConfig
+}
+
+input FormThemeMetadataInput {
+    backgroundColor: String
+    header: FontConfigInput
+    primaryColor: String
+    question: FontConfigInput
+    text: FontConfigInput
+}
+
+input FormUpdateInput {
+    components: [FormComponentCreateInput!]
+    description: String
+    metadata: FormMetadataInput
+    title: String
+}
+
+type FormUserData {
+    accountId: String
+    createdAt: DateTimeISO!
+    data: JSON!
+    emailAddress: String
+    formId: String!
+    id: String!
+    profileId: String
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Mutation {
+    formArchive(id: String!): Form!
+    formCreate(input: FormCreateInput!): Form!
+    formFork(id: String!): Form!
+    formPublish(id: String!): Form!
+    formUpdate(id: String!, input: FormUpdateInput!): Form!
+    submitForm(data: JSON!, emailAddress: String, identifier: String!): FormUserData!
+}
+
+"""
+The order direction of a query
+"""
+enum OrderByDirection {
+    Ascending
+    Descending
+}
+
+input OrderByInput {
+    direction: OrderByDirection
+    key: String!
+}
+
+type Pagination {
+    itemIndex: Int!
+    itemIndexForNextPage: Int
+    itemIndexForPreviousPage: Int
+    itemsPerPage: Int!
+    itemsTotal: Int!
+    page: Int!
+    pagesTotal: Int!
+}
+
+type PaginationFormResult {
+    items: [Form!]!
+    pagination: Pagination!
+}
+
+input PaginationInput {
+    filters: [ColumnFilterInput!]
+    itemIndex: Int
+    itemsPerPage: Int!
+    orderBy: [OrderByInput!]
+}
+
+type Query {
+    form(identifier: String!): Form!
+    formPrivileged(id: String, identifier: String): Form!
+    formsPrivileged(pagination: PaginationInput!): PaginationFormResult!
+}
