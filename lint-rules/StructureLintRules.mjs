@@ -7,6 +7,7 @@ import ReactNamingConventionsRule from './ReactNamingConventionsRule.mjs';
 import ReactFunctionStyleRule from './ReactFunctionStyleRule.mjs';
 import ReactExportRule from './ReactExportRule.mjs';
 import ReactImportRule from './ReactImportRule.mjs';
+import ReactFileOrganizationRule from './ReactFileOrganizationRule.mjs';
 
 // ESLint Structure Lint Rules
 const StructureLintRules = {
@@ -19,6 +20,7 @@ const StructureLintRules = {
         'react-function-style-rule': ReactFunctionStyleRule,
         'react-export-rule': ReactExportRule,
         'react-import-rule': ReactImportRule,
+        'react-file-organization-rule': ReactFileOrganizationRule,
     },
 };
 

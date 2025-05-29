@@ -1,8 +1,13 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Types
+import { DropContainer, DropBounds } from './DragAndDropTypes';
+
+// Dependencies - Hooks
+import { useDragAndDrop } from './useDragAndDrop';
+
 // Dependencies - Main Components
-import { Slot, Slottable } from '@radix-ui/react-slot';
 import { useDrag, useMove } from '@use-gesture/react';
 
 // Dependencies - Animation
@@ -10,174 +15,6 @@ import { useSpring, animated } from '@react-spring/web';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-
-type DropBounds = {
-    left: number;
-    top: number;
-    right: number;
-    bottom: number;
-};
-interface DragAndDropContextInterface {
-    dropBounds: { container: DropContainer; bounds: DropBounds }[];
-    dropContainers: DropContainer[];
-    setDropContainers: React.Dispatch<React.SetStateAction<DropContainer[]>>;
-    currentlyHoveredDropArea: DropContainer | null;
-    onEnterDropArea?: (container: DropContainer) => void;
-    onLeaveDropArea?: () => void;
-    onDrop?: () => void;
-    onDragItemStart?: () => void;
-    onDragItemEnd?: () => void;
-    resetPositionOnDrop?: boolean;
-    recalculateDropBounds: () => void;
-}
-
-// Create a context for the drag and drop functionality.
-const DragAndDropContext = React.createContext<DragAndDropContextInterface | undefined>(undefined);
-
-// A hook to use the drag and drop context.
-const useDragAndDrop = () => {
-    const context = React.useContext(DragAndDropContext);
-    if(!context) {
-        throw new Error('useDragAndDrop must be used within a DragAndDropProvider');
-    }
-    return context;
-};
-
-// Function to calculate the bounds of the drop containers
-function calculateBoundsFromDropContainers(dropContainers: DropContainer[]) {
-    {
-        return dropContainers?.map((container) => {
-            let bounds: DropBounds = {
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0,
-            };
-
-            if(typeof container === 'string') {
-                const dropContainer = document.getElementById(container);
-                if(dropContainer) {
-                    const rect = dropContainer.getBoundingClientRect();
-                    bounds = {
-                        left: rect.left,
-                        top: rect.top,
-                        right: rect.right,
-                        bottom: rect.bottom,
-                    };
-                }
-            }
-            else if(container instanceof HTMLDivElement) {
-                const rect = container.getBoundingClientRect();
-                bounds = {
-                    left: rect.left,
-                    top: rect.top,
-                    right: rect.right,
-                    bottom: rect.bottom,
-                };
-            }
-            else if(container instanceof Object) {
-                const rect = container.current?.getBoundingClientRect();
-                if(rect) {
-                    bounds = {
-                        left: rect.left,
-                        top: rect.top,
-                        right: rect.right,
-                        bottom: rect.bottom,
-                    };
-                }
-            }
-
-            return { container, bounds };
-        });
-    }
-}
-
-// Type for the drop container
-type DropContainer = HTMLDivElement | string | React.RefObject<HTMLDivElement>;
-
-// Type for the properties of the DragAndDropRoot component
-interface DragAndDropRootProperties {
-    children: React.ReactNode;
-    dropContainers?: DropContainer[];
-    onEnterDropArea?: (dropArea: DropContainer) => void;
-    onLeaveDropArea?: () => void;
-    onDrop?: () => void;
-    onDragItemStart?: () => void;
-    onDragItemEnd?: () => void;
-    resetItemsPositionOnDrop?: boolean;
-}
-
-// Component - DragAndDropRoot
-function DragAndDropRoot(properties: DragAndDropRootProperties) {
-    const resetItemsPositionOnDrop = properties.resetItemsPositionOnDrop ?? false;
-
-    // State
-    const [dropContainers, setDropContainers] = React.useState<DropContainer[]>(properties.dropContainers ?? []);
-    const [dropBounds, setDropBounds] = React.useState<DragAndDropContextInterface['dropBounds']>(function () {
-        return calculateBoundsFromDropContainers(dropContainers);
-    });
-    const [currentlyHoveredDropArea, setCurrentlyHoveredDropArea] = React.useState<DropContainer | null>(null);
-
-    // Effect to update the drop bounds when the drop containers change
-    React.useEffect(
-        function () {
-            // Update drop bounds when drop containers change
-            setDropBounds(calculateBoundsFromDropContainers(dropContainers));
-
-            // Add event listeners for window resize
-            window.addEventListener('resize', function () {
-                setDropBounds(calculateBoundsFromDropContainers(dropContainers));
-            });
-
-            return () => {
-                window.removeEventListener('resize', function () {
-                    setDropBounds(calculateBoundsFromDropContainers(dropContainers));
-                });
-            };
-        },
-        [dropContainers],
-    );
-
-    // Function to handle the enter drop area event
-    function onEnterDropAreaCallback(container: DropContainer) {
-        properties.onEnterDropArea?.(container);
-
-        setCurrentlyHoveredDropArea(container);
-    }
-
-    // Function to handle the leave drop area event
-    function onLeaveDropAreaCallback() {
-        properties.onLeaveDropArea?.();
-
-        setCurrentlyHoveredDropArea(null);
-    }
-
-    // Function to recalculate the drop bounds
-    function recalculateDropBounds() {
-        setDropBounds(calculateBoundsFromDropContainers(dropContainers));
-    }
-
-    // Render the component
-    return (
-        <DragAndDropContext.Provider
-            value={{
-                dropBounds,
-                recalculateDropBounds,
-                dropContainers,
-                setDropContainers,
-                onEnterDropArea: onEnterDropAreaCallback,
-                onLeaveDropArea: onLeaveDropAreaCallback,
-                currentlyHoveredDropArea,
-                onDrop: properties.onDrop,
-                onDragItemStart: properties.onDragItemStart,
-                onDragItemEnd: properties.onDragItemEnd,
-                resetPositionOnDrop: resetItemsPositionOnDrop,
-            }}
-        >
-            {properties.children}
-        </DragAndDropContext.Provider>
-    );
-}
 
 // Function to check if the coordinates are within the bounds of a drop area
 function checkIfXyInDropBounds(xy: [number, number], bounds: DropBounds) {
@@ -197,7 +34,7 @@ interface DraggableItemProperties {
     leaveGhost?: boolean;
     // asChild?: boolean;
 }
-const DraggableItem = (properties: DraggableItemProperties) => {
+export function DraggableItem(properties: DraggableItemProperties) {
     const handleReference = React.useRef<HTMLDivElement>(null);
     const containerReference = React.useRef<HTMLDivElement>(null);
     const ghostSpacerReference = React.useRef<HTMLDivElement>(null);
@@ -420,56 +257,4 @@ const DraggableItem = (properties: DraggableItemProperties) => {
             </animated.div>
         </div>
     );
-};
-
-// Component - DropArea
-interface DropAreaProperties extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-    onItemIsHovering?: () => void;
-    asChild?: boolean;
 }
-export function DropArea({ asChild, children, onItemIsHovering, ...componentProperties }: DropAreaProperties) {
-    const Component = asChild ? Slot : 'div';
-
-    const dropContainerRef = React.useRef<HTMLDivElement>(null);
-    const { setDropContainers, currentlyHoveredDropArea } = useDragAndDrop();
-    const [isHovering, setIsHovering] = React.useState(false);
-
-    React.useEffect(
-        function () {
-            setDropContainers((prev) => [...prev, dropContainerRef]);
-
-            return () => {
-                setDropContainers((prev) => prev.filter((container) => container !== dropContainerRef));
-            };
-        },
-        [setDropContainers],
-    );
-
-    React.useEffect(
-        function () {
-            if(currentlyHoveredDropArea === dropContainerRef) {
-                onItemIsHovering?.();
-
-                if(dropContainerRef.current) setIsHovering(true);
-            }
-            else {
-                if(dropContainerRef.current) setIsHovering(false);
-            }
-        },
-        [currentlyHoveredDropArea, onItemIsHovering],
-    );
-
-    return (
-        <Component
-            ref={dropContainerRef}
-            className={asChild ? '' : 'h-auto w-auto'}
-            {...componentProperties}
-            data-item-hovering={isHovering}
-        >
-            <Slottable>{children}</Slottable>
-        </Component>
-    );
-}
-
-export { DragAndDropRoot as Root, DraggableItem as Item, DropArea as Area };
