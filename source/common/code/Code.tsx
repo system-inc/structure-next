@@ -26,34 +26,38 @@ export interface CodeProperties extends React.HTMLAttributes<HTMLDivElement> {
  * @param properties Properties for the component
  * @example <CodeEditor code={code} setCode={setCode} language="jsx" edit={true} showLineNumbers={true} />
  */
-export function Code(properties: CodeProperties) {
+export function Code({
+    code,
+    setCode,
+    language: languageProperty,
+    edit,
+    showLineNumbers,
+    loadLanguages,
+    className,
+    ...divProperties
+}: CodeProperties) {
     // Extract all necessary properties with defaults
-    const language = properties.language || 'js';
+    const language = languageProperty || 'js';
 
     // References
     const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
     // Function to handle code change
     function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-        if(properties.setCode) properties.setCode(event.target.value);
+        if(setCode) setCode(event.target.value);
     }
 
     // Effect to handle tab key down
-    const propertiesCode = properties.code;
-    const propertiesSetCode = properties.setCode;
     React.useEffect(
         function () {
-            if(propertiesSetCode) {
+            if(setCode) {
                 const handleKeyDown = function (event: KeyboardEvent) {
                     if(event.key === 'Tab') {
                         event.preventDefault();
                         const target = event.target as HTMLTextAreaElement;
                         const start = target.selectionStart;
                         const end = target.selectionEnd;
-                        if(propertiesSetCode)
-                            propertiesSetCode(
-                                propertiesCode.substring(0, start) + '    ' + propertiesCode.substring(end),
-                            );
+                        if(setCode) setCode(code.substring(0, start) + '    ' + code.substring(end));
 
                         target.selectionStart = target.selectionEnd = start + 2;
                     }
@@ -63,20 +67,20 @@ export function Code(properties: CodeProperties) {
                 return () => document.removeEventListener('keydown', handleKeyDown);
             }
         },
-        [propertiesCode, propertiesSetCode],
+        [code, setCode],
     );
 
     // Effect to load additional languages
     React.useLayoutEffect(
         function () {
             // Register additional languages
-            if(properties.loadLanguages) {
-                properties.loadLanguages.forEach((language) =>
+            if(loadLanguages) {
+                loadLanguages.forEach((language) =>
                     SyntaxHighlighter.registerLanguage(language.name, language.languageFunction),
                 );
             }
         },
-        [properties.loadLanguages],
+        [loadLanguages],
     );
 
     // Effect to register languages
@@ -86,22 +90,13 @@ export function Code(properties: CodeProperties) {
         SyntaxHighlighter.registerLanguage('ts', typescript);
     }, []);
 
-    // Clone properties for remaining HTML attributes
-    const htmlProperties = { ...properties } as Partial<CodeProperties>;
-    delete htmlProperties.code;
-    delete htmlProperties.setCode;
-    delete htmlProperties.language;
-    delete htmlProperties.edit;
-    delete htmlProperties.showLineNumbers;
-    delete htmlProperties.loadLanguages;
-
     // Render the component
     return (
         <div
-            {...htmlProperties}
+            {...divProperties}
             className={mergeClassNames(
                 'relative h-max overflow-clip rounded border border-light/10 bg-dark-3 p-1.5 font-mono tracking-wide transition-all focus-within:outline focus-within:ring dark:bg-dark',
-                properties.className,
+                className,
             )}
         >
             <div className="absolute right-0 top-0 w-min rounded-bl bg-dark-6 px-1.5 py-0.5 text-xs dark:bg-dark-3">
@@ -111,8 +106,8 @@ export function Code(properties: CodeProperties) {
                 <div
                     className="inset-0 z-10 w-min text-light selection:bg-light/20 dark:selection:bg-light/10"
                     style={{
-                        pointerEvents: properties.edit ? 'none' : 'auto',
-                        position: properties.edit ? 'absolute' : 'static',
+                        pointerEvents: edit ? 'none' : 'auto',
+                        position: edit ? 'absolute' : 'static',
                     }}
                 >
                     <SyntaxHighlighter
@@ -124,7 +119,7 @@ export function Code(properties: CodeProperties) {
                             margin: 0,
                             fontFamily: 'inherit',
                             letterSpacing: 'inherit',
-                            pointerEvents: properties.edit ? 'none' : 'auto',
+                            pointerEvents: edit ? 'none' : 'auto',
                             color: 'inherit',
                             lineHeight: 'inherit',
                             overflow: 'clip',
@@ -149,34 +144,26 @@ export function Code(properties: CodeProperties) {
                             fontSize: 'inherit',
                             lineHeight: 'inherit',
                         }}
-                        showLineNumbers={properties.showLineNumbers ?? true}
+                        showLineNumbers={showLineNumbers ?? true}
                     >
-                        {properties.showLineNumbers
-                            ? properties.code.length === 0
-                                ? ' '
-                                : properties.code
-                            : properties.code.length === 0
-                              ? ' '
-                              : properties.code}
+                        {showLineNumbers ? (code.length === 0 ? ' ' : code) : code.length === 0 ? ' ' : code}
                     </SyntaxHighlighter>
                 </div>
 
-                {properties.edit && (
+                {edit && (
                     <textarea
                         className="z-0 h-full w-full resize-none overflow-visible whitespace-pre rounded bg-transparent font-mono tracking-wide text-transparent caret-slate-100 selection:bg-slate-200/20 focus:outline-none focus:ring-0"
-                        rows={properties.code.split('\n').length}
+                        rows={code.split('\n').length}
                         style={{
-                            marginLeft: properties.showLineNumbers ?? true ? '2rem' : undefined,
+                            marginLeft: showLineNumbers ?? true ? '2rem' : undefined,
                             overflow: 'hidden',
-                            opacity: properties.edit ? 1 : 0,
-                            pointerEvents: properties.edit ? 'auto' : 'none',
-                            width:
-                                properties.code.split('\n').reduce((max, line) => Math.max(max, line.length * 1.1), 0) +
-                                'ch',
+                            opacity: edit ? 1 : 0,
+                            pointerEvents: edit ? 'auto' : 'none',
+                            width: code.split('\n').reduce((max, line) => Math.max(max, line.length * 1.1), 0) + 'ch',
                             minWidth: '90%',
                         }}
                         spellCheck={false}
-                        value={properties.code}
+                        value={code}
                         onChange={handleChange}
                     />
                 )}

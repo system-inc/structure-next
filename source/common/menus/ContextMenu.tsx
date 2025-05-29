@@ -28,38 +28,38 @@ export interface ContextMenuProperties extends MenuProperties {
     collisionPadding?: number;
     collisionBoundary?: HTMLElement[];
 }
-export function ContextMenu(properties: ContextMenuProperties) {
-    // Create a copy of properties for Menu component, excluding Radix Context Menu specific props
-    const menuProperties = { ...properties };
-
-    // Delete Radix Context Menu specific properties
-    delete menuProperties.modal;
-    delete menuProperties.onOpenChange;
-    delete menuProperties.onCloseAutoFocus;
-    delete menuProperties.alignOffset;
-    delete menuProperties.avoidCollisions;
-    delete menuProperties.collisionPadding;
-    delete menuProperties.collisionBoundary;
-
+export function ContextMenu({
+    modal,
+    onOpenChange,
+    onCloseAutoFocus,
+    alignOffset,
+    avoidCollisions,
+    collisionPadding,
+    collisionBoundary,
+    children,
+    containerClassName,
+    className,
+    ...menuProperties
+}: ContextMenuProperties) {
     // Render the component
     return (
-        <RadixContextMenu.Root onOpenChange={properties.onOpenChange} modal={properties.modal}>
-            <RadixContextMenu.Trigger>{properties.children}</RadixContextMenu.Trigger>
+        <RadixContextMenu.Root onOpenChange={onOpenChange} modal={modal}>
+            <RadixContextMenu.Trigger>{children}</RadixContextMenu.Trigger>
             <RadixContextMenu.Portal>
                 <RadixContextMenu.Content
-                    className={mergeClassNames('z-30', properties.containerClassName)}
-                    onCloseAutoFocus={properties.onCloseAutoFocus}
-                    alignOffset={properties.alignOffset}
-                    avoidCollisions={properties.avoidCollisions}
-                    collisionPadding={properties.collisionPadding}
-                    collisionBoundary={properties.collisionBoundary}
+                    className={mergeClassNames('z-30', containerClassName)}
+                    onCloseAutoFocus={onCloseAutoFocus}
+                    alignOffset={alignOffset}
+                    avoidCollisions={avoidCollisions}
+                    collisionPadding={collisionPadding}
+                    collisionBoundary={collisionBoundary}
                     // Use Radix variables to style the popover content size
                     style={{
                         maxWidth: 'var(--radix-context-menu-content-available-width)',
                         maxHeight: 'var(--radix-context-menu-content-available-height)',
                     }}
                 >
-                    <Menu {...menuProperties} className={mergeClassNames('text-xs', properties.className)} />
+                    <Menu {...menuProperties} className={mergeClassNames('text-xs', className)} />
                 </RadixContextMenu.Content>
             </RadixContextMenu.Portal>
         </RadixContextMenu.Root>

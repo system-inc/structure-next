@@ -2,7 +2,7 @@
 
 import React from 'react';
 import * as RadixTabPrimitive from '@radix-ui/react-tabs';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps as VariantProperties } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -25,37 +25,23 @@ const tabsVariants = cva(
 );
 
 const TabsContext = React.createContext<
-    VariantProps<typeof tabsVariants> & { tabGroupId: string; currentValue: string | undefined }
+    VariantProperties<typeof tabsVariants> & { tabGroupId: string; currentValue: string | undefined }
 >({ tabGroupId: '', currentValue: undefined });
 
 const Tabs = React.forwardRef<
     React.ElementRef<typeof RadixTabPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Root> & VariantProps<typeof tabsVariants>
->(function (properties, reference) {
-    const activationMode = properties.activationMode || 'manual';
+    React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Root> & VariantProperties<typeof tabsVariants>
+>(function ({ className, size, activationMode: activationModeProperty, ...radixTabRootProperties }, reference) {
+    const activationMode = activationModeProperty || 'manual';
 
     const tabGroupId = React.useId();
 
-    // Properties to spread to the the context provider
-    const tabsContextProviderProperties = { ...properties };
-    delete tabsContextProviderProperties.className;
-    delete tabsContextProviderProperties.size;
-    delete tabsContextProviderProperties.activationMode;
-
     return (
         <AnimatePresence mode="popLayout">
-            <TabsContext.Provider
-                value={{ size: properties.size, tabGroupId, currentValue: tabsContextProviderProperties.value }}
-            >
-                <RadixTabPrimitive.Root
-                    ref={reference}
-                    activationMode={activationMode}
-                    {...tabsContextProviderProperties}
-                >
-                    <RadixTabPrimitive.List
-                        className={mergeClassNames(tabsVariants({ className: properties.className }))}
-                    >
-                        {tabsContextProviderProperties.children}
+            <TabsContext.Provider value={{ size: size, tabGroupId, currentValue: radixTabRootProperties.value }}>
+                <RadixTabPrimitive.Root ref={reference} activationMode={activationMode} {...radixTabRootProperties}>
+                    <RadixTabPrimitive.List className={mergeClassNames(tabsVariants({ className: className }))}>
+                        {radixTabRootProperties.children}
                     </RadixTabPrimitive.List>
                 </RadixTabPrimitive.Root>
             </TabsContext.Provider>
@@ -106,44 +92,36 @@ const tabItemVariants = cva(
 
 // Component - TabItem
 interface TabItemProperties
-    extends Omit<VariantProps<typeof tabItemVariants>, 'size'>,
+    extends Omit<VariantProperties<typeof tabItemVariants>, 'size'>,
         React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Trigger> {}
-const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
-    function (properties, reference) {
-        const { size, tabGroupId, currentValue } = React.useContext(TabsContext);
-        const isActive = currentValue === properties.value;
+const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(function (
+    { className, icon, ...radixTabTriggerProperties },
+    reference,
+) {
+    const { size, tabGroupId, currentValue } = React.useContext(TabsContext);
+    const isActive = currentValue === radixTabTriggerProperties.value;
 
-        // Properties to spread onto the Radix tab primitive trigger
-        const radixTabPrimitiveTriggerProperties = { ...properties };
-        delete radixTabPrimitiveTriggerProperties.className;
-        delete radixTabPrimitiveTriggerProperties.icon;
+    return (
+        <RadixTabPrimitive.Trigger ref={reference} {...radixTabTriggerProperties} asChild>
+            <motion.button className={mergeClassNames(tabItemVariants({ size, icon: icon, className: className }))}>
+                {isActive && (
+                    <motion.div
+                        layoutId={`tab-${tabGroupId}`}
+                        className={mergeClassNames(
+                            'absolute inset-0 h-full w-full border border-transparent',
+                            'group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary z-0',
+                        )}
+                        style={{
+                            borderRadius: '99px',
+                        }}
+                    />
+                )}
 
-        return (
-            <RadixTabPrimitive.Trigger ref={reference} {...radixTabPrimitiveTriggerProperties} asChild>
-                <motion.button
-                    className={mergeClassNames(
-                        tabItemVariants({ size, icon: properties.icon, className: properties.className }),
-                    )}
-                >
-                    {isActive && (
-                        <motion.div
-                            layoutId={`tab-${tabGroupId}`}
-                            className={mergeClassNames(
-                                'absolute inset-0 h-full w-full border border-transparent',
-                                'group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary z-0',
-                            )}
-                            style={{
-                                borderRadius: '99px',
-                            }}
-                        />
-                    )}
-
-                    <div className="z-10">{radixTabPrimitiveTriggerProperties.children}</div>
-                </motion.button>
-            </RadixTabPrimitive.Trigger>
-        );
-    },
-);
+                <div className="z-10">{radixTabTriggerProperties.children}</div>
+            </motion.button>
+        </RadixTabPrimitive.Trigger>
+    );
+});
 TabItem.displayName = RadixTabPrimitive.Trigger.displayName;
 
 export { Tabs, tabsVariants, TabItem, tabItemVariants };

@@ -3,15 +3,15 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import NextLink from 'next/link';
-import type { LinkProps as NextLinkInterface } from 'next/link';
+import type { LinkProps as NextLinkProperties } from 'next/link';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - Link
 export interface LinkProperties
-    extends NextLinkInterface,
-        Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkInterface> {
+    extends NextLinkProperties,
+        Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkProperties> {
     className?: string;
     children?: React.ReactNode;
     variant?: 'Primary' | 'Secondary' | 'Muted' | 'Unstyled';

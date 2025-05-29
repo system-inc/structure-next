@@ -114,11 +114,7 @@ const components: ComponentsProperties = {
 export interface MarkdownProperties extends React.HTMLAttributes<HTMLDivElement> {
     children: string;
 }
-export function Markdown(properties: MarkdownProperties) {
-    // Properties to spread onto the div element
-    const divProperties = { ...properties } as Partial<MarkdownProperties>;
-    delete divProperties.children;
-
+export function Markdown({ children, ...divProperties }: MarkdownProperties) {
     // Render the component
     return (
         <div className="max-w-3xl" {...divProperties}>
@@ -127,7 +123,7 @@ export function Markdown(properties: MarkdownProperties) {
                 remarkPlugins={[remarkCustomHeaderId, remarkGfm]}
                 components={components}
             >
-                {properties.children}
+                {children}
             </ReactMarkdown>
         </div>
     );

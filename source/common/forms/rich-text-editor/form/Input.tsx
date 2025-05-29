@@ -1,5 +1,5 @@
 import React from 'react';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 const inputVariants = cva(
@@ -45,23 +45,20 @@ const inputVariants = cva(
 );
 
 // Component - Input
-type InputProperties = React.ComponentPropsWithoutRef<'input'> & VariantProps<typeof inputVariants>;
-const Input = React.forwardRef<HTMLInputElement, InputProperties>(function (properties, reference) {
-    // Get properties to spread onto the input element
-    const inputProperties = { ...properties };
-    delete inputProperties.className;
-    delete inputProperties.size;
-    delete inputProperties.rounded;
-
+type InputProperties = React.ComponentPropsWithoutRef<'input'> & VariantProperties<typeof inputVariants>;
+const Input = React.forwardRef<HTMLInputElement, InputProperties>(function (
+    { className, size, rounded, ...inputProperties },
+    reference,
+) {
     // Render the component
     return (
         <input
             ref={reference}
             className={mergeClassNames(
                 inputVariants({
-                    className: properties.className,
-                    size: properties.size,
-                    rounded: properties.rounded,
+                    className: className,
+                    size: size,
+                    rounded: rounded,
                 }),
             )}
             {...inputProperties}

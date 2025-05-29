@@ -1,10 +1,12 @@
-// ESLint rule to enforce React component property interfaces/types ending with "Properties"
-// This ensures consistency in component property type naming
-const ReactPropertiesTypeNamingRule = {
+// ESLint rule to enforce React naming conventions for properties
+// 1. Component parameters should be named "properties" instead of "props"
+// 2. Component property interfaces/types must end with "Properties"
+// 3. No identifiers can end with "Prop" or "Props" 
+const ReactPropertiesNamingRule = {
     meta: {
         type: 'suggestion',
         docs: {
-            description: 'Enforce React component property types/interfaces to end with "Properties"',
+            description: 'Enforce React property naming: use "properties" parameter, types end with "Properties", no "Prop"/"Props" suffixes',
             category: 'Stylistic Issues',
             recommended: true,
         },
@@ -27,11 +29,112 @@ const ReactPropertiesTypeNamingRule = {
             return /^[A-Z][A-Za-z0-9]*$/.test(name) && !name.startsWith('use');
         }
 
+        // Helper function to check if identifier ends with Prop/Props and suggest fix
+        function checkPropertyNaming(node, name) {
+
+            if(name.endsWith('Prop') && !name.endsWith('Properties')) {
+                const suggestedName = name.replace(/Prop$/, 'Property');
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not end with "Prop". Use "${suggestedName}".`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, suggestedName);
+                    }
+                });
+            } else if(name.endsWith('Props') && !name.endsWith('Properties')) {
+                const suggestedName = name.replace(/Props$/, 'Properties');
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not end with "Props". Use "${suggestedName}".`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, suggestedName);
+                    }
+                });
+            }
+        }
+
+        // Function to check if node is likely a React component
+        function isReactComponent(node) {
+            // If function name starts with uppercase letter, it's likely a component
+            if(node.id && node.id.name && /^[A-Z]/.test(node.id.name)) {
+                return true;
+            }
+
+            // For arrow functions or anonymous functions assigned to variables
+            if(node.parent && node.parent.type === 'VariableDeclarator' &&
+                node.parent.id && node.parent.id.name && /^[A-Z]/.test(node.parent.id.name)) {
+                return true;
+            }
+
+            // For functions assigned to properties (e.g., in object literals)
+            if(node.parent && node.parent.type === 'Property' &&
+                node.parent.key && node.parent.key.name && /^[A-Z]/.test(node.parent.key.name)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        // Function to check React component parameters for "props" naming
+        function checkPropertiesParameter(node) {
+            // Skip functions with no params
+            if(!node.params || node.params.length === 0) {
+                return;
+            }
+
+            // Only check the first parameter for React components
+            const firstParam = node.params[0];
+
+            // Only report if it's a React component and parameter is specifically named "props"
+            if(isReactComponent(node) && firstParam.type === 'Identifier' && firstParam.name === 'props') {
+                context.report({
+                    node: firstParam,
+                    message: `Use 'properties' instead of 'props' for component properties.`,
+                    fix(fixer) {
+                        return fixer.replaceText(firstParam, 'properties');
+                    }
+                });
+            }
+        }
+
         return {
+
+            // Check all identifiers for Prop/Props naming
+            Identifier(node) {
+                // Skip if this identifier is part of a React.* member expression
+                if(node.parent &&
+                    node.parent.type === 'MemberExpression' &&
+                    node.parent.object &&
+                    node.parent.object.name === 'React') {
+                    return;
+                }
+
+                // Skip if this identifier is part of a React.* TypeScript type reference 
+                if(node.parent &&
+                    node.parent.type === 'TSQualifiedName' &&
+                    node.parent.left &&
+                    node.parent.left.name === 'React') {
+                    return;
+                }
+
+                // Skip if this identifier is being imported (external library names we can't control)
+                if(node.parent &&
+                    (node.parent.type === 'ImportSpecifier' ||
+                        node.parent.type === 'ImportDefaultSpecifier' ||
+                        node.parent.type === 'ImportNamespaceSpecifier')) {
+                    return;
+                }
+
+                checkPropertyNaming(node, node.name);
+            },
+
             // First pass: Identify component property types
 
             // React components defined as function declarations
             FunctionDeclaration(node) {
+                // Check for props parameter naming
+                checkPropertiesParameter(node);
+
                 // Skip if not a component (not PascalCase or starts with "use")
                 if(!node.id || !isLikelyComponentName(node.id.name)) {
                     return;
@@ -80,6 +183,11 @@ const ReactPropertiesTypeNamingRule = {
 
             // React components defined as arrow functions or function expressions in variable declarations
             VariableDeclarator(node) {
+                // Check for props parameter naming in function expressions/arrow functions
+                if(node.init && (node.init.type === 'ArrowFunctionExpression' || node.init.type === 'FunctionExpression')) {
+                    checkPropertiesParameter(node.init);
+                }
+
                 // Skip if not a component (not PascalCase or starts with "use")
                 if(!node.id || !isLikelyComponentName(node.id.name)) {
                     return;
@@ -199,4 +307,4 @@ const ReactPropertiesTypeNamingRule = {
 };
 
 // Export - Default
-export default ReactPropertiesTypeNamingRule;
+export default ReactPropertiesNamingRule;

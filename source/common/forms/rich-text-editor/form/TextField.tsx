@@ -33,49 +33,37 @@ interface TextFieldProperties extends React.ComponentPropsWithoutRef<typeof Inpu
     placeholder: string; // Enforce placeholder
 }
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProperties>(function (
-    properties: TextFieldProperties,
+    { label, optional, info, icon, caption, error, id, className, size, ...inputProperties }: TextFieldProperties,
     reference,
 ) {
     const internalId = React.useId();
 
-    // Clone the properties object and remove properties we handle separately
-    // Get the properties to spread onto the Input element
-    const inputProperties = { ...properties } as Partial<TextFieldProperties>;
-    delete inputProperties.label;
-    delete inputProperties.optional;
-    delete inputProperties.info;
-    delete inputProperties.icon;
-    delete inputProperties.caption;
-    delete inputProperties.error;
-    delete inputProperties.id;
-    delete inputProperties.className;
-
     // Render the component
     return (
         <FormField
-            label={properties.label}
-            optional={properties.optional}
-            // info={properties.info}
-            caption={properties.caption}
-            error={properties.error}
-            htmlFor={properties.id ?? internalId}
+            label={label}
+            optional={optional}
+            // info={info}
+            caption={caption}
+            error={error}
+            htmlFor={id ?? internalId}
             className={mergeClassNames(
                 textFieldVariants({
-                    className: properties.className,
-                    size: properties.size,
+                    className: className,
+                    size: size,
                 }),
             )}
-            // size={properties.size}
+            // size={size}
         >
             {/* Input */}
-            {!properties.icon ? (
+            {!icon ? (
                 <Input
                     ref={reference}
-                    id={properties.id ?? internalId}
+                    id={id ?? internalId}
                     className={mergeClassNames(
                         textFieldVariants({
-                            className: properties.className,
-                            size: properties.size,
+                            className: className,
+                            size: size,
                         }),
                     )}
                     {...inputProperties}
@@ -83,24 +71,22 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProperties>(functi
             ) : (
                 <TextInputWithIcon
                     ref={reference}
-                    icon={properties.icon}
-                    id={properties.id ?? internalId}
+                    icon={icon}
+                    id={id ?? internalId}
                     className={mergeClassNames(
                         textFieldVariants({
-                            className: properties.className,
-                            size: properties.size,
+                            className: className,
+                            size: size,
                         }),
                     )}
-                    size={properties.size}
+                    size={size}
                     {...inputProperties}
                 />
             )}
 
             {/* InfoIcon */}
-            {properties.info && (
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                    {properties.info}
-                </div>
+            {info && (
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">{info}</div>
             )}
         </FormField>
     );
@@ -110,4 +96,4 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProperties>(functi
 TextField.displayName = 'TextField';
 
 // Export
-export { TextField, type TextFieldProperties as TextFieldProps, textFieldVariants };
+export { TextField, type TextFieldProperties, textFieldVariants };

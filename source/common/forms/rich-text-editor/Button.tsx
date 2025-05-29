@@ -1,6 +1,6 @@
 import React from 'react';
 import { Slot, Slottable } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps as VariantProperties } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 const buttonVariants = cva(
@@ -114,47 +114,35 @@ const buttonVariants = cva(
 // Component - Button
 export interface ButtonProperties
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-        VariantProps<typeof buttonVariants> {
+        VariantProperties<typeof buttonVariants> {
     asChild?: boolean;
     iconLeft?: React.ReactNode;
     iconRight?: React.ReactNode;
 }
-const Button = React.forwardRef<HTMLButtonElement, ButtonProperties>(function (properties, reference) {
-    const asChild = properties.asChild !== undefined ? properties.asChild : false;
+const Button = React.forwardRef<HTMLButtonElement, ButtonProperties>(function (
+    { className, variant, size, icon, asChild, children, iconLeft, iconRight, ...buttonProperties },
+    reference,
+) {
+    const asChildValue = asChild !== undefined ? asChild : false;
 
-    if((properties.iconLeft || properties.iconRight) && properties.icon) {
+    if((iconLeft || iconRight) && icon) {
         throw new Error(
-            'Button: Cannot use both iconLeft/iconRight and icon props at the same time\n\nButton Content: ' +
-                properties.children,
+            'Button: Cannot use both iconLeft/iconRight and icon props at the same time\n\nButton Content: ' + children,
         );
     }
 
-    const Component = asChild ? Slot : 'button';
-
-    // Properties to spread onto the button element
-    const buttonElementProperties = { ...properties };
-    delete buttonElementProperties.className;
-    delete buttonElementProperties.variant;
-    delete buttonElementProperties.size;
-    delete buttonElementProperties.icon;
-    delete buttonElementProperties.asChild;
-    delete buttonElementProperties.children;
-    delete buttonElementProperties.iconLeft;
-    delete buttonElementProperties.iconRight;
+    const Component = asChildValue ? Slot : 'button';
 
     return (
         <Component
-            className={mergeClassNames(
-                buttonVariants({ variant: properties.variant, size: properties.size, icon: properties.icon }),
-                properties.className,
-            )}
+            className={mergeClassNames(buttonVariants({ variant: variant, size: size, icon: icon }), className)}
             ref={reference}
             type="button" // Default to button type (avoids accidental form submissions)
-            {...buttonElementProperties}
+            {...buttonProperties}
         >
-            {properties.iconLeft}
-            <Slottable>{properties.children}</Slottable>
-            {properties.iconRight}
+            {iconLeft}
+            <Slottable>{children}</Slottable>
+            {iconRight}
         </Component>
     );
 });

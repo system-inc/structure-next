@@ -41,25 +41,30 @@ type DraggableListProperties = {
     onReorder?: (originalOrder: React.ReactNode[], newOrder: React.ReactNode[]) => void;
     onDrag?: (activeIndex: number, currentRow: number) => void;
 } & Omit<React.HTMLAttributes<HTMLUListElement>, 'children' | 'onDrag'>;
-export function DraggableList(properties: DraggableListProperties) {
-    // Defaults
-    const iconPosition = properties.iconPosition || 'left';
-    const iconAlignment = properties.iconAlignment || 'center';
-
+export function DraggableList({
+    className,
+    items,
+    icon,
+    iconPosition = 'left',
+    iconAlignment = 'center',
+    onReorder,
+    onDrag,
+    ...ulProperties
+}: DraggableListProperties) {
     // Remember the original order of the items
-    const originalItemOrder = React.useRef<number[]>(properties.items.map((_, i) => i));
+    const originalItemOrder = React.useRef<number[]>(items.map((_, i) => i));
 
     // Store the height of each item in a map
     const heightMap = React.useMemo(
         function () {
-            return new Map<React.ReactNode, number>(properties.items.map((item) => [item, 50]));
+            return new Map<React.ReactNode, number>(items.map((item) => [item, 50]));
         },
-        [properties.items],
+        [items],
     );
 
     // Create a spring for each item in the list
-    const [springs, springsApi] = useSprings(properties.items.length, function (index: number) {
-        const itemHeight = heightMap.get(properties.items[index])!;
+    const [springs, springsApi] = useSprings(items.length, function (index: number) {
+        const itemHeight = heightMap.get(items[index])!;
 
         return {
             y: originalItemOrder.current.indexOf(index) * itemHeight,
@@ -88,11 +93,11 @@ export function DraggableList(properties: DraggableListProperties) {
                     40, // divided by the height of the item
             ),
             0, // Clamp the row to be at least 0
-            properties.items.length - 1, // Clamp the row to be at most the length of the items
+            items.length - 1, // Clamp the row to be at most the length of the items
         );
 
         // Call the onDrag callback when an item is dragged
-        properties.onDrag?.(originalIndex, curRow);
+        onDrag?.(originalIndex, curRow);
 
         // Calculate the new order of the items
         const newOrder = swap(originalItemOrder.current, curIndex, curRow);
@@ -102,12 +107,12 @@ export function DraggableList(properties: DraggableListProperties) {
         springsApi.start((index: number) => {
             const startingYForDraggingItem = originalItemOrder.current
                 .slice(0, originalIndex)
-                .reduce((sum, index) => sum + heightMap.get(properties.items[index])!, 0);
+                .reduce((sum, index) => sum + heightMap.get(items[index])!, 0);
 
             // Calculate the sum of the heights of the items before the current item
             const sumOfPreviousItemsHeights = newOrder
                 .slice(0, newOrder.indexOf(index))
-                .reduce((sum, index) => sum + heightMap.get(properties.items[index])!, 0);
+                .reduce((sum, index) => sum + heightMap.get(items[index])!, 0);
 
             // If the item is being dragged, apply the drag effect
             if(active && index === originalIndex) {
@@ -131,9 +136,9 @@ export function DraggableList(properties: DraggableListProperties) {
                         if(!active) {
                             // Update the items based on the new order if the animation is complete
                             // console.log("Updating items");
-                            properties.onReorder?.(
-                                properties.items,
-                                newOrder.map((index) => properties.items[index]),
+                            onReorder?.(
+                                items,
+                                newOrder.map((index) => items[index]),
                             );
                         }
                     },
@@ -150,11 +155,11 @@ export function DraggableList(properties: DraggableListProperties) {
     // Keep the original order of the items in sync with the items prop
     React.useEffect(
         function () {
-            originalItemOrder.current = properties.items.map((_, i) => i);
+            originalItemOrder.current = items.map((_, i) => i);
             springsApi.start((index: number) => {
                 const sumOfPreviousItemsHeights = originalItemOrder.current
                     .slice(0, index)
-                    .reduce((sum, index) => sum + heightMap.get(properties.items[index])!, 0);
+                    .reduce((sum, index) => sum + heightMap.get(items[index])!, 0);
 
                 return {
                     y: sumOfPreviousItemsHeights,
@@ -165,36 +170,26 @@ export function DraggableList(properties: DraggableListProperties) {
                 };
             });
         },
-        [properties.items, springsApi, heightMap],
+        [items, springsApi, heightMap],
     );
 
-    // Get the properties to spread to the ul element
-    const ulProperties = { ...properties } as Partial<DraggableListProperties>;
-    delete ulProperties.className;
-    delete ulProperties.items;
-    delete ulProperties.icon;
-    delete ulProperties.iconPosition;
-    delete ulProperties.iconAlignment;
-    delete ulProperties.onReorder;
-    delete ulProperties.onDrag;
-
     // If there is an icon, render the icon and the items
-    if(properties.icon) {
+    if(icon) {
         return (
             <ul
-                className={'relative ' + ulProperties.className}
+                className={'relative ' + (className || '')}
                 {...(ulProperties as React.HTMLAttributes<HTMLUListElement>)}
             >
-                {springs.map((springProps, index) => {
-                    const y = springProps.y;
-                    const scale = springProps.scale;
-                    const zIndex = springProps.zIndex;
+                {springs.map((springProperties, index) => {
+                    const y = springProperties.y;
+                    const scale = springProperties.scale;
+                    const zIndex = springProperties.zIndex;
                     return (
                         <animated.li
                             key={index}
                             ref={(el) => {
                                 if(el) {
-                                    heightMap.set(properties.items[index], el.clientHeight);
+                                    heightMap.set(items[index], el.clientHeight);
                                 }
                             }}
                             style={{
@@ -218,16 +213,16 @@ export function DraggableList(properties: DraggableListProperties) {
                                     className="touch-none select-none hover:cursor-grab active:cursor-grabbing"
                                     {...bindDrag(index)}
                                 >
-                                    {properties.icon}
+                                    {icon}
                                 </div>
                             )}
-                            {properties.items[index]}
+                            {items[index]}
                             {iconPosition === 'right' && (
                                 <div
                                     className="touch-none select-none hover:cursor-grab active:cursor-grabbing"
                                     {...bindDrag(index)}
                                 >
-                                    {properties.icon}
+                                    {icon}
                                 </div>
                             )}
                         </animated.li>
@@ -239,10 +234,7 @@ export function DraggableList(properties: DraggableListProperties) {
 
     // Render the component
     return (
-        <ul
-            className={'relative ' + ulProperties.className}
-            {...(ulProperties as React.HTMLAttributes<HTMLUListElement>)}
-        >
+        <ul className={'relative ' + (className || '')} {...(ulProperties as React.HTMLAttributes<HTMLUListElement>)}>
             {springs.map(function (springProperties, index) {
                 const y = springProperties.y;
                 const scale = springProperties.scale;
@@ -252,7 +244,7 @@ export function DraggableList(properties: DraggableListProperties) {
                         key={index}
                         ref={(element) => {
                             if(element) {
-                                heightMap.set(properties.items[index], element.clientHeight);
+                                heightMap.set(items[index], element.clientHeight);
                             }
                         }}
                         style={{
@@ -266,7 +258,7 @@ export function DraggableList(properties: DraggableListProperties) {
                         className={'absolute touch-none select-none hover:cursor-grab active:cursor-grabbing '}
                         {...bindDrag(index)}
                     >
-                        {properties.items[index]}
+                        {items[index]}
                     </animated.li>
                 );
             })}
