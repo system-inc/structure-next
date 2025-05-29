@@ -28,16 +28,6 @@ export function wrapForSlot(children: React.ReactElement, className?: string) {
     );
 }
 
-// Function to remove properties from an object
-export function removeProperties<T extends object, K extends keyof T>(
-    object: T,
-    propertiesToExclude: readonly K[],
-): Omit<T, K> {
-    const result = { ...object };
-    propertiesToExclude.forEach((key) => delete result[key]);
-    return result as Omit<T, K>;
-}
-
 // Function to get the previous value of a state variable
 export function usePrevious<T>(value: T): T | undefined {
     // Create a reference to store the previous value

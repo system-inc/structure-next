@@ -12,7 +12,6 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { removeProperties } from '@structure/source/utilities/React';
 
 // Component - CopyButton
 export interface CopyButtonProperties extends ButtonProperties {
@@ -20,7 +19,7 @@ export interface CopyButtonProperties extends ButtonProperties {
     value: string;
     notice?: Omit<NoticeInterface, 'id'>;
 }
-export function CopyButton(properties: CopyButtonProperties) {
+export function CopyButton({ className, value, notice, ...buttonProperties }: CopyButtonProperties) {
     // Hooks
     const { addNotice } = useNotice();
 
@@ -28,19 +27,17 @@ export function CopyButton(properties: CopyButtonProperties) {
     const [valueCopiedToClipboard, setValueCopiedToClipboard] = React.useState(false);
 
     // Function to copy the value to the clipboard
-    const propertiesValue = properties.value;
-    const propertiesNotice = properties.notice;
     const onCopyValueToClipboard = React.useCallback(
         function () {
             // Copy the value to the clipboard
-            navigator.clipboard.writeText(propertiesValue);
+            navigator.clipboard.writeText(value);
 
             // Update the state
             setValueCopiedToClipboard(true);
 
             // Show a notice
-            if(propertiesNotice) {
-                addNotice(propertiesNotice);
+            if(notice) {
+                addNotice(notice);
             }
 
             // Reset the state after a delay
@@ -48,11 +45,8 @@ export function CopyButton(properties: CopyButtonProperties) {
                 setValueCopiedToClipboard(false);
             }, 1000);
         },
-        [propertiesValue, propertiesNotice, addNotice],
+        [value, notice, addNotice],
     );
-
-    // Separate the properties
-    const buttonProperties = removeProperties(properties, ['className', 'value', 'notice']);
 
     // Render the component
     return (
@@ -65,7 +59,7 @@ export function CopyButton(properties: CopyButtonProperties) {
             {...buttonProperties}
             className={mergeClassNames(
                 !valueCopiedToClipboard ? 'text-neutral hover:text-dark dark:text-neutral+6 dark:hover:text-light' : '',
-                properties.className,
+                className,
                 valueCopiedToClipboard
                     ? 'text-emerald-500 hover:text-emerald-500 dark:text-emerald-500 dark:hover:text-emerald-500'
                     : '',
