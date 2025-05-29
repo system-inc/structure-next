@@ -1,12 +1,13 @@
-// ESLint rule to enforce React naming conventions for properties
+// ESLint rule to enforce React naming conventions
 // 1. Component parameters should be named "properties" instead of "props"
 // 2. Component property interfaces/types must end with "Properties"
-// 3. No identifiers can end with "Prop" or "Props" 
-const ReactPropertiesNamingRule = {
+// 3. No identifiers can end with "Prop" or "Props"
+// 4. No identifiers can end with "Param" or "Params"
+const ReactNamingConventionsRule = {
     meta: {
         type: 'suggestion',
         docs: {
-            description: 'Enforce React property naming: use "properties" parameter, types end with "Properties", no "Prop"/"Props" suffixes',
+            description: 'Enforce React naming conventions: use "properties" parameter, types end with "Properties", no "Prop"/"Props"/"Param"/"Params" suffixes',
             category: 'Stylistic Issues',
             recommended: true,
         },
@@ -29,10 +30,75 @@ const ReactPropertiesNamingRule = {
             return /^[A-Z][A-Za-z0-9]*$/.test(name) && !name.startsWith('use');
         }
 
-        // Helper function to check if identifier ends with Prop/Props and suggest fix
-        function checkPropertyNaming(node, name) {
+        // Helper function to check if identifier ends with disallowed suffixes and suggest fix
+        function checkNamingConventions(node, name) {
+            // Whitelist of allowed names that would otherwise be flagged
+            const allowedNames = [
+                'searchParams', // Next.js standard prop
+                'URLSearchParams', // Web API
+            ];
 
-            if(name.endsWith('Prop') && !name.endsWith('Properties')) {
+            // Additional whitelist for Next.js contexts
+            const nextJsPageNames = [
+                'params', // Next.js dynamic route parameters
+                'searchParams', // Next.js search parameters
+            ];
+
+            // Check if we're in a Next.js context
+            const isPageFile = filename.endsWith('/page.tsx') || filename.endsWith('\\page.tsx');
+            const isPageComponent = filename.includes('Page.tsx') || filename.includes('PageRoute.tsx');
+            const isNextJsFunction = node.parent && 
+                node.parent.type === 'Property' && 
+                node.parent.key && 
+                node.parent.key.name === 'params';
+
+            // Skip whitelisted names
+            if(allowedNames.includes(name) || 
+               ((isPageFile || isPageComponent || isNextJsFunction) && nextJsPageNames.includes(name))) {
+                return;
+            }
+
+            // Check for exact matches first
+            if(name === 'prop') {
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not be named "prop". Use "property" or a more descriptive name.`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, 'property');
+                    }
+                });
+            } else if(name === 'props') {
+                // Allow accessing .props on React elements (e.g., element.props.id)
+                if(node.parent && 
+                   node.parent.type === 'MemberExpression' && 
+                   node.parent.property === node) {
+                    return; // This is accessing .props on an object, which is fine for React elements
+                }
+                
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not be named "props". Use "properties" or a more descriptive name.`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, 'properties');
+                    }
+                });
+            } else if(name === 'param') {
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not be named "param". Use "parameter" or a more descriptive name.`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, 'parameter');
+                    }
+                });
+            } else if(name === 'params') {
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not be named "params". Use "parameters" or a more descriptive name.`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, 'parameters');
+                    }
+                });
+            } else if(name.endsWith('Prop') && !name.endsWith('Properties')) {
                 const suggestedName = name.replace(/Prop$/, 'Property');
                 context.report({
                     node: node,
@@ -46,6 +112,24 @@ const ReactPropertiesNamingRule = {
                 context.report({
                     node: node,
                     message: `Identifier "${name}" should not end with "Props". Use "${suggestedName}".`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, suggestedName);
+                    }
+                });
+            } else if(name.endsWith('Param')) {
+                const suggestedName = name.replace(/Param$/, 'Parameter');
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not end with "Param". Use "${suggestedName}".`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, suggestedName);
+                    }
+                });
+            } else if(name.endsWith('Params')) {
+                const suggestedName = name.replace(/Params$/, 'Parameters');
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not end with "Params". Use "${suggestedName}".`,
                     fix(fixer) {
                         return fixer.replaceText(node, suggestedName);
                     }
@@ -125,7 +209,7 @@ const ReactPropertiesNamingRule = {
                     return;
                 }
 
-                checkPropertyNaming(node, node.name);
+                checkNamingConventions(node, node.name);
             },
 
             // First pass: Identify component property types
@@ -307,4 +391,4 @@ const ReactPropertiesNamingRule = {
 };
 
 // Export - Default
-export default ReactPropertiesNamingRule;
+export default ReactNamingConventionsRule;

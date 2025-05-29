@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams as useSearchParameters } from 'next/navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -41,7 +41,7 @@ export function Pagination(properties: PaginationProperties) {
 
     // Hooks
     const router = useRouter();
-    const searchParams = useSearchParams();
+    const searchParams = useSearchParameters();
 
     // State
     const [localItemsPerPage, setLocalItemsPerPage] = React.useState(properties.itemsPerPage || 10);
