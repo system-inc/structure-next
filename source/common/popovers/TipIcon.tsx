@@ -12,7 +12,6 @@ import InformationCircledIcon from '@structure/assets/icons/status/InformationCi
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { removeProperties } from '@structure/source/utilities/React';
 
 // TODO: add icon variants like information, question, warning, error icons
 // TODO: add size variants like xs, sm, base/default, lg, xl
@@ -46,51 +45,54 @@ export interface TipIconProperties extends Omit<PopoverProperties, 'children'> {
     openOnPress?: boolean;
     tabIndex?: number;
 }
-export function TipIcon(properties: TipIconProperties) {
+export function TipIcon({
+    openOnPress,
+    icon,
+    variant,
+    contentVariant,
+    iconProperties,
+    iconClassName,
+    content,
+    contentClassName,
+    className,
+    tabIndex,
+    ...componentProperties
+}: TipIconProperties) {
     // Defaults
-    const openOnPress = properties.openOnPress ?? false;
-    const Icon = properties.icon ?? InformationCircledIcon;
-    const variant = properties.variant || 'default';
-    const contentVariant = properties.contentVariant || 'default';
+    const openOnPressValue = openOnPress ?? false;
+    const Icon = icon ?? InformationCircledIcon;
+    const variantValue = variant || 'default';
+    const contentVariantValue = contentVariant || 'default';
 
     // If openOnPress is true, use Popover, otherwise use Tip
-    const Component = openOnPress ? Popover : Tip;
-
-    // Separate the PopoverInterface properties from the TipIconInterface properties
-    // We will apply these to the Popover or Tip component
-    const popoverInterfaceProperties = removeProperties(properties, [
-        'icon',
-        'iconProperties',
-        'openOnPress',
-        'className',
-    ]);
+    const Component = openOnPressValue ? Popover : Tip;
 
     // Check if this is a Phosphor icon by looking for Phosphor-specific properties
     const isPhosphorIcon =
         Icon !== InformationCircledIcon &&
-        properties.icon &&
-        (properties.iconProperties?.weight !== undefined || properties.iconProperties?.size !== undefined);
+        icon &&
+        (iconProperties?.weight !== undefined || iconProperties?.size !== undefined);
 
     // Default properties for Phosphor icons
     const defaultIconProperties = { size: 16, weight: 'regular' };
-    const iconProperties = { ...defaultIconProperties, ...properties.iconProperties };
+    const iconPropertiesValue = { ...defaultIconProperties, ...iconProperties };
 
     // Render the component
     return (
         <Component
-            {...popoverInterfaceProperties}
-            content={properties.content}
-            className={mergeClassNames(TipIconContentVariants[contentVariant], properties.contentClassName)}
-            tabIndex={properties.tabIndex ?? 1}
+            {...componentProperties}
+            content={content}
+            className={mergeClassNames(TipIconContentVariants[contentVariantValue], contentClassName)}
+            tabIndex={tabIndex ?? 1}
         >
             <div
                 // Styles for the icon
-                className={mergeClassNames(TipIconVariants[variant], properties.className)}
+                className={mergeClassNames(TipIconVariants[variantValue], className)}
             >
                 {isPhosphorIcon ? (
-                    <Icon {...iconProperties} className={mergeClassNames('', properties.iconClassName)} />
+                    <Icon {...iconPropertiesValue} className={mergeClassNames('', iconClassName)} />
                 ) : (
-                    <Icon className={mergeClassNames('h-3 w-3', properties.iconClassName)} />
+                    <Icon className={mergeClassNames('h-3 w-3', iconClassName)} />
                 )}
             </div>
         </Component>
