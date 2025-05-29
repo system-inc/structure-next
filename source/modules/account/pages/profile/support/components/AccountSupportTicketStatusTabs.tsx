@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams as useSearchParameters } from 'next/navigation';
 
 // Dependencies - Main Components
 import { TabItem, Tabs } from '@structure/source/common/navigation/tabs/Tabs';
@@ -14,14 +14,14 @@ interface AccountSupportTicketStatusTabsProperties {
 }
 export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketStatusTabsProperties) {
     const router = useRouter();
-    const searchParams = useSearchParams();
+    const searchParams = useSearchParameters();
 
     const activeTab = searchParams.get('status') || 'open';
 
     const handleTabChange = (value: string) => {
-        const updatedParams = new URLSearchParams(searchParams ?? undefined);
-        updatedParams.set('status', value);
-        router.replace(`?${updatedParams.toString()}`);
+        const updatedParameters = new URLSearchParams(searchParams ?? undefined);
+        updatedParameters.set('status', value);
+        router.replace(`?${updatedParameters.toString()}`);
     };
 
     // Render the component

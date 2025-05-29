@@ -100,14 +100,14 @@ export function UsersPage() {
     // Function to handle pagination changes
     async function handlePaginationChange(newItemsPerPage: number, newPage: number) {
         // Create new URLSearchParams
-        const newUrlSearchParams = new URLSearchParams(urlSearchParameters?.toString() || '');
+        const newUrlSearchParameters = new URLSearchParams(urlSearchParameters?.toString() || '');
 
         // Update the parameters
-        newUrlSearchParams.set('page', newPage.toString());
-        newUrlSearchParams.set('itemsPerPage', newItemsPerPage.toString());
+        newUrlSearchParameters.set('page', newPage.toString());
+        newUrlSearchParameters.set('itemsPerPage', newItemsPerPage.toString());
 
         // Navigate to the new URL with updated parameters
-        router.push(`${pathname}?${newUrlSearchParams.toString()}`);
+        router.push(`${pathname}?${newUrlSearchParameters.toString()}`);
     }
 
     // Function to handle user deletion
