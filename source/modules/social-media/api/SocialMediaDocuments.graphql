@@ -76,25 +76,13 @@ query SocialMediaPlatformSettings($platform: SocialMediaPlatform!) {
 
 mutation CreateSocialMediaPlatformSettings($input: CreateSocialMediaPlatformSettingsInput!) {
     socialMediaPlatformSettingsCreate(input: $input) {
-        id
-        platform
-        responseBotEnabled
-        responseModel
-        responseSystemPrompt
-        responseTemperature
-        createdAt
+        success
     }
 }
 
 mutation UpdateSocialMediaPlatformSettings($input: UpdateSocialMediaPlatformSettingsInput!) {
     socialMediaPlatformSettingsUpdate(input: $input) {
-        id
-        platform
-        responseBotEnabled
-        responseModel
-        responseSystemPrompt
-        responseTemperature
-        updatedAt
+        success
     }
 }
 
