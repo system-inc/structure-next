@@ -3,7 +3,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import { Metadata } from 'next';
-import { useRouter, useSearchParams as useSearchParameters } from 'next/navigation';
+import { useRouter, useUrlSearchParameters } from '@structure/source/router/Navigation';
 import Link from 'next/link';
 
 // Dependencies - Main Components
@@ -105,13 +105,13 @@ const ProfileEmptySupportTickets = (properties: ProfileEmptySupportTicketsProper
 // Component - ProfileSupportPage
 export function ProfileSupportPage() {
     // Hooks
-    const searchParams = useSearchParameters();
+    const urlSearchParameters = useUrlSearchParameters();
     const router = useRouter();
 
     const { ticketsQuery } = useProfileSupportTickets(1, 1);
 
     const [selectedStatus, setSelectedStatus] = React.useState<string | null>(
-        searchParams.get('status') || SupportTicketStatus.Open,
+        urlSearchParameters.get('status') || SupportTicketStatus.Open,
     );
     // const [_supportTickets, _setSupportTickets] = React.useState<{
     //     openTickets: ProfileSupportTicketsQuery['openTickets']['items'];
@@ -141,7 +141,7 @@ export function ProfileSupportPage() {
 
     React.useEffect(
         function () {
-            const statusParameter = searchParams.get('status');
+            const statusParameter = urlSearchParameters.get('status');
             if(!statusParameter) {
                 // If no status param, set it to 'open' and update the URL
                 const newSearchParameters = new URLSearchParams(window.location.search);
@@ -154,7 +154,7 @@ export function ProfileSupportPage() {
                 setSelectedStatus(statusParameter);
             }
         },
-        [searchParams, router],
+        [urlSearchParameters, router],
     );
 
     if(ticketsQuery.loading) {

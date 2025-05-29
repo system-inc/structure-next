@@ -6,8 +6,8 @@ import { ProjectSettings } from '@project/ProjectSettings';
 // Dependencies - React and Next.js
 import React from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
+import { useRouter } from '@structure/source/router/Navigation';
+import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';

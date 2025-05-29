@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname as useUrlPath } from 'next/navigation';
+import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { OpsNavigationLinks } from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
