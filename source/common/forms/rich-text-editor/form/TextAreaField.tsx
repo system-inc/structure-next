@@ -8,10 +8,10 @@ import { FormField } from './FormField';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { VariantProps } from 'class-variance-authority';
+import { VariantProps as VariantProperties } from 'class-variance-authority';
 
 // Component - TextAreaField
-type TextAreaFieldProperties = VariantProps<typeof textFieldVariants> &
+type TextAreaFieldProperties = VariantProperties<typeof textFieldVariants> &
     React.ComponentPropsWithoutRef<typeof TextArea> & {
         label: string;
         optional?: boolean;
@@ -21,35 +21,20 @@ type TextAreaFieldProperties = VariantProps<typeof textFieldVariants> &
         placeholder: string; // Enforce placeholder
     };
 const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldProperties>(function (
-    properties: TextAreaFieldProperties,
+    { label, optional, info, caption, error, id, className, ...textAreaProperties }: TextAreaFieldProperties,
     reference,
 ) {
     const internalId = React.useId();
 
-    // Get the properties to spread onto the TextArea element
-    const textAreaProperties = { ...properties } as Partial<TextAreaFieldProperties>;
-    delete textAreaProperties.label;
-    delete textAreaProperties.optional;
-    delete textAreaProperties.info;
-    delete textAreaProperties.caption;
-    delete textAreaProperties.error;
-    delete textAreaProperties.id;
-    delete textAreaProperties.className;
-
     // Render the component
     return (
-        <FormField
-            label={properties.label}
-            optional={properties.optional}
-            caption={properties.caption}
-            error={properties.error}
-        >
+        <FormField label={label} optional={optional} caption={caption} error={error}>
             <TextArea
-                id={properties.id ?? internalId}
+                id={id ?? internalId}
                 className={mergeClassNames(
                     textFieldVariants({
-                        size: properties.size,
-                        className: properties.className,
+                        size: textAreaProperties.size,
+                        className: className,
                     }),
                 )}
                 {...textAreaProperties}
@@ -57,11 +42,7 @@ const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldPropert
             />
 
             {/* InfoIcon */}
-            {properties.info && (
-                <div className="pointer-events-none absolute right-0 top-2 flex items-start pr-3">
-                    {properties.info}
-                </div>
-            )}
+            {info && <div className="pointer-events-none absolute right-0 top-2 flex items-start pr-3">{info}</div>}
         </FormField>
     );
 });
@@ -70,4 +51,4 @@ const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldPropert
 TextAreaField.displayName = 'TextAreaField';
 
 // Export
-export { TextAreaField, type TextAreaFieldProperties as TextAreaFieldProps };
+export { TextAreaField, type TextAreaFieldProperties };

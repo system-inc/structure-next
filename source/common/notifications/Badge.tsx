@@ -1,5 +1,5 @@
 import React from 'react';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 export const badgeVariants = cva(
@@ -81,30 +81,25 @@ export const badgeVariants = cva(
     },
 );
 
-type BadgeProperties = VariantProps<typeof badgeVariants> & React.HTMLAttributes<HTMLDivElement>;
-export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(properties, reference) {
-    // Create a clone of properties for remaining HTML attributes
-    const divProperties = { ...properties };
-    delete divProperties.variant;
-    delete divProperties.size;
-    delete divProperties.type;
-    delete divProperties.className;
-    delete divProperties.children;
-
+type BadgeProperties = VariantProperties<typeof badgeVariants> & React.HTMLAttributes<HTMLDivElement>;
+export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(
+    { variant, size, type, className, children, ...divProperties },
+    reference,
+) {
     return (
         <div
             ref={reference}
             className={mergeClassNames(
                 badgeVariants({
-                    size: properties.size,
-                    variant: properties.variant,
-                    type: properties.type,
-                    className: properties.className,
+                    size: size,
+                    variant: variant,
+                    type: type,
+                    className: className,
                 }),
             )}
             {...divProperties}
         >
-            {properties.children}
+            {children}
         </div>
     );
 });

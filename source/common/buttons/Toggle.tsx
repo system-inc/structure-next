@@ -2,7 +2,7 @@
 
 import React from 'react';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps as VariantProperties } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 export const toggleVariants = cva(
@@ -28,25 +28,19 @@ export const toggleVariants = cva(
 
 export const Toggle = React.forwardRef<
     React.ElementRef<typeof TogglePrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>
->(function (properties, reference) {
-    // Create a clone of properties for remaining HTML attributes
-    const rootElementProperties = { ...properties };
-    delete rootElementProperties.variant;
-    delete rootElementProperties.size;
-    delete rootElementProperties.className;
-
+    React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> & VariantProperties<typeof toggleVariants>
+>(function ({ variant, size, className, ...togglePrimitiveRootProperties }, reference) {
     return (
         <TogglePrimitive.Root
             ref={reference}
             className={mergeClassNames(
                 toggleVariants({
-                    variant: properties.variant,
-                    size: properties.size,
-                    className: properties.className,
+                    variant: variant,
+                    size: size,
+                    className: className,
                 }),
             )}
-            {...rootElementProperties}
+            {...togglePrimitiveRootProperties}
         />
     );
 });
