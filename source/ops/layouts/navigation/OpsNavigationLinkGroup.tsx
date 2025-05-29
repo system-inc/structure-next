@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { OpsNavigationLinkProperties, OpsNavigationLink } from './OpsNavigationLink';
@@ -25,14 +25,14 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
     const [isOpen, setIsOpen] = React.useState(active);
 
     // Get the current pathname from the URL
-    const urlPathname = usePathname();
+    const urlPath = useUrlPath();
 
     // Open or close the group when the path, active state, or properties change
     React.useEffect(
         function () {
             setIsOpen(active);
         },
-        [urlPathname, active],
+        [urlPath, active],
     ); // Listen to changes to the pathname and active state
 
     const animationConfig = { duration: 500, easing: easings.easeOutExpo };

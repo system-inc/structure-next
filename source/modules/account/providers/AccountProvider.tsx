@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { AuthenticationDialog } from '@structure/source/modules/account/pages/authentication/components/AuthenticationDialog';

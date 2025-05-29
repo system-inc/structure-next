@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { redirect } from 'next/navigation';
+import { redirect } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 // import { Button } from '@structure/source/common/buttons/Button';
@@ -21,22 +21,20 @@ import { slug } from '@structure/source/utilities/String';
 
 // Component - IdeaPage
 export interface IdeaPageProperties {
-    params: {
-        ideaIdentifier: string;
-        ideaSlug?: string;
-    };
+    ideaIdentifier: string;
+    ideaSlug?: string;
 }
 export function IdeaPage(properties: IdeaPageProperties) {
     // Hooks
     const ideaQueryState = useQuery(PostDocument, {
         variables: {
-            identifier: properties.params.ideaIdentifier,
+            identifier: properties.ideaIdentifier,
         },
     });
 
     // If there is no idea slug, redirect to the URL with the slug
-    if(!properties.params.ideaSlug && ideaQueryState.data?.post) {
-        redirect('/ideas/' + properties.params.ideaIdentifier + '/' + slug(ideaQueryState.data.post.title));
+    if(!properties.ideaSlug && ideaQueryState.data?.post) {
+        redirect('/ideas/' + properties.ideaIdentifier + '/' + slug(ideaQueryState.data.post.title));
     }
 
     // Render the component

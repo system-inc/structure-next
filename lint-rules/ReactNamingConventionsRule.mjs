@@ -30,31 +30,43 @@ const ReactNamingConventionsRule = {
             return /^[A-Z][A-Za-z0-9]*$/.test(name) && !name.startsWith('use');
         }
 
+        // Track if this file has Next.js page APIs
+        let hasNextJsPageApis = false;
+
         // Helper function to check if identifier ends with disallowed suffixes and suggest fix
         function checkNamingConventions(node, name) {
             // Whitelist of allowed names that would otherwise be flagged
             const allowedNames = [
-                'searchParams', // Next.js standard prop
                 'URLSearchParams', // Web API
             ];
 
-            // Additional whitelist for Next.js contexts
+            // Additional whitelist for Next.js contexts (only in specific contexts)
             const nextJsPageNames = [
                 'params', // Next.js dynamic route parameters
                 'searchParams', // Next.js search parameters
             ];
 
-            // Check if we're in a Next.js context
+            // Check if we're in a Next.js page context (where Next.js prop names are allowed)
             const isPageFile = filename.endsWith('/page.tsx') || filename.endsWith('\\page.tsx');
-            const isPageComponent = filename.includes('Page.tsx') || filename.includes('PageRoute.tsx');
-            const isNextJsFunction = node.parent && 
-                node.parent.type === 'Property' && 
-                node.parent.key && 
-                node.parent.key.name === 'params';
+            
+            // Check various Next.js contexts where these names are legitimate
+            const isInNextJsContext = 
+                // Property in an object type/interface (e.g., params: { id: string })
+                (node.parent && node.parent.type === 'Property' && node.parent.key === node) ||
+                // Member expression access (e.g., properties.params)
+                (node.parent && node.parent.type === 'MemberExpression' && node.parent.property === node) ||
+                // Object destructuring (e.g., { params } = properties)
+                (node.parent && node.parent.type === 'Property' && node.parent.value === node) ||
+                // Direct property access in interfaces for Next.js page props
+                (node.parent && (node.parent.type === 'PropertySignature' || node.parent.type === 'TSPropertySignature'));
 
             // Skip whitelisted names
-            if(allowedNames.includes(name) || 
-               ((isPageFile || isPageComponent || isNextJsFunction) && nextJsPageNames.includes(name))) {
+            if(allowedNames.includes(name)) {
+                return;
+            }
+
+            // Allow Next.js page names in files with Next.js APIs within Next.js contexts
+            if(nextJsPageNames.includes(name) && (isPageFile || hasNextJsPageApis) && isInNextJsContext) {
                 return;
             }
 
@@ -182,6 +194,24 @@ const ReactNamingConventionsRule = {
         }
 
         return {
+            // Detect Next.js page APIs to determine if this file should allow Next.js conventions
+            ExportNamedDeclaration(node) {
+                if (node.declaration && node.declaration.type === 'FunctionDeclaration' && node.declaration.id) {
+                    const functionName = node.declaration.id.name;
+                    const nextJsPageApis = [
+                        'generateMetadata',
+                        'generateStaticParams',
+                        'generateStaticPaths',
+                        'getServerSideProps',
+                        'getStaticProps',
+                        'getStaticPaths'
+                    ];
+                    
+                    if (nextJsPageApis.includes(functionName)) {
+                        hasNextJsPageApis = true;
+                    }
+                }
+            },
 
             // Check all identifiers for Prop/Props naming
             Identifier(node) {

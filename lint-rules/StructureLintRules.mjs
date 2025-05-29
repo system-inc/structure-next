@@ -6,6 +6,7 @@ import ReactNoArrowFunctionsAsHookParametersRule from './ReactNoArrowFunctionsAs
 import ReactNamingConventionsRule from './ReactNamingConventionsRule.mjs';
 import ReactFunctionStyleRule from './ReactFunctionStyleRule.mjs';
 import ReactExportRule from './ReactExportRule.mjs';
+import ReactImportRule from './ReactImportRule.mjs';
 
 // ESLint Structure Lint Rules
 const StructureLintRules = {
@@ -17,6 +18,7 @@ const StructureLintRules = {
         'react-naming-conventions-rule': ReactNamingConventionsRule,
         'react-function-style-rule': ReactFunctionStyleRule,
         'react-export-rule': ReactExportRule,
+        'react-import-rule': ReactImportRule,
     },
 };
 

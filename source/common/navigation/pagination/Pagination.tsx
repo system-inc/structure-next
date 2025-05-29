@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useRouter, useSearchParams as useSearchParameters } from 'next/navigation';
+import { useRouter, useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -41,7 +41,7 @@ export function Pagination(properties: PaginationProperties) {
 
     // Hooks
     const router = useRouter();
-    const searchParams = useSearchParameters();
+    const urlSearchParameters = useUrlSearchParameters();
 
     // State
     const [localItemsPerPage, setLocalItemsPerPage] = React.useState(properties.itemsPerPage || 10);
@@ -60,7 +60,7 @@ export function Pagination(properties: PaginationProperties) {
 
     // Get current itemsPerPage - from URL if using links, otherwise from local state
     const itemsPerPage = useLinks
-        ? parseInt(searchParams.get('itemsPerPage') || (properties.itemsPerPage || 10).toString())
+        ? parseInt(urlSearchParameters.get('itemsPerPage') || (properties.itemsPerPage || 10).toString())
         : localItemsPerPage;
     // const useLinks = properties.useLinks ?? false;
     // const itemsPerPageControl = properties.itemsPerPageControl ?? true;
