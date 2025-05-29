@@ -37,8 +37,11 @@ export const TipIconContentVariants = {
 export interface TipIconProperties extends Omit<PopoverProperties, 'children'> {
     variant?: keyof typeof TipIconVariants;
     contentVariant?: keyof typeof TipIconContentVariants;
-    icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+    icon?:
+        | React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+        | React.ComponentType<{ size?: number | string; className?: string; weight?: string }>;
     iconClassName?: string;
+    iconProperties?: { size?: number | string; weight?: string; [key: string]: unknown };
     contentClassName?: string;
     openOnPress?: boolean;
     tabIndex?: number;
@@ -55,7 +58,22 @@ export function TipIcon(properties: TipIconProperties) {
 
     // Separate the PopoverInterface properties from the TipIconInterface properties
     // We will apply these to the Popover or Tip component
-    const popoverInterfaceProperties = removeProperties(properties, ['icon', 'openOnPress', 'content', 'className']);
+    const popoverInterfaceProperties = removeProperties(properties, [
+        'icon',
+        'iconProperties',
+        'openOnPress',
+        'className',
+    ]);
+
+    // Check if this is a Phosphor icon by looking for Phosphor-specific properties
+    const isPhosphorIcon =
+        Icon !== InformationCircledIcon &&
+        properties.icon &&
+        (properties.iconProperties?.weight !== undefined || properties.iconProperties?.size !== undefined);
+
+    // Default properties for Phosphor icons
+    const defaultIconProperties = { size: 16, weight: 'regular' };
+    const iconProperties = { ...defaultIconProperties, ...properties.iconProperties };
 
     // Render the component
     return (
@@ -69,7 +87,11 @@ export function TipIcon(properties: TipIconProperties) {
                 // Styles for the icon
                 className={mergeClassNames(TipIconVariants[variant], properties.className)}
             >
-                <Icon className={mergeClassNames('h-3 w-3', properties.iconClassName)} />
+                {isPhosphorIcon ? (
+                    <Icon {...iconProperties} className={mergeClassNames('', properties.iconClassName)} />
+                ) : (
+                    <Icon className={mergeClassNames('h-3 w-3', properties.iconClassName)} />
+                )}
             </div>
         </Component>
     );
