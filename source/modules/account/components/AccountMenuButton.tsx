@@ -12,12 +12,12 @@ import { Popover } from '@structure/source/common/popovers/Popover';
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - Icons
-import { usePathname } from 'next/navigation';
+import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Component - AccountMenuButton
 export function AccountMenuButton() {
     // Hooks
-    const pathname = usePathname();
+    const urlPath = useUrlPath();
     const { accountState } = useAccount();
 
     // State
@@ -39,7 +39,7 @@ export function AccountMenuButton() {
         function () {
             setOpen(false);
         },
-        [pathname],
+        [urlPath],
     );
 
     // Render the component

@@ -3,7 +3,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import { Metadata } from 'next';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';

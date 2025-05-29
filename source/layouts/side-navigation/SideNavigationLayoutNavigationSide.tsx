@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname as useUrlPath, useParams as useUrlParameters } from 'next/navigation';
+import { useUrlPath, useUrlParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';

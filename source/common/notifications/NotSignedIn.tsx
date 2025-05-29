@@ -2,23 +2,23 @@
 
 // Dependencies - Main Components
 // import { SignInForm } from '@structure/source/modules/account/SignInForm';
-import { usePathname, useRouter } from 'next/navigation';
+import { useUrlPath, useRouter } from '@structure/source/router/Navigation';
 import React from 'react';
 
 // Component - NotSignedIn
 export function NotSignedIn() {
     // TODO: Clean this up. Just a quick solution for now.
-    const pathName = usePathname() ?? '';
+    const urlPath = useUrlPath() ?? '';
     const router = useRouter();
 
     // Redirect to sign in with the current path as the redirect path
     React.useEffect(
         function () {
-            if(pathName !== '/sign-in') {
-                router.push(`/sign-in?redirectUrl=${encodeURIComponent(pathName)}`);
+            if(urlPath !== '/sign-in') {
+                router.push(`/sign-in?redirectUrl=${encodeURIComponent(urlPath)}`);
             }
         },
-        [pathName, router],
+        [urlPath, router],
     );
 
     // Render the component

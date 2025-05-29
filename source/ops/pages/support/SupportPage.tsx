@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useUrlSearchParameters, useRouter } from '@structure/source/utilities/next/NextNavigation';
+import { useUrlSearchParameters, useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Internal Components
 import { TicketList } from './components/TicketList/TicketList';

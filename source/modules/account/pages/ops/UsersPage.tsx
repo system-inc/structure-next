@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { useRouter, useUrlPath, useUrlSearchParameters } from '@structure/source/utilities/next/NextNavigation';
+import { useRouter, useUrlPath, useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/common/navigation/Link';

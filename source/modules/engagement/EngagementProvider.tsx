@@ -5,7 +5,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname, useSearchParams as useSearchParameters } from 'next/navigation';
+import { useUrlPath, useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { EngagementContainer } from '@structure/source/modules/engagement/EngagementContainer';
@@ -33,8 +33,8 @@ export interface EngagementProviderProperties {
 }
 export function EngagementProvider(properties: EngagementProviderProperties) {
     // Hooks
-    const urlPath = usePathname() ?? '';
-    const urlSearchParameters = useSearchParameters();
+    const urlPath = useUrlPath() ?? '';
+    const urlSearchParameters = useUrlSearchParameters();
     const [engagementEventCreateMutation] = useMutation(EngagementEventCreateDocument);
 
     // References

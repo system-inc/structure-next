@@ -3,7 +3,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 import { useQueryState as useUrlQueryState, parseAsArrayOf, parseAsJson, parseAsStringEnum } from 'nuqs';
-import { useSearchParams as useUrlSearchParameters } from 'next/navigation';
+import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Chart } from './Chart';

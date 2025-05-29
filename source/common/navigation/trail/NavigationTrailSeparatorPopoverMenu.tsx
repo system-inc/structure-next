@@ -1,6 +1,6 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { PopoverMenuProperties, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
@@ -17,7 +17,7 @@ export interface NavigationTrailSeparatorPopoverMenuProperties
 }
 export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailSeparatorPopoverMenuProperties) {
     // Hooks
-    const urlPathname = usePathname() ?? '';
+    const urlPath = useUrlPath() ?? '';
 
     // State for the PopoverMenu
     const [open, setOpen] = React.useState(false);
@@ -29,7 +29,7 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
             items={properties.links.map(function (link) {
                 // Use trailing slashes for comparison to prevent issues with comparing paths like /data and /database
                 const linkWithTrailingSlash = link.href.endsWith('/') ? link.href : link.href + '/';
-                const urlPathnameWithTrailingSlash = urlPathname.endsWith('/') ? urlPathname : urlPathname + '/';
+                const urlPathnameWithTrailingSlash = urlPath.endsWith('/') ? urlPath : urlPath + '/';
                 const selected = urlPathnameWithTrailingSlash.startsWith(linkWithTrailingSlash);
 
                 return {
