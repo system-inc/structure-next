@@ -4,7 +4,7 @@ import React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
 
 const checkboxVariants = cva(
     [
@@ -32,18 +32,13 @@ const checkboxVariants = cva(
 // Component - Checkbox
 const Checkbox = React.forwardRef<
     React.ElementRef<typeof CheckboxPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & VariantProps<typeof checkboxVariants>
->(function (properties, reference) {
-    // Properties to spread onto the component
-    const checkboxProperties = { ...properties };
-    delete checkboxProperties.className;
-    delete checkboxProperties.size;
-
+    React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & VariantProperties<typeof checkboxVariants>
+>(function ({ className, size, ...checkboxPrimitiveRootProperties }, reference) {
     return (
         <CheckboxPrimitive.Root
             ref={reference}
-            className={mergeClassNames(checkboxVariants({ size: properties.size }), properties.className)}
-            {...checkboxProperties}
+            className={mergeClassNames(checkboxVariants({ size: size }), className)}
+            {...checkboxPrimitiveRootProperties}
         >
             <CheckboxPrimitive.Indicator className={mergeClassNames('flex items-center justify-center text-current')}>
                 <CheckIcon className="h-full w-full" />

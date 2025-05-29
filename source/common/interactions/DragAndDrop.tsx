@@ -428,14 +428,7 @@ interface DropAreaProperties extends React.HTMLAttributes<HTMLDivElement> {
     onItemIsHovering?: () => void;
     asChild?: boolean;
 }
-export function DropArea(properties: DropAreaProperties) {
-    const asChild = properties.asChild;
-    const children = properties.children;
-    const onItemIsHovering = properties.onItemIsHovering;
-    const props = { ...properties };
-    delete props.asChild;
-    delete props.children;
-    delete props.onItemIsHovering;
+export function DropArea({ asChild, children, onItemIsHovering, ...componentProperties }: DropAreaProperties) {
     const Component = asChild ? Slot : 'div';
 
     const dropContainerRef = React.useRef<HTMLDivElement>(null);
@@ -471,7 +464,7 @@ export function DropArea(properties: DropAreaProperties) {
         <Component
             ref={dropContainerRef}
             className={asChild ? '' : 'h-auto w-auto'}
-            {...props}
+            {...componentProperties}
             data-item-hovering={isHovering}
         >
             <Slottable>{children}</Slottable>

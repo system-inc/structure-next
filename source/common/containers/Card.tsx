@@ -1,5 +1,5 @@
 import React from 'react';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { Slot } from '@radix-ui/react-slot';
 
@@ -26,26 +26,21 @@ export const cardVariants = cva(
     },
 );
 
-type CardProperties = React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof cardVariants> & { asChild?: boolean };
-export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function (properties, reference) {
-    const Component = properties.asChild ? Slot : 'div';
-
-    // Properties to spread onto the component
-    const componentProperties = { ...properties };
-    delete componentProperties.className;
-    delete componentProperties.children;
-    delete componentProperties.asChild;
-    delete componentProperties.interactive;
+type CardProperties = React.HTMLAttributes<HTMLDivElement> &
+    VariantProperties<typeof cardVariants> & { asChild?: boolean };
+export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function (
+    { className, children, asChild, interactive, ...divProperties },
+    reference,
+) {
+    const Component = asChild ? Slot : 'div';
 
     return (
         <Component
             ref={reference}
-            className={mergeClassNames(
-                cardVariants({ className: properties.className, interactive: properties.interactive }),
-            )}
-            {...componentProperties}
+            className={mergeClassNames(cardVariants({ className: className, interactive: interactive }))}
+            {...divProperties}
         >
-            {properties.children}
+            {children}
         </Component>
     );
 });

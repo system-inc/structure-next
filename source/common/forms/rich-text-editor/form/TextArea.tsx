@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
 
 const textAreaVariants = cva(
     [
@@ -36,15 +36,18 @@ const textAreaVariants = cva(
 );
 
 // Component - TextArea
-type TextAreaProperties = React.ComponentPropsWithoutRef<'textarea'> & VariantProps<typeof textAreaVariants>;
-const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(function (properties, reference) {
+type TextAreaProperties = React.ComponentPropsWithoutRef<'textarea'> & VariantProperties<typeof textAreaVariants>;
+const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(function (
+    { className, size, resize, ...textAreaProperties },
+    reference,
+) {
     const resizeId = React.useId();
 
     // Create an event handler to resize the textarea to the size of the content unless the resize value is none
     React.useEffect(
         function () {
             const textarea = document.querySelector(`[data-resize-id="${resizeId}"]`) as HTMLTextAreaElement | null;
-            if(!textarea || properties.resize === 'none') return;
+            if(!textarea || resize === 'none') return;
             const inputListener = () => {
                 const scrollHeightAdjustment = 2;
                 textarea.style.height = 'auto';
@@ -53,14 +56,8 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(funct
             textarea.addEventListener('input', inputListener);
             return () => textarea.removeEventListener('input', inputListener);
         },
-        [resizeId, properties.resize],
+        [resizeId, resize],
     );
-
-    // Get the properties to spread onto the textarea element
-    const textAreaProperties = { ...properties };
-    delete textAreaProperties.className;
-    delete textAreaProperties.size;
-    delete textAreaProperties.resize;
 
     // Render the component
     return (
@@ -69,9 +66,9 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(funct
             ref={reference}
             className={mergeClassNames(
                 textAreaVariants({
-                    className: properties.className,
-                    size: properties.size,
-                    resize: properties.resize,
+                    className: className,
+                    size: size,
+                    resize: resize,
                 }),
             )}
             {...textAreaProperties}
@@ -82,4 +79,4 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(funct
 TextArea.displayName = 'TextArea';
 
 // Export
-export { TextArea, type TextAreaProperties as TextAreaProps };
+export { TextArea, type TextAreaProperties };

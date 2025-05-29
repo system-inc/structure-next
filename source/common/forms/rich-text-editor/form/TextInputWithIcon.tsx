@@ -6,7 +6,7 @@ import { Input, InputProperties } from './Input';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
 
 const textInputWithIconVariants = cva(
     [''], // Defaults
@@ -24,34 +24,30 @@ const textInputWithIconVariants = cva(
 
 // Component - TextInputWithIcon
 type TextInputWithIconProperties = React.ComponentPropsWithoutRef<'input'> &
-    Omit<VariantProps<typeof textInputWithIconVariants>, 'icon'> & {
+    Omit<VariantProperties<typeof textInputWithIconVariants>, 'icon'> & {
         icon: React.ReactNode;
     } & InputProperties;
-const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconProperties>(
-    function (properties, reference) {
-        // Get the properties to spread onto the Input component
-        const inputProperties = { ...properties };
-        delete inputProperties.className;
-        delete inputProperties.icon;
-
-        // Render the component
-        return (
-            <div className={mergeClassNames('relative w-full', properties.className)}>
-                <Input
-                    ref={reference}
-                    className={mergeClassNames(textInputWithIconVariants({ size: properties.size }))}
-                    {...inputProperties}
-                />
-                <div className="text-opsis-content-tetriary pointer-events-none absolute inset-y-0 left-5 flex h-full w-5 items-center">
-                    {properties.icon}
-                </div>
+const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconProperties>(function (
+    { className, icon, size, ...inputProperties },
+    reference,
+) {
+    // Render the component
+    return (
+        <div className={mergeClassNames('relative w-full', className)}>
+            <Input
+                ref={reference}
+                className={mergeClassNames(textInputWithIconVariants({ size: size }))}
+                {...inputProperties}
+            />
+            <div className="text-opsis-content-tetriary pointer-events-none absolute inset-y-0 left-5 flex h-full w-5 items-center">
+                {icon}
             </div>
-        );
-    },
-);
+        </div>
+    );
+});
 
 // Set the display name for debugging
 TextInputWithIcon.displayName = 'TextInputWithIcon';
 
 // Export
-export { TextInputWithIcon, type TextInputWithIconProperties as TextInputWithIconProps };
+export { TextInputWithIcon, type TextInputWithIconProperties };

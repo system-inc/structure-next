@@ -11,24 +11,19 @@ export interface ToggleButtonProperties extends ButtonProperties {
     pressed?: boolean;
     onPressedChange?: (pressed: boolean, event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 }
-export function ToggleButton(properties: ToggleButtonProperties) {
+export function ToggleButton({ pressed, onPressedChange, ...buttonProperties }: ToggleButtonProperties) {
     // State
-    const [pressed, setPressed] = React.useState<boolean>(properties.pressed ? true : false);
-
-    // Create a new object for button properties, excluding ToggleButton-specific props
-    const buttonProperties = { ...properties };
-    delete buttonProperties.pressed;
-    delete buttonProperties.onPressedChange;
+    const [pressedState, setPressedState] = React.useState<boolean>(pressed ? true : false);
 
     // Render the component
     return (
         <Button
             {...buttonProperties}
-            variant={pressed ? 'toggleOn' : 'toggleOff'}
+            variant={pressedState ? 'toggleOn' : 'toggleOff'}
             onClick={function (event) {
-                setPressed(!pressed);
-                if(properties.onPressedChange) {
-                    properties.onPressedChange(!pressed, event);
+                setPressedState(!pressedState);
+                if(onPressedChange) {
+                    onPressedChange(!pressedState, event);
                 }
             }}
         />

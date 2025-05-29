@@ -25,8 +25,16 @@ type FileDropFieldProperties<T extends HTMLElement> = FormFieldProperties<T> &
     Omit<React.ComponentPropsWithoutRef<typeof FileDrop>, 'children'> & {
         multiple?: boolean;
     };
-export function FileDropField<T extends HTMLElement>(properties: FileDropFieldProperties<T>) {
-    const multiple = properties.multiple ?? false;
+export function FileDropField<T extends HTMLElement>({
+    label,
+    caption,
+    error,
+    optional,
+    multiple: multipleProperty,
+    files: filesProperty,
+    ...fileDropProperties
+}: FileDropFieldProperties<T>) {
+    const multiple = multipleProperty ?? false;
     const [dragging, setDragging] = React.useState(false);
 
     const borderSpring = useSpring({
@@ -43,23 +51,10 @@ export function FileDropField<T extends HTMLElement>(properties: FileDropFieldPr
         .join(' ');
 
     // Ensure files property is present as it's required by FileDrop
-    const files = properties.files ?? [];
-
-    // Properties to spread onto the FileDrop element
-    const fileDropProperties = { ...properties } as Partial<FileDropFieldProperties<T>>;
-    delete fileDropProperties.label;
-    delete fileDropProperties.caption;
-    delete fileDropProperties.error;
-    delete fileDropProperties.optional;
-    delete fileDropProperties.multiple;
+    const files = filesProperty ?? [];
 
     return (
-        <FormField
-            label={properties.label}
-            caption={properties.caption}
-            error={properties.error}
-            optional={properties.optional}
-        >
+        <FormField label={label} caption={caption} error={error} optional={optional}>
             <FileDrop
                 files={files}
                 isDragging={dragging}
