@@ -5,7 +5,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams as useSearchParameters } from 'next/navigation';
 
 // Dependencies - Main Components
 import { EngagementContainer } from '@structure/source/modules/engagement/EngagementContainer';
@@ -34,7 +34,8 @@ export interface EngagementProviderProperties {
 export function EngagementProvider(properties: EngagementProviderProperties) {
     // Hooks
     const urlPath = usePathname() ?? '';
-    const urlSearchParameters = useSearchParams();
+    const urlSearchParameters = useSearchParameters();
+    const [engagementEventCreateMutation] = useMutation(EngagementEventCreateDocument);
 
     // References
     const engagementEventsSentReference = React.useRef(0);

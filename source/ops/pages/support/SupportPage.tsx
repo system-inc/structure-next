@@ -27,7 +27,7 @@ export function SupportPage() {
     // URL Parameters
     const urlSearchParameters = useUrlSearchParameters();
 
-    const pageParam = urlSearchParameters.get('page') ? parseInt(urlSearchParameters?.get('page') as string) : 1;
+    const pageParameters = urlSearchParameters.get('page') ? parseInt(urlSearchParameters?.get('page') as string) : 1;
 
     // State & Refs
     const [selectedStatus, setSelectedStatus] = React.useState<SupportTicketStatus>(
@@ -42,7 +42,7 @@ export function SupportPage() {
         itemIndexForPreviousPage: null,
         itemsPerPage: 20,
         itemsTotal: 0,
-        page: pageParam,
+        page: pageParameters,
         pagesTotal: 0,
     });
     const [showMyTickets] = React.useState<boolean>(false);
@@ -83,12 +83,12 @@ export function SupportPage() {
         }));
 
         // Update the URL parameters for status and reset the page
-        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
-        updatedParams.set('status', status);
-        updatedParams.set('page', '1'); // Reset to the first page when status changes
-        updatedParams.delete('ticket'); // Remove the ticket parameter temporarily
+        const updatedParameters = new URLSearchParams(urlSearchParameters ?? undefined);
+        updatedParameters.set('status', status);
+        updatedParameters.set('page', '1'); // Reset to the first page when status changes
+        updatedParameters.delete('ticket'); // Remove the ticket parameter temporarily
 
-        router.replace(`?${updatedParams.toString()}`);
+        router.replace(`?${updatedParameters.toString()}`);
     }
 
     function handlePageChange(page: number) {
@@ -97,25 +97,25 @@ export function SupportPage() {
             page,
         }));
 
-        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
-        updatedParams.set('status', selectedStatus); // Preserve the current status
-        updatedParams.set('page', page.toString()); // Update the page
+        const updatedParameters = new URLSearchParams(urlSearchParameters ?? undefined);
+        updatedParameters.set('status', selectedStatus); // Preserve the current status
+        updatedParameters.set('page', page.toString()); // Update the page
         if(selectedTicketIdentifier) {
-            updatedParams.set('ticket', selectedTicketIdentifier); // Preserve the selected ticket
+            updatedParameters.set('ticket', selectedTicketIdentifier); // Preserve the selected ticket
         }
 
         // Update the URL
-        router.replace(`?${updatedParams.toString()}`);
+        router.replace(`?${updatedParameters.toString()}`);
     }
 
     // Function to select ticket and update URL
     function handleTicketSelection(ticketIdentifier: string) {
         setSelectedTicketIdentifier(ticketIdentifier);
-        const updatedParams = new URLSearchParams(urlSearchParameters ?? undefined);
-        updatedParams.set('status', selectedStatus); // Preserve the current status
-        updatedParams.set('page', currentPagination.page.toString()); // Preserve the current page
-        updatedParams.set('ticket', ticketIdentifier); // Update the selected ticket
-        router.replace(`?${updatedParams.toString()}`);
+        const updatedParameters = new URLSearchParams(urlSearchParameters ?? undefined);
+        updatedParameters.set('status', selectedStatus); // Preserve the current status
+        updatedParameters.set('page', currentPagination.page.toString()); // Preserve the current page
+        updatedParameters.set('ticket', ticketIdentifier); // Update the selected ticket
+        router.replace(`?${updatedParameters.toString()}`);
     }
 
     React.useEffect(
@@ -136,20 +136,20 @@ export function SupportPage() {
                     setSelectedTicketIdentifier(firstTicket.identifier); // Update the selected ticket ID in state
 
                     // Update the URL with the new ticket parameter and reset the page to 1
-                    const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
-                    newParams.set('status', selectedStatus);
-                    newParams.set('page', currentPagination.page.toString()); // Reset to the first page
-                    newParams.set('ticket', firstTicket.identifier); // Set the first ticket ID
-                    router.replace(`?${newParams.toString()}`);
+                    const newParameters = new URLSearchParams(urlSearchParameters ?? undefined);
+                    newParameters.set('status', selectedStatus);
+                    newParameters.set('page', currentPagination.page.toString()); // Reset to the first page
+                    newParameters.set('ticket', firstTicket.identifier); // Set the first ticket ID
+                    router.replace(`?${newParameters.toString()}`);
                 }
                 else {
                     // If no tickets are available, clear the ticket parameter
                     setSelectedTicketIdentifier(null);
-                    const newParams = new URLSearchParams(urlSearchParameters ?? undefined);
-                    newParams.set('status', selectedStatus);
-                    newParams.set('page', currentPagination.page.toString());
-                    newParams.delete('ticket');
-                    router.replace(`?${newParams.toString()}`);
+                    const newParameters = new URLSearchParams(urlSearchParameters ?? undefined);
+                    newParameters.set('status', selectedStatus);
+                    newParameters.set('page', currentPagination.page.toString());
+                    newParameters.delete('ticket');
+                    router.replace(`?${newParameters.toString()}`);
                 }
             }
         },
