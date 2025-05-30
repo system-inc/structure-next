@@ -3,17 +3,18 @@
 // Dependencies - Project
 import ProjectSettings from '@project/ProjectSettings';
 
+// Dependencies - Session Management
+import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
+
 // Dependencies - API
 import { apolloClient } from '@structure/source/api/apollo/ApolloClient';
 import { EngagementEventCreateDocument, DeviceOrientation } from '@project/source/api/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/String';
+import { getMetaAttributionForEvents } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
 
-// Dependencies - Session Management
-import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
-
-// Function - createEngagementEvent
+// Function to create an engagement event
 export function createEngagementEvent(
     eventName: string,
     eventCategory?: string,
@@ -64,6 +65,15 @@ export function createEngagementEvent(
     const sessionDurationInMilliseconds = sessionManager.getSessionDurationInMilliseconds();
     // console.log('📊 Session duration for GraphQL:', sessionDuration);
 
+    // Get Meta attribution data
+    const metaAttributionData = getMetaAttributionForEvents();
+
+    // Merge Meta attribution data with event-specific data
+    const mergedAdditionalData = {
+        ...metaAttributionData,
+        ...(eventSpecificData || {}),
+    };
+
     // Perform the mutation
     apolloClient.mutate({
         mutation: EngagementEventCreateDocument,
@@ -85,7 +95,7 @@ export function createEngagementEvent(
                     viewTitle: viewTitle,
                     referrer: document.referrer || undefined,
                     sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
-                    additionalData: eventSpecificData || undefined,
+                    additionalData: Object.keys(mergedAdditionalData).length > 0 ? mergedAdditionalData : undefined,
                     loggedAt: new Date().toISOString(),
                 },
             },
