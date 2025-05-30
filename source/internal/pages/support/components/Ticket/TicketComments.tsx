@@ -82,12 +82,12 @@ export function TicketComments(properties: TicketCommentsInterface) {
 
     // Render the component
     return (
-        <div className={`flex flex-col flex-1 overflow-hidden ${isAgentViewer && 'p-10'}`}>
+        <div className={`flex flex-1 flex-col overflow-hidden ${isAgentViewer && 'p-10 pb-0'}`}>
             <ScrollArea className="flex flex-grow" ref={commentsContainerReference}>
                 <div className="flex flex-grow flex-col justify-end">
                     <div className="flex flex-col space-y-4">
                         {comments
-                            .filter(comment => showInternalComments || comment.visibility !== 'Internal')
+                            .filter((comment) => showInternalComments || comment.visibility !== 'Internal')
                             .map((comment, index) => {
                                 const messageDate = formatDateToTodayYesterdayOrDate(new Date(comment.createdAt));
                                 const shouldRenderDate = lastRenderedDate !== messageDate;
@@ -104,48 +104,61 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                         ? 'justify-end items-end'
                                         : 'justify-start items-start'
                                     : isUserComment
-                                    ? 'justify-end items-end'
-                                    : 'justify-start items-start';
+                                      ? 'justify-end items-end'
+                                      : 'justify-start items-start';
 
                                 const textAlignmentClasses = isAgentViewer
                                     ? isUserComment
                                         ? 'ml-4 text-left'
                                         : 'mr-4 text-right justify-end'
                                     : isAgentComment
-                                        ? 'ml-4 text-left'
-                                        : 'mr-4 text-right';
+                                      ? 'ml-4 text-left'
+                                      : 'mr-4 text-right';
 
                                 const backgroundColorClasses = isAgentViewer
                                     ? isAgentComment
                                         ? 'bg-blue text-light dark:bg-blue rounded-br-none'
                                         : 'bg-light-1 dark:bg-dark-2 rounded-bl-none'
                                     : isUserComment
-                                    ? 'bg-blue text-light dark:bg-blue rounded-br-none'
-                                    : 'bg-light-1 dark:bg-dark-2 rounded-bl-none';
+                                      ? 'bg-blue text-light dark:bg-blue rounded-br-none'
+                                      : 'bg-light-1 dark:bg-dark-2 rounded-bl-none';
 
                                 return (
-                                    <div key={comment.id}>
+                                    <div key={comment.id} className="last:pb-4">
                                         {shouldRenderDate && (
-                                            <div className={`flex justify-center text-xs font-medium ${index !== 0 && 'mt-6'}`}>
+                                            <div
+                                                className={`flex justify-center text-xs font-medium ${
+                                                    index !== 0 && 'mt-6'
+                                                }`}
+                                            >
                                                 {messageDate}
                                             </div>
                                         )}
                                         {index === 0 && (
-                                            <div className="flex justify-center text-xs mt-2 mb-4">
-                                                Conversation started at {formatDateOnlyTime(new Date(comment.createdAt))}
+                                            <div className="mb-4 mt-2 flex justify-center text-xs">
+                                                Conversation started at{' '}
+                                                {formatDateOnlyTime(new Date(comment.createdAt))}
                                             </div>
                                         )}
                                         <div className={`flex ${alignmentClasses}`}>
-                                            <div className="flex flex-col">
-                                                <div className={`flex gap-2 dark:neutral my-2 text-xs ${textAlignmentClasses}`}>
+                                            <div className={`flex flex-col ${alignmentClasses}`}>
+                                                <div
+                                                    className={`dark:neutral my-2 flex gap-2 text-xs ${textAlignmentClasses}`}
+                                                >
                                                     {!(isUserViewer && isUserComment) && (
                                                         <div className="flex gap-2 text-xs font-medium">
                                                             {isUserComment ? (
-                                                                <>{properties.userFullName ?? properties.userEmailAddress}</>
+                                                                <>
+                                                                    {properties.userFullName ??
+                                                                        properties.userEmailAddress}
+                                                                </>
                                                             ) : (
                                                                 <>
                                                                     <Image
-                                                                        src={ProjectSettings.assets.favicon.light.location}
+                                                                        src={
+                                                                            ProjectSettings.assets.favicon.light
+                                                                                .location
+                                                                        }
                                                                         alt="Logo"
                                                                         height={16} // h-7 = 28px
                                                                         width={16} // h-7 = 28px
@@ -153,7 +166,9 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                                                         className="dark:hidden"
                                                                     />
                                                                     <Image
-                                                                        src={ProjectSettings.assets.favicon.dark.location}
+                                                                        src={
+                                                                            ProjectSettings.assets.favicon.dark.location
+                                                                        }
                                                                         alt="Logo"
                                                                         height={16}
                                                                         width={16}
@@ -168,7 +183,9 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                                     {formatDateToTimeWithTodayOrYesterday(new Date(comment.createdAt))}
                                                 </div>
                                                 {!!commentContent && (
-                                                    <div className={`min-w-96 max-w-[80%] rounded-lg p-4 text-xs ${backgroundColorClasses}`}>
+                                                    <div
+                                                        className={`max-w-[80%] rounded-lg p-4 text-xs ${backgroundColorClasses}`}
+                                                    >
                                                         <p className="whitespace-pre-wrap">{commentContent}</p>
                                                     </div>
                                                 )}
@@ -182,8 +199,7 @@ export function TicketComments(properties: TicketCommentsInterface) {
                                         />
                                     </div>
                                 );
-                            })
-                        }
+                            })}
                     </div>
                 </div>
             </ScrollArea>

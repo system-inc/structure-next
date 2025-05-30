@@ -6,18 +6,7 @@ import ProjectSettings from '@project/ProjectSettings';
 
 // Dependencies - Forms and Validation
 import { useForm } from 'react-hook-form';
-import {
-    object,
-    string,
-    array,
-    instance,
-    optional,
-    mimeType,
-    maxSize,
-    minLength,
-    pipe,
-    InferOutput
-  } from 'valibot';
+import { object, string, array, instance, optional, mimeType, maxSize, minLength, pipe, InferOutput } from 'valibot';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 
 // Dependencies - Main Components
@@ -28,18 +17,20 @@ import {
     SupportTicketsPrivilegedQuery,
     SupportTicketCommentCreateInput,
     RichContentFormat,
-    SupportTicketCommentVisibility
+    SupportTicketCommentVisibility,
 } from '@project/source/api/GraphQlGeneratedCode';
 
 const TicketMessageFormSchema = object({
     reply: pipe(string('Reply is required.'), minLength(1, 'Reply cannot be empty.')),
-    attachments: optional(array(
-        pipe(
-            instance(File),
-            mimeType(['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/json']),
-            maxSize(5 * 1024 * 1024, 'The file cannot be larger than 5MB.')
-        )
-    )),
+    attachments: optional(
+        array(
+            pipe(
+                instance(File),
+                mimeType(['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/json']),
+                maxSize(5 * 1024 * 1024, 'The file cannot be larger than 5MB.'),
+            ),
+        ),
+    ),
 });
 type TicketMessageFormValues = InferOutput<typeof TicketMessageFormSchema>;
 
@@ -62,7 +53,11 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
     // const [uploadProgress, setUploadProgress] = React.useState<number | null>(null);
     const [shouldResetEditor, setShouldResetEditor] = React.useState(false);
 
-    const { handleSubmit, setValue, formState: { errors } } = useForm<TicketMessageFormValues>({
+    const {
+        handleSubmit,
+        setValue,
+        formState: { errors },
+    } = useForm<TicketMessageFormValues>({
         resolver: valibotResolver(TicketMessageFormSchema),
         mode: 'onSubmit',
         defaultValues: {
@@ -72,14 +67,12 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
 
     const handleEditorChange = ({ markdown }: { markdown: string }) => {
         setValue('reply', markdown, { shouldValidate: true });
-    }
+    };
 
     const handleSaveFiles = (files: File[]) => {
         setAttachedFiles((prev) => {
             const newFiles = files.filter(
-                (file) => !prev.some(
-                    (existing) => existing.name === file.name && existing.size === file.size
-                )
+                (file) => !prev.some((existing) => existing.name === file.name && existing.size === file.size),
             );
             const updatedFiles = [...prev, ...newFiles];
             setValue('attachments', updatedFiles, { shouldValidate: true });
@@ -103,8 +96,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
         setFormSubmitted(false);
         setIsSubmitting(false);
         setShouldResetEditor(true);
-    }
-
+    };
 
     async function handleSubmitForm(formValues: TicketMessageFormValues) {
         const hasAttachments = attachedFiles.length > 0;
@@ -119,8 +111,8 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
 
         try {
             setIsSubmitting(true);
-            
-            if (hasAttachments) {
+
+            if(hasAttachments) {
                 const formData = new FormData();
                 formData.append('content', input.content);
                 formData.append('contentType', input.contentType);
@@ -131,25 +123,30 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
                     const filenameNoExt = file.name.replace(/\.[^/.]+$/, '');
                     formData.append(filenameNoExt, file);
                 });
-    
-                const response = await fetch(`https://${ProjectSettings.apis.base.host}/support/${ticketIdentifier}/commentCreatePrivileged`, {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'include',
-                })
-    
-                if (!response.ok) {
+
+                const response = await fetch(
+                    `https://${ProjectSettings.apis.base.host}/support/${ticketIdentifier}/commentCreatePrivileged`,
+                    {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'include',
+                    },
+                );
+
+                if(!response.ok) {
                     throw new Error(`Error uploading files: ${response.status} - ${response.statusText}`);
                 }
 
                 properties.refetchTickets();
-            } else {
+            }
+            else {
                 await properties.onTicketCommentCreate(input);
             }
 
             handleSuccess();
             return { success: true };
-        } catch (error) {
+        }
+        catch(error) {
             console.log('Error:', error);
             // Display toast error message to user
         } finally {
@@ -166,7 +163,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
                 setFormSubmitted(true);
                 handleSubmitForm(formValues);
             })}
-            className="p-10"
+            className="p-10 pt-0"
         >
             <RichTextEditor
                 type="markdown"
@@ -180,9 +177,7 @@ export function TicketMessageForm(properties: TicketMessageFormInterface) {
                 shouldReset={shouldResetEditor}
                 onResetComplete={() => setShouldResetEditor(false)}
             />
-            {formSubmitted && errors.reply && (
-                <p className="text-red-500 text-sm mt-2">{errors.reply.message}</p>
-            )}
+            {formSubmitted && errors.reply && <p className="mt-2 text-sm text-red-500">{errors.reply.message}</p>}
         </form>
     );
 }
