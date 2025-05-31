@@ -13,7 +13,7 @@ import { EngagementContainer } from '@structure/source/modules/engagement/Engage
 // Dependencies - Utilities
 import { createEngagementEvent } from '@structure/source/modules/engagement/createEngagementEvent';
 import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
-import { initializeMetaAttribution } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
+import { initializeThirdPartyAttribution } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
 
 // Context - Engagement
 interface EngagementContextInterface {
@@ -72,8 +72,8 @@ export function EngagementProvider(properties: EngagementProviderInterface) {
 
             // console.log('Current page:', urlPath);
 
-            // Initialize Meta attribution tracking
-            initializeMetaAttribution(urlSearchParameters);
+            // Initialize third-party attribution tracking
+            initializeThirdPartyAttribution(urlSearchParameters);
 
             // Get the view load time in milliseconds
             if(performance && performance.getEntriesByType && engagementEventsSentReference.current === 0) {

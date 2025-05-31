@@ -5,6 +5,9 @@ import ProjectSettings from '@project/ProjectSettings';
 const metaFbcKey = ProjectSettings.identifier + 'EngagementMetaFbc';
 const metaFbpKey = ProjectSettings.identifier + 'EngagementMetaFbp';
 
+// X Attribution Constants
+const xTwclidKey = ProjectSettings.identifier + 'EngagementXTwclid';
+
 function getSubdomainIndex(): number {
     const parts = window.location.hostname.split('.');
     return Math.max(parts.length - 1, 0);
@@ -36,7 +39,7 @@ function createMetaFbpIfMissing(): string {
 }
 
 // Function to handle fbclid and create/update fbc
-function handleFbclid(fbclid: string): string {
+function handleMetaFbclid(fbclid: string): string {
     const timestamp = Date.now();
     const subdomainIndex = getSubdomainIndex();
     const fbc = `fb.${subdomainIndex}.${timestamp}.${fbclid}`;
@@ -47,6 +50,14 @@ function handleFbclid(fbclid: string): string {
     return fbc;
 }
 
+// Function to handle twclid and store X attribution
+function handleXTwclid(twclid: string): string {
+    // Store the twclid as-is in localStorage
+    localStorage.setItem(xTwclidKey, twclid);
+
+    return twclid;
+}
+
 // Function to get current Meta attribution data
 function getMetaAttributionData(): { fbc?: string; fbp?: string } {
     const fbc = localStorage.getItem(metaFbcKey) || undefined;
@@ -55,41 +66,60 @@ function getMetaAttributionData(): { fbc?: string; fbp?: string } {
     return { fbc, fbp };
 }
 
-// Function to initialize Meta attribution from URL parameters
-export function initializeMetaAttribution(urlSearchParameters: URLSearchParams | null): void {
+// Function to get current X/Twitter attribution data
+function getXAttributionData(): { twclid?: string } {
+    const twclid = localStorage.getItem(xTwclidKey) || undefined;
+    return { twclid };
+}
+
+// Function to initialize third-party attribution from URL parameters
+export function initializeThirdPartyAttribution(urlSearchParameters: URLSearchParams | null): void {
     // Return early if not in browser
     if(typeof window !== 'object') {
         return;
     }
 
-    // Always ensure fbp exists (create once, store forever)
+    // Always ensure Meta fbp exists (create once, store forever)
     createMetaFbpIfMissing();
 
-    // Check for fbclid in URL parameters
+    // Check for Meta fbclid in URL parameters
     const fbclid = urlSearchParameters?.get('fbclid');
     if(fbclid) {
         // Handle new Meta ad click - update fbc
-        handleFbclid(fbclid);
+        handleMetaFbclid(fbclid);
     }
     // If no fbclid, leave existing fbc untouched
+
+    // Check for twclid in URL parameters
+    const twclid = urlSearchParameters?.get('twclid');
+    if(twclid) {
+        // Handle new X ad click - store twclid
+        handleXTwclid(twclid);
+    }
 }
 
-// Function to get Meta attribution data for engagement events
-export function getMetaAttributionForEvents(): Record<string, unknown> {
+// Function to get third-party attribution data for engagement events
+export function getThirdPartyAttributionForEvents(): Record<string, unknown> {
+    // Meta
     const { fbc, fbp } = getMetaAttributionData();
-    const meta: Record<string, unknown> = {};
 
-    if(fbc) {
-        meta.fbc = fbc;
-    }
-    if(fbp) {
-        meta.fbp = fbp;
+    // X
+    const { twclid } = getXAttributionData();
+
+    const attributionData: Record<string, unknown> = {};
+
+    // Add meta object if we have Meta attribution data
+    if(fbc || fbp) {
+        const meta: Record<string, unknown> = {};
+        if(fbc) meta.fbc = fbc;
+        if(fbp) meta.fbp = fbp;
+        attributionData.meta = meta;
     }
 
-    // Only return meta object if we have attribution data
-    if(Object.keys(meta).length > 0) {
-        return { meta };
+    // Add x object if we have X attribution data
+    if(twclid) {
+        attributionData.x = { twclid };
     }
 
-    return {};
+    return attributionData;
 }
