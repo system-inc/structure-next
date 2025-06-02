@@ -219,6 +219,11 @@ export const InternalNavigationLinks: InternalNavigationLinkInterface[] = [
                 title: 'Automations',
                 href: '/internal/marketing/automations',
             },
+            // Social Media Page
+            {
+                title: 'Social Media',
+                href: '/internal/marketing/social-media',
+            },
         ],
     },
     // Discounts Group
