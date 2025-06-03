@@ -1,0 +1,168 @@
+query GetSocialResponse($id: String!) {
+    socialResponse(id: $id) {
+        id
+        text
+        status
+        postUrl
+        platformPostId
+        postedAt
+        error
+        metadata
+        model
+        modelProvider
+        generatedAt
+        createdAt
+        updatedAt
+        mention {
+            id
+            platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
+        }
+    }
+}
+
+query GetSocialResponses($pagination: PaginationInput!) {
+    socialResponses(pagination: $pagination) {
+        items {
+            id
+            text
+            status
+            postUrl
+            platformPostId
+            postedAt
+            error
+            metadata
+            model
+            modelProvider
+            generatedAt
+            createdAt
+            updatedAt
+            mention {
+                id
+                platform
+                mentionPost {
+                    postedAt
+                    postUrl
+                    text
+                }
+            }
+        }
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+            pagesTotal
+            page
+        }
+    }
+}
+
+query SocialMediaPlatformSettings($platform: SocialMediaPlatform!) {
+    socialMediaPlatformSettings(platform: $platform) {
+        responseBotEnabled
+        responseSystemPrompt
+        responseModel
+        responseTemperature
+        lastPullAt
+        additionalSettings
+    }
+}
+
+mutation CreateSocialMediaPlatformSettings($input: CreateSocialMediaPlatformSettingsInput!) {
+    socialMediaPlatformSettingsCreate(input: $input) {
+        success
+    }
+}
+
+mutation UpdateSocialMediaPlatformSettings($input: UpdateSocialMediaPlatformSettingsInput!) {
+    socialMediaPlatformSettingsUpdate(input: $input) {
+        success
+    }
+}
+
+mutation ApproveSocialResponse($id: String!) {
+    socialResponseApprove(id: $id) {
+        id
+        text
+        status
+        postUrl
+        platformPostId
+        postedAt
+        error
+        metadata
+        model
+        modelProvider
+        generatedAt
+        createdAt
+        updatedAt
+        mention {
+            id
+            platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
+        }
+    }
+}
+
+mutation RejectSocialResponse($id: String!) {
+    socialResponseReject(id: $id) {
+        id
+        text
+        status
+        postUrl
+        platformPostId
+        postedAt
+        error
+        metadata
+        model
+        modelProvider
+        generatedAt
+        createdAt
+        updatedAt
+        mention {
+            id
+            platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
+        }
+    }
+}
+
+mutation UpdateSocialResponse($input: UpdateSocialResponseInput!) {
+    socialResponseUpdate(input: $input) {
+        id
+        text
+        status
+        postUrl
+        platformPostId
+        postedAt
+        error
+        metadata
+        model
+        modelProvider
+        generatedAt
+        createdAt
+        updatedAt
+        mention {
+            id
+            platform
+            mentionPost {
+                postedAt
+                postUrl
+                text
+            }
+        }
+    }
+}

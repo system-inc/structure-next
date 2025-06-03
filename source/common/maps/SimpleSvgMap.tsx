@@ -65,7 +65,7 @@ export function SimpleSvgMap(properties: SimpleSvgMapInterface) {
             {points.map(function (point, index) {
                 // Adjusted and clamped Mercator Projection
                 const { x, y } = getCoordinates(point.latitude, point.longitude);
-                console.log(x, y, point.title);
+                // console.log(x, y, point.title);
 
                 return (
                     <Tip

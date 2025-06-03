@@ -855,3 +855,19 @@ query CommerceOrdersPrivileged($pagination: PaginationInput!) {
         }
     }
 }
+
+# Commerce Orders Privileged Chart Query
+query CommerceOrdersPrivilegedChart($pagination: PaginationInput!) {
+    commerceOrdersPrivileged(pagination: $pagination) {
+        items {
+            createdAt
+        }
+        pagination {
+            itemIndex
+            itemIndexForPreviousPage
+            itemIndexForNextPage
+            itemsPerPage
+            itemsTotal
+        }
+    }
+}

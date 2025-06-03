@@ -13,8 +13,8 @@ mutation EngagementEventsCreate($input: [CreateEngagementEventInput!]!) {
 }
 
 # Engagement Overview Query
-query EngagementOverview {
-    engagementOverview {
+query EngagementOverview($input: EngagementOverviewInput) {
+    engagementOverview(input: $input) {
         uniqueDeviceIds
         views {
             uniqueDeviceCount
@@ -25,6 +25,10 @@ query EngagementOverview {
             countryCode
             latitude
             longitude
+        }
+        referrers {
+            referrer
+            uniqueDeviceCount
         }
         deviceCategoryPercentages
     }
