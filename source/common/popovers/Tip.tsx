@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixTooltip from '@radix-ui/react-tooltip';
-import { PopoverProperties, popoverClassName } from '@structure/source/common/popovers/Popover';
+import { PopoverProperties, PopoverVariants } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -78,7 +78,7 @@ export function Tip(properties: TipProperties) {
                         'data-[state=instant-open]:animate-in data-[state=instant-open]:fade-in-0 data-[state=instant-open]:zoom-in-95',
                         // State delayed-open is specific to Tip
                         'data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
-                        popoverClassName,
+                        PopoverVariants.default,
                         // This was previously set to z-50 but the tips were showing through the dialog overlay
                         // This is now set to 40 to ensure the tooltip is below the dialog overlay
                         'z-40',
