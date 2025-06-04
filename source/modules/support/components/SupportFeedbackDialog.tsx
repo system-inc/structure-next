@@ -2,7 +2,7 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-// import { useUrlPath } from '@structure/source/utilities/next/NextNavigation';
+// import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

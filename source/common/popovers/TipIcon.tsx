@@ -33,7 +33,7 @@ export const TipIconContentVariants = {
 };
 
 // Component - TipIcon
-export interface TipIconProperties extends Omit<PopoverProperties, 'children'> {
+export interface TipIconProperties extends Omit<PopoverProperties, 'children' | 'variant'> {
     variant?: keyof typeof TipIconVariants;
     contentVariant?: keyof typeof TipIconContentVariants;
     icon?:
