@@ -10,22 +10,26 @@ import * as RadixPopover from '@radix-ui/react-popover';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { wrapForSlot } from '@structure/source/utilities/React';
 
-// Class Names - Popover
-export const popoverClassName =
-    // Focus
-    `outline-none ` +
-    // Background and text
-    `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
-    // Border
-    `rounded-small border border-light-4 dark:border-dark-4 ` +
-    // Animations
-    `data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 ` +
-    // Base width and height
-    `w-full`;
+// Variants - Popover
+export const PopoverVariants = {
+    // Default variant
+    default:
+        // Focus
+        `outline-none ` +
+        // Background and text
+        `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
+        // Border
+        `rounded-small border border-light-4 dark:border-dark-4 ` +
+        // Base width and height
+        `w-full`,
+    // Unstyled variant
+    unstyled: ``,
+};
 
 // Component - Popover
 export interface PopoverProperties {
     children?: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
+    variant?: keyof typeof PopoverVariants;
     content: React.ReactNode;
     className?: string;
     side?: 'top' | 'bottom' | 'left' | 'right';
@@ -44,6 +48,9 @@ export interface PopoverProperties {
     tabIndex?: number;
 }
 export function Popover(properties: PopoverProperties) {
+    // Defaults
+    const variant = properties.variant || 'default';
+
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 
@@ -110,11 +117,13 @@ export function Popover(properties: PopoverProperties) {
                 onOpenAutoFocus={properties.onOpenAutoFocus}
                 tabIndex={properties.tabIndex ?? 1}
                 className={mergeClassNames(
-                    popoverClassName,
+                    PopoverVariants[variant],
                     // State open is specific to Popover
                     'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
                     // Side bottom is specific to Popover
                     'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+                    // Closed animation
+                    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
                     // This was previously set to z-50 but the tips were showing through the dialog overlay
                     // This is now set to 40 to ensure the tooltip is below the dialog overlay
                     'z-40',
