@@ -92,7 +92,7 @@ export function createEngagementEvent(
                 },
                 eventContext: {
                     viewIdentifier: viewIdentifier,
-                    viewTitle: viewTitle,
+                    viewTitle: viewTitle || null,
                     referrer: document.referrer || undefined,
                     sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
                     additionalData: Object.keys(mergedAdditionalData).length > 0 ? mergedAdditionalData : undefined,
