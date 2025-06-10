@@ -8,6 +8,9 @@ const metaFbpKey = ProjectSettings.identifier + 'EngagementMetaFbp';
 // X Attribution Constants
 const xTwclidKey = ProjectSettings.identifier + 'EngagementXTwclid';
 
+// Reddit Attribution Constants
+const redditRdtCidKey = ProjectSettings.identifier + 'EngagementRedditRdtCid';
+
 function getSubdomainIndex(): number {
     const parts = window.location.hostname.split('.');
     return Math.max(parts.length - 1, 0);
@@ -58,6 +61,14 @@ function handleXTwclid(twclid: string): string {
     return twclid;
 }
 
+// Function to handle rdt_cid and store Reddit attribution
+function handleRedditRdtCid(rdtCid: string): string {
+    // Store the rdt_cid as-is in localStorage
+    localStorage.setItem(redditRdtCidKey, rdtCid);
+
+    return rdtCid;
+}
+
 // Function to get current Meta attribution data
 function getMetaAttributionData(): { fbc?: string; fbp?: string } {
     const fbc = localStorage.getItem(metaFbcKey) || undefined;
@@ -70,6 +81,12 @@ function getMetaAttributionData(): { fbc?: string; fbp?: string } {
 function getXAttributionData(): { twclid?: string } {
     const twclid = localStorage.getItem(xTwclidKey) || undefined;
     return { twclid };
+}
+
+// Function to get current Reddit attribution data
+function getRedditAttributionData(): { rdt_cid?: string } {
+    const rdt_cid = localStorage.getItem(redditRdtCidKey) || undefined;
+    return { rdt_cid };
 }
 
 // Function to initialize third-party attribution from URL parameters
@@ -96,6 +113,13 @@ export function initializeThirdPartyAttribution(urlSearchParameters: URLSearchPa
         // Handle new X ad click - store twclid
         handleXTwclid(twclid);
     }
+
+    // Check for rdt_cid in URL parameters
+    const rdtCid = urlSearchParameters?.get('rdt_cid');
+    if(rdtCid) {
+        // Handle new Reddit ad click - store rdt_cid
+        handleRedditRdtCid(rdtCid);
+    }
 }
 
 // Function to get third-party attribution data for engagement events
@@ -105,6 +129,9 @@ export function getThirdPartyAttributionForEvents(): Record<string, unknown> {
 
     // X
     const { twclid } = getXAttributionData();
+
+    // Reddit
+    const { rdt_cid } = getRedditAttributionData();
 
     const attributionData: Record<string, unknown> = {};
 
@@ -119,6 +146,11 @@ export function getThirdPartyAttributionForEvents(): Record<string, unknown> {
     // Add x object if we have X attribution data
     if(twclid) {
         attributionData.x = { twclid };
+    }
+
+    // Add reddit object if we have Reddit attribution data
+    if(rdt_cid) {
+        attributionData.reddit = { rdt_cid };
     }
 
     return attributionData;
