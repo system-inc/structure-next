@@ -75,6 +75,7 @@ union FormComponent =
     | FormComponentDataLinearScale
     | FormComponentDataMultipleChoice
     | FormComponentDataMultipleChoiceGrid
+    | FormComponentDataNumber
     | FormComponentDataParagraph
     | FormComponentDataRating
     | FormComponentDataSectionHeader
@@ -190,6 +191,20 @@ type FormComponentDataMultipleChoiceGrid {
     type: FormComponentType!
 }
 
+type FormComponentDataNumber {
+    allowFloat: Boolean
+    description: String
+    id: String!
+    max: Decimal
+    metadata: JSON
+    min: Decimal
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
 type FormComponentDataParagraph {
     description: String
     id: String!
@@ -278,6 +293,7 @@ enum FormComponentType {
     LinearScale
     MultipleChoice
     MultipleChoiceGrid
+    Number
     Paragraph
     Rating
     SectionHeader

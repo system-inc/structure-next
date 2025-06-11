@@ -11,8 +11,8 @@ import { useUrlPath, useUrlSearchParameters } from '@structure/source/router/Nav
 import { EngagementContainer } from '@structure/source/modules/engagement/EngagementContainer';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { EngagementEventCreateDocument, DeviceOrientation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+// import { useMutation } from '@apollo/client';
+// import { EngagementEventCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 // Dependencies - Utilities
 import { createEngagementEvent } from '@structure/source/modules/engagement/createEngagementEvent';
 import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
@@ -35,7 +35,7 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
     // Hooks
     const urlPath = useUrlPath() ?? '';
     const urlSearchParameters = useUrlSearchParameters();
-    const [engagementEventCreateMutation] = useMutation(EngagementEventCreateDocument);
+    // const [engagementEventCreateMutation] = useMutation(EngagementEventCreateDocument);
 
     // References
     const engagementEventsSentReference = React.useRef(0);

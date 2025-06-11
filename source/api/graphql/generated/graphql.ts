@@ -763,6 +763,15 @@ export type CreateProductVariantInput = {
     taxCode?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateSocialMediaPlatformSettingsInput = {
+    additionalSettings?: InputMaybe<Scalars['JSON']['input']>;
+    platform: SocialMediaPlatform;
+    responseBotEnabled: Scalars['Boolean']['input'];
+    responseModel?: InputMaybe<Scalars['String']['input']>;
+    responseSystemPrompt: Scalars['String']['input'];
+    responseTemperature?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type CreateVendorInput = {
     description?: InputMaybe<Scalars['String']['input']>;
     identifier?: InputMaybe<Scalars['String']['input']>;
@@ -1361,16 +1370,12 @@ export type EngagementEvent = {
 };
 
 export type EngagementEventContextInput = {
-    loadDurationInMilliseconds?: InputMaybe<Scalars['Int']['input']>;
+    additionalData?: InputMaybe<Scalars['JSON']['input']>;
     loggedAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
-    previousViewDurationInMilliseconds?: InputMaybe<Scalars['Int']['input']>;
-    previousViewIdentifier?: InputMaybe<Scalars['String']['input']>;
-    previousViewTitle?: InputMaybe<Scalars['String']['input']>;
     referrer?: InputMaybe<Scalars['String']['input']>;
     sessionDurationInMilliseconds?: InputMaybe<Scalars['Int']['input']>;
     traceId?: InputMaybe<Scalars['String']['input']>;
     traceSequenceNumber?: InputMaybe<Scalars['Int']['input']>;
-    viewDurationInMilliseconds?: InputMaybe<Scalars['Int']['input']>;
     viewIdentifier?: InputMaybe<Scalars['String']['input']>;
     viewTitle?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1385,15 +1390,22 @@ export type EngagementLocationOverview = {
 
 export type EngagementOverview = {
     __typename?: 'EngagementOverview';
-    deviceCategoryPercentages: Scalars['JSON']['output'];
+    deviceCategoryPercentages?: Maybe<Scalars['JSON']['output']>;
     locations: Array<EngagementLocationOverview>;
+    referrers?: Maybe<Array<EngagementReferrerOverview>>;
     uniqueDeviceIds: Scalars['Int']['output'];
-    views: Array<EngagementViewOverview>;
+    views?: Maybe<Array<EngagementViewOverview>>;
 };
 
 export type EngagementOverviewInput = {
     endTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
     startTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
+};
+
+export type EngagementReferrerOverview = {
+    __typename?: 'EngagementReferrerOverview';
+    referrer?: Maybe<Scalars['String']['output']>;
+    uniqueDeviceCount: Scalars['Int']['output'];
 };
 
 export type EngagementViewOverview = {
@@ -1475,6 +1487,7 @@ export type FormComponent =
     | FormComponentDataLinearScale
     | FormComponentDataMultipleChoice
     | FormComponentDataMultipleChoiceGrid
+    | FormComponentDataNumber
     | FormComponentDataParagraph
     | FormComponentDataRating
     | FormComponentDataSectionHeader
@@ -1597,6 +1610,21 @@ export type FormComponentDataMultipleChoiceGrid = {
     type: FormComponentType;
 };
 
+export type FormComponentDataNumber = {
+    __typename?: 'FormComponentDataNumber';
+    allowFloat?: Maybe<Scalars['Boolean']['output']>;
+    description?: Maybe<Scalars['String']['output']>;
+    id: Scalars['String']['output'];
+    max?: Maybe<Scalars['Decimal']['output']>;
+    metadata?: Maybe<Scalars['JSON']['output']>;
+    min?: Maybe<Scalars['Decimal']['output']>;
+    position: Scalars['Int']['output'];
+    required: Scalars['Boolean']['output'];
+    section: Scalars['Int']['output'];
+    title?: Maybe<Scalars['String']['output']>;
+    type: FormComponentType;
+};
+
 export type FormComponentDataParagraph = {
     __typename?: 'FormComponentDataParagraph';
     description?: Maybe<Scalars['String']['output']>;
@@ -1689,6 +1717,7 @@ export enum FormComponentType {
     LinearScale = 'LinearScale',
     MultipleChoice = 'MultipleChoice',
     MultipleChoiceGrid = 'MultipleChoiceGrid',
+    Number = 'Number',
     Paragraph = 'Paragraph',
     Rating = 'Rating',
     SectionHeader = 'SectionHeader',
@@ -1924,6 +1953,11 @@ export type Mutation = {
     productVariantRemoveGalleryAsset: ProductVariant;
     productVariantReorderGallery: ProductVariant;
     sendEmail: Scalars['String']['output'];
+    socialMediaPlatformSettingsCreate: OperationResult;
+    socialMediaPlatformSettingsUpdate: OperationResult;
+    socialResponseApprove: SocialResponse;
+    socialResponseReject: SocialResponse;
+    socialResponseUpdate: SocialResponse;
     submitForm: FormUserData;
     supportTicketAssign: SupportTicket;
     supportTicketCommentCreatePrivileged: SupportTicketComment;
@@ -2334,6 +2368,26 @@ export type MutationSendEmailArgs = {
     data: SendEmailInput;
 };
 
+export type MutationSocialMediaPlatformSettingsCreateArgs = {
+    input: CreateSocialMediaPlatformSettingsInput;
+};
+
+export type MutationSocialMediaPlatformSettingsUpdateArgs = {
+    input: UpdateSocialMediaPlatformSettingsInput;
+};
+
+export type MutationSocialResponseApproveArgs = {
+    id: Scalars['String']['input'];
+};
+
+export type MutationSocialResponseRejectArgs = {
+    id: Scalars['String']['input'];
+};
+
+export type MutationSocialResponseUpdateArgs = {
+    input: UpdateSocialResponseInput;
+};
+
 export type MutationSubmitFormArgs = {
     data: Scalars['JSON']['input'];
     emailAddress?: InputMaybe<Scalars['String']['input']>;
@@ -2379,6 +2433,7 @@ export type MutationWaitListEntryCreateArgs = {
 export type MutationWaitListEntryDeleteArgs = {
     emailAddress?: InputMaybe<Scalars['String']['input']>;
     id?: InputMaybe<Scalars['String']['input']>;
+    reason?: InputMaybe<Scalars['String']['input']>;
     waitListIdentifier?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -2507,6 +2562,12 @@ export type PagedPostRevisions = {
 export type PagedPosts = {
     __typename?: 'PagedPosts';
     items: Array<Post>;
+    pagination: Pagination;
+};
+
+export type PagedSocialResponses = {
+    __typename?: 'PagedSocialResponses';
+    items: Array<SocialResponse>;
     pagination: Pagination;
 };
 
@@ -3177,6 +3238,9 @@ export type Query = {
     postsMine: PagedPosts;
     postsPrivileged: PagedPosts;
     queryOrderPrice: QueryCommerceOrderPriceResult;
+    socialMediaPlatformSettings: SocialMediaPlatformSettings;
+    socialResponse: SocialResponse;
+    socialResponses: PagedSocialResponses;
     supportAllSupportProfiles: Array<PublicProfile>;
     supportTickets: PaginationSupportTicketResult;
     supportTicketsPrivileged: PaginationSupportTicketResult;
@@ -3480,6 +3544,18 @@ export type QueryQueryOrderPriceArgs = {
     input: QueryCommerceOrderPriceInput;
 };
 
+export type QuerySocialMediaPlatformSettingsArgs = {
+    platform: SocialMediaPlatform;
+};
+
+export type QuerySocialResponseArgs = {
+    id: Scalars['String']['input'];
+};
+
+export type QuerySocialResponsesArgs = {
+    pagination: PaginationInput;
+};
+
 export type QuerySupportTicketsArgs = {
     pagination: PaginationInput;
 };
@@ -3639,6 +3715,105 @@ export enum ShippingServiceType {
     UspsParcelSelect = 'USPSParcelSelect',
     UspsPriorityMail = 'USPSPriorityMail',
     UspsPriorityMailExpress = 'USPSPriorityMailExpress',
+}
+
+/** The social platform */
+export enum SocialMediaPlatform {
+    Reddit = 'Reddit',
+    XTwitter = 'XTwitter',
+}
+
+export type SocialMediaPlatformSettings = {
+    __typename?: 'SocialMediaPlatformSettings';
+    additionalSettings?: Maybe<Scalars['JSON']['output']>;
+    createdAt: Scalars['DateTimeISO']['output'];
+    createdByAccountId: Scalars['String']['output'];
+    createdByProfileId: Scalars['String']['output'];
+    id: Scalars['String']['output'];
+    lastPullAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    platform: SocialMediaPlatform;
+    responseBotEnabled: Scalars['Boolean']['output'];
+    responseModel?: Maybe<Scalars['String']['output']>;
+    responseSystemPrompt: Scalars['String']['output'];
+    responseTemperature?: Maybe<Scalars['Float']['output']>;
+    updatedAt: Scalars['DateTimeISO']['output'];
+    updatedByAccountId?: Maybe<Scalars['String']['output']>;
+    updatedByProfileId?: Maybe<Scalars['String']['output']>;
+};
+
+export type SocialMention = {
+    __typename?: 'SocialMention';
+    context?: Maybe<Scalars['JSON']['output']>;
+    createdAt: Scalars['DateTimeISO']['output'];
+    id: Scalars['String']['output'];
+    /** The post that mentioned us */
+    mentionPost?: Maybe<SocialPost>;
+    metadata?: Maybe<Scalars['JSON']['output']>;
+    platform: SocialMediaPlatform;
+    platformMentionPostId: Scalars['String']['output'];
+    posts: Array<SocialPost>;
+    status: SocialMentionStatus;
+    updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+/** Status of a social mention */
+export enum SocialMentionStatus {
+    Failed = 'Failed',
+    New = 'New',
+    Processing = 'Processing',
+    Responded = 'Responded',
+    Skipped = 'Skipped',
+}
+
+export type SocialPost = {
+    __typename?: 'SocialPost';
+    createdAt: Scalars['DateTimeISO']['output'];
+    id: Scalars['String']['output'];
+    metadata?: Maybe<Scalars['JSON']['output']>;
+    platform: SocialMediaPlatform;
+    platformParentPostId?: Maybe<Scalars['String']['output']>;
+    platformPostId: Scalars['String']['output'];
+    platformThreadId: Scalars['String']['output'];
+    platformUserId: Scalars['String']['output'];
+    postUrl: Scalars['String']['output'];
+    postedAt: Scalars['DateTimeISO']['output'];
+    text: Scalars['String']['output'];
+    updatedAt: Scalars['DateTimeISO']['output'];
+};
+
+export type SocialResponse = {
+    __typename?: 'SocialResponse';
+    createdAt: Scalars['DateTimeISO']['output'];
+    error?: Maybe<Scalars['String']['output']>;
+    generatedAt: Scalars['DateTimeISO']['output'];
+    id: Scalars['String']['output'];
+    mention?: Maybe<SocialMention>;
+    mentionId: Scalars['String']['output'];
+    metadata: Scalars['JSON']['output'];
+    model: Scalars['String']['output'];
+    modelProvider: SocialResponseAiModelProvider;
+    platformPostId?: Maybe<Scalars['String']['output']>;
+    postUrl?: Maybe<Scalars['String']['output']>;
+    postedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    status: SocialResponseStatus;
+    text: Scalars['String']['output'];
+    updatedAt: Scalars['DateTimeISO']['output'];
+    updatedByAccountId?: Maybe<Scalars['String']['output']>;
+    updatedByProfileId?: Maybe<Scalars['String']['output']>;
+};
+
+/** Provider of the AI model */
+export enum SocialResponseAiModelProvider {
+    OpenAi = 'OpenAI',
+}
+
+/** Status of a social response */
+export enum SocialResponseStatus {
+    Approved = 'Approved',
+    Failed = 'Failed',
+    Pending = 'Pending',
+    Posted = 'Posted',
+    Rejected = 'Rejected',
 }
 
 export type StatusRecord = {
@@ -3837,6 +4012,21 @@ export type UpdateProductVariantInput = {
     sku?: InputMaybe<Scalars['String']['input']>;
     status?: InputMaybe<ProductVariantStatus>;
     taxCode?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateSocialMediaPlatformSettingsInput = {
+    additionalSettings?: InputMaybe<Scalars['JSON']['input']>;
+    platform: SocialMediaPlatform;
+    responseBotEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+    responseModel?: InputMaybe<Scalars['String']['input']>;
+    responseSystemPrompt?: InputMaybe<Scalars['String']['input']>;
+    responseTemperature?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateSocialResponseInput = {
+    id: Scalars['String']['input'];
+    metadata?: InputMaybe<Scalars['JSON']['input']>;
+    text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateVendorInput = {
@@ -4501,11 +4691,10 @@ export type CommerceOrdersByCheckoutSessionQuery = {
               lineItems?: Array<{
                   __typename?: 'CommerceOrderLineItem';
                   id: string;
+                  indexId: number;
                   status: CommerceOrderLineItemStatus;
                   productVariantId: string;
                   quantity: number;
-                  updatedAt: any;
-                  createdAt: any;
               }> | null;
               shippingInfo?: {
                   __typename?: 'CommerceOrderShippingInfo';
@@ -4561,6 +4750,12 @@ export type CommerceOrdersByCheckoutSessionQuery = {
                   __typename?: 'CommerceOrderDiscount';
                   amount: any;
                   code?: string | null;
+                  items?: Array<{
+                      __typename?: 'CommerceOrderLineItemDiscount';
+                      indexId: number;
+                      unitAmount?: any | null;
+                      amount: any;
+                  }> | null;
               }> | null;
           }
         | {
@@ -4573,6 +4768,7 @@ export type CommerceOrdersByCheckoutSessionQuery = {
               lineItems?: Array<{
                   __typename?: 'PublicCommerceOrderLineItem';
                   id: string;
+                  indexId: number;
                   status: CommerceOrderLineItemStatus;
                   productVariantId: string;
                   quantity: number;
@@ -4586,6 +4782,17 @@ export type CommerceOrdersByCheckoutSessionQuery = {
                   shippingRate: { __typename?: 'CommerceOrderShippingRate'; originalAmount: any; amount: any };
                   tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
               };
+              appliedDiscounts?: Array<{
+                  __typename?: 'CommerceOrderDiscount';
+                  amount: any;
+                  code?: string | null;
+                  items?: Array<{
+                      __typename?: 'CommerceOrderLineItemDiscount';
+                      indexId: number;
+                      unitAmount?: any | null;
+                      amount: any;
+                  }> | null;
+              }> | null;
           }
     >;
 };
@@ -4610,15 +4817,54 @@ export type CommerceOrdersQuery = {
             lineItems?: Array<{
                 __typename?: 'CommerceOrderLineItem';
                 id: string;
+                indexId: number;
                 status: CommerceOrderLineItemStatus;
                 productVariantId: string;
                 quantity: number;
             }> | null;
-            priceInfo: { __typename?: 'CommerceOrderPrice'; amount: any; originalSubtotal: any };
+            shipments?: Array<{
+                __typename?: 'Shipment';
+                id: string;
+                orderIndexId: number;
+                status: ShipmentStatus;
+                shippedAt?: any | null;
+                deliveredAt?: any | null;
+                cancelledAt?: any | null;
+                label?: {
+                    __typename?: 'ShippingLabel';
+                    carrier: string;
+                    serviceType: ShippingServiceType;
+                    trackingNumber: string;
+                    trackingUrl?: string | null;
+                } | null;
+                packageInfo: {
+                    __typename?: 'ShippingPackageInfo';
+                    items: Array<{ __typename?: 'ShippingPackageItem'; indexId: number; quantity: number }>;
+                };
+            }> | null;
+            priceInfo: {
+                __typename?: 'CommerceOrderPrice';
+                amount: any;
+                originalSubtotal: any;
+                lineItemPrices: Array<{
+                    __typename?: 'CommerceOrderLineItemPrice';
+                    indexId: number;
+                    originalSubtotal: any;
+                    originalUnitPrice?: any | null;
+                    subtotal: any;
+                    unitPrice?: any | null;
+                }>;
+            };
             appliedDiscounts?: Array<{
                 __typename?: 'CommerceOrderDiscount';
                 amount: any;
                 code?: string | null;
+                items?: Array<{
+                    __typename?: 'CommerceOrderLineItemDiscount';
+                    indexId: number;
+                    unitAmount?: any | null;
+                    amount: any;
+                }> | null;
             }> | null;
         }>;
         pagination: {
@@ -4736,11 +4982,25 @@ export type CommerceOrderQuery = {
                   amount: any;
                   shippingRate: { __typename?: 'CommerceOrderShippingRate'; originalAmount: any; amount: any };
                   tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
+                  lineItemPrices: Array<{
+                      __typename?: 'CommerceOrderLineItemPrice';
+                      indexId: number;
+                      originalSubtotal: any;
+                      originalUnitPrice?: any | null;
+                      subtotal: any;
+                      unitPrice?: any | null;
+                  }>;
               };
               appliedDiscounts?: Array<{
                   __typename?: 'CommerceOrderDiscount';
                   amount: any;
                   code?: string | null;
+                  items?: Array<{
+                      __typename?: 'CommerceOrderLineItemDiscount';
+                      indexId: number;
+                      unitAmount?: any | null;
+                      amount: any;
+                  }> | null;
               }> | null;
           }
         | {
@@ -4753,6 +5013,7 @@ export type CommerceOrderQuery = {
               lineItems?: Array<{
                   __typename?: 'PublicCommerceOrderLineItem';
                   id: string;
+                  indexId: number;
                   status: CommerceOrderLineItemStatus;
                   productVariantId: string;
                   quantity: number;
@@ -4765,7 +5026,26 @@ export type CommerceOrderQuery = {
                   amount: any;
                   shippingRate: { __typename?: 'CommerceOrderShippingRate'; originalAmount: any; amount: any };
                   tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
+                  lineItemPrices: Array<{
+                      __typename?: 'CommerceOrderLineItemPrice';
+                      indexId: number;
+                      originalSubtotal: any;
+                      originalUnitPrice?: any | null;
+                      subtotal: any;
+                      unitPrice?: any | null;
+                  }>;
               };
+              appliedDiscounts?: Array<{
+                  __typename?: 'CommerceOrderDiscount';
+                  amount: any;
+                  code?: string | null;
+                  items?: Array<{
+                      __typename?: 'CommerceOrderLineItemDiscount';
+                      indexId: number;
+                      unitAmount?: any | null;
+                      amount: any;
+                  }> | null;
+              }> | null;
           };
 };
 
@@ -4924,6 +5204,26 @@ export type CommerceOrdersPrivilegedQuery = {
             itemIndex: number;
             itemIndexForNextPage?: number | null;
             itemIndexForPreviousPage?: number | null;
+        };
+    };
+};
+
+export type CommerceOrdersPrivilegedChartQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type CommerceOrdersPrivilegedChartQuery = {
+    __typename?: 'Query';
+    commerceOrdersPrivileged: {
+        __typename?: 'PaginationOrderResult';
+        items: Array<{ __typename?: 'CommerceOrder'; createdAt: any }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
         };
     };
 };
@@ -5088,19 +5388,21 @@ export type EngagementEventsCreateMutation = {
     engagementEventsCreate: { __typename?: 'OperationResult'; success: boolean };
 };
 
-export type EngagementOverviewQueryVariables = Exact<{ [key: string]: never }>;
+export type EngagementOverviewQueryVariables = Exact<{
+    input?: InputMaybe<EngagementOverviewInput>;
+}>;
 
 export type EngagementOverviewQuery = {
     __typename?: 'Query';
     engagementOverview: {
         __typename?: 'EngagementOverview';
         uniqueDeviceIds: number;
-        deviceCategoryPercentages: any;
-        views: Array<{
+        deviceCategoryPercentages?: any | null;
+        views?: Array<{
             __typename?: 'EngagementViewOverview';
             uniqueDeviceCount: number;
             viewIdentifier?: string | null;
-        }>;
+        }> | null;
         locations: Array<{
             __typename?: 'EngagementLocationOverview';
             uniqueDeviceCount: number;
@@ -5108,6 +5410,11 @@ export type EngagementOverviewQuery = {
             latitude?: string | null;
             longitude?: string | null;
         }>;
+        referrers?: Array<{
+            __typename?: 'EngagementReferrerOverview';
+            referrer?: string | null;
+            uniqueDeviceCount: number;
+        }> | null;
     };
 };
 
@@ -5227,6 +5534,19 @@ export type FormQuery = {
                   required: boolean;
                   columns: Array<string>;
                   rows: Array<string>;
+              }
+            | {
+                  __typename?: 'FormComponentDataNumber';
+                  id: string;
+                  position: number;
+                  section: number;
+                  type: FormComponentType;
+                  title?: string | null;
+                  description?: string | null;
+                  required: boolean;
+                  allowFloat?: boolean | null;
+                  numberMin?: any | null;
+                  numberMax?: any | null;
               }
             | {
                   __typename?: 'FormComponentDataParagraph';
@@ -5664,6 +5984,204 @@ export type PostTopicDeleteMutationVariables = Exact<{
 export type PostTopicDeleteMutation = {
     __typename?: 'Mutation';
     postTopicDelete: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type GetSocialResponseQueryVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type GetSocialResponseQuery = {
+    __typename?: 'Query';
+    socialResponse: {
+        __typename?: 'SocialResponse';
+        id: string;
+        text: string;
+        status: SocialResponseStatus;
+        postUrl?: string | null;
+        platformPostId?: string | null;
+        postedAt?: any | null;
+        error?: string | null;
+        metadata: any;
+        model: string;
+        modelProvider: SocialResponseAiModelProvider;
+        generatedAt: any;
+        createdAt: any;
+        updatedAt: any;
+        mention?: {
+            __typename?: 'SocialMention';
+            id: string;
+            platform: SocialMediaPlatform;
+            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
+        } | null;
+    };
+};
+
+export type GetSocialResponsesQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type GetSocialResponsesQuery = {
+    __typename?: 'Query';
+    socialResponses: {
+        __typename?: 'PagedSocialResponses';
+        items: Array<{
+            __typename?: 'SocialResponse';
+            id: string;
+            text: string;
+            status: SocialResponseStatus;
+            postUrl?: string | null;
+            platformPostId?: string | null;
+            postedAt?: any | null;
+            error?: string | null;
+            metadata: any;
+            model: string;
+            modelProvider: SocialResponseAiModelProvider;
+            generatedAt: any;
+            createdAt: any;
+            updatedAt: any;
+            mention?: {
+                __typename?: 'SocialMention';
+                id: string;
+                platform: SocialMediaPlatform;
+                mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
+            } | null;
+        }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
+    };
+};
+
+export type SocialMediaPlatformSettingsQueryVariables = Exact<{
+    platform: SocialMediaPlatform;
+}>;
+
+export type SocialMediaPlatformSettingsQuery = {
+    __typename?: 'Query';
+    socialMediaPlatformSettings: {
+        __typename?: 'SocialMediaPlatformSettings';
+        responseBotEnabled: boolean;
+        responseSystemPrompt: string;
+        responseModel?: string | null;
+        responseTemperature?: number | null;
+        lastPullAt?: any | null;
+        additionalSettings?: any | null;
+    };
+};
+
+export type CreateSocialMediaPlatformSettingsMutationVariables = Exact<{
+    input: CreateSocialMediaPlatformSettingsInput;
+}>;
+
+export type CreateSocialMediaPlatformSettingsMutation = {
+    __typename?: 'Mutation';
+    socialMediaPlatformSettingsCreate: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type UpdateSocialMediaPlatformSettingsMutationVariables = Exact<{
+    input: UpdateSocialMediaPlatformSettingsInput;
+}>;
+
+export type UpdateSocialMediaPlatformSettingsMutation = {
+    __typename?: 'Mutation';
+    socialMediaPlatformSettingsUpdate: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type ApproveSocialResponseMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type ApproveSocialResponseMutation = {
+    __typename?: 'Mutation';
+    socialResponseApprove: {
+        __typename?: 'SocialResponse';
+        id: string;
+        text: string;
+        status: SocialResponseStatus;
+        postUrl?: string | null;
+        platformPostId?: string | null;
+        postedAt?: any | null;
+        error?: string | null;
+        metadata: any;
+        model: string;
+        modelProvider: SocialResponseAiModelProvider;
+        generatedAt: any;
+        createdAt: any;
+        updatedAt: any;
+        mention?: {
+            __typename?: 'SocialMention';
+            id: string;
+            platform: SocialMediaPlatform;
+            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
+        } | null;
+    };
+};
+
+export type RejectSocialResponseMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type RejectSocialResponseMutation = {
+    __typename?: 'Mutation';
+    socialResponseReject: {
+        __typename?: 'SocialResponse';
+        id: string;
+        text: string;
+        status: SocialResponseStatus;
+        postUrl?: string | null;
+        platformPostId?: string | null;
+        postedAt?: any | null;
+        error?: string | null;
+        metadata: any;
+        model: string;
+        modelProvider: SocialResponseAiModelProvider;
+        generatedAt: any;
+        createdAt: any;
+        updatedAt: any;
+        mention?: {
+            __typename?: 'SocialMention';
+            id: string;
+            platform: SocialMediaPlatform;
+            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
+        } | null;
+    };
+};
+
+export type UpdateSocialResponseMutationVariables = Exact<{
+    input: UpdateSocialResponseInput;
+}>;
+
+export type UpdateSocialResponseMutation = {
+    __typename?: 'Mutation';
+    socialResponseUpdate: {
+        __typename?: 'SocialResponse';
+        id: string;
+        text: string;
+        status: SocialResponseStatus;
+        postUrl?: string | null;
+        platformPostId?: string | null;
+        postedAt?: any | null;
+        error?: string | null;
+        metadata: any;
+        model: string;
+        modelProvider: SocialResponseAiModelProvider;
+        generatedAt: any;
+        createdAt: any;
+        updatedAt: any;
+        mention?: {
+            __typename?: 'SocialMention';
+            id: string;
+            platform: SocialMediaPlatform;
+            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
+        } | null;
+    };
 };
 
 export type SupportPostQueryVariables = Exact<{
@@ -6139,13 +6657,13 @@ export type ProfileSupportTicketQuery = {
     };
 };
 
-export type WaitListsQueryVariables = Exact<{
+export type WaitListsPrivilegedQueryVariables = Exact<{
     pagination: PaginationInput;
 }>;
 
-export type WaitListsQuery = {
+export type WaitListsPrivilegedQuery = {
     __typename?: 'Query';
-    waitLists: {
+    waitListsPrivileged: {
         __typename?: 'WaitListResult';
         pagination: {
             __typename?: 'Pagination';
@@ -6222,12 +6740,22 @@ export type WaitListEntriesPrivilegedQuery = {
 
 export type WaitListEntryCreateMutationVariables = Exact<{
     emailAddress: Scalars['String']['input'];
-    waitlistIdentifier?: Scalars['String']['input'];
+    waitListIdentifier?: Scalars['String']['input'];
 }>;
 
 export type WaitListEntryCreateMutation = {
     __typename?: 'Mutation';
     waitListEntryCreate: { __typename?: 'WaitListEntry'; id: string; emailAddress: string };
+};
+
+export type WaitListEntryDeleteMutationVariables = Exact<{
+    emailAddress: Scalars['String']['input'];
+    waitListIdentifier?: Scalars['String']['input'];
+}>;
+
+export type WaitListEntryDeleteMutation = {
+    __typename?: 'Mutation';
+    waitListEntryDelete: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export const AccountAuthenticationRegistrationOrSignInCreateDocument = {
@@ -7706,14 +8234,13 @@ export const CommerceOrdersByCheckoutSessionDocument = {
                                                     kind: 'SelectionSet',
                                                     selections: [
                                                         { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'status' } },
                                                         {
                                                             kind: 'Field',
                                                             name: { kind: 'Name', value: 'productVariantId' },
                                                         },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                                                     ],
                                                 },
                                             },
@@ -7972,6 +8499,27 @@ export const CommerceOrdersByCheckoutSessionDocument = {
                                                     selections: [
                                                         { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'items' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitAmount' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'amount' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
                                                     ],
                                                 },
                                             },
@@ -7999,6 +8547,7 @@ export const CommerceOrdersByCheckoutSessionDocument = {
                                                     kind: 'SelectionSet',
                                                     selections: [
                                                         { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'status' } },
                                                         {
                                                             kind: 'Field',
@@ -8058,6 +8607,38 @@ export const CommerceOrdersByCheckoutSessionDocument = {
                                                         },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
+                                                    ],
+                                                },
+                                            },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'appliedDiscounts' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'items' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitAmount' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'amount' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
                                                     ],
                                                 },
                                             },
@@ -8124,12 +8705,88 @@ export const CommerceOrdersDocument = {
                                                     kind: 'SelectionSet',
                                                     selections: [
                                                         { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'status' } },
                                                         {
                                                             kind: 'Field',
                                                             name: { kind: 'Name', value: 'productVariantId' },
                                                         },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
+                                                    ],
+                                                },
+                                            },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'shipments' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'orderIndexId' },
+                                                        },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'label' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'carrier' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'serviceType' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'trackingNumber' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'trackingUrl' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'packageInfo' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'items' },
+                                                                        selectionSet: {
+                                                                            kind: 'SelectionSet',
+                                                                            selections: [
+                                                                                {
+                                                                                    kind: 'Field',
+                                                                                    name: {
+                                                                                        kind: 'Name',
+                                                                                        value: 'indexId',
+                                                                                    },
+                                                                                },
+                                                                                {
+                                                                                    kind: 'Field',
+                                                                                    name: {
+                                                                                        kind: 'Name',
+                                                                                        value: 'quantity',
+                                                                                    },
+                                                                                },
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'shippedAt' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'deliveredAt' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'cancelledAt' } },
                                                     ],
                                                 },
                                             },
@@ -8144,6 +8801,41 @@ export const CommerceOrdersDocument = {
                                                             kind: 'Field',
                                                             name: { kind: 'Name', value: 'originalSubtotal' },
                                                         },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'lineItemPrices' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: {
+                                                                            kind: 'Name',
+                                                                            value: 'originalSubtotal',
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: {
+                                                                            kind: 'Name',
+                                                                            value: 'originalUnitPrice',
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'subtotal' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitPrice' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
                                                     ],
                                                 },
                                             },
@@ -8155,6 +8847,27 @@ export const CommerceOrdersDocument = {
                                                     selections: [
                                                         { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'items' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitAmount' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'amount' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
                                                     ],
                                                 },
                                             },
@@ -8586,6 +9299,41 @@ export const CommerceOrderDocument = {
                                                         },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'lineItemPrices' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: {
+                                                                            kind: 'Name',
+                                                                            value: 'originalSubtotal',
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: {
+                                                                            kind: 'Name',
+                                                                            value: 'originalUnitPrice',
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'subtotal' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitPrice' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
                                                     ],
                                                 },
                                             },
@@ -8598,6 +9346,27 @@ export const CommerceOrderDocument = {
                                                     selections: [
                                                         { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'items' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitAmount' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'amount' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
                                                     ],
                                                 },
                                             },
@@ -8624,6 +9393,7 @@ export const CommerceOrderDocument = {
                                                     kind: 'SelectionSet',
                                                     selections: [
                                                         { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'status' } },
                                                         {
                                                             kind: 'Field',
@@ -8683,6 +9453,73 @@ export const CommerceOrderDocument = {
                                                         },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'lineItemPrices' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: {
+                                                                            kind: 'Name',
+                                                                            value: 'originalSubtotal',
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: {
+                                                                            kind: 'Name',
+                                                                            value: 'originalUnitPrice',
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'subtotal' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitPrice' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
+                                                    ],
+                                                },
+                                            },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'appliedDiscounts' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'items' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'indexId' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'unitAmount' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'amount' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
                                                     ],
                                                 },
                                             },
@@ -9289,6 +10126,72 @@ export const CommerceOrdersPrivilegedDocument = {
         },
     ],
 } as unknown as DocumentNode<CommerceOrdersPrivilegedQuery, CommerceOrdersPrivilegedQueryVariables>;
+export const CommerceOrdersPrivilegedChartDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'query',
+            name: { kind: 'Name', value: 'CommerceOrdersPrivilegedChart' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
+                    type: {
+                        kind: 'NonNullType',
+                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
+                    },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'commerceOrdersPrivileged' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'pagination' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'items' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } }],
+                                    },
+                                },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'pagination' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
+                                            },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<CommerceOrdersPrivilegedChartQuery, CommerceOrdersPrivilegedChartQueryVariables>;
 export const DataInteractionDatabasesDocument = {
     kind: 'Document',
     definitions: [
@@ -9793,12 +10696,26 @@ export const EngagementOverviewDocument = {
             kind: 'OperationDefinition',
             operation: 'query',
             name: { kind: 'Name', value: 'EngagementOverview' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'EngagementOverviewInput' } },
+                },
+            ],
             selectionSet: {
                 kind: 'SelectionSet',
                 selections: [
                     {
                         kind: 'Field',
                         name: { kind: 'Name', value: 'engagementOverview' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'input' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                            },
+                        ],
                         selectionSet: {
                             kind: 'SelectionSet',
                             selections: [
@@ -9824,6 +10741,17 @@ export const EngagementOverviewDocument = {
                                             { kind: 'Field', name: { kind: 'Name', value: 'countryCode' } },
                                             { kind: 'Field', name: { kind: 'Name', value: 'latitude' } },
                                             { kind: 'Field', name: { kind: 'Name', value: 'longitude' } },
+                                        ],
+                                    },
+                                },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'referrers' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'referrer' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'uniqueDeviceCount' } },
                                         ],
                                     },
                                 },
@@ -10119,6 +11047,36 @@ export const FormDocument = {
                                                         { kind: 'Field', name: { kind: 'Name', value: 'required' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'columns' } },
                                                         { kind: 'Field', name: { kind: 'Name', value: 'rows' } },
+                                                    ],
+                                                },
+                                            },
+                                            {
+                                                kind: 'InlineFragment',
+                                                typeCondition: {
+                                                    kind: 'NamedType',
+                                                    name: { kind: 'Name', value: 'FormComponentDataNumber' },
+                                                },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            alias: { kind: 'Name', value: 'numberMin' },
+                                                            name: { kind: 'Name', value: 'min' },
+                                                        },
+                                                        {
+                                                            kind: 'Field',
+                                                            alias: { kind: 'Name', value: 'numberMax' },
+                                                            name: { kind: 'Name', value: 'max' },
+                                                        },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'allowFloat' } },
                                                     ],
                                                 },
                                             },
@@ -11394,6 +12352,558 @@ export const PostTopicDeleteDocument = {
         },
     ],
 } as unknown as DocumentNode<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
+export const GetSocialResponseDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'query',
+            name: { kind: 'Name', value: 'GetSocialResponse' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialResponse' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'id' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'mention' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'mentionPost' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                                    ],
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<GetSocialResponseQuery, GetSocialResponseQueryVariables>;
+export const GetSocialResponsesDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'query',
+            name: { kind: 'Name', value: 'GetSocialResponses' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
+                    type: {
+                        kind: 'NonNullType',
+                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
+                    },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialResponses' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'pagination' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'items' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'error' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'model' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'mention' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
+                                                        {
+                                                            kind: 'Field',
+                                                            name: { kind: 'Name', value: 'mentionPost' },
+                                                            selectionSet: {
+                                                                kind: 'SelectionSet',
+                                                                selections: [
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'postedAt' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'postUrl' },
+                                                                    },
+                                                                    {
+                                                                        kind: 'Field',
+                                                                        name: { kind: 'Name', value: 'text' },
+                                                                    },
+                                                                ],
+                                                            },
+                                                        },
+                                                    ],
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'pagination' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
+                                            },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<GetSocialResponsesQuery, GetSocialResponsesQueryVariables>;
+export const SocialMediaPlatformSettingsDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'query',
+            name: { kind: 'Name', value: 'SocialMediaPlatformSettings' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'platform' } },
+                    type: {
+                        kind: 'NonNullType',
+                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'SocialMediaPlatform' } },
+                    },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialMediaPlatformSettings' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'platform' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'platform' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                { kind: 'Field', name: { kind: 'Name', value: 'responseBotEnabled' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'responseSystemPrompt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'responseModel' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'responseTemperature' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'lastPullAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'additionalSettings' } },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<SocialMediaPlatformSettingsQuery, SocialMediaPlatformSettingsQueryVariables>;
+export const CreateSocialMediaPlatformSettingsDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'mutation',
+            name: { kind: 'Name', value: 'CreateSocialMediaPlatformSettings' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                    type: {
+                        kind: 'NonNullType',
+                        type: {
+                            kind: 'NamedType',
+                            name: { kind: 'Name', value: 'CreateSocialMediaPlatformSettingsInput' },
+                        },
+                    },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialMediaPlatformSettingsCreate' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'input' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<
+    CreateSocialMediaPlatformSettingsMutation,
+    CreateSocialMediaPlatformSettingsMutationVariables
+>;
+export const UpdateSocialMediaPlatformSettingsDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'mutation',
+            name: { kind: 'Name', value: 'UpdateSocialMediaPlatformSettings' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                    type: {
+                        kind: 'NonNullType',
+                        type: {
+                            kind: 'NamedType',
+                            name: { kind: 'Name', value: 'UpdateSocialMediaPlatformSettingsInput' },
+                        },
+                    },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialMediaPlatformSettingsUpdate' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'input' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<
+    UpdateSocialMediaPlatformSettingsMutation,
+    UpdateSocialMediaPlatformSettingsMutationVariables
+>;
+export const ApproveSocialResponseDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'mutation',
+            name: { kind: 'Name', value: 'ApproveSocialResponse' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialResponseApprove' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'id' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'mention' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'mentionPost' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                                    ],
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<ApproveSocialResponseMutation, ApproveSocialResponseMutationVariables>;
+export const RejectSocialResponseDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'mutation',
+            name: { kind: 'Name', value: 'RejectSocialResponse' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialResponseReject' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'id' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'mention' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'mentionPost' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                                    ],
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<RejectSocialResponseMutation, RejectSocialResponseMutationVariables>;
+export const UpdateSocialResponseDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'mutation',
+            name: { kind: 'Name', value: 'UpdateSocialResponse' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                    type: {
+                        kind: 'NonNullType',
+                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'UpdateSocialResponseInput' } },
+                    },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'socialResponseUpdate' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'input' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [
+                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                                {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'mention' },
+                                    selectionSet: {
+                                        kind: 'SelectionSet',
+                                        selections: [
+                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
+                                            {
+                                                kind: 'Field',
+                                                name: { kind: 'Name', value: 'mentionPost' },
+                                                selectionSet: {
+                                                    kind: 'SelectionSet',
+                                                    selections: [
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
+                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+                                                    ],
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<UpdateSocialResponseMutation, UpdateSocialResponseMutationVariables>;
 export const SupportPostDocument = {
     kind: 'Document',
     definitions: [
@@ -12831,13 +14341,13 @@ export const ProfileSupportTicketDocument = {
         },
     ],
 } as unknown as DocumentNode<ProfileSupportTicketQuery, ProfileSupportTicketQueryVariables>;
-export const WaitListsDocument = {
+export const WaitListsPrivilegedDocument = {
     kind: 'Document',
     definitions: [
         {
             kind: 'OperationDefinition',
             operation: 'query',
-            name: { kind: 'Name', value: 'WaitLists' },
+            name: { kind: 'Name', value: 'WaitListsPrivileged' },
             variableDefinitions: [
                 {
                     kind: 'VariableDefinition',
@@ -12853,7 +14363,7 @@ export const WaitListsDocument = {
                 selections: [
                     {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'waitLists' },
+                        name: { kind: 'Name', value: 'waitListsPrivileged' },
                         arguments: [
                             {
                                 kind: 'Argument',
@@ -12905,7 +14415,7 @@ export const WaitListsDocument = {
             },
         },
     ],
-} as unknown as DocumentNode<WaitListsQuery, WaitListsQueryVariables>;
+} as unknown as DocumentNode<WaitListsPrivilegedQuery, WaitListsPrivilegedQueryVariables>;
 export const WaitListCreatePrivilegedDocument = {
     kind: 'Document',
     definitions: [
@@ -13056,7 +14566,7 @@ export const WaitListEntryCreateDocument = {
                 },
                 {
                     kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'waitlistIdentifier' } },
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
                     type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
                     defaultValue: { kind: 'StringValue', value: 'earlyAccess', block: false },
                 },
@@ -13076,7 +14586,7 @@ export const WaitListEntryCreateDocument = {
                             {
                                 kind: 'Argument',
                                 name: { kind: 'Name', value: 'waitListIdentifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'waitlistIdentifier' } },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
                             },
                         ],
                         selectionSet: {
@@ -13092,6 +14602,54 @@ export const WaitListEntryCreateDocument = {
         },
     ],
 } as unknown as DocumentNode<WaitListEntryCreateMutation, WaitListEntryCreateMutationVariables>;
+export const WaitListEntryDeleteDocument = {
+    kind: 'Document',
+    definitions: [
+        {
+            kind: 'OperationDefinition',
+            operation: 'mutation',
+            name: { kind: 'Name', value: 'WaitListEntryDelete' },
+            variableDefinitions: [
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
+                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+                },
+                {
+                    kind: 'VariableDefinition',
+                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
+                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
+                    defaultValue: { kind: 'StringValue', value: 'earlyAccess', block: false },
+                },
+            ],
+            selectionSet: {
+                kind: 'SelectionSet',
+                selections: [
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'waitListEntryDelete' },
+                        arguments: [
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'emailAddress' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
+                            },
+                            {
+                                kind: 'Argument',
+                                name: { kind: 'Name', value: 'waitListIdentifier' },
+                                value: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
+                            },
+                        ],
+                        selectionSet: {
+                            kind: 'SelectionSet',
+                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
+                        },
+                    },
+                ],
+            },
+        },
+    ],
+} as unknown as DocumentNode<WaitListEntryDeleteMutation, WaitListEntryDeleteMutationVariables>;
 export type GraphQLInputTypeMetadata =
     | GraphQLInputScalarTypeMetadata
     | GraphQLInputEnumTypeMetadata
@@ -13321,6 +14879,123 @@ export namespace GraphQLInputTypes {
                 required: false,
             },
         ],
+    };
+
+    export const UpdateSocialResponseInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'UpdateSocialResponseInput',
+        fields: [
+            {
+                name: 'id',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'text',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+            {
+                name: 'metadata',
+                kind: 'scalar',
+                type: 'JSON',
+                required: false,
+            },
+        ],
+    };
+
+    export const UpdateSocialMediaPlatformSettingsInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'UpdateSocialMediaPlatformSettingsInput',
+        fields: [
+            {
+                name: 'platform',
+                kind: 'enum',
+                type: GraphQLInputTypes.SocialMediaPlatform,
+                required: true,
+            },
+            {
+                name: 'responseBotEnabled',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'responseSystemPrompt',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+            {
+                name: 'responseModel',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+            {
+                name: 'responseTemperature',
+                kind: 'scalar',
+                type: 'Float',
+                required: false,
+            },
+            {
+                name: 'additionalSettings',
+                kind: 'scalar',
+                type: 'JSON',
+                required: false,
+            },
+        ],
+    };
+
+    export const CreateSocialMediaPlatformSettingsInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'CreateSocialMediaPlatformSettingsInput',
+        fields: [
+            {
+                name: 'platform',
+                kind: 'enum',
+                type: GraphQLInputTypes.SocialMediaPlatform,
+                required: true,
+            },
+            {
+                name: 'responseBotEnabled',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: true,
+            },
+            {
+                name: 'responseSystemPrompt',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'responseModel',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+            {
+                name: 'responseTemperature',
+                kind: 'scalar',
+                type: 'Float',
+                required: false,
+            },
+            {
+                name: 'additionalSettings',
+                kind: 'scalar',
+                type: 'JSON',
+                required: false,
+            },
+        ],
+    };
+
+    export const SocialMediaPlatform: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'SocialMediaPlatform',
+        values: ['XTwitter', 'Reddit'],
     };
 
     export const PostTopicUpdateInput: GraphQLInputObjectTypeMetadata = {
@@ -13748,27 +15423,31 @@ export namespace GraphQLInputTypes {
         ],
     };
 
+    export const EngagementOverviewInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'EngagementOverviewInput',
+        fields: [
+            {
+                name: 'startTime',
+                kind: 'scalar',
+                type: 'DateTimeISO',
+                required: false,
+            },
+            {
+                name: 'endTime',
+                kind: 'scalar',
+                type: 'DateTimeISO',
+                required: false,
+            },
+        ],
+    };
+
     export const EngagementEventContextInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
         type: 'EngagementEventContextInput',
         fields: [
             {
                 name: 'viewIdentifier',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
-                    },
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
-            },
-            {
-                name: 'previousViewIdentifier',
                 kind: 'scalar',
                 type: 'String',
                 required: false,
@@ -13835,63 +15514,6 @@ export namespace GraphQLInputTypes {
                 ],
             },
             {
-                name: 'previousViewTitle',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isNotEmpty',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
-                    },
-                ],
-            },
-            {
-                name: 'loadDurationInMilliseconds',
-                kind: 'scalar',
-                type: 'Int',
-                required: false,
-                validation: [
-                    {
-                        type: 'isPositive',
-                    },
-                    {
-                        type: 'isInt',
-                    },
-                ],
-            },
-            {
-                name: 'viewDurationInMilliseconds',
-                kind: 'scalar',
-                type: 'Int',
-                required: false,
-                validation: [
-                    {
-                        type: 'isPositive',
-                    },
-                    {
-                        type: 'isInt',
-                    },
-                ],
-            },
-            {
-                name: 'previousViewDurationInMilliseconds',
-                kind: 'scalar',
-                type: 'Int',
-                required: false,
-                validation: [
-                    {
-                        type: 'isPositive',
-                    },
-                    {
-                        type: 'isInt',
-                    },
-                ],
-            },
-            {
                 name: 'sessionDurationInMilliseconds',
                 kind: 'scalar',
                 type: 'Int',
@@ -13915,6 +15537,12 @@ export namespace GraphQLInputTypes {
                         type: 'isDate',
                     },
                 ],
+            },
+            {
+                name: 'additionalData',
+                kind: 'scalar',
+                type: 'JSON',
+                required: false,
             },
         ],
     };
@@ -15073,6 +16701,22 @@ export const CommerceOrdersPrivilegedOperation: GraphQLOperationMetadata<typeof 
     ],
 };
 
+export const CommerceOrdersPrivilegedChartOperation: GraphQLOperationMetadata<
+    typeof CommerceOrdersPrivilegedChartDocument
+> = {
+    operation: 'CommerceOrdersPrivilegedChart',
+    operationType: 'query',
+    document: CommerceOrdersPrivilegedChartDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
 export const DataInteractionDatabasesOperation: GraphQLOperationMetadata<typeof DataInteractionDatabasesDocument> = {
     operation: 'DataInteractionDatabases',
     operationType: 'query',
@@ -15207,6 +16851,20 @@ export const EngagementEventsCreateOperation: GraphQLOperationMetadata<typeof En
             itemKind: 'object',
             type: GraphQLInputTypes.CreateEngagementEventInput,
             allowsEmpty: false,
+        },
+    ],
+};
+
+export const EngagementOverviewOperation: GraphQLOperationMetadata<typeof EngagementOverviewDocument> = {
+    operation: 'EngagementOverview',
+    operationType: 'query',
+    document: EngagementOverviewDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: false,
+            kind: 'object',
+            type: GraphQLInputTypes.EngagementOverviewInput,
         },
     ],
 };
@@ -15527,6 +17185,124 @@ export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopic
     ],
 };
 
+export const GetSocialResponseOperation: GraphQLOperationMetadata<typeof GetSocialResponseDocument> = {
+    operation: 'GetSocialResponse',
+    operationType: 'query',
+    document: GetSocialResponseDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const GetSocialResponsesOperation: GraphQLOperationMetadata<typeof GetSocialResponsesDocument> = {
+    operation: 'GetSocialResponses',
+    operationType: 'query',
+    document: GetSocialResponsesDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const SocialMediaPlatformSettingsOperation: GraphQLOperationMetadata<
+    typeof SocialMediaPlatformSettingsDocument
+> = {
+    operation: 'SocialMediaPlatformSettings',
+    operationType: 'query',
+    document: SocialMediaPlatformSettingsDocument,
+    parameters: [
+        {
+            parameter: 'platform',
+            required: true,
+            kind: 'enum',
+            type: GraphQLInputTypes.SocialMediaPlatform,
+        },
+    ],
+};
+
+export const CreateSocialMediaPlatformSettingsOperation: GraphQLOperationMetadata<
+    typeof CreateSocialMediaPlatformSettingsDocument
+> = {
+    operation: 'CreateSocialMediaPlatformSettings',
+    operationType: 'mutation',
+    document: CreateSocialMediaPlatformSettingsDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.CreateSocialMediaPlatformSettingsInput,
+        },
+    ],
+};
+
+export const UpdateSocialMediaPlatformSettingsOperation: GraphQLOperationMetadata<
+    typeof UpdateSocialMediaPlatformSettingsDocument
+> = {
+    operation: 'UpdateSocialMediaPlatformSettings',
+    operationType: 'mutation',
+    document: UpdateSocialMediaPlatformSettingsDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.UpdateSocialMediaPlatformSettingsInput,
+        },
+    ],
+};
+
+export const ApproveSocialResponseOperation: GraphQLOperationMetadata<typeof ApproveSocialResponseDocument> = {
+    operation: 'ApproveSocialResponse',
+    operationType: 'mutation',
+    document: ApproveSocialResponseDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const RejectSocialResponseOperation: GraphQLOperationMetadata<typeof RejectSocialResponseDocument> = {
+    operation: 'RejectSocialResponse',
+    operationType: 'mutation',
+    document: RejectSocialResponseDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const UpdateSocialResponseOperation: GraphQLOperationMetadata<typeof UpdateSocialResponseDocument> = {
+    operation: 'UpdateSocialResponse',
+    operationType: 'mutation',
+    document: UpdateSocialResponseDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.UpdateSocialResponseInput,
+        },
+    ],
+};
+
 export const SupportPostOperation: GraphQLOperationMetadata<typeof SupportPostDocument> = {
     operation: 'SupportPost',
     operationType: 'query',
@@ -15723,10 +17499,10 @@ export const ProfileSupportTicketOperation: GraphQLOperationMetadata<typeof Prof
     ],
 };
 
-export const WaitListsOperation: GraphQLOperationMetadata<typeof WaitListsDocument> = {
-    operation: 'WaitLists',
+export const WaitListsPrivilegedOperation: GraphQLOperationMetadata<typeof WaitListsPrivilegedDocument> = {
+    operation: 'WaitListsPrivileged',
     operationType: 'query',
-    document: WaitListsDocument,
+    document: WaitListsPrivilegedDocument,
     parameters: [
         {
             parameter: 'pagination',
@@ -15783,7 +17559,27 @@ export const WaitListEntryCreateOperation: GraphQLOperationMetadata<typeof WaitL
             type: 'String',
         },
         {
-            parameter: 'waitlistIdentifier',
+            parameter: 'waitListIdentifier',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const WaitListEntryDeleteOperation: GraphQLOperationMetadata<typeof WaitListEntryDeleteDocument> = {
+    operation: 'WaitListEntryDelete',
+    operationType: 'mutation',
+    document: WaitListEntryDeleteDocument,
+    parameters: [
+        {
+            parameter: 'emailAddress',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'waitListIdentifier',
             required: true,
             kind: 'scalar',
             type: 'String',

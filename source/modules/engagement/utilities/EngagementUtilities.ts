@@ -1,5 +1,5 @@
 // Dependencies - Project
-import ProjectSettings from '@project/ProjectSettings';
+import { ProjectSettings } from '@project/ProjectSettings';
 
 // Google Attribution Constants
 const googleGclidKey = ProjectSettings.identifier + 'EngagementGoogleGclid';
@@ -33,7 +33,7 @@ function handleGoogleGclid(gclid: string): string {
 }
 
 // Function to handle gbraid and store Google attribution
-// Appended when an ad click starts on the web and the conversion happens in an iOS app (web to app)
+// Appended when an ad click starts on the web and the conversion happens in an iOS app (web to app)
 function handleGoogleGbraid(gbraid: string): string {
     localStorage.setItem(googleGbraidKey, gbraid);
 
@@ -41,7 +41,7 @@ function handleGoogleGbraid(gbraid: string): string {
 }
 
 // Function to handle wbraid and store Google attribution
-// Appended when an ad click starts in a Google iOS app (e.g., Search app, YouTube) and the conversion happens on the web (app to web)
+// Appended when an ad click starts in a Google iOS app (e.g., Search app, YouTube) and the conversion happens on the web (app to web)
 function handleGoogleWbraid(wbraid: string): string {
     localStorage.setItem(googleWbraidKey, wbraid);
 
