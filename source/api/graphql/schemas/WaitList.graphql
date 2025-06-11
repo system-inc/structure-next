@@ -42,7 +42,7 @@ type Mutation {
     waitListCreatePrivileged(data: WaitListCreationInput!): WaitList!
     waitListDeletePrivileged(forceDelete: Boolean, id: String!): OperationResult!
     waitListEntryCreate(emailAddress: String!, waitListIdentifier: String!): WaitListEntry!
-    waitListEntryDelete(emailAddress: String, id: String, waitListIdentifier: String): OperationResult!
+    waitListEntryDelete(emailAddress: String, id: String, reason: String, waitListIdentifier: String): OperationResult!
     waitListUpdatePrivileged(input: WaitListUpdateInput!): WaitList!
 }
 

@@ -76,7 +76,7 @@ export function OpsHomePage() {
                                         <div>Views</div>
                                     </div>
 
-                                    {engagementLiveQueryState.data.engagementOverview.views.map(function (view) {
+                                    {engagementLiveQueryState.data.engagementOverview.views?.map(function (view) {
                                         return (
                                             <div className="flex justify-between" key={view.viewIdentifier}>
                                                 <div>{view.viewIdentifier}</div>

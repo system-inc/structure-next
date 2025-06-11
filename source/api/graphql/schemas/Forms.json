@@ -37,6 +37,7 @@
                     "CheckboxGrid",
                     "Date",
                     "Time",
+                    "Number",
                     "TitleAndDescription",
                     "SectionHeader"
                 ]
@@ -304,6 +305,7 @@
                                         "CheckboxGrid": "CheckboxGrid",
                                         "Date": "Date",
                                         "Time": "Time",
+                                        "Number": "Number",
                                         "TitleAndDescription": "TitleAndDescription",
                                         "SectionHeader": "SectionHeader"
                                     },
@@ -319,6 +321,7 @@
                                         "CheckboxGrid",
                                         "Date",
                                         "Time",
+                                        "Number",
                                         "TitleAndDescription",
                                         "SectionHeader"
                                     ]

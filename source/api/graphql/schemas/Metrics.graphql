@@ -38,16 +38,12 @@ type EngagementEvent {
 }
 
 input EngagementEventContextInput {
-    loadDurationInMilliseconds: Int
+    additionalData: JSON
     loggedAt: DateTimeISO
-    previousViewDurationInMilliseconds: Int
-    previousViewIdentifier: String
-    previousViewTitle: String
     referrer: String
     sessionDurationInMilliseconds: Int
     traceId: String
     traceSequenceNumber: Int
-    viewDurationInMilliseconds: Int
     viewIdentifier: String
     viewTitle: String
 }
@@ -60,15 +56,21 @@ type EngagementLocationOverview {
 }
 
 type EngagementOverview {
-    deviceCategoryPercentages: JSON!
+    deviceCategoryPercentages: JSON
     locations: [EngagementLocationOverview!]!
+    referrers: [EngagementReferrerOverview!]
     uniqueDeviceIds: Int!
-    views: [EngagementViewOverview!]!
+    views: [EngagementViewOverview!]
 }
 
 input EngagementOverviewInput {
     endTime: DateTimeISO
     startTime: DateTimeISO
+}
+
+type EngagementReferrerOverview {
+    referrer: String
+    uniqueDeviceCount: Int!
 }
 
 type EngagementViewOverview {

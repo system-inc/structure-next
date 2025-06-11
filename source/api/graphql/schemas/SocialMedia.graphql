@@ -1,0 +1,221 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"""
+The operator of a field filter
+"""
+enum ColumnFilterConditionOperator {
+    Equal
+    GreaterThan
+    GreaterThanOrEqual
+    In
+    IsNotNull
+    IsNull
+    LessThan
+    LessThanOrEqual
+    Like
+    NotEqual
+    NotIn
+    NotLike
+}
+
+input ColumnFilterInput {
+    caseSensitive: Boolean
+    column: String!
+    operator: ColumnFilterConditionOperator!
+    value: JSON!
+}
+
+input CreateSocialMediaPlatformSettingsInput {
+    additionalSettings: JSON
+    platform: SocialMediaPlatform!
+    responseBotEnabled: Boolean!
+    responseModel: String
+    responseSystemPrompt: String!
+    responseTemperature: Float
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Mutation {
+    socialMediaPlatformSettingsCreate(input: CreateSocialMediaPlatformSettingsInput!): OperationResult!
+    socialMediaPlatformSettingsUpdate(input: UpdateSocialMediaPlatformSettingsInput!): OperationResult!
+    socialResponseApprove(id: String!): SocialResponse!
+    socialResponseReject(id: String!): SocialResponse!
+    socialResponseUpdate(input: UpdateSocialResponseInput!): SocialResponse!
+}
+
+type OperationResult {
+    success: Boolean!
+}
+
+"""
+The order direction of a query
+"""
+enum OrderByDirection {
+    Ascending
+    Descending
+}
+
+input OrderByInput {
+    direction: OrderByDirection
+    key: String!
+}
+
+type PagedSocialResponses {
+    items: [SocialResponse!]!
+    pagination: Pagination!
+}
+
+type Pagination {
+    itemIndex: Int!
+    itemIndexForNextPage: Int
+    itemIndexForPreviousPage: Int
+    itemsPerPage: Int!
+    itemsTotal: Int!
+    page: Int!
+    pagesTotal: Int!
+}
+
+input PaginationInput {
+    filters: [ColumnFilterInput!]
+    itemIndex: Int
+    itemsPerPage: Int!
+    orderBy: [OrderByInput!]
+}
+
+type Query {
+    socialMediaPlatformSettings(platform: SocialMediaPlatform!): SocialMediaPlatformSettings!
+    socialResponse(id: String!): SocialResponse!
+    socialResponses(pagination: PaginationInput!): PagedSocialResponses!
+}
+
+"""
+The social platform
+"""
+enum SocialMediaPlatform {
+    Reddit
+    XTwitter
+}
+
+type SocialMediaPlatformSettings {
+    additionalSettings: JSON
+    createdAt: DateTimeISO!
+    createdByAccountId: String!
+    createdByProfileId: String!
+    id: String!
+    lastPullAt: DateTimeISO
+    platform: SocialMediaPlatform!
+    responseBotEnabled: Boolean!
+    responseModel: String
+    responseSystemPrompt: String!
+    responseTemperature: Float
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+type SocialMention {
+    context: JSON
+    createdAt: DateTimeISO!
+    id: String!
+    """
+    The post that mentioned us
+    """
+    mentionPost: SocialPost
+    metadata: JSON
+    platform: SocialMediaPlatform!
+    platformMentionPostId: String!
+    posts: [SocialPost!]!
+    status: SocialMentionStatus!
+    updatedAt: DateTimeISO!
+}
+
+"""
+Status of a social mention
+"""
+enum SocialMentionStatus {
+    Failed
+    New
+    Processing
+    Responded
+    Skipped
+}
+
+type SocialPost {
+    createdAt: DateTimeISO!
+    id: String!
+    metadata: JSON
+    platform: SocialMediaPlatform!
+    platformParentPostId: String
+    platformPostId: String!
+    platformThreadId: String!
+    platformUserId: String!
+    postUrl: String!
+    postedAt: DateTimeISO!
+    text: String!
+    updatedAt: DateTimeISO!
+}
+
+type SocialResponse {
+    createdAt: DateTimeISO!
+    error: String
+    generatedAt: DateTimeISO!
+    id: String!
+    mention: SocialMention
+    mentionId: String!
+    metadata: JSON!
+    model: String!
+    modelProvider: SocialResponseAiModelProvider!
+    platformPostId: String
+    postUrl: String
+    postedAt: DateTimeISO
+    status: SocialResponseStatus!
+    text: String!
+    updatedAt: DateTimeISO!
+    updatedByAccountId: String
+    updatedByProfileId: String
+}
+
+"""
+Provider of the AI model
+"""
+enum SocialResponseAiModelProvider {
+    OpenAI
+}
+
+"""
+Status of a social response
+"""
+enum SocialResponseStatus {
+    Approved
+    Failed
+    Pending
+    Posted
+    Rejected
+}
+
+input UpdateSocialMediaPlatformSettingsInput {
+    additionalSettings: JSON
+    platform: SocialMediaPlatform!
+    responseBotEnabled: Boolean
+    responseModel: String
+    responseSystemPrompt: String
+    responseTemperature: Float
+}
+
+input UpdateSocialResponseInput {
+    id: String!
+    metadata: JSON
+    text: String
+}

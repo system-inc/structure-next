@@ -187,21 +187,6 @@
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "previousViewIdentifier",
-                        "validation": [
-                            {
-                                "type": "maxLength",
-                                "constraints": [512]
-                            },
-                            {
-                                "type": "isNotEmpty"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
                         "name": "traceId",
                         "validation": [
                             {
@@ -252,63 +237,6 @@
                     },
                     {
                         "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "previousViewTitle",
-                        "validation": [
-                            {
-                                "type": "isNotEmpty"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [512]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Int",
-                        "required": false,
-                        "name": "loadDurationInMilliseconds",
-                        "validation": [
-                            {
-                                "type": "isPositive"
-                            },
-                            {
-                                "type": "isInt"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Int",
-                        "required": false,
-                        "name": "viewDurationInMilliseconds",
-                        "validation": [
-                            {
-                                "type": "isPositive"
-                            },
-                            {
-                                "type": "isInt"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Int",
-                        "required": false,
-                        "name": "previousViewDurationInMilliseconds",
-                        "validation": [
-                            {
-                                "type": "isPositive"
-                            },
-                            {
-                                "type": "isInt"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
                         "type": "Int",
                         "required": false,
                         "name": "sessionDurationInMilliseconds",
@@ -331,6 +259,12 @@
                                 "type": "isDate"
                             }
                         ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "JSON",
+                        "required": false,
+                        "name": "additionalData"
                     }
                 ]
             },
