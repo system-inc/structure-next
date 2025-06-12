@@ -30,7 +30,7 @@ export const InputSelectSizes = {
 
 // Interface InputSelectItemInterface
 // We use property.defaultValue and value state to manage the selected items
-export interface InputSelectItemProperties extends Omit<MenuItemProperties, 'selected'> {}
+export type InputSelectItemProperties = Omit<MenuItemProperties, 'selected'>;
 
 // Component - InputSelect
 export interface InputSelectProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {

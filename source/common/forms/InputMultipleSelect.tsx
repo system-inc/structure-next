@@ -38,7 +38,7 @@ export interface InputMultipleSelectReferenceProperties {
 
 // Interface InputMultipleSelectItemInterface
 // We use property.defaultValue and value state to manage the selected items
-export interface InputMultipleSelectItemProperties extends Omit<MenuItemProperties, 'selected'> {}
+export type InputMultipleSelectItemProperties = Omit<MenuItemProperties, 'selected'>;
 
 // Component - InputMultipleSelect
 export interface InputMultipleSelectProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {

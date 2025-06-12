@@ -9,7 +9,7 @@ import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialo
 import { DeleteAccount } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccount';
 
 // Component - DeleteAccountDialog
-export interface DeleteAccountDialogProperties extends DialogProperties {}
+export type DeleteAccountDialogProperties = DialogProperties;
 export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);

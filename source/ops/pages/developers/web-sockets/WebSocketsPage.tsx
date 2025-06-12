@@ -15,8 +15,6 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Component - WebSocketsPage
-export interface WebSocketsPageProperties {}
-
 export function WebSocketsPage() {
     // State
     const [webSocketUrl, setWebSocketUrl] = React.useState<string>('wss://echo.websocket.org');

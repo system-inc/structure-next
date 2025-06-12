@@ -12,7 +12,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 import { wrapForSlot } from '@structure/source/utilities/React';
 
 // Component - Tip
-export interface TipProperties extends PopoverProperties {}
+export type TipProperties = PopoverProperties;
 export function Tip(properties: TipProperties) {
     // Extract properties
     const externalOpen = properties.open;
