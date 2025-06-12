@@ -10,7 +10,6 @@ import { InputText } from '@structure/source/common/forms/InputText';
 import { InputCheckbox, InputCheckboxState } from '@structure/source/common/forms/InputCheckbox';
 
 // Component - DevelopersPage
-export interface DevelopersPageProperties {}
 export function DevelopersPage() {
     const [code, setCode] = React.useState<string>(`// Code goes here
 const [state, setState] = React.useState<string>('');`);

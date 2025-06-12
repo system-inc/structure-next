@@ -21,7 +21,7 @@ import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.s
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - AccountNavigation
-interface AccountNavigationProperties extends React.HTMLProps<HTMLElement> {}
+type AccountNavigationProperties = React.HTMLProps<HTMLElement>;
 export function AccountNavigation(properties: AccountNavigationProperties) {
     // Render the component
     return (

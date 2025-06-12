@@ -15,7 +15,7 @@ import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 // import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - OpsDialogMenu
-export interface OpsDialogMenuProperties extends Omit<DialogMenuProperties, 'menuItems'> {}
+export type OpsDialogMenuProperties = Omit<DialogMenuProperties, 'menuItems'>;
 export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
     // Function to get the menu items from the internal navigation links
     function getMenuItemsFromOpsNavigationLinks(

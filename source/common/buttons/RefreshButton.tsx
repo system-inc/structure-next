@@ -11,7 +11,7 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 import ReloadIcon from '@structure/assets/icons/interface/ReloadIcon.svg';
 
 // Component - RefreshButton
-export interface RefreshButtonProperties extends ButtonProperties {}
+export type RefreshButtonProperties = ButtonProperties;
 export function RefreshButton(properties: RefreshButtonProperties) {
     // Render the component
     return (

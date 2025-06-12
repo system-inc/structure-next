@@ -23,7 +23,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 // import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Component - SupportFeedbackDialog
-export interface SupportFeedbackDialogProperties extends DialogProperties {}
+export type SupportFeedbackDialogProperties = DialogProperties;
 export function SupportFeedbackDialog(properties: SupportFeedbackDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);

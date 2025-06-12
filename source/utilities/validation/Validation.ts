@@ -2,7 +2,7 @@
 export interface ValidationRule {
     // An identifier for the validation rule, e.g. 'required', 'email', 'minimumLength', etc.
     identifier: string;
-    parameters?: {};
+    parameters?: Record<string, unknown>;
     message?: string;
 }
 
