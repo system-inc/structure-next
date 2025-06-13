@@ -60,7 +60,7 @@ interface ToolbarPluginProperties {
     // loadingProgress?: number | null;
 }
 export function ToolbarPlugin(properties: ToolbarPluginProperties) {
-    const { attachedFiles = [], onSaveFiles, onRemoveFile } = properties;
+    const attachedFiles = properties.attachedFiles || [];
 
     const [editor] = useLexicalComposerContext();
 
@@ -137,12 +137,12 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
 
     // Function to handle saving files
     function handleSaveFiles(files: File[]) {
-        onSaveFiles?.(files);
+        properties.onSaveFiles?.(files);
     }
 
     // Function to remove a file
     function handleRemoveFile(index: number) {
-        onRemoveFile?.(index);
+        properties.onRemoveFile?.(index);
     }
 
     return (
@@ -155,7 +155,7 @@ export function ToolbarPlugin(properties: ToolbarPluginProperties) {
                     isDiabled={properties.isDisabled}
                 />
             )}
-            <div className="item-center bg-opsis-background-primary flex w-full shrink-0 justify-between gap-4 overflow-x-auto border-t px-4 py-2">
+            <div className="item-center flex w-full shrink-0 justify-between gap-4 overflow-x-auto border-t bg-opsis-background-primary px-4 py-2">
                 <div className="flex items-center gap-1">
                     <Button
                         className={toggleVariants({

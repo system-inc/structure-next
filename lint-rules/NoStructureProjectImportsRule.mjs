@@ -3,14 +3,12 @@ const NoStructureProjectImportsRule = {
     meta: {
         type: 'problem',
         docs: {
-            description:
-                "Disallow imports using the alias '@project' from files within 'libraries/structure'.",
+            description: "Disallow imports using the alias '@project' from files within 'libraries/structure'.",
             category: 'Possible Errors',
             recommended: false,
         },
         messages: {
-            forbiddenImport:
-                "Importing from '@project' is not allowed within 'libraries/structure'.",
+            forbiddenImport: "Importing from '@project' is not allowed within 'libraries/structure'.",
         },
     },
     create(context) {
@@ -26,7 +24,7 @@ const NoStructureProjectImportsRule = {
         const whitelistedImports = [
             '@project/ProjectSettings',
             '@project/app/_theme/styles/theme.css',
-            '@project/tailwind.config'
+            '@project/tailwind.config',
         ];
 
         return {
@@ -49,10 +47,7 @@ const NoStructureProjectImportsRule = {
             CallExpression(node) {
                 if(!isInBaseLibrary) return;
 
-                if(
-                    node.callee.type === 'Identifier' &&
-                    node.callee.name === 'require'
-                ) {
+                if(node.callee.type === 'Identifier' && node.callee.name === 'require') {
                     const argument = node.arguments[0];
                     if(
                         argument &&

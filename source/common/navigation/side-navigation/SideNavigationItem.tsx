@@ -22,7 +22,6 @@ export function SideNavigationItem(properties: SideNavigationItemProperties) {
     const urlPath = useUrlPath();
 
     // Components
-    const Icon = properties.icon;
 
     // Render the component
     return (
@@ -35,9 +34,9 @@ export function SideNavigationItem(properties: SideNavigationItemProperties) {
                     : 'text-dark hover:text-dark dark:bg-transparent dark:text-light-4',
             )}
         >
-            {Icon && (
+            {properties.icon && (
                 <div className="relative h-4 w-4">
-                    <Icon className="h-full w-full" />
+                    <properties.icon className="h-full w-full" />
                 </div>
             )}
             {properties.title}

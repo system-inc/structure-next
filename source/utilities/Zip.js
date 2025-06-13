@@ -19,10 +19,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         ('undefined' != typeof window
             ? window
             : 'undefined' != typeof global
-                ? global
-                : 'undefined' != typeof self
-                    ? self
-                    : this
+              ? global
+              : 'undefined' != typeof self
+                ? self
+                : this
         ).JSZip = e();
     }
 })(function () {
@@ -66,17 +66,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     (r.encode = function (e) {
                         for(
                             var t,
-                            r,
-                            n,
-                            i,
-                            s,
-                            a,
-                            o,
-                            h = [],
-                            u = 0,
-                            l = e.length,
-                            f = l,
-                            c = 'string' !== d.getTypeOf(e);
+                                r,
+                                n,
+                                i,
+                                s,
+                                a,
+                                o,
+                                h = [],
+                                u = 0,
+                                l = e.length,
+                                f = l,
+                                c = 'string' !== d.getTypeOf(e);
                             u < e.length;
 
                         )
@@ -84,8 +84,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (n = c
                                     ? ((t = e[u++]), (r = u < l ? e[u++] : 0), u < l ? e[u++] : 0)
                                     : ((t = e.charCodeAt(u++)),
-                                        (r = u < l ? e.charCodeAt(u++) : 0),
-                                        u < l ? e.charCodeAt(u++) : 0)),
+                                      (r = u < l ? e.charCodeAt(u++) : 0),
+                                      u < l ? e.charCodeAt(u++) : 0)),
                                 (i = t >> 2),
                                 (s = ((3 & t) << 4) | (r >> 4)),
                                 (a = 1 < f ? ((15 & r) << 2) | (n >> 6) : 64),
@@ -109,11 +109,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 f = (3 * (e = e.replace(/[^A-Za-z0-9+/=]/g, '')).length) / 4;
                             if(
                                 (e.charAt(e.length - 1) === p.charAt(64) && f--,
-                                    e.charAt(e.length - 2) === p.charAt(64) && f--,
-                                    f % 1 != 0)
+                                e.charAt(e.length - 2) === p.charAt(64) && f--,
+                                f % 1 != 0)
                             )
                                 throw new Error('Invalid base64 input, bad content length.');
-                            for(l = c.uint8array ? new Uint8Array(0 | f) : new Array(0 | f); o < e.length;)
+                            for(l = c.uint8array ? new Uint8Array(0 | f) : new Array(0 | f); o < e.length; )
                                 (t = (p.indexOf(e.charAt(o++)) << 2) | ((i = p.indexOf(e.charAt(o++))) >> 4)),
                                     (r = ((15 & i) << 4) | ((s = p.indexOf(e.charAt(o++))) >> 2)),
                                     (n = ((3 & s) << 6) | (a = p.indexOf(e.charAt(o++)))),
@@ -142,8 +142,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     (o.prototype = {
                         getContentWorker: function () {
                             var e = new i(n.Promise.resolve(this.compressedContent))
-                                .pipe(this.compression.uncompressWorker())
-                                .pipe(new a('data_length')),
+                                    .pipe(this.compression.uncompressWorker())
+                                    .pipe(new a('data_length')),
                                 t = this;
                             return (
                                 e.on('end', function () {
@@ -211,19 +211,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         return void 0 !== e && e.length
                             ? 'string' !== n.getTypeOf(e)
                                 ? (function (e, t, r, n) {
-                                    var i = o,
-                                        s = n + r;
-                                    e ^= -1;
-                                    for(var a = n; a < s; a++) e = (e >>> 8) ^ i[255 & (e ^ t[a])];
-                                    return -1 ^ e;
-                                })(0 | t, e, e.length, 0)
+                                      var i = o,
+                                          s = n + r;
+                                      e ^= -1;
+                                      for(var a = n; a < s; a++) e = (e >>> 8) ^ i[255 & (e ^ t[a])];
+                                      return -1 ^ e;
+                                  })(0 | t, e, e.length, 0)
                                 : (function (e, t, r, n) {
-                                    var i = o,
-                                        s = n + r;
-                                    e ^= -1;
-                                    for(var a = n; a < s; a++) e = (e >>> 8) ^ i[255 & (e ^ t.charCodeAt(a))];
-                                    return -1 ^ e;
-                                })(0 | t, e, e.length, 0)
+                                      var i = o,
+                                          s = n + r;
+                                      e ^= -1;
+                                      for(var a = n; a < s; a++) e = (e >>> 8) ^ i[255 & (e ^ t.charCodeAt(a))];
+                                      return -1 ^ e;
+                                  })(0 | t, e, e.length, 0)
                             : 0;
                     };
                 },
@@ -257,9 +257,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                 function (e, t, r) {
                     'use strict';
                     var n =
-                        'undefined' != typeof Uint8Array &&
-                        'undefined' != typeof Uint16Array &&
-                        'undefined' != typeof Uint32Array,
+                            'undefined' != typeof Uint8Array &&
+                            'undefined' != typeof Uint16Array &&
+                            'undefined' != typeof Uint32Array,
                         i = e('pako'),
                         s = e('./utils'),
                         a = e('./stream/GenericWorker'),
@@ -332,8 +332,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             x = { crc32: 0, compressedSize: 0, uncompressedSize: 0 };
                         (t && !r) ||
                             ((x.crc32 = e.crc32),
-                                (x.compressedSize = e.compressedSize),
-                                (x.uncompressedSize = e.uncompressedSize));
+                            (x.compressedSize = e.compressedSize),
+                            (x.uncompressedSize = e.uncompressedSize));
                         var S = 0;
                         t && (S |= 8), l || (!_ && !g) || (S |= 2048);
                         var z = 0,
@@ -341,14 +341,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         w && (z |= 16),
                             'UNIX' === i
                                 ? ((C = 798),
-                                    (z |= (function (e, t) {
-                                        var r = e;
-                                        return e || (r = t ? 16893 : 33204), (65535 & r) << 16;
-                                    })(h.unixPermissions, w)))
+                                  (z |= (function (e, t) {
+                                      var r = e;
+                                      return e || (r = t ? 16893 : 33204), (65535 & r) << 16;
+                                  })(h.unixPermissions, w)))
                                 : ((C = 20),
-                                    (z |= (function (e) {
-                                        return 63 & (e || 0);
-                                    })(h.dosPermissions))),
+                                  (z |= (function (e) {
+                                      return 63 & (e || 0);
+                                  })(h.dosPermissions))),
                             (a = k.getUTCHours()),
                             (a <<= 6),
                             (a |= k.getUTCMinutes()),
@@ -417,13 +417,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             this.accumulate
                                 ? this.contentBuffer.push(e)
                                 : ((this.bytesWritten += e.data.length),
-                                    i.prototype.push.call(this, {
-                                        data: e.data,
-                                        meta: {
-                                            currentFile: this.currentFile,
-                                            percent: r ? (t + 100 * (r - n - 1)) / r : 100,
-                                        },
-                                    }));
+                                  i.prototype.push.call(this, {
+                                      data: e.data,
+                                      meta: {
+                                          currentFile: this.currentFile,
+                                          percent: r ? (t + 100 * (r - n - 1)) / r : 100,
+                                      },
+                                  }));
                         }),
                         (s.prototype.openedSource = function (e) {
                             (this.currentSourceOffset = this.bytesWritten), (this.currentFile = e.file.name);
@@ -506,8 +506,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (!this.previous && this._sources.length
                                     ? (this.prepareNextSource(), !0)
                                     : this.previous || this._sources.length || this.generatedError
-                                        ? void 0
-                                        : (this.end(), !0))
+                                      ? void 0
+                                      : (this.end(), !0))
                             );
                         }),
                         (s.prototype.error = function (e) {
@@ -517,7 +517,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 try {
                                     t[r].error(e);
                                 }
-                                catch(e) { }
+                                catch(e) {}
                             return !0;
                         }),
                         (s.prototype.lock = function () {
@@ -540,11 +540,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             e.forEach(function (e, t) {
                                 h++;
                                 var r = (function (e, t) {
-                                    var r = e || t,
-                                        n = u[r];
-                                    if(!n) throw new Error(r + ' is not a valid compression method !');
-                                    return n;
-                                })(t.options.compression, a.compression),
+                                        var r = e || t,
+                                            n = u[r];
+                                        if(!n) throw new Error(r + ' is not a valid compression method !');
+                                        return n;
+                                    })(t.options.compression, a.compression),
                                     n = t.options.compressionOptions || a.compressionOptions || {},
                                     i = t.dir,
                                     s = t.date;
@@ -635,36 +635,36 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             l.isNode && l.isStream(e)
                                 ? i.Promise.reject(new Error("JSZip can't accept a stream when loading a zip file."))
                                 : u
-                                    .prepareContent('the loaded zip file', e, !0, o.optimizedBinaryString, o.base64)
-                                    .then(function (e) {
-                                        var t = new s(o);
-                                        return t.load(e), t;
-                                    })
-                                    .then(function (e) {
-                                        var t = [i.Promise.resolve(e)],
-                                            r = e.files;
-                                        if(o.checkCRC32) for(var n = 0; n < r.length; n++) t.push(f(r[n]));
-                                        return i.Promise.all(t);
-                                    })
-                                    .then(function (e) {
-                                        for(var t = e.shift(), r = t.files, n = 0; n < r.length; n++) {
-                                            var i = r[n],
-                                                s = i.fileNameStr,
-                                                a = u.resolve(i.fileNameStr);
-                                            h.file(a, i.decompressed, {
-                                                binary: !0,
-                                                optimizedBinaryString: !0,
-                                                date: i.date,
-                                                dir: i.dir,
-                                                comment: i.fileCommentStr.length ? i.fileCommentStr : null,
-                                                unixPermissions: i.unixPermissions,
-                                                dosPermissions: i.dosPermissions,
-                                                createFolders: o.createFolders,
-                                            }),
-                                                i.dir || (h.file(a).unsafeOriginalName = s);
-                                        }
-                                        return t.zipComment.length && (h.comment = t.zipComment), h;
-                                    })
+                                      .prepareContent('the loaded zip file', e, !0, o.optimizedBinaryString, o.base64)
+                                      .then(function (e) {
+                                          var t = new s(o);
+                                          return t.load(e), t;
+                                      })
+                                      .then(function (e) {
+                                          var t = [i.Promise.resolve(e)],
+                                              r = e.files;
+                                          if(o.checkCRC32) for(var n = 0; n < r.length; n++) t.push(f(r[n]));
+                                          return i.Promise.all(t);
+                                      })
+                                      .then(function (e) {
+                                          for(var t = e.shift(), r = t.files, n = 0; n < r.length; n++) {
+                                              var i = r[n],
+                                                  s = i.fileNameStr,
+                                                  a = u.resolve(i.fileNameStr);
+                                              h.file(a, i.decompressed, {
+                                                  binary: !0,
+                                                  optimizedBinaryString: !0,
+                                                  date: i.date,
+                                                  dir: i.dir,
+                                                  comment: i.fileCommentStr.length ? i.fileCommentStr : null,
+                                                  unixPermissions: i.unixPermissions,
+                                                  dosPermissions: i.dosPermissions,
+                                                  createFolders: o.createFolders,
+                                              }),
+                                                  i.dir || (h.file(a).unsafeOriginalName = s);
+                                          }
+                                          return t.zipComment.length && (h.comment = t.zipComment), h;
+                                      })
                         );
                     };
                 },
@@ -780,7 +780,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         (s.date = s.date || new Date()),
                             null !== s.compression && (s.compression = s.compression.toUpperCase()),
                             'string' == typeof s.unixPermissions &&
-                            (s.unixPermissions = parseInt(s.unixPermissions, 8)),
+                                (s.unixPermissions = parseInt(s.unixPermissions, 8)),
                             s.unixPermissions && 16384 & s.unixPermissions && (s.dir = !0),
                             s.dosPermissions && 16 & s.dosPermissions && (s.dir = !0),
                             s.dir && (e = g(e)),
@@ -788,14 +788,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         var a = 'string' === i && !1 === s.binary && !1 === s.base64;
                         (r && void 0 !== r.binary) || (s.binary = !a),
                             ((t instanceof c && 0 === t.uncompressedSize) || s.dir || !t || 0 === t.length) &&
-                            ((s.base64 = !1), (s.binary = !0), (t = ''), (s.compression = 'STORE'), (i = 'string'));
+                                ((s.base64 = !1), (s.binary = !0), (t = ''), (s.compression = 'STORE'), (i = 'string'));
                         var o = null;
                         o =
                             t instanceof c || t instanceof l
                                 ? t
                                 : p.isNode && p.isStream(t)
-                                    ? new m(e, t)
-                                    : u.prepareContent(e, t, s.binary, s.optimizedBinaryString, s.base64);
+                                  ? new m(e, t)
+                                  : u.prepareContent(e, t, s.binary, s.optimizedBinaryString, s.base64);
                         var h = new d(e, o, s);
                         this.files[e] = h;
                     }
@@ -839,8 +839,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             for(t in this.files)
                                 (n = this.files[t]),
                                     (r = t.slice(this.root.length, t.length)) &&
-                                    t.slice(0, this.root.length) === this.root &&
-                                    e(r, n);
+                                        t.slice(0, this.root.length) === this.root &&
+                                        e(r, n);
                         },
                         filter: function (r) {
                             var n = [];
@@ -881,9 +881,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             else
                                 for(
                                     var t = this.filter(function (e, t) {
-                                        return t.name.slice(0, r.length) === r;
-                                    }),
-                                    n = 0;
+                                            return t.name.slice(0, r.length) === r;
+                                        }),
+                                        n = 0;
                                     n < t.length;
                                     n++
                                 )
@@ -910,9 +910,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         mimeType: 'application/zip',
                                         encodeFileName: i.utf8encode,
                                     })).type = r.type.toLowerCase()),
-                                        (r.compression = r.compression.toUpperCase()),
-                                        'binarystring' === r.type && (r.type = 'string'),
-                                        !r.type)
+                                    (r.compression = r.compression.toUpperCase()),
+                                    'binarystring' === r.type && (r.type = 'string'),
+                                    !r.type)
                                 )
                                     throw new Error('No output type specified.');
                                 u.checkSupport(r.type),
@@ -920,7 +920,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         'freebsd' !== r.platform &&
                                         'linux' !== r.platform &&
                                         'sunos' !== r.platform) ||
-                                    (r.platform = 'UNIX'),
+                                        (r.platform = 'UNIX'),
                                     'win32' === r.platform && (r.platform = 'DOS');
                                 var n = r.comment || this.comment || '';
                                 t = o.generateWorker(this, r, n);
@@ -977,10 +977,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         (i.prototype.lastIndexOfSignature = function (e) {
                             for(
                                 var t = e.charCodeAt(0),
-                                r = e.charCodeAt(1),
-                                n = e.charCodeAt(2),
-                                i = e.charCodeAt(3),
-                                s = this.length - 4;
+                                    r = e.charCodeAt(1),
+                                    n = e.charCodeAt(2),
+                                    i = e.charCodeAt(3),
+                                    s = this.length - 4;
                                 0 <= s;
                                 --s
                             )
@@ -1025,10 +1025,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             if(this.length < this.zero + e || e < 0)
                                 throw new Error(
                                     'End of data reached (data length = ' +
-                                    this.length +
-                                    ', asked index = ' +
-                                    e +
-                                    '). Corrupted zip ?',
+                                        this.length +
+                                        ', asked index = ' +
+                                        e +
+                                        '). Corrupted zip ?',
                                 );
                         },
                         setIndex: function (e) {
@@ -1037,7 +1037,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         skip: function (e) {
                             this.setIndex(this.index + e);
                         },
-                        byteAt: function () { },
+                        byteAt: function () {},
                         readInt: function (e) {
                             var t,
                                 r = 0;
@@ -1048,9 +1048,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         readString: function (e) {
                             return n.transformTo('string', this.readData(e));
                         },
-                        readData: function () { },
-                        lastIndexOfSignature: function () { },
-                        readAndCheckSignature: function () { },
+                        readData: function () {},
+                        lastIndexOfSignature: function () {},
+                        readAndCheckSignature: function () {},
                         readDate: function () {
                             var e = this.readInt(4);
                             return new Date(
@@ -1146,8 +1146,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 ? 'nodebuffer' === t
                                     ? new o(e)
                                     : i.uint8array
-                                        ? new h(n.transformTo('uint8array', e))
-                                        : new s(n.transformTo('array', e))
+                                      ? new h(n.transformTo('uint8array', e))
+                                      : new s(n.transformTo('array', e))
                                 : new a(e)
                         );
                     };
@@ -1262,16 +1262,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (!this._tickScheduled &&
                                     this.dataIsReady &&
                                     ((this._tickScheduled = !0), n.delay(this._tickAndRepeat, [], this)),
-                                    !0)
+                                !0)
                             );
                         }),
                         (s.prototype._tickAndRepeat = function () {
                             (this._tickScheduled = !1),
                                 this.isPaused ||
-                                this.isFinished ||
-                                (this._tick(),
                                     this.isFinished ||
-                                    (n.delay(this._tickAndRepeat, [], this), (this._tickScheduled = !0)));
+                                    (this._tick(),
+                                    this.isFinished ||
+                                        (n.delay(this._tickAndRepeat, [], this), (this._tickScheduled = !0)));
                         }),
                         (s.prototype._tick = function () {
                             if(this.isPaused || this.isFinished) return !1;
@@ -1333,10 +1333,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (this.isPaused
                                     ? (this.generatedError = e)
                                     : ((this.isFinished = !0),
-                                        this.emit('error', e),
-                                        this.previous && this.previous.error(e),
-                                        this.cleanUp()),
-                                    !0)
+                                      this.emit('error', e),
+                                      this.previous && this.previous.error(e),
+                                      this.cleanUp()),
+                                !0)
                             );
                         },
                         on: function (e, t) {
@@ -1386,7 +1386,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 !e
                             );
                         },
-                        flush: function () { },
+                        flush: function () {},
                         processChunk: function (e) {
                             this.push(e);
                         },
@@ -1425,7 +1425,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         try {
                             o = e('../nodejs/NodejsStreamOutputAdapter');
                         }
-                        catch(e) { }
+                        catch(e) {}
                     function l(e, o) {
                         return new a.Promise(function (t, r) {
                             var n = [],
@@ -1515,11 +1515,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             return (
                                 'data' === e
                                     ? this._worker.on(e, function (e) {
-                                        t.call(r, e.data, e.meta);
-                                    })
+                                          t.call(r, e.data, e.meta);
+                                      })
                                     : this._worker.on(e, function () {
-                                        h.delay(t, arguments, r);
-                                    }),
+                                          h.delay(t, arguments, r);
+                                      }),
                                 this
                             );
                         },
@@ -1552,12 +1552,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     'use strict';
                     if(
                         ((r.base64 = !0),
-                            (r.array = !0),
-                            (r.string = !0),
-                            (r.arraybuffer = 'undefined' != typeof ArrayBuffer && 'undefined' != typeof Uint8Array),
-                            (r.nodebuffer = 'undefined' != typeof Buffer),
-                            (r.uint8array = 'undefined' != typeof Uint8Array),
-                            'undefined' == typeof ArrayBuffer)
+                        (r.array = !0),
+                        (r.string = !0),
+                        (r.arraybuffer = 'undefined' != typeof ArrayBuffer && 'undefined' != typeof Uint8Array),
+                        (r.nodebuffer = 'undefined' != typeof Buffer),
+                        (r.uint8array = 'undefined' != typeof Uint8Array),
+                        'undefined' == typeof ArrayBuffer)
                     )
                         r.blob = !1;
                     else {
@@ -1592,11 +1592,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     'use strict';
                     for(
                         var o = e('./utils'),
-                        h = e('./support'),
-                        r = e('./nodejsUtils'),
-                        n = e('./stream/GenericWorker'),
-                        u = new Array(256),
-                        i = 0;
+                            h = e('./support'),
+                            r = e('./nodejsUtils'),
+                            n = e('./stream/GenericWorker'),
+                            u = new Array(256),
+                            i = 0;
                         i < 256;
                         i++
                     )
@@ -1612,66 +1612,66 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         return h.nodebuffer
                             ? r.newBufferFrom(e, 'utf-8')
                             : (function (e) {
-                                var t,
-                                    r,
-                                    n,
-                                    i,
-                                    s,
-                                    a = e.length,
-                                    o = 0;
-                                for(i = 0; i < a; i++)
-                                    55296 == (64512 & (r = e.charCodeAt(i))) &&
-                                        i + 1 < a &&
-                                        56320 == (64512 & (n = e.charCodeAt(i + 1))) &&
-                                        ((r = 65536 + ((r - 55296) << 10) + (n - 56320)), i++),
-                                        (o += r < 128 ? 1 : r < 2048 ? 2 : r < 65536 ? 3 : 4);
-                                for(t = h.uint8array ? new Uint8Array(o) : new Array(o), i = s = 0; s < o; i++)
-                                    55296 == (64512 & (r = e.charCodeAt(i))) &&
-                                        i + 1 < a &&
-                                        56320 == (64512 & (n = e.charCodeAt(i + 1))) &&
-                                        ((r = 65536 + ((r - 55296) << 10) + (n - 56320)), i++),
-                                        r < 128
-                                            ? (t[s++] = r)
-                                            : (r < 2048
-                                                ? (t[s++] = 192 | (r >>> 6))
-                                                : (r < 65536
-                                                    ? (t[s++] = 224 | (r >>> 12))
-                                                    : ((t[s++] = 240 | (r >>> 18)),
-                                                        (t[s++] = 128 | ((r >>> 12) & 63))),
-                                                    (t[s++] = 128 | ((r >>> 6) & 63))),
+                                  var t,
+                                      r,
+                                      n,
+                                      i,
+                                      s,
+                                      a = e.length,
+                                      o = 0;
+                                  for(i = 0; i < a; i++)
+                                      55296 == (64512 & (r = e.charCodeAt(i))) &&
+                                          i + 1 < a &&
+                                          56320 == (64512 & (n = e.charCodeAt(i + 1))) &&
+                                          ((r = 65536 + ((r - 55296) << 10) + (n - 56320)), i++),
+                                          (o += r < 128 ? 1 : r < 2048 ? 2 : r < 65536 ? 3 : 4);
+                                  for(t = h.uint8array ? new Uint8Array(o) : new Array(o), i = s = 0; s < o; i++)
+                                      55296 == (64512 & (r = e.charCodeAt(i))) &&
+                                          i + 1 < a &&
+                                          56320 == (64512 & (n = e.charCodeAt(i + 1))) &&
+                                          ((r = 65536 + ((r - 55296) << 10) + (n - 56320)), i++),
+                                          r < 128
+                                              ? (t[s++] = r)
+                                              : (r < 2048
+                                                    ? (t[s++] = 192 | (r >>> 6))
+                                                    : (r < 65536
+                                                          ? (t[s++] = 224 | (r >>> 12))
+                                                          : ((t[s++] = 240 | (r >>> 18)),
+                                                            (t[s++] = 128 | ((r >>> 12) & 63))),
+                                                      (t[s++] = 128 | ((r >>> 6) & 63))),
                                                 (t[s++] = 128 | (63 & r)));
-                                return t;
-                            })(e);
+                                  return t;
+                              })(e);
                     }),
                         (s.utf8decode = function (e) {
                             return h.nodebuffer
                                 ? o.transformTo('nodebuffer', e).toString('utf-8')
                                 : (function (e) {
-                                    var t,
-                                        r,
-                                        n,
-                                        i,
-                                        s = e.length,
-                                        a = new Array(2 * s);
-                                    for(t = r = 0; t < s;)
-                                        if((n = e[t++]) < 128) a[r++] = n;
-                                        else if(4 < (i = u[n])) (a[r++] = 65533), (t += i - 1);
-                                        else {
-                                            for(n &= 2 === i ? 31 : 3 === i ? 15 : 7; 1 < i && t < s;)
-                                                (n = (n << 6) | (63 & e[t++])), i--;
-                                            1 < i
-                                                ? (a[r++] = 65533)
-                                                : n < 65536
+                                      var t,
+                                          r,
+                                          n,
+                                          i,
+                                          s = e.length,
+                                          a = new Array(2 * s);
+                                      for(t = r = 0; t < s; )
+                                          if((n = e[t++]) < 128) a[r++] = n;
+                                          else if(4 < (i = u[n])) (a[r++] = 65533), (t += i - 1);
+                                          else {
+                                              for(n &= 2 === i ? 31 : 3 === i ? 15 : 7; 1 < i && t < s; )
+                                                  (n = (n << 6) | (63 & e[t++])), i--;
+                                              1 < i
+                                                  ? (a[r++] = 65533)
+                                                  : n < 65536
                                                     ? (a[r++] = n)
                                                     : ((n -= 65536),
-                                                        (a[r++] = 55296 | ((n >> 10) & 1023)),
-                                                        (a[r++] = 56320 | (1023 & n)));
-                                        }
-                                    return (
-                                        a.length !== r && (a.subarray ? (a = a.subarray(0, r)) : (a.length = r)),
-                                        o.applyFromCharCode(a)
-                                    );
-                                })((e = o.transformTo(h.uint8array ? 'uint8array' : 'array', e)));
+                                                      (a[r++] = 55296 | ((n >> 10) & 1023)),
+                                                      (a[r++] = 56320 | (1023 & n)));
+                                          }
+                                      return (
+                                          a.length !== r && (a.subarray ? (a = a.subarray(0, r)) : (a.length = r)),
+                                          o.applyFromCharCode(a)
+                                      );
+                                  })((e = o.transformTo(h.uint8array ? 'uint8array' : 'array', e)));
                         }),
                         o.inherits(a, n),
                         (a.prototype.processChunk = function (e) {
@@ -1686,15 +1686,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 this.leftOver = null;
                             }
                             var n = (function (e, t) {
-                                var r;
-                                for(
-                                    (t = t || e.length) > e.length && (t = e.length), r = t - 1;
-                                    0 <= r && 128 == (192 & e[r]);
+                                    var r;
+                                    for(
+                                        (t = t || e.length) > e.length && (t = e.length), r = t - 1;
+                                        0 <= r && 128 == (192 & e[r]);
 
-                                )
-                                    r--;
-                                return r < 0 ? t : 0 === r ? t : r + u[e[r]] > t ? r : t;
-                            })(t),
+                                    )
+                                        r--;
+                                    return r < 0 ? t : 0 === r ? t : r + u[e[r]] > t ? r : t;
+                                })(t),
                                 i = t;
                             n !== t.length &&
                                 (h.uint8array
@@ -1755,7 +1755,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 i = 0,
                                 s = e.length;
                             if(s <= r) return String.fromCharCode.apply(null, e);
-                            for(; i < s;)
+                            for(; i < s; )
                                 'array' === t || 'nodebuffer' === t
                                     ? n.push(String.fromCharCode.apply(null, e.slice(i, Math.min(i + r, s))))
                                     : n.push(String.fromCharCode.apply(null, e.subarray(i, Math.min(i + r, s)))),
@@ -1797,9 +1797,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             ('uint8array' === r
                                 ? (n = i.applyCanBeUsed.uint8array)
                                 : 'nodebuffer' === r && (n = i.applyCanBeUsed.nodebuffer),
-                                n)
+                            n)
                         )
-                            for(; 1 < t;)
+                            for(; 1 < t; )
                                 try {
                                     return i.stringifyByChunk(e, r, t);
                                 }
@@ -1902,14 +1902,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             return 'string' == typeof e
                                 ? 'string'
                                 : '[object Array]' === Object.prototype.toString.call(e)
-                                    ? 'array'
-                                    : o.nodebuffer && r.isBuffer(e)
-                                        ? 'nodebuffer'
-                                        : o.uint8array && e instanceof Uint8Array
-                                            ? 'uint8array'
-                                            : o.arraybuffer && e instanceof ArrayBuffer
-                                                ? 'arraybuffer'
-                                                : void 0;
+                                  ? 'array'
+                                  : o.nodebuffer && r.isBuffer(e)
+                                    ? 'nodebuffer'
+                                    : o.uint8array && e instanceof Uint8Array
+                                      ? 'uint8array'
+                                      : o.arraybuffer && e instanceof ArrayBuffer
+                                        ? 'arraybuffer'
+                                        : void 0;
                         }),
                         (a.checkSupport = function (e) {
                             if(!o[e.toLowerCase()]) throw new Error(e + ' is not supported by this platform');
@@ -1930,7 +1930,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             });
                         }),
                         (a.inherits = function (e, t) {
-                            function r() { }
+                            function r() {}
                             (r.prototype = t.prototype), (e.prototype = new r());
                         }),
                         (a.extend = function () {
@@ -1950,48 +1950,48 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     return o.blob &&
                                         (n instanceof Blob ||
                                             -1 !==
-                                            ['[object File]', '[object Blob]'].indexOf(
-                                                Object.prototype.toString.call(n),
-                                            )) &&
+                                                ['[object File]', '[object Blob]'].indexOf(
+                                                    Object.prototype.toString.call(n),
+                                                )) &&
                                         'undefined' != typeof FileReader
                                         ? new u.Promise(function (t, r) {
-                                            var e = new FileReader();
-                                            (e.onload = function (e) {
-                                                t(e.target.result);
-                                            }),
-                                                (e.onerror = function (e) {
-                                                    r(e.target.error);
-                                                }),
-                                                e.readAsArrayBuffer(n);
-                                        })
+                                              var e = new FileReader();
+                                              (e.onload = function (e) {
+                                                  t(e.target.result);
+                                              }),
+                                                  (e.onerror = function (e) {
+                                                      r(e.target.error);
+                                                  }),
+                                                  e.readAsArrayBuffer(n);
+                                          })
                                         : n;
                                 })
                                 .then(function (e) {
                                     var t = a.getTypeOf(e);
                                     return t
                                         ? ('arraybuffer' === t
-                                            ? (e = a.transformTo('uint8array', e))
-                                            : 'string' === t &&
-                                            (s
-                                                ? (e = h.decode(e))
-                                                : n &&
-                                                !0 !== i &&
-                                                (e = (function (e) {
-                                                    return l(
-                                                        e,
-                                                        o.uint8array
-                                                            ? new Uint8Array(e.length)
-                                                            : new Array(e.length),
-                                                    );
-                                                })(e))),
-                                            e)
+                                              ? (e = a.transformTo('uint8array', e))
+                                              : 'string' === t &&
+                                                (s
+                                                    ? (e = h.decode(e))
+                                                    : n &&
+                                                      !0 !== i &&
+                                                      (e = (function (e) {
+                                                          return l(
+                                                              e,
+                                                              o.uint8array
+                                                                  ? new Uint8Array(e.length)
+                                                                  : new Array(e.length),
+                                                          );
+                                                      })(e))),
+                                          e)
                                         : u.Promise.reject(
-                                            new Error(
-                                                "Can't read the data of '" +
-                                                r +
-                                                "'. Is it in a supported JavaScript type (String, Blob, ArrayBuffer, etc) ?",
-                                            ),
-                                        );
+                                              new Error(
+                                                  "Can't read the data of '" +
+                                                      r +
+                                                      "'. Is it in a supported JavaScript type (String, Blob, ArrayBuffer, etc) ?",
+                                              ),
+                                          );
                                 });
                         });
                 },
@@ -2015,10 +2015,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 var t = this.reader.readString(4);
                                 throw new Error(
                                     'Corrupted zip or bug: unexpected signature (' +
-                                    i.pretty(t) +
-                                    ', expected ' +
-                                    i.pretty(e) +
-                                    ')',
+                                        i.pretty(t) +
+                                        ', expected ' +
+                                        i.pretty(e) +
+                                        ')',
                                 );
                             }
                         },
@@ -2051,7 +2051,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (this.centralDirSize = this.reader.readInt(8)),
                                 (this.centralDirOffset = this.reader.readInt(8)),
                                 (this.zip64ExtensibleData = {});
-                            for(var e, t, r, n = this.zip64EndOfCentralSize - 44; 0 < n;)
+                            for(var e, t, r, n = this.zip64EndOfCentralSize - 44; 0 < n; )
                                 (e = this.reader.readInt(2)),
                                     (t = this.reader.readInt(4)),
                                     (r = this.reader.readData(t)),
@@ -2060,9 +2060,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         readBlockZip64EndOfCentralLocator: function () {
                             if(
                                 ((this.diskWithZip64CentralDirStart = this.reader.readInt(4)),
-                                    (this.relativeOffsetEndOfZip64CentralDir = this.reader.readInt(8)),
-                                    (this.disksCount = this.reader.readInt(4)),
-                                    1 < this.disksCount)
+                                (this.relativeOffsetEndOfZip64CentralDir = this.reader.readInt(8)),
+                                (this.disksCount = this.reader.readInt(4)),
+                                1 < this.disksCount)
                             )
                                 throw new Error('Multi-volumes zip are not supported');
                         },
@@ -2092,9 +2092,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             )
                                 throw new Error(
                                     'Corrupted zip or bug: expected ' +
-                                    this.centralDirRecords +
-                                    ' records in central dir, got ' +
-                                    this.files.length,
+                                        this.centralDirRecords +
+                                        ' records in central dir, got ' +
+                                        this.files.length,
                                 );
                         },
                         readEndOfCentral: function () {
@@ -2102,15 +2102,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             if(e < 0)
                                 throw !this.isSignature(0, s.LOCAL_FILE_HEADER)
                                     ? new Error(
-                                        "Can't find end of central directory : is this a zip file ? If it is, see https://stuk.github.io/jszip/documentation/howto/read_zip.html",
-                                    )
+                                          "Can't find end of central directory : is this a zip file ? If it is, see https://stuk.github.io/jszip/documentation/howto/read_zip.html",
+                                      )
                                     : new Error("Corrupted zip: can't find end of central directory");
                             this.reader.setIndex(e);
                             var t = e;
                             if(
                                 (this.checkSignature(s.CENTRAL_DIRECTORY_END),
-                                    this.readBlockEndOfCentral(),
-                                    this.diskNumber === i.MAX_VALUE_16BITS ||
+                                this.readBlockEndOfCentral(),
+                                this.diskNumber === i.MAX_VALUE_16BITS ||
                                     this.diskWithCentralDirStart === i.MAX_VALUE_16BITS ||
                                     this.centralDirRecordsOnThisDisk === i.MAX_VALUE_16BITS ||
                                     this.centralDirRecords === i.MAX_VALUE_16BITS ||
@@ -2119,23 +2119,23 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             ) {
                                 if(
                                     ((this.zip64 = !0),
-                                        (e = this.reader.lastIndexOfSignature(s.ZIP64_CENTRAL_DIRECTORY_LOCATOR)) < 0)
+                                    (e = this.reader.lastIndexOfSignature(s.ZIP64_CENTRAL_DIRECTORY_LOCATOR)) < 0)
                                 )
                                     throw new Error(
                                         "Corrupted zip: can't find the ZIP64 end of central directory locator",
                                     );
                                 if(
                                     (this.reader.setIndex(e),
-                                        this.checkSignature(s.ZIP64_CENTRAL_DIRECTORY_LOCATOR),
-                                        this.readBlockZip64EndOfCentralLocator(),
-                                        !this.isSignature(
-                                            this.relativeOffsetEndOfZip64CentralDir,
-                                            s.ZIP64_CENTRAL_DIRECTORY_END,
-                                        ) &&
+                                    this.checkSignature(s.ZIP64_CENTRAL_DIRECTORY_LOCATOR),
+                                    this.readBlockZip64EndOfCentralLocator(),
+                                    !this.isSignature(
+                                        this.relativeOffsetEndOfZip64CentralDir,
+                                        s.ZIP64_CENTRAL_DIRECTORY_END,
+                                    ) &&
                                         ((this.relativeOffsetEndOfZip64CentralDir = this.reader.lastIndexOfSignature(
                                             s.ZIP64_CENTRAL_DIRECTORY_END,
                                         )),
-                                            this.relativeOffsetEndOfZip64CentralDir < 0))
+                                        this.relativeOffsetEndOfZip64CentralDir < 0))
                                 )
                                     throw new Error("Corrupted zip: can't find the ZIP64 end of central directory");
                                 this.reader.setIndex(this.relativeOffsetEndOfZip64CentralDir),
@@ -2186,11 +2186,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             var t, r;
                             if(
                                 (e.skip(22),
-                                    (this.fileNameLength = e.readInt(2)),
-                                    (r = e.readInt(2)),
-                                    (this.fileName = e.readData(this.fileNameLength)),
-                                    e.skip(r),
-                                    -1 === this.compressedSize || -1 === this.uncompressedSize)
+                                (this.fileNameLength = e.readInt(2)),
+                                (r = e.readInt(2)),
+                                (this.fileName = e.readData(this.fileNameLength)),
+                                e.skip(r),
+                                -1 === this.compressedSize || -1 === this.uncompressedSize)
                             )
                                 throw new Error(
                                     "Bug or corrupted zip : didn't get enough information from the central directory (compressedSize === -1 || uncompressedSize === -1)",
@@ -2205,10 +2205,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             )
                                 throw new Error(
                                     'Corrupted zip : compression ' +
-                                    s.pretty(this.compressionMethod) +
-                                    ' unknown (inner file : ' +
-                                    s.transformTo('string', this.fileName) +
-                                    ')',
+                                        s.pretty(this.compressionMethod) +
+                                        ' unknown (inner file : ' +
+                                        s.transformTo('string', this.fileName) +
+                                        ')',
                                 );
                             this.decompressed = new i(
                                 this.compressedSize,
@@ -2230,12 +2230,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             var t = e.readInt(2);
                             if(
                                 ((this.extraFieldsLength = e.readInt(2)),
-                                    (this.fileCommentLength = e.readInt(2)),
-                                    (this.diskNumberStart = e.readInt(2)),
-                                    (this.internalFileAttributes = e.readInt(2)),
-                                    (this.externalFileAttributes = e.readInt(4)),
-                                    (this.localHeaderOffset = e.readInt(4)),
-                                    this.isEncrypted())
+                                (this.fileCommentLength = e.readInt(2)),
+                                (this.diskNumberStart = e.readInt(2)),
+                                (this.internalFileAttributes = e.readInt(2)),
+                                (this.externalFileAttributes = e.readInt(4)),
+                                (this.localHeaderOffset = e.readInt(4)),
+                                this.isEncrypted())
                             )
                                 throw new Error('Encrypted zip are not supported');
                             e.skip(t),
@@ -2257,9 +2257,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 this.uncompressedSize === s.MAX_VALUE_32BITS && (this.uncompressedSize = e.readInt(8)),
                                     this.compressedSize === s.MAX_VALUE_32BITS && (this.compressedSize = e.readInt(8)),
                                     this.localHeaderOffset === s.MAX_VALUE_32BITS &&
-                                    (this.localHeaderOffset = e.readInt(8)),
+                                        (this.localHeaderOffset = e.readInt(8)),
                                     this.diskNumberStart === s.MAX_VALUE_32BITS &&
-                                    (this.diskNumberStart = e.readInt(4));
+                                        (this.diskNumberStart = e.readInt(4));
                             }
                         },
                         readExtraFields: function (e) {
@@ -2267,7 +2267,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 r,
                                 n,
                                 i = e.index + this.extraFieldsLength;
-                            for(this.extraFields || (this.extraFields = {}); e.index + 4 < i;)
+                            for(this.extraFields || (this.extraFields = {}); e.index + 4 < i; )
                                 (t = e.readInt(2)),
                                     (r = e.readInt(2)),
                                     (n = e.readData(r)),
@@ -2301,8 +2301,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 return 1 !== t.readInt(1)
                                     ? null
                                     : a(this.fileName) !== t.readInt(4)
-                                        ? null
-                                        : o.utf8decode(t.readData(e.length - 5));
+                                      ? null
+                                      : o.utf8decode(t.readData(e.length - 5));
                             }
                             return null;
                         },
@@ -2313,8 +2313,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 return 1 !== t.readInt(1)
                                     ? null
                                     : a(this.fileComment) !== t.readInt(4)
-                                        ? null
-                                        : o.utf8decode(t.readData(e.length - 5));
+                                      ? null
+                                      : o.utf8decode(t.readData(e.length - 5));
                             }
                             return null;
                         },
@@ -2386,18 +2386,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             return this._data instanceof o
                                 ? this._data.getContentWorker()
                                 : this._data instanceof h
-                                    ? this._data
-                                    : new i(this._data);
+                                  ? this._data
+                                  : new i(this._data);
                         },
                     };
                     for(
                         var u = ['asText', 'asBinary', 'asNodeBuffer', 'asUint8Array', 'asArrayBuffer'],
-                        l = function () {
-                            throw new Error(
-                                'This method has been removed in JSZip 3.0, please check the upgrade guide.',
-                            );
-                        },
-                        f = 0;
+                            l = function () {
+                                throw new Error(
+                                    'This method has been removed in JSZip 3.0, please check the upgrade guide.',
+                                );
+                            },
+                            f = 0;
                         f < u.length;
                         f++
                     )
@@ -2432,18 +2432,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             r =
                                 'document' in t && 'onreadystatechange' in t.document.createElement('script')
                                     ? function () {
-                                        var e = t.document.createElement('script');
-                                        (e.onreadystatechange = function () {
-                                            u(),
-                                                (e.onreadystatechange = null),
-                                                e.parentNode.removeChild(e),
-                                                (e = null);
-                                        }),
-                                            t.document.documentElement.appendChild(e);
-                                    }
+                                          var e = t.document.createElement('script');
+                                          (e.onreadystatechange = function () {
+                                              u(),
+                                                  (e.onreadystatechange = null),
+                                                  e.parentNode.removeChild(e),
+                                                  (e = null);
+                                          }),
+                                              t.document.documentElement.appendChild(e);
+                                      }
                                     : function () {
-                                        setTimeout(u, 0);
-                                    };
+                                          setTimeout(u, 0);
+                                      };
                         else {
                             var o = new t.MessageChannel();
                             (o.port1.onmessage = u),
@@ -2455,8 +2455,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         function u() {
                             var e, t;
                             n = !0;
-                            for(var r = h.length; r;) {
-                                for(t = h, h = [], e = -1; ++e < r;) t[e]();
+                            for(var r = h.length; r; ) {
+                                for(t = h, h = [], e = -1; ++e < r; ) t[e]();
                                 r = h.length;
                             }
                             n = !1;
@@ -2469,10 +2469,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         'undefined' != typeof global
                             ? global
                             : 'undefined' != typeof self
-                                ? self
-                                : 'undefined' != typeof window
-                                    ? window
-                                    : {},
+                              ? self
+                              : 'undefined' != typeof window
+                                ? window
+                                : {},
                     );
                 },
                 {},
@@ -2481,7 +2481,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                 function (e, t, r) {
                     'use strict';
                     var i = e('immediate');
-                    function u() { }
+                    function u() {}
                     var l = {},
                         s = ['REJECTED'],
                         a = ['FULFILLED'],
@@ -2493,9 +2493,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     function h(e, t, r) {
                         (this.promise = e),
                             'function' == typeof t &&
-                            ((this.onFulfilled = t), (this.callFulfilled = this.otherCallFulfilled)),
+                                ((this.onFulfilled = t), (this.callFulfilled = this.otherCallFulfilled)),
                             'function' == typeof r &&
-                            ((this.onRejected = r), (this.callRejected = this.otherCallRejected));
+                                ((this.onRejected = r), (this.callRejected = this.otherCallRejected));
                     }
                     function f(t, r, n) {
                         i(function () {
@@ -2591,13 +2591,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             if(n) d(e, n);
                             else {
                                 (e.state = a), (e.outcome = t);
-                                for(var i = -1, s = e.queue.length; ++i < s;) e.queue[i].callFulfilled(t);
+                                for(var i = -1, s = e.queue.length; ++i < s; ) e.queue[i].callFulfilled(t);
                             }
                             return e;
                         }),
                         (l.reject = function (e, t) {
                             (e.state = s), (e.outcome = t);
-                            for(var r = -1, n = e.queue.length; ++r < n;) e.queue[r].callRejected(t);
+                            for(var r = -1, n = e.queue.length; ++r < n; ) e.queue[r].callRejected(t);
                             return e;
                         }),
                         (o.resolve = function (e) {
@@ -2619,7 +2619,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 a = 0,
                                 t = -1,
                                 o = new this(u);
-                            for(; ++t < n;) h(e[t], t);
+                            for(; ++t < n; ) h(e[t], t);
                             return o;
                             function h(e, t) {
                                 r.resolve(e).then(
@@ -2641,7 +2641,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             if(!r) return this.resolve([]);
                             var i = -1,
                                 s = new this(u);
-                            for(; ++i < r;)
+                            for(; ++i < r; )
                                 (a = e[i]),
                                     t.resolve(a).then(
                                         function (e) {
@@ -2709,9 +2709,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     'string' == typeof t.dictionary
                                         ? h.string2buf(t.dictionary)
                                         : '[object ArrayBuffer]' === u.call(t.dictionary)
-                                            ? new Uint8Array(t.dictionary)
-                                            : t.dictionary),
-                                    (r = a.deflateSetDictionary(this.strm, n)) !== l)
+                                          ? new Uint8Array(t.dictionary)
+                                          : t.dictionary),
+                                (r = a.deflateSetDictionary(this.strm, n)) !== l)
                             )
                                 throw new Error(i[r]);
                             this._dict_set = !0;
@@ -2732,14 +2732,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             'string' == typeof e
                                 ? (i.input = h.string2buf(e))
                                 : '[object ArrayBuffer]' === u.call(e)
-                                    ? (i.input = new Uint8Array(e))
-                                    : (i.input = e),
+                                  ? (i.input = new Uint8Array(e))
+                                  : (i.input = e),
                             (i.next_in = 0),
                             (i.avail_in = i.input.length);
                         do {
                             if(
                                 (0 === i.avail_out && ((i.output = new o.Buf8(s)), (i.next_out = 0), (i.avail_out = s)),
-                                    1 !== (r = a.deflate(i, n)) && r !== l)
+                                1 !== (r = a.deflate(i, n)) && r !== l)
                             )
                                 return this.onEnd(r), !(this.ended = !0);
                             (0 !== i.avail_out && (0 !== i.avail_in || (4 !== n && 2 !== n))) ||
@@ -2832,24 +2832,24 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             'string' == typeof e
                                 ? (h.input = p.binstring2buf(e))
                                 : '[object ArrayBuffer]' === _.call(e)
-                                    ? (h.input = new Uint8Array(e))
-                                    : (h.input = e),
+                                  ? (h.input = new Uint8Array(e))
+                                  : (h.input = e),
                             (h.next_in = 0),
                             (h.avail_in = h.input.length);
                         do {
                             if(
                                 (0 === h.avail_out && ((h.output = new d.Buf8(u)), (h.next_out = 0), (h.avail_out = u)),
-                                    (r = c.inflate(h, m.Z_NO_FLUSH)) === m.Z_NEED_DICT &&
+                                (r = c.inflate(h, m.Z_NO_FLUSH)) === m.Z_NEED_DICT &&
                                     l &&
                                     ((o =
                                         'string' == typeof l
                                             ? p.string2buf(l)
                                             : '[object ArrayBuffer]' === _.call(l)
-                                                ? new Uint8Array(l)
-                                                : l),
-                                        (r = c.inflateSetDictionary(this.strm, o))),
-                                    r === m.Z_BUF_ERROR && !0 === f && ((r = m.Z_OK), (f = !1)),
-                                    r !== m.Z_STREAM_END && r !== m.Z_OK)
+                                              ? new Uint8Array(l)
+                                              : l),
+                                    (r = c.inflateSetDictionary(this.strm, o))),
+                                r === m.Z_BUF_ERROR && !0 === f && ((r = m.Z_OK), (f = !1)),
+                                r !== m.Z_STREAM_END && r !== m.Z_OK)
                             )
                                 return this.onEnd(r), !(this.ended = !0);
                             h.next_out &&
@@ -2858,12 +2858,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     (0 !== h.avail_in || (n !== m.Z_FINISH && n !== m.Z_SYNC_FLUSH))) ||
                                     ('string' === this.options.to
                                         ? ((i = p.utf8border(h.output, h.next_out)),
-                                            (s = h.next_out - i),
-                                            (a = p.buf2string(h.output, i)),
-                                            (h.next_out = s),
-                                            (h.avail_out = u - s),
-                                            s && d.arraySet(h.output, h.output, i, s, 0),
-                                            this.onData(a))
+                                          (s = h.next_out - i),
+                                          (a = p.buf2string(h.output, i)),
+                                          (h.next_out = s),
+                                          (h.avail_out = u - s),
+                                          s && d.arraySet(h.output, h.output, i, s, 0),
+                                          this.onData(a))
                                         : this.onData(d.shrinkBuf(h.output, h.next_out)))),
                                 0 === h.avail_in && 0 === h.avail_out && (f = !0);
                         } while((0 < h.avail_in || 0 === h.avail_out) && r !== m.Z_STREAM_END);
@@ -2911,7 +2911,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         'undefined' != typeof Uint16Array &&
                         'undefined' != typeof Int32Array;
                     (r.assign = function (e) {
-                        for(var t = Array.prototype.slice.call(arguments, 1); t.length;) {
+                        for(var t = Array.prototype.slice.call(arguments, 1); t.length; ) {
                             var r = t.shift();
                             if(r) {
                                 if('object' != typeof r) throw new TypeError(r + 'must be non-object');
@@ -2924,18 +2924,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             return e.length === t ? e : e.subarray ? e.subarray(0, t) : ((e.length = t), e);
                         });
                     var i = {
-                        arraySet: function (e, t, r, n, i) {
-                            if(t.subarray && e.subarray) e.set(t.subarray(r, r + n), i);
-                            else for(var s = 0; s < n; s++) e[i + s] = t[r + s];
+                            arraySet: function (e, t, r, n, i) {
+                                if(t.subarray && e.subarray) e.set(t.subarray(r, r + n), i);
+                                else for(var s = 0; s < n; s++) e[i + s] = t[r + s];
+                            },
+                            flattenChunks: function (e) {
+                                var t, r, n, i, s, a;
+                                for(t = n = 0, r = e.length; t < r; t++) n += e[t].length;
+                                for(a = new Uint8Array(n), t = i = 0, r = e.length; t < r; t++)
+                                    (s = e[t]), a.set(s, i), (i += s.length);
+                                return a;
+                            },
                         },
-                        flattenChunks: function (e) {
-                            var t, r, n, i, s, a;
-                            for(t = n = 0, r = e.length; t < r; t++) n += e[t].length;
-                            for(a = new Uint8Array(n), t = i = 0, r = e.length; t < r; t++)
-                                (s = e[t]), a.set(s, i), (i += s.length);
-                            return a;
-                        },
-                    },
                         s = {
                             arraySet: function (e, t, r, n, i) {
                                 for(var s = 0; s < n; s++) e[i + s] = t[r + s];
@@ -3002,12 +3002,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     r < 128
                                         ? (t[s++] = r)
                                         : (r < 2048
-                                            ? (t[s++] = 192 | (r >>> 6))
-                                            : (r < 65536
-                                                ? (t[s++] = 224 | (r >>> 12))
-                                                : ((t[s++] = 240 | (r >>> 18)), (t[s++] = 128 | ((r >>> 12) & 63))),
+                                              ? (t[s++] = 192 | (r >>> 6))
+                                              : (r < 65536
+                                                    ? (t[s++] = 224 | (r >>> 12))
+                                                    : ((t[s++] = 240 | (r >>> 18)), (t[s++] = 128 | ((r >>> 12) & 63))),
                                                 (t[s++] = 128 | ((r >>> 6) & 63))),
-                                            (t[s++] = 128 | (63 & r)));
+                                          (t[s++] = 128 | (63 & r)));
                             return t;
                         }),
                         (r.buf2binstring = function (e) {
@@ -3024,19 +3024,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 s,
                                 a = t || e.length,
                                 o = new Array(2 * a);
-                            for(r = n = 0; r < a;)
+                            for(r = n = 0; r < a; )
                                 if((i = e[r++]) < 128) o[n++] = i;
                                 else if(4 < (s = u[i])) (o[n++] = 65533), (r += s - 1);
                                 else {
-                                    for(i &= 2 === s ? 31 : 3 === s ? 15 : 7; 1 < s && r < a;)
+                                    for(i &= 2 === s ? 31 : 3 === s ? 15 : 7; 1 < s && r < a; )
                                         (i = (i << 6) | (63 & e[r++])), s--;
                                     1 < s
                                         ? (o[n++] = 65533)
                                         : i < 65536
-                                            ? (o[n++] = i)
-                                            : ((i -= 65536),
-                                                (o[n++] = 55296 | ((i >> 10) & 1023)),
-                                                (o[n++] = 56320 | (1023 & i)));
+                                          ? (o[n++] = i)
+                                          : ((i -= 65536),
+                                            (o[n++] = 55296 | ((i >> 10) & 1023)),
+                                            (o[n++] = 56320 | (1023 & i)));
                                 }
                             return l(o, n);
                         }),
@@ -3057,8 +3057,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                 function (e, t, r) {
                     'use strict';
                     t.exports = function (e, t, r, n) {
-                        for(var i = (65535 & e) | 0, s = ((e >>> 16) & 65535) | 0, a = 0; 0 !== r;) {
-                            for(r -= a = 2e3 < r ? 2e3 : r; (s = (s + (i = (i + t[n++]) | 0)) | 0), --a;);
+                        for(var i = (65535 & e) | 0, s = ((e >>> 16) & 65535) | 0, a = 0; 0 !== r; ) {
+                            for(r -= a = 2e3 < r ? 2e3 : r; (s = (s + (i = (i + t[n++]) | 0)) | 0), --a; );
                             (i %= 65521), (s %= 65521);
                         }
                         return i | (s << 16) | 0;
@@ -3161,14 +3161,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         return (e << 1) - (4 < e ? 9 : 0);
                     }
                     function D(e) {
-                        for(var t = e.length; 0 <= --t;) e[t] = 0;
+                        for(var t = e.length; 0 <= --t; ) e[t] = 0;
                     }
                     function F(e) {
                         var t = e.state,
                             r = t.pending;
                         r > e.avail_out && (r = e.avail_out),
                             0 !== r &&
-                            (c.arraySet(e.output, t.pending_buf, t.pending_out, r, e.next_out),
+                                (c.arraySet(e.output, t.pending_buf, t.pending_out, r, e.next_out),
                                 (e.next_out += r),
                                 (t.pending_out += r),
                                 (e.total_out += r),
@@ -3205,7 +3205,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         do {
                             if(u[(r = t) + a] === p && u[r + a - 1] === d && u[r] === u[s] && u[++r] === u[s + 1]) {
                                 (s += 2), r++;
-                                do { } while(
+                                do {} while(
                                     u[++s] === u[++r] &&
                                     u[++s] === u[++r] &&
                                     u[++s] === u[++r] &&
@@ -3240,94 +3240,95 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             if(((i = e.window_size - e.lookahead - e.strstart), e.strstart >= f + (f - z))) {
                                 for(
                                     c.arraySet(e.window, e.window, f, f, 0),
-                                    e.match_start -= f,
-                                    e.strstart -= f,
-                                    e.block_start -= f,
-                                    t = r = e.hash_size;
+                                        e.match_start -= f,
+                                        e.strstart -= f,
+                                        e.block_start -= f,
+                                        t = r = e.hash_size;
                                     (n = e.head[--t]), (e.head[t] = f <= n ? n - f : 0), --r;
 
                                 );
-                                for(t = r = f; (n = e.prev[--t]), (e.prev[t] = f <= n ? n - f : 0), --r;);
+                                for(t = r = f; (n = e.prev[--t]), (e.prev[t] = f <= n ? n - f : 0), --r; );
                                 i += f;
                             }
                             if(0 === e.strm.avail_in) break;
                             if(
                                 ((a = e.strm),
-                                    (o = e.window),
-                                    (h = e.strstart + e.lookahead),
-                                    (u = i),
-                                    (l = void 0),
-                                    (l = a.avail_in),
-                                    u < l && (l = u),
-                                    (r =
-                                        0 === l
-                                            ? 0
-                                            : ((a.avail_in -= l),
-                                                c.arraySet(o, a.input, a.next_in, l, h),
-                                                1 === a.state.wrap
-                                                    ? (a.adler = d(a.adler, o, l, h))
-                                                    : 2 === a.state.wrap && (a.adler = p(a.adler, o, l, h)),
-                                                (a.next_in += l),
-                                                (a.total_in += l),
-                                                l)),
-                                    (e.lookahead += r),
-                                    e.lookahead + e.insert >= x)
+                                (o = e.window),
+                                (h = e.strstart + e.lookahead),
+                                (u = i),
+                                (l = void 0),
+                                (l = a.avail_in),
+                                u < l && (l = u),
+                                (r =
+                                    0 === l
+                                        ? 0
+                                        : ((a.avail_in -= l),
+                                          c.arraySet(o, a.input, a.next_in, l, h),
+                                          1 === a.state.wrap
+                                              ? (a.adler = d(a.adler, o, l, h))
+                                              : 2 === a.state.wrap && (a.adler = p(a.adler, o, l, h)),
+                                          (a.next_in += l),
+                                          (a.total_in += l),
+                                          l)),
+                                (e.lookahead += r),
+                                e.lookahead + e.insert >= x)
                             )
                                 for(
                                     s = e.strstart - e.insert,
-                                    e.ins_h = e.window[s],
-                                    e.ins_h = ((e.ins_h << e.hash_shift) ^ e.window[s + 1]) & e.hash_mask;
+                                        e.ins_h = e.window[s],
+                                        e.ins_h = ((e.ins_h << e.hash_shift) ^ e.window[s + 1]) & e.hash_mask;
                                     e.insert &&
                                     ((e.ins_h = ((e.ins_h << e.hash_shift) ^ e.window[s + x - 1]) & e.hash_mask),
-                                        (e.prev[s & e.w_mask] = e.head[e.ins_h]),
-                                        (e.head[e.ins_h] = s),
-                                        s++,
-                                        e.insert--,
-                                        !(e.lookahead + e.insert < x));
+                                    (e.prev[s & e.w_mask] = e.head[e.ins_h]),
+                                    (e.head[e.ins_h] = s),
+                                    s++,
+                                    e.insert--,
+                                    !(e.lookahead + e.insert < x));
 
                                 );
                         } while(e.lookahead < z && 0 !== e.strm.avail_in);
                     }
                     function Z(e, t) {
-                        for(var r, n; ;) {
+                        for(var r, n; ; ) {
                             if(e.lookahead < z) {
                                 if((j(e), e.lookahead < z && t === l)) return A;
                                 if(0 === e.lookahead) break;
                             }
                             if(
                                 ((r = 0),
-                                    e.lookahead >= x &&
+                                e.lookahead >= x &&
                                     ((e.ins_h =
                                         ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + x - 1]) & e.hash_mask),
-                                        (r = e.prev[e.strstart & e.w_mask] = e.head[e.ins_h]),
-                                        (e.head[e.ins_h] = e.strstart)),
-                                    0 !== r && e.strstart - r <= e.w_size - z && (e.match_length = L(e, r)),
-                                    e.match_length >= x)
+                                    (r = e.prev[e.strstart & e.w_mask] = e.head[e.ins_h]),
+                                    (e.head[e.ins_h] = e.strstart)),
+                                0 !== r && e.strstart - r <= e.w_size - z && (e.match_length = L(e, r)),
+                                e.match_length >= x)
                             )
                                 if(
                                     ((n = u._tr_tally(e, e.strstart - e.match_start, e.match_length - x)),
-                                        (e.lookahead -= e.match_length),
-                                        e.match_length <= e.max_lazy_match && e.lookahead >= x)
+                                    (e.lookahead -= e.match_length),
+                                    e.match_length <= e.max_lazy_match && e.lookahead >= x)
                                 ) {
                                     for(
                                         e.match_length--;
                                         e.strstart++,
-                                        (e.ins_h =
-                                            ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + x - 1]) &
-                                            e.hash_mask),
-                                        (r = e.prev[e.strstart & e.w_mask] = e.head[e.ins_h]),
-                                        (e.head[e.ins_h] = e.strstart),
-                                        0 != --e.match_length;
+                                            (e.ins_h =
+                                                ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + x - 1]) &
+                                                e.hash_mask),
+                                            (r = e.prev[e.strstart & e.w_mask] = e.head[e.ins_h]),
+                                            (e.head[e.ins_h] = e.strstart),
+                                            0 != --e.match_length;
 
                                     );
                                     e.strstart++;
                                 }
-                                else(e.strstart += e.match_length),
-                                    (e.match_length = 0),
-                                    (e.ins_h = e.window[e.strstart]),
-                                    (e.ins_h =
-                                        ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + 1]) & e.hash_mask);
-                            else(n = u._tr_tally(e, 0, e.window[e.strstart])), e.lookahead--, e.strstart++;
+                                else
+                                    (e.strstart += e.match_length),
+                                        (e.match_length = 0),
+                                        (e.ins_h = e.window[e.strstart]),
+                                        (e.ins_h =
+                                            ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + 1]) & e.hash_mask);
+                            else (n = u._tr_tally(e, 0, e.window[e.strstart])), e.lookahead--, e.strstart++;
                             if(n && (N(e, !1), 0 === e.strm.avail_out)) return A;
                         }
                         return (
@@ -3335,77 +3336,77 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             t === f
                                 ? (N(e, !0), 0 === e.strm.avail_out ? O : B)
                                 : e.last_lit && (N(e, !1), 0 === e.strm.avail_out)
-                                    ? A
-                                    : I
+                                  ? A
+                                  : I
                         );
                     }
                     function W(e, t) {
-                        for(var r, n, i; ;) {
+                        for(var r, n, i; ; ) {
                             if(e.lookahead < z) {
                                 if((j(e), e.lookahead < z && t === l)) return A;
                                 if(0 === e.lookahead) break;
                             }
                             if(
                                 ((r = 0),
-                                    e.lookahead >= x &&
+                                e.lookahead >= x &&
                                     ((e.ins_h =
                                         ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + x - 1]) & e.hash_mask),
-                                        (r = e.prev[e.strstart & e.w_mask] = e.head[e.ins_h]),
-                                        (e.head[e.ins_h] = e.strstart)),
-                                    (e.prev_length = e.match_length),
-                                    (e.prev_match = e.match_start),
-                                    (e.match_length = x - 1),
-                                    0 !== r &&
+                                    (r = e.prev[e.strstart & e.w_mask] = e.head[e.ins_h]),
+                                    (e.head[e.ins_h] = e.strstart)),
+                                (e.prev_length = e.match_length),
+                                (e.prev_match = e.match_start),
+                                (e.match_length = x - 1),
+                                0 !== r &&
                                     e.prev_length < e.max_lazy_match &&
                                     e.strstart - r <= e.w_size - z &&
                                     ((e.match_length = L(e, r)),
-                                        e.match_length <= 5 &&
+                                    e.match_length <= 5 &&
                                         (1 === e.strategy ||
                                             (e.match_length === x && 4096 < e.strstart - e.match_start)) &&
                                         (e.match_length = x - 1)),
-                                    e.prev_length >= x && e.match_length <= e.prev_length)
+                                e.prev_length >= x && e.match_length <= e.prev_length)
                             ) {
                                 for(
                                     i = e.strstart + e.lookahead - x,
-                                    n = u._tr_tally(e, e.strstart - 1 - e.prev_match, e.prev_length - x),
-                                    e.lookahead -= e.prev_length - 1,
-                                    e.prev_length -= 2;
+                                        n = u._tr_tally(e, e.strstart - 1 - e.prev_match, e.prev_length - x),
+                                        e.lookahead -= e.prev_length - 1,
+                                        e.prev_length -= 2;
                                     ++e.strstart <= i &&
-                                    ((e.ins_h =
-                                        ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + x - 1]) & e.hash_mask),
+                                        ((e.ins_h =
+                                            ((e.ins_h << e.hash_shift) ^ e.window[e.strstart + x - 1]) & e.hash_mask),
                                         (r = e.prev[e.strstart & e.w_mask] = e.head[e.ins_h]),
                                         (e.head[e.ins_h] = e.strstart)),
-                                    0 != --e.prev_length;
+                                        0 != --e.prev_length;
 
                                 );
                                 if(
                                     ((e.match_available = 0),
-                                        (e.match_length = x - 1),
-                                        e.strstart++,
-                                        n && (N(e, !1), 0 === e.strm.avail_out))
+                                    (e.match_length = x - 1),
+                                    e.strstart++,
+                                    n && (N(e, !1), 0 === e.strm.avail_out))
                                 )
                                     return A;
                             }
                             else if(e.match_available) {
                                 if(
                                     ((n = u._tr_tally(e, 0, e.window[e.strstart - 1])) && N(e, !1),
-                                        e.strstart++,
-                                        e.lookahead--,
-                                        0 === e.strm.avail_out)
+                                    e.strstart++,
+                                    e.lookahead--,
+                                    0 === e.strm.avail_out)
                                 )
                                     return A;
                             }
-                            else(e.match_available = 1), e.strstart++, e.lookahead--;
+                            else (e.match_available = 1), e.strstart++, e.lookahead--;
                         }
                         return (
                             e.match_available &&
-                            ((n = u._tr_tally(e, 0, e.window[e.strstart - 1])), (e.match_available = 0)),
+                                ((n = u._tr_tally(e, 0, e.window[e.strstart - 1])), (e.match_available = 0)),
                             (e.insert = e.strstart < x - 1 ? e.strstart : x - 1),
                             t === f
                                 ? (N(e, !0), 0 === e.strm.avail_out ? O : B)
                                 : e.last_lit && (N(e, !1), 0 === e.strm.avail_out)
-                                    ? A
-                                    : I
+                                  ? A
+                                  : I
                         );
                     }
                     function M(e, t, r, n, i) {
@@ -3484,36 +3485,36 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         var t;
                         return e && e.state
                             ? ((e.total_in = e.total_out = 0),
-                                (e.data_type = i),
-                                ((t = e.state).pending = 0),
-                                (t.pending_out = 0),
-                                t.wrap < 0 && (t.wrap = -t.wrap),
-                                (t.status = t.wrap ? C : E),
-                                (e.adler = 2 === t.wrap ? 0 : 1),
-                                (t.last_flush = l),
-                                u._tr_init(t),
-                                m)
+                              (e.data_type = i),
+                              ((t = e.state).pending = 0),
+                              (t.pending_out = 0),
+                              t.wrap < 0 && (t.wrap = -t.wrap),
+                              (t.status = t.wrap ? C : E),
+                              (e.adler = 2 === t.wrap ? 0 : 1),
+                              (t.last_flush = l),
+                              u._tr_init(t),
+                              m)
                             : R(e, _);
                     }
                     function K(e) {
                         var t = G(e);
                         return (
                             t === m &&
-                            (function (e) {
-                                (e.window_size = 2 * e.w_size),
-                                    D(e.head),
-                                    (e.max_lazy_match = h[e.level].max_lazy),
-                                    (e.good_match = h[e.level].good_length),
-                                    (e.nice_match = h[e.level].nice_length),
-                                    (e.max_chain_length = h[e.level].max_chain),
-                                    (e.strstart = 0),
-                                    (e.block_start = 0),
-                                    (e.lookahead = 0),
-                                    (e.insert = 0),
-                                    (e.match_length = e.prev_length = x - 1),
-                                    (e.match_available = 0),
-                                    (e.ins_h = 0);
-                            })(e.state),
+                                (function (e) {
+                                    (e.window_size = 2 * e.w_size),
+                                        D(e.head),
+                                        (e.max_lazy_match = h[e.level].max_lazy),
+                                        (e.good_match = h[e.level].good_length),
+                                        (e.nice_match = h[e.level].nice_length),
+                                        (e.max_chain_length = h[e.level].max_chain),
+                                        (e.strstart = 0),
+                                        (e.block_start = 0),
+                                        (e.lookahead = 0),
+                                        (e.insert = 0),
+                                        (e.match_length = e.prev_length = x - 1),
+                                        (e.match_available = 0),
+                                        (e.ins_h = 0);
+                                })(e.state),
                             t
                         );
                     }
@@ -3522,8 +3523,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         var a = 1;
                         if(
                             (t === g && (t = 6),
-                                n < 0 ? ((a = 0), (n = -n)) : 15 < n && ((a = 2), (n -= 16)),
-                                i < 1 || y < i || r !== v || n < 8 || 15 < n || t < 0 || 9 < t || s < 0 || b < s)
+                            n < 0 ? ((a = 0), (n = -n)) : 15 < n && ((a = 2), (n -= 16)),
+                            i < 1 || y < i || r !== v || n < 8 || 15 < n || t < 0 || 9 < t || s < 0 || b < s)
                         )
                             return R(e, _);
                         8 === n && (n = 9);
@@ -3556,7 +3557,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     (h = [
                         new M(0, 0, 0, 0, function (e, t) {
                             var r = 65535;
-                            for(r > e.pending_buf_size - 5 && (r = e.pending_buf_size - 5); ;) {
+                            for(r > e.pending_buf_size - 5 && (r = e.pending_buf_size - 5); ; ) {
                                 if(e.lookahead <= 1) {
                                     if((j(e), 0 === e.lookahead && t === l)) return A;
                                     if(0 === e.lookahead) break;
@@ -3602,7 +3603,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             if(!e || !e.state || 5 < t || t < 0) return e ? R(e, _) : _;
                             if(
                                 ((n = e.state),
-                                    !e.output || (!e.input && 0 !== e.avail_in) || (666 === n.status && t !== f))
+                                !e.output || (!e.input && 0 !== e.avail_in) || (666 === n.status && t !== f))
                             )
                                 return R(e, 0 === e.avail_out ? -5 : _);
                             if(((n.strm = e), (r = n.last_flush), (n.last_flush = t), n.status === C))
@@ -3613,44 +3614,44 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         U(n, 8),
                                         n.gzhead
                                             ? (U(
-                                                n,
-                                                (n.gzhead.text ? 1 : 0) +
-                                                (n.gzhead.hcrc ? 2 : 0) +
-                                                (n.gzhead.extra ? 4 : 0) +
-                                                (n.gzhead.name ? 8 : 0) +
-                                                (n.gzhead.comment ? 16 : 0),
-                                            ),
-                                                U(n, 255 & n.gzhead.time),
-                                                U(n, (n.gzhead.time >> 8) & 255),
-                                                U(n, (n.gzhead.time >> 16) & 255),
-                                                U(n, (n.gzhead.time >> 24) & 255),
-                                                U(n, 9 === n.level ? 2 : 2 <= n.strategy || n.level < 2 ? 4 : 0),
-                                                U(n, 255 & n.gzhead.os),
-                                                n.gzhead.extra &&
-                                                n.gzhead.extra.length &&
-                                                (U(n, 255 & n.gzhead.extra.length),
-                                                    U(n, (n.gzhead.extra.length >> 8) & 255)),
-                                                n.gzhead.hcrc && (e.adler = p(e.adler, n.pending_buf, n.pending, 0)),
-                                                (n.gzindex = 0),
-                                                (n.status = 69))
+                                                  n,
+                                                  (n.gzhead.text ? 1 : 0) +
+                                                      (n.gzhead.hcrc ? 2 : 0) +
+                                                      (n.gzhead.extra ? 4 : 0) +
+                                                      (n.gzhead.name ? 8 : 0) +
+                                                      (n.gzhead.comment ? 16 : 0),
+                                              ),
+                                              U(n, 255 & n.gzhead.time),
+                                              U(n, (n.gzhead.time >> 8) & 255),
+                                              U(n, (n.gzhead.time >> 16) & 255),
+                                              U(n, (n.gzhead.time >> 24) & 255),
+                                              U(n, 9 === n.level ? 2 : 2 <= n.strategy || n.level < 2 ? 4 : 0),
+                                              U(n, 255 & n.gzhead.os),
+                                              n.gzhead.extra &&
+                                                  n.gzhead.extra.length &&
+                                                  (U(n, 255 & n.gzhead.extra.length),
+                                                  U(n, (n.gzhead.extra.length >> 8) & 255)),
+                                              n.gzhead.hcrc && (e.adler = p(e.adler, n.pending_buf, n.pending, 0)),
+                                              (n.gzindex = 0),
+                                              (n.status = 69))
                                             : (U(n, 0),
-                                                U(n, 0),
-                                                U(n, 0),
-                                                U(n, 0),
-                                                U(n, 0),
-                                                U(n, 9 === n.level ? 2 : 2 <= n.strategy || n.level < 2 ? 4 : 0),
-                                                U(n, 3),
-                                                (n.status = E));
+                                              U(n, 0),
+                                              U(n, 0),
+                                              U(n, 0),
+                                              U(n, 0),
+                                              U(n, 9 === n.level ? 2 : 2 <= n.strategy || n.level < 2 ? 4 : 0),
+                                              U(n, 3),
+                                              (n.status = E));
                                 else {
                                     var a = (v + ((n.w_bits - 8) << 4)) << 8;
                                     (a |=
                                         (2 <= n.strategy || n.level < 2
                                             ? 0
                                             : n.level < 6
-                                                ? 1
-                                                : 6 === n.level
-                                                    ? 2
-                                                    : 3) << 6),
+                                              ? 1
+                                              : 6 === n.level
+                                                ? 2
+                                                : 3) << 6),
                                         0 !== n.strstart && (a |= 32),
                                         (a += 31 - (a % 31)),
                                         (n.status = E),
@@ -3667,9 +3668,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             (n.gzhead.hcrc &&
                                                 n.pending > i &&
                                                 (e.adler = p(e.adler, n.pending_buf, n.pending - i, i)),
-                                                F(e),
-                                                (i = n.pending),
-                                                n.pending !== n.pending_buf_size));
+                                            F(e),
+                                            (i = n.pending),
+                                            n.pending !== n.pending_buf_size));
 
                                     )
                                         U(n, 255 & n.gzhead.extra[n.gzindex]), n.gzindex++;
@@ -3688,9 +3689,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             (n.gzhead.hcrc &&
                                                 n.pending > i &&
                                                 (e.adler = p(e.adler, n.pending_buf, n.pending - i, i)),
-                                                F(e),
-                                                (i = n.pending),
-                                                n.pending === n.pending_buf_size)
+                                            F(e),
+                                            (i = n.pending),
+                                            n.pending === n.pending_buf_size)
                                         ) {
                                             s = 1;
                                             break;
@@ -3716,9 +3717,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             (n.gzhead.hcrc &&
                                                 n.pending > i &&
                                                 (e.adler = p(e.adler, n.pending_buf, n.pending - i, i)),
-                                                F(e),
-                                                (i = n.pending),
-                                                n.pending === n.pending_buf_size)
+                                            F(e),
+                                            (i = n.pending),
+                                            n.pending === n.pending_buf_size)
                                         ) {
                                             s = 1;
                                             break;
@@ -3739,13 +3740,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (103 === n.status &&
                                     (n.gzhead.hcrc
                                         ? (n.pending + 2 > n.pending_buf_size && F(e),
-                                            n.pending + 2 <= n.pending_buf_size &&
-                                            (U(n, 255 & e.adler),
-                                                U(n, (e.adler >> 8) & 255),
-                                                (e.adler = 0),
-                                                (n.status = E)))
+                                          n.pending + 2 <= n.pending_buf_size &&
+                                              (U(n, 255 & e.adler),
+                                              U(n, (e.adler >> 8) & 255),
+                                              (e.adler = 0),
+                                              (n.status = E)))
                                         : (n.status = E)),
-                                    0 !== n.pending)
+                                0 !== n.pending)
                             ) {
                                 if((F(e), 0 === e.avail_out)) return (n.last_flush = -1), m;
                             }
@@ -3755,46 +3756,46 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 var o =
                                     2 === n.strategy
                                         ? (function (e, t) {
-                                            for(var r; ;) {
-                                                if(0 === e.lookahead && (j(e), 0 === e.lookahead)) {
-                                                    if(t === l) return A;
-                                                    break;
-                                                }
-                                                if(
-                                                    ((e.match_length = 0),
-                                                        (r = u._tr_tally(e, 0, e.window[e.strstart])),
-                                                        e.lookahead--,
-                                                        e.strstart++,
-                                                        r && (N(e, !1), 0 === e.strm.avail_out))
-                                                )
-                                                    return A;
-                                            }
-                                            return (
-                                                (e.insert = 0),
-                                                t === f
-                                                    ? (N(e, !0), 0 === e.strm.avail_out ? O : B)
-                                                    : e.last_lit && (N(e, !1), 0 === e.strm.avail_out)
+                                              for(var r; ; ) {
+                                                  if(0 === e.lookahead && (j(e), 0 === e.lookahead)) {
+                                                      if(t === l) return A;
+                                                      break;
+                                                  }
+                                                  if(
+                                                      ((e.match_length = 0),
+                                                      (r = u._tr_tally(e, 0, e.window[e.strstart])),
+                                                      e.lookahead--,
+                                                      e.strstart++,
+                                                      r && (N(e, !1), 0 === e.strm.avail_out))
+                                                  )
+                                                      return A;
+                                              }
+                                              return (
+                                                  (e.insert = 0),
+                                                  t === f
+                                                      ? (N(e, !0), 0 === e.strm.avail_out ? O : B)
+                                                      : e.last_lit && (N(e, !1), 0 === e.strm.avail_out)
                                                         ? A
                                                         : I
-                                            );
-                                        })(n, t)
+                                              );
+                                          })(n, t)
                                         : 3 === n.strategy
-                                            ? (function (e, t) {
-                                                for(var r, n, i, s, a = e.window; ;) {
+                                          ? (function (e, t) {
+                                                for(var r, n, i, s, a = e.window; ; ) {
                                                     if(e.lookahead <= S) {
                                                         if((j(e), e.lookahead <= S && t === l)) return A;
                                                         if(0 === e.lookahead) break;
                                                     }
                                                     if(
                                                         ((e.match_length = 0),
-                                                            e.lookahead >= x &&
+                                                        e.lookahead >= x &&
                                                             0 < e.strstart &&
                                                             (n = a[(i = e.strstart - 1)]) === a[++i] &&
                                                             n === a[++i] &&
                                                             n === a[++i])
                                                     ) {
                                                         s = e.strstart + S;
-                                                        do { } while(
+                                                        do {} while(
                                                             n === a[++i] &&
                                                             n === a[++i] &&
                                                             n === a[++i] &&
@@ -3807,18 +3808,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                                         );
                                                         (e.match_length = S - (s - i)),
                                                             e.match_length > e.lookahead &&
-                                                            (e.match_length = e.lookahead);
+                                                                (e.match_length = e.lookahead);
                                                     }
                                                     if(
                                                         (e.match_length >= x
                                                             ? ((r = u._tr_tally(e, 1, e.match_length - x)),
-                                                                (e.lookahead -= e.match_length),
-                                                                (e.strstart += e.match_length),
-                                                                (e.match_length = 0))
+                                                              (e.lookahead -= e.match_length),
+                                                              (e.strstart += e.match_length),
+                                                              (e.match_length = 0))
                                                             : ((r = u._tr_tally(e, 0, e.window[e.strstart])),
-                                                                e.lookahead--,
-                                                                e.strstart++),
-                                                            r && (N(e, !1), 0 === e.strm.avail_out))
+                                                              e.lookahead--,
+                                                              e.strstart++),
+                                                        r && (N(e, !1), 0 === e.strm.avail_out))
                                                     )
                                                         return A;
                                                 }
@@ -3827,11 +3828,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                                     t === f
                                                         ? (N(e, !0), 0 === e.strm.avail_out ? O : B)
                                                         : e.last_lit && (N(e, !1), 0 === e.strm.avail_out)
-                                                            ? A
-                                                            : I
+                                                          ? A
+                                                          : I
                                                 );
                                             })(n, t)
-                                            : h[n.level].func(n, t);
+                                          : h[n.level].func(n, t);
                                 if(((o !== O && o !== B) || (n.status = 666), o === A || o === O))
                                     return 0 === e.avail_out && (n.last_flush = -1), m;
                                 if(
@@ -3839,44 +3840,44 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     (1 === t
                                         ? u._tr_align(n)
                                         : 5 !== t &&
-                                        (u._tr_stored_block(n, 0, 0, !1),
-                                            3 === t &&
-                                            (D(n.head),
-                                                0 === n.lookahead &&
-                                                ((n.strstart = 0), (n.block_start = 0), (n.insert = 0)))),
-                                        F(e),
-                                        0 === e.avail_out)
+                                          (u._tr_stored_block(n, 0, 0, !1),
+                                          3 === t &&
+                                              (D(n.head),
+                                              0 === n.lookahead &&
+                                                  ((n.strstart = 0), (n.block_start = 0), (n.insert = 0)))),
+                                    F(e),
+                                    0 === e.avail_out)
                                 )
                                     return (n.last_flush = -1), m;
                             }
                             return t !== f
                                 ? m
                                 : n.wrap <= 0
-                                    ? 1
-                                    : (2 === n.wrap
+                                  ? 1
+                                  : (2 === n.wrap
                                         ? (U(n, 255 & e.adler),
-                                            U(n, (e.adler >> 8) & 255),
-                                            U(n, (e.adler >> 16) & 255),
-                                            U(n, (e.adler >> 24) & 255),
-                                            U(n, 255 & e.total_in),
-                                            U(n, (e.total_in >> 8) & 255),
-                                            U(n, (e.total_in >> 16) & 255),
-                                            U(n, (e.total_in >> 24) & 255))
+                                          U(n, (e.adler >> 8) & 255),
+                                          U(n, (e.adler >> 16) & 255),
+                                          U(n, (e.adler >> 24) & 255),
+                                          U(n, 255 & e.total_in),
+                                          U(n, (e.total_in >> 8) & 255),
+                                          U(n, (e.total_in >> 16) & 255),
+                                          U(n, (e.total_in >> 24) & 255))
                                         : (P(n, e.adler >>> 16), P(n, 65535 & e.adler)),
-                                        F(e),
-                                        0 < n.wrap && (n.wrap = -n.wrap),
-                                        0 !== n.pending ? m : 1);
+                                    F(e),
+                                    0 < n.wrap && (n.wrap = -n.wrap),
+                                    0 !== n.pending ? m : 1);
                         }),
                         (r.deflateEnd = function (e) {
                             var t;
                             return e && e.state
                                 ? (t = e.state.status) !== C &&
-                                    69 !== t &&
-                                    73 !== t &&
-                                    91 !== t &&
-                                    103 !== t &&
-                                    t !== E &&
-                                    666 !== t
+                                  69 !== t &&
+                                  73 !== t &&
+                                  91 !== t &&
+                                  103 !== t &&
+                                  t !== E &&
+                                  666 !== t
                                     ? R(e, _)
                                     : ((e.state = null), t === E ? R(e, -3) : m)
                                 : _;
@@ -3895,30 +3896,30 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             if(2 === (s = (r = e.state).wrap) || (1 === s && r.status !== C) || r.lookahead) return _;
                             for(
                                 1 === s && (e.adler = d(e.adler, t, l, 0)),
-                                r.wrap = 0,
-                                l >= r.w_size &&
-                                (0 === s && (D(r.head), (r.strstart = 0), (r.block_start = 0), (r.insert = 0)),
-                                    (u = new c.Buf8(r.w_size)),
-                                    c.arraySet(u, t, l - r.w_size, r.w_size, 0),
-                                    (t = u),
-                                    (l = r.w_size)),
-                                a = e.avail_in,
-                                o = e.next_in,
-                                h = e.input,
-                                e.avail_in = l,
-                                e.next_in = 0,
-                                e.input = t,
-                                j(r);
+                                    r.wrap = 0,
+                                    l >= r.w_size &&
+                                        (0 === s && (D(r.head), (r.strstart = 0), (r.block_start = 0), (r.insert = 0)),
+                                        (u = new c.Buf8(r.w_size)),
+                                        c.arraySet(u, t, l - r.w_size, r.w_size, 0),
+                                        (t = u),
+                                        (l = r.w_size)),
+                                    a = e.avail_in,
+                                    o = e.next_in,
+                                    h = e.input,
+                                    e.avail_in = l,
+                                    e.next_in = 0,
+                                    e.input = t,
+                                    j(r);
                                 r.lookahead >= x;
 
                             ) {
                                 for(
                                     n = r.strstart, i = r.lookahead - (x - 1);
                                     (r.ins_h = ((r.ins_h << r.hash_shift) ^ r.window[n + x - 1]) & r.hash_mask),
-                                    (r.prev[n & r.w_mask] = r.head[r.ins_h]),
-                                    (r.head[r.ins_h] = n),
-                                    n++,
-                                    --i;
+                                        (r.prev[n & r.w_mask] = r.head[r.ins_h]),
+                                        (r.head[r.ins_h] = n),
+                                        n++,
+                                        --i;
 
                                 );
                                 (r.strstart = n), (r.lookahead = x - 1), j(r);
@@ -3985,7 +3986,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             (b = (1 << r.distbits) - 1);
                         e: do {
                             p < 15 && ((d += z[n++] << p), (p += 8), (d += z[n++] << p), (p += 8)), (v = m[d & g]);
-                            t: for(; ;) {
+                            t: for (;;) {
                                 if(((d >>>= y = v >>> 24), (p -= y), 0 === (y = (v >>> 16) & 255))) C[s++] = 65535 & v;
                                 else {
                                     if(!(16 & y)) {
@@ -4002,13 +4003,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     }
                                     (w = 65535 & v),
                                         (y &= 15) &&
-                                        (p < y && ((d += z[n++] << p), (p += 8)),
+                                            (p < y && ((d += z[n++] << p), (p += 8)),
                                             (w += d & ((1 << y) - 1)),
                                             (d >>>= y),
                                             (p -= y)),
                                         p < 15 && ((d += z[n++] << p), (p += 8), (d += z[n++] << p), (p += 8)),
                                         (v = _[d & b]);
-                                    r: for(; ;) {
+                                    r: for (;;) {
                                         if(((d >>>= y = v >>> 24), (p -= y), !(16 & (y = (v >>> 16) & 255)))) {
                                             if(0 == (64 & y)) {
                                                 v = _[(65535 & v) + (d & ((1 << y) - 1))];
@@ -4019,9 +4020,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         }
                                         if(
                                             ((k = 65535 & v),
-                                                p < (y &= 15) &&
+                                            p < (y &= 15) &&
                                                 ((d += z[n++] << p), (p += 8) < y && ((d += z[n++] << p), (p += 8))),
-                                                h < (k += d & ((1 << y) - 1)))
+                                            h < (k += d & ((1 << y) - 1)))
                                         ) {
                                             (e.msg = 'invalid distance too far back'), (r.mode = 30);
                                             break e;
@@ -4033,24 +4034,24 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             }
                                             if(((S = c), (x = 0) === f)) {
                                                 if(((x += u - y), y < w)) {
-                                                    for(w -= y; (C[s++] = c[x++]), --y;);
+                                                    for(w -= y; (C[s++] = c[x++]), --y; );
                                                     (x = s - k), (S = C);
                                                 }
                                             }
                                             else if(f < y) {
                                                 if(((x += u + f - y), (y -= f) < w)) {
-                                                    for(w -= y; (C[s++] = c[x++]), --y;);
+                                                    for(w -= y; (C[s++] = c[x++]), --y; );
                                                     if(((x = 0), f < w)) {
-                                                        for(w -= y = f; (C[s++] = c[x++]), --y;);
+                                                        for(w -= y = f; (C[s++] = c[x++]), --y; );
                                                         (x = s - k), (S = C);
                                                     }
                                                 }
                                             }
                                             else if(((x += f - y), y < w)) {
-                                                for(w -= y; (C[s++] = c[x++]), --y;);
+                                                for(w -= y; (C[s++] = c[x++]), --y; );
                                                 (x = s - k), (S = C);
                                             }
-                                            for(; 2 < w;)
+                                            for(; 2 < w; )
                                                 (C[s++] = S[x++]), (C[s++] = S[x++]), (C[s++] = S[x++]), (w -= 3);
                                             w && ((C[s++] = S[x++]), 1 < w && (C[s++] = S[x++]));
                                         }
@@ -4139,21 +4140,21 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         var t;
                         return e && e.state
                             ? ((t = e.state),
-                                (e.total_in = e.total_out = t.total = 0),
-                                (e.msg = ''),
-                                t.wrap && (e.adler = 1 & t.wrap),
-                                (t.mode = P),
-                                (t.last = 0),
-                                (t.havedict = 0),
-                                (t.dmax = 32768),
-                                (t.head = null),
-                                (t.hold = 0),
-                                (t.bits = 0),
-                                (t.lencode = t.lendyn = new I.Buf32(n)),
-                                (t.distcode = t.distdyn = new I.Buf32(i)),
-                                (t.sane = 1),
-                                (t.back = -1),
-                                N)
+                              (e.total_in = e.total_out = t.total = 0),
+                              (e.msg = ''),
+                              t.wrap && (e.adler = 1 & t.wrap),
+                              (t.mode = P),
+                              (t.last = 0),
+                              (t.havedict = 0),
+                              (t.dmax = 32768),
+                              (t.head = null),
+                              (t.hold = 0),
+                              (t.bits = 0),
+                              (t.lencode = t.lendyn = new I.Buf32(n)),
+                              (t.distcode = t.distdyn = new I.Buf32(i)),
+                              (t.sane = 1),
+                              (t.back = -1),
+                              N)
                             : U;
                     }
                     function o(e) {
@@ -4164,13 +4165,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         var r, n;
                         return e && e.state
                             ? ((n = e.state),
-                                t < 0 ? ((r = 0), (t = -t)) : ((r = 1 + (t >> 4)), t < 48 && (t &= 15)),
-                                t && (t < 8 || 15 < t)
-                                    ? U
-                                    : (null !== n.window && n.wbits !== t && (n.window = null),
-                                        (n.wrap = r),
-                                        (n.wbits = t),
-                                        o(e)))
+                              t < 0 ? ((r = 0), (t = -t)) : ((r = 1 + (t >> 4)), t < 48 && (t &= 15)),
+                              t && (t < 8 || 15 < t)
+                                  ? U
+                                  : (null !== n.window && n.wbits !== t && (n.window = null),
+                                    (n.wrap = r),
+                                    (n.wbits = t),
+                                    o(e)))
                             : U;
                     }
                     function u(e, t) {
@@ -4185,11 +4186,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     function j(e) {
                         if(c) {
                             var t;
-                            for(l = new I.Buf32(512), f = new I.Buf32(32), t = 0; t < 144;) e.lens[t++] = 8;
-                            for(; t < 256;) e.lens[t++] = 9;
-                            for(; t < 280;) e.lens[t++] = 7;
-                            for(; t < 288;) e.lens[t++] = 8;
-                            for(T(D, e.lens, 0, 288, l, 0, e.work, { bits: 9 }), t = 0; t < 32;) e.lens[t++] = 5;
+                            for(l = new I.Buf32(512), f = new I.Buf32(32), t = 0; t < 144; ) e.lens[t++] = 8;
+                            for(; t < 256; ) e.lens[t++] = 9;
+                            for(; t < 280; ) e.lens[t++] = 7;
+                            for(; t < 288; ) e.lens[t++] = 8;
+                            for(T(D, e.lens, 0, 288, l, 0, e.work, { bits: 9 }), t = 0; t < 32; ) e.lens[t++] = 5;
                             T(F, e.lens, 0, 32, f, 0, e.work, { bits: 5 }), (c = !1);
                         }
                         (e.lencode = l), (e.lenbits = 9), (e.distcode = f), (e.distbits = 5);
@@ -4199,19 +4200,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             s = e.state;
                         return (
                             null === s.window &&
-                            ((s.wsize = 1 << s.wbits),
+                                ((s.wsize = 1 << s.wbits),
                                 (s.wnext = 0),
                                 (s.whave = 0),
                                 (s.window = new I.Buf8(s.wsize))),
                             n >= s.wsize
                                 ? (I.arraySet(s.window, t, r - s.wsize, s.wsize, 0), (s.wnext = 0), (s.whave = s.wsize))
                                 : (n < (i = s.wsize - s.wnext) && (i = n),
-                                    I.arraySet(s.window, t, r - n, i, s.wnext),
-                                    (n -= i)
-                                        ? (I.arraySet(s.window, t, r - n, n, 0), (s.wnext = n), (s.whave = s.wsize))
-                                        : ((s.wnext += i),
-                                            s.wnext === s.wsize && (s.wnext = 0),
-                                            s.whave < s.wsize && (s.whave += i))),
+                                  I.arraySet(s.window, t, r - n, i, s.wnext),
+                                  (n -= i)
+                                      ? (I.arraySet(s.window, t, r - n, n, 0), (s.wnext = n), (s.whave = s.wsize))
+                                      : ((s.wnext += i),
+                                        s.wnext === s.wsize && (s.wnext = 0),
+                                        s.whave < s.wsize && (s.whave += i))),
                             0
                         );
                     }
@@ -4263,14 +4264,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (f = o),
                                 (c = h),
                                 (x = N);
-                            e: for(; ;)
+                            e: for (;;)
                                 switch(r.mode) {
                                     case P:
                                         if(0 === r.wrap) {
                                             r.mode = 13;
                                             break;
                                         }
-                                        for(; l < 16;) {
+                                        for(; l < 16; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
@@ -4284,8 +4285,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         }
                                         if(
                                             ((r.flags = 0),
-                                                r.head && (r.head.done = !1),
-                                                !(1 & r.wrap) || (((255 & u) << 8) + (u >> 8)) % 31)
+                                            r.head && (r.head.done = !1),
+                                            !(1 & r.wrap) || (((255 & u) << 8) + (u >> 8)) % 31)
                                         ) {
                                             (e.msg = 'incorrect header check'), (r.mode = 30);
                                             break;
@@ -4305,7 +4306,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             (l = u = 0);
                                         break;
                                     case 2:
-                                        for(; l < 16;) {
+                                        for(; l < 16; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
@@ -4319,19 +4320,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         }
                                         r.head && (r.head.text = (u >> 8) & 1),
                                             512 & r.flags &&
-                                            ((E[0] = 255 & u),
+                                                ((E[0] = 255 & u),
                                                 (E[1] = (u >>> 8) & 255),
                                                 (r.check = B(r.check, E, 2, 0))),
                                             (l = u = 0),
                                             (r.mode = 3);
                                     case 3:
-                                        for(; l < 32;) {
+                                        for(; l < 32; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
                                         r.head && (r.head.time = u),
                                             512 & r.flags &&
-                                            ((E[0] = 255 & u),
+                                                ((E[0] = 255 & u),
                                                 (E[1] = (u >>> 8) & 255),
                                                 (E[2] = (u >>> 16) & 255),
                                                 (E[3] = (u >>> 24) & 255),
@@ -4339,27 +4340,27 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             (l = u = 0),
                                             (r.mode = 4);
                                     case 4:
-                                        for(; l < 16;) {
+                                        for(; l < 16; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
                                         r.head && ((r.head.xflags = 255 & u), (r.head.os = u >> 8)),
                                             512 & r.flags &&
-                                            ((E[0] = 255 & u),
+                                                ((E[0] = 255 & u),
                                                 (E[1] = (u >>> 8) & 255),
                                                 (r.check = B(r.check, E, 2, 0))),
                                             (l = u = 0),
                                             (r.mode = 5);
                                     case 5:
                                         if(1024 & r.flags) {
-                                            for(; l < 16;) {
+                                            for(; l < 16; ) {
                                                 if(0 === o) break e;
                                                 o--, (u += n[s++] << l), (l += 8);
                                             }
                                             (r.length = u),
                                                 r.head && (r.head.extra_len = u),
                                                 512 & r.flags &&
-                                                ((E[0] = 255 & u),
+                                                    ((E[0] = 255 & u),
                                                     (E[1] = (u >>> 8) & 255),
                                                     (r.check = B(r.check, E, 2, 0))),
                                                 (l = u = 0);
@@ -4370,16 +4371,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         if(
                                             1024 & r.flags &&
                                             (o < (d = r.length) && (d = o),
-                                                d &&
+                                            d &&
                                                 (r.head &&
                                                     ((k = r.head.extra_len - r.length),
-                                                        r.head.extra || (r.head.extra = new Array(r.head.extra_len)),
-                                                        I.arraySet(r.head.extra, n, s, d, k)),
-                                                    512 & r.flags && (r.check = B(r.check, n, d, s)),
-                                                    (o -= d),
-                                                    (s += d),
-                                                    (r.length -= d)),
-                                                r.length)
+                                                    r.head.extra || (r.head.extra = new Array(r.head.extra_len)),
+                                                    I.arraySet(r.head.extra, n, s, d, k)),
+                                                512 & r.flags && (r.check = B(r.check, n, d, s)),
+                                                (o -= d),
+                                                (s += d),
+                                                (r.length -= d)),
+                                            r.length)
                                         )
                                             break e;
                                         (r.length = 0), (r.mode = 7);
@@ -4389,18 +4390,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             for(
                                                 d = 0;
                                                 (k = n[s + d++]),
-                                                r.head &&
-                                                k &&
-                                                r.length < 65536 &&
-                                                (r.head.name += String.fromCharCode(k)),
-                                                k && d < o;
+                                                    r.head &&
+                                                        k &&
+                                                        r.length < 65536 &&
+                                                        (r.head.name += String.fromCharCode(k)),
+                                                    k && d < o;
 
                                             );
                                             if(
                                                 (512 & r.flags && (r.check = B(r.check, n, d, s)),
-                                                    (o -= d),
-                                                    (s += d),
-                                                    k)
+                                                (o -= d),
+                                                (s += d),
+                                                k)
                                             )
                                                 break e;
                                         }
@@ -4412,18 +4413,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             for(
                                                 d = 0;
                                                 (k = n[s + d++]),
-                                                r.head &&
-                                                k &&
-                                                r.length < 65536 &&
-                                                (r.head.comment += String.fromCharCode(k)),
-                                                k && d < o;
+                                                    r.head &&
+                                                        k &&
+                                                        r.length < 65536 &&
+                                                        (r.head.comment += String.fromCharCode(k)),
+                                                    k && d < o;
 
                                             );
                                             if(
                                                 (512 & r.flags && (r.check = B(r.check, n, d, s)),
-                                                    (o -= d),
-                                                    (s += d),
-                                                    k)
+                                                (o -= d),
+                                                (s += d),
+                                                k)
                                             )
                                                 break e;
                                         }
@@ -4431,7 +4432,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         r.mode = 9;
                                     case 9:
                                         if(512 & r.flags) {
-                                            for(; l < 16;) {
+                                            for(; l < 16; ) {
                                                 if(0 === o) break e;
                                                 o--, (u += n[s++] << l), (l += 8);
                                             }
@@ -4446,7 +4447,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             (r.mode = 12);
                                         break;
                                     case 10:
-                                        for(; l < 32;) {
+                                        for(; l < 32; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
@@ -4470,7 +4471,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             (u >>>= 7 & l), (l -= 7 & l), (r.mode = 27);
                                             break;
                                         }
-                                        for(; l < 3;) {
+                                        for(; l < 3; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
@@ -4491,7 +4492,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         (u >>>= 2), (l -= 2);
                                         break;
                                     case 14:
-                                        for(u >>>= 7 & l, l -= 7 & l; l < 32;) {
+                                        for(u >>>= 7 & l, l -= 7 & l; l < 32; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
@@ -4516,54 +4517,54 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         r.mode = 12;
                                         break;
                                     case 17:
-                                        for(; l < 14;) {
+                                        for(; l < 14; ) {
                                             if(0 === o) break e;
                                             o--, (u += n[s++] << l), (l += 8);
                                         }
                                         if(
                                             ((r.nlen = 257 + (31 & u)),
-                                                (u >>>= 5),
-                                                (l -= 5),
-                                                (r.ndist = 1 + (31 & u)),
-                                                (u >>>= 5),
-                                                (l -= 5),
-                                                (r.ncode = 4 + (15 & u)),
-                                                (u >>>= 4),
-                                                (l -= 4),
-                                                286 < r.nlen || 30 < r.ndist)
+                                            (u >>>= 5),
+                                            (l -= 5),
+                                            (r.ndist = 1 + (31 & u)),
+                                            (u >>>= 5),
+                                            (l -= 5),
+                                            (r.ncode = 4 + (15 & u)),
+                                            (u >>>= 4),
+                                            (l -= 4),
+                                            286 < r.nlen || 30 < r.ndist)
                                         ) {
                                             (e.msg = 'too many length or distance symbols'), (r.mode = 30);
                                             break;
                                         }
                                         (r.have = 0), (r.mode = 18);
                                     case 18:
-                                        for(; r.have < r.ncode;) {
-                                            for(; l < 3;) {
+                                        for(; r.have < r.ncode; ) {
+                                            for(; l < 3; ) {
                                                 if(0 === o) break e;
                                                 o--, (u += n[s++] << l), (l += 8);
                                             }
                                             (r.lens[A[r.have++]] = 7 & u), (u >>>= 3), (l -= 3);
                                         }
-                                        for(; r.have < 19;) r.lens[A[r.have++]] = 0;
+                                        for(; r.have < 19; ) r.lens[A[r.have++]] = 0;
                                         if(
                                             ((r.lencode = r.lendyn),
-                                                (r.lenbits = 7),
-                                                (S = { bits: r.lenbits }),
-                                                (x = T(0, r.lens, 0, 19, r.lencode, 0, r.work, S)),
-                                                (r.lenbits = S.bits),
-                                                x)
+                                            (r.lenbits = 7),
+                                            (S = { bits: r.lenbits }),
+                                            (x = T(0, r.lens, 0, 19, r.lencode, 0, r.work, S)),
+                                            (r.lenbits = S.bits),
+                                            x)
                                         ) {
                                             (e.msg = 'invalid code lengths set'), (r.mode = 30);
                                             break;
                                         }
                                         (r.have = 0), (r.mode = 19);
                                     case 19:
-                                        for(; r.have < r.nlen + r.ndist;) {
+                                        for(; r.have < r.nlen + r.ndist; ) {
                                             for(
                                                 ;
                                                 (g = ((C = r.lencode[u & ((1 << r.lenbits) - 1)]) >>> 16) & 255),
-                                                (b = 65535 & C),
-                                                !((_ = C >>> 24) <= l);
+                                                    (b = 65535 & C),
+                                                    !((_ = C >>> 24) <= l);
 
                                             ) {
                                                 if(0 === o) break e;
@@ -4572,7 +4573,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             if(b < 16) (u >>>= _), (l -= _), (r.lens[r.have++] = b);
                                             else {
                                                 if(16 === b) {
-                                                    for(z = _ + 2; l < z;) {
+                                                    for(z = _ + 2; l < z; ) {
                                                         if(0 === o) break e;
                                                         o--, (u += n[s++] << l), (l += 8);
                                                     }
@@ -4583,14 +4584,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                                     (k = r.lens[r.have - 1]), (d = 3 + (3 & u)), (u >>>= 2), (l -= 2);
                                                 }
                                                 else if(17 === b) {
-                                                    for(z = _ + 3; l < z;) {
+                                                    for(z = _ + 3; l < z; ) {
                                                         if(0 === o) break e;
                                                         o--, (u += n[s++] << l), (l += 8);
                                                     }
                                                     (l -= _), (k = 0), (d = 3 + (7 & (u >>>= _))), (u >>>= 3), (l -= 3);
                                                 }
                                                 else {
-                                                    for(z = _ + 7; l < z;) {
+                                                    for(z = _ + 7; l < z; ) {
                                                         if(0 === o) break e;
                                                         o--, (u += n[s++] << l), (l += 8);
                                                     }
@@ -4604,7 +4605,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                                     (e.msg = 'invalid bit length repeat'), (r.mode = 30);
                                                     break;
                                                 }
-                                                for(; d--;) r.lens[r.have++] = k;
+                                                for(; d--; ) r.lens[r.have++] = k;
                                             }
                                         }
                                         if(30 === r.mode) break;
@@ -4614,21 +4615,21 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         }
                                         if(
                                             ((r.lenbits = 9),
-                                                (S = { bits: r.lenbits }),
-                                                (x = T(D, r.lens, 0, r.nlen, r.lencode, 0, r.work, S)),
-                                                (r.lenbits = S.bits),
-                                                x)
+                                            (S = { bits: r.lenbits }),
+                                            (x = T(D, r.lens, 0, r.nlen, r.lencode, 0, r.work, S)),
+                                            (r.lenbits = S.bits),
+                                            x)
                                         ) {
                                             (e.msg = 'invalid literal/lengths set'), (r.mode = 30);
                                             break;
                                         }
                                         if(
                                             ((r.distbits = 6),
-                                                (r.distcode = r.distdyn),
-                                                (S = { bits: r.distbits }),
-                                                (x = T(F, r.lens, r.nlen, r.ndist, r.distcode, 0, r.work, S)),
-                                                (r.distbits = S.bits),
-                                                x)
+                                            (r.distcode = r.distdyn),
+                                            (S = { bits: r.distbits }),
+                                            (x = T(F, r.lens, r.nlen, r.ndist, r.distcode, 0, r.work, S)),
+                                            (r.distbits = S.bits),
+                                            x)
                                         ) {
                                             (e.msg = 'invalid distances set'), (r.mode = 30);
                                             break;
@@ -4659,8 +4660,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         for(
                                             r.back = 0;
                                             (g = ((C = r.lencode[u & ((1 << r.lenbits) - 1)]) >>> 16) & 255),
-                                            (b = 65535 & C),
-                                            !((_ = C >>> 24) <= l);
+                                                (b = 65535 & C),
+                                                !((_ = C >>> 24) <= l);
 
                                         ) {
                                             if(0 === o) break e;
@@ -4672,8 +4673,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                                 (g =
                                                     ((C = r.lencode[w + ((u & ((1 << (v + y)) - 1)) >> v)]) >>> 16) &
                                                     255),
-                                                (b = 65535 & C),
-                                                !(v + (_ = C >>> 24) <= l);
+                                                    (b = 65535 & C),
+                                                    !(v + (_ = C >>> 24) <= l);
 
                                             ) {
                                                 if(0 === o) break e;
@@ -4696,7 +4697,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         (r.extra = 15 & g), (r.mode = 22);
                                     case 22:
                                         if(r.extra) {
-                                            for(z = r.extra; l < z;) {
+                                            for(z = r.extra; l < z; ) {
                                                 if(0 === o) break e;
                                                 o--, (u += n[s++] << l), (l += 8);
                                             }
@@ -4710,8 +4711,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         for(
                                             ;
                                             (g = ((C = r.distcode[u & ((1 << r.distbits) - 1)]) >>> 16) & 255),
-                                            (b = 65535 & C),
-                                            !((_ = C >>> 24) <= l);
+                                                (b = 65535 & C),
+                                                !((_ = C >>> 24) <= l);
 
                                         ) {
                                             if(0 === o) break e;
@@ -4723,8 +4724,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                                 (g =
                                                     ((C = r.distcode[w + ((u & ((1 << (v + y)) - 1)) >> v)]) >>> 16) &
                                                     255),
-                                                (b = 65535 & C),
-                                                !(v + (_ = C >>> 24) <= l);
+                                                    (b = 65535 & C),
+                                                    !(v + (_ = C >>> 24) <= l);
 
                                             ) {
                                                 if(0 === o) break e;
@@ -4739,7 +4740,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         (r.offset = b), (r.extra = 15 & g), (r.mode = 24);
                                     case 24:
                                         if(r.extra) {
-                                            for(z = r.extra; l < z;) {
+                                            for(z = r.extra; l < z; ) {
                                                 if(0 === o) break e;
                                                 o--, (u += n[s++] << l), (l += 8);
                                             }
@@ -4764,8 +4765,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                                 d > r.length && (d = r.length),
                                                 (m = r.window);
                                         }
-                                        else(m = i), (p = a - r.offset), (d = r.length);
-                                        for(h < d && (d = h), h -= d, r.length -= d; (i[a++] = m[p++]), --d;);
+                                        else (m = i), (p = a - r.offset), (d = r.length);
+                                        for(h < d && (d = h), h -= d, r.length -= d; (i[a++] = m[p++]), --d; );
                                         0 === r.length && (r.mode = 21);
                                         break;
                                     case 26:
@@ -4774,19 +4775,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         break;
                                     case 27:
                                         if(r.wrap) {
-                                            for(; l < 32;) {
+                                            for(; l < 32; ) {
                                                 if(0 === o) break e;
                                                 o--, (u |= n[s++] << l), (l += 8);
                                             }
                                             if(
                                                 ((c -= h),
-                                                    (e.total_out += c),
-                                                    (r.total += c),
-                                                    c &&
+                                                (e.total_out += c),
+                                                (r.total += c),
+                                                c &&
                                                     (e.adler = r.check =
                                                         r.flags ? B(r.check, i, c, a - c) : O(r.check, i, c, a - c)),
-                                                    (c = h),
-                                                    (r.flags ? u : L(u)) !== r.check)
+                                                (c = h),
+                                                (r.flags ? u : L(u)) !== r.check)
                                             ) {
                                                 (e.msg = 'incorrect data check'), (r.mode = 30);
                                                 break;
@@ -4796,7 +4797,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                         r.mode = 28;
                                     case 28:
                                         if(r.wrap && r.flags) {
-                                            for(; l < 32;) {
+                                            for(; l < 32; ) {
                                                 if(0 === o) break e;
                                                 o--, (u += n[s++] << l), (l += 8);
                                             }
@@ -4827,26 +4828,26 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 (r.hold = u),
                                 (r.bits = l),
                                 (r.wsize || (c !== e.avail_out && r.mode < 30 && (r.mode < 27 || 4 !== t))) &&
-                                    Z(e, e.output, e.next_out, c - e.avail_out)
+                                Z(e, e.output, e.next_out, c - e.avail_out)
                                     ? ((r.mode = 31), -4)
                                     : ((f -= e.avail_in),
-                                        (c -= e.avail_out),
-                                        (e.total_in += f),
-                                        (e.total_out += c),
-                                        (r.total += c),
-                                        r.wrap &&
-                                        c &&
-                                        (e.adler = r.check =
-                                            r.flags
-                                                ? B(r.check, i, c, e.next_out - c)
-                                                : O(r.check, i, c, e.next_out - c)),
-                                        (e.data_type =
-                                            r.bits +
-                                            (r.last ? 64 : 0) +
-                                            (12 === r.mode ? 128 : 0) +
-                                            (20 === r.mode || 15 === r.mode ? 256 : 0)),
-                                        ((0 == f && 0 === c) || 4 === t) && x === N && (x = -5),
-                                        x)
+                                      (c -= e.avail_out),
+                                      (e.total_in += f),
+                                      (e.total_out += c),
+                                      (r.total += c),
+                                      r.wrap &&
+                                          c &&
+                                          (e.adler = r.check =
+                                              r.flags
+                                                  ? B(r.check, i, c, e.next_out - c)
+                                                  : O(r.check, i, c, e.next_out - c)),
+                                      (e.data_type =
+                                          r.bits +
+                                          (r.last ? 64 : 0) +
+                                          (12 === r.mode ? 128 : 0) +
+                                          (20 === r.mode || 15 === r.mode ? 256 : 0)),
+                                      ((0 == f && 0 === c) || 4 === t) && x === N && (x = -5),
+                                      x)
                             );
                         }),
                         (r.inflateEnd = function (e) {
@@ -4869,10 +4870,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 ? 0 !== (r = e.state).wrap && 11 !== r.mode
                                     ? U
                                     : 11 === r.mode && O(1, t, n, 0) !== r.check
-                                        ? -3
-                                        : Z(e, t, n, n)
-                                            ? ((r.mode = 31), -4)
-                                            : ((r.havedict = 1), N)
+                                      ? -3
+                                      : Z(e, t, n, n)
+                                        ? ((r.mode = 31), -4)
+                                        : ((r.havedict = 1), N)
                                 : U;
                         }),
                         (r.inflateInfo = 'pako inflate (from Nodeca project)');
@@ -4941,31 +4942,31 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 0 === e
                                     ? ((A = R = a), 19)
                                     : 1 === e
-                                        ? ((A = F), (I -= 257), (R = N), (T -= 257), 256)
-                                        : ((A = U), (R = P), -1)),
-                                (b = y),
-                                (c = s),
-                                (S = v = E = 0),
-                                (l = -1),
-                                (f = (C = 1 << (x = k)) - 1),
-                                (1 === e && 852 < C) || (2 === e && 592 < C))
+                                      ? ((A = F), (I -= 257), (R = N), (T -= 257), 256)
+                                      : ((A = U), (R = P), -1)),
+                            (b = y),
+                            (c = s),
+                            (S = v = E = 0),
+                            (l = -1),
+                            (f = (C = 1 << (x = k)) - 1),
+                            (1 === e && 852 < C) || (2 === e && 592 < C))
                         )
                             return 1;
-                        for(; ;) {
+                        for (;;) {
                             for(
                                 p = b - S,
-                                _ =
-                                a[v] < d
-                                    ? ((m = 0), a[v])
-                                    : a[v] > d
-                                        ? ((m = R[T + a[v]]), A[I + a[v]])
-                                        : ((m = 96), 0),
-                                h = 1 << (b - S),
-                                y = u = 1 << x;
+                                    _ =
+                                        a[v] < d
+                                            ? ((m = 0), a[v])
+                                            : a[v] > d
+                                              ? ((m = R[T + a[v]]), A[I + a[v]])
+                                              : ((m = 96), 0),
+                                    h = 1 << (b - S),
+                                    y = u = 1 << x;
                                 (i[c + (E >> S) + (u -= h)] = (p << 24) | (m << 16) | _ | 0), 0 !== u;
 
                             );
-                            for(h = 1 << (b - 1); E & h;) h >>= 1;
+                            for(h = 1 << (b - 1); E & h; ) h >>= 1;
                             if((0 !== h ? ((E &= h - 1), (E += h)) : (E = 0), v++, 0 == --O[b])) {
                                 if(b === w) break;
                                 b = t[r + a[v]];
@@ -5010,7 +5011,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         o = 0,
                         h = 1;
                     function n(e) {
-                        for(var t = e.length; 0 <= --t;) e[t] = 0;
+                        for(var t = e.length; 0 <= --t; ) e[t] = 0;
                     }
                     var s = 0,
                         a = 29,
@@ -5067,16 +5068,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                     function P(e, t, r) {
                         e.bi_valid > d - r
                             ? ((e.bi_buf |= (t << e.bi_valid) & 65535),
-                                U(e, e.bi_buf),
-                                (e.bi_buf = t >> (d - e.bi_valid)),
-                                (e.bi_valid += r - d))
+                              U(e, e.bi_buf),
+                              (e.bi_buf = t >> (d - e.bi_valid)),
+                              (e.bi_valid += r - d))
                             : ((e.bi_buf |= (t << e.bi_valid) & 65535), (e.bi_valid += r));
                     }
                     function L(e, t, r) {
                         P(e, r[2 * t], r[2 * t + 1]);
                     }
                     function j(e, t) {
-                        for(var r = 0; (r |= 1 & e), (e >>>= 1), (r <<= 1), 0 < --t;);
+                        for(var r = 0; (r |= 1 & e), (e >>>= 1), (r <<= 1), 0 < --t; );
                         return r >>> 1;
                     }
                     function Z(e, t, r) {
@@ -5112,7 +5113,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             var n = e.heap[r], i = r << 1;
                             i <= e.heap_len &&
                             (i < e.heap_len && H(t, e.heap[i + 1], e.heap[i], e.depth) && i++,
-                                !H(t, n, e.heap[i], e.depth));
+                            !H(t, n, e.heap[i], e.depth));
 
                         )
                             (e.heap[r] = e.heap[i]), (r = i), (i <<= 1);
@@ -5128,15 +5129,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             for(
                                 ;
                                 (n = (e.pending_buf[e.d_buf + 2 * o] << 8) | e.pending_buf[e.d_buf + 2 * o + 1]),
-                                (i = e.pending_buf[e.l_buf + o]),
-                                o++,
-                                0 === n
-                                    ? L(e, i, t)
-                                    : (L(e, (s = A[i]) + u + 1, t),
-                                        0 !== (a = w[s]) && P(e, (i -= I[s]), a),
-                                        L(e, (s = N(--n)), r),
-                                        0 !== (a = k[s]) && P(e, (n -= T[s]), a)),
-                                o < e.last_lit;
+                                    (i = e.pending_buf[e.l_buf + o]),
+                                    o++,
+                                    0 === n
+                                        ? L(e, i, t)
+                                        : (L(e, (s = A[i]) + u + 1, t),
+                                          0 !== (a = w[s]) && P(e, (i -= I[s]), a),
+                                          L(e, (s = N(--n)), r),
+                                          0 !== (a = k[s]) && P(e, (n -= T[s]), a)),
+                                    o < e.last_lit;
 
                             );
                         L(e, m, t);
@@ -5152,7 +5153,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             u = -1;
                         for(e.heap_len = 0, e.heap_max = _, r = 0; r < h; r++)
                             0 !== s[2 * r] ? ((e.heap[++e.heap_len] = u = r), (e.depth[r] = 0)) : (s[2 * r + 1] = 0);
-                        for(; e.heap_len < 2;)
+                        for(; e.heap_len < 2; )
                             (s[2 * (i = e.heap[++e.heap_len] = u < 2 ? ++u : 0)] = 1),
                                 (e.depth[i] = 0),
                                 e.opt_len--,
@@ -5161,17 +5162,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         for(
                             i = h;
                             (r = e.heap[1]),
-                            (e.heap[1] = e.heap[e.heap_len--]),
-                            G(e, s, 1),
-                            (n = e.heap[1]),
-                            (e.heap[--e.heap_max] = r),
-                            (e.heap[--e.heap_max] = n),
-                            (s[2 * i] = s[2 * r] + s[2 * n]),
-                            (e.depth[i] = (e.depth[r] >= e.depth[n] ? e.depth[r] : e.depth[n]) + 1),
-                            (s[2 * r + 1] = s[2 * n + 1] = i),
-                            (e.heap[1] = i++),
-                            G(e, s, 1),
-                            2 <= e.heap_len;
+                                (e.heap[1] = e.heap[e.heap_len--]),
+                                G(e, s, 1),
+                                (n = e.heap[1]),
+                                (e.heap[--e.heap_max] = r),
+                                (e.heap[--e.heap_max] = n),
+                                (s[2 * i] = s[2 * r] + s[2 * n]),
+                                (e.depth[i] = (e.depth[r] >= e.depth[n] ? e.depth[r] : e.depth[n]) + 1),
+                                (s[2 * r + 1] = s[2 * n + 1] = i),
+                                (e.heap[1] = i++),
+                                G(e, s, 1),
+                                2 <= e.heap_len;
 
                         );
                         (e.heap[--e.heap_max] = e.heap[1]),
@@ -5195,7 +5196,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     p < (s = h[2 * h[2 * (n = e.heap[r]) + 1] + 1] + 1) && ((s = p), m++),
                                         (h[2 * n + 1] = s),
                                         u < n ||
-                                        (e.bl_count[s]++,
+                                            (e.bl_count[s]++,
                                             (a = 0),
                                             d <= n && (a = c[n - d]),
                                             (o = h[2 * n]),
@@ -5203,15 +5204,15 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                             f && (e.static_len += o * (l[2 * n + 1] + a)));
                                 if(0 !== m) {
                                     do {
-                                        for(s = p - 1; 0 === e.bl_count[s];) s--;
+                                        for(s = p - 1; 0 === e.bl_count[s]; ) s--;
                                         e.bl_count[s]--, (e.bl_count[s + 1] += 2), e.bl_count[p]--, (m -= 2);
                                     } while(0 < m);
                                     for(s = p; 0 !== s; s--)
-                                        for(n = e.bl_count[s]; 0 !== n;)
+                                        for(n = e.bl_count[s]; 0 !== n; )
                                             u < (i = e.heap[--r]) ||
                                                 (h[2 * i + 1] !== s &&
                                                     ((e.opt_len += (s - h[2 * i + 1]) * h[2 * i]), (h[2 * i + 1] = s)),
-                                                    n--);
+                                                n--);
                                 }
                             })(e, t),
                             Z(s, u, e.bl_count);
@@ -5228,11 +5229,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             (i = a),
                                 (a = t[2 * (n + 1) + 1]),
                                 (++o < h && i === a) ||
-                                (o < u
-                                    ? (e.bl_tree[2 * i] += o)
-                                    : 0 !== i
-                                        ? (i !== s && e.bl_tree[2 * i]++, e.bl_tree[2 * b]++)
-                                        : o <= 10
+                                    (o < u
+                                        ? (e.bl_tree[2 * i] += o)
+                                        : 0 !== i
+                                          ? (i !== s && e.bl_tree[2 * i]++, e.bl_tree[2 * b]++)
+                                          : o <= 10
                                             ? e.bl_tree[2 * v]++
                                             : e.bl_tree[2 * y]++,
                                     (s = i),
@@ -5248,13 +5249,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                             u = 4;
                         for(0 === a && ((h = 138), (u = 3)), n = 0; n <= r; n++)
                             if(((i = a), (a = t[2 * (n + 1) + 1]), !(++o < h && i === a))) {
-                                if(o < u) for(; L(e, i, e.bl_tree), 0 != --o;);
+                                if(o < u) for(; L(e, i, e.bl_tree), 0 != --o; );
                                 else
                                     0 !== i
                                         ? (i !== s && (L(e, i, e.bl_tree), o--), L(e, b, e.bl_tree), P(e, o - 3, 2))
                                         : o <= 10
-                                            ? (L(e, v, e.bl_tree), P(e, o - 3, 3))
-                                            : (L(e, y, e.bl_tree), P(e, o - 11, 7));
+                                          ? (L(e, v, e.bl_tree), P(e, o - 3, 3))
+                                          : (L(e, y, e.bl_tree), P(e, o - 11, 7));
                                 (s = i), (u = (o = 0) === a ? ((h = 138), 3) : i === a ? ((h = 6), 3) : ((h = 7), 4));
                             }
                     }
@@ -5284,16 +5285,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 for(i >>= 7; n < f; n++)
                                     for(T[n] = i << 7, e = 0; e < 1 << (k[n] - 7); e++) E[256 + i++] = n;
                                 for(t = 0; t <= g; t++) s[t] = 0;
-                                for(e = 0; e <= 143;) (z[2 * e + 1] = 8), e++, s[8]++;
-                                for(; e <= 255;) (z[2 * e + 1] = 9), e++, s[9]++;
-                                for(; e <= 279;) (z[2 * e + 1] = 7), e++, s[7]++;
-                                for(; e <= 287;) (z[2 * e + 1] = 8), e++, s[8]++;
+                                for(e = 0; e <= 143; ) (z[2 * e + 1] = 8), e++, s[8]++;
+                                for(; e <= 255; ) (z[2 * e + 1] = 9), e++, s[9]++;
+                                for(; e <= 279; ) (z[2 * e + 1] = 7), e++, s[7]++;
+                                for(; e <= 287; ) (z[2 * e + 1] = 8), e++, s[8]++;
                                 for(Z(z, l + 1, s), e = 0; e < f; e++) (C[2 * e + 1] = 5), (C[2 * e] = j(e, 5));
                                 (O = new D(z, w, u + 1, l, g)),
                                     (B = new D(C, k, 0, f, g)),
                                     (R = new D(new Array(0), x, 0, c, p));
                             })(),
-                                (q = !0)),
+                            (q = !0)),
                             (e.l_desc = new F(e.dyn_ltree, O)),
                             (e.d_desc = new F(e.dyn_dtree, B)),
                             (e.bl_desc = new F(e.bl_tree, R)),
@@ -5308,45 +5309,45 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                 a = 0;
                             0 < e.level
                                 ? (2 === e.strm.data_type &&
-                                    (e.strm.data_type = (function (e) {
-                                        var t,
-                                            r = 4093624447;
-                                        for(t = 0; t <= 31; t++, r >>>= 1)
-                                            if(1 & r && 0 !== e.dyn_ltree[2 * t]) return o;
-                                        if(0 !== e.dyn_ltree[18] || 0 !== e.dyn_ltree[20] || 0 !== e.dyn_ltree[26])
-                                            return h;
-                                        for(t = 32; t < u; t++) if(0 !== e.dyn_ltree[2 * t]) return h;
-                                        return o;
-                                    })(e)),
-                                    Y(e, e.l_desc),
-                                    Y(e, e.d_desc),
-                                    (a = (function (e) {
-                                        var t;
-                                        for(
-                                            X(e, e.dyn_ltree, e.l_desc.max_code),
-                                            X(e, e.dyn_dtree, e.d_desc.max_code),
-                                            Y(e, e.bl_desc),
-                                            t = c - 1;
-                                            3 <= t && 0 === e.bl_tree[2 * S[t] + 1];
-                                            t--
-                                        );
-                                        return (e.opt_len += 3 * (t + 1) + 5 + 5 + 4), t;
-                                    })(e)),
-                                    (i = (e.opt_len + 3 + 7) >>> 3),
-                                    (s = (e.static_len + 3 + 7) >>> 3) <= i && (i = s))
+                                      (e.strm.data_type = (function (e) {
+                                          var t,
+                                              r = 4093624447;
+                                          for(t = 0; t <= 31; t++, r >>>= 1)
+                                              if(1 & r && 0 !== e.dyn_ltree[2 * t]) return o;
+                                          if(0 !== e.dyn_ltree[18] || 0 !== e.dyn_ltree[20] || 0 !== e.dyn_ltree[26])
+                                              return h;
+                                          for(t = 32; t < u; t++) if(0 !== e.dyn_ltree[2 * t]) return h;
+                                          return o;
+                                      })(e)),
+                                  Y(e, e.l_desc),
+                                  Y(e, e.d_desc),
+                                  (a = (function (e) {
+                                      var t;
+                                      for(
+                                          X(e, e.dyn_ltree, e.l_desc.max_code),
+                                              X(e, e.dyn_dtree, e.d_desc.max_code),
+                                              Y(e, e.bl_desc),
+                                              t = c - 1;
+                                          3 <= t && 0 === e.bl_tree[2 * S[t] + 1];
+                                          t--
+                                      );
+                                      return (e.opt_len += 3 * (t + 1) + 5 + 5 + 4), t;
+                                  })(e)),
+                                  (i = (e.opt_len + 3 + 7) >>> 3),
+                                  (s = (e.static_len + 3 + 7) >>> 3) <= i && (i = s))
                                 : (i = s = r + 5),
                                 r + 4 <= i && -1 !== t
                                     ? J(e, t, r, n)
                                     : 4 === e.strategy || s === i
-                                        ? (P(e, 2 + (n ? 1 : 0), 3), K(e, z, C))
-                                        : (P(e, 4 + (n ? 1 : 0), 3),
-                                            (function (e, t, r, n) {
-                                                var i;
-                                                for(P(e, t - 257, 5), P(e, r - 1, 5), P(e, n - 4, 4), i = 0; i < n; i++)
-                                                    P(e, e.bl_tree[2 * S[i] + 1], 3);
-                                                V(e, e.dyn_ltree, t - 1), V(e, e.dyn_dtree, r - 1);
-                                            })(e, e.l_desc.max_code + 1, e.d_desc.max_code + 1, a + 1),
-                                            K(e, e.dyn_ltree, e.dyn_dtree)),
+                                      ? (P(e, 2 + (n ? 1 : 0), 3), K(e, z, C))
+                                      : (P(e, 4 + (n ? 1 : 0), 3),
+                                        (function (e, t, r, n) {
+                                            var i;
+                                            for(P(e, t - 257, 5), P(e, r - 1, 5), P(e, n - 4, 4), i = 0; i < n; i++)
+                                                P(e, e.bl_tree[2 * S[i] + 1], 3);
+                                            V(e, e.dyn_ltree, t - 1), V(e, e.dyn_dtree, r - 1);
+                                        })(e, e.l_desc.max_code + 1, e.d_desc.max_code + 1, a + 1),
+                                        K(e, e.dyn_ltree, e.dyn_dtree)),
                                 W(e),
                                 n && M(e);
                         }),
@@ -5369,9 +5370,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     16 === e.bi_valid
                                         ? (U(e, e.bi_buf), (e.bi_buf = 0), (e.bi_valid = 0))
                                         : 8 <= e.bi_valid &&
-                                        ((e.pending_buf[e.pending++] = 255 & e.bi_buf),
-                                            (e.bi_buf >>= 8),
-                                            (e.bi_valid -= 8));
+                                          ((e.pending_buf[e.pending++] = 255 & e.bi_buf),
+                                          (e.bi_buf >>= 8),
+                                          (e.bi_valid -= 8));
                                 })(e);
                         });
                 },
@@ -5416,53 +5417,53 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                                     (i =
                                         '[object process]' === {}.toString.call(r.process)
                                             ? function (e) {
-                                                process.nextTick(function () {
-                                                    c(e);
-                                                });
-                                            }
+                                                  process.nextTick(function () {
+                                                      c(e);
+                                                  });
+                                              }
                                             : (function () {
-                                                if(r.postMessage && !r.importScripts) {
-                                                    var e = !0,
-                                                        t = r.onmessage;
-                                                    return (
-                                                        (r.onmessage = function () {
-                                                            e = !1;
-                                                        }),
-                                                        r.postMessage('', '*'),
-                                                        (r.onmessage = t),
-                                                        e
-                                                    );
-                                                }
-                                            })()
-                                                ? ((a = 'setImmediate$' + Math.random() + '$'),
-                                                    r.addEventListener
-                                                        ? r.addEventListener('message', d, !1)
-                                                        : r.attachEvent('onmessage', d),
+                                                    if(r.postMessage && !r.importScripts) {
+                                                        var e = !0,
+                                                            t = r.onmessage;
+                                                        return (
+                                                            (r.onmessage = function () {
+                                                                e = !1;
+                                                            }),
+                                                            r.postMessage('', '*'),
+                                                            (r.onmessage = t),
+                                                            e
+                                                        );
+                                                    }
+                                                })()
+                                              ? ((a = 'setImmediate$' + Math.random() + '$'),
+                                                r.addEventListener
+                                                    ? r.addEventListener('message', d, !1)
+                                                    : r.attachEvent('onmessage', d),
+                                                function (e) {
+                                                    r.postMessage(a + e, '*');
+                                                })
+                                              : r.MessageChannel
+                                                ? (((t = new MessageChannel()).port1.onmessage = function (e) {
+                                                      c(e.data);
+                                                  }),
+                                                  function (e) {
+                                                      t.port2.postMessage(e);
+                                                  })
+                                                : l && 'onreadystatechange' in l.createElement('script')
+                                                  ? ((s = l.documentElement),
                                                     function (e) {
-                                                        r.postMessage(a + e, '*');
-                                                    })
-                                                : r.MessageChannel
-                                                    ? (((t = new MessageChannel()).port1.onmessage = function (e) {
-                                                        c(e.data);
-                                                    }),
-                                                        function (e) {
-                                                            t.port2.postMessage(e);
-                                                        })
-                                                    : l && 'onreadystatechange' in l.createElement('script')
-                                                        ? ((s = l.documentElement),
-                                                            function (e) {
-                                                                var t = l.createElement('script');
-                                                                (t.onreadystatechange = function () {
-                                                                    c(e),
-                                                                        (t.onreadystatechange = null),
-                                                                        s.removeChild(t),
-                                                                        (t = null);
-                                                                }),
-                                                                    s.appendChild(t);
-                                                            })
-                                                        : function (e) {
-                                                            setTimeout(c, 0, e);
+                                                        var t = l.createElement('script');
+                                                        (t.onreadystatechange = function () {
+                                                            c(e),
+                                                                (t.onreadystatechange = null),
+                                                                s.removeChild(t),
+                                                                (t = null);
                                                         }),
+                                                            s.appendChild(t);
+                                                    })
+                                                  : function (e) {
+                                                        setTimeout(c, 0, e);
+                                                    }),
                                     (e.setImmediate = function (e) {
                                         'function' != typeof e && (e = new Function('' + e));
                                         for(var t = new Array(arguments.length - 1), r = 0; r < t.length; r++)
@@ -5520,10 +5521,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
                         'undefined' != typeof global
                             ? global
                             : 'undefined' != typeof self
-                                ? self
-                                : 'undefined' != typeof window
-                                    ? window
-                                    : {},
+                              ? self
+                              : 'undefined' != typeof window
+                                ? window
+                                : {},
                     );
                 },
                 {},

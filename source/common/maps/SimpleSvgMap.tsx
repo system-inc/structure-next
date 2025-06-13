@@ -18,8 +18,6 @@ export interface SimpleSvgMapProperties {
 }
 
 export function SimpleSvgMap(properties: SimpleSvgMapProperties) {
-    const { points } = properties;
-
     const mapWidth = 2000; // Width of the map image in pixels
     const mapHeight = 1280; // Height of the map image in pixels
 
@@ -62,7 +60,7 @@ export function SimpleSvgMap(properties: SimpleSvgMapProperties) {
     return (
         <div className="relative h-0 w-full" style={{ paddingBottom: `${aspectRatio}%` }}>
             <WorldMapMercator className="absolute left-0 top-0 h-full w-full text-neutral+3 dark:text-neutral-6" />
-            {points.map(function (point, index) {
+            {properties.points.map(function (point, index) {
                 // Adjusted and clamped Mercator Projection
                 const { x, y } = getCoordinates(point.latitude, point.longitude);
                 // console.log(x, y, point.title);

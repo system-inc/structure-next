@@ -1,12 +1,12 @@
 /**
  * WebSocketSharedWorker Build Script
- * 
+ *
  * This script compiles the TypeScript files for the WebSocket SharedWorker
  * and generates a single JavaScript file that can be used as a SharedWorker.
- * 
+ *
  * Add this script to your package.json scripts section:
  * "build:websocketsharedworker": "node libraries/structure/source/api/web-sockets/shared-worker/scripts/BuildWebSocketSharedWorker.mjs"
- * 
+ *
  * Then use `npm run build:websocketsharedworker` to run the script.
  */
 
@@ -67,7 +67,7 @@ async function buildWebSocketSharedWorker() {
                 {
                     name: 'resolve-structure-imports',
                     setup(build) {
-                        build.onResolve({ filter: /^@structure\// }, args => {
+                        build.onResolve({ filter: /^@structure\// }, (args) => {
                             // console.log(`Resolving import: ${args.path}`);
                             const importPath = args.path.replace('@structure/', '');
                             // Handle paths like '@structure/source/api/...' by resolving to the full path
@@ -103,14 +103,15 @@ async function buildWebSocketSharedWorker() {
         NodeFileSystem.writeFileSync(outputFile, finalCode, 'utf8');
 
         console.log(`WebSocket SharedWorker built successfully: ${outputFile}`);
-    } catch(error) {
+    }
+    catch(error) {
         console.error('Error building WebSocket SharedWorker:', error);
         process.exit(1);
     }
 }
 
 // Run the build process
-buildWebSocketSharedWorker().catch(error => {
+buildWebSocketSharedWorker().catch((error) => {
     console.error('Unhandled error:', error);
     process.exit(1);
 });

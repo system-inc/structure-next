@@ -17,7 +17,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 // import // PrincipleMagicDiceDocument,
 // // PrincipleMagicDiceQuery,
 // // SupportFeedbackCreateDocument,
-// '@project/source/api/graphql/GraphQlGeneratedCode';
+// '@project/app/_api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 // import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

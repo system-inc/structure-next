@@ -46,7 +46,7 @@ const inputVariants = cva(
 
 // Component - Input
 type InputProperties = React.ComponentPropsWithoutRef<'input'> & VariantProperties<typeof inputVariants>;
-const Input = React.forwardRef<HTMLInputElement, InputProperties>(function (
+export const Input = React.forwardRef<HTMLInputElement, InputProperties>(function (
     { className, size, rounded, ...inputProperties },
     reference,
 ) {
@@ -70,4 +70,3 @@ const Input = React.forwardRef<HTMLInputElement, InputProperties>(function (
 Input.displayName = 'Input';
 
 // Export
-export { Input, type InputProperties, inputVariants };

@@ -32,24 +32,27 @@ const ReactExportRule = {
             '/layout.tsx',
             '/layout.jsx',
             '/not-found.tsx',
-            '/not-found.jsx'
+            '/not-found.jsx',
         ];
 
-        const isSpecialNextJsFile = specialNextJsFiles.some(pattern => filename.endsWith(pattern));
+        const isSpecialNextJsFile = specialNextJsFiles.some((pattern) => filename.endsWith(pattern));
 
         return {
             // Detect React components with React.forwardRef
             VariableDeclarator(node) {
                 // Check for patterns like: const MyComponent = React.forwardRef(...
-                if(node.id && node.id.type === 'Identifier' &&
-                    node.init && node.init.type === 'CallExpression' &&
+                if(
+                    node.id &&
+                    node.id.type === 'Identifier' &&
+                    node.init &&
+                    node.init.type === 'CallExpression' &&
                     node.init.callee &&
                     node.init.callee.type === 'MemberExpression' &&
                     node.init.callee.object &&
                     node.init.callee.object.name === 'React' &&
                     node.init.callee.property &&
-                    node.init.callee.property.name === 'forwardRef') {
-
+                    node.init.callee.property.name === 'forwardRef'
+                ) {
                     // If the variable name starts with an uppercase letter, it's likely a component
                     if(/^[A-Z]/.test(node.id.name)) {
                         implementedComponents.add(node.id.name);
@@ -60,9 +63,7 @@ const ReactExportRule = {
                         }
 
                         // Check if this is already a named export via 'export const X = React.forwardRef(...)'
-                        if(node.parent &&
-                            node.parent.parent &&
-                            node.parent.parent.type === 'ExportNamedDeclaration') {
+                        if(node.parent && node.parent.parent && node.parent.parent.type === 'ExportNamedDeclaration') {
                             hasNamedExport = true;
                         }
                     }
@@ -79,8 +80,8 @@ const ReactExportRule = {
                 }
 
                 // Special check for Next.js page components
-                const isPageFunction = functionName === 'Page' &&
-                    (filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx'));
+                const isPageFunction =
+                    functionName === 'Page' && (filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx'));
 
                 // For regular components, require uppercase first letter
                 if(!isPageFunction && !/^[A-Z]/.test(functionName)) {
@@ -95,33 +96,35 @@ const ReactExportRule = {
                     // Check function parameters for props/properties pattern
                     if(node.params && node.params.length > 0) {
                         const firstParam = node.params[0];
-                        if(firstParam.type === 'Identifier' &&
-                            (firstParam.name === 'properties' || firstParam.name === 'props')) {
+                        if(
+                            firstParam.type === 'Identifier' &&
+                            (firstParam.name === 'properties' || firstParam.name === 'props')
+                        ) {
                             isReactComponent = true;
                         }
                     }
 
                     // Check return statements for JSX elements (common in React components)
-                    const returnStatements = node.body.body.filter(stmt =>
-                        stmt.type === 'ReturnStatement');
+                    const returnStatements = node.body.body.filter((stmt) => stmt.type === 'ReturnStatement');
 
                     if(returnStatements.length > 0) {
                         const returnValue = returnStatements[0].argument;
-                        if(returnValue && (
-                            returnValue.type === 'JSXElement' ||
-                            returnValue.type === 'JSXFragment' ||
-                            (returnValue.type === 'ConditionalExpression' &&
-                                (returnValue.consequent.type === 'JSXElement' ||
-                                    returnValue.alternate.type === 'JSXElement'))
-                        )) {
+                        if(
+                            returnValue &&
+                            (returnValue.type === 'JSXElement' ||
+                                returnValue.type === 'JSXFragment' ||
+                                (returnValue.type === 'ConditionalExpression' &&
+                                    (returnValue.consequent.type === 'JSXElement' ||
+                                        returnValue.alternate.type === 'JSXElement')))
+                        ) {
                             isReactComponent = true;
                         }
                     }
                 }
 
                 // Check if this is a Next.js Page component by name
-                const isNextJsPageFunction = functionName === 'Page' &&
-                    (filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx'));
+                const isNextJsPageFunction =
+                    functionName === 'Page' && (filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx'));
 
                 // Mark it as a component if it's either a React component or a Page function
                 if(isReactComponent || isNextJsPageFunction) {
@@ -141,23 +144,23 @@ const ReactExportRule = {
 
             // Check for named exports of any component
             ExportNamedDeclaration(node) {
-                // First, check if we're exporting a variable or function directly 
+                // First, check if we're exporting a variable or function directly
                 if(node.declaration) {
                     // If exporting a function declaration directly
-                    if(node.declaration.type === 'FunctionDeclaration' &&
-                        node.declaration.id) {
+                    if(node.declaration.type === 'FunctionDeclaration' && node.declaration.id) {
                         const name = node.declaration.id.name;
                         if(implementedComponents.has(name) || name === componentName) {
                             hasNamedExport = true;
                         }
                     }
                     // If exporting a variable declaration (like const ComponentName = React.forwardRef(...))
-                    else if(node.declaration.type === 'VariableDeclaration' &&
+                    else if(
+                        node.declaration.type === 'VariableDeclaration' &&
                         node.declaration.declarations &&
-                        node.declaration.declarations.length > 0) {
-
+                        node.declaration.declarations.length > 0
+                    ) {
                         // Check each variable declared
-                        node.declaration.declarations.forEach(declaration => {
+                        node.declaration.declarations.forEach((declaration) => {
                             if(declaration.id && declaration.id.type === 'Identifier') {
                                 const name = declaration.id.name;
                                 if(implementedComponents.has(name) || name === componentName) {
@@ -167,13 +170,26 @@ const ReactExportRule = {
                         });
                     }
                 }
-                // Check for named exports with specifiers (export { Component })
+                // Check for named exports with specifiers (export { Component }) - NOT ALLOWED
                 else if(node.specifiers && node.specifiers.length > 0) {
                     for(const specifier of node.specifiers) {
-                        if(specifier.exported &&
+                        if(
+                            specifier.exported &&
                             (implementedComponents.has(specifier.exported.name) ||
-                                specifier.exported.name === componentName)) {
-                            hasNamedExport = true;
+                                specifier.exported.name === componentName)
+                        ) {
+                            // This is a named export at the bottom - report as error
+                            context.report({
+                                node,
+                                message: `Named exports at the bottom are not allowed. Export components directly when defining them: 'export function ${specifier.exported.name}(properties) {...}' instead of 'export { ${specifier.exported.name} }'.`,
+                                fix(fixer) {
+                                    // Remove the export statement - direct export should be added separately
+                                    return fixer.remove(node);
+                                },
+                            });
+
+                            // Don't mark as having export since this is the wrong type
+                            // hasNamedExport = true;
                             break;
                         }
                     }
@@ -183,8 +199,7 @@ const ReactExportRule = {
             // Check for default exports and track/report depending on file type
             ExportDefaultDeclaration(node) {
                 // Skip non-React files and node_modules
-                if(!(/\.(tsx|jsx)$/i.test(filename)) ||
-                    filename.includes('node_modules')) {
+                if(!/\.(tsx|jsx)$/i.test(filename) || filename.includes('node_modules')) {
                     return;
                 }
 
@@ -195,9 +210,8 @@ const ReactExportRule = {
                 let exportedName = '';
                 if(node.declaration && node.declaration.type === 'Identifier') {
                     exportedName = node.declaration.name;
-                } else if(node.declaration &&
-                    node.declaration.type === 'FunctionDeclaration' &&
-                    node.declaration.id) {
+                }
+                else if(node.declaration && node.declaration.type === 'FunctionDeclaration' && node.declaration.id) {
                     exportedName = node.declaration.id.name;
 
                     // If this is a page.tsx file and we're exporting "function Page()", record it
@@ -225,7 +239,7 @@ const ReactExportRule = {
                                 // Remove the default export statement entirely
                                 return fixer.remove(node);
                             }
-                        }
+                        },
                     });
                 }
             },
@@ -236,13 +250,13 @@ const ReactExportRule = {
                 const allComponents = new Set([...implementedComponents]);
                 if(componentName) allComponents.add(componentName);
 
-                // Skip if we didn't find any components 
+                // Skip if we didn't find any components
                 if(allComponents.size === 0) {
                     return;
                 }
 
                 // Skip non-React files
-                if(!(/\.(tsx|jsx)$/i.test(filename))) {
+                if(!/\.(tsx|jsx)$/i.test(filename)) {
                     return;
                 }
 
@@ -270,11 +284,12 @@ const ReactExportRule = {
                             fix(fixer) {
                                 return fixer.insertTextAfterRange(
                                     [0, context.getSourceCode().getText().length],
-                                    `\n\n// Export - Default (required for Next.js pages)\nexport default ${pageComponentName};\n`
+                                    `\n\n// Export - Default (required for Next.js pages)\nexport default ${pageComponentName};\n`,
                                 );
-                            }
+                            },
                         });
-                    } else {
+                    }
+                    else {
                         context.report({
                             node: node,
                             message: 'Next.js page files must have a default export.',
@@ -293,16 +308,74 @@ const ReactExportRule = {
                     // Named export is required for regular components
                     context.report({
                         node: node,
-                        message: `Component "${componentName}" is missing a named export. Add "export { ${componentName} };" or export the function directly with "export function ${componentName}".`,
+                        message: `Component "${componentName}" is missing a named export. Export the function directly with "export function ${componentName}(properties) {...}" instead of adding exports at the bottom.`,
                         fix(fixer) {
-                            return fixer.insertTextAfterRange(
-                                [0, context.getSourceCode().getText().length],
-                                `\n\n// Export - Named\nexport { ${componentName} };\n`
-                            );
-                        }
+                            // Find the function declaration in the AST and add export keyword
+                            const sourceCode = context.getSourceCode();
+                            let functionNode = null;
+
+                            // Look for the function or variable declaration with cycle prevention
+                            const visited = new Set();
+                            function findComponentDeclaration(node) {
+                                if(!node || typeof node !== 'object' || visited.has(node)) {
+                                    return;
+                                }
+                                visited.add(node);
+
+                                // Look for function declarations
+                                if(node.type === 'FunctionDeclaration' && node.id && node.id.name === componentName) {
+                                    functionNode = node;
+                                    return;
+                                }
+
+                                // Look for variable declarations (like const Button = React.forwardRef(...))
+                                if(node.type === 'VariableDeclarator' && node.id && node.id.name === componentName) {
+                                    // Find the parent VariableDeclaration
+                                    let parent = node.parent;
+                                    while(parent && parent.type !== 'VariableDeclaration') {
+                                        parent = parent.parent;
+                                    }
+                                    if(parent) {
+                                        functionNode = parent;
+                                        return;
+                                    }
+                                }
+
+                                // Only search specific AST properties to avoid cycles
+                                const searchableKeys = ['body', 'declarations', 'declaration'];
+                                for(const key of searchableKeys) {
+                                    if(node[key]) {
+                                        if(Array.isArray(node[key])) {
+                                            for(const child of node[key]) {
+                                                findComponentDeclaration(child);
+                                                if(functionNode) return;
+                                            }
+                                        }
+                                        else {
+                                            findComponentDeclaration(node[key]);
+                                            if(functionNode) return;
+                                        }
+                                    }
+                                }
+                            }
+
+                            findComponentDeclaration(node);
+
+                            if(functionNode) {
+                                // Add export keyword before function
+                                return fixer.insertTextBefore(functionNode, 'export ');
+                            }
+                            else {
+                                // Fallback: add export at the end (this shouldn't happen but provides safety)
+                                return fixer.insertTextAfterRange(
+                                    [0, sourceCode.getText().length],
+                                    `\n\n\nexport { ${componentName} };\n`,
+                                );
+                            }
+                        },
                     });
                 }
-            }
+            },
         };
     },
 };

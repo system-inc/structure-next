@@ -45,7 +45,7 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
 
 export function AccountNavigationMobile() {
     const [navigationOpen, setNavigationOpen] = React.useState<string>();
-    const [navigationContentRef, { height }] = useMeasure();
+    const [navigationContentReference, { height }] = useMeasure();
 
     const navigationSpring = useSpring({
         height: navigationOpen === 'menu' ? height : 0,
@@ -98,7 +98,7 @@ export function AccountNavigationMobile() {
                             className="overflow-hidden"
                         >
                             <div
-                                ref={navigationContentRef}
+                                ref={navigationContentReference}
                                 className={mergeClassNames('container flex flex-col items-start py-2 pb-8')}
                             >
                                 {linksTrail.map(function (style, accountNavigationLinkIndex) {

@@ -4,7 +4,8 @@ const ReactFileOrganizationRule = {
     meta: {
         type: 'suggestion',
         docs: {
-            description: 'Enforce that files with large components (>60 lines) should only contain one primary component',
+            description:
+                'Enforce that files with large components (>60 lines) should only contain one primary component',
             category: 'Best Practices',
             recommended: true,
         },
@@ -16,16 +17,16 @@ const ReactFileOrganizationRule = {
                     maxComponentLines: {
                         type: 'integer',
                         minimum: 1,
-                        default: 60
+                        default: 60,
                     },
                     maxHelperLines: {
                         type: 'integer',
                         minimum: 1,
-                        default: 10
-                    }
+                        default: 10,
+                    },
                 },
-                additionalProperties: false
-            }
+                additionalProperties: false,
+            },
         ],
     },
     create(context) {
@@ -70,31 +71,46 @@ const ReactFileOrganizationRule = {
                 }
 
                 // Check for React hooks (useState, useEffect, etc.)
-                if(currentNode.type === 'CallExpression' &&
+                if(
+                    currentNode.type === 'CallExpression' &&
                     currentNode.callee &&
                     currentNode.callee.type === 'MemberExpression' &&
                     currentNode.callee.object &&
                     currentNode.callee.object.name === 'React' &&
                     currentNode.callee.property &&
                     currentNode.callee.property.name &&
-                    currentNode.callee.property.name.startsWith('use')) {
+                    currentNode.callee.property.name.startsWith('use')
+                ) {
                     hasReactHooks = true;
                     return;
                 }
 
                 // Check for direct hook calls (if not prefixed with React.)
-                if(currentNode.type === 'CallExpression' &&
+                if(
+                    currentNode.type === 'CallExpression' &&
                     currentNode.callee &&
                     currentNode.callee.type === 'Identifier' &&
                     currentNode.callee.name &&
                     currentNode.callee.name.startsWith('use') &&
-                    /^use[A-Z]/.test(currentNode.callee.name)) {
+                    /^use[A-Z]/.test(currentNode.callee.name)
+                ) {
                     hasReactHooks = true;
                     return;
                 }
 
                 // Only traverse specific properties to avoid cycles
-                const propertiesToTraverse = ['body', 'consequent', 'alternate', 'declarations', 'expression', 'init', 'callee', 'arguments', 'elements', 'properties'];
+                const propertiesToTraverse = [
+                    'body',
+                    'consequent',
+                    'alternate',
+                    'declarations',
+                    'expression',
+                    'init',
+                    'callee',
+                    'arguments',
+                    'elements',
+                    'properties',
+                ];
 
                 for(const key of propertiesToTraverse) {
                     if(currentNode[key]) {
@@ -104,7 +120,8 @@ const ReactFileOrganizationRule = {
                                 traverse(item, depth + 1);
                                 if(hasJSX && hasReactHooks) return;
                             }
-                        } else if(value && typeof value === 'object') {
+                        }
+                        else if(value && typeof value === 'object') {
                             traverse(value, depth + 1);
                             if(hasJSX && hasReactHooks) return;
                         }
@@ -141,15 +158,17 @@ const ReactFileOrganizationRule = {
             const mediumComponents = []; // Components between maxHelperLines and maxComponentLines
             const smallComponents = []; // Components <= maxHelperLines (10)
 
-            components.forEach(component => {
+            components.forEach((component) => {
                 const lineCount = countCodeLines(component.node);
                 component.lineCount = lineCount;
 
                 if(lineCount > maxComponentLines) {
                     actualLargeComponents.push(component);
-                } else if(lineCount <= maxHelperLines) {
+                }
+                else if(lineCount <= maxHelperLines) {
                     smallComponents.push(component);
-                } else {
+                }
+                else {
                     // Medium-sized components (between helper size and large size)
                     mediumComponents.push(component);
                 }
@@ -166,20 +185,20 @@ const ReactFileOrganizationRule = {
                     const violatingComponents = allNonSmallComponents.slice(1);
 
                     // Report violations for additional components
-                    violatingComponents.forEach(component => {
+                    violatingComponents.forEach((component) => {
                         context.report({
                             node: component.node,
-                            message: `File contains a component with ${primaryComponent.lineCount} lines. When any component exceeds ${maxComponentLines} lines, the file should contain only one primary component. Consider moving this ${component.lineCount}-line component to its own file.`
+                            message: `File contains a component with ${primaryComponent.lineCount} lines. When any component exceeds ${maxComponentLines} lines, the file should contain only one primary component. Consider moving this ${component.lineCount}-line component to its own file.`,
                         });
                     });
                 }
 
                 // Also check if we have too many small components when there's a large component
                 if(hasLargeComponents && smallComponents.length > 3) {
-                    smallComponents.slice(3).forEach(component => {
+                    smallComponents.slice(3).forEach((component) => {
                         context.report({
                             node: component.node,
-                            message: `Too many helper components in a file with a large primary component. Consider moving some helpers to separate files or combining them.`
+                            message: `Too many helper components in a file with a large primary component. Consider moving some helpers to separate files or combining them.`,
                         });
                     });
                 }
@@ -193,7 +212,7 @@ const ReactFileOrganizationRule = {
                     components.push({
                         node: node,
                         name: node.id.name,
-                        type: 'FunctionDeclaration'
+                        type: 'FunctionDeclaration',
                     });
                 }
             },
@@ -203,18 +222,19 @@ const ReactFileOrganizationRule = {
                 if(node.declaration && node.declaration.type === 'VariableDeclaration') {
                     const declarations = node.declaration.declarations || [];
 
-                    declarations.forEach(declaration => {
+                    declarations.forEach((declaration) => {
                         const identifierName = declaration.id && declaration.id.name;
                         if(identifierName && /^[A-Z]/.test(identifierName)) {
-                            if(declaration.init &&
+                            if(
+                                declaration.init &&
                                 (declaration.init.type === 'FunctionExpression' ||
-                                    declaration.init.type === 'ArrowFunctionExpression')) {
-
+                                    declaration.init.type === 'ArrowFunctionExpression')
+                            ) {
                                 if(hasJSXOrReactFeatures(declaration.init)) {
                                     components.push({
                                         node: declaration.init,
                                         name: identifierName,
-                                        type: declaration.init.type
+                                        type: declaration.init.type,
                                     });
                                 }
                             }
@@ -230,15 +250,18 @@ const ReactFileOrganizationRule = {
                         components.push({
                             node: node.declaration,
                             name: node.declaration.id ? node.declaration.id.name : 'DefaultExport',
-                            type: 'FunctionDeclaration'
+                            type: 'FunctionDeclaration',
                         });
-                    } else if((node.declaration.type === 'FunctionExpression' ||
-                        node.declaration.type === 'ArrowFunctionExpression') &&
-                        hasJSXOrReactFeatures(node.declaration)) {
+                    }
+                    else if(
+                        (node.declaration.type === 'FunctionExpression' ||
+                            node.declaration.type === 'ArrowFunctionExpression') &&
+                        hasJSXOrReactFeatures(node.declaration)
+                    ) {
                         components.push({
                             node: node.declaration,
                             name: 'DefaultExport',
-                            type: node.declaration.type
+                            type: node.declaration.type,
                         });
                     }
                 }
@@ -247,7 +270,7 @@ const ReactFileOrganizationRule = {
             // Check organization when we finish parsing the file
             'Program:exit'() {
                 checkFileOrganization();
-            }
+            },
         };
     },
 };

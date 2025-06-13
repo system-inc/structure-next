@@ -72,7 +72,7 @@ export function FileDropField<T extends HTMLElement>({
                         suppressHydrationWarning
                     >
                         <p className="font-medium">Drag and drop or select files to upload.</p>
-                        <p className="text-opsis-content-secondary mt-2 transition-colors">
+                        <p className="mt-2 text-opsis-content-secondary transition-colors">
                             Attach any files that might help us assist you better.
                         </p>
 
@@ -123,22 +123,22 @@ export function FileListItem(properties: FileListItemProperties) {
     const FileTypeIcon = getFileTypeIconFromType(properties.file.type);
 
     return (
-        <div className={'bg-opsis-background-secondary flex items-center justify-between rounded-medium px-5 py-3'}>
+        <div className={'flex items-center justify-between rounded-medium bg-opsis-background-secondary px-5 py-3'}>
             <FileTypeIcon className="mr-4 size-5" weight="regular" />
 
             <div className="min-w-0 flex-1">
-                <p className="text-opsis-content-primary truncate text-sm font-medium">{properties.file.name}</p>
+                <p className="truncate text-sm font-medium text-opsis-content-primary">{properties.file.name}</p>
             </div>
 
             <div className="flex items-center gap-4 pl-2">
-                <p className="text-opsis-content-secondary text-sm">{formatFileSize(properties.file.size)}</p>
+                <p className="text-sm text-opsis-content-secondary">{formatFileSize(properties.file.size)}</p>
                 <Button
                     variant="ghost"
                     icon
                     size="extra-small"
                     type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
+                    onClick={(event) => {
+                        event.stopPropagation();
                         properties.removeFile(properties.index);
                     }}
                     className="flexitems-center justify-center hover:text-red-500 focus:text-red-500"

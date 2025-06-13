@@ -24,15 +24,15 @@ const ReactNoDestructuringReactRule = {
                 }
 
                 // Check if React is imported as default (correct way)
-                const hasDefaultImport = node.specifiers.some(spec =>
-                    spec.type === 'ImportDefaultSpecifier' && spec.local.name === 'React'
+                const hasDefaultImport = node.specifiers.some(
+                    (spec) => spec.type === 'ImportDefaultSpecifier' && spec.local.name === 'React',
                 );
 
                 // Check if any named imports from React
-                const namedImports = node.specifiers.filter(spec => spec.type === 'ImportSpecifier');
+                const namedImports = node.specifiers.filter((spec) => spec.type === 'ImportSpecifier');
 
                 // Track and report any React items that were imported with destructuring
-                namedImports.forEach(specifier => {
+                namedImports.forEach((specifier) => {
                     const importedName = specifier.imported.name;
                     const localName = specifier.local.name;
 
@@ -92,9 +92,9 @@ const ReactNoDestructuringReactRule = {
                         message: `Use React.${typeName} instead of direct type reference.`,
                     });
                 }
-            }
+            },
         };
-    }
+    },
 };
 
 // Export - Default

@@ -40,7 +40,6 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
     });
 
     // Components
-    const Icon = properties.icon;
 
     // Determine if the item or any of its children are active
     const isActive = properties.href === urlPath || properties.children?.some((child) => child.href === urlPath);
@@ -60,9 +59,9 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         <div className="flex items-center gap-x-2">
-                            {Icon && (
+                            {properties.icon && (
                                 <div className="relative h-4 w-4">
-                                    <Icon className="h-full w-full" />
+                                    <properties.icon className="h-full w-full" />
                                 </div>
                             )}
                             {properties.title}

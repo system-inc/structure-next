@@ -6,7 +6,11 @@ import React from 'react';
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
 import { Alert } from '@structure/source/common/notifications/Alert';
-import { Cropper, CropperRef, CropperPreviewRef } from 'react-advanced-cropper';
+import {
+    Cropper,
+    CropperRef as CropperReference,
+    CropperPreviewRef as CropperPreviewReference,
+} from 'react-advanced-cropper';
 import 'react-advanced-cropper/dist/style.css';
 
 // Dependencies - Utilities
@@ -46,8 +50,8 @@ export function ImageEditor(properties: ImageEditorProperties) {
     // References
     const lastPreviewUrlReference = React.useRef<string | null>(null);
     const temporaryUrlsReference = React.useRef<string[]>([]);
-    const cropperRef = React.useRef<CropperRef>(null);
-    const previewRef = React.useRef<CropperPreviewRef>(null);
+    const cropperReference = React.useRef<CropperReference>(null);
+    const previewReference = React.useRef<CropperPreviewReference>(null);
 
     // State
     const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
@@ -137,10 +141,8 @@ export function ImageEditor(properties: ImageEditorProperties) {
         // No need to call update() as the cropper manages its own updates
     }, []);
 
-    // Extract properties used in useCallback to variables
     const propertiesAllowResize = properties.allowResize;
     const propertiesOnSave = properties.onSave;
-
     const handleSave = React.useCallback(
         async function () {
             if(!previewUrl || !cropArea) {
@@ -189,7 +191,6 @@ export function ImageEditor(properties: ImageEditorProperties) {
                 setLoading(false);
             }
         },
-        // Extracted properties for dependencies
         [previewUrl, cropArea, dimensions, outputOptions, propertiesAllowResize, propertiesOnSave],
     );
 
@@ -238,7 +239,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                         {/* Cropper - takes most of the space */}
                         <div className="flex-grow">
                             <Cropper
-                                ref={cropperRef}
+                                ref={cropperReference}
                                 src={previewUrl}
                                 stencilProps={{
                                     aspectRatio: properties.cropAspectRatio
@@ -253,7 +254,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                                 className="border-neutral-200 dark:border-neutral-700 rounded-medium border"
                                 onUpdate={function (cropper) {
                                     // Update the preview
-                                    previewRef.current?.update(cropper);
+                                    previewReference.current?.update(cropper);
 
                                     // Convert cropper coordinates to our CropArea format
                                     const coordinates = cropper.getCoordinates();

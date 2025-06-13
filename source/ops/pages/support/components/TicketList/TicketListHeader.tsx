@@ -22,15 +22,13 @@ export interface TicketListHeaderProperties {
     onStatusChange: (value: SupportTicketStatus) => void;
 }
 export function TicketListHeader(properties: TicketListHeaderProperties) {
-    const { isRefreshing, onRefresh, onStatusChange } = properties;
-
     // Render the component
     return (
         <BorderContainer>
             <div className="flex items-center">
-                <div className="group flex cursor-pointer items-center" onClick={onRefresh}>
+                <div className="group flex cursor-pointer items-center" onClick={properties.onRefresh}>
                     <h2 className="text-base font-medium">Tickets</h2>
-                    {isRefreshing && <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin" />}
+                    {properties.isRefreshing && <BrokenCircleIcon className="ml-2 h-4 w-4 animate-spin" />}
                 </div>
             </div>
 
@@ -40,7 +38,7 @@ export function TicketListHeader(properties: TicketListHeaderProperties) {
                     items={ticketStatusOptions}
                     defaultValue={properties.selectedStatus}
                     onChange={function (value) {
-                        onStatusChange((value as SupportTicketStatus) || SupportTicketStatus.Open);
+                        properties.onStatusChange((value as SupportTicketStatus) || SupportTicketStatus.Open);
                     }}
                 />
             </div>

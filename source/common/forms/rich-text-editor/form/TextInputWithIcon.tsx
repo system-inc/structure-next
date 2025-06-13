@@ -27,7 +27,7 @@ type TextInputWithIconProperties = React.ComponentPropsWithoutRef<'input'> &
     Omit<VariantProperties<typeof textInputWithIconVariants>, 'icon'> & {
         icon: React.ReactNode;
     } & InputProperties;
-const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconProperties>(function (
+export const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconProperties>(function (
     { className, icon, size, ...inputProperties },
     reference,
 ) {
@@ -39,7 +39,7 @@ const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconPr
                 className={mergeClassNames(textInputWithIconVariants({ size: size }))}
                 {...inputProperties}
             />
-            <div className="text-opsis-content-tetriary pointer-events-none absolute inset-y-0 left-5 flex h-full w-5 items-center">
+            <div className="pointer-events-none absolute inset-y-0 left-5 flex h-full w-5 items-center text-opsis-content-tetriary">
                 {icon}
             </div>
         </div>
@@ -50,4 +50,3 @@ const TextInputWithIcon = React.forwardRef<HTMLInputElement, TextInputWithIconPr
 TextInputWithIcon.displayName = 'TextInputWithIcon';
 
 // Export
-export { TextInputWithIcon, type TextInputWithIconProperties };

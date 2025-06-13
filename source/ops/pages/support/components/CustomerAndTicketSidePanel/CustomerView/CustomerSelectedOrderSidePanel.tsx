@@ -27,7 +27,7 @@ export interface CustomerSelectedOrderProperties {
 }
 export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrderProperties) {
     // Properties
-    const { order, onClose } = properties;
+    const order = properties.order;
 
     // State
     const [isVisible, setIsVisible] = React.useState(!!order);
@@ -45,7 +45,7 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
             // Clear the local order only when the panel is fully hidden
             if(!isVisible) {
                 setLocalOrder(undefined);
-                onClose();
+                properties.onClose();
             }
         },
     });
@@ -68,7 +68,7 @@ export function CustomerSelectedOrderSidePanel(properties: CustomerSelectedOrder
     return (
         <animated.div
             style={{ ...panelStyles }}
-            className="bg-opsis-background-primary fixed right-0 top-0 mt-14 flex h-[calc(100vh-3.5rem)] w-[390px] flex-col border-l border-light-3 dark:border-dark-3"
+            className="fixed right-0 top-0 mt-14 flex h-[calc(100vh-3.5rem)] w-[390px] flex-col border-l border-light-3 bg-opsis-background-primary dark:border-dark-3"
         >
             <BorderContainer>
                 <Button

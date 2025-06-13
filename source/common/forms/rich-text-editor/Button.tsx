@@ -119,7 +119,7 @@ export interface ButtonProperties
     iconLeft?: React.ReactNode;
     iconRight?: React.ReactNode;
 }
-const Button = React.forwardRef<HTMLButtonElement, ButtonProperties>(function (
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProperties>(function (
     { className, variant, size, icon, asChild, children, iconLeft, iconRight, ...buttonProperties },
     reference,
 ) {
@@ -147,5 +147,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProperties>(function (
     );
 });
 Button.displayName = 'Button';
-
-export { Button, buttonVariants };

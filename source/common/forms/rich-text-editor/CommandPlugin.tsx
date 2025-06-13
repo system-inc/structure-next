@@ -37,7 +37,7 @@ export function CommandPlugin(properties: CommandPluginProperties) {
     const [matchingCommands, setMatchingCommands] = React.useState<CommandType[]>(properties.commands);
     const [selectedCommandIndex, setSelectedCommandIndex] = React.useState(0);
     const [text, setText] = React.useState('');
-    const menuRef = React.useRef<HTMLUListElement>(null);
+    const menuReference = React.useRef<HTMLUListElement>(null);
 
     const closeMenu = React.useCallback(
         function () {
@@ -243,7 +243,7 @@ export function CommandPlugin(properties: CommandPluginProperties) {
     React.useEffect(
         function () {
             const handleClickOutside = (event: MouseEvent) => {
-                if(menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                if(menuReference.current && !menuReference.current.contains(event.target as Node)) {
                     closeMenu();
                 }
             };
@@ -260,7 +260,7 @@ export function CommandPlugin(properties: CommandPluginProperties) {
         function () {
             // Get the position of the cursor and update the menu position
             const updateMenuPosition = () => {
-                if(!menuRef.current) return;
+                if(!menuReference.current) return;
                 let anchorKey;
                 editor.read(() => {
                     const selection = $getSelection();
@@ -272,8 +272,8 @@ export function CommandPlugin(properties: CommandPluginProperties) {
                 if(!anchorElement) return;
 
                 const { top, left } = anchorElement.getBoundingClientRect();
-                menuRef.current.style.top = `${top + anchorElement.offsetHeight}px`;
-                menuRef.current.style.left = `${left}px`;
+                menuReference.current.style.top = `${top + anchorElement.offsetHeight}px`;
+                menuReference.current.style.left = `${left}px`;
             };
 
             updateMenuPosition();
@@ -287,7 +287,7 @@ export function CommandPlugin(properties: CommandPluginProperties) {
 
     return (
         <ul
-            ref={menuRef}
+            ref={menuReference}
             className={mergeClassNames(popoverVariants({}), 'absolute z-10 block max-h-60 w-64 overflow-auto')}
         >
             {matchingCommands.map((command, index) => (
@@ -299,7 +299,7 @@ export function CommandPlugin(properties: CommandPluginProperties) {
                         // Padding
                         'px-3 py-2.5',
                         'cursor-pointer px-4 py-2',
-                        'data-[selected="true"]:bg-opsis-background-secondary text-sm font-medium',
+                        'text-sm font-medium data-[selected="true"]:bg-opsis-background-secondary',
                     )}
                     onClick={() => {
                         insertCommand(command);

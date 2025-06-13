@@ -20,7 +20,7 @@ const ReactFunctionStyleRule = {
                     const declarations = node.declaration.declarations || [];
 
                     // Check each declaration in the export statement
-                    declarations.forEach(declaration => {
+                    declarations.forEach((declaration) => {
                         // Only proceed if this is a likely component (PascalCase identifier)
                         const identifierName = declaration.id && declaration.id.name;
                         if(!identifierName || !/^[A-Z][A-Za-z0-9]*$/.test(identifierName)) {
@@ -31,10 +31,11 @@ const ReactFunctionStyleRule = {
                         // This matches both:
                         // 1. export const Component = function() {...}
                         // 2. export const Component = () => {...}
-                        if(declaration.init &&
+                        if(
+                            declaration.init &&
                             (declaration.init.type === 'FunctionExpression' ||
-                                declaration.init.type === 'ArrowFunctionExpression')) {
-
+                                declaration.init.type === 'ArrowFunctionExpression')
+                        ) {
                             // Get source code to create a fix
                             const sourceCode = context.getSourceCode();
                             const functionCode = sourceCode.getText(declaration.init);
@@ -48,17 +49,14 @@ const ReactFunctionStyleRule = {
 
                                 // If body is a block (has curly braces), use it directly
                                 // Otherwise wrap it in return statement
-                                const functionBody = declaration.init.body.type === 'BlockStatement'
-                                    ? body
-                                    : `{ return ${body}; }`;
+                                const functionBody =
+                                    declaration.init.body.type === 'BlockStatement' ? body : `{ return ${body}; }`;
 
                                 newFunctionCode = `function ${identifierName}(${params}) ${functionBody}`;
-                            } else {
+                            }
+                            else {
                                 // For regular function expressions, just add the name
-                                newFunctionCode = functionCode.replace(
-                                    /^function\s*/,
-                                    `function ${identifierName}`
-                                );
+                                newFunctionCode = functionCode.replace(/^function\s*/, `function ${identifierName}`);
                             }
 
                             context.report({
@@ -66,16 +64,13 @@ const ReactFunctionStyleRule = {
                                 message: `Use 'export function ${identifierName}()' instead of 'export const ${identifierName} = function()'`,
                                 fix(fixer) {
                                     // Replace the entire export declaration with the function declaration
-                                    return fixer.replaceText(
-                                        node,
-                                        `export ${newFunctionCode}`
-                                    );
-                                }
+                                    return fixer.replaceText(node, `export ${newFunctionCode}`);
+                                },
                             });
                         }
                     });
                 }
-            }
+            },
         };
     },
 };

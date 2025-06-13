@@ -53,7 +53,7 @@ export function CommentAttachments(properties: CommentAttachmentsProperties) {
                             </div>
                         ) : (
                             <div
-                                className="border-opsis-border-primary flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg border bg-white p-4 text-center"
+                                className="flex h-[124px] w-[154px] cursor-pointer flex-col items-start justify-end rounded-lg border border-opsis-border-primary bg-white p-4 text-center"
                                 onClick={() => window.open(attachment.url, '_blank')}
                             >
                                 <FilePdf className="size-5 text-[--global-red-600]" />

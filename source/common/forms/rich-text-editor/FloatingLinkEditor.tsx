@@ -55,7 +55,12 @@ export function FloatingLinkEditor() {
 
     return (
         <div className="floating-link-editor" style={{ top: position.top, left: position.left, position: 'absolute' }}>
-            <input type="text" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="Enter URL" />
+            <input
+                type="text"
+                value={linkUrl}
+                onChange={(event) => setLinkUrl(event.target.value)}
+                placeholder="Enter URL"
+            />
             <button onClick={updateLink}>Update</button>
             <button onClick={removeLink}>Remove</button>
         </div>

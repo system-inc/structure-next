@@ -9,7 +9,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 // Dependencies - Main Components
 import { Form, FormValuesInterface } from '@structure/source/common/forms/Form';
 import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-// import { RichTextEditor } from '@project/source/ui/derived/RichTextEditor';
+// import { RichTextEditor } from '@project/app/_components/derived/RichTextEditor';
 
 // Dependencies - API
 import {
@@ -30,9 +30,6 @@ export interface ProfileSupportTicketMessageFormProperties {
     onTicketCommentCreate: (input: SupportTicketCommentCreateInput) => void;
 }
 export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicketMessageFormProperties) {
-    // Properties
-    const { ticketIdentifier, comments } = properties;
-
     // const {
     //     register,
     //     handleSubmit,
@@ -66,9 +63,9 @@ export function ProfileSupportTicketMessageForm(properties: ProfileSupportTicket
     async function handleFormSubmit(formValues: FormValuesInterface) {
         // Submit the form
         const input = {
-            ticketIdentifier,
+            ticketIdentifier: properties.ticketIdentifier,
             content: formValues.reply,
-            replyToCommentId: comments[0]?.id || '',
+            replyToCommentId: properties.comments[0]?.id || '',
         };
 
         // await createComment({

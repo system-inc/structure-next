@@ -33,27 +33,16 @@ const ReactImportRule = {
                 checkImportSource(node, node.source.value);
             },
             CallExpression(node) {
-                if(
-                    node.callee.type === 'Identifier' &&
-                    node.callee.name === 'require'
-                ) {
+                if(node.callee.type === 'Identifier' && node.callee.name === 'require') {
                     const argument = node.arguments[0];
-                    if(
-                        argument &&
-                        argument.type === 'Literal' &&
-                        typeof argument.value === 'string'
-                    ) {
+                    if(argument && argument.type === 'Literal' && typeof argument.value === 'string') {
                         checkImportSource(node, argument.value);
                     }
                 }
             },
             ImportExpression(node) {
                 const argument = node.source;
-                if(
-                    argument &&
-                    argument.type === 'Literal' &&
-                    typeof argument.value === 'string'
-                ) {
+                if(argument && argument.type === 'Literal' && typeof argument.value === 'string') {
                     checkImportSource(node, argument.value);
                 }
             },

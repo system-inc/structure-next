@@ -38,14 +38,15 @@ export interface JsonNodeProperties {
     keyName?: string;
 }
 export function JsonNode(properties: JsonNodeProperties) {
-    const { data, level, initialExpansionDepth, keyName } = properties;
-    const [isExpanded, setIsExpanded] = React.useState(level < initialExpansionDepth);
+    const [isExpanded, setIsExpanded] = React.useState(properties.level < properties.initialExpansionDepth);
 
     const maximumPreviewItems = 4;
 
-    const isObject = data !== null && typeof data === 'object';
-    const isArray = Array.isArray(data);
-    const isEmpty = isObject && (isArray ? (data as unknown[]).length === 0 : Object.keys(data as object).length === 0);
+    const isObject = properties.data !== null && typeof properties.data === 'object';
+    const isArray = Array.isArray(properties.data);
+    const isEmpty =
+        isObject &&
+        (isArray ? (properties.data as unknown[]).length === 0 : Object.keys(properties.data as object).length === 0);
 
     // Remove the indentationStyle
     // const indentationStyle = {
@@ -84,16 +85,16 @@ export function JsonNode(properties: JsonNodeProperties) {
     function renderCollapsedPreview(): JSX.Element {
         if(!isObject || isEmpty) {
             // If it's just a primitive, just render the value
-            return <> {renderPrimitiveValue(data)} </>;
+            return <> {renderPrimitiveValue(properties.data)} </>;
         }
 
         let entries: [string, unknown][] = [];
         if(isArray) {
-            const arrData = data as unknown[];
+            const arrData = properties.data as unknown[];
             entries = arrData.map((val, i) => [String(i), val]);
         }
         else {
-            entries = Object.entries(data as object);
+            entries = Object.entries(properties.data as object);
         }
 
         const previewEntries = entries.slice(0, maximumPreviewItems);
@@ -145,36 +146,36 @@ export function JsonNode(properties: JsonNodeProperties) {
     // Render fully expanded objects/arrays
     function renderExpandedContent() {
         if(isArray) {
-            const arr = data as unknown[];
+            const arr = properties.data as unknown[];
             return arr.map((value, index) => (
                 <JsonNode
                     key={index}
                     data={value}
-                    level={level + 1}
-                    initialExpansionDepth={initialExpansionDepth}
+                    level={properties.level + 1}
+                    initialExpansionDepth={properties.initialExpansionDepth}
                     keyName={String(index)}
                 />
             ));
         }
         else {
-            const obj = data as object;
+            const obj = properties.data as object;
             return Object.entries(obj).map(([k, v]) => (
                 <JsonNode
                     key={k}
                     data={v}
                     keyName={k}
-                    level={level + 1}
-                    initialExpansionDepth={initialExpansionDepth}
+                    level={properties.level + 1}
+                    initialExpansionDepth={properties.initialExpansionDepth}
                 />
             ));
         }
     }
 
     // Render root level (special case)
-    if(level === 0) {
+    if(properties.level === 0) {
         if(!isObject) {
             // Just a primitive at root
-            return <div>{renderPrimitiveValue(data)}</div>;
+            return <div>{renderPrimitiveValue(properties.data)}</div>;
         }
 
         if(isEmpty) {
@@ -203,7 +204,7 @@ export function JsonNode(properties: JsonNodeProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames(level > 1 ? 'ml-3.5' : '')}>
+        <div className={mergeClassNames(properties.level > 1 ? 'ml-3.5' : '')}>
             <div className={lineClasses} onClick={toggleExpand}>
                 {/* Toggle button or placeholder */}
                 <span
@@ -218,14 +219,14 @@ export function JsonNode(properties: JsonNodeProperties) {
                 </span>
 
                 {/* Key name */}
-                {keyName && <span className={keyClasses}>{keyName}:&nbsp;</span>}
+                {properties.keyName && <span className={keyClasses}>{properties.keyName}:&nbsp;</span>}
 
                 {/* Value or expanded/collapsed structure */}
                 {isObject ? (
                     isExpanded ? (
                         // Expanded
                         <span className="text-[#1E293B] dark:text-[#94A3B8]">
-                            {isArray ? 'Array(' + data.length + ')' : ''}
+                            {isArray ? 'Array(' + (properties.data as unknown[]).length + ')' : ''}
                         </span>
                     ) : (
                         // Collapsed with preview
@@ -233,7 +234,7 @@ export function JsonNode(properties: JsonNodeProperties) {
                     )
                 ) : (
                     // Primitive
-                    <span>{renderPrimitiveValue(data)}</span>
+                    <span>{renderPrimitiveValue(properties.data)}</span>
                 )}
             </div>
 

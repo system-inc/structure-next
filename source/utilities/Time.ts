@@ -137,15 +137,17 @@ export function formatDateToTodayYesterdayOrDate(date: Date): string {
 
     const messageDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-    if (messageDate.getTime() === today.getTime()) {
-        return "Today";
-    } else if (messageDate.getTime() === yesterday.getTime()) {
-        return "Yesterday";
-    } else {
-        return new Intl.DateTimeFormat("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
+    if(messageDate.getTime() === today.getTime()) {
+        return 'Today';
+    }
+    else if(messageDate.getTime() === yesterday.getTime()) {
+        return 'Yesterday';
+    }
+    else {
+        return new Intl.DateTimeFormat('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
         }).format(date);
     }
 }
@@ -153,16 +155,22 @@ export function formatDateToTodayYesterdayOrDate(date: Date): string {
 // Function to format the date to a short date with time
 // Example: "Feb 12, 2025 at 12:12 pm"
 export function formatDateToShortDateWithTime(date: Date): string {
-    const timeString = date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-    }).toLowerCase();
+    const timeString = date
+        .toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+        })
+        .toLowerCase();
 
-    return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    }) + ' at ' + timeString;
+    return (
+        date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+        }) +
+        ' at ' +
+        timeString
+    );
 }
 
 // Function to format the date to just show the time and am/pm
@@ -176,19 +184,20 @@ export function formatDateToTimeWithTodayOrYesterday(date: Date): string {
     yesterday.setDate(yesterday.getDate() - 1);
 
     const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    
-    let prefix = "";
-    if (inputDate.getTime() === today.getTime()) {
-        prefix = "Today, ";
-    } else if (inputDate.getTime() === yesterday.getTime()) {
-        prefix = "Yesterday, ";
+
+    let prefix = '';
+    if(inputDate.getTime() === today.getTime()) {
+        prefix = 'Today, ';
+    }
+    else if(inputDate.getTime() === yesterday.getTime()) {
+        prefix = 'Yesterday, ';
     }
 
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "pm" : "am";
+    const ampm = hours >= 12 ? 'pm' : 'am';
     const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes.toString().padStart(2, "0");
+    const formattedMinutes = minutes.toString().padStart(2, '0');
 
     return `${prefix}${formattedHours}:${formattedMinutes} ${ampm}`;
 }
@@ -205,37 +214,39 @@ export function formatDateToDateAtTime(date: Date): string {
 
     const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-    let prefix = "";
-    if (inputDate.getTime() === today.getTime()) {
-        prefix = "Today at ";
-    } else if (inputDate.getTime() === yesterday.getTime()) {
-        prefix = "Yesterday at ";
-    } else {
-        prefix = date.toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-        }) + " at ";
+    let prefix = '';
+    if(inputDate.getTime() === today.getTime()) {
+        prefix = 'Today at ';
+    }
+    else if(inputDate.getTime() === yesterday.getTime()) {
+        prefix = 'Yesterday at ';
+    }
+    else {
+        prefix =
+            date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+            }) + ' at ';
     }
 
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "pm" : "am";
+    const ampm = hours >= 12 ? 'pm' : 'am';
     const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes.toString().padStart(2, "0");
+    const formattedMinutes = minutes.toString().padStart(2, '0');
 
     return `${prefix}${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
-
 // Function to format the date to show the day of the ween and the date
 // Example: "Mon, Jan 12, 2025"
 export function formatDateToDayOfWeekAndDate(date: Date): string {
-    return date.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
+    return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
     });
 }
 
@@ -244,10 +255,10 @@ export function formatDateToDayOfWeekAndDate(date: Date): string {
 export function formatDateOnlyTime(date: Date): string {
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "pm" : "am";
+    const ampm = hours >= 12 ? 'pm' : 'am';
     const formattedHours = hours % 12 || 12;
 
-    return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
+    return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
 }
 
 // Function to convert milliseconds into Years:Months:Days:Hours:Minutes:Seconds

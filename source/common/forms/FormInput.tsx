@@ -60,7 +60,7 @@ export interface FormInputReferenceInterface extends InputReferenceInterface {
 
 // Component - FormInput
 export interface FormInputProperties extends InputProperties {
-    ref?: (instance: FormInputReferenceInterface) => void;
+    reference?: (instance: FormInputReferenceInterface) => void;
     id: string;
     size?: keyof typeof FormInputSizes;
     componentClassName?: string;

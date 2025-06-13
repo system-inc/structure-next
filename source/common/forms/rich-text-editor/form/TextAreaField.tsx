@@ -20,7 +20,7 @@ type TextAreaFieldProperties = VariantProperties<typeof textFieldVariants> &
         error?: string;
         placeholder: string; // Enforce placeholder
     };
-const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldProperties>(function (
+export const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldProperties>(function (
     { label, optional, info, caption, error, id, className, ...textAreaProperties }: TextAreaFieldProperties,
     reference,
 ) {
@@ -51,4 +51,3 @@ const TextAreaField = React.forwardRef<HTMLTextAreaElement, TextAreaFieldPropert
 TextAreaField.displayName = 'TextAreaField';
 
 // Export
-export { TextAreaField, type TextAreaFieldProperties };
