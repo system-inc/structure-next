@@ -18,9 +18,6 @@ export interface OpsNavigationLinkProperties {
 export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
     // console.log('OpsNavigationLink', properties.title, 'active', properties.active);
 
-    // The icon component to use
-    const Icon = properties.icon;
-
     // Render the component
     return (
         <Link
@@ -34,9 +31,9 @@ export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
                       '',
             )}
         >
-            {Icon && (
+            {properties.icon && (
                 <div className="relative h-4 w-4">
-                    <Icon className="h-full w-full" />
+                    <properties.icon className="h-full w-full" />
                 </div>
             )}
             <p>{properties.title}</p>

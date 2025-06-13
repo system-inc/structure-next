@@ -23,15 +23,15 @@ export interface AttachmentBarProperties {
 export function AttachmentBar(properties: AttachmentBarProperties) {
     // Render the component
     return (
-        <div className="border-opsis-border-primary bg-opsis-background-secondary flex flex-wrap items-center gap-4 border-b px-4 py-2">
+        <div className="flex flex-wrap items-center gap-4 border-b border-opsis-border-primary bg-opsis-background-secondary px-4 py-2">
             {properties.files.map((file, index) => {
                 const FileTypeIcon = getFileTypeIconFromType(file.type);
 
                 return (
                     <div key={index} className="flex items-center gap-2 rounded-small bg-white px-3 py-1 shadow-sm">
-                        <FileTypeIcon className="text-opsis-content-primary size-4" weight="regular" />
+                        <FileTypeIcon className="size-4 text-opsis-content-primary" weight="regular" />
                         <div className="min-w-0 flex-1">
-                            <p className="text-opsis-content-primary truncate text-xs font-normal">{file.name}</p>
+                            <p className="truncate text-xs font-normal text-opsis-content-primary">{file.name}</p>
                             {/* <p className="text-xs text-opsis-content-secondary">{formatFileSize(file.size)}</p> */}
                         </div>
                         <Button

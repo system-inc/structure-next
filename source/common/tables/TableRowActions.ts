@@ -31,7 +31,7 @@ export const defaultTableRowActions = [
 // TODO: Implement this function to copy row data as JSON to clipboard
 export function copyRowAsJsonToClipboard(/* row: TableRowInterface */) {}
 
-// Function to copy row as JSON to clipboard (visible columns only) 
+// Function to copy row as JSON to clipboard (visible columns only)
 // TODO: Implement this function to copy visible columns as JSON to clipboard
 export function copyRowAsJsonToClipboardVisibleColumns(/* row: TableRowInterface */) {}
 

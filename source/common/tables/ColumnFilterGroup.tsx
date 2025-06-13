@@ -83,12 +83,12 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     );
 
     // Effect to trigger onChange when the filterData changes
-    const propertiesOnChange = properties.onChange;
+
     React.useEffect(
         function () {
             // Call the properties onChange function
-            if(propertiesOnChange && columnFilterGroupData) {
-                propertiesOnChange(columnFilterGroupData);
+            if(properties.onChange && columnFilterGroupData) {
+                properties.onChange(columnFilterGroupData);
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -314,7 +314,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
+                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm text-muted-foreground">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -433,7 +433,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             }}
                         />
                     ) : (
-                        <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
+                        <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm text-muted-foreground">
                             {columnFilterGroupData.operator.toLowerCase()}
                         </p>
                     )}

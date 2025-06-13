@@ -105,7 +105,7 @@ type FileInputProperties = {
 const FileInput: React.FC<FileInputProperties> = (properties) => {
     const multiple = properties.multiple ?? false;
     const { addFiles, onDragChange, accept } = useFileContext();
-    const inputRef = React.useRef<HTMLInputElement>(null);
+    const inputReference = React.useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
@@ -114,8 +114,8 @@ const FileInput: React.FC<FileInputProperties> = (properties) => {
         }
 
         // Reset the input value so the same file can be selected again
-        if(inputRef.current) {
-            inputRef.current.value = '';
+        if(inputReference.current) {
+            inputReference.current.value = '';
         }
     };
 
@@ -138,7 +138,7 @@ const FileInput: React.FC<FileInputProperties> = (properties) => {
     };
 
     const handleClick = () => {
-        inputRef.current?.click();
+        inputReference.current?.click();
     };
 
     return (
@@ -151,7 +151,7 @@ const FileInput: React.FC<FileInputProperties> = (properties) => {
         >
             <input
                 type="file"
-                ref={inputRef}
+                ref={inputReference}
                 className="sr-only"
                 onChange={handleFileChange}
                 accept={`${accept?.join(',')}`}
@@ -180,7 +180,6 @@ type FileListProperties = {
 };
 const FileList: React.FC<FileListProperties> = (properties) => {
     const { files, removeFile } = useFileContext();
-    const Component = properties.component;
 
     if(files.length === 0) {
         return null;
@@ -190,7 +189,7 @@ const FileList: React.FC<FileListProperties> = (properties) => {
         <ul className={mergeClassNames('', properties.className)}>
             {files.map((file, index) => (
                 <li key={index}>
-                    <Component file={file} removeFile={removeFile} index={index} />
+                    <properties.component file={file} removeFile={removeFile} index={index} />
                 </li>
             ))}
         </ul>

@@ -48,7 +48,7 @@ export function SupportPage() {
     const [showMyTickets] = React.useState<boolean>(false);
 
     // const ticketDetailsRef = React.useRef<HTMLDivElement>(null);
-    const commentsContainerRef = React.useRef<HTMLDivElement>(null);
+    const commentsContainerReference = React.useRef<HTMLDivElement>(null);
 
     // Hooks
     const {
@@ -178,8 +178,8 @@ export function SupportPage() {
     // Scroll to bottom when selecting ticket or when new comments appear
     React.useEffect(
         function () {
-            if(commentsContainerRef.current && selectedTicket?.comments) {
-                commentsContainerRef.current.scrollTop = commentsContainerRef.current.scrollHeight;
+            if(commentsContainerReference.current && selectedTicket?.comments) {
+                commentsContainerReference.current.scrollTop = commentsContainerReference.current.scrollHeight;
             }
         },
         [selectedTicket],

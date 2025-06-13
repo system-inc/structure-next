@@ -37,7 +37,7 @@ const textAreaVariants = cva(
 
 // Component - TextArea
 type TextAreaProperties = React.ComponentPropsWithoutRef<'textarea'> & VariantProperties<typeof textAreaVariants>;
-const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(function (
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(function (
     { className, size, resize, ...textAreaProperties },
     reference,
 ) {
@@ -79,4 +79,3 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProperties>(funct
 TextArea.displayName = 'TextArea';
 
 // Export
-export { TextArea, type TextAreaProperties };

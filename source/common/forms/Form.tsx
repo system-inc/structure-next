@@ -457,7 +457,7 @@ export function Form(properties: FormProperties) {
 
                 // Clone the form input and pass in the necessary properties
                 const formInputClone = React.cloneElement(formInput, {
-                    ref: (reference: FormInputReferenceInterface | null) => {
+                    reference: (reference: FormInputReferenceInterface | null) => {
                         if(reference) {
                             attachFormInputReference(formInput.props.id, reference);
                         }

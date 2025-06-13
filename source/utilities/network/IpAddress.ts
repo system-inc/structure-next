@@ -15,7 +15,7 @@ export function isIpV4Address(value: string): boolean {
     }
 
     // Validate that each octet is between 0-255
-    return match.slice(1).every(function(octet) {
+    return match.slice(1).every(function (octet) {
         const num = parseInt(octet, 10);
         return num >= 0 && num <= 255;
     });

@@ -26,15 +26,11 @@ export interface TicketListItemProperties {
 }
 export function TicketListItem(properties: TicketListItemProperties) {
     // Properties
-    const {
-        ticket,
-        isSelected,
-        // isFirst,
-        onSelect,
-    } = properties;
 
-    const lastTicketComment = ticket.comments[ticket.comments.length - 1];
-    const createdAtDate = new Date(ticket.createdAt);
+    // const isFirst = properties.isFirst;
+
+    const lastTicketComment = properties.ticket.comments[properties.ticket.comments.length - 1];
+    const createdAtDate = new Date(properties.ticket.createdAt);
 
     // Hooks
     const pulsatingRingAnimation = useSpring({
@@ -51,11 +47,13 @@ export function TicketListItem(properties: TicketListItemProperties) {
     return (
         <div
             className={`relative mx-4 my-3 cursor-pointer rounded-lg py-3 pl-12 pr-3 hover:bg-light-1 active:bg-light-1 dark:active:bg-dark-2 ${
-                isSelected ? 'bg-light-1 dark:bg-dark-2' : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
+                properties.isSelected
+                    ? 'bg-light-1 dark:bg-dark-2'
+                    : 'border-light-3 dark:border-dark-3 dark:hover:bg-dark-1'
             }`}
-            onClick={() => onSelect(ticket.identifier)}
+            onClick={() => properties.onSelect(properties.ticket.identifier)}
         >
-            {!ticket.answered && (
+            {!properties.ticket.answered && (
                 <div className="absolute left-5 top-[18px] flex items-center justify-center">
                     {/* Growing and fading ring */}
                     <animated.div
@@ -73,8 +71,8 @@ export function TicketListItem(properties: TicketListItemProperties) {
                 <p className="neutral text-xs">{formatDateWithTimeIfToday(createdAtDate)}</p>
             </div> */}
             <div className="mb-1 flex items-center justify-between">
-                <h4 className="text-sm font-medium">{ticket.title}</h4>
-                <p className="text-opsis-content-tetriary text-xs font-medium">
+                <h4 className="text-sm font-medium">{properties.ticket.title}</h4>
+                <p className="text-xs font-medium text-opsis-content-tetriary">
                     {formatDateWithTimeIfToday(createdAtDate)}
                 </p>
             </div>

@@ -32,7 +32,7 @@ interface TextFieldProperties extends React.ComponentPropsWithoutRef<typeof Inpu
     error?: string;
     placeholder: string; // Enforce placeholder
 }
-const TextField = React.forwardRef<HTMLInputElement, TextFieldProperties>(function (
+export const TextField = React.forwardRef<HTMLInputElement, TextFieldProperties>(function (
     { label, optional, info, icon, caption, error, id, className, size, ...inputProperties }: TextFieldProperties,
     reference,
 ) {
@@ -96,4 +96,3 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProperties>(functi
 TextField.displayName = 'TextField';
 
 // Export
-export { TextField, type TextFieldProperties, textFieldVariants };

@@ -32,7 +32,7 @@ export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketS
                     <div className="flex items-center">
                         <span>Open Requests</span>
                         {!!properties.openTicketsCount && (
-                            <span className="text-opsis-content-primary bg-opsis-background-primary ml-2 rounded-full border px-2 py-0.5 text-xs">
+                            <span className="ml-2 rounded-full border bg-opsis-background-primary px-2 py-0.5 text-xs text-opsis-content-primary">
                                 {properties.openTicketsCount}
                             </span>
                         )}
@@ -42,7 +42,7 @@ export function AccountSupportTicketStatusTabs(properties: AccountSupportTicketS
                     <div className="flex items-center">
                         <span>Closed Requests</span>
                         {!!properties.closedTicketsCount && (
-                            <span className="text-opsis-content-primary bg-opsis-background-primary ml-2 rounded-full border px-2 py-0.5 text-xs">
+                            <span className="ml-2 rounded-full border bg-opsis-background-primary px-2 py-0.5 text-xs text-opsis-content-primary">
                                 {properties.closedTicketsCount}
                             </span>
                         )}

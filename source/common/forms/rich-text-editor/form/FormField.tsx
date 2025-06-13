@@ -21,7 +21,7 @@ const FormField = function <T extends HTMLElement>(properties: FormFieldProperti
             >
                 {properties.label}{' '}
                 {properties.optional && (
-                    <span className="text-opsis-content-tetriary text-xs font-normal transition-colors">
+                    <span className="text-xs font-normal text-opsis-content-tetriary transition-colors">
                         (optional)
                     </span>
                 )}

@@ -37,7 +37,7 @@ interface PopoverProperties
     content: React.ReactNode;
     modal?: boolean;
 }
-function Popover({
+export function Popover({
     open: externalOpen,
     onOpenChange: externalSetOpen,
     onOpenAutoFocus,
@@ -158,7 +158,7 @@ interface PopoverItemProperties
         React.HTMLAttributes<HTMLButtonElement> {
     asChild?: boolean;
 }
-const PopoverItem = React.forwardRef<HTMLButtonElement, PopoverItemProperties>(function (
+export const PopoverItem = React.forwardRef<HTMLButtonElement, PopoverItemProperties>(function (
     { asChild, className, children, ...componentProperties },
     reference,
 ) {
@@ -183,7 +183,7 @@ interface PopoverLinkProperties extends Omit<PopoverItemProperties, 'asChild'> {
     linkProperties?: Omit<LinkProperties, 'href' | 'passHref' | 'legacyBehavior'>;
 }
 
-const PopoverLink = React.forwardRef<HTMLAnchorElement, PopoverLinkProperties>(function (
+export const PopoverLink = React.forwardRef<HTMLAnchorElement, PopoverLinkProperties>(function (
     { href, linkProperties, className, children, ...popoverItemProperties },
     reference,
 ) {
@@ -210,7 +210,7 @@ const popoverLabelVariants = cva(['text-opsis-content-primary text-base font-med
 interface PopoverLabelProperties
     extends VariantProperties<typeof popoverLabelVariants>,
         React.HTMLAttributes<HTMLDivElement> {}
-const PopoverLabel = React.forwardRef<HTMLDivElement, PopoverLabelProperties>(function (
+export const PopoverLabel = React.forwardRef<HTMLDivElement, PopoverLabelProperties>(function (
     { className, ...divProperties },
     reference,
 ) {
@@ -219,17 +219,6 @@ const PopoverLabel = React.forwardRef<HTMLDivElement, PopoverLabelProperties>(fu
 PopoverLabel.displayName = 'PopoverLabel';
 
 // DROPDOWN SEPARATOR
-const PopoverSeparator = () => (
-    <hr className="bg-opsis-border-primary my-2 h-px w-full rounded-full transition-colors" />
-);
-
-export {
-    Popover,
-    popoverVariants,
-    PopoverItem,
-    popoverItemVariants,
-    PopoverSeparator,
-    PopoverLabel,
-    popoverLabelVariants,
-    PopoverLink,
-};
+export function PopoverSeparator() {
+    return <hr className="my-2 h-px w-full rounded-full bg-opsis-border-primary transition-colors" />;
+}

@@ -8,7 +8,7 @@ import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/Ops
 // import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
 
 // Dependencies - API
-// import { EmailListsDocument } from '@project/source/api/graphql/GraphQlGeneratedCode';
+// import { EmailListsDocument } from '@project/app/_api/graphql/GraphQlGeneratedCode';
 
 // Component - EmailListsPage
 // export type EmailListsPageProperties = {};

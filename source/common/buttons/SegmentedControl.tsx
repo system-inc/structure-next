@@ -33,7 +33,7 @@ interface SegmentedControlProperties<T = string> extends VariantProperties<typeo
     className?: string;
     children: React.ReactNode;
 }
-const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedControlProperties>(function SegmentedControl(
+export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedControlProperties>(function SegmentedControl(
     { onValueChange, className, variant, size, children, ...toggleGroupPrimitiveRootProperties },
     reference,
 ) {
@@ -52,7 +52,7 @@ const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedControlProper
             onValueChange={handleValueChange}
             className={mergeClassNames(
                 'inline-flex h-9 w-full items-center p-0.5',
-                'bg-opsis-background-secondary rounded-lg',
+                'rounded-lg bg-opsis-background-secondary',
                 className,
             )}
             {...toggleGroupPrimitiveRootProperties}
@@ -88,9 +88,9 @@ const SegmentedControlItem = React.forwardRef<HTMLButtonElement, SegmentedContro
                     }),
                     'h-8 flex-1',
                     'px-4 py-2 text-sm font-medium shadow-none transition',
-                    'data-[state=on]:border-opsis-border-primary border',
+                    'border data-[state=on]:border-opsis-border-primary',
                     'data-[state=on]:bg-white data-[state=on]:text-black',
-                    'data-[state=off]:text-opsis-content-secondary data-[state=off]:bg-transparent',
+                    'data-[state=off]:bg-transparent data-[state=off]:text-opsis-content-secondary',
                     'data-[state=off]:border-transparent',
                     className,
                 )}
@@ -105,4 +105,3 @@ const SegmentedControlItem = React.forwardRef<HTMLButtonElement, SegmentedContro
 SegmentedControlItem.displayName = 'SegmentedControlItem';
 
 // Export components
-export { SegmentedControl, SegmentedControlItem };

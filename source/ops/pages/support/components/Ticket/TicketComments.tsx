@@ -31,9 +31,6 @@ interface TicketCommentsProperties {
     userFullName?: string;
 }
 export function TicketComments(properties: TicketCommentsProperties) {
-    // Properties
-    const { comments } = properties;
-
     const isAgentViewer = properties.viewer === 'Agent';
     const isUserViewer = properties.viewer === 'User';
 
@@ -51,12 +48,12 @@ export function TicketComments(properties: TicketCommentsProperties) {
                 commentsContainerReference.current.scrollTop = commentsContainerReference.current.scrollHeight;
             }
         },
-        [comments],
+        [properties.comments],
     );
 
     const allAttachments = React.useMemo(
         function () {
-            return comments.reduce((acc: FileCarouselProperties['files'], comment) => {
+            return properties.comments.reduce((acc: FileCarouselProperties['files'], comment) => {
                 const attachments = (comment.attachments || []).map((attachment) => ({
                     url: attachment.url || '',
                     metadata: {
@@ -67,7 +64,7 @@ export function TicketComments(properties: TicketCommentsProperties) {
                 return acc.concat(attachments);
             }, []);
         },
-        [comments],
+        [properties.comments],
     );
 
     // Function to get global index for an attachment URL
@@ -89,7 +86,7 @@ export function TicketComments(properties: TicketCommentsProperties) {
             <ScrollArea className="flex flex-grow" ref={commentsContainerReference}>
                 <div className="flex flex-grow flex-col justify-end">
                     <div className="flex flex-col space-y-4">
-                        {comments
+                        {properties.comments
                             .filter((comment) => showInternalComments || comment.visibility !== 'Internal')
                             .map((comment, index) => {
                                 const messageDate = formatDateToTodayYesterdayOrDate(new Date(comment.createdAt));

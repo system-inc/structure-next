@@ -28,7 +28,7 @@ const TabsContext = React.createContext<
     VariantProperties<typeof tabsVariants> & { tabGroupId: string; currentValue: string | undefined }
 >({ tabGroupId: '', currentValue: undefined });
 
-const Tabs = React.forwardRef<
+export const Tabs = React.forwardRef<
     React.ElementRef<typeof RadixTabPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Root> & VariantProperties<typeof tabsVariants>
 >(function ({ className, size, activationMode: activationModeProperty, ...radixTabRootProperties }, reference) {
@@ -109,7 +109,7 @@ const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigg
                         layoutId={`tab-${tabGroupId}`}
                         className={mergeClassNames(
                             'absolute inset-0 h-full w-full border border-transparent',
-                            'group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary z-0',
+                            'z-0 group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary',
                         )}
                         style={{
                             borderRadius: '99px',
@@ -123,5 +123,3 @@ const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigg
     );
 });
 TabItem.displayName = RadixTabPrimitive.Trigger.displayName;
-
-export { Tabs, tabsVariants, TabItem, tabItemVariants };

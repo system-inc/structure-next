@@ -34,8 +34,6 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     // Hooks
     const { accountState } = useAccount();
 
-    const post = properties.post;
-
     // Hooks - API
     // const supportPostQueryState = useQuery(SupportPostDocument, {
     //     variables: {
@@ -54,9 +52,10 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
         navigationTrailUrlPathname += '/' + properties.postTopicSlug;
     }
 
-    const postHref = navigationTrailUrlPathname + '/articles/' + post.identifier + '/' + post.slug;
+    const postHref =
+        navigationTrailUrlPathname + '/articles/' + properties.post.identifier + '/' + properties.post.slug;
 
-    const updateAtTimeInMilliseconds = new Date(post.updatedAt).getTime();
+    const updateAtTimeInMilliseconds = new Date(properties.post.updatedAt).getTime();
     let updatedTimeAgoString = timeAgo(updateAtTimeInMilliseconds);
 
     // If it has been over a week
@@ -74,7 +73,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                         icon={EditIcon}
                         iconPosition="left"
                         iconClassName="w-3 h-3"
-                        href={'/support/posts/' + post.identifier + '/edit'}
+                        href={'/support/posts/' + properties.post.identifier + '/edit'}
                     >
                         Edit Post
                     </Button>
@@ -86,14 +85,14 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
                 <div className="mb-4 max-w-2xl ">
                     <Link href={postHref} className="">
-                        <h1 className="inline text-3xl font-medium leading-10">{post.title}</h1>
+                        <h1 className="inline text-3xl font-medium leading-10">{properties.post.title}</h1>
                     </Link>
                 </div>
 
                 <p className="neutral mb-8 text-sm">Updated {updatedTimeAgoString}</p>
 
                 {/* Post Content in Markdown */}
-                {post.content && <Markdown className="mb-4 max-w-2xl">{post.content}</Markdown>}
+                {properties.post.content && <Markdown className="mb-4 max-w-2xl">{properties.post.content}</Markdown>}
             </div>
 
             <hr className="my-16" />

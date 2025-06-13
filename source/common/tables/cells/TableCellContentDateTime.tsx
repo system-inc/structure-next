@@ -12,15 +12,14 @@ export interface TableCellContentDateTimeProperties extends React.HTMLAttributes
     value: string | null;
 }
 export function TableCellContentDateTime(properties: TableCellContentDateTimeProperties) {
-    const value = properties.value;
     let date = null;
 
     // If we have a value
-    if(value) {
+    if(properties.value) {
         // The date string can come in the format of "2024-03-27 14:50:25" (this is UTC time)
         // which is not recognized by the Date object
         // We need to convert it to "2024-03-27T14:50:25Z" to be recognized by the Date object
-        let dateString = value;
+        let dateString = properties.value;
         if(dateString.length === 19) {
             // Add the missing T and Z
             dateString = dateString.replace(' ', 'T') + 'Z';

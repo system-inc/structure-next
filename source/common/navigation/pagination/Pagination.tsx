@@ -51,12 +51,10 @@ export function Pagination(properties: PaginationProperties) {
     const inputTextPageReference = React.useRef<InputReferenceInterface>(null);
 
     // Defaults
-    const {
-        useLinks = false,
-        itemsPerPageControl = true,
-        pageInputControl = true,
-        firstAndLastPageControl = true,
-    } = properties;
+    const useLinks = properties.useLinks ?? false;
+    const itemsPerPageControl = properties.itemsPerPageControl ?? true;
+    const pageInputControl = properties.pageInputControl ?? true;
+    const firstAndLastPageControl = properties.firstAndLastPageControl ?? true;
 
     // Get current itemsPerPage - from URL if using links, otherwise from local state
     const itemsPerPage = useLinks
@@ -303,8 +301,7 @@ export function Pagination(properties: PaginationProperties) {
                                 useLinks
                                     ? undefined
                                     : async function () {
-                                          const newPage = properties.pagesTotal;
-                                          await onChangeIntercept(itemsPerPage, newPage);
+                                          await onChangeIntercept(itemsPerPage, properties.pagesTotal);
                                       }
                             }
                         />

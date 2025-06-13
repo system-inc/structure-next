@@ -71,17 +71,17 @@ const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardProperties
                     <h2 className="m-0 text-base font-medium">{properties.ticket.title}</h2>
                 </div>
                 <div className="mb-2 flex items-center justify-start gap-2">
-                    <span className="text-opsis-content-secondary text-sm">
+                    <span className="text-sm text-opsis-content-secondary">
                         Placed {formatDateToDayOfWeekAndDate(new Date(properties.ticket.createdAt))}
                     </span>
                     <span>&bull;</span>
-                    <span className="text-opsis-content-secondary text-sm">ID: {properties.ticket.identifier}</span>
+                    <span className="text-sm text-opsis-content-secondary">ID: {properties.ticket.identifier}</span>
                     {/* <span>&bull;</span>
                     <span className="text-sm text-opsis-content-secondary">
                         Updated: {formatDateToDateAtTime(new Date(properties.ticket.updatedAt))}
                     </span> */}
                 </div>
-                <p className="text-opsis-content-secondary truncate text-sm">{commentContent}</p>
+                <p className="truncate text-sm text-opsis-content-secondary">{commentContent}</p>
             </div>
         </Link>
     );

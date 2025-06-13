@@ -30,7 +30,7 @@ const checkboxVariants = cva(
 );
 
 // Component - Checkbox
-const Checkbox = React.forwardRef<
+export const Checkbox = React.forwardRef<
     React.ElementRef<typeof CheckboxPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & VariantProperties<typeof checkboxVariants>
 >(function ({ className, size, ...checkboxPrimitiveRootProperties }, reference) {
@@ -47,5 +47,3 @@ const Checkbox = React.forwardRef<
     );
 });
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
-
-export { Checkbox };

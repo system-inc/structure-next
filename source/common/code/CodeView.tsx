@@ -32,7 +32,7 @@ export function CodeEditor({
     // Extract properties
     const language = languageProperty || 'js';
 
-    const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+    const scrollContainerReference = React.useRef<HTMLDivElement>(null);
 
     function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
         setCode(event.target.value);
@@ -88,7 +88,7 @@ export function CodeEditor({
             <div className="absolute right-0 top-0 w-min rounded-bl bg-dark-6 px-1.5 py-0.5 text-xs dark:bg-dark-3">
                 <p className="text-muted-foreground">{language.toUpperCase()}</p>
             </div>
-            <div ref={scrollContainerRef} className="relative h-max overflow-auto">
+            <div ref={scrollContainerReference} className="relative h-max overflow-auto">
                 <div
                     className="inset-0 z-10 w-min text-light selection:bg-light/20 dark:selection:bg-light/10"
                     style={{

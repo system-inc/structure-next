@@ -204,14 +204,14 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                 if(!notice) {
                     return;
                 }
-                const noticeRef = noticeReferences.get(notice);
-                if(!noticeRef) {
+                const noticeReference = noticeReferences.get(notice);
+                if(!noticeReference) {
                     return;
                 }
 
                 springControl.start({
                     opacity: 1,
-                    height: noticeRef.offsetHeight + NOTICES_MARGIN_PX,
+                    height: noticeReference.offsetHeight + NOTICES_MARGIN_PX,
                     scale: 1,
                 });
             });

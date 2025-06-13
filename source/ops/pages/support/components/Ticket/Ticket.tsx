@@ -30,13 +30,12 @@ export interface TicketProperties {
 }
 export function Ticket(properties: TicketProperties) {
     // Properties
-    const { account } = properties;
 
     const userDisplayName =
-        account?.defaultProfile.preferredName ||
-        account?.defaultProfile.displayName ||
-        (account?.defaultProfile.givenName && account?.defaultProfile.familyName
-            ? `${account.defaultProfile.givenName} ${account.defaultProfile.familyName}`
+        properties.account?.defaultProfile.preferredName ||
+        properties.account?.defaultProfile.displayName ||
+        (properties.account?.defaultProfile.givenName && properties.account?.defaultProfile.familyName
+            ? `${properties.account.defaultProfile.givenName} ${properties.account.defaultProfile.familyName}`
             : undefined);
 
     return (

@@ -1,5 +1,9 @@
 // Function to flatten an object
-export function flattenObject(object: Record<string, unknown>, parentKey = '', result: Record<string, unknown> = {}): Record<string, unknown> {
+export function flattenObject(
+    object: Record<string, unknown>,
+    parentKey = '',
+    result: Record<string, unknown> = {},
+): Record<string, unknown> {
     for(const key in object) {
         if(Object.prototype.hasOwnProperty.call(object, key)) {
             const newKey = parentKey ? `${parentKey}-${key}` : key;
@@ -16,7 +20,10 @@ export function flattenObject(object: Record<string, unknown>, parentKey = '', r
 }
 
 // Function to merge two objects deeply
-export function mergeDeep<T extends Record<string, unknown>>(original: T, updates: Partial<T> | Record<string, unknown>): T {
+export function mergeDeep<T extends Record<string, unknown>>(
+    original: T,
+    updates: Partial<T> | Record<string, unknown>,
+): T {
     const result = { ...original } as T;
 
     for(const key in updates) {
@@ -24,12 +31,12 @@ export function mergeDeep<T extends Record<string, unknown>>(original: T, update
             // Use type assertion to fix the index access issue
             const keyAsString = key as string;
             Reflect.set(
-                result, 
-                keyAsString, 
+                result,
+                keyAsString,
                 mergeDeep(
-                    original[keyAsString] as Record<string, unknown>, 
-                    (updates[keyAsString] ?? {}) as Record<string, unknown>
-                )
+                    original[keyAsString] as Record<string, unknown>,
+                    (updates[keyAsString] ?? {}) as Record<string, unknown>,
+                ),
             );
         }
         else {
@@ -117,7 +124,7 @@ export function isEqual(objectA: unknown, objectB: unknown): boolean {
     if(typeof objectA === 'object' && typeof objectB === 'object') {
         const objectATyped = objectA as Record<string, unknown>;
         const objectBTyped = objectB as Record<string, unknown>;
-        
+
         const keys1 = Object.keys(objectATyped);
         const keys2 = Object.keys(objectBTyped);
 

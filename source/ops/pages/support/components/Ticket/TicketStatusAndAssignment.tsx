@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-// import { Button } from '@project/source/ui/base/Button';
+// import { Button } from '@project/app/_components/base/Button';
 // import { Button } from '@structure/source/common/buttons/Button';
 import { InputSelect } from '@structure/source/common/forms/InputSelect';
 import { BorderContainer } from '../BorderContainer';

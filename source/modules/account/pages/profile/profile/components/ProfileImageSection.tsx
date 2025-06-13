@@ -16,7 +16,7 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 export function ProfileImageSection() {
     // Hooks
     const { accountState } = useAccount();
-    
+
     // Get the profile image details
     const profileImageUrl = accountState.account?.profile?.images?.find((image) => image.variant === 'profile-image')
         ?.url;

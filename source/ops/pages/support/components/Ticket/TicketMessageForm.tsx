@@ -42,7 +42,7 @@ export interface TicketMessageFormProperties {
     refetchTickets: () => void;
 }
 export function TicketMessageForm(properties: TicketMessageFormProperties) {
-    const formRef = React.useRef<HTMLFormElement>(null);
+    const formReference = React.useRef<HTMLFormElement>(null);
 
     const [attachedFiles, setAttachedFiles] = React.useState<File[]>([]);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -86,7 +86,7 @@ export function TicketMessageForm(properties: TicketMessageFormProperties) {
     };
 
     const handleSuccess = () => {
-        formRef.current?.reset();
+        formReference.current?.reset();
         setValue('reply', '');
         setValue('attachments', []);
         setAttachedFiles([]);
@@ -155,7 +155,7 @@ export function TicketMessageForm(properties: TicketMessageFormProperties) {
     // Render the component
     return (
         <form
-            ref={formRef}
+            ref={formReference}
             onSubmit={handleSubmit((formValues) => {
                 setFormSubmitted(true);
                 handleSubmitForm(formValues);

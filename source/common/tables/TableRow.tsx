@@ -26,8 +26,6 @@ export interface TableRowProperties extends React.HTMLAttributes<HTMLTableRowEle
     rowIndex?: number;
 }
 export function TableRow(properties: TableRowProperties) {
-    const cells = properties.cells;
-
     // Defaults
     const type = properties.type || 'Body';
     const CellComponent = type === 'Header' || type === 'Footer' ? TableHeaderCell : TableCell;
@@ -68,7 +66,7 @@ export function TableRow(properties: TableRowProperties) {
                     <TableRowInputCheckbox {...properties} />
                 </CellComponent>
             )}
-            {cells.map(function (cell, cellIndex) {
+            {properties.cells.map(function (cell, cellIndex) {
                 return (
                     <CellComponent
                         key={cellIndex}

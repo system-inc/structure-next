@@ -6,7 +6,7 @@ import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 import { InputCheckboxState, InputCheckbox } from '@structure/source/common/forms/InputCheckbox';
 
 export function TableRowInputCheckbox(properties: TableRowProperties) {
-    const checkboxRef = React.useRef<React.ElementRef<typeof InputCheckbox> | null>(null);
+    const checkboxReference = React.useRef<React.ElementRef<typeof InputCheckbox> | null>(null);
     const [forceSafeRerender, setForceSafeRerender] = React.useState<number>(0);
     const propertiesRowsLength = properties.rowsLength ?? 0;
     const propertiesSelectedRowsIndexesSet = properties.selectedRowsIndexesSet;
@@ -14,7 +14,7 @@ export function TableRowInputCheckbox(properties: TableRowProperties) {
     React.useEffect(
         function () {
             // console.log('TableRowInputCheckbox useEffect', propertiesRowsLength);
-            if(checkboxRef.current) {
+            if(checkboxReference.current) {
                 const headerCondition =
                     properties.type === 'Header' &&
                     propertiesRowsLength === propertiesSelectedRowsIndexesSet?.size &&
@@ -30,7 +30,7 @@ export function TableRowInputCheckbox(properties: TableRowProperties) {
                     // );
                 }
 
-                checkboxRef.current.setValue(
+                checkboxReference.current.setValue(
                     bodyCondition || headerCondition ? InputCheckboxState.Checked : InputCheckboxState.Unchecked,
                 );
             }
@@ -62,7 +62,7 @@ export function TableRowInputCheckbox(properties: TableRowProperties) {
     // Render the component
     return (
         <InputCheckbox
-            ref={checkboxRef}
+            ref={checkboxReference}
             tabIndex={0}
             defaultValue={properties.selected ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
             onChange={function (value) {

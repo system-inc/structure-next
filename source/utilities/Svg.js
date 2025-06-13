@@ -1,17 +1,15 @@
 /* eslint-disable */
 
-
 /*!
-* @svgdotjs/svg.js - A lightweight library for manipulating and animating SVG.
-* @version 3.2.0
-* https://svgjs.dev/
-*
-* @copyright Wout Fierens <wout@mick-wout.com>
-* @license MIT
-*
-* BUILT: Mon Jun 12 2023 10:34:51 GMT+0200 (Central European Summer Time)
-*/;
-export const Svg = (function () {
+ * @svgdotjs/svg.js - A lightweight library for manipulating and animating SVG.
+ * @version 3.2.0
+ * https://svgjs.dev/
+ *
+ * @copyright Wout Fierens <wout@mick-wout.com>
+ * @license MIT
+ *
+ * BUILT: Mon Jun 12 2023 10:34:51 GMT+0200 (Central European Summer Time)
+ */ export const Svg = (function () {
     'use strict';
 
     const methods$1 = {};
@@ -74,11 +72,11 @@ export const Svg = (function () {
     } // Degrees to radians
 
     function radians(d) {
-        return d % 360 * Math.PI / 180;
+        return ((d % 360) * Math.PI) / 180;
     } // Radians to degrees
 
     function degrees(r) {
-        return r * 180 / Math.PI % 360;
+        return ((r * 180) / Math.PI) % 360;
     } // Convert dash-separated-string to camelCase
 
     function camelCase(s) {
@@ -102,22 +100,23 @@ export const Svg = (function () {
             box = box || element.bbox();
 
             if(width == null) {
-                width = box.width / box.height * height;
-            } else if(height == null) {
-                height = box.height / box.width * width;
+                width = (box.width / box.height) * height;
+            }
+            else if(height == null) {
+                height = (box.height / box.width) * width;
             }
         }
 
         return {
             width: width,
-            height: height
+            height: height,
         };
     }
     /**
      * This function adds support for string origins.
      * It searches for an origin in o.origin o.ox and o.originX.
      * This way, origin: {x: 'center', y: 50} can be passed as well as ox: 'center', oy: 50
-    **/
+     **/
 
     function getOrigin(o, element) {
         const origin = o.origin; // First check if origin is in ox or originX
@@ -126,20 +125,18 @@ export const Svg = (function () {
         let oy = o.oy != null ? o.oy : o.originY != null ? o.originY : 'center'; // Then check if origin was used and overwrite in that case
 
         if(origin != null) {
-            [ox, oy] = Array.isArray(origin) ? origin : typeof origin === 'object' ? [origin.x, origin.y] : [origin, origin];
+            [ox, oy] = Array.isArray(origin)
+                ? origin
+                : typeof origin === 'object'
+                  ? [origin.x, origin.y]
+                  : [origin, origin];
         } // Make sure to only call bbox when actually needed
-
 
         const condX = typeof ox === 'string';
         const condY = typeof oy === 'string';
 
         if(condX || condY) {
-            const {
-                height,
-                width,
-                x,
-                y
-            } = element.bbox(); // And only overwrite if string was passed for this specific axis
+            const { height, width, x, y } = element.bbox(); // And only overwrite if string was passed for this specific axis
 
             if(condX) {
                 ox = ox.includes('left') ? x : ox.includes('right') ? x + width : x + width / 2;
@@ -149,7 +146,6 @@ export const Svg = (function () {
                 oy = oy.includes('top') ? y : oy.includes('bottom') ? y + height : y + height / 2;
             }
         } // Return the origin as it is if it wasn't a string
-
 
         return [ox, oy];
     }
@@ -164,7 +160,7 @@ export const Svg = (function () {
         unCamelCase: unCamelCase,
         capitalize: capitalize,
         proportionalSize: proportionalSize,
-        getOrigin: getOrigin
+        getOrigin: getOrigin,
     };
 
     // Default namespaces
@@ -180,12 +176,12 @@ export const Svg = (function () {
         html: html,
         xmlns: xmlns,
         xlink: xlink,
-        svgjs: svgjs
+        svgjs: svgjs,
     };
 
     const globals = {
         window: typeof window === 'undefined' ? null : window,
-        document: typeof document === 'undefined' ? null : document
+        document: typeof document === 'undefined' ? null : document,
     };
     function registerWindow(win = null, doc = null) {
         globals.window = win;
@@ -210,7 +206,8 @@ export const Svg = (function () {
         return globals.window;
     }
 
-    class Base {// constructor (node/*, {extensions = []} */) {
+    class Base {
+        // constructor (node/*, {extensions = []} */) {
         //   // this.tags = []
         //   //
         //   // for (let extension of extensions) {
@@ -242,7 +239,6 @@ export const Svg = (function () {
             return adopter(globals.document.querySelector(element));
         } // Make sure, that HTML elements are created with the correct namespace
 
-
         const wrapper = isHTML ? globals.document.createElement('div') : create('svg');
         wrapper.innerHTML = element; // We can use firstChild here because we know,
         // that the first char is < and thus an element
@@ -266,12 +262,12 @@ export const Svg = (function () {
             return new elements.Fragment(node);
         } // initialize variables
 
-
         let className = capitalize(node.nodeName || 'Dom'); // Make sure that gradients are adopted correctly
 
         if(className === 'LinearGradient' || className === 'RadialGradient') {
             className = 'Gradient'; // Fallback to Dom if element is not known
-        } else if(!elements[className]) {
+        }
+        else if(!elements[className]) {
             className = 'Dom';
         }
 
@@ -327,7 +323,8 @@ export const Svg = (function () {
 
             if(o && o.constructor === Object && !(o instanceof Array)) {
                 return fn.apply(this, args.slice(0, -1)).attr(o);
-            } else {
+            }
+            else {
                 return fn.apply(this, args);
             }
         };
@@ -415,7 +412,7 @@ export const Svg = (function () {
         before,
         after,
         insertBefore,
-        insertAfter
+        insertAfter,
     });
 
     // Parse unit value
@@ -459,7 +456,7 @@ export const Svg = (function () {
         isNumber: isNumber,
         isImage: isImage,
         delimiter: delimiter,
-        isPathLetter: isPathLetter
+        isPathLetter: isPathLetter,
     };
 
     function classes() {
@@ -483,9 +480,14 @@ export const Svg = (function () {
 
     function removeClass(name) {
         if(this.hasClass(name)) {
-            this.attr('class', this.classes().filter(function (c) {
-                return c !== name;
-            }).join(' '));
+            this.attr(
+                'class',
+                this.classes()
+                    .filter(function (c) {
+                        return c !== name;
+                    })
+                    .join(' '),
+            );
         }
 
         return this;
@@ -499,7 +501,7 @@ export const Svg = (function () {
         hasClass,
         addClass,
         removeClass,
-        toggleClass
+        toggleClass,
     });
 
     function css(style, val) {
@@ -507,12 +509,15 @@ export const Svg = (function () {
 
         if(arguments.length === 0) {
             // get full style as object
-            this.node.style.cssText.split(/\s*;\s*/).filter(function (el) {
-                return !!el.length;
-            }).forEach(function (el) {
-                const t = el.split(/\s*:\s*/);
-                ret[t[0]] = t[1];
-            });
+            this.node.style.cssText
+                .split(/\s*;\s*/)
+                .filter(function (el) {
+                    return !!el.length;
+                })
+                .forEach(function (el) {
+                    const t = el.split(/\s*:\s*/);
+                    ret[t[0]] = t[1];
+                });
             return ret;
         }
 
@@ -527,20 +532,18 @@ export const Svg = (function () {
                 return ret;
             } // get style for property
 
-
             if(typeof style === 'string') {
                 return this.node.style[camelCase(style)];
             } // set styles in object
 
-
             if(typeof style === 'object') {
                 for(const name in style) {
                     // set empty string if null/undefined/'' was given
-                    this.node.style[camelCase(name)] = style[name] == null || isBlank.test(style[name]) ? '' : style[name];
+                    this.node.style[camelCase(name)] =
+                        style[name] == null || isBlank.test(style[name]) ? '' : style[name];
                 }
             }
         } // set style for property
-
 
         if(arguments.length === 2) {
             this.node.style[camelCase(style)] = val == null || isBlank.test(val) ? '' : val;
@@ -564,14 +567,20 @@ export const Svg = (function () {
         css,
         show,
         hide,
-        visible
+        visible,
     });
 
     function data(a, v, r) {
         if(a == null) {
             // get an object of attributes
-            return this.data(map(filter(this.node.attributes, el => el.nodeName.indexOf('data-') === 0), el => el.nodeName.slice(5)));
-        } else if(a instanceof Array) {
+            return this.data(
+                map(
+                    filter(this.node.attributes, (el) => el.nodeName.indexOf('data-') === 0),
+                    (el) => el.nodeName.slice(5),
+                ),
+            );
+        }
+        else if(a instanceof Array) {
             const data = {};
 
             for(const key of a) {
@@ -579,24 +588,35 @@ export const Svg = (function () {
             }
 
             return data;
-        } else if(typeof a === 'object') {
+        }
+        else if(typeof a === 'object') {
             for(v in a) {
                 this.data(v, a[v]);
             }
-        } else if(arguments.length < 2) {
+        }
+        else if(arguments.length < 2) {
             try {
                 return JSON.parse(this.attr('data-' + a));
-            } catch(e) {
+            }
+            catch(e) {
                 return this.attr('data-' + a);
             }
-        } else {
-            this.attr('data-' + a, v === null ? null : r === true || typeof v === 'string' || typeof v === 'number' ? v : JSON.stringify(v));
+        }
+        else {
+            this.attr(
+                'data-' + a,
+                v === null
+                    ? null
+                    : r === true || typeof v === 'string' || typeof v === 'number'
+                      ? v
+                      : JSON.stringify(v),
+            );
         }
 
         return this;
     }
     registerMethods('Dom', {
-        data
+        data,
     });
 
     function remember(k, v) {
@@ -605,10 +625,12 @@ export const Svg = (function () {
             for(const key in k) {
                 this.remember(key, k[key]);
             }
-        } else if(arguments.length === 1) {
+        }
+        else if(arguments.length === 1) {
             // retrieve memory
             return this.memory()[k];
-        } else {
+        }
+        else {
             // store memory
             this.memory()[k] = v;
         }
@@ -619,7 +641,8 @@ export const Svg = (function () {
     function forget() {
         if(arguments.length === 0) {
             this._memory = {};
-        } else {
+        }
+        else {
             for(let i = arguments.length - 1; i >= 0; i--) {
                 delete this.memory()[arguments[i]];
             }
@@ -631,16 +654,26 @@ export const Svg = (function () {
     // Return local memory object
 
     function memory() {
-        return this._memory = this._memory || {};
+        return (this._memory = this._memory || {});
     }
     registerMethods('Dom', {
         remember,
         forget,
-        memory
+        memory,
     });
 
     function sixDigitHex(hex) {
-        return hex.length === 4 ? ['#', hex.substring(1, 2), hex.substring(1, 2), hex.substring(2, 3), hex.substring(2, 3), hex.substring(3, 4), hex.substring(3, 4)].join('') : hex;
+        return hex.length === 4
+            ? [
+                  '#',
+                  hex.substring(1, 2),
+                  hex.substring(1, 2),
+                  hex.substring(2, 3),
+                  hex.substring(2, 3),
+                  hex.substring(3, 4),
+                  hex.substring(3, 4),
+              ].join('')
+            : hex;
     }
 
     function componentHex(component) {
@@ -651,7 +684,7 @@ export const Svg = (function () {
     }
 
     function is(object, space) {
-        for(let i = space.length; i--;) {
+        for(let i = space.length; i--; ) {
             if(object[space[i]] == null) {
                 return false;
             }
@@ -661,48 +694,60 @@ export const Svg = (function () {
     }
 
     function getParameters(a, b) {
-        const params = is(a, 'rgb') ? {
-            _a: a.r,
-            _b: a.g,
-            _c: a.b,
-            _d: 0,
-            space: 'rgb'
-        } : is(a, 'xyz') ? {
-            _a: a.x,
-            _b: a.y,
-            _c: a.z,
-            _d: 0,
-            space: 'xyz'
-        } : is(a, 'hsl') ? {
-            _a: a.h,
-            _b: a.s,
-            _c: a.l,
-            _d: 0,
-            space: 'hsl'
-        } : is(a, 'lab') ? {
-            _a: a.l,
-            _b: a.a,
-            _c: a.b,
-            _d: 0,
-            space: 'lab'
-        } : is(a, 'lch') ? {
-            _a: a.l,
-            _b: a.c,
-            _c: a.h,
-            _d: 0,
-            space: 'lch'
-        } : is(a, 'cmyk') ? {
-            _a: a.c,
-            _b: a.m,
-            _c: a.y,
-            _d: a.k,
-            space: 'cmyk'
-        } : {
-            _a: 0,
-            _b: 0,
-            _c: 0,
-            space: 'rgb'
-        };
+        const params = is(a, 'rgb')
+            ? {
+                  _a: a.r,
+                  _b: a.g,
+                  _c: a.b,
+                  _d: 0,
+                  space: 'rgb',
+              }
+            : is(a, 'xyz')
+              ? {
+                    _a: a.x,
+                    _b: a.y,
+                    _c: a.z,
+                    _d: 0,
+                    space: 'xyz',
+                }
+              : is(a, 'hsl')
+                ? {
+                      _a: a.h,
+                      _b: a.s,
+                      _c: a.l,
+                      _d: 0,
+                      space: 'hsl',
+                  }
+                : is(a, 'lab')
+                  ? {
+                        _a: a.l,
+                        _b: a.a,
+                        _c: a.b,
+                        _d: 0,
+                        space: 'lab',
+                    }
+                  : is(a, 'lch')
+                    ? {
+                          _a: a.l,
+                          _b: a.c,
+                          _c: a.h,
+                          _d: 0,
+                          space: 'lch',
+                      }
+                    : is(a, 'cmyk')
+                      ? {
+                            _a: a.c,
+                            _b: a.m,
+                            _c: a.y,
+                            _d: a.k,
+                            space: 'cmyk',
+                        }
+                      : {
+                            _a: 0,
+                            _b: 0,
+                            _c: 0,
+                            space: 'rgb',
+                        };
         params.space = b || params.space;
         return params;
     }
@@ -710,7 +755,8 @@ export const Svg = (function () {
     function cieSpace(space) {
         if(space === 'lab' || space === 'xyz' || space === 'lch') {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -729,11 +775,9 @@ export const Svg = (function () {
             this.init(...inputs);
         } // Test if given value is a color
 
-
         static isColor(color) {
             return color && (color instanceof Color || this.isRgb(color) || this.test(color));
         } // Test if given value is an rgb object
-
 
         static isRgb(color) {
             return color && typeof color.r === 'number' && typeof color.g === 'number' && typeof color.b === 'number';
@@ -744,12 +788,7 @@ export const Svg = (function () {
 
         static random(mode = 'vibrant', t, u) {
             // Get the math modules
-            const {
-                random,
-                round,
-                sin,
-                PI: pi
-            } = Math; // Run the correct generator
+            const { random, round, sin, PI: pi } = Math; // Run the correct generator
 
             if(mode === 'vibrant') {
                 const l = (81 - 57) * random() + 57;
@@ -757,46 +796,52 @@ export const Svg = (function () {
                 const h = 360 * random();
                 const color = new Color(l, c, h, 'lch');
                 return color;
-            } else if(mode === 'sine') {
+            }
+            else if(mode === 'sine') {
                 t = t == null ? random() : t;
-                const r = round(80 * sin(2 * pi * t / 0.5 + 0.01) + 150);
-                const g = round(50 * sin(2 * pi * t / 0.5 + 4.6) + 200);
-                const b = round(100 * sin(2 * pi * t / 0.5 + 2.3) + 150);
+                const r = round(80 * sin((2 * pi * t) / 0.5 + 0.01) + 150);
+                const g = round(50 * sin((2 * pi * t) / 0.5 + 4.6) + 200);
+                const b = round(100 * sin((2 * pi * t) / 0.5 + 2.3) + 150);
                 const color = new Color(r, g, b);
                 return color;
-            } else if(mode === 'pastel') {
+            }
+            else if(mode === 'pastel') {
                 const l = (94 - 86) * random() + 86;
                 const c = (26 - 9) * random() + 9;
                 const h = 360 * random();
                 const color = new Color(l, c, h, 'lch');
                 return color;
-            } else if(mode === 'dark') {
+            }
+            else if(mode === 'dark') {
                 const l = 10 + 10 * random();
                 const c = (125 - 75) * random() + 86;
                 const h = 360 * random();
                 const color = new Color(l, c, h, 'lch');
                 return color;
-            } else if(mode === 'rgb') {
+            }
+            else if(mode === 'rgb') {
                 const r = 255 * random();
                 const g = 255 * random();
                 const b = 255 * random();
                 const color = new Color(r, g, b);
                 return color;
-            } else if(mode === 'lab') {
+            }
+            else if(mode === 'lab') {
                 const l = 100 * random();
                 const a = 256 * random() - 128;
                 const b = 256 * random() - 128;
                 const color = new Color(l, a, b, 'lab');
                 return color;
-            } else if(mode === 'gray') {
+            }
+            else if(mode === 'gray') {
                 const gray = 255 * random();
                 const color = new Color(gray, gray, gray);
                 return color;
-            } else {
+            }
+            else {
                 throw new Error('Unsupported random color mode');
             }
         } // Test if given value is a color string
-
 
         static test(color) {
             return typeof color === 'string' && (isHex.test(color) || isRgb.test(color));
@@ -804,12 +849,8 @@ export const Svg = (function () {
 
         cmyk() {
             // Get the rgb values for the current color
-            const {
-                _a,
-                _b,
-                _c
-            } = this.rgb();
-            const [r, g, b] = [_a, _b, _c].map(v => v / 255); // Get the cmyk values in an unbounded format
+            const { _a, _b, _c } = this.rgb();
+            const [r, g, b] = [_a, _b, _c].map((v) => v / 255); // Get the cmyk values in an unbounded format
 
             const k = Math.min(1 - r, 1 - g, 1 - b);
 
@@ -828,12 +869,8 @@ export const Svg = (function () {
 
         hsl() {
             // Get the rgb values
-            const {
-                _a,
-                _b,
-                _c
-            } = this.rgb();
-            const [r, g, b] = [_a, _b, _c].map(v => v / 255); // Find the maximum and minimum values to get the lightness
+            const { _a, _b, _c } = this.rgb();
+            const [r, g, b] = [_a, _b, _c].map((v) => v / 255); // Find the maximum and minimum values to get the lightness
 
             const max = Math.max(r, g, b);
             const min = Math.min(r, g, b);
@@ -843,7 +880,15 @@ export const Svg = (function () {
 
             const delta = max - min;
             const s = isGray ? 0 : l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
-            const h = isGray ? 0 : max === r ? ((g - b) / delta + (g < b ? 6 : 0)) / 6 : max === g ? ((b - r) / delta + 2) / 6 : max === b ? ((r - g) / delta + 4) / 6 : 0; // Construct and return the new color
+            const h = isGray
+                ? 0
+                : max === r
+                  ? ((g - b) / delta + (g < b ? 6 : 0)) / 6
+                  : max === g
+                    ? ((b - r) / delta + 2) / 6
+                    : max === b
+                      ? ((r - g) / delta + 4) / 6
+                      : 0; // Construct and return the new color
 
             const color = new Color(360 * h, 100 * s, 100 * l, 'hsl');
             return color;
@@ -869,33 +914,40 @@ export const Svg = (function () {
                     _b: b,
                     _c: c,
                     _d: d,
-                    space
+                    space,
                 }); // If the user gave us an array, make the color from it
-            } else if(a instanceof Array) {
+            }
+            else if(a instanceof Array) {
                 this.space = b || (typeof a[3] === 'string' ? a[3] : a[4]) || 'rgb';
                 Object.assign(this, {
                     _a: a[0],
                     _b: a[1],
                     _c: a[2],
-                    _d: a[3] || 0
+                    _d: a[3] || 0,
                 });
-            } else if(a instanceof Object) {
+            }
+            else if(a instanceof Object) {
                 // Set the object up and assign its values directly
                 const values = getParameters(a, b);
                 Object.assign(this, values);
-            } else if(typeof a === 'string') {
+            }
+            else if(typeof a === 'string') {
                 if(isRgb.test(a)) {
                     const noWhitespace = a.replace(whitespace, '');
-                    const [_a, _b, _c] = rgb.exec(noWhitespace).slice(1, 4).map(v => parseInt(v));
+                    const [_a, _b, _c] = rgb
+                        .exec(noWhitespace)
+                        .slice(1, 4)
+                        .map((v) => parseInt(v));
                     Object.assign(this, {
                         _a,
                         _b,
                         _c,
                         _d: 0,
-                        space: 'rgb'
+                        space: 'rgb',
                     });
-                } else if(isHex.test(a)) {
-                    const hexParse = v => parseInt(v, 16);
+                }
+                else if(isHex.test(a)) {
+                    const hexParse = (v) => parseInt(v, 16);
 
                     const [, _a, _b, _c] = hex.exec(sixDigitHex(a)).map(hexParse);
                     Object.assign(this, {
@@ -903,54 +955,58 @@ export const Svg = (function () {
                         _b,
                         _c,
                         _d: 0,
-                        space: 'rgb'
+                        space: 'rgb',
                     });
-                } else throw Error('Unsupported string format, can\'t construct Color');
+                }
+                else throw Error("Unsupported string format, can't construct Color");
             } // Now add the components as a convenience
 
-
-            const {
-                _a,
-                _b,
-                _c,
-                _d
-            } = this;
-            const components = this.space === 'rgb' ? {
-                r: _a,
-                g: _b,
-                b: _c
-            } : this.space === 'xyz' ? {
-                x: _a,
-                y: _b,
-                z: _c
-            } : this.space === 'hsl' ? {
-                h: _a,
-                s: _b,
-                l: _c
-            } : this.space === 'lab' ? {
-                l: _a,
-                a: _b,
-                b: _c
-            } : this.space === 'lch' ? {
-                l: _a,
-                c: _b,
-                h: _c
-            } : this.space === 'cmyk' ? {
-                c: _a,
-                m: _b,
-                y: _c,
-                k: _d
-            } : {};
+            const { _a, _b, _c, _d } = this;
+            const components =
+                this.space === 'rgb'
+                    ? {
+                          r: _a,
+                          g: _b,
+                          b: _c,
+                      }
+                    : this.space === 'xyz'
+                      ? {
+                            x: _a,
+                            y: _b,
+                            z: _c,
+                        }
+                      : this.space === 'hsl'
+                        ? {
+                              h: _a,
+                              s: _b,
+                              l: _c,
+                          }
+                        : this.space === 'lab'
+                          ? {
+                                l: _a,
+                                a: _b,
+                                b: _c,
+                            }
+                          : this.space === 'lch'
+                            ? {
+                                  l: _a,
+                                  c: _b,
+                                  h: _c,
+                              }
+                            : this.space === 'cmyk'
+                              ? {
+                                    c: _a,
+                                    m: _b,
+                                    y: _c,
+                                    k: _d,
+                                }
+                              : {};
             Object.assign(this, components);
         }
 
         lab() {
             // Get the xyz color
-            const {
-                x,
-                y,
-                z
-            } = this.xyz(); // Get the lab components
+            const { x, y, z } = this.xyz(); // Get the lab components
 
             const l = 116 * y - 16;
             const a = 500 * (x - y);
@@ -962,20 +1018,15 @@ export const Svg = (function () {
 
         lch() {
             // Get the lab color directly
-            const {
-                l,
-                a,
-                b
-            } = this.lab(); // Get the chromaticity and the hue using polar coordinates
+            const { l, a, b } = this.lab(); // Get the chromaticity and the hue using polar coordinates
 
             const c = Math.sqrt(a ** 2 + b ** 2);
-            let h = 180 * Math.atan2(b, a) / Math.PI;
+            let h = (180 * Math.atan2(b, a)) / Math.PI;
 
             if(h < 0) {
                 h *= -1;
                 h = 360 - h;
             } // Make a new color and return it
-
 
             const color = new Color(l, c, h, 'lch');
             return color;
@@ -984,36 +1035,24 @@ export const Svg = (function () {
         Conversion Methods
         */
 
-
         rgb() {
             if(this.space === 'rgb') {
                 return this;
-            } else if(cieSpace(this.space)) {
+            }
+            else if(cieSpace(this.space)) {
                 // Convert to the xyz color space
-                let {
-                    x,
-                    y,
-                    z
-                } = this;
+                let { x, y, z } = this;
 
                 if(this.space === 'lab' || this.space === 'lch') {
                     // Get the values in the lab space
-                    let {
-                        l,
-                        a,
-                        b
-                    } = this;
+                    let { l, a, b } = this;
 
                     if(this.space === 'lch') {
-                        const {
-                            c,
-                            h
-                        } = this;
+                        const { c, h } = this;
                         const dToR = Math.PI / 180;
                         a = c * Math.cos(dToR * h);
                         b = c * Math.sin(dToR * h);
                     } // Undo the nonlinear function
-
 
                     const yL = (l + 16) / 116;
                     const xL = a / 500 + yL;
@@ -1023,14 +1062,13 @@ export const Svg = (function () {
                     const mx = 0.008856;
                     const nm = 7.787;
                     x = 0.95047 * (xL ** 3 > mx ? xL ** 3 : (xL - ct) / nm);
-                    y = 1.00000 * (yL ** 3 > mx ? yL ** 3 : (yL - ct) / nm);
+                    y = 1.0 * (yL ** 3 > mx ? yL ** 3 : (yL - ct) / nm);
                     z = 1.08883 * (zL ** 3 > mx ? zL ** 3 : (zL - ct) / nm);
                 } // Convert xyz to unbounded rgb values
 
-
                 const rU = x * 3.2406 + y * -1.5372 + z * -0.4986;
                 const gU = x * -0.9689 + y * 1.8758 + z * 0.0415;
-                const bU = x * 0.0557 + y * -0.2040 + z * 1.0570; // Convert the values to true rgb values
+                const bU = x * 0.0557 + y * -0.204 + z * 1.057; // Convert the values to true rgb values
 
                 const pow = Math.pow;
                 const bd = 0.0031308;
@@ -1040,14 +1078,11 @@ export const Svg = (function () {
 
                 const color = new Color(255 * r, 255 * g, 255 * b);
                 return color;
-            } else if(this.space === 'hsl') {
+            }
+            else if(this.space === 'hsl') {
                 // https://bgrins.github.io/TinyColor/docs/tinycolor.html
                 // Get the current hsl values
-                let {
-                    h,
-                    s,
-                    l
-                } = this;
+                let { h, s, l } = this;
                 h /= 360;
                 s /= 100;
                 l /= 100; // If we are gray, then just make the color directly
@@ -1058,7 +1093,6 @@ export const Svg = (function () {
                     return color;
                 } // TODO I have no idea what this does :D If you figure it out, tell me!
 
-
                 const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
                 const p = 2 * l - q; // Get the rgb values
 
@@ -1068,15 +1102,11 @@ export const Svg = (function () {
 
                 const color = new Color(r, g, b);
                 return color;
-            } else if(this.space === 'cmyk') {
+            }
+            else if(this.space === 'cmyk') {
                 // https://gist.github.com/felipesabino/5066336
                 // Get the normalised cmyk values
-                const {
-                    c,
-                    m,
-                    y,
-                    k
-                } = this; // Get the rgb values
+                const { c, m, y, k } = this; // Get the rgb values
 
                 const r = 255 * (1 - Math.min(1, c * (1 - k) + k));
                 const g = 255 * (1 - Math.min(1, m * (1 - k) + k));
@@ -1084,19 +1114,14 @@ export const Svg = (function () {
 
                 const color = new Color(r, g, b);
                 return color;
-            } else {
+            }
+            else {
                 return this;
             }
         }
 
         toArray() {
-            const {
-                _a,
-                _b,
-                _c,
-                _d,
-                space
-            } = this;
+            const { _a, _b, _c, _d, space } = this;
             return [_a, _b, _c, _d, space];
         }
 
@@ -1119,19 +1144,15 @@ export const Svg = (function () {
 
         xyz() {
             // Normalise the red, green and blue values
-            const {
-                _a: r255,
-                _b: g255,
-                _c: b255
-            } = this.rgb();
-            const [r, g, b] = [r255, g255, b255].map(v => v / 255); // Convert to the lab rgb space
+            const { _a: r255, _b: g255, _c: b255 } = this.rgb();
+            const [r, g, b] = [r255, g255, b255].map((v) => v / 255); // Convert to the lab rgb space
 
             const rL = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
             const gL = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
             const bL = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92; // Convert to the xyz color space without bounding the values
 
             const xU = (rL * 0.4124 + gL * 0.3576 + bL * 0.1805) / 0.95047;
-            const yU = (rL * 0.2126 + gL * 0.7152 + bL * 0.0722) / 1.00000;
+            const yU = (rL * 0.2126 + gL * 0.7152 + bL * 0.0722) / 1.0;
             const zU = (rL * 0.0193 + gL * 0.1192 + bL * 0.9505) / 1.08883; // Get the proper xyz values by applying the bounding
 
             const x = xU > 0.008856 ? Math.pow(xU, 1 / 3) : 7.787 * xU + 16 / 116;
@@ -1145,28 +1166,17 @@ export const Svg = (function () {
         Input and Output methods
         */
 
-
         _clamped() {
-            const {
-                _a,
-                _b,
-                _c
-            } = this.rgb();
-            const {
-                max,
-                min,
-                round
-            } = Math;
+            const { _a, _b, _c } = this.rgb();
+            const { max, min, round } = Math;
 
-            const format = v => max(0, min(round(v), 255));
+            const format = (v) => max(0, min(round(v), 255));
 
             return [_a, _b, _c].map(format);
         }
         /*
         Constructing colors
         */
-
-
     }
 
     class Point {
@@ -1175,7 +1185,6 @@ export const Svg = (function () {
             this.init(...args);
         } // Clone point
 
-
         clone() {
             return new Point(this);
         }
@@ -1183,19 +1192,23 @@ export const Svg = (function () {
         init(x, y) {
             const base = {
                 x: 0,
-                y: 0
+                y: 0,
             }; // ensure source as object
 
-            const source = Array.isArray(x) ? {
-                x: x[0],
-                y: x[1]
-            } : typeof x === 'object' ? {
-                x: x.x,
-                y: x.y
-            } : {
-                x: x,
-                y: y
-            }; // merge source
+            const source = Array.isArray(x)
+                ? {
+                      x: x[0],
+                      y: x[1],
+                  }
+                : typeof x === 'object'
+                  ? {
+                        x: x.x,
+                        y: x.y,
+                    }
+                  : {
+                        x: x,
+                        y: y,
+                    }; // merge source
 
             this.x = source.x == null ? base.x : source.x;
             this.y = source.y == null ? base.y : source.y;
@@ -1210,22 +1223,17 @@ export const Svg = (function () {
             return this.clone().transformO(m);
         } // Transform point with matrix
 
-
         transformO(m) {
             if(!Matrix.isMatrixLike(m)) {
                 m = new Matrix(m);
             }
 
-            const {
-                x,
-                y
-            } = this; // Perform the matrix multiplication
+            const { x, y } = this; // Perform the matrix multiplication
 
             this.x = m.a * x + m.c * y + m.e;
             this.y = m.b * x + m.d * y + m.f;
             return this;
         }
-
     }
     function point(x, y) {
         return new Point(x, y).transformO(this.screenCTM().inverseO());
@@ -1245,10 +1253,26 @@ export const Svg = (function () {
             const flipBoth = o.flip === 'both' || o.flip === true;
             const flipX = o.flip && (flipBoth || o.flip === 'x') ? -1 : 1;
             const flipY = o.flip && (flipBoth || o.flip === 'y') ? -1 : 1;
-            const skewX = o.skew && o.skew.length ? o.skew[0] : isFinite(o.skew) ? o.skew : isFinite(o.skewX) ? o.skewX : 0;
-            const skewY = o.skew && o.skew.length ? o.skew[1] : isFinite(o.skew) ? o.skew : isFinite(o.skewY) ? o.skewY : 0;
-            const scaleX = o.scale && o.scale.length ? o.scale[0] * flipX : isFinite(o.scale) ? o.scale * flipX : isFinite(o.scaleX) ? o.scaleX * flipX : flipX;
-            const scaleY = o.scale && o.scale.length ? o.scale[1] * flipY : isFinite(o.scale) ? o.scale * flipY : isFinite(o.scaleY) ? o.scaleY * flipY : flipY;
+            const skewX =
+                o.skew && o.skew.length ? o.skew[0] : isFinite(o.skew) ? o.skew : isFinite(o.skewX) ? o.skewX : 0;
+            const skewY =
+                o.skew && o.skew.length ? o.skew[1] : isFinite(o.skew) ? o.skew : isFinite(o.skewY) ? o.skewY : 0;
+            const scaleX =
+                o.scale && o.scale.length
+                    ? o.scale[0] * flipX
+                    : isFinite(o.scale)
+                      ? o.scale * flipX
+                      : isFinite(o.scaleX)
+                        ? o.scaleX * flipX
+                        : flipX;
+            const scaleY =
+                o.scale && o.scale.length
+                    ? o.scale[1] * flipY
+                    : isFinite(o.scale)
+                      ? o.scale * flipY
+                      : isFinite(o.scaleY)
+                        ? o.scaleY * flipY
+                        : flipY;
             const shear = o.shear || 0;
             const theta = o.rotate || o.theta || 0;
             const origin = new Point(o.origin || o.around || o.ox || o.originX, o.oy || o.originY);
@@ -1279,7 +1303,7 @@ export const Svg = (function () {
                 ox,
                 oy,
                 px,
-                py
+                py,
             };
         }
 
@@ -1290,14 +1314,13 @@ export const Svg = (function () {
                 c: a[2],
                 d: a[3],
                 e: a[4],
-                f: a[5]
+                f: a[5],
             };
         }
 
         static isMatrixLike(o) {
             return o.a != null || o.b != null || o.c != null || o.d != null || o.e != null || o.f != null;
         } // left matrix, right matrix, target matrix which is overwritten
-
 
         static matrixMultiply(l, r, o) {
             // Work out the product directly
@@ -1321,18 +1344,15 @@ export const Svg = (function () {
             return this.clone().aroundO(cx, cy, matrix);
         } // Transform around a center point
 
-
         aroundO(cx, cy, matrix) {
             const dx = cx || 0;
             const dy = cy || 0;
             return this.translateO(-dx, -dy).lmultiplyO(matrix).translateO(dx, dy);
         } // Clones this matrix
 
-
         clone() {
             return new Matrix(this);
         } // Decomposes this matrix into its affine parameters
-
 
         decompose(cx = 0, cy = 0) {
             // Get the parameters from the matrix
@@ -1349,13 +1369,13 @@ export const Svg = (function () {
 
             const sx = ccw * Math.sqrt(a * a + b * b);
             const thetaRad = Math.atan2(ccw * b, ccw * a);
-            const theta = 180 / Math.PI * thetaRad;
+            const theta = (180 / Math.PI) * thetaRad;
             const ct = Math.cos(thetaRad);
             const st = Math.sin(thetaRad); // We can then solve the y basis vector simultaneously to get the other
             // two affine parameters directly from these parameters
 
             const lam = (a * c + b * d) / determinant;
-            const sy = c * sx / (lam * a - b) || d * sx / (lam * b + a); // Use the translations
+            const sy = (c * sx) / (lam * a - b) || (d * sx) / (lam * b + a); // Use the translations
 
             const tx = e - cx + cx * ct * sx + cy * (lam * ct * sx - st * sy);
             const ty = f - cy + cx * st * sx + cy * (lam * st * sx + ct * sy); // Construct the decomposition and return it
@@ -1376,31 +1396,52 @@ export const Svg = (function () {
                 c: this.c,
                 d: this.d,
                 e: this.e,
-                f: this.f
+                f: this.f,
             };
         } // Check if two matrices are equal
-
 
         equals(other) {
             if(other === this) return true;
             const comp = new Matrix(other);
-            return closeEnough(this.a, comp.a) && closeEnough(this.b, comp.b) && closeEnough(this.c, comp.c) && closeEnough(this.d, comp.d) && closeEnough(this.e, comp.e) && closeEnough(this.f, comp.f);
+            return (
+                closeEnough(this.a, comp.a) &&
+                closeEnough(this.b, comp.b) &&
+                closeEnough(this.c, comp.c) &&
+                closeEnough(this.d, comp.d) &&
+                closeEnough(this.e, comp.e) &&
+                closeEnough(this.f, comp.f)
+            );
         } // Flip matrix on x or y, at a given offset
-
 
         flip(axis, around) {
             return this.clone().flipO(axis, around);
         }
 
         flipO(axis, around) {
-            return axis === 'x' ? this.scaleO(-1, 1, around, 0) : axis === 'y' ? this.scaleO(1, -1, 0, around) : this.scaleO(-1, -1, axis, around || axis); // Define an x, y flip point
+            return axis === 'x'
+                ? this.scaleO(-1, 1, around, 0)
+                : axis === 'y'
+                  ? this.scaleO(1, -1, 0, around)
+                  : this.scaleO(-1, -1, axis, around || axis); // Define an x, y flip point
         } // Initialize
-
 
         init(source) {
             const base = Matrix.fromArray([1, 0, 0, 1, 0, 0]); // ensure source as object
 
-            source = source instanceof Element ? source.matrixify() : typeof source === 'string' ? Matrix.fromArray(source.split(delimiter).map(parseFloat)) : Array.isArray(source) ? Matrix.fromArray(source) : typeof source === 'object' && Matrix.isMatrixLike(source) ? source : typeof source === 'object' ? new Matrix().transform(source) : arguments.length === 6 ? Matrix.fromArray([].slice.call(arguments)) : base; // Merge the source matrix with the base matrix
+            source =
+                source instanceof Element
+                    ? source.matrixify()
+                    : typeof source === 'string'
+                      ? Matrix.fromArray(source.split(delimiter).map(parseFloat))
+                      : Array.isArray(source)
+                        ? Matrix.fromArray(source)
+                        : typeof source === 'object' && Matrix.isMatrixLike(source)
+                          ? source
+                          : typeof source === 'object'
+                            ? new Matrix().transform(source)
+                            : arguments.length === 6
+                              ? Matrix.fromArray([].slice.call(arguments))
+                              : base; // Merge the source matrix with the base matrix
 
             this.a = source.a != null ? source.a : base.a;
             this.b = source.b != null ? source.b : base.b;
@@ -1414,7 +1455,6 @@ export const Svg = (function () {
         inverse() {
             return this.clone().inverseO();
         } // Inverses matrix
-
 
         inverseO() {
             // Get the current parameters out of the matrix
@@ -1455,7 +1495,6 @@ export const Svg = (function () {
             return Matrix.matrixMultiply(l, r, this);
         } // Left multiplies by the given matrix
 
-
         multiply(matrix) {
             return this.clone().multiplyO(matrix);
         }
@@ -1467,7 +1506,6 @@ export const Svg = (function () {
             return Matrix.matrixMultiply(l, r, this);
         } // Rotate matrix
 
-
         rotate(r, cx, cy) {
             return this.clone().rotateO(r, cx, cy);
         }
@@ -1477,14 +1515,7 @@ export const Svg = (function () {
             r = radians(r);
             const cos = Math.cos(r);
             const sin = Math.sin(r);
-            const {
-                a,
-                b,
-                c,
-                d,
-                e,
-                f
-            } = this;
+            const { a, b, c, d, e, f } = this;
             this.a = a * cos - b * sin;
             this.b = b * cos + a * sin;
             this.c = c * cos - d * sin;
@@ -1493,7 +1524,6 @@ export const Svg = (function () {
             this.f = f * cos + e * sin - cx * sin - cy * cos + cy;
             return this;
         } // Scale matrix
-
 
         scale(x, y, cx, cy) {
             return this.clone().scaleO(...arguments);
@@ -1507,14 +1537,7 @@ export const Svg = (function () {
                 y = x;
             }
 
-            const {
-                a,
-                b,
-                c,
-                d,
-                e,
-                f
-            } = this;
+            const { a, b, c, d, e, f } = this;
             this.a = a * x;
             this.b = b * y;
             this.c = c * x;
@@ -1524,26 +1547,17 @@ export const Svg = (function () {
             return this;
         } // Shear matrix
 
-
         shear(a, cx, cy) {
             return this.clone().shearO(a, cx, cy);
         }
 
         shearO(lx, cx = 0, cy = 0) {
-            const {
-                a,
-                b,
-                c,
-                d,
-                e,
-                f
-            } = this;
+            const { a, b, c, d, e, f } = this;
             this.a = a + b * lx;
             this.c = c + d * lx;
             this.e = e + f * lx - cy * lx;
             return this;
         } // Skew Matrix
-
 
         skew(x, y, cx, cy) {
             return this.clone().skewO(...arguments);
@@ -1557,19 +1571,11 @@ export const Svg = (function () {
                 y = x;
             } // Convert degrees to radians
 
-
             x = radians(x);
             y = radians(y);
             const lx = Math.tan(x);
             const ly = Math.tan(y);
-            const {
-                a,
-                b,
-                c,
-                d,
-                e,
-                f
-            } = this;
+            const { a, b, c, d, e, f } = this;
             this.a = a + b * lx;
             this.b = b + a * ly;
             this.c = c + d * lx;
@@ -1579,11 +1585,9 @@ export const Svg = (function () {
             return this;
         } // SkewX
 
-
         skewX(x, cx, cy) {
             return this.skew(x, 0, cx, cy);
         } // SkewY
-
 
         skewY(y, cx, cy) {
             return this.skew(0, y, cx, cy);
@@ -1593,11 +1597,9 @@ export const Svg = (function () {
             return [this.a, this.b, this.c, this.d, this.e, this.f];
         } // Convert matrix to string
 
-
         toString() {
             return 'matrix(' + this.a + ',' + this.b + ',' + this.c + ',' + this.d + ',' + this.e + ',' + this.f + ')';
         } // Transform a matrix into another matrix by manipulating the space
-
 
         transform(o) {
             // Check if o is a matrix and then left multiply it directly
@@ -1606,15 +1608,19 @@ export const Svg = (function () {
                 return matrix.multiplyO(this);
             } // Get the proposed transformations and the current transformations
 
-
             const t = Matrix.formatTransforms(o);
             const current = this;
-            const {
-                x: ox,
-                y: oy
-            } = new Point(t.ox, t.oy).transform(current); // Construct the resulting matrix
+            const { x: ox, y: oy } = new Point(t.ox, t.oy).transform(current); // Construct the resulting matrix
 
-            const transformer = new Matrix().translateO(t.rx, t.ry).lmultiplyO(current).translateO(-ox, -oy).scaleO(t.scaleX, t.scaleY).skewO(t.skewX, t.skewY).shearO(t.shear).rotateO(t.theta).translateO(ox, oy); // If we want the origin at a particular place, we force it there
+            const transformer = new Matrix()
+                .translateO(t.rx, t.ry)
+                .lmultiplyO(current)
+                .translateO(-ox, -oy)
+                .scaleO(t.scaleX, t.scaleY)
+                .skewO(t.skewX, t.skewY)
+                .shearO(t.shear)
+                .rotateO(t.theta)
+                .translateO(ox, oy); // If we want the origin at a particular place, we force it there
 
             if(isFinite(t.px) || isFinite(t.py)) {
                 const origin = new Point(ox, oy).transform(transformer); // TODO: Replace t.px with isFinite(t.px)
@@ -1625,11 +1631,9 @@ export const Svg = (function () {
                 transformer.translateO(dx, dy);
             } // Translate now after positioning
 
-
             transformer.translateO(t.tx, t.ty);
             return transformer;
         } // Translate matrix
-
 
         translate(x, y) {
             return this.clone().translateO(x, y);
@@ -1648,10 +1652,9 @@ export const Svg = (function () {
                 c: this.c,
                 d: this.d,
                 e: this.e,
-                f: this.f
+                f: this.f,
             };
         }
-
     }
     function ctm() {
         return new Matrix(this.node.getCTM());
@@ -1676,13 +1679,19 @@ export const Svg = (function () {
         // Reuse cached element if possible
         if(!parser.nodes) {
             const svg = makeInstance().size(2, 0);
-            svg.node.style.cssText = ['opacity: 0', 'position: absolute', 'left: -100%', 'top: -100%', 'overflow: hidden'].join(';');
+            svg.node.style.cssText = [
+                'opacity: 0',
+                'position: absolute',
+                'left: -100%',
+                'top: -100%',
+                'overflow: hidden',
+            ].join(';');
             svg.attr('focusable', 'false');
             svg.attr('aria-hidden', 'true');
             const path = svg.path().node;
             parser.nodes = {
                 svg,
-                path
+                path,
             };
         }
 
@@ -1698,14 +1707,20 @@ export const Svg = (function () {
         return !box.width && !box.height && !box.x && !box.y;
     }
     function domContains(node) {
-        return node === globals.document || (globals.document.documentElement.contains || function (node) {
-            // This is IE - it does not support contains() for top-level SVGs
-            while(node.parentNode) {
-                node = node.parentNode;
-            }
+        return (
+            node === globals.document ||
+            (
+                globals.document.documentElement.contains ||
+                function (node) {
+                    // This is IE - it does not support contains() for top-level SVGs
+                    while(node.parentNode) {
+                        node = node.parentNode;
+                    }
 
-            return node === globals.document;
-        }).call(globals.document.documentElement, node);
+                    return node === globals.document;
+                }
+            ).call(globals.document.documentElement, node)
+        );
     }
     class Box {
         constructor(...args) {
@@ -1721,7 +1736,21 @@ export const Svg = (function () {
 
         init(source) {
             const base = [0, 0, 0, 0];
-            source = typeof source === 'string' ? source.split(delimiter).map(parseFloat) : Array.isArray(source) ? source : typeof source === 'object' ? [source.left != null ? source.left : source.x, source.top != null ? source.top : source.y, source.width, source.height] : arguments.length === 4 ? [].slice.call(arguments) : base;
+            source =
+                typeof source === 'string'
+                    ? source.split(delimiter).map(parseFloat)
+                    : Array.isArray(source)
+                      ? source
+                      : typeof source === 'object'
+                        ? [
+                              source.left != null ? source.left : source.x,
+                              source.top != null ? source.top : source.y,
+                              source.width,
+                              source.height,
+                          ]
+                        : arguments.length === 4
+                          ? [].slice.call(arguments)
+                          : base;
             this.x = source[0] || 0;
             this.y = source[1] || 0;
             this.width = this.w = source[2] || 0;
@@ -1737,7 +1766,6 @@ export const Svg = (function () {
         isNulled() {
             return isNulledBox(this);
         } // Merge rect box with another, return a new instance
-
 
         merge(box) {
             const x = Math.min(this.x, box.x);
@@ -1764,7 +1792,12 @@ export const Svg = (function () {
             let xMax = -Infinity;
             let yMin = Infinity;
             let yMax = -Infinity;
-            const pts = [new Point(this.x, this.y), new Point(this.x2, this.y), new Point(this.x, this.y2), new Point(this.x2, this.y2)];
+            const pts = [
+                new Point(this.x, this.y),
+                new Point(this.x2, this.y),
+                new Point(this.x, this.y2),
+                new Point(this.x2, this.y2),
+            ];
             pts.forEach(function (p) {
                 p = p.transform(m);
                 xMin = Math.min(xMin, p.x);
@@ -1774,7 +1807,6 @@ export const Svg = (function () {
             });
             return new Box(xMin, yMin, xMax - xMin, yMax - yMin);
         }
-
     }
 
     function getBox(el, getBBoxFn, retry) {
@@ -1788,7 +1820,8 @@ export const Svg = (function () {
             if(isNulledBox(box) && !domContains(el.node)) {
                 throw new Error('Element not in the dom');
             }
-        } catch(e) {
+        }
+        catch(e) {
             // ... and calling the retry handler here
             box = retry(el);
         }
@@ -1798,17 +1831,17 @@ export const Svg = (function () {
 
     function bbox() {
         // Function to get bbox is getBBox()
-        const getBBox = node => node.getBBox(); // Take all measures so that a stupid browser renders the element
+        const getBBox = (node) => node.getBBox(); // Take all measures so that a stupid browser renders the element
         // so we can get the bbox from it when we try again
 
-
-        const retry = el => {
+        const retry = (el) => {
             try {
                 const clone = el.clone().addTo(parser().svg).show();
                 const box = clone.node.getBBox();
                 clone.remove();
                 return box;
-            } catch(e) {
+            }
+            catch(e) {
                 // We give up...
                 throw new Error(`Getting bbox of element "${el.node.nodeName}" is not possible: ${e.toString()}`);
             }
@@ -1819,9 +1852,9 @@ export const Svg = (function () {
         return bbox;
     }
     function rbox(el) {
-        const getRBox = node => node.getBoundingClientRect();
+        const getRBox = (node) => node.getBoundingClientRect();
 
-        const retry = el => {
+        const retry = (el) => {
             // There is no point in trying tricks here because if we insert the element into the dom ourselves
             // it obviously will be at the wrong position
             throw new Error(`Getting rbox of element "${el.node.nodeName}" is not possible`);
@@ -1834,7 +1867,6 @@ export const Svg = (function () {
             return rbox.transform(el.screenCTM().inverseO());
         } // Else we want it in absolute screen coordinates
         // Therefore we need to add the scrollOffset
-
 
         return rbox.addOffset();
     } // Checks whether the given point is inside the bounding box
@@ -1860,20 +1892,18 @@ export const Svg = (function () {
                 //                        Furthermore this size is incorrect if the element is further transformed by its parents
                 // computedStyle: Only returns meaningful values if css was used with px. We dont go this route here!
                 // getBBox: returns the bounding box of its content - that doesn't help!
-                let {
-                    width,
-                    height
-                } = this.attr(['width', 'height']); // Width and height is a string when a number with a unit is present which we can't use
+                let { width, height } = this.attr(['width', 'height']); // Width and height is a string when a number with a unit is present which we can't use
                 // So we try clientXYZ
 
-                if(!width && !height || typeof width === 'string' || typeof height === 'string') {
+                if((!width && !height) || typeof width === 'string' || typeof height === 'string') {
                     width = this.node.clientWidth;
                     height = this.node.clientHeight;
                 } // Giving up...
 
-
                 if(!width || !height) {
-                    throw new Error('Impossible to get absolute width and height. Please provide an absolute width and height attribute on the zooming element');
+                    throw new Error(
+                        'Impossible to get absolute width and height. Please provide an absolute width and height attribute on the zooming element',
+                    );
                 }
 
                 const v = this.viewbox();
@@ -1890,14 +1920,15 @@ export const Svg = (function () {
 
                 if(zoomAmount === Infinity) zoomAmount = Number.MAX_SAFE_INTEGER / 100;
                 point = point || new Point(width / 2 / zoomX + v.x, height / 2 / zoomY + v.y);
-                const box = new Box(v).transform(new Matrix({
-                    scale: zoomAmount,
-                    origin: point
-                }));
+                const box = new Box(v).transform(
+                    new Matrix({
+                        scale: zoomAmount,
+                        origin: point,
+                    }),
+                );
                 return this.viewbox(box);
-            }
-
-        }
+            },
+        },
     });
     register(Box, 'Box');
 
@@ -1908,7 +1939,6 @@ export const Svg = (function () {
             this.length = 0;
             this.push(...arr);
         }
-
     }
     extend([List], {
         each(fnOrMethodName, ...args) {
@@ -1916,8 +1946,9 @@ export const Svg = (function () {
                 return this.map((el, i, arr) => {
                     return fnOrMethodName.call(el, el, i, arr);
                 });
-            } else {
-                return this.map(el => {
+            }
+            else {
+                return this.map((el) => {
                     return el[fnOrMethodName](...args);
                 });
             }
@@ -1925,8 +1956,7 @@ export const Svg = (function () {
 
         toArray() {
             return Array.prototype.concat.apply([], this);
-        }
-
+        },
     });
     const reserved = ['toArray', 'constructor', 'each'];
 
@@ -1947,9 +1977,11 @@ export const Svg = (function () {
     };
 
     function baseFind(query, parent) {
-        return new List(map((parent || globals.document).querySelectorAll(query), function (node) {
-            return adopt(node);
-        }));
+        return new List(
+            map((parent || globals.document).querySelectorAll(query), function (node) {
+                return adopt(node);
+            }),
+        );
     } // Scoped find method
 
     function find(query) {
@@ -2012,7 +2044,6 @@ export const Svg = (function () {
             if(!listener) return;
         } // events can be an array of events or a string or undefined
 
-
         events = Array.isArray(events) ? events : (events || '').split(delimiter);
         events.forEach(function (event) {
             const ev = event && event.split('.')[0];
@@ -2026,7 +2057,8 @@ export const Svg = (function () {
                     n.removeEventListener(ev, bag[ev][ns || '*'][listener], options || false);
                     delete bag[ev][ns || '*'][listener];
                 }
-            } else if(ev && ns) {
+            }
+            else if(ev && ns) {
                 // remove all listeners for a namespaced event
                 if(bag[ev] && bag[ev][ns]) {
                     for(l in bag[ev][ns]) {
@@ -2035,7 +2067,8 @@ export const Svg = (function () {
 
                     delete bag[ev][ns];
                 }
-            } else if(ns) {
+            }
+            else if(ns) {
                 // remove all listeners for a specific namespace
                 for(event in bag) {
                     for(namespace in bag[event]) {
@@ -2044,7 +2077,8 @@ export const Svg = (function () {
                         }
                     }
                 }
-            } else if(ev) {
+            }
+            else if(ev) {
                 // remove all listeners for the event
                 if(bag[ev]) {
                     for(namespace in bag[ev]) {
@@ -2053,7 +2087,8 @@ export const Svg = (function () {
 
                     delete bag[ev];
                 }
-            } else {
+            }
+            else {
                 // remove all listeners on a given node
                 for(event in bag) {
                     off(n, event);
@@ -2068,11 +2103,12 @@ export const Svg = (function () {
 
         if(event instanceof globals.window.Event) {
             n.dispatchEvent(event);
-        } else {
+        }
+        else {
             event = new globals.window.CustomEvent(event, {
                 detail: data,
                 cancelable: true,
-                ...options
+                ...options,
             });
             n.dispatchEvent(event);
         }
@@ -2081,7 +2117,7 @@ export const Svg = (function () {
     }
 
     class EventTarget extends Base {
-        addEventListener() { }
+        addEventListener() {}
 
         dispatch(event, data, options) {
             return dispatch(this, event, data, options);
@@ -2101,7 +2137,6 @@ export const Svg = (function () {
             return !event.defaultPrevented;
         } // Fire given event
 
-
         fire(event, data, options) {
             this.dispatch(event, data, options);
             return this;
@@ -2115,29 +2150,26 @@ export const Svg = (function () {
             return this;
         } // Unbind event from listener
 
-
         off(event, listener, options) {
             off(this, event, listener, options);
             return this;
         } // Bind given event to listener
-
 
         on(event, listener, binding, options) {
             on(this, event, listener, binding, options);
             return this;
         }
 
-        removeEventListener() { }
-
+        removeEventListener() {}
     }
     register(EventTarget, 'EventTarget');
 
-    function noop() { } // Default animation values
+    function noop() {} // Default animation values
 
     const timeline = {
         duration: 400,
         ease: '>',
-        delay: 0
+        delay: 0,
     }; // Default attribute values
 
     const attrs = {
@@ -2167,14 +2199,14 @@ export const Svg = (function () {
         'stop-opacity': 1,
         'stop-color': '#000000',
         // text
-        'text-anchor': 'start'
+        'text-anchor': 'start',
     };
 
     var defaults = {
         __proto__: null,
         noop: noop,
         timeline: timeline,
-        attrs: attrs
+        attrs: attrs,
     };
 
     class SVGArray extends Array {
@@ -2195,7 +2227,6 @@ export const Svg = (function () {
             return this;
         } // Parse whitespace separated string
 
-
         parse(array = []) {
             // If already is an array, no need to parse it
             if(array instanceof Array) return array;
@@ -2214,13 +2245,11 @@ export const Svg = (function () {
             return this.join(' ');
         } // Flattens the array if needed
 
-
         valueOf() {
             const ret = [];
             ret.push(...this);
             return ret;
         }
-
     }
 
     class SVGNumber {
@@ -2232,7 +2261,6 @@ export const Svg = (function () {
         convert(unit) {
             return new SVGNumber(this.value, unit);
         } // Divide number
-
 
         divide(number) {
             number = new SVGNumber(number);
@@ -2248,8 +2276,9 @@ export const Svg = (function () {
 
             if(typeof value === 'number') {
                 // ensure a valid numeric value
-                this.value = isNaN(value) ? 0 : !isFinite(value) ? value < 0 ? -3.4e+38 : +3.4e+38 : value;
-            } else if(typeof value === 'string') {
+                this.value = isNaN(value) ? 0 : !isFinite(value) ? (value < 0 ? -3.4e38 : +3.4e38) : value;
+            }
+            else if(typeof value === 'string') {
                 unit = value.match(numberAndUnit);
 
                 if(unit) {
@@ -2258,14 +2287,15 @@ export const Svg = (function () {
 
                     if(unit[5] === '%') {
                         this.value /= 100;
-                    } else if(unit[5] === 's') {
+                    }
+                    else if(unit[5] === 's') {
                         this.value *= 1000;
                     } // store unit
 
-
                     this.unit = unit[5];
                 }
-            } else {
+            }
+            else {
                 if(value instanceof SVGNumber) {
                     this.value = value.valueOf();
                     this.unit = value.unit;
@@ -2275,18 +2305,15 @@ export const Svg = (function () {
             return this;
         } // Subtract number
 
-
         minus(number) {
             number = new SVGNumber(number);
             return new SVGNumber(this - number, this.unit || number.unit);
         } // Add number
 
-
         plus(number) {
             number = new SVGNumber(number);
             return new SVGNumber(this + number, this.unit || number.unit);
         } // Multiply number
-
 
         times(number) {
             number = new SVGNumber(number);
@@ -2302,13 +2329,15 @@ export const Svg = (function () {
         }
 
         toString() {
-            return (this.unit === '%' ? ~~(this.value * 1e8) / 1e6 : this.unit === 's' ? this.value / 1e3 : this.value) + this.unit;
+            return (
+                (this.unit === '%' ? ~~(this.value * 1e8) / 1e6 : this.unit === 's' ? this.value / 1e3 : this.value) +
+                this.unit
+            );
         }
 
         valueOf() {
             return this.value;
         }
-
     }
 
     const hooks = [];
@@ -2328,23 +2357,28 @@ export const Svg = (function () {
             }
 
             return attr;
-        } else if(attr instanceof Array) {
+        }
+        else if(attr instanceof Array) {
             // loop through array and get all values
             return attr.reduce((last, curr) => {
                 last[curr] = this.attr(curr);
                 return last;
             }, {});
-        } else if(typeof attr === 'object' && attr.constructor === Object) {
+        }
+        else if(typeof attr === 'object' && attr.constructor === Object) {
             // apply every attribute individually if an object is passed
             for(val in attr) this.attr(val, attr[val]);
-        } else if(val === null) {
+        }
+        else if(val === null) {
             // remove value
             this.node.removeAttribute(attr);
-        } else if(val == null) {
+        }
+        else if(val == null) {
             // act as a getter if the first and only argument is not an object
             val = this.node.getAttribute(attr);
             return val == null ? attrs[attr] : isNumber.test(val) ? parseFloat(val) : val;
-        } else {
+        }
+        else {
             // Loop through hooks and execute them to convert value
             val = hooks.reduce((_val, hook) => {
                 return hook(attr, _val, this);
@@ -2352,25 +2386,28 @@ export const Svg = (function () {
 
             if(typeof val === 'number') {
                 val = new SVGNumber(val);
-            } else if(Color.isColor(val)) {
+            }
+            else if(Color.isColor(val)) {
                 // ensure full hex color
                 val = new Color(val);
-            } else if(val.constructor === Array) {
+            }
+            else if(val.constructor === Array) {
                 // Check for plain arrays and parse array values
                 val = new SVGArray(val);
             } // if the passed attribute is leading...
-
 
             if(attr === 'leading') {
                 // ... call the leading method instead
                 if(this.leading) {
                     this.leading(val);
                 }
-            } else {
+            }
+            else {
                 // set given attribute on node
-                typeof ns === 'string' ? this.node.setAttributeNS(ns, attr, val.toString()) : this.node.setAttribute(attr, val.toString());
+                typeof ns === 'string'
+                    ? this.node.setAttributeNS(ns, attr, val.toString())
+                    : this.node.setAttribute(attr, val.toString());
             } // rebuild if required
-
 
             if(this.rebuild && (attr === 'font-size' || attr === 'x')) {
                 this.rebuild();
@@ -2391,7 +2428,6 @@ export const Svg = (function () {
             }
         } // Add given element at a position
 
-
         add(element, i) {
             element = makeInstance(element); // If non-root svg nodes are added we have to remove their namespaces
 
@@ -2401,25 +2437,25 @@ export const Svg = (function () {
 
             if(i == null) {
                 this.node.appendChild(element.node);
-            } else if(element.node !== this.node.childNodes[i]) {
+            }
+            else if(element.node !== this.node.childNodes[i]) {
                 this.node.insertBefore(element.node, this.node.childNodes[i]);
             }
 
             return this;
         } // Add element to given container and return self
 
-
         addTo(parent, i) {
             return makeInstance(parent).put(this, i);
         } // Returns all child elements
 
-
         children() {
-            return new List(map(this.node.children, function (node) {
-                return adopt(node);
-            }));
+            return new List(
+                map(this.node.children, function (node) {
+                    return adopt(node);
+                }),
+            );
         } // Remove all elements in this container
-
 
         clear() {
             // remove children
@@ -2429,7 +2465,6 @@ export const Svg = (function () {
 
             return this;
         } // Clone element
-
 
         clone(deep = true, assignNewIds = true) {
             // write dom data to the dom so the clone can pickup the data
@@ -2444,7 +2479,6 @@ export const Svg = (function () {
 
             return new this.constructor(nodeClone);
         } // Iterates over all children and invokes a given block
-
 
         each(block, deep) {
             const children = this.children();
@@ -2465,11 +2499,9 @@ export const Svg = (function () {
             return this.put(new Dom(create(nodeName), attrs));
         } // Get first child
 
-
         first() {
             return adopt(this.node.firstChild);
         } // Get a element at the given index
-
 
         get(i) {
             return adopt(this.node.childNodes[i]);
@@ -2483,7 +2515,6 @@ export const Svg = (function () {
             return this.node;
         } // Checks if the given element is a child
 
-
         has(element) {
             return this.index(element) >= 0;
         }
@@ -2492,34 +2523,35 @@ export const Svg = (function () {
             return this.xml(htmlOrFn, outerHTML, html);
         } // Get / set id
 
-
         id(id) {
             // generate new id if no id set
             if(typeof id === 'undefined' && !this.node.id) {
                 this.node.id = eid(this.type);
             } // don't set directly with this.node.id to make `null` work correctly
 
-
             return this.attr('id', id);
         } // Gets index of given element
-
 
         index(element) {
             return [].slice.call(this.node.childNodes).indexOf(element.node);
         } // Get the last child
 
-
         last() {
             return adopt(this.node.lastChild);
         } // matches the element vs a css selector
 
-
         matches(selector) {
             const el = this.node;
-            const matcher = el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector || null;
+            const matcher =
+                el.matches ||
+                el.matchesSelector ||
+                el.msMatchesSelector ||
+                el.mozMatchesSelector ||
+                el.webkitMatchesSelector ||
+                el.oMatchesSelector ||
+                null;
             return matcher && matcher.call(el, selector);
         } // Returns the parent element instance
-
 
         parent(type) {
             let parent = this; // check for parent
@@ -2531,11 +2563,10 @@ export const Svg = (function () {
 
             do {
                 if(typeof type === 'string' ? parent.matches(type) : parent instanceof type) return parent;
-            } while(parent = adopt(parent.node.parentNode));
+            } while((parent = adopt(parent.node.parentNode)));
 
             return parent;
         } // Basically does the same as `add()` but returns the added element instead
-
 
         put(element, i) {
             element = makeInstance(element);
@@ -2543,11 +2574,9 @@ export const Svg = (function () {
             return element;
         } // Add element to given container and return container
 
-
         putIn(parent, i) {
             return makeInstance(parent).add(this, i);
         } // Remove element
-
 
         remove() {
             if(this.parent()) {
@@ -2557,12 +2586,10 @@ export const Svg = (function () {
             return this;
         } // Remove a given child
 
-
         removeElement(element) {
             this.node.removeChild(element.node);
             return this;
         } // Replace this with element
-
 
         replace(element) {
             element = makeInstance(element);
@@ -2588,11 +2615,9 @@ export const Svg = (function () {
             return this;
         } // Import / Export raw svg
 
-
         svg(svgOrFn, outerSVG) {
             return this.xml(svgOrFn, outerSVG, svg);
         } // Return id on string conversion
-
 
         toString() {
             return this.id();
@@ -2615,7 +2640,6 @@ export const Svg = (function () {
             return parent.put(node, position).put(this);
         } // write svgjs data to the dom
 
-
         writeDataToDom() {
             // dump variables recursively
             this.each(function () {
@@ -2624,14 +2648,12 @@ export const Svg = (function () {
             return this;
         } // Import / Export raw svg
 
-
         xml(xmlOrFn, outerXML, ns) {
             if(typeof xmlOrFn === 'boolean') {
                 ns = outerXML;
                 outerXML = xmlOrFn;
                 xmlOrFn = null;
             } // act as getter if no svg string is given
-
 
             if(xmlOrFn == null || typeof xmlOrFn === 'function') {
                 // The default for exports is, that the outerNode is included
@@ -2650,26 +2672,23 @@ export const Svg = (function () {
                         if(result === false) return '';
                     } // Deep loop through all children and apply modifier
 
-
                     current.each(function () {
                         const result = xmlOrFn(this);
 
                         const _this = result || this; // If modifier returns false, discard node
 
-
                         if(result === false) {
                             this.remove(); // If modifier returns new node, use it
-                        } else if(result && this !== _this) {
+                        }
+                        else if(result && this !== _this) {
                             this.replace(_this);
                         }
                     }, true);
                 } // Return outer or inner content
 
-
                 return outerXML ? current.node.outerHTML : current.node.innerHTML;
             } // Act as setter if we got a string
             // The default for import is, that the current node is not replaced
-
 
             outerXML = outerXML == null ? false : outerXML; // Create temporary holder
 
@@ -2678,7 +2697,7 @@ export const Svg = (function () {
 
             well.innerHTML = xmlOrFn; // Transplant nodes into the fragment
 
-            for(let len = well.children.length; len--;) {
+            for(let len = well.children.length; len--; ) {
                 fragment.appendChild(well.firstElementChild);
             }
 
@@ -2686,12 +2705,11 @@ export const Svg = (function () {
 
             return outerXML ? this.replace(fragment) && parent : this.add(fragment);
         }
-
     }
     extend(Dom, {
         attr,
         find,
-        findOne
+        findOne,
     });
     register(Dom, 'Dom');
 
@@ -2709,37 +2727,30 @@ export const Svg = (function () {
             }
         } // Move element by its center
 
-
         center(x, y) {
             return this.cx(x).cy(y);
         } // Move by center over x-axis
-
 
         cx(x) {
             return x == null ? this.x() + this.width() / 2 : this.x(x - this.width() / 2);
         } // Move by center over y-axis
 
-
         cy(y) {
             return y == null ? this.y() + this.height() / 2 : this.y(y - this.height() / 2);
         } // Get defs
-
 
         defs() {
             const root = this.root();
             return root && root.defs();
         } // Relative move over x and y axes
 
-
         dmove(x, y) {
             return this.dx(x).dy(y);
         } // Relative move over x axis
 
-
         dx(x = 0) {
             return this.x(new SVGNumber(x).plus(this.x()));
         } // Relative move over y axis
-
 
         dy(y = 0) {
             return this.y(new SVGNumber(y).plus(this.y()));
@@ -2749,16 +2760,13 @@ export const Svg = (function () {
             return this;
         } // Set height of element
 
-
         height(height) {
             return this.attr('height', height);
         } // Move element to given x and y values
 
-
         move(x, y) {
             return this.x(x).y(y);
         } // return array of all ancestors of given type up to the root svg
-
 
         parents(until = this.root()) {
             const isSelector = typeof until === 'string';
@@ -2770,7 +2778,11 @@ export const Svg = (function () {
             const parents = new List();
             let parent = this;
 
-            while((parent = parent.parent()) && parent.node !== globals.document && parent.nodeName !== '#document-fragment') {
+            while(
+                (parent = parent.parent()) &&
+                parent.node !== globals.document &&
+                parent.nodeName !== '#document-fragment'
+            ) {
                 parents.push(parent);
 
                 if(!isSelector && parent.node === until.node) {
@@ -2790,7 +2802,6 @@ export const Svg = (function () {
             return parents;
         } // Get referenced element form attribute value
 
-
         reference(attr) {
             attr = this.attr(attr);
             if(!attr) return null;
@@ -2798,29 +2809,24 @@ export const Svg = (function () {
             return m ? makeInstance(m[1]) : null;
         } // Get parent document
 
-
         root() {
             const p = this.parent(getClass(root));
             return p && p.root();
         } // set given data to the elements data property
-
 
         setData(o) {
             this.dom = o;
             return this;
         } // Set element size to given width and height
 
-
         size(width, height) {
             const p = proportionalSize(this, width, height);
             return this.width(new SVGNumber(p.width)).height(new SVGNumber(p.height));
         } // Set width of element
 
-
         width(width) {
             return this.attr('width', width);
         } // write svgjs data to the dom
-
 
         writeDataToDom() {
             // remove previously set data
@@ -2833,16 +2839,13 @@ export const Svg = (function () {
             return super.writeDataToDom();
         } // Move over x-axis
 
-
         x(x) {
             return this.attr('x', x);
         } // Move over y-axis
 
-
         y(y) {
             return this.attr('y', y);
         }
-
     }
     extend(Element, {
         bbox,
@@ -2850,7 +2853,7 @@ export const Svg = (function () {
         inside,
         point,
         ctm,
-        screenCTM
+        screenCTM,
     });
     register(Element, 'Element');
 
@@ -2859,9 +2862,8 @@ export const Svg = (function () {
         fill: ['color', 'opacity', 'rule'],
         prefix: function (t, a) {
             return a === 'color' ? t : t + '-' + a;
-        }
-    } // Add sugar for fill and stroke
-        ;
+        },
+    }; // Add sugar for fill and stroke
     ['fill', 'stroke'].forEach(function (m) {
         const extension = {};
         let i;
@@ -2873,7 +2875,8 @@ export const Svg = (function () {
 
             if(typeof o === 'string' || o instanceof Color || Color.isRgb(o) || o instanceof Element) {
                 this.attr(m, o);
-            } else {
+            }
+            else {
                 // set all attributes from sugar.fill and sugar.stroke list
                 for(i = sugar[m].length - 1; i >= 0; i--) {
                     if(o[sugar[m][i]] != null) {
@@ -2895,59 +2898,86 @@ export const Svg = (function () {
                 return new Matrix(this);
             } // Act as a setter, the user can pass a matrix or a set of numbers
 
-
             return this.attr('transform', new Matrix(mat, b, c, d, e, f));
         },
         // Map rotation to transform
         rotate: function (angle, cx, cy) {
-            return this.transform({
-                rotate: angle,
-                ox: cx,
-                oy: cy
-            }, true);
+            return this.transform(
+                {
+                    rotate: angle,
+                    ox: cx,
+                    oy: cy,
+                },
+                true,
+            );
         },
         // Map skew to transform
         skew: function (x, y, cx, cy) {
-            return arguments.length === 1 || arguments.length === 3 ? this.transform({
-                skew: x,
-                ox: y,
-                oy: cx
-            }, true) : this.transform({
-                skew: [x, y],
-                ox: cx,
-                oy: cy
-            }, true);
+            return arguments.length === 1 || arguments.length === 3
+                ? this.transform(
+                      {
+                          skew: x,
+                          ox: y,
+                          oy: cx,
+                      },
+                      true,
+                  )
+                : this.transform(
+                      {
+                          skew: [x, y],
+                          ox: cx,
+                          oy: cy,
+                      },
+                      true,
+                  );
         },
         shear: function (lam, cx, cy) {
-            return this.transform({
-                shear: lam,
-                ox: cx,
-                oy: cy
-            }, true);
+            return this.transform(
+                {
+                    shear: lam,
+                    ox: cx,
+                    oy: cy,
+                },
+                true,
+            );
         },
         // Map scale to transform
         scale: function (x, y, cx, cy) {
-            return arguments.length === 1 || arguments.length === 3 ? this.transform({
-                scale: x,
-                ox: y,
-                oy: cx
-            }, true) : this.transform({
-                scale: [x, y],
-                ox: cx,
-                oy: cy
-            }, true);
+            return arguments.length === 1 || arguments.length === 3
+                ? this.transform(
+                      {
+                          scale: x,
+                          ox: y,
+                          oy: cx,
+                      },
+                      true,
+                  )
+                : this.transform(
+                      {
+                          scale: [x, y],
+                          ox: cx,
+                          oy: cy,
+                      },
+                      true,
+                  );
         },
         // Map translate to transform
         translate: function (x, y) {
-            return this.transform({
-                translate: [x, y]
-            }, true);
+            return this.transform(
+                {
+                    translate: [x, y],
+                },
+                true,
+            );
         },
         // Map relative translations to transform
         relative: function (x, y) {
-            return this.transform({
-                relative: [x, y]
-            }, true);
+            return this.transform(
+                {
+                    relative: [x, y],
+                },
+                true,
+            );
         },
         // Map flip to transform
         flip: function (direction = 'both', origin = 'center') {
@@ -2956,22 +2986,25 @@ export const Svg = (function () {
                 direction = 'both';
             }
 
-            return this.transform({
-                flip: direction,
-                origin: origin
-            }, true);
+            return this.transform(
+                {
+                    flip: direction,
+                    origin: origin,
+                },
+                true,
+            );
         },
         // Opacity
         opacity: function (value) {
             return this.attr('opacity', value);
-        }
+        },
     });
     registerMethods('radius', {
         // Add x and y radius
         radius: function (x, y = x) {
             const type = (this._element || this).type;
             return type === 'radialGradient' ? this.attr('r', new SVGNumber(x)) : this.rx(x).ry(y);
-        }
+        },
     });
     registerMethods('Path', {
         // Get path length
@@ -2981,7 +3014,7 @@ export const Svg = (function () {
         // Get point at length
         pointAt: function (length) {
             return new Point(this.node.getPointAtLength(length));
-        }
+        },
     });
     registerMethods(['Element', 'Runner'], {
         // Set font
@@ -2992,16 +3025,43 @@ export const Svg = (function () {
                 return this;
             }
 
-            return a === 'leading' ? this.leading(v) : a === 'anchor' ? this.attr('text-anchor', v) : a === 'size' || a === 'family' || a === 'weight' || a === 'stretch' || a === 'variant' || a === 'style' ? this.attr('font-' + a, v) : this.attr(a, v);
-        }
+            return a === 'leading'
+                ? this.leading(v)
+                : a === 'anchor'
+                  ? this.attr('text-anchor', v)
+                  : a === 'size' ||
+                      a === 'family' ||
+                      a === 'weight' ||
+                      a === 'stretch' ||
+                      a === 'variant' ||
+                      a === 'style'
+                    ? this.attr('font-' + a, v)
+                    : this.attr(a, v);
+        },
     }); // Add events to elements
 
-    const methods = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout', 'mousemove', 'mouseenter', 'mouseleave', 'touchstart', 'touchmove', 'touchleave', 'touchend', 'touchcancel'].reduce(function (last, event) {
+    const methods = [
+        'click',
+        'dblclick',
+        'mousedown',
+        'mouseup',
+        'mouseover',
+        'mouseout',
+        'mousemove',
+        'mouseenter',
+        'mouseleave',
+        'touchstart',
+        'touchmove',
+        'touchleave',
+        'touchend',
+        'touchcancel',
+    ].reduce(function (last, event) {
         // add event to Element
         const fn = function (f) {
             if(f === null) {
                 this.off(event);
-            } else {
+            }
+            else {
                 this.on(event, f);
             }
 
@@ -3018,14 +3078,20 @@ export const Svg = (function () {
     } // merge the whole transformation chain into one matrix and returns it
 
     function matrixify() {
-        const matrix = (this.attr('transform') || '' // split transformations
-        ).split(transforms).slice(0, -1).map(function (str) {
-            // generate key => value pairs
-            const kv = str.trim().split('(');
-            return [kv[0], kv[1].split(delimiter).map(function (str) {
-                return parseFloat(str);
-            })];
-        }).reverse() // merge every transformation into one matrix
+        const matrix = (this.attr('transform') || '') // split transformations
+            .split(transforms)
+            .slice(0, -1)
+            .map(function (str) {
+                // generate key => value pairs
+                const kv = str.trim().split('(');
+                return [
+                    kv[0],
+                    kv[1].split(delimiter).map(function (str) {
+                        return parseFloat(str);
+                    }),
+                ];
+            })
+            .reverse() // merge every transformation into one matrix
             .reduce(function (matrix, transform) {
                 if(transform[0] === 'matrix') {
                     return matrix.lmultiply(Matrix.fromArray(transform[1]));
@@ -3059,10 +3125,9 @@ export const Svg = (function () {
             // Set the origin according to the defined transform
             o = {
                 ...o,
-                origin: getOrigin(o, this)
+                origin: getOrigin(o, this),
             };
         } // The user can pass a boolean, an Element or an Matrix or nothing
-
 
         const cleanRelative = relative === true ? this : relative || false;
         const result = new Matrix(cleanRelative).transform(o);
@@ -3073,7 +3138,7 @@ export const Svg = (function () {
         matrixify,
         toParent,
         toRoot,
-        transform
+        transform,
     });
 
     class Container extends Element {
@@ -3095,7 +3160,6 @@ export const Svg = (function () {
             });
             return this.remove();
         }
-
     }
     register(Container, 'Container');
 
@@ -3111,11 +3175,10 @@ export const Svg = (function () {
         ungroup() {
             return this;
         }
-
     }
     register(Defs, 'Defs');
 
-    class Shape extends Element { }
+    class Shape extends Element {}
     register(Shape, 'Shape');
 
     function rx(rx) {
@@ -3159,7 +3222,7 @@ export const Svg = (function () {
         cx: cx$1,
         cy: cy$1,
         width: width$2,
-        height: height$2
+        height: height$2,
     };
 
     class Ellipse extends Shape {
@@ -3171,14 +3234,13 @@ export const Svg = (function () {
             const p = proportionalSize(this, width, height);
             return this.rx(new SVGNumber(p.width).divide(2)).ry(new SVGNumber(p.height).divide(2));
         }
-
     }
     extend(Ellipse, circled);
     registerMethods('Container', {
         // Create an ellipse
         ellipse: wrapWithAttrCheck(function (width = 0, height = width) {
             return this.put(new Ellipse()).size(width, height).move(0, 0);
-        })
+        }),
     });
     register(Ellipse, 'Ellipse');
 
@@ -3186,7 +3248,6 @@ export const Svg = (function () {
         constructor(node = globals.document.createDocumentFragment()) {
             super(node);
         } // Import / Export raw xml
-
 
         xml(xmlOrFn, outerXML, ns) {
             if(typeof xmlOrFn === 'boolean') {
@@ -3196,51 +3257,51 @@ export const Svg = (function () {
             } // because this is a fragment we have to put all elements into a wrapper first
             // before we can get the innerXML from it
 
-
             if(xmlOrFn == null || typeof xmlOrFn === 'function') {
                 const wrapper = new Dom(create('wrapper', ns));
                 wrapper.add(this.node.cloneNode(true));
                 return wrapper.xml(false, ns);
             } // Act as setter if we got a string
 
-
             return super.xml(xmlOrFn, false, ns);
         }
-
     }
 
     register(Fragment, 'Fragment');
 
     function from(x, y) {
-        return (this._element || this).type === 'radialGradient' ? this.attr({
-            fx: new SVGNumber(x),
-            fy: new SVGNumber(y)
-        }) : this.attr({
-            x1: new SVGNumber(x),
-            y1: new SVGNumber(y)
-        });
+        return (this._element || this).type === 'radialGradient'
+            ? this.attr({
+                  fx: new SVGNumber(x),
+                  fy: new SVGNumber(y),
+              })
+            : this.attr({
+                  x1: new SVGNumber(x),
+                  y1: new SVGNumber(y),
+              });
     }
     function to(x, y) {
-        return (this._element || this).type === 'radialGradient' ? this.attr({
-            cx: new SVGNumber(x),
-            cy: new SVGNumber(y)
-        }) : this.attr({
-            x2: new SVGNumber(x),
-            y2: new SVGNumber(y)
-        });
+        return (this._element || this).type === 'radialGradient'
+            ? this.attr({
+                  cx: new SVGNumber(x),
+                  cy: new SVGNumber(y),
+              })
+            : this.attr({
+                  x2: new SVGNumber(x),
+                  y2: new SVGNumber(y),
+              });
     }
 
     var gradiented = {
         __proto__: null,
         from: from,
-        to: to
+        to: to,
     };
 
     class Gradient extends Container {
         constructor(type, attrs) {
             super(nodeOrNew(type + 'Gradient', typeof type === 'string' ? null : type), attrs);
         } // custom attr to handle transform
-
 
         attr(a, b, c) {
             if(a === 'transform') a = 'gradientTransform';
@@ -3255,11 +3316,9 @@ export const Svg = (function () {
             return baseFind('svg [fill*=' + this.id() + ']');
         } // Alias string conversion to fill
 
-
         toString() {
             return this.url();
         } // Update gradient
-
 
         update(block) {
             // remove all stops
@@ -3272,11 +3331,9 @@ export const Svg = (function () {
             return this;
         } // Return the fill id
 
-
         url() {
             return 'url(#' + this.id() + ')';
         }
-
     }
     extend(Gradient, gradiented);
     registerMethods({
@@ -3284,15 +3341,14 @@ export const Svg = (function () {
             // Create gradient element in defs
             gradient(...args) {
                 return this.defs().gradient(...args);
-            }
-
+            },
         },
         // define gradient
         Defs: {
             gradient: wrapWithAttrCheck(function (type, block) {
                 return this.put(new Gradient(type)).update(block);
-            })
-        }
+            }),
+        },
     });
     register(Gradient, 'Gradient');
 
@@ -3301,7 +3357,6 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('pattern', node), attrs);
         } // custom attr to handle transform
-
 
         attr(a, b, c) {
             if(a === 'transform') a = 'patternTransform';
@@ -3316,11 +3371,9 @@ export const Svg = (function () {
             return baseFind('svg [fill*=' + this.id() + ']');
         } // Alias string conversion to fill
 
-
         toString() {
             return this.url();
         } // Update pattern by rebuilding
-
 
         update(block) {
             // remove content
@@ -3333,19 +3386,16 @@ export const Svg = (function () {
             return this;
         } // Return the fill id
 
-
         url() {
             return 'url(#' + this.id() + ')';
         }
-
     }
     registerMethods({
         Container: {
             // Create pattern element in defs
             pattern(...args) {
                 return this.defs().pattern(...args);
-            }
-
+            },
         },
         Defs: {
             pattern: wrapWithAttrCheck(function (width, height, block) {
@@ -3354,10 +3404,10 @@ export const Svg = (function () {
                     y: 0,
                     width: width,
                     height: height,
-                    patternUnits: 'userSpaceOnUse'
+                    patternUnits: 'userSpaceOnUse',
                 });
-            })
-        }
+            }),
+        },
     });
     register(Pattern, 'Pattern');
 
@@ -3366,35 +3416,38 @@ export const Svg = (function () {
             super(nodeOrNew('image', node), attrs);
         } // (re)load image
 
-
         load(url, callback) {
             if(!url) return this;
             const img = new globals.window.Image();
-            on(img, 'load', function (e) {
-                const p = this.parent(Pattern); // ensure image size
+            on(
+                img,
+                'load',
+                function (e) {
+                    const p = this.parent(Pattern); // ensure image size
 
-                if(this.width() === 0 && this.height() === 0) {
-                    this.size(img.width, img.height);
-                }
-
-                if(p instanceof Pattern) {
-                    // ensure pattern size if not set
-                    if(p.width() === 0 && p.height() === 0) {
-                        p.size(this.width(), this.height());
+                    if(this.width() === 0 && this.height() === 0) {
+                        this.size(img.width, img.height);
                     }
-                }
 
-                if(typeof callback === 'function') {
-                    callback.call(this, e);
-                }
-            }, this);
+                    if(p instanceof Pattern) {
+                        // ensure pattern size if not set
+                        if(p.width() === 0 && p.height() === 0) {
+                            p.size(this.width(), this.height());
+                        }
+                    }
+
+                    if(typeof callback === 'function') {
+                        callback.call(this, e);
+                    }
+                },
+                this,
+            );
             on(img, 'load error', function () {
                 // dont forget to unbind memory leaking events
                 off(img);
             });
-            return this.attr('href', img.src = url, xlink);
+            return this.attr('href', (img.src = url), xlink);
         }
-
     }
     registerAttrHook(function (attr, val, _this) {
         // convert image fill and stroke to patterns
@@ -3405,9 +3458,12 @@ export const Svg = (function () {
         }
 
         if(val instanceof Image) {
-            val = _this.root().defs().pattern(0, 0, pattern => {
-                pattern.add(val);
-            });
+            val = _this
+                .root()
+                .defs()
+                .pattern(0, 0, (pattern) => {
+                    pattern.add(val);
+                });
         }
 
         return val;
@@ -3417,8 +3473,8 @@ export const Svg = (function () {
             // create image element, load image and set its size
             image: wrapWithAttrCheck(function (source, callback) {
                 return this.put(new Image()).size(0, 0).load(source, callback);
-            })
-        }
+            }),
+        },
     });
     register(Image, 'Image');
 
@@ -3438,7 +3494,6 @@ export const Svg = (function () {
             return new Box(minX, minY, maxX - minX, maxY - minY);
         } // Move point string
 
-
         move(x, y) {
             const box = this.bbox(); // get relative offset
 
@@ -3454,19 +3509,18 @@ export const Svg = (function () {
             return this;
         } // Parse point string and flat array
 
-
         parse(array = [0, 0]) {
             const points = []; // if it is an array, we flatten it and therefore clone it to 1 depths
 
             if(array instanceof Array) {
                 array = Array.prototype.concat.apply([], array);
-            } else {
+            }
+            else {
                 // Else, it is considered as a string
                 // parse points
                 array = array.trim().split(delimiter).map(parseFloat);
             } // validate points - https://svgwg.org/svg2-draft/shapes.html#DataTypePoints
             // Odd number of coordinates is an error. In such cases, drop the last odd coordinate.
-
 
             if(array.length % 2 !== 0) array.pop(); // wrap points in two-tuples
 
@@ -3477,29 +3531,26 @@ export const Svg = (function () {
             return points;
         } // Resize poly string
 
-
         size(width, height) {
             let i;
             const box = this.bbox(); // recalculate position of all points according to new size
 
             for(i = this.length - 1; i >= 0; i--) {
-                if(box.width) this[i][0] = (this[i][0] - box.x) * width / box.width + box.x;
-                if(box.height) this[i][1] = (this[i][1] - box.y) * height / box.height + box.y;
+                if(box.width) this[i][0] = ((this[i][0] - box.x) * width) / box.width + box.x;
+                if(box.height) this[i][1] = ((this[i][1] - box.y) * height) / box.height + box.y;
             }
 
             return this;
         } // Convert array to line object
-
 
         toLine() {
             return {
                 x1: this[0][0],
                 y1: this[0][1],
                 x2: this[1][0],
-                y2: this[1][1]
+                y2: this[1][1],
             };
         } // Convert array to string
-
 
         toString() {
             const array = []; // convert to a poly point string
@@ -3515,13 +3566,12 @@ export const Svg = (function () {
             return this.clone().transformO(m);
         } // transform points with matrix (similar to Point.transform)
 
-
         transformO(m) {
             if(!Matrix.isMatrixLike(m)) {
                 m = new Matrix(m);
             }
 
-            for(let i = this.length; i--;) {
+            for(let i = this.length; i--; ) {
                 // Perform the matrix multiplication
                 const [x, y] = this[i];
                 this[i][0] = m.a * x + m.c * y + m.e;
@@ -3530,7 +3580,6 @@ export const Svg = (function () {
 
             return this;
         }
-
     }
 
     const MorphArray = PointArray; // Move by left top corner over x-axis
@@ -3559,7 +3608,7 @@ export const Svg = (function () {
         x: x$2,
         y: y$2,
         width: width$1,
-        height: height$1
+        height: height$1,
     };
 
     class Line extends Shape {
@@ -3568,40 +3617,40 @@ export const Svg = (function () {
             super(nodeOrNew('line', node), attrs);
         } // Get array
 
-
         array() {
-            return new PointArray([[this.attr('x1'), this.attr('y1')], [this.attr('x2'), this.attr('y2')]]);
+            return new PointArray([
+                [this.attr('x1'), this.attr('y1')],
+                [this.attr('x2'), this.attr('y2')],
+            ]);
         } // Move by left top corner
-
 
         move(x, y) {
             return this.attr(this.array().move(x, y).toLine());
         } // Overwrite native plot() method
 
-
         plot(x1, y1, x2, y2) {
             if(x1 == null) {
                 return this.array();
-            } else if(typeof y1 !== 'undefined') {
+            }
+            else if(typeof y1 !== 'undefined') {
                 x1 = {
                     x1,
                     y1,
                     x2,
-                    y2
+                    y2,
                 };
-            } else {
+            }
+            else {
                 x1 = new PointArray(x1).toLine();
             }
 
             return this.attr(x1);
         } // Set element size to given width and height
 
-
         size(width, height) {
             const p = proportionalSize(this, width, height);
             return this.attr(this.array().size(p.width, p.height).toLine());
         }
-
     }
     extend(Line, pointed);
     registerMethods({
@@ -3611,8 +3660,8 @@ export const Svg = (function () {
                 // make sure plot is called as a setter
                 // x1 is not necessarily a number, it can also be an array, a string and a PointArray
                 return Line.prototype.plot.apply(this.put(new Line()), args[0] != null ? args : [0, 0, 0, 0]);
-            })
-        }
+            }),
+        },
     });
     register(Line, 'Line');
 
@@ -3622,7 +3671,6 @@ export const Svg = (function () {
             super(nodeOrNew('marker', node), attrs);
         } // Set height of element
 
-
         height(height) {
             return this.attr('markerHeight', height);
         }
@@ -3631,16 +3679,13 @@ export const Svg = (function () {
             return this.attr('orient', orient);
         } // Set marker refX and refY
 
-
         ref(x, y) {
             return this.attr('refX', x).attr('refY', y);
         } // Return the fill id
 
-
         toString() {
             return 'url(#' + this.id() + ')';
         } // Update marker
-
 
         update(block) {
             // remove all content
@@ -3653,26 +3698,28 @@ export const Svg = (function () {
             return this;
         } // Set width of element
 
-
         width(width) {
             return this.attr('markerWidth', width);
         }
-
     }
     registerMethods({
         Container: {
             marker(...args) {
                 // Create marker element in defs
                 return this.defs().marker(...args);
-            }
-
+            },
         },
         Defs: {
             // Create marker
             marker: wrapWithAttrCheck(function (width, height, block) {
                 // Set default viewbox to match the width and height, set ref to cx and cy and set orient to auto
-                return this.put(new Marker()).size(width, height).ref(width / 2, height / 2).viewbox(0, 0, width, height).attr('orient', 'auto').update(block);
-            })
+                return this.put(new Marker())
+                    .size(width, height)
+                    .ref(width / 2, height / 2)
+                    .viewbox(0, 0, width, height)
+                    .attr('orient', 'auto')
+                    .update(block);
+            }),
         },
         marker: {
             // Create and attach markers
@@ -3684,9 +3731,8 @@ export const Svg = (function () {
 
                 marker = arguments[1] instanceof Marker ? arguments[1] : this.defs().marker(width, height, block);
                 return this.attr(attr, marker);
-            }
-
-        }
+            },
+        },
     });
     register(Marker, 'Marker');
 
@@ -3713,31 +3759,37 @@ export const Svg = (function () {
             return -Math.cos(pos * Math.PI) / 2 + 0.5;
         },
         '>': function (pos) {
-            return Math.sin(pos * Math.PI / 2);
+            return Math.sin((pos * Math.PI) / 2);
         },
         '<': function (pos) {
-            return -Math.cos(pos * Math.PI / 2) + 1;
+            return -Math.cos((pos * Math.PI) / 2) + 1;
         },
         bezier: function (x1, y1, x2, y2) {
             // see https://www.w3.org/TR/css-easing-1/#cubic-bezier-algo
             return function (t) {
                 if(t < 0) {
                     if(x1 > 0) {
-                        return y1 / x1 * t;
-                    } else if(x2 > 0) {
-                        return y2 / x2 * t;
-                    } else {
+                        return (y1 / x1) * t;
+                    }
+                    else if(x2 > 0) {
+                        return (y2 / x2) * t;
+                    }
+                    else {
                         return 0;
                     }
-                } else if(t > 1) {
+                }
+                else if(t > 1) {
                     if(x2 < 1) {
-                        return (1 - y2) / (1 - x2) * t + (y2 - x2) / (1 - x2);
-                    } else if(x1 < 1) {
-                        return (1 - y1) / (1 - x1) * t + (y1 - x1) / (1 - x1);
-                    } else {
+                        return ((1 - y2) / (1 - x2)) * t + (y2 - x2) / (1 - x2);
+                    }
+                    else if(x1 < 1) {
+                        return ((1 - y1) / (1 - x1)) * t + (y1 - x1) / (1 - x1);
+                    }
+                    else {
                         return 1;
                     }
-                } else {
+                }
+                else {
                     return 3 * t * (1 - t) ** 2 * y1 + 3 * t ** 2 * (1 - t) * y2 + t ** 3;
                 }
             };
@@ -3750,15 +3802,15 @@ export const Svg = (function () {
 
             if(stepPosition === 'none') {
                 --jumps;
-            } else if(stepPosition === 'both') {
+            }
+            else if(stepPosition === 'both') {
                 ++jumps;
             } // The beforeFlag is essentially useless
-
 
             return (t, beforeFlag = false) => {
                 // Step is called currentStep in referenced url
                 let step = Math.floor(t * steps);
-                const jumping = t * step % 1 === 0;
+                const jumping = (t * step) % 1 === 0;
 
                 if(stepPosition === 'start' || stepPosition === 'both') {
                     ++step;
@@ -3778,13 +3830,12 @@ export const Svg = (function () {
 
                 return step / jumps;
             };
-        }
+        },
     };
     class Stepper {
         done() {
             return false;
         }
-
     }
     /***
     Easing Functions
@@ -3804,7 +3855,6 @@ export const Svg = (function () {
 
             return from + (to - from) * this.ease(pos);
         }
-
     }
     /***
     Controller Types
@@ -3824,7 +3874,6 @@ export const Svg = (function () {
         step(current, target, dt, c) {
             return this.stepper(current, target, dt, c);
         }
-
     }
 
     function recalculate() {
@@ -3859,18 +3908,17 @@ export const Svg = (function () {
             const velocity = c.velocity || 0; // Apply the control to get the new position and store it
 
             const acceleration = -this.d * velocity - this.k * (current - target);
-            const newPosition = current + velocity * dt + acceleration * dt * dt / 2; // Store the velocity
+            const newPosition = current + velocity * dt + (acceleration * dt * dt) / 2; // Store the velocity
 
             c.velocity = velocity + acceleration * dt; // Figure out if we have converged, and if so, pass the value
 
             c.done = Math.abs(target - newPosition) + Math.abs(velocity) < 0.002;
             return c.done ? target : newPosition;
         }
-
     }
     extend(Spring, {
         duration: makeSetterGetter('_duration', recalculate),
-        overshoot: makeSetterGetter('_overshoot', recalculate)
+        overshoot: makeSetterGetter('_overshoot', recalculate),
     });
     class PID extends Controller {
         constructor(p = 0.1, i = 0.01, d = 0, windup = 1000) {
@@ -3897,13 +3945,12 @@ export const Svg = (function () {
             c.done = Math.abs(p) < 0.001;
             return c.done ? target : current + (this.P * p + this.I * i + this.D * d);
         }
-
     }
     extend(PID, {
         windup: makeSetterGetter('_windup'),
         p: makeSetterGetter('P'),
         i: makeSetterGetter('I'),
-        d: makeSetterGetter('D')
+        d: makeSetterGetter('D'),
     });
 
     const segmentParameters = {
@@ -3916,7 +3963,7 @@ export const Svg = (function () {
         Q: 4,
         T: 2,
         A: 7,
-        Z: 0
+        Z: 0,
     };
     const pathHandlers = {
         M: function (c, p, p0) {
@@ -3966,24 +4013,27 @@ export const Svg = (function () {
             p.x = c[5];
             p.y = c[6];
             return ['A', c[0], c[1], c[2], c[3], c[4], c[5], c[6]];
-        }
+        },
     };
     const mlhvqtcsaz = 'mlhvqtcsaz'.split('');
 
     for(let i = 0, il = mlhvqtcsaz.length; i < il; ++i) {
-        pathHandlers[mlhvqtcsaz[i]] = function (i) {
+        pathHandlers[mlhvqtcsaz[i]] = (function (i) {
             return function (c, p, p0) {
-                if(i === 'H') c[0] = c[0] + p.x; else if(i === 'V') c[0] = c[0] + p.y; else if(i === 'A') {
+                if(i === 'H') c[0] = c[0] + p.x;
+                else if(i === 'V') c[0] = c[0] + p.y;
+                else if(i === 'A') {
                     c[5] = c[5] + p.x;
                     c[6] = c[6] + p.y;
-                } else {
+                }
+                else {
                     for(let j = 0, jl = c.length; j < jl; ++j) {
                         c[j] = c[j] + (j % 2 ? p.y : p.x);
                     }
                 }
                 return pathHandlers[i](c, p, p0);
             };
-        }(mlhvqtcsaz[i].toUpperCase());
+        })(mlhvqtcsaz[i].toUpperCase());
     }
 
     function makeAbsolut(parser) {
@@ -3992,7 +4042,9 @@ export const Svg = (function () {
     }
 
     function segmentComplete(parser) {
-        return parser.segment.length && parser.segment.length - 1 === segmentParameters[parser.segment[0].toUpperCase()];
+        return (
+            parser.segment.length && parser.segment.length - 1 === segmentParameters[parser.segment[0].toUpperCase()]
+        );
     }
 
     function startNewSegment(parser, token) {
@@ -4001,11 +4053,12 @@ export const Svg = (function () {
 
         if(pathLetter) {
             parser.segment = [token];
-        } else {
+        }
+        else {
             const lastCommand = parser.lastCommand;
             const small = lastCommand.toLowerCase();
             const isSmall = lastCommand === small;
-            parser.segment = [small === 'm' ? isSmall ? 'l' : 'L' : lastCommand];
+            parser.segment = [small === 'm' ? (isSmall ? 'l' : 'L') : lastCommand];
         }
 
         parser.inSegment = true;
@@ -4061,10 +4114,10 @@ export const Svg = (function () {
             hasExponent: false,
             absolute: toAbsolute,
             p0: new Point(),
-            p: new Point()
+            p: new Point(),
         };
 
-        while(parser.lastToken = token, token = d.charAt(index++)) {
+        while(((parser.lastToken = token), (token = d.charAt(index++)))) {
             if(!parser.inSegment) {
                 if(startNewSegment(parser, token)) {
                     continue;
@@ -4126,9 +4179,11 @@ export const Svg = (function () {
             if(isPathLetter.test(token)) {
                 if(parser.inNumber) {
                     finalizeNumber(parser, false);
-                } else if(!segmentComplete(parser)) {
+                }
+                else if(!segmentComplete(parser)) {
                     throw new Error('parser Error');
-                } else {
+                }
+                else {
                     finalizeSegment(parser);
                 }
 
@@ -4192,7 +4247,6 @@ export const Svg = (function () {
             return new Box(parser.nodes.path.getBBox());
         } // Move path string
 
-
         move(x, y) {
             // get bounding box of current situation
             const box = this.bbox(); // get relative offset
@@ -4208,11 +4262,14 @@ export const Svg = (function () {
                     if(l === 'M' || l === 'L' || l === 'T') {
                         this[i][1] += x;
                         this[i][2] += y;
-                    } else if(l === 'H') {
+                    }
+                    else if(l === 'H') {
                         this[i][1] += x;
-                    } else if(l === 'V') {
+                    }
+                    else if(l === 'V') {
                         this[i][1] += y;
-                    } else if(l === 'C' || l === 'S' || l === 'Q') {
+                    }
+                    else if(l === 'C' || l === 'S' || l === 'Q') {
                         this[i][1] += x;
                         this[i][2] += y;
                         this[i][3] += x;
@@ -4222,7 +4279,8 @@ export const Svg = (function () {
                             this[i][5] += x;
                             this[i][6] += y;
                         }
-                    } else if(l === 'A') {
+                    }
+                    else if(l === 'A') {
                         this[i][6] += x;
                         this[i][7] += y;
                     }
@@ -4232,7 +4290,6 @@ export const Svg = (function () {
             return this;
         } // Absolutize and parse path to array
 
-
         parse(d = 'M0 0') {
             if(Array.isArray(d)) {
                 d = Array.prototype.concat.apply([], d).toString();
@@ -4240,7 +4297,6 @@ export const Svg = (function () {
 
             return pathParser(d);
         } // Resize path string
-
 
         size(width, height) {
             // get bounding box of current situation
@@ -4255,64 +4311,74 @@ export const Svg = (function () {
                 l = this[i][0];
 
                 if(l === 'M' || l === 'L' || l === 'T') {
-                    this[i][1] = (this[i][1] - box.x) * width / box.width + box.x;
-                    this[i][2] = (this[i][2] - box.y) * height / box.height + box.y;
-                } else if(l === 'H') {
-                    this[i][1] = (this[i][1] - box.x) * width / box.width + box.x;
-                } else if(l === 'V') {
-                    this[i][1] = (this[i][1] - box.y) * height / box.height + box.y;
-                } else if(l === 'C' || l === 'S' || l === 'Q') {
-                    this[i][1] = (this[i][1] - box.x) * width / box.width + box.x;
-                    this[i][2] = (this[i][2] - box.y) * height / box.height + box.y;
-                    this[i][3] = (this[i][3] - box.x) * width / box.width + box.x;
-                    this[i][4] = (this[i][4] - box.y) * height / box.height + box.y;
+                    this[i][1] = ((this[i][1] - box.x) * width) / box.width + box.x;
+                    this[i][2] = ((this[i][2] - box.y) * height) / box.height + box.y;
+                }
+                else if(l === 'H') {
+                    this[i][1] = ((this[i][1] - box.x) * width) / box.width + box.x;
+                }
+                else if(l === 'V') {
+                    this[i][1] = ((this[i][1] - box.y) * height) / box.height + box.y;
+                }
+                else if(l === 'C' || l === 'S' || l === 'Q') {
+                    this[i][1] = ((this[i][1] - box.x) * width) / box.width + box.x;
+                    this[i][2] = ((this[i][2] - box.y) * height) / box.height + box.y;
+                    this[i][3] = ((this[i][3] - box.x) * width) / box.width + box.x;
+                    this[i][4] = ((this[i][4] - box.y) * height) / box.height + box.y;
 
                     if(l === 'C') {
-                        this[i][5] = (this[i][5] - box.x) * width / box.width + box.x;
-                        this[i][6] = (this[i][6] - box.y) * height / box.height + box.y;
+                        this[i][5] = ((this[i][5] - box.x) * width) / box.width + box.x;
+                        this[i][6] = ((this[i][6] - box.y) * height) / box.height + box.y;
                     }
-                } else if(l === 'A') {
+                }
+                else if(l === 'A') {
                     // resize radii
-                    this[i][1] = this[i][1] * width / box.width;
-                    this[i][2] = this[i][2] * height / box.height; // move position values
+                    this[i][1] = (this[i][1] * width) / box.width;
+                    this[i][2] = (this[i][2] * height) / box.height; // move position values
 
-                    this[i][6] = (this[i][6] - box.x) * width / box.width + box.x;
-                    this[i][7] = (this[i][7] - box.y) * height / box.height + box.y;
+                    this[i][6] = ((this[i][6] - box.x) * width) / box.width + box.x;
+                    this[i][7] = ((this[i][7] - box.y) * height) / box.height + box.y;
                 }
             }
 
             return this;
         } // Convert array to string
 
-
         toString() {
             return arrayToString(this);
         }
-
     }
 
-    const getClassForType = value => {
+    const getClassForType = (value) => {
         const type = typeof value;
 
         if(type === 'number') {
             return SVGNumber;
-        } else if(type === 'string') {
+        }
+        else if(type === 'string') {
             if(Color.isColor(value)) {
                 return Color;
-            } else if(delimiter.test(value)) {
+            }
+            else if(delimiter.test(value)) {
                 return isPathLetter.test(value) ? PathArray : SVGArray;
-            } else if(numberAndUnit.test(value)) {
+            }
+            else if(numberAndUnit.test(value)) {
                 return SVGNumber;
-            } else {
+            }
+            else {
                 return NonMorphable;
             }
-        } else if(morphableTypes.indexOf(value.constructor) > -1) {
+        }
+        else if(morphableTypes.indexOf(value.constructor) > -1) {
             return value.constructor;
-        } else if(Array.isArray(value)) {
+        }
+        else if(Array.isArray(value)) {
             return SVGArray;
-        } else if(type === 'object') {
+        }
+        else if(type === 'object') {
             return ObjectBag;
-        } else {
+        }
+        else {
             return NonMorphable;
         }
     };
@@ -4369,7 +4435,6 @@ export const Svg = (function () {
                 return this._type;
             } // setter
 
-
             this._type = type;
             return this;
         }
@@ -4391,13 +4456,16 @@ export const Svg = (function () {
 
             result = result.toConsumable();
             this._morphObj = this._morphObj || new this._type();
-            this._context = this._context || Array.apply(null, Array(result.length)).map(Object).map(function (o) {
-                o.done = true;
-                return o;
-            });
+            this._context =
+                this._context ||
+                Array.apply(null, Array(result.length))
+                    .map(Object)
+                    .map(function (o) {
+                        o.done = true;
+                        return o;
+                    });
             return result;
         }
-
     }
     class NonMorphable {
         constructor(...args) {
@@ -4417,7 +4485,6 @@ export const Svg = (function () {
         valueOf() {
             return this.value;
         }
-
     }
     class TransformBag {
         constructor(...args) {
@@ -4434,7 +4501,7 @@ export const Svg = (function () {
                     translateX: obj[4],
                     translateY: obj[5],
                     originX: obj[6],
-                    originY: obj[7]
+                    originY: obj[7],
                 };
             }
 
@@ -4446,7 +4513,6 @@ export const Svg = (function () {
             const v = this;
             return [v.scaleX, v.scaleY, v.shear, v.rotate, v.translateX, v.translateY, v.originX, v.originY];
         }
-
     }
     TransformBag.defaults = {
         scaleX: 1,
@@ -4456,7 +4522,7 @@ export const Svg = (function () {
         translateX: 0,
         translateY: 0,
         originX: 0,
-        originY: 0
+        originY: 0,
     };
 
     const sortByKey = (a, b) => {
@@ -4488,7 +4554,6 @@ export const Svg = (function () {
                     return this;
                 } // The types differ, so we overwrite the new type with the old one
                 // And initialize it with the types default (e.g. black for color or 0 for number)
-
 
                 const defaultObject = new other[i + 1]().toArray(); // Than we fix the values array
 
@@ -4540,7 +4605,6 @@ export const Svg = (function () {
 
             return obj;
         }
-
     }
     const morphableTypes = [NonMorphable, TransformBag, ObjectBag];
     function registerMorphableType(type = []) {
@@ -4549,7 +4613,9 @@ export const Svg = (function () {
     function makeMorphable() {
         extend(morphableTypes, {
             to(val) {
-                return new Morphable().type(this.constructor).from(this.toArray()) // this.valueOf())
+                return new Morphable()
+                    .type(this.constructor)
+                    .from(this.toArray()) // this.valueOf())
                     .to(val);
             },
 
@@ -4568,8 +4634,7 @@ export const Svg = (function () {
                 };
 
                 return this.fromArray(from.map(mapper));
-            }
-
+            },
         });
     }
 
@@ -4579,53 +4644,45 @@ export const Svg = (function () {
             super(nodeOrNew('path', node), attrs);
         } // Get array
 
-
         array() {
             return this._array || (this._array = new PathArray(this.attr('d')));
         } // Clear array cache
-
 
         clear() {
             delete this._array;
             return this;
         } // Set height of element
 
-
         height(height) {
             return height == null ? this.bbox().height : this.size(this.bbox().width, height);
         } // Move by left top corner
-
 
         move(x, y) {
             return this.attr('d', this.array().move(x, y));
         } // Plot new path
 
-
         plot(d) {
-            return d == null ? this.array() : this.clear().attr('d', typeof d === 'string' ? d : this._array = new PathArray(d));
+            return d == null
+                ? this.array()
+                : this.clear().attr('d', typeof d === 'string' ? d : (this._array = new PathArray(d)));
         } // Set element size to given width and height
-
 
         size(width, height) {
             const p = proportionalSize(this, width, height);
             return this.attr('d', this.array().size(p.width, p.height));
         } // Set width of element
 
-
         width(width) {
             return width == null ? this.bbox().width : this.size(width, this.bbox().height);
         } // Move by left top corner over x-axis
-
 
         x(x) {
             return x == null ? this.bbox().x : this.move(x, this.bbox().y);
         } // Move by left top corner over y-axis
 
-
         y(y) {
             return y == null ? this.bbox().y : this.move(this.bbox().x, y);
         }
-
     } // Define morphable array
 
     Path.prototype.MorphArray = PathArray; // Add parent method
@@ -4636,8 +4693,8 @@ export const Svg = (function () {
             path: wrapWithAttrCheck(function (d) {
                 // make sure plot is called as a setter
                 return this.put(new Path()).plot(d || new PathArray());
-            })
-        }
+            }),
+        },
     });
     register(Path, 'Path');
 
@@ -4655,7 +4712,9 @@ export const Svg = (function () {
     } // Plot new path
 
     function plot(p) {
-        return p == null ? this.array() : this.clear().attr('points', typeof p === 'string' ? p : this._array = new PointArray(p));
+        return p == null
+            ? this.array()
+            : this.clear().attr('points', typeof p === 'string' ? p : (this._array = new PointArray(p)));
     } // Set element size to given width and height
 
     function size$1(width, height) {
@@ -4669,7 +4728,7 @@ export const Svg = (function () {
         clear: clear,
         move: move$2,
         plot: plot,
-        size: size$1
+        size: size$1,
     };
 
     class Polygon extends Shape {
@@ -4677,7 +4736,6 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('polygon', node), attrs);
         }
-
     }
     registerMethods({
         Container: {
@@ -4685,8 +4743,8 @@ export const Svg = (function () {
             polygon: wrapWithAttrCheck(function (p) {
                 // make sure plot is called as a setter
                 return this.put(new Polygon()).plot(p || new PointArray());
-            })
-        }
+            }),
+        },
     });
     extend(Polygon, pointed);
     extend(Polygon, poly);
@@ -4697,7 +4755,6 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('polyline', node), attrs);
         }
-
     }
     registerMethods({
         Container: {
@@ -4705,8 +4762,8 @@ export const Svg = (function () {
             polyline: wrapWithAttrCheck(function (p) {
                 // make sure plot is called as a setter
                 return this.put(new Polyline()).plot(p || new PointArray());
-            })
-        }
+            }),
+        },
     });
     extend(Polyline, pointed);
     extend(Polyline, poly);
@@ -4717,19 +4774,18 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('rect', node), attrs);
         }
-
     }
     extend(Rect, {
         rx,
-        ry
+        ry,
     });
     registerMethods({
         Container: {
             // Create a rect element
             rect: wrapWithAttrCheck(function (width, height) {
                 return this.put(new Rect()).size(width, height);
-            })
-        }
+            }),
+        },
     });
     register(Rect, 'Rect');
 
@@ -4739,11 +4795,9 @@ export const Svg = (function () {
             this._last = null;
         } // Shows us the first item in the list
 
-
         first() {
             return this._first && this._first.value;
         } // Shows us the last item in the list
-
 
         last() {
             return this._last && this._last.value;
@@ -4751,25 +4805,27 @@ export const Svg = (function () {
 
         push(value) {
             // An item stores an id and the provided value
-            const item = typeof value.next !== 'undefined' ? value : {
-                value: value,
-                next: null,
-                prev: null
-            }; // Deal with the queue being empty or populated
+            const item =
+                typeof value.next !== 'undefined'
+                    ? value
+                    : {
+                          value: value,
+                          next: null,
+                          prev: null,
+                      }; // Deal with the queue being empty or populated
 
             if(this._last) {
                 item.prev = this._last;
                 this._last.next = item;
                 this._last = item;
-            } else {
+            }
+            else {
                 this._last = item;
                 this._first = item;
             } // Return the current item
 
-
             return item;
         } // Removes the item that was returned from the push
-
 
         remove(item) {
             // Relink the previous item
@@ -4792,7 +4848,6 @@ export const Svg = (function () {
             this._last = this._first ? this._last : null;
             return remove.value;
         }
-
     }
 
     const Animator = {
@@ -4806,13 +4861,12 @@ export const Svg = (function () {
         frame(fn) {
             // Store the node
             const node = Animator.frames.push({
-                run: fn
+                run: fn,
             }); // Request an animation frame if we don't have one
 
             if(Animator.nextDraw === null) {
                 Animator.nextDraw = globals.window.requestAnimationFrame(Animator._draw);
             } // Return the node so we can remove it easily
-
 
             return node;
         },
@@ -4824,7 +4878,7 @@ export const Svg = (function () {
 
             const node = Animator.timeouts.push({
                 run: fn,
-                time: time
+                time: time,
             }); // Request another animation frame if we need one
 
             if(Animator.nextDraw === null) {
@@ -4863,18 +4917,17 @@ export const Svg = (function () {
             let nextTimeout = null;
             const lastTimeout = Animator.timeouts.last();
 
-            while(nextTimeout = Animator.timeouts.shift()) {
+            while((nextTimeout = Animator.timeouts.shift())) {
                 // Run the timeout if its time, or push it to the end
                 if(now >= nextTimeout.time) {
                     nextTimeout.run();
-                } else {
+                }
+                else {
                     Animator.timeouts.push(nextTimeout);
                 } // If we hit the last item, we should stop shifting out more items
 
-
                 if(nextTimeout === lastTimeout) break;
             } // Run all of the animation frames
-
 
             let nextFrame = null;
             const lastFrame = Animator.frames.last();
@@ -4885,14 +4938,15 @@ export const Svg = (function () {
 
             let nextImmediate = null;
 
-            while(nextImmediate = Animator.immediates.shift()) {
+            while((nextImmediate = Animator.immediates.shift())) {
                 nextImmediate();
             } // If we have remaining timeouts or frames, draw until we don't anymore
 
-
-            Animator.nextDraw = Animator.timeouts.first() || Animator.frames.first() ? globals.window.requestAnimationFrame(Animator._draw) : null;
-        }
-
+            Animator.nextDraw =
+                Animator.timeouts.first() || Animator.frames.first()
+                    ? globals.window.requestAnimationFrame(Animator._draw)
+                    : null;
+        },
     };
 
     const makeSchedule = function (runnerInfo) {
@@ -4903,7 +4957,7 @@ export const Svg = (function () {
             start: start,
             duration: duration,
             end: end,
-            runner: runnerInfo.runner
+            runner: runnerInfo.runner,
         };
     };
 
@@ -4946,7 +5000,6 @@ export const Svg = (function () {
             return this.pause();
         } // Calculates the end of the timeline
 
-
         getEndTime() {
             const lastRunnerInfo = this.getLastRunnerInfo();
             const lastDuration = lastRunnerInfo ? lastRunnerInfo.runner.duration() : 0;
@@ -4955,7 +5008,7 @@ export const Svg = (function () {
         }
 
         getEndTimeOfTimeline() {
-            const endTimes = this._runners.map(i => i.start + i.runner.duration());
+            const endTimes = this._runners.map((i) => i.start + i.runner.duration());
 
             return Math.max(0, ...endTimes);
         }
@@ -4992,14 +5045,12 @@ export const Svg = (function () {
             return this.speed(yes ? -positive : positive);
         } // schedules a runner on the timeline
 
-
         schedule(runner, delay, when) {
             if(runner == null) {
                 return this._runners.map(makeSchedule);
             } // The start time for the next animation can either be given explicitly,
             // derived from the current timeline time or it can be relative to the
             // last start time to chain animations directly
-
 
             let absoluteStartTime = 0;
             const endTime = this.getEndTime();
@@ -5008,26 +5059,30 @@ export const Svg = (function () {
             if(when == null || when === 'last' || when === 'after') {
                 // Take the last time and increment
                 absoluteStartTime = endTime;
-            } else if(when === 'absolute' || when === 'start') {
+            }
+            else if(when === 'absolute' || when === 'start') {
                 absoluteStartTime = delay;
                 delay = 0;
-            } else if(when === 'now') {
+            }
+            else if(when === 'now') {
                 absoluteStartTime = this._time;
-            } else if(when === 'relative') {
+            }
+            else if(when === 'relative') {
                 const runnerInfo = this.getRunnerInfoById(runner.id);
 
                 if(runnerInfo) {
                     absoluteStartTime = runnerInfo.start + delay;
                     delay = 0;
                 }
-            } else if(when === 'with-last') {
+            }
+            else if(when === 'with-last') {
                 const lastRunnerInfo = this.getLastRunnerInfo();
                 const lastStartTime = lastRunnerInfo ? lastRunnerInfo.start : this._time;
                 absoluteStartTime = lastStartTime;
-            } else {
+            }
+            else {
                 throw new Error('Invalid value for the "when" parameter');
             } // Manage runner
-
 
             runner.unschedule();
             runner.timeline(this);
@@ -5035,7 +5090,7 @@ export const Svg = (function () {
             const runnerInfo = {
                 persist: persist === null ? this._persist : persist,
                 start: absoluteStartTime + delay,
-                runner
+                runner,
             };
             this._lastRunnerId = runner.id;
 
@@ -5043,7 +5098,7 @@ export const Svg = (function () {
 
             this._runners.sort((a, b) => a.start - b.start);
 
-            this._runnerIds = this._runners.map(info => info.runner.id);
+            this._runnerIds = this._runners.map((info) => info.runner.id);
 
             this.updateTime()._continue();
 
@@ -5078,7 +5133,6 @@ export const Svg = (function () {
             return this._continue(true);
         } // Remove the runner from this timeline
 
-
         unschedule(runner) {
             const index = this._runnerIds.indexOf(runner.id);
 
@@ -5092,7 +5146,6 @@ export const Svg = (function () {
             return this;
         } // Makes sure, that after pausing the time doesn't jump
 
-
         updateTime() {
             if(!this.active()) {
                 this._lastSourceTime = this._timeSource();
@@ -5100,7 +5153,6 @@ export const Svg = (function () {
 
             return this;
         } // Checks if we are running and continues the animation
-
 
         _continue(immediateStep = false) {
             Animator.cancelFrame(this._nextFrame);
@@ -5139,7 +5191,7 @@ export const Svg = (function () {
             // and therefore should win the attribute battle
             // this can be solved by resetting them backwards
 
-            for(let k = this._runners.length; k--;) {
+            for(let k = this._runners.length; k--; ) {
                 // Get and run the current runner and ignore it if its inactive
                 const runnerInfo = this._runners[k];
                 const runner = runnerInfo.runner; // Make sure that we give the actual difference
@@ -5152,7 +5204,6 @@ export const Svg = (function () {
                     runner.reset();
                 }
             } // Run all of the runners directly
-
 
             let runnersLeft = false;
 
@@ -5168,7 +5219,8 @@ export const Svg = (function () {
                 if(dtToStart <= 0) {
                     runnersLeft = true;
                     continue;
-                } else if(dtToStart < dt) {
+                }
+                else if(dtToStart < dt) {
                     // Adjust dt to make sure that animation is on point
                     dt = dtToStart;
                 }
@@ -5180,7 +5232,8 @@ export const Svg = (function () {
 
                 if(!finished) {
                     runnersLeft = true; // continue
-                } else if(runnerInfo.persist !== true) {
+                }
+                else if(runnerInfo.persist !== true) {
                     // runner is finished. And runner might get removed
                     const endTime = runner.duration() - runner.time() + this._time;
 
@@ -5194,17 +5247,19 @@ export const Svg = (function () {
             } // Basically: we continue when there are runners right from us in time
             // when -->, and when runners are left from us when <--
 
-
-            if(runnersLeft && !(this._speed < 0 && this._time === 0) || this._runnerIds.length && this._speed < 0 && this._time > 0) {
+            if(
+                (runnersLeft && !(this._speed < 0 && this._time === 0)) ||
+                (this._runnerIds.length && this._speed < 0 && this._time > 0)
+            ) {
                 this._continue();
-            } else {
+            }
+            else {
                 this.pause();
                 this.fire('finished');
             }
 
             return this;
         }
-
     }
     registerMethods({
         Element: {
@@ -5212,12 +5267,13 @@ export const Svg = (function () {
                 if(timeline == null) {
                     this._timeline = this._timeline || new Timeline();
                     return this._timeline;
-                } else {
+                }
+                else {
                     this._timeline = timeline;
                     return this;
                 }
-            }
-        }
+            },
+        },
     });
 
     class Runner extends EventTarget {
@@ -5285,7 +5341,7 @@ export const Svg = (function () {
                 swing: swing,
                 times: times,
                 wait: wait,
-                when: when
+                when: when,
             };
         }
 
@@ -5299,7 +5355,6 @@ export const Svg = (function () {
         ===============
         Methods that shouldn't be used externally
         */
-
 
         addTransform(transform, index) {
             this.transforms.lmultiplyO(transform);
@@ -5323,10 +5378,9 @@ export const Svg = (function () {
             return this;
         } // TODO: Keep track of all transformations so that deletion is faster
 
-
         clearTransformsFromQueue() {
             if(!this.done || !this._timeline || !this._timeline._runnerIds.includes(this.id)) {
-                this._queue = this._queue.filter(item => {
+                this._queue = this._queue.filter((item) => {
                     return !item.isTransform;
                 });
             }
@@ -5355,7 +5409,6 @@ export const Svg = (function () {
         help us make new runners from the current runner
         */
 
-
         element(element) {
             if(element == null) return this._element;
             this._element = element;
@@ -5376,7 +5429,6 @@ export const Svg = (function () {
                 wait = times.wait;
                 times = times.times;
             } // Sanitise the values and store them
-
 
             this._times = times || Infinity;
             this._swing = swing || false;
@@ -5430,23 +5482,21 @@ export const Svg = (function () {
                 */
                 // Figure out the value without thinking about the start or end time
                 const f = function (x) {
-                    const swinging = s * Math.floor(x % (2 * (w + d)) / (w + d));
-                    const backwards = swinging && !r || !swinging && r;
-                    const uncliped = Math.pow(-1, backwards) * (x % (w + d)) / d + backwards;
+                    const swinging = s * Math.floor((x % (2 * (w + d))) / (w + d));
+                    const backwards = (swinging && !r) || (!swinging && r);
+                    const uncliped = (Math.pow(-1, backwards) * (x % (w + d))) / d + backwards;
                     const clipped = Math.max(Math.min(uncliped, 1), 0);
                     return clipped;
                 }; // Figure out the value by incorporating the start time
-
 
                 const endTime = t * (w + d) - w;
                 position = x <= 0 ? Math.round(f(1e-5)) : x < endTime ? f(x) : Math.round(f(endTime - 1e-5));
                 return position;
             } // Work out the loops done and add the position to the loops done
 
-
             const loopsDone = Math.floor(this.loops());
             const swingForward = s && loopsDone % 2 === 0;
-            const forwards = swingForward && !r || r && swingForward;
+            const forwards = (swingForward && !r) || (r && swingForward);
             position = loopsDone + (forwards ? p : 1 - p);
             return this.loops(position);
         }
@@ -5464,7 +5514,6 @@ export const Svg = (function () {
         These methods allow us to attach basic functions to the runner directly
         */
 
-
         queue(initFn, runFn, retargetFn, isTransform) {
             this._queue.push({
                 initialiser: initFn || noop,
@@ -5472,7 +5521,7 @@ export const Svg = (function () {
                 retarget: retargetFn,
                 isTransform: isTransform,
                 initialised: false,
-                finished: false
+                finished: false,
             });
 
             const timeline = this.timeline();
@@ -5500,11 +5549,9 @@ export const Svg = (function () {
                 timeline = this.timeline();
             } // If there is no timeline, yell at the user...
 
-
             if(!timeline) {
                 throw Error('Runner cannot be scheduled without timeline');
             } // Schedule the runner on the timeline provided
-
 
             timeline.schedule(this, delay, when);
             return this;
@@ -5532,7 +5579,6 @@ export const Svg = (function () {
             // know, that they are running in the last step (this is good for
             // transformations which can be merged)
 
-
             const declarative = this._isDeclarative;
             this.done = !declarative && !justFinished && this._time >= duration; // Runner is running. So its not in reset state anymore
 
@@ -5542,15 +5588,13 @@ export const Svg = (function () {
             if(running || declarative) {
                 this._initialise(running); // clear the transforms on this runner so they dont get added again and again
 
-
                 this.transforms = new Matrix();
                 converged = this._run(declarative ? dt : position);
                 this.fire('step', this);
             } // correct the done flag here
             // declarative animations itself know when they converged
 
-
-            this.done = this.done || converged && declarative;
+            this.done = this.done || (converged && declarative);
 
             if(justFinished) {
                 this.fire('finished', this);
@@ -5563,7 +5607,6 @@ export const Svg = (function () {
         ========================
         Control how the animation plays
         */
-
 
         time(time) {
             if(time == null) {
@@ -5588,7 +5631,6 @@ export const Svg = (function () {
             return this;
         } // Run each initialise function in the runner if required
 
-
         _initialise(running) {
             // If we aren't running, we shouldn't initialise when not declarative
             if(!running && !this._isDeclarative) return; // Loop through all of the initialisers
@@ -5597,7 +5639,7 @@ export const Svg = (function () {
                 // Get the current initialiser
                 const current = this._queue[i]; // Determine whether we need to initialise
 
-                const needsIt = this._isDeclarative || !current.initialised && running;
+                const needsIt = this._isDeclarative || (!current.initialised && running);
                 running = !current.finished; // Call the initialiser if we need to
 
                 if(needsIt && running) {
@@ -5607,11 +5649,10 @@ export const Svg = (function () {
             }
         } // Save a morpher to the morpher list so that we can retarget it later
 
-
         _rememberMorpher(method, morpher) {
             this._history[method] = {
                 morpher: morpher,
-                caller: this._queue[this._queue.length - 1]
+                caller: this._queue[this._queue.length - 1],
             }; // We have to resume the timeline in case a controller
             // is already done without being ever run
             // This can happen when e.g. this is done:
@@ -5625,7 +5666,6 @@ export const Svg = (function () {
             }
         } // Try to set the target for a morpher if the morpher exists, otherwise
         // Run each run function for the position or dt given
-
 
         _run(positionOrDt) {
             // Run all of the _queue directly
@@ -5641,10 +5681,8 @@ export const Svg = (function () {
                 allfinished = allfinished && current.finished;
             } // We report when all of the constructors are finished
 
-
             return allfinished;
         } // do nothing and return false
-
 
         _tryRetarget(method, target, extra) {
             if(this._history[method]) {
@@ -5658,11 +5696,10 @@ export const Svg = (function () {
                 } // for the case of transformations, we use the special retarget function
                 // which has access to the outer scope
 
-
                 if(this._history[method].caller.retarget) {
                     this._history[method].caller.retarget.call(this, target, extra); // for everything else a simple morpher change is sufficient
-
-                } else {
+                }
+                else {
                     this._history[method].morpher.to(target);
                 }
 
@@ -5674,7 +5711,6 @@ export const Svg = (function () {
 
             return false;
         }
-
     }
     Runner.id = 0;
     class FakeRunner {
@@ -5684,19 +5720,17 @@ export const Svg = (function () {
             this.done = done;
         }
 
-        clearTransformsFromQueue() { }
-
+        clearTransformsFromQueue() {}
     }
     extend([Runner, FakeRunner], {
         mergeWith(runner) {
             return new FakeRunner(runner.transforms.lmultiply(this.transforms), runner.id);
-        }
-
+        },
     }); // FakeRunner.emptyRunner = new FakeRunner()
 
     const lmultiply = (last, curr) => last.lmultiplyO(curr);
 
-    const getRunnerTransform = runner => runner.transforms;
+    const getRunnerTransform = (runner) => runner.transforms;
 
     function mergeTransforms() {
         // Find the matrix to apply to the element and apply it
@@ -5728,7 +5762,7 @@ export const Svg = (function () {
         clearBefore(id) {
             const deleteCnt = this.ids.indexOf(id + 1) || 1;
             this.ids.splice(0, deleteCnt, 0);
-            this.runners.splice(0, deleteCnt, new FakeRunner()).forEach(r => r.clearTransformsFromQueue());
+            this.runners.splice(0, deleteCnt, new FakeRunner()).forEach((r) => r.clearTransformsFromQueue());
             return this;
         }
 
@@ -5752,8 +5786,12 @@ export const Svg = (function () {
 
             for(let i = 0; i < this.runners.length; ++i) {
                 const runner = this.runners[i];
-                const condition = lastRunner && runner.done && lastRunner.done // don't merge runner when persisted on timeline
-                    && (!runner._timeline || !runner._timeline._runnerIds.includes(runner.id)) && (!lastRunner._timeline || !lastRunner._timeline._runnerIds.includes(lastRunner.id));
+                const condition =
+                    lastRunner &&
+                    runner.done &&
+                    lastRunner.done && // don't merge runner when persisted on timeline
+                    (!runner._timeline || !runner._timeline._runnerIds.includes(runner.id)) &&
+                    (!lastRunner._timeline || !lastRunner._timeline._runnerIds.includes(lastRunner.id));
 
                 if(condition) {
                     // the +1 happens in the function
@@ -5762,7 +5800,8 @@ export const Svg = (function () {
                     this.edit(lastRunner.id, newRunner);
                     lastRunner = newRunner;
                     --i;
-                } else {
+                }
+                else {
                     lastRunner = runner;
                 }
             }
@@ -5776,7 +5815,6 @@ export const Svg = (function () {
             this.runners.splice(index, 1);
             return this;
         }
-
     }
     registerMethods({
         Element: {
@@ -5799,17 +5837,20 @@ export const Svg = (function () {
             },
 
             _currentTransform(current) {
-                return this._transformationRunners.runners // we need the equal sign here to make sure, that also transformations
-                    // on the same runner which execute before the current transformation are
-                    // taken into account
-                    .filter(runner => runner.id <= current.id).map(getRunnerTransform).reduce(lmultiply, new Matrix());
+                return (
+                    this._transformationRunners.runners // we need the equal sign here to make sure, that also transformations
+                        // on the same runner which execute before the current transformation are
+                        // taken into account
+                        .filter((runner) => runner.id <= current.id)
+                        .map(getRunnerTransform)
+                        .reduce(lmultiply, new Matrix())
+                );
             },
 
             _addRunner(runner) {
                 this._transformationRunners.add(runner); // Make sure that the runner merge is executed at the very end of
                 // all Animator functions. That is why we use immediate here to execute
                 // the merge right after all frames are run
-
 
                 Animator.cancelImmediate(this._frameId);
                 this._frameId = Animator.immediate(mergeTransforms.bind(this));
@@ -5819,12 +5860,11 @@ export const Svg = (function () {
                 if(this._frameId == null) {
                     this._transformationRunners = new RunnerArray().add(new FakeRunner(new Matrix(this)));
                 }
-            }
-
-        }
+            },
+        },
     }); // Will output the elements from array A that are not in the array B
 
-    const difference = (a, b) => a.filter(x => !b.includes(x));
+    const difference = (a, b) => a.filter((x) => !b.includes(x));
 
     extend(Runner, {
         attr(a, v) {
@@ -5839,7 +5879,7 @@ export const Svg = (function () {
         styleAttr(type, nameOrAttrs, val) {
             if(typeof nameOrAttrs === 'string') {
                 return this.styleAttr(type, {
-                    [nameOrAttrs]: val
+                    [nameOrAttrs]: val,
                 });
             }
 
@@ -5847,36 +5887,39 @@ export const Svg = (function () {
             if(this._tryRetarget(type, attrs)) return this;
             let morpher = new Morphable(this._stepper).to(attrs);
             let keys = Object.keys(attrs);
-            this.queue(function () {
-                morpher = morpher.from(this.element()[type](keys));
-            }, function (pos) {
-                this.element()[type](morpher.at(pos).valueOf());
-                return morpher.done();
-            }, function (newToAttrs) {
-                // Check if any new keys were added
-                const newKeys = Object.keys(newToAttrs);
-                const differences = difference(newKeys, keys); // If their are new keys, initialize them and add them to morpher
+            this.queue(
+                function () {
+                    morpher = morpher.from(this.element()[type](keys));
+                },
+                function (pos) {
+                    this.element()[type](morpher.at(pos).valueOf());
+                    return morpher.done();
+                },
+                function (newToAttrs) {
+                    // Check if any new keys were added
+                    const newKeys = Object.keys(newToAttrs);
+                    const differences = difference(newKeys, keys); // If their are new keys, initialize them and add them to morpher
 
-                if(differences.length) {
-                    // Get the values
-                    const addedFromAttrs = this.element()[type](differences); // Get the already initialized values
+                    if(differences.length) {
+                        // Get the values
+                        const addedFromAttrs = this.element()[type](differences); // Get the already initialized values
 
-                    const oldFromAttrs = new ObjectBag(morpher.from()).valueOf(); // Merge old and new
+                        const oldFromAttrs = new ObjectBag(morpher.from()).valueOf(); // Merge old and new
 
-                    Object.assign(oldFromAttrs, addedFromAttrs);
-                    morpher.from(oldFromAttrs);
-                } // Get the object from the morpher
+                        Object.assign(oldFromAttrs, addedFromAttrs);
+                        morpher.from(oldFromAttrs);
+                    } // Get the object from the morpher
 
+                    const oldToAttrs = new ObjectBag(morpher.to()).valueOf(); // Merge in new attributes
 
-                const oldToAttrs = new ObjectBag(morpher.to()).valueOf(); // Merge in new attributes
+                    Object.assign(oldToAttrs, newToAttrs); // Change morpher target
 
-                Object.assign(oldToAttrs, newToAttrs); // Change morpher target
+                    morpher.to(oldToAttrs); // Make sure that we save the work we did so we don't need it to do again
 
-                morpher.to(oldToAttrs); // Make sure that we save the work we did so we don't need it to do again
-
-                keys = newKeys;
-                attrs = newToAttrs;
-            });
+                    keys = newKeys;
+                    attrs = newToAttrs;
+                },
+            );
 
             this._rememberMorpher(type, morpher);
 
@@ -5886,15 +5929,19 @@ export const Svg = (function () {
         zoom(level, point) {
             if(this._tryRetarget('zoom', level, point)) return this;
             let morpher = new Morphable(this._stepper).to(new SVGNumber(level));
-            this.queue(function () {
-                morpher = morpher.from(this.element().zoom());
-            }, function (pos) {
-                this.element().zoom(morpher.at(pos), point);
-                return morpher.done();
-            }, function (newLevel, newPoint) {
-                point = newPoint;
-                morpher.to(newLevel);
-            });
+            this.queue(
+                function () {
+                    morpher = morpher.from(this.element().zoom());
+                },
+                function (pos) {
+                    this.element().zoom(morpher.at(pos), point);
+                    return morpher.done();
+                },
+                function (newLevel, newPoint) {
+                    point = newPoint;
+                    morpher.to(newLevel);
+                },
+            );
 
             this._rememberMorpher('zoom', morpher);
 
@@ -5924,7 +5971,6 @@ export const Svg = (function () {
                 return this;
             } // Parse the parameters
 
-
             const isMatrix = Matrix.isMatrixLike(transforms);
             affine = transforms.affine != null ? transforms.affine : affine != null ? affine : !isMatrix; // Create a morpher and set its type
 
@@ -5943,7 +5989,6 @@ export const Svg = (function () {
 
                 element._addRunner(this); // Deactivate all transforms that have run so far if we are absolute
 
-
                 if(!relative) {
                     element._clearTransformRunnersBefore(this);
                 }
@@ -5953,13 +5998,10 @@ export const Svg = (function () {
                 // clear all other transforms before this in case something is saved
                 // on this runner. We are absolute. We dont need these!
                 if(!relative) this.clearTransform();
-                const {
-                    x,
-                    y
-                } = new Point(origin).transform(element._currentTransform(this));
+                const { x, y } = new Point(origin).transform(element._currentTransform(this));
                 let target = new Matrix({
                     ...transforms,
-                    origin: [x, y]
+                    origin: [x, y],
                 });
                 let start = this._isDeclarative && current ? current : startTransform;
 
@@ -5971,7 +6013,7 @@ export const Svg = (function () {
                     const rCurrent = start.rotate; // Figure out the shortest path to rotate directly
 
                     const possibilities = [rTarget - 360, rTarget, rTarget + 360];
-                    const distances = possibilities.map(a => Math.abs(a - rCurrent));
+                    const distances = possibilities.map((a) => Math.abs(a - rCurrent));
                     const shortest = Math.min(...distances);
                     const index = distances.indexOf(shortest);
                     target.rotate = possibilities[index];
@@ -6007,10 +6049,9 @@ export const Svg = (function () {
                     origin = getOrigin(newTransforms, element);
                 } // overwrite the old transformations with the new ones
 
-
                 transforms = {
                     ...newTransforms,
-                    origin
+                    origin,
                 };
             }
 
@@ -6048,16 +6089,20 @@ export const Svg = (function () {
 
             const morpher = new Morphable(this._stepper).to(to);
             let from = null;
-            this.queue(function () {
-                from = this.element()[method]();
-                morpher.from(from);
-                morpher.to(from + to);
-            }, function (pos) {
-                this.element()[method](morpher.at(pos));
-                return morpher.done();
-            }, function (newTo) {
-                morpher.to(from + new SVGNumber(newTo));
-            }); // Register the morpher so that if it is changed again, we can retarget it
+            this.queue(
+                function () {
+                    from = this.element()[method]();
+                    morpher.from(from);
+                    morpher.to(from + to);
+                },
+                function (pos) {
+                    this.element()[method](morpher.at(pos));
+                    return morpher.done();
+                },
+                function (newTo) {
+                    morpher.to(from + new SVGNumber(newTo));
+                },
+            ); // Register the morpher so that if it is changed again, we can retarget it
 
             this._rememberMorpher(method, morpher);
 
@@ -6069,12 +6114,15 @@ export const Svg = (function () {
             if(this._tryRetarget(method, to)) return this; // Make a morpher and queue the animation
 
             const morpher = new Morphable(this._stepper).to(to);
-            this.queue(function () {
-                morpher.from(this.element()[method]());
-            }, function (pos) {
-                this.element()[method](morpher.at(pos));
-                return morpher.done();
-            }); // Register the morpher so that if it is changed again, we can retarget it
+            this.queue(
+                function () {
+                    morpher.from(this.element()[method]());
+                },
+                function (pos) {
+                    this.element()[method](morpher.at(pos));
+                    return morpher.done();
+                },
+            ); // Register the morpher so that if it is changed again, we can retarget it
 
             this._rememberMorpher(method, morpher);
 
@@ -6115,11 +6163,11 @@ export const Svg = (function () {
             }
 
             if(!width) {
-                width = box.width / box.height * height;
+                width = (box.width / box.height) * height;
             }
 
             if(!height) {
-                height = box.height / box.width * width;
+                height = (box.height / box.width) * width;
             }
 
             return this.width(width).height(height);
@@ -6144,13 +6192,16 @@ export const Svg = (function () {
 
             if(this._tryRetarget('plot', a)) return this;
             const morpher = new Morphable(this._stepper).type(this._element.MorphArray).to(a);
-            this.queue(function () {
-                morpher.from(this._element.array());
-            }, function (pos) {
-                this._element.plot(morpher.at(pos));
+            this.queue(
+                function () {
+                    morpher.from(this._element.array());
+                },
+                function (pos) {
+                    this._element.plot(morpher.at(pos));
 
-                return morpher.done();
-            });
+                    return morpher.done();
+                },
+            );
 
             this._rememberMorpher('plot', morpher);
 
@@ -6172,7 +6223,7 @@ export const Svg = (function () {
                 return this.update({
                     offset: arguments[0],
                     color: arguments[1],
-                    opacity: arguments[2]
+                    opacity: arguments[2],
                 });
             }
 
@@ -6180,14 +6231,13 @@ export const Svg = (function () {
             if(o.color != null) this.attr('stop-color', o.color);
             if(o.offset != null) this.attr('offset', o.offset);
             return this;
-        }
-
+        },
     });
     extend(Runner, {
         rx,
         ry,
         from,
-        to
+        to,
     });
     register(Runner, 'Runner');
 
@@ -6197,47 +6247,51 @@ export const Svg = (function () {
             this.namespace();
         } // Creates and returns defs element
 
-
         defs() {
             if(!this.isRoot()) return this.root().defs();
             return adopt(this.node.querySelector('defs')) || this.put(new Defs());
         }
 
         isRoot() {
-            return !this.node.parentNode || !(this.node.parentNode instanceof globals.window.SVGElement) && this.node.parentNode.nodeName !== '#document-fragment';
+            return (
+                !this.node.parentNode ||
+                (!(this.node.parentNode instanceof globals.window.SVGElement) &&
+                    this.node.parentNode.nodeName !== '#document-fragment')
+            );
         } // Add namespaces
-
 
         namespace() {
             if(!this.isRoot()) return this.root().namespace();
             return this.attr({
                 xmlns: svg,
-                version: '1.1'
-            }).attr('xmlns:xlink', xlink, xmlns).attr('xmlns:svgjs', svgjs, xmlns);
+                version: '1.1',
+            })
+                .attr('xmlns:xlink', xlink, xmlns)
+                .attr('xmlns:svgjs', svgjs, xmlns);
         }
 
         removeNamespace() {
             return this.attr({
                 xmlns: null,
-                version: null
-            }).attr('xmlns:xlink', null, xmlns).attr('xmlns:svgjs', null, xmlns);
+                version: null,
+            })
+                .attr('xmlns:xlink', null, xmlns)
+                .attr('xmlns:svgjs', null, xmlns);
         } // Check if this is a root svg
         // If not, call root() from this element
-
 
         root() {
             if(this.isRoot()) return this;
             return super.root();
         }
-
     }
     registerMethods({
         Container: {
             // Create nested svg document
             nested: wrapWithAttrCheck(function () {
                 return this.put(new Svg());
-            })
-        }
+            }),
+        },
     });
     register(Svg, 'Svg', true);
 
@@ -6246,14 +6300,13 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('symbol', node), attrs);
         }
-
     }
     registerMethods({
         Container: {
             symbol: wrapWithAttrCheck(function () {
                 return this.put(new Symbol());
-            })
-        }
+            }),
+        },
     });
     register(Symbol, 'Symbol');
 
@@ -6262,7 +6315,6 @@ export const Svg = (function () {
         if(this._build === false) {
             this.clear();
         } // create text node
-
 
         this.node.appendChild(globals.document.createTextNode(text));
         return this;
@@ -6339,7 +6391,7 @@ export const Svg = (function () {
         ax: ax,
         ay: ay,
         amove: amove,
-        build: build
+        build: build,
     };
 
     class Text extends Shape {
@@ -6353,25 +6405,21 @@ export const Svg = (function () {
             this._build = false; // disable build mode for adding multiple lines
         } // Set / get leading
 
-
         leading(value) {
             // act as getter
             if(value == null) {
                 return this.dom.leading;
             } // act as setter
 
-
             this.dom.leading = new SVGNumber(value);
             return this.rebuild();
         } // Rebuild appearance type
-
 
         rebuild(rebuild) {
             // store new rebuild flag if given
             if(typeof rebuild === 'boolean') {
                 this._rebuild = rebuild;
             } // define position of all lines
-
 
             if(this._rebuild) {
                 const self = this;
@@ -6386,7 +6434,8 @@ export const Svg = (function () {
 
                         if(this.text() === '\n') {
                             blankLineOffset += dy;
-                        } else {
+                        }
+                        else {
                             this.attr('dy', i ? dy + blankLineOffset : 0);
                             blankLineOffset = 0;
                         }
@@ -6398,13 +6447,11 @@ export const Svg = (function () {
             return this;
         } // overwrite method from parent to set data properly
 
-
         setData(o) {
             this.dom = o;
             this.dom.leading = new SVGNumber(o.leading || 1.3);
             return this;
         } // Set the text content
-
 
         text(text) {
             // act as getter
@@ -6420,11 +6467,9 @@ export const Svg = (function () {
                         continue;
                     } // add newline if its not the first child and newLined is set to true
 
-
                     if(i !== firstLine && children[i].nodeType !== 3 && adopt(children[i]).dom.newLined === true) {
                         text += '\n';
                     } // add content of this node
-
 
                     text += children[i].textContent;
                 }
@@ -6432,13 +6477,13 @@ export const Svg = (function () {
                 return text;
             } // remove existing content
 
-
             this.clear().build(true);
 
             if(typeof text === 'function') {
                 // call block
                 text.call(this, this);
-            } else {
+            }
+            else {
                 // store text and make sure text is not blank
                 text = (text + '').split('\n'); // build new lines
 
@@ -6447,10 +6492,8 @@ export const Svg = (function () {
                 }
             } // disable build mode and rebuild lines
 
-
             return this.build(false).rebuild();
         }
-
     }
     extend(Text, textable);
     registerMethods({
@@ -6462,8 +6505,8 @@ export const Svg = (function () {
             // Create plain text element
             plain: wrapWithAttrCheck(function (text = '') {
                 return this.put(new Text()).plain(text);
-            })
-        }
+            }),
+        },
     });
     register(Text, 'Text');
 
@@ -6474,16 +6517,13 @@ export const Svg = (function () {
             this._build = false; // disable build mode for adding multiple lines
         } // Shortcut dx
 
-
         dx(dx) {
             return this.attr('dx', dx);
         } // Shortcut dy
 
-
         dy(dy) {
             return this.attr('dy', dy);
         } // Create new line
-
 
         newLine() {
             // mark new line
@@ -6502,7 +6542,6 @@ export const Svg = (function () {
             return this.dy(i ? dy : 0).attr('x', text.x());
         } // Set text content
 
-
         text(text) {
             if(text == null) return this.node.textContent + (this.dom.newLined ? '\n' : '');
 
@@ -6510,13 +6549,13 @@ export const Svg = (function () {
                 this.clear().build(true);
                 text.call(this, this);
                 this.build(false);
-            } else {
+            }
+            else {
                 this.plain(text);
             }
 
             return this;
         }
-
     }
     extend(Tspan, textable);
     registerMethods({
@@ -6528,15 +6567,14 @@ export const Svg = (function () {
                     this.clear();
                 } // add new tspan
 
-
                 return this.put(tspan).text(text);
-            })
+            }),
         },
         Text: {
             newLine: function (text = '') {
                 return this.tspan(text).newLine();
-            }
-        }
+            },
+        },
     });
     register(Tspan, 'Tspan');
 
@@ -6549,11 +6587,9 @@ export const Svg = (function () {
             return this.attr('r', r);
         } // Radius x value
 
-
         rx(rx) {
             return this.attr('r', rx);
         } // Alias radius x value
-
 
         ry(ry) {
             return this.rx(ry);
@@ -6562,7 +6598,6 @@ export const Svg = (function () {
         size(size) {
             return this.radius(new SVGNumber(size).divide(2));
         }
-
     }
     extend(Circle, {
         x: x$3,
@@ -6570,15 +6605,15 @@ export const Svg = (function () {
         cx: cx$1,
         cy: cy$1,
         width: width$2,
-        height: height$2
+        height: height$2,
     });
     registerMethods({
         Container: {
             // Create circle element
             circle: wrapWithAttrCheck(function (size = 0) {
                 return this.put(new Circle()).size(size).move(0, 0);
-            })
-        }
+            }),
+        },
     });
     register(Circle, 'Circle');
 
@@ -6586,7 +6621,6 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('clipPath', node), attrs);
         } // Unclip all clipped elements and remove itself
-
 
         remove() {
             // unclip all targets
@@ -6600,14 +6634,13 @@ export const Svg = (function () {
         targets() {
             return baseFind('svg [clip-path*=' + this.id() + ']');
         }
-
     }
     registerMethods({
         Container: {
             // Create clipping element
             clip: wrapWithAttrCheck(function () {
                 return this.defs().put(new ClipPath());
-            })
+            }),
         },
         Element: {
             // Distribute clipPath to svg element
@@ -6625,9 +6658,8 @@ export const Svg = (function () {
             // Unclip element
             unclip() {
                 return this.attr('clip-path', null);
-            }
-
-        }
+            },
+        },
     });
     register(ClipPath, 'ClipPath');
 
@@ -6635,14 +6667,13 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('foreignObject', node), attrs);
         }
-
     }
     registerMethods({
         Container: {
             foreignObject: wrapWithAttrCheck(function (width, height) {
                 return this.put(new ForeignObject()).size(width, height);
-            })
-        }
+            }),
+        },
     });
     register(ForeignObject, 'ForeignObject');
 
@@ -6654,10 +6685,10 @@ export const Svg = (function () {
             try {
                 // Get the childs bbox
                 bbox = child.bbox();
-            } catch(e) {
+            }
+            catch(e) {
                 return;
             } // Get childs matrix
-
 
             const m = new Matrix(child); // Translate childs matrix by amount and
             // transform it back into parents space
@@ -6718,14 +6749,13 @@ export const Svg = (function () {
         size: size,
         width: width,
         x: x,
-        y: y
+        y: y,
     };
 
     class G extends Container {
         constructor(node, attrs = node) {
             super(nodeOrNew('g', node), attrs);
         }
-
     }
     extend(G, containerGeometry);
     registerMethods({
@@ -6733,8 +6763,8 @@ export const Svg = (function () {
             // Create a group element
             group: wrapWithAttrCheck(function () {
                 return this.put(new G());
-            })
-        }
+            }),
+        },
     });
     register(G, 'G');
 
@@ -6743,16 +6773,13 @@ export const Svg = (function () {
             super(nodeOrNew('a', node), attrs);
         } // Link target attribute
 
-
         target(target) {
             return this.attr('target', target);
         } // Link url
 
-
         to(url) {
             return this.attr('href', url, xlink);
         }
-
     }
     extend(A, containerGeometry);
     registerMethods({
@@ -6760,7 +6787,7 @@ export const Svg = (function () {
             // Create a hyperlink element
             link: wrapWithAttrCheck(function (url) {
                 return this.put(new A()).to(url);
-            })
+            }),
         },
         Element: {
             unlink() {
@@ -6789,7 +6816,8 @@ export const Svg = (function () {
 
                 if(typeof url === 'function') {
                     url.call(link, link);
-                } else {
+                }
+                else {
                     link.to(url);
                 }
 
@@ -6804,9 +6832,8 @@ export const Svg = (function () {
                 }
 
                 return null;
-            }
-
-        }
+            },
+        },
     });
     register(A, 'A');
 
@@ -6815,7 +6842,6 @@ export const Svg = (function () {
         constructor(node, attrs = node) {
             super(nodeOrNew('mask', node), attrs);
         } // Unmask all masked elements and remove itself
-
 
         remove() {
             // unmask all targets
@@ -6829,13 +6855,12 @@ export const Svg = (function () {
         targets() {
             return baseFind('svg [mask*=' + this.id() + ']');
         }
-
     }
     registerMethods({
         Container: {
             mask: wrapWithAttrCheck(function () {
                 return this.defs().put(new Mask());
-            })
+            }),
         },
         Element: {
             // Distribute mask to svg element
@@ -6853,9 +6878,8 @@ export const Svg = (function () {
             // Unmask element
             unmask() {
                 return this.attr('mask', null);
-            }
-
-        }
+            },
+        },
     });
     register(Mask, 'Mask');
 
@@ -6864,31 +6888,28 @@ export const Svg = (function () {
             super(nodeOrNew('stop', node), attrs);
         } // add color stops
 
-
         update(o) {
             if(typeof o === 'number' || o instanceof SVGNumber) {
                 o = {
                     offset: arguments[0],
                     color: arguments[1],
-                    opacity: arguments[2]
+                    opacity: arguments[2],
                 };
             } // set attributes
-
 
             if(o.opacity != null) this.attr('stop-opacity', o.opacity);
             if(o.color != null) this.attr('stop-color', o.color);
             if(o.offset != null) this.attr('offset', new SVGNumber(o.offset));
             return this;
         }
-
     }
     registerMethods({
         Gradient: {
             // Add a color stop
             stop: function (offset, color, opacity) {
                 return this.put(new Stop()).update(offset, color, opacity);
-            }
-        }
+            },
+        },
     });
     register(Stop, 'Stop');
 
@@ -6919,14 +6940,13 @@ export const Svg = (function () {
             return this.rule('@font-face', {
                 fontFamily: name,
                 src: src,
-                ...params
+                ...params,
             });
         }
 
         rule(selector, obj) {
             return this.addText(cssRule(selector, obj));
         }
-
     }
     registerMethods('Dom', {
         style(selector, obj) {
@@ -6935,8 +6955,7 @@ export const Svg = (function () {
 
         fontface(name, src, params) {
             return this.put(new Style()).font(name, src, params);
-        }
-
+        },
     });
     register(Style, 'Style');
 
@@ -6946,12 +6965,10 @@ export const Svg = (function () {
             super(nodeOrNew('textPath', node), attrs);
         } // return the array of the path track element
 
-
         array() {
             const track = this.track();
             return track ? track.array() : null;
         } // Plot path if any
-
 
         plot(d) {
             const track = this.track();
@@ -6964,11 +6981,9 @@ export const Svg = (function () {
             return d == null ? pathArray : this;
         } // Get the path element
 
-
         track() {
             return this.reference('href');
         }
-
     }
     registerMethods({
         Container: {
@@ -6979,7 +6994,7 @@ export const Svg = (function () {
                 }
 
                 return text.path(path);
-            })
+            }),
         },
         Text: {
             // Create path for text to run on
@@ -6991,17 +7006,15 @@ export const Svg = (function () {
                     track = this.defs().path(track);
                 } // link textPath to path and add content
 
-
                 textPath.attr('href', '#' + track, xlink); // Transplant all nodes from text to textPath
 
                 let node;
 
                 if(importNodes) {
-                    while(node = this.node.firstChild) {
+                    while((node = this.node.firstChild)) {
                         textPath.node.appendChild(node);
                     }
                 } // add textPath element as child node and return textPath
-
 
                 return this.put(textPath);
             }),
@@ -7009,8 +7022,7 @@ export const Svg = (function () {
             // Get the textPath children
             textPath() {
                 return this.findOne('textPath');
-            }
-
+            },
         },
         Path: {
             // creates a textPath from this path
@@ -7020,18 +7032,16 @@ export const Svg = (function () {
                     text = new Text().addTo(this.parent()).text(text);
                 } // Create textPath from text and path and return
 
-
                 return text.path(this);
             }),
 
             targets() {
-                return baseFind('svg textPath').filter(node => {
+                return baseFind('svg textPath').filter((node) => {
                     return (node.attr('href') || '').includes(this.id());
                 }); // Does not work in IE11. Use when IE support is dropped
                 // return baseFind('svg textPath[*|href*=' + this.id() + ']')
-            }
-
-        }
+            },
+        },
     });
     TextPath.prototype.MorphArray = PathArray;
     register(TextPath, 'TextPath');
@@ -7041,20 +7051,18 @@ export const Svg = (function () {
             super(nodeOrNew('use', node), attrs);
         } // Use element as a reference
 
-
         use(element, file) {
             // Set lined element
             return this.attr('href', (file || '') + '#' + element, xlink);
         }
-
     }
     registerMethods({
         Container: {
             // Create a use element
             use: wrapWithAttrCheck(function (element, file) {
                 return this.put(new Use()).use(element, file);
-            })
-        }
+            }),
+        },
     });
     register(Use, 'Use');
 
@@ -7165,7 +7173,7 @@ export const Svg = (function () {
         eid: eid,
         assignNewId: assignNewId,
         extend: extend,
-        wrapWithAttrCheck: wrapWithAttrCheck
+        wrapWithAttrCheck: wrapWithAttrCheck,
     };
 
     function SVG(element, isHTML) {
@@ -7174,6 +7182,4 @@ export const Svg = (function () {
     Object.assign(SVG, svgMembers);
 
     return SVG;
-
 })();
-

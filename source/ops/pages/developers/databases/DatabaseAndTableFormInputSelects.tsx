@@ -106,7 +106,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     );
 
     // Listen to changes to the selected database
-    const propertiesOnChange = properties.onChange;
+
     React.useEffect(
         function () {
             // Items for the table select
@@ -141,8 +141,8 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                 setSelectedTableName(tableNameDefaultValue);
 
                 // Run the onChange callback
-                if(propertiesOnChange) {
-                    propertiesOnChange(selectedDatabaseName, tableNameDefaultValue);
+                if(properties.onChange) {
+                    properties.onChange(selectedDatabaseName, tableNameDefaultValue);
                 }
             }
 
