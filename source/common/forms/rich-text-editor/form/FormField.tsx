@@ -10,7 +10,7 @@ interface FormFieldProperties<T extends HTMLElement> extends React.HTMLAttribute
     htmlFor?: string;
     children?: React.ReactNode;
 }
-const FormField = function <T extends HTMLElement>(properties: FormFieldProperties<T>) {
+export function FormField<T extends HTMLElement>(properties: FormFieldProperties<T>) {
     return (
         <div className={mergeClassNames('flex w-full flex-col gap-2', properties.className)}>
             {/* Label */}
@@ -38,6 +38,6 @@ const FormField = function <T extends HTMLElement>(properties: FormFieldProperti
             </div>
         </div>
     );
-};
+}
 
-export { FormField, type FormFieldProperties };
+

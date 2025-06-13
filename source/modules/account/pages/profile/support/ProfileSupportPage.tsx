@@ -55,7 +55,7 @@ interface ProfileSupportTicketCardProperties {
         | ProfileSupportTicketsQuery['openTickets']['items'][0]
         | ProfileSupportTicketsQuery['closedTickets']['items'][0];
 }
-const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardProperties) => {
+function ProfileSupportTicketCard(properties: ProfileSupportTicketCardProperties) {
     const lastComment = properties.ticket.comments[properties.ticket.comments.length - 1];
     const commentContent = extractLatestEmailContent(lastComment?.content || '');
     return (
@@ -85,12 +85,12 @@ const ProfileSupportTicketCard = (properties: ProfileSupportTicketCardProperties
             </div>
         </Link>
     );
-};
+}
 
 interface ProfileEmptySupportTicketsProperties {
     status: SupportTicketStatus;
 }
-const ProfileEmptySupportTickets = (properties: ProfileEmptySupportTicketsProperties) => {
+function ProfileEmptySupportTickets(properties: ProfileEmptySupportTicketsProperties) {
     return (
         <div className="flex h-full w-full flex-col items-center justify-center">
             <Smiley size={24} className="text-neutral-500" />
@@ -100,7 +100,7 @@ const ProfileEmptySupportTickets = (properties: ProfileEmptySupportTicketsProper
             <p className="text-neutral-400 mt-2 text-sm">Reach out anytime by creating a new request.</p>
         </div>
     );
-};
+}
 
 // Component - ProfileSupportPage
 export function ProfileSupportPage() {
