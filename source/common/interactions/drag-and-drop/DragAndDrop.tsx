@@ -8,7 +8,7 @@ import { DropContainer, DropBounds } from './DragAndDropTypes';
 import { DragAndDropContext, DragAndDropContextInterface } from './useDragAndDrop';
 
 // Function to calculate the bounds of the drop containers
-function calculateBoundsFromDropContainers(dropContainers: DropContainer[]) {
+export function calculateBoundsFromDropContainers(dropContainers: DropContainer[]) {
     {
         return dropContainers?.map((container) => {
             let bounds: DropBounds = {

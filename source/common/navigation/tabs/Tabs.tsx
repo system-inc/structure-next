@@ -6,7 +6,7 @@ import { cva, type VariantProps as VariantProperties } from 'class-variance-auth
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { AnimatePresence, motion } from 'motion/react';
 
-const tabsVariants = cva(
+export const tabsVariants = cva(
     [
         // Wrapper defaults
         'rounded-full transition-colors bg-opsis-background-secondary p-0.5 flex items-center gap-1 z-0',
@@ -24,7 +24,7 @@ const tabsVariants = cva(
     },
 );
 
-const TabsContext = React.createContext<
+export const TabsContext = React.createContext<
     VariantProperties<typeof tabsVariants> & { tabGroupId: string; currentValue: string | undefined }
 >({ tabGroupId: '', currentValue: undefined });
 
@@ -51,7 +51,7 @@ export const Tabs = React.forwardRef<
 Tabs.displayName = RadixTabPrimitive.Root.displayName;
 
 // TAB ITEM
-const tabItemVariants = cva(
+export const tabItemVariants = cva(
     [
         // Default
         'text-opsis-content-secondary rounded-full transition-colors relative group',
@@ -91,35 +91,34 @@ const tabItemVariants = cva(
 );
 
 // Component - TabItem
-interface TabItemProperties
+export interface TabItemProperties
     extends Omit<VariantProperties<typeof tabItemVariants>, 'size'>,
         React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Trigger> {}
-const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(function (
-    { className, icon, ...radixTabTriggerProperties },
-    reference,
-) {
-    const { size, tabGroupId, currentValue } = React.useContext(TabsContext);
-    const isActive = currentValue === radixTabTriggerProperties.value;
+export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
+    function ({ className, icon, ...radixTabTriggerProperties }, reference) {
+        const { size, tabGroupId, currentValue } = React.useContext(TabsContext);
+        const isActive = currentValue === radixTabTriggerProperties.value;
 
-    return (
-        <RadixTabPrimitive.Trigger ref={reference} {...radixTabTriggerProperties} asChild>
-            <motion.button className={mergeClassNames(tabItemVariants({ size, icon: icon, className: className }))}>
-                {isActive && (
-                    <motion.div
-                        layoutId={`tab-${tabGroupId}`}
-                        className={mergeClassNames(
-                            'absolute inset-0 h-full w-full border border-transparent',
-                            'z-0 group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary',
-                        )}
-                        style={{
-                            borderRadius: '99px',
-                        }}
-                    />
-                )}
+        return (
+            <RadixTabPrimitive.Trigger ref={reference} {...radixTabTriggerProperties} asChild>
+                <motion.button className={mergeClassNames(tabItemVariants({ size, icon: icon, className: className }))}>
+                    {isActive && (
+                        <motion.div
+                            layoutId={`tab-${tabGroupId}`}
+                            className={mergeClassNames(
+                                'absolute inset-0 h-full w-full border border-transparent',
+                                'z-0 group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary',
+                            )}
+                            style={{
+                                borderRadius: '99px',
+                            }}
+                        />
+                    )}
 
-                <div className="z-10">{radixTabTriggerProperties.children}</div>
-            </motion.button>
-        </RadixTabPrimitive.Trigger>
-    );
-});
+                    <div className="z-10">{radixTabTriggerProperties.children}</div>
+                </motion.button>
+            </RadixTabPrimitive.Trigger>
+        );
+    },
+);
 TabItem.displayName = RadixTabPrimitive.Trigger.displayName;

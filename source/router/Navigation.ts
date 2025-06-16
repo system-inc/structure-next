@@ -16,4 +16,6 @@ export {
     usePathname as useUrlPath,
     useParams as useUrlParameters,
     useSearchParams as useUrlSearchParameters,
+    RedirectType,
+    notFound,
 } from 'next/navigation';
