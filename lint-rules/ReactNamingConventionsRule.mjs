@@ -48,8 +48,11 @@ const ReactNamingConventionsRule = {
             ];
 
             // Check if we're in a Next.js page context (where Next.js prop names are allowed)
-            const isPageFile = filename.endsWith('/page.tsx') || filename.endsWith('\\page.tsx') || 
-                              filename.endsWith('/layout.tsx') || filename.endsWith('\\layout.tsx');
+            const isPageFile =
+                filename.endsWith('/page.tsx') ||
+                filename.endsWith('\\page.tsx') ||
+                filename.endsWith('/layout.tsx') ||
+                filename.endsWith('\\layout.tsx');
 
             // Check various Next.js contexts where these names are legitimate
             const isInNextJsContext =
