@@ -38,13 +38,13 @@ const SideNavigationLayoutNavigation = dynamic(
 );
 
 // Settings
-export const internalLayoutIdentifier = 'Internal';
+export const opsLayoutIdentifier = 'Ops';
 
 // Component - InternalLayout
-export interface InternalLayoutProperties {
+export interface OpsLayoutProperties {
     children: React.ReactNode;
 }
-export function InternalLayout(properties: InternalLayoutProperties) {
+export function OpsLayout(properties: OpsLayoutProperties) {
     // Effect to adjust the background color of the body on mount
     // We want the navigation to be dark but the content to be a bit lighter
     // React.useEffect(function () {
@@ -58,12 +58,12 @@ export function InternalLayout(properties: InternalLayoutProperties) {
     return (
         <>
             {/* Navigation */}
-            <SideNavigationLayoutNavigation layoutIdentifier={internalLayoutIdentifier} topBar={true}>
+            <SideNavigationLayoutNavigation layoutIdentifier={opsLayoutIdentifier} topBar={true}>
                 <OpsNavigation />
             </SideNavigationLayoutNavigation>
 
             {/* Content */}
-            <SideNavigationLayoutContent layoutIdentifier={internalLayoutIdentifier} topTitle="Internal">
+            <SideNavigationLayoutContent layoutIdentifier={opsLayoutIdentifier}>
                 <SideNavigationLayoutContentBody>{properties.children}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
 
