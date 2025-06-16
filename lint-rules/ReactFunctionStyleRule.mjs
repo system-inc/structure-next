@@ -40,8 +40,7 @@ const ReactFunctionStyleRule = {
             // 2. const Component = () => {...}
             if(
                 declaration.init &&
-                (declaration.init.type === 'FunctionExpression' ||
-                    declaration.init.type === 'ArrowFunctionExpression')
+                (declaration.init.type === 'FunctionExpression' || declaration.init.type === 'ArrowFunctionExpression')
             ) {
                 // Get source code to create a fix
                 const sourceCode = context.getSourceCode();
@@ -51,15 +50,15 @@ const ReactFunctionStyleRule = {
                 let newFunctionCode;
                 if(declaration.init.type === 'ArrowFunctionExpression') {
                     // Convert arrow function to regular function
-                    const paramsText = declaration.init.params.length > 0
-                        ? declaration.init.params.map(param => sourceCode.getText(param)).join(', ')
-                        : '';
+                    const paramsText =
+                        declaration.init.params.length > 0
+                            ? declaration.init.params.map((param) => sourceCode.getText(param)).join(', ')
+                            : '';
                     const body = sourceCode.getText(declaration.init.body);
 
                     // If body is a block (has curly braces), use it directly
                     // Otherwise wrap it in return statement
-                    const functionBody =
-                        declaration.init.body.type === 'BlockStatement' ? body : `{ return ${body}; }`;
+                    const functionBody = declaration.init.body.type === 'BlockStatement' ? body : `{ return ${body}; }`;
 
                     newFunctionCode = `function ${identifierName}(${paramsText}) ${functionBody}`;
                 }
@@ -71,13 +70,16 @@ const ReactFunctionStyleRule = {
                 const messagePrefix = isExported ? 'export ' : '';
                 context.report({
                     node: declaration,
-                    message: `Use '${messagePrefix}function ${identifierName}()' instead of '${messagePrefix}const ${identifierName} = ${declaration.init.type === 'ArrowFunctionExpression' ? '() => {}' : 'function()'}''`,
+                    message: `Use '${messagePrefix}function ${identifierName}()' instead of '${messagePrefix}const ${identifierName} = ${
+                        declaration.init.type === 'ArrowFunctionExpression' ? '() => {}' : 'function()'
+                    }''`,
                     fix(fixer) {
-                        if (isExported) {
+                        if(isExported) {
                             // For exported declarations, replace the entire export statement
                             const exportNode = declaration.parent.parent;
                             return fixer.replaceText(exportNode, `export ${newFunctionCode}`);
-                        } else {
+                        }
+                        else {
                             // For non-exported, replace the entire variable declaration
                             return fixer.replaceText(declaration.parent, newFunctionCode);
                         }
