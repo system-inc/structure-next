@@ -221,7 +221,7 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             // Social Media Page
             {
                 title: 'Social Media',
-                href: '/internal/marketing/social-media',
+                href: '/ops/marketing/social-media',
             },
         ],
     },
