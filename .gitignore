@@ -15,6 +15,7 @@
 
 # Testing & Coverage
 /coverage
+*storybook.log
 
 # Logs
 npm-debug.log*
@@ -26,27 +27,30 @@ yarn-error.log*
 *.pem
 .env
 .env*.local
+.dev.vars
+*.pem
+.certificates
+certificates
 
 # Deployment
 .cloudflare
 .wrangler
-wrangler.toml
 *.secret.toml
+.worker-next
+.open-next
 
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
 
+# Caching
+.cache/
+.eslintcache
+
 # Editors & IDEs
-.vscode/
 .idea/
 *.sublime-workspace
 *.sublime-project
-
-# Credentials
-.dev.vars
-*.pem
-
 
 # Operating Systems & Miscellaneous
 .DS_Store
