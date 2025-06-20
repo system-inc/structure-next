@@ -11,7 +11,6 @@ import { apolloClient } from '@structure/source/api/apollo/ApolloClient';
 import { EngagementEventCreateDocument, DeviceOrientation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { uniqueIdentifier } from '@structure/source/utilities/String';
 import { getThirdPartyAttributionForEvents } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
 
 // Function to create an engagement event
@@ -28,19 +27,6 @@ export function createEngagementEvent(
     // Return early if we are not in the browser
     if(typeof window !== 'object') {
         return;
-    }
-
-    // Get the device ID from local storage
-    const deviceIdLocalStorageKey = ProjectSettings.identifier + 'DeviceId';
-    let deviceId = localStorage.getItem(deviceIdLocalStorageKey) || '';
-
-    // If there is no device ID
-    if(!deviceId) {
-        // Create a new device ID
-        deviceId = uniqueIdentifier();
-
-        // Save the device ID to local storage
-        localStorage.setItem(deviceIdLocalStorageKey, deviceId);
     }
 
     // Determine the device orientation
