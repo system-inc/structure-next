@@ -41,7 +41,6 @@ certificates
 
 # TypeScript
 *.tsbuildinfo
-next-env.d.ts
 
 # Caching
 .cache/
