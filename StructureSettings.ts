@@ -67,7 +67,7 @@ export interface StructureSettingsInterface {
         defaultTheme: Theme;
     };
     assets: {
-        url: string;
+        host: string;
         favicon: ThemedAsset;
         logo: LogoAsset;
     };
@@ -103,7 +103,7 @@ export const StructureSettings: StructureSettingsInterface = {
         },
     },
     assets: {
-        url: 'https://assets.system.inc/',
+        host: 'assets.system.inc',
         favicon: {
             light: {
                 location: '/images/icons/favicons/favicon-light.png',
