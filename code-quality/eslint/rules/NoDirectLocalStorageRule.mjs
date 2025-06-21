@@ -10,13 +10,27 @@ const NoDirectLocalStorageRule = {
         },
         messages: {
             directLocalStorage:
-                "Direct localStorage usage is not allowed. Use LocalStorageService from '@structure/source/utilities/storage/LocalStorageService' instead.",
+                "Direct localStorage usage is not allowed. Use localStorageService from '@structure/source/services/local-storage/LocalStorageService' instead.",
             windowLocalStorage:
-                "Direct window.localStorage usage is not allowed. Use LocalStorageService from '@structure/source/utilities/storage/LocalStorageService' instead.",
+                "Direct window.localStorage usage is not allowed. Use localStorageService from '@structure/source/services/local-storage/LocalStorageService' instead.",
         },
         fixable: null, // No auto-fix since it requires importing and using a different API
     },
     create(context) {
+        const filename = context.getFilename();
+        
+        // Normalize file path to always use forward slashes
+        const normalizedPath = filename.replace(/\\/g, '/');
+        
+        // Allow direct localStorage usage only in the LocalStorageService implementation itself
+        const isLocalStorageService = 
+            normalizedPath.includes('/services/local-storage/LocalStorageService.ts') ||
+            normalizedPath.includes('/services/local-storage/internal/LocalStorageServiceUtilities.ts');
+        
+        if(isLocalStorageService) {
+            return {};
+        }
+
         return {
             // Check for localStorage.method() calls
             MemberExpression(node) {

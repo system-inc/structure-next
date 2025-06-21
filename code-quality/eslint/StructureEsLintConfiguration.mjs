@@ -135,7 +135,7 @@ export const structureJavaScriptAndTypeScriptRules = {
     // Structure
     'no-empty': ['error', { allowEmptyCatch: true }],
     'structure/no-structure-project-imports-rule': 'error',
-    // 'structure/no-direct-localstorage-rule': 'error',
+    'structure/no-direct-localstorage-rule': 'error',
     'structure/react-no-destructuring-react-rule': 'error',
     'structure/react-import-rule': 'error',
     'structure/react-export-rule': 'error',
