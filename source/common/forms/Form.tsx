@@ -457,6 +457,7 @@ export function Form(properties: FormProperties) {
 
                 // Clone the form input and pass in the necessary properties
                 const formInputClone = React.cloneElement(formInput, {
+                    // eslint-disable-next-line structure/react-naming-conventions-rule
                     ref: (reference: FormInputReferenceInterface | null) => {
                         console.log('[Form.tsx] Setting ref for', formInput.props.id, 'reference:', reference);
                         if(reference) {

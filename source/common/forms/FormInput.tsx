@@ -60,7 +60,8 @@ export interface FormInputReferenceInterface extends InputReferenceInterface {
 
 // Component - FormInput
 export interface FormInputProperties extends InputProperties {
-    reference?: (instance: FormInputReferenceInterface) => void;
+    // eslint-disable-next-line structure/react-naming-conventions-rule
+    ref?: (instance: FormInputReferenceInterface) => void;
     id: string;
     size?: keyof typeof FormInputSizes;
     componentClassName?: string;
