@@ -33,6 +33,9 @@ import { useSpring, animated } from '@react-spring/web';
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
+// Dependencies - Services
+import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
+
 // Component - SideNavigationLayoutNavigationSide
 export interface SideNavigationLayoutNavigationSideProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
@@ -168,9 +171,9 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     //     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
                     //     roundedWidth,
                     // );
-                    localStorage.setItem(
+                    localStorageService.set(
                         getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
-                        roundedWidth.toString(),
+                        roundedWidth,
                     );
                 }
             }
@@ -210,9 +213,9 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationWidth(defaultNavigationWidth);
 
                 // Update the local storage
-                localStorage.setItem(
+                localStorageService.set(
                     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
-                    defaultNavigationWidth.toString(),
+                    defaultNavigationWidth,
                 );
             }
 
@@ -305,7 +308,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             // console.log('Initial width from session storage:', sessionStorageWidth);
 
             // Read the width from local storage
-            const localStorageWidth = localStorage.getItem(
+            const localStorageWidth = localStorageService.get<number>(
                 getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
             );
             // console.log('Initial width from local storage:', localStorageWidth);
@@ -316,7 +319,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 // This behavior means that users can adjust the width on one tab and it will not affect other active tabs
                 // However, if the user closes the tab and opens a new one, the width will be the same as the last
                 // manually adjusted width
-                setSideNavigationLayoutNavigationWidth(parseInt(localStorageWidth));
+                setSideNavigationLayoutNavigationWidth(localStorageWidth);
             }
 
             // If on mobile
