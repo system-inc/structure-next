@@ -14,6 +14,9 @@ import { accountSignedInKey, Account } from '@structure/source/modules/account/A
 import { useQuery, useMutation, ApolloError } from '@apollo/client';
 import { AccountDocument, AccountSignOutDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
+// Dependencies - Services
+import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
+
 // Context - Account
 interface AccountContextInterface {
     accountState: {
@@ -91,7 +94,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
 
         // Update local storage so other tabs can know the account is signed in
         // Local storage - because it is shared across tabs
-        localStorage.setItem(accountSignedInKey, value ? 'true' : 'false');
+        localStorageService.set(accountSignedInKey, value);
 
         // Update the state
         setSignedIn(value);
@@ -125,7 +128,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
 
     // Effect to update local storage on mount
     React.useEffect(function () {
-        localStorage.setItem(accountSignedInKey, signedIn ? 'true' : 'false');
+        localStorageService.set(accountSignedInKey, signedIn);
     });
 
     // Effect to listen for changes in local storage

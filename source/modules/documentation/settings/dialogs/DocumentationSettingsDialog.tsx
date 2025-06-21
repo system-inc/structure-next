@@ -8,40 +8,32 @@ import { Form } from '@structure/source/common/forms/Form';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 
-// Dependencies - Shared State
-import { atomWithStorage, createJSONStorage } from 'jotai/utils';
-import { useAtom } from 'jotai';
+// Dependencies - Services
+import { useLocalStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
-// Atom for API key
-export const apiKeyAtom = atomWithStorage<string>(
-    'apiKey', // Key
-    '', // Default value
-    // Use local storage to persist the state
-    typeof localStorage !== 'undefined'
-        ? createJSONStorage(function () {
-              return localStorage;
-          })
-        : undefined,
-    {
-        getOnInit: true, // Get the value on initialization (this is important for SSR)
-    },
-);
+// Dependencies - Utilities
+import { uppercaseFirstCharacter } from '@structure/source/utilities/String';
 
 // Component - DocumentationSettingsDialog
 export interface DocumentationSettingsDialogProperties {
+    documentationIdentifier: string;
     isOpen: boolean;
     onClose: () => void;
 }
 export function DocumentationSettingsDialog(properties: DocumentationSettingsDialogProperties) {
-    // State
-    const [apiKey, setApiKey] = useAtom(apiKeyAtom);
-    const [newApiKey, setNewApiKey] = React.useState(apiKey);
+    // Use localStorage service for API key with unique identifier
+    const { value: apiKey, set: setApiKey } = useLocalStorageService<string | null>(
+        uppercaseFirstCharacter(properties.documentationIdentifier) + 'DocumentationApiKey',
+    );
+
+    // State for the form input
+    const [newApiKey, setNewApiKey] = React.useState(apiKey || '');
 
     // Effect to sync form with current apiKey when dialog opens
     React.useEffect(
         function () {
             if(properties.isOpen) {
-                setNewApiKey(apiKey);
+                setNewApiKey(apiKey || '');
             }
         },
         [properties.isOpen, apiKey],

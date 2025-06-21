@@ -19,19 +19,24 @@ import {
 } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
 // import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
 
+// Dependencies - Services
+import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
+
 // Dependencies - Assets
 import PlayIcon from '@structure/assets/icons/media/PlayIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
 import {
     getMethodColorClass,
     getStatusCodeColorClass,
 } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
+import { uppercaseFirstCharacter } from '@structure/source/utilities/String';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - RestEndpointNodeContent
 export interface RestEndpointNodeContentProperties {
     node: RestEndpointNodeProperties;
+    documentationIdentifier: string;
 }
 export function RestEndpointNodeContent(properties: RestEndpointNodeContentProperties) {
     const { endpoint } = properties.node;
@@ -296,8 +301,10 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
     const testEndpoint = async function () {
         setRunningRequest(true);
 
-        // Get 'apiKey' from local storage
-        let apiKey = localStorage.getItem('apiKey');
+        // Get 'apiKey' from local storage with unique identifier
+        let apiKey = localStorageService.get<string>(
+            uppercaseFirstCharacter(properties.documentationIdentifier) + 'DocumentationApiKey',
+        );
         if(apiKey) {
             apiKey = apiKey.trim().replaceAll('"', '');
         }

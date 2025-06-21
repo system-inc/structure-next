@@ -13,6 +13,7 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - DocumentationSettings
 export interface DocumentationSettingsProperties {
     className?: string;
+    documentationIdentifier: string;
 }
 export function DocumentationSettings(properties: DocumentationSettingsProperties) {
     // State
@@ -32,6 +33,7 @@ export function DocumentationSettings(properties: DocumentationSettingsPropertie
 
             {/* API Key */}
             <DocumentationSettingsDialog
+                documentationIdentifier={properties.documentationIdentifier}
                 isOpen={isSettingsDialogOpen}
                 onClose={function () {
                     setIsSettingsDialogOpen(false);

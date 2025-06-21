@@ -27,14 +27,14 @@ import {
     sideNavigationLayoutNavigationSpringConfiguration,
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
+// Dependencies - Services
+import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
+
 // Dependencies - Animation
 import { useSpring, animated } from '@react-spring/web';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-
-// Dependencies - Services
-import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
 // Component - SideNavigationLayoutNavigationSide
 export interface SideNavigationLayoutNavigationSideProperties {

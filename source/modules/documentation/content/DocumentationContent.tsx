@@ -37,7 +37,12 @@ export function DocumentationContent(properties: DocumentationContentProperties)
                 content = <Markdown>{currentNode.content}</Markdown>;
                 break;
             case 'RestEndpoint':
-                content = <RestEndpointNodeContent node={currentNode} />;
+                content = (
+                    <RestEndpointNodeContent
+                        documentationIdentifier={properties.specification.identifier}
+                        node={currentNode}
+                    />
+                );
                 break;
             // Add cases for other node types as needed
             default:

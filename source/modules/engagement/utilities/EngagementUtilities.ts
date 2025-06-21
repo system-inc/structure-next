@@ -1,33 +1,33 @@
-// Dependencies - Project
-import { ProjectSettings } from '@project/ProjectSettings';
+// Dependencies - Services
+import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
 // Google Attribution Constants
-const googleGclidKey = ProjectSettings.identifier + 'EngagementGoogleGclid';
-const googleGbraidKey = ProjectSettings.identifier + 'EngagementGoogleGbraid';
-const googleWbraidKey = ProjectSettings.identifier + 'EngagementGoogleWbraid';
+const googleGclidKey = 'EngagementGoogleGclid';
+const googleGbraidKey = 'EngagementGoogleGbraid';
+const googleWbraidKey = 'EngagementGoogleWbraid';
 
 // Meta Attribution Constants
-const metaFbcKey = ProjectSettings.identifier + 'EngagementMetaFbc';
-const metaFbpKey = ProjectSettings.identifier + 'EngagementMetaFbp';
+const metaFbcKey = 'EngagementMetaFbc';
+const metaFbpKey = 'EngagementMetaFbp';
 
 // X Attribution Constants
-const xTwclidKey = ProjectSettings.identifier + 'EngagementXTwclid';
+const xTwclidKey = 'EngagementXTwclid';
 
 // Reddit Attribution Constants
-const redditRdtCidKey = ProjectSettings.identifier + 'EngagementRedditRdtCid';
+const redditRdtCidKey = 'EngagementRedditRdtCid';
 
 // Function to get current Google attribution data
 function getGoogleAttributionData(): { gclid?: string; gbraid?: string; wbraid?: string } {
-    const gclid = localStorage.getItem(googleGclidKey) || undefined;
-    const gbraid = localStorage.getItem(googleGbraidKey) || undefined;
-    const wbraid = localStorage.getItem(googleWbraidKey) || undefined;
+    const gclid = localStorageService.get<string>(googleGclidKey) || undefined;
+    const gbraid = localStorageService.get<string>(googleGbraidKey) || undefined;
+    const wbraid = localStorageService.get<string>(googleWbraidKey) || undefined;
     return { gclid, gbraid, wbraid };
 }
 
 // Function to handle gclid and store Google attribution
 // Added to every Google Ads landing‑page URL when Auto‑tagging is on (all browsers except special iOS cases)
 function handleGoogleGclid(gclid: string): string {
-    localStorage.setItem(googleGclidKey, gclid);
+    localStorageService.set(googleGclidKey, gclid);
 
     return gclid;
 }
@@ -35,7 +35,7 @@ function handleGoogleGclid(gclid: string): string {
 // Function to handle gbraid and store Google attribution
 // Appended when an ad click starts on the web and the conversion happens in an iOS app (web to app)
 function handleGoogleGbraid(gbraid: string): string {
-    localStorage.setItem(googleGbraidKey, gbraid);
+    localStorageService.set(googleGbraidKey, gbraid);
 
     return gbraid;
 }
@@ -43,7 +43,7 @@ function handleGoogleGbraid(gbraid: string): string {
 // Function to handle wbraid and store Google attribution
 // Appended when an ad click starts in a Google iOS app (e.g., Search app, YouTube) and the conversion happens on the web (app to web)
 function handleGoogleWbraid(wbraid: string): string {
-    localStorage.setItem(googleWbraidKey, wbraid);
+    localStorageService.set(googleWbraidKey, wbraid);
 
     return wbraid;
 }
@@ -62,8 +62,8 @@ function generateRandomNumber(): number {
 
 // Function to get current Meta attribution data
 function getMetaAttributionData(): { fbc?: string; fbp?: string } {
-    const fbc = localStorage.getItem(metaFbcKey) || undefined;
-    const fbp = localStorage.getItem(metaFbpKey) || undefined;
+    const fbc = localStorageService.get<string>(metaFbcKey) || undefined;
+    const fbp = localStorageService.get<string>(metaFbpKey) || undefined;
 
     return { fbc, fbp };
 }
@@ -71,7 +71,7 @@ function getMetaAttributionData(): { fbc?: string; fbp?: string } {
 // Function to create Meta fbp if it doesn't exist (create once, store forever)
 function createMetaFbpIfMissing(): string {
     // Check if fbp already exists in localStorage
-    const existingFbp = localStorage.getItem(metaFbpKey);
+    const existingFbp = localStorageService.get<string>(metaFbpKey);
     if(existingFbp) {
         return existingFbp;
     }
@@ -83,7 +83,7 @@ function createMetaFbpIfMissing(): string {
     const fbp = `fb.${subdomainIndex}.${timestamp}.${randomNumber}`;
 
     // Store in localStorage
-    localStorage.setItem(metaFbpKey, fbp);
+    localStorageService.set(metaFbpKey, fbp);
 
     return fbp;
 }
@@ -95,33 +95,33 @@ function handleMetaFbclid(fbclid: string): string {
     const fbc = `fb.${subdomainIndex}.${timestamp}.${fbclid}`;
 
     // Store in localStorage
-    localStorage.setItem(metaFbcKey, fbc);
+    localStorageService.set(metaFbcKey, fbc);
 
     return fbc;
 }
 
 // Function to get current X/Twitter attribution data
 function getXAttributionData(): { twclid?: string } {
-    const twclid = localStorage.getItem(xTwclidKey) || undefined;
+    const twclid = localStorageService.get<string>(xTwclidKey) || undefined;
     return { twclid };
 }
 
 // Function to handle X twclid and store attribution
 function handleXTwclid(twclid: string): string {
-    localStorage.setItem(xTwclidKey, twclid);
+    localStorageService.set(xTwclidKey, twclid);
 
     return twclid;
 }
 
 // Function to get current Reddit attribution data
 function getRedditAttributionData(): { rdt_cid?: string } {
-    const rdt_cid = localStorage.getItem(redditRdtCidKey) || undefined;
+    const rdt_cid = localStorageService.get<string>(redditRdtCidKey) || undefined;
     return { rdt_cid };
 }
 
 // Function to handle Reddit rdt_cid and store attribution
 function handleRedditRdtCid(rdtCid: string): string {
-    localStorage.setItem(redditRdtCidKey, rdtCid);
+    localStorageService.set(redditRdtCidKey, rdtCid);
 
     return rdtCid;
 }

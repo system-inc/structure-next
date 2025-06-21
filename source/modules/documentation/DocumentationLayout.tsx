@@ -29,7 +29,12 @@ export function DocumentationLayout(properties: DocumentationLayoutProperties) {
             navigation={
                 <nav className="px-4 py-4">
                     {/* Settings */}
-                    {properties.specification.settingsDialogEnabled && <DocumentationSettings className="mb-4" />}
+                    {properties.specification.settingsDialogEnabled && (
+                        <DocumentationSettings
+                            className="mb-4"
+                            documentationIdentifier={properties.specification.identifier}
+                        />
+                    )}
 
                     {/* Side Navigation */}
                     <SideNavigation
