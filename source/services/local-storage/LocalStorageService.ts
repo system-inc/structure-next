@@ -70,23 +70,68 @@ class LocalStorageService {
                 return null;
             }
 
-            // Parse the stored JSON to get the wrapped value with metadata
-            const parsed = JSON.parse(item) as LocalStorageItem<T>;
+            // Try to parse as our JSON format first
+            try {
+                // Parse the stored JSON to get the wrapped value with metadata
+                const parsed = JSON.parse(item) as LocalStorageItem<T>;
 
-            // Check if item has expired
-            if(parsed.expiresAt && Date.now() > parsed.expiresAt) {
-                // Remove expired item from storage
-                window.localStorage.removeItem(prefixedKey);
-                // Emit expire event instead of using remove() to avoid 'remove' event
-                this.emitStorageEvent(key, LocalStorageEventActions.Expire, null);
-                return null;
+                // Check if this is our format (has a 'value' property)
+                if(parsed && typeof parsed === 'object' && 'value' in parsed) {
+                    // Check if item has expired
+                    if(parsed.expiresAt && Date.now() > parsed.expiresAt) {
+                        // Remove expired item from storage
+                        window.localStorage.removeItem(prefixedKey);
+                        // Emit expire event instead of using remove() to avoid 'remove' event
+                        this.emitStorageEvent(key, LocalStorageEventActions.Expire, null);
+                        return null;
+                    }
+
+                    // Return the actual stored value
+                    return parsed.value;
+                }
+                else {
+                    // JSON parsed but not our format, treat as raw value
+                    throw new Error('Not LocalStorageItem format');
+                }
+            } catch {
+                // Not JSON or not our format - this is a legacy raw value
+                // Migrate it to the new format
+                console.log(`Migrating legacy localStorage value for key "${key}"`);
+
+                // Attempt to parse the value based on type
+                let migratedValue: T;
+
+                // Try to parse as JSON first (in case it's a stringified object/array)
+                try {
+                    migratedValue = JSON.parse(item) as T;
+                } catch {
+                    // Not JSON, treat as raw string/number/boolean
+                    // Try to convert to appropriate type
+                    if(item === 'true') {
+                        migratedValue = true as T;
+                    }
+                    else if(item === 'false') {
+                        migratedValue = false as T;
+                    }
+                    else if(item !== '' && !isNaN(Number(item))) {
+                        // Check if it's a number
+                        migratedValue = Number(item) as T;
+                    }
+                    else {
+                        // Keep as string
+                        migratedValue = item as T;
+                    }
+                }
+
+                // Store in new format (this will trigger the set event)
+                this.set(key, migratedValue);
+
+                // Return the migrated value
+                return migratedValue;
             }
-
-            // Return the actual stored value
-            return parsed.value;
         }
         catch(error) {
-            // Log error and return null if parsing fails or any other error occurs
+            // Log error and return null if any other error occurs
             console.error(`Error reading from localStorage for key "${key}":`, error);
             return null;
         }
