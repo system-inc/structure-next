@@ -15,6 +15,7 @@ import ReactNoArrowFunctionsAsHookParametersRule from './rules/ReactNoArrowFunct
 import ReactNamingConventionsRule from './rules/ReactNamingConventionsRule.mjs';
 import ReactFileOrganizationRule from './rules/ReactFileOrganizationRule.mjs';
 
+// ESLint Ignore patterns
 export const structureIgnorePatterns = [
     // Node modules
     'node_modules',
@@ -35,6 +36,7 @@ export const structureIgnorePatterns = [
     '**/*.code.js',
 ];
 
+// ESLint JavaScript configuration
 export const structureJavaScriptConfiguration = {
     files: ['**/*.{mjs,js,jsx}'],
     languageOptions: {
@@ -67,6 +69,7 @@ export const structureJavaScriptConfiguration = {
     },
 };
 
+// ESLint TypeScript configuration
 export const structureTypeScriptConfiguration = {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -83,6 +86,7 @@ export const structureTypeScriptConfiguration = {
     },
 };
 
+// ESLint JavaScript and TypeScript globals
 export const structureJavaScriptAndTypeScriptGlobals = {
     // React global
     React: 'writable', // Keep "React" writable for rules that still expect the old pragma
@@ -97,6 +101,7 @@ export const structureJavaScriptAndTypeScriptGlobals = {
     clearInterval: 'readonly',
 };
 
+// ESLint JavaScript and TypeScript plugins
 export const structureJavaScriptAndTypeScriptPlugins = {
     react: EsLintPluginReact,
     'react-hooks': EsLintPluginReactHooks,
@@ -117,6 +122,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
     },
 };
 
+// ESLint JavaScript and TypeScript rules
 export const structureJavaScriptAndTypeScriptRules = {
     // React
     ...EsLintPluginReact.configs['jsx-runtime'].rules,
