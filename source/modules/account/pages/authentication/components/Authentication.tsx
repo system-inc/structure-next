@@ -157,6 +157,24 @@ export function Authentication(properties: AuthenticationProperties) {
         [accountState.account, setAuthenticationDialogOpen, apolloClient, redirectUrl, router],
     );
 
+    // Effect to handle authentication success redirects
+    React.useEffect(
+        function () {
+            if(authenticationSessionSuccess) {
+                // If a redirect URL is provided, redirect to that URL
+                if(redirectUrl) {
+                    console.log('Redirecting to', redirectUrl);
+                    router.push(redirectUrl);
+                }
+                // Otherwise, redirect to root if on sign-in page
+                else if(urlPath == '/sign-in') {
+                    router.push('/'); // Default redirect if no specific URL is provided
+                }
+            }
+        },
+        [authenticationSessionSuccess, redirectUrl, urlPath, router],
+    );
+
     // The current authentication component based on the authentication state
     let currentAuthenticationComponent = null;
 
@@ -188,17 +206,15 @@ export function Authentication(properties: AuthenticationProperties) {
     }
     // Authenticated session success
     else if(authenticationSessionSuccess) {
-        // console.log('urlPath', urlPath, 'redirectUrl', redirectUrl);
-
-        // If a redirect URL is provided, redirect to that URL
-        if(redirectUrl) {
-            console.log('Redirecting to', redirectUrl);
-            router.push(redirectUrl);
-        }
-        // Otherwise, redirect to root if on sign-in page
-        else if(urlPath == '/sign-in') {
-            router.push('/'); // Default redirect if no specific URL is provided
-        }
+        // Redirects are handled in the useEffect above
+        currentAuthenticationComponent = (
+            <div className="flex items-center space-x-1.5">
+                <div>
+                    <BrokenCircleIcon className="h-5 w-5 animate-spin" />
+                </div>
+                <div>Redirecting...</div>
+            </div>
+        );
     }
     // Challenge - Email Verification
     else if(
