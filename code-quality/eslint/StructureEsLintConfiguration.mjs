@@ -1,0 +1,141 @@
+// Dependencies - Plugins
+import EsLintPluginReact from 'eslint-plugin-react';
+import EsLintPluginReactHooks from 'eslint-plugin-react-hooks';
+import EsLintPluginNext from '@next/eslint-plugin-next';
+
+// Dependencies - Structure ESLint Rules
+import NoStructureProjectImportsRule from './rules/NoStructureProjectImportsRule.mjs';
+import NoDirectLocalStorageRule from './rules/NoDirectLocalStorageRule.mjs';
+import ReactNoDestructuringReactRule from './rules/ReactNoDestructuringReactRule.mjs';
+import ReactImportRule from './rules/ReactImportRule.mjs';
+import ReactExportRule from './rules/ReactExportRule.mjs';
+import ReactFunctionStyleRule from './rules/ReactFunctionStyleRule.mjs';
+import ReactDestructuringPropertiesRule from './rules/ReactDestructuringPropertiesRule.mjs';
+import ReactNoArrowFunctionsAsHookParametersRule from './rules/ReactNoArrowFunctionsAsHookParametersRule.mjs';
+import ReactNamingConventionsRule from './rules/ReactNamingConventionsRule.mjs';
+import ReactFileOrganizationRule from './rules/ReactFileOrganizationRule.mjs';
+
+export const structureIgnorePatterns = [
+    // Node modules
+    'node_modules',
+    'package*.json',
+    // Lock files & manifest
+    'pnpm-lock.yaml',
+    'yarn.lock',
+    // Public folder
+    'public/**',
+    // Build artifacts
+    '**/.next/**',
+    '**/.open-next/**',
+    '**/.worker-next/**',
+    '**/.wrangler/**',
+    '**/build/**',
+    '**/dist/**',
+    // *.code.js files
+    '**/*.code.js',
+];
+
+export const structureJavaScriptConfiguration = {
+    files: ['**/*.{mjs,js,jsx}'],
+    languageOptions: {
+        // Use the standard ESLint parser for JavaScript
+        parserOptions: {
+            sourceType: 'module',
+            ecmaVersion: 2022,
+            jsx: true, // Enable JSX parsing
+        },
+    },
+    globals: {
+        // Node.js globals
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        process: 'readonly',
+        console: 'readonly',
+        global: 'readonly',
+        Buffer: 'readonly',
+    },
+    linterOptions: {
+        reportUnusedDisableDirectives: true,
+    },
+    rules: {
+        // More permissive rules for JavaScript files
+        'no-console': 'off', // Allow console logs
+        'no-process-exit': 'off', // Allow process.exit()
+        'no-sync': 'off', // Allow synchronous methods (often used in scripts)
+    },
+};
+
+export const structureTypeScriptConfiguration = {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+        parserOptions: {
+            project: true, // Auto-detect nearest tsconfig.json
+            sourceType: 'module',
+        },
+    },
+    rules: {
+        // TypeScript tweaks
+        '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
+        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-namespace': 'off', // Allow TypeScript namespaces
+    },
+};
+
+export const structureJavaScriptAndTypeScriptGlobals = {
+    // React global
+    React: 'writable', // Keep "React" writable for rules that still expect the old pragma
+
+    // Browser globals
+    document: 'readonly',
+    window: 'readonly',
+    navigator: 'readonly',
+    setTimeout: 'readonly',
+    clearTimeout: 'readonly',
+    setInterval: 'readonly',
+    clearInterval: 'readonly',
+};
+
+export const structureJavaScriptAndTypeScriptPlugins = {
+    react: EsLintPluginReact,
+    'react-hooks': EsLintPluginReactHooks,
+    '@next/next': EsLintPluginNext,
+    structure: {
+        rules: {
+            'no-structure-project-imports-rule': NoStructureProjectImportsRule,
+            'no-direct-localstorage-rule': NoDirectLocalStorageRule,
+            'react-no-destructuring-react-rule': ReactNoDestructuringReactRule,
+            'react-import-rule': ReactImportRule,
+            'react-export-rule': ReactExportRule,
+            'react-function-style-rule': ReactFunctionStyleRule,
+            'react-destructuring-properties-rule': ReactDestructuringPropertiesRule,
+            'react-no-arrow-functions-as-hook-parameters-rule': ReactNoArrowFunctionsAsHookParametersRule,
+            'react-naming-conventions-rule': ReactNamingConventionsRule,
+            'react-file-organization-rule': ReactFileOrganizationRule,
+        }
+    },
+};
+
+export const structureJavaScriptAndTypeScriptRules = {
+    // React
+    ...EsLintPluginReact.configs['jsx-runtime'].rules,
+    ...EsLintPluginReactHooks.configs.recommended.rules,
+
+    // Next.js
+    ...EsLintPluginNext.configs.recommended.rules,
+    ...EsLintPluginNext.configs['core-web-vitals'].rules,
+
+    // Structure
+    'no-empty': ['error', { allowEmptyCatch: true }],
+    'structure/no-structure-project-imports-rule': 'error',
+    // 'structure/no-direct-localstorage-rule': 'error',
+    'structure/react-no-destructuring-react-rule': 'error',
+    'structure/react-import-rule': 'error',
+    'structure/react-export-rule': 'error',
+    'structure/react-function-style-rule': 'error',
+    'structure/react-destructuring-properties-rule': 'error',
+    'structure/react-no-arrow-functions-as-hook-parameters-rule': 'error',
+    'structure/react-naming-conventions-rule': 'error',
+    'structure/react-file-organization-rule': 'error',
+};
