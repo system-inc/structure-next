@@ -163,9 +163,9 @@ export function createEngagementEvent(
         // Determine the delay
         let delay = 100; // Default 100ms delay for subsequent batches
 
-        // If this is the first event, use a 1.5-second delay
+        // If this is the first event, use a 3.5-second delay
         if(isFirstEvent) {
-            delay = 1500;
+            delay = 3500;
             isFirstEvent = false;
             // console.log('📊 Page loaded... waiting 1.5 seconds before sending engagement events');
         }
