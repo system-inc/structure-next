@@ -206,14 +206,7 @@
             "ShippingServiceType": {
                 "kind": "enum",
                 "type": "ShippingServiceType",
-                "values": [
-                    "USPSFirstClassMail",
-                    "USPSPriorityMail",
-                    "USPSPriorityMailExpress",
-                    "USPSParcelSelect",
-                    "USPSMediaMail",
-                    "UPSGround"
-                ]
+                "values": ["USPSStandard", "UPSGround"]
             },
             "Float": {
                 "kind": "scalar",
@@ -339,10 +332,10 @@
                 "type": "CommerceCheckoutSessionStatus",
                 "values": ["Pending", "Complete", "Failed", "Closed", "Expired"]
             },
-            "ProductBundleVisibility": {
+            "ProductStatus": {
                 "kind": "enum",
-                "type": "ProductBundleVisibility",
-                "values": ["Public", "Unlisted"]
+                "type": "ProductStatus",
+                "values": ["Active", "Archived", "Draft"]
             },
             "ProductVariantStatus": {
                 "kind": "enum",
@@ -365,11 +358,6 @@
                 "kind": "enum",
                 "type": "ProductVariantAttributeKey",
                 "values": ["Color", "Size", "SubscriptionPlan", "Credits", "AppStore"]
-            },
-            "ProductStatus": {
-                "kind": "enum",
-                "type": "ProductStatus",
-                "values": ["Active", "Archived", "Draft"]
             },
             "VendorStatus": {
                 "kind": "enum",
@@ -510,214 +498,6 @@
                                 "type": "isPositive"
                             }
                         ]
-                    }
-                ]
-            },
-            "CreateProductBundleInput": {
-                "kind": "object",
-                "type": "CreateProductBundleInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "id",
-                        "validation": [
-                            {
-                                "type": "isUuid"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "name",
-                        "validation": [
-                            {
-                                "type": "isLength",
-                                "constraints": [4, 128]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "identifier",
-                        "validation": [
-                            {
-                                "type": "isLength",
-                                "constraints": [4, 16]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "description",
-                        "validation": [
-                            {
-                                "type": "isLength",
-                                "constraints": [0, 512]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "enum",
-                        "type": "ProductBundleVisibility",
-                        "required": false,
-                        "name": "visibility",
-                        "validation": [
-                            {
-                                "type": "isEnum",
-                                "constraints": [
-                                    {
-                                        "Public": "Public",
-                                        "Unlisted": "Unlisted"
-                                    },
-                                    ["Public", "Unlisted"]
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "object",
-                        "type": "CreateProductBundleItemInput",
-                        "required": true,
-                        "name": "items",
-                        "validation": [
-                            {
-                                "type": "arrayNotEmpty"
-                            }
-                        ]
-                    }
-                ]
-            },
-            "CreateProductBundleItemInput": {
-                "kind": "object",
-                "type": "CreateProductBundleItemInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "productVariantId",
-                        "validation": [
-                            {
-                                "type": "isLength",
-                                "constraints": [4, 128]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Float",
-                        "required": true,
-                        "name": "quantity"
-                    }
-                ]
-            },
-            "UpdateProductBundleInput": {
-                "kind": "object",
-                "type": "UpdateProductBundleInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "id"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "name",
-                        "validation": [
-                            {
-                                "type": "isLength",
-                                "constraints": [4, 128]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "identifier",
-                        "validation": [
-                            {
-                                "type": "isLength",
-                                "constraints": [4, 16]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "description",
-                        "validation": [
-                            {
-                                "type": "isLength",
-                                "constraints": [0, 512]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "enum",
-                        "type": "ProductBundleVisibility",
-                        "required": false,
-                        "name": "visibility",
-                        "validation": [
-                            {
-                                "type": "isEnum",
-                                "constraints": [
-                                    {
-                                        "Public": "Public",
-                                        "Unlisted": "Unlisted"
-                                    },
-                                    ["Public", "Unlisted"]
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "object",
-                        "type": "CreateProductBundleItemInput",
-                        "required": true,
-                        "name": "addItems"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "removeItems"
-                    },
-                    {
-                        "kind": "object",
-                        "type": "UpdateProductBundleItemInput",
-                        "required": true,
-                        "name": "updateItems"
-                    }
-                ]
-            },
-            "UpdateProductBundleItemInput": {
-                "kind": "object",
-                "type": "UpdateProductBundleItemInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "indexId"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Float",
-                        "required": true,
-                        "name": "quantity"
                     }
                 ]
             },

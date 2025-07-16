@@ -82,6 +82,7 @@ type Account {
     emailAddress: String!
     emails: [AccountEmail!]!
     enrolledChallenges: [String!]!
+    entitlements: [String!]!
     profile: Profile!
     profiles: [Profile!]!
     session: AccountSession
@@ -174,7 +175,7 @@ input AccountRegistrationOrSignInCreateInput {
 }
 
 type AccountSession {
-    accessRoles: AccessRoleAssignment!
+    accessRoles: [AccessRoleAssignment!]!
     createdAt: DateTimeISO!
     id: String!
     lastUsed: DateTimeISO
@@ -414,7 +415,7 @@ type Mutation {
     """
     Revoke a profile entitlement.
     """
-    accountProfileEntitlementDeletePrivileged(input: ProfileEntitlementInput!): OperationResult!
+    accountProfileEntitlementRevokePrivileged(input: ProfileEntitlementInput!): OperationResult!
     accountProfileImageRemove: Profile!
     accountProfileUpdate(input: AccountProfileUpdateInput!): Profile!
     accountSessionDelete(input: AccountSessionDeleteInput!): OperationResult!
@@ -497,6 +498,7 @@ type ProfileEntitlement {
     id: String!
     profile: Profile!
     profileId: String!
+    status: ProfileEntitlementStatus!
     updatedAt: DateTimeISO!
     updatedByAccountId: String
     updatedByProfileId: String
@@ -515,6 +517,15 @@ input ProfileEntitlementInput {
 input ProfileEntitlementListInput {
     entitlementId: String
     profileId: String
+}
+
+"""
+The status of a ProfileEntitlement feature key for an account/profile
+"""
+enum ProfileEntitlementStatus {
+    Active
+    Expired
+    Revoked
 }
 
 type PublicProfile {

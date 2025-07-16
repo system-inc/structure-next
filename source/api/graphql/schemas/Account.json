@@ -55,6 +55,12 @@
                 "description": "The status of an access role for an account/profile",
                 "values": ["Active", "Expired", "Revoked"]
             },
+            "ProfileEntitlementStatus": {
+                "kind": "enum",
+                "type": "ProfileEntitlementStatus",
+                "description": "The status of a ProfileEntitlement feature key for an account/profile",
+                "values": ["Active", "Expired", "Revoked"]
+            },
             "PaginationInput": {
                 "kind": "object",
                 "type": "PaginationInput",

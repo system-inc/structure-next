@@ -5,39 +5,42 @@ import { graphql } from '../../../../../package.json';
 // Configuration
 export const graphQlCodeGeneratorConfiguration: GraphQlCodeGeneratorConfiguration = {
     generates: {
-        // Structure GraphQL files (using structure schemas and documents)
-        './libraries/structure/source/api/graphql/generated/': {
-            preset: 'client',
-            schema: graphql.projects.structure.schema,
-            documents: graphql.projects.structure.documents,
-            plugins: [
-                {
-                    'typescript-operation-metadata': {
-                        metadata: ['./libraries/structure/source/api/graphql/schemas/**/*.json'],
-                    },
-                },
-            ],
-            config: {
-                useTypeImports: true,
-            },
-        },
-        // Project GraphQL files (using project schemas and documents)
-        './app/_api/graphql/generated/': {
+        // App GraphQL files
+        [graphql.projects.app.output]: {
             preset: 'client',
             schema: graphql.projects.app.schema,
             documents: graphql.projects.app.documents,
             plugins: [
                 {
                     'typescript-operation-metadata': {
-                        metadata: ['./app/_api/graphql/schemas/**/*.json'],
+                        metadata: graphql.projects.app.metadata,
                     },
                 },
             ],
             config: {
                 useTypeImports: true,
+                documentMode: 'string',
+            },
+        },
+        // Structure GraphQL files
+        [graphql.projects.structure.output]: {
+            preset: 'client',
+            schema: graphql.projects.structure.schema,
+            documents: graphql.projects.structure.documents,
+            plugins: [
+                {
+                    'typescript-operation-metadata': {
+                        metadata: graphql.projects.structure.metadata,
+                    },
+                },
+            ],
+            config: {
+                useTypeImports: true,
+                documentMode: 'string',
             },
         },
     },
+    ignoreNoDocuments: true,
 };
 
 // Export - Default

@@ -11,30 +11,34 @@ type AppleStoreTransactionOrderMapping {
 }
 
 type CommerceOrder {
-    batchIdentifier: String!
-    beneficiaryEmailAddress: String
-    checkoutSessionId: String!
+    appliedDiscounts: [CommerceOrderDiscount!]
     createdAt: DateTimeISO!
-    discounts: [Discount!]
     emailAddress: String!
     fulfillmentSource: String
     fulfillmentStatus: CommerceOrderFulfillmentStatus!
-    holdOnShipping: Boolean!
     id: String!
     identifier: String!
     lineItems: [CommerceOrderLineItem!]
     metadata: JSON
-    orderLogs: [CommerceOrderLog!]
     payment: Payment
-    paymentId: String
     paymentStatus: PaymentStatus
     priceInfo: CommerceOrderPrice!
+    refunds: [Refund!]
     shipments: [Shipment!]
     shippingInfo: CommerceOrderShippingInfo
     source: String!
     status: CommerceOrderStatus!
-    statusDescription: String
+    statusRecords: [StatusRecord!]
     updatedAt: DateTimeISO!
+}
+
+type CommerceOrderDiscount {
+    amount: MonetaryDecimal!
+    code: String
+    colorOption: LabelColorOption
+    iconAlt: String
+    iconUrl: String
+    items: [CommerceOrderLineItemDiscount!]
 }
 
 """
@@ -50,25 +54,29 @@ enum CommerceOrderFulfillmentStatus {
 }
 
 type CommerceOrderLineItem {
-    commerceOrderId: String!
     createdAt: DateTimeISO!
-    fulfilledQuantity: Int!
     id: String!
     indexId: Int!
+    originalQuantity: Int
     productVariantId: String!
     quantity: Int!
-    shippedQuantity: Int!
     status: CommerceOrderLineItemStatus!
-    statusDescription: String
+    statusRecords: [StatusRecord!]
     updatedAt: DateTimeISO!
 }
 
-type CommerceOrderLineItemPrice {
+type CommerceOrderLineItemDiscount {
     amount: MonetaryDecimal!
     indexId: Int!
+    unitAmount: MonetaryDecimal
+}
+
+type CommerceOrderLineItemPrice {
+    indexId: Int!
     originalSubtotal: MonetaryDecimal!
+    originalUnitPrice: MonetaryDecimal
     subtotal: MonetaryDecimal!
-    tax: MonetaryDecimal!
+    unitPrice: MonetaryDecimal
 }
 
 """
@@ -78,33 +86,6 @@ enum CommerceOrderLineItemStatus {
     Cancelled
     Pending
     Shipped
-}
-
-type CommerceOrderLog {
-    commerceOrderId: String!
-    content: JSON
-    createdAt: DateTimeISO!
-    description: String
-    id: String!
-    source: CommerceOrderLogSource!
-    visibility: CommerceOrderLogVisibility!
-}
-
-"""
-The source of the order log.
-"""
-enum CommerceOrderLogSource {
-    CustomerSupport
-    System
-    User
-}
-
-"""
-The visibility of the order log.
-"""
-enum CommerceOrderLogVisibility {
-    Internal
-    Public
 }
 
 type CommerceOrderPrice {
@@ -123,34 +104,19 @@ type CommerceOrderShippingInfo {
 
 type CommerceOrderShippingRate {
     amount: MonetaryDecimal!
-    breakdown: [CommerceOrderShippingRateBreakdown!]!
     originalAmount: MonetaryDecimal!
-}
-
-type CommerceOrderShippingRateBreakdown {
-    freeShipping: Boolean!
-    items: [CommerceOrderShippingRateBreakdownItem!]!
-    originalShippingRate: MonetaryDecimal!
-    packageIndexId: Int!
-    shippingRate: MonetaryDecimal!
-}
-
-type CommerceOrderShippingRateBreakdownItem {
-    indexId: Int!
-    quantity: Int!
 }
 
 """
 The status of the order
 """
 enum CommerceOrderStatus {
-    Archived
     Cancelled
     Complete
-    FailToConfirm
     Open
     OutOfStock
     Pending
+    Refunded
     WaitPayment
 }
 
@@ -183,101 +149,18 @@ enum DeliveryStatus {
     ReadyForPickup
 }
 
-type Discount {
-    code: String
-    conditions: [DiscountCondition!]!
-    createdAt: DateTimeISO!
-    endsAt: DateTimeISO
-    id: String!
-    rule: DiscountRule
-    startsAt: DateTimeISO
-    type: DiscountType!
-    updatedAt: DateTimeISO!
-    usageCount: Int!
-}
-
-enum DiscountAllocationMethod {
-    BuyXGetFollowing
-    BuyXGetY
-    Flat
-}
-
-type DiscountAllocationObject {
-    buyThisGetY: Int
-    buyThisGetYAmount: MonetaryDecimal
-    buyXAmountGetThis: MonetaryDecimal
-    buyXGetThis: Int
-    maxAllocationLimit: Float!
-    method: DiscountAllocationMethod!
-    target: DiscountAllocationTarget!
-    value: MonetaryDecimal!
-    valueType: DiscountValueType!
-}
-
-enum DiscountAllocationTarget {
-    Across
-    Each
-    ShippingAmount
-    ShippingBreakdown
-}
-
-type DiscountCondition {
-    createdAt: DateTimeISO!
-    discountRuleId: String
-    id: String!
-    quantityRequirement: DiscountConditionRequirementObject
-    referenceId: String!
-    subtotalRequirement: DiscountConditionRequirementObject
-    target: DiscountConditionTarget!
-    type: DiscountConditionType!
-    updatedAt: DateTimeISO!
-}
-
-type DiscountConditionRequirementObject {
-    maxValue: Int
-    minValue: Int
-    requiredValue: Int
-}
-
-enum DiscountConditionTarget {
-    EntireOrder
-    LineItem
-}
-
-enum DiscountConditionType {
-    ProductVariants
-    Products
-    Vendors
-}
-
-type DiscountRule {
-    allocation: DiscountAllocationObject!
-    conditions: [DiscountCondition!]!
-    createdAt: DateTimeISO!
-    displayTitle: String!
-    id: String!
-    oncePerCustomer: Boolean!
-    title: String!
-    updatedAt: DateTimeISO!
-}
-
-"""
-The type of the discount.
-"""
-enum DiscountType {
-    Automatic
-    Code
-}
-
-enum DiscountValueType {
-    FixedAmount
-    Percentage
-}
-
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSON
+
+"""
+The label color to be used for display
+"""
+enum LabelColorOption {
+    Blue
+    Green
+}
 
 """
 Monetary decimal custom scalar type, we stored and operate the value in cents, and this scalar will convert the value to dollar when read and convert the value to cents when write.
@@ -297,9 +180,7 @@ type Payment {
     paymentMethod: PaymentMethod
     paymentProcessorType: PaymentProcessorType!
     status: PaymentStatus!
-    statusDescription: String
     updatedAt: DateTimeISO!
-    walletEntryId: String
 }
 
 interface PaymentMethod {
@@ -332,8 +213,9 @@ enum PaymentMethodType {
 
 enum PaymentProcessorType {
     AppleInAppPurchase
+    Stripe
     StripeEmbedded
-    StripeProxy
+    Test
 }
 
 """
@@ -349,7 +231,42 @@ enum PaymentStatus {
 }
 
 type Query {
-    appleStoreTransactionWithOrderInfo(transactionId: String!): AppleStoreTransactionOrderMapping
+    appleStoreTransactionWithOrderInfo(
+        originalTransactionId: String
+        transactionId: String!
+    ): AppleStoreTransactionOrderMapping
+}
+
+type Refund {
+    amount: MonetaryDecimal
+    commerceOrder: CommerceOrder
+    commerceOrderId: String!
+    createdAt: DateTimeISO!
+    id: String!
+    items: [RefundItem!]!
+    metadata: JSON
+    reason: String
+    status: RefundStatus!
+    statusRecords: [StatusRecord!]
+    updatedAt: DateTimeISO!
+}
+
+type RefundItem {
+    lineItemId: Float!
+    quantity: Float!
+}
+
+"""
+The status of a refund.
+"""
+enum RefundStatus {
+    Cancelled
+    Created
+    Failed
+    Issued
+    Pending
+    Rejected
+    RequiresAction
 }
 
 type Shipment {
@@ -362,11 +279,10 @@ type Shipment {
     id: String!
     label: ShippingLabel
     orderIndexId: Int!
-    orderSlip: ShippingOrderSlip
+    packageInfo: ShippingPackageInfo!
     shippedAt: DateTimeISO
     source: String!
     status: ShipmentStatus!
-    statusDescription: String
     toAddress: StreetAddressObject!
     updatedAt: DateTimeISO!
     updatedByAccountId: String
@@ -387,28 +303,30 @@ enum ShipmentStatus {
 
 type ShippingLabel {
     carrier: String!
-    labelId: String!
     serviceType: ShippingServiceType!
-    source: ShippingLabelSource!
     trackingNumber: String!
     trackingUrl: String
 }
 
-enum ShippingLabelSource {
-    Others
-    Stamps
+type ShippingPackageInfo {
+    items: [ShippingPackageItem!]!
+    packageIndexId: Float!
 }
 
-type ShippingOrderSlip {
-    storedObjectUrl: String
+type ShippingPackageItem {
+    indexId: Float!
+    quantity: Float!
 }
 
 enum ShippingServiceType {
-    USPSFirstClassMail
-    USPSMediaMail
-    USPSParcelSelect
-    USPSPriorityMail
-    USPSPriorityMailExpress
+    UPSGround
+    USPSStandard
+}
+
+type StatusRecord {
+    description: String
+    status: String!
+    timestamp: DateTimeISO!
 }
 
 type StreetAddressObject {

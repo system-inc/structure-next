@@ -52,7 +52,7 @@ query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMe
 }
 
 # Database Tables Query
-query DataInteractionDatabaseTables($databaseName: String, $pagination: PaginationInput!) {
+query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
     dataInteractionDatabaseTables(databaseName: $databaseName, pagination: $pagination) {
         items {
             databaseName

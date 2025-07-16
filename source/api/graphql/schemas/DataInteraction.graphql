@@ -214,7 +214,7 @@ type Query {
         pagination: PaginationInput!
         tableName: String!
     ): DatabaseTableMetadataWithRows!
-    dataInteractionDatabaseTables(databaseName: String, pagination: PaginationInput!): DatabaseTablesResult!
+    dataInteractionDatabaseTables(databaseName: String!, pagination: PaginationInput!): DatabaseTablesResult!
     dataInteractionDatabases(pagination: PaginationInput!): PagedDatabasesResult!
 }
 

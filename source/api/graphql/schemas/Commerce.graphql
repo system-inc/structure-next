@@ -90,6 +90,8 @@ type CommerceOrderDiscount {
     amount: MonetaryDecimal!
     code: String
     colorOption: LabelColorOption
+    iconAlt: String
+    iconUrl: String
     items: [CommerceOrderLineItemDiscount!]
 }
 
@@ -207,20 +209,6 @@ input CreateOrderRefundInput {
 
 input CreateOrderRefundLineItemInput {
     orderLineItemId: Float!
-    quantity: Float!
-}
-
-input CreateProductBundleInput {
-    description: String
-    id: String
-    identifier: String!
-    items: [CreateProductBundleItemInput!]!
-    name: String!
-    visibility: ProductBundleVisibility
-}
-
-input CreateProductBundleItemInput {
-    productVariantId: String!
     quantity: Float!
 }
 
@@ -343,9 +331,6 @@ type Mutation {
     commerceCreateFulfillment(input: CreateFulfillmentInput!): Shipment!
     commerceOrderCancel(orderId: String!): OperationResult!
     commerceOrderRefund(input: CreateOrderRefundInput!): Refund!
-    commerceProductBundleCreate(input: CreateProductBundleInput!): ProductBundle!
-    commerceProductBundleDelete(id: String!): OperationResult!
-    commerceProductBundleUpdate(input: UpdateProductBundleInput!): ProductBundle!
     commerceProductCreate(input: CreateProductInput!): Product!
     commerceProductUpdate(input: UpdateProductInput!): Product!
     commerceRefundRequestRejectPrivileged(id: String!, reason: String): Refund!
@@ -353,6 +338,7 @@ type Mutation {
     commerceVendorUpdate(input: UpdateVendorInput!): Vendor!
     productVariantRemoveGalleryAsset(assetId: String!, id: String!): ProductVariant!
     productVariantReorderGallery(assetIds: [String!]!, id: String!): ProductVariant!
+    stripePaymentCreateSetupIntent: StripeSetupIntentCreateResult!
     warehouseCreate(input: WarehouseCreateInput!): Warehouse!
     warehouseDelete(id: String!): OperationResult!
     warehouseInventoryCreate(input: WarehouseInventoryCreateInput!): WarehouseInventory!
@@ -497,38 +483,6 @@ type Product {
     vendorId: String
 }
 
-type ProductBundle {
-    createdAt: DateTimeISO!
-    createdByAccountId: String!
-    createdByProfileId: String!
-    description: String
-    id: String!
-    identifier: String!
-    items: [ProductBundleItem!]!
-    name: String!
-    updatedAt: DateTimeISO!
-    updatedByAccountId: String
-    updatedByProfileId: String
-    visibility: ProductBundleVisibility!
-}
-
-type ProductBundleItem {
-    indexId: String!
-    productVariant: ProductVariant
-    productVariantId: String!
-    quantity: Float!
-}
-
-enum ProductBundleVisibility {
-    Public
-    Unlisted
-}
-
-type ProductBundlesPaginationResult {
-    items: [ProductBundle!]!
-    pagination: Pagination!
-}
-
 enum ProductStatus {
     Active
     Archived
@@ -662,8 +616,6 @@ type Query {
     commerceOrdersPrivileged(pagination: PaginationInput!): PaginationOrderResult!
     commerceOrdersReadyToFulfill(pagination: PaginationInput!): PaginationFulfillmentOrderResult!
     commerceProduct(id: String, identifier: String, name: String): Product!
-    commerceProductBundle(id: String, identifier: String): ProductBundle!
-    commerceProductBundles(pagination: PaginationInput!): ProductBundlesPaginationResult!
     commerceProductPrivileged(id: String, identifier: String, name: String): Product!
     commerceProducts(pagination: PaginationInput!): ProductsPaginationResult!
     commerceProductsPrivileged(pagination: PaginationInput!): ProductsPaginationResult!
@@ -770,11 +722,7 @@ type ShippingPackageItem {
 
 enum ShippingServiceType {
     UPSGround
-    USPSFirstClassMail
-    USPSMediaMail
-    USPSParcelSelect
-    USPSPriorityMail
-    USPSPriorityMailExpress
+    USPSStandard
 }
 
 type StatusRecord {
@@ -809,20 +757,10 @@ type StreetAddressObject {
     state: String!
 }
 
-input UpdateProductBundleInput {
-    addItems: [CreateProductBundleItemInput!]
-    description: String
-    id: String!
-    identifier: String
-    name: String
-    removeItems: [String!]
-    updateItems: [UpdateProductBundleItemInput!]
-    visibility: ProductBundleVisibility
-}
-
-input UpdateProductBundleItemInput {
-    indexId: String!
-    quantity: Float!
+type StripeSetupIntentCreateResult {
+    clientSecret: String!
+    setupIntentId: String!
+    stripeCustomerId: String!
 }
 
 input UpdateProductInput {

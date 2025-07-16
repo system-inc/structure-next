@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import type { DocumentTypeDecoration } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -104,6 +104,7 @@ export type Account = {
     emailAddress: Scalars['String']['output'];
     emails: Array<AccountEmail>;
     enrolledChallenges: Array<Scalars['String']['output']>;
+    entitlements: Array<Scalars['String']['output']>;
     profile: Profile;
     profiles: Array<Profile>;
     session?: Maybe<AccountSession>;
@@ -197,7 +198,7 @@ export type AccountRegistrationOrSignInCreateInput = {
 
 export type AccountSession = {
     __typename?: 'AccountSession';
-    accessRoles: AccessRoleAssignment;
+    accessRoles: Array<AccessRoleAssignment>;
     createdAt: Scalars['DateTimeISO']['output'];
     id: Scalars['String']['output'];
     lastUsed?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -406,22 +407,15 @@ export enum CommerceCheckoutSessionStatus {
 export type CommerceOrder = {
     __typename?: 'CommerceOrder';
     appliedDiscounts?: Maybe<Array<CommerceOrderDiscount>>;
-    batchIdentifier: Scalars['String']['output'];
-    beneficiaryEmailAddress?: Maybe<Scalars['String']['output']>;
-    checkoutSessionId: Scalars['String']['output'];
     createdAt: Scalars['DateTimeISO']['output'];
-    discounts?: Maybe<Array<Discount>>;
     emailAddress: Scalars['String']['output'];
     fulfillmentSource?: Maybe<Scalars['String']['output']>;
     fulfillmentStatus: CommerceOrderFulfillmentStatus;
-    holdOnShipping: Scalars['Boolean']['output'];
     id: Scalars['String']['output'];
     identifier: Scalars['String']['output'];
     lineItems?: Maybe<Array<CommerceOrderLineItem>>;
     metadata?: Maybe<Scalars['JSON']['output']>;
-    orderLogs?: Maybe<Array<CommerceOrderLog>>;
     payment?: Maybe<Payment>;
-    paymentId?: Maybe<Scalars['String']['output']>;
     paymentStatus?: Maybe<PaymentStatus>;
     priceInfo: CommerceOrderPrice;
     refunds?: Maybe<Array<Refund>>;
@@ -429,7 +423,6 @@ export type CommerceOrder = {
     shippingInfo?: Maybe<CommerceOrderShippingInfo>;
     source: Scalars['String']['output'];
     status: CommerceOrderStatus;
-    statusDescription?: Maybe<Scalars['String']['output']>;
     statusRecords?: Maybe<Array<StatusRecord>>;
     updatedAt: Scalars['DateTimeISO']['output'];
 };
@@ -439,6 +432,8 @@ export type CommerceOrderDiscount = {
     amount: Scalars['MonetaryDecimal']['output'];
     code?: Maybe<Scalars['String']['output']>;
     colorOption?: Maybe<LabelColorOption>;
+    iconAlt?: Maybe<Scalars['String']['output']>;
+    iconUrl?: Maybe<Scalars['String']['output']>;
     items?: Maybe<Array<CommerceOrderLineItemDiscount>>;
 };
 
@@ -454,17 +449,13 @@ export enum CommerceOrderFulfillmentStatus {
 
 export type CommerceOrderLineItem = {
     __typename?: 'CommerceOrderLineItem';
-    commerceOrderId: Scalars['String']['output'];
     createdAt: Scalars['DateTimeISO']['output'];
-    fulfilledQuantity: Scalars['Int']['output'];
     id: Scalars['String']['output'];
     indexId: Scalars['Int']['output'];
     originalQuantity?: Maybe<Scalars['Int']['output']>;
     productVariantId: Scalars['String']['output'];
     quantity: Scalars['Int']['output'];
-    shippedQuantity: Scalars['Int']['output'];
     status: CommerceOrderLineItemStatus;
-    statusDescription?: Maybe<Scalars['String']['output']>;
     statusRecords?: Maybe<Array<StatusRecord>>;
     updatedAt: Scalars['DateTimeISO']['output'];
 };
@@ -478,12 +469,10 @@ export type CommerceOrderLineItemDiscount = {
 
 export type CommerceOrderLineItemPrice = {
     __typename?: 'CommerceOrderLineItemPrice';
-    amount: Scalars['MonetaryDecimal']['output'];
     indexId: Scalars['Int']['output'];
     originalSubtotal: Scalars['MonetaryDecimal']['output'];
     originalUnitPrice?: Maybe<Scalars['MonetaryDecimal']['output']>;
     subtotal: Scalars['MonetaryDecimal']['output'];
-    tax: Scalars['MonetaryDecimal']['output'];
     unitPrice?: Maybe<Scalars['MonetaryDecimal']['output']>;
 };
 
@@ -492,30 +481,6 @@ export enum CommerceOrderLineItemStatus {
     Cancelled = 'Cancelled',
     Pending = 'Pending',
     Shipped = 'Shipped',
-}
-
-export type CommerceOrderLog = {
-    __typename?: 'CommerceOrderLog';
-    commerceOrderId: Scalars['String']['output'];
-    content?: Maybe<Scalars['JSON']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    source: CommerceOrderLogSource;
-    visibility: CommerceOrderLogVisibility;
-};
-
-/** The source of the order log. */
-export enum CommerceOrderLogSource {
-    CustomerSupport = 'CustomerSupport',
-    System = 'System',
-    User = 'User',
-}
-
-/** The visibility of the order log. */
-export enum CommerceOrderLogVisibility {
-    Internal = 'Internal',
-    Public = 'Public',
 }
 
 export type CommerceOrderPrice = {
@@ -539,31 +504,13 @@ export type CommerceOrderShippingInfo = {
 export type CommerceOrderShippingRate = {
     __typename?: 'CommerceOrderShippingRate';
     amount: Scalars['MonetaryDecimal']['output'];
-    breakdown: Array<CommerceOrderShippingRateBreakdown>;
     originalAmount: Scalars['MonetaryDecimal']['output'];
-};
-
-export type CommerceOrderShippingRateBreakdown = {
-    __typename?: 'CommerceOrderShippingRateBreakdown';
-    freeShipping: Scalars['Boolean']['output'];
-    items: Array<CommerceOrderShippingRateBreakdownItem>;
-    originalShippingRate: Scalars['MonetaryDecimal']['output'];
-    packageIndexId: Scalars['Int']['output'];
-    shippingRate: Scalars['MonetaryDecimal']['output'];
-};
-
-export type CommerceOrderShippingRateBreakdownItem = {
-    __typename?: 'CommerceOrderShippingRateBreakdownItem';
-    indexId: Scalars['Int']['output'];
-    quantity: Scalars['Int']['output'];
 };
 
 /** The status of the order */
 export enum CommerceOrderStatus {
-    Archived = 'Archived',
     Cancelled = 'Cancelled',
     Complete = 'Complete',
-    FailToConfirm = 'FailToConfirm',
     Open = 'Open',
     OutOfStock = 'OutOfStock',
     Pending = 'Pending',
@@ -721,20 +668,6 @@ export type CreateOrderRefundLineItemInput = {
     quantity: Scalars['Float']['input'];
 };
 
-export type CreateProductBundleInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier: Scalars['String']['input'];
-    items: Array<CreateProductBundleItemInput>;
-    name: Scalars['String']['input'];
-    visibility?: InputMaybe<ProductBundleVisibility>;
-};
-
-export type CreateProductBundleItemInput = {
-    productVariantId: Scalars['String']['input'];
-    quantity: Scalars['Float']['input'];
-};
-
 export type CreateProductInput = {
     description?: InputMaybe<Scalars['String']['input']>;
     id?: InputMaybe<Scalars['String']['input']>;
@@ -761,15 +694,6 @@ export type CreateProductVariantInput = {
     sku?: InputMaybe<Scalars['String']['input']>;
     status?: InputMaybe<ProductVariantStatus>;
     taxCode?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateSocialMediaPlatformSettingsInput = {
-    additionalSettings?: InputMaybe<Scalars['JSON']['input']>;
-    platform: SocialMediaPlatform;
-    responseBotEnabled: Scalars['Boolean']['input'];
-    responseModel?: InputMaybe<Scalars['String']['input']>;
-    responseSystemPrompt: Scalars['String']['input'];
-    responseTemperature?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type CreateVendorInput = {
@@ -926,100 +850,6 @@ export type DiscordWebhookMessageCreateInput = {
     username?: InputMaybe<Scalars['String']['input']>;
     webhookId: Scalars['String']['input'];
 };
-
-export type Discount = {
-    __typename?: 'Discount';
-    code?: Maybe<Scalars['String']['output']>;
-    conditions: Array<DiscountCondition>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    endsAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    id: Scalars['String']['output'];
-    rule?: Maybe<DiscountRule>;
-    startsAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    type: DiscountType;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    usageCount: Scalars['Int']['output'];
-};
-
-export enum DiscountAllocationMethod {
-    BuyXGetFollowing = 'BuyXGetFollowing',
-    BuyXGetY = 'BuyXGetY',
-    Flat = 'Flat',
-}
-
-export type DiscountAllocationObject = {
-    __typename?: 'DiscountAllocationObject';
-    buyThisGetY?: Maybe<Scalars['Int']['output']>;
-    buyThisGetYAmount?: Maybe<Scalars['MonetaryDecimal']['output']>;
-    buyXAmountGetThis?: Maybe<Scalars['MonetaryDecimal']['output']>;
-    buyXGetThis?: Maybe<Scalars['Int']['output']>;
-    maxAllocationLimit: Scalars['Float']['output'];
-    method: DiscountAllocationMethod;
-    target: DiscountAllocationTarget;
-    value: Scalars['MonetaryDecimal']['output'];
-    valueType: DiscountValueType;
-};
-
-export enum DiscountAllocationTarget {
-    Across = 'Across',
-    Each = 'Each',
-    ShippingAmount = 'ShippingAmount',
-    ShippingBreakdown = 'ShippingBreakdown',
-}
-
-export type DiscountCondition = {
-    __typename?: 'DiscountCondition';
-    createdAt: Scalars['DateTimeISO']['output'];
-    discountRuleId?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    quantityRequirement?: Maybe<DiscountConditionRequirementObject>;
-    referenceId: Scalars['String']['output'];
-    subtotalRequirement?: Maybe<DiscountConditionRequirementObject>;
-    target: DiscountConditionTarget;
-    type: DiscountConditionType;
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type DiscountConditionRequirementObject = {
-    __typename?: 'DiscountConditionRequirementObject';
-    maxValue?: Maybe<Scalars['Int']['output']>;
-    minValue?: Maybe<Scalars['Int']['output']>;
-    requiredValue?: Maybe<Scalars['Int']['output']>;
-};
-
-export enum DiscountConditionTarget {
-    EntireOrder = 'EntireOrder',
-    LineItem = 'LineItem',
-}
-
-export enum DiscountConditionType {
-    ProductVariants = 'ProductVariants',
-    Products = 'Products',
-    Vendors = 'Vendors',
-}
-
-export type DiscountRule = {
-    __typename?: 'DiscountRule';
-    allocation: DiscountAllocationObject;
-    conditions: Array<DiscountCondition>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    displayTitle: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    oncePerCustomer: Scalars['Boolean']['output'];
-    title: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-/** The type of the discount. */
-export enum DiscountType {
-    Automatic = 'Automatic',
-    Code = 'Code',
-}
-
-export enum DiscountValueType {
-    FixedAmount = 'FixedAmount',
-    Percentage = 'Percentage',
-}
 
 export type EmailAutomation = {
     __typename?: 'EmailAutomation';
@@ -1881,7 +1711,7 @@ export type Mutation = {
     /** Manually grant an entitlement to a profile. */
     accountProfileEntitlementCreatePrivileged: ProfileEntitlement;
     /** Revoke a profile entitlement. */
-    accountProfileEntitlementDeletePrivileged: OperationResult;
+    accountProfileEntitlementRevokePrivileged: OperationResult;
     accountProfileImageRemove: Profile;
     accountProfileUpdate: Profile;
     accountSessionDelete: OperationResult;
@@ -1890,9 +1720,6 @@ export type Mutation = {
     commerceCreateFulfillment: Shipment;
     commerceOrderCancel: OperationResult;
     commerceOrderRefund: Refund;
-    commerceProductBundleCreate: ProductBundle;
-    commerceProductBundleDelete: OperationResult;
-    commerceProductBundleUpdate: ProductBundle;
     commerceProductCreate: Product;
     commerceProductUpdate: Product;
     commerceRefundRequestRejectPrivileged: Refund;
@@ -1953,13 +1780,10 @@ export type Mutation = {
     productVariantRemoveGalleryAsset: ProductVariant;
     productVariantReorderGallery: ProductVariant;
     sendEmail: Scalars['String']['output'];
-    socialMediaPlatformSettingsCreate: OperationResult;
-    socialMediaPlatformSettingsUpdate: OperationResult;
-    socialResponseApprove: SocialResponse;
-    socialResponseReject: SocialResponse;
-    socialResponseUpdate: SocialResponse;
+    stripePaymentCreateSetupIntent: StripeSetupIntentCreateResult;
     submitForm: FormUserData;
     supportTicketAssign: SupportTicket;
+    supportTicketCommentCreate: SupportTicketComment;
     supportTicketCommentCreatePrivileged: SupportTicketComment;
     supportTicketCreate: SupportTicket;
     supportTicketUpdatePrivileged: SupportTicket;
@@ -2057,7 +1881,7 @@ export type MutationAccountProfileEntitlementCreatePrivilegedArgs = {
     input: ProfileEntitlementCreateInput;
 };
 
-export type MutationAccountProfileEntitlementDeletePrivilegedArgs = {
+export type MutationAccountProfileEntitlementRevokePrivilegedArgs = {
     input: ProfileEntitlementInput;
 };
 
@@ -2083,18 +1907,6 @@ export type MutationCommerceOrderCancelArgs = {
 
 export type MutationCommerceOrderRefundArgs = {
     input: CreateOrderRefundInput;
-};
-
-export type MutationCommerceProductBundleCreateArgs = {
-    input: CreateProductBundleInput;
-};
-
-export type MutationCommerceProductBundleDeleteArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationCommerceProductBundleUpdateArgs = {
-    input: UpdateProductBundleInput;
 };
 
 export type MutationCommerceProductCreateArgs = {
@@ -2368,26 +2180,6 @@ export type MutationSendEmailArgs = {
     data: SendEmailInput;
 };
 
-export type MutationSocialMediaPlatformSettingsCreateArgs = {
-    input: CreateSocialMediaPlatformSettingsInput;
-};
-
-export type MutationSocialMediaPlatformSettingsUpdateArgs = {
-    input: UpdateSocialMediaPlatformSettingsInput;
-};
-
-export type MutationSocialResponseApproveArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationSocialResponseRejectArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationSocialResponseUpdateArgs = {
-    input: UpdateSocialResponseInput;
-};
-
 export type MutationSubmitFormArgs = {
     data: Scalars['JSON']['input'];
     emailAddress?: InputMaybe<Scalars['String']['input']>;
@@ -2397,6 +2189,10 @@ export type MutationSubmitFormArgs = {
 export type MutationSupportTicketAssignArgs = {
     ticketId: Scalars['String']['input'];
     username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationSupportTicketCommentCreateArgs = {
+    input: SupportTicketCommentCreateInput;
 };
 
 export type MutationSupportTicketCommentCreatePrivilegedArgs = {
@@ -2565,12 +2361,6 @@ export type PagedPosts = {
     pagination: Pagination;
 };
 
-export type PagedSocialResponses = {
-    __typename?: 'PagedSocialResponses';
-    items: Array<SocialResponse>;
-    pagination: Pagination;
-};
-
 export type Pagination = {
     __typename?: 'Pagination';
     itemIndex: Scalars['Int']['output'];
@@ -2639,9 +2429,7 @@ export type Payment = {
     paymentMethod?: Maybe<PaymentMethod>;
     paymentProcessorType: PaymentProcessorType;
     status: PaymentStatus;
-    statusDescription?: Maybe<Scalars['String']['output']>;
     updatedAt: Scalars['DateTimeISO']['output'];
-    walletEntryId?: Maybe<Scalars['String']['output']>;
 };
 
 export type PaymentMethod = {
@@ -2678,7 +2466,6 @@ export enum PaymentProcessorType {
     AppleInAppPurchase = 'AppleInAppPurchase',
     Stripe = 'Stripe',
     StripeEmbedded = 'StripeEmbedded',
-    StripeProxy = 'StripeProxy',
     Test = 'Test',
 }
 
@@ -2932,41 +2719,6 @@ export type Product = {
     vendorId?: Maybe<Scalars['String']['output']>;
 };
 
-export type ProductBundle = {
-    __typename?: 'ProductBundle';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    identifier: Scalars['String']['output'];
-    items: Array<ProductBundleItem>;
-    name: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-    visibility: ProductBundleVisibility;
-};
-
-export type ProductBundleItem = {
-    __typename?: 'ProductBundleItem';
-    indexId: Scalars['String']['output'];
-    productVariant?: Maybe<ProductVariant>;
-    productVariantId: Scalars['String']['output'];
-    quantity: Scalars['Float']['output'];
-};
-
-export enum ProductBundleVisibility {
-    Public = 'Public',
-    Unlisted = 'Unlisted',
-}
-
-export type ProductBundlesPaginationResult = {
-    __typename?: 'ProductBundlesPaginationResult';
-    items: Array<ProductBundle>;
-    pagination: Pagination;
-};
-
 export enum ProductStatus {
     Active = 'Active',
     Archived = 'Archived',
@@ -3090,6 +2842,7 @@ export type ProfileEntitlement = {
     id: Scalars['String']['output'];
     profile: Profile;
     profileId: Scalars['String']['output'];
+    status: ProfileEntitlementStatus;
     updatedAt: Scalars['DateTimeISO']['output'];
     updatedByAccountId?: Maybe<Scalars['String']['output']>;
     updatedByProfileId?: Maybe<Scalars['String']['output']>;
@@ -3109,6 +2862,13 @@ export type ProfileEntitlementListInput = {
     entitlementId?: InputMaybe<Scalars['String']['input']>;
     profileId?: InputMaybe<Scalars['String']['input']>;
 };
+
+/** The status of a ProfileEntitlement feature key for an account/profile */
+export enum ProfileEntitlementStatus {
+    Active = 'Active',
+    Expired = 'Expired',
+    Revoked = 'Revoked',
+}
 
 export type PublicCommerceOrder = {
     __typename?: 'PublicCommerceOrder';
@@ -3190,8 +2950,6 @@ export type Query = {
     commerceOrdersPrivileged: PaginationOrderResult;
     commerceOrdersReadyToFulfill: PaginationFulfillmentOrderResult;
     commerceProduct: Product;
-    commerceProductBundle: ProductBundle;
-    commerceProductBundles: ProductBundlesPaginationResult;
     commerceProductPrivileged: Product;
     commerceProducts: ProductsPaginationResult;
     commerceProductsPrivileged: ProductsPaginationResult;
@@ -3238,10 +2996,8 @@ export type Query = {
     postsMine: PagedPosts;
     postsPrivileged: PagedPosts;
     queryOrderPrice: QueryCommerceOrderPriceResult;
-    socialMediaPlatformSettings: SocialMediaPlatformSettings;
-    socialResponse: SocialResponse;
-    socialResponses: PagedSocialResponses;
     supportAllSupportProfiles: Array<PublicProfile>;
+    supportTicket: SupportTicket;
     supportTickets: PaginationSupportTicketResult;
     supportTicketsPrivileged: PaginationSupportTicketResult;
     waitListEntriesPrivileged: WaitListEntriesResult;
@@ -3297,6 +3053,7 @@ export type QueryAccountsPrivilegedArgs = {
 };
 
 export type QueryAppleStoreTransactionWithOrderInfoArgs = {
+    originalTransactionId?: InputMaybe<Scalars['String']['input']>;
     transactionId: Scalars['String']['input'];
 };
 
@@ -3333,15 +3090,6 @@ export type QueryCommerceProductArgs = {
     id?: InputMaybe<Scalars['String']['input']>;
     identifier?: InputMaybe<Scalars['String']['input']>;
     name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryCommerceProductBundleArgs = {
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryCommerceProductBundlesArgs = {
-    pagination: PaginationInput;
 };
 
 export type QueryCommerceProductPrivilegedArgs = {
@@ -3402,7 +3150,7 @@ export type QueryDataInteractionDatabaseTableRowsArgs = {
 };
 
 export type QueryDataInteractionDatabaseTablesArgs = {
-    databaseName?: InputMaybe<Scalars['String']['input']>;
+    databaseName: Scalars['String']['input'];
     pagination: PaginationInput;
 };
 
@@ -3462,7 +3210,6 @@ export type QueryEmailTemplatesArgs = {
 
 export type QueryEngagementOverviewArgs = {
     input?: InputMaybe<EngagementOverviewInput>;
-    live?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type QueryFormArgs = {
@@ -3544,16 +3291,8 @@ export type QueryQueryOrderPriceArgs = {
     input: QueryCommerceOrderPriceInput;
 };
 
-export type QuerySocialMediaPlatformSettingsArgs = {
-    platform: SocialMediaPlatform;
-};
-
-export type QuerySocialResponseArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type QuerySocialResponsesArgs = {
-    pagination: PaginationInput;
+export type QuerySupportTicketArgs = {
+    identifier: Scalars['String']['input'];
 };
 
 export type QuerySupportTicketsArgs = {
@@ -3654,12 +3393,10 @@ export type Shipment = {
     id: Scalars['String']['output'];
     label?: Maybe<ShippingLabel>;
     orderIndexId: Scalars['Int']['output'];
-    orderSlip?: Maybe<ShippingOrderSlip>;
     packageInfo: ShippingPackageInfo;
     shippedAt?: Maybe<Scalars['DateTimeISO']['output']>;
     source: Scalars['String']['output'];
     status: ShipmentStatus;
-    statusDescription?: Maybe<Scalars['String']['output']>;
     toAddress: StreetAddressObject;
     updatedAt: Scalars['DateTimeISO']['output'];
     updatedByAccountId?: Maybe<Scalars['String']['output']>;
@@ -3679,21 +3416,9 @@ export enum ShipmentStatus {
 export type ShippingLabel = {
     __typename?: 'ShippingLabel';
     carrier: Scalars['String']['output'];
-    labelId: Scalars['String']['output'];
     serviceType: ShippingServiceType;
-    source: ShippingLabelSource;
     trackingNumber: Scalars['String']['output'];
     trackingUrl?: Maybe<Scalars['String']['output']>;
-};
-
-export enum ShippingLabelSource {
-    Others = 'Others',
-    Stamps = 'Stamps',
-}
-
-export type ShippingOrderSlip = {
-    __typename?: 'ShippingOrderSlip';
-    storedObjectUrl?: Maybe<Scalars['String']['output']>;
 };
 
 export type ShippingPackageInfo = {
@@ -3710,110 +3435,7 @@ export type ShippingPackageItem = {
 
 export enum ShippingServiceType {
     UpsGround = 'UPSGround',
-    UspsFirstClassMail = 'USPSFirstClassMail',
-    UspsMediaMail = 'USPSMediaMail',
-    UspsParcelSelect = 'USPSParcelSelect',
-    UspsPriorityMail = 'USPSPriorityMail',
-    UspsPriorityMailExpress = 'USPSPriorityMailExpress',
-}
-
-/** The social platform */
-export enum SocialMediaPlatform {
-    Reddit = 'Reddit',
-    XTwitter = 'XTwitter',
-}
-
-export type SocialMediaPlatformSettings = {
-    __typename?: 'SocialMediaPlatformSettings';
-    additionalSettings?: Maybe<Scalars['JSON']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    lastPullAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    platform: SocialMediaPlatform;
-    responseBotEnabled: Scalars['Boolean']['output'];
-    responseModel?: Maybe<Scalars['String']['output']>;
-    responseSystemPrompt: Scalars['String']['output'];
-    responseTemperature?: Maybe<Scalars['Float']['output']>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type SocialMention = {
-    __typename?: 'SocialMention';
-    context?: Maybe<Scalars['JSON']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    id: Scalars['String']['output'];
-    /** The post that mentioned us */
-    mentionPost?: Maybe<SocialPost>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    platform: SocialMediaPlatform;
-    platformMentionPostId: Scalars['String']['output'];
-    posts: Array<SocialPost>;
-    status: SocialMentionStatus;
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-/** Status of a social mention */
-export enum SocialMentionStatus {
-    Failed = 'Failed',
-    New = 'New',
-    Processing = 'Processing',
-    Responded = 'Responded',
-    Skipped = 'Skipped',
-}
-
-export type SocialPost = {
-    __typename?: 'SocialPost';
-    createdAt: Scalars['DateTimeISO']['output'];
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    platform: SocialMediaPlatform;
-    platformParentPostId?: Maybe<Scalars['String']['output']>;
-    platformPostId: Scalars['String']['output'];
-    platformThreadId: Scalars['String']['output'];
-    platformUserId: Scalars['String']['output'];
-    postUrl: Scalars['String']['output'];
-    postedAt: Scalars['DateTimeISO']['output'];
-    text: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type SocialResponse = {
-    __typename?: 'SocialResponse';
-    createdAt: Scalars['DateTimeISO']['output'];
-    error?: Maybe<Scalars['String']['output']>;
-    generatedAt: Scalars['DateTimeISO']['output'];
-    id: Scalars['String']['output'];
-    mention?: Maybe<SocialMention>;
-    mentionId: Scalars['String']['output'];
-    metadata: Scalars['JSON']['output'];
-    model: Scalars['String']['output'];
-    modelProvider: SocialResponseAiModelProvider;
-    platformPostId?: Maybe<Scalars['String']['output']>;
-    postUrl?: Maybe<Scalars['String']['output']>;
-    postedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    status: SocialResponseStatus;
-    text: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-/** Provider of the AI model */
-export enum SocialResponseAiModelProvider {
-    OpenAi = 'OpenAI',
-}
-
-/** Status of a social response */
-export enum SocialResponseStatus {
-    Approved = 'Approved',
-    Failed = 'Failed',
-    Pending = 'Pending',
-    Posted = 'Posted',
-    Rejected = 'Rejected',
+    UspsStandard = 'USPSStandard',
 }
 
 export type StatusRecord = {
@@ -3848,6 +3470,13 @@ export type StreetAddressObject = {
     phoneNumber?: Maybe<Scalars['String']['output']>;
     postalCode: Scalars['String']['output'];
     state: Scalars['String']['output'];
+};
+
+export type StripeSetupIntentCreateResult = {
+    __typename?: 'StripeSetupIntentCreateResult';
+    clientSecret: Scalars['String']['output'];
+    setupIntentId: Scalars['String']['output'];
+    stripeCustomerId: Scalars['String']['output'];
 };
 
 export type SupportTicket = {
@@ -3965,22 +3594,6 @@ export type UpdateEmailTemplateInput = {
     title?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdateProductBundleInput = {
-    addItems?: InputMaybe<Array<CreateProductBundleItemInput>>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    id: Scalars['String']['input'];
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    name?: InputMaybe<Scalars['String']['input']>;
-    removeItems?: InputMaybe<Array<Scalars['String']['input']>>;
-    updateItems?: InputMaybe<Array<UpdateProductBundleItemInput>>;
-    visibility?: InputMaybe<ProductBundleVisibility>;
-};
-
-export type UpdateProductBundleItemInput = {
-    indexId: Scalars['String']['input'];
-    quantity: Scalars['Float']['input'];
-};
-
 export type UpdateProductInput = {
     description?: InputMaybe<Scalars['String']['input']>;
     id?: InputMaybe<Scalars['String']['input']>;
@@ -4012,21 +3625,6 @@ export type UpdateProductVariantInput = {
     sku?: InputMaybe<Scalars['String']['input']>;
     status?: InputMaybe<ProductVariantStatus>;
     taxCode?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateSocialMediaPlatformSettingsInput = {
-    additionalSettings?: InputMaybe<Scalars['JSON']['input']>;
-    platform: SocialMediaPlatform;
-    responseBotEnabled?: InputMaybe<Scalars['Boolean']['input']>;
-    responseModel?: InputMaybe<Scalars['String']['input']>;
-    responseSystemPrompt?: InputMaybe<Scalars['String']['input']>;
-    responseTemperature?: InputMaybe<Scalars['Float']['input']>;
-};
-
-export type UpdateSocialResponseInput = {
-    id: Scalars['String']['input'];
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-    text?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateVendorInput = {
@@ -5299,7 +4897,7 @@ export type DataInteractionDatabaseTableMetricsQuery = {
 };
 
 export type DataInteractionDatabaseTablesQueryVariables = Exact<{
-    databaseName?: InputMaybe<Scalars['String']['input']>;
+    databaseName: Scalars['String']['input'];
     pagination: PaginationInput;
 }>;
 
@@ -5986,204 +5584,6 @@ export type PostTopicDeleteMutation = {
     postTopicDelete: { __typename?: 'OperationResult'; success: boolean };
 };
 
-export type GetSocialResponseQueryVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type GetSocialResponseQuery = {
-    __typename?: 'Query';
-    socialResponse: {
-        __typename?: 'SocialResponse';
-        id: string;
-        text: string;
-        status: SocialResponseStatus;
-        postUrl?: string | null;
-        platformPostId?: string | null;
-        postedAt?: any | null;
-        error?: string | null;
-        metadata: any;
-        model: string;
-        modelProvider: SocialResponseAiModelProvider;
-        generatedAt: any;
-        createdAt: any;
-        updatedAt: any;
-        mention?: {
-            __typename?: 'SocialMention';
-            id: string;
-            platform: SocialMediaPlatform;
-            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
-        } | null;
-    };
-};
-
-export type GetSocialResponsesQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type GetSocialResponsesQuery = {
-    __typename?: 'Query';
-    socialResponses: {
-        __typename?: 'PagedSocialResponses';
-        items: Array<{
-            __typename?: 'SocialResponse';
-            id: string;
-            text: string;
-            status: SocialResponseStatus;
-            postUrl?: string | null;
-            platformPostId?: string | null;
-            postedAt?: any | null;
-            error?: string | null;
-            metadata: any;
-            model: string;
-            modelProvider: SocialResponseAiModelProvider;
-            generatedAt: any;
-            createdAt: any;
-            updatedAt: any;
-            mention?: {
-                __typename?: 'SocialMention';
-                id: string;
-                platform: SocialMediaPlatform;
-                mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
-            } | null;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-    };
-};
-
-export type SocialMediaPlatformSettingsQueryVariables = Exact<{
-    platform: SocialMediaPlatform;
-}>;
-
-export type SocialMediaPlatformSettingsQuery = {
-    __typename?: 'Query';
-    socialMediaPlatformSettings: {
-        __typename?: 'SocialMediaPlatformSettings';
-        responseBotEnabled: boolean;
-        responseSystemPrompt: string;
-        responseModel?: string | null;
-        responseTemperature?: number | null;
-        lastPullAt?: any | null;
-        additionalSettings?: any | null;
-    };
-};
-
-export type CreateSocialMediaPlatformSettingsMutationVariables = Exact<{
-    input: CreateSocialMediaPlatformSettingsInput;
-}>;
-
-export type CreateSocialMediaPlatformSettingsMutation = {
-    __typename?: 'Mutation';
-    socialMediaPlatformSettingsCreate: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type UpdateSocialMediaPlatformSettingsMutationVariables = Exact<{
-    input: UpdateSocialMediaPlatformSettingsInput;
-}>;
-
-export type UpdateSocialMediaPlatformSettingsMutation = {
-    __typename?: 'Mutation';
-    socialMediaPlatformSettingsUpdate: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type ApproveSocialResponseMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type ApproveSocialResponseMutation = {
-    __typename?: 'Mutation';
-    socialResponseApprove: {
-        __typename?: 'SocialResponse';
-        id: string;
-        text: string;
-        status: SocialResponseStatus;
-        postUrl?: string | null;
-        platformPostId?: string | null;
-        postedAt?: any | null;
-        error?: string | null;
-        metadata: any;
-        model: string;
-        modelProvider: SocialResponseAiModelProvider;
-        generatedAt: any;
-        createdAt: any;
-        updatedAt: any;
-        mention?: {
-            __typename?: 'SocialMention';
-            id: string;
-            platform: SocialMediaPlatform;
-            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
-        } | null;
-    };
-};
-
-export type RejectSocialResponseMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type RejectSocialResponseMutation = {
-    __typename?: 'Mutation';
-    socialResponseReject: {
-        __typename?: 'SocialResponse';
-        id: string;
-        text: string;
-        status: SocialResponseStatus;
-        postUrl?: string | null;
-        platformPostId?: string | null;
-        postedAt?: any | null;
-        error?: string | null;
-        metadata: any;
-        model: string;
-        modelProvider: SocialResponseAiModelProvider;
-        generatedAt: any;
-        createdAt: any;
-        updatedAt: any;
-        mention?: {
-            __typename?: 'SocialMention';
-            id: string;
-            platform: SocialMediaPlatform;
-            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
-        } | null;
-    };
-};
-
-export type UpdateSocialResponseMutationVariables = Exact<{
-    input: UpdateSocialResponseInput;
-}>;
-
-export type UpdateSocialResponseMutation = {
-    __typename?: 'Mutation';
-    socialResponseUpdate: {
-        __typename?: 'SocialResponse';
-        id: string;
-        text: string;
-        status: SocialResponseStatus;
-        postUrl?: string | null;
-        platformPostId?: string | null;
-        postedAt?: any | null;
-        error?: string | null;
-        metadata: any;
-        model: string;
-        modelProvider: SocialResponseAiModelProvider;
-        generatedAt: any;
-        createdAt: any;
-        updatedAt: any;
-        mention?: {
-            __typename?: 'SocialMention';
-            id: string;
-            platform: SocialMediaPlatform;
-            mentionPost?: { __typename?: 'SocialPost'; postedAt: any; postUrl: string; text: string } | null;
-        } | null;
-    };
-};
-
 export type SupportPostQueryVariables = Exact<{
     identifier: Scalars['String']['input'];
 }>;
@@ -6511,7 +5911,6 @@ export type SupportTicketAccountAndCommerceOrdersPrivelegedQuery = {
                 shippingRate: { __typename?: 'CommerceOrderShippingRate'; amount: any; originalAmount: any };
                 tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
             };
-            discounts?: Array<{ __typename?: 'Discount'; code?: string | null }> | null;
             shippingInfo?: {
                 __typename?: 'CommerceOrderShippingInfo';
                 shippingAddress: {
@@ -6758,7898 +6157,2122 @@ export type WaitListEntryDeleteMutation = {
     waitListEntryDelete: { __typename?: 'OperationResult'; success: boolean };
 };
 
-export const AccountAuthenticationRegistrationOrSignInCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAuthenticationRegistrationOrSignInCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'NamedType',
-                            name: { kind: 'Name', value: 'AccountRegistrationOrSignInCreateInput' },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthenticationRegistrationOrSignInCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'authentication' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'scopeType' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'currentChallenge' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'challengeType' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export class TypedDocumentString<TResult, TVariables>
+    extends String
+    implements DocumentTypeDecoration<TResult, TVariables>
+{
+    __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+    private value: string;
+    public __meta__?: Record<string, any> | undefined;
+
+    constructor(value: string, __meta__?: Record<string, any> | undefined) {
+        super(value);
+        this.value = value;
+        this.__meta__ = __meta__;
+    }
+
+    toString(): string & DocumentTypeDecoration<TResult, TVariables> {
+        return this.value;
+    }
+}
+
+export const AccountAuthenticationRegistrationOrSignInCreateDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
+  accountAuthenticationRegistrationOrSignInCreate(input: $input) {
+    emailAddress
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAuthenticationRegistrationOrSignInCreateMutation,
     AccountAuthenticationRegistrationOrSignInCreateMutationVariables
 >;
-export const AccountAuthenticationDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountAuthentication' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthentication' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'scopeType' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'currentChallenge' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'challengeType' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountAuthenticationQuery, AccountAuthenticationQueryVariables>;
-export const AccountAuthenticationEmailVerificationDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountAuthenticationEmailVerification' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthenticationEmailVerification' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'verification' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'lastEmailSentAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'authentication' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'scopeType' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'currentChallenge' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'challengeType' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountAuthenticationDocument = new TypedDocumentString(`
+    query AccountAuthentication {
+  accountAuthentication {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountAuthenticationQuery, AccountAuthenticationQueryVariables>;
+export const AccountAuthenticationEmailVerificationDocument = new TypedDocumentString(`
+    query AccountAuthenticationEmailVerification {
+  accountAuthenticationEmailVerification {
+    verification {
+      status
+      emailAddress
+      lastEmailSentAt
+    }
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAuthenticationEmailVerificationQuery,
     AccountAuthenticationEmailVerificationQueryVariables
 >;
-export const AccountAuthenticationEmailVerificationSendDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAuthenticationEmailVerificationSend' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthenticationEmailVerificationSend' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'verification' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'lastEmailSentAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'authentication' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'scopeType' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'currentChallenge' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'challengeType' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountAuthenticationEmailVerificationSendDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationEmailVerificationSend {
+  accountAuthenticationEmailVerificationSend {
+    verification {
+      status
+      emailAddress
+      lastEmailSentAt
+    }
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAuthenticationEmailVerificationSendMutation,
     AccountAuthenticationEmailVerificationSendMutationVariables
 >;
-export const AccountAuthenticationEmailVerificationVerifyDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAuthenticationEmailVerificationVerify' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'NamedType',
-                            name: { kind: 'Name', value: 'AccountEmailVerificationVerifyInput' },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthenticationEmailVerificationVerify' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'verification' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'lastEmailSentAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'authentication' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'scopeType' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'currentChallenge' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'challengeType' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountAuthenticationEmailVerificationVerifyDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {
+  accountAuthenticationEmailVerificationVerify(input: $input) {
+    verification {
+      status
+      emailAddress
+      lastEmailSentAt
+    }
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAuthenticationEmailVerificationVerifyMutation,
     AccountAuthenticationEmailVerificationVerifyMutationVariables
 >;
-export const AccountAuthenticationPasswordVerifyDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAuthenticationPasswordVerify' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccountPasswordVerifyInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthenticationPasswordVerify' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'success' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'authentication' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'scopeType' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'currentChallenge' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'challengeType' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountAuthenticationPasswordVerifyDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
+  accountAuthenticationPasswordVerify(input: $input) {
+    success
+    authentication {
+      status
+      scopeType
+      currentChallenge {
+        challengeType
+        status
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAuthenticationPasswordVerifyMutation,
     AccountAuthenticationPasswordVerifyMutationVariables
 >;
-export const AccountMaintenanceSessionCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountMaintenanceSessionCreate' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountMaintenanceSessionCreate' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'scopeType' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'currentChallenge' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'challengeType' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountMaintenanceSessionCreateMutation, AccountMaintenanceSessionCreateMutationVariables>;
-export const AccountAuthenticationRegistrationCompleteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAuthenticationRegistrationComplete' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccountRegistrationCompleteInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthenticationRegistrationComplete' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
+    mutation AccountMaintenanceSessionCreate {
+  accountMaintenanceSessionCreate {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountMaintenanceSessionCreateMutation,
+    AccountMaintenanceSessionCreateMutationVariables
+>;
+export const AccountAuthenticationRegistrationCompleteDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
+  accountAuthenticationRegistrationComplete(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAuthenticationRegistrationCompleteMutation,
     AccountAuthenticationRegistrationCompleteMutationVariables
 >;
-export const AccountAuthenticationSignInCompleteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAuthenticationSignInComplete' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAuthenticationSignInComplete' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountAuthenticationSignInCompleteDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationSignInComplete {
+  accountAuthenticationSignInComplete {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAuthenticationSignInCompleteMutation,
     AccountAuthenticationSignInCompleteMutationVariables
 >;
-export const AccountPasswordUpdateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountPasswordUpdate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccountPasswordUpdateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountPasswordUpdate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountPasswordUpdateMutation, AccountPasswordUpdateMutationVariables>;
-export const AccountSignOutDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountSignOut' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountSignOut' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountSignOutMutation, AccountSignOutMutationVariables>;
-export const AccountDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'Account' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'account' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'profile' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'givenName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'familyName' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'images' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'accessRoles' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountQuery, AccountQueryVariables>;
-export const AccountPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccountInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'profiles' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'givenName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'familyName' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'images' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'accessRoles' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountPrivilegedQuery, AccountPrivilegedQueryVariables>;
-export const AccountsPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountsPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountsPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'profiles' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'givenName' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'familyName' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'countryCode' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'images' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'url' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'variant' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountsPrivilegedQuery, AccountsPrivilegedQueryVariables>;
-export const AccountProfileUsernameValidateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountProfileUsernameValidate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'username' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountProfileUsernameValidate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'username' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'username' } },
-                            },
-                        ],
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountProfileUsernameValidateQuery, AccountProfileUsernameValidateQueryVariables>;
-export const AccountEnrolledChallengesDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountEnrolledChallenges' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'account' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'enrolledChallenges' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountEnrolledChallengesQuery, AccountEnrolledChallengesQueryVariables>;
-export const AccountProfileUpdateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountProfileUpdate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccountProfileUpdateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountProfileUpdate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'givenName' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'familyName' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'images' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
-export const AccountProfilePublicDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountProfilePublic' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'username' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountProfilePublic' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'username' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'username' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'images' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountProfilePublicQuery, AccountProfilePublicQueryVariables>;
-export const AccountAccessRolesPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountAccessRolesPrivileged' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAccessRolesPrivileged' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountAccessRolesPrivilegedQuery, AccountAccessRolesPrivilegedQueryVariables>;
-export const AccountAccessRoleAssignmentsPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AccountAccessRoleAssignmentsPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'statuses' } },
-                    type: {
-                        kind: 'ListType',
-                        type: {
-                            kind: 'NonNullType',
-                            type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccessRoleStatus' } },
-                        },
-                    },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAccessRoleAssignmentsPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'statuses' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'statuses' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'accessRole' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'profile' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'images' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'url' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'variant' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'expiresAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountPasswordUpdateDocument = new TypedDocumentString(`
+    mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
+  accountPasswordUpdate(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountPasswordUpdateMutation, AccountPasswordUpdateMutationVariables>;
+export const AccountSignOutDocument = new TypedDocumentString(`
+    mutation AccountSignOut {
+  accountSignOut {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountSignOutMutation, AccountSignOutMutationVariables>;
+export const AccountDocument = new TypedDocumentString(`
+    query Account {
+  account {
+    emailAddress
+    profile {
+      id
+      username
+      displayName
+      givenName
+      familyName
+      images {
+        url
+        variant
+      }
+      updatedAt
+      createdAt
+    }
+    accessRoles
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
+export const AccountPrivilegedDocument = new TypedDocumentString(`
+    query AccountPrivileged($input: AccountInput!) {
+  accountPrivileged(input: $input) {
+    emailAddress
+    profiles {
+      username
+      displayName
+      givenName
+      familyName
+      images {
+        url
+        variant
+      }
+      updatedAt
+      createdAt
+    }
+    accessRoles
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountPrivilegedQuery, AccountPrivilegedQueryVariables>;
+export const AccountsPrivilegedDocument = new TypedDocumentString(`
+    query AccountsPrivileged($pagination: PaginationInput!) {
+  accountsPrivileged(pagination: $pagination) {
+    items {
+      emailAddress
+      profiles {
+        username
+        displayName
+        givenName
+        familyName
+        countryCode
+        images {
+          url
+          variant
+        }
+        updatedAt
+        createdAt
+      }
+    }
+    pagination {
+      itemsTotal
+      itemsPerPage
+      page
+      pagesTotal
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountsPrivilegedQuery, AccountsPrivilegedQueryVariables>;
+export const AccountProfileUsernameValidateDocument = new TypedDocumentString(`
+    query AccountProfileUsernameValidate($username: String!) {
+  accountProfileUsernameValidate(username: $username)
+}
+    `) as unknown as TypedDocumentString<
+    AccountProfileUsernameValidateQuery,
+    AccountProfileUsernameValidateQueryVariables
+>;
+export const AccountEnrolledChallengesDocument = new TypedDocumentString(`
+    query AccountEnrolledChallenges {
+  account {
+    enrolledChallenges
+  }
+}
+    `) as unknown as TypedDocumentString<AccountEnrolledChallengesQuery, AccountEnrolledChallengesQueryVariables>;
+export const AccountProfileUpdateDocument = new TypedDocumentString(`
+    mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
+  accountProfileUpdate(input: $input) {
+    username
+    displayName
+    givenName
+    familyName
+    images {
+      url
+      variant
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
+export const AccountProfilePublicDocument = new TypedDocumentString(`
+    query AccountProfilePublic($username: String!) {
+  accountProfilePublic(username: $username) {
+    username
+    displayName
+    images {
+      url
+      variant
+    }
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfilePublicQuery, AccountProfilePublicQueryVariables>;
+export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
+    query AccountAccessRolesPrivileged {
+  accountAccessRolesPrivileged {
+    id
+    type
+    description
+  }
+}
+    `) as unknown as TypedDocumentString<AccountAccessRolesPrivilegedQuery, AccountAccessRolesPrivilegedQueryVariables>;
+export const AccountAccessRoleAssignmentsPrivilegedDocument = new TypedDocumentString(`
+    query AccountAccessRoleAssignmentsPrivileged($statuses: [AccessRoleStatus!], $pagination: PaginationInput!) {
+  accountAccessRoleAssignmentsPrivileged(
+    statuses: $statuses
+    pagination: $pagination
+  ) {
+    items {
+      id
+      accessRole {
+        id
+        type
+        description
+      }
+      status
+      emailAddress
+      profile {
+        username
+        displayName
+        images {
+          url
+          variant
+        }
+        createdAt
+      }
+      expiresAt
+      createdAt
+      updatedAt
+    }
+    pagination {
+      itemsTotal
+      itemsPerPage
+      page
+      pagesTotal
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAccessRoleAssignmentsPrivilegedQuery,
     AccountAccessRoleAssignmentsPrivilegedQueryVariables
 >;
-export const AccountAccessRoleAssignmentRevokePrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAccessRoleAssignmentRevokePrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccessRoleAssignmentRevokeInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAccessRoleAssignmentRevokePrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountAccessRoleAssignmentRevokePrivilegedDocument = new TypedDocumentString(`
+    mutation AccountAccessRoleAssignmentRevokePrivileged($input: AccessRoleAssignmentRevokeInput!) {
+  accountAccessRoleAssignmentRevokePrivileged(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAccessRoleAssignmentRevokePrivilegedMutation,
     AccountAccessRoleAssignmentRevokePrivilegedMutationVariables
 >;
-export const AccountAccessRoleAssignmentCreatePrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountAccessRoleAssignmentCreatePrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccessRoleAssignmentCreateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountAccessRoleAssignmentCreatePrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'accessRole' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'profile' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'images' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'expiresAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountAccessRoleAssignmentCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
+  accountAccessRoleAssignmentCreatePrivileged(input: $input) {
+    id
+    accessRole {
+      id
+      type
+      description
+    }
+    status
+    profile {
+      username
+      displayName
+      images {
+        type
+        url
+        variant
+      }
+      createdAt
+    }
+    expiresAt
+    createdAt
+    updatedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
     AccountAccessRoleAssignmentCreatePrivilegedMutation,
     AccountAccessRoleAssignmentCreatePrivilegedMutationVariables
 >;
-export const AccountDeleteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountDelete' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'reason' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountDelete' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'reason' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'reason' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountDeleteMutation, AccountDeleteMutationVariables>;
-export const AccountDeletePrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountDeletePrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'AccountDeleteInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountDeletePrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountDeletePrivilegedMutation, AccountDeletePrivilegedMutationVariables>;
-export const AccountProfileImageRemoveDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'AccountProfileImageRemove' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountProfileImageRemove' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'images' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
-export const CommerceCheckoutSessionCreateDirectDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'CommerceCheckoutSessionCreateDirect' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'NamedType',
-                            name: { kind: 'Name', value: 'CommerceCheckoutSessionCreateDirectInput' },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'commerceCheckoutSessionCreateDirect' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'externalMetadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const AccountDeleteDocument = new TypedDocumentString(`
+    mutation AccountDelete($reason: String) {
+  accountDelete(reason: $reason) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountDeleteMutation, AccountDeleteMutationVariables>;
+export const AccountDeletePrivilegedDocument = new TypedDocumentString(`
+    mutation AccountDeletePrivileged($input: AccountDeleteInput!) {
+  accountDeletePrivileged(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountDeletePrivilegedMutation, AccountDeletePrivilegedMutationVariables>;
+export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
+    mutation AccountProfileImageRemove {
+  accountProfileImageRemove {
+    id
+    username
+    displayName
+    images {
+      url
+      variant
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
+export const CommerceCheckoutSessionCreateDirectDocument = new TypedDocumentString(`
+    mutation CommerceCheckoutSessionCreateDirect($input: CommerceCheckoutSessionCreateDirectInput!) {
+  commerceCheckoutSessionCreateDirect(input: $input) {
+    id
+    externalMetadata
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<
     CommerceCheckoutSessionCreateDirectMutation,
     CommerceCheckoutSessionCreateDirectMutationVariables
 >;
-export const CommerceOrdersByCheckoutSessionDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'CommerceOrdersByCheckoutSession' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'checkoutSessionId' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'commerceOrdersByCheckoutSession' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'checkoutSessionId' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'checkoutSessionId' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'InlineFragment',
-                                    typeCondition: {
-                                        kind: 'NamedType',
-                                        name: { kind: 'Name', value: 'CommerceOrder' },
-                                    },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'paymentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'lineItems' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'productVariantId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'shippingInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingAddress' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'firstName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'lastName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'company' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'phoneNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line1' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line2' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'city' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'state' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'postalCode' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'country' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'payment' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'paymentMethod' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'InlineFragment',
-                                                                        typeCondition: {
-                                                                            kind: 'NamedType',
-                                                                            name: {
-                                                                                kind: 'Name',
-                                                                                value: 'PaymentMethodCreditCard',
-                                                                            },
-                                                                        },
-                                                                        selectionSet: {
-                                                                            kind: 'SelectionSet',
-                                                                            selections: [
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'billingAddress',
-                                                                                    },
-                                                                                    selectionSet: {
-                                                                                        kind: 'SelectionSet',
-                                                                                        selections: [
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'firstName',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'lastName',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'company',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'phoneNumber',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'line1',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'line2',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'city',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'state',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'postalCode',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'country',
-                                                                                                },
-                                                                                            },
-                                                                                        ],
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'type',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'last4',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'cardType',
-                                                                                    },
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'priceInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'currencyCode' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'originalSubtotal' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingRate' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'originalAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'tax' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'shipping' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'total' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'appliedDiscounts' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'items' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'InlineFragment',
-                                    typeCondition: {
-                                        kind: 'NamedType',
-                                        name: { kind: 'Name', value: 'PublicCommerceOrder' },
-                                    },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'paymentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentStatus' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'lineItems' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'productVariantId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'priceInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'currencyCode' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'originalSubtotal' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingRate' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'originalAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'tax' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'shipping' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'total' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'appliedDiscounts' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'items' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<CommerceOrdersByCheckoutSessionQuery, CommerceOrdersByCheckoutSessionQueryVariables>;
-export const CommerceOrdersDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'CommerceOrders' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'commerceOrders' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'paymentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentStatus' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'lineItems' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'productVariantId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'shipments' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'orderIndexId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'label' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'carrier' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'serviceType' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'trackingNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'trackingUrl' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'packageInfo' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'items' },
-                                                                        selectionSet: {
-                                                                            kind: 'SelectionSet',
-                                                                            selections: [
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'indexId',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'quantity',
-                                                                                    },
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'shippedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'deliveredAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'cancelledAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'priceInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'originalSubtotal' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'lineItemPrices' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalSubtotal',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalUnitPrice',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'subtotal' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitPrice' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'appliedDiscounts' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'items' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<CommerceOrdersQuery, CommerceOrdersQueryVariables>;
-export const CommerceOrderDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'CommerceOrder' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'orderIdentifier' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'commerceOrder' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'identifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'orderIdentifier' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'InlineFragment',
-                                    typeCondition: {
-                                        kind: 'NamedType',
-                                        name: { kind: 'Name', value: 'CommerceOrder' },
-                                    },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'statusRecords' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'timestamp' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'paymentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'lineItems' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'productVariantId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'shipments' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'orderIndexId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'label' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'carrier' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'serviceType' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'trackingNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'trackingUrl' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'packageInfo' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'items' },
-                                                                        selectionSet: {
-                                                                            kind: 'SelectionSet',
-                                                                            selections: [
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'indexId',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'quantity',
-                                                                                    },
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'shippedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'deliveredAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'cancelledAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'shippingInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingAddress' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'firstName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'lastName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'company' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'phoneNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line1' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line2' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'city' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'state' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'postalCode' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'country' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'payment' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'paymentMethod' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'InlineFragment',
-                                                                        typeCondition: {
-                                                                            kind: 'NamedType',
-                                                                            name: {
-                                                                                kind: 'Name',
-                                                                                value: 'PaymentMethodCreditCard',
-                                                                            },
-                                                                        },
-                                                                        selectionSet: {
-                                                                            kind: 'SelectionSet',
-                                                                            selections: [
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'billingAddress',
-                                                                                    },
-                                                                                    selectionSet: {
-                                                                                        kind: 'SelectionSet',
-                                                                                        selections: [
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'firstName',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'lastName',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'company',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'phoneNumber',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'line1',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'line2',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'city',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'state',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'postalCode',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'country',
-                                                                                                },
-                                                                                            },
-                                                                                        ],
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'type',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'last4',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'cardType',
-                                                                                    },
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'priceInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'currencyCode' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'originalSubtotal' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingRate' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'originalAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'tax' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'shipping' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'total' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'lineItemPrices' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalSubtotal',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalUnitPrice',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'subtotal' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitPrice' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'appliedDiscounts' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'items' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'InlineFragment',
-                                    typeCondition: {
-                                        kind: 'NamedType',
-                                        name: { kind: 'Name', value: 'PublicCommerceOrder' },
-                                    },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'paymentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentStatus' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'lineItems' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'productVariantId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'priceInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'currencyCode' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'originalSubtotal' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingRate' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'originalAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'tax' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'shipping' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'total' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'lineItemPrices' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalSubtotal',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalUnitPrice',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'subtotal' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitPrice' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'appliedDiscounts' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'items' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'unitAmount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<CommerceOrderQuery, CommerceOrderQueryVariables>;
-export const CommerceOrdersPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'CommerceOrdersPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'commerceOrdersPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentSource' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'lineItems' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'productVariantId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'payment' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'authorizedAt' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'cancelledAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'capturedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'confirmedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'currencyCode' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'externalReferenceId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'paymentMethod' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'externalResourceId',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'paymentProcessorType',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'type' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'InlineFragment',
-                                                                        typeCondition: {
-                                                                            kind: 'NamedType',
-                                                                            name: {
-                                                                                kind: 'Name',
-                                                                                value: 'PaymentMethodCreditCard',
-                                                                            },
-                                                                        },
-                                                                        selectionSet: {
-                                                                            kind: 'SelectionSet',
-                                                                            selections: [
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'externalResourceId',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'billingAddress',
-                                                                                    },
-                                                                                    selectionSet: {
-                                                                                        kind: 'SelectionSet',
-                                                                                        selections: [
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'city',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'company',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'country',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'firstName',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'lastName',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'line1',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'line2',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'postalCode',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'state',
-                                                                                                },
-                                                                                            },
-                                                                                            {
-                                                                                                kind: 'Field',
-                                                                                                name: {
-                                                                                                    kind: 'Name',
-                                                                                                    value: 'phoneNumber',
-                                                                                                },
-                                                                                            },
-                                                                                        ],
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'cardType',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'expirationMonth',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'expirationYear',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'last4',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'paymentProcessorType',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'type',
-                                                                                    },
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'InlineFragment',
-                                                                        typeCondition: {
-                                                                            kind: 'NamedType',
-                                                                            name: {
-                                                                                kind: 'Name',
-                                                                                value: 'PaymentMethodAppleInAppPurchase',
-                                                                            },
-                                                                        },
-                                                                        selectionSet: {
-                                                                            kind: 'SelectionSet',
-                                                                            selections: [
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'externalResourceId',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'paymentProcessorType',
-                                                                                    },
-                                                                                },
-                                                                                {
-                                                                                    kind: 'Field',
-                                                                                    name: {
-                                                                                        kind: 'Name',
-                                                                                        value: 'type',
-                                                                                    },
-                                                                                },
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'paymentProcessorType' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'paymentStatus' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'priceInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'currencyCode' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'lineItemPrices' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalSubtotal',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'subtotal' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'originalSubtotal' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingRate' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'originalAmount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'tax' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'shipping' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'total' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'shipments' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'cancelledAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'createdByAccountId' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'createdByProfileId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'deliveredAt' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'deliveryStatus' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'orderIndexId' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'label' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'carrier' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'serviceType' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'trackingNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'trackingUrl' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'shippedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'toAddress' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'city' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'company' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'country' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'firstName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'lastName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line1' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line2' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'phoneNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'state' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'postalCode' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'updatedByAccountId' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'updatedByProfileId' },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'shippingInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingAddress' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'city' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'country' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'company' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'lastName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'firstName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line1' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line2' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'phoneNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'postalCode' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'state' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<CommerceOrdersPrivilegedQuery, CommerceOrdersPrivilegedQueryVariables>;
-export const CommerceOrdersPrivilegedChartDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'CommerceOrdersPrivilegedChart' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'commerceOrdersPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } }],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<CommerceOrdersPrivilegedChartQuery, CommerceOrdersPrivilegedChartQueryVariables>;
-export const DataInteractionDatabasesDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'DataInteractionDatabases' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'dataInteractionDatabases' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [{ kind: 'Field', name: { kind: 'Name', value: 'databaseName' } }],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<DataInteractionDatabasesQuery, DataInteractionDatabasesQueryVariables>;
-export const DataInteractionDatabaseTableDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'DataInteractionDatabaseTable' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'databaseName' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'tableName' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'dataInteractionDatabaseTable' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'databaseName' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'databaseName' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'tableName' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'tableName' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'databaseName' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'tableName' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'columns' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isKey' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isPrimaryKey' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'keyTableName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'possibleValues' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isNullable' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isGenerated' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'length' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'relations' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fieldName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'tableName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'inverseFieldName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'inverseType' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'inverseTableName' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<DataInteractionDatabaseTableQuery, DataInteractionDatabaseTableQueryVariables>;
-export const DataInteractionDatabaseTableMetricsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'DataInteractionDatabaseTableMetrics' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'NamedType',
-                            name: { kind: 'Name', value: 'DataInteractionDatabaseTableMetricsQueryInput' },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'dataInteractionDatabaseTableMetrics' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'timeInterval' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'data' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const CommerceOrdersByCheckoutSessionDocument = new TypedDocumentString(`
+    query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
+  commerceOrdersByCheckoutSession(checkoutSessionId: $checkoutSessionId) {
+    ... on CommerceOrder {
+      identifier
+      status
+      paymentStatus
+      fulfillmentStatus
+      emailAddress
+      lineItems {
+        id
+        indexId
+        status
+        productVariantId
+        quantity
+      }
+      shippingInfo {
+        shippingAddress {
+          firstName
+          lastName
+          company
+          phoneNumber
+          line1
+          line2
+          city
+          state
+          postalCode
+          country
+        }
+      }
+      payment {
+        paymentMethod {
+          ... on PaymentMethodCreditCard {
+            billingAddress {
+              firstName
+              lastName
+              company
+              phoneNumber
+              line1
+              line2
+              city
+              state
+              postalCode
+              country
+            }
+            type
+            last4
+            cardType
+          }
+        }
+      }
+      priceInfo {
+        currencyCode
+        originalSubtotal
+        shippingRate {
+          originalAmount
+          amount
+        }
+        tax {
+          shipping
+          total
+        }
+        subtotal
+        amount
+      }
+      appliedDiscounts {
+        amount
+        code
+        items {
+          indexId
+          unitAmount
+          amount
+        }
+      }
+      createdAt
+    }
+    ... on PublicCommerceOrder {
+      identifier
+      status
+      paymentStatus
+      fulfillmentStatus
+      lineItems {
+        id
+        indexId
+        status
+        productVariantId
+        quantity
+      }
+      priceInfo {
+        currencyCode
+        originalSubtotal
+        shippingRate {
+          originalAmount
+          amount
+        }
+        tax {
+          shipping
+          total
+        }
+        subtotal
+        amount
+      }
+      appliedDiscounts {
+        amount
+        code
+        items {
+          indexId
+          unitAmount
+          amount
+        }
+      }
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    CommerceOrdersByCheckoutSessionQuery,
+    CommerceOrdersByCheckoutSessionQueryVariables
+>;
+export const CommerceOrdersDocument = new TypedDocumentString(`
+    query CommerceOrders($pagination: PaginationInput!) {
+  commerceOrders(pagination: $pagination) {
+    items {
+      id
+      identifier
+      status
+      paymentStatus
+      fulfillmentStatus
+      lineItems {
+        id
+        indexId
+        status
+        productVariantId
+        quantity
+      }
+      shipments {
+        id
+        orderIndexId
+        status
+        label {
+          carrier
+          serviceType
+          trackingNumber
+          trackingUrl
+        }
+        packageInfo {
+          items {
+            indexId
+            quantity
+          }
+        }
+        shippedAt
+        deliveredAt
+        cancelledAt
+      }
+      priceInfo {
+        amount
+        originalSubtotal
+        lineItemPrices {
+          indexId
+          originalSubtotal
+          originalUnitPrice
+          subtotal
+          unitPrice
+        }
+      }
+      appliedDiscounts {
+        amount
+        code
+        items {
+          indexId
+          unitAmount
+          amount
+        }
+      }
+      updatedAt
+      createdAt
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CommerceOrdersQuery, CommerceOrdersQueryVariables>;
+export const CommerceOrderDocument = new TypedDocumentString(`
+    query CommerceOrder($orderIdentifier: String!) {
+  commerceOrder(identifier: $orderIdentifier) {
+    ... on CommerceOrder {
+      identifier
+      status
+      statusRecords {
+        status
+        timestamp
+        description
+      }
+      paymentStatus
+      fulfillmentStatus
+      emailAddress
+      lineItems {
+        id
+        indexId
+        status
+        productVariantId
+        quantity
+        updatedAt
+        createdAt
+      }
+      shipments {
+        id
+        orderIndexId
+        status
+        label {
+          carrier
+          serviceType
+          trackingNumber
+          trackingUrl
+        }
+        packageInfo {
+          items {
+            indexId
+            quantity
+          }
+        }
+        shippedAt
+        deliveredAt
+        cancelledAt
+        updatedAt
+        createdAt
+      }
+      shippingInfo {
+        shippingAddress {
+          firstName
+          lastName
+          company
+          phoneNumber
+          line1
+          line2
+          city
+          state
+          postalCode
+          country
+        }
+      }
+      payment {
+        paymentMethod {
+          ... on PaymentMethodCreditCard {
+            billingAddress {
+              firstName
+              lastName
+              company
+              phoneNumber
+              line1
+              line2
+              city
+              state
+              postalCode
+              country
+            }
+            type
+            last4
+            cardType
+          }
+        }
+      }
+      priceInfo {
+        currencyCode
+        originalSubtotal
+        shippingRate {
+          originalAmount
+          amount
+        }
+        tax {
+          shipping
+          total
+        }
+        subtotal
+        amount
+        lineItemPrices {
+          indexId
+          originalSubtotal
+          originalUnitPrice
+          subtotal
+          unitPrice
+        }
+      }
+      createdAt
+      appliedDiscounts {
+        amount
+        code
+        items {
+          indexId
+          unitAmount
+          amount
+        }
+      }
+    }
+    ... on PublicCommerceOrder {
+      identifier
+      status
+      paymentStatus
+      fulfillmentStatus
+      lineItems {
+        id
+        indexId
+        status
+        productVariantId
+        quantity
+      }
+      priceInfo {
+        currencyCode
+        originalSubtotal
+        shippingRate {
+          originalAmount
+          amount
+        }
+        tax {
+          shipping
+          total
+        }
+        subtotal
+        amount
+        lineItemPrices {
+          indexId
+          originalSubtotal
+          originalUnitPrice
+          subtotal
+          unitPrice
+        }
+      }
+      appliedDiscounts {
+        amount
+        code
+        items {
+          indexId
+          unitAmount
+          amount
+        }
+      }
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CommerceOrderQuery, CommerceOrderQueryVariables>;
+export const CommerceOrdersPrivilegedDocument = new TypedDocumentString(`
+    query CommerceOrdersPrivileged($pagination: PaginationInput!) {
+  commerceOrdersPrivileged(pagination: $pagination) {
+    items {
+      createdAt
+      emailAddress
+      fulfillmentSource
+      fulfillmentStatus
+      id
+      identifier
+      lineItems {
+        createdAt
+        id
+        indexId
+        productVariantId
+        quantity
+        status
+        updatedAt
+      }
+      metadata
+      payment {
+        amount
+        authorizedAt
+        cancelledAt
+        capturedAt
+        confirmedAt
+        createdAt
+        currencyCode
+        externalReferenceId
+        id
+        paymentMethod {
+          externalResourceId
+          paymentProcessorType
+          type
+          ... on PaymentMethodCreditCard {
+            externalResourceId
+            billingAddress {
+              city
+              company
+              country
+              firstName
+              lastName
+              line1
+              line2
+              postalCode
+              state
+              phoneNumber
+            }
+            cardType
+            expirationMonth
+            expirationYear
+            last4
+            paymentProcessorType
+            type
+          }
+          ... on PaymentMethodAppleInAppPurchase {
+            externalResourceId
+            paymentProcessorType
+            type
+          }
+        }
+        paymentProcessorType
+        status
+        updatedAt
+      }
+      paymentStatus
+      priceInfo {
+        amount
+        currencyCode
+        lineItemPrices {
+          indexId
+          originalSubtotal
+          subtotal
+        }
+        originalSubtotal
+        shippingRate {
+          amount
+          originalAmount
+        }
+        subtotal
+        tax {
+          shipping
+          total
+        }
+      }
+      shipments {
+        cancelledAt
+        createdAt
+        createdByAccountId
+        createdByProfileId
+        deliveredAt
+        deliveryStatus
+        id
+        orderIndexId
+        label {
+          carrier
+          serviceType
+          trackingNumber
+          trackingUrl
+        }
+        shippedAt
+        source
+        status
+        toAddress {
+          city
+          company
+          country
+          firstName
+          lastName
+          line1
+          line2
+          phoneNumber
+          state
+          postalCode
+        }
+        updatedAt
+        updatedByAccountId
+        updatedByProfileId
+      }
+      shippingInfo {
+        shippingAddress {
+          city
+          country
+          company
+          lastName
+          firstName
+          line1
+          line2
+          phoneNumber
+          postalCode
+          state
+        }
+      }
+      source
+      status
+      updatedAt
+    }
+    pagination {
+      itemsTotal
+      itemsPerPage
+      page
+      pagesTotal
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<CommerceOrdersPrivilegedQuery, CommerceOrdersPrivilegedQueryVariables>;
+export const CommerceOrdersPrivilegedChartDocument = new TypedDocumentString(`
+    query CommerceOrdersPrivilegedChart($pagination: PaginationInput!) {
+  commerceOrdersPrivileged(pagination: $pagination) {
+    items {
+      createdAt
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    CommerceOrdersPrivilegedChartQuery,
+    CommerceOrdersPrivilegedChartQueryVariables
+>;
+export const DataInteractionDatabasesDocument = new TypedDocumentString(`
+    query DataInteractionDatabases($pagination: PaginationInput!) {
+  dataInteractionDatabases(pagination: $pagination) {
+    items {
+      databaseName
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<DataInteractionDatabasesQuery, DataInteractionDatabasesQueryVariables>;
+export const DataInteractionDatabaseTableDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTable($databaseName: String!, $tableName: String!) {
+  dataInteractionDatabaseTable(databaseName: $databaseName, tableName: $tableName) {
+    databaseName
+    tableName
+    columns {
+      name
+      type
+      isKey
+      isPrimaryKey
+      keyTableName
+      possibleValues
+      isNullable
+      isGenerated
+      length
+    }
+    relations {
+      fieldName
+      type
+      tableName
+      inverseFieldName
+      inverseType
+      inverseTableName
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<DataInteractionDatabaseTableQuery, DataInteractionDatabaseTableQueryVariables>;
+export const DataInteractionDatabaseTableMetricsDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
+  dataInteractionDatabaseTableMetrics(input: $input) {
+    timeInterval
+    data
+  }
+}
+    `) as unknown as TypedDocumentString<
     DataInteractionDatabaseTableMetricsQuery,
     DataInteractionDatabaseTableMetricsQueryVariables
 >;
-export const DataInteractionDatabaseTablesDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'DataInteractionDatabaseTables' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'databaseName' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'dataInteractionDatabaseTables' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'databaseName' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'databaseName' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'databaseName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'tableName' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<DataInteractionDatabaseTablesQuery, DataInteractionDatabaseTablesQueryVariables>;
-export const DataInteractionDatabaseTableRowsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'DataInteractionDatabaseTableRows' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'databaseName' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'tableName' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'ColumnFilterGroupInput' } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'dataInteractionDatabaseTableRows' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'databaseName' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'databaseName' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'tableName' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'tableName' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'filters' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'filters' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'items' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'databaseName' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'tableName' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'rowCount' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'columns' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isKey' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isPrimaryKey' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'keyTableName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'possibleValues' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isNullable' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'isGenerated' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'length' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'relations' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fieldName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'tableName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'inverseFieldName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'inverseType' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'inverseTableName' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<DataInteractionDatabaseTableRowsQuery, DataInteractionDatabaseTableRowsQueryVariables>;
-export const EngagementEventCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'EngagementEventCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'CreateEngagementEventInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'engagementEventCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<EngagementEventCreateMutation, EngagementEventCreateMutationVariables>;
-export const EngagementEventsCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'EngagementEventsCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'ListType',
-                            type: {
-                                kind: 'NonNullType',
-                                type: {
-                                    kind: 'NamedType',
-                                    name: { kind: 'Name', value: 'CreateEngagementEventInput' },
-                                },
-                            },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'engagementEventsCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'inputs' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<EngagementEventsCreateMutation, EngagementEventsCreateMutationVariables>;
-export const EngagementOverviewDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'EngagementOverview' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'EngagementOverviewInput' } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'engagementOverview' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'uniqueDeviceIds' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'views' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'uniqueDeviceCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'viewIdentifier' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'locations' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'uniqueDeviceCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'countryCode' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'latitude' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'longitude' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'referrers' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'referrer' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'uniqueDeviceCount' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'deviceCategoryPercentages' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<EngagementOverviewQuery, EngagementOverviewQueryVariables>;
-export const FormDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'Form' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'form' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'identifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'metadata' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'theme' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'backgroundColor' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'primaryColor' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'header' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'fontFamily' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'fontSize' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'question' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'fontFamily' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'fontSize' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'text' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'fontFamily' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'fontSize' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'components' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataCheckbox' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'options' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'maxSelections' },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataCheckboxGrid' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'columns' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'rows' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'maxSelectionsPerRow' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'allowEmpty' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataDate' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'initialDate' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'minDate' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'maxDate' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataDropdown' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'options' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'placeholder' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'defaultOption' },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataLinearScale' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'min' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'max' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'step' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'leftLabel' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'rightLabel' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataMultipleChoice' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'options' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'defaultOption' },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: {
-                                                        kind: 'Name',
-                                                        value: 'FormComponentDataMultipleChoiceGrid',
-                                                    },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'columns' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'rows' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataNumber' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            alias: { kind: 'Name', value: 'numberMin' },
-                                                            name: { kind: 'Name', value: 'min' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            alias: { kind: 'Name', value: 'numberMax' },
-                                                            name: { kind: 'Name', value: 'max' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'allowFloat' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataParagraph' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'placeholder' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataRating' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'icon' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'max' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'allowHalf' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'allowZero' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataSectionHeader' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataShortAnswer' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'placeholder' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: { kind: 'Name', value: 'FormComponentDataTime' },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'initialTime' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'minTime' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'maxTime' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'allowSeconds' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'ampm' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'InlineFragment',
-                                                typeCondition: {
-                                                    kind: 'NamedType',
-                                                    name: {
-                                                        kind: 'Name',
-                                                        value: 'FormComponentDataTitleAndDescription',
-                                                    },
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'position' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'section' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'required' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<FormQuery, FormQueryVariables>;
-export const SubmitFormDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'SubmitForm' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'JSON' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'submitForm' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'identifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'emailAddress' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'data' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'formId' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SubmitFormMutation, SubmitFormMutationVariables>;
-export const PostsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'Posts' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'posts' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdByProfileId' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'createdByProfile' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'images' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'url' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'type' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'variant' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'topics' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'reactions' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'count' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'reacted' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'upvoteCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'downvoteCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'voteType' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'reportedCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'reportStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'latestRevisionId' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostsQuery, PostsQueryVariables>;
-export const PostsMineDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'PostsMine' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postsMine' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdByProfileId' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'createdByProfile' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'images' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'url' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'type' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'variant' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'topics' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'reactions' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'count' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'reacted' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'upvoteCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'downvoteCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'voteType' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'reportedCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'reportStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'latestRevisionId' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostsMineQuery, PostsMineQueryVariables>;
-export const PostDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'Post' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'post' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'identifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdByProfileId' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'createdByProfile' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'images' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'topics' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'reactions' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'count' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'reacted' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'upvoteCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'downvoteCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'voteType' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'reportedCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'reportStatus' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'latestRevisionId' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostQuery, PostQueryVariables>;
-export const PostCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PostCreateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postCreatePrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'settings' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'upvoteCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'downvoteCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostCreateMutation, PostCreateMutationVariables>;
-export const PostUpdateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostUpdate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PostUpdateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postUpdate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'settings' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'upvoteCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'downvoteCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostUpdateMutation, PostUpdateMutationVariables>;
-export const PostDeleteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostDelete' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postDelete' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                        ],
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostDeleteMutation, PostDeleteMutationVariables>;
-export const PostVoteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostVote' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PostVoteType' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postVote' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'postId' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'type' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostVoteMutation, PostVoteMutationVariables>;
-export const PostUnvoteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostUnvote' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postUnvote' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'postId' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostUnvoteMutation, PostUnvoteMutationVariables>;
-export const PostReactionCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostReactionCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'content' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postReactionCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'postId' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'content' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'content' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostReactionCreateMutation, PostReactionCreateMutationVariables>;
-export const PostReactionDeleteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostReactionDelete' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'content' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postReactionDelete' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'postId' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'content' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'content' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostReactionDeleteMutation, PostReactionDeleteMutationVariables>;
-export const PostReactionProfilesDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'PostReactionProfiles' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'content' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postReactionProfiles' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'postId' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'postId' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'content' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'content' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'profileId' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostReactionProfilesQuery, PostReactionProfilesQueryVariables>;
-export const PostReportCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostReportCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PostReportInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postReportCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'id' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostReportCreateMutation, PostReportCreateMutationVariables>;
-export const PostTopicByIdDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'PostTopicById' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postTopicById' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
-export const PostTopicsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'PostTopics' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-                    type: {
-                        kind: 'ListType',
-                        type: {
-                            kind: 'NonNullType',
-                            type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postTopics' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'ids' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostTopicsQuery, PostTopicsQueryVariables>;
-export const PostTopicCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostTopicCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PostTopicCreateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postTopicCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostTopicCreateMutation, PostTopicCreateMutationVariables>;
-export const PostTopicUpdateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostTopicUpdate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PostTopicUpdateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postTopicUpdate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postCount' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostTopicUpdateMutation, PostTopicUpdateMutationVariables>;
-export const PostTopicDeleteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'PostTopicDelete' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postTopicDelete' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
-export const GetSocialResponseDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'GetSocialResponse' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialResponse' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'mention' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'mentionPost' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<GetSocialResponseQuery, GetSocialResponseQueryVariables>;
-export const GetSocialResponsesDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'GetSocialResponses' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialResponses' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'error' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'model' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'mention' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'mentionPost' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'postedAt' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'postUrl' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'text' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<GetSocialResponsesQuery, GetSocialResponsesQueryVariables>;
-export const SocialMediaPlatformSettingsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'SocialMediaPlatformSettings' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'platform' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'SocialMediaPlatform' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialMediaPlatformSettings' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'platform' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'platform' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'responseBotEnabled' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'responseSystemPrompt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'responseModel' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'responseTemperature' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'lastPullAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'additionalSettings' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SocialMediaPlatformSettingsQuery, SocialMediaPlatformSettingsQueryVariables>;
-export const CreateSocialMediaPlatformSettingsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'CreateSocialMediaPlatformSettings' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'NamedType',
-                            name: { kind: 'Name', value: 'CreateSocialMediaPlatformSettingsInput' },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialMediaPlatformSettingsCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
-    CreateSocialMediaPlatformSettingsMutation,
-    CreateSocialMediaPlatformSettingsMutationVariables
+export const DataInteractionDatabaseTablesDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
+  dataInteractionDatabaseTables(
+    databaseName: $databaseName
+    pagination: $pagination
+  ) {
+    items {
+      databaseName
+      tableName
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    DataInteractionDatabaseTablesQuery,
+    DataInteractionDatabaseTablesQueryVariables
 >;
-export const UpdateSocialMediaPlatformSettingsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'UpdateSocialMediaPlatformSettings' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'NamedType',
-                            name: { kind: 'Name', value: 'UpdateSocialMediaPlatformSettingsInput' },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialMediaPlatformSettingsUpdate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
-    UpdateSocialMediaPlatformSettingsMutation,
-    UpdateSocialMediaPlatformSettingsMutationVariables
+export const DataInteractionDatabaseTableRowsDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTableRows($databaseName: String!, $tableName: String!, $pagination: PaginationInput!, $filters: ColumnFilterGroupInput) {
+  dataInteractionDatabaseTableRows(
+    databaseName: $databaseName
+    tableName: $tableName
+    pagination: $pagination
+    filters: $filters
+  ) {
+    items
+    databaseName
+    tableName
+    rowCount
+    columns {
+      name
+      type
+      isKey
+      isPrimaryKey
+      keyTableName
+      possibleValues
+      isNullable
+      isGenerated
+      length
+    }
+    relations {
+      fieldName
+      tableName
+      type
+      inverseFieldName
+      inverseType
+      inverseTableName
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    DataInteractionDatabaseTableRowsQuery,
+    DataInteractionDatabaseTableRowsQueryVariables
 >;
-export const ApproveSocialResponseDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'ApproveSocialResponse' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialResponseApprove' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'mention' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'mentionPost' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<ApproveSocialResponseMutation, ApproveSocialResponseMutationVariables>;
-export const RejectSocialResponseDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'RejectSocialResponse' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialResponseReject' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'mention' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'mentionPost' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<RejectSocialResponseMutation, RejectSocialResponseMutationVariables>;
-export const UpdateSocialResponseDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'UpdateSocialResponse' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'UpdateSocialResponseInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'socialResponseUpdate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'platformPostId' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'error' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'model' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'modelProvider' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'generatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'mention' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'platform' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'mentionPost' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'postUrl' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'text' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<UpdateSocialResponseMutation, UpdateSocialResponseMutationVariables>;
-export const SupportPostDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'SupportPost' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'post' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'identifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'identifier' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SupportPostQuery, SupportPostQueryVariables>;
-export const SupportPostsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'SupportPosts' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'posts' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'topics' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SupportPostsQuery, SupportPostsQueryVariables>;
-export const SupportPostTopicDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'SupportPostTopic' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'path' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postTopic' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'slug' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'path' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'path' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'type' },
-                                value: { kind: 'StringValue', value: 'SupportArticle', block: false },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'topic' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'postCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'subTopics' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'postCount' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagedPosts' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'items' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'pagination' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'itemIndexForNextPage' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'itemsPerPage' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SupportPostTopicQuery, SupportPostTopicQueryVariables>;
-export const SupportTicketCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'SupportTicketCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'SupportTicketCreateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'supportTicketCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'userEmailAddress' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'comments' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [{ kind: 'Field', name: { kind: 'Name', value: 'content' } }],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SupportTicketCreateMutation, SupportTicketCreateMutationVariables>;
-export const SupportTicketUpdateStatusPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'SupportTicketUpdateStatusPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'status' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'SupportTicketStatus' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'supportTicketUpdateStatusPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'id' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'status' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'status' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const EngagementEventCreateDocument = new TypedDocumentString(`
+    mutation EngagementEventCreate($input: CreateEngagementEventInput!) {
+  engagementEventCreate(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<EngagementEventCreateMutation, EngagementEventCreateMutationVariables>;
+export const EngagementEventsCreateDocument = new TypedDocumentString(`
+    mutation EngagementEventsCreate($input: [CreateEngagementEventInput!]!) {
+  engagementEventsCreate(inputs: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<EngagementEventsCreateMutation, EngagementEventsCreateMutationVariables>;
+export const EngagementOverviewDocument = new TypedDocumentString(`
+    query EngagementOverview($input: EngagementOverviewInput) {
+  engagementOverview(input: $input) {
+    uniqueDeviceIds
+    views {
+      uniqueDeviceCount
+      viewIdentifier
+    }
+    locations {
+      uniqueDeviceCount
+      countryCode
+      latitude
+      longitude
+    }
+    referrers {
+      referrer
+      uniqueDeviceCount
+    }
+    deviceCategoryPercentages
+  }
+}
+    `) as unknown as TypedDocumentString<EngagementOverviewQuery, EngagementOverviewQueryVariables>;
+export const FormDocument = new TypedDocumentString(`
+    query Form($identifier: String!) {
+  form(identifier: $identifier) {
+    identifier
+    title
+    description
+    status
+    metadata {
+      theme {
+        backgroundColor
+        primaryColor
+        header {
+          fontFamily
+          fontSize
+        }
+        question {
+          fontFamily
+          fontSize
+        }
+        text {
+          fontFamily
+          fontSize
+        }
+      }
+    }
+    components {
+      ... on FormComponentDataCheckbox {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        options
+        maxSelections
+      }
+      ... on FormComponentDataCheckboxGrid {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        columns
+        rows
+        maxSelectionsPerRow
+        allowEmpty
+      }
+      ... on FormComponentDataDate {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        initialDate
+        minDate
+        maxDate
+      }
+      ... on FormComponentDataDropdown {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        options
+        placeholder
+        defaultOption
+      }
+      ... on FormComponentDataLinearScale {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        min
+        max
+        step
+        leftLabel
+        rightLabel
+      }
+      ... on FormComponentDataMultipleChoice {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        options
+        defaultOption
+      }
+      ... on FormComponentDataMultipleChoiceGrid {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        columns
+        rows
+      }
+      ... on FormComponentDataNumber {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        numberMin: min
+        numberMax: max
+        allowFloat
+      }
+      ... on FormComponentDataParagraph {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        placeholder
+      }
+      ... on FormComponentDataRating {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        icon
+        max
+        allowHalf
+        allowZero
+      }
+      ... on FormComponentDataSectionHeader {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+      }
+      ... on FormComponentDataShortAnswer {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        placeholder
+      }
+      ... on FormComponentDataTime {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+        initialTime
+        minTime
+        maxTime
+        allowSeconds
+        ampm
+      }
+      ... on FormComponentDataTitleAndDescription {
+        id
+        position
+        section
+        type
+        title
+        description
+        required
+      }
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<FormQuery, FormQueryVariables>;
+export const SubmitFormDocument = new TypedDocumentString(`
+    mutation SubmitForm($identifier: String!, $emailAddress: String, $data: JSON!) {
+  submitForm(identifier: $identifier, emailAddress: $emailAddress, data: $data) {
+    id
+    formId
+  }
+}
+    `) as unknown as TypedDocumentString<SubmitFormMutation, SubmitFormMutationVariables>;
+export const PostsDocument = new TypedDocumentString(`
+    query Posts($pagination: PaginationInput!) {
+  posts(pagination: $pagination) {
+    items {
+      id
+      identifier
+      slug
+      status
+      title
+      createdByProfileId
+      createdByProfile {
+        displayName
+        username
+        images {
+          url
+          type
+          variant
+        }
+      }
+      content
+      topics {
+        id
+        title
+        slug
+      }
+      reactions {
+        content
+        count
+        reacted
+      }
+      upvoteCount
+      downvoteCount
+      voteType
+      reportedCount
+      reportStatus
+      metadata
+      latestRevisionId
+      updatedAt
+      createdAt
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<PostsQuery, PostsQueryVariables>;
+export const PostsMineDocument = new TypedDocumentString(`
+    query PostsMine($pagination: PaginationInput!) {
+  postsMine(pagination: $pagination) {
+    items {
+      id
+      identifier
+      slug
+      status
+      title
+      createdByProfileId
+      createdByProfile {
+        displayName
+        username
+        images {
+          url
+          type
+          variant
+        }
+      }
+      content
+      topics {
+        id
+        title
+        slug
+      }
+      reactions {
+        content
+        count
+        reacted
+      }
+      upvoteCount
+      downvoteCount
+      voteType
+      reportedCount
+      reportStatus
+      metadata
+      latestRevisionId
+      updatedAt
+      createdAt
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<PostsMineQuery, PostsMineQueryVariables>;
+export const PostDocument = new TypedDocumentString(`
+    query Post($identifier: String!) {
+  post(identifier: $identifier) {
+    id
+    identifier
+    slug
+    status
+    title
+    createdByProfileId
+    createdByProfile {
+      displayName
+      username
+      images {
+        url
+        type
+        variant
+      }
+    }
+    content
+    topics {
+      id
+      title
+    }
+    reactions {
+      content
+      count
+      reacted
+    }
+    upvoteCount
+    downvoteCount
+    voteType
+    reportedCount
+    reportStatus
+    type
+    metadata
+    latestRevisionId
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostQuery, PostQueryVariables>;
+export const PostCreateDocument = new TypedDocumentString(`
+    mutation PostCreate($input: PostCreateInput!) {
+  postCreatePrivileged(input: $input) {
+    id
+    status
+    title
+    contentType
+    content
+    settings
+    upvoteCount
+    downvoteCount
+    metadata
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostCreateMutation, PostCreateMutationVariables>;
+export const PostUpdateDocument = new TypedDocumentString(`
+    mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
+  postUpdate(id: $id, input: $input) {
+    id
+    status
+    title
+    contentType
+    content
+    settings
+    upvoteCount
+    downvoteCount
+    metadata
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostUpdateMutation, PostUpdateMutationVariables>;
+export const PostDeleteDocument = new TypedDocumentString(`
+    mutation PostDelete($id: String!) {
+  postDelete(id: $id)
+}
+    `) as unknown as TypedDocumentString<PostDeleteMutation, PostDeleteMutationVariables>;
+export const PostVoteDocument = new TypedDocumentString(`
+    mutation PostVote($postId: String!, $type: PostVoteType!) {
+  postVote(postId: $postId, type: $type) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostVoteMutation, PostVoteMutationVariables>;
+export const PostUnvoteDocument = new TypedDocumentString(`
+    mutation PostUnvote($postId: String!) {
+  postUnvote(postId: $postId) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostUnvoteMutation, PostUnvoteMutationVariables>;
+export const PostReactionCreateDocument = new TypedDocumentString(`
+    mutation PostReactionCreate($postId: String!, $content: String!) {
+  postReactionCreate(postId: $postId, content: $content) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostReactionCreateMutation, PostReactionCreateMutationVariables>;
+export const PostReactionDeleteDocument = new TypedDocumentString(`
+    mutation PostReactionDelete($postId: String!, $content: String!) {
+  postReactionDelete(postId: $postId, content: $content) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostReactionDeleteMutation, PostReactionDeleteMutationVariables>;
+export const PostReactionProfilesDocument = new TypedDocumentString(`
+    query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {
+  postReactionProfiles(
+    postId: $postId
+    content: $content
+    pagination: $pagination
+  ) {
+    items {
+      username
+      displayName
+      profileId
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<PostReactionProfilesQuery, PostReactionProfilesQueryVariables>;
+export const PostReportCreateDocument = new TypedDocumentString(`
+    mutation PostReportCreate($input: PostReportInput!) {
+  postReportCreate(input: $input) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<PostReportCreateMutation, PostReportCreateMutationVariables>;
+export const PostTopicByIdDocument = new TypedDocumentString(`
+    query PostTopicById($id: String!) {
+  postTopicById(id: $id) {
+    id
+    title
+    slug
+    description
+    postCount
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
+export const PostTopicsDocument = new TypedDocumentString(`
+    query PostTopics($ids: [String!]) {
+  postTopics(ids: $ids) {
+    id
+    title
+    slug
+    description
+    postCount
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicsQuery, PostTopicsQueryVariables>;
+export const PostTopicCreateDocument = new TypedDocumentString(`
+    mutation PostTopicCreate($input: PostTopicCreateInput!) {
+  postTopicCreate(input: $input) {
+    id
+    title
+    slug
+    description
+    postCount
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicCreateMutation, PostTopicCreateMutationVariables>;
+export const PostTopicUpdateDocument = new TypedDocumentString(`
+    mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
+  postTopicUpdate(input: $input) {
+    id
+    title
+    slug
+    description
+    postCount
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicUpdateMutation, PostTopicUpdateMutationVariables>;
+export const PostTopicDeleteDocument = new TypedDocumentString(`
+    mutation PostTopicDelete($id: String!) {
+  postTopicDelete(id: $id) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
+export const SupportPostDocument = new TypedDocumentString(`
+    query SupportPost($identifier: String!) {
+  post(identifier: $identifier) {
+    identifier
+    slug
+    status
+    title
+    description
+    content
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<SupportPostQuery, SupportPostQueryVariables>;
+export const SupportPostsDocument = new TypedDocumentString(`
+    query SupportPosts($pagination: PaginationInput!) {
+  posts(pagination: $pagination) {
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+    items {
+      identifier
+      slug
+      status
+      title
+      description
+      content
+      topics {
+        id
+        title
+        slug
+      }
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportPostsQuery, SupportPostsQueryVariables>;
+export const SupportPostTopicDocument = new TypedDocumentString(`
+    query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInput!) {
+  postTopic(
+    slug: $slug
+    path: $path
+    type: "SupportArticle"
+    pagination: $pagination
+  ) {
+    topic {
+      id
+      title
+      slug
+      description
+      postCount
+      createdAt
+    }
+    subTopics {
+      id
+      title
+      slug
+      description
+      postCount
+      createdAt
+    }
+    pagedPosts {
+      items {
+        id
+        identifier
+        slug
+        status
+        title
+        description
+        content
+        metadata
+        updatedAt
+        createdAt
+      }
+      pagination {
+        itemIndex
+        itemIndexForPreviousPage
+        itemIndexForNextPage
+        itemsPerPage
+        itemsTotal
+        pagesTotal
+        page
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportPostTopicQuery, SupportPostTopicQueryVariables>;
+export const SupportTicketCreateDocument = new TypedDocumentString(`
+    mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
+  supportTicketCreate(input: $input) {
+    id
+    type
+    status
+    userEmailAddress
+    title
+    description
+    comments {
+      content
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportTicketCreateMutation, SupportTicketCreateMutationVariables>;
+export const SupportTicketUpdateStatusPrivilegedDocument = new TypedDocumentString(`
+    mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {
+  supportTicketUpdateStatusPrivileged(id: $id, status: $status) {
+    id
+    status
+  }
+}
+    `) as unknown as TypedDocumentString<
     SupportTicketUpdateStatusPrivilegedMutation,
     SupportTicketUpdateStatusPrivilegedMutationVariables
 >;
-export const SupportTicketsPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'SupportTicketsPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'supportTicketsPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'userEmailAddress' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'assignedToProfileId' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'assignedToProfile' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'images' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'type' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'url' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'variant' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'comments' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'visibility' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'attachments' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'type' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'url' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'variant' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'lastUserCommentedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'answeredAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'answered' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SupportTicketsPrivilegedQuery, SupportTicketsPrivilegedQueryVariables>;
-export const SupportTicketAssignDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'SupportTicketAssign' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'ticketId' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'username' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'supportTicketAssign' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'ticketId' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'ticketId' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'username' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'username' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'assignedToProfileId' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'assignedToProfile' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'images' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SupportTicketAssignMutation, SupportTicketAssignMutationVariables>;
-export const SupportTicketCommentCreatePrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'SupportTicketCommentCreatePrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'SupportTicketCommentCreateInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'supportTicketCommentCreatePrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'input' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'visibility' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const SupportTicketsPrivilegedDocument = new TypedDocumentString(`
+    query SupportTicketsPrivileged($pagination: PaginationInput!) {
+  supportTicketsPrivileged(pagination: $pagination) {
+    items {
+      id
+      identifier
+      status
+      type
+      title
+      description
+      userEmailAddress
+      assignedToProfileId
+      assignedToProfile {
+        username
+        displayName
+        images {
+          type
+          url
+          variant
+        }
+      }
+      comments {
+        id
+        source
+        visibility
+        content
+        contentType
+        attachments {
+          type
+          url
+          variant
+        }
+        createdAt
+      }
+      createdAt
+      updatedAt
+      lastUserCommentedAt
+      answeredAt
+      answered
+    }
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportTicketsPrivilegedQuery, SupportTicketsPrivilegedQueryVariables>;
+export const SupportTicketAssignDocument = new TypedDocumentString(`
+    mutation SupportTicketAssign($ticketId: String!, $username: String) {
+  supportTicketAssign(ticketId: $ticketId, username: $username) {
+    id
+    assignedToProfileId
+    assignedToProfile {
+      username
+      displayName
+      images {
+        type
+        url
+        variant
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportTicketAssignMutation, SupportTicketAssignMutationVariables>;
+export const SupportTicketCommentCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreateInput!) {
+  supportTicketCommentCreatePrivileged(input: $input) {
+    id
+    content
+    contentType
+    source
+    visibility
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<
     SupportTicketCommentCreatePrivilegedMutation,
     SupportTicketCommentCreatePrivilegedMutationVariables
 >;
-export const SupportAllSupportProfilesDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'SupportAllSupportProfiles' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'supportAllSupportProfiles' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'images' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<SupportAllSupportProfilesQuery, SupportAllSupportProfilesQueryVariables>;
-export const SupportTicketAccountAndCommerceOrdersPrivelegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'SupportTicketAccountAndCommerceOrdersPriveleged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'email' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accountPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'input' },
-                                value: {
-                                    kind: 'ObjectValue',
-                                    fields: [
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'emailAddress' },
-                                            value: { kind: 'Variable', name: { kind: 'Name', value: 'email' } },
-                                        },
-                                    ],
-                                },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'defaultProfileId' } },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'defaultProfile' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'images' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'variant' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'displayName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'givenName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'familyName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'preferredName' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'username' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                                { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'commerceOrdersPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'fulfillmentStatus' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'lineItems' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'indexId' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'productVariantId' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'paymentStatus' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'priceInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'amount' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'currencyCode' },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'originalSubtotal' },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'subtotal' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'lineItemPrices' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'indexId' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'originalSubtotal',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'subtotal' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingRate' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'amount' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'originalAmount' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'tax' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'shipping' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'total' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'discounts' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'metadata' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'shippingInfo' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'shippingAddress' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line1' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'line2' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'city' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'company' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'country' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'firstName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'lastName' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'phoneNumber' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'postalCode' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'state' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const SupportAllSupportProfilesDocument = new TypedDocumentString(`
+    query SupportAllSupportProfiles {
+  supportAllSupportProfiles {
+    username
+    displayName
+    images {
+      type
+      url
+      variant
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportAllSupportProfilesQuery, SupportAllSupportProfilesQueryVariables>;
+export const SupportTicketAccountAndCommerceOrdersPrivelegedDocument = new TypedDocumentString(`
+    query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $pagination: PaginationInput!) {
+  accountPrivileged(input: {emailAddress: $email}) {
+    defaultProfileId
+    defaultProfile {
+      id
+      images {
+        type
+        url
+        variant
+      }
+      displayName
+      givenName
+      familyName
+      preferredName
+      username
+      createdAt
+    }
+    emailAddress
+    status
+  }
+  commerceOrdersPrivileged(pagination: $pagination) {
+    items {
+      id
+      fulfillmentStatus
+      emailAddress
+      identifier
+      lineItems {
+        createdAt
+        id
+        indexId
+        productVariantId
+        quantity
+        status
+        updatedAt
+      }
+      paymentStatus
+      priceInfo {
+        amount
+        currencyCode
+        originalSubtotal
+        subtotal
+        lineItemPrices {
+          indexId
+          originalSubtotal
+          subtotal
+        }
+        shippingRate {
+          amount
+          originalAmount
+        }
+        tax {
+          shipping
+          total
+        }
+      }
+      source
+      status
+      metadata
+      createdAt
+      updatedAt
+      shippingInfo {
+        shippingAddress {
+          line1
+          line2
+          city
+          company
+          country
+          firstName
+          lastName
+          phoneNumber
+          postalCode
+          state
+        }
+      }
+    }
+    pagination {
+      pagesTotal
+      page
+      itemsTotal
+      itemsPerPage
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemIndex
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
     SupportTicketAccountAndCommerceOrdersPrivelegedQuery,
     SupportTicketAccountAndCommerceOrdersPrivelegedQueryVariables
 >;
-export const ProfileSupportTicketsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'ProfileSupportTickets' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'openTicketsIndex' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'closedTicketsIndex' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } } },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        alias: { kind: 'Name', value: 'openTickets' },
-                        name: { kind: 'Name', value: 'supportTickets' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: {
-                                    kind: 'ObjectValue',
-                                    fields: [
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'itemsPerPage' },
-                                            value: { kind: 'IntValue', value: '3' },
-                                        },
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'itemIndex' },
-                                            value: {
-                                                kind: 'Variable',
-                                                name: { kind: 'Name', value: 'openTicketsIndex' },
-                                            },
-                                        },
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'filters' },
-                                            value: {
-                                                kind: 'ListValue',
-                                                values: [
-                                                    {
-                                                        kind: 'ObjectValue',
-                                                        fields: [
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'column' },
-                                                                value: {
-                                                                    kind: 'StringValue',
-                                                                    value: 'status',
-                                                                    block: false,
-                                                                },
-                                                            },
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'operator' },
-                                                                value: { kind: 'EnumValue', value: 'Equal' },
-                                                            },
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'value' },
-                                                                value: {
-                                                                    kind: 'StringValue',
-                                                                    value: 'Open',
-                                                                    block: false,
-                                                                },
-                                                            },
-                                                        ],
-                                                    },
-                                                ],
-                                            },
-                                        },
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'orderBy' },
-                                            value: {
-                                                kind: 'ListValue',
-                                                values: [
-                                                    {
-                                                        kind: 'ObjectValue',
-                                                        fields: [
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'key' },
-                                                                value: {
-                                                                    kind: 'StringValue',
-                                                                    value: 'createdAt',
-                                                                    block: false,
-                                                                },
-                                                            },
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'direction' },
-                                                                value: { kind: 'EnumValue', value: 'Descending' },
-                                                            },
-                                                        ],
-                                                    },
-                                                ],
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'userEmailAddress' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'comments' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'visibility' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        alias: { kind: 'Name', value: 'closedTickets' },
-                        name: { kind: 'Name', value: 'supportTickets' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: {
-                                    kind: 'ObjectValue',
-                                    fields: [
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'itemsPerPage' },
-                                            value: { kind: 'IntValue', value: '3' },
-                                        },
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'itemIndex' },
-                                            value: {
-                                                kind: 'Variable',
-                                                name: { kind: 'Name', value: 'closedTicketsIndex' },
-                                            },
-                                        },
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'filters' },
-                                            value: {
-                                                kind: 'ListValue',
-                                                values: [
-                                                    {
-                                                        kind: 'ObjectValue',
-                                                        fields: [
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'column' },
-                                                                value: {
-                                                                    kind: 'StringValue',
-                                                                    value: 'status',
-                                                                    block: false,
-                                                                },
-                                                            },
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'operator' },
-                                                                value: { kind: 'EnumValue', value: 'Equal' },
-                                                            },
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'value' },
-                                                                value: {
-                                                                    kind: 'StringValue',
-                                                                    value: 'Closed',
-                                                                    block: false,
-                                                                },
-                                                            },
-                                                        ],
-                                                    },
-                                                ],
-                                            },
-                                        },
-                                        {
-                                            kind: 'ObjectField',
-                                            name: { kind: 'Name', value: 'orderBy' },
-                                            value: {
-                                                kind: 'ListValue',
-                                                values: [
-                                                    {
-                                                        kind: 'ObjectValue',
-                                                        fields: [
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'key' },
-                                                                value: {
-                                                                    kind: 'StringValue',
-                                                                    value: 'createdAt',
-                                                                    block: false,
-                                                                },
-                                                            },
-                                                            {
-                                                                kind: 'ObjectField',
-                                                                name: { kind: 'Name', value: 'direction' },
-                                                                value: { kind: 'EnumValue', value: 'Descending' },
-                                                            },
-                                                        ],
-                                                    },
-                                                ],
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'userEmailAddress' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'comments' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'visibility' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<ProfileSupportTicketsQuery, ProfileSupportTicketsQueryVariables>;
-export const ProfileSupportTicketDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'ProfileSupportTicket' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'supportTickets' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'status' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'userEmailAddress' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'comments' },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'source' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'visibility' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'content' } },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'contentType' } },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: { kind: 'Name', value: 'attachments' },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'type' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'url' },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: { kind: 'Name', value: 'variant' },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                                    ],
-                                                },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<ProfileSupportTicketQuery, ProfileSupportTicketQueryVariables>;
-export const WaitListsPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'WaitListsPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'waitListsPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<WaitListsPrivilegedQuery, WaitListsPrivilegedQueryVariables>;
-export const WaitListCreatePrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'WaitListCreatePrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'WaitListCreationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'waitListCreatePrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'data' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'data' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'identifier' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<WaitListCreatePrivilegedMutation, WaitListCreatePrivilegedMutationVariables>;
-export const WaitListEntriesPrivilegedDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'WaitListEntriesPrivileged' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
-                    type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                    type: {
-                        kind: 'NonNullType',
-                        type: { kind: 'NamedType', name: { kind: 'Name', value: 'PaginationInput' } },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'waitListEntriesPrivileged' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'waitListIdentifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'pagination' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'pagination' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'pagination' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndex' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemIndexForNextPage' } },
-                                            {
-                                                kind: 'Field',
-                                                name: { kind: 'Name', value: 'itemIndexForPreviousPage' },
-                                            },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsPerPage' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'itemsTotal' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'page' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'pagesTotal' } },
-                                        ],
-                                    },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'items' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'message' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'userAgent' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'countryCode' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'referredBy' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'contactedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
-                                            { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<WaitListEntriesPrivilegedQuery, WaitListEntriesPrivilegedQueryVariables>;
-export const WaitListEntryCreateDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'WaitListEntryCreate' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                    defaultValue: { kind: 'StringValue', value: 'earlyAccess', block: false },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'waitListEntryCreate' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'emailAddress' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'waitListIdentifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                                { kind: 'Field', name: { kind: 'Name', value: 'emailAddress' } },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<WaitListEntryCreateMutation, WaitListEntryCreateMutationVariables>;
-export const WaitListEntryDeleteDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'mutation',
-            name: { kind: 'Name', value: 'WaitListEntryDelete' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                },
-                {
-                    kind: 'VariableDefinition',
-                    variable: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
-                    type: { kind: 'NonNullType', type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } } },
-                    defaultValue: { kind: 'StringValue', value: 'earlyAccess', block: false },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'waitListEntryDelete' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'emailAddress' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'emailAddress' } },
-                            },
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'waitListIdentifier' },
-                                value: { kind: 'Variable', name: { kind: 'Name', value: 'waitListIdentifier' } },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [{ kind: 'Field', name: { kind: 'Name', value: 'success' } }],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<WaitListEntryDeleteMutation, WaitListEntryDeleteMutationVariables>;
+export const ProfileSupportTicketsDocument = new TypedDocumentString(`
+    query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) {
+  openTickets: supportTickets(
+    pagination: {itemsPerPage: 3, itemIndex: $openTicketsIndex, filters: [{column: "status", operator: Equal, value: "Open"}], orderBy: [{key: "createdAt", direction: Descending}]}
+  ) {
+    items {
+      id
+      identifier
+      status
+      type
+      title
+      description
+      userEmailAddress
+      comments {
+        id
+        source
+        visibility
+        content
+        contentType
+        createdAt
+      }
+      createdAt
+      updatedAt
+    }
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+  }
+  closedTickets: supportTickets(
+    pagination: {itemsPerPage: 3, itemIndex: $closedTicketsIndex, filters: [{column: "status", operator: Equal, value: "Closed"}], orderBy: [{key: "createdAt", direction: Descending}]}
+  ) {
+    items {
+      id
+      identifier
+      status
+      type
+      title
+      description
+      userEmailAddress
+      comments {
+        id
+        source
+        visibility
+        content
+        contentType
+        createdAt
+      }
+      createdAt
+      updatedAt
+    }
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<ProfileSupportTicketsQuery, ProfileSupportTicketsQueryVariables>;
+export const ProfileSupportTicketDocument = new TypedDocumentString(`
+    query ProfileSupportTicket($pagination: PaginationInput!) {
+  supportTickets(pagination: $pagination) {
+    items {
+      id
+      identifier
+      status
+      type
+      title
+      description
+      userEmailAddress
+      comments {
+        id
+        source
+        visibility
+        content
+        contentType
+        attachments {
+          type
+          url
+          variant
+        }
+        createdAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<ProfileSupportTicketQuery, ProfileSupportTicketQueryVariables>;
+export const WaitListsPrivilegedDocument = new TypedDocumentString(`
+    query WaitListsPrivileged($pagination: PaginationInput!) {
+  waitListsPrivileged(pagination: $pagination) {
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+    items {
+      id
+      identifier
+      title
+      description
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<WaitListsPrivilegedQuery, WaitListsPrivilegedQueryVariables>;
+export const WaitListCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
+  waitListCreatePrivileged(data: $data) {
+    id
+    identifier
+    title
+    description
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<WaitListCreatePrivilegedMutation, WaitListCreatePrivilegedMutationVariables>;
+export const WaitListEntriesPrivilegedDocument = new TypedDocumentString(`
+    query WaitListEntriesPrivileged($waitListIdentifier: String, $pagination: PaginationInput!) {
+  waitListEntriesPrivileged(
+    waitListIdentifier: $waitListIdentifier
+    pagination: $pagination
+  ) {
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+    items {
+      id
+      emailAddress
+      message
+      userAgent
+      countryCode
+      referredBy
+      contactedAt
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<WaitListEntriesPrivilegedQuery, WaitListEntriesPrivilegedQueryVariables>;
+export const WaitListEntryCreateDocument = new TypedDocumentString(`
+    mutation WaitListEntryCreate($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
+  waitListEntryCreate(
+    emailAddress: $emailAddress
+    waitListIdentifier: $waitListIdentifier
+  ) {
+    id
+    emailAddress
+  }
+}
+    `) as unknown as TypedDocumentString<WaitListEntryCreateMutation, WaitListEntryCreateMutationVariables>;
+export const WaitListEntryDeleteDocument = new TypedDocumentString(`
+    mutation WaitListEntryDelete($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
+  waitListEntryDelete(
+    emailAddress: $emailAddress
+    waitListIdentifier: $waitListIdentifier
+  ) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<WaitListEntryDeleteMutation, WaitListEntryDeleteMutationVariables>;
 export type GraphQLInputTypeMetadata =
     | GraphQLInputScalarTypeMetadata
     | GraphQLInputEnumTypeMetadata
@@ -14879,123 +8502,6 @@ export namespace GraphQLInputTypes {
                 required: false,
             },
         ],
-    };
-
-    export const UpdateSocialResponseInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'UpdateSocialResponseInput',
-        fields: [
-            {
-                name: 'id',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'text',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'metadata',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
-
-    export const UpdateSocialMediaPlatformSettingsInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'UpdateSocialMediaPlatformSettingsInput',
-        fields: [
-            {
-                name: 'platform',
-                kind: 'enum',
-                type: GraphQLInputTypes.SocialMediaPlatform,
-                required: true,
-            },
-            {
-                name: 'responseBotEnabled',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'responseSystemPrompt',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'responseModel',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'responseTemperature',
-                kind: 'scalar',
-                type: 'Float',
-                required: false,
-            },
-            {
-                name: 'additionalSettings',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
-
-    export const CreateSocialMediaPlatformSettingsInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'CreateSocialMediaPlatformSettingsInput',
-        fields: [
-            {
-                name: 'platform',
-                kind: 'enum',
-                type: GraphQLInputTypes.SocialMediaPlatform,
-                required: true,
-            },
-            {
-                name: 'responseBotEnabled',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: true,
-            },
-            {
-                name: 'responseSystemPrompt',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'responseModel',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'responseTemperature',
-                kind: 'scalar',
-                type: 'Float',
-                required: false,
-            },
-            {
-                name: 'additionalSettings',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
-
-    export const SocialMediaPlatform: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'SocialMediaPlatform',
-        values: ['XTwitter', 'Reddit'],
     };
 
     export const PostTopicUpdateInput: GraphQLInputObjectTypeMetadata = {
@@ -15758,7 +9264,7 @@ export namespace GraphQLInputTypes {
     export const PaymentProcessorType: GraphQLInputEnumTypeMetadata = {
         kind: 'enum',
         type: 'PaymentProcessorType',
-        values: ['StripeProxy', 'StripeEmbedded', 'AppleInAppPurchase'],
+        values: ['Stripe', 'StripeEmbedded', 'AppleInAppPurchase', 'Test'],
     };
 
     export const CheckoutSessionCreateDirectItemInput: GraphQLInputObjectTypeMetadata = {
@@ -16778,7 +10284,7 @@ export const DataInteractionDatabaseTablesOperation: GraphQLOperationMetadata<
     parameters: [
         {
             parameter: 'databaseName',
-            required: false,
+            required: true,
             kind: 'scalar',
             type: 'String',
         },
@@ -17181,124 +10687,6 @@ export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopic
             required: true,
             kind: 'scalar',
             type: 'String',
-        },
-    ],
-};
-
-export const GetSocialResponseOperation: GraphQLOperationMetadata<typeof GetSocialResponseDocument> = {
-    operation: 'GetSocialResponse',
-    operationType: 'query',
-    document: GetSocialResponseDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const GetSocialResponsesOperation: GraphQLOperationMetadata<typeof GetSocialResponsesDocument> = {
-    operation: 'GetSocialResponses',
-    operationType: 'query',
-    document: GetSocialResponsesDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const SocialMediaPlatformSettingsOperation: GraphQLOperationMetadata<
-    typeof SocialMediaPlatformSettingsDocument
-> = {
-    operation: 'SocialMediaPlatformSettings',
-    operationType: 'query',
-    document: SocialMediaPlatformSettingsDocument,
-    parameters: [
-        {
-            parameter: 'platform',
-            required: true,
-            kind: 'enum',
-            type: GraphQLInputTypes.SocialMediaPlatform,
-        },
-    ],
-};
-
-export const CreateSocialMediaPlatformSettingsOperation: GraphQLOperationMetadata<
-    typeof CreateSocialMediaPlatformSettingsDocument
-> = {
-    operation: 'CreateSocialMediaPlatformSettings',
-    operationType: 'mutation',
-    document: CreateSocialMediaPlatformSettingsDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.CreateSocialMediaPlatformSettingsInput,
-        },
-    ],
-};
-
-export const UpdateSocialMediaPlatformSettingsOperation: GraphQLOperationMetadata<
-    typeof UpdateSocialMediaPlatformSettingsDocument
-> = {
-    operation: 'UpdateSocialMediaPlatformSettings',
-    operationType: 'mutation',
-    document: UpdateSocialMediaPlatformSettingsDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.UpdateSocialMediaPlatformSettingsInput,
-        },
-    ],
-};
-
-export const ApproveSocialResponseOperation: GraphQLOperationMetadata<typeof ApproveSocialResponseDocument> = {
-    operation: 'ApproveSocialResponse',
-    operationType: 'mutation',
-    document: ApproveSocialResponseDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const RejectSocialResponseOperation: GraphQLOperationMetadata<typeof RejectSocialResponseDocument> = {
-    operation: 'RejectSocialResponse',
-    operationType: 'mutation',
-    document: RejectSocialResponseDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const UpdateSocialResponseOperation: GraphQLOperationMetadata<typeof UpdateSocialResponseDocument> = {
-    operation: 'UpdateSocialResponse',
-    operationType: 'mutation',
-    document: UpdateSocialResponseDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.UpdateSocialResponseInput,
         },
     ],
 };

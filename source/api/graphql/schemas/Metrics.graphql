@@ -94,5 +94,5 @@ type OperationResult {
 
 type Query {
     engagementEvents: [EngagementEvent!]!
-    engagementOverview(input: EngagementOverviewInput, live: Boolean): EngagementOverview!
+    engagementOverview(input: EngagementOverviewInput): EngagementOverview!
 }

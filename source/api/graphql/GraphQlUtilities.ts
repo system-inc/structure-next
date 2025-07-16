@@ -1,6 +1,27 @@
 // Dependencies - API
 import { ApolloError } from '@apollo/client';
 
+// Interface - GraphQL Response with potential errors
+export interface GraphQlResponseInterface<TData = unknown> {
+    data?: TData;
+    errors?: GraphQlErrorInterface[];
+    error?: GraphQlErrorInterface;
+}
+
+// Interface - GraphQL Error
+export interface GraphQlErrorInterface {
+    message: string;
+    path?: (string | number)[];
+    extensions?: {
+        name?: string;
+        status?: number;
+        message?: string;
+        code?: string;
+        validationErrors?: GraphQlValidationError[];
+        [key: string]: unknown;
+    };
+}
+
 // Interface - GraphQL Validation Error
 export interface GraphQlValidationError {
     property?: string;
@@ -74,3 +95,19 @@ export const apolloErrorToMessage = function (mutationError?: ApolloError) {
 
     return 'Unknown error.';
 };
+
+// Function to parse GraphQL errors from response
+export function parseGraphQlErrors(response: GraphQlResponseInterface): string | null {
+    if(response.errors && response.errors.length > 0 && response.errors[0]) {
+        return response.errors[0].message;
+    }
+    if(response.error) {
+        return response.error.message;
+    }
+    return null;
+}
+
+// Function to check if a response has errors
+export function hasGraphQlErrors(response: GraphQlResponseInterface): boolean {
+    return !!(response.errors || response.error || !response.data);
+}

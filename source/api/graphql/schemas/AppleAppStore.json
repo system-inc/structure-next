@@ -9,7 +9,7 @@
             "PaymentProcessorType": {
                 "kind": "enum",
                 "type": "PaymentProcessorType",
-                "values": ["StripeProxy", "StripeEmbedded", "AppleInAppPurchase"]
+                "values": ["Stripe", "StripeEmbedded", "AppleInAppPurchase", "Test"]
             },
             "String": {
                 "kind": "scalar",
@@ -35,16 +35,7 @@
                 "kind": "enum",
                 "type": "CommerceOrderStatus",
                 "description": "The status of the order",
-                "values": [
-                    "WaitPayment",
-                    "Pending",
-                    "FailToConfirm",
-                    "Open",
-                    "Complete",
-                    "Archived",
-                    "Cancelled",
-                    "OutOfStock"
-                ]
+                "values": ["WaitPayment", "Pending", "Open", "Complete", "Cancelled", "OutOfStock", "Refunded"]
             },
             "PaymentStatus": {
                 "kind": "enum",
@@ -58,15 +49,16 @@
                 "description": "The fulfillment status of the order",
                 "values": ["NotStart", "Unfulfilled", "PartiallyFulfilled", "Fulfilled", "Shipped", "Cancelled"]
             },
-            "Boolean": {
-                "kind": "scalar",
-                "type": "Boolean",
-                "description": "The `Boolean` scalar type represents `true` or `false`."
-            },
             "MonetaryDecimal": {
                 "kind": "scalar",
                 "type": "MonetaryDecimal",
                 "description": "Monetary decimal custom scalar type, we stored and operate the value in cents, and this scalar will convert the value to dollar when read and convert the value to cents when write."
+            },
+            "LabelColorOption": {
+                "kind": "enum",
+                "type": "LabelColorOption",
+                "description": "The label color to be used for display",
+                "values": ["Blue", "Green"]
             },
             "JSON": {
                 "kind": "scalar",
@@ -78,54 +70,6 @@
                 "type": "CommerceOrderLineItemStatus",
                 "description": "The status of the order line item",
                 "values": ["Pending", "Shipped", "Cancelled"]
-            },
-            "CommerceOrderLogVisibility": {
-                "kind": "enum",
-                "type": "CommerceOrderLogVisibility",
-                "description": "The visibility of the order log.",
-                "values": ["Public", "Internal"]
-            },
-            "CommerceOrderLogSource": {
-                "kind": "enum",
-                "type": "CommerceOrderLogSource",
-                "description": "The source of the order log.",
-                "values": ["System", "User", "CustomerSupport"]
-            },
-            "DiscountType": {
-                "kind": "enum",
-                "type": "DiscountType",
-                "description": "The type of the discount.",
-                "values": ["Automatic", "Code"]
-            },
-            "DiscountAllocationTarget": {
-                "kind": "enum",
-                "type": "DiscountAllocationTarget",
-                "values": ["Each", "Across", "ShippingAmount", "ShippingBreakdown"]
-            },
-            "Float": {
-                "kind": "scalar",
-                "type": "Float",
-                "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point)."
-            },
-            "DiscountValueType": {
-                "kind": "enum",
-                "type": "DiscountValueType",
-                "values": ["FixedAmount", "Percentage"]
-            },
-            "DiscountAllocationMethod": {
-                "kind": "enum",
-                "type": "DiscountAllocationMethod",
-                "values": ["Flat", "BuyXGetY", "BuyXGetFollowing"]
-            },
-            "DiscountConditionType": {
-                "kind": "enum",
-                "type": "DiscountConditionType",
-                "values": ["Vendors", "Products", "ProductVariants"]
-            },
-            "DiscountConditionTarget": {
-                "kind": "enum",
-                "type": "DiscountConditionTarget",
-                "values": ["EntireOrder", "LineItem"]
             },
             "ShipmentStatus": {
                 "kind": "enum",
@@ -139,21 +83,26 @@
                 "description": "The status of the delivery",
                 "values": ["AttemptedDelivery", "ReadyForPickup", "InTransit", "OutForDelivery", "Delivered"]
             },
-            "ShippingLabelSource": {
-                "kind": "enum",
-                "type": "ShippingLabelSource",
-                "values": ["Stamps", "Others"]
-            },
             "ShippingServiceType": {
                 "kind": "enum",
                 "type": "ShippingServiceType",
-                "values": [
-                    "USPSFirstClassMail",
-                    "USPSPriorityMail",
-                    "USPSPriorityMailExpress",
-                    "USPSParcelSelect",
-                    "USPSMediaMail"
-                ]
+                "values": ["USPSStandard", "UPSGround"]
+            },
+            "Float": {
+                "kind": "scalar",
+                "type": "Float",
+                "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point)."
+            },
+            "RefundStatus": {
+                "kind": "enum",
+                "type": "RefundStatus",
+                "description": "The status of a refund.",
+                "values": ["Pending", "Rejected", "Created", "Issued", "Failed", "Cancelled", "RequiresAction"]
+            },
+            "Boolean": {
+                "kind": "scalar",
+                "type": "Boolean",
+                "description": "The `Boolean` scalar type represents `true` or `false`."
             },
             "__TypeKind": {
                 "kind": "enum",
