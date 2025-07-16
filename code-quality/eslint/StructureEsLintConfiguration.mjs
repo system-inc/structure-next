@@ -4,16 +4,17 @@ import EsLintPluginReactHooks from 'eslint-plugin-react-hooks';
 import EsLintPluginNext from '@next/eslint-plugin-next';
 
 // Dependencies - Structure ESLint Rules
+import LocalStorageServiceRule from './rules/LocalStorageServiceRule.mjs';
+import NetworkServiceRule from './rules/NetworkServiceRule.mjs';
 import NoStructureProjectImportsRule from './rules/NoStructureProjectImportsRule.mjs';
-import NoDirectLocalStorageRule from './rules/NoDirectLocalStorageRule.mjs';
-import ReactNoDestructuringReactRule from './rules/ReactNoDestructuringReactRule.mjs';
-import ReactImportRule from './rules/ReactImportRule.mjs';
-import ReactExportRule from './rules/ReactExportRule.mjs';
-import ReactFunctionStyleRule from './rules/ReactFunctionStyleRule.mjs';
 import ReactDestructuringPropertiesRule from './rules/ReactDestructuringPropertiesRule.mjs';
-import ReactNoArrowFunctionsAsHookParametersRule from './rules/ReactNoArrowFunctionsAsHookParametersRule.mjs';
-import ReactNamingConventionsRule from './rules/ReactNamingConventionsRule.mjs';
+import ReactExportRule from './rules/ReactExportRule.mjs';
 import ReactFileOrganizationRule from './rules/ReactFileOrganizationRule.mjs';
+import ReactFunctionStyleRule from './rules/ReactFunctionStyleRule.mjs';
+import ReactImportRule from './rules/ReactImportRule.mjs';
+import ReactNamingConventionsRule from './rules/ReactNamingConventionsRule.mjs';
+import ReactNoArrowFunctionsAsHookParametersRule from './rules/ReactNoArrowFunctionsAsHookParametersRule.mjs';
+import ReactNoDestructuringReactRule from './rules/ReactNoDestructuringReactRule.mjs';
 
 // ESLint Ignore patterns
 export const structureIgnorePatterns = [
@@ -108,16 +109,17 @@ export const structureJavaScriptAndTypeScriptPlugins = {
     '@next/next': EsLintPluginNext,
     structure: {
         rules: {
+            'local-storage-service-rule': LocalStorageServiceRule,
+            'network-service-rule': NetworkServiceRule,
             'no-structure-project-imports-rule': NoStructureProjectImportsRule,
-            'no-direct-localstorage-rule': NoDirectLocalStorageRule,
-            'react-no-destructuring-react-rule': ReactNoDestructuringReactRule,
-            'react-import-rule': ReactImportRule,
-            'react-export-rule': ReactExportRule,
-            'react-function-style-rule': ReactFunctionStyleRule,
             'react-destructuring-properties-rule': ReactDestructuringPropertiesRule,
-            'react-no-arrow-functions-as-hook-parameters-rule': ReactNoArrowFunctionsAsHookParametersRule,
-            'react-naming-conventions-rule': ReactNamingConventionsRule,
+            'react-export-rule': ReactExportRule,
             'react-file-organization-rule': ReactFileOrganizationRule,
+            'react-function-style-rule': ReactFunctionStyleRule,
+            'react-import-rule': ReactImportRule,
+            'react-naming-conventions-rule': ReactNamingConventionsRule,
+            'react-no-arrow-functions-as-hook-parameters-rule': ReactNoArrowFunctionsAsHookParametersRule,
+            'react-no-destructuring-react-rule': ReactNoDestructuringReactRule,
         }
     },
 };
@@ -134,14 +136,15 @@ export const structureJavaScriptAndTypeScriptRules = {
 
     // Structure
     'no-empty': ['error', { allowEmptyCatch: true }],
+    'structure/local-storage-service-rule': 'error',
+    'structure/network-service-rule': 'error',
     'structure/no-structure-project-imports-rule': 'error',
-    'structure/no-direct-localstorage-rule': 'error',
-    'structure/react-no-destructuring-react-rule': 'error',
-    'structure/react-import-rule': 'error',
-    'structure/react-export-rule': 'error',
-    'structure/react-function-style-rule': 'error',
     'structure/react-destructuring-properties-rule': 'error',
-    'structure/react-no-arrow-functions-as-hook-parameters-rule': 'error',
-    'structure/react-naming-conventions-rule': 'error',
+    'structure/react-export-rule': 'error',
     'structure/react-file-organization-rule': 'error',
+    'structure/react-function-style-rule': 'error',
+    'structure/react-import-rule': 'error',
+    'structure/react-naming-conventions-rule': 'error',
+    'structure/react-no-arrow-functions-as-hook-parameters-rule': 'error',
+    'structure/react-no-destructuring-react-rule': 'error',
 };
