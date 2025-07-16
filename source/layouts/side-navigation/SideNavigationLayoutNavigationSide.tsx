@@ -171,7 +171,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     //     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
                     //     roundedWidth,
                     // );
-                    localStorageService.set(
+                    localStorageService.set<number>(
                         getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
                         roundedWidth,
                     );
@@ -213,7 +213,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationWidth(defaultNavigationWidth);
 
                 // Update the local storage
-                localStorageService.set(
+                localStorageService.set<number>(
                     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
                     defaultNavigationWidth,
                 );
