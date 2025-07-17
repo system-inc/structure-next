@@ -13,6 +13,7 @@ export default {
             noDirectFetch: 'Direct fetch() calls are not allowed. Use NetworkService instead for all network requests.',
             noDirectTanStackQuery: 'Direct imports from @tanstack/react-query are not allowed. Use NetworkService instead.',
             noDirectApollo: 'Direct imports from @apollo/client are not allowed. Use NetworkService instead.',
+            noDirectGraphqlImport: 'Direct imports of graphql from generated paths are not allowed. Import gql from NetworkService instead.',
         },
         schema: [],
     },
@@ -93,6 +94,16 @@ export default {
                     context.report({
                         node,
                         messageId: 'noDirectApollo',
+                    });
+                }
+
+                // Block direct graphql imports from generated paths
+                if (source.includes('/generated') && node.specifiers.some(spec => 
+                    spec.type === 'ImportSpecifier' && spec.imported.name === 'graphql'
+                )) {
+                    context.report({
+                        node,
+                        messageId: 'noDirectGraphqlImport',
                     });
                 }
 
