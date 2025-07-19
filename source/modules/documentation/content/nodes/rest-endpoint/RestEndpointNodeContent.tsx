@@ -19,6 +19,9 @@ import {
 } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
 // import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
 
+// Dependencies - API
+import { networkService } from '@structure/source/api/network/NetworkService';
+
 // Dependencies - Services
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
@@ -313,7 +316,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
         const requestBodyObject = getRequestBodyObjectFromRequestParametersStateMap();
 
         // Fetch the endpoint
-        const response = await fetch(getEndpointUrlString(), {
+        const response = await networkService.request(getEndpointUrlString(), {
             method: endpoint.method,
             headers: {
                 'Content-Type': 'application/json',
@@ -333,7 +336,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
 
         // Convert headers to object and stringify
         const headers: { [key: string]: string } = {};
-        response.headers.forEach((value, key) => {
+        response.headers.forEach(function (value, key) {
             headers[key] = value;
         });
         setTestOutputResponseHttpHeaders(<Json data={headers} />);

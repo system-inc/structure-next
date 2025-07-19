@@ -9,11 +9,8 @@ import { Form, FormSubmitResponseInterface } from '@structure/source/common/form
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import {
-    AccountAuthenticationPasswordVerifyDocument,
-    AccountAuthenticationQuery,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 // import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
@@ -25,7 +22,25 @@ export interface AccountPasswordFormProperties {
 }
 export function AccountPasswordForm(properties: AccountPasswordFormProperties) {
     // Hooks - API - Mutations
-    const [accountAuthenticationPasswordVerifyMutation] = useMutation(AccountAuthenticationPasswordVerifyDocument);
+    const accountAuthenticationPasswordVerifyRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
+                accountAuthenticationPasswordVerify(input: $input) {
+                    success
+                    authentication {
+                        status
+                        scopeType
+                        currentChallenge {
+                            challengeType
+                            status
+                        }
+                        updatedAt
+                        createdAt
+                    }
+                }
+            }
+        `),
+    );
 
     // Render the component
     return (
@@ -64,33 +79,28 @@ export function AccountPasswordForm(properties: AccountPasswordFormProperties) {
                         success: false,
                     };
 
-                    // Run the mutation
-                    const currentAccountPasswordVerifyMutationState = await accountAuthenticationPasswordVerifyMutation(
-                        {
-                            variables: {
-                                input: {
-                                    password: formValues.password,
-                                },
+                    try {
+                        // Run the mutation
+                        const mutationResult = await accountAuthenticationPasswordVerifyRequest.execute({
+                            input: {
+                                password: formValues.password,
                             },
-                        },
-                    );
+                        });
 
-                    // Log the mutation state
-                    console.log('currentAccountPasswordVerifyMutationState', currentAccountPasswordVerifyMutationState);
+                        // Log the mutation state
+                        console.log('mutationResult', mutationResult);
 
-                    // If there are errors
-                    if(currentAccountPasswordVerifyMutationState.errors) {
-                        result.message = currentAccountPasswordVerifyMutationState.errors[0]?.message;
+                        // If there is data
+                        if(mutationResult?.accountAuthenticationPasswordVerify) {
+                            result.success = true;
+
+                            // Run the success callback
+                            properties.onSuccess(mutationResult.accountAuthenticationPasswordVerify.authentication);
+                        }
                     }
-                    // If there is data
-                    else if(currentAccountPasswordVerifyMutationState.data) {
-                        result.success = true;
-
-                        // Run the success callback
-                        properties.onSuccess(
-                            currentAccountPasswordVerifyMutationState.data.accountAuthenticationPasswordVerify
-                                .authentication,
-                        );
+                    catch(error) {
+                        // Handle errors
+                        result.message = error instanceof Error ? error.message : 'An error occurred';
                     }
 
                     return result;

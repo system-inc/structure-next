@@ -15,12 +15,8 @@ import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 // import TopProductLink from '@structure/source/internal/common/dashboard/TopProductLink';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import {
-    EngagementOverviewDocument,
-    CommerceOrdersPrivilegedChartDocument,
-    ColumnFilterConditionOperator,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { ColumnFilterConditionOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { addDays, endOfToday, subMinutes } from 'date-fns';
@@ -73,8 +69,30 @@ export function OpsHomePage() {
     );
 
     // Hooks
-    const engagementLiveQueryState = useQuery(EngagementOverviewDocument, {
-        variables: {
+    const engagementOverviewRequest = networkService.useGraphQlQuery(
+        gql(`
+            query EngagementOverview($input: EngagementOverviewInput) {
+                engagementOverview(input: $input) {
+                    uniqueDeviceIds
+                    views {
+                        uniqueDeviceCount
+                        viewIdentifier
+                    }
+                    locations {
+                        uniqueDeviceCount
+                        countryCode
+                        latitude
+                        longitude
+                    }
+                    referrers {
+                        referrer
+                        uniqueDeviceCount
+                    }
+                    deviceCategoryPercentages
+                }
+            }
+        `),
+        {
             input:
                 isLiveMode && liveModeTimeRange
                     ? liveModeTimeRange
@@ -83,11 +101,29 @@ export function OpsHomePage() {
                           endTime: timeRange.endTime?.toISOString(),
                       },
         },
-        pollInterval: isLiveMode ? 10000 : undefined, // Poll every 10 seconds in live mode
-    });
+        {
+            refreshIntervalInMilliseconds: isLiveMode ? 10000 : false, // Poll every 10 seconds in live mode
+        },
+    );
 
-    const ordersQueryState = useQuery(CommerceOrdersPrivilegedChartDocument, {
-        variables: {
+    const commerceOrdersPrivilegedRequest = networkService.useGraphQlQuery(
+        gql(`
+            query CommerceOrdersPrivilegedChart($pagination: PaginationInput!) {
+                commerceOrdersPrivileged(pagination: $pagination) {
+                    items {
+                        createdAt
+                    }
+                    pagination {
+                        itemIndex
+                        itemIndexForPreviousPage
+                        itemIndexForNextPage
+                        itemsPerPage
+                        itemsTotal
+                    }
+                }
+            }
+        `),
+        {
             pagination: {
                 itemsPerPage: 1000,
                 filters:
@@ -128,8 +164,10 @@ export function OpsHomePage() {
                           ],
             },
         },
-        pollInterval: isLiveMode ? 10000 : undefined, // Poll every 10 seconds in live mode
-    });
+        {
+            refreshIntervalInMilliseconds: isLiveMode ? 10000 : false, // Poll every 10 seconds in live mode
+        },
+    );
 
     // Effects
     // Auto-refresh countdown in live mode
@@ -213,13 +251,13 @@ export function OpsHomePage() {
     // Process views data - group by URL path
     const groupedViews = React.useMemo(
         function () {
-            if(!engagementLiveQueryState.data?.engagementOverview.views) {
+            if(!engagementOverviewRequest.data?.engagementOverview.views) {
                 return [];
             }
 
             const pathGroups = new Map<string, number>();
 
-            engagementLiveQueryState.data.engagementOverview.views.forEach(function (view) {
+            engagementOverviewRequest.data.engagementOverview.views.forEach(function (view) {
                 const viewIdentifier = view.viewIdentifier;
                 const uniqueDeviceCount = view.uniqueDeviceCount;
                 if(viewIdentifier && uniqueDeviceCount !== undefined) {
@@ -237,17 +275,17 @@ export function OpsHomePage() {
                     return b.uniqueDeviceCount - a.uniqueDeviceCount;
                 });
         },
-        [engagementLiveQueryState.data?.engagementOverview.views, extractUrlPath],
+        [engagementOverviewRequest.data?.engagementOverview.views, extractUrlPath],
     );
 
     // Raw views data - not grouped, showing full URLs
     const rawViews = React.useMemo(
         function () {
-            if(!engagementLiveQueryState.data?.engagementOverview.views) {
+            if(!engagementOverviewRequest.data?.engagementOverview.views) {
                 return [];
             }
 
-            return engagementLiveQueryState.data.engagementOverview.views
+            return engagementOverviewRequest.data.engagementOverview.views
                 .filter(function (view) {
                     return view.viewIdentifier && view.uniqueDeviceCount !== undefined;
                 })
@@ -261,19 +299,19 @@ export function OpsHomePage() {
                     return b.uniqueDeviceCount - a.uniqueDeviceCount;
                 });
         },
-        [engagementLiveQueryState.data?.engagementOverview.views],
+        [engagementOverviewRequest.data?.engagementOverview.views],
     );
 
     // Process traffic sources data
     const trafficSources = React.useMemo(
         function () {
-            if(!engagementLiveQueryState.data?.engagementOverview.views) {
+            if(!engagementOverviewRequest.data?.engagementOverview.views) {
                 return [];
             }
 
             const sourceGroups = new Map<string, number>();
 
-            engagementLiveQueryState.data.engagementOverview.views.forEach(function (view) {
+            engagementOverviewRequest.data.engagementOverview.views.forEach(function (view) {
                 const viewIdentifier = view.viewIdentifier;
                 const uniqueDeviceCount = view.uniqueDeviceCount;
                 if(viewIdentifier && uniqueDeviceCount !== undefined) {
@@ -291,7 +329,7 @@ export function OpsHomePage() {
                     return b.uniqueDeviceCount - a.uniqueDeviceCount;
                 });
         },
-        [engagementLiveQueryState.data?.engagementOverview.views, categorizeTrafficSource],
+        [engagementOverviewRequest.data?.engagementOverview.views, categorizeTrafficSource],
     );
 
     // Calculate total views
@@ -356,7 +394,7 @@ export function OpsHomePage() {
     const timeStats = React.useMemo(
         function () {
             if(isLiveMode) {
-                const totalUsers = engagementLiveQueryState.data?.engagementOverview.uniqueDeviceIds || 0;
+                const totalUsers = engagementOverviewRequest.data?.engagementOverview.uniqueDeviceIds || 0;
                 // For 30 minutes, calculate users per hour
                 const usersPerHour = Math.round(totalUsers * 2);
                 return { days: 0, usersPerDay: 0, usersPerHour };
@@ -371,7 +409,7 @@ export function OpsHomePage() {
             const timeDiff = endDate.getTime() - startDate.getTime();
             const days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 to include both start and end days
 
-            const totalUsers = engagementLiveQueryState.data?.engagementOverview.uniqueDeviceIds || 0;
+            const totalUsers = engagementOverviewRequest.data?.engagementOverview.uniqueDeviceIds || 0;
             const usersPerDay = Math.round(totalUsers / days);
 
             return { days, usersPerDay, usersPerHour: 0 };
@@ -379,7 +417,7 @@ export function OpsHomePage() {
         [
             timeRange.startTime,
             timeRange.endTime,
-            engagementLiveQueryState.data?.engagementOverview.uniqueDeviceIds,
+            engagementOverviewRequest.data?.engagementOverview.uniqueDeviceIds,
             isLiveMode,
         ],
     );
@@ -387,13 +425,13 @@ export function OpsHomePage() {
     // Process referrers data - filter and group
     const processedReferrers = React.useMemo(
         function () {
-            if(!engagementLiveQueryState.data?.engagementOverview.referrers) {
+            if(!engagementOverviewRequest.data?.engagementOverview.referrers) {
                 return [];
             }
 
             const referrerGroups = new Map<string, number>();
 
-            engagementLiveQueryState.data.engagementOverview.referrers.forEach(function (referrer) {
+            engagementOverviewRequest.data.engagementOverview.referrers.forEach(function (referrer) {
                 const referrerUrl = referrer.referrer;
 
                 // Skip internal phi.health referrers
@@ -433,13 +471,13 @@ export function OpsHomePage() {
                     return b.uniqueDeviceCount - a.uniqueDeviceCount;
                 });
         },
-        [engagementLiveQueryState.data?.engagementOverview.referrers],
+        [engagementOverviewRequest.data?.engagementOverview.referrers],
     );
 
     // Process orders chart data
     const ordersChartData = React.useMemo(
         function () {
-            if(!ordersQueryState.data?.commerceOrdersPrivileged?.items) {
+            if(!commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged?.items) {
                 return [];
             }
 
@@ -458,7 +496,7 @@ export function OpsHomePage() {
             }
 
             // Count orders for each date (automatically converts UTC to user's local timezone)
-            ordersQueryState.data.commerceOrdersPrivileged.items.forEach(function (order) {
+            commerceOrdersPrivilegedRequest.data.commerceOrdersPrivileged.items.forEach(function (order) {
                 // new Date() automatically converts UTC ISO string to local timezone
                 const orderDate = new Date(order.createdAt).toLocaleDateString();
                 const currentCount = ordersByDate.get(orderDate) || 0;
@@ -474,7 +512,7 @@ export function OpsHomePage() {
                     return new Date(a.date).getTime() - new Date(b.date).getTime();
                 });
         },
-        [ordersQueryState.data?.commerceOrdersPrivileged?.items, timeStats.days, isLiveMode],
+        [commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged?.items, timeStats.days, isLiveMode],
     );
 
     // Generate mock traffic source data by date (since the API doesn't provide timestamp data)
@@ -578,9 +616,9 @@ export function OpsHomePage() {
                 {/* User Count and Time Range Controls */}
                 <div className="mb-6 flex items-center justify-between">
                     <div className="flex items-center">
-                        {engagementLiveQueryState.data && (
+                        {engagementOverviewRequest.data && (
                             <h1 className="text-lg font-medium">
-                                {addCommas(engagementLiveQueryState.data.engagementOverview.uniqueDeviceIds)} unique
+                                {addCommas(engagementOverviewRequest.data.engagementOverview.uniqueDeviceIds)} unique
                                 users{' '}
                                 {isLiveMode
                                     ? '(last 30 minutes)'
@@ -630,11 +668,11 @@ export function OpsHomePage() {
                     {/* <PanAndZoomContainer width={500} height={500} /> */}
 
                     {/* Engagement */}
-                    {engagementLiveQueryState.error && (
-                        <div className="text-red-500">Error: {engagementLiveQueryState.error.message}</div>
+                    {engagementOverviewRequest.error && (
+                        <div className="text-red-500">Error: {engagementOverviewRequest.error.message}</div>
                     )}
-                    {engagementLiveQueryState.loading && <div>Loading...</div>}
-                    {engagementLiveQueryState.data && (
+                    {engagementOverviewRequest.isLoading && <div>Loading...</div>}
+                    {engagementOverviewRequest.data && (
                         <>
                             {/* Combined Orders and Traffic Sources Chart */}
                             <div className="mb-4 flex-grow rounded-lg border border-light-4 p-5 dark:border-dark-4 dark:shadow-dark-4/30">
@@ -672,10 +710,10 @@ export function OpsHomePage() {
                                     </div>
                                 </div>
 
-                                {ordersQueryState.loading && <div>Loading...</div>}
-                                {ordersQueryState.error && (
+                                {commerceOrdersPrivilegedRequest.isLoading && <div>Loading...</div>}
+                                {commerceOrdersPrivilegedRequest.error && (
                                     <div className="text-red-500">
-                                        Error loading data: {ordersQueryState.error.message}
+                                        Error loading data: {commerceOrdersPrivilegedRequest.error.message}
                                     </div>
                                 )}
                                 {trafficSourcesByDate.length > 0 && (
@@ -752,7 +790,7 @@ export function OpsHomePage() {
                                         </ResponsiveContainer>
                                     </div>
                                 )}
-                                {trafficSourcesByDate.length === 0 && !ordersQueryState.loading && (
+                                {trafficSourcesByDate.length === 0 && !commerceOrdersPrivilegedRequest.isLoading && (
                                     <div className="py-8 text-center text-gray-500">
                                         No data available for the selected time range
                                     </div>
@@ -907,7 +945,7 @@ export function OpsHomePage() {
                                     </div>
 
                                     <SimpleSvgMap
-                                        points={engagementLiveQueryState.data.engagementOverview.locations.map(
+                                        points={engagementOverviewRequest.data.engagementOverview.locations.map(
                                             function (location) {
                                                 return {
                                                     latitude: Number(location.latitude),
@@ -926,13 +964,13 @@ export function OpsHomePage() {
                                     </div>
                                     <div className="text-sm text-neutral dark:text-neutral">
                                         {Object.keys(
-                                            engagementLiveQueryState.data.engagementOverview.deviceCategoryPercentages,
+                                            engagementOverviewRequest.data.engagementOverview.deviceCategoryPercentages,
                                         ).map(function (category) {
                                             return (
                                                 <div className="flex items-center gap-2 py-1" key={category}>
                                                     <div className="min-w-[3rem] text-right font-medium">
                                                         {
-                                                            engagementLiveQueryState.data?.engagementOverview
+                                                            engagementOverviewRequest.data?.engagementOverview
                                                                 .deviceCategoryPercentages[category]
                                                         }
                                                         %

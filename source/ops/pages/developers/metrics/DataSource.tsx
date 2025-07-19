@@ -12,12 +12,8 @@ import { Popover } from '@structure/source/common/popovers/Popover';
 import { Tip } from '@structure/source/common/popovers/Tip';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import {
-    DataInteractionDatabaseTableDocument,
-    DataInteractionDatabaseTableMetricsDocument,
-    TimeInterval,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import DragIcon from '@structure/assets/icons/interface/DragIcon.svg';
@@ -50,18 +46,45 @@ export interface DataSourceProperties {
 }
 export function DataSource(properties: DataSourceProperties) {
     // Query the API for the available columns for the current table table
-    const dataInteractionDatabaseTableQueryState = useQuery(DataInteractionDatabaseTableDocument, {
-        variables: {
+    const dataInteractionDatabaseTableRequest = networkService.useGraphQlQuery(
+        gql(`
+            query DataInteractionDatabaseTable($databaseName: String!, $tableName: String!) {
+                dataInteractionDatabaseTable(databaseName: $databaseName, tableName: $tableName) {
+                    databaseName
+                    tableName
+                    columns {
+                        name
+                        type
+                        isKey
+                        isPrimaryKey
+                        keyTableName
+                        possibleValues
+                        isNullable
+                        isGenerated
+                        length
+                    }
+                    relations {
+                        fieldName
+                        type
+                        tableName
+                        inverseFieldName
+                        inverseType
+                        inverseTableName
+                    }
+                }
+            }
+        `),
+        {
             databaseName: properties.settings.databaseName,
             tableName: properties.settings.tableName,
         },
-    });
+    );
     // console.log('dataInteractionDatabaseTableQueryState', dataInteractionDatabaseTableQueryState);
 
     // Get the available columns for the table
     let availableColumns: string[] | undefined = undefined;
-    if(dataInteractionDatabaseTableQueryState.data?.dataInteractionDatabaseTable.columns) {
-        availableColumns = dataInteractionDatabaseTableQueryState.data?.dataInteractionDatabaseTable.columns
+    if(dataInteractionDatabaseTableRequest.data?.dataInteractionDatabaseTable.columns) {
+        availableColumns = dataInteractionDatabaseTableRequest.data?.dataInteractionDatabaseTable.columns
             // Filter out columns that are not datetime
             .filter((column) => column.type === 'datetime')
             // Map to column names
@@ -102,8 +125,16 @@ export function DataSource(properties: DataSourceProperties) {
     }
 
     // Get the table metrics and update the aggregate metrics data when the data is fetched
-    const dataInteractionDatabaseTableMetricsQueryState = useQuery(DataInteractionDatabaseTableMetricsDocument, {
-        variables: {
+    const dataInteractionDatabaseTableMetricsRequest = networkService.useGraphQlQuery(
+        gql(`
+            query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
+                dataInteractionDatabaseTableMetrics(input: $input) {
+                    timeInterval
+                    data
+                }
+            }
+        `),
+        {
             input: {
                 databaseName: properties.settings.databaseName as string,
                 tableName: properties.settings.tableName as string,
@@ -113,63 +144,65 @@ export function DataSource(properties: DataSourceProperties) {
                 endTime: properties.settings.endTime?.toISOString(),
             },
         },
-        skip: properties.error || !columnToMeasure, // Skip if there is an error or if there is no column to measure
-        onCompleted: (data) => {
-            // Set the loading state to false
-            properties.setLoading(false);
+        {
+            enabled: !properties.error && !!columnToMeasure, // Skip if there is an error or if there is no column to measure
+            onSuccess: (data) => {
+                // Set the loading state to false
+                properties.setLoading(false);
 
-            // If there is no data, return
-            if(!data) return;
+                // If there is no data, return
+                if(!data) return;
 
-            properties.setDataSourcesWithMetrics((oldData) => {
-                if(!data.dataInteractionDatabaseTableMetrics[0])
-                    return oldData.filter((old) => old.id !== properties.settings.id);
+                properties.setDataSourcesWithMetrics((oldData) => {
+                    if(!data.dataInteractionDatabaseTableMetrics[0])
+                        return oldData.filter((old) => old.id !== properties.settings.id);
 
-                // Find if the data already exists in the array
-                // console.log(oldData, properties.queryConfig.id);
-                const index = oldData.findIndex((old) => old.id === properties.settings.id);
+                    // Find if the data already exists in the array
+                    // console.log(oldData, properties.queryConfig.id);
+                    const index = oldData.findIndex((old) => old.id === properties.settings.id);
 
-                // If the data doesn't exist, add it to the array
-                if(index === -1) {
-                    return [
-                        ...oldData,
-                        {
-                            id: properties.settings.id,
-                            databaseName: properties.settings.databaseName,
-                            tableName: properties.settings.tableName,
-                            columnName: columnToMeasure,
-                            color: properties.settings.color,
-                            yAxisAlignment: properties.settings.yAxisAlignment,
-                            lineStyle: properties.settings.lineStyle,
-                            metrics: data.dataInteractionDatabaseTableMetrics[0],
-                        },
-                    ];
-                }
-                else {
-                    // If the data does exist, update it
-                    return [
-                        ...oldData.slice(0, index),
-                        {
-                            id: properties.settings.id,
-                            databaseName: properties.settings.databaseName,
-                            tableName: properties.settings.tableName,
-                            columnName: columnToMeasure,
-                            color: properties.settings.color,
-                            yAxisAlignment: properties.settings.yAxisAlignment,
-                            lineStyle: properties.settings.lineStyle,
-                            metrics: data.dataInteractionDatabaseTableMetrics[0],
-                        },
-                        ...oldData.slice(index + 1),
-                    ];
-                }
-            });
+                    // If the data doesn't exist, add it to the array
+                    if(index === -1) {
+                        return [
+                            ...oldData,
+                            {
+                                id: properties.settings.id,
+                                databaseName: properties.settings.databaseName,
+                                tableName: properties.settings.tableName,
+                                columnName: columnToMeasure,
+                                color: properties.settings.color,
+                                yAxisAlignment: properties.settings.yAxisAlignment,
+                                lineStyle: properties.settings.lineStyle,
+                                metrics: data.dataInteractionDatabaseTableMetrics[0],
+                            },
+                        ];
+                    }
+                    else {
+                        // If the data does exist, update it
+                        return [
+                            ...oldData.slice(0, index),
+                            {
+                                id: properties.settings.id,
+                                databaseName: properties.settings.databaseName,
+                                tableName: properties.settings.tableName,
+                                columnName: columnToMeasure,
+                                color: properties.settings.color,
+                                yAxisAlignment: properties.settings.yAxisAlignment,
+                                lineStyle: properties.settings.lineStyle,
+                                metrics: data.dataInteractionDatabaseTableMetrics[0],
+                            },
+                            ...oldData.slice(index + 1),
+                        ];
+                    }
+                });
+            },
+            onError: function () {
+                properties.setDataSourcesWithMetrics((old) => {
+                    return old.filter((old) => old.id !== properties.settings.id);
+                });
+            },
         },
-        onError: function () {
-            properties.setDataSourcesWithMetrics((old) => {
-                return old.filter((old) => old.id !== properties.settings.id);
-            });
-        },
-    });
+    );
 
     // Function to handle changing the database and table
     function handleDatabaseAndTableChange(databaseName?: string, tableName?: string) {
@@ -495,11 +528,9 @@ export function DataSource(properties: DataSourceProperties) {
 
     // Calculate the statistics
     const statistics = calculateStatistics(
-        dataInteractionDatabaseTableMetricsQueryState.data?.dataInteractionDatabaseTableMetrics[0]?.data.map(
-            function (d) {
-                return d[1];
-            },
-        ) ?? [],
+        dataInteractionDatabaseTableMetricsRequest.data?.dataInteractionDatabaseTableMetrics[0]?.data.map(function (d) {
+            return d[1];
+        }) ?? [],
     );
 
     // console.log('availableColumns', availableColumns);
@@ -605,7 +636,7 @@ export function DataSource(properties: DataSourceProperties) {
                         : // If not, default to the first available column
                           availableColumns?.at(0)
                 }
-                disabled={dataInteractionDatabaseTableQueryState.loading || !availableColumns}
+                disabled={dataInteractionDatabaseTableRequest.isLoading || !availableColumns}
                 onChange={(value) => setColumnToMeasureOnDataSources(value as string)}
             />
 
@@ -666,7 +697,7 @@ export function DataSource(properties: DataSourceProperties) {
                 <Tip
                     content={
                         <div className="p-2">
-                            {!dataInteractionDatabaseTableMetricsQueryState.loading && (
+                            {!dataInteractionDatabaseTableMetricsRequest.isLoading && (
                                 <div>
                                     <table>
                                         <tbody>
@@ -723,7 +754,7 @@ export function DataSource(properties: DataSourceProperties) {
                     }
                 >
                     <p className="relative cursor-default text-end italic text-dark/30 dark:text-light-4/50">
-                        {dataInteractionDatabaseTableMetricsQueryState.loading ? '...' : addCommas(statistics.sum)}
+                        {dataInteractionDatabaseTableMetricsRequest.isLoading ? '...' : addCommas(statistics.sum)}
                     </p>
                 </Tip>
             </div>

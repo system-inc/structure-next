@@ -11,8 +11,7 @@ import { PostControl } from '@structure/source/modules/post/controls/PostControl
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { PostReactionCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Assets
 import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
@@ -29,7 +28,15 @@ export interface PostReactionControlProperties {
 export function PostReactionControl(properties: PostReactionControlProperties) {
     // Hooks
     const { accountState, setAuthenticationDialogOpen } = useAccount();
-    const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
+    const postReactionCreateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostReactionCreate($postId: String!, $content: String!) {
+                postReactionCreate(postId: $postId, content: $content) {
+                    success
+                }
+            }
+        `),
+    );
 
     // Function to handle a reaction
     async function handleReaction(content: string) {
@@ -39,11 +46,9 @@ export function PostReactionControl(properties: PostReactionControlProperties) {
             properties.onReactionCreate(content);
 
             // Invoke the mutation
-            ideaReactionCreateMutation({
-                variables: {
-                    postId: properties.ideaId,
-                    content: content,
-                },
+            postReactionCreateRequest.execute({
+                postId: properties.ideaId,
+                content: content,
             });
         }
         // If the user is not signed in

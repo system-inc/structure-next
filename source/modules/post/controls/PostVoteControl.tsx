@@ -12,8 +12,8 @@ import { PostControl } from '@structure/source/modules/post/controls/PostControl
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { PostVoteDocument, PostUnvoteDocument, PostVoteType } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { PostVoteType } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
@@ -37,8 +37,24 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
 
     // Hooks
     const { accountState, setAuthenticationDialogOpen } = useAccount();
-    const [ideaVoteMutation] = useMutation(PostVoteDocument);
-    const [ideaUnvoteMutation] = useMutation(PostUnvoteDocument);
+    const postVoteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostVote($postId: String!, $type: PostVoteType!) {
+                postVote(postId: $postId, type: $type) {
+                    success
+                }
+            }
+        `),
+    );
+    const postUnvoteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostUnvote($postId: String!) {
+                postUnvote(postId: $postId) {
+                    success
+                }
+            }
+        `),
+    );
 
     // Function to handle voting
     function handleVote() {
@@ -54,10 +70,8 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
                 properties.onVoteChange(upvoteCount - 1, null);
 
                 // Run the unvote mutation in the background
-                ideaUnvoteMutation({
-                    variables: {
-                        postId: properties.postId,
-                    },
+                postUnvoteRequest.execute({
+                    postId: properties.postId,
                 });
             }
             // Otherwise, upvote
@@ -70,11 +84,9 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
                 properties.onVoteChange(upvoteCount + 1, PostVoteType.Upvote);
 
                 // Run the vote mutation in the background
-                ideaVoteMutation({
-                    variables: {
-                        postId: properties.postId,
-                        type: PostVoteType.Upvote,
-                    },
+                postVoteRequest.execute({
+                    postId: properties.postId,
+                    type: PostVoteType.Upvote,
                 });
             }
         }

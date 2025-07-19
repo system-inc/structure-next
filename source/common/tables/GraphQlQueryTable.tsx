@@ -9,17 +9,17 @@ import { TableColumnProperties, inferTableColumnType } from '@structure/source/c
 import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
-import { useQuery, ApolloError, TypedDocumentNode } from '@apollo/client';
+import { networkService } from '@structure/source/services/network/NetworkService';
+import { GraphQlError, GraphQlDocument } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Dependencies - Utilities
 import { flattenObject } from '@structure/source/utilities/Object';
 import { titleCase } from '@structure/source/utilities/String';
 
 // Component - GraphQlQueryTable
-export interface GraphQlQueryTableProperties<VariableType>
+export interface GraphQlQueryTableProperties
     extends Omit<TableProperties, 'columns' | 'rows' | 'pagination'> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    queryDocument: TypedDocumentNode<any, VariableType>;
+    queryDocument: GraphQlDocument;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     variables?: any;
     skip?: boolean;
@@ -31,7 +31,7 @@ export interface GraphQlQueryTableProperties<VariableType>
 
     hideTypeColumns?: boolean;
 }
-export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTableProperties<VariableType>) {
+export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
     // State
     const [queryPagination] = React.useState({
         page: properties.pagination?.page || 1,
@@ -42,9 +42,9 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTablePro
     // const hideTypeColumns = properties.hideTypeColumns ?? true;
 
     // Hooks
-    const queryState = useQuery(properties.queryDocument, {
-        skip: properties.skip,
-        variables: {
+    const queryState = networkService.useGraphQlQuery(
+        properties.queryDocument,
+        {
             ...properties.variables,
             // By default, order by createdAt descending
             orderBy: {
@@ -58,7 +58,10 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTablePro
                 ...properties.variables?.pagination,
             },
         },
-    });
+        {
+            enabled: !properties.skip,
+        }
+    );
 
     // Find the data within the query
     // Our GraphQL responses are always in the form of data.$type.items and data.$type.pagination
@@ -181,7 +184,7 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTablePro
     // console.log('pagination', pagination);
 
     let key = '';
-    if(queryState.loading) {
+    if(queryState.isLoading) {
         key += 'loading';
     }
     else if(queryState.data) {
@@ -205,8 +208,8 @@ export function GraphQlQueryTable<VariableType>(properties: GraphQlQueryTablePro
                 // filter={true}
                 // filters={properties.filters}
                 pagination={pagination}
-                loading={queryState.loading || (!queryState.error && !queryState.data)}
-                error={queryState.error as ApolloError}
+                loading={queryState.isLoading || (!queryState.error && !queryState.data)}
+                error={queryState.error as GraphQlError}
             />
         </>
     );

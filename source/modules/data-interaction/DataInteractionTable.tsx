@@ -17,12 +17,8 @@ import BarGraphIcon from '@structure/assets/icons/analytics/BarGraphIcon.svg';
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - API
-import { useApolloClient, useQuery, ApolloError } from '@apollo/client';
-import {
-    DataInteractionDatabaseTableRowsDocument,
-    OrderByDirection,
-    ColumnFilterGroupInput,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { OrderByDirection, ColumnFilterGroupInput } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
@@ -45,9 +41,6 @@ export interface DataInteractionTableProperties extends Omit<TableProperties, 'c
     };
 }
 export function DataInteractionTable(properties: DataInteractionTableProperties) {
-    // Use the Apollo Client for refetching queries with the refresh button
-    const apolloClient = useApolloClient();
-
     // State
     const [databaseName, setDatabaseName] = React.useState<string | undefined>(properties.databaseName);
     const [tableName, setTableName] = React.useState<string | undefined>(properties.tableName);
@@ -72,9 +65,56 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
     }
 
     // Hooks
-    const queryState = useQuery(DataInteractionDatabaseTableRowsDocument, {
-        skip: !databaseName || !tableName,
-        variables: {
+    const dataInteractionDatabaseTableRowsRequest = networkService.useGraphQlQuery(
+        gql(`
+            query DataInteractionDatabaseTableRows(
+                $databaseName: String!
+                $tableName: String!
+                $pagination: PaginationInput!
+                $filters: ColumnFilterGroupInput
+            ) {
+                dataInteractionDatabaseTableRows(
+                    databaseName: $databaseName
+                    tableName: $tableName
+                    pagination: $pagination
+                    filters: $filters
+                ) {
+                    items
+                    databaseName
+                    tableName
+                    rowCount
+                    columns {
+                        name
+                        type
+                        isKey
+                        isPrimaryKey
+                        keyTableName
+                        possibleValues
+                        isNullable
+                        isGenerated
+                        length
+                    }
+                    relations {
+                        fieldName
+                        tableName
+                        type
+                        inverseFieldName
+                        inverseType
+                        inverseTableName
+                    }
+                    pagination {
+                        itemIndex
+                        itemIndexForPreviousPage
+                        itemIndexForNextPage
+                        itemsPerPage
+                        itemsTotal
+                        pagesTotal
+                        page
+                    }
+                }
+            }
+        `),
+        {
             databaseName: databaseName!,
             tableName: tableName!,
             pagination: {
@@ -90,75 +130,81 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
             },
             filters,
         },
-    });
+        {
+            enabled: !!(databaseName && tableName),
+            keepPreviousData: true, // Smooth transitions between pages
+        },
+    );
 
     // Memoize the columns
     const columns = React.useMemo<TableColumnProperties[]>(
         function () {
             const columns: TableColumnProperties[] = [];
-            queryState.data?.dataInteractionDatabaseTableRows?.columns?.forEach(function (column) {
-                // Determine the column type
-                let columnType: TableColumnType = TableColumnType.String;
-                if(column.isKey) {
-                    columnType = TableColumnType.Id;
-                }
-                else if(column.type === 'datetime') {
-                    columnType = TableColumnType.DateTime;
-                }
-                else if(column.type === 'enum') {
-                    columnType = TableColumnType.Option;
-                }
-                else if(column.type === 'int') {
-                    columnType = TableColumnType.Number;
-                }
-
-                // Meta object to store additional information
-                const meta: {
-                    databaseName?: string;
-                    tableName?: string;
-                    url?: string;
-                } = {
-                    databaseName: databaseName,
-                };
-
-                // If the column is an ID
-                if(columnType === TableColumnType.Id) {
-                    let keyTableName = column.keyTableName;
-
-                    // If the column is an ID column, and there is no key table name
-                    if(!keyTableName) {
-                        // Guess the key table name from the column name
-                        keyTableName = uppercaseFirstCharacter(column.name).replace('Id', '');
+            dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows?.columns?.forEach(
+                function (column) {
+                    // Determine the column type
+                    let columnType: TableColumnType = TableColumnType.String;
+                    if(column.isKey) {
+                        columnType = TableColumnType.Id;
+                    }
+                    else if(column.type === 'datetime') {
+                        columnType = TableColumnType.DateTime;
+                    }
+                    else if(column.type === 'enum') {
+                        columnType = TableColumnType.Option;
+                    }
+                    else if(column.type === 'int') {
+                        columnType = TableColumnType.Number;
                     }
 
-                    if(keyTableName) {
-                        // Add the table name to the meta object
-                        meta['tableName'] = keyTableName;
+                    // Meta object to store additional information
+                    const meta: {
+                        databaseName?: string;
+                        tableName?: string;
+                        url?: string;
+                    } = {
+                        databaseName: databaseName,
+                    };
 
-                        // Add the URL to the meta object
-                        meta['url'] = `/ops/developers/databases/${databaseName}/tables/${keyTableName}/rows/`;
+                    // If the column is an ID
+                    if(columnType === TableColumnType.Id) {
+                        let keyTableName = column.keyTableName;
+
+                        // If the column is an ID column, and there is no key table name
+                        if(!keyTableName) {
+                            // Guess the key table name from the column name
+                            keyTableName = uppercaseFirstCharacter(column.name).replace('Id', '');
+                        }
+
+                        if(keyTableName) {
+                            // Add the table name to the meta object
+                            meta['tableName'] = keyTableName;
+
+                            // Add the URL to the meta object
+                            meta['url'] = `/ops/developers/databases/${databaseName}/tables/${keyTableName}/rows/`;
+                        }
                     }
-                }
 
-                // Get the possible values
-                const possibleValues = column.possibleValues
-                    ? column.possibleValues.map(function (possibleValue: string) {
-                          return {
-                              value: possibleValue,
-                              title: possibleValue,
-                          };
-                      })
-                    : undefined;
+                    // Get the possible values
+                    const possibleValues = column.possibleValues
+                        ? column.possibleValues.map(function (possibleValue: string) {
+                              return {
+                                  value: possibleValue,
+                                  title: possibleValue,
+                              };
+                          })
+                        : undefined;
 
-                // Add the column
-                columns.push({
-                    identifier: column.name,
-                    title: titleCase(column.name),
-                    type: columnType,
-                    possibleValues,
-                    meta,
-                });
-            });
+                    // Add the column
+                    columns.push({
+                        identifier: column.name,
+                        title: titleCase(column.name),
+                        type: columnType,
+                        possibleValues,
+                        meta,
+                    });
+                },
+            );
 
             // Sort the columns by their identifiers
             columns.sort(function (columnA, columnB) {
@@ -173,12 +219,12 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
 
             return columns;
         },
-        [databaseName, queryState.data?.dataInteractionDatabaseTableRows?.columns],
+        [databaseName, dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows?.columns],
     );
 
     // Create the rows from the data
     const rows =
-        queryState.data?.dataInteractionDatabaseTableRows.items?.map(function (item) {
+        dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows.items?.map(function (item) {
             // console.log('item', item);
 
             return {
@@ -202,41 +248,24 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
     // console.log('rows', rows);
 
     // Create the pagination object
-    const pagination = queryState.data?.dataInteractionDatabaseTableRows.pagination
+    const pagination = dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows.pagination
         ? {
-              ...queryState.data?.dataInteractionDatabaseTableRows.pagination,
+              ...dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows.pagination,
               // Add an onChange function
               onChange: async function (itemsPerPage: number, page: number) {
                   // Invoke the provided onChange function
                   if(properties.pagination?.onChange) {
                       await properties.pagination.onChange(itemsPerPage, page);
                   }
-
-                  // console.log('onChange called with', { itemsPerPage, page });
-                  try {
-                      await queryState.fetchMore({
-                          variables: {
-                              pagination: {
-                                  itemIndex: (page - 1) * itemsPerPage,
-                                  itemsPerPage: itemsPerPage,
-                              },
-                          },
-                          updateQuery: function (previousResult, options) {
-                              //   console.log('updateQuery called with', { previousResult, fetchMoreResult: options.fetchMoreResult });
-                              return options.fetchMoreResult;
-                          },
-                      });
-                      //   console.log('fetchMore resolved', queryStateData.data);
-                  } catch {
-                      //   console.error('fetchMore failed', error);
-                  }
+                  // With NetworkService and keepPreviousData, the parent component
+                  // will update state which triggers a new query automatically
               },
           }
         : undefined;
     // console.log('pagination', pagination);
 
     // Determine if there is a relations table as well
-    const relations = queryState.data?.dataInteractionDatabaseTableRows?.relations;
+    const relations = dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows?.relations;
     let relationsColumns: TableColumnProperties[] = [];
     // let relationsRows: TableRowInterface[] = [];
     if(relations && relations[0]) {
@@ -370,9 +399,7 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
                         className="mt-[22px]"
                         size={'formInputIcon'}
                         onClick={async () => {
-                            await apolloClient.refetchQueries({
-                                include: 'active',
-                            });
+                            dataInteractionDatabaseTableRowsRequest.refresh();
                         }}
                     />
                 </div>
@@ -390,8 +417,11 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
                 sortable={true}
                 // filters={properties.filters}
                 pagination={pagination}
-                loading={queryState.loading || (!queryState.error && !queryState.data)}
-                error={queryState.error as ApolloError}
+                loading={
+                    dataInteractionDatabaseTableRowsRequest.isLoading ||
+                    (!dataInteractionDatabaseTableRowsRequest.error && !dataInteractionDatabaseTableRowsRequest.data)
+                }
+                error={dataInteractionDatabaseTableRowsRequest.error}
             />
 
             {/* FIXME: Uncomment after fixing above table rendering issues. */}
@@ -399,10 +429,10 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
                 <>
                     <h3 className="mt-8">{tableName} Relations</h3>
                     <Table
-                        key={queryState.loading ? 'relationsLoading' : 'relationsLoaded'}
+                        key={queryState.isLoading ? 'relationsLoading' : 'relationsLoaded'}
                         columns={relationsColumns}
                         rows={relationsRows}
-                        loading={queryState.loading}
+                        loading={queryState.isLoading}
                     />
                 </>
             )} */}

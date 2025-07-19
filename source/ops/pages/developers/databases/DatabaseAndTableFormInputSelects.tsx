@@ -8,8 +8,7 @@ import { FormInputSelectProperties, FormInputSelect } from '@structure/source/co
 import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { DataInteractionDatabaseTablesDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -29,14 +28,35 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     const [selectedTableName, setSelectedTableName] = React.useState<string | undefined>(undefined);
 
     // Get the databases from the GraphQL API
-    const dataInteractionDatabaseTablesQueryState = useQuery(DataInteractionDatabaseTablesDocument, {
-        variables: {
+    const dataInteractionDatabaseTablesQuery = networkService.useGraphQlQuery(
+        gql(`
+            query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
+                dataInteractionDatabaseTables(databaseName: $databaseName, pagination: $pagination) {
+                    items {
+                        databaseName
+                        tableName
+                        # rowCount
+                    }
+                    pagination {
+                        itemIndex
+                        itemIndexForPreviousPage
+                        itemIndexForNextPage
+                        itemsPerPage
+                        itemsTotal
+                        pagesTotal
+                        page
+                    }
+                }
+            }
+        `),
+        {
+            databaseName: '', // Empty string to get all databases
             pagination: {
                 // TODO: This is probably bad and will break with lots of tables
                 itemsPerPage: 1000,
             },
         },
-    });
+    );
 
     // Extract databases and tables from the query
     const databasesAndTables = React.useMemo(
@@ -54,33 +74,30 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
             if(databaseNameDefaultValue) {
                 // Loop over the items to see if the default value is in the list of database names
                 let selectedDatabaseDefaultValueFound = false;
-                dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items.forEach(
-                    function (item) {
-                        if(item.databaseName === databaseNameDefaultValue) {
-                            selectedDatabaseDefaultValueFound = true;
-                        }
-                    },
-                );
+                dataInteractionDatabaseTablesQuery.data?.dataInteractionDatabaseTables?.items.forEach(function (item) {
+                    if(item.databaseName === databaseNameDefaultValue) {
+                        selectedDatabaseDefaultValueFound = true;
+                    }
+                });
 
                 // If the default value is not in the list of database names, set the first database name as the default value
                 if(!selectedDatabaseDefaultValueFound) {
                     databaseNameDefaultValue =
-                        dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items?.[0]
+                        dataInteractionDatabaseTablesQuery.data?.dataInteractionDatabaseTables?.items?.[0]
                             ?.databaseName;
                 }
             }
             // If no default value was provided, set the first database name as the default value
             else {
                 databaseNameDefaultValue =
-                    dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items?.[0]
-                        ?.databaseName;
+                    dataInteractionDatabaseTablesQuery.data?.dataInteractionDatabaseTables?.items?.[0]?.databaseName;
             }
 
             // Set the selected database name
             setSelectedDatabaseName(databaseNameDefaultValue);
 
             // Loop over the query results with a reference to the index
-            dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items.forEach(function (item) {
+            dataInteractionDatabaseTablesQuery.data?.dataInteractionDatabaseTables?.items.forEach(function (item) {
                 // Create the entry for the database if it doesn't exist
                 if(!databasesAndTablesObject[item.databaseName]) {
                     databasesAndTablesObject[item.databaseName] = [];
@@ -102,7 +119,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
 
             return databasesAndTablesObject;
         },
-        [dataInteractionDatabaseTablesQueryState.data, properties.databaseNameFormInputSelectProperties?.defaultValue],
+        [dataInteractionDatabaseTablesQuery.data, properties.databaseNameFormInputSelectProperties?.defaultValue],
     );
 
     // Listen to changes to the selected database
@@ -162,7 +179,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                 id="databaseName"
                 items={databaseItems}
                 defaultValue={selectedDatabaseName}
-                loadingItems={dataInteractionDatabaseTablesQueryState.loading}
+                loadingItems={dataInteractionDatabaseTablesQuery.isLoading}
                 loadingItemsMessage="Loading databases..."
                 placeholder="Database"
                 label="Database"
@@ -185,7 +202,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                 id="tableTable"
                 items={tableItems}
                 defaultValue={selectedTableName}
-                loadingItems={dataInteractionDatabaseTablesQueryState.loading}
+                loadingItems={dataInteractionDatabaseTablesQuery.isLoading}
                 loadingItemsMessage="Loading tables..."
                 placeholder="Table"
                 label="Table"

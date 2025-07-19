@@ -11,8 +11,7 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { AccountPasswordUpdateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -25,7 +24,15 @@ export interface ManagePasswordFormProperties {
 }
 export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
     // Hooks
-    const [updateMutation] = useMutation(AccountPasswordUpdateDocument);
+    const accountPasswordUpdateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
+                accountPasswordUpdate(input: $input) {
+                    success
+                }
+            }
+        `),
+    );
 
     // State
     const [success, setSuccess] = React.useState(false);
@@ -36,15 +43,13 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
 
         // If we have a valid maintenance session and no pending challenges, proceed with password update
         try {
-            const result = await updateMutation({
-                variables: {
-                    input: {
-                        newPassword: newPassword!,
-                    },
+            const result = await accountPasswordUpdateRequest.execute({
+                input: {
+                    newPassword: newPassword!,
                 },
             });
 
-            if(result.data?.accountPasswordUpdate.success) {
+            if(result?.accountPasswordUpdate.success) {
                 setSuccess(true);
 
                 return {

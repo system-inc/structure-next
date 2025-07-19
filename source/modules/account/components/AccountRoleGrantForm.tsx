@@ -12,13 +12,7 @@ import { InputSelect } from '@structure/source/common/forms/InputSelect';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - API
-import { useQuery, useMutation } from '@apollo/client';
-import {
-    AccountAccessRoleAssignmentCreatePrivilegedDocument,
-    AccountAccessRolesPrivilegedDocument,
-    AccountPrivilegedDocument,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Utilities
 import { isEmailAddress } from '@structure/source/utilities/validation/Validation';
@@ -50,19 +44,69 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
     const debouncedEmail = useDebounce(emailInput, 500);
 
     // Queries and Mutations
-    const accountAvailableAccessRolesPrivilegedState = useQuery(AccountAccessRolesPrivilegedDocument);
-    const accountPrivilegedState = useQuery(AccountPrivilegedDocument, {
-        variables: {
+    const accountAccessRolesPrivilegedRequest = networkService.useGraphQlQuery(
+        gql(`
+            query AccountAccessRolesPrivileged {
+                accountAccessRolesPrivileged {
+                    type
+                    description
+                }
+            }
+        `),
+    );
+
+    const accountPrivilegedRequest = networkService.useGraphQlQuery(
+        gql(`
+            query AccountPrivileged($input: AccountInput!) {
+                accountPrivileged(input: $input) {
+                    profiles {
+                        username
+                        displayName
+                        images {
+                            url
+                            variant
+                        }
+                    }
+                }
+            }
+        `),
+        {
             input: {
                 emailAddress: debouncedEmail,
             },
         },
-        skip: !debouncedEmail || !isEmailAddress(debouncedEmail),
-    });
-    const [
-        accountAccessRoleAssignmentCreatePrivilegedMutation,
-        accountAccessRoleAssignmentCreatePrivilegedMutationState,
-    ] = useMutation(AccountAccessRoleAssignmentCreatePrivilegedDocument);
+        {
+            enabled: Boolean(debouncedEmail && isEmailAddress(debouncedEmail)),
+        },
+    );
+
+    const accountAccessRoleAssignmentCreatePrivilegedRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
+                accountAccessRoleAssignmentCreatePrivileged(input: $input) {
+                    id
+                    accessRole {
+                        id
+                        type
+                        description
+                    }
+                    status
+                    profile {
+                        username
+                        displayName
+                        images {
+                            url
+                            variant
+                        }
+                        createdAt
+                    }
+                    expiresAt
+                    createdAt
+                    updatedAt
+                }
+            }
+        `),
+    );
 
     // Effect to handle email validation
     React.useEffect(
@@ -80,25 +124,28 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
     // Effect to set searching state
     React.useEffect(
         function () {
-            setIsSearching(debouncedEmail === emailInput && !!emailInput && isEmailAddress(emailInput));
+            setIsSearching(
+                debouncedEmail === emailInput &&
+                    !!emailInput &&
+                    isEmailAddress(emailInput) &&
+                    accountPrivilegedRequest.isLoading,
+            );
         },
-        [debouncedEmail, emailInput],
+        [debouncedEmail, emailInput, accountPrivilegedRequest.isLoading],
     );
 
     // Function to handle role grant confirmation
     async function handleGrantConfirm() {
         try {
-            const result = await accountAccessRoleAssignmentCreatePrivilegedMutation({
-                variables: {
-                    input: {
-                        username: selectedUsername,
-                        emailAddress: emailInput,
-                        accessRole: selectedRoleType,
-                    },
+            const result = await accountAccessRoleAssignmentCreatePrivilegedRequest.execute({
+                input: {
+                    username: selectedUsername,
+                    emailAddress: emailInput,
+                    accessRole: selectedRoleType,
                 },
             });
 
-            if(result.data?.accountAccessRoleAssignmentCreatePrivileged) {
+            if(result?.accountAccessRoleAssignmentCreatePrivileged) {
                 setGrantSuccess({ username: selectedUsername, role: selectedRoleType });
                 setGrantDialogOpen(false);
                 if(properties.onRoleGranted) {
@@ -109,7 +156,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 setTimeout(() => setGrantSuccess(null), 5000);
             }
         } catch {
-            // Error is handled in the dialog via grantRoleMutationState.error
+            // Error is handled in the dialog via mutation error state
         }
     }
 
@@ -140,7 +187,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             </div>
 
             {/* Loading State */}
-            {isSearching && accountPrivilegedState.loading && (
+            {isSearching && (
                 <div className="flex items-center space-x-2 text-neutral">
                     <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     <span>Searching...</span>
@@ -148,22 +195,20 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             )}
 
             {/* Error State */}
-            {accountPrivilegedState.error && (
-                <Alert variant="error" title={apolloErrorToMessage(accountPrivilegedState.error)} />
-            )}
+            {accountPrivilegedRequest.error && <Alert variant="error" title={accountPrivilegedRequest.error.message} />}
 
             {/* Empty State */}
-            {!accountPrivilegedState.loading &&
-                !accountPrivilegedState.error &&
+            {!accountPrivilegedRequest.isLoading &&
+                !accountPrivilegedRequest.error &&
                 debouncedEmail &&
-                accountPrivilegedState.data?.accountPrivileged?.profiles.length === 0 && (
+                accountPrivilegedRequest.data?.accountPrivileged?.profiles.length === 0 && (
                     <Alert variant="warning" title="No user found">
                         We couldn&apos;t find any user with this email address.
                     </Alert>
                 )}
 
             {/* User Preview and Role Selection */}
-            {accountPrivilegedState.data?.accountPrivileged?.profiles.map(function (profile) {
+            {accountPrivilegedRequest.data?.accountPrivileged?.profiles.map(function (profile) {
                 return (
                     <div
                         key={profile.username}
@@ -190,7 +235,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                                 className="w-full"
                                 defaultValue={selectedRoleType}
                                 items={
-                                    accountAvailableAccessRolesPrivilegedState.data?.accountAccessRolesPrivileged.map(
+                                    accountAccessRolesPrivilegedRequest.data?.accountAccessRolesPrivileged.map(
                                         function (item) {
                                             return {
                                                 value: item.type,
@@ -232,13 +277,11 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             Are you sure you want to grant the <b>{selectedRoleType}</b> role to{' '}
                             <b>@{selectedUsername}</b>?
                         </p>
-                        {accountAccessRoleAssignmentCreatePrivilegedMutationState.error && (
+                        {accountAccessRoleAssignmentCreatePrivilegedRequest.error && (
                             <Alert
                                 className="mt-4"
                                 variant="error"
-                                title={apolloErrorToMessage(
-                                    accountAccessRoleAssignmentCreatePrivilegedMutationState.error,
-                                )}
+                                title={accountAccessRoleAssignmentCreatePrivilegedRequest.error.message}
                             />
                         )}
                     </>
@@ -248,7 +291,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                         <Button onClick={() => setGrantDialogOpen(false)}>Cancel</Button>
                         <Button
                             onClick={handleGrantConfirm}
-                            processing={accountAccessRoleAssignmentCreatePrivilegedMutationState.loading}
+                            processing={accountAccessRoleAssignmentCreatePrivilegedRequest.isLoading}
                         >
                             Grant Role
                         </Button>

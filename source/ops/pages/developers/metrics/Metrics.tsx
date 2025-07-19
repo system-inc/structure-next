@@ -20,7 +20,7 @@ import { ContextMenu } from '@structure/source/common/menus/ContextMenu';
 import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - API
-import { useApolloClient } from '@apollo/client';
+import { networkService } from '@structure/source/services/network/NetworkService';
 import { ColumnFilterConditionOperator, TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
@@ -96,9 +96,6 @@ export type DataSourceWithMetricsType = DataSourceType & {
 // Component - Metrics
 // The higher level component used to render both the chart and the controls
 export function Metrics() {
-    // Use the Apollo Client for refetching queries with the refresh button
-    const apolloClient = useApolloClient();
-
     // Use the URL search parameters to store the state of the component
     const urlSearchParameters = useUrlSearchParameters();
 
@@ -947,9 +944,7 @@ export function Metrics() {
                         <RefreshButton
                             size={'formInputIcon'}
                             onClick={async () => {
-                                await apolloClient.refetchQueries({
-                                    include: 'active',
-                                });
+                                await networkService.refreshActiveRequests();
                             }}
                         />
                     </div>

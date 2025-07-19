@@ -12,6 +12,7 @@ import {
     QueryClient as tanStackReactQueryClient,
     QueryKey as CacheKey,
     keepPreviousData,
+    Query,
 } from '@tanstack/react-query';
 
 // Dependencies - Services
@@ -172,22 +173,23 @@ interface UseRequestResultBase<TData> {
 }
 
 // Query-specific result interface
-export interface UseQueryResultInterface<TData> extends UseRequestResultBase<TData> {
+export interface UseGraphQlQueryRequestResultInterface<TData> extends UseRequestResultBase<TData> {
     refresh: () => void;
     isRefreshing: boolean;
 }
 
 // Mutation-specific result interface
-export interface UseMutationResultInterface<TData, TVariables = void> extends UseRequestResultBase<TData> {
-    execute: TVariables extends void 
-        ? (() => Promise<TData>)
-        : ((variables: TVariables) => Promise<TData>);
+export interface UseGraphQlMutationRequestResultInterface<TData, TVariables = void>
+    extends UseRequestResultBase<TData> {
+    execute: (variables?: TVariables) => Promise<TData>;
     isPending: boolean;
+    variables?: TVariables;
 }
 
 // For backward compatibility - will be removed in future
-export type UseRequestResultInterface<TData, TVariables = void> = 
-    UseQueryResultInterface<TData> | UseMutationResultInterface<TData, TVariables>;
+export type UseRequestResultInterface<TData, TVariables = void> =
+    | UseGraphQlQueryRequestResultInterface<TData>
+    | UseGraphQlMutationRequestResultInterface<TData, TVariables>;
 
 // Suspense query result interface (no loading/error states - those are handled by Suspense/ErrorBoundary)
 export interface UseSuspenseRequestResultInterface<TData> {
@@ -216,11 +218,18 @@ export interface NetworkRequestStatisticsInterface {
 
 const deviceIdUpdatedAtKey = 'DeviceIdUpdatedAt';
 
+// Interface - NetworkService Options
+export interface NetworkServiceOptions {
+    serverSide?: boolean;
+    fetch?: typeof fetch;
+}
+
 // NetworkService class
-class NetworkService {
+export class NetworkService {
     private tanStackReactQueryClient: tanStackReactQueryClient;
     private deviceIdPromise: Promise<void> | null = null;
     private deviceIdChecked = false;
+    private options: NetworkServiceOptions;
 
     // Statistics tracking
     private statistics: NetworkRequestStatisticsInterface = {
@@ -240,7 +249,8 @@ class NetworkService {
     };
     private responseTimes: number[] = [];
 
-    constructor() {
+    constructor(options: NetworkServiceOptions = {}) {
+        this.options = options;
         this.tanStackReactQueryClient = new tanStackReactQueryClient({
             defaultOptions: {
                 queries: {
@@ -261,10 +271,15 @@ class NetworkService {
         return this.tanStackReactQueryClient;
     }
 
+    // Check if running on server side
+    private isServerSide(): boolean {
+        return typeof window === 'undefined' || this.options.serverSide === true;
+    }
+
     // Device ID management
     private async ensureDeviceId(): Promise<void> {
-        // Skip deviceId check if accounts module is disabled
-        if(!ProjectSettings.modules?.accounts) {
+        // Skip deviceId check if accounts module is disabled or on server side
+        if(!ProjectSettings.modules?.accounts || this.isServerSide()) {
             return;
         }
 
@@ -337,10 +352,33 @@ class NetworkService {
     }
 
     // Direct request method (fetch proxy with deviceId handling)
-    async request(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-        // Ensure deviceId before making the request
-        await this.ensureDeviceId();
+    async request(input: RequestInfo | URL, options?: RequestInit): Promise<Response> {
+        // Ensure deviceId before making the request (skip on server-side)
+        if(!this.isServerSide()) {
+            await this.ensureDeviceId();
+        }
 
+        // Use custom fetch if provided (for Cloudflare worker-to-worker calls)
+        const fetchMethod = this.options.fetch || fetch;
+
+        // For server-side requests in production, transform the URL to use the internal API
+        let finalInput = input;
+        if(this.options.serverSide && this.options.fetch) {
+            // This is a special convention that tells Base to not create duplicate deviceIds for worker to worker requests
+            finalInput =
+                typeof input === 'string'
+                    ? input.replace(/^https:\/\/[^/]+/, 'https://website.base-internal')
+                    : input instanceof URL
+                      ? new URL(input.toString().replace(/^https:\/\/[^/]+/, 'https://website.base-internal'))
+                      : input;
+        }
+
+        // Skip statistics tracking on server-side to avoid state pollution
+        if(this.isServerSide()) {
+            return fetchMethod(finalInput, options);
+        }
+
+        // Client-side path with full statistics tracking
         const startTime = Date.now();
         this.statistics.totalRequests++;
         this.statistics.activeRequests++;
@@ -348,20 +386,20 @@ class NetworkService {
 
         try {
             // Track request size if body is provided
-            if(init?.body) {
+            if(options?.body) {
                 const bodySize =
-                    typeof init.body === 'string'
-                        ? new Blob([init.body]).size
-                        : init.body instanceof Blob
-                          ? init.body.size
-                          : init.body instanceof ArrayBuffer
-                            ? init.body.byteLength
+                    typeof options.body === 'string'
+                        ? new Blob([options.body]).size
+                        : options.body instanceof Blob
+                          ? options.body.size
+                          : options.body instanceof ArrayBuffer
+                            ? options.body.byteLength
                             : 0;
                 this.statistics.totalBytesSent += bodySize;
             }
 
             // Make the actual request
-            const response = await fetch(input, init);
+            const response = await fetchMethod(finalInput, options);
 
             // Update statistics based on response
             if(response.ok) {
@@ -394,6 +432,7 @@ class NetworkService {
     async graphQlRequest<TResult, TVariables = Record<string, never>>(
         query: AnyTypedDocumentString<TResult, TVariables>,
         variables?: TVariables,
+        options?: { headers?: HeadersInit },
     ): Promise<TResult> {
         const graphqlEndpoint = ProjectSettings.apis?.base
             ? `https://${ProjectSettings.apis.base.host}${ProjectSettings.apis.base.graphQlPath}`
@@ -407,13 +446,18 @@ class NetworkService {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/graphql-response+json',
+                ...options?.headers,
             },
             body,
             credentials: 'include',
         });
 
         const responseText = await response.text();
-        this.statistics.totalBytesReceived += new Blob([responseText]).size;
+
+        // Skip statistics tracking on server-side to avoid state pollution
+        if(!this.isServerSide()) {
+            this.statistics.totalBytesReceived += new Blob([responseText]).size;
+        }
 
         // Parse response with proper typing
         const graphQlResponse = JSON.parse(responseText) as GraphQlResponseInterface<TResult>;
@@ -444,13 +488,13 @@ class NetworkService {
     // Main hook with overloads
     useRequest<TData>(
         options: UseRequestOptionsInterface<TData, void> & { cacheKey: CacheKey },
-    ): UseQueryResultInterface<TData>;
+    ): UseGraphQlQueryRequestResultInterface<TData>;
     useRequest<TData, TVariables = void>(
         options: UseRequestOptionsInterface<TData, TVariables> & { cacheKey: false },
-    ): UseMutationResultInterface<TData, TVariables>;
+    ): UseGraphQlMutationRequestResultInterface<TData, TVariables>;
     useRequest<TData, TVariables = void>(
         options: UseRequestOptionsInterface<TData, TVariables>,
-    ): UseQueryResultInterface<TData> | UseMutationResultInterface<TData, TVariables> {
+    ): UseGraphQlQueryRequestResultInterface<TData> | UseGraphQlMutationRequestResultInterface<TData, TVariables> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
         if(options.cacheKey !== false) {
@@ -505,7 +549,7 @@ class NetworkService {
                 refresh: queryResult.refetch,
                 isRefreshing: queryResult.isRefetching,
                 cancel: () => queryClient.cancelQueries({ queryKey: options.cacheKey as CacheKey }),
-            } as UseQueryResultInterface<TData>;
+            } as UseGraphQlQueryRequestResultInterface<TData>;
         }
         else {
             // Non-cached behavior (like useMutation)
@@ -549,15 +593,14 @@ class NetworkService {
                 isLoading: mutationResult.isPending,
                 isError: mutationResult.isError,
                 isSuccess: mutationResult.isSuccess,
-                execute: mutationResult.mutateAsync as TVariables extends void 
-                    ? (() => Promise<TData>)
-                    : ((variables: TVariables) => Promise<TData>),
+                execute: mutationResult.mutateAsync,
                 isPending: mutationResult.isPending,
+                variables: mutationResult.variables,
                 cancel: () => {
                     // Mutations don't have a built-in cancel, but we can track it
                     this.statistics.cancelledRequests++;
                 },
-            } as UseMutationResultInterface<TData, TVariables>;
+            } as UseGraphQlMutationRequestResultInterface<TData, TVariables>;
         }
     }
 
@@ -701,6 +744,26 @@ class NetworkService {
                 return fn();
             },
         });
+    }
+
+    // Refresh all requests
+    async refreshAllRequests(): Promise<void> {
+        return this.tanStackReactQueryClient.refetchQueries();
+    }
+
+    // Refresh requests with filters
+    async refreshRequests(filters?: {
+        type?: 'active' | 'inactive' | 'all';
+        exact?: boolean;
+        predicate?: (query: Query) => boolean;
+        queryKey?: CacheKey;
+    }): Promise<void> {
+        return this.tanStackReactQueryClient.refetchQueries(filters);
+    }
+
+    // Convenience method to refresh only active requests
+    async refreshActiveRequests(): Promise<void> {
+        return this.refreshRequests({ type: 'active' });
     }
 
     // Statistics methods

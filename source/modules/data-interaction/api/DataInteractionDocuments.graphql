@@ -51,26 +51,6 @@ query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMe
     }
 }
 
-# Database Tables Query
-query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
-    dataInteractionDatabaseTables(databaseName: $databaseName, pagination: $pagination) {
-        items {
-            databaseName
-            tableName
-            # rowCount
-        }
-        pagination {
-            itemIndex
-            itemIndexForPreviousPage
-            itemIndexForNextPage
-            itemsPerPage
-            itemsTotal
-            pagesTotal
-            page
-        }
-    }
-}
-
 # Database Table Rows Query
 query DataInteractionDatabaseTableRows(
     $databaseName: String!

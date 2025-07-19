@@ -11,8 +11,7 @@ import { PostControl } from '@structure/source/modules/post/controls/PostControl
 import ReactionIcon from '@structure/assets/icons/people/ReactionIcon.svg';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { PostReactionCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Utilities
 // import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -25,7 +24,15 @@ export interface PostCommentReactionControlProperties {
 }
 export function PostCommentReactionControl(properties: PostCommentReactionControlProperties) {
     // Hooks
-    const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
+    const postReactionCreateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostReactionCreate($postId: String!, $content: String!) {
+                postReactionCreate(postId: $postId, content: $content) {
+                    success
+                }
+            }
+        `),
+    );
 
     // Function to handle a reaction
     async function handleReaction(content: string) {
@@ -33,11 +40,9 @@ export function PostCommentReactionControl(properties: PostCommentReactionContro
         properties.onReactionCreate(content);
 
         // Invoke the mutation
-        ideaReactionCreateMutation({
-            variables: {
-                postId: properties.ideaId,
-                content: content,
-            },
+        postReactionCreateRequest.execute({
+            postId: properties.ideaId,
+            content: content,
         });
     }
 

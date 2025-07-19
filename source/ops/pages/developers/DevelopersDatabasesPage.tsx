@@ -9,8 +9,7 @@ import { Table } from '@structure/source/common/tables/Table';
 import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
-import { useSuspenseQuery } from '@apollo/client';
-import { DataInteractionDatabaseTablesDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Utilities
 // import { addCommas } from '@structure/source/utilities/Number';
@@ -18,13 +17,34 @@ import { DataInteractionDatabaseTablesDocument } from '@structure/source/api/gra
 // Component - DatabasePage
 export function DevelopersDatabasePage() {
     // Get the databases and tables from the GraphQL API
-    const dataInteractionDatabaseTablesQueryState = useSuspenseQuery(DataInteractionDatabaseTablesDocument, {
-        variables: {
+    const dataInteractionDatabaseTablesRequest = networkService.useSuspenseGraphQlQuery(
+        gql(`
+            query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
+                dataInteractionDatabaseTables(databaseName: $databaseName, pagination: $pagination) {
+                    items {
+                        databaseName
+                        tableName
+                        # rowCount
+                    }
+                    pagination {
+                        itemIndex
+                        itemIndexForPreviousPage
+                        itemIndexForNextPage
+                        itemsPerPage
+                        itemsTotal
+                        pagesTotal
+                        page
+                    }
+                }
+            }
+        `),
+        {
+            databaseName: '', // Empty string to get all databases
             pagination: {
                 itemsPerPage: 1000,
             },
         },
-    });
+    );
 
     // Extract databases and tables from the query
     const databasesAndTables = React.useMemo(
@@ -38,7 +58,7 @@ export function DevelopersDatabasePage() {
             } = {};
 
             // Loop over the query results with a reference to the index
-            dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items.forEach(function (item) {
+            dataInteractionDatabaseTablesRequest.data?.dataInteractionDatabaseTables?.items.forEach(function (item) {
                 // Create the entry for the database if it doesn't exist
                 if(!databasesAndTablesObject[item.databaseName]) {
                     databasesAndTablesObject[item.databaseName] = [];
@@ -52,7 +72,7 @@ export function DevelopersDatabasePage() {
 
             return databasesAndTablesObject;
         },
-        [dataInteractionDatabaseTablesQueryState.data?.dataInteractionDatabaseTables?.items],
+        [dataInteractionDatabaseTablesRequest.data?.dataInteractionDatabaseTables?.items],
     );
 
     // console.log('databasesAndTables', databasesAndTables);
@@ -63,10 +83,7 @@ export function DevelopersDatabasePage() {
             <React.Suspense>
                 <OpsNavigationTrail />
 
-                {dataInteractionDatabaseTablesQueryState.error ? (
-                    // Error
-                    <p>Error: {dataInteractionDatabaseTablesQueryState.error.message}</p>
-                ) : Object.keys(databasesAndTables).length === 0 ? (
+                {Object.keys(databasesAndTables).length === 0 ? (
                     // No databases found
                     <p>No databases found.</p>
                 ) : (

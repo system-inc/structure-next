@@ -12,8 +12,7 @@ import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextA
 // import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { PostReportCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Assets
 import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
@@ -30,7 +29,15 @@ export function PostCommentReportDialog(properties: PostCommentReportDialogPrope
     const [reportComplete, setReportComplete] = React.useState(false);
 
     // Hooks
-    const [ideaReportCreateMutation] = useMutation(PostReportCreateDocument);
+    const postReportCreateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostReportCreate($input: PostReportInput!) {
+                postReportCreate(input: $input) {
+                    id
+                }
+            }
+        `),
+    );
 
     // Effect to update the open state when the open property changes
     React.useEffect(
@@ -53,21 +60,18 @@ export function PostCommentReportDialog(properties: PostCommentReportDialogPrope
     async function report(reason: string, note?: string) {
         console.log('Reporting', properties.ideaId);
 
-        await ideaReportCreateMutation({
-            variables: {
+        try {
+            await postReportCreateRequest.execute({
                 input: {
                     postId: properties.ideaId,
                     reason: reason,
                     note: note,
                 },
-            },
-            onError: function () {
-                setReportError(true);
-            },
-            onCompleted: function () {
-                setReportComplete(true);
-            },
-        });
+            });
+            setReportComplete(true);
+        } catch {
+            setReportError(true);
+        }
     }
 
     // Render the component

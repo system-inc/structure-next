@@ -12,11 +12,8 @@ import { Form, FormSubmitResponseInterface } from '@structure/source/common/form
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import {
-    AccountAuthenticationRegistrationOrSignInCreateDocument,
-    AccountAuthenticationQuery,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import ArrowRightIcon from '@structure/assets/icons/interface/ArrowRightIcon.svg';
@@ -31,8 +28,24 @@ export interface EmailFormProperties {
 }
 export function EmailForm(properties: EmailFormProperties) {
     // Hooks
-    const [accountAuthenticationRegistrationOrSignInCreateMutation] = useMutation(
-        AccountAuthenticationRegistrationOrSignInCreateDocument,
+    const accountAuthenticationRegistrationOrSignInCreateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
+                accountAuthenticationRegistrationOrSignInCreate(input: $input) {
+                    emailAddress
+                    authentication {
+                        status
+                        scopeType
+                        currentChallenge {
+                            challengeType
+                            status
+                        }
+                        updatedAt
+                        createdAt
+                    }
+                }
+            }
+        `),
     );
 
     // Render the component
@@ -71,37 +84,31 @@ export function EmailForm(properties: EmailFormProperties) {
                         success: false,
                     };
 
-                    // Run the mutation
-                    const currentAccountRegistrationOrSignInCreateMutationState =
-                        await accountAuthenticationRegistrationOrSignInCreateMutation({
-                            variables: {
-                                input: {
-                                    emailAddress: formValues.emailAddress,
-                                },
+                    try {
+                        // Run the mutation
+                        const mutationResult = await accountAuthenticationRegistrationOrSignInCreateRequest.execute({
+                            input: {
+                                emailAddress: formValues.emailAddress,
                             },
                         });
 
-                    // Log the mutation state
-                    console.log(
-                        'currentAccountRegistrationOrSignInCreateMutationState',
-                        currentAccountRegistrationOrSignInCreateMutationState,
-                    );
+                        // Log the mutation state
+                        console.log('mutationResult', mutationResult);
 
-                    // If there are errors
-                    if(currentAccountRegistrationOrSignInCreateMutationState.errors) {
-                        result.message = currentAccountRegistrationOrSignInCreateMutationState.errors[0]?.message;
+                        // If there is data
+                        if(mutationResult?.accountAuthenticationRegistrationOrSignInCreate) {
+                            result.success = true;
+
+                            // Run the success callback
+                            properties.onSuccess(
+                                mutationResult.accountAuthenticationRegistrationOrSignInCreate.emailAddress,
+                                mutationResult.accountAuthenticationRegistrationOrSignInCreate.authentication,
+                            );
+                        }
                     }
-                    // If there is data
-                    else if(currentAccountRegistrationOrSignInCreateMutationState.data) {
-                        result.success = true;
-
-                        // Run the success callback
-                        properties.onSuccess(
-                            currentAccountRegistrationOrSignInCreateMutationState.data
-                                .accountAuthenticationRegistrationOrSignInCreate.emailAddress,
-                            currentAccountRegistrationOrSignInCreateMutationState.data
-                                .accountAuthenticationRegistrationOrSignInCreate.authentication,
-                        );
+                    catch(error) {
+                        // Handle errors
+                        result.message = error instanceof Error ? error.message : 'An error occurred';
                     }
 
                     return result;

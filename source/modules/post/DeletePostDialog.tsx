@@ -8,8 +8,7 @@ import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialo
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
-import { useMutation, useApolloClient } from '@apollo/client';
-import { PostDeleteDocument, PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Component - DeletePostDialog
 export interface DeletePostDialogProperties extends DialogProperties {
@@ -20,8 +19,13 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // Hooks
-    const [postDeleteMutation, postDeleteMutationState] = useMutation(PostDeleteDocument);
-    const apolloClient = useApolloClient();
+    const postDeleteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostDelete($id: String!) {
+                postDelete(id: $id)
+            }
+        `),
+    );
 
     // Effect to update the open state when the open property changes
     React.useEffect(
@@ -44,26 +48,33 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
     async function deletePost() {
         console.log('Deleting post', properties.postIdentifier);
 
-        // First, get the post by identifier
-        const postQueryState = await apolloClient.query({
-            query: PostDocument,
-            variables: {
-                identifier: properties.postIdentifier,
-            },
-        });
+        try {
+            // First, get the post by identifier
+            const postRequest = await networkService.graphQlRequest(
+                gql(`
+                    query PostByIdentifier($identifier: String!) {
+                        post(identifier: $identifier) {
+                            id
+                        }
+                    }
+                `),
+                {
+                    identifier: properties.postIdentifier,
+                },
+            );
 
-        console.log('Post', postQueryState);
+            console.log('Post', postRequest);
 
-        // Delete the post
-        await postDeleteMutation({
-            variables: {
-                id: postQueryState.data.post.id,
-            },
-            onCompleted: function () {
-                console.log('Post deleted');
-                // document.title = `${inputTextReference.current?.getValue()} • Chat • Phi`;
-            },
-        });
+            // Delete the post
+            await postDeleteRequest.execute({
+                id: postRequest.post.id,
+            });
+
+            console.log('Post deleted');
+        }
+        catch(error) {
+            console.error('Error deleting post:', error);
+        }
     }
 
     // Render the component
@@ -78,7 +89,7 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
             footer={
                 <Button
                     variant="destructive"
-                    loading={postDeleteMutationState.loading}
+                    loading={postDeleteRequest.isLoading}
                     onClick={function () {
                         deletePost();
                     }}

@@ -14,12 +14,8 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import {
-    AccountProfileUpdateDocument,
-    AccountProfileUsernameValidateDocument,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { AccountProfileUsernameValidateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
@@ -31,7 +27,24 @@ import { ValidationSchema } from '@structure/source/utilities/validation/Validat
 export function UsernameForm() {
     // Hooks - API
     const { accountState } = useAccount();
-    const [updateMutation, mutationState] = useMutation(AccountProfileUpdateDocument);
+    const accountProfileUpdateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
+                accountProfileUpdate(input: $input) {
+                    username
+                    displayName
+                    givenName
+                    familyName
+                    images {
+                        url
+                        variant
+                    }
+                    updatedAt
+                    createdAt
+                }
+            }
+        `),
+    );
 
     // State
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
@@ -59,18 +72,23 @@ export function UsernameForm() {
 
     // Function to handle confirmation
     async function handleConfirm() {
-        const result = await updateMutation({
-            variables: {
+        try {
+            const result = await accountProfileUpdateRequest.execute({
                 input: {
                     username: newUsername,
                 },
-            },
-        });
+            });
 
-        if(result.data) {
-            setActiveUsername(newUsername); // Update activeUsername
-            setNewUsername(newUsername); // Synchronize newUsername with activeUsername
-            setUsernameUpdateSuccess(true);
+            if(result?.accountProfileUpdate) {
+                setActiveUsername(newUsername); // Update activeUsername
+                setNewUsername(newUsername); // Synchronize newUsername with activeUsername
+                setUsernameUpdateSuccess(true);
+
+                // Invalidate account cache to refresh the profile data
+                networkService.invalidateCache(['account']);
+            }
+        } catch {
+            // Error is handled by the mutation's error state
         }
     }
 
@@ -151,11 +169,11 @@ export function UsernameForm() {
                                 to
                                 <b>&quot;{newUsername}&quot;</b>?
                             </p>
-                            {mutationState.error && (
+                            {accountProfileUpdateRequest.error && (
                                 <Alert
                                     className="mt-4"
                                     variant="error"
-                                    title={apolloErrorToMessage(mutationState.error)}
+                                    title={accountProfileUpdateRequest.error.message}
                                 />
                             )}
                         </>
@@ -167,7 +185,11 @@ export function UsernameForm() {
                     ) : (
                         <div className="mt-6 flex justify-end space-x-2">
                             <Button onClick={handleDialogClose}>Cancel</Button>
-                            <Button variant="primary" onClick={handleConfirm} processing={mutationState.loading}>
+                            <Button
+                                variant="primary"
+                                onClick={handleConfirm}
+                                processing={accountProfileUpdateRequest.isLoading}
+                            >
                                 Confirm
                             </Button>
                         </div>

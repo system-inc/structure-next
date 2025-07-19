@@ -15,13 +15,8 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - API
-import { useQuery, useMutation } from '@apollo/client';
-import {
-    AccountsPrivilegedDocument,
-    AccountDeletePrivilegedDocument,
-    OrderByDirection,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { iso8601Date, timeAgo } from '@structure/source/utilities/Time';
@@ -67,8 +62,39 @@ export function UsersPage() {
     const [deleteSuccess, setDeleteSuccess] = React.useState(false);
 
     // Query
-    const accountsPrivilegedQueryState = useQuery(AccountsPrivilegedDocument, {
-        variables: {
+    const accountsPrivilegedRequest = networkService.useGraphQlQuery(
+        gql(`
+            query AccountsPrivileged($pagination: PaginationInput!) {
+                accountsPrivileged(pagination: $pagination) {
+                    items {
+                        emailAddress
+                        profiles {
+                            username
+                            displayName
+                            givenName
+                            familyName
+                            countryCode
+                            images {
+                                url
+                                variant
+                            }
+                            updatedAt
+                            createdAt
+                        }
+                    }
+                    pagination {
+                        itemsTotal
+                        itemsPerPage
+                        page
+                        pagesTotal
+                        itemIndex
+                        itemIndexForNextPage
+                        itemIndexForPreviousPage
+                    }
+                }
+            }
+        `),
+        {
             pagination: {
                 itemsPerPage: itemsPerPage,
                 itemIndex: (page - 1) * itemsPerPage,
@@ -80,21 +106,27 @@ export function UsersPage() {
                 ],
             },
         },
-    });
+    );
 
     // Mutation
-    const [accountDeletePrivilegedMutation, accountDeletePrivilegedMutationState] = useMutation(
-        AccountDeletePrivilegedDocument,
+    const accountDeletePrivilegedRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountDeletePrivileged($input: AccountDeleteInput!) {
+                accountDeletePrivileged(input: $input) {
+                    success
+                }
+            }
+        `),
     );
 
     // Effects
     React.useEffect(
         function () {
-            if(accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.itemsTotal) {
-                setTotalUsers(accountsPrivilegedQueryState.data.accountsPrivileged.pagination.itemsTotal);
+            if(accountsPrivilegedRequest.data?.accountsPrivileged.pagination?.itemsTotal) {
+                setTotalUsers(accountsPrivilegedRequest.data.accountsPrivileged.pagination.itemsTotal);
             }
         },
-        [accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.itemsTotal],
+        [accountsPrivilegedRequest.data?.accountsPrivileged.pagination?.itemsTotal],
     );
 
     // Function to handle pagination changes
@@ -115,21 +147,19 @@ export function UsersPage() {
         if(!selectedUser) return;
 
         try {
-            const result = await accountDeletePrivilegedMutation({
-                variables: {
-                    input: {
-                        emailAddress: selectedUser.emailAddress,
-                    },
+            const result = await accountDeletePrivilegedRequest.execute({
+                input: {
+                    emailAddress: selectedUser.emailAddress,
                 },
             });
 
-            if(result.data?.accountDeletePrivileged.success) {
+            if(result?.accountDeletePrivileged.success) {
                 setDeleteSuccess(true);
                 // Refresh the users list
-                await accountsPrivilegedQueryState.refetch();
+                networkService.invalidateCache(['accountsPrivileged']);
             }
         } catch {
-            // Error is handled in the dialog via deleteMutationState.error
+            // Error is handled in the dialog via mutation.error
         }
     }
 
@@ -150,7 +180,7 @@ export function UsersPage() {
             {/* Content */}
             <div className="divide-y divide-neutral/10">
                 {/* Loading and Error States */}
-                {accountsPrivilegedQueryState.loading && (
+                {accountsPrivilegedRequest.isLoading && (
                     <div className="divide-y divide-neutral/10">
                         {[...Array(itemsPerPage)].map((_, index) => (
                             <div
@@ -175,12 +205,12 @@ export function UsersPage() {
                         ))}
                     </div>
                 )}
-                {accountsPrivilegedQueryState.error && <div>Error: {accountsPrivilegedQueryState.error.message}</div>}
+                {accountsPrivilegedRequest.error && <div>Error: {accountsPrivilegedRequest.error.message}</div>}
 
                 {/* Users List */}
-                {accountsPrivilegedQueryState.data?.accountsPrivileged.items && (
+                {accountsPrivilegedRequest.data?.accountsPrivileged.items && (
                     <>
-                        {accountsPrivilegedQueryState.data.accountsPrivileged.items.map(function (account) {
+                        {accountsPrivilegedRequest.data.accountsPrivileged.items.map(function (account) {
                             return (
                                 <div
                                     key={account.emailAddress}
@@ -281,16 +311,14 @@ export function UsersPage() {
                 )}
 
                 {/* Pagination */}
-                {(accountsPrivilegedQueryState.loading || accountsPrivilegedQueryState.data) && (
+                {(accountsPrivilegedRequest.isLoading || accountsPrivilegedRequest.data) && (
                     <div className="flex items-center space-x-4 pt-6">
                         <Pagination
                             className="justify-start"
                             page={page}
                             itemsPerPage={itemsPerPage}
                             itemsTotal={totalUsers}
-                            pagesTotal={
-                                accountsPrivilegedQueryState.data?.accountsPrivileged.pagination?.pagesTotal ?? 0
-                            }
+                            pagesTotal={accountsPrivilegedRequest.data?.accountsPrivileged.pagination?.pagesTotal ?? 0}
                             useLinks={false}
                             itemsPerPageControl={true}
                             pageInputControl={true}
@@ -314,11 +342,11 @@ export function UsersPage() {
                                 Are you sure you want to delete the user <b>@{selectedUser?.username}</b> with email{' '}
                                 <b>{selectedUser?.emailAddress}</b>?
                             </p>
-                            {accountDeletePrivilegedMutationState.error && (
+                            {accountDeletePrivilegedRequest.error && (
                                 <Alert
                                     className="mt-4"
                                     variant="error"
-                                    title={apolloErrorToMessage(accountDeletePrivilegedMutationState.error)}
+                                    title={accountDeletePrivilegedRequest.error.message}
                                 />
                             )}
                         </>
@@ -333,7 +361,7 @@ export function UsersPage() {
                             <Button
                                 variant="destructive"
                                 onClick={handleDeleteConfirm}
-                                processing={accountDeletePrivilegedMutationState.loading}
+                                processing={accountDeletePrivilegedRequest.isLoading}
                             >
                                 Delete User
                             </Button>

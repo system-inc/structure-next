@@ -10,8 +10,7 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { AccountDeleteDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -23,7 +22,15 @@ export interface DeleteAccountFormProperties {
 }
 export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
     // Hooks
-    const [accountDeleteMutation] = useMutation(AccountDeleteDocument);
+    const accountDeleteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountDelete($reason: String) {
+                accountDelete(reason: $reason) {
+                    success
+                }
+            }
+        `),
+    );
 
     // State
     const [success, setSuccess] = React.useState(false);
@@ -34,13 +41,11 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
 
         // If we have a valid maintenance session and no pending challenges, proceed with password update
         try {
-            const result = await accountDeleteMutation({
-                variables: {
-                    reason: reason,
-                },
+            const result = await accountDeleteRequest.execute({
+                reason: reason,
             });
 
-            if(result.data?.accountDelete.success) {
+            if(result.accountDelete.success) {
                 setSuccess(true);
 
                 return {

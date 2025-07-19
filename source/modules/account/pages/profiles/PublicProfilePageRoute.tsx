@@ -5,27 +5,27 @@ import { getRequestCookiesHeaderString } from '@structure/source/utilities/next/
 import { PublicProfilePage } from '@structure/source/modules/account/pages/profiles/PublicProfilePage';
 
 // Dependencies - API
-import { getApolloClientForServerSideRendering } from '@structure/source/api/apollo/ApolloClientForServerSideRendering';
+import { getServerSideNetworkService } from '@structure/source/services/network/NetworkServiceServerSide';
 import { AccountProfilePublicDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Function to get server-side properties
 async function getServerSideProperties(username: string) {
-    const apolloClientForServerSideRendering = getApolloClientForServerSideRendering();
+    const serverSideNetworkService = await getServerSideNetworkService();
 
-    const profilePublicQueryState = await apolloClientForServerSideRendering.query({
-        query: AccountProfilePublicDocument,
-        variables: {
+    const accountProfilePublicRequest = await serverSideNetworkService.graphQlRequest(
+        AccountProfilePublicDocument,
+        {
             username: username,
         },
-        context: {
+        {
             headers: {
                 cookie: getRequestCookiesHeaderString(),
             },
         },
-    });
-    // console.log('profilePublicQueryState', profilePublicQueryState);
+    );
+    // console.log('profilePublicData', profilePublicData);
 
-    return { profilePublic: profilePublicQueryState.data?.accountProfilePublic };
+    return { profilePublic: accountProfilePublicRequest?.accountProfilePublic };
 }
 
 // Metadata

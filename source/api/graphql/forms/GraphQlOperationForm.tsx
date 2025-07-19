@@ -15,7 +15,8 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
-import { useQuery, useMutation, ApolloError, DocumentNode } from '@apollo/client';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { GraphQlError, GraphQlDocument } from '@structure/source/api/graphql/GraphQlUtilities';
 import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
@@ -31,34 +32,21 @@ export interface FormInputsProperties {
     [key: string]: Record<string, unknown>;
 }
 
-// A minimal valid query document for when defaultValuesQuery is not provided
-const noOpDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'NoOp' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [{ kind: 'Field', name: { kind: 'Name', value: '__typename' } }],
-            },
-        },
-    ],
-} as DocumentNode;
+// A minimal valid query for when defaultValuesQuery is not provided
+const noOpQuery = gql(`query NoOp { __typename }`);
 
 // Component - GraphQlOperationForm
 export interface GraphQlOperationFormProperties extends Omit<FormProperties, 'formInputs' | 'onSubmit'> {
-    operation: GraphQLOperationMetadata<DocumentNode>;
+    operation: GraphQLOperationMetadata<GraphQlDocument>;
     defaultValuesQuery?: {
-        document: DocumentNode;
+        document: GraphQlDocument;
         variables: Record<string, unknown>;
     };
     inputComponentsProperties?: FormInputsProperties;
     onSubmit?: (
         formValues: FormValuesInterface,
         mutationResponseData: unknown,
-        mutationResponseError: ApolloError | null,
+        mutationResponseError: GraphQlError | null,
     ) => void | Promise<void>;
     showPreviewGraphQlMutationButton?: boolean;
 }
@@ -72,13 +60,16 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
     const formInputsReferencesMap = React.useRef(new Map<string, FormInputReferenceInterface>()).current;
 
     // Hooks
-    const [mutation] = useMutation(properties.operation.document);
+    const mutation = networkService.useGraphQlMutation(properties.operation.document as Parameters<typeof networkService.useGraphQlMutation>[0]);
 
     // Fetch default values if defaultValuesQuery is provided
-    const defaultValuesQueryState = useQuery(properties.defaultValuesQuery?.document || noOpDocument, {
-        skip: !properties.defaultValuesQuery,
-        variables: properties.defaultValuesQuery?.variables,
-    });
+    const defaultValuesQueryState = networkService.useGraphQlQuery(
+        properties.defaultValuesQuery?.document || noOpQuery,
+        properties.defaultValuesQuery?.variables,
+        {
+            enabled: !!properties.defaultValuesQuery,
+        },
+    );
 
     // Effect to update the default values when the query loads data
     React.useEffect(
@@ -143,7 +134,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
             // Use the form values directly for submission
             return GraphQlFormSubmissionHandler({
                 formValues: currentFormValues,
-                mutationFunction: mutation,
+                mutationFunction: mutation.execute,
                 onSubmit: properties.onSubmit,
             });
         },
@@ -163,7 +154,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
             {/* Render the form */}
             <Form
                 {...properties}
-                loading={properties.defaultValuesQuery && defaultValuesQueryState.loading}
+                loading={properties.defaultValuesQuery && defaultValuesQueryState.isLoading}
                 formInputs={formInputs}
                 onSubmit={handleSubmit}
             />

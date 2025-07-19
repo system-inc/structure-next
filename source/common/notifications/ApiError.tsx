@@ -5,11 +5,11 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { AlertProperties, Alert } from '@structure/source/common/notifications/Alert';
-import { ApolloError } from '@apollo/client';
+import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Component - NotAuthorized
 export interface ApiErrorProperties {
-    error?: ApolloError | Error;
+    error?: GraphQlError | Error;
     alertProperties?: AlertProperties;
 }
 export function ApiError(properties: ApiErrorProperties) {

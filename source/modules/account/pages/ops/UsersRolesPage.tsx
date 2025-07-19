@@ -16,15 +16,12 @@ import { AccountRoleGrantForm } from '@structure/source/modules/account/componen
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 
 // Dependencies - API
-import { useQuery, useMutation } from '@apollo/client';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import {
     AccessRoleStatus,
     OrderByDirection,
-    AccountAccessRoleAssignmentsPrivilegedDocument,
-    AccountAccessRoleAssignmentRevokePrivilegedDocument,
     AccountAccessRoleAssignmentsPrivilegedQuery,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { apolloErrorToMessage } from '@structure/source/api/apollo/ApolloUtilities';
 
 // Dependencies - Utilities
 import { fullDate } from '@structure/source/utilities/Time';
@@ -42,8 +39,45 @@ export function UsersRolesPage() {
     const [revokeSuccess, setRevokeSuccess] = React.useState(false);
 
     // Hooks
-    const assignedRolesQueryState = useQuery(AccountAccessRoleAssignmentsPrivilegedDocument, {
-        variables: {
+    const accountAccessRoleAssignmentsPrivilegedRequest = networkService.useGraphQlQuery(
+        gql(`
+            query AccountAccessRoleAssignmentsPrivileged($statuses: [AccessRoleStatus!]!, $pagination: PaginationInput!) {
+                accountAccessRoleAssignmentsPrivileged(statuses: $statuses, pagination: $pagination) {
+                    items {
+                        id
+                        accessRole {
+                            id
+                            type
+                            description
+                        }
+                        status
+                        emailAddress
+                        profile {
+                            username
+                            displayName
+                            images {
+                                url
+                                variant
+                            }
+                            createdAt
+                        }
+                        expiresAt
+                        createdAt
+                        updatedAt
+                    }
+                    pagination {
+                        itemsTotal
+                        itemsPerPage
+                        page
+                        pagesTotal
+                        itemIndex
+                        itemIndexForNextPage
+                        itemIndexForPreviousPage
+                    }
+                }
+            }
+        `),
+        {
             statuses: [AccessRoleStatus.Active],
             pagination: {
                 itemsPerPage: 25,
@@ -55,31 +89,38 @@ export function UsersRolesPage() {
                 ],
             },
         },
-    });
-    const [revokeMutation, revokeMutationState] = useMutation(AccountAccessRoleAssignmentRevokePrivilegedDocument);
+    );
+
+    const accountAccessRoleAssignmentRevokePrivilegedRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountAccessRoleAssignmentRevokePrivileged($input: AccessRoleAssignmentRevokeInput!) {
+                accountAccessRoleAssignmentRevokePrivileged(input: $input) {
+                    success
+                }
+            }
+        `),
+    );
 
     // Function to handle role revocation
     async function handleRevokeConfirm() {
         if(!selectedRole) return;
 
         try {
-            const result = await revokeMutation({
-                variables: {
-                    input: {
-                        accessRole: selectedRole.type,
-                        emailAddress: selectedRole.emailAddress,
-                        username: selectedRole.username,
-                    },
+            const result = await accountAccessRoleAssignmentRevokePrivilegedRequest.execute({
+                input: {
+                    accessRole: selectedRole.type,
+                    emailAddress: selectedRole.emailAddress,
+                    username: selectedRole.username,
                 },
             });
 
-            if(result.data?.accountAccessRoleAssignmentRevokePrivileged.success) {
+            if(result?.accountAccessRoleAssignmentRevokePrivileged.success) {
                 setRevokeSuccess(true);
                 // Refresh the roles list
-                await assignedRolesQueryState.refetch();
+                networkService.invalidateCache(['accountAccessRoleAssignmentsPrivileged']);
             }
         } catch {
-            // Error is handled in the dialog via revokeMutationState.error
+            // Error is handled in the dialog via revokeMutation.error
         }
     }
 
@@ -123,14 +164,16 @@ export function UsersRolesPage() {
 
             <div className="space-y-12">
                 {/* Role Granting Form */}
-                <AccountRoleGrantForm onRoleGranted={() => assignedRolesQueryState.refetch()} />
+                <AccountRoleGrantForm
+                    onRoleGranted={() => networkService.invalidateCache(['accountAccessRoleAssignmentsPrivileged'])}
+                />
 
                 {/* Assigned Roles Section */}
                 <section>
                     <h2 className="mb-4 text-lg font-medium">Assigned Roles</h2>
 
                     {/* Loading State */}
-                    {assignedRolesQueryState.loading && (
+                    {accountAccessRoleAssignmentsPrivilegedRequest.isLoading && (
                         <div className="divide-y divide-neutral/10">
                             {[...Array(5)].map((_, index) => (
                                 <div
@@ -148,16 +191,19 @@ export function UsersRolesPage() {
                     )}
 
                     {/* Error State */}
-                    {assignedRolesQueryState.error && (
-                        <div className="mt-4 text-red-500">Error: {assignedRolesQueryState.error.message}</div>
+                    {accountAccessRoleAssignmentsPrivilegedRequest.error && (
+                        <div className="mt-4 text-red-500">
+                            Error: {accountAccessRoleAssignmentsPrivilegedRequest.error.message}
+                        </div>
                     )}
 
                     {/* Roles List Grouped by Type */}
-                    {assignedRolesQueryState.data?.accountAccessRoleAssignmentsPrivileged && (
+                    {accountAccessRoleAssignmentsPrivilegedRequest.data?.accountAccessRoleAssignmentsPrivileged && (
                         <div className="space-y-8">
                             {Object.entries(
                                 groupAssignmentsByType(
-                                    assignedRolesQueryState.data.accountAccessRoleAssignmentsPrivileged.items,
+                                    accountAccessRoleAssignmentsPrivilegedRequest.data
+                                        .accountAccessRoleAssignmentsPrivileged.items,
                                 ),
                             ).map(([type, roles]) => (
                                 <div key={type} className="space-y-4">
@@ -278,11 +324,11 @@ export function UsersRolesPage() {
                                 Are you sure you want to revoke the <b>{selectedRole?.type}</b> role from{' '}
                                 <b>@{selectedRole?.username}</b>?
                             </p>
-                            {revokeMutationState.error && (
+                            {accountAccessRoleAssignmentRevokePrivilegedRequest.error && (
                                 <Alert
                                     className="mt-4"
                                     variant="error"
-                                    title={apolloErrorToMessage(revokeMutationState.error)}
+                                    title={accountAccessRoleAssignmentRevokePrivilegedRequest.error.message}
                                 />
                             )}
                         </>
@@ -297,7 +343,7 @@ export function UsersRolesPage() {
                             <Button
                                 variant="destructive"
                                 onClick={handleRevokeConfirm}
-                                processing={revokeMutationState.loading}
+                                processing={accountAccessRoleAssignmentRevokePrivilegedRequest.isLoading}
                             >
                                 Revoke Role
                             </Button>

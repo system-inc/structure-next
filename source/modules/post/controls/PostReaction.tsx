@@ -7,12 +7,7 @@ import React from 'react';
 import { Tip } from '@structure/source/common/popovers/Tip';
 
 // Dependencies - API
-import { useQuery, useMutation } from '@apollo/client';
-import {
-    PostReactionProfilesDocument,
-    PostReactionCreateDocument,
-    PostReactionDeleteDocument,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
@@ -39,18 +34,56 @@ export function PostReaction(properties: PostReactionProperties) {
 
     // Hooks
     const { accountState, setAuthenticationDialogOpen } = useAccount();
-    const ideaReactionProfilesQueryState = useQuery(PostReactionProfilesDocument, {
-        skip: !tipOpen,
-        variables: {
+    const postReactionProfilesRequest = networkService.useGraphQlQuery(
+        gql(`
+            query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {
+                postReactionProfiles(postId: $postId, content: $content, pagination: $pagination) {
+                    items {
+                        username
+                        displayName
+                        profileId
+                    }
+                    pagination {
+                        itemIndex
+                        itemIndexForPreviousPage
+                        itemIndexForNextPage
+                        itemsPerPage
+                        itemsTotal
+                        pagesTotal
+                        page
+                    }
+                }
+            }
+        `),
+        {
             postId: properties.ideaId,
             content: properties.content,
             pagination: {
                 itemsPerPage: 10,
             },
         },
-    });
-    const [ideaReactionCreateMutation] = useMutation(PostReactionCreateDocument);
-    const [ideaReactionDeleteMutation] = useMutation(PostReactionDeleteDocument);
+        {
+            enabled: tipOpen,
+        },
+    );
+    const postReactionCreateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostReactionCreate($postId: String!, $content: String!) {
+                postReactionCreate(postId: $postId, content: $content) {
+                    success
+                }
+            }
+        `),
+    );
+    const postReactionDeleteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostReactionDelete($postId: String!, $content: String!) {
+                postReactionDelete(postId: $postId, content: $content) {
+                    success
+                }
+            }
+        `),
+    );
 
     // Function to handle clicking on the reaction
     async function handleReaction() {
@@ -62,11 +95,9 @@ export function PostReaction(properties: PostReactionProperties) {
                 properties.onReactionDelete(properties.content);
 
                 // Invoke the mutation to delete the reaction
-                ideaReactionDeleteMutation({
-                    variables: {
-                        postId: properties.ideaId,
-                        content: properties.content,
-                    },
+                postReactionDeleteRequest.execute({
+                    postId: properties.ideaId,
+                    content: properties.content,
                 });
             }
             // If the user has not done this reaction
@@ -75,11 +106,9 @@ export function PostReaction(properties: PostReactionProperties) {
                 properties.onReactionCreate(properties.content);
 
                 // Invoke the mutation to create the reaction
-                ideaReactionCreateMutation({
-                    variables: {
-                        postId: properties.ideaId,
-                        content: properties.content,
-                    },
+                postReactionCreateRequest.execute({
+                    postId: properties.ideaId,
+                    content: properties.content,
                 });
             }
         }
@@ -101,19 +130,17 @@ export function PostReaction(properties: PostReactionProperties) {
                     {/* Profiles Query State */}
                     <div className="min-w-32">
                         {/* Loading */}
-                        {ideaReactionProfilesQueryState.loading && (
-                            <BrokenCircleIcon className="h-4 w-4 animate-spin" />
-                        )}
+                        {postReactionProfilesRequest.isLoading && <BrokenCircleIcon className="h-4 w-4 animate-spin" />}
 
                         {/* Error */}
-                        {ideaReactionProfilesQueryState.error && (
-                            <div>Error: {ideaReactionProfilesQueryState.error.message}</div>
+                        {postReactionProfilesRequest.error && (
+                            <div>Error: {postReactionProfilesRequest.error.message}</div>
                         )}
 
                         {/* Profiles */}
-                        {ideaReactionProfilesQueryState.data && (
+                        {postReactionProfilesRequest.data && (
                             <div className="">
-                                {ideaReactionProfilesQueryState.data.postReactionProfiles.items.map(
+                                {postReactionProfilesRequest.data.postReactionProfiles.items.map(
                                     function (profile, profileIndex) {
                                         return (
                                             <div key={profileIndex} className="">

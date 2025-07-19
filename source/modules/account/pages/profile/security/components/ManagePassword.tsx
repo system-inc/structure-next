@@ -13,10 +13,9 @@ import { ManagePasswordForm } from '@structure/source/modules/account/pages/prof
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import {
     AccountAuthenticationQuery,
-    AccountMaintenanceSessionCreateDocument,
     AuthenticationSessionStatus,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
@@ -36,13 +35,26 @@ export function ManagePassword(properties: ManagePasswordProperties) {
     const emailAddress = account.accountState.account?.emailAddress ?? '';
 
     // Hooks - API - Mutations
-    const [accountMaintenanceSessionCreateMutation, accountMaintenanceSessionCreateMutationState] = useMutation(
-        AccountMaintenanceSessionCreateDocument,
+    const accountMaintenanceSessionCreateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountMaintenanceSessionCreate {
+                accountMaintenanceSessionCreate {
+                    status
+                    scopeType
+                    currentChallenge {
+                        challengeType
+                        status
+                    }
+                    updatedAt
+                    createdAt
+                }
+            }
+        `),
     );
 
     // Function to create the account maintenance session
     async function createAccountMaintenanceSession() {
-        await accountMaintenanceSessionCreateMutation();
+        await accountMaintenanceSessionCreateRequest.execute();
     }
 
     // The current authentication component based on the authentication state
@@ -51,9 +63,9 @@ export function ManagePassword(properties: ManagePasswordProperties) {
     // Authenticated
     if(
         // The account maintenance session shows we are authenticated and the scope is AccountMaintenance
-        (accountMaintenanceSessionCreateMutationState.data?.accountMaintenanceSessionCreate.status ==
+        (accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate.status ==
             AuthenticationSessionStatus.Authenticated &&
-            accountMaintenanceSessionCreateMutationState.data?.accountMaintenanceSessionCreate.scopeType ==
+            accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate.scopeType ==
                 'AccountMaintenance') ||
         // Or, the current authentication session shows we are authenticated and the scope is AccountMaintenance
         (authenticationSession?.status == AuthenticationSessionStatus.Authenticated &&
@@ -68,12 +80,12 @@ export function ManagePassword(properties: ManagePasswordProperties) {
     }
     // Challenged
     else if(
-        accountMaintenanceSessionCreateMutationState.data?.accountMaintenanceSessionCreate.status ==
+        accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate.status ==
         AuthenticationSessionStatus.Challenged
     ) {
         // Challenge - Email Verification
         if(
-            accountMaintenanceSessionCreateMutationState.data?.accountMaintenanceSessionCreate.currentChallenge
+            accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate.currentChallenge
                 ?.challengeType == 'EmailVerification'
         ) {
             currentAuthenticationComponent = (
@@ -87,7 +99,7 @@ export function ManagePassword(properties: ManagePasswordProperties) {
         }
         // Challenge - Account Password
         else if(
-            accountMaintenanceSessionCreateMutationState.data?.accountMaintenanceSessionCreate.currentChallenge
+            accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate.currentChallenge
                 ?.challengeType == 'AccountPassword'
         ) {
             currentAuthenticationComponent = (
@@ -111,7 +123,7 @@ export function ManagePassword(properties: ManagePasswordProperties) {
                     To {properties.accountHasPasswordSet ? 'change' : 'set'} your password, please verify your identity.
                 </p>
                 <Button
-                    loading={accountMaintenanceSessionCreateMutationState.loading}
+                    loading={accountMaintenanceSessionCreateRequest.isLoading}
                     className="mt-6"
                     onClick={function () {
                         createAccountMaintenanceSession();

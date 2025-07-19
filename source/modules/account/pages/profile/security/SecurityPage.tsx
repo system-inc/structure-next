@@ -9,8 +9,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { ManagePasswordDialog } from '@structure/source/modules/account/pages/profile/security/components/ManagePasswordDialog';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { AccountEnrolledChallengesDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,14 +24,20 @@ export function SecurityPage() {
     const [managePasswordDialogOpen, setManagePasswordDialogOpen] = React.useState(false);
 
     // Hooks - API - Queries
-    const accountEnrolledChallengesQueryState = useQuery(AccountEnrolledChallengesDocument, {
-        fetchPolicy: 'no-cache', // Do not use the cache as this overwrites the accountCurrent cache
-    });
+    const accountEnrolledChallengesRequest = networkService.useGraphQlQuery(
+        gql(`
+            query AccountEnrolledChallenges {
+                account {
+                    enrolledChallenges
+                }
+            }
+        `),
+    );
 
     // Check if the account has a password set
     const accountHasPasswordSet =
-        (accountEnrolledChallengesQueryState.data?.account.enrolledChallenges.length ?? 0) > 0 &&
-        accountEnrolledChallengesQueryState.data?.account.enrolledChallenges.includes('AccountPassword');
+        (accountEnrolledChallengesRequest.data?.account.enrolledChallenges.length ?? 0) > 0 &&
+        accountEnrolledChallengesRequest.data?.account.enrolledChallenges.includes('AccountPassword');
 
     // Render the component
     return (

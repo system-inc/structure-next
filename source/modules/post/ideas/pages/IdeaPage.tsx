@@ -9,8 +9,7 @@ import { redirect } from '@structure/source/router/Navigation';
 // import { Post } from '@structure/source/modules/post/Post';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { usePostRequest } from '@structure/source/modules/post/hooks/usePostRequest';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -26,15 +25,13 @@ export interface IdeaPageProperties {
 }
 export function IdeaPage(properties: IdeaPageProperties) {
     // Hooks
-    const ideaQueryState = useQuery(PostDocument, {
-        variables: {
-            identifier: properties.ideaIdentifier,
-        },
+    const postRequest = usePostRequest({
+        identifier: properties.ideaIdentifier,
     });
 
     // If there is no idea slug, redirect to the URL with the slug
-    if(!properties.ideaSlug && ideaQueryState.data?.post) {
-        redirect('/ideas/' + properties.ideaIdentifier + '/' + slug(ideaQueryState.data.post.title));
+    if(!properties.ideaSlug && postRequest.data?.post) {
+        redirect('/ideas/' + properties.ideaIdentifier + '/' + slug(postRequest.data.post.title));
     }
 
     // Render the component
@@ -42,11 +39,11 @@ export function IdeaPage(properties: IdeaPageProperties) {
         <div className="container items-center justify-center pt-12">
             <p>Post Page use github issue page https://github.com/reactchartjs/react-chartjs-2/issues/1219</p>
             {/* Loading */}
-            {ideaQueryState.loading && <BrokenCircleIcon className="h-4 w-4 animate-spin" />}
+            {postRequest.isLoading && <BrokenCircleIcon className="h-4 w-4 animate-spin" />}
             {/* Error */}
-            {ideaQueryState.error && <p>Error: {ideaQueryState.error.message}</p>}
+            {postRequest.error && <p>Error: {postRequest.error.message}</p>}
             {/* Data */}
-            {ideaQueryState.data && (
+            {postRequest.data && (
                 <div>data</div>
                 // <Post
                 //     id={ideaQueryState.data.post.id}

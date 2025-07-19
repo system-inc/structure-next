@@ -10,8 +10,7 @@ import { useNotice } from '@structure/source/common/notifications/NoticeProvider
 
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
-import { useMutation } from '@apollo/client';
-import { AccountProfileUpdateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Interface - ProfileFormValues
 interface ProfileFormValues {
@@ -26,7 +25,24 @@ export function ProfileInformationForm() {
     // Hooks
     const notice = useNotice();
     const { accountState } = useAccount();
-    const [updateMutation] = useMutation(AccountProfileUpdateDocument);
+    const accountProfileUpdateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
+                accountProfileUpdate(input: $input) {
+                    username
+                    displayName
+                    givenName
+                    familyName
+                    images {
+                        url
+                        variant
+                    }
+                    updatedAt
+                    createdAt
+                }
+            }
+        `),
+    );
 
     // Function to format phone number
     // function formatPhoneNumber(phoneNumber: string | null | undefined): string | undefined {
@@ -40,27 +56,36 @@ export function ProfileInformationForm() {
 
     // Function to handle form submission
     async function handleSubmit(formValues: ProfileFormValues): Promise<FormSubmitResponseInterface> {
-        const result = await updateMutation({
-            variables: {
+        try {
+            const result = await accountProfileUpdateRequest.execute({
                 input: {
                     givenName: formValues.givenName as string,
                     familyName: formValues.familyName as string,
                     displayName: formValues.displayName as string,
                     // phoneNumber: formatPhoneNumber(formValues.phoneNumber as string),
                 },
-            },
-        });
-
-        if(result.data) {
-            notice.addNotice({
-                title: 'Profile Updated',
-                content: 'Your profile information has been updated successfully.',
             });
-        }
 
-        return {
-            success: true,
-        };
+            if(result?.accountProfileUpdate) {
+                notice.addNotice({
+                    title: 'Profile Updated',
+                    content: 'Your profile information has been updated successfully.',
+                });
+
+                // Invalidate account cache to refresh the profile data
+                networkService.invalidateCache(['account']);
+            }
+
+            return {
+                success: true,
+            };
+        }
+        catch(error) {
+            return {
+                success: false,
+                message: error instanceof Error ? error.message : 'An error occurred while updating your profile.',
+            };
+        }
     }
 
     // Render the component

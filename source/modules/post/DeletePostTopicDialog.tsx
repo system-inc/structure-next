@@ -8,8 +8,7 @@ import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialo
 import { Button } from '@structure/source/common/buttons/Button';
 
 // Dependencies - API
-import { useMutation } from '@apollo/client';
-import { PostTopicDeleteDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Component - DeletePostTopicDialog
 export interface DeletePostTopicDialogProperties extends DialogProperties {
@@ -20,7 +19,15 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // Hooks
-    const [postTopicDeleteMutation, postTopicDeleteMutationState] = useMutation(PostTopicDeleteDocument);
+    const postTopicDeleteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation PostTopicDelete($id: String!) {
+                postTopicDelete(id: $id) {
+                    success
+                }
+            }
+        `),
+    );
 
     // Effect to update the open state when the open property changes
     React.useEffect(
@@ -43,15 +50,16 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
     async function deletePostTopic() {
         console.log('Deleting post topic', properties.postTopicId);
 
-        // Delete the post
-        await postTopicDeleteMutation({
-            variables: {
+        try {
+            // Delete the post
+            await postTopicDeleteRequest.execute({
                 id: properties.postTopicId,
-            },
-            onCompleted: function () {
-                console.log('Post topic deleted');
-            },
-        });
+            });
+            console.log('Post topic deleted');
+        }
+        catch(error) {
+            console.error('Error deleting post topic:', error);
+        }
     }
 
     // Render the component
@@ -66,7 +74,7 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
             footer={
                 <Button
                     variant="destructive"
-                    loading={postTopicDeleteMutationState.loading}
+                    loading={postTopicDeleteRequest.isLoading}
                     onClick={function () {
                         deletePostTopic();
                     }}

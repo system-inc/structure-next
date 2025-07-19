@@ -7,8 +7,8 @@ import {
 } from '@structure/source/utilities/validation/Validation';
 
 // Dependencies - API
-import { DocumentNode } from '@apollo/client';
-import { apolloClient } from '@structure/source/api/apollo/ApolloClient';
+import { networkService } from '@structure/source/services/network/NetworkService';
+import { GraphQlDocument } from '@structure/source/api/graphql/GraphQlUtilities';
 import { UniqueFieldValidationResult } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Interface - ValidationSchema
@@ -632,7 +632,7 @@ export class ValidationSchema {
 
     // GraphQL query
     graphQlQuery(
-        validateGraphQlQueryDocument: DocumentNode,
+        validateGraphQlQueryDocument: GraphQlDocument,
         variables: (value: unknown) => Record<string, unknown>,
         skip?: (value: unknown) => boolean,
     ) {
@@ -664,15 +664,16 @@ export class ValidationSchema {
                     const queryVariables = variables(value);
 
                     // Execute the GraphQL query
-                    const queryState = await apolloClient.query({
-                        query: validateGraphQlQueryDocument,
-                        variables: queryVariables,
-                    });
+                    // Cast to unknown first to satisfy TypeScript since we're dealing with a runtime string query
+                    const data = await networkService.graphQlRequest(
+                        validateGraphQlQueryDocument as unknown as Parameters<typeof networkService.graphQlRequest>[0],
+                        queryVariables,
+                    );
 
                     // If there is data, get first property from the data object as the result
-                    // It could be named anything, e.g., queryState.data?.accountProfileUsernameValidate;
-                    // or queryState.data?.accountProjectNameValidate;
-                    const uniqueFieldValidationResult = queryState.data ? Object.values(queryState.data)[0] : null;
+                    // It could be named anything, e.g., data?.accountProfileUsernameValidate;
+                    // or data?.accountProjectNameValidate;
+                    const uniqueFieldValidationResult = data ? Object.values(data)[0] : null;
                     // console.log('uniqueFieldValidationResult', uniqueFieldValidationResult);
 
                     // Check the UniqueFieldValidationResult and add errors or successes accordingly

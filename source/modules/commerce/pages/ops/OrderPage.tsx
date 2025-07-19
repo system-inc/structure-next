@@ -16,11 +16,8 @@ import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
 import ReloadIcon from '@structure/assets/icons/interface/ReloadIcon.svg';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import {
-    CommerceOrdersPrivilegedDocument,
-    ColumnFilterConditionOperator,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { ColumnFilterConditionOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useCommerceOrdersPrivilegedRequest } from '@structure/source/modules/commerce/hooks/useCommerceOrdersPrivilegedRequest';
 
 // Component - OrderPage
 export interface OrderPageProperties {
@@ -31,19 +28,15 @@ export function OrderPage(properties: OrderPageProperties) {
     const [isJsonVisible, setIsJsonVisible] = React.useState(false);
 
     // Query
-    const orderQueryState = useQuery(CommerceOrdersPrivilegedDocument, {
-        variables: {
-            pagination: {
-                itemsPerPage: 1,
-                filters: [
-                    {
-                        column: 'identifier',
-                        operator: ColumnFilterConditionOperator.Equal,
-                        value: properties.orderId,
-                    },
-                ],
+    const orderQueryState = useCommerceOrdersPrivilegedRequest({
+        itemsPerPage: 1,
+        filters: [
+            {
+                column: 'identifier',
+                operator: ColumnFilterConditionOperator.Equal,
+                value: properties.orderId,
             },
-        },
+        ],
     });
 
     // Functions
@@ -60,7 +53,7 @@ export function OrderPage(properties: OrderPageProperties) {
     }
 
     // Render loading state
-    if(orderQueryState.loading) {
+    if(orderQueryState.isLoading) {
         return (
             <div className="px-6 py-4">
                 <OpsNavigationTrail />
@@ -84,7 +77,7 @@ export function OrderPage(properties: OrderPageProperties) {
                 <div className="mb-4 text-red-600">Error: {orderQueryState.error.message}</div>
                 <Button
                     onClick={function () {
-                        orderQueryState.refetch();
+                        orderQueryState.refresh();
                     }}
                 >
                     <ReloadIcon className="mr-2 h-4 w-4" />

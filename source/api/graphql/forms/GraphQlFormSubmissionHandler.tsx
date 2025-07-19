@@ -10,7 +10,7 @@ import { FormValuesInterface, FormSubmitResponseInterface } from '@structure/sou
 import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - API
-import { ApolloError, FetchResult } from '@apollo/client';
+import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
@@ -49,6 +49,12 @@ export function convertFormValuesToGraphQlMutationVariables(formValues: FormValu
     return mutationVariables;
 }
 
+// Interface for GraphQL mutation response
+export interface GraphQlMutationResult<TData = Record<string, unknown>> {
+    data?: TData | null;
+    errors?: Array<{ message: string; [key: string]: unknown }>;
+}
+
 // Function to handle form submission
 export interface GraphQlFormSubmissionHandlerProperties<
     TGraphQlMutationResponseData = Record<string, unknown>,
@@ -57,11 +63,11 @@ export interface GraphQlFormSubmissionHandlerProperties<
     formValues: FormValuesInterface;
     mutationFunction: (options: {
         variables: TGraphQlMutationVariables;
-    }) => Promise<FetchResult<TGraphQlMutationResponseData>>;
+    }) => Promise<GraphQlMutationResult<TGraphQlMutationResponseData>>;
     onSubmit?: (
         formValues: FormValuesInterface,
         mutationResponseData: TGraphQlMutationResponseData | null,
-        mutationResponseError: ApolloError | null,
+        mutationResponseError: GraphQlError | null,
     ) => void | Promise<void>;
 }
 export async function GraphQlFormSubmissionHandler<
@@ -74,7 +80,7 @@ export async function GraphQlFormSubmissionHandler<
 
     // Variables to store the mutation response data and error
     let mutationResponseData: TGraphQlMutationResponseData | null = null;
-    let mutationResponseError: ApolloError | null = null;
+    let mutationResponseError: GraphQlError | null = null;
 
     // Convert form values to mutation variables
     const mutationVariables = convertFormValuesToGraphQlMutationVariables(
@@ -92,8 +98,14 @@ export async function GraphQlFormSubmissionHandler<
         mutationResponseData = mutationResponse.data || null;
     }
     catch(error) {
-        // Cast the error as an ApolloError
-        mutationResponseError = error as ApolloError;
+        // Convert the error to a GraphQlError
+        if (error instanceof GraphQlError) {
+            mutationResponseError = error;
+        } else if (error instanceof Error) {
+            mutationResponseError = new GraphQlError(error.message);
+        } else {
+            mutationResponseError = new GraphQlError('An unknown error occurred');
+        }
     }
 
     // Prepare the submitResponse

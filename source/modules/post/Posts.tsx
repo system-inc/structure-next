@@ -7,11 +7,10 @@ import React from 'react';
 import { Post, PostReactionsType } from '@structure/source/modules/post/Post';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
+import { usePostsRequest } from '@structure/source/modules/post/hooks/usePostsRequest';
 import {
     PostsQuery,
     PostVoteType,
-    PostsDocument,
     ColumnFilterConditionOperator,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
@@ -29,21 +28,17 @@ export interface PostsProperties {
 }
 export function Posts(properties: PostsProperties) {
     // Hooks
-    const postsQueryState = useQuery(PostsDocument, {
-        variables: {
-            pagination: {
-                itemsPerPage: properties.itemsPerPage ?? 10,
-                filters: [
-                    {
-                        column: 'type',
-                        operator: ColumnFilterConditionOperator.Equal,
-                        value: properties.type,
-                    },
-                ],
+    const postsRequest = usePostsRequest({
+        itemsPerPage: properties.itemsPerPage ?? 10,
+        filters: [
+            {
+                column: 'type',
+                operator: ColumnFilterConditionOperator.Equal,
+                value: properties.type,
             },
-        },
+        ],
     });
-    console.log('postsQueryState', postsQueryState);
+    console.log('postsRequest', postsRequest);
 
     const posts: {
         id: string;
@@ -66,7 +61,7 @@ export function Posts(properties: PostsProperties) {
         createdAt: string;
     }[] = [];
 
-    postsQueryState.data?.posts.items.forEach(function (post) {
+    postsRequest.data?.posts.items.forEach(function (post) {
         const contentTrimmed = post.content?.trim();
         let content = contentTrimmed && contentTrimmed.length > 0 ? contentTrimmed : '';
 
@@ -111,17 +106,17 @@ export function Posts(properties: PostsProperties) {
 
             <div className="mt-4">
                 {/* Loading */}
-                {postsQueryState.loading && (
+                {postsRequest.isLoading && (
                     <div className="mt-10">
                         <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     </div>
                 )}
 
                 {/* Error */}
-                {postsQueryState.error && <div>Error: {postsQueryState.error.message}</div>}
+                {postsRequest.error && <div>Error: {postsRequest.error.message}</div>}
 
                 {/* Posts */}
-                {postsQueryState.data &&
+                {postsRequest.data &&
                     posts.map(function (post) {
                         return (
                             <Post

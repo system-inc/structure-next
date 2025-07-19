@@ -18,8 +18,8 @@ import { ImageEditor } from '@structure/source/common/images/editor/ImageEditor'
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Dependencies - API
-import { useMutation, useApolloClient } from '@apollo/client';
-import { AccountProfileImageRemoveDocument, AccountDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Types - Profile Image Upload Response
 interface StoredObject {
@@ -62,17 +62,28 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
     const [uploading, setUploading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
-    // GraphQL client
-    const apolloClient = useApolloClient();
-    const [removeProfileImage, removeProfileImageState] = useMutation(AccountProfileImageRemoveDocument, {
-        onCompleted: function () {
-            handleSuccess();
+    // GraphQL mutation
+    const removeProfileImageMutation = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountProfileImageRemove {
+                accountProfileImageRemove {
+                    images {
+                        url
+                        variant
+                    }
+                }
+            }
+        `),
+        {
+            onSuccess: function () {
+                handleSuccess();
+            },
+            onError: function (error) {
+                setError(error.message);
+                setUploading(false);
+            },
         },
-        onError: function (error) {
-            setError(error.message);
-            setUploading(false);
-        },
-    });
+    );
 
     // Handle dialog close
     function handleDialogClose() {
@@ -99,22 +110,16 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
         setError(null);
 
         try {
-            // Upload image to server
-            const response = await fetch('https://' + ProjectSettings.apis.base.host + '/accounts/profiles/images', {
+            // Upload image to server via NetworkService
+            const profileImageUploadResponse = await networkService.request<ProfileImageUploadResponse>({
+                url: 'https://' + ProjectSettings.apis.base.host + '/accounts/profiles/images',
                 method: 'POST',
                 body: imageBlob,
                 headers: {
                     'Content-Type': 'image/jpeg',
                 },
-                credentials: 'include', // Include HTTP-only cookies
+                credentials: 'include',
             });
-
-            if(!response.ok) {
-                throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
-            }
-
-            // Get the response data
-            const profileImageUploadResponse = (await response.json()) as ProfileImageUploadResponse;
 
             // Handle success with the image data
             handleSuccess(profileImageUploadResponse);
@@ -131,8 +136,8 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
         setError(null);
 
         try {
-            await removeProfileImage();
-            // Success is handled by onCompleted callback
+            await removeProfileImageMutation.execute();
+            // Success is handled by onSuccess callback
         } catch {
             // Error is handled by onError callback
         }
@@ -146,8 +151,8 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
             profileImageUploadResponse.transformed &&
             profileImageUploadResponse.transformed.length > 0
         ) {
-            // Get Apollo cache data
-            const accountData = apolloClient.readQuery({ query: AccountDocument });
+            // Get cached account data
+            const accountData = networkService.getCache<AccountQuery>(['account']);
 
             if(accountData && accountData.account) {
                 // Create new images array from the upload response
@@ -156,13 +161,11 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                     {
                         url: profileImageUploadResponse.original.url,
                         variant: profileImageUploadResponse.original.name,
-                        __typename: 'ImageObject' as const,
                     },
                     // All transformed images
                     ...profileImageUploadResponse.transformed.map((transformedImage) => ({
                         url: transformedImage.url,
                         variant: transformedImage.name,
-                        __typename: 'ImageObject' as const,
                     })),
                 ];
 
@@ -175,17 +178,14 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                     },
                 };
 
-                // Write the updated data to Apollo cache
-                apolloClient.writeQuery({
-                    query: AccountDocument,
-                    data: { account: updatedAccount },
-                });
+                // Update the cache with new data
+                networkService.setCache(['account'], { account: updatedAccount });
             }
         }
-        else if(removeProfileImageState.data) {
+        else if(removeProfileImageMutation.data) {
             // For image removal, update the cache with the mutation result
-            const removeResult = removeProfileImageState.data.accountProfileImageRemove;
-            const accountData = apolloClient.readQuery({ query: AccountDocument });
+            const removeResult = removeProfileImageMutation.data.accountProfileImageRemove;
+            const accountData = networkService.getCache<AccountQuery>(['account']);
 
             if(removeResult && accountData && accountData.account) {
                 // Create updated account data with the response
@@ -197,11 +197,8 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                     },
                 };
 
-                // Write the updated data to Apollo cache
-                apolloClient.writeQuery({
-                    query: AccountDocument,
-                    data: { account: updatedAccount },
-                });
+                // Update the cache with new data
+                networkService.setCache(['account'], { account: updatedAccount });
             }
         }
 
@@ -242,7 +239,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                                 variant="destructive"
                                 onClick={handleRemoveImage}
                                 disabled={uploading}
-                                loading={removeProfileImageState.loading}
+                                loading={removeProfileImageMutation.isLoading}
                             >
                                 Remove Current Profile Picture
                             </Button>

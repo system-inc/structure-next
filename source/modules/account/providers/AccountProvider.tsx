@@ -11,8 +11,9 @@ import { AuthenticationDialog } from '@structure/source/modules/account/pages/au
 import { accountSignedInKey, Account } from '@structure/source/modules/account/Account';
 
 // Dependencies - API
-import { useQuery, useMutation, ApolloError } from '@apollo/client';
-import { AccountDocument, AccountSignOutDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
+import { AccountSignOutDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Services
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
@@ -21,7 +22,7 @@ import { localStorageService } from '@structure/source/services/local-storage/Lo
 interface AccountContextInterface {
     accountState: {
         loading: boolean;
-        error: ApolloError | null;
+        error: GraphQlError | null;
         account: Account | null; // If this is null, the account is not signed in
     };
     signedIn: boolean;
@@ -46,32 +47,71 @@ export function AccountProvider(properties: AccountProviderProperties) {
     const router = useRouter();
 
     // Mutations
-    const [accountSignOutMutation] = useMutation(AccountSignOutDocument);
+    const accountSignOutMutation = networkService.useGraphQlMutation(AccountSignOutDocument);
 
     // Queries
-    const accountQueryState = useQuery(AccountDocument, {
-        // Do not run the query if the account is not signed in
-        skip: !signedIn,
-        onCompleted: function (data) {
-            // If signed in
-            if(data.account) {
-                // Update the signed in state
-                setSignedIn(true);
-
-                // Close the authentication dialog if it is open
-                setAuthenticationDialogOpen(false);
+    const accountQueryState = networkService.useGraphQlQuery(
+        gql(`
+            query Account {
+                account {
+                    emailAddress
+                    profile {
+                        id
+                        username
+                        displayName
+                        givenName
+                        familyName
+                        images {
+                            url
+                            variant
+                        }
+                        updatedAt
+                        createdAt
+                    }
+                    accessRoles
+                    createdAt
+                }
             }
-            // If not signed in
-            else {
-                // Update the signed in state
+        `),
+        undefined,
+        {
+            // Do not run the query if the account is not signed in
+            enabled: signedIn,
+        },
+    );
+
+    // Effect to handle query completion
+    React.useEffect(
+        function () {
+            if(accountQueryState.data) {
+                // If signed in
+                if(accountQueryState.data.account) {
+                    // Update the signed in state
+                    setSignedIn(true);
+
+                    // Close the authentication dialog if it is open
+                    setAuthenticationDialogOpen(false);
+                }
+                // If not signed in
+                else {
+                    // Update the signed in state
+                    setSignedIn(false);
+                }
+            }
+        },
+        [accountQueryState.data],
+    );
+
+    // Effect to handle query error
+    React.useEffect(
+        function () {
+            if(accountQueryState.error) {
+                // If there is an error, the account is not signed in
                 setSignedIn(false);
             }
         },
-        onError: function () {
-            // If there is an error, the account is not signed in
-            setSignedIn(false);
-        },
-    });
+        [accountQueryState.error],
+    );
     // console.log('accountQueryState', accountQueryState);
 
     // Create the account object from the GraphQL query data
@@ -106,7 +146,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
             // Invoke the GraphQL mutation
             try {
                 // Invoke the mutation
-                await accountSignOutMutation();
+                await accountSignOutMutation.execute({});
             }
             catch(error) {
                 console.log('error', JSON.stringify(error));
@@ -158,8 +198,8 @@ export function AccountProvider(properties: AccountProviderProperties) {
             value={{
                 accountState: {
                     // We are loading if the account query is loading or if we are signed in and the account is not loaded
-                    loading: accountQueryState.loading || (signedIn && account == null),
-                    error: accountQueryState.error ?? null,
+                    loading: accountQueryState.isLoading || (signedIn && account == null),
+                    error: accountQueryState.error as GraphQlError | null,
                     account: account,
                 },
                 signedIn: signedIn,

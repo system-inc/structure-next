@@ -11,8 +11,8 @@ import { Pagination } from '@structure/source/common/navigation/pagination/Pagin
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 
 // Dependencies - API
-import { useQuery } from '@apollo/client';
-import { CommerceOrdersPrivilegedDocument, OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useCommerceOrdersPrivilegedRequest } from '@structure/source/modules/commerce/hooks/useCommerceOrdersPrivilegedRequest';
 
 // Dependencies - Utilities
 import { timeAgo, dayNameWithFullDate } from '@structure/source/utilities/Time';
@@ -26,19 +26,15 @@ export function OrdersPage() {
     const [totalOrders, setTotalOrders] = React.useState<number>(0);
 
     // Query
-    const ordersQueryState = useQuery(CommerceOrdersPrivilegedDocument, {
-        variables: {
-            pagination: {
-                itemsPerPage: itemsPerPage,
-                itemIndex: (page - 1) * itemsPerPage,
-                orderBy: [
-                    {
-                        key: 'createdAt',
-                        direction: OrderByDirection.Descending,
-                    },
-                ],
+    const ordersQueryState = useCommerceOrdersPrivilegedRequest({
+        itemsPerPage: itemsPerPage,
+        itemIndex: (page - 1) * itemsPerPage,
+        orderBy: [
+            {
+                key: 'createdAt',
+                direction: OrderByDirection.Descending,
             },
-        },
+        ],
     });
 
     // Effects
@@ -66,7 +62,7 @@ export function OrdersPage() {
             {/* Content */}
             <div className="divide-y divide-neutral/10">
                 {/* Loading and Error States */}
-                {ordersQueryState.loading && (
+                {ordersQueryState.isLoading && (
                     <div className="divide-y divide-neutral/10">
                         {[...Array(itemsPerPage)].map((_, index) => (
                             <div
@@ -142,7 +138,7 @@ export function OrdersPage() {
                 )}
 
                 {/* Pagination */}
-                {(ordersQueryState.loading || ordersQueryState.data) && (
+                {(ordersQueryState.isLoading || ordersQueryState.data) && (
                     <div className="flex items-center space-x-4 pt-6">
                         <Pagination
                             className="justify-start"

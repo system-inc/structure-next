@@ -1,55 +1,3 @@
-# Posts Query
-query Posts($pagination: PaginationInput!) {
-    posts(pagination: $pagination) {
-        items {
-            id
-            identifier
-            slug
-            status
-            title
-            createdByProfileId
-            createdByProfile {
-                displayName
-                username
-                images {
-                    url
-                    type
-                    variant
-                }
-            }
-            content
-            topics {
-                id
-                title
-                slug
-            }
-            reactions {
-                content
-                count
-                reacted
-            }
-            upvoteCount
-            downvoteCount
-            voteType
-            reportedCount
-            reportStatus
-            metadata
-            latestRevisionId
-            updatedAt
-            createdAt
-        }
-        pagination {
-            itemIndex
-            itemIndexForPreviousPage
-            itemIndexForNextPage
-            itemsPerPage
-            itemsTotal
-            pagesTotal
-            page
-        }
-    }
-}
-
 # Posts Mine Query
 query PostsMine($pagination: PaginationInput!) {
     postsMine(pagination: $pagination) {
@@ -99,47 +47,6 @@ query PostsMine($pagination: PaginationInput!) {
             pagesTotal
             page
         }
-    }
-}
-
-# Post Query
-query Post($identifier: String!) {
-    post(identifier: $identifier) {
-        id
-        identifier
-        slug
-        status
-        title
-        createdByProfileId
-        createdByProfile {
-            displayName
-            username
-            images {
-                url
-                type
-                variant
-            }
-        }
-        content
-        topics {
-            id
-            title
-        }
-        reactions {
-            content
-            count
-            reacted
-        }
-        upvoteCount
-        downvoteCount
-        voteType
-        reportedCount
-        reportStatus
-        type
-        metadata
-        latestRevisionId
-        updatedAt
-        createdAt
     }
 }
 

@@ -20,13 +20,8 @@ import { AccountPasswordChallenge } from '@structure/source/modules/account/page
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
-import { useApolloClient, useQuery, useMutation } from '@apollo/client';
-import {
-    AccountAuthenticationQuery,
-    AccountAuthenticationDocument,
-    AccountAuthenticationRegistrationCompleteDocument,
-    AccountAuthenticationSignInCompleteDocument,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -55,23 +50,45 @@ export function Authentication(properties: AuthenticationProperties) {
     const router = useRouter();
     const urlPath = useUrlPath();
     const { accountState, setSignedIn, signOut, setAuthenticationDialogOpen } = useAccount();
-    const apolloClient = useApolloClient();
 
     // Hooks - API - Queries
-    useQuery(AccountAuthenticationDocument, {
-        // Immediately run the query and see if we already have an authentication session
-        onCompleted: function (data) {
-            if(data.accountAuthentication) {
-                setAuthenticationSession(data.accountAuthentication);
+    const accountAuthenticationRequest = networkService.useGraphQlQuery(
+        gql(`
+            query AccountAuthentication {
+                accountAuthentication {
+                    status
+                    scopeType
+                    currentChallenge {
+                        challengeType
+                        status
+                    }
+                    updatedAt
+                    createdAt
+                }
             }
-        },
-    });
+        `),
+    );
 
     // Hooks - API - Mutations
-    const [accountAuthenticationRegistrationCompleteMutation] = useMutation(
-        AccountAuthenticationRegistrationCompleteDocument,
+    const accountAuthenticationRegistrationCompleteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
+                accountAuthenticationRegistrationComplete(input: $input) {
+                    success
+                }
+            }
+        `),
     );
-    const [accountAuthenticationSignInCompleteMutation] = useMutation(AccountAuthenticationSignInCompleteDocument);
+
+    const accountAuthenticationSignInCompleteRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountAuthenticationSignInComplete {
+                accountAuthenticationSignInComplete {
+                    success
+                }
+            }
+        `),
+    );
 
     // Effect to run on mount
     React.useEffect(function () {
@@ -81,6 +98,16 @@ export function Authentication(properties: AuthenticationProperties) {
             setRedirectUrl(decodeURIComponent(redirect));
         }
     }, []);
+
+    // Effect to set authentication session when data is available
+    React.useEffect(
+        function () {
+            if(accountAuthenticationRequest.data?.accountAuthentication) {
+                setAuthenticationSession(accountAuthenticationRequest.data.accountAuthentication);
+            }
+        },
+        [accountAuthenticationRequest.data],
+    );
 
     // Effect to run every time the authentication session changes
     React.useEffect(
@@ -92,11 +119,11 @@ export function Authentication(properties: AuthenticationProperties) {
                     console.log('AccountRegistrationComplete');
 
                     // Run the accountRegistrationComplete mutation
-                    accountAuthenticationRegistrationCompleteMutation({
-                        variables: {
+                    accountAuthenticationRegistrationCompleteRequest
+                        .execute({
                             input: {},
-                        },
-                        onCompleted: function (data) {
+                        })
+                        .then(function (data) {
                             console.log('accountAuthenticationRegistrationCompleteMutation', data);
 
                             // Set the authentication session success
@@ -104,16 +131,19 @@ export function Authentication(properties: AuthenticationProperties) {
 
                             // Set the account signed in
                             setSignedIn(true);
-                        },
-                    });
+                        })
+                        .catch(function (error) {
+                            console.error('Registration complete error:', error);
+                        });
                 }
                 // If the scope is AccountSignIn
                 else if(authenticationSession?.scopeType == 'AccountSignIn') {
                     console.log('AccountSignInComplete');
 
                     // Run the accountSignInComplete mutation
-                    accountAuthenticationSignInCompleteMutation({
-                        onCompleted: function (data) {
+                    accountAuthenticationSignInCompleteRequest
+                        .execute()
+                        .then(function (data) {
                             console.log('accountAuthenticationSignInCompleteMutation', data);
 
                             // Set the authentication session success
@@ -121,15 +151,17 @@ export function Authentication(properties: AuthenticationProperties) {
 
                             // Set the account signed in
                             setSignedIn(true);
-                        },
-                    });
+                        })
+                        .catch(function (error) {
+                            console.error('Sign in complete error:', error);
+                        });
                 }
             }
         },
         [
             authenticationSession,
-            accountAuthenticationRegistrationCompleteMutation,
-            accountAuthenticationSignInCompleteMutation,
+            accountAuthenticationRegistrationCompleteRequest,
+            accountAuthenticationSignInCompleteRequest,
             setSignedIn,
         ],
     );
@@ -149,12 +181,12 @@ export function Authentication(properties: AuthenticationProperties) {
                 }
                 // If no redirect URL is provided
                 else {
-                    // Refetch queries
-                    apolloClient.reFetchObservableQueries();
+                    // Invalidate cached queries
+                    networkService.clearCache();
                 }
             }
         },
-        [accountState.account, setAuthenticationDialogOpen, apolloClient, redirectUrl, router],
+        [accountState.account, setAuthenticationDialogOpen, redirectUrl, router],
     );
 
     // Effect to handle authentication success redirects
