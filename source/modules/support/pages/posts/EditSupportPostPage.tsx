@@ -15,6 +15,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { DeletePostDialog } from '@structure/source/modules/post/DeletePostDialog';
 
 // Dependencies - API
+import { gql } from '@structure/source/services/network/NetworkService';
 import {
     PostUpdateOperation,
     PostDocument,
@@ -24,6 +25,25 @@ import {
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+
+// GraphQL Operations
+gql(`
+    mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
+        postUpdate(id: $id, input: $input) {
+            id
+            status
+            title
+            contentType
+            content
+            settings
+            upvoteCount
+            downvoteCount
+            metadata
+            updatedAt
+            createdAt
+        }
+    }
+`);
 
 // Component - EditSupportPostPage
 export interface EditSupportPostPageProperties {

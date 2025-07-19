@@ -8,9 +8,29 @@ import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - API
+import { gql } from '@structure/source/services/network/NetworkService';
 import { PostCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
+
+// GraphQL Operations
+gql(`
+    mutation PostCreate($input: PostCreateInput!) {
+        postCreatePrivileged(input: $input) {
+            id
+            status
+            title
+            contentType
+            content
+            settings
+            upvoteCount
+            downvoteCount
+            metadata
+            updatedAt
+            createdAt
+        }
+    }
+`);
 
 // Component - CreateSupportPostPage
 export function CreateSupportPostPage() {

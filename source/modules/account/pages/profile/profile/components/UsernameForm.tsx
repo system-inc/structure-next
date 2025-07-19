@@ -15,7 +15,6 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
-import { AccountProfileUsernameValidateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
@@ -126,7 +125,11 @@ export function UsernameForm() {
                         validateOnChange={true}
                         validateOnBlur={true}
                         validationSchema={new ValidationSchema().username(activeUsername).graphQlQuery(
-                            AccountProfileUsernameValidateDocument,
+                            gql(`
+                                query AccountProfileUsernameValidate($username: String!) {
+                                    accountProfileUsernameValidate(username: $username)
+                                }
+                            `),
                             function (value) {
                                 return {
                                     username: value,

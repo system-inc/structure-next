@@ -7,8 +7,8 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
 
 // Dependencies - API
-import { networkService } from '@structure/source/services/network/NetworkService';
-import { EngagementEventCreateDocument, DeviceOrientation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { DeviceOrientation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { getThirdPartyAttributionForEvents } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
@@ -61,7 +61,15 @@ export function createEngagementEvent(
     };
 
     // Perform the mutation
-    networkService.graphQlRequest(EngagementEventCreateDocument, {
+    networkService.graphQlRequest(
+        gql(`
+            mutation EngagementEventCreate($input: CreateEngagementEventInput!) {
+                engagementEventCreate(input: $input) {
+                    success
+                }
+            }
+        `),
+        {
         input: {
             name: eventName,
             category: eventCategory,
@@ -83,5 +91,6 @@ export function createEngagementEvent(
                 loggedAt: new Date().toISOString(),
             },
         },
-    });
+    },
+    );
 }

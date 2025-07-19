@@ -9,9 +9,24 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { DeletePostTopicDialog } from '@structure/source/modules/post/DeletePostTopicDialog';
 
 // Dependencies - API
-import { PostTopicUpdateOperation, PostTopicByIdDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { gql } from '@structure/source/services/network/NetworkService';
+import { PostTopicUpdateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
+
+// GraphQL Operations
+gql(`
+    mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
+        postTopicUpdate(input: $input) {
+            id
+            title
+            slug
+            description
+            postCount
+            createdAt
+        }
+    }
+`);
 
 // Component - EditSupportPostTopicPage
 export interface EditSupportPostTopicPageProperties {
@@ -40,7 +55,18 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
                     children: 'Save Changes',
                 }}
                 defaultValuesQuery={{
-                    document: PostTopicByIdDocument,
+                    document: gql(`
+                        query PostTopicById($id: String!) {
+                            postTopicById(id: $id) {
+                                id
+                                title
+                                slug
+                                description
+                                postCount
+                                createdAt
+                            }
+                        }
+                    `),
                     variables: {
                         id: properties.postTopicId,
                     },

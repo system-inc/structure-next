@@ -13,7 +13,6 @@ import { Markdown } from '@structure/source/common/markdown/Markdown';
 
 // Dependencies - API
 // import { useQuery } from '@apollo/client';
-import { SupportPostQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
@@ -26,7 +25,16 @@ import { timeAgo } from '@structure/source/utilities/Time';
 export interface SupportPostPageProperties {
     postTopicSlug?: string;
     parentPostTopicsSlugs?: string[];
-    post: SupportPostQuery['post'];
+    post: {
+        identifier: string;
+        slug: string;
+        status: string;
+        title: string;
+        description?: string | null;
+        content?: string | null;
+        updatedAt: string | Date;
+        createdAt: string | Date;
+    };
 }
 export function SupportPostPage(properties: SupportPostPageProperties) {
     console.log('SupportPostPage', properties);

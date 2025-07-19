@@ -8,9 +8,24 @@ import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - API
+import { gql } from '@structure/source/services/network/NetworkService';
 import { PostTopicCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
+
+// GraphQL Operations
+gql(`
+    mutation PostTopicCreate($input: PostTopicCreateInput!) {
+        postTopicCreate(input: $input) {
+            id
+            title
+            slug
+            description
+            postCount
+            createdAt
+        }
+    }
+`);
 
 // Component - CreateSupportPostTopicPage
 export function CreateSupportPostTopicPage() {

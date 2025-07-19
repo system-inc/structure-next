@@ -13,7 +13,6 @@ import { accountSignedInKey, Account } from '@structure/source/modules/account/A
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
-import { AccountSignOutDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Services
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
@@ -47,7 +46,15 @@ export function AccountProvider(properties: AccountProviderProperties) {
     const router = useRouter();
 
     // Mutations
-    const accountSignOutMutation = networkService.useGraphQlMutation(AccountSignOutDocument);
+    const accountSignOutMutation = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountSignOut {
+                accountSignOut {
+                    success
+                }
+            }
+        `),
+    );
 
     // Queries
     const accountQueryState = networkService.useGraphQlQuery(
