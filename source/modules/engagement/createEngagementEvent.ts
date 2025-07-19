@@ -7,7 +7,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
 
 // Dependencies - API
-import { apolloClient } from '@structure/source/api/apollo/ApolloClient';
+import { networkService } from '@structure/source/services/network/NetworkService';
 import { EngagementEventCreateDocument, DeviceOrientation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
@@ -61,29 +61,26 @@ export function createEngagementEvent(
     };
 
     // Perform the mutation
-    apolloClient.mutate({
-        mutation: EngagementEventCreateDocument,
-        variables: {
-            input: {
-                name: eventName,
-                category: eventCategory,
-                deviceProperties: {
-                    orientation: orientation,
-                },
-                clientProperties: {
-                    environment:
-                        window.location.hostname.includes('localhost') || window.location.hostname === '127.0.0.1'
-                            ? 'Development'
-                            : 'Production',
-                },
-                eventContext: {
-                    viewIdentifier: viewIdentifier,
-                    viewTitle: viewTitle || null,
-                    referrer: document.referrer || undefined,
-                    sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
-                    additionalData: Object.keys(mergedAdditionalData).length > 0 ? mergedAdditionalData : undefined,
-                    loggedAt: new Date().toISOString(),
-                },
+    networkService.graphQlRequest(EngagementEventCreateDocument, {
+        input: {
+            name: eventName,
+            category: eventCategory,
+            deviceProperties: {
+                orientation: orientation,
+            },
+            clientProperties: {
+                environment:
+                    window.location.hostname.includes('localhost') || window.location.hostname === '127.0.0.1'
+                        ? 'Development'
+                        : 'Production',
+            },
+            eventContext: {
+                viewIdentifier: viewIdentifier,
+                viewTitle: viewTitle || null,
+                referrer: document.referrer || undefined,
+                sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
+                additionalData: Object.keys(mergedAdditionalData).length > 0 ? mergedAdditionalData : undefined,
+                loggedAt: new Date().toISOString(),
             },
         },
     });

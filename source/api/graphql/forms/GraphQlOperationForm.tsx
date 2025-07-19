@@ -60,11 +60,13 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
     const formInputsReferencesMap = React.useRef(new Map<string, FormInputReferenceInterface>()).current;
 
     // Hooks
-    const mutation = networkService.useGraphQlMutation(properties.operation.document as Parameters<typeof networkService.useGraphQlMutation>[0]);
+    const mutation = networkService.useGraphQlMutation(
+        properties.operation.document as Parameters<typeof networkService.useGraphQlMutation>[0],
+    );
 
     // Fetch default values if defaultValuesQuery is provided
     const defaultValuesQueryState = networkService.useGraphQlQuery(
-        properties.defaultValuesQuery?.document || noOpQuery,
+        (properties.defaultValuesQuery?.document || noOpQuery) as Parameters<typeof networkService.useGraphQlQuery>[0],
         properties.defaultValuesQuery?.variables,
         {
             enabled: !!properties.defaultValuesQuery,
@@ -74,8 +76,8 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
     // Effect to update the default values when the query loads data
     React.useEffect(
         function () {
-            if(defaultValuesQueryState.data) {
-                setDefaultValues(defaultValuesQueryState.data);
+            if(defaultValuesQueryState.data && typeof defaultValuesQueryState.data === 'object') {
+                setDefaultValues(defaultValuesQueryState.data as Record<string, unknown>);
             }
         },
         [defaultValuesQueryState.data],
@@ -134,7 +136,13 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
             // Use the form values directly for submission
             return GraphQlFormSubmissionHandler({
                 formValues: currentFormValues,
-                mutationFunction: mutation.execute,
+                mutationFunction: async function (options: { variables: Record<string, unknown> }) {
+                    const result = await mutation.execute(options.variables);
+                    return {
+                        data: result,
+                        errors: undefined,
+                    };
+                },
                 onSubmit: properties.onSubmit,
             });
         },

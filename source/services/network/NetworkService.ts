@@ -56,7 +56,7 @@ import type { TypedDocumentString as StructureTypedDocumentString } from '@struc
 
 // Create a union type that accepts both TypedDocumentString types
 // This allows our GraphQL methods to accept queries from either code generation output
-type AnyTypedDocumentString<TResult, TVariables> =
+export type AnyTypedDocumentString<TResult, TVariables> =
     | StructureTypedDocumentString<TResult, TVariables>
     | AppTypedDocumentString<TResult, TVariables>;
 
@@ -499,46 +499,53 @@ export class NetworkService {
 
         if(options.cacheKey !== false) {
             // Cached behavior (like useQuery)
-            const queryResult = tanStackReactQueryUseQuery(
-                {
-                    queryKey: options.cacheKey,
-                    queryFn: async () => {
-                        const startTime = Date.now();
-                        this.statistics.totalRequests++;
-                        this.statistics.activeRequests++;
-                        this.statistics.lastRequestAt = startTime;
+            const baseQueryOptions = {
+                queryKey: options.cacheKey,
+                queryFn: async () => {
+                    const startTime = Date.now();
+                    this.statistics.totalRequests++;
+                    this.statistics.activeRequests++;
+                    this.statistics.lastRequestAt = startTime;
 
-                        try {
-                            await this.ensureDeviceId();
-                            const result = await (options.request as (variables?: unknown) => Promise<TData>)();
+                    try {
+                        await this.ensureDeviceId();
+                        const result = await (options.request as (variables?: unknown) => Promise<TData>)();
 
-                            // Update success statistics
-                            this.statistics.successfulRequests++;
-                            this.statistics.lastSuccessAt = Date.now();
-                            this.updateResponseTime(Date.now() - startTime);
+                        // Update success statistics
+                        this.statistics.successfulRequests++;
+                        this.statistics.lastSuccessAt = Date.now();
+                        this.updateResponseTime(Date.now() - startTime);
 
-                            return result;
-                        }
-                        catch(error) {
-                            // Update error statistics
-                            this.statistics.failedRequests++;
-                            this.statistics.lastErrorAt = Date.now();
-                            throw error;
-                        } finally {
-                            this.statistics.activeRequests--;
-                        }
-                    },
-                    enabled: options.enabled,
-                    staleTime: options.validDurationInMilliseconds,
-                    gcTime: options.clearAfterUnusedDurationInMilliseconds,
-                    refetchInterval: options.refreshIntervalInMilliseconds,
-                    refetchOnWindowFocus: options.refreshOnWindowFocus,
-                    retry: options.maximumRetries,
-                    initialData: options.initialData,
-                    placeholderData: options.keepPreviousData ? keepPreviousData : options.placeholderData,
+                        return result;
+                    }
+                    catch(error) {
+                        // Update error statistics
+                        this.statistics.failedRequests++;
+                        this.statistics.lastErrorAt = Date.now();
+                        throw error;
+                    } finally {
+                        this.statistics.activeRequests--;
+                    }
                 },
-                this.tanStackReactQueryClient,
-            );
+                enabled: options.enabled,
+                staleTime: options.validDurationInMilliseconds,
+                gcTime: options.clearAfterUnusedDurationInMilliseconds,
+                refetchInterval: options.refreshIntervalInMilliseconds,
+                refetchOnWindowFocus: options.refreshOnWindowFocus,
+                retry: options.maximumRetries,
+                initialData: options.initialData,
+            };
+
+            // Build complete options with placeholderData if needed
+            const completeQueryOptions = {
+                ...baseQueryOptions,
+                ...(options.keepPreviousData ? { placeholderData: keepPreviousData } : {}),
+                ...(options.placeholderData !== undefined && !options.keepPreviousData
+                    ? { placeholderData: options.placeholderData }
+                    : {}),
+            } as Parameters<typeof tanStackReactQueryUseQuery>[0];
+
+            const queryResult = tanStackReactQueryUseQuery(completeQueryOptions, this.tanStackReactQueryClient);
 
             return {
                 data: queryResult.data,
@@ -645,7 +652,6 @@ export class NetworkService {
                 refetchOnWindowFocus: options.refreshOnWindowFocus,
                 retry: options.maximumRetries,
                 initialData: options.initialData,
-                placeholderData: options.keepPreviousData ? keepPreviousData : options.placeholderData,
             },
             this.tanStackReactQueryClient,
         );

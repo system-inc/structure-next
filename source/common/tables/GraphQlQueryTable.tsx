@@ -9,19 +9,47 @@ import { TableColumnProperties, inferTableColumnType } from '@structure/source/c
 import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - API
-import { networkService } from '@structure/source/services/network/NetworkService';
-import { GraphQlError, GraphQlDocument } from '@structure/source/api/graphql/GraphQlUtilities';
+import { networkService, AnyTypedDocumentString } from '@structure/source/services/network/NetworkService';
+import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
+
+// Helper types for GraphQL table data
+interface GraphQlTableItem {
+    [key: string]: unknown;
+}
+
+interface GraphQlTableData {
+    items?: GraphQlTableItem[];
+    pagination?: {
+        itemIndex: number;
+        itemIndexForPreviousPage?: number;
+        itemIndexForNextPage?: number;
+        itemsPerPage: number;
+        itemsTotal: number;
+        pagesTotal: number;
+        page: number;
+    };
+}
+
+interface GraphQlVariablesWithPagination extends Record<string, unknown> {
+    orderBy?: {
+        direction: string;
+        key: string;
+    };
+    pagination?: {
+        itemsPerPage: number;
+        itemIndex: number;
+    };
+}
 
 // Dependencies - Utilities
 import { flattenObject } from '@structure/source/utilities/Object';
 import { titleCase } from '@structure/source/utilities/String';
 
 // Component - GraphQlQueryTable
-export interface GraphQlQueryTableProperties
+export interface GraphQlQueryTableProperties<TResult = unknown, TVariables = Record<string, unknown>>
     extends Omit<TableProperties, 'columns' | 'rows' | 'pagination'> {
-    queryDocument: GraphQlDocument;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    variables?: any;
+    queryDocument: AnyTypedDocumentString<TResult, TVariables>;
+    variables?: TVariables;
     skip?: boolean;
     pagination?: {
         itemsPerPage?: number;
@@ -31,7 +59,42 @@ export interface GraphQlQueryTableProperties
 
     hideTypeColumns?: boolean;
 }
-export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
+
+// Helper function to make the query with proper typing
+function makeGraphQlQuery<TResult, TVariables>(
+    networkService: typeof import('@structure/source/services/network/NetworkService').networkService,
+    queryDocument: AnyTypedDocumentString<TResult, TVariables>,
+    variables: TVariables | undefined,
+    options: { enabled?: boolean; keepPreviousData?: boolean },
+    hasVariables: boolean,
+) {
+    // Use type assertion to handle the conditional type limitation
+    if(!hasVariables) {
+        return (
+            networkService as {
+                useGraphQlQuery<R>(
+                    query: unknown,
+                    variables: undefined,
+                    options?: unknown,
+                ): ReturnType<typeof networkService.useGraphQlQuery<R, Record<string, never>>>;
+            }
+        ).useGraphQlQuery(queryDocument, undefined, options);
+    }
+
+    return (
+        networkService as {
+            useGraphQlQuery<R, V>(
+                query: unknown,
+                variables: V,
+                options?: unknown,
+            ): ReturnType<typeof networkService.useGraphQlQuery<R, V>>;
+        }
+    ).useGraphQlQuery(queryDocument, variables, options);
+}
+
+export function GraphQlQueryTable<TResult = unknown, TVariables = Record<string, unknown>>(
+    properties: GraphQlQueryTableProperties<TResult, TVariables>,
+) {
     // State
     const [queryPagination] = React.useState({
         page: properties.pagination?.page || 1,
@@ -41,37 +104,56 @@ export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
     // Defaults
     // const hideTypeColumns = properties.hideTypeColumns ?? true;
 
-    // Hooks
-    const queryState = networkService.useGraphQlQuery(
-        properties.queryDocument,
-        {
-            ...properties.variables,
+    // Helper to determine if we have variables
+    const hasVariables = !!(properties.variables && Object.keys(properties.variables).length > 0);
+
+    // Build variables with pagination
+    const buildVariablesWithPagination = () => {
+        const baseVariables = properties.variables || {};
+        const baseWithPagination = baseVariables as Record<string, unknown> & Partial<GraphQlVariablesWithPagination>;
+
+        return {
+            ...baseVariables,
             // By default, order by createdAt descending
             orderBy: {
                 direction: 'Descending',
                 key: 'createdAt',
-                ...properties.variables?.orderBy,
+                ...baseWithPagination.orderBy,
             },
             pagination: {
                 itemsPerPage: queryPagination.itemsPerPage,
                 itemIndex: queryPagination.itemsPerPage * (queryPagination.page - 1),
-                ...properties.variables?.pagination,
+                ...baseWithPagination.pagination,
             },
-        },
-        {
-            enabled: !properties.skip,
-        }
-    );
+        };
+    };
+
+    // Hooks
+    const queryOptions = {
+        enabled: properties.skip !== true,
+        keepPreviousData: true,
+    };
+
+    // Build the query state
+    const variablesWithPagination = hasVariables ? (buildVariablesWithPagination() as TVariables) : undefined;
+
+    const queryState = makeGraphQlQuery(
+        networkService,
+        properties.queryDocument,
+        variablesWithPagination,
+        queryOptions,
+        hasVariables,
+    ) as ReturnType<typeof networkService.useGraphQlQuery<TResult, TVariables>>;
 
     // Find the data within the query
     // Our GraphQL responses are always in the form of data.$type.items and data.$type.pagination
 
     // First, loop through the data and see if there is a property that has an items property
     // If there is, then we will use that items property for our table, otherwise, we use nothing
-    const data = Object.keys(queryState.data || {}).flatMap(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (key) => queryState.data[key].items?.map((item: any) => flattenObject({ ...item })) ?? [],
-    );
+    const data = Object.keys(queryState.data || {}).flatMap((key) => {
+        const dataValue = (queryState.data as Record<string, GraphQlTableData>)[key];
+        return dataValue?.items?.map((item: GraphQlTableItem) => flattenObject({ ...item })) ?? [];
+    });
     // console.log('data', data);
 
     // Memoize the columns
@@ -80,7 +162,7 @@ export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
             const columns: TableColumnProperties[] = [];
 
             // Create the columns using the keys of the first item
-            const columnIdentifiers = data.length > 0 ? Object.keys(data[0]) : [];
+            const columnIdentifiers = data.length > 0 && data[0] ? Object.keys(data[0]) : [];
             // console.log('columnIdentifiers', columnIdentifiers);
 
             // Loop through the column identifiers and create the columns
@@ -94,7 +176,10 @@ export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
                 columns.push({
                     identifier: columnIdentifier,
                     title: columnTitle,
-                    type: inferTableColumnType(columnIdentifier, data[0][columnIdentifier]),
+                    type: inferTableColumnType(
+                        columnIdentifier,
+                        data[0]?.[columnIdentifier] as string | number | undefined,
+                    ),
                 });
             });
 
@@ -133,7 +218,7 @@ export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
                     }
 
                     return {
-                        value: cell,
+                        value: cell as string | undefined,
                     };
                 }),
             };
@@ -142,10 +227,13 @@ export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
 
     // Create the pagination object
     const queryStateDataPagination = (function () {
-        const key = Object.keys(queryState.data || {}).find(function (key) {
-            return !!queryState.data[key].pagination;
+        const dataAsRecord = queryState.data as Record<string, GraphQlTableData> | undefined;
+        if(!dataAsRecord) return undefined;
+
+        const key = Object.keys(dataAsRecord).find(function (key) {
+            return !!dataAsRecord[key]?.pagination;
         });
-        return key ? queryState.data[key].pagination : undefined;
+        return key ? dataAsRecord[key]?.pagination : undefined;
     })();
     // console.log('queryStateDataPagination', queryStateDataPagination);
 
@@ -160,24 +248,8 @@ export function GraphQlQueryTable(properties: GraphQlQueryTableProperties) {
                       await properties.pagination.onChange(itemsPerPage, page);
                   }
 
-                  //   console.log('onChange called with', { itemsPerPage, page });
-                  try {
-                      await queryState.fetchMore({
-                          variables: {
-                              pagination: {
-                                  itemIndex: (page - 1) * itemsPerPage,
-                                  itemsPerPage: itemsPerPage,
-                              },
-                          },
-                          updateQuery: function (previousResult, options) {
-                              //   console.log('updateQuery called with', { previousResult, fetchMoreResult: options.fetchMoreResult });
-                              return options.fetchMoreResult;
-                          },
-                      });
-                      //   console.log('fetchMore resolved');
-                  } catch {
-                      //   console.error('fetchMore failed');
-                  }
+                  // Since we're using keepPreviousData, we don't need fetchMore
+                  // The parent component should update state which triggers a new query
               },
           }
         : undefined;

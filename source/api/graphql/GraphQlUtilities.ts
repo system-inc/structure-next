@@ -57,11 +57,14 @@ export class GraphQlError extends Error {
     public networkError?: Error;
     public response?: GraphQlResponseInterface;
 
-    constructor(message: string, options?: {
-        graphQlErrors?: GraphQlErrorInterface[];
-        networkError?: Error;
-        response?: GraphQlResponseInterface;
-    }) {
+    constructor(
+        message: string,
+        options?: {
+            graphQlErrors?: GraphQlErrorInterface[];
+            networkError?: Error;
+            response?: GraphQlResponseInterface;
+        },
+    ) {
         super(message);
         this.name = 'GraphQlError';
         this.graphQlErrors = options?.graphQlErrors;
@@ -75,15 +78,17 @@ export function extractValidationErrors(
     error?: GraphQlError | Error | GraphQlResponseInterface,
 ): GraphQlValidationError[] | undefined {
     let graphQlError: GraphQlErrorInterface | undefined;
-    
-    if (error instanceof GraphQlError && error.graphQlErrors?.[0]) {
+
+    if(error instanceof GraphQlError && error.graphQlErrors?.[0]) {
         graphQlError = error.graphQlErrors[0];
-    } else if (error && 'errors' in error && error.errors?.[0]) {
+    }
+    else if(error && 'errors' in error && error.errors?.[0]) {
         graphQlError = error.errors[0];
-    } else if (error && 'error' in error && error.error) {
+    }
+    else if(error && 'error' in error && error.error) {
         graphQlError = error.error;
     }
-    
+
     const extensions = graphQlError?.extensions as GraphQlErrorExtensions | undefined;
     return extensions?.validationErrors;
 }
@@ -98,10 +103,11 @@ export function isUniqueConstraintError(error?: GraphQlError | Error | GraphQlRe
 export const graphQlErrorToMessage = function (mutationError?: GraphQlError | Error | GraphQlResponseInterface) {
     let errorMessage = 'Unknown error.';
     let errorObject: GraphQlErrorInterface[] | undefined;
-    
-    if (mutationError instanceof GraphQlError) {
+
+    if(mutationError instanceof GraphQlError) {
         errorObject = mutationError.graphQlErrors;
-    } else if (mutationError && 'errors' in mutationError) {
+    }
+    else if(mutationError && 'errors' in mutationError) {
         errorObject = mutationError.errors;
     }
 

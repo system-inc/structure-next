@@ -20,7 +20,7 @@ import {
 // import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
 
 // Dependencies - API
-import { networkService } from '@structure/source/api/network/NetworkService';
+import { networkService } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Services
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';

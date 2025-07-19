@@ -99,11 +99,13 @@ export async function GraphQlFormSubmissionHandler<
     }
     catch(error) {
         // Convert the error to a GraphQlError
-        if (error instanceof GraphQlError) {
+        if(error instanceof GraphQlError) {
             mutationResponseError = error;
-        } else if (error instanceof Error) {
+        }
+        else if(error instanceof Error) {
             mutationResponseError = new GraphQlError(error.message);
-        } else {
+        }
+        else {
             mutationResponseError = new GraphQlError('An unknown error occurred');
         }
     }

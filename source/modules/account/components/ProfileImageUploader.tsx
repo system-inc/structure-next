@@ -111,15 +111,20 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
 
         try {
             // Upload image to server via NetworkService
-            const profileImageUploadResponse = await networkService.request<ProfileImageUploadResponse>({
-                url: 'https://' + ProjectSettings.apis.base.host + '/accounts/profiles/images',
-                method: 'POST',
-                body: imageBlob,
-                headers: {
-                    'Content-Type': 'image/jpeg',
+            const response = await networkService.request(
+                'https://' + ProjectSettings.apis.base.host + '/accounts/profiles/images',
+                {
+                    method: 'POST',
+                    body: imageBlob,
+                    headers: {
+                        'Content-Type': 'image/jpeg',
+                    },
+                    credentials: 'include',
                 },
-                credentials: 'include',
-            });
+            );
+
+            // Parse the response JSON
+            const profileImageUploadResponse = (await response.json()) as ProfileImageUploadResponse;
 
             // Handle success with the image data
             handleSuccess(profileImageUploadResponse);

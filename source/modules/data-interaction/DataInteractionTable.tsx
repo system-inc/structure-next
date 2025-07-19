@@ -421,7 +421,13 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
                     dataInteractionDatabaseTableRowsRequest.isLoading ||
                     (!dataInteractionDatabaseTableRowsRequest.error && !dataInteractionDatabaseTableRowsRequest.data)
                 }
-                error={dataInteractionDatabaseTableRowsRequest.error}
+                error={
+                    dataInteractionDatabaseTableRowsRequest.error
+                        ? {
+                              message: dataInteractionDatabaseTableRowsRequest.error.message,
+                          }
+                        : undefined
+                }
             />
 
             {/* FIXME: Uncomment after fixing above table rendering issues. */}

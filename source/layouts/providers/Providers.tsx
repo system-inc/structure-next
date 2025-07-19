@@ -11,7 +11,6 @@ import { CookiesProvider } from '@structure/source/utilities/cookies/CookiesProv
 import { Cookies } from '@structure/source/utilities/cookies/Cookies';
 
 // Dependencies - State Providers
-import { ApolloProvider } from '@structure/source/api/apollo/ApolloProvider';
 import { WebSocketViaSharedWorkerProvider } from '@structure/source/api/web-sockets/providers/WebSocketViaSharedWorkerProvider';
 import { AccountProvider } from '@structure/source/modules/account/providers/AccountProvider';
 import { SharedStateProvider } from '@structure/source/utilities/shared-state/SharedStateProvider';
@@ -60,32 +59,30 @@ export function Providers(properties: ProvidersProperties) {
             <CookiesProvider cookies={Cookies}>
                 {/* State Providers */}
                 <StateProviders>
-                    <ApolloProvider>
-                        <WebSocketViaSharedWorkerProvider>
-                            <SharedStateProvider>
-                                <AccountProvider signedIn={properties.accountSignedIn}>
-                                    {/* Theme Providers */}
-                                    <ThemeProviders>
-                                        <ThemeProvider>
-                                            {/* Feature Providers */}
-                                            <FeatureProviders>
-                                                <EngagementProvider>
-                                                    {/* Interaction Providers */}
-                                                    <InteractionProviders>
-                                                        <NoticeProvider>
-                                                            <TipProvider delayDuration={100}>
-                                                                {properties.children}
-                                                            </TipProvider>
-                                                        </NoticeProvider>
-                                                    </InteractionProviders>
-                                                </EngagementProvider>
-                                            </FeatureProviders>
-                                        </ThemeProvider>
-                                    </ThemeProviders>
-                                </AccountProvider>
-                            </SharedStateProvider>
-                        </WebSocketViaSharedWorkerProvider>
-                    </ApolloProvider>
+                    <WebSocketViaSharedWorkerProvider>
+                        <SharedStateProvider>
+                            <AccountProvider signedIn={properties.accountSignedIn}>
+                                {/* Theme Providers */}
+                                <ThemeProviders>
+                                    <ThemeProvider>
+                                        {/* Feature Providers */}
+                                        <FeatureProviders>
+                                            <EngagementProvider>
+                                                {/* Interaction Providers */}
+                                                <InteractionProviders>
+                                                    <NoticeProvider>
+                                                        <TipProvider delayDuration={100}>
+                                                            {properties.children}
+                                                        </TipProvider>
+                                                    </NoticeProvider>
+                                                </InteractionProviders>
+                                            </EngagementProvider>
+                                        </FeatureProviders>
+                                    </ThemeProvider>
+                                </ThemeProviders>
+                            </AccountProvider>
+                        </SharedStateProvider>
+                    </WebSocketViaSharedWorkerProvider>
                 </StateProviders>
             </CookiesProvider>
         </FoundationProviders>
