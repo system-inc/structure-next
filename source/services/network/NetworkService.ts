@@ -351,7 +351,14 @@ export class NetworkService {
         console.warn('Failed to fetch deviceId after 3 attempts:', lastError);
     }
 
-    // Direct request method (fetch proxy with deviceId handling)
+    /**
+     * Direct request method (fetch proxy with deviceId handling and smart credentials)
+     *
+     * Automatically includes credentials for internal API calls:
+     * - Internal API calls get `credentials: 'include'`
+     * - External API calls use browser default (`credentials: 'same-origin'`)
+     * - Can be overridden by explicitly setting credentials in options
+     */
     async request(input: RequestInfo | URL, options?: RequestInit): Promise<Response> {
         // Ensure deviceId before making the request (skip on server-side)
         if(!this.isServerSide()) {
@@ -373,9 +380,49 @@ export class NetworkService {
                       : input;
         }
 
+        // Determine if this is an internal API call
+        let isInternalApi = false;
+        if(ProjectSettings.apis?.base?.host) {
+            const apiHost = ProjectSettings.apis.base.host;
+
+            // Extract the base domain from the API host (e.g., "domain.com" from "api.domain.com")
+            const baseDomain = apiHost.split('.').slice(-2).join('.');
+
+            // Helper function to check if a hostname belongs to the internal domain
+            const isInternalDomain = (hostname: string) => {
+                return hostname === apiHost || hostname.endsWith('.' + baseDomain);
+            };
+
+            if(typeof input === 'string') {
+                try {
+                    const url = new URL(input);
+                    isInternalApi = isInternalDomain(url.hostname);
+                } catch {
+                    // If URL parsing fails, fall back to simple string check
+                    isInternalApi = input.includes(apiHost);
+                }
+            }
+            else if(input instanceof URL) {
+                isInternalApi = isInternalDomain(input.hostname);
+            }
+            else if(input instanceof Request) {
+                const requestUrl = new URL(input.url);
+                isInternalApi = isInternalDomain(requestUrl.hostname);
+            }
+        }
+
+        // Build final options with smart credential defaults
+        const finalOptions: RequestInit = {
+            ...options,
+            // Only set credentials if not explicitly provided
+            ...(options?.credentials === undefined && isInternalApi
+                ? { credentials: 'include' as RequestCredentials }
+                : {}),
+        };
+
         // Skip statistics tracking on server-side to avoid state pollution
         if(this.isServerSide()) {
-            return fetchMethod(finalInput, options);
+            return fetchMethod(finalInput, finalOptions);
         }
 
         // Client-side path with full statistics tracking
@@ -399,7 +446,7 @@ export class NetworkService {
             }
 
             // Make the actual request
-            const response = await fetchMethod(finalInput, options);
+            const response = await fetchMethod(finalInput, finalOptions);
 
             // Update statistics based on response
             if(response.ok) {
@@ -449,7 +496,6 @@ export class NetworkService {
                 ...options?.headers,
             },
             body,
-            credentials: 'include',
         });
 
         const responseText = await response.text();

@@ -9,10 +9,19 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - API
+import { gql } from '@structure/source/services/network/NetworkService';
 import { WaitListEntryCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// Dependencies - API
 import { isUniqueConstraintError } from '@structure/source/api/graphql/GraphQlUtilities';
+
+// GraphQL Operations
+gql(`
+    mutation WaitListEntryCreate($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
+        waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: $waitListIdentifier) {
+            id
+            emailAddress
+        }
+    }
+`);
 
 // Component - WaitListForm
 export function WaitListForm() {

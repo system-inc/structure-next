@@ -9,10 +9,24 @@ import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryT
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - API
+import { gql } from '@structure/source/services/network/NetworkService';
 import {
-    WaitListsPrivilegedDocument,
     WaitListCreatePrivilegedOperation,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+
+// GraphQL Operations
+gql(`
+    mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
+        waitListCreatePrivileged(data: $data) {
+            id
+            identifier
+            title
+            description
+            updatedAt
+            createdAt
+        }
+    }
+`);
 
 // Component - UsersWaitListsPage
 export function UsersWaitListsPage() {
@@ -25,7 +39,32 @@ export function UsersWaitListsPage() {
 
             <GraphQlOperationForm className="mb-12" operation={WaitListCreatePrivilegedOperation} />
 
-            <GraphQlQueryTable className="" queryDocument={WaitListsPrivilegedDocument} />
+            <GraphQlQueryTable 
+                className="" 
+                queryDocument={gql(`
+                    query WaitListsPrivileged($pagination: PaginationInput!) {
+                        waitListsPrivileged(pagination: $pagination) {
+                            pagination {
+                                itemIndex
+                                itemIndexForNextPage
+                                itemIndexForPreviousPage
+                                itemsPerPage
+                                itemsTotal
+                                page
+                                pagesTotal
+                            }
+                            items {
+                                id
+                                identifier
+                                title
+                                description
+                                updatedAt
+                                createdAt
+                            }
+                        }
+                    }
+                `)} 
+            />
         </div>
     );
 }

@@ -119,7 +119,6 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                     headers: {
                         'Content-Type': 'image/jpeg',
                     },
-                    credentials: 'include',
                 },
             );
 

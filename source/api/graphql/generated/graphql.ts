@@ -3804,6 +3804,102 @@ export type WarehouseUpdateInput = {
     name?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type NoOpQueryVariables = Exact<{ [key: string]: never }>;
+
+export type NoOpQuery = { __typename: 'Query' };
+
+export type AccountAccessRolesPrivilegedQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountAccessRolesPrivilegedQuery = {
+    __typename?: 'Query';
+    accountAccessRolesPrivileged: Array<{ __typename?: 'AccessRole'; type: string; description?: string | null }>;
+};
+
+export type AccountPrivilegedQueryVariables = Exact<{
+    input: AccountInput;
+}>;
+
+export type AccountPrivilegedQuery = {
+    __typename?: 'Query';
+    accountPrivileged?: {
+        __typename?: 'Account';
+        profiles: Array<{
+            __typename?: 'Profile';
+            username: string;
+            displayName?: string | null;
+            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+        }>;
+    } | null;
+};
+
+export type AccountAccessRoleAssignmentCreatePrivilegedMutationVariables = Exact<{
+    input: AccessRoleAssignmentCreateInput;
+}>;
+
+export type AccountAccessRoleAssignmentCreatePrivilegedMutation = {
+    __typename?: 'Mutation';
+    accountAccessRoleAssignmentCreatePrivileged: {
+        __typename?: 'AccessRoleAssignment';
+        id: string;
+        status: AccessRoleStatus;
+        expiresAt?: any | null;
+        createdAt: any;
+        updatedAt: any;
+        accessRole: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null };
+        profile: {
+            __typename?: 'Profile';
+            username: string;
+            displayName?: string | null;
+            createdAt: any;
+            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+        };
+    };
+};
+
+export type AccountProfileImageRemoveMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountProfileImageRemoveMutation = {
+    __typename?: 'Mutation';
+    accountProfileImageRemove: {
+        __typename?: 'Profile';
+        images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+    };
+};
+
+export type AccountAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountAuthenticationQuery = {
+    __typename?: 'Query';
+    accountAuthentication?: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        updatedAt: any;
+        createdAt: any;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    } | null;
+};
+
+export type AccountAuthenticationRegistrationCompleteMutationVariables = Exact<{
+    input: AccountRegistrationCompleteInput;
+}>;
+
+export type AccountAuthenticationRegistrationCompleteMutation = {
+    __typename?: 'Mutation';
+    accountAuthenticationRegistrationComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
+};
+
+export type AccountAuthenticationSignInCompleteMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountAuthenticationSignInCompleteMutation = {
+    __typename?: 'Mutation';
+    accountAuthenticationSignInComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
+};
+
 export type AccountAuthenticationRegistrationOrSignInCreateMutationVariables = Exact<{
     input: AccountRegistrationOrSignInCreateInput;
 }>;
@@ -3828,63 +3924,15 @@ export type AccountAuthenticationRegistrationOrSignInCreateMutation = {
     };
 };
 
-export type AccountAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountAuthenticationPasswordVerifyMutationVariables = Exact<{
+    input: AccountPasswordVerifyInput;
+}>;
 
-export type AccountAuthenticationQuery = {
-    __typename?: 'Query';
-    accountAuthentication?: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        updatedAt: any;
-        createdAt: any;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    } | null;
-};
-
-export type AccountAuthenticationEmailVerificationQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountAuthenticationEmailVerificationQuery = {
-    __typename?: 'Query';
-    accountAuthenticationEmailVerification?: {
-        __typename?: 'AuthenticationEmailVerification';
-        verification: {
-            __typename?: 'EmailVerification';
-            status: EmailVerificationStatus;
-            emailAddress: string;
-            lastEmailSentAt?: any | null;
-        };
-        authentication: {
-            __typename?: 'AuthenticationSession';
-            status: AuthenticationSessionStatus;
-            scopeType: string;
-            updatedAt: any;
-            createdAt: any;
-            currentChallenge?: {
-                __typename?: 'AuthenticationChallenge';
-                challengeType: string;
-                status: AuthenticationChallengeStatus;
-            } | null;
-        };
-    } | null;
-};
-
-export type AccountAuthenticationEmailVerificationSendMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountAuthenticationEmailVerificationSendMutation = {
+export type AccountAuthenticationPasswordVerifyMutation = {
     __typename?: 'Mutation';
-    accountAuthenticationEmailVerificationSend: {
-        __typename?: 'AuthenticationEmailVerification';
-        verification: {
-            __typename?: 'EmailVerification';
-            status: EmailVerificationStatus;
-            emailAddress: string;
-            lastEmailSentAt?: any | null;
-        };
+    accountAuthenticationPasswordVerify: {
+        __typename?: 'AuthenticationOperationResult';
+        success: boolean;
         authentication: {
             __typename?: 'AuthenticationSession';
             status: AuthenticationSessionStatus;
@@ -3929,15 +3977,18 @@ export type AccountAuthenticationEmailVerificationVerifyMutation = {
     };
 };
 
-export type AccountAuthenticationPasswordVerifyMutationVariables = Exact<{
-    input: AccountPasswordVerifyInput;
-}>;
+export type AccountAuthenticationEmailVerificationSendMutationVariables = Exact<{ [key: string]: never }>;
 
-export type AccountAuthenticationPasswordVerifyMutation = {
+export type AccountAuthenticationEmailVerificationSendMutation = {
     __typename?: 'Mutation';
-    accountAuthenticationPasswordVerify: {
-        __typename?: 'AuthenticationOperationResult';
-        success: boolean;
+    accountAuthenticationEmailVerificationSend: {
+        __typename?: 'AuthenticationEmailVerification';
+        verification: {
+            __typename?: 'EmailVerification';
+            status: EmailVerificationStatus;
+            emailAddress: string;
+            lastEmailSentAt?: any | null;
+        };
         authentication: {
             __typename?: 'AuthenticationSession';
             status: AuthenticationSessionStatus;
@@ -3951,103 +4002,6 @@ export type AccountAuthenticationPasswordVerifyMutation = {
             } | null;
         };
     };
-};
-
-export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountMaintenanceSessionCreateMutation = {
-    __typename?: 'Mutation';
-    accountMaintenanceSessionCreate: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        updatedAt: any;
-        createdAt: any;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    };
-};
-
-export type AccountAuthenticationRegistrationCompleteMutationVariables = Exact<{
-    input: AccountRegistrationCompleteInput;
-}>;
-
-export type AccountAuthenticationRegistrationCompleteMutation = {
-    __typename?: 'Mutation';
-    accountAuthenticationRegistrationComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
-};
-
-export type AccountAuthenticationSignInCompleteMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountAuthenticationSignInCompleteMutation = {
-    __typename?: 'Mutation';
-    accountAuthenticationSignInComplete: { __typename?: 'AuthenticationOperationResult'; success: boolean };
-};
-
-export type AccountPasswordUpdateMutationVariables = Exact<{
-    input: AccountPasswordUpdateInput;
-}>;
-
-export type AccountPasswordUpdateMutation = {
-    __typename?: 'Mutation';
-    accountPasswordUpdate: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type AccountSignOutMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountSignOutMutation = {
-    __typename?: 'Mutation';
-    accountSignOut: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type AccountQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountQuery = {
-    __typename?: 'Query';
-    account: {
-        __typename?: 'Account';
-        emailAddress: string;
-        accessRoles: Array<string>;
-        createdAt: any;
-        profile: {
-            __typename?: 'Profile';
-            id: string;
-            username: string;
-            displayName?: string | null;
-            givenName?: string | null;
-            familyName?: string | null;
-            updatedAt: any;
-            createdAt: any;
-            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
-        };
-    };
-};
-
-export type AccountPrivilegedQueryVariables = Exact<{
-    input: AccountInput;
-}>;
-
-export type AccountPrivilegedQuery = {
-    __typename?: 'Query';
-    accountPrivileged?: {
-        __typename?: 'Account';
-        emailAddress: string;
-        accessRoles: Array<string>;
-        createdAt: any;
-        profiles: Array<{
-            __typename?: 'Profile';
-            username: string;
-            displayName?: string | null;
-            givenName?: string | null;
-            familyName?: string | null;
-            updatedAt: any;
-            createdAt: any;
-            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
-        }>;
-    } | null;
 };
 
 export type AccountsPrivilegedQueryVariables = Exact<{
@@ -4086,69 +4040,17 @@ export type AccountsPrivilegedQuery = {
     };
 };
 
-export type AccountProfileUsernameValidateQueryVariables = Exact<{
-    username: Scalars['String']['input'];
+export type AccountDeletePrivilegedMutationVariables = Exact<{
+    input: AccountDeleteInput;
 }>;
 
-export type AccountProfileUsernameValidateQuery = {
-    __typename?: 'Query';
-    accountProfileUsernameValidate: UniqueFieldValidationResult;
-};
-
-export type AccountEnrolledChallengesQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountEnrolledChallengesQuery = {
-    __typename?: 'Query';
-    account: { __typename?: 'Account'; enrolledChallenges: Array<string> };
-};
-
-export type AccountProfileUpdateMutationVariables = Exact<{
-    input: AccountProfileUpdateInput;
-}>;
-
-export type AccountProfileUpdateMutation = {
+export type AccountDeletePrivilegedMutation = {
     __typename?: 'Mutation';
-    accountProfileUpdate: {
-        __typename?: 'Profile';
-        username: string;
-        displayName?: string | null;
-        givenName?: string | null;
-        familyName?: string | null;
-        updatedAt: any;
-        createdAt: any;
-        images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
-    };
-};
-
-export type AccountProfilePublicQueryVariables = Exact<{
-    username: Scalars['String']['input'];
-}>;
-
-export type AccountProfilePublicQuery = {
-    __typename?: 'Query';
-    accountProfilePublic?: {
-        __typename?: 'PublicProfile';
-        username: string;
-        displayName?: string | null;
-        createdAt?: any | null;
-        images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
-    } | null;
-};
-
-export type AccountAccessRolesPrivilegedQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountAccessRolesPrivilegedQuery = {
-    __typename?: 'Query';
-    accountAccessRolesPrivileged: Array<{
-        __typename?: 'AccessRole';
-        id: string;
-        type: string;
-        description?: string | null;
-    }>;
+    accountDeletePrivileged: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type AccountAccessRoleAssignmentsPrivilegedQueryVariables = Exact<{
-    statuses?: InputMaybe<Array<AccessRoleStatus> | AccessRoleStatus>;
+    statuses: Array<AccessRoleStatus> | AccessRoleStatus;
     pagination: PaginationInput;
 }>;
 
@@ -4195,33 +4097,112 @@ export type AccountAccessRoleAssignmentRevokePrivilegedMutation = {
     accountAccessRoleAssignmentRevokePrivileged: { __typename?: 'OperationResult'; success: boolean };
 };
 
-export type AccountAccessRoleAssignmentCreatePrivilegedMutationVariables = Exact<{
-    input: AccessRoleAssignmentCreateInput;
+export type WaitListCreatePrivilegedMutationVariables = Exact<{
+    data: WaitListCreationInput;
 }>;
 
-export type AccountAccessRoleAssignmentCreatePrivilegedMutation = {
+export type WaitListCreatePrivilegedMutation = {
     __typename?: 'Mutation';
-    accountAccessRoleAssignmentCreatePrivileged: {
-        __typename?: 'AccessRoleAssignment';
+    waitListCreatePrivileged: {
+        __typename?: 'WaitList';
         id: string;
-        status: AccessRoleStatus;
-        expiresAt?: any | null;
-        createdAt: any;
+        identifier: string;
+        title: string;
+        description?: string | null;
         updatedAt: any;
-        accessRole: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null };
-        profile: {
-            __typename?: 'Profile';
-            username: string;
-            displayName?: string | null;
-            createdAt: any;
-            images?: Array<{
-                __typename?: 'ImageObject';
-                type: MediaObjectType;
-                url: string;
-                variant?: string | null;
-            }> | null;
-        };
+        createdAt: any;
     };
+};
+
+export type WaitListsPrivilegedQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type WaitListsPrivilegedQuery = {
+    __typename?: 'Query';
+    waitListsPrivileged: {
+        __typename?: 'WaitListResult';
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForNextPage?: number | null;
+            itemIndexForPreviousPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            page: number;
+            pagesTotal: number;
+        };
+        items: Array<{
+            __typename?: 'WaitList';
+            id: string;
+            identifier: string;
+            title: string;
+            description?: string | null;
+            updatedAt: any;
+            createdAt: any;
+        }>;
+    };
+};
+
+export type AccountProfileUpdateMutationVariables = Exact<{
+    input: AccountProfileUpdateInput;
+}>;
+
+export type AccountProfileUpdateMutation = {
+    __typename?: 'Mutation';
+    accountProfileUpdate: {
+        __typename?: 'Profile';
+        username: string;
+        displayName?: string | null;
+        givenName?: string | null;
+        familyName?: string | null;
+        updatedAt: any;
+        createdAt: any;
+        images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+    };
+};
+
+export type AccountProfileUsernameValidateQueryVariables = Exact<{
+    username: Scalars['String']['input'];
+}>;
+
+export type AccountProfileUsernameValidateQuery = {
+    __typename?: 'Query';
+    accountProfileUsernameValidate: UniqueFieldValidationResult;
+};
+
+export type AccountEnrolledChallengesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountEnrolledChallengesQuery = {
+    __typename?: 'Query';
+    account: { __typename?: 'Account'; enrolledChallenges: Array<string> };
+};
+
+export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountMaintenanceSessionCreateMutation = {
+    __typename?: 'Mutation';
+    accountMaintenanceSessionCreate: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        updatedAt: any;
+        createdAt: any;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    };
+};
+
+export type AccountPasswordUpdateMutationVariables = Exact<{
+    input: AccountPasswordUpdateInput;
+}>;
+
+export type AccountPasswordUpdateMutation = {
+    __typename?: 'Mutation';
+    accountPasswordUpdate: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type AccountDeleteMutationVariables = Exact<{
@@ -4233,418 +4214,49 @@ export type AccountDeleteMutation = {
     accountDelete: { __typename?: 'OperationResult'; success: boolean };
 };
 
-export type AccountDeletePrivilegedMutationVariables = Exact<{
-    input: AccountDeleteInput;
+export type AccountProfilePublicQueryVariables = Exact<{
+    username: Scalars['String']['input'];
 }>;
 
-export type AccountDeletePrivilegedMutation = {
-    __typename?: 'Mutation';
-    accountDeletePrivileged: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type AccountProfileImageRemoveMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountProfileImageRemoveMutation = {
-    __typename?: 'Mutation';
-    accountProfileImageRemove: {
-        __typename?: 'Profile';
-        id: string;
+export type AccountProfilePublicQuery = {
+    __typename?: 'Query';
+    accountProfilePublic?: {
+        __typename?: 'PublicProfile';
         username: string;
         displayName?: string | null;
-        updatedAt: any;
-        createdAt: any;
+        createdAt?: any | null;
         images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
-    };
+    } | null;
 };
 
-export type CommerceCheckoutSessionCreateDirectMutationVariables = Exact<{
-    input: CommerceCheckoutSessionCreateDirectInput;
-}>;
+export type AccountSignOutMutationVariables = Exact<{ [key: string]: never }>;
 
-export type CommerceCheckoutSessionCreateDirectMutation = {
+export type AccountSignOutMutation = {
     __typename?: 'Mutation';
-    commerceCheckoutSessionCreateDirect: {
-        __typename?: 'CommerceCheckoutSession';
-        id: string;
-        externalMetadata?: any | null;
+    accountSignOut: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type AccountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountQuery = {
+    __typename?: 'Query';
+    account: {
+        __typename?: 'Account';
+        emailAddress: string;
+        accessRoles: Array<string>;
         createdAt: any;
-    };
-};
-
-export type CommerceOrdersByCheckoutSessionQueryVariables = Exact<{
-    checkoutSessionId: Scalars['String']['input'];
-}>;
-
-export type CommerceOrdersByCheckoutSessionQuery = {
-    __typename?: 'Query';
-    commerceOrdersByCheckoutSession: Array<
-        | {
-              __typename?: 'CommerceOrder';
-              identifier: string;
-              status: CommerceOrderStatus;
-              paymentStatus?: PaymentStatus | null;
-              fulfillmentStatus: CommerceOrderFulfillmentStatus;
-              emailAddress: string;
-              createdAt: any;
-              lineItems?: Array<{
-                  __typename?: 'CommerceOrderLineItem';
-                  id: string;
-                  indexId: number;
-                  status: CommerceOrderLineItemStatus;
-                  productVariantId: string;
-                  quantity: number;
-              }> | null;
-              shippingInfo?: {
-                  __typename?: 'CommerceOrderShippingInfo';
-                  shippingAddress: {
-                      __typename?: 'StreetAddressObject';
-                      firstName: string;
-                      lastName: string;
-                      company?: string | null;
-                      phoneNumber?: string | null;
-                      line1: string;
-                      line2?: string | null;
-                      city: string;
-                      state: string;
-                      postalCode: string;
-                      country: string;
-                  };
-              } | null;
-              payment?: {
-                  __typename?: 'Payment';
-                  paymentMethod?:
-                      | { __typename?: 'PaymentMethodAppleInAppPurchase' }
-                      | {
-                            __typename?: 'PaymentMethodCreditCard';
-                            type: PaymentMethodType;
-                            last4: string;
-                            cardType: CreditCardType;
-                            billingAddress: {
-                                __typename?: 'StreetAddressObject';
-                                firstName: string;
-                                lastName: string;
-                                company?: string | null;
-                                phoneNumber?: string | null;
-                                line1: string;
-                                line2?: string | null;
-                                city: string;
-                                state: string;
-                                postalCode: string;
-                                country: string;
-                            };
-                        }
-                      | null;
-              } | null;
-              priceInfo: {
-                  __typename?: 'CommerceOrderPrice';
-                  currencyCode: string;
-                  originalSubtotal: any;
-                  subtotal: any;
-                  amount: any;
-                  shippingRate: { __typename?: 'CommerceOrderShippingRate'; originalAmount: any; amount: any };
-                  tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
-              };
-              appliedDiscounts?: Array<{
-                  __typename?: 'CommerceOrderDiscount';
-                  amount: any;
-                  code?: string | null;
-                  items?: Array<{
-                      __typename?: 'CommerceOrderLineItemDiscount';
-                      indexId: number;
-                      unitAmount?: any | null;
-                      amount: any;
-                  }> | null;
-              }> | null;
-          }
-        | {
-              __typename?: 'PublicCommerceOrder';
-              identifier: string;
-              status: CommerceOrderStatus;
-              paymentStatus?: PaymentStatus | null;
-              fulfillmentStatus: CommerceOrderFulfillmentStatus;
-              createdAt: any;
-              lineItems?: Array<{
-                  __typename?: 'PublicCommerceOrderLineItem';
-                  id: string;
-                  indexId: number;
-                  status: CommerceOrderLineItemStatus;
-                  productVariantId: string;
-                  quantity: number;
-              }> | null;
-              priceInfo: {
-                  __typename?: 'CommerceOrderPrice';
-                  currencyCode: string;
-                  originalSubtotal: any;
-                  subtotal: any;
-                  amount: any;
-                  shippingRate: { __typename?: 'CommerceOrderShippingRate'; originalAmount: any; amount: any };
-                  tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
-              };
-              appliedDiscounts?: Array<{
-                  __typename?: 'CommerceOrderDiscount';
-                  amount: any;
-                  code?: string | null;
-                  items?: Array<{
-                      __typename?: 'CommerceOrderLineItemDiscount';
-                      indexId: number;
-                      unitAmount?: any | null;
-                      amount: any;
-                  }> | null;
-              }> | null;
-          }
-    >;
-};
-
-export type CommerceOrdersQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type CommerceOrdersQuery = {
-    __typename?: 'Query';
-    commerceOrders: {
-        __typename?: 'PaginationOrderResult';
-        items: Array<{
-            __typename?: 'CommerceOrder';
+        profile: {
+            __typename?: 'Profile';
             id: string;
-            identifier: string;
-            status: CommerceOrderStatus;
-            paymentStatus?: PaymentStatus | null;
-            fulfillmentStatus: CommerceOrderFulfillmentStatus;
+            username: string;
+            displayName?: string | null;
+            givenName?: string | null;
+            familyName?: string | null;
             updatedAt: any;
             createdAt: any;
-            lineItems?: Array<{
-                __typename?: 'CommerceOrderLineItem';
-                id: string;
-                indexId: number;
-                status: CommerceOrderLineItemStatus;
-                productVariantId: string;
-                quantity: number;
-            }> | null;
-            shipments?: Array<{
-                __typename?: 'Shipment';
-                id: string;
-                orderIndexId: number;
-                status: ShipmentStatus;
-                shippedAt?: any | null;
-                deliveredAt?: any | null;
-                cancelledAt?: any | null;
-                label?: {
-                    __typename?: 'ShippingLabel';
-                    carrier: string;
-                    serviceType: ShippingServiceType;
-                    trackingNumber: string;
-                    trackingUrl?: string | null;
-                } | null;
-                packageInfo: {
-                    __typename?: 'ShippingPackageInfo';
-                    items: Array<{ __typename?: 'ShippingPackageItem'; indexId: number; quantity: number }>;
-                };
-            }> | null;
-            priceInfo: {
-                __typename?: 'CommerceOrderPrice';
-                amount: any;
-                originalSubtotal: any;
-                lineItemPrices: Array<{
-                    __typename?: 'CommerceOrderLineItemPrice';
-                    indexId: number;
-                    originalSubtotal: any;
-                    originalUnitPrice?: any | null;
-                    subtotal: any;
-                    unitPrice?: any | null;
-                }>;
-            };
-            appliedDiscounts?: Array<{
-                __typename?: 'CommerceOrderDiscount';
-                amount: any;
-                code?: string | null;
-                items?: Array<{
-                    __typename?: 'CommerceOrderLineItemDiscount';
-                    indexId: number;
-                    unitAmount?: any | null;
-                    amount: any;
-                }> | null;
-            }> | null;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            page: number;
-            pagesTotal: number;
+            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
         };
     };
-};
-
-export type CommerceOrderQueryVariables = Exact<{
-    orderIdentifier: Scalars['String']['input'];
-}>;
-
-export type CommerceOrderQuery = {
-    __typename?: 'Query';
-    commerceOrder:
-        | {
-              __typename?: 'CommerceOrder';
-              identifier: string;
-              status: CommerceOrderStatus;
-              paymentStatus?: PaymentStatus | null;
-              fulfillmentStatus: CommerceOrderFulfillmentStatus;
-              emailAddress: string;
-              createdAt: any;
-              statusRecords?: Array<{
-                  __typename?: 'StatusRecord';
-                  status: string;
-                  timestamp: any;
-                  description?: string | null;
-              }> | null;
-              lineItems?: Array<{
-                  __typename?: 'CommerceOrderLineItem';
-                  id: string;
-                  indexId: number;
-                  status: CommerceOrderLineItemStatus;
-                  productVariantId: string;
-                  quantity: number;
-                  updatedAt: any;
-                  createdAt: any;
-              }> | null;
-              shipments?: Array<{
-                  __typename?: 'Shipment';
-                  id: string;
-                  orderIndexId: number;
-                  status: ShipmentStatus;
-                  shippedAt?: any | null;
-                  deliveredAt?: any | null;
-                  cancelledAt?: any | null;
-                  updatedAt: any;
-                  createdAt: any;
-                  label?: {
-                      __typename?: 'ShippingLabel';
-                      carrier: string;
-                      serviceType: ShippingServiceType;
-                      trackingNumber: string;
-                      trackingUrl?: string | null;
-                  } | null;
-                  packageInfo: {
-                      __typename?: 'ShippingPackageInfo';
-                      items: Array<{ __typename?: 'ShippingPackageItem'; indexId: number; quantity: number }>;
-                  };
-              }> | null;
-              shippingInfo?: {
-                  __typename?: 'CommerceOrderShippingInfo';
-                  shippingAddress: {
-                      __typename?: 'StreetAddressObject';
-                      firstName: string;
-                      lastName: string;
-                      company?: string | null;
-                      phoneNumber?: string | null;
-                      line1: string;
-                      line2?: string | null;
-                      city: string;
-                      state: string;
-                      postalCode: string;
-                      country: string;
-                  };
-              } | null;
-              payment?: {
-                  __typename?: 'Payment';
-                  paymentMethod?:
-                      | { __typename?: 'PaymentMethodAppleInAppPurchase' }
-                      | {
-                            __typename?: 'PaymentMethodCreditCard';
-                            type: PaymentMethodType;
-                            last4: string;
-                            cardType: CreditCardType;
-                            billingAddress: {
-                                __typename?: 'StreetAddressObject';
-                                firstName: string;
-                                lastName: string;
-                                company?: string | null;
-                                phoneNumber?: string | null;
-                                line1: string;
-                                line2?: string | null;
-                                city: string;
-                                state: string;
-                                postalCode: string;
-                                country: string;
-                            };
-                        }
-                      | null;
-              } | null;
-              priceInfo: {
-                  __typename?: 'CommerceOrderPrice';
-                  currencyCode: string;
-                  originalSubtotal: any;
-                  subtotal: any;
-                  amount: any;
-                  shippingRate: { __typename?: 'CommerceOrderShippingRate'; originalAmount: any; amount: any };
-                  tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
-                  lineItemPrices: Array<{
-                      __typename?: 'CommerceOrderLineItemPrice';
-                      indexId: number;
-                      originalSubtotal: any;
-                      originalUnitPrice?: any | null;
-                      subtotal: any;
-                      unitPrice?: any | null;
-                  }>;
-              };
-              appliedDiscounts?: Array<{
-                  __typename?: 'CommerceOrderDiscount';
-                  amount: any;
-                  code?: string | null;
-                  items?: Array<{
-                      __typename?: 'CommerceOrderLineItemDiscount';
-                      indexId: number;
-                      unitAmount?: any | null;
-                      amount: any;
-                  }> | null;
-              }> | null;
-          }
-        | {
-              __typename?: 'PublicCommerceOrder';
-              identifier: string;
-              status: CommerceOrderStatus;
-              paymentStatus?: PaymentStatus | null;
-              fulfillmentStatus: CommerceOrderFulfillmentStatus;
-              createdAt: any;
-              lineItems?: Array<{
-                  __typename?: 'PublicCommerceOrderLineItem';
-                  id: string;
-                  indexId: number;
-                  status: CommerceOrderLineItemStatus;
-                  productVariantId: string;
-                  quantity: number;
-              }> | null;
-              priceInfo: {
-                  __typename?: 'CommerceOrderPrice';
-                  currencyCode: string;
-                  originalSubtotal: any;
-                  subtotal: any;
-                  amount: any;
-                  shippingRate: { __typename?: 'CommerceOrderShippingRate'; originalAmount: any; amount: any };
-                  tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
-                  lineItemPrices: Array<{
-                      __typename?: 'CommerceOrderLineItemPrice';
-                      indexId: number;
-                      originalSubtotal: any;
-                      originalUnitPrice?: any | null;
-                      subtotal: any;
-                      unitPrice?: any | null;
-                  }>;
-              };
-              appliedDiscounts?: Array<{
-                  __typename?: 'CommerceOrderDiscount';
-                  amount: any;
-                  code?: string | null;
-                  items?: Array<{
-                      __typename?: 'CommerceOrderLineItemDiscount';
-                      indexId: number;
-                      unitAmount?: any | null;
-                      amount: any;
-                  }> | null;
-              }> | null;
-          };
 };
 
 export type CommerceOrdersPrivilegedQueryVariables = Exact<{
@@ -4806,15 +4418,42 @@ export type CommerceOrdersPrivilegedQuery = {
     };
 };
 
-export type CommerceOrdersPrivilegedChartQueryVariables = Exact<{
+export type DataInteractionDatabaseTableRowsQueryVariables = Exact<{
+    databaseName: Scalars['String']['input'];
+    tableName: Scalars['String']['input'];
     pagination: PaginationInput;
+    filters?: InputMaybe<ColumnFilterGroupInput>;
 }>;
 
-export type CommerceOrdersPrivilegedChartQuery = {
+export type DataInteractionDatabaseTableRowsQuery = {
     __typename?: 'Query';
-    commerceOrdersPrivileged: {
-        __typename?: 'PaginationOrderResult';
-        items: Array<{ __typename?: 'CommerceOrder'; createdAt: any }>;
+    dataInteractionDatabaseTableRows: {
+        __typename?: 'DatabaseTableMetadataWithRows';
+        items: Array<any>;
+        databaseName: string;
+        tableName: string;
+        rowCount: number;
+        columns?: Array<{
+            __typename?: 'DatabaseTableColumn';
+            name: string;
+            type: string;
+            isKey: boolean;
+            isPrimaryKey: boolean;
+            keyTableName?: string | null;
+            possibleValues?: Array<string> | null;
+            isNullable: boolean;
+            isGenerated: boolean;
+            length: string;
+        }> | null;
+        relations?: Array<{
+            __typename?: 'DatabaseTableRelation';
+            fieldName: string;
+            tableName: string;
+            type: string;
+            inverseFieldName?: string | null;
+            inverseType?: string | null;
+            inverseTableName?: string | null;
+        }> | null;
         pagination: {
             __typename?: 'Pagination';
             itemIndex: number;
@@ -4822,19 +4461,346 @@ export type CommerceOrdersPrivilegedChartQuery = {
             itemIndexForNextPage?: number | null;
             itemsPerPage: number;
             itemsTotal: number;
+            pagesTotal: number;
+            page: number;
         };
     };
 };
 
-export type DataInteractionDatabasesQueryVariables = Exact<{
+export type EngagementEventCreateMutationVariables = Exact<{
+    input: CreateEngagementEventInput;
+}>;
+
+export type EngagementEventCreateMutation = {
+    __typename?: 'Mutation';
+    engagementEventCreate: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostDeleteMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type PostDeleteMutation = { __typename?: 'Mutation'; postDelete: string };
+
+export type PostByIdentifierQueryVariables = Exact<{
+    identifier: Scalars['String']['input'];
+}>;
+
+export type PostByIdentifierQuery = { __typename?: 'Query'; post: { __typename?: 'Post'; id: string } };
+
+export type PostTopicDeleteMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type PostTopicDeleteMutation = {
+    __typename?: 'Mutation';
+    postTopicDelete: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostUpdateMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+    input: PostUpdateInput;
+}>;
+
+export type PostUpdateMutation = {
+    __typename?: 'Mutation';
+    postUpdate: {
+        __typename?: 'Post';
+        id: string;
+        status: PostStatus;
+        title: string;
+        contentType: RichContentFormat;
+        content?: string | null;
+        settings?: any | null;
+        upvoteCount: number;
+        downvoteCount: number;
+        metadata?: any | null;
+        updatedAt: any;
+        createdAt: any;
+    };
+};
+
+export type PostReactionCreateMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+    content: Scalars['String']['input'];
+}>;
+
+export type PostReactionCreateMutation = {
+    __typename?: 'Mutation';
+    postReactionCreate: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostReportCreateMutationVariables = Exact<{
+    input: PostReportInput;
+}>;
+
+export type PostReportCreateMutation = {
+    __typename?: 'Mutation';
+    postReportCreate: { __typename?: 'PostReport'; id: string };
+};
+
+export type PostVoteMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+    type: PostVoteType;
+}>;
+
+export type PostVoteMutation = {
+    __typename?: 'Mutation';
+    postVote: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostUnvoteMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+}>;
+
+export type PostUnvoteMutation = {
+    __typename?: 'Mutation';
+    postUnvote: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostReactionProfilesQueryVariables = Exact<{
+    postId: Scalars['String']['input'];
+    content: Scalars['String']['input'];
     pagination: PaginationInput;
 }>;
 
-export type DataInteractionDatabasesQuery = {
+export type PostReactionProfilesQuery = {
     __typename?: 'Query';
-    dataInteractionDatabases: {
-        __typename?: 'PagedDatabasesResult';
-        items: Array<{ __typename?: 'DatebaseMetadata'; databaseName: string }>;
+    postReactionProfiles: {
+        __typename?: 'PagedPostReactionProfile';
+        items: Array<{
+            __typename?: 'PostReactionProfile';
+            username: string;
+            displayName?: string | null;
+            profileId: string;
+        }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
+    };
+};
+
+export type PostReactionDeleteMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+    content: Scalars['String']['input'];
+}>;
+
+export type PostReactionDeleteMutation = {
+    __typename?: 'Mutation';
+    postReactionDelete: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostQueryVariables = Exact<{
+    id?: InputMaybe<Scalars['String']['input']>;
+    slug?: InputMaybe<Scalars['String']['input']>;
+    identifier?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type PostQuery = {
+    __typename?: 'Query';
+    post: {
+        __typename?: 'Post';
+        id: string;
+        identifier: string;
+        slug: string;
+        status: PostStatus;
+        title: string;
+        createdByProfileId: string;
+        content?: string | null;
+        upvoteCount: number;
+        downvoteCount: number;
+        voteType?: PostVoteType | null;
+        reportedCount: number;
+        reportStatus?: PostReportStatus | null;
+        metadata?: any | null;
+        latestRevisionId?: string | null;
+        updatedAt: any;
+        createdAt: any;
+        createdByProfile?: {
+            __typename?: 'PublicProfile';
+            displayName?: string | null;
+            username: string;
+            images?: Array<{
+                __typename?: 'ImageObject';
+                url: string;
+                type: MediaObjectType;
+                variant?: string | null;
+            }> | null;
+        } | null;
+        reactions?: Array<{ __typename?: 'PostReaction'; content: string; count: number; reacted: boolean }> | null;
+    };
+};
+
+export type PostsQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type PostsQuery = {
+    __typename?: 'Query';
+    posts: {
+        __typename?: 'PagedPosts';
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
+        items: Array<{
+            __typename?: 'Post';
+            id: string;
+            identifier: string;
+            slug: string;
+            status: PostStatus;
+            title: string;
+            createdByProfileId: string;
+            content?: string | null;
+            upvoteCount: number;
+            downvoteCount: number;
+            voteType?: PostVoteType | null;
+            reportedCount: number;
+            reportStatus?: PostReportStatus | null;
+            metadata?: any | null;
+            latestRevisionId?: string | null;
+            updatedAt: any;
+            createdAt: any;
+            createdByProfile?: {
+                __typename?: 'PublicProfile';
+                displayName?: string | null;
+                username: string;
+                images?: Array<{
+                    __typename?: 'ImageObject';
+                    url: string;
+                    type: MediaObjectType;
+                    variant?: string | null;
+                }> | null;
+            } | null;
+            reactions?: Array<{ __typename?: 'PostReaction'; content: string; count: number; reacted: boolean }> | null;
+        }>;
+    };
+};
+
+export type PostCreateMutationVariables = Exact<{
+    input: PostCreateInput;
+}>;
+
+export type PostCreateMutation = {
+    __typename?: 'Mutation';
+    postCreatePrivileged: {
+        __typename?: 'Post';
+        id: string;
+        status: PostStatus;
+        title: string;
+        contentType: RichContentFormat;
+        content?: string | null;
+        settings?: any | null;
+        upvoteCount: number;
+        downvoteCount: number;
+        metadata?: any | null;
+        updatedAt: any;
+        createdAt: any;
+    };
+};
+
+export type SupportTicketCreateMutationVariables = Exact<{
+    input: SupportTicketCreateInput;
+}>;
+
+export type SupportTicketCreateMutation = {
+    __typename?: 'Mutation';
+    supportTicketCreate: {
+        __typename?: 'SupportTicket';
+        id: string;
+        type: string;
+        status: SupportTicketStatus;
+        userEmailAddress: string;
+        title: string;
+        description?: string | null;
+        comments: Array<{ __typename?: 'SupportTicketComment'; content: string }>;
+    };
+};
+
+export type PostTopicCreateMutationVariables = Exact<{
+    input: PostTopicCreateInput;
+}>;
+
+export type PostTopicCreateMutation = {
+    __typename?: 'Mutation';
+    postTopicCreate: {
+        __typename?: 'PostTopic';
+        id: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        postCount: number;
+        createdAt: any;
+    };
+};
+
+export type PostTopicUpdateMutationVariables = Exact<{
+    input: PostTopicUpdateInput;
+}>;
+
+export type PostTopicUpdateMutation = {
+    __typename?: 'Mutation';
+    postTopicUpdate: {
+        __typename?: 'PostTopic';
+        id: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        postCount: number;
+        createdAt: any;
+    };
+};
+
+export type PostTopicByIdQueryVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type PostTopicByIdQuery = {
+    __typename?: 'Query';
+    postTopicById: {
+        __typename?: 'PostTopic';
+        id: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        postCount: number;
+        createdAt: any;
+    };
+};
+
+export type WaitListEntryCreateMutationVariables = Exact<{
+    emailAddress: Scalars['String']['input'];
+    waitListIdentifier?: Scalars['String']['input'];
+}>;
+
+export type WaitListEntryCreateMutation = {
+    __typename?: 'Mutation';
+    waitListEntryCreate: { __typename?: 'WaitListEntry'; id: string; emailAddress: string };
+};
+
+export type DataInteractionDatabaseTablesQueryVariables = Exact<{
+    databaseName: Scalars['String']['input'];
+    pagination: PaginationInput;
+}>;
+
+export type DataInteractionDatabaseTablesQuery = {
+    __typename?: 'Query';
+    dataInteractionDatabaseTables: {
+        __typename?: 'DatabaseTablesResult';
+        items: Array<{ __typename?: 'DatabaseTableMetadata'; databaseName: string; tableName: string }>;
         pagination: {
             __typename?: 'Pagination';
             itemIndex: number;
@@ -4896,96 +4862,6 @@ export type DataInteractionDatabaseTableMetricsQuery = {
     }>;
 };
 
-export type DataInteractionDatabaseTablesQueryVariables = Exact<{
-    databaseName: Scalars['String']['input'];
-    pagination: PaginationInput;
-}>;
-
-export type DataInteractionDatabaseTablesQuery = {
-    __typename?: 'Query';
-    dataInteractionDatabaseTables: {
-        __typename?: 'DatabaseTablesResult';
-        items: Array<{ __typename?: 'DatabaseTableMetadata'; databaseName: string; tableName: string }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-    };
-};
-
-export type DataInteractionDatabaseTableRowsQueryVariables = Exact<{
-    databaseName: Scalars['String']['input'];
-    tableName: Scalars['String']['input'];
-    pagination: PaginationInput;
-    filters?: InputMaybe<ColumnFilterGroupInput>;
-}>;
-
-export type DataInteractionDatabaseTableRowsQuery = {
-    __typename?: 'Query';
-    dataInteractionDatabaseTableRows: {
-        __typename?: 'DatabaseTableMetadataWithRows';
-        items: Array<any>;
-        databaseName: string;
-        tableName: string;
-        rowCount: number;
-        columns?: Array<{
-            __typename?: 'DatabaseTableColumn';
-            name: string;
-            type: string;
-            isKey: boolean;
-            isPrimaryKey: boolean;
-            keyTableName?: string | null;
-            possibleValues?: Array<string> | null;
-            isNullable: boolean;
-            isGenerated: boolean;
-            length: string;
-        }> | null;
-        relations?: Array<{
-            __typename?: 'DatabaseTableRelation';
-            fieldName: string;
-            tableName: string;
-            type: string;
-            inverseFieldName?: string | null;
-            inverseType?: string | null;
-            inverseTableName?: string | null;
-        }> | null;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-    };
-};
-
-export type EngagementEventCreateMutationVariables = Exact<{
-    input: CreateEngagementEventInput;
-}>;
-
-export type EngagementEventCreateMutation = {
-    __typename?: 'Mutation';
-    engagementEventCreate: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type EngagementEventsCreateMutationVariables = Exact<{
-    input: Array<CreateEngagementEventInput> | CreateEngagementEventInput;
-}>;
-
-export type EngagementEventsCreateMutation = {
-    __typename?: 'Mutation';
-    engagementEventsCreate: { __typename?: 'OperationResult'; success: boolean };
-};
-
 export type EngagementOverviewQueryVariables = Exact<{
     input?: InputMaybe<EngagementOverviewInput>;
 }>;
@@ -5016,1145 +4892,24 @@ export type EngagementOverviewQuery = {
     };
 };
 
-export type FormQueryVariables = Exact<{
-    identifier: Scalars['String']['input'];
-}>;
-
-export type FormQuery = {
-    __typename?: 'Query';
-    form: {
-        __typename?: 'Form';
-        identifier: string;
-        title?: string | null;
-        description?: string | null;
-        status: FormStatus;
-        updatedAt: any;
-        createdAt: any;
-        metadata?: {
-            __typename?: 'FormMetadata';
-            theme?: {
-                __typename?: 'FormThemeMetadata';
-                backgroundColor?: string | null;
-                primaryColor?: string | null;
-                header?: { __typename?: 'FontConfig'; fontFamily: string; fontSize: number } | null;
-                question?: { __typename?: 'FontConfig'; fontFamily: string; fontSize: number } | null;
-                text?: { __typename?: 'FontConfig'; fontFamily: string; fontSize: number } | null;
-            } | null;
-        } | null;
-        components?: Array<
-            | {
-                  __typename?: 'FormComponentDataCheckbox';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  options: Array<string>;
-                  maxSelections?: number | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataCheckboxGrid';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  columns: Array<string>;
-                  rows: Array<string>;
-                  maxSelectionsPerRow?: number | null;
-                  allowEmpty?: boolean | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataDate';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  initialDate?: any | null;
-                  minDate?: any | null;
-                  maxDate?: any | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataDropdown';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  options: Array<string>;
-                  placeholder?: string | null;
-                  defaultOption?: number | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataLinearScale';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  min: number;
-                  max: number;
-                  step: any;
-                  leftLabel?: string | null;
-                  rightLabel?: string | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataMultipleChoice';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  options: Array<string>;
-                  defaultOption?: number | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataMultipleChoiceGrid';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  columns: Array<string>;
-                  rows: Array<string>;
-              }
-            | {
-                  __typename?: 'FormComponentDataNumber';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  allowFloat?: boolean | null;
-                  numberMin?: any | null;
-                  numberMax?: any | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataParagraph';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  placeholder?: string | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataRating';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  icon: string;
-                  max: number;
-                  allowHalf?: boolean | null;
-                  allowZero?: boolean | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataSectionHeader';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-              }
-            | {
-                  __typename?: 'FormComponentDataShortAnswer';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  placeholder?: string | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataTime';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-                  initialTime?: any | null;
-                  minTime?: any | null;
-                  maxTime?: any | null;
-                  allowSeconds?: boolean | null;
-                  ampm?: boolean | null;
-              }
-            | {
-                  __typename?: 'FormComponentDataTitleAndDescription';
-                  id: string;
-                  position: number;
-                  section: number;
-                  type: FormComponentType;
-                  title?: string | null;
-                  description?: string | null;
-                  required: boolean;
-              }
-        > | null;
-    };
-};
-
-export type SubmitFormMutationVariables = Exact<{
-    identifier: Scalars['String']['input'];
-    emailAddress?: InputMaybe<Scalars['String']['input']>;
-    data: Scalars['JSON']['input'];
-}>;
-
-export type SubmitFormMutation = {
-    __typename?: 'Mutation';
-    submitForm: { __typename?: 'FormUserData'; id: string; formId: string };
-};
-
-export type PostsQueryVariables = Exact<{
+export type CommerceOrdersPrivilegedChartQueryVariables = Exact<{
     pagination: PaginationInput;
 }>;
 
-export type PostsQuery = {
+export type CommerceOrdersPrivilegedChartQuery = {
     __typename?: 'Query';
-    posts: {
-        __typename?: 'PagedPosts';
-        items: Array<{
-            __typename?: 'Post';
-            id: string;
-            identifier: string;
-            slug: string;
-            status: PostStatus;
-            title: string;
-            createdByProfileId: string;
-            content?: string | null;
-            upvoteCount: number;
-            downvoteCount: number;
-            voteType?: PostVoteType | null;
-            reportedCount: number;
-            reportStatus?: PostReportStatus | null;
-            metadata?: any | null;
-            latestRevisionId?: string | null;
-            updatedAt: any;
-            createdAt: any;
-            createdByProfile?: {
-                __typename?: 'PublicProfile';
-                displayName?: string | null;
-                username: string;
-                images?: Array<{
-                    __typename?: 'ImageObject';
-                    url: string;
-                    type: MediaObjectType;
-                    variant?: string | null;
-                }> | null;
-            } | null;
-            topics?: Array<{ __typename?: 'PostTopic'; id: string; title: string; slug: string }> | null;
-            reactions?: Array<{ __typename?: 'PostReaction'; content: string; count: number; reacted: boolean }> | null;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-    };
-};
-
-export type PostsMineQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type PostsMineQuery = {
-    __typename?: 'Query';
-    postsMine: {
-        __typename?: 'PagedPosts';
-        items: Array<{
-            __typename?: 'Post';
-            id: string;
-            identifier: string;
-            slug: string;
-            status: PostStatus;
-            title: string;
-            createdByProfileId: string;
-            content?: string | null;
-            upvoteCount: number;
-            downvoteCount: number;
-            voteType?: PostVoteType | null;
-            reportedCount: number;
-            reportStatus?: PostReportStatus | null;
-            metadata?: any | null;
-            latestRevisionId?: string | null;
-            updatedAt: any;
-            createdAt: any;
-            createdByProfile?: {
-                __typename?: 'PublicProfile';
-                displayName?: string | null;
-                username: string;
-                images?: Array<{
-                    __typename?: 'ImageObject';
-                    url: string;
-                    type: MediaObjectType;
-                    variant?: string | null;
-                }> | null;
-            } | null;
-            topics?: Array<{ __typename?: 'PostTopic'; id: string; title: string; slug: string }> | null;
-            reactions?: Array<{ __typename?: 'PostReaction'; content: string; count: number; reacted: boolean }> | null;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-    };
-};
-
-export type PostQueryVariables = Exact<{
-    identifier: Scalars['String']['input'];
-}>;
-
-export type PostQuery = {
-    __typename?: 'Query';
-    post: {
-        __typename?: 'Post';
-        id: string;
-        identifier: string;
-        slug: string;
-        status: PostStatus;
-        title: string;
-        createdByProfileId: string;
-        content?: string | null;
-        upvoteCount: number;
-        downvoteCount: number;
-        voteType?: PostVoteType | null;
-        reportedCount: number;
-        reportStatus?: PostReportStatus | null;
-        type: string;
-        metadata?: any | null;
-        latestRevisionId?: string | null;
-        updatedAt: any;
-        createdAt: any;
-        createdByProfile?: {
-            __typename?: 'PublicProfile';
-            displayName?: string | null;
-            username: string;
-            images?: Array<{
-                __typename?: 'ImageObject';
-                url: string;
-                type: MediaObjectType;
-                variant?: string | null;
-            }> | null;
-        } | null;
-        topics?: Array<{ __typename?: 'PostTopic'; id: string; title: string }> | null;
-        reactions?: Array<{ __typename?: 'PostReaction'; content: string; count: number; reacted: boolean }> | null;
-    };
-};
-
-export type PostCreateMutationVariables = Exact<{
-    input: PostCreateInput;
-}>;
-
-export type PostCreateMutation = {
-    __typename?: 'Mutation';
-    postCreatePrivileged: {
-        __typename?: 'Post';
-        id: string;
-        status: PostStatus;
-        title: string;
-        contentType: RichContentFormat;
-        content?: string | null;
-        settings?: any | null;
-        upvoteCount: number;
-        downvoteCount: number;
-        metadata?: any | null;
-        updatedAt: any;
-        createdAt: any;
-    };
-};
-
-export type PostUpdateMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-    input: PostUpdateInput;
-}>;
-
-export type PostUpdateMutation = {
-    __typename?: 'Mutation';
-    postUpdate: {
-        __typename?: 'Post';
-        id: string;
-        status: PostStatus;
-        title: string;
-        contentType: RichContentFormat;
-        content?: string | null;
-        settings?: any | null;
-        upvoteCount: number;
-        downvoteCount: number;
-        metadata?: any | null;
-        updatedAt: any;
-        createdAt: any;
-    };
-};
-
-export type PostDeleteMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type PostDeleteMutation = { __typename?: 'Mutation'; postDelete: string };
-
-export type PostVoteMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-    type: PostVoteType;
-}>;
-
-export type PostVoteMutation = {
-    __typename?: 'Mutation';
-    postVote: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostUnvoteMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-}>;
-
-export type PostUnvoteMutation = {
-    __typename?: 'Mutation';
-    postUnvote: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostReactionCreateMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-    content: Scalars['String']['input'];
-}>;
-
-export type PostReactionCreateMutation = {
-    __typename?: 'Mutation';
-    postReactionCreate: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostReactionDeleteMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-    content: Scalars['String']['input'];
-}>;
-
-export type PostReactionDeleteMutation = {
-    __typename?: 'Mutation';
-    postReactionDelete: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostReactionProfilesQueryVariables = Exact<{
-    postId: Scalars['String']['input'];
-    content: Scalars['String']['input'];
-    pagination: PaginationInput;
-}>;
-
-export type PostReactionProfilesQuery = {
-    __typename?: 'Query';
-    postReactionProfiles: {
-        __typename?: 'PagedPostReactionProfile';
-        items: Array<{
-            __typename?: 'PostReactionProfile';
-            username: string;
-            displayName?: string | null;
-            profileId: string;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-    };
-};
-
-export type PostReportCreateMutationVariables = Exact<{
-    input: PostReportInput;
-}>;
-
-export type PostReportCreateMutation = {
-    __typename?: 'Mutation';
-    postReportCreate: { __typename?: 'PostReport'; id: string };
-};
-
-export type PostTopicByIdQueryVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type PostTopicByIdQuery = {
-    __typename?: 'Query';
-    postTopicById: {
-        __typename?: 'PostTopic';
-        id: string;
-        title: string;
-        slug: string;
-        description?: string | null;
-        postCount: number;
-        createdAt: any;
-    };
-};
-
-export type PostTopicsQueryVariables = Exact<{
-    ids?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
-}>;
-
-export type PostTopicsQuery = {
-    __typename?: 'Query';
-    postTopics: Array<{
-        __typename?: 'PostTopic';
-        id: string;
-        title: string;
-        slug: string;
-        description?: string | null;
-        postCount: number;
-        createdAt: any;
-    }>;
-};
-
-export type PostTopicCreateMutationVariables = Exact<{
-    input: PostTopicCreateInput;
-}>;
-
-export type PostTopicCreateMutation = {
-    __typename?: 'Mutation';
-    postTopicCreate: {
-        __typename?: 'PostTopic';
-        id: string;
-        title: string;
-        slug: string;
-        description?: string | null;
-        postCount: number;
-        createdAt: any;
-    };
-};
-
-export type PostTopicUpdateMutationVariables = Exact<{
-    input: PostTopicUpdateInput;
-}>;
-
-export type PostTopicUpdateMutation = {
-    __typename?: 'Mutation';
-    postTopicUpdate: {
-        __typename?: 'PostTopic';
-        id: string;
-        title: string;
-        slug: string;
-        description?: string | null;
-        postCount: number;
-        createdAt: any;
-    };
-};
-
-export type PostTopicDeleteMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type PostTopicDeleteMutation = {
-    __typename?: 'Mutation';
-    postTopicDelete: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type SupportPostQueryVariables = Exact<{
-    identifier: Scalars['String']['input'];
-}>;
-
-export type SupportPostQuery = {
-    __typename?: 'Query';
-    post: {
-        __typename?: 'Post';
-        identifier: string;
-        slug: string;
-        status: PostStatus;
-        title: string;
-        description?: string | null;
-        content?: string | null;
-        updatedAt: any;
-        createdAt: any;
-    };
-};
-
-export type SupportPostsQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type SupportPostsQuery = {
-    __typename?: 'Query';
-    posts: {
-        __typename?: 'PagedPosts';
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-        items: Array<{
-            __typename?: 'Post';
-            identifier: string;
-            slug: string;
-            status: PostStatus;
-            title: string;
-            description?: string | null;
-            content?: string | null;
-            updatedAt: any;
-            createdAt: any;
-            topics?: Array<{ __typename?: 'PostTopic'; id: string; title: string; slug: string }> | null;
-        }>;
-    };
-};
-
-export type SupportPostTopicQueryVariables = Exact<{
-    slug: Scalars['String']['input'];
-    path?: InputMaybe<Scalars['String']['input']>;
-    pagination: PaginationInput;
-}>;
-
-export type SupportPostTopicQuery = {
-    __typename?: 'Query';
-    postTopic: {
-        __typename?: 'PostTopicQueryResult';
-        topic: {
-            __typename?: 'PostTopic';
-            id: string;
-            title: string;
-            slug: string;
-            description?: string | null;
-            postCount: number;
-            createdAt: any;
-        };
-        subTopics?: Array<{
-            __typename?: 'PostTopic';
-            id: string;
-            title: string;
-            slug: string;
-            description?: string | null;
-            postCount: number;
-            createdAt: any;
-        }> | null;
-        pagedPosts: {
-            __typename?: 'PagedPosts';
-            items: Array<{
-                __typename?: 'Post';
-                id: string;
-                identifier: string;
-                slug: string;
-                status: PostStatus;
-                title: string;
-                description?: string | null;
-                content?: string | null;
-                metadata?: any | null;
-                updatedAt: any;
-                createdAt: any;
-            }>;
-            pagination: {
-                __typename?: 'Pagination';
-                itemIndex: number;
-                itemIndexForPreviousPage?: number | null;
-                itemIndexForNextPage?: number | null;
-                itemsPerPage: number;
-                itemsTotal: number;
-                pagesTotal: number;
-                page: number;
-            };
-        };
-    };
-};
-
-export type SupportTicketCreateMutationVariables = Exact<{
-    input: SupportTicketCreateInput;
-}>;
-
-export type SupportTicketCreateMutation = {
-    __typename?: 'Mutation';
-    supportTicketCreate: {
-        __typename?: 'SupportTicket';
-        id: string;
-        type: string;
-        status: SupportTicketStatus;
-        userEmailAddress: string;
-        title: string;
-        description?: string | null;
-        comments: Array<{ __typename?: 'SupportTicketComment'; content: string }>;
-    };
-};
-
-export type SupportTicketUpdateStatusPrivilegedMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-    status: SupportTicketStatus;
-}>;
-
-export type SupportTicketUpdateStatusPrivilegedMutation = {
-    __typename?: 'Mutation';
-    supportTicketUpdateStatusPrivileged: { __typename?: 'SupportTicket'; id: string; status: SupportTicketStatus };
-};
-
-export type SupportTicketsPrivilegedQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type SupportTicketsPrivilegedQuery = {
-    __typename?: 'Query';
-    supportTicketsPrivileged: {
-        __typename?: 'PaginationSupportTicketResult';
-        items: Array<{
-            __typename?: 'SupportTicket';
-            id: string;
-            identifier: string;
-            status: SupportTicketStatus;
-            type: string;
-            title: string;
-            description?: string | null;
-            userEmailAddress: string;
-            assignedToProfileId?: string | null;
-            createdAt: any;
-            updatedAt: any;
-            lastUserCommentedAt?: any | null;
-            answeredAt?: any | null;
-            answered: boolean;
-            assignedToProfile?: {
-                __typename?: 'PublicProfile';
-                username: string;
-                displayName?: string | null;
-                images?: Array<{
-                    __typename?: 'ImageObject';
-                    type: MediaObjectType;
-                    url: string;
-                    variant?: string | null;
-                }> | null;
-            } | null;
-            comments: Array<{
-                __typename?: 'SupportTicketComment';
-                id: string;
-                source: SupportTicketCommentSource;
-                visibility: SupportTicketCommentVisibility;
-                content: string;
-                contentType: RichContentFormat;
-                createdAt: any;
-                attachments?: Array<{
-                    __typename?: 'MediaObject';
-                    type: MediaObjectType;
-                    url: string;
-                    variant?: string | null;
-                }> | null;
-            }>;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForNextPage?: number | null;
-            itemIndexForPreviousPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            page: number;
-            pagesTotal: number;
-        };
-    };
-};
-
-export type SupportTicketAssignMutationVariables = Exact<{
-    ticketId: Scalars['String']['input'];
-    username?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-export type SupportTicketAssignMutation = {
-    __typename?: 'Mutation';
-    supportTicketAssign: {
-        __typename?: 'SupportTicket';
-        id: string;
-        assignedToProfileId?: string | null;
-        assignedToProfile?: {
-            __typename?: 'PublicProfile';
-            username: string;
-            displayName?: string | null;
-            images?: Array<{
-                __typename?: 'ImageObject';
-                type: MediaObjectType;
-                url: string;
-                variant?: string | null;
-            }> | null;
-        } | null;
-    };
-};
-
-export type SupportTicketCommentCreatePrivilegedMutationVariables = Exact<{
-    input: SupportTicketCommentCreateInput;
-}>;
-
-export type SupportTicketCommentCreatePrivilegedMutation = {
-    __typename?: 'Mutation';
-    supportTicketCommentCreatePrivileged: {
-        __typename?: 'SupportTicketComment';
-        id: string;
-        content: string;
-        contentType: RichContentFormat;
-        source: SupportTicketCommentSource;
-        visibility: SupportTicketCommentVisibility;
-        createdAt: any;
-    };
-};
-
-export type SupportAllSupportProfilesQueryVariables = Exact<{ [key: string]: never }>;
-
-export type SupportAllSupportProfilesQuery = {
-    __typename?: 'Query';
-    supportAllSupportProfiles: Array<{
-        __typename?: 'PublicProfile';
-        username: string;
-        displayName?: string | null;
-        images?: Array<{
-            __typename?: 'ImageObject';
-            type: MediaObjectType;
-            url: string;
-            variant?: string | null;
-        }> | null;
-    }>;
-};
-
-export type SupportTicketAccountAndCommerceOrdersPrivelegedQueryVariables = Exact<{
-    email: Scalars['String']['input'];
-    pagination: PaginationInput;
-}>;
-
-export type SupportTicketAccountAndCommerceOrdersPrivelegedQuery = {
-    __typename?: 'Query';
-    accountPrivileged?: {
-        __typename?: 'Account';
-        defaultProfileId: string;
-        emailAddress: string;
-        status: AccountStatus;
-        defaultProfile: {
-            __typename?: 'Profile';
-            id: string;
-            displayName?: string | null;
-            givenName?: string | null;
-            familyName?: string | null;
-            preferredName?: string | null;
-            username: string;
-            createdAt: any;
-            images?: Array<{
-                __typename?: 'ImageObject';
-                type: MediaObjectType;
-                url: string;
-                variant?: string | null;
-            }> | null;
-        };
-    } | null;
     commerceOrdersPrivileged: {
         __typename?: 'PaginationOrderResult';
-        items: Array<{
-            __typename?: 'CommerceOrder';
-            id: string;
-            fulfillmentStatus: CommerceOrderFulfillmentStatus;
-            emailAddress: string;
-            identifier: string;
-            paymentStatus?: PaymentStatus | null;
-            source: string;
-            status: CommerceOrderStatus;
-            metadata?: any | null;
-            createdAt: any;
-            updatedAt: any;
-            lineItems?: Array<{
-                __typename?: 'CommerceOrderLineItem';
-                createdAt: any;
-                id: string;
-                indexId: number;
-                productVariantId: string;
-                quantity: number;
-                status: CommerceOrderLineItemStatus;
-                updatedAt: any;
-            }> | null;
-            priceInfo: {
-                __typename?: 'CommerceOrderPrice';
-                amount: any;
-                currencyCode: string;
-                originalSubtotal: any;
-                subtotal: any;
-                lineItemPrices: Array<{
-                    __typename?: 'CommerceOrderLineItemPrice';
-                    indexId: number;
-                    originalSubtotal: any;
-                    subtotal: any;
-                }>;
-                shippingRate: { __typename?: 'CommerceOrderShippingRate'; amount: any; originalAmount: any };
-                tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
-            };
-            shippingInfo?: {
-                __typename?: 'CommerceOrderShippingInfo';
-                shippingAddress: {
-                    __typename?: 'StreetAddressObject';
-                    line1: string;
-                    line2?: string | null;
-                    city: string;
-                    company?: string | null;
-                    country: string;
-                    firstName: string;
-                    lastName: string;
-                    phoneNumber?: string | null;
-                    postalCode: string;
-                    state: string;
-                };
-            } | null;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            pagesTotal: number;
-            page: number;
-            itemsTotal: number;
-            itemsPerPage: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemIndex: number;
-        };
-    };
-};
-
-export type ProfileSupportTicketsQueryVariables = Exact<{
-    openTicketsIndex: Scalars['Int']['input'];
-    closedTicketsIndex: Scalars['Int']['input'];
-}>;
-
-export type ProfileSupportTicketsQuery = {
-    __typename?: 'Query';
-    openTickets: {
-        __typename?: 'PaginationSupportTicketResult';
-        items: Array<{
-            __typename?: 'SupportTicket';
-            id: string;
-            identifier: string;
-            status: SupportTicketStatus;
-            type: string;
-            title: string;
-            description?: string | null;
-            userEmailAddress: string;
-            createdAt: any;
-            updatedAt: any;
-            comments: Array<{
-                __typename?: 'SupportTicketComment';
-                id: string;
-                source: SupportTicketCommentSource;
-                visibility: SupportTicketCommentVisibility;
-                content: string;
-                contentType: RichContentFormat;
-                createdAt: any;
-            }>;
-        }>;
+        items: Array<{ __typename?: 'CommerceOrder'; createdAt: any }>;
         pagination: {
             __typename?: 'Pagination';
             itemIndex: number;
-            itemIndexForNextPage?: number | null;
             itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
             itemsPerPage: number;
             itemsTotal: number;
-            page: number;
-            pagesTotal: number;
         };
     };
-    closedTickets: {
-        __typename?: 'PaginationSupportTicketResult';
-        items: Array<{
-            __typename?: 'SupportTicket';
-            id: string;
-            identifier: string;
-            status: SupportTicketStatus;
-            type: string;
-            title: string;
-            description?: string | null;
-            userEmailAddress: string;
-            createdAt: any;
-            updatedAt: any;
-            comments: Array<{
-                __typename?: 'SupportTicketComment';
-                id: string;
-                source: SupportTicketCommentSource;
-                visibility: SupportTicketCommentVisibility;
-                content: string;
-                contentType: RichContentFormat;
-                createdAt: any;
-            }>;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForNextPage?: number | null;
-            itemIndexForPreviousPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            page: number;
-            pagesTotal: number;
-        };
-    };
-};
-
-export type ProfileSupportTicketQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type ProfileSupportTicketQuery = {
-    __typename?: 'Query';
-    supportTickets: {
-        __typename?: 'PaginationSupportTicketResult';
-        items: Array<{
-            __typename?: 'SupportTicket';
-            id: string;
-            identifier: string;
-            status: SupportTicketStatus;
-            type: string;
-            title: string;
-            description?: string | null;
-            userEmailAddress: string;
-            createdAt: any;
-            updatedAt: any;
-            comments: Array<{
-                __typename?: 'SupportTicketComment';
-                id: string;
-                source: SupportTicketCommentSource;
-                visibility: SupportTicketCommentVisibility;
-                content: string;
-                contentType: RichContentFormat;
-                createdAt: any;
-                attachments?: Array<{
-                    __typename?: 'MediaObject';
-                    type: MediaObjectType;
-                    url: string;
-                    variant?: string | null;
-                }> | null;
-            }>;
-        }>;
-    };
-};
-
-export type WaitListsPrivilegedQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type WaitListsPrivilegedQuery = {
-    __typename?: 'Query';
-    waitListsPrivileged: {
-        __typename?: 'WaitListResult';
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForNextPage?: number | null;
-            itemIndexForPreviousPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            page: number;
-            pagesTotal: number;
-        };
-        items: Array<{
-            __typename?: 'WaitList';
-            id: string;
-            identifier: string;
-            title: string;
-            description?: string | null;
-            updatedAt: any;
-            createdAt: any;
-        }>;
-    };
-};
-
-export type WaitListCreatePrivilegedMutationVariables = Exact<{
-    data: WaitListCreationInput;
-}>;
-
-export type WaitListCreatePrivilegedMutation = {
-    __typename?: 'Mutation';
-    waitListCreatePrivileged: {
-        __typename?: 'WaitList';
-        id: string;
-        identifier: string;
-        title: string;
-        description?: string | null;
-        updatedAt: any;
-        createdAt: any;
-    };
-};
-
-export type WaitListEntriesPrivilegedQueryVariables = Exact<{
-    waitListIdentifier?: InputMaybe<Scalars['String']['input']>;
-    pagination: PaginationInput;
-}>;
-
-export type WaitListEntriesPrivilegedQuery = {
-    __typename?: 'Query';
-    waitListEntriesPrivileged: {
-        __typename?: 'WaitListEntriesResult';
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForNextPage?: number | null;
-            itemIndexForPreviousPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            page: number;
-            pagesTotal: number;
-        };
-        items: Array<{
-            __typename?: 'WaitListEntry';
-            id: string;
-            emailAddress: string;
-            message?: string | null;
-            userAgent?: string | null;
-            countryCode?: string | null;
-            referredBy?: string | null;
-            contactedAt?: any | null;
-            updatedAt: any;
-            createdAt: any;
-        }>;
-    };
-};
-
-export type WaitListEntryCreateMutationVariables = Exact<{
-    emailAddress: Scalars['String']['input'];
-    waitListIdentifier?: Scalars['String']['input'];
-}>;
-
-export type WaitListEntryCreateMutation = {
-    __typename?: 'Mutation';
-    waitListEntryCreate: { __typename?: 'WaitListEntry'; id: string; emailAddress: string };
-};
-
-export type WaitListEntryDeleteMutationVariables = Exact<{
-    emailAddress: Scalars['String']['input'];
-    waitListIdentifier?: Scalars['String']['input'];
-}>;
-
-export type WaitListEntryDeleteMutation = {
-    __typename?: 'Mutation';
-    waitListEntryDelete: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export class TypedDocumentString<TResult, TVariables>
@@ -6176,6 +4931,105 @@ export class TypedDocumentString<TResult, TVariables>
     }
 }
 
+export const NoOpDocument = new TypedDocumentString(`
+    query NoOp {
+  __typename
+}
+    `) as unknown as TypedDocumentString<NoOpQuery, NoOpQueryVariables>;
+export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
+    query AccountAccessRolesPrivileged {
+  accountAccessRolesPrivileged {
+    type
+    description
+  }
+}
+    `) as unknown as TypedDocumentString<AccountAccessRolesPrivilegedQuery, AccountAccessRolesPrivilegedQueryVariables>;
+export const AccountPrivilegedDocument = new TypedDocumentString(`
+    query AccountPrivileged($input: AccountInput!) {
+  accountPrivileged(input: $input) {
+    profiles {
+      username
+      displayName
+      images {
+        url
+        variant
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountPrivilegedQuery, AccountPrivilegedQueryVariables>;
+export const AccountAccessRoleAssignmentCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
+  accountAccessRoleAssignmentCreatePrivileged(input: $input) {
+    id
+    accessRole {
+      id
+      type
+      description
+    }
+    status
+    profile {
+      username
+      displayName
+      images {
+        url
+        variant
+      }
+      createdAt
+    }
+    expiresAt
+    createdAt
+    updatedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAccessRoleAssignmentCreatePrivilegedMutation,
+    AccountAccessRoleAssignmentCreatePrivilegedMutationVariables
+>;
+export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
+    mutation AccountProfileImageRemove {
+  accountProfileImageRemove {
+    images {
+      url
+      variant
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
+export const AccountAuthenticationDocument = new TypedDocumentString(`
+    query AccountAuthentication {
+  accountAuthentication {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountAuthenticationQuery, AccountAuthenticationQueryVariables>;
+export const AccountAuthenticationRegistrationCompleteDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
+  accountAuthenticationRegistrationComplete(input: $input) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAuthenticationRegistrationCompleteMutation,
+    AccountAuthenticationRegistrationCompleteMutationVariables
+>;
+export const AccountAuthenticationSignInCompleteDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationSignInComplete {
+  accountAuthenticationSignInComplete {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAuthenticationSignInCompleteMutation,
+    AccountAuthenticationSignInCompleteMutationVariables
+>;
 export const AccountAuthenticationRegistrationOrSignInCreateDocument = new TypedDocumentString(`
     mutation AccountAuthenticationRegistrationOrSignInCreate($input: AccountRegistrationOrSignInCreateInput!) {
   accountAuthenticationRegistrationOrSignInCreate(input: $input) {
@@ -6196,28 +5050,10 @@ export const AccountAuthenticationRegistrationOrSignInCreateDocument = new Typed
     AccountAuthenticationRegistrationOrSignInCreateMutation,
     AccountAuthenticationRegistrationOrSignInCreateMutationVariables
 >;
-export const AccountAuthenticationDocument = new TypedDocumentString(`
-    query AccountAuthentication {
-  accountAuthentication {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountAuthenticationQuery, AccountAuthenticationQueryVariables>;
-export const AccountAuthenticationEmailVerificationDocument = new TypedDocumentString(`
-    query AccountAuthenticationEmailVerification {
-  accountAuthenticationEmailVerification {
-    verification {
-      status
-      emailAddress
-      lastEmailSentAt
-    }
+export const AccountAuthenticationPasswordVerifyDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
+  accountAuthenticationPasswordVerify(input: $input) {
+    success
     authentication {
       status
       scopeType
@@ -6231,32 +5067,8 @@ export const AccountAuthenticationEmailVerificationDocument = new TypedDocumentS
   }
 }
     `) as unknown as TypedDocumentString<
-    AccountAuthenticationEmailVerificationQuery,
-    AccountAuthenticationEmailVerificationQueryVariables
->;
-export const AccountAuthenticationEmailVerificationSendDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationEmailVerificationSend {
-  accountAuthenticationEmailVerificationSend {
-    verification {
-      status
-      emailAddress
-      lastEmailSentAt
-    }
-    authentication {
-      status
-      scopeType
-      currentChallenge {
-        challengeType
-        status
-      }
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationEmailVerificationSendMutation,
-    AccountAuthenticationEmailVerificationSendMutationVariables
+    AccountAuthenticationPasswordVerifyMutation,
+    AccountAuthenticationPasswordVerifyMutationVariables
 >;
 export const AccountAuthenticationEmailVerificationVerifyDocument = new TypedDocumentString(`
     mutation AccountAuthenticationEmailVerificationVerify($input: AccountEmailVerificationVerifyInput!) {
@@ -6282,10 +5094,14 @@ export const AccountAuthenticationEmailVerificationVerifyDocument = new TypedDoc
     AccountAuthenticationEmailVerificationVerifyMutation,
     AccountAuthenticationEmailVerificationVerifyMutationVariables
 >;
-export const AccountAuthenticationPasswordVerifyDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationPasswordVerify($input: AccountPasswordVerifyInput!) {
-  accountAuthenticationPasswordVerify(input: $input) {
-    success
+export const AccountAuthenticationEmailVerificationSendDocument = new TypedDocumentString(`
+    mutation AccountAuthenticationEmailVerificationSend {
+  accountAuthenticationEmailVerificationSend {
+    verification {
+      status
+      emailAddress
+      lastEmailSentAt
+    }
     authentication {
       status
       scopeType
@@ -6299,103 +5115,9 @@ export const AccountAuthenticationPasswordVerifyDocument = new TypedDocumentStri
   }
 }
     `) as unknown as TypedDocumentString<
-    AccountAuthenticationPasswordVerifyMutation,
-    AccountAuthenticationPasswordVerifyMutationVariables
+    AccountAuthenticationEmailVerificationSendMutation,
+    AccountAuthenticationEmailVerificationSendMutationVariables
 >;
-export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
-    mutation AccountMaintenanceSessionCreate {
-  accountMaintenanceSessionCreate {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountMaintenanceSessionCreateMutation,
-    AccountMaintenanceSessionCreateMutationVariables
->;
-export const AccountAuthenticationRegistrationCompleteDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {
-  accountAuthenticationRegistrationComplete(input: $input) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationRegistrationCompleteMutation,
-    AccountAuthenticationRegistrationCompleteMutationVariables
->;
-export const AccountAuthenticationSignInCompleteDocument = new TypedDocumentString(`
-    mutation AccountAuthenticationSignInComplete {
-  accountAuthenticationSignInComplete {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAuthenticationSignInCompleteMutation,
-    AccountAuthenticationSignInCompleteMutationVariables
->;
-export const AccountPasswordUpdateDocument = new TypedDocumentString(`
-    mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
-  accountPasswordUpdate(input: $input) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<AccountPasswordUpdateMutation, AccountPasswordUpdateMutationVariables>;
-export const AccountSignOutDocument = new TypedDocumentString(`
-    mutation AccountSignOut {
-  accountSignOut {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<AccountSignOutMutation, AccountSignOutMutationVariables>;
-export const AccountDocument = new TypedDocumentString(`
-    query Account {
-  account {
-    emailAddress
-    profile {
-      id
-      username
-      displayName
-      givenName
-      familyName
-      images {
-        url
-        variant
-      }
-      updatedAt
-      createdAt
-    }
-    accessRoles
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
-export const AccountPrivilegedDocument = new TypedDocumentString(`
-    query AccountPrivileged($input: AccountInput!) {
-  accountPrivileged(input: $input) {
-    emailAddress
-    profiles {
-      username
-      displayName
-      givenName
-      familyName
-      images {
-        url
-        variant
-      }
-      updatedAt
-      createdAt
-    }
-    accessRoles
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountPrivilegedQuery, AccountPrivilegedQueryVariables>;
 export const AccountsPrivilegedDocument = new TypedDocumentString(`
     query AccountsPrivileged($pagination: PaginationInput!) {
   accountsPrivileged(pagination: $pagination) {
@@ -6427,61 +5149,15 @@ export const AccountsPrivilegedDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountsPrivilegedQuery, AccountsPrivilegedQueryVariables>;
-export const AccountProfileUsernameValidateDocument = new TypedDocumentString(`
-    query AccountProfileUsernameValidate($username: String!) {
-  accountProfileUsernameValidate(username: $username)
-}
-    `) as unknown as TypedDocumentString<
-    AccountProfileUsernameValidateQuery,
-    AccountProfileUsernameValidateQueryVariables
->;
-export const AccountEnrolledChallengesDocument = new TypedDocumentString(`
-    query AccountEnrolledChallenges {
-  account {
-    enrolledChallenges
+export const AccountDeletePrivilegedDocument = new TypedDocumentString(`
+    mutation AccountDeletePrivileged($input: AccountDeleteInput!) {
+  accountDeletePrivileged(input: $input) {
+    success
   }
 }
-    `) as unknown as TypedDocumentString<AccountEnrolledChallengesQuery, AccountEnrolledChallengesQueryVariables>;
-export const AccountProfileUpdateDocument = new TypedDocumentString(`
-    mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
-  accountProfileUpdate(input: $input) {
-    username
-    displayName
-    givenName
-    familyName
-    images {
-      url
-      variant
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
-export const AccountProfilePublicDocument = new TypedDocumentString(`
-    query AccountProfilePublic($username: String!) {
-  accountProfilePublic(username: $username) {
-    username
-    displayName
-    images {
-      url
-      variant
-    }
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountProfilePublicQuery, AccountProfilePublicQueryVariables>;
-export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
-    query AccountAccessRolesPrivileged {
-  accountAccessRolesPrivileged {
-    id
-    type
-    description
-  }
-}
-    `) as unknown as TypedDocumentString<AccountAccessRolesPrivilegedQuery, AccountAccessRolesPrivilegedQueryVariables>;
+    `) as unknown as TypedDocumentString<AccountDeletePrivilegedMutation, AccountDeletePrivilegedMutationVariables>;
 export const AccountAccessRoleAssignmentsPrivilegedDocument = new TypedDocumentString(`
-    query AccountAccessRoleAssignmentsPrivileged($statuses: [AccessRoleStatus!], $pagination: PaginationInput!) {
+    query AccountAccessRoleAssignmentsPrivileged($statuses: [AccessRoleStatus!]!, $pagination: PaginationInput!) {
   accountAccessRoleAssignmentsPrivileged(
     statuses: $statuses
     pagination: $pagination
@@ -6533,55 +5209,48 @@ export const AccountAccessRoleAssignmentRevokePrivilegedDocument = new TypedDocu
     AccountAccessRoleAssignmentRevokePrivilegedMutation,
     AccountAccessRoleAssignmentRevokePrivilegedMutationVariables
 >;
-export const AccountAccessRoleAssignmentCreatePrivilegedDocument = new TypedDocumentString(`
-    mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
-  accountAccessRoleAssignmentCreatePrivileged(input: $input) {
+export const WaitListCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
+  waitListCreatePrivileged(data: $data) {
     id
-    accessRole {
-      id
-      type
-      description
+    identifier
+    title
+    description
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<WaitListCreatePrivilegedMutation, WaitListCreatePrivilegedMutationVariables>;
+export const WaitListsPrivilegedDocument = new TypedDocumentString(`
+    query WaitListsPrivileged($pagination: PaginationInput!) {
+  waitListsPrivileged(pagination: $pagination) {
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
     }
-    status
-    profile {
-      username
-      displayName
-      images {
-        type
-        url
-        variant
-      }
+    items {
+      id
+      identifier
+      title
+      description
+      updatedAt
       createdAt
     }
-    expiresAt
-    createdAt
-    updatedAt
   }
 }
-    `) as unknown as TypedDocumentString<
-    AccountAccessRoleAssignmentCreatePrivilegedMutation,
-    AccountAccessRoleAssignmentCreatePrivilegedMutationVariables
->;
-export const AccountDeleteDocument = new TypedDocumentString(`
-    mutation AccountDelete($reason: String) {
-  accountDelete(reason: $reason) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<AccountDeleteMutation, AccountDeleteMutationVariables>;
-export const AccountDeletePrivilegedDocument = new TypedDocumentString(`
-    mutation AccountDeletePrivileged($input: AccountDeleteInput!) {
-  accountDeletePrivileged(input: $input) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<AccountDeletePrivilegedMutation, AccountDeletePrivilegedMutationVariables>;
-export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
-    mutation AccountProfileImageRemove {
-  accountProfileImageRemove {
-    id
+    `) as unknown as TypedDocumentString<WaitListsPrivilegedQuery, WaitListsPrivilegedQueryVariables>;
+export const AccountProfileUpdateDocument = new TypedDocumentString(`
+    mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
+  accountProfileUpdate(input: $input) {
     username
     displayName
+    givenName
+    familyName
     images {
       url
       variant
@@ -6590,368 +5259,95 @@ export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
     createdAt
   }
 }
-    `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
-export const CommerceCheckoutSessionCreateDirectDocument = new TypedDocumentString(`
-    mutation CommerceCheckoutSessionCreateDirect($input: CommerceCheckoutSessionCreateDirectInput!) {
-  commerceCheckoutSessionCreateDirect(input: $input) {
-    id
-    externalMetadata
+    `) as unknown as TypedDocumentString<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
+export const AccountProfileUsernameValidateDocument = new TypedDocumentString(`
+    query AccountProfileUsernameValidate($username: String!) {
+  accountProfileUsernameValidate(username: $username)
+}
+    `) as unknown as TypedDocumentString<
+    AccountProfileUsernameValidateQuery,
+    AccountProfileUsernameValidateQueryVariables
+>;
+export const AccountEnrolledChallengesDocument = new TypedDocumentString(`
+    query AccountEnrolledChallenges {
+  account {
+    enrolledChallenges
+  }
+}
+    `) as unknown as TypedDocumentString<AccountEnrolledChallengesQuery, AccountEnrolledChallengesQueryVariables>;
+export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
+    mutation AccountMaintenanceSessionCreate {
+  accountMaintenanceSessionCreate {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+    updatedAt
     createdAt
   }
 }
     `) as unknown as TypedDocumentString<
-    CommerceCheckoutSessionCreateDirectMutation,
-    CommerceCheckoutSessionCreateDirectMutationVariables
+    AccountMaintenanceSessionCreateMutation,
+    AccountMaintenanceSessionCreateMutationVariables
 >;
-export const CommerceOrdersByCheckoutSessionDocument = new TypedDocumentString(`
-    query CommerceOrdersByCheckoutSession($checkoutSessionId: String!) {
-  commerceOrdersByCheckoutSession(checkoutSessionId: $checkoutSessionId) {
-    ... on CommerceOrder {
-      identifier
-      status
-      paymentStatus
-      fulfillmentStatus
-      emailAddress
-      lineItems {
-        id
-        indexId
-        status
-        productVariantId
-        quantity
-      }
-      shippingInfo {
-        shippingAddress {
-          firstName
-          lastName
-          company
-          phoneNumber
-          line1
-          line2
-          city
-          state
-          postalCode
-          country
-        }
-      }
-      payment {
-        paymentMethod {
-          ... on PaymentMethodCreditCard {
-            billingAddress {
-              firstName
-              lastName
-              company
-              phoneNumber
-              line1
-              line2
-              city
-              state
-              postalCode
-              country
-            }
-            type
-            last4
-            cardType
-          }
-        }
-      }
-      priceInfo {
-        currencyCode
-        originalSubtotal
-        shippingRate {
-          originalAmount
-          amount
-        }
-        tax {
-          shipping
-          total
-        }
-        subtotal
-        amount
-      }
-      appliedDiscounts {
-        amount
-        code
-        items {
-          indexId
-          unitAmount
-          amount
-        }
-      }
-      createdAt
-    }
-    ... on PublicCommerceOrder {
-      identifier
-      status
-      paymentStatus
-      fulfillmentStatus
-      lineItems {
-        id
-        indexId
-        status
-        productVariantId
-        quantity
-      }
-      priceInfo {
-        currencyCode
-        originalSubtotal
-        shippingRate {
-          originalAmount
-          amount
-        }
-        tax {
-          shipping
-          total
-        }
-        subtotal
-        amount
-      }
-      appliedDiscounts {
-        amount
-        code
-        items {
-          indexId
-          unitAmount
-          amount
-        }
-      }
-      createdAt
-    }
+export const AccountPasswordUpdateDocument = new TypedDocumentString(`
+    mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
+  accountPasswordUpdate(input: $input) {
+    success
   }
 }
-    `) as unknown as TypedDocumentString<
-    CommerceOrdersByCheckoutSessionQuery,
-    CommerceOrdersByCheckoutSessionQueryVariables
->;
-export const CommerceOrdersDocument = new TypedDocumentString(`
-    query CommerceOrders($pagination: PaginationInput!) {
-  commerceOrders(pagination: $pagination) {
-    items {
+    `) as unknown as TypedDocumentString<AccountPasswordUpdateMutation, AccountPasswordUpdateMutationVariables>;
+export const AccountDeleteDocument = new TypedDocumentString(`
+    mutation AccountDelete($reason: String) {
+  accountDelete(reason: $reason) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountDeleteMutation, AccountDeleteMutationVariables>;
+export const AccountProfilePublicDocument = new TypedDocumentString(`
+    query AccountProfilePublic($username: String!) {
+  accountProfilePublic(username: $username) {
+    username
+    displayName
+    images {
+      url
+      variant
+    }
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfilePublicQuery, AccountProfilePublicQueryVariables>;
+export const AccountSignOutDocument = new TypedDocumentString(`
+    mutation AccountSignOut {
+  accountSignOut {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountSignOutMutation, AccountSignOutMutationVariables>;
+export const AccountDocument = new TypedDocumentString(`
+    query Account {
+  account {
+    emailAddress
+    profile {
       id
-      identifier
-      status
-      paymentStatus
-      fulfillmentStatus
-      lineItems {
-        id
-        indexId
-        status
-        productVariantId
-        quantity
-      }
-      shipments {
-        id
-        orderIndexId
-        status
-        label {
-          carrier
-          serviceType
-          trackingNumber
-          trackingUrl
-        }
-        packageInfo {
-          items {
-            indexId
-            quantity
-          }
-        }
-        shippedAt
-        deliveredAt
-        cancelledAt
-      }
-      priceInfo {
-        amount
-        originalSubtotal
-        lineItemPrices {
-          indexId
-          originalSubtotal
-          originalUnitPrice
-          subtotal
-          unitPrice
-        }
-      }
-      appliedDiscounts {
-        amount
-        code
-        items {
-          indexId
-          unitAmount
-          amount
-        }
+      username
+      displayName
+      givenName
+      familyName
+      images {
+        url
+        variant
       }
       updatedAt
       createdAt
     }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      page
-      pagesTotal
-    }
+    accessRoles
+    createdAt
   }
 }
-    `) as unknown as TypedDocumentString<CommerceOrdersQuery, CommerceOrdersQueryVariables>;
-export const CommerceOrderDocument = new TypedDocumentString(`
-    query CommerceOrder($orderIdentifier: String!) {
-  commerceOrder(identifier: $orderIdentifier) {
-    ... on CommerceOrder {
-      identifier
-      status
-      statusRecords {
-        status
-        timestamp
-        description
-      }
-      paymentStatus
-      fulfillmentStatus
-      emailAddress
-      lineItems {
-        id
-        indexId
-        status
-        productVariantId
-        quantity
-        updatedAt
-        createdAt
-      }
-      shipments {
-        id
-        orderIndexId
-        status
-        label {
-          carrier
-          serviceType
-          trackingNumber
-          trackingUrl
-        }
-        packageInfo {
-          items {
-            indexId
-            quantity
-          }
-        }
-        shippedAt
-        deliveredAt
-        cancelledAt
-        updatedAt
-        createdAt
-      }
-      shippingInfo {
-        shippingAddress {
-          firstName
-          lastName
-          company
-          phoneNumber
-          line1
-          line2
-          city
-          state
-          postalCode
-          country
-        }
-      }
-      payment {
-        paymentMethod {
-          ... on PaymentMethodCreditCard {
-            billingAddress {
-              firstName
-              lastName
-              company
-              phoneNumber
-              line1
-              line2
-              city
-              state
-              postalCode
-              country
-            }
-            type
-            last4
-            cardType
-          }
-        }
-      }
-      priceInfo {
-        currencyCode
-        originalSubtotal
-        shippingRate {
-          originalAmount
-          amount
-        }
-        tax {
-          shipping
-          total
-        }
-        subtotal
-        amount
-        lineItemPrices {
-          indexId
-          originalSubtotal
-          originalUnitPrice
-          subtotal
-          unitPrice
-        }
-      }
-      createdAt
-      appliedDiscounts {
-        amount
-        code
-        items {
-          indexId
-          unitAmount
-          amount
-        }
-      }
-    }
-    ... on PublicCommerceOrder {
-      identifier
-      status
-      paymentStatus
-      fulfillmentStatus
-      lineItems {
-        id
-        indexId
-        status
-        productVariantId
-        quantity
-      }
-      priceInfo {
-        currencyCode
-        originalSubtotal
-        shippingRate {
-          originalAmount
-          amount
-        }
-        tax {
-          shipping
-          total
-        }
-        subtotal
-        amount
-        lineItemPrices {
-          indexId
-          originalSubtotal
-          originalUnitPrice
-          subtotal
-          unitPrice
-        }
-      }
-      appliedDiscounts {
-        amount
-        code
-        items {
-          indexId
-          unitAmount
-          amount
-        }
-      }
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<CommerceOrderQuery, CommerceOrderQueryVariables>;
+    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
 export const CommerceOrdersPrivilegedDocument = new TypedDocumentString(`
     query CommerceOrdersPrivileged($pagination: PaginationInput!) {
   commerceOrdersPrivileged(pagination: $pagination) {
@@ -7101,106 +5497,6 @@ export const CommerceOrdersPrivilegedDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CommerceOrdersPrivilegedQuery, CommerceOrdersPrivilegedQueryVariables>;
-export const CommerceOrdersPrivilegedChartDocument = new TypedDocumentString(`
-    query CommerceOrdersPrivilegedChart($pagination: PaginationInput!) {
-  commerceOrdersPrivileged(pagination: $pagination) {
-    items {
-      createdAt
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    CommerceOrdersPrivilegedChartQuery,
-    CommerceOrdersPrivilegedChartQueryVariables
->;
-export const DataInteractionDatabasesDocument = new TypedDocumentString(`
-    query DataInteractionDatabases($pagination: PaginationInput!) {
-  dataInteractionDatabases(pagination: $pagination) {
-    items {
-      databaseName
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      pagesTotal
-      page
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<DataInteractionDatabasesQuery, DataInteractionDatabasesQueryVariables>;
-export const DataInteractionDatabaseTableDocument = new TypedDocumentString(`
-    query DataInteractionDatabaseTable($databaseName: String!, $tableName: String!) {
-  dataInteractionDatabaseTable(databaseName: $databaseName, tableName: $tableName) {
-    databaseName
-    tableName
-    columns {
-      name
-      type
-      isKey
-      isPrimaryKey
-      keyTableName
-      possibleValues
-      isNullable
-      isGenerated
-      length
-    }
-    relations {
-      fieldName
-      type
-      tableName
-      inverseFieldName
-      inverseType
-      inverseTableName
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<DataInteractionDatabaseTableQuery, DataInteractionDatabaseTableQueryVariables>;
-export const DataInteractionDatabaseTableMetricsDocument = new TypedDocumentString(`
-    query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
-  dataInteractionDatabaseTableMetrics(input: $input) {
-    timeInterval
-    data
-  }
-}
-    `) as unknown as TypedDocumentString<
-    DataInteractionDatabaseTableMetricsQuery,
-    DataInteractionDatabaseTableMetricsQueryVariables
->;
-export const DataInteractionDatabaseTablesDocument = new TypedDocumentString(`
-    query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
-  dataInteractionDatabaseTables(
-    databaseName: $databaseName
-    pagination: $pagination
-  ) {
-    items {
-      databaseName
-      tableName
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      pagesTotal
-      page
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    DataInteractionDatabaseTablesQuery,
-    DataInteractionDatabaseTablesQueryVariables
->;
 export const DataInteractionDatabaseTableRowsDocument = new TypedDocumentString(`
     query DataInteractionDatabaseTableRows($databaseName: String!, $tableName: String!, $pagination: PaginationInput!, $filters: ColumnFilterGroupInput) {
   dataInteractionDatabaseTableRows(
@@ -7254,398 +5550,25 @@ export const EngagementEventCreateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<EngagementEventCreateMutation, EngagementEventCreateMutationVariables>;
-export const EngagementEventsCreateDocument = new TypedDocumentString(`
-    mutation EngagementEventsCreate($input: [CreateEngagementEventInput!]!) {
-  engagementEventsCreate(inputs: $input) {
+export const PostDeleteDocument = new TypedDocumentString(`
+    mutation PostDelete($id: String!) {
+  postDelete(id: $id)
+}
+    `) as unknown as TypedDocumentString<PostDeleteMutation, PostDeleteMutationVariables>;
+export const PostByIdentifierDocument = new TypedDocumentString(`
+    query PostByIdentifier($identifier: String!) {
+  post(identifier: $identifier) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<PostByIdentifierQuery, PostByIdentifierQueryVariables>;
+export const PostTopicDeleteDocument = new TypedDocumentString(`
+    mutation PostTopicDelete($id: String!) {
+  postTopicDelete(id: $id) {
     success
   }
 }
-    `) as unknown as TypedDocumentString<EngagementEventsCreateMutation, EngagementEventsCreateMutationVariables>;
-export const EngagementOverviewDocument = new TypedDocumentString(`
-    query EngagementOverview($input: EngagementOverviewInput) {
-  engagementOverview(input: $input) {
-    uniqueDeviceIds
-    views {
-      uniqueDeviceCount
-      viewIdentifier
-    }
-    locations {
-      uniqueDeviceCount
-      countryCode
-      latitude
-      longitude
-    }
-    referrers {
-      referrer
-      uniqueDeviceCount
-    }
-    deviceCategoryPercentages
-  }
-}
-    `) as unknown as TypedDocumentString<EngagementOverviewQuery, EngagementOverviewQueryVariables>;
-export const FormDocument = new TypedDocumentString(`
-    query Form($identifier: String!) {
-  form(identifier: $identifier) {
-    identifier
-    title
-    description
-    status
-    metadata {
-      theme {
-        backgroundColor
-        primaryColor
-        header {
-          fontFamily
-          fontSize
-        }
-        question {
-          fontFamily
-          fontSize
-        }
-        text {
-          fontFamily
-          fontSize
-        }
-      }
-    }
-    components {
-      ... on FormComponentDataCheckbox {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        options
-        maxSelections
-      }
-      ... on FormComponentDataCheckboxGrid {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        columns
-        rows
-        maxSelectionsPerRow
-        allowEmpty
-      }
-      ... on FormComponentDataDate {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        initialDate
-        minDate
-        maxDate
-      }
-      ... on FormComponentDataDropdown {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        options
-        placeholder
-        defaultOption
-      }
-      ... on FormComponentDataLinearScale {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        min
-        max
-        step
-        leftLabel
-        rightLabel
-      }
-      ... on FormComponentDataMultipleChoice {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        options
-        defaultOption
-      }
-      ... on FormComponentDataMultipleChoiceGrid {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        columns
-        rows
-      }
-      ... on FormComponentDataNumber {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        numberMin: min
-        numberMax: max
-        allowFloat
-      }
-      ... on FormComponentDataParagraph {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        placeholder
-      }
-      ... on FormComponentDataRating {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        icon
-        max
-        allowHalf
-        allowZero
-      }
-      ... on FormComponentDataSectionHeader {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-      }
-      ... on FormComponentDataShortAnswer {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        placeholder
-      }
-      ... on FormComponentDataTime {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-        initialTime
-        minTime
-        maxTime
-        allowSeconds
-        ampm
-      }
-      ... on FormComponentDataTitleAndDescription {
-        id
-        position
-        section
-        type
-        title
-        description
-        required
-      }
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<FormQuery, FormQueryVariables>;
-export const SubmitFormDocument = new TypedDocumentString(`
-    mutation SubmitForm($identifier: String!, $emailAddress: String, $data: JSON!) {
-  submitForm(identifier: $identifier, emailAddress: $emailAddress, data: $data) {
-    id
-    formId
-  }
-}
-    `) as unknown as TypedDocumentString<SubmitFormMutation, SubmitFormMutationVariables>;
-export const PostsDocument = new TypedDocumentString(`
-    query Posts($pagination: PaginationInput!) {
-  posts(pagination: $pagination) {
-    items {
-      id
-      identifier
-      slug
-      status
-      title
-      createdByProfileId
-      createdByProfile {
-        displayName
-        username
-        images {
-          url
-          type
-          variant
-        }
-      }
-      content
-      topics {
-        id
-        title
-        slug
-      }
-      reactions {
-        content
-        count
-        reacted
-      }
-      upvoteCount
-      downvoteCount
-      voteType
-      reportedCount
-      reportStatus
-      metadata
-      latestRevisionId
-      updatedAt
-      createdAt
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      pagesTotal
-      page
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<PostsQuery, PostsQueryVariables>;
-export const PostsMineDocument = new TypedDocumentString(`
-    query PostsMine($pagination: PaginationInput!) {
-  postsMine(pagination: $pagination) {
-    items {
-      id
-      identifier
-      slug
-      status
-      title
-      createdByProfileId
-      createdByProfile {
-        displayName
-        username
-        images {
-          url
-          type
-          variant
-        }
-      }
-      content
-      topics {
-        id
-        title
-        slug
-      }
-      reactions {
-        content
-        count
-        reacted
-      }
-      upvoteCount
-      downvoteCount
-      voteType
-      reportedCount
-      reportStatus
-      metadata
-      latestRevisionId
-      updatedAt
-      createdAt
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      pagesTotal
-      page
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<PostsMineQuery, PostsMineQueryVariables>;
-export const PostDocument = new TypedDocumentString(`
-    query Post($identifier: String!) {
-  post(identifier: $identifier) {
-    id
-    identifier
-    slug
-    status
-    title
-    createdByProfileId
-    createdByProfile {
-      displayName
-      username
-      images {
-        url
-        type
-        variant
-      }
-    }
-    content
-    topics {
-      id
-      title
-    }
-    reactions {
-      content
-      count
-      reacted
-    }
-    upvoteCount
-    downvoteCount
-    voteType
-    reportedCount
-    reportStatus
-    type
-    metadata
-    latestRevisionId
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<PostQuery, PostQueryVariables>;
-export const PostCreateDocument = new TypedDocumentString(`
-    mutation PostCreate($input: PostCreateInput!) {
-  postCreatePrivileged(input: $input) {
-    id
-    status
-    title
-    contentType
-    content
-    settings
-    upvoteCount
-    downvoteCount
-    metadata
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<PostCreateMutation, PostCreateMutationVariables>;
+    `) as unknown as TypedDocumentString<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
 export const PostUpdateDocument = new TypedDocumentString(`
     mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
   postUpdate(id: $id, input: $input) {
@@ -7663,11 +5586,20 @@ export const PostUpdateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostUpdateMutation, PostUpdateMutationVariables>;
-export const PostDeleteDocument = new TypedDocumentString(`
-    mutation PostDelete($id: String!) {
-  postDelete(id: $id)
+export const PostReactionCreateDocument = new TypedDocumentString(`
+    mutation PostReactionCreate($postId: String!, $content: String!) {
+  postReactionCreate(postId: $postId, content: $content) {
+    success
+  }
 }
-    `) as unknown as TypedDocumentString<PostDeleteMutation, PostDeleteMutationVariables>;
+    `) as unknown as TypedDocumentString<PostReactionCreateMutation, PostReactionCreateMutationVariables>;
+export const PostReportCreateDocument = new TypedDocumentString(`
+    mutation PostReportCreate($input: PostReportInput!) {
+  postReportCreate(input: $input) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<PostReportCreateMutation, PostReportCreateMutationVariables>;
 export const PostVoteDocument = new TypedDocumentString(`
     mutation PostVote($postId: String!, $type: PostVoteType!) {
   postVote(postId: $postId, type: $type) {
@@ -7682,20 +5614,6 @@ export const PostUnvoteDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostUnvoteMutation, PostUnvoteMutationVariables>;
-export const PostReactionCreateDocument = new TypedDocumentString(`
-    mutation PostReactionCreate($postId: String!, $content: String!) {
-  postReactionCreate(postId: $postId, content: $content) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<PostReactionCreateMutation, PostReactionCreateMutationVariables>;
-export const PostReactionDeleteDocument = new TypedDocumentString(`
-    mutation PostReactionDelete($postId: String!, $content: String!) {
-  postReactionDelete(postId: $postId, content: $content) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<PostReactionDeleteMutation, PostReactionDeleteMutationVariables>;
 export const PostReactionProfilesDocument = new TypedDocumentString(`
     query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {
   postReactionProfiles(
@@ -7720,37 +5638,128 @@ export const PostReactionProfilesDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostReactionProfilesQuery, PostReactionProfilesQueryVariables>;
-export const PostReportCreateDocument = new TypedDocumentString(`
-    mutation PostReportCreate($input: PostReportInput!) {
-  postReportCreate(input: $input) {
-    id
+export const PostReactionDeleteDocument = new TypedDocumentString(`
+    mutation PostReactionDelete($postId: String!, $content: String!) {
+  postReactionDelete(postId: $postId, content: $content) {
+    success
   }
 }
-    `) as unknown as TypedDocumentString<PostReportCreateMutation, PostReportCreateMutationVariables>;
-export const PostTopicByIdDocument = new TypedDocumentString(`
-    query PostTopicById($id: String!) {
-  postTopicById(id: $id) {
+    `) as unknown as TypedDocumentString<PostReactionDeleteMutation, PostReactionDeleteMutationVariables>;
+export const PostDocument = new TypedDocumentString(`
+    query Post($id: String, $slug: String, $identifier: String) {
+  post(id: $id, slug: $slug, identifier: $identifier) {
     id
-    title
+    identifier
     slug
-    description
-    postCount
+    status
+    title
+    createdByProfileId
+    createdByProfile {
+      displayName
+      username
+      images {
+        url
+        type
+        variant
+      }
+    }
+    content
+    reactions {
+      content
+      count
+      reacted
+    }
+    upvoteCount
+    downvoteCount
+    voteType
+    reportedCount
+    reportStatus
+    metadata
+    latestRevisionId
+    updatedAt
     createdAt
   }
 }
-    `) as unknown as TypedDocumentString<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
-export const PostTopicsDocument = new TypedDocumentString(`
-    query PostTopics($ids: [String!]) {
-  postTopics(ids: $ids) {
+    `) as unknown as TypedDocumentString<PostQuery, PostQueryVariables>;
+export const PostsDocument = new TypedDocumentString(`
+    query Posts($pagination: PaginationInput!) {
+  posts(pagination: $pagination) {
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+    items {
+      id
+      identifier
+      slug
+      status
+      title
+      createdByProfileId
+      createdByProfile {
+        displayName
+        username
+        images {
+          url
+          type
+          variant
+        }
+      }
+      content
+      reactions {
+        content
+        count
+        reacted
+      }
+      upvoteCount
+      downvoteCount
+      voteType
+      reportedCount
+      reportStatus
+      metadata
+      latestRevisionId
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<PostsQuery, PostsQueryVariables>;
+export const PostCreateDocument = new TypedDocumentString(`
+    mutation PostCreate($input: PostCreateInput!) {
+  postCreatePrivileged(input: $input) {
     id
+    status
     title
-    slug
-    description
-    postCount
+    contentType
+    content
+    settings
+    upvoteCount
+    downvoteCount
+    metadata
+    updatedAt
     createdAt
   }
 }
-    `) as unknown as TypedDocumentString<PostTopicsQuery, PostTopicsQueryVariables>;
+    `) as unknown as TypedDocumentString<PostCreateMutation, PostCreateMutationVariables>;
+export const SupportTicketCreateDocument = new TypedDocumentString(`
+    mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
+  supportTicketCreate(input: $input) {
+    id
+    type
+    status
+    userEmailAddress
+    title
+    description
+    comments {
+      content
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportTicketCreateMutation, SupportTicketCreateMutationVariables>;
 export const PostTopicCreateDocument = new TypedDocumentString(`
     mutation PostTopicCreate($input: PostTopicCreateInput!) {
   postTopicCreate(input: $input) {
@@ -7775,483 +5784,18 @@ export const PostTopicUpdateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostTopicUpdateMutation, PostTopicUpdateMutationVariables>;
-export const PostTopicDeleteDocument = new TypedDocumentString(`
-    mutation PostTopicDelete($id: String!) {
-  postTopicDelete(id: $id) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
-export const SupportPostDocument = new TypedDocumentString(`
-    query SupportPost($identifier: String!) {
-  post(identifier: $identifier) {
-    identifier
+export const PostTopicByIdDocument = new TypedDocumentString(`
+    query PostTopicById($id: String!) {
+  postTopicById(id: $id) {
+    id
+    title
     slug
-    status
-    title
     description
-    content
-    updatedAt
+    postCount
     createdAt
   }
 }
-    `) as unknown as TypedDocumentString<SupportPostQuery, SupportPostQueryVariables>;
-export const SupportPostsDocument = new TypedDocumentString(`
-    query SupportPosts($pagination: PaginationInput!) {
-  posts(pagination: $pagination) {
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      pagesTotal
-      page
-    }
-    items {
-      identifier
-      slug
-      status
-      title
-      description
-      content
-      topics {
-        id
-        title
-        slug
-      }
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<SupportPostsQuery, SupportPostsQueryVariables>;
-export const SupportPostTopicDocument = new TypedDocumentString(`
-    query SupportPostTopic($slug: String!, $path: String, $pagination: PaginationInput!) {
-  postTopic(
-    slug: $slug
-    path: $path
-    type: "SupportArticle"
-    pagination: $pagination
-  ) {
-    topic {
-      id
-      title
-      slug
-      description
-      postCount
-      createdAt
-    }
-    subTopics {
-      id
-      title
-      slug
-      description
-      postCount
-      createdAt
-    }
-    pagedPosts {
-      items {
-        id
-        identifier
-        slug
-        status
-        title
-        description
-        content
-        metadata
-        updatedAt
-        createdAt
-      }
-      pagination {
-        itemIndex
-        itemIndexForPreviousPage
-        itemIndexForNextPage
-        itemsPerPage
-        itemsTotal
-        pagesTotal
-        page
-      }
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<SupportPostTopicQuery, SupportPostTopicQueryVariables>;
-export const SupportTicketCreateDocument = new TypedDocumentString(`
-    mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
-  supportTicketCreate(input: $input) {
-    id
-    type
-    status
-    userEmailAddress
-    title
-    description
-    comments {
-      content
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<SupportTicketCreateMutation, SupportTicketCreateMutationVariables>;
-export const SupportTicketUpdateStatusPrivilegedDocument = new TypedDocumentString(`
-    mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {
-  supportTicketUpdateStatusPrivileged(id: $id, status: $status) {
-    id
-    status
-  }
-}
-    `) as unknown as TypedDocumentString<
-    SupportTicketUpdateStatusPrivilegedMutation,
-    SupportTicketUpdateStatusPrivilegedMutationVariables
->;
-export const SupportTicketsPrivilegedDocument = new TypedDocumentString(`
-    query SupportTicketsPrivileged($pagination: PaginationInput!) {
-  supportTicketsPrivileged(pagination: $pagination) {
-    items {
-      id
-      identifier
-      status
-      type
-      title
-      description
-      userEmailAddress
-      assignedToProfileId
-      assignedToProfile {
-        username
-        displayName
-        images {
-          type
-          url
-          variant
-        }
-      }
-      comments {
-        id
-        source
-        visibility
-        content
-        contentType
-        attachments {
-          type
-          url
-          variant
-        }
-        createdAt
-      }
-      createdAt
-      updatedAt
-      lastUserCommentedAt
-      answeredAt
-      answered
-    }
-    pagination {
-      itemIndex
-      itemIndexForNextPage
-      itemIndexForPreviousPage
-      itemsPerPage
-      itemsTotal
-      page
-      pagesTotal
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<SupportTicketsPrivilegedQuery, SupportTicketsPrivilegedQueryVariables>;
-export const SupportTicketAssignDocument = new TypedDocumentString(`
-    mutation SupportTicketAssign($ticketId: String!, $username: String) {
-  supportTicketAssign(ticketId: $ticketId, username: $username) {
-    id
-    assignedToProfileId
-    assignedToProfile {
-      username
-      displayName
-      images {
-        type
-        url
-        variant
-      }
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<SupportTicketAssignMutation, SupportTicketAssignMutationVariables>;
-export const SupportTicketCommentCreatePrivilegedDocument = new TypedDocumentString(`
-    mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreateInput!) {
-  supportTicketCommentCreatePrivileged(input: $input) {
-    id
-    content
-    contentType
-    source
-    visibility
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<
-    SupportTicketCommentCreatePrivilegedMutation,
-    SupportTicketCommentCreatePrivilegedMutationVariables
->;
-export const SupportAllSupportProfilesDocument = new TypedDocumentString(`
-    query SupportAllSupportProfiles {
-  supportAllSupportProfiles {
-    username
-    displayName
-    images {
-      type
-      url
-      variant
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<SupportAllSupportProfilesQuery, SupportAllSupportProfilesQueryVariables>;
-export const SupportTicketAccountAndCommerceOrdersPrivelegedDocument = new TypedDocumentString(`
-    query SupportTicketAccountAndCommerceOrdersPriveleged($email: String!, $pagination: PaginationInput!) {
-  accountPrivileged(input: {emailAddress: $email}) {
-    defaultProfileId
-    defaultProfile {
-      id
-      images {
-        type
-        url
-        variant
-      }
-      displayName
-      givenName
-      familyName
-      preferredName
-      username
-      createdAt
-    }
-    emailAddress
-    status
-  }
-  commerceOrdersPrivileged(pagination: $pagination) {
-    items {
-      id
-      fulfillmentStatus
-      emailAddress
-      identifier
-      lineItems {
-        createdAt
-        id
-        indexId
-        productVariantId
-        quantity
-        status
-        updatedAt
-      }
-      paymentStatus
-      priceInfo {
-        amount
-        currencyCode
-        originalSubtotal
-        subtotal
-        lineItemPrices {
-          indexId
-          originalSubtotal
-          subtotal
-        }
-        shippingRate {
-          amount
-          originalAmount
-        }
-        tax {
-          shipping
-          total
-        }
-      }
-      source
-      status
-      metadata
-      createdAt
-      updatedAt
-      shippingInfo {
-        shippingAddress {
-          line1
-          line2
-          city
-          company
-          country
-          firstName
-          lastName
-          phoneNumber
-          postalCode
-          state
-        }
-      }
-    }
-    pagination {
-      pagesTotal
-      page
-      itemsTotal
-      itemsPerPage
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemIndex
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    SupportTicketAccountAndCommerceOrdersPrivelegedQuery,
-    SupportTicketAccountAndCommerceOrdersPrivelegedQueryVariables
->;
-export const ProfileSupportTicketsDocument = new TypedDocumentString(`
-    query ProfileSupportTickets($openTicketsIndex: Int!, $closedTicketsIndex: Int!) {
-  openTickets: supportTickets(
-    pagination: {itemsPerPage: 3, itemIndex: $openTicketsIndex, filters: [{column: "status", operator: Equal, value: "Open"}], orderBy: [{key: "createdAt", direction: Descending}]}
-  ) {
-    items {
-      id
-      identifier
-      status
-      type
-      title
-      description
-      userEmailAddress
-      comments {
-        id
-        source
-        visibility
-        content
-        contentType
-        createdAt
-      }
-      createdAt
-      updatedAt
-    }
-    pagination {
-      itemIndex
-      itemIndexForNextPage
-      itemIndexForPreviousPage
-      itemsPerPage
-      itemsTotal
-      page
-      pagesTotal
-    }
-  }
-  closedTickets: supportTickets(
-    pagination: {itemsPerPage: 3, itemIndex: $closedTicketsIndex, filters: [{column: "status", operator: Equal, value: "Closed"}], orderBy: [{key: "createdAt", direction: Descending}]}
-  ) {
-    items {
-      id
-      identifier
-      status
-      type
-      title
-      description
-      userEmailAddress
-      comments {
-        id
-        source
-        visibility
-        content
-        contentType
-        createdAt
-      }
-      createdAt
-      updatedAt
-    }
-    pagination {
-      itemIndex
-      itemIndexForNextPage
-      itemIndexForPreviousPage
-      itemsPerPage
-      itemsTotal
-      page
-      pagesTotal
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<ProfileSupportTicketsQuery, ProfileSupportTicketsQueryVariables>;
-export const ProfileSupportTicketDocument = new TypedDocumentString(`
-    query ProfileSupportTicket($pagination: PaginationInput!) {
-  supportTickets(pagination: $pagination) {
-    items {
-      id
-      identifier
-      status
-      type
-      title
-      description
-      userEmailAddress
-      comments {
-        id
-        source
-        visibility
-        content
-        contentType
-        attachments {
-          type
-          url
-          variant
-        }
-        createdAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<ProfileSupportTicketQuery, ProfileSupportTicketQueryVariables>;
-export const WaitListsPrivilegedDocument = new TypedDocumentString(`
-    query WaitListsPrivileged($pagination: PaginationInput!) {
-  waitListsPrivileged(pagination: $pagination) {
-    pagination {
-      itemIndex
-      itemIndexForNextPage
-      itemIndexForPreviousPage
-      itemsPerPage
-      itemsTotal
-      page
-      pagesTotal
-    }
-    items {
-      id
-      identifier
-      title
-      description
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<WaitListsPrivilegedQuery, WaitListsPrivilegedQueryVariables>;
-export const WaitListCreatePrivilegedDocument = new TypedDocumentString(`
-    mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
-  waitListCreatePrivileged(data: $data) {
-    id
-    identifier
-    title
-    description
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<WaitListCreatePrivilegedMutation, WaitListCreatePrivilegedMutationVariables>;
-export const WaitListEntriesPrivilegedDocument = new TypedDocumentString(`
-    query WaitListEntriesPrivileged($waitListIdentifier: String, $pagination: PaginationInput!) {
-  waitListEntriesPrivileged(
-    waitListIdentifier: $waitListIdentifier
-    pagination: $pagination
-  ) {
-    pagination {
-      itemIndex
-      itemIndexForNextPage
-      itemIndexForPreviousPage
-      itemsPerPage
-      itemsTotal
-      page
-      pagesTotal
-    }
-    items {
-      id
-      emailAddress
-      message
-      userAgent
-      countryCode
-      referredBy
-      contactedAt
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<WaitListEntriesPrivilegedQuery, WaitListEntriesPrivilegedQueryVariables>;
+    `) as unknown as TypedDocumentString<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
 export const WaitListEntryCreateDocument = new TypedDocumentString(`
     mutation WaitListEntryCreate($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
   waitListEntryCreate(
@@ -8263,16 +5807,110 @@ export const WaitListEntryCreateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<WaitListEntryCreateMutation, WaitListEntryCreateMutationVariables>;
-export const WaitListEntryDeleteDocument = new TypedDocumentString(`
-    mutation WaitListEntryDelete($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
-  waitListEntryDelete(
-    emailAddress: $emailAddress
-    waitListIdentifier: $waitListIdentifier
+export const DataInteractionDatabaseTablesDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
+  dataInteractionDatabaseTables(
+    databaseName: $databaseName
+    pagination: $pagination
   ) {
-    success
+    items {
+      databaseName
+      tableName
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
   }
 }
-    `) as unknown as TypedDocumentString<WaitListEntryDeleteMutation, WaitListEntryDeleteMutationVariables>;
+    `) as unknown as TypedDocumentString<
+    DataInteractionDatabaseTablesQuery,
+    DataInteractionDatabaseTablesQueryVariables
+>;
+export const DataInteractionDatabaseTableDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTable($databaseName: String!, $tableName: String!) {
+  dataInteractionDatabaseTable(databaseName: $databaseName, tableName: $tableName) {
+    databaseName
+    tableName
+    columns {
+      name
+      type
+      isKey
+      isPrimaryKey
+      keyTableName
+      possibleValues
+      isNullable
+      isGenerated
+      length
+    }
+    relations {
+      fieldName
+      type
+      tableName
+      inverseFieldName
+      inverseType
+      inverseTableName
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<DataInteractionDatabaseTableQuery, DataInteractionDatabaseTableQueryVariables>;
+export const DataInteractionDatabaseTableMetricsDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
+  dataInteractionDatabaseTableMetrics(input: $input) {
+    timeInterval
+    data
+  }
+}
+    `) as unknown as TypedDocumentString<
+    DataInteractionDatabaseTableMetricsQuery,
+    DataInteractionDatabaseTableMetricsQueryVariables
+>;
+export const EngagementOverviewDocument = new TypedDocumentString(`
+    query EngagementOverview($input: EngagementOverviewInput) {
+  engagementOverview(input: $input) {
+    uniqueDeviceIds
+    views {
+      uniqueDeviceCount
+      viewIdentifier
+    }
+    locations {
+      uniqueDeviceCount
+      countryCode
+      latitude
+      longitude
+    }
+    referrers {
+      referrer
+      uniqueDeviceCount
+    }
+    deviceCategoryPercentages
+  }
+}
+    `) as unknown as TypedDocumentString<EngagementOverviewQuery, EngagementOverviewQueryVariables>;
+export const CommerceOrdersPrivilegedChartDocument = new TypedDocumentString(`
+    query CommerceOrdersPrivilegedChart($pagination: PaginationInput!) {
+  commerceOrdersPrivileged(pagination: $pagination) {
+    items {
+      createdAt
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    CommerceOrdersPrivilegedChartQuery,
+    CommerceOrdersPrivilegedChartQueryVariables
+>;
 export type GraphQLInputTypeMetadata =
     | GraphQLInputScalarTypeMetadata
     | GraphQLInputEnumTypeMetadata
@@ -8349,157 +5987,78 @@ export interface GraphQLInputObjectFieldValidationMetadata {
 }
 
 export namespace GraphQLInputTypes {
-    export const WaitListCreationInput: GraphQLInputObjectTypeMetadata = {
+    export const EngagementOverviewInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'WaitListCreationInput',
+        type: 'EngagementOverviewInput',
         fields: [
             {
-                name: 'identifier',
+                name: 'startTime',
                 kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [16],
-                    },
-                ],
-            },
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
-                    },
-                ],
-            },
-        ],
-    };
-
-    export const SupportTicketStatus: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'SupportTicketStatus',
-        values: ['Open', 'Closed', 'Deleted'],
-    };
-
-    export const SupportTicketCommentVisibility: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'SupportTicketCommentVisibility',
-        values: ['Public', 'Internal'],
-    };
-
-    export const SupportTicketCommentCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'SupportTicketCommentCreateInput',
-        fields: [
-            {
-                name: 'ticketIdentifier',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'content',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'contentType',
-                kind: 'enum',
-                type: GraphQLInputTypes.RichContentFormat,
+                type: 'DateTimeISO',
                 required: false,
             },
             {
-                name: 'replyToCommentId',
+                name: 'endTime',
                 kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'visibility',
-                kind: 'enum',
-                type: GraphQLInputTypes.SupportTicketCommentVisibility,
+                type: 'DateTimeISO',
                 required: false,
             },
         ],
     };
 
-    export const SupportTicketCreateInput: GraphQLInputObjectTypeMetadata = {
+    export const TimeInterval: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'TimeInterval',
+        values: ['Hour', 'HourOfDay', 'Day', 'DayOfWeek', 'DayOfMonth', 'Month', 'MonthOfYear', 'Quarter', 'Year'],
+    };
+
+    export const DataInteractionDatabaseTableMetricsQueryInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'SupportTicketCreateInput',
+        type: 'DataInteractionDatabaseTableMetricsQueryInput',
         fields: [
             {
-                name: 'title',
+                name: 'columnName',
                 kind: 'scalar',
                 type: 'String',
                 required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
             },
             {
-                name: 'description',
+                name: 'startTime',
                 kind: 'scalar',
-                type: 'String',
+                type: 'DateTimeISO',
                 required: false,
             },
             {
-                name: 'type',
+                name: 'endTime',
                 kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [36],
-                    },
-                    {
-                        type: 'isIn',
-                        constraints: [['Contact', 'SupportArticleFeedback']],
-                    },
-                ],
-            },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'initialComment',
-                kind: 'object',
-                type: GraphQLInputTypes.SupportTicketCommentCreateInput,
+                type: 'DateTimeISO',
                 required: false,
+            },
+            {
+                name: 'timeIntervals',
+                kind: 'enum',
+                type: GraphQLInputTypes.TimeInterval,
+                required: true,
+                validation: [
+                    {
+                        type: 'arrayNotEmpty',
+                    },
+                    {
+                        type: 'isArray',
+                    },
+                ],
+            },
+            {
+                name: 'tableName',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'databaseName',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
             },
         ],
     };
@@ -8639,12 +6198,36 @@ export namespace GraphQLInputTypes {
         ],
     };
 
-    export const PostReportInput: GraphQLInputObjectTypeMetadata = {
+    export const SupportTicketCommentVisibility: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'SupportTicketCommentVisibility',
+        values: ['Public', 'Internal'],
+    };
+
+    export const SupportTicketCommentCreateInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'PostReportInput',
+        type: 'SupportTicketCommentCreateInput',
         fields: [
             {
-                name: 'postId',
+                name: 'ticketIdentifier',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'content',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'contentType',
+                kind: 'enum',
+                type: GraphQLInputTypes.RichContentFormat,
+                required: false,
+            },
+            {
+                name: 'replyToCommentId',
                 kind: 'scalar',
                 type: 'String',
                 required: false,
@@ -8655,18 +6238,20 @@ export namespace GraphQLInputTypes {
                 ],
             },
             {
-                name: 'commentId',
-                kind: 'scalar',
-                type: 'String',
+                name: 'visibility',
+                kind: 'enum',
+                type: GraphQLInputTypes.SupportTicketCommentVisibility,
                 required: false,
-                validation: [
-                    {
-                        type: 'isUuid',
-                    },
-                ],
             },
+        ],
+    };
+
+    export const SupportTicketCreateInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'SupportTicketCreateInput',
+        fields: [
             {
-                name: 'reason',
+                name: 'title',
                 kind: 'scalar',
                 type: 'String',
                 required: true,
@@ -8678,125 +6263,45 @@ export namespace GraphQLInputTypes {
                 ],
             },
             {
-                name: 'note',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-        ],
-    };
-
-    export const PostVoteType: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'PostVoteType',
-        values: ['Upvote', 'Downvote'],
-    };
-
-    export const PostUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostUpdateInput',
-        fields: [
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [1024],
-                    },
-                ],
-            },
-            {
-                name: 'type',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isIn',
-                        constraints: [['Principle', 'Idea', 'SupportArticle']],
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [24],
-                    },
-                ],
-            },
-            {
-                name: 'slug',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [160],
-                    },
-                ],
-            },
-            {
                 name: 'description',
                 kind: 'scalar',
                 type: 'String',
                 required: false,
             },
             {
-                name: 'content',
+                name: 'type',
                 kind: 'scalar',
                 type: 'String',
-                required: false,
+                required: true,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [36],
+                    },
+                    {
+                        type: 'isIn',
+                        constraints: [['Contact', 'SupportArticleFeedback']],
+                    },
+                ],
             },
             {
-                name: 'contentType',
-                kind: 'enum',
-                type: GraphQLInputTypes.RichContentFormat,
-                required: false,
-            },
-            {
-                name: 'publishedAt',
+                name: 'emailAddress',
                 kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isEmail',
+                    },
+                ],
             },
             {
-                name: 'allowComment',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowVote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowDownvote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowReaction',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'metadata',
-                kind: 'scalar',
-                type: 'JSON',
+                name: 'initialComment',
+                kind: 'object',
+                type: GraphQLInputTypes.SupportTicketCommentCreateInput,
                 required: false,
             },
         ],
-    };
-
-    export const RichContentFormat: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'RichContentFormat',
-        values: ['Markdown', 'Html', 'PlainText'],
     };
 
     export const PostStatus: GraphQLInputEnumTypeMetadata = {
@@ -8929,20 +6434,161 @@ export namespace GraphQLInputTypes {
         ],
     };
 
-    export const EngagementOverviewInput: GraphQLInputObjectTypeMetadata = {
+    export const PostVoteType: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'PostVoteType',
+        values: ['Upvote', 'Downvote'],
+    };
+
+    export const PostReportInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'EngagementOverviewInput',
+        type: 'PostReportInput',
         fields: [
             {
-                name: 'startTime',
+                name: 'postId',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isUuid',
+                    },
+                ],
+            },
+            {
+                name: 'commentId',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isUuid',
+                    },
+                ],
+            },
+            {
+                name: 'reason',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [256],
+                    },
+                ],
+            },
+            {
+                name: 'note',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+        ],
+    };
+
+    export const RichContentFormat: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'RichContentFormat',
+        values: ['Markdown', 'Html', 'PlainText'],
+    };
+
+    export const PostUpdateInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'PostUpdateInput',
+        fields: [
+            {
+                name: 'title',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [1024],
+                    },
+                ],
+            },
+            {
+                name: 'type',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isIn',
+                        constraints: [['Principle', 'Idea', 'SupportArticle']],
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [24],
+                    },
+                ],
+            },
+            {
+                name: 'slug',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [160],
+                    },
+                ],
+            },
+            {
+                name: 'description',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+            {
+                name: 'content',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+            {
+                name: 'contentType',
+                kind: 'enum',
+                type: GraphQLInputTypes.RichContentFormat,
+                required: false,
+            },
+            {
+                name: 'publishedAt',
                 kind: 'scalar',
                 type: 'DateTimeISO',
                 required: false,
             },
             {
-                name: 'endTime',
+                name: 'allowComment',
                 kind: 'scalar',
-                type: 'DateTimeISO',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'allowVote',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'allowDownvote',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'allowReaction',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'metadata',
+                kind: 'scalar',
+                type: 'JSON',
                 required: false,
             },
         ],
@@ -9204,248 +6850,22 @@ export namespace GraphQLInputTypes {
         ],
     };
 
-    export const TimeInterval: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'TimeInterval',
-        values: ['Hour', 'HourOfDay', 'Day', 'DayOfWeek', 'DayOfMonth', 'Month', 'MonthOfYear', 'Quarter', 'Year'],
-    };
-
-    export const DataInteractionDatabaseTableMetricsQueryInput: GraphQLInputObjectTypeMetadata = {
+    export const AccountPasswordUpdateInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'DataInteractionDatabaseTableMetricsQueryInput',
+        type: 'AccountPasswordUpdateInput',
         fields: [
             {
-                name: 'columnName',
+                name: 'newPassword',
                 kind: 'scalar',
                 type: 'String',
                 required: true,
-            },
-            {
-                name: 'startTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'endTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'timeIntervals',
-                kind: 'enum',
-                type: GraphQLInputTypes.TimeInterval,
-                required: true,
-                validation: [
-                    {
-                        type: 'arrayNotEmpty',
-                    },
-                    {
-                        type: 'isArray',
-                    },
-                ],
-            },
-            {
-                name: 'tableName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'databaseName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
-
-    export const PaymentProcessorType: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'PaymentProcessorType',
-        values: ['Stripe', 'StripeEmbedded', 'AppleInAppPurchase', 'Test'],
-    };
-
-    export const CheckoutSessionCreateDirectItemInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'CheckoutSessionCreateDirectItemInput',
-        fields: [
-            {
-                name: 'productVariantId',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'quantity',
-                kind: 'scalar',
-                type: 'Int',
-                required: true,
-                validation: [
-                    {
-                        type: 'isPositive',
-                    },
-                ],
-            },
-        ],
-    };
-
-    export const CommerceCheckoutSessionCreateDirectInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'CommerceCheckoutSessionCreateDirectInput',
-        fields: [
-            {
-                name: 'items',
-                kind: 'object',
-                type: GraphQLInputTypes.CheckoutSessionCreateDirectItemInput,
-                required: true,
-                validation: [
-                    {
-                        type: 'arrayNotEmpty',
-                    },
-                ],
-            },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'paymentProcessorType',
-                kind: 'enum',
-                type: GraphQLInputTypes.PaymentProcessorType,
-                required: true,
-            },
-            {
-                name: 'returnBaseUrl',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isUrl',
-                    },
-                ],
-            },
-            {
-                name: 'orderMetadata',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
-
-    export const AccountDeleteInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountDeleteInput',
-        fields: [
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'reason',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
                 validation: [
                     {
                         type: 'isNotEmpty',
                     },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
                 ],
             },
         ],
-    };
-
-    export const AccessRoleAssignmentCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccessRoleAssignmentCreateInput',
-        fields: [
-            {
-                name: 'expiresAt',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'accessRole',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
-
-    export const AccessRoleAssignmentRevokeInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccessRoleAssignmentRevokeInput',
-        fields: [
-            {
-                name: 'accessRole',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
-
-    export const AccessRoleStatus: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'AccessRoleStatus',
-        values: ['Active', 'Expired', 'Revoked'],
     };
 
     export const AccountProfileUpdateInput: GraphQLInputObjectTypeMetadata = {
@@ -9564,6 +6984,118 @@ export namespace GraphQLInputTypes {
         ],
     };
 
+    export const WaitListCreationInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'WaitListCreationInput',
+        fields: [
+            {
+                name: 'identifier',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [16],
+                    },
+                ],
+            },
+            {
+                name: 'title',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [256],
+                    },
+                ],
+            },
+            {
+                name: 'description',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [512],
+                    },
+                ],
+            },
+        ],
+    };
+
+    export const AccessRoleAssignmentRevokeInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'AccessRoleAssignmentRevokeInput',
+        fields: [
+            {
+                name: 'accessRole',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'emailAddress',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isEmail',
+                    },
+                ],
+            },
+            {
+                name: 'username',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+        ],
+    };
+
+    export const AccessRoleStatus: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'AccessRoleStatus',
+        values: ['Active', 'Expired', 'Revoked'],
+    };
+
+    export const AccountDeleteInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'AccountDeleteInput',
+        fields: [
+            {
+                name: 'emailAddress',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isEmail',
+                    },
+                ],
+            },
+            {
+                name: 'reason',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isNotEmpty',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [128],
+                    },
+                ],
+            },
+        ],
+    };
+
     export const OrderByDirection: GraphQLInputEnumTypeMetadata = {
         kind: 'enum',
         type: 'OrderByDirection',
@@ -9670,9 +7202,45 @@ export namespace GraphQLInputTypes {
         ],
     };
 
-    export const AccountInput: GraphQLInputObjectTypeMetadata = {
+    export const AccountEmailVerificationVerifyInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'AccountInput',
+        type: 'AccountEmailVerificationVerifyInput',
+        fields: [
+            {
+                name: 'code',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isNotEmpty',
+                    },
+                ],
+            },
+        ],
+    };
+
+    export const AccountPasswordVerifyInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'AccountPasswordVerifyInput',
+        fields: [
+            {
+                name: 'password',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isNotEmpty',
+                    },
+                ],
+            },
+        ],
+    };
+
+    export const AccountRegistrationOrSignInCreateInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'AccountRegistrationOrSignInCreateInput',
         fields: [
             {
                 name: 'emailAddress',
@@ -9682,24 +7250,6 @@ export namespace GraphQLInputTypes {
                 validation: [
                     {
                         type: 'isEmail',
-                    },
-                ],
-            },
-        ],
-    };
-
-    export const AccountPasswordUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountPasswordUpdateInput',
-        fields: [
-            {
-                name: 'newPassword',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isNotEmpty',
                     },
                 ],
             },
@@ -9801,45 +7351,45 @@ export namespace GraphQLInputTypes {
         ],
     };
 
-    export const AccountPasswordVerifyInput: GraphQLInputObjectTypeMetadata = {
+    export const AccessRoleAssignmentCreateInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'AccountPasswordVerifyInput',
+        type: 'AccessRoleAssignmentCreateInput',
         fields: [
             {
-                name: 'password',
+                name: 'expiresAt',
+                kind: 'scalar',
+                type: 'DateTimeISO',
+                required: false,
+            },
+            {
+                name: 'accessRole',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'emailAddress',
                 kind: 'scalar',
                 type: 'String',
                 required: true,
                 validation: [
                     {
-                        type: 'isNotEmpty',
+                        type: 'isEmail',
                     },
                 ],
             },
-        ],
-    };
-
-    export const AccountEmailVerificationVerifyInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountEmailVerificationVerifyInput',
-        fields: [
             {
-                name: 'code',
+                name: 'username',
                 kind: 'scalar',
                 type: 'String',
                 required: true,
-                validation: [
-                    {
-                        type: 'isNotEmpty',
-                    },
-                ],
             },
         ],
     };
 
-    export const AccountRegistrationOrSignInCreateInput: GraphQLInputObjectTypeMetadata = {
+    export const AccountInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'AccountRegistrationOrSignInCreateInput',
+        type: 'AccountInput',
         fields: [
             {
                 name: 'emailAddress',
@@ -9899,50 +7449,32 @@ export interface GraphQLOperationScalarListParameterMetadata extends BaseGraphQL
     readonly type: string;
 }
 
-export const AccountAuthenticationRegistrationOrSignInCreateOperation: GraphQLOperationMetadata<
-    typeof AccountAuthenticationRegistrationOrSignInCreateDocument
-> = {
-    operation: 'AccountAuthenticationRegistrationOrSignInCreate',
-    operationType: 'mutation',
-    document: AccountAuthenticationRegistrationOrSignInCreateDocument,
+export const AccountPrivilegedOperation: GraphQLOperationMetadata<typeof AccountPrivilegedDocument> = {
+    operation: 'AccountPrivileged',
+    operationType: 'query',
+    document: AccountPrivilegedDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountRegistrationOrSignInCreateInput,
+            type: GraphQLInputTypes.AccountInput,
         },
     ],
 };
 
-export const AccountAuthenticationEmailVerificationVerifyOperation: GraphQLOperationMetadata<
-    typeof AccountAuthenticationEmailVerificationVerifyDocument
+export const AccountAccessRoleAssignmentCreatePrivilegedOperation: GraphQLOperationMetadata<
+    typeof AccountAccessRoleAssignmentCreatePrivilegedDocument
 > = {
-    operation: 'AccountAuthenticationEmailVerificationVerify',
+    operation: 'AccountAccessRoleAssignmentCreatePrivileged',
     operationType: 'mutation',
-    document: AccountAuthenticationEmailVerificationVerifyDocument,
+    document: AccountAccessRoleAssignmentCreatePrivilegedDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountEmailVerificationVerifyInput,
-        },
-    ],
-};
-
-export const AccountAuthenticationPasswordVerifyOperation: GraphQLOperationMetadata<
-    typeof AccountAuthenticationPasswordVerifyDocument
-> = {
-    operation: 'AccountAuthenticationPasswordVerify',
-    operationType: 'mutation',
-    document: AccountAuthenticationPasswordVerifyDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.AccountPasswordVerifyInput,
+            type: GraphQLInputTypes.AccessRoleAssignmentCreateInput,
         },
     ],
 };
@@ -9963,30 +7495,50 @@ export const AccountAuthenticationRegistrationCompleteOperation: GraphQLOperatio
     ],
 };
 
-export const AccountPasswordUpdateOperation: GraphQLOperationMetadata<typeof AccountPasswordUpdateDocument> = {
-    operation: 'AccountPasswordUpdate',
+export const AccountAuthenticationRegistrationOrSignInCreateOperation: GraphQLOperationMetadata<
+    typeof AccountAuthenticationRegistrationOrSignInCreateDocument
+> = {
+    operation: 'AccountAuthenticationRegistrationOrSignInCreate',
     operationType: 'mutation',
-    document: AccountPasswordUpdateDocument,
+    document: AccountAuthenticationRegistrationOrSignInCreateDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountPasswordUpdateInput,
+            type: GraphQLInputTypes.AccountRegistrationOrSignInCreateInput,
         },
     ],
 };
 
-export const AccountPrivilegedOperation: GraphQLOperationMetadata<typeof AccountPrivilegedDocument> = {
-    operation: 'AccountPrivileged',
-    operationType: 'query',
-    document: AccountPrivilegedDocument,
+export const AccountAuthenticationPasswordVerifyOperation: GraphQLOperationMetadata<
+    typeof AccountAuthenticationPasswordVerifyDocument
+> = {
+    operation: 'AccountAuthenticationPasswordVerify',
+    operationType: 'mutation',
+    document: AccountAuthenticationPasswordVerifyDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountInput,
+            type: GraphQLInputTypes.AccountPasswordVerifyInput,
+        },
+    ],
+};
+
+export const AccountAuthenticationEmailVerificationVerifyOperation: GraphQLOperationMetadata<
+    typeof AccountAuthenticationEmailVerificationVerifyDocument
+> = {
+    operation: 'AccountAuthenticationEmailVerificationVerify',
+    operationType: 'mutation',
+    document: AccountAuthenticationEmailVerificationVerifyDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.AccountEmailVerificationVerifyInput,
         },
     ],
 };
@@ -10005,46 +7557,16 @@ export const AccountsPrivilegedOperation: GraphQLOperationMetadata<typeof Accoun
     ],
 };
 
-export const AccountProfileUsernameValidateOperation: GraphQLOperationMetadata<
-    typeof AccountProfileUsernameValidateDocument
-> = {
-    operation: 'AccountProfileUsernameValidate',
-    operationType: 'query',
-    document: AccountProfileUsernameValidateDocument,
-    parameters: [
-        {
-            parameter: 'username',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const AccountProfileUpdateOperation: GraphQLOperationMetadata<typeof AccountProfileUpdateDocument> = {
-    operation: 'AccountProfileUpdate',
+export const AccountDeletePrivilegedOperation: GraphQLOperationMetadata<typeof AccountDeletePrivilegedDocument> = {
+    operation: 'AccountDeletePrivileged',
     operationType: 'mutation',
-    document: AccountProfileUpdateDocument,
+    document: AccountDeletePrivilegedDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccountProfileUpdateInput,
-        },
-    ],
-};
-
-export const AccountProfilePublicOperation: GraphQLOperationMetadata<typeof AccountProfilePublicDocument> = {
-    operation: 'AccountProfilePublic',
-    operationType: 'query',
-    document: AccountProfilePublicDocument,
-    parameters: [
-        {
-            parameter: 'username',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
+            type: GraphQLInputTypes.AccountDeleteInput,
         },
     ],
 };
@@ -10058,7 +7580,7 @@ export const AccountAccessRoleAssignmentsPrivilegedOperation: GraphQLOperationMe
     parameters: [
         {
             parameter: 'statuses',
-            required: false,
+            required: true,
             kind: 'list',
             itemKind: 'enum',
             type: GraphQLInputTypes.AccessRoleStatus,
@@ -10089,18 +7611,74 @@ export const AccountAccessRoleAssignmentRevokePrivilegedOperation: GraphQLOperat
     ],
 };
 
-export const AccountAccessRoleAssignmentCreatePrivilegedOperation: GraphQLOperationMetadata<
-    typeof AccountAccessRoleAssignmentCreatePrivilegedDocument
-> = {
-    operation: 'AccountAccessRoleAssignmentCreatePrivileged',
+export const WaitListCreatePrivilegedOperation: GraphQLOperationMetadata<typeof WaitListCreatePrivilegedDocument> = {
+    operation: 'WaitListCreatePrivileged',
     operationType: 'mutation',
-    document: AccountAccessRoleAssignmentCreatePrivilegedDocument,
+    document: WaitListCreatePrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'data',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.WaitListCreationInput,
+        },
+    ],
+};
+
+export const WaitListsPrivilegedOperation: GraphQLOperationMetadata<typeof WaitListsPrivilegedDocument> = {
+    operation: 'WaitListsPrivileged',
+    operationType: 'query',
+    document: WaitListsPrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const AccountProfileUpdateOperation: GraphQLOperationMetadata<typeof AccountProfileUpdateDocument> = {
+    operation: 'AccountProfileUpdate',
+    operationType: 'mutation',
+    document: AccountProfileUpdateDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.AccessRoleAssignmentCreateInput,
+            type: GraphQLInputTypes.AccountProfileUpdateInput,
+        },
+    ],
+};
+
+export const AccountProfileUsernameValidateOperation: GraphQLOperationMetadata<
+    typeof AccountProfileUsernameValidateDocument
+> = {
+    operation: 'AccountProfileUsernameValidate',
+    operationType: 'query',
+    document: AccountProfileUsernameValidateDocument,
+    parameters: [
+        {
+            parameter: 'username',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const AccountPasswordUpdateOperation: GraphQLOperationMetadata<typeof AccountPasswordUpdateDocument> = {
+    operation: 'AccountPasswordUpdate',
+    operationType: 'mutation',
+    document: AccountPasswordUpdateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.AccountPasswordUpdateInput,
         },
     ],
 };
@@ -10119,73 +7697,13 @@ export const AccountDeleteOperation: GraphQLOperationMetadata<typeof AccountDele
     ],
 };
 
-export const AccountDeletePrivilegedOperation: GraphQLOperationMetadata<typeof AccountDeletePrivilegedDocument> = {
-    operation: 'AccountDeletePrivileged',
-    operationType: 'mutation',
-    document: AccountDeletePrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.AccountDeleteInput,
-        },
-    ],
-};
-
-export const CommerceCheckoutSessionCreateDirectOperation: GraphQLOperationMetadata<
-    typeof CommerceCheckoutSessionCreateDirectDocument
-> = {
-    operation: 'CommerceCheckoutSessionCreateDirect',
-    operationType: 'mutation',
-    document: CommerceCheckoutSessionCreateDirectDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.CommerceCheckoutSessionCreateDirectInput,
-        },
-    ],
-};
-
-export const CommerceOrdersByCheckoutSessionOperation: GraphQLOperationMetadata<
-    typeof CommerceOrdersByCheckoutSessionDocument
-> = {
-    operation: 'CommerceOrdersByCheckoutSession',
+export const AccountProfilePublicOperation: GraphQLOperationMetadata<typeof AccountProfilePublicDocument> = {
+    operation: 'AccountProfilePublic',
     operationType: 'query',
-    document: CommerceOrdersByCheckoutSessionDocument,
+    document: AccountProfilePublicDocument,
     parameters: [
         {
-            parameter: 'checkoutSessionId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const CommerceOrdersOperation: GraphQLOperationMetadata<typeof CommerceOrdersDocument> = {
-    operation: 'CommerceOrders',
-    operationType: 'query',
-    document: CommerceOrdersDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const CommerceOrderOperation: GraphQLOperationMetadata<typeof CommerceOrderDocument> = {
-    operation: 'CommerceOrder',
-    operationType: 'query',
-    document: CommerceOrderDocument,
-    parameters: [
-        {
-            parameter: 'orderIdentifier',
+            parameter: 'username',
             required: true,
             kind: 'scalar',
             type: 'String',
@@ -10198,96 +7716,6 @@ export const CommerceOrdersPrivilegedOperation: GraphQLOperationMetadata<typeof 
     operationType: 'query',
     document: CommerceOrdersPrivilegedDocument,
     parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const CommerceOrdersPrivilegedChartOperation: GraphQLOperationMetadata<
-    typeof CommerceOrdersPrivilegedChartDocument
-> = {
-    operation: 'CommerceOrdersPrivilegedChart',
-    operationType: 'query',
-    document: CommerceOrdersPrivilegedChartDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const DataInteractionDatabasesOperation: GraphQLOperationMetadata<typeof DataInteractionDatabasesDocument> = {
-    operation: 'DataInteractionDatabases',
-    operationType: 'query',
-    document: DataInteractionDatabasesDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const DataInteractionDatabaseTableOperation: GraphQLOperationMetadata<
-    typeof DataInteractionDatabaseTableDocument
-> = {
-    operation: 'DataInteractionDatabaseTable',
-    operationType: 'query',
-    document: DataInteractionDatabaseTableDocument,
-    parameters: [
-        {
-            parameter: 'databaseName',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'tableName',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const DataInteractionDatabaseTableMetricsOperation: GraphQLOperationMetadata<
-    typeof DataInteractionDatabaseTableMetricsDocument
-> = {
-    operation: 'DataInteractionDatabaseTableMetrics',
-    operationType: 'query',
-    document: DataInteractionDatabaseTableMetricsDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.DataInteractionDatabaseTableMetricsQueryInput,
-        },
-    ],
-};
-
-export const DataInteractionDatabaseTablesOperation: GraphQLOperationMetadata<
-    typeof DataInteractionDatabaseTablesDocument
-> = {
-    operation: 'DataInteractionDatabaseTables',
-    operationType: 'query',
-    document: DataInteractionDatabaseTablesDocument,
-    parameters: [
-        {
-            parameter: 'databaseName',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
         {
             parameter: 'pagination',
             required: true,
@@ -10345,40 +7773,24 @@ export const EngagementEventCreateOperation: GraphQLOperationMetadata<typeof Eng
     ],
 };
 
-export const EngagementEventsCreateOperation: GraphQLOperationMetadata<typeof EngagementEventsCreateDocument> = {
-    operation: 'EngagementEventsCreate',
+export const PostDeleteOperation: GraphQLOperationMetadata<typeof PostDeleteDocument> = {
+    operation: 'PostDelete',
     operationType: 'mutation',
-    document: EngagementEventsCreateDocument,
+    document: PostDeleteDocument,
     parameters: [
         {
-            parameter: 'input',
+            parameter: 'id',
             required: true,
-            kind: 'list',
-            itemKind: 'object',
-            type: GraphQLInputTypes.CreateEngagementEventInput,
-            allowsEmpty: false,
+            kind: 'scalar',
+            type: 'String',
         },
     ],
 };
 
-export const EngagementOverviewOperation: GraphQLOperationMetadata<typeof EngagementOverviewDocument> = {
-    operation: 'EngagementOverview',
+export const PostByIdentifierOperation: GraphQLOperationMetadata<typeof PostByIdentifierDocument> = {
+    operation: 'PostByIdentifier',
     operationType: 'query',
-    document: EngagementOverviewDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: false,
-            kind: 'object',
-            type: GraphQLInputTypes.EngagementOverviewInput,
-        },
-    ],
-};
-
-export const FormOperation: GraphQLOperationMetadata<typeof FormDocument> = {
-    operation: 'Form',
-    operationType: 'query',
-    document: FormDocument,
+    document: PostByIdentifierDocument,
     parameters: [
         {
             parameter: 'identifier',
@@ -10389,84 +7801,16 @@ export const FormOperation: GraphQLOperationMetadata<typeof FormDocument> = {
     ],
 };
 
-export const SubmitFormOperation: GraphQLOperationMetadata<typeof SubmitFormDocument> = {
-    operation: 'SubmitForm',
+export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopicDeleteDocument> = {
+    operation: 'PostTopicDelete',
     operationType: 'mutation',
-    document: SubmitFormDocument,
+    document: PostTopicDeleteDocument,
     parameters: [
         {
-            parameter: 'identifier',
+            parameter: 'id',
             required: true,
             kind: 'scalar',
             type: 'String',
-        },
-        {
-            parameter: 'emailAddress',
-            required: false,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'data',
-            required: true,
-            kind: 'scalar',
-            type: 'JSON',
-        },
-    ],
-};
-
-export const PostsOperation: GraphQLOperationMetadata<typeof PostsDocument> = {
-    operation: 'Posts',
-    operationType: 'query',
-    document: PostsDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const PostsMineOperation: GraphQLOperationMetadata<typeof PostsMineDocument> = {
-    operation: 'PostsMine',
-    operationType: 'query',
-    document: PostsMineDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const PostOperation: GraphQLOperationMetadata<typeof PostDocument> = {
-    operation: 'Post',
-    operationType: 'query',
-    document: PostDocument,
-    parameters: [
-        {
-            parameter: 'identifier',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const PostCreateOperation: GraphQLOperationMetadata<typeof PostCreateDocument> = {
-    operation: 'PostCreate',
-    operationType: 'mutation',
-    document: PostCreateDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PostCreateInput,
         },
     ],
 };
@@ -10491,16 +7835,36 @@ export const PostUpdateOperation: GraphQLOperationMetadata<typeof PostUpdateDocu
     ],
 };
 
-export const PostDeleteOperation: GraphQLOperationMetadata<typeof PostDeleteDocument> = {
-    operation: 'PostDelete',
+export const PostReactionCreateOperation: GraphQLOperationMetadata<typeof PostReactionCreateDocument> = {
+    operation: 'PostReactionCreate',
     operationType: 'mutation',
-    document: PostDeleteDocument,
+    document: PostReactionCreateDocument,
     parameters: [
         {
-            parameter: 'id',
+            parameter: 'postId',
             required: true,
             kind: 'scalar',
             type: 'String',
+        },
+        {
+            parameter: 'content',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const PostReportCreateOperation: GraphQLOperationMetadata<typeof PostReportCreateDocument> = {
+    operation: 'PostReportCreate',
+    operationType: 'mutation',
+    document: PostReportCreateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PostReportInput,
         },
     ],
 };
@@ -10539,46 +7903,6 @@ export const PostUnvoteOperation: GraphQLOperationMetadata<typeof PostUnvoteDocu
     ],
 };
 
-export const PostReactionCreateOperation: GraphQLOperationMetadata<typeof PostReactionCreateDocument> = {
-    operation: 'PostReactionCreate',
-    operationType: 'mutation',
-    document: PostReactionCreateDocument,
-    parameters: [
-        {
-            parameter: 'postId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'content',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const PostReactionDeleteOperation: GraphQLOperationMetadata<typeof PostReactionDeleteDocument> = {
-    operation: 'PostReactionDelete',
-    operationType: 'mutation',
-    document: PostReactionDeleteDocument,
-    parameters: [
-        {
-            parameter: 'postId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'content',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
 export const PostReactionProfilesOperation: GraphQLOperationMetadata<typeof PostReactionProfilesDocument> = {
     operation: 'PostReactionProfiles',
     operationType: 'query',
@@ -10605,27 +7929,19 @@ export const PostReactionProfilesOperation: GraphQLOperationMetadata<typeof Post
     ],
 };
 
-export const PostReportCreateOperation: GraphQLOperationMetadata<typeof PostReportCreateDocument> = {
-    operation: 'PostReportCreate',
+export const PostReactionDeleteOperation: GraphQLOperationMetadata<typeof PostReactionDeleteDocument> = {
+    operation: 'PostReactionDelete',
     operationType: 'mutation',
-    document: PostReportCreateDocument,
+    document: PostReactionDeleteDocument,
     parameters: [
         {
-            parameter: 'input',
+            parameter: 'postId',
             required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PostReportInput,
+            kind: 'scalar',
+            type: 'String',
         },
-    ],
-};
-
-export const PostTopicByIdOperation: GraphQLOperationMetadata<typeof PostTopicByIdDocument> = {
-    operation: 'PostTopicById',
-    operationType: 'query',
-    document: PostTopicByIdDocument,
-    parameters: [
         {
-            parameter: 'id',
+            parameter: 'content',
             required: true,
             kind: 'scalar',
             type: 'String',
@@ -10633,18 +7949,70 @@ export const PostTopicByIdOperation: GraphQLOperationMetadata<typeof PostTopicBy
     ],
 };
 
-export const PostTopicsOperation: GraphQLOperationMetadata<typeof PostTopicsDocument> = {
-    operation: 'PostTopics',
+export const PostOperation: GraphQLOperationMetadata<typeof PostDocument> = {
+    operation: 'Post',
     operationType: 'query',
-    document: PostTopicsDocument,
+    document: PostDocument,
     parameters: [
         {
-            parameter: 'ids',
+            parameter: 'id',
             required: false,
-            kind: 'list',
-            itemKind: 'scalar',
+            kind: 'scalar',
             type: 'String',
-            allowsEmpty: false,
+        },
+        {
+            parameter: 'slug',
+            required: false,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'identifier',
+            required: false,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const PostsOperation: GraphQLOperationMetadata<typeof PostsDocument> = {
+    operation: 'Posts',
+    operationType: 'query',
+    document: PostsDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const PostCreateOperation: GraphQLOperationMetadata<typeof PostCreateDocument> = {
+    operation: 'PostCreate',
+    operationType: 'mutation',
+    document: PostCreateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PostCreateInput,
+        },
+    ],
+};
+
+export const SupportTicketCreateOperation: GraphQLOperationMetadata<typeof SupportTicketCreateDocument> = {
+    operation: 'SupportTicketCreate',
+    operationType: 'mutation',
+    document: SupportTicketCreateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.SupportTicketCreateInput,
         },
     ],
 };
@@ -10677,260 +8045,16 @@ export const PostTopicUpdateOperation: GraphQLOperationMetadata<typeof PostTopic
     ],
 };
 
-export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopicDeleteDocument> = {
-    operation: 'PostTopicDelete',
-    operationType: 'mutation',
-    document: PostTopicDeleteDocument,
+export const PostTopicByIdOperation: GraphQLOperationMetadata<typeof PostTopicByIdDocument> = {
+    operation: 'PostTopicById',
+    operationType: 'query',
+    document: PostTopicByIdDocument,
     parameters: [
         {
             parameter: 'id',
             required: true,
             kind: 'scalar',
             type: 'String',
-        },
-    ],
-};
-
-export const SupportPostOperation: GraphQLOperationMetadata<typeof SupportPostDocument> = {
-    operation: 'SupportPost',
-    operationType: 'query',
-    document: SupportPostDocument,
-    parameters: [
-        {
-            parameter: 'identifier',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const SupportPostsOperation: GraphQLOperationMetadata<typeof SupportPostsDocument> = {
-    operation: 'SupportPosts',
-    operationType: 'query',
-    document: SupportPostsDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const SupportPostTopicOperation: GraphQLOperationMetadata<typeof SupportPostTopicDocument> = {
-    operation: 'SupportPostTopic',
-    operationType: 'query',
-    document: SupportPostTopicDocument,
-    parameters: [
-        {
-            parameter: 'slug',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'path',
-            required: false,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const SupportTicketCreateOperation: GraphQLOperationMetadata<typeof SupportTicketCreateDocument> = {
-    operation: 'SupportTicketCreate',
-    operationType: 'mutation',
-    document: SupportTicketCreateDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.SupportTicketCreateInput,
-        },
-    ],
-};
-
-export const SupportTicketUpdateStatusPrivilegedOperation: GraphQLOperationMetadata<
-    typeof SupportTicketUpdateStatusPrivilegedDocument
-> = {
-    operation: 'SupportTicketUpdateStatusPrivileged',
-    operationType: 'mutation',
-    document: SupportTicketUpdateStatusPrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'status',
-            required: true,
-            kind: 'enum',
-            type: GraphQLInputTypes.SupportTicketStatus,
-        },
-    ],
-};
-
-export const SupportTicketsPrivilegedOperation: GraphQLOperationMetadata<typeof SupportTicketsPrivilegedDocument> = {
-    operation: 'SupportTicketsPrivileged',
-    operationType: 'query',
-    document: SupportTicketsPrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const SupportTicketAssignOperation: GraphQLOperationMetadata<typeof SupportTicketAssignDocument> = {
-    operation: 'SupportTicketAssign',
-    operationType: 'mutation',
-    document: SupportTicketAssignDocument,
-    parameters: [
-        {
-            parameter: 'ticketId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'username',
-            required: false,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const SupportTicketCommentCreatePrivilegedOperation: GraphQLOperationMetadata<
-    typeof SupportTicketCommentCreatePrivilegedDocument
-> = {
-    operation: 'SupportTicketCommentCreatePrivileged',
-    operationType: 'mutation',
-    document: SupportTicketCommentCreatePrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.SupportTicketCommentCreateInput,
-        },
-    ],
-};
-
-export const SupportTicketAccountAndCommerceOrdersPrivelegedOperation: GraphQLOperationMetadata<
-    typeof SupportTicketAccountAndCommerceOrdersPrivelegedDocument
-> = {
-    operation: 'SupportTicketAccountAndCommerceOrdersPriveleged',
-    operationType: 'query',
-    document: SupportTicketAccountAndCommerceOrdersPrivelegedDocument,
-    parameters: [
-        {
-            parameter: 'email',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const ProfileSupportTicketsOperation: GraphQLOperationMetadata<typeof ProfileSupportTicketsDocument> = {
-    operation: 'ProfileSupportTickets',
-    operationType: 'query',
-    document: ProfileSupportTicketsDocument,
-    parameters: [
-        {
-            parameter: 'openTicketsIndex',
-            required: true,
-            kind: 'scalar',
-            type: 'Int',
-        },
-        {
-            parameter: 'closedTicketsIndex',
-            required: true,
-            kind: 'scalar',
-            type: 'Int',
-        },
-    ],
-};
-
-export const ProfileSupportTicketOperation: GraphQLOperationMetadata<typeof ProfileSupportTicketDocument> = {
-    operation: 'ProfileSupportTicket',
-    operationType: 'query',
-    document: ProfileSupportTicketDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const WaitListsPrivilegedOperation: GraphQLOperationMetadata<typeof WaitListsPrivilegedDocument> = {
-    operation: 'WaitListsPrivileged',
-    operationType: 'query',
-    document: WaitListsPrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const WaitListCreatePrivilegedOperation: GraphQLOperationMetadata<typeof WaitListCreatePrivilegedDocument> = {
-    operation: 'WaitListCreatePrivileged',
-    operationType: 'mutation',
-    document: WaitListCreatePrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'data',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.WaitListCreationInput,
-        },
-    ],
-};
-
-export const WaitListEntriesPrivilegedOperation: GraphQLOperationMetadata<typeof WaitListEntriesPrivilegedDocument> = {
-    operation: 'WaitListEntriesPrivileged',
-    operationType: 'query',
-    document: WaitListEntriesPrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'waitListIdentifier',
-            required: false,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
         },
     ],
 };
@@ -10955,22 +8079,92 @@ export const WaitListEntryCreateOperation: GraphQLOperationMetadata<typeof WaitL
     ],
 };
 
-export const WaitListEntryDeleteOperation: GraphQLOperationMetadata<typeof WaitListEntryDeleteDocument> = {
-    operation: 'WaitListEntryDelete',
-    operationType: 'mutation',
-    document: WaitListEntryDeleteDocument,
+export const DataInteractionDatabaseTablesOperation: GraphQLOperationMetadata<
+    typeof DataInteractionDatabaseTablesDocument
+> = {
+    operation: 'DataInteractionDatabaseTables',
+    operationType: 'query',
+    document: DataInteractionDatabaseTablesDocument,
     parameters: [
         {
-            parameter: 'emailAddress',
+            parameter: 'databaseName',
             required: true,
             kind: 'scalar',
             type: 'String',
         },
         {
-            parameter: 'waitListIdentifier',
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const DataInteractionDatabaseTableOperation: GraphQLOperationMetadata<
+    typeof DataInteractionDatabaseTableDocument
+> = {
+    operation: 'DataInteractionDatabaseTable',
+    operationType: 'query',
+    document: DataInteractionDatabaseTableDocument,
+    parameters: [
+        {
+            parameter: 'databaseName',
             required: true,
             kind: 'scalar',
             type: 'String',
+        },
+        {
+            parameter: 'tableName',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const DataInteractionDatabaseTableMetricsOperation: GraphQLOperationMetadata<
+    typeof DataInteractionDatabaseTableMetricsDocument
+> = {
+    operation: 'DataInteractionDatabaseTableMetrics',
+    operationType: 'query',
+    document: DataInteractionDatabaseTableMetricsDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.DataInteractionDatabaseTableMetricsQueryInput,
+        },
+    ],
+};
+
+export const EngagementOverviewOperation: GraphQLOperationMetadata<typeof EngagementOverviewDocument> = {
+    operation: 'EngagementOverview',
+    operationType: 'query',
+    document: EngagementOverviewDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: false,
+            kind: 'object',
+            type: GraphQLInputTypes.EngagementOverviewInput,
+        },
+    ],
+};
+
+export const CommerceOrdersPrivilegedChartOperation: GraphQLOperationMetadata<
+    typeof CommerceOrdersPrivilegedChartDocument
+> = {
+    operation: 'CommerceOrdersPrivilegedChart',
+    operationType: 'query',
+    document: CommerceOrdersPrivilegedChartDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
         },
     ],
 };
