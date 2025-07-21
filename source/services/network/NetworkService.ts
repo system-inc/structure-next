@@ -135,11 +135,15 @@ export class NetworkService {
 
                         // Don't retry on GraphQL errors with 4xx status codes
                         if(error instanceof Error && 'graphQlErrors' in error) {
-                            const graphQlErrors = (error as Error & { graphQlErrors: Array<{ extensions?: { status?: number } }> }).graphQlErrors;
-                            if(graphQlErrors?.some(function(graphQlError) {
-                                const status = graphQlError.extensions?.status;
-                                return status !== undefined && status >= 400 && status < 500;
-                            })) {
+                            const graphQlErrors = (
+                                error as Error & { graphQlErrors: Array<{ extensions?: { status?: number } }> }
+                            ).graphQlErrors;
+                            if(
+                                graphQlErrors?.some(function (graphQlError) {
+                                    const status = graphQlError.extensions?.status;
+                                    return status !== undefined && status >= 400 && status < 500;
+                                })
+                            ) {
                                 return false;
                             }
                         }
