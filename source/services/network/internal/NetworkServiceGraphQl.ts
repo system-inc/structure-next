@@ -65,7 +65,9 @@ export type AppOrStructureTypedDocumentString<TResult, TVariables> =
  * 2. Make it clear this is our unified NetworkService version
  */
 export const gql = new Proxy(
-    {},
+    function gqlTarget() {
+        throw new Error('gql called without arguments');
+    }, // Change target to a function for callability
     {
         get(target, property) {
             // Try app graphql first (for pre-generated documents)
@@ -76,19 +78,7 @@ export const gql = new Proxy(
             if(property in structureGraphQl) {
                 return (structureGraphQl as unknown as Record<string | symbol, unknown>)[property];
             }
-            // Handle function.apply calls for template tag usage
-            if(property === 'apply') {
-                return function (target: unknown, thisArgument: unknown, argumentsList: unknown[]) {
-                    try {
-                        // Use Function constructor to avoid ESLint warnings about spread
-                        const appFunction = appGraphQl as unknown as (...args: unknown[]) => unknown;
-                        return Function.prototype.apply.call(appFunction, null, argumentsList);
-                    } catch {
-                        const structureFunction = structureGraphQl as unknown as (...args: unknown[]) => unknown;
-                        return Function.prototype.apply.call(structureFunction, null, argumentsList);
-                    }
-                };
-            }
+
             return undefined;
         },
         // Handle direct function calls (template tag usage)
