@@ -15,9 +15,6 @@ import {
     Query,
 } from '@tanstack/react-query';
 
-// Dependencies - Services
-import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
-
 // Dependencies - API
 import {
     GraphQlResponseInterface,
@@ -25,112 +22,17 @@ import {
     parseGraphQlErrors,
 } from '@structure/source/api/graphql/GraphQlUtilities';
 
-/**
- * GraphQL Import Strategy
- *
- * We have two separate GraphQL code generation outputs:
- * 1. App-specific queries: /app/_api/graphql/generated/
- * 2. Structure queries: /libraries/structure/source/api/graphql/generated/
- *
- * NetworkService needs to handle both because:
- * - App code uses app-specific GraphQL queries (e.g., product queries, checkout, etc.)
- * - Structure code uses structure GraphQL queries (e.g., account management, posts, etc.)
- *
- * By importing both and creating a unified interface, NetworkService becomes the single
- * source of truth for all network operations, regardless of where the query was defined.
- *
- * The ESLint ignores below are necessary because NetworkService is a special case that
- * needs to bridge the app/structure boundary to provide a unified API.
- */
+// Dependencies - Internal
+import { NetworkStatistics, NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';
+import { AppOrStructureTypedDocumentString } from './internal/NetworkServiceGraphQl';
+import { NetworkServiceDeviceId } from './internal/NetworkServiceDeviceId';
 
-// Import both graphql functions from their respective generated locations
-// eslint-disable-next-line structure/no-structure-project-imports-rule
-import { graphql as appGraphQl } from '@project/app/_api/graphql/GraphQlGeneratedCode';
-import { graphql as structureGraphQl } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+// Export GraphQL utilities
+export { gql } from './internal/NetworkServiceGraphQl';
+export type { AppOrStructureTypedDocumentString as AnyTypedDocumentString } from './internal/NetworkServiceGraphQl';
 
-// Import TypedDocumentString types from both locations
-// TypedDocumentString is a class that extends String and contains the GraphQL query along with its type information for full type safety
-// eslint-disable-next-line structure/no-structure-project-imports-rule
-import type { TypedDocumentString as AppTypedDocumentString } from '@project/app/_api/graphql/GraphQlGeneratedCode';
-import type { TypedDocumentString as StructureTypedDocumentString } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// Create a union type that accepts both TypedDocumentString types
-// This allows our GraphQL methods to accept queries from either code generation output
-export type AnyTypedDocumentString<TResult, TVariables> =
-    | StructureTypedDocumentString<TResult, TVariables>
-    | AppTypedDocumentString<TResult, TVariables>;
-
-/**
- * Unified GraphQL Template Tag (gql)
- *
- * This Proxy creates a single `gql` function that can handle GraphQL queries from both
- * app and structure generated code. It works by:
- *
- * 1. When used as a template tag: gql`query { ... }`
- *    - Tries app's graphql function first
- *    - Falls back to structure's graphql function if not found
- *
- * 2. When accessing pre-generated documents: gql.SomeDocument
- *    - Checks if the property exists in app's graphql exports
- *    - Falls back to structure's graphql exports if not found
- *
- * This approach allows us to:
- * - Use a single import: `import { gql } from '@structure/source/services/network/NetworkService'`
- * - Access queries from either code generation output transparently
- * - Maintain full TypeScript type safety for all queries
- *
- * Example usage:
- * ```typescript
- * // For inline queries (template tag)
- * const myQuery = gql`query GetUser { user { id name } }`;
- *
- * // For pre-generated typed documents
- * const result = await networkService.graphQlRequest(gql.GetUserDocument, variables);
- * ```
- * Export note: We export as 'gql' instead of 'graphql' to:
- * 1. Avoid naming conflicts with the original graphql imports
- * 2. Make it clear this is our unified NetworkService version
- */
-export const gql = new Proxy(
-    {},
-    {
-        get(target, property) {
-            // Try app graphql first (for pre-generated documents)
-            if(property in appGraphQl) {
-                return (appGraphQl as unknown as Record<string | symbol, unknown>)[property];
-            }
-            // Fall back to structure graphql
-            if(property in structureGraphQl) {
-                return (structureGraphQl as unknown as Record<string | symbol, unknown>)[property];
-            }
-            // Handle function.apply calls for template tag usage
-            if(property === 'apply') {
-                return function (target: unknown, thisArgument: unknown, argumentsList: unknown[]) {
-                    try {
-                        // Use Function constructor to avoid ESLint warnings about spread
-                        const appFunction = appGraphQl as unknown as (...args: unknown[]) => unknown;
-                        return Function.prototype.apply.call(appFunction, null, argumentsList);
-                    } catch {
-                        const structureFunction = structureGraphQl as unknown as (...args: unknown[]) => unknown;
-                        return Function.prototype.apply.call(structureFunction, null, argumentsList);
-                    }
-                };
-            }
-            return undefined;
-        },
-        // Handle direct function calls (template tag usage)
-        apply(target, thisArgument, argumentsList) {
-            try {
-                // Use Function constructor to avoid ESLint warnings about spread
-                const appFunction = appGraphQl as unknown as (...args: unknown[]) => unknown;
-                return Function.prototype.apply.call(appFunction, null, argumentsList);
-            } catch {
-                const structureFunction = structureGraphQl as unknown as (...args: unknown[]) => unknown;
-                return Function.prototype.apply.call(structureFunction, null, argumentsList);
-            }
-        },
-    },
-) as typeof appGraphQl & typeof structureGraphQl;
+// Export statistics interface
+export type { NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';
 
 // Types
 export interface UseRequestOptionsInterface<TData, TVariables = void> {
@@ -186,11 +88,6 @@ export interface UseGraphQlMutationRequestResultInterface<TData, TVariables = vo
     variables?: TVariables;
 }
 
-// For backward compatibility - will be removed in future
-export type UseRequestResultInterface<TData, TVariables = void> =
-    | UseGraphQlQueryRequestResultInterface<TData>
-    | UseGraphQlMutationRequestResultInterface<TData, TVariables>;
-
 // Suspense query result interface (no loading/error states - those are handled by Suspense/ErrorBoundary)
 export interface UseSuspenseRequestResultInterface<TData> {
     data: TData; // Always present in suspense queries
@@ -198,25 +95,6 @@ export interface UseSuspenseRequestResultInterface<TData> {
     isRefreshing: boolean;
     cancel: () => void;
 }
-
-// Network Request Statistics Interface
-export interface NetworkRequestStatisticsInterface {
-    totalRequests: number;
-    successfulRequests: number;
-    failedRequests: number;
-    cancelledRequests: number;
-    averageResponseTimeInMilliseconds: number | null;
-    totalBytesReceived: number;
-    totalBytesSent: number;
-    activeRequests: number;
-    cacheHits: number;
-    cacheMisses: number;
-    lastRequestAt: number | null;
-    lastSuccessAt: number | null;
-    lastErrorAt: number | null;
-}
-
-const deviceIdUpdatedAtKey = 'DeviceIdUpdatedAt';
 
 // Interface - NetworkService Options
 export interface NetworkServiceOptions {
@@ -227,30 +105,14 @@ export interface NetworkServiceOptions {
 // NetworkService class
 export class NetworkService {
     private tanStackReactQueryClient: tanStackReactQueryClient;
-    private deviceIdPromise: Promise<void> | null = null;
-    private deviceIdChecked = false;
     private options: NetworkServiceOptions;
-
-    // Statistics tracking
-    private statistics: NetworkRequestStatisticsInterface = {
-        totalRequests: 0,
-        successfulRequests: 0,
-        failedRequests: 0,
-        cancelledRequests: 0,
-        averageResponseTimeInMilliseconds: null,
-        totalBytesReceived: 0,
-        totalBytesSent: 0,
-        activeRequests: 0,
-        cacheHits: 0,
-        cacheMisses: 0,
-        lastRequestAt: null,
-        lastSuccessAt: null,
-        lastErrorAt: null,
-    };
-    private responseTimes: number[] = [];
+    private statisticsManager: NetworkStatistics;
+    private deviceIdManager: NetworkServiceDeviceId;
 
     constructor(options: NetworkServiceOptions = {}) {
         this.options = options;
+        this.statisticsManager = new NetworkStatistics(this.isServerSide());
+        this.deviceIdManager = new NetworkServiceDeviceId(this.isServerSide());
         this.tanStackReactQueryClient = new tanStackReactQueryClient({
             defaultOptions: {
                 queries: {
@@ -276,79 +138,60 @@ export class NetworkService {
         return typeof window === 'undefined' || this.options.serverSide === true;
     }
 
-    // Device ID management
-    private async ensureDeviceId(): Promise<void> {
-        // Skip deviceId check if accounts module is disabled or on server side
-        if(!ProjectSettings.modules?.accounts || this.isServerSide()) {
-            return;
-        }
-
-        // If already checked this session, skip
-        if(this.deviceIdChecked) return;
-
-        // If already checking, return the same promise
-        if(this.deviceIdPromise) return this.deviceIdPromise;
-
-        // Start the check
-        this.deviceIdPromise = this.checkAndRequestDeviceId();
-
-        try {
-            await this.deviceIdPromise;
-            this.deviceIdChecked = true;
-        } finally {
-            this.deviceIdPromise = null;
-        }
+    // Helper to calculate body size for statistics
+    private getBodySize(body: BodyInit | null | undefined): number {
+        if(!body) return 0;
+        if(typeof body === 'string') return new Blob([body]).size;
+        if(body instanceof Blob) return body.size;
+        if(body instanceof ArrayBuffer) return body.byteLength;
+        return 0;
     }
 
-    private async checkAndRequestDeviceId(): Promise<void> {
-        const deviceIdUpdatedAt = localStorageService.get<number>(deviceIdUpdatedAtKey);
-        const sixMonthsInMilliseconds = 6 * 30 * 24 * 60 * 60 * 1000;
-        const sixMonthsAgo = Date.now() - sixMonthsInMilliseconds;
+    // Helper to determine if URL is internal API
+    private isInternalApiUrl(input: RequestInfo | URL): boolean {
+        if(!ProjectSettings.apis?.base?.host) return false;
 
-        if(deviceIdUpdatedAt && deviceIdUpdatedAt > sixMonthsAgo) {
-            // Valid deviceId exists
-            return;
-        }
+        const apiHost = ProjectSettings.apis.base.host;
+        const baseDomain = apiHost.split('.').slice(-2).join('.');
 
-        // Fetch deviceId with retries
-        let lastError: Error | null = null;
-
-        for(let attempt = 0; attempt < 3; attempt++) {
+        const getHostname = (url: string | URL | Request): string => {
             try {
-                // Build the deviceId endpoint URL
-                const deviceIdUrl = ProjectSettings.apis?.base
-                    ? `https://${ProjectSettings.apis.base.host}/graphql/deviceId`
-                    : '/graphql/deviceId';
-
-                const response = await fetch(deviceIdUrl, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ query: '{ deviceId }' }),
-                });
-
-                if(response.ok) {
-                    localStorageService.set<number>(deviceIdUpdatedAtKey, Date.now());
-                    return;
-                }
-
-                lastError = new Error(`DeviceId fetch failed with status: ${response.status}`);
+                if(typeof url === 'string') return new URL(url).hostname;
+                if(url instanceof URL) return url.hostname;
+                if(url instanceof Request) return new URL(url.url).hostname;
+                return '';
+            } catch {
+                return '';
             }
-            catch(error) {
-                lastError = error as Error;
-            }
+        };
 
-            // If not the last attempt, wait with exponential backoff
-            if(attempt < 2) {
-                await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
-            }
+        const hostname = getHostname(input);
+        return hostname === apiHost || hostname.endsWith('.' + baseDomain);
+    }
+
+    // Helper to augment error with additional properties
+    private augmentError<T extends Error>(error: T, properties: Record<string, unknown>): T {
+        Object.assign(error, properties);
+        return error;
+    }
+
+    // Helper to track and execute async operations
+    private async trackAsyncOperation<T>(operation: () => Promise<T>): Promise<T> {
+        const startTime = Date.now();
+        this.statisticsManager.trackRequest();
+
+        try {
+            await this.deviceIdManager.ensure();
+            const result = await operation();
+            this.statisticsManager.trackSuccess(Date.now() - startTime);
+            return result;
         }
-
-        // If all retries failed, log the error but continue
-        // This allows requests to proceed even if deviceId fetch fails
-        console.warn('Failed to fetch deviceId after 3 attempts:', lastError);
+        catch(error) {
+            this.statisticsManager.trackError();
+            throw error;
+        } finally {
+            this.statisticsManager.decrementActiveRequests();
+        }
     }
 
     /**
@@ -360,18 +203,16 @@ export class NetworkService {
      * - Can be overridden by explicitly setting credentials in options
      */
     async request(input: RequestInfo | URL, options?: RequestInit): Promise<Response> {
-        // Ensure deviceId before making the request (skip on server-side)
-        if(!this.isServerSide()) {
-            await this.ensureDeviceId();
-        }
+        // Ensure deviceId before making the request
+        await this.deviceIdManager.ensure();
 
         // Use custom fetch if provided (for Cloudflare worker-to-worker calls)
         const fetchMethod = this.options.fetch || fetch;
 
-        // For server-side requests in production, transform the URL to use the internal API
+        // For server-side requests in production, transform the URL to use the Base worker-to-worker API
         let finalInput = input;
         if(this.options.serverSide && this.options.fetch) {
-            // This is a special convention that tells Base to not create duplicate deviceIds for worker to worker requests
+            // This is a special convention that tells Base to not create duplicate deviceIds for worker-to-worker requests
             finalInput =
                 typeof input === 'string'
                     ? input.replace(/^https:\/\/[^/]+/, 'https://website.base-internal')
@@ -381,35 +222,7 @@ export class NetworkService {
         }
 
         // Determine if this is an internal API call
-        let isInternalApi = false;
-        if(ProjectSettings.apis?.base?.host) {
-            const apiHost = ProjectSettings.apis.base.host;
-
-            // Extract the base domain from the API host (e.g., "domain.com" from "api.domain.com")
-            const baseDomain = apiHost.split('.').slice(-2).join('.');
-
-            // Helper function to check if a hostname belongs to the internal domain
-            const isInternalDomain = (hostname: string) => {
-                return hostname === apiHost || hostname.endsWith('.' + baseDomain);
-            };
-
-            if(typeof input === 'string') {
-                try {
-                    const url = new URL(input);
-                    isInternalApi = isInternalDomain(url.hostname);
-                } catch {
-                    // If URL parsing fails, fall back to simple string check
-                    isInternalApi = input.includes(apiHost);
-                }
-            }
-            else if(input instanceof URL) {
-                isInternalApi = isInternalDomain(input.hostname);
-            }
-            else if(input instanceof Request) {
-                const requestUrl = new URL(input.url);
-                isInternalApi = isInternalDomain(requestUrl.hostname);
-            }
-        }
+        const isInternalApi = this.isInternalApiUrl(input);
 
         // Build final options with smart credential defaults
         const finalOptions: RequestInit = {
@@ -427,22 +240,12 @@ export class NetworkService {
 
         // Client-side path with full statistics tracking
         const startTime = Date.now();
-        this.statistics.totalRequests++;
-        this.statistics.activeRequests++;
-        this.statistics.lastRequestAt = startTime;
+        this.statisticsManager.trackRequest();
 
         try {
             // Track request size if body is provided
             if(options?.body) {
-                const bodySize =
-                    typeof options.body === 'string'
-                        ? new Blob([options.body]).size
-                        : options.body instanceof Blob
-                          ? options.body.size
-                          : options.body instanceof ArrayBuffer
-                            ? options.body.byteLength
-                            : 0;
-                this.statistics.totalBytesSent += bodySize;
+                this.statisticsManager.trackBytesSent(this.getBodySize(options.body));
             }
 
             // Make the actual request
@@ -450,15 +253,11 @@ export class NetworkService {
 
             // Update statistics based on response
             if(response.ok) {
-                this.statistics.successfulRequests++;
-                this.statistics.lastSuccessAt = Date.now();
+                this.statisticsManager.trackSuccess(Date.now() - startTime);
             }
             else {
-                this.statistics.failedRequests++;
-                this.statistics.lastErrorAt = Date.now();
+                this.statisticsManager.trackError();
             }
-
-            this.updateResponseTime(Date.now() - startTime);
 
             // Note: We can't easily track response size without consuming the body
             // The caller needs the response body, so we'll skip size tracking for direct requests
@@ -466,18 +265,16 @@ export class NetworkService {
             return response;
         }
         catch(error) {
-            // Update error statistics
-            this.statistics.failedRequests++;
-            this.statistics.lastErrorAt = Date.now();
+            this.statisticsManager.trackError();
             throw error;
         } finally {
-            this.statistics.activeRequests--;
+            this.statisticsManager.decrementActiveRequests();
         }
     }
 
     // Direct GraphQL request method (for non-hook GraphQL requests)
     async graphQlRequest<TResult, TVariables = Record<string, never>>(
-        query: AnyTypedDocumentString<TResult, TVariables>,
+        query: AppOrStructureTypedDocumentString<TResult, TVariables>,
         variables?: TVariables,
         options?: { headers?: HeadersInit },
     ): Promise<TResult> {
@@ -487,7 +284,7 @@ export class NetworkService {
 
         const body = JSON.stringify({ query: query.toString(), variables });
 
-        // Use our request method which handles deviceId, statistics, etc.
+        // Use our request method which handles device ID, statistics, etc.
         const response = await this.request(graphqlEndpoint, {
             method: 'POST',
             headers: {
@@ -502,7 +299,7 @@ export class NetworkService {
 
         // Skip statistics tracking on server-side to avoid state pollution
         if(!this.isServerSide()) {
-            this.statistics.totalBytesReceived += new Blob([responseText]).size;
+            this.statisticsManager.trackBytesReceived(new Blob([responseText]).size);
         }
 
         // Parse response with proper typing
@@ -510,9 +307,9 @@ export class NetworkService {
 
         // Check for network errors
         if(!response.ok) {
-            const error = new Error(`Network request failed with status ${response.status}`);
-            (error as { status?: number }).status = response.status;
-            throw error;
+            throw this.augmentError(new Error(`Network request failed with status ${response.status}`), {
+                status: response.status,
+            });
         }
 
         // Check for GraphQL errors
@@ -521,11 +318,10 @@ export class NetworkService {
             const error = new Error(errorMessage);
 
             // Attach the full error details for better debugging
-            (error as { graphQlErrors?: unknown; graphQlResponse?: unknown }).graphQlErrors =
-                graphQlResponse.errors || (graphQlResponse.error ? [graphQlResponse.error] : []);
-            (error as { graphQlErrors?: unknown; graphQlResponse?: unknown }).graphQlResponse = graphQlResponse;
-
-            throw error;
+            throw this.augmentError(error, {
+                graphQlErrors: graphQlResponse.errors || (graphQlResponse.error ? [graphQlResponse.error] : []),
+                graphQlResponse,
+            });
         }
 
         return graphQlResponse.data as TResult;
@@ -543,36 +339,13 @@ export class NetworkService {
     ): UseGraphQlQueryRequestResultInterface<TData> | UseGraphQlMutationRequestResultInterface<TData, TVariables> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
+        // If cacheKey is not false, we treat this as a query
         if(options.cacheKey !== false) {
             // Cached behavior (like useQuery)
             const baseQueryOptions = {
                 queryKey: options.cacheKey,
-                queryFn: async () => {
-                    const startTime = Date.now();
-                    this.statistics.totalRequests++;
-                    this.statistics.activeRequests++;
-                    this.statistics.lastRequestAt = startTime;
-
-                    try {
-                        await this.ensureDeviceId();
-                        const result = await (options.request as (variables?: unknown) => Promise<TData>)();
-
-                        // Update success statistics
-                        this.statistics.successfulRequests++;
-                        this.statistics.lastSuccessAt = Date.now();
-                        this.updateResponseTime(Date.now() - startTime);
-
-                        return result;
-                    }
-                    catch(error) {
-                        // Update error statistics
-                        this.statistics.failedRequests++;
-                        this.statistics.lastErrorAt = Date.now();
-                        throw error;
-                    } finally {
-                        this.statistics.activeRequests--;
-                    }
-                },
+                queryFn: () =>
+                    this.trackAsyncOperation(() => (options.request as (variables?: unknown) => Promise<TData>)()),
                 enabled: options.enabled,
                 staleTime: options.validDurationInMilliseconds,
                 gcTime: options.clearAfterUnusedDurationInMilliseconds,
@@ -608,32 +381,7 @@ export class NetworkService {
             // Non-cached behavior (like useMutation)
             const mutationResult = tanStackReactQueryUseMutation(
                 {
-                    mutationFn: async (variables: TVariables) => {
-                        const startTime = Date.now();
-                        this.statistics.totalRequests++;
-                        this.statistics.activeRequests++;
-                        this.statistics.lastRequestAt = startTime;
-
-                        try {
-                            await this.ensureDeviceId();
-                            const result = await options.request(variables);
-
-                            // Update success statistics
-                            this.statistics.successfulRequests++;
-                            this.statistics.lastSuccessAt = Date.now();
-                            this.updateResponseTime(Date.now() - startTime);
-
-                            return result;
-                        }
-                        catch(error) {
-                            // Update error statistics
-                            this.statistics.failedRequests++;
-                            this.statistics.lastErrorAt = Date.now();
-                            throw error;
-                        } finally {
-                            this.statistics.activeRequests--;
-                        }
-                    },
+                    mutationFn: (variables: TVariables) => this.trackAsyncOperation(() => options.request(variables)),
                     onSuccess: options.onSuccess,
                     onError: options.onError,
                 },
@@ -651,7 +399,7 @@ export class NetworkService {
                 variables: mutationResult.variables,
                 cancel: () => {
                     // Mutations don't have a built-in cancel, but we can track it
-                    this.statistics.cancelledRequests++;
+                    this.statisticsManager.trackCancellation();
                 },
             } as UseGraphQlMutationRequestResultInterface<TData, TVariables>;
         }
@@ -666,32 +414,7 @@ export class NetworkService {
         const queryResult = tanStackReactQueryUseSuspenseQuery(
             {
                 queryKey: options.cacheKey,
-                queryFn: async () => {
-                    const startTime = Date.now();
-                    this.statistics.totalRequests++;
-                    this.statistics.activeRequests++;
-                    this.statistics.lastRequestAt = startTime;
-
-                    try {
-                        await this.ensureDeviceId();
-                        const result = await options.request();
-
-                        // Update success statistics
-                        this.statistics.successfulRequests++;
-                        this.statistics.lastSuccessAt = Date.now();
-                        this.updateResponseTime(Date.now() - startTime);
-
-                        return result;
-                    }
-                    catch(error) {
-                        // Update error statistics
-                        this.statistics.failedRequests++;
-                        this.statistics.lastErrorAt = Date.now();
-                        throw error;
-                    } finally {
-                        this.statistics.activeRequests--;
-                    }
-                },
+                queryFn: () => this.trackAsyncOperation(() => options.request()),
                 staleTime: options.validDurationInMilliseconds,
                 gcTime: options.clearAfterUnusedDurationInMilliseconds,
                 refetchInterval: options.refreshIntervalInMilliseconds,
@@ -712,63 +435,54 @@ export class NetworkService {
 
     // GraphQL helpers
     useGraphQlQuery<TResult, TVariables>(
-        query: AnyTypedDocumentString<TResult, TVariables>,
+        query: AppOrStructureTypedDocumentString<TResult, TVariables>,
         ...[variables, options]: TVariables extends Record<string, never>
             ? [variables?: undefined, options?: Partial<UseRequestOptionsInterface<TResult, void>>]
             : [variables: TVariables, options?: Partial<UseRequestOptionsInterface<TResult, void>>]
     ) {
         return this.useRequest<TResult>({
             cacheKey: [query.toString(), variables],
-            request: async () => {
-                const response = await this.graphQlRequest(query, variables);
-                return response;
-            },
+            request: () => this.graphQlRequest(query, variables),
             ...options,
         } as UseRequestOptionsInterface<TResult, void> & { cacheKey: CacheKey });
     }
 
     useGraphQlMutation<TResult, TVariables>(
-        mutation: AnyTypedDocumentString<TResult, TVariables>,
+        mutation: AppOrStructureTypedDocumentString<TResult, TVariables>,
         options?: Partial<UseRequestOptionsInterface<TResult, TVariables>>,
     ) {
         return this.useRequest<TResult, TVariables>({
             cacheKey: false,
-            request: async (variables: TVariables) => {
-                const response = await this.graphQlRequest(mutation, variables);
-                return response;
-            },
+            request: (variables: TVariables) => this.graphQlRequest(mutation, variables),
             ...options,
         } as UseRequestOptionsInterface<TResult, TVariables> & { cacheKey: false });
     }
 
     // GraphQL suspense query helper
     useSuspenseGraphQlQuery<TResult, TVariables>(
-        query: AnyTypedDocumentString<TResult, TVariables>,
+        query: AppOrStructureTypedDocumentString<TResult, TVariables>,
         ...[variables, options]: TVariables extends Record<string, never>
             ? [variables?: undefined, options?: Partial<Omit<UseRequestOptionsInterface<TResult, void>, 'enabled'>>]
             : [variables: TVariables, options?: Partial<Omit<UseRequestOptionsInterface<TResult, void>, 'enabled'>>]
     ): UseSuspenseRequestResultInterface<TResult> {
         return this.useSuspenseRequest<TResult>({
             cacheKey: [query.toString(), variables],
-            request: async () => {
-                const response = await this.graphQlRequest(query, variables);
-                return response;
-            },
+            request: () => this.graphQlRequest(query, variables),
             ...options,
         } as Omit<UseRequestOptionsInterface<TResult, void>, 'enabled'> & { cacheKey: CacheKey });
     }
 
     // Cache management methods
-    invalidateCache(keys: CacheKey): Promise<void> {
-        return this.tanStackReactQueryClient.invalidateQueries({ queryKey: keys });
+    getCache<TData>(key: CacheKey): TData | undefined {
+        return this.tanStackReactQueryClient.getQueryData<TData>(key);
     }
 
     setCache<TData>(key: CacheKey, data: TData): void {
         this.tanStackReactQueryClient.setQueryData(key, data);
     }
 
-    getCache<TData>(key: CacheKey): TData | undefined {
-        return this.tanStackReactQueryClient.getQueryData<TData>(key);
+    invalidateCache(keys: CacheKey): Promise<void> {
+        return this.tanStackReactQueryClient.invalidateQueries({ queryKey: keys });
     }
 
     removeCache(keys: CacheKey): void {
@@ -782,28 +496,24 @@ export class NetworkService {
         return this.tanStackReactQueryClient.resetQueries();
     }
 
-    // Clear all cache
     clearCache(): void {
         this.tanStackReactQueryClient.clear();
     }
 
-    // Prefetch data
     async prefetchCache<TData>(key: CacheKey, fn: () => Promise<TData>): Promise<void> {
         await this.tanStackReactQueryClient.prefetchQuery({
             queryKey: key,
             queryFn: async () => {
-                await this.ensureDeviceId();
+                await this.deviceIdManager.ensure();
                 return fn();
             },
         });
     }
 
-    // Refresh all requests
     async refreshAllRequests(): Promise<void> {
         return this.tanStackReactQueryClient.refetchQueries();
     }
 
-    // Refresh requests with filters
     async refreshRequests(filters?: {
         type?: 'active' | 'inactive' | 'all';
         exact?: boolean;
@@ -813,46 +523,17 @@ export class NetworkService {
         return this.tanStackReactQueryClient.refetchQueries(filters);
     }
 
-    // Convenience method to refresh only active requests
     async refreshActiveRequests(): Promise<void> {
         return this.refreshRequests({ type: 'active' });
     }
 
     // Statistics methods
-    private updateResponseTime(responseTimeInMilliseconds: number): void {
-        this.responseTimes.push(responseTimeInMilliseconds);
-
-        // Keep only last 100 response times to prevent memory leak
-        if(this.responseTimes.length > 100) {
-            this.responseTimes.shift();
-        }
-
-        // Update average
-        const sum = this.responseTimes.reduce((acc, time) => acc + time, 0);
-        this.statistics.averageResponseTimeInMilliseconds = Math.round(sum / this.responseTimes.length);
-    }
-
     getStatistics(): NetworkRequestStatisticsInterface {
-        return { ...this.statistics };
+        return this.statisticsManager.getStatistics();
     }
 
     resetStatistics(): void {
-        this.statistics = {
-            totalRequests: 0,
-            successfulRequests: 0,
-            failedRequests: 0,
-            cancelledRequests: 0,
-            averageResponseTimeInMilliseconds: null,
-            totalBytesReceived: 0,
-            totalBytesSent: 0,
-            activeRequests: 0,
-            cacheHits: 0,
-            cacheMisses: 0,
-            lastRequestAt: null,
-            lastSuccessAt: null,
-            lastErrorAt: null,
-        };
-        this.responseTimes = [];
+        this.statisticsManager.resetStatistics();
     }
 }
 
