@@ -24,8 +24,8 @@ import { graphql as structureGraphQl } from '@structure/source/api/graphql/Graph
 // Import TypedDocumentString types from both locations
 // TypedDocumentString is a class that extends String and contains the GraphQL query along with its type information for full type safety
 // eslint-disable-next-line structure/no-structure-project-imports-rule
-import type { TypedDocumentString as AppTypedDocumentString } from '@project/app/_api/graphql/GraphQlGeneratedCode';
-import type { TypedDocumentString as StructureTypedDocumentString } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { TypedDocumentString as AppTypedDocumentString } from '@project/app/_api/graphql/GraphQlGeneratedCode';
+import { TypedDocumentString as StructureTypedDocumentString } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Create a union type that accepts both TypedDocumentString types
 // This allows our GraphQL methods to accept queries from either code generation output
@@ -83,14 +83,32 @@ export const gql = new Proxy(
         },
         // Handle direct function calls (template tag usage)
         apply(target, thisArgument, argumentsList) {
-            try {
-                // Use Function constructor to avoid ESLint warnings about spread
-                const appFunction = appGraphQl as unknown as (...args: unknown[]) => unknown;
-                return Function.prototype.apply.call(appFunction, null, argumentsList);
-            } catch {
-                const structureFunction = structureGraphQl as unknown as (...args: unknown[]) => unknown;
-                return Function.prototype.apply.call(structureFunction, null, argumentsList);
+            // Helper to check if result is a valid TypedDocumentString
+            const isValidDocument = (result: unknown): boolean => {
+                // Check if it's an instance of either TypedDocumentString class
+                return result instanceof AppTypedDocumentString || result instanceof StructureTypedDocumentString;
+            };
+
+            // Try app's graphql function first
+            const appFunction = appGraphQl as unknown as (...args: unknown[]) => unknown;
+            const appResult = Function.prototype.apply.call(appFunction, null, argumentsList);
+
+            if(isValidDocument(appResult)) {
+                return appResult;
             }
+
+            // Try structure's graphql function
+            const structureFunction = structureGraphQl as unknown as (...args: unknown[]) => unknown;
+            const structureResult = Function.prototype.apply.call(structureFunction, null, argumentsList);
+
+            if(isValidDocument(structureResult)) {
+                return structureResult;
+            }
+
+            // Neither worked, throw an error
+            throw new Error(
+                `GraphQL query not found in generated documents. Make sure to run 'npm run graphql:generate' after adding new queries.`,
+            );
         },
     },
 ) as typeof appGraphQl & typeof structureGraphQl;
