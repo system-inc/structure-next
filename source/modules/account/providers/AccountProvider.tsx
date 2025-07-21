@@ -49,7 +49,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
     const router = useRouter();
 
     // Mutations
-    const accountSignOutMutation = networkService.useGraphQlMutation(
+    const accountSignOutRequest = networkService.useGraphQlMutation(
         gql(`
             mutation AccountSignOut {
                 accountSignOut {
@@ -60,7 +60,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
     );
 
     // Queries
-    const accountQueryState = networkService.useGraphQlQuery(
+    const accountRequest = networkService.useGraphQlQuery(
         gql(`
             query Account {
                 account {
@@ -94,9 +94,9 @@ export function AccountProvider(properties: AccountProviderProperties) {
     // Effect to handle query completion
     React.useEffect(
         function () {
-            if(accountQueryState.data) {
+            if(accountRequest.data) {
                 // If signed in
-                if(accountQueryState.data.account) {
+                if(accountRequest.data.account) {
                     // Update the signed in state
                     setSignedIn(true);
 
@@ -110,18 +110,18 @@ export function AccountProvider(properties: AccountProviderProperties) {
                 }
             }
         },
-        [accountQueryState.data],
+        [accountRequest.data],
     );
 
     // Effect to handle query error
     React.useEffect(
         function () {
-            if(accountQueryState.error) {
+            if(accountRequest.error) {
                 // If there is an error, the account is not signed in
                 setSignedIn(false);
             }
         },
-        [accountQueryState.error],
+        [accountRequest.error],
     );
     // console.log('accountQueryState', accountQueryState);
 
@@ -129,14 +129,14 @@ export function AccountProvider(properties: AccountProviderProperties) {
     const account = React.useMemo(
         function () {
             // If there is account data
-            if(accountQueryState.data?.account) {
-                return new Account(accountQueryState.data.account);
+            if(accountRequest.data?.account) {
+                return new Account(accountRequest.data.account);
             }
             else {
                 return null;
             }
         },
-        [accountQueryState.data?.account],
+        [accountRequest.data?.account],
     );
 
     // Function to update the signed in state
@@ -157,7 +157,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
             // Invoke the GraphQL mutation
             try {
                 // Invoke the mutation
-                await accountSignOutMutation.execute({});
+                await accountSignOutRequest.execute({});
             }
             catch(error) {
                 console.log('error', JSON.stringify(error));
@@ -174,13 +174,36 @@ export function AccountProvider(properties: AccountProviderProperties) {
 
             return true;
         },
-        [accountSignOutMutation, updateSignedIn, router],
+        [accountSignOutRequest, updateSignedIn, router],
     );
 
-    // Effect to update local storage on mount
-    React.useEffect(function () {
-        localStorageService.set(accountSignedInKey, signedIn);
-    });
+    // Effect to reconcile localStorage with initial server-side state
+    // This is crucial for environments where the API is on a different domain
+    // and HTTP-only cookies cannot be shared between the frontend and API.
+    //
+    // Flow:
+    // 1. User signs in → localStorage is set to true
+    // 2. Page refresh → Server can't see cross-domain cookies, assumes signed out
+    // 3. This effect runs → Checks localStorage and corrects the state
+    // 4. Account query runs → Verifies authentication with API
+    React.useEffect(
+        function () {
+            // Only run on mount
+            const storedSignedIn = localStorageService.get<boolean>(accountSignedInKey);
+
+            // If localStorage indicates we're signed in but server-side rendering
+            // initialized us as signed out (due to missing cross-domain cookies),
+            // update the state to trigger the account query
+            if(storedSignedIn === true && !signedIn) {
+                // console.log('AccountProvider: localStorage indicates signed in, updating state');
+                setSignedIn(true);
+            }
+            // Note: We don't handle the opposite case (stored false, state true)
+            // because the server's cookie check is authoritative in production
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [], // Empty dependency array - only run once on mount
+    );
 
     // Effect to listen for changes in local storage
     React.useEffect(
@@ -209,8 +232,8 @@ export function AccountProvider(properties: AccountProviderProperties) {
             value={{
                 accountState: {
                     // We are loading if the account query is loading or if we are signed in and the account is not loaded
-                    loading: accountQueryState.isLoading || (signedIn && account == null),
-                    error: accountQueryState.error as GraphQlError | null,
+                    loading: accountRequest.isLoading || (signedIn && account == null),
+                    error: accountRequest.error as GraphQlError | null,
                     account: account,
                 },
                 signedIn: signedIn,

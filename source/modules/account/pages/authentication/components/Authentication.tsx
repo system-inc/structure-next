@@ -115,7 +115,12 @@ export function Authentication(properties: AuthenticationProperties) {
             // If the authentication session is authenticated
             if(authenticationSession?.status == 'Authenticated') {
                 // If the scope is AccountRegistration
-                if(authenticationSession?.scopeType == 'AccountRegistration') {
+                if(
+                    authenticationSession?.scopeType == 'AccountRegistration' &&
+                    !accountAuthenticationRegistrationCompleteRequest.isSuccess &&
+                    !accountAuthenticationRegistrationCompleteRequest.isError &&
+                    !accountAuthenticationRegistrationCompleteRequest.isLoading
+                ) {
                     console.log('AccountRegistrationComplete');
 
                     // Run the accountRegistrationComplete mutation
@@ -137,7 +142,12 @@ export function Authentication(properties: AuthenticationProperties) {
                         });
                 }
                 // If the scope is AccountSignIn
-                else if(authenticationSession?.scopeType == 'AccountSignIn') {
+                else if(
+                    authenticationSession?.scopeType == 'AccountSignIn' &&
+                    !accountAuthenticationSignInCompleteRequest.isSuccess &&
+                    !accountAuthenticationSignInCompleteRequest.isError &&
+                    !accountAuthenticationSignInCompleteRequest.isLoading
+                ) {
                     console.log('AccountSignInComplete');
 
                     // Run the accountSignInComplete mutation
@@ -160,6 +170,12 @@ export function Authentication(properties: AuthenticationProperties) {
         },
         [
             authenticationSession,
+            accountAuthenticationRegistrationCompleteRequest.isSuccess,
+            accountAuthenticationRegistrationCompleteRequest.isError,
+            accountAuthenticationRegistrationCompleteRequest.isLoading,
+            accountAuthenticationSignInCompleteRequest.isSuccess,
+            accountAuthenticationSignInCompleteRequest.isError,
+            accountAuthenticationSignInCompleteRequest.isLoading,
             accountAuthenticationRegistrationCompleteRequest,
             accountAuthenticationSignInCompleteRequest,
             setSignedIn,
