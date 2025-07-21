@@ -75,7 +75,8 @@ export const structureTypeScriptConfiguration = {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
         parserOptions: {
-            project: true, // Auto-detect nearest tsconfig.json
+            project: './tsconfig.json', // Use root tsconfig.json
+            tsconfigRootDir: process.cwd(), // Set root directory to project root
             sourceType: 'module',
         },
     },
