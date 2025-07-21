@@ -1,5 +1,3 @@
-'use client'; // This component uses client-only features
-
 // Dependencies - Project
 import { ProjectSettings } from '@project/ProjectSettings';
 
