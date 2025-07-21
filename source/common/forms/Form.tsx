@@ -459,7 +459,7 @@ export function Form(properties: FormProperties) {
                 const formInputClone = React.cloneElement(formInput, {
                     // eslint-disable-next-line structure/react-naming-conventions-rule
                     ref: (reference: FormInputReferenceInterface | null) => {
-                        console.log('[Form.tsx] Setting ref for', formInput.props.id, 'reference:', reference);
+                        // console.log('[Form.tsx] Setting ref for', formInput.props.id, 'reference:', reference);
                         if(reference) {
                             attachFormInputReference(formInput.props.id, reference);
                         }
