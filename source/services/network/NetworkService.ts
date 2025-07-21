@@ -124,7 +124,29 @@ export class NetworkService {
                 queries: {
                     staleTime: 5 * 60 * 1000, // 5 minutes
                     gcTime: 10 * 60 * 1000, // 10 minutes
-                    retry: 1,
+                    retry: function (failureCount, error) {
+                        // Don't retry on 4xx HTTP errors (client errors like 401, 403, 404)
+                        if(error instanceof Error && 'status' in error) {
+                            const status = (error as Error & { status: number }).status;
+                            if(status >= 400 && status < 500) {
+                                return false;
+                            }
+                        }
+
+                        // Don't retry on GraphQL errors with 4xx status codes
+                        if(error instanceof Error && 'graphQlErrors' in error) {
+                            const graphQlErrors = (error as Error & { graphQlErrors: Array<{ extensions?: { status?: number } }> }).graphQlErrors;
+                            if(graphQlErrors?.some(function(graphQlError) {
+                                const status = graphQlError.extensions?.status;
+                                return status !== undefined && status >= 400 && status < 500;
+                            })) {
+                                return false;
+                            }
+                        }
+
+                        // For other errors, use default retry logic (respects maximumRetries)
+                        return failureCount < 1; // Default was retry: 1
+                    },
                     refetchOnWindowFocus: false,
                 },
                 mutations: {
@@ -358,7 +380,7 @@ export class NetworkService {
                 refetchIntervalInBackground: options.refreshIntervalInBackground,
                 refetchOnWindowFocus: options.refreshOnWindowFocus,
                 refetchOnReconnect: options.refreshOnReconnect,
-                retry: options.maximumRetries,
+                ...(options.maximumRetries !== undefined ? { retry: options.maximumRetries } : {}),
                 initialData: options.initialData,
                 select: options.select,
                 meta: options.metadata,
@@ -431,7 +453,7 @@ export class NetworkService {
                 refetchIntervalInBackground: options.refreshIntervalInBackground,
                 refetchOnWindowFocus: options.refreshOnWindowFocus,
                 refetchOnReconnect: options.refreshOnReconnect,
-                retry: options.maximumRetries,
+                ...(options.maximumRetries !== undefined ? { retry: options.maximumRetries } : {}),
                 initialData: options.initialData,
                 select: options.select,
             },
