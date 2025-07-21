@@ -33,11 +33,13 @@ export type { AppOrStructureTypedDocumentString as AnyTypedDocumentString } from
 export type { NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';
 
 // Types
-export interface UseRequestOptionsInterface<TData, TVariables = void> {
+export interface UseRequestOptionsInterface<TData, TVariables = void, TSelected = TData> {
     // The async function to execute that fetches or mutates data
     request: (variables: TVariables) => Promise<TData>;
     // Unique identifier for caching - use array for cached queries, false for mutations
     cacheKey: CacheKey | false;
+    // Transform or select part of the data (affects returned data but not cache)
+    select?: (data: TData) => TSelected;
     // Callback function called when the request succeeds
     onSuccess?: (data: TData) => void;
     // Callback function called when the request fails
@@ -50,8 +52,12 @@ export interface UseRequestOptionsInterface<TData, TVariables = void> {
     clearAfterUnusedDurationInMilliseconds?: number;
     // Automatically refresh data at this interval (false to disable)
     refreshIntervalInMilliseconds?: number | false;
+    // Whether to continue refresh intervals when tab/window is in background
+    refreshIntervalInBackground?: boolean;
     // Whether to refresh data when the window regains focus
     refreshOnWindowFocus?: boolean;
+    // Whether to refresh data when reconnecting to the internet
+    refreshOnReconnect?: boolean;
     // Number of retry attempts for failed requests (true = 3, false = 0)
     maximumRetries?: boolean | number;
     // Initial data to be set as the query's initial data
@@ -60,6 +66,8 @@ export interface UseRequestOptionsInterface<TData, TVariables = void> {
     placeholderData?: TData | (() => TData | undefined);
     // Keep previous data when query key changes (useful for pagination)
     keepPreviousData?: boolean;
+    // Attach metadata to the query for debugging, logging, or filtering
+    metadata?: Record<string, unknown>;
 }
 
 // Base interface with common properties
@@ -179,7 +187,6 @@ export class NetworkService {
         this.statisticsManager.trackRequest();
 
         try {
-            await this.deviceIdManager.ensure();
             const result = await operation();
             this.statisticsManager.trackSuccess(Date.now() - startTime);
             return result;
@@ -326,15 +333,15 @@ export class NetworkService {
     }
 
     // Main hook with overloads
-    useRequest<TData>(
-        options: UseRequestOptionsInterface<TData, void> & { cacheKey: CacheKey },
-    ): UseGraphQlQueryRequestResultInterface<TData>;
+    useRequest<TData, TVariables = void, TSelected = TData>(
+        options: UseRequestOptionsInterface<TData, TVariables, TSelected> & { cacheKey: CacheKey },
+    ): UseGraphQlQueryRequestResultInterface<TSelected>;
     useRequest<TData, TVariables = void>(
         options: UseRequestOptionsInterface<TData, TVariables> & { cacheKey: false },
     ): UseGraphQlMutationRequestResultInterface<TData, TVariables>;
-    useRequest<TData, TVariables = void>(
-        options: UseRequestOptionsInterface<TData, TVariables>,
-    ): UseGraphQlQueryRequestResultInterface<TData> | UseGraphQlMutationRequestResultInterface<TData, TVariables> {
+    useRequest<TData, TVariables = void, TSelected = TData>(
+        options: UseRequestOptionsInterface<TData, TVariables, TSelected>,
+    ): UseGraphQlQueryRequestResultInterface<TSelected> | UseGraphQlMutationRequestResultInterface<TData, TVariables> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
         // If cacheKey is not false, we treat this as a query
@@ -348,9 +355,13 @@ export class NetworkService {
                 staleTime: options.validDurationInMilliseconds,
                 gcTime: options.clearAfterUnusedDurationInMilliseconds,
                 refetchInterval: options.refreshIntervalInMilliseconds,
+                refetchIntervalInBackground: options.refreshIntervalInBackground,
                 refetchOnWindowFocus: options.refreshOnWindowFocus,
+                refetchOnReconnect: options.refreshOnReconnect,
                 retry: options.maximumRetries,
                 initialData: options.initialData,
+                select: options.select,
+                meta: options.metadata,
             };
 
             // Build complete options with placeholderData if needed
@@ -373,7 +384,7 @@ export class NetworkService {
                 refresh: queryResult.refetch,
                 isRefreshing: queryResult.isRefetching,
                 cancel: () => queryClient.cancelQueries({ queryKey: options.cacheKey as CacheKey }),
-            } as UseGraphQlQueryRequestResultInterface<TData>;
+            } as UseGraphQlQueryRequestResultInterface<TSelected>;
         }
         else {
             // Non-cached behavior (like useMutation)
@@ -382,6 +393,7 @@ export class NetworkService {
                     mutationFn: (variables: TVariables) => this.trackAsyncOperation(() => options.request(variables)),
                     onSuccess: options.onSuccess,
                     onError: options.onError,
+                    meta: options.metadata,
                 },
                 this.tanStackReactQueryClient,
             );
@@ -404,9 +416,9 @@ export class NetworkService {
     }
 
     // Suspense query method
-    useSuspenseRequest<TData>(
-        options: Omit<UseRequestOptionsInterface<TData, void>, 'enabled'> & { cacheKey: CacheKey },
-    ): UseSuspenseRequestResultInterface<TData> {
+    useSuspenseRequest<TData, TSelected = TData>(
+        options: Omit<UseRequestOptionsInterface<TData, void, TSelected>, 'enabled'> & { cacheKey: CacheKey },
+    ): UseSuspenseRequestResultInterface<TSelected> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
         const queryResult = tanStackReactQueryUseSuspenseQuery(
@@ -416,9 +428,12 @@ export class NetworkService {
                 staleTime: options.validDurationInMilliseconds,
                 gcTime: options.clearAfterUnusedDurationInMilliseconds,
                 refetchInterval: options.refreshIntervalInMilliseconds,
+                refetchIntervalInBackground: options.refreshIntervalInBackground,
                 refetchOnWindowFocus: options.refreshOnWindowFocus,
+                refetchOnReconnect: options.refreshOnReconnect,
                 retry: options.maximumRetries,
                 initialData: options.initialData,
+                select: options.select,
             },
             this.tanStackReactQueryClient,
         );

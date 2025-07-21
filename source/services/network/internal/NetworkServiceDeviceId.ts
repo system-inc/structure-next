@@ -11,7 +11,7 @@ const sixMonthsInMilliseconds = 6 * 30 * 24 * 60 * 60 * 1000;
 // Retry configuration - Gmail-style infinite retry with backoff
 const deviceIdRequestRetryConfiguration = {
     // Initial retry delays: 1s, 2s, 4s, 8s, 16s, 32s, then 60s forever
-    initialDelayInMilliseconds: 1000,
+    initialRetryDelayInMilliseconds: 1000,
     backoffMultiplier: 2,
     maximumDelayInMilliseconds: 60000, // 1 minute max delay
     steadyStateDelayInMilliseconds: 60000, // Retry every minute after backoff
@@ -170,7 +170,7 @@ export class NetworkServiceDeviceId {
             if(attemptNumber < deviceIdRequestRetryConfiguration.exponentialBackoffAttempts) {
                 // Exponential backoff phase
                 baseDelay = Math.min(
-                    deviceIdRequestRetryConfiguration.initialDelayInMilliseconds *
+                    deviceIdRequestRetryConfiguration.initialRetryDelayInMilliseconds *
                         Math.pow(deviceIdRequestRetryConfiguration.backoffMultiplier, attemptNumber),
                     deviceIdRequestRetryConfiguration.maximumDelayInMilliseconds,
                 );
