@@ -9,6 +9,7 @@ import { Wrapper } from '@structure/source/utilities/Wrapper';
 // Dependencies - Foundation Providers
 import { CookiesProvider } from '@structure/source/utilities/cookies/CookiesProvider';
 import { Cookies } from '@structure/source/utilities/cookies/Cookies';
+import { NetworkServiceProvider } from '@structure/source/services/network/NetworkServiceProvider';
 
 // Dependencies - State Providers
 import { WebSocketViaSharedWorkerProvider } from '@structure/source/api/web-sockets/providers/WebSocketViaSharedWorkerProvider';
@@ -56,35 +57,37 @@ export function Providers(properties: ProvidersProperties) {
     return (
         // Foundation Providers
         <FoundationProviders>
-            <CookiesProvider cookies={Cookies}>
-                {/* State Providers */}
-                <StateProviders>
-                    <WebSocketViaSharedWorkerProvider>
-                        <SharedStateProvider>
-                            <AccountProvider signedIn={properties.accountSignedIn}>
-                                {/* Theme Providers */}
-                                <ThemeProviders>
-                                    <ThemeProvider>
-                                        {/* Feature Providers */}
-                                        <FeatureProviders>
-                                            <EngagementProvider>
-                                                {/* Interaction Providers */}
-                                                <InteractionProviders>
-                                                    <NoticeProvider>
-                                                        <TipProvider delayDuration={100}>
-                                                            {properties.children}
-                                                        </TipProvider>
-                                                    </NoticeProvider>
-                                                </InteractionProviders>
-                                            </EngagementProvider>
-                                        </FeatureProviders>
-                                    </ThemeProvider>
-                                </ThemeProviders>
-                            </AccountProvider>
-                        </SharedStateProvider>
-                    </WebSocketViaSharedWorkerProvider>
-                </StateProviders>
-            </CookiesProvider>
+            <NetworkServiceProvider>
+                <CookiesProvider cookies={Cookies}>
+                    {/* State Providers */}
+                    <StateProviders>
+                        <WebSocketViaSharedWorkerProvider>
+                            <SharedStateProvider>
+                                <AccountProvider signedIn={properties.accountSignedIn}>
+                                    {/* Theme Providers */}
+                                    <ThemeProviders>
+                                        <ThemeProvider>
+                                            {/* Feature Providers */}
+                                            <FeatureProviders>
+                                                <EngagementProvider>
+                                                    {/* Interaction Providers */}
+                                                    <InteractionProviders>
+                                                        <NoticeProvider>
+                                                            <TipProvider delayDuration={100}>
+                                                                {properties.children}
+                                                            </TipProvider>
+                                                        </NoticeProvider>
+                                                    </InteractionProviders>
+                                                </EngagementProvider>
+                                            </FeatureProviders>
+                                        </ThemeProvider>
+                                    </ThemeProviders>
+                                </AccountProvider>
+                            </SharedStateProvider>
+                        </WebSocketViaSharedWorkerProvider>
+                    </StateProviders>
+                </CookiesProvider>
+            </NetworkServiceProvider>
         </FoundationProviders>
     );
 }
