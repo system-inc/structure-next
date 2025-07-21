@@ -23,6 +23,9 @@ import {
     AccountAccessRoleAssignmentsPrivilegedQuery,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
+// Cache key constants
+export const accountAccessRoleAssignmentsPrivilegedCacheKey = 'accountAccessRoleAssignmentsPrivileged';
+
 // Dependencies - Utilities
 import { fullDate } from '@structure/source/utilities/Time';
 
@@ -89,6 +92,9 @@ export function UsersRolesPage() {
                 ],
             },
         },
+        {
+            cacheKey: [accountAccessRoleAssignmentsPrivilegedCacheKey],
+        },
     );
 
     const accountAccessRoleAssignmentRevokePrivilegedRequest = networkService.useGraphQlMutation(
@@ -117,7 +123,7 @@ export function UsersRolesPage() {
             if(result?.accountAccessRoleAssignmentRevokePrivileged.success) {
                 setRevokeSuccess(true);
                 // Refresh the roles list
-                networkService.invalidateCache(['accountAccessRoleAssignmentsPrivileged']);
+                networkService.invalidateCache([accountAccessRoleAssignmentsPrivilegedCacheKey]);
             }
         } catch {
             // Error is handled in the dialog via revokeMutation.error
@@ -165,7 +171,7 @@ export function UsersRolesPage() {
             <div className="space-y-12">
                 {/* Role Granting Form */}
                 <AccountRoleGrantForm
-                    onRoleGranted={() => networkService.invalidateCache(['accountAccessRoleAssignmentsPrivileged'])}
+                    onRoleGranted={() => networkService.invalidateCache([accountAccessRoleAssignmentsPrivilegedCacheKey])}
                 />
 
                 {/* Assigned Roles Section */}

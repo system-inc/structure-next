@@ -9,7 +9,7 @@ import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
 
 // Dependencies - API
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount, accountCacheKey } from '@structure/source/modules/account/providers/AccountProvider';
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Interface - ProfileFormValues
@@ -73,7 +73,7 @@ export function ProfileInformationForm() {
                 });
 
                 // Invalidate account cache to refresh the profile data
-                networkService.invalidateCache(['account']);
+                networkService.invalidateCache([accountCacheKey]);
             }
 
             return {

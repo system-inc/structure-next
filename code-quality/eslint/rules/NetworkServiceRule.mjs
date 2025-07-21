@@ -14,6 +14,9 @@ export default {
             noDirectTanStackQuery: 'Direct imports from @tanstack/react-query are not allowed. Use NetworkService instead.',
             noDirectApollo: 'Direct imports from @apollo/client are not allowed. Use NetworkService instead.',
             noDirectGraphqlImport: 'Direct imports of graphql from generated paths are not allowed. Import gql from NetworkService instead.',
+            noStringLiteralInvalidateCache: 'invalidateCache must use an imported cache key variable instead of a string literal. This prevents typos and makes cache keys easier to refactor. Export the cache key from where the cache is created.',
+            noTemplateLiteralInvalidateCache: 'invalidateCache must use an imported cache key variable instead of a template literal. This prevents typos and makes cache keys easier to refactor. Export the cache key from where the cache is created.',
+            noArrayWithStringLiteralInvalidateCache: 'invalidateCache array arguments must use imported cache key variables instead of string literals. This prevents typos and makes cache keys easier to refactor.',
         },
         schema: [],
     },
@@ -22,10 +25,10 @@ export default {
             // Check for direct fetch calls
             CallExpression(node) {
                 // Check if it's a fetch call
-                if (node.callee.type === 'Identifier' && node.callee.name === 'fetch') {
+                if(node.callee.type === 'Identifier' && node.callee.name === 'fetch') {
                     // Allow fetch in NetworkService.ts itself
                     const filename = context.getFilename();
-                    if (filename.includes('NetworkService.ts')) {
+                    if(filename.includes('NetworkService.ts')) {
                         return;
                     }
 
@@ -36,13 +39,13 @@ export default {
                 }
 
                 // Check for window.fetch
-                if (
+                if(
                     node.callee.type === 'MemberExpression' &&
                     node.callee.object.name === 'window' &&
                     node.callee.property.name === 'fetch'
                 ) {
                     const filename = context.getFilename();
-                    if (filename.includes('NetworkService.ts')) {
+                    if(filename.includes('NetworkService.ts')) {
                         return;
                     }
 
@@ -53,13 +56,13 @@ export default {
                 }
 
                 // Check for globalThis.fetch
-                if (
+                if(
                     node.callee.type === 'MemberExpression' &&
                     node.callee.object.name === 'globalThis' &&
                     node.callee.property.name === 'fetch'
                 ) {
                     const filename = context.getFilename();
-                    if (filename.includes('NetworkService.ts')) {
+                    if(filename.includes('NetworkService.ts')) {
                         return;
                     }
 
@@ -69,6 +72,58 @@ export default {
                     });
                 }
 
+                // Check for invalidateCache calls
+                if(
+                    node.callee.type === 'MemberExpression' &&
+                    node.callee.property.type === 'Identifier' &&
+                    node.callee.property.name === 'invalidateCache'
+                ) {
+                    // Check the first argument
+                    const firstArg = node.arguments[0];
+
+                    if(!firstArg) {
+                        return;
+                    }
+
+                    // Check if it's a string literal
+                    if(firstArg.type === 'Literal' && typeof firstArg.value === 'string') {
+                        context.report({
+                            node: firstArg,
+                            messageId: 'noStringLiteralInvalidateCache',
+                        });
+                        return;
+                    }
+
+                    // Check if it's a template literal
+                    if(firstArg.type === 'TemplateLiteral') {
+                        context.report({
+                            node: firstArg,
+                            messageId: 'noTemplateLiteralInvalidateCache',
+                        });
+                        return;
+                    }
+
+                    // Check if it's an array with string literals
+                    if(firstArg.type === 'ArrayExpression') {
+                        firstArg.elements.forEach((element) => {
+                            if(element && element.type === 'Literal' && typeof element.value === 'string') {
+                                context.report({
+                                    node: element,
+                                    messageId: 'noArrayWithStringLiteralInvalidateCache',
+                                });
+                            }
+
+                            // Also check for template literals in arrays
+                            if(element && element.type === 'TemplateLiteral') {
+                                context.report({
+                                    node: element,
+                                    messageId: 'noTemplateLiteralInvalidateCache',
+                                });
+                            }
+                        });
+                    }
+                }
+
             },
 
             // Check for prohibited imports
@@ -76,10 +131,10 @@ export default {
                 const source = node.source.value;
 
                 // Block direct TanStack Query imports
-                if (source === '@tanstack/react-query') {
+                if(source === '@tanstack/react-query') {
                     // Allow in NetworkService.ts and Providers.tsx
                     const filename = context.getFilename();
-                    if (filename.includes('NetworkService.ts') || filename.includes('Providers.tsx')) {
+                    if(filename.includes('NetworkService.ts') || filename.includes('Providers.tsx')) {
                         return;
                     }
 
@@ -90,7 +145,7 @@ export default {
                 }
 
                 // Block Apollo Client imports
-                if (source === '@apollo/client' || source.startsWith('@apollo/')) {
+                if(source === '@apollo/client' || source.startsWith('@apollo/')) {
                     context.report({
                         node,
                         messageId: 'noDirectApollo',
@@ -98,7 +153,7 @@ export default {
                 }
 
                 // Block direct graphql imports from generated paths
-                if (source.includes('/generated') && node.specifiers.some(spec => 
+                if(source.includes('/generated') && node.specifiers.some(spec =>
                     spec.type === 'ImportSpecifier' && spec.imported.name === 'graphql'
                 )) {
                     context.report({

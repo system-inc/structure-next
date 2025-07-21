@@ -17,6 +17,9 @@ import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
 // Dependencies - Services
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
+// Cache key constants
+export const accountCacheKey = 'account';
+
 // Context - Account
 interface AccountContextInterface {
     accountState: {
@@ -82,6 +85,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
         `),
         undefined,
         {
+            cacheKey: [accountCacheKey],
             // Do not run the query if the account is not signed in
             enabled: signedIn,
         },

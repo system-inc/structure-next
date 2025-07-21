@@ -18,6 +18,9 @@ import { Alert } from '@structure/source/common/notifications/Alert';
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
+// Cache key constants
+export const accountsPrivilegedCacheKey = 'accountsPrivileged';
+
 // Dependencies - Utilities
 import { iso8601Date, timeAgo } from '@structure/source/utilities/Time';
 
@@ -106,6 +109,9 @@ export function UsersPage() {
                 ],
             },
         },
+        {
+            cacheKey: [accountsPrivilegedCacheKey, page, itemsPerPage],
+        },
     );
 
     // Mutation
@@ -156,7 +162,7 @@ export function UsersPage() {
             if(result?.accountDeletePrivileged.success) {
                 setDeleteSuccess(true);
                 // Refresh the users list
-                networkService.invalidateCache(['accountsPrivileged']);
+                networkService.invalidateCache([accountsPrivilegedCacheKey]);
             }
         } catch {
             // Error is handled in the dialog via mutation.error

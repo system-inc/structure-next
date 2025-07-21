@@ -11,7 +11,7 @@ import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount, accountCacheKey } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
@@ -84,7 +84,7 @@ export function UsernameForm() {
                 setUsernameUpdateSuccess(true);
 
                 // Invalidate account cache to refresh the profile data
-                networkService.invalidateCache(['account']);
+                networkService.invalidateCache([accountCacheKey]);
             }
         } catch {
             // Error is handled by the mutation's error state
