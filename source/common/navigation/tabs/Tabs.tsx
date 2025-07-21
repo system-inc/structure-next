@@ -107,7 +107,7 @@ export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitiv
                             layoutId={`tab-${tabGroupId}`}
                             className={mergeClassNames(
                                 'absolute inset-0 h-full w-full border border-transparent',
-                                'z-0 group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary',
+                                'group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary z-0',
                             )}
                             style={{
                                 borderRadius: '99px',

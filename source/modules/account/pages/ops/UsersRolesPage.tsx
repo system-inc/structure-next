@@ -171,7 +171,9 @@ export function UsersRolesPage() {
             <div className="space-y-12">
                 {/* Role Granting Form */}
                 <AccountRoleGrantForm
-                    onRoleGranted={() => networkService.invalidateCache([accountAccessRoleAssignmentsPrivilegedCacheKey])}
+                    onRoleGranted={function () {
+                        networkService.invalidateCache([accountAccessRoleAssignmentsPrivilegedCacheKey]);
+                    }}
                 />
 
                 {/* Assigned Roles Section */}

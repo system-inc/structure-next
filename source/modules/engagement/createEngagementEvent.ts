@@ -70,27 +70,27 @@ export function createEngagementEvent(
             }
         `),
         {
-        input: {
-            name: eventName,
-            category: eventCategory,
-            deviceProperties: {
-                orientation: orientation,
-            },
-            clientProperties: {
-                environment:
-                    window.location.hostname.includes('localhost') || window.location.hostname === '127.0.0.1'
-                        ? 'Development'
-                        : 'Production',
-            },
-            eventContext: {
-                viewIdentifier: viewIdentifier,
-                viewTitle: viewTitle || null,
-                referrer: document.referrer || undefined,
-                sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
-                additionalData: Object.keys(mergedAdditionalData).length > 0 ? mergedAdditionalData : undefined,
-                loggedAt: new Date().toISOString(),
+            input: {
+                name: eventName,
+                category: eventCategory,
+                deviceProperties: {
+                    orientation: orientation,
+                },
+                clientProperties: {
+                    environment:
+                        window.location.hostname.includes('localhost') || window.location.hostname === '127.0.0.1'
+                            ? 'Development'
+                            : 'Production',
+                },
+                eventContext: {
+                    viewIdentifier: viewIdentifier,
+                    viewTitle: viewTitle || null,
+                    referrer: document.referrer || undefined,
+                    sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
+                    additionalData: Object.keys(mergedAdditionalData).length > 0 ? mergedAdditionalData : undefined,
+                    loggedAt: new Date().toISOString(),
+                },
             },
         },
-    },
     );
 }

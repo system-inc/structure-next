@@ -4,7 +4,7 @@ const NoDirectLocalStorageRule = {
         type: 'problem',
         docs: {
             description:
-                "Disallow direct localStorage usage and require LocalStorageService instead for better abstraction and error handling.",
+                'Disallow direct localStorage usage and require LocalStorageService instead for better abstraction and error handling.',
             category: 'Best Practices',
             recommended: true,
         },
@@ -18,15 +18,15 @@ const NoDirectLocalStorageRule = {
     },
     create(context) {
         const filename = context.getFilename();
-        
+
         // Normalize file path to always use forward slashes
         const normalizedPath = filename.replace(/\\/g, '/');
-        
+
         // Allow direct localStorage usage only in the LocalStorageService implementation itself
-        const isLocalStorageService = 
+        const isLocalStorageService =
             normalizedPath.includes('/services/local-storage/LocalStorageService.ts') ||
             normalizedPath.includes('/services/local-storage/internal/LocalStorageServiceUtilities.ts');
-        
+
         if(isLocalStorageService) {
             return {};
         }
@@ -35,10 +35,7 @@ const NoDirectLocalStorageRule = {
             // Check for localStorage.method() calls
             MemberExpression(node) {
                 // Check for localStorage.setItem, localStorage.getItem, etc.
-                if(
-                    node.object.type === 'Identifier' &&
-                    node.object.name === 'localStorage'
-                ) {
+                if(node.object.type === 'Identifier' && node.object.name === 'localStorage') {
                     context.report({
                         node: node.object,
                         messageId: 'directLocalStorage',
@@ -62,10 +59,7 @@ const NoDirectLocalStorageRule = {
             // Check for localStorage as a standalone identifier (e.g., const storage = localStorage)
             Identifier(node) {
                 // Only check if it's being used as a value (not a property name)
-                if(
-                    node.name === 'localStorage' &&
-                    node.parent.type !== 'MemberExpression'
-                ) {
+                if(node.name === 'localStorage' && node.parent.type !== 'MemberExpression') {
                     // Skip if it's the property of a member expression (we handle that above)
                     if(
                         node.parent.type === 'MemberExpression' &&
@@ -76,11 +70,7 @@ const NoDirectLocalStorageRule = {
                     }
 
                     // Skip if it's a property in an object literal
-                    if(
-                        node.parent.type === 'Property' &&
-                        node.parent.key === node &&
-                        !node.parent.computed
-                    ) {
+                    if(node.parent.type === 'Property' && node.parent.key === node && !node.parent.computed) {
                         return;
                     }
 

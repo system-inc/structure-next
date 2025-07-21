@@ -10,9 +10,7 @@ import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQ
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
-import {
-    WaitListCreatePrivilegedOperation,
-} from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { WaitListCreatePrivilegedOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // GraphQL Operations
 gql(`
@@ -39,8 +37,8 @@ export function UsersWaitListsPage() {
 
             <GraphQlOperationForm className="mb-12" operation={WaitListCreatePrivilegedOperation} />
 
-            <GraphQlQueryTable 
-                className="" 
+            <GraphQlQueryTable
+                className=""
                 queryDocument={gql(`
                     query WaitListsPrivileged($pagination: PaginationInput!) {
                         waitListsPrivileged(pagination: $pagination) {
@@ -63,7 +61,7 @@ export function UsersWaitListsPage() {
                             }
                         }
                     }
-                `)} 
+                `)}
             />
         </div>
     );

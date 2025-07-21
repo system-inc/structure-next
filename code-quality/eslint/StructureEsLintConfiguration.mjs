@@ -121,7 +121,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
             'react-naming-conventions-rule': ReactNamingConventionsRule,
             'react-no-arrow-functions-as-hook-parameters-rule': ReactNoArrowFunctionsAsHookParametersRule,
             'react-no-destructuring-react-rule': ReactNoDestructuringReactRule,
-        }
+        },
     },
 };
 

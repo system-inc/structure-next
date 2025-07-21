@@ -11,12 +11,17 @@ export default {
         },
         messages: {
             noDirectFetch: 'Direct fetch() calls are not allowed. Use NetworkService instead for all network requests.',
-            noDirectTanStackQuery: 'Direct imports from @tanstack/react-query are not allowed. Use NetworkService instead.',
+            noDirectTanStackQuery:
+                'Direct imports from @tanstack/react-query are not allowed. Use NetworkService instead.',
             noDirectApollo: 'Direct imports from @apollo/client are not allowed. Use NetworkService instead.',
-            noDirectGraphqlImport: 'Direct imports of graphql from generated paths are not allowed. Import gql from NetworkService instead.',
-            noStringLiteralInvalidateCache: 'invalidateCache must use an imported cache key variable instead of a string literal. This prevents typos and makes cache keys easier to refactor. Export the cache key from where the cache is created.',
-            noTemplateLiteralInvalidateCache: 'invalidateCache must use an imported cache key variable instead of a template literal. This prevents typos and makes cache keys easier to refactor. Export the cache key from where the cache is created.',
-            noArrayWithStringLiteralInvalidateCache: 'invalidateCache array arguments must use imported cache key variables instead of string literals. This prevents typos and makes cache keys easier to refactor.',
+            noDirectGraphqlImport:
+                'Direct imports of graphql from generated paths are not allowed. Import gql from NetworkService instead.',
+            noStringLiteralInvalidateCache:
+                'invalidateCache must use an imported cache key variable instead of a string literal. This prevents typos and makes cache keys easier to refactor. Export the cache key from where the cache is created.',
+            noTemplateLiteralInvalidateCache:
+                'invalidateCache must use an imported cache key variable instead of a template literal. This prevents typos and makes cache keys easier to refactor. Export the cache key from where the cache is created.',
+            noArrayWithStringLiteralInvalidateCache:
+                'invalidateCache array arguments must use imported cache key variables instead of string literals. This prevents typos and makes cache keys easier to refactor.',
         },
         schema: [],
     },
@@ -123,7 +128,6 @@ export default {
                         });
                     }
                 }
-
             },
 
             // Check for prohibited imports
@@ -153,15 +157,15 @@ export default {
                 }
 
                 // Block direct graphql imports from generated paths
-                if(source.includes('/generated') && node.specifiers.some(spec =>
-                    spec.type === 'ImportSpecifier' && spec.imported.name === 'graphql'
-                )) {
+                if(
+                    source.includes('/generated') &&
+                    node.specifiers.some((spec) => spec.type === 'ImportSpecifier' && spec.imported.name === 'graphql')
+                ) {
                     context.report({
                         node,
                         messageId: 'noDirectGraphqlImport',
                     });
                 }
-
             },
         };
     },
