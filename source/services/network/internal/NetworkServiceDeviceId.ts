@@ -89,8 +89,8 @@ export class NetworkServiceDeviceId {
 
         // Build the deviceId endpoint URL
         const deviceIdUrl = ProjectSettings.apis?.base
-            ? `https://${ProjectSettings.apis.base.host}/graphql/deviceId`
-            : '/graphql/deviceId';
+            ? `https://${ProjectSettings.apis.base.host}/deviceId`
+            : '/deviceId';
 
         // Fetch deviceId with exponential backoff and retries
         return this.retryWithExponentialBackoff(async () => {
@@ -98,12 +98,8 @@ export class NetworkServiceDeviceId {
             // to avoid circular dependency (NetworkService -> DeviceId -> NetworkService)
             // eslint-disable-next-line structure/network-service-rule
             const response = await fetch(deviceIdUrl, {
-                method: 'POST',
+                method: 'GET',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ query: '{ deviceId }' }),
             });
 
             if(!response.ok) {
