@@ -18,6 +18,7 @@ type Documents = {
     '\n            query AccountPrivileged($input: AccountInput!) {\n                accountPrivileged(input: $input) {\n                    profiles {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                    }\n                }\n            }\n        ': typeof types.AccountPrivilegedDocument;
     '\n            mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {\n                accountAccessRoleAssignmentCreatePrivileged(input: $input) {\n                    id\n                    accessRole {\n                        id\n                        type\n                        description\n                    }\n                    status\n                    profile {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                        createdAt\n                    }\n                    expiresAt\n                    createdAt\n                    updatedAt\n                }\n            }\n        ': typeof types.AccountAccessRoleAssignmentCreatePrivilegedDocument;
     '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ': typeof types.AccountProfileImageRemoveDocument;
+    '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ': typeof types.AccountEmailsDocument;
     '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountAuthenticationDocument;
     '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ': typeof types.AccountAuthenticationRegistrationCompleteDocument;
     '\n            mutation AccountAuthenticationSignInComplete {\n                accountAuthenticationSignInComplete {\n                    success\n                }\n            }\n        ': typeof types.AccountAuthenticationSignInCompleteDocument;
@@ -77,6 +78,8 @@ const documents: Documents = {
         types.AccountAccessRoleAssignmentCreatePrivilegedDocument,
     '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ':
         types.AccountProfileImageRemoveDocument,
+    '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ':
+        types.AccountEmailsDocument,
     '\n            query AccountAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
         types.AccountAuthenticationDocument,
     '\n            mutation AccountAuthenticationRegistrationComplete($input: AccountRegistrationCompleteInput!) {\n                accountAuthenticationRegistrationComplete(input: $input) {\n                    success\n                }\n            }\n        ':
@@ -203,6 +206,12 @@ export function graphql(
 export function graphql(
     source: '\n            mutation AccountProfileImageRemove {\n                accountProfileImageRemove {\n                    images {\n                        url\n                        variant\n                    }\n                }\n            }\n        ',
 ): typeof import('./graphql').AccountProfileImageRemoveDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            query AccountEmails {\n                accountEmailAddresses {\n                    emailAddresses {\n                        id\n                        emailAddress\n                        type\n                        isVerified\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountEmailsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

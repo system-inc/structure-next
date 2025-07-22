@@ -3866,6 +3866,22 @@ export type AccountProfileImageRemoveMutation = {
     };
 };
 
+export type AccountEmailsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountEmailsQuery = {
+    __typename?: 'Query';
+    accountEmailAddresses: {
+        __typename?: 'AccountEmailAddressesResult';
+        emailAddresses: Array<{
+            __typename?: 'AccountEmail';
+            id: string;
+            emailAddress: string;
+            type: AccountEmailType;
+            isVerified: boolean;
+        }>;
+    };
+};
+
 export type AccountAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AccountAuthenticationQuery = {
@@ -4996,6 +5012,18 @@ export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
+export const AccountEmailsDocument = new TypedDocumentString(`
+    query AccountEmails {
+  accountEmailAddresses {
+    emailAddresses {
+      id
+      emailAddress
+      type
+      isVerified
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountEmailsQuery, AccountEmailsQueryVariables>;
 export const AccountAuthenticationDocument = new TypedDocumentString(`
     query AccountAuthentication {
   accountAuthentication {
