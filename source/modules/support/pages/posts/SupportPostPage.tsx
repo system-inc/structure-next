@@ -37,7 +37,7 @@ export interface SupportPostPageProperties {
     };
 }
 export function SupportPostPage(properties: SupportPostPageProperties) {
-    console.log('SupportPostPage', properties);
+    // console.log('SupportPostPage', properties);
 
     // Hooks
     const { accountState } = useAccount();
