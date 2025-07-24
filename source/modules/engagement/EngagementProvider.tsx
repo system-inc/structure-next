@@ -14,7 +14,7 @@ import { EngagementContainer } from '@structure/source/modules/engagement/Engage
 // import { useMutation } from '@apollo/client';
 // import { EngagementEventCreateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 // Dependencies - Utilities
-import { createEngagementEvent } from '@structure/source/modules/engagement/createEngagementEvent';
+import { engagementService } from '@structure/source/modules/engagement/services/EngagementService';
 import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
 import { initializeThirdPartyAttribution } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
 
@@ -103,7 +103,7 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
             // console.log('previousViewDurationInMilliseconds', previousViewDurationInMilliseconds);
 
             // Send the PageView engagement event with timing data
-            createEngagementEvent('PageView', 'Navigation', {
+            engagementService.collect('PageView', 'Navigation', {
                 loadDurationInMilliseconds: loadDurationInMillisecondsReference.current || undefined,
                 previousViewDurationInMilliseconds: previousViewDurationInMilliseconds || undefined,
                 previousViewTitle: previousViewTitleReference.current || undefined,

@@ -4483,13 +4483,13 @@ export type DataInteractionDatabaseTableRowsQuery = {
     };
 };
 
-export type EngagementEventCreateMutationVariables = Exact<{
-    input: CreateEngagementEventInput;
+export type EngagementEventsCreateMutationVariables = Exact<{
+    inputs: Array<CreateEngagementEventInput> | CreateEngagementEventInput;
 }>;
 
-export type EngagementEventCreateMutation = {
+export type EngagementEventsCreateMutation = {
     __typename?: 'Mutation';
-    engagementEventCreate: { __typename?: 'OperationResult'; success: boolean };
+    engagementEventsCreate: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type PostDeleteMutationVariables = Exact<{
@@ -5571,13 +5571,13 @@ export const DataInteractionDatabaseTableRowsDocument = new TypedDocumentString(
     DataInteractionDatabaseTableRowsQuery,
     DataInteractionDatabaseTableRowsQueryVariables
 >;
-export const EngagementEventCreateDocument = new TypedDocumentString(`
-    mutation EngagementEventCreate($input: CreateEngagementEventInput!) {
-  engagementEventCreate(input: $input) {
+export const EngagementEventsCreateDocument = new TypedDocumentString(`
+    mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {
+  engagementEventsCreate(inputs: $inputs) {
     success
   }
 }
-    `) as unknown as TypedDocumentString<EngagementEventCreateMutation, EngagementEventCreateMutationVariables>;
+    `) as unknown as TypedDocumentString<EngagementEventsCreateMutation, EngagementEventsCreateMutationVariables>;
 export const PostDeleteDocument = new TypedDocumentString(`
     mutation PostDelete($id: String!) {
   postDelete(id: $id)
@@ -7787,16 +7787,18 @@ export const DataInteractionDatabaseTableRowsOperation: GraphQLOperationMetadata
     ],
 };
 
-export const EngagementEventCreateOperation: GraphQLOperationMetadata<typeof EngagementEventCreateDocument> = {
-    operation: 'EngagementEventCreate',
+export const EngagementEventsCreateOperation: GraphQLOperationMetadata<typeof EngagementEventsCreateDocument> = {
+    operation: 'EngagementEventsCreate',
     operationType: 'mutation',
-    document: EngagementEventCreateDocument,
+    document: EngagementEventsCreateDocument,
     parameters: [
         {
-            parameter: 'input',
+            parameter: 'inputs',
             required: true,
-            kind: 'object',
+            kind: 'list',
+            itemKind: 'object',
             type: GraphQLInputTypes.CreateEngagementEventInput,
+            allowsEmpty: false,
         },
     ],
 };
