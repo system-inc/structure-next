@@ -7,7 +7,7 @@ import EsLintPluginNext from '@next/eslint-plugin-next';
 import LocalStorageServiceRule from './rules/LocalStorageServiceRule.mjs';
 import NetworkServiceRule from './rules/NetworkServiceRule.mjs';
 import NoStructureProjectImportsRule from './rules/NoStructureProjectImportsRule.mjs';
-import ReactDestructuringPropertiesRule from './rules/ReactDestructuringPropertiesRule.mjs';
+import ReactDestructuringRule from './rules/ReactDestructuringRule.mjs';
 import ReactExportRule from './rules/ReactExportRule.mjs';
 import ReactFileOrganizationRule from './rules/ReactFileOrganizationRule.mjs';
 import ReactFunctionStyleRule from './rules/ReactFunctionStyleRule.mjs';
@@ -113,7 +113,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
             'local-storage-service-rule': LocalStorageServiceRule,
             'network-service-rule': NetworkServiceRule,
             'no-structure-project-imports-rule': NoStructureProjectImportsRule,
-            'react-destructuring-properties-rule': ReactDestructuringPropertiesRule,
+            'react-destructuring-rule': ReactDestructuringRule,
             'react-export-rule': ReactExportRule,
             'react-file-organization-rule': ReactFileOrganizationRule,
             'react-function-style-rule': ReactFunctionStyleRule,
@@ -140,7 +140,7 @@ export const structureJavaScriptAndTypeScriptRules = {
     'structure/local-storage-service-rule': 'error',
     'structure/network-service-rule': 'error',
     'structure/no-structure-project-imports-rule': 'error',
-    'structure/react-destructuring-properties-rule': 'error',
+    'structure/react-destructuring-rule': 'error',
     'structure/react-export-rule': 'error',
     'structure/react-file-organization-rule': 'error',
     'structure/react-function-style-rule': 'error',
