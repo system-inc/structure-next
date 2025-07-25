@@ -28,14 +28,12 @@ export default {
             const text = comment.value.trim();
             // Check if it's a JSDoc comment
             if(comment.type === 'Block' && text.startsWith('*')) {
-                const lines = text.split('\n').map(line => line.trim());
+                const lines = text.split('\n').map((line) => line.trim());
                 // Remove leading and trailing asterisks
-                const cleanLines = lines
-                    .map(line => line.replace(/^\*\s?/, ''))
-                    .filter(line => line.length > 0);
+                const cleanLines = lines.map((line) => line.replace(/^\*\s?/, '')).filter((line) => line.length > 0);
 
                 // If it's just a single line description (no @param, @returns, etc.), it should be a single-line comment
-                const hasJsDocTags = cleanLines.some(line => line.startsWith('@'));
+                const hasJsDocTags = cleanLines.some((line) => line.startsWith('@'));
                 const isOnlyDescription = cleanLines.length === 1 && !hasJsDocTags;
 
                 return isOnlyDescription;
@@ -46,11 +44,9 @@ export default {
         // Helper function to extract description from JSDoc comment
         function extractDescription(comment) {
             const text = comment.value.trim();
-            const lines = text.split('\n').map(line => line.trim());
+            const lines = text.split('\n').map((line) => line.trim());
             // Remove leading and trailing asterisks and filter empty lines
-            const cleanLines = lines
-                .map(line => line.replace(/^\*\s?/, ''))
-                .filter(line => line.length > 0);
+            const cleanLines = lines.map((line) => line.replace(/^\*\s?/, '')).filter((line) => line.length > 0);
 
             // Return the first non-empty line as the description
             return cleanLines[0] || '';
@@ -87,7 +83,7 @@ export default {
                 const sourceCode = context.getSourceCode();
                 const allComments = sourceCode.getAllComments();
 
-                allComments.forEach(comment => {
+                allComments.forEach((comment) => {
                     // Check if it's a single-line JSDoc that should be a regular comment
                     if(isSingleLineJsDoc(comment)) {
                         const description = extractDescription(comment);

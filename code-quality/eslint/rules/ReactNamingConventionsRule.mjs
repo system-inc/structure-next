@@ -52,7 +52,14 @@ const ReactNamingConventionsRule = {
         // Check if the variable name matches the expected pattern for a hook
         function isCorrectHookVariableName(varName, hookName) {
             // Special cases for state management hooks where variable name describes the atom/state
-            const stateManagementHooks = ['useAtom', 'useAtomValue', 'useSetAtom', 'useRecoilState', 'useRecoilValue', 'useSetRecoilState'];
+            const stateManagementHooks = [
+                'useAtom',
+                'useAtomValue',
+                'useSetAtom',
+                'useRecoilState',
+                'useRecoilValue',
+                'useSetRecoilState',
+            ];
             if(stateManagementHooks.includes(hookName)) {
                 // For state management hooks, any descriptive name is fine
                 // Just prevent generic names
@@ -217,8 +224,8 @@ const ReactNamingConventionsRule = {
                 const contextHint = isError
                     ? ' (appears to be an error)'
                     : isEvent
-                        ? ' (appears to be an event)'
-                        : ' (context unclear)';
+                      ? ' (appears to be an event)'
+                      : ' (context unclear)';
 
                 context.report({
                     node: node,
@@ -648,11 +655,14 @@ const ReactNamingConventionsRule = {
             // React components defined as arrow functions or function expressions in variable declarations
             VariableDeclarator(node) {
                 // Check for hook result naming
-                if(node.init && node.init.type === 'CallExpression' &&
+                if(
+                    node.init &&
+                    node.init.type === 'CallExpression' &&
                     node.init.callee.type === 'Identifier' &&
                     node.init.callee.name.startsWith('use') &&
-                    node.id && node.id.type === 'Identifier') {
-
+                    node.id &&
+                    node.id.type === 'Identifier'
+                ) {
                     const varName = node.id.name;
                     const hookName = node.init.callee.name;
 
@@ -812,13 +822,17 @@ const ReactNamingConventionsRule = {
 
                         // Check for bad patterns
                         const badPatterns = ['result', 'data', 'value', 'state', 'hook'];
-                        const hasBadSuffix = badPatterns.some(pattern => varName.endsWith(pattern[0].toUpperCase() + pattern.slice(1)));
+                        const hasBadSuffix = badPatterns.some((pattern) =>
+                            varName.endsWith(pattern[0].toUpperCase() + pattern.slice(1)),
+                        );
 
                         if(hasBadSuffix) {
                             message = `Hook result variable "${varName}" should not end with generic suffixes like "Result", "Data", etc. Use "${expectedName}" or something more specific.`;
-                        } else if(varNameLower === 'data' || varNameLower === 'result' || varName.length <= 2) {
+                        }
+                        else if(varNameLower === 'data' || varNameLower === 'result' || varName.length <= 2) {
                             message = `Hook result variable "${varName}" is too generic. Use "${expectedName}" or a descriptive name.`;
-                        } else {
+                        }
+                        else {
                             message = `Hook result variable "${varName}" should be related to the hook name "${hookName}". Use "${expectedName}" or something more specific.`;
                         }
 

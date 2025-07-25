@@ -110,7 +110,9 @@ export default {
             // Check if it's networkService.method()
             if(object.type === 'Identifier' && object.name === 'networkService') {
                 const methodName = property.name;
-                return ['useGraphQlQuery', 'useGraphQlMutation', 'graphQlRequest', 'useSuspenseGraphQlQuery'].includes(methodName);
+                return ['useGraphQlQuery', 'useGraphQlMutation', 'graphQlRequest', 'useSuspenseGraphQlQuery'].includes(
+                    methodName,
+                );
             }
 
             return false;
@@ -164,7 +166,8 @@ export default {
                                     traverse(item);
                                 }
                             }
-                        } else if(node[key].type) {
+                        }
+                        else if(node[key].type) {
                             traverse(node[key]);
                         }
                     }
@@ -439,7 +442,10 @@ export default {
                 const functionName = node.id.name;
 
                 // Check if the function uses NetworkService
-                if(node.init && (node.init.type === 'ArrowFunctionExpression' || node.init.type === 'FunctionExpression')) {
+                if(
+                    node.init &&
+                    (node.init.type === 'ArrowFunctionExpression' || node.init.type === 'FunctionExpression')
+                ) {
                     if(node.init.body && checkForNetworkService(node.init.body)) {
                         networkServiceHooks.set(functionName, node);
 
