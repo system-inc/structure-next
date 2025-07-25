@@ -40,16 +40,7 @@ export function DraggableItem(properties: DraggableItemProperties) {
     const ghostSpacerReference = React.useRef<HTMLDivElement>(null);
     const isDraggingReference = React.useRef(false); // Used to prevent children from being clicked when the item is being dragged
 
-    const {
-        onDragItemStart,
-        onDragItemEnd,
-        dropBounds,
-        onEnterDropArea: onItemEnterDropArea,
-        onLeaveDropArea: onItemLeaveDropArea,
-        onDrop,
-        resetPositionOnDrop,
-        recalculateDropBounds: recalcDropBounds,
-    } = useDragAndDrop();
+    const dragAndDrop = useDragAndDrop();
 
     const [spring, api] = useSpring(() => ({
         x: 0,
@@ -100,19 +91,21 @@ export function DraggableItem(properties: DraggableItemProperties) {
                     ghostSpacerReference.current.style.height = `${currentBounds.height}px`;
                 }
 
-                recalcDropBounds();
+                dragAndDrop.recalculateDropBounds();
 
-                if(dropBounds.length === 0) {
+                if(dragAndDrop.dropBounds.length === 0) {
                     console.warn(
                         'The drop area bounds are not set. Please make sure to provide a list of dropContainers to the <DragAndDrop.Root> component or add some <DragAndDrop.Area>s as descendants of the <DragAndDrop.Root> component.',
                     );
                 }
 
-                onDragItemStart?.();
+                dragAndDrop.onDragItemStart?.();
                 properties.onDragStart?.();
 
                 // Check if the item is inside a drop area
-                const inDropArea = dropBounds.some((dropBound) => checkIfXyInDropBounds(state.xy, dropBound.bounds));
+                const inDropArea = dragAndDrop.dropBounds.some((dropBound) =>
+                    checkIfXyInDropBounds(state.xy, dropBound.bounds),
+                );
 
                 if(inDropArea) {
                     properties.onRemove?.();
@@ -128,33 +121,35 @@ export function DraggableItem(properties: DraggableItemProperties) {
             });
 
             // If the item is inside the drop area, handle the enter drop area event
-            const currentDropArea = dropBounds.find((dropBound) => {
+            const currentDropArea = dragAndDrop.dropBounds.find((dropBound) => {
                 return checkIfXyInDropBounds(state.xy, dropBound.bounds);
             });
 
             if(currentDropArea) {
-                onItemEnterDropArea?.(currentDropArea.container);
+                dragAndDrop.onEnterDropArea?.(currentDropArea.container);
                 properties.onEnterDropArea?.(currentDropArea.container);
 
                 // If the item is dropped inside the drop area, handle the drop event
                 if(state.last) {
                     properties.onDrop?.(currentDropArea.container);
-                    onDrop?.();
+                    dragAndDrop.onDrop?.();
                 }
             }
             else {
-                onItemLeaveDropArea?.();
+                dragAndDrop.onLeaveDropArea?.();
                 properties.onLeaveDropArea?.();
             }
 
             if(state.last) {
-                onDragItemEnd?.();
+                dragAndDrop.onDragItemEnd?.();
                 properties.onDragEnd?.();
-                onItemLeaveDropArea?.();
+                dragAndDrop.onLeaveDropArea?.();
                 properties.onLeaveDropArea?.();
 
                 // If the item was dropped outside the drop area, reset its position
-                const inDropArea = dropBounds.some((dropBound) => checkIfXyInDropBounds(state.xy, dropBound.bounds));
+                const inDropArea = dragAndDrop.dropBounds.some((dropBound) =>
+                    checkIfXyInDropBounds(state.xy, dropBound.bounds),
+                );
                 if(!inDropArea) {
                     api.start({
                         x: 0,
@@ -173,7 +168,7 @@ export function DraggableItem(properties: DraggableItemProperties) {
                         },
                     });
                 }
-                else if(resetPositionOnDrop) {
+                else if(dragAndDrop.resetPositionOnDrop) {
                     api.set({ x: 0, y: 0 });
                     if(containerReference.current) {
                         containerReference.current.style.zIndex = '';

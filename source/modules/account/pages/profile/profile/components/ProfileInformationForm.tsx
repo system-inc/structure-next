@@ -24,7 +24,7 @@ interface ProfileFormValues {
 export function ProfileInformationForm() {
     // Hooks
     const notice = useNotice();
-    const { accountState } = useAccount();
+    const account = useAccount();
     const accountProfileUpdateRequest = networkService.useGraphQlMutation(
         gql(`
             mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
@@ -94,7 +94,7 @@ export function ProfileInformationForm() {
             <h2 className="text-xl font-medium">Profile Information</h2>
 
             <Form
-                loading={accountState.loading}
+                loading={account.isLoading}
                 className="mt-6"
                 formInputs={[
                     <FormInputText
@@ -103,7 +103,7 @@ export function ProfileInformationForm() {
                         className="flex-grow"
                         label="First Name"
                         labelTip="This is also known as your given name."
-                        defaultValue={accountState.account?.profile?.givenName}
+                        defaultValue={account.data?.profile?.givenName}
                     />,
                     <FormInputText
                         key="familyName"
@@ -111,7 +111,7 @@ export function ProfileInformationForm() {
                         className="flex-grow"
                         label="Last Name"
                         labelTip="This is also known as your family name."
-                        defaultValue={accountState.account?.profile?.familyName}
+                        defaultValue={account.data?.profile?.familyName}
                     />,
                     <FormInputText
                         key="displayName"
@@ -119,7 +119,7 @@ export function ProfileInformationForm() {
                         className="mt-6"
                         label="Display Name"
                         labelTip="Your display name is how you will be identified on our platform."
-                        defaultValue={accountState.account?.profile?.displayName}
+                        defaultValue={account.data?.profile?.displayName}
                     />,
                     // <FormInputText
                     //     key="phoneNumber"
@@ -127,7 +127,7 @@ export function ProfileInformationForm() {
                     //     className="mt-6"
                     //     label="Phone Number"
                     //     placeholder="(555) 555-5555"
-                    //     defaultValue={accountState.account?.profile?.phoneNumber}
+                    //     defaultValue={account.account?.profile?.phoneNumber}
                     // />,
                 ]}
                 buttonProperties={{

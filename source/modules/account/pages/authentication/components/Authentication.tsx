@@ -49,7 +49,7 @@ export function Authentication(properties: AuthenticationProperties) {
     // Hooks
     const router = useRouter();
     const urlPath = useUrlPath();
-    const { accountState, setSignedIn, signOut, setAuthenticationDialogOpen } = useAccount();
+    const account = useAccount();
 
     // Hooks - API - Queries
     const accountAuthenticationRequest = networkService.useGraphQlQuery(
@@ -135,7 +135,7 @@ export function Authentication(properties: AuthenticationProperties) {
                             setAuthenticationSessionSuccess(true);
 
                             // Set the account signed in
-                            setSignedIn(true);
+                            account.setSignedIn(true);
                         })
                         .catch(function (error) {
                             console.error('Registration complete error:', error);
@@ -160,7 +160,7 @@ export function Authentication(properties: AuthenticationProperties) {
                             setAuthenticationSessionSuccess(true);
 
                             // Set the account signed in
-                            setSignedIn(true);
+                            account.setSignedIn(true);
                         })
                         .catch(function (error) {
                             console.error('Sign in complete error:', error);
@@ -178,7 +178,7 @@ export function Authentication(properties: AuthenticationProperties) {
             accountAuthenticationSignInCompleteRequest.isLoading,
             accountAuthenticationRegistrationCompleteRequest,
             accountAuthenticationSignInCompleteRequest,
-            setSignedIn,
+            account,
         ],
     );
 
@@ -186,9 +186,9 @@ export function Authentication(properties: AuthenticationProperties) {
     React.useEffect(
         function () {
             // If the account is signed in
-            if(accountState.account) {
+            if(account.data) {
                 // Close the authentication dialog
-                setAuthenticationDialogOpen(false);
+                account.setAuthenticationDialogOpen(false);
 
                 // If a redirect URL is provided, redirect to that URL
                 if(redirectUrl) {
@@ -202,7 +202,7 @@ export function Authentication(properties: AuthenticationProperties) {
                 }
             }
         },
-        [accountState.account, setAuthenticationDialogOpen, redirectUrl, router],
+        [account, redirectUrl, router],
     );
 
     // Effect to handle authentication success redirects
@@ -227,16 +227,16 @@ export function Authentication(properties: AuthenticationProperties) {
     let currentAuthenticationComponent = null;
 
     // Authenticated session complete
-    if(accountState.account) {
+    if(account.data) {
         currentAuthenticationComponent = (
             <div>
-                <p>You are signed in as {accountState.account.emailAddress}.</p>
+                <p>You are signed in as {account.data.emailAddress}.</p>
                 <div className="mt-8 flex flex-col space-y-4">
                     <Button
                         variant="destructive"
                         onClick={function () {
                             console.log('signing out..');
-                            signOut('/');
+                            account.signOut('/');
                         }}
                     >
                         Sign Out

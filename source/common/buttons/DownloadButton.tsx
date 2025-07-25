@@ -36,7 +36,7 @@ export interface DownloadUrlButtonInterface extends DownloadButtonInterface {
 export type DownloadButtonProperties = DownloadDataButtonInterface | DownloadUrlButtonInterface;
 export function DownloadButton(properties: DownloadButtonProperties) {
     // Hooks
-    const { addNotice } = useNotice();
+    const notice = useNotice();
 
     // State
     const [downloadStarted, setDownloadStarted] = React.useState(false);
@@ -76,7 +76,7 @@ export function DownloadButton(properties: DownloadButtonProperties) {
 
         // Show a notice if provided
         if(properties.notice) {
-            addNotice(properties.notice);
+            notice.addNotice(properties.notice);
         }
 
         // Reset the state after a delay

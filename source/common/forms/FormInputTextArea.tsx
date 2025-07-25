@@ -40,7 +40,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
 
     // References
     const inputTextAreaReference = React.useRef<FormInputReferenceInterface>(null);
-    const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputTextAreaReference);
+    const formInputValue = useFormInputValue(properties.defaultValue, inputTextAreaReference);
 
     // Function to focus on the component
     const focus = React.useCallback(function () {
@@ -104,7 +104,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
             skipOnChangeCallback: boolean = false,
         ) {
             // Update the value
-            setValue(value);
+            formInputValue.setValue(value);
 
             // Optionally run the provided onChange function if provided
             if(!skipOnChangeCallback && propertiesOnChange) {
@@ -116,7 +116,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
                 validate(value);
             }
         },
-        [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
+        [propertiesOnChange, propertiesValidateOnChange, validate, formInputValue],
     );
 
     // Function to handle form input blur events
@@ -145,7 +145,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
     React.useImperativeHandle(reference, function () {
         return {
             getValue: function () {
-                return valueReference.current;
+                return formInputValue.valueReference.current;
             },
             setValue: function (value: string | undefined, event: React.ChangeEvent<HTMLTextAreaElement>) {
                 onChangeIntercept(value, event, true);

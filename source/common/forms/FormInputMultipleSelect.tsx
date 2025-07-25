@@ -31,7 +31,7 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
 
         // References
         const inputMultipleSelectReference = React.useRef<FormInputReferenceInterface>(null);
-        const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputMultipleSelectReference);
+        const formInputValue = useFormInputValue(properties.defaultValue, inputMultipleSelectReference);
 
         // Function to focus on the component
         const focus = React.useCallback(function () {
@@ -81,7 +81,7 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
                 skipOnChangeCallback: boolean = false,
             ) {
                 // Update the value reference
-                setValue(value);
+                formInputValue.setValue(value);
 
                 // Optionally run the provided onChange function if provided
                 if(!skipOnChangeCallback && propertiesOnChange) {
@@ -93,14 +93,14 @@ export const FormInputMultipleSelect = React.forwardRef<FormInputReferenceInterf
                     validate(value);
                 }
             },
-            [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
+            [propertiesOnChange, propertiesValidateOnChange, validate, formInputValue],
         );
 
         // Expose internal state to Form through the reference
         React.useImperativeHandle(reference, function () {
             return {
                 getValue: function () {
-                    return valueReference.current;
+                    return formInputValue.valueReference.current;
                 },
                 setValue: function (value: string[] | undefined, event?: React.SyntheticEvent | Event | unknown) {
                     onChangeIntercept(value, event, true);

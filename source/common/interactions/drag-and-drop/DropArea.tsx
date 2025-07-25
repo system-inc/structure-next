@@ -15,7 +15,7 @@ interface DropAreaProperties extends React.HTMLAttributes<HTMLDivElement> {
 }
 export function DropArea({ asChild, children, onItemIsHovering, ...componentProperties }: DropAreaProperties) {
     // Hooks
-    const { setDropContainers, currentlyHoveredDropArea } = useDragAndDrop();
+    const dragAndDrop = useDragAndDrop();
 
     // State
     const [isHovering, setIsHovering] = React.useState(false);
@@ -27,18 +27,23 @@ export function DropArea({ asChild, children, onItemIsHovering, ...componentProp
 
     React.useEffect(
         function () {
-            setDropContainers((previousDropContainers) => [...previousDropContainers, dropContainerReference]);
+            dragAndDrop.setDropContainers((previousDropContainers) => [
+                ...previousDropContainers,
+                dropContainerReference,
+            ]);
 
             return () => {
-                setDropContainers((prev) => prev.filter((container) => container !== dropContainerReference));
+                dragAndDrop.setDropContainers((prev) =>
+                    prev.filter((container) => container !== dropContainerReference),
+                );
             };
         },
-        [setDropContainers],
+        [dragAndDrop],
     );
 
     React.useEffect(
         function () {
-            if(currentlyHoveredDropArea === dropContainerReference) {
+            if(dragAndDrop.currentlyHoveredDropArea === dropContainerReference) {
                 onItemIsHovering?.();
 
                 if(dropContainerReference.current) setIsHovering(true);
@@ -47,7 +52,7 @@ export function DropArea({ asChild, children, onItemIsHovering, ...componentProp
                 if(dropContainerReference.current) setIsHovering(false);
             }
         },
-        [currentlyHoveredDropArea, onItemIsHovering],
+        [dragAndDrop.currentlyHoveredDropArea, onItemIsHovering],
     );
 
     // Render the component

@@ -25,7 +25,7 @@ import { ValidationSchema } from '@structure/source/utilities/validation/Validat
 // Component - UsernameForm
 export function UsernameForm() {
     // Hooks - API
-    const { accountState } = useAccount();
+    const account = useAccount();
     const accountProfileUpdateRequest = networkService.useGraphQlMutation(
         gql(`
             mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
@@ -47,20 +47,20 @@ export function UsernameForm() {
 
     // State
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-    const [activeUsername, setActiveUsername] = React.useState(accountState.account?.profile?.username || '');
+    const [activeUsername, setActiveUsername] = React.useState(account.data?.profile?.username || '');
     const [newUsername, setNewUsername] = React.useState(activeUsername);
     const [usernameUpdateSuccess, setUsernameUpdateSuccess] = React.useState(false);
 
     // Effect to sync activeUsername with account state on initial load
     React.useEffect(
         function () {
-            const currentUsername = accountState.account?.profile?.username;
+            const currentUsername = account.data?.profile?.username;
             if(currentUsername) {
                 setActiveUsername(currentUsername);
                 setNewUsername(currentUsername);
             }
         },
-        [accountState.account?.profile?.username],
+        [account.data?.profile?.username],
     );
 
     // Function to handle form submission
@@ -114,7 +114,7 @@ export function UsernameForm() {
             <h2 className="text-xl font-medium">Change Username</h2>
 
             <Form
-                loading={accountState.loading}
+                loading={account.isLoading}
                 className="mt-6"
                 formInputs={[
                     <FormInputText

@@ -33,7 +33,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
 
     // References
     const inputSelectReference = React.useRef<FormInputReferenceInterface>(null);
-    const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputSelectReference);
+    const formInputValue = useFormInputValue(properties.defaultValue, inputSelectReference);
 
     // Function to focus on the component
     const focus = React.useCallback(function () {
@@ -85,7 +85,7 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
             // console.log('FormInputSelect.tsx Form input value changed:', value);
 
             // Update the value reference
-            setValue(value);
+            formInputValue.setValue(value);
 
             // Optionally run the provided onChange function if provided
             if(!skipOnChangeCallback && propertiesOnChange) {
@@ -97,14 +97,14 @@ export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, For
                 validate(value);
             }
         },
-        [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
+        [propertiesOnChange, propertiesValidateOnChange, validate, formInputValue],
     );
 
     // Expose internal state to Form through the reference
     React.useImperativeHandle(reference, function () {
         return {
             getValue: function () {
-                return valueReference.current;
+                return formInputValue.valueReference.current;
             },
             setValue: function (value: string | undefined, event?: React.MouseEvent<HTMLElement>) {
                 onChangeIntercept(value, event, true);

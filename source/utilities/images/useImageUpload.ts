@@ -47,20 +47,14 @@ interface UseImageUploadReturn {
 // Hook - useImageUpload
 // Hook for handling image uploads with optional processing (crop, resize)
 export function useImageUpload(options: UseImageUploadOptions): UseImageUploadReturn {
-    // Destructure options with defaults
-    const {
-        url,
-        httpMethod: method = 'POST',
-        headers = {},
-        withCredentials = true,
-        autoUpload = false,
-        outputFormat = 'jpeg',
-        outputQuality = 0.9,
-        maximumOutputSizeInBytes: maxOutputSizeBytes = 1024 * 1024, // 1MB default
-        onSuccess,
-        onError,
-        onProgress,
-    } = options;
+    // Extract options with defaults
+    const method = options.httpMethod || 'POST';
+    const withCredentials = options.withCredentials !== undefined ? options.withCredentials : true;
+    const autoUpload = options.autoUpload !== undefined ? options.autoUpload : false;
+    const outputFormat = options.outputFormat || 'jpeg';
+    const outputQuality = options.outputQuality !== undefined ? options.outputQuality : 0.9;
+    const maxOutputSizeBytes =
+        options.maximumOutputSizeInBytes !== undefined ? options.maximumOutputSizeInBytes : 1024 * 1024; // 1MB default
 
     // State
     const [file, setFile] = React.useState<File | null>(null);
@@ -118,7 +112,7 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                         if(event.lengthComputable) {
                             const progressPercent = Math.round((event.loaded / event.total) * 100);
                             setProgress(progressPercent);
-                            onProgress?.(progressPercent);
+                            options.onProgress?.(progressPercent);
                         }
                     });
 
@@ -152,13 +146,13 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                             });
 
                             setResponse(uploadResponse);
-                            onSuccess?.(uploadResponse);
+                            options.onSuccess?.(uploadResponse);
                             resolve(uploadResponse);
                         }
                         else {
                             const uploadError = new Error(`Upload failed with status ${xmlHttpRequest.status}`);
                             setError(uploadError);
-                            onError?.(uploadError);
+                            options.onError?.(uploadError);
                             reject(uploadError);
                         }
                     });
@@ -167,7 +161,7 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                     xmlHttpRequest.addEventListener('error', function () {
                         const uploadError = new Error('Network error occurred during upload');
                         setError(uploadError);
-                        onError?.(uploadError);
+                        options.onError?.(uploadError);
                         reject(uploadError);
                     });
 
@@ -175,7 +169,7 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                     xmlHttpRequest.addEventListener('timeout', function () {
                         const uploadError = new Error('Upload timeout');
                         setError(uploadError);
-                        onError?.(uploadError);
+                        options.onError?.(uploadError);
                         reject(uploadError);
                     });
 
@@ -183,13 +177,13 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                     xmlHttpRequest.addEventListener('abort', function () {
                         const uploadError = new Error('Upload aborted');
                         setError(uploadError);
-                        onError?.(uploadError);
+                        options.onError?.(uploadError);
                         reject(uploadError);
                     });
                 });
 
                 // Open and send the request
-                xmlHttpRequest.open(method, url, true);
+                xmlHttpRequest.open(method, options.url, true);
 
                 // Set withCredentials if specified
                 xmlHttpRequest.withCredentials = withCredentials;
@@ -198,7 +192,7 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                 const contentType = blob instanceof File ? blob.type : 'application/octet-stream';
 
                 // Set request headers
-                Object.entries({ 'Content-Type': contentType, ...headers }).forEach(function (entry) {
+                Object.entries({ 'Content-Type': contentType, ...options.headers }).forEach(function (entry) {
                     const [key, value] = entry;
                     xmlHttpRequest.setRequestHeader(key, value);
                 });
@@ -215,7 +209,7 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                 if(err instanceof Error && err.name !== 'AbortError') {
                     const uploadError = err;
                     setError(uploadError);
-                    onError?.(uploadError);
+                    options.onError?.(uploadError);
                 }
                 return null;
             } finally {
@@ -224,7 +218,7 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
                 abortControllerReference.current = null;
             }
         },
-        [url, method, headers, withCredentials, onSuccess, onError, onProgress],
+        [method, withCredentials, options],
     );
 
     // Select a file and optionally upload it
@@ -277,11 +271,11 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
             catch(err) {
                 const processingError = err instanceof Error ? err : new Error('Image processing failed');
                 setError(processingError);
-                onError?.(processingError);
+                options.onError?.(processingError);
                 return null;
             }
         },
-        [file, outputFormat, outputQuality, maxOutputSizeBytes, uploadBlob, onError],
+        [file, outputFormat, outputQuality, maxOutputSizeBytes, uploadBlob, options],
     );
 
     // Process and upload with resizing
@@ -308,11 +302,11 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
             catch(err) {
                 const processingError = err instanceof Error ? err : new Error('Image processing failed');
                 setError(processingError);
-                onError?.(processingError);
+                options.onError?.(processingError);
                 return null;
             }
         },
-        [file, outputFormat, outputQuality, maxOutputSizeBytes, uploadBlob, onError],
+        [file, outputFormat, outputQuality, maxOutputSizeBytes, uploadBlob, options],
     );
 
     // Process and upload with both cropping and resizing
@@ -351,11 +345,11 @@ export function useImageUpload(options: UseImageUploadOptions): UseImageUploadRe
             catch(err) {
                 const processingError = err instanceof Error ? err : new Error('Image processing failed');
                 setError(processingError);
-                onError?.(processingError);
+                options.onError?.(processingError);
                 return null;
             }
         },
-        [file, outputFormat, outputQuality, maxOutputSizeBytes, uploadBlob, onError],
+        [file, outputFormat, outputQuality, maxOutputSizeBytes, uploadBlob, options],
     );
 
     return {

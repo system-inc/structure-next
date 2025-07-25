@@ -18,20 +18,19 @@ import { useUrlPath } from '@structure/source/router/Navigation';
 export function AccountMenuButton() {
     // Hooks
     const urlPath = useUrlPath();
-    const { accountState } = useAccount();
+    const account = useAccount();
 
     // State
     const [open, setOpen] = React.useState(false);
 
     // Get the profile image URL
-    const profileImageUrl = accountState.account?.profile?.images?.find(
-        (image) => image.variant === 'profile-image-small',
-    )?.url;
+    const profileImageUrl = account.data?.profile?.images?.find((image) => image.variant === 'profile-image-small')
+        ?.url;
 
     // Get the profile image alternate text
     let profileImageAlternateText = undefined;
-    if(accountState.account) {
-        profileImageAlternateText = accountState.account.getPublicDisplayName();
+    if(account.data) {
+        profileImageAlternateText = account.data.getPublicDisplayName();
     }
 
     // Effect to close the popover when the pathname changes
@@ -47,7 +46,7 @@ export function AccountMenuButton() {
         <Popover
             open={open}
             onOpenChange={setOpen}
-            content={<AccountMenu account={accountState.account} className="py-3 outline-none" />}
+            content={<AccountMenu account={account.data} className="py-3 outline-none" />}
             align="end"
         >
             <div className="h-8 w-8 cursor-pointer">

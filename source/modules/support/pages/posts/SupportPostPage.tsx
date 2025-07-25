@@ -40,7 +40,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     // console.log('SupportPostPage', properties);
 
     // Hooks
-    const { accountState } = useAccount();
+    const account = useAccount();
 
     // Hooks - API
     // const supportPostQueryState = useQuery(SupportPostDocument, {
@@ -74,7 +74,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     // Render the component
     return (
         <div className="container pb-32 pt-8">
-            {accountState.account?.isAdministator() && (
+            {account.data?.isAdministator() && (
                 <div className="float-end flex space-x-2">
                     <Button
                         className="pl-3"

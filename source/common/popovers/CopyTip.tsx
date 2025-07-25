@@ -12,10 +12,10 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - CopyTip
 export interface CopyTipProperties extends Omit<TipProperties, 'content'> {
     value: string;
-    notice?: Omit<NoticeInterface, 'id'>;
+    noticeData?: Omit<NoticeInterface, 'id'>;
 }
 export function CopyTip(properties: CopyTipProperties) {
-    const { children, notice, value, className, ...tipProperties } = properties;
+    const { children, noticeData, value, className, ...tipProperties } = properties;
 
     // Render the component
     return (
@@ -25,7 +25,7 @@ export function CopyTip(properties: CopyTipProperties) {
                     <div className="flex items-center border-r">
                         <CopyButton
                             value={value}
-                            notice={notice}
+                            noticeData={noticeData}
                             className={mergeClassNames('p-1.5', className)}
                             iconClassName="h-3.5 w-3.5"
                         />

@@ -50,7 +50,7 @@ export interface PostControlsProperties {
 }
 export function PostControls(properties: PostControlsProperties) {
     // Hooks
-    const { accountState } = useAccount();
+    const account = useAccount();
     const urlPath = useUrlPath();
 
     // Defaults
@@ -111,7 +111,7 @@ export function PostControls(properties: PostControlsProperties) {
 
                 {/* Edit */}
                 {/* Must be signed in and the current profile must match the creator profile of the post */}
-                {accountState.account && accountState.account.profile?.id === properties.createdByProfileId && (
+                {account.data && account.data.profile?.id === properties.createdByProfileId && (
                     <PostControl href={editUrlPath}>Edit</PostControl>
                 )}
             </div>

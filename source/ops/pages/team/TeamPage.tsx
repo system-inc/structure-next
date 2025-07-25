@@ -13,7 +13,7 @@ import { useNotice } from '@structure/source/common/notifications/NoticeProvider
 // Component - TeamPage
 export function TeamPage() {
     // Hooks
-    const { addNotice } = useNotice();
+    const notice = useNotice();
 
     // Render the component
     return (
@@ -25,7 +25,7 @@ export function TeamPage() {
 
             <Button
                 onClick={async function () {
-                    addNotice({
+                    notice.addNotice({
                         title: 'Hello!',
                         content: 'This is a notice. ' + new Date().toLocaleTimeString('en-US', {}),
                     });

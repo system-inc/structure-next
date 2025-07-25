@@ -35,7 +35,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
 
         // References
         const inputCheckboxReference = React.useRef<FormInputReferenceInterface>(null);
-        const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputCheckboxReference);
+        const formInputValue = useFormInputValue(properties.defaultValue, inputCheckboxReference);
 
         // Function to focus on the component
         const focus = React.useCallback(function () {
@@ -94,7 +94,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                 // console.log('FormInputCheckbox.tsx Form input value changed:', value);
 
                 // Update the value reference
-                setValue(value);
+                formInputValue.setValue(value);
 
                 // Optionally run the provided onChange function if provided
                 if(!skipOnChangeCallback && propertiesOnChange) {
@@ -106,13 +106,13 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                     validate(value);
                 }
             },
-            [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
+            [propertiesOnChange, propertiesValidateOnChange, validate, formInputValue],
         );
 
         React.useImperativeHandle(reference, function () {
             return {
                 getValue: function () {
-                    return valueReference.current;
+                    return formInputValue.valueReference.current;
                 },
                 setValue: function (
                     value: InputCheckboxState | undefined,

@@ -29,7 +29,7 @@ export function SupportFeedbackDialog(properties: SupportFeedbackDialogPropertie
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // Hooks
-    const { accountState } = useAccount();
+    const account = useAccount();
     // const urlPath = useUrlPath();
     // const apolloClient = useApolloClient();
     // const [principleReviewCreateMutation] = useMutation(SupportFeedbackCreateDocument);
@@ -94,7 +94,7 @@ export function SupportFeedbackDialog(properties: SupportFeedbackDialogPropertie
                         // }
                         type="email"
                         placeholder="Email Address"
-                        defaultValue={accountState?.account?.emailAddress}
+                        defaultValue={account?.data?.emailAddress}
                     />
 
                     {/* Quick feedback selection */}

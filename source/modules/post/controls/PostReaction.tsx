@@ -33,7 +33,7 @@ export function PostReaction(properties: PostReactionProperties) {
     const [tipOpen, setTipOpen] = React.useState<boolean>(false);
 
     // Hooks
-    const { accountState, setAuthenticationDialogOpen } = useAccount();
+    const account = useAccount();
     const postReactionProfilesRequest = networkService.useGraphQlQuery(
         gql(`
             query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {
@@ -88,7 +88,7 @@ export function PostReaction(properties: PostReactionProperties) {
     // Function to handle clicking on the reaction
     async function handleReaction() {
         // If the user is signed in
-        if(accountState.account) {
+        if(account.data) {
             // If the user has already done this reaction
             if(properties.reacted) {
                 // Opportunistically update the parent component
@@ -115,7 +115,7 @@ export function PostReaction(properties: PostReactionProperties) {
         // If the user is not signed in
         else {
             // Show the sign in dialog
-            setAuthenticationDialogOpen(true);
+            account.setAuthenticationDialogOpen(true);
         }
     }
 

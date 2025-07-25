@@ -21,7 +21,7 @@ export interface AccountMenuProperties {
 }
 export function AccountMenu(properties: AccountMenuProperties) {
     // Hooks
-    const { signOut } = useAccount();
+    const account = useAccount();
 
     // Render the component
     return (
@@ -51,7 +51,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
                             tabIndex={1}
                             className="w-[92px]"
                             onClick={async function () {
-                                await signOut();
+                                await account.signOut();
                             }}
                             processingAnimation={true}
                         >

@@ -13,7 +13,7 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 // Component - AccountMenu
 export function AccountMenuSignedOut() {
     // Hooks
-    const { setAuthenticationDialogOpen } = useAccount();
+    const account = useAccount();
 
     // Render the component
     return (
@@ -25,7 +25,7 @@ export function AccountMenuSignedOut() {
                 <Button
                     className="w-full"
                     onClick={function () {
-                        setAuthenticationDialogOpen(true);
+                        account.setAuthenticationDialogOpen(true);
                     }}
                 >
                     Sign In or Create Account

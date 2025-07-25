@@ -68,7 +68,7 @@ export interface TableProperties extends React.HTMLAttributes<HTMLTableElement> 
 }
 export function Table(properties: TableProperties) {
     // Hooks
-    const { addNotice } = useNotice();
+    const notice = useNotice();
 
     // References
     const filtersReference = React.useRef<ColumnFilterGroupDataInterface | undefined>(properties.filters);
@@ -369,7 +369,7 @@ export function Table(properties: TableProperties) {
                                 await tableRowsAction.actionFunction(selectedRows, columns);
 
                                 // Show a notice
-                                addNotice({
+                                notice.addNotice({
                                     title: tableRowsAction.notice.title,
                                     content: tableRowsAction.notice.content,
                                 });
@@ -386,7 +386,7 @@ export function Table(properties: TableProperties) {
             columns,
             properties.columnVisibility,
             visibleColumnsIndexesSet.size,
-            addNotice,
+            notice,
         ],
     );
 

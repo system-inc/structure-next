@@ -27,7 +27,7 @@ export interface PostReactionControlProperties {
 }
 export function PostReactionControl(properties: PostReactionControlProperties) {
     // Hooks
-    const { accountState, setAuthenticationDialogOpen } = useAccount();
+    const account = useAccount();
     const postReactionCreateRequest = networkService.useGraphQlMutation(
         gql(`
             mutation PostReactionCreate($postId: String!, $content: String!) {
@@ -41,7 +41,7 @@ export function PostReactionControl(properties: PostReactionControlProperties) {
     // Function to handle a reaction
     async function handleReaction(content: string) {
         // If the user is signed in
-        if(accountState.account) {
+        if(account.data) {
             // Opportunistically update the parent component
             properties.onReactionCreate(content);
 
@@ -54,7 +54,7 @@ export function PostReactionControl(properties: PostReactionControlProperties) {
         // If the user is not signed in
         else {
             // Show the sign in dialog
-            setAuthenticationDialogOpen(true);
+            account.setAuthenticationDialogOpen(true);
         }
     }
 

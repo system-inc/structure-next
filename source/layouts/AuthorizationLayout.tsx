@@ -32,14 +32,14 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     const accessibleRoles = properties.accessibleRoles || [];
 
     // Hooks
-    const { accountState, signedIn } = useAccount();
+    const account = useAccount();
 
     // Loading account or rendering on server
-    if(!signedIn && accountState.loading) {
+    if(!account.signedIn && account.isLoading) {
         return <LineLoadingAnimation />;
     }
     // Not signed in
-    else if(!signedIn && !accountState.account) {
+    else if(!account.signedIn && !account.data) {
         return (
             <React.Suspense fallback={null}>
                 <NotSignedIn />
@@ -47,23 +47,23 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
         );
     }
     // Error loading account
-    else if(accountState.error) {
-        return <ApiError error={accountState.error} />;
+    else if(account.error) {
+        return <ApiError error={account.error} />;
     }
     // If accessibleRoles are defined, check if the user has any of those roles
     else if(accessibleRoles.length > 0) {
         // Account info is still loading, wait
-        if(accountState.loading) {
+        if(account.isLoading) {
             return <LineLoadingAnimation />;
         }
 
         // Account info insufficient to authorize
-        if(!accountState.account) {
+        if(!account.data) {
             return <NotAuthorized />;
         }
 
         // Check if the account has any of the accessible roles
-        if(!accountState.account.isAdministator() && !accountState.account.hasAnyRole(accessibleRoles)) {
+        if(!account.data.isAdministator() && !account.data.hasAnyRole(accessibleRoles)) {
             return <NotAuthorized />;
         }
     }

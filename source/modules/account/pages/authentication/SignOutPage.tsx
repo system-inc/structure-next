@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 // Component - SignOutPage
 export function SignOutPage() {
     // Hooks
-    const { signOut } = useAccount();
+    const account = useAccount();
     const router = useRouter();
 
     // Render the component
@@ -36,7 +36,7 @@ export function SignOutPage() {
                             variant="destructive"
                             onClick={function () {
                                 console.log('signing out..');
-                                signOut('/');
+                                account.signOut('/');
                             }}
                         >
                             Sign Out

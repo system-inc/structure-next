@@ -7,13 +7,13 @@ export const accountSignedInKey = 'AccountSignedIn';
 // Class - Account
 
 export class Account {
-    /** Account email address */
+    // Account email address
     emailAddress: AccountQuery['account']['emailAddress'] | null | undefined;
-    /** Account profile information */
+    // Account profile information
     profile: AccountQuery['account']['profile'];
-    /** Access roles assigned to this account */
+    // Access roles assigned to this account
     accessRoles: AccountQuery['account']['accessRoles'];
-    /** Date when the account was created */
+    // Date when the account was created
     createdAt: Date;
 
     /**

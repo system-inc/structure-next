@@ -21,17 +21,17 @@ type StandardizedUseFormReturn<T extends FieldValues> = {
     submit: UseFormReturn<T>['handleSubmit'];
 };
 export function useForm<T extends FieldValues>(properties?: UseFormProperties<T>): StandardizedUseFormReturn<T> {
-    const { setValue, getValues, watch, register, formState, handleSubmit } = reactHookFormUseForm<T>(properties);
+    const reactHookForm = reactHookFormUseForm<T>(properties);
 
     return {
-        setInputValue: setValue,
-        getInputValue: getValues,
-        getInputValues: getValues,
-        watchInputValue: watch,
-        watchInputValues: watch,
-        registerInput: register,
-        state: formState,
-        submit: handleSubmit,
+        setInputValue: reactHookForm.setValue,
+        getInputValue: reactHookForm.getValues,
+        getInputValues: reactHookForm.getValues,
+        watchInputValue: reactHookForm.watch,
+        watchInputValues: reactHookForm.watch,
+        registerInput: reactHookForm.register,
+        state: reactHookForm.formState,
+        submit: reactHookForm.handleSubmit,
     };
 }
 

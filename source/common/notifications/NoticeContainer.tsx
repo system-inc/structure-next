@@ -22,7 +22,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
     const COLLAPSED_OFFSET_PX = 24;
 
     // Hooks
-    const { removeNotice } = useNotice();
+    const notice = useNotice();
 
     // State
     const [hovered, setHovered] = React.useState(false);
@@ -316,9 +316,9 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
     // Function to handle removal of a notice
     const handleRemoval = React.useCallback(
         function (id: string) {
-            removeNotice(id);
+            notice.removeNotice(id);
         },
-        [removeNotice],
+        [notice],
     );
 
     // Render the component

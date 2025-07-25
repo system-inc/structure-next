@@ -22,7 +22,7 @@ export interface NoticesClearAllButtonProperties extends ButtonProperties {
 export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, NoticesClearAllButtonProperties>(
     function (properties, reference) {
         // Hooks
-        const { removeAllNotices } = useNotice();
+        const notice = useNotice();
 
         // Springs
         const buttonSpring = useSpring({
@@ -41,10 +41,10 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
                 buttonSpring.opacity.start(0);
 
                 properties.xSpringFunction(200, () => {
-                    removeAllNotices();
+                    notice.removeAllNotices();
                 });
             },
-            [removeAllNotices, properties, buttonSpring],
+            [notice, properties, buttonSpring],
         );
 
         // Render the component

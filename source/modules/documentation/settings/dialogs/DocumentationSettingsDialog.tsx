@@ -22,26 +22,26 @@ export interface DocumentationSettingsDialogProperties {
 }
 export function DocumentationSettingsDialog(properties: DocumentationSettingsDialogProperties) {
     // Use localStorage service for API key with unique identifier
-    const { value: apiKey, set: setApiKey } = useLocalStorageService<string | null>(
+    const localStorageService = useLocalStorageService<string | null>(
         uppercaseFirstCharacter(properties.documentationIdentifier) + 'DocumentationApiKey',
     );
 
     // State for the form input
-    const [newApiKey, setNewApiKey] = React.useState(apiKey || '');
+    const [newApiKey, setNewApiKey] = React.useState(localStorageService.value || '');
 
     // Effect to sync form with current apiKey when dialog opens
     React.useEffect(
         function () {
             if(properties.isOpen) {
-                setNewApiKey(apiKey || '');
+                setNewApiKey(localStorageService.value || '');
             }
         },
-        [properties.isOpen, apiKey],
+        [properties.isOpen, localStorageService.value],
     );
 
     // Function to handle form submission
     async function handleSubmit() {
-        setApiKey(newApiKey);
+        localStorageService.set(newApiKey);
         properties.onClose();
         return { success: true };
     }
@@ -67,7 +67,7 @@ export function DocumentationSettingsDialog(properties: DocumentationSettingsDia
                     ]}
                     buttonProperties={{
                         children: 'Save API Key',
-                        disabled: !newApiKey || newApiKey === apiKey,
+                        disabled: !newApiKey || newApiKey === localStorageService.value,
                     }}
                     onSubmit={handleSubmit}
                 />

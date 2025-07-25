@@ -36,7 +36,7 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
     const [voteType, setVoteType] = React.useState<PostVoteType | null | undefined>(properties.voteType ?? null);
 
     // Hooks
-    const { accountState, setAuthenticationDialogOpen } = useAccount();
+    const account = useAccount();
     const postVoteRequest = networkService.useGraphQlMutation(
         gql(`
             mutation PostVote($postId: String!, $type: PostVoteType!) {
@@ -59,7 +59,7 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
     // Function to handle voting
     function handleVote() {
         // If the user is signed in
-        if(accountState.account) {
+        if(account.data) {
             // If they have already upvoted, unvote
             if(voteType) {
                 // Opportunistically update the UI
@@ -93,7 +93,7 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
         // If the user is not signed in
         else {
             // Show the sign in dialog
-            setAuthenticationDialogOpen(true);
+            account.setAuthenticationDialogOpen(true);
         }
     }
 

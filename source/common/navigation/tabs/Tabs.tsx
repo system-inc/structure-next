@@ -96,18 +96,22 @@ export interface TabItemProperties
         React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Trigger> {}
 export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
     function ({ className, icon, ...radixTabTriggerProperties }, reference) {
-        const { size, tabGroupId, currentValue } = React.useContext(TabsContext);
-        const isActive = currentValue === radixTabTriggerProperties.value;
+        const tabsContext = React.useContext(TabsContext);
+        const isActive = tabsContext.currentValue === radixTabTriggerProperties.value;
 
         return (
             <RadixTabPrimitive.Trigger ref={reference} {...radixTabTriggerProperties} asChild>
-                <motion.button className={mergeClassNames(tabItemVariants({ size, icon: icon, className: className }))}>
+                <motion.button
+                    className={mergeClassNames(
+                        tabItemVariants({ size: tabsContext.size, icon: icon, className: className }),
+                    )}
+                >
                     {isActive && (
                         <motion.div
-                            layoutId={`tab-${tabGroupId}`}
+                            layoutId={`tab-${tabsContext.tabGroupId}`}
                             className={mergeClassNames(
                                 'absolute inset-0 h-full w-full border border-transparent',
-                                'z-0 group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary',
+                                'group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary z-0',
                             )}
                             style={{
                                 borderRadius: '99px',

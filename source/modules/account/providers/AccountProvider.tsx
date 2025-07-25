@@ -22,11 +22,9 @@ export const accountCacheKey = 'account';
 
 // Context - Account
 interface AccountContextInterface {
-    accountState: {
-        loading: boolean;
-        error: GraphQlError | null;
-        account: Account | null; // If this is null, the account is not signed in
-    };
+    isLoading: boolean;
+    error: GraphQlError | null;
+    data: Account | null; // If this is null, the account is not signed in
     signedIn: boolean;
     setSignedIn: (value: boolean) => void;
     signOut: (redirectPath?: string) => Promise<boolean>;
@@ -230,12 +228,10 @@ export function AccountProvider(properties: AccountProviderProperties) {
     return (
         <AccountContext.Provider
             value={{
-                accountState: {
-                    // We are loading if the account query is loading or if we are signed in and the account is not loaded
-                    loading: accountRequest.isLoading || (signedIn && account == null),
-                    error: accountRequest.error as GraphQlError | null,
-                    account: account,
-                },
+                // We are loading if the account query is loading or if we are signed in and the account is not loaded
+                isLoading: accountRequest.isLoading || (signedIn && account == null),
+                error: accountRequest.error as GraphQlError | null,
+                data: account,
                 signedIn: signedIn,
                 setSignedIn: updateSignedIn,
                 signOut,

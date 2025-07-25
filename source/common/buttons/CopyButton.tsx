@@ -17,11 +17,11 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 export interface CopyButtonProperties extends ButtonProperties {
     className?: string;
     value: string;
-    notice?: Omit<NoticeInterface, 'id'>;
+    noticeData?: Omit<NoticeInterface, 'id'>;
 }
-export function CopyButton({ className, value, notice, ...buttonProperties }: CopyButtonProperties) {
+export function CopyButton({ className, value, noticeData, ...buttonProperties }: CopyButtonProperties) {
     // Hooks
-    const { addNotice } = useNotice();
+    const notice = useNotice();
 
     // State
     const [valueCopiedToClipboard, setValueCopiedToClipboard] = React.useState(false);
@@ -36,8 +36,8 @@ export function CopyButton({ className, value, notice, ...buttonProperties }: Co
             setValueCopiedToClipboard(true);
 
             // Show a notice
-            if(notice) {
-                addNotice(notice);
+            if(noticeData) {
+                notice.addNotice(noticeData);
             }
 
             // Reset the state after a delay
@@ -45,7 +45,7 @@ export function CopyButton({ className, value, notice, ...buttonProperties }: Co
                 setValueCopiedToClipboard(false);
             }, 1000);
         },
-        [value, notice, addNotice],
+        [value, noticeData, notice],
     );
 
     // Render the component

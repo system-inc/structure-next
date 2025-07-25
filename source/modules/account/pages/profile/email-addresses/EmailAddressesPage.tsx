@@ -20,15 +20,15 @@ export async function generateMetadata(): Promise<Metadata> {
 // Component - EmailAddressesPage
 export function EmailAddressesPage() {
     // Hooks
-    const { accountState } = useAccount();
-    const primaryAccountEmailAddress = accountState.account?.emailAddress;
+    const account = useAccount();
+    const primaryAccountEmailAddress = account.data?.emailAddress;
 
     // Render the component
     return (
         <>
             <h1>Email Addresses</h1>
 
-            {accountState.loading ? (
+            {account.isLoading ? (
                 // Loading State
                 <div className="mt-10">
                     <PlaceholderAnimation className="h-6 w-64" />

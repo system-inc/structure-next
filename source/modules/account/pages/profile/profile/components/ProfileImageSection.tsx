@@ -15,17 +15,16 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 // Component - ProfileImageSection
 export function ProfileImageSection() {
     // Hooks
-    const { accountState } = useAccount();
+    const account = useAccount();
 
     // Get the profile image details
-    const profileImageUrl = accountState.account?.profile?.images?.find((image) => image.variant === 'profile-image')
-        ?.url;
-    const profileImageAlternateText = accountState.account?.getPublicDisplayName();
+    const profileImageUrl = account.data?.profile?.images?.find((image) => image.variant === 'profile-image')?.url;
+    const profileImageAlternateText = account.data?.getPublicDisplayName();
 
     // Render the component
     return (
         <div className="mr-6">
-            {accountState.loading ? (
+            {account.isLoading ? (
                 <PlaceholderAnimation className="h-32 w-32" />
             ) : (
                 <ProfileImageUploader

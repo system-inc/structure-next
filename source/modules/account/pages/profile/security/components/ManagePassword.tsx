@@ -32,7 +32,7 @@ export function ManagePassword(properties: ManagePasswordProperties) {
 
     // Hooks
     const account = useAccount();
-    const emailAddress = account.accountState.account?.emailAddress ?? '';
+    const emailAddress = account.data?.emailAddress ?? '';
 
     // Hooks - API - Mutations
     const accountMaintenanceSessionCreateRequest = networkService.useGraphQlMutation(

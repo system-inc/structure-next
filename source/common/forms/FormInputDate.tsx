@@ -31,7 +31,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
 
     // References
     const inputDateReference = React.useRef<FormInputReferenceInterface>(null);
-    const { valueReference, setValue } = useFormInputValue(properties.defaultValue, inputDateReference);
+    const formInputValue = useFormInputValue(properties.defaultValue, inputDateReference);
 
     // Function to focus on the component
     const focus = React.useCallback(function () {
@@ -77,7 +77,7 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
     const onChangeIntercept = React.useCallback(
         function (value: Date | undefined, skipOnChangeCallback: boolean = false) {
             // Update the value reference
-            setValue(value);
+            formInputValue.setValue(value);
 
             // Optionally run the provided onChange function if provided
             if(!skipOnChangeCallback && propertiesOnChange) {
@@ -89,14 +89,14 @@ export const FormInputDate = React.forwardRef<InputDateReferenceInterface, FormI
                 validate(value);
             }
         },
-        [propertiesOnChange, propertiesValidateOnChange, validate, setValue],
+        [propertiesOnChange, propertiesValidateOnChange, validate, formInputValue],
     );
 
     // Expose internal state to Form through the reference
     React.useImperativeHandle(reference, function () {
         return {
             getValue: function () {
-                return valueReference.current;
+                return formInputValue.valueReference.current;
             },
             setValue: function (value: Date | undefined) {
                 onChangeIntercept(value, true); // Skip the onChange callback

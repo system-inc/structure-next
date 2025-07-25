@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 // Component - ProfilePage
 export function ProfilePage() {
     // Hooks
-    const { accountState } = useAccount();
+    const account = useAccount();
 
     // Render the component
     return (
@@ -36,30 +36,30 @@ export function ProfilePage() {
 
                 <div className="mt-4 md:mt-0">
                     {/* Display Name */}
-                    {accountState.loading ? (
+                    {account.isLoading ? (
                         <PlaceholderAnimation className="h-8 w-48" />
                     ) : (
-                        accountState.account?.getPublicDisplayName() && (
-                            <h2 className="text-2xl font-semibold">{accountState.account.getPublicDisplayName()}</h2>
+                        account.data?.getPublicDisplayName() && (
+                            <h2 className="text-2xl font-semibold">{account.data.getPublicDisplayName()}</h2>
                         )
                     )}
 
                     {/* Username */}
-                    {accountState.loading ? (
+                    {account.isLoading ? (
                         <PlaceholderAnimation className="mt-2 h-4 w-32" />
                     ) : (
-                        accountState.account?.profile?.username && (
-                            <p className="neutral mb-2 mt-1 text-sm">@{accountState.account.profile.username}</p>
+                        account.data?.profile?.username && (
+                            <p className="neutral mb-2 mt-1 text-sm">@{account.data.profile.username}</p>
                         )
                     )}
 
                     {/* Joined Date */}
-                    {accountState.loading ? (
+                    {account.isLoading ? (
                         <PlaceholderAnimation className="mt-2 h-4 w-40" />
                     ) : (
                         <p className="text-sm">
                             Joined{' '}
-                            {accountState.account?.createdAt.toLocaleDateString('en-US', {
+                            {account.data?.createdAt.toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',

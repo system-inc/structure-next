@@ -30,7 +30,7 @@ export interface ContactPageProperties {
 }
 export function ContactPage(properties: ContactPageProperties) {
     // Hooks
-    const { accountState } = useAccount();
+    const account = useAccount();
     const supportTicketCreateRequest = networkService.useGraphQlMutation(
         gql(`
             mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
@@ -72,7 +72,7 @@ export function ContactPage(properties: ContactPageProperties) {
     return (
         <div className={mergeClassNames('container pt-12', properties.className)}>
             <h1>Contact {ProjectSettings.title}</h1>
-            <p className="text-foreground-secondary mt-4 text-sm">We look forward to hearing from you.</p>
+            <p className="mt-4 text-sm text-foreground-secondary">We look forward to hearing from you.</p>
 
             <hr className="my-6" />
 
@@ -89,7 +89,7 @@ export function ContactPage(properties: ContactPageProperties) {
                                     label="Your Email Address"
                                     placeholder="email@domain.com"
                                     required={true}
-                                    defaultValue={accountState.account?.emailAddress}
+                                    defaultValue={account.data?.emailAddress}
                                 />,
                                 <FormInputText
                                     key="subject"
