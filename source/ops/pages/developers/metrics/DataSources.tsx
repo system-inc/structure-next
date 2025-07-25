@@ -90,7 +90,7 @@ export function DataSources(properties: DataSourcesProperties) {
         // Remove the data from the chartData array
         properties.setDataSourcesWithMetrics((oldData) => {
             // Find the index of the current config
-            const configIndex = oldData?.findIndex((config) => config.id === id);
+            const configIndex = oldData?.findIndex((configuration) => configuration.id === id);
 
             return oldData?.filter((configuration, id) => id !== configIndex);
         });
@@ -156,7 +156,7 @@ export function DataSources(properties: DataSourcesProperties) {
                             console.log('Updating the order of the data sources.');
                             const newDataSourcesOrder: DataSourceType[] = newOrder
                                 .map((index) => properties.settings.dataSources[index])
-                                .filter((config): config is DataSourceType => Boolean(config));
+                                .filter((configuration): configuration is DataSourceType => Boolean(configuration));
                             console.log(newDataSourcesOrder);
                             properties.setDataSources(newDataSourcesOrder);
                         }

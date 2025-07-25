@@ -35,10 +35,10 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
         [urlPath, active],
     ); // Listen to changes to the pathname and active state
 
-    const animationConfig = { duration: 500, easing: easings.easeOutExpo };
+    const animationConfiguration = { duration: 500, easing: easings.easeOutExpo };
     const rotationSpring = useSpring({
         rotate: isOpen ? 270 : 90,
-        config: animationConfig,
+        config: animationConfiguration,
     });
 
     // Render the component
@@ -66,7 +66,7 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
                 </div>
             </div>
 
-            <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={animationConfig}>
+            <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={animationConfiguration}>
                 <div className="ml-3 space-y-0.5 border-l border-l-light-4 pb-0.5 pl-4 pt-0.5 dark:border-l-dark-4">
                     {properties.links?.map((internalNavigationLink) => {
                         return (

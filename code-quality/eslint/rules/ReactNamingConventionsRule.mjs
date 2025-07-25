@@ -154,8 +154,8 @@ const ReactNamingConventionsRule = {
                 const contextHint = isError
                     ? ' (appears to be an error)'
                     : isEvent
-                      ? ' (appears to be an event)'
-                      : ' (context unclear)';
+                        ? ' (appears to be an event)'
+                        : ' (context unclear)';
 
                 context.report({
                     node: node,
@@ -306,6 +306,35 @@ const ReactNamingConventionsRule = {
                 context.report({
                     node: node,
                     message: `Identifier "${name}" should not end with "Ref". Use "${suggestedName}".`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, suggestedName);
+                    },
+                });
+            }
+            else if(name === 'config') {
+                // Skip if this is a property key in an object literal (like { config: value })
+                if(node.parent && node.parent.type === 'Property' && node.parent.key === node) {
+                    return;
+                }
+
+                // Skip if this is accessing .config property on an object
+                if(node.parent && node.parent.type === 'MemberExpression' && node.parent.property === node) {
+                    return;
+                }
+
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not be named "config". Use "configuration" or a more descriptive name.`,
+                    fix(fixer) {
+                        return fixer.replaceText(node, 'configuration');
+                    },
+                });
+            }
+            else if(name.endsWith('Config')) {
+                const suggestedName = name.replace(/Config$/, 'Configuration');
+                context.report({
+                    node: node,
+                    message: `Identifier "${name}" should not end with "Config". Use "${suggestedName}".`,
                     fix(fixer) {
                         return fixer.replaceText(node, suggestedName);
                     },
