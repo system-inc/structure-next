@@ -1,6 +1,4 @@
-/**
- * Swaps two elements in an array
- */
+// Swaps two elements in an array
 export function swapArrayElements<T>(array: T[], fromIndex: number, toIndex: number) {
     // Clone the array
     const arrayClone = array.slice();

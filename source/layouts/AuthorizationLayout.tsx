@@ -24,9 +24,7 @@ export interface AuthorizationLayoutProperties {
     accessibleRoles?: string[];
 }
 
-/**
- * Component that validates the user's authorization (logged in state) and renders the children if authorized.
- */
+// Component that validates the user's authorization (logged in state) and renders the children if authorized.
 export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     // Defaults
     const accessibleRoles = properties.accessibleRoles || [];

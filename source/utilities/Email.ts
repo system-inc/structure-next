@@ -8,9 +8,7 @@ const COMMON_EMAIL_MARKERS = [
     /<div class="gmail_attr">/, // Gmail quote attribution
 ];
 
-/**
- * Extracts the latest email content from a thread
- */
+// Extracts the latest email content from a thread
 export function extractLatestEmailContent(threadHtml: string): string {
     // If thread HTML is empty, return empty string
     if(!threadHtml) return '';

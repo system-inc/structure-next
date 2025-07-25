@@ -1,10 +1,6 @@
-/**
- * Utilities for validating and working with IP addresses
- */
+// Utilities for validating and working with IP addresses
 
-/**
- * Validates if a string is a valid IPv4 address
- */
+// Validates if a string is a valid IPv4 address
 export function isIpV4Address(value: string): boolean {
     // Check if the string matches IPv4 pattern
     const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
@@ -21,9 +17,7 @@ export function isIpV4Address(value: string): boolean {
     });
 }
 
-/**
- * Validates if a string is a valid IPv6 address
- */
+// Validates if a string is a valid IPv6 address
 export function isIpV6Address(value: string): boolean {
     // Standard IPv6 regex - checks for valid IPv6 formats
     const ipv6Regex =
@@ -32,9 +26,7 @@ export function isIpV6Address(value: string): boolean {
     return ipv6Regex.test(value);
 }
 
-/**
- * Validates if a string is any valid IP address (IPv4 or IPv6)
- */
+// Validates if a string is any valid IP address (IPv4 or IPv6)
 export function isIpAddress(value: string): boolean {
     return isIpV4Address(value) || isIpV6Address(value);
 }

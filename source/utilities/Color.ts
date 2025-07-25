@@ -661,9 +661,7 @@ export function hexToOklch(hex: string): [number, number, number] {
     return [l, c, h];
 }
 
-/**
- * Converts OKLCH [l, c, h] to a sRGB hex string (e.g. "#ef4444").
- */
+// Converts OKLCH [l, c, h] to a sRGB hex string (e.g. "#ef4444").
 export function oklchToHex(l: number, c: number, h: number): string {
     // step 1: oklch -> oklab
     const lab = oklchToOklab(l, c, h);

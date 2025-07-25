@@ -1,6 +1,4 @@
-/**
- * Add commas to a number
- */
+// Add commas to a number
 export function addCommas(number?: number | string): string {
     if(!number) return '0';
     const value = typeof number === 'string' ? Number(number) : number;

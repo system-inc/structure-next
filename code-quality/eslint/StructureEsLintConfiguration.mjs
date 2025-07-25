@@ -4,6 +4,7 @@ import EsLintPluginReactHooks from 'eslint-plugin-react-hooks';
 import EsLintPluginNext from '@next/eslint-plugin-next';
 
 // Dependencies - Structure ESLint Rules
+import CodeConsistencyRule from './rules/CodeConsistencyRule.mjs';
 import LocalStorageServiceRule from './rules/LocalStorageServiceRule.mjs';
 import NetworkServiceRule from './rules/NetworkServiceRule.mjs';
 import NoStructureProjectImportsRule from './rules/NoStructureProjectImportsRule.mjs';
@@ -110,6 +111,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
     '@next/next': EsLintPluginNext,
     structure: {
         rules: {
+            'code-consistency-rule': CodeConsistencyRule,
             'local-storage-service-rule': LocalStorageServiceRule,
             'network-service-rule': NetworkServiceRule,
             'no-structure-project-imports-rule': NoStructureProjectImportsRule,
@@ -137,6 +139,7 @@ export const structureJavaScriptAndTypeScriptRules = {
 
     // Structure
     'no-empty': ['error', { allowEmptyCatch: true }],
+    'structure/code-consistency-rule': 'error',
     'structure/local-storage-service-rule': 'error',
     'structure/network-service-rule': 'error',
     'structure/no-structure-project-imports-rule': 'error',
