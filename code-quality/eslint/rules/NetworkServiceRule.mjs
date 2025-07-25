@@ -33,10 +33,19 @@ export default {
                 'Import GraphQL types from @project/app/_api/graphql/GraphQlGeneratedCode instead of @project/app/_api/graphql/generated/gql',
             incorrectStructureGqlImport:
                 'Import GraphQL types from @structure/source/api/graphql/GraphQlGeneratedCode instead of @structure/source/api/graphql/generated/gql',
+            hookShouldEndWithRequest:
+                'Hook "{{hookName}}" uses NetworkService and should end with "Request". Suggested name: "{{suggestedName}}"',
+            fileShouldEndWithRequest:
+                'File contains hook "{{hookName}}" that uses NetworkService. File should be named "{{suggestedFileName}}"',
         },
         schema: [],
     },
     create(context) {
+        // Track if this file contains network service imports
+        let hasNetworkServiceImport = false;
+        // Track hooks that use network service
+        const networkServiceHooks = new Map();
+
         // Helper function to get the filename safely
         function getFilename() {
             return context.filename || context.getFilename() || context.getPhysicalFilename() || '';
@@ -86,6 +95,84 @@ export default {
             }
 
             return false;
+        }
+
+        // Helper function to check if a node is a NetworkService method call
+        function isNetworkServiceCall(node) {
+            if(node.type !== 'CallExpression') return false;
+
+            const callee = node.callee;
+            if(callee.type !== 'MemberExpression') return false;
+
+            const object = callee.object;
+            const property = callee.property;
+
+            // Check if it's networkService.method()
+            if(object.type === 'Identifier' && object.name === 'networkService') {
+                const methodName = property.name;
+                return ['useGraphQlQuery', 'useGraphQlMutation', 'graphQlRequest', 'useSuspenseGraphQlQuery'].includes(methodName);
+            }
+
+            return false;
+        }
+
+        // Helper function to suggest a better name for hooks
+        function suggestHookName(currentName) {
+            // If it already ends with Request, return as is
+            if(currentName.endsWith('Request')) return currentName;
+
+            // Remove common suffixes that should be replaced
+            const suffixesToReplace = ['Query', 'Mutation', 'Hook'];
+            let baseName = currentName;
+
+            for(const suffix of suffixesToReplace) {
+                if(baseName.endsWith(suffix)) {
+                    baseName = baseName.slice(0, -suffix.length);
+                    break;
+                }
+            }
+
+            return baseName + 'Request';
+        }
+
+        // Helper function to check if a function uses NetworkService
+        function checkForNetworkService(node) {
+            let usesNetworkService = false;
+            const visited = new Set();
+
+            const traverse = (node) => {
+                if(!node || typeof node !== 'object') return;
+
+                // Create a unique key for this node
+                const nodeKey = `${node.type}-${node.start}-${node.end}`;
+                if(visited.has(nodeKey)) return;
+                visited.add(nodeKey);
+
+                if(isNetworkServiceCall(node)) {
+                    usesNetworkService = true;
+                    return;
+                }
+
+                // Recursively check child nodes
+                for(const key in node) {
+                    if(key === 'parent' || key === 'range' || key === 'loc') continue; // Skip references that could cause cycles
+
+                    if(node[key] && typeof node[key] === 'object') {
+                        if(Array.isArray(node[key])) {
+                            for(const item of node[key]) {
+                                if(item && typeof item === 'object' && item.type) {
+                                    traverse(item);
+                                }
+                            }
+                        } else if(node[key].type) {
+                            traverse(node[key]);
+                        }
+                    }
+                }
+            };
+
+            traverse(node);
+            return usesNetworkService;
         }
 
         return {
@@ -229,6 +316,11 @@ export default {
             ImportDeclaration(node) {
                 const source = node.source.value;
 
+                // Track NetworkService imports
+                if(source.includes('NetworkService')) {
+                    hasNetworkServiceImport = true;
+                }
+
                 // Block direct TanStack Query imports
                 if(source === '@tanstack/react-query') {
                     // Allow in NetworkService.ts and Providers.tsx
@@ -310,6 +402,95 @@ export default {
                             );
                         },
                     });
+                }
+            },
+
+            // Check function declarations that might be hooks
+            FunctionDeclaration(node) {
+                if(!hasNetworkServiceImport) return;
+                if(!node.id || !node.id.name.startsWith('use')) return;
+
+                const functionName = node.id.name;
+
+                // Check if this function uses NetworkService
+                if(node.body && checkForNetworkService(node.body)) {
+                    networkServiceHooks.set(functionName, node);
+
+                    // Check if the hook name ends with Request
+                    if(!functionName.endsWith('Request')) {
+                        const suggestedName = suggestHookName(functionName);
+                        context.report({
+                            node: node.id,
+                            messageId: 'hookShouldEndWithRequest',
+                            data: {
+                                hookName: functionName,
+                                suggestedName: suggestedName,
+                            },
+                        });
+                    }
+                }
+            },
+
+            // Check arrow functions and function expressions that might be hooks
+            VariableDeclarator(node) {
+                if(!hasNetworkServiceImport) return;
+                if(!node.id || !node.id.name || !node.id.name.startsWith('use')) return;
+
+                const functionName = node.id.name;
+
+                // Check if the function uses NetworkService
+                if(node.init && (node.init.type === 'ArrowFunctionExpression' || node.init.type === 'FunctionExpression')) {
+                    if(node.init.body && checkForNetworkService(node.init.body)) {
+                        networkServiceHooks.set(functionName, node);
+
+                        if(!functionName.endsWith('Request')) {
+                            const suggestedName = suggestHookName(functionName);
+                            context.report({
+                                node: node.id,
+                                messageId: 'hookShouldEndWithRequest',
+                                data: {
+                                    hookName: functionName,
+                                    suggestedName: suggestedName,
+                                },
+                            });
+                        }
+                    }
+                }
+            },
+
+            // Check at the end of the file for filename convention
+            'Program:exit'() {
+                if(networkServiceHooks.size === 0) return;
+
+                const filename = getFilename();
+                const basename = filename.split('/').pop().split('\\').pop();
+
+                // Skip if not a TypeScript file
+                if(!basename.endsWith('.ts') && !basename.endsWith('.tsx')) return;
+
+                // Extract filename without extension
+                const nameWithoutExt = basename.replace(/\.(ts|tsx)$/, '');
+
+                // Check if filename ends with Request
+                if(!nameWithoutExt.endsWith('Request')) {
+                    // Find the main exported hook
+                    let mainHookName = null;
+                    for(const [hookName] of networkServiceHooks) {
+                        mainHookName = hookName;
+                        break; // Just take the first one for now
+                    }
+
+                    if(mainHookName) {
+                        const suggestedFileName = suggestHookName(mainHookName) + basename.slice(nameWithoutExt.length);
+                        context.report({
+                            node: networkServiceHooks.get(mainHookName),
+                            messageId: 'fileShouldEndWithRequest',
+                            data: {
+                                hookName: mainHookName,
+                                suggestedFileName: suggestedFileName,
+                            },
+                        });
+                    }
                 }
             },
         };
