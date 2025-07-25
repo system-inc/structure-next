@@ -136,9 +136,10 @@ function checkDestructuringFromCall(node, context, hookCallCache) {
     }
 
     const destructuredProps = getDestructuredPropertyNames(node.id);
-    const suggestion = destructuredProps.length > 0
-        ? `const ${callInformation.suggestedVarName} = ${callInformation.hookName}(); then use ${callInformation.suggestedVarName}.${destructuredProps[0]}`
-        : `const ${callInformation.suggestedVarName} = ${callInformation.hookName}();`;
+    const suggestion =
+        destructuredProps.length > 0
+            ? `const ${callInformation.suggestedVarName} = ${callInformation.hookName}(); then use ${callInformation.suggestedVarName}.${destructuredProps[0]}`
+            : `const ${callInformation.suggestedVarName} = ${callInformation.hookName}();`;
 
     context.report({
         node: node.id,
@@ -211,7 +212,7 @@ function getCallInformation(callExpression, cache) {
     const result = {
         isHook: false,
         hookName: '',
-        suggestedVarName: 'result'
+        suggestedVarName: 'result',
     };
 
     const callee = callExpression.callee;
@@ -222,8 +223,8 @@ function getCallInformation(callExpression, cache) {
             result.isHook = true;
             result.hookName = callee.name;
             // Convert useMyHook to myHookResult
-            result.suggestedVarName = callee.name.replace(/^use/, '').charAt(0).toLowerCase() +
-                callee.name.slice(4) + 'Result';
+            result.suggestedVarName =
+                callee.name.replace(/^use/, '').charAt(0).toLowerCase() + callee.name.slice(4) + 'Result';
         }
     }
     // Member expression: React.useHook()
@@ -232,8 +233,8 @@ function getCallInformation(callExpression, cache) {
         if(propName && propName.startsWith('use')) {
             result.isHook = true;
             result.hookName = propName;
-            result.suggestedVarName = propName.replace(/^use/, '').charAt(0).toLowerCase() +
-                propName.slice(4) + 'Result';
+            result.suggestedVarName =
+                propName.replace(/^use/, '').charAt(0).toLowerCase() + propName.slice(4) + 'Result';
         }
     }
 
@@ -243,9 +244,7 @@ function getCallInformation(callExpression, cache) {
 
 // Get destructured property names from an ObjectPattern
 function getDestructuredPropertyNames(pattern) {
-    return pattern.properties
-        .filter((prop) => prop.type === 'Property' && prop.key)
-        .map((prop) => prop.key.name);
+    return pattern.properties.filter((prop) => prop.type === 'Property' && prop.key).map((prop) => prop.key.name);
 }
 
 // Get the name of a function
@@ -270,7 +269,8 @@ function validateParameterDestructuring(param, functionNode) {
     if(!restElement) {
         return {
             isValid: false,
-            message: 'Destructuring in function parameters is only allowed when spreading remaining properties. Use direct property access (properties.propName) instead.',
+            message:
+                'Destructuring in function parameters is only allowed when spreading remaining properties. Use direct property access (properties.propName) instead.',
         };
     }
 
@@ -360,14 +360,22 @@ function isSpreadReference(node, spreadName) {
     }
 
     // TypeScript type assertion: variableName as Type
-    if(node.type === 'TSAsExpression' && node.expression &&
-        node.expression.type === 'Identifier' && node.expression.name === spreadName) {
+    if(
+        node.type === 'TSAsExpression' &&
+        node.expression &&
+        node.expression.type === 'Identifier' &&
+        node.expression.name === spreadName
+    ) {
         return true;
     }
 
     // Parenthesized expression: (variableName)
-    if(node.type === 'ParenthesizedExpression' && node.expression &&
-        node.expression.type === 'Identifier' && node.expression.name === spreadName) {
+    if(
+        node.type === 'ParenthesizedExpression' &&
+        node.expression &&
+        node.expression.type === 'Identifier' &&
+        node.expression.name === spreadName
+    ) {
         return true;
     }
 
@@ -378,9 +386,11 @@ function isSpreadReference(node, spreadName) {
 function findContainingFunction(node) {
     let current = node.parent;
     while(current) {
-        if(current.type === 'FunctionDeclaration' ||
+        if(
+            current.type === 'FunctionDeclaration' ||
             current.type === 'FunctionExpression' ||
-            current.type === 'ArrowFunctionExpression') {
+            current.type === 'ArrowFunctionExpression'
+        ) {
             return current;
         }
         current = current.parent;
@@ -421,11 +431,12 @@ function checkIfUsedInHookDependency(node, variableName) {
         if(currentNode.type === 'CallExpression' && currentNode.callee) {
             const isReactHook =
                 (currentNode.callee.type === 'MemberExpression' &&
-                    currentNode.callee.object && currentNode.callee.object.name === 'React' &&
-                    currentNode.callee.property && currentNode.callee.property.name &&
+                    currentNode.callee.object &&
+                    currentNode.callee.object.name === 'React' &&
+                    currentNode.callee.property &&
+                    currentNode.callee.property.name &&
                     currentNode.callee.property.name.startsWith('use')) ||
-                (currentNode.callee.type === 'Identifier' &&
-                    currentNode.callee.name.startsWith('use'));
+                (currentNode.callee.type === 'Identifier' && currentNode.callee.name.startsWith('use'));
 
             if(isReactHook && currentNode.arguments && currentNode.arguments.length >= 2) {
                 const depArray = currentNode.arguments[1];
