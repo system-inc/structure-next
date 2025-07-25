@@ -109,7 +109,7 @@ export function DataSources(properties: DataSourcesProperties) {
     );
 
     // Bind the drag event to the row
-    const dragEventListener = useDrag(
+    const drag = useDrag(
         function (event) {
             const originalIndex = event.args[0];
             const active = event.active;
@@ -261,7 +261,7 @@ export function DataSources(properties: DataSourcesProperties) {
                                         setDataSourcesWithMetrics={properties.setDataSourcesWithMetrics}
                                         deleteDataSource={handleRemoveDataSource}
                                         isFirst={index === 0}
-                                        dragEventListener={dragEventListener(index)}
+                                        dragEventListener={drag(index)}
                                         error={properties.error}
                                         setLoading={properties.setLoading}
                                     />

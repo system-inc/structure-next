@@ -26,7 +26,7 @@ export function OrdersPage() {
     const [totalOrders, setTotalOrders] = React.useState<number>(0);
 
     // Query
-    const ordersQueryState = useCommerceOrdersPrivilegedRequest({
+    const commerceOrdersPrivilegedRequest = useCommerceOrdersPrivilegedRequest({
         itemsPerPage: itemsPerPage,
         itemIndex: (page - 1) * itemsPerPage,
         orderBy: [
@@ -40,11 +40,11 @@ export function OrdersPage() {
     // Effects
     React.useEffect(
         function () {
-            if(ordersQueryState.data?.commerceOrdersPrivileged.pagination?.itemsTotal) {
-                setTotalOrders(ordersQueryState.data.commerceOrdersPrivileged.pagination.itemsTotal);
+            if(commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged.pagination?.itemsTotal) {
+                setTotalOrders(commerceOrdersPrivilegedRequest.data.commerceOrdersPrivileged.pagination.itemsTotal);
             }
         },
-        [ordersQueryState.data?.commerceOrdersPrivileged.pagination?.itemsTotal],
+        [commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged.pagination?.itemsTotal],
     );
 
     // Functions
@@ -62,7 +62,7 @@ export function OrdersPage() {
             {/* Content */}
             <div className="divide-y divide-neutral/10">
                 {/* Loading and Error States */}
-                {ordersQueryState.isLoading && (
+                {commerceOrdersPrivilegedRequest.isLoading && (
                     <div className="divide-y divide-neutral/10">
                         {[...Array(itemsPerPage)].map((_, index) => (
                             <div
@@ -85,10 +85,12 @@ export function OrdersPage() {
                         ))}
                     </div>
                 )}
-                {ordersQueryState.error && <div>Error: {ordersQueryState.error.message}</div>}
+                {commerceOrdersPrivilegedRequest.error && (
+                    <div>Error: {commerceOrdersPrivilegedRequest.error.message}</div>
+                )}
 
                 {/* Orders List */}
-                {ordersQueryState.data?.commerceOrdersPrivileged.items && (
+                {commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged.items && (
                     <>
                         {/* Header Row */}
                         <div className="hidden grid-cols-[200px_200px_120px_120px] items-center gap-3 py-2 font-medium md:grid">
@@ -98,7 +100,7 @@ export function OrdersPage() {
                             <div>Amount</div>
                         </div>
 
-                        {ordersQueryState.data.commerceOrdersPrivileged.items.map((order) => (
+                        {commerceOrdersPrivilegedRequest.data.commerceOrdersPrivileged.items.map((order) => (
                             <div
                                 key={order.id}
                                 className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px_400px]"
@@ -138,7 +140,7 @@ export function OrdersPage() {
                 )}
 
                 {/* Pagination */}
-                {(ordersQueryState.isLoading || ordersQueryState.data) && (
+                {(commerceOrdersPrivilegedRequest.isLoading || commerceOrdersPrivilegedRequest.data) && (
                     <div className="flex items-center space-x-4 pt-6">
                         <Pagination
                             className="justify-start"

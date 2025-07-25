@@ -43,7 +43,7 @@ export function WebSocketsPage() {
     }, []);
 
     // Hooks - WebSocket
-    const webSocket = useWebSocketViaSharedWorker();
+    const webSocketViaSharedWorker = useWebSocketViaSharedWorker();
 
     // Effects - Update time formats on client side only
     React.useEffect(
@@ -51,7 +51,7 @@ export function WebSocketsPage() {
             const clientTimes: Record<string, { connectedTime: string; lastActiveTime: string }> = {};
 
             // Format client connection times
-            webSocket.sharedWorkerServerClientConnections.forEach(function (client) {
+            webSocketViaSharedWorker.sharedWorkerServerClientConnections.forEach(function (client) {
                 clientTimes[client.id] = {
                     connectedTime: client.firstConnectedAt.toLocaleString(),
                     lastActiveTime: client.lastActiveAt.toLocaleString(),
@@ -60,46 +60,53 @@ export function WebSocketsPage() {
 
             // Update all formatted times
             setFormattedTimes({
-                stateUpdatedAt: new Date(webSocket.webSocketConnectionInformation.createdAt).toLocaleString(),
-                connectedSince: webSocket.webSocketConnectionInformation.statistics?.connectedAt
-                    ? new Date(webSocket.webSocketConnectionInformation.statistics.connectedAt).toLocaleString()
-                    : '',
-                lastMessageSent: webSocket.webSocketConnectionInformation.statistics?.lastMessageSentAt
-                    ? new Date(webSocket.webSocketConnectionInformation.statistics.lastMessageSentAt).toLocaleString()
-                    : '',
-                lastMessageReceived: webSocket.webSocketConnectionInformation.statistics?.lastMessageReceivedAt
+                stateUpdatedAt: new Date(
+                    webSocketViaSharedWorker.webSocketConnectionInformation.createdAt,
+                ).toLocaleString(),
+                connectedSince: webSocketViaSharedWorker.webSocketConnectionInformation.statistics?.connectedAt
                     ? new Date(
-                          webSocket.webSocketConnectionInformation.statistics.lastMessageReceivedAt,
+                          webSocketViaSharedWorker.webSocketConnectionInformation.statistics.connectedAt,
+                      ).toLocaleString()
+                    : '',
+                lastMessageSent: webSocketViaSharedWorker.webSocketConnectionInformation.statistics?.lastMessageSentAt
+                    ? new Date(
+                          webSocketViaSharedWorker.webSocketConnectionInformation.statistics.lastMessageSentAt,
+                      ).toLocaleString()
+                    : '',
+                lastMessageReceived: webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                    ?.lastMessageReceivedAt
+                    ? new Date(
+                          webSocketViaSharedWorker.webSocketConnectionInformation.statistics.lastMessageReceivedAt,
                       ).toLocaleString()
                     : '',
                 clientConnectedTimes: clientTimes,
             });
         },
         [
-            webSocket.webSocketConnectionInformation.createdAt,
-            webSocket.webSocketConnectionInformation.statistics?.connectedAt,
-            webSocket.webSocketConnectionInformation.statistics?.lastMessageSentAt,
-            webSocket.webSocketConnectionInformation.statistics?.lastMessageReceivedAt,
-            webSocket.sharedWorkerServerClientConnections,
+            webSocketViaSharedWorker.webSocketConnectionInformation.createdAt,
+            webSocketViaSharedWorker.webSocketConnectionInformation.statistics?.connectedAt,
+            webSocketViaSharedWorker.webSocketConnectionInformation.statistics?.lastMessageSentAt,
+            webSocketViaSharedWorker.webSocketConnectionInformation.statistics?.lastMessageReceivedAt,
+            webSocketViaSharedWorker.sharedWorkerServerClientConnections,
         ],
     );
 
     // Functions
     function handleConnect() {
-        webSocket.connectWebSocket(webSocketUrl);
+        webSocketViaSharedWorker.connectWebSocket(webSocketUrl);
     }
 
     function handleDisconnect() {
-        webSocket.disconnectWebSocket(1000, 'User initiated disconnect');
+        webSocketViaSharedWorker.disconnectWebSocket(1000, 'User initiated disconnect');
     }
 
     function handleSendMessage() {
-        webSocket.sendWebSocketMessage({ text: message });
+        webSocketViaSharedWorker.sendWebSocketMessage({ text: message });
     }
 
     // Get connection status color and text
     function getConnectionStatusInfo() {
-        switch(webSocket.webSocketConnectionInformation.state) {
+        switch(webSocketViaSharedWorker.webSocketConnectionInformation.state) {
             case WebSocketConnectionState.Connected:
                 return { color: 'bg-green-500', text: 'Connected' };
             case WebSocketConnectionState.Connecting:
@@ -123,13 +130,13 @@ export function WebSocketsPage() {
 
             <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2">
                 <p>SharedWorker Supported?</p>
-                <p>{webSocket.isSharedWorkerSupported ? 'Yes' : 'No'}</p>
+                <p>{webSocketViaSharedWorker.isSharedWorkerSupported ? 'Yes' : 'No'}</p>
 
                 <p>SharedWorker Connected?</p>
-                <p>{webSocket.isSharedWorkerConnected ? 'Yes' : 'No'}</p>
+                <p>{webSocketViaSharedWorker.isSharedWorkerConnected ? 'Yes' : 'No'}</p>
 
                 <p>Client ID</p>
-                <p>{webSocket.sharedWorkerClientIdAssignedFromServer}</p>
+                <p>{webSocketViaSharedWorker.sharedWorkerClientIdAssignedFromServer}</p>
             </div>
 
             <div className="mb-8 rounded-md border p-4">
@@ -146,25 +153,25 @@ export function WebSocketsPage() {
                     <p className="font-bold">State Updated At</p>
                     <p>{formattedTimes.stateUpdatedAt}</p>
 
-                    {webSocket.webSocketConnectionInformation.url && (
+                    {webSocketViaSharedWorker.webSocketConnectionInformation.url && (
                         <>
                             <p className="font-bold">Connected URL</p>
-                            <p>{webSocket.webSocketConnectionInformation.url}</p>
+                            <p>{webSocketViaSharedWorker.webSocketConnectionInformation.url}</p>
                         </>
                     )}
 
-                    {webSocket.webSocketConnectionInformation.readyState !== undefined && (
+                    {webSocketViaSharedWorker.webSocketConnectionInformation.readyState !== undefined && (
                         <>
                             <p className="font-bold">Socket Ready State</p>
                             <p>
-                                {webSocket.webSocketConnectionInformation.readyState} (
-                                {webSocket.webSocketConnectionInformation.readyState === 0
+                                {webSocketViaSharedWorker.webSocketConnectionInformation.readyState} (
+                                {webSocketViaSharedWorker.webSocketConnectionInformation.readyState === 0
                                     ? 'CONNECTING'
-                                    : webSocket.webSocketConnectionInformation.readyState === 1
+                                    : webSocketViaSharedWorker.webSocketConnectionInformation.readyState === 1
                                       ? 'OPEN'
-                                      : webSocket.webSocketConnectionInformation.readyState === 2
+                                      : webSocketViaSharedWorker.webSocketConnectionInformation.readyState === 2
                                         ? 'CLOSING'
-                                        : webSocket.webSocketConnectionInformation.readyState === 3
+                                        : webSocketViaSharedWorker.webSocketConnectionInformation.readyState === 3
                                           ? 'CLOSED'
                                           : 'UNKNOWN'}
                                 )
@@ -173,92 +180,128 @@ export function WebSocketsPage() {
                     )}
 
                     {/* Reconnection details */}
-                    {webSocket.webSocketConnectionInformation.reconnectAttempts !== undefined && (
+                    {webSocketViaSharedWorker.webSocketConnectionInformation.reconnectAttempts !== undefined && (
                         <>
                             <p className="font-bold">Reconnection Attempts</p>
-                            <p>{webSocket.webSocketConnectionInformation.reconnectAttempts}</p>
+                            <p>{webSocketViaSharedWorker.webSocketConnectionInformation.reconnectAttempts}</p>
                         </>
                     )}
 
-                    {webSocket.webSocketConnectionInformation.nextReconnectAt !== undefined && (
+                    {webSocketViaSharedWorker.webSocketConnectionInformation.nextReconnectAt !== undefined && (
                         <>
                             <p className="font-bold">Next Reconnect At</p>
-                            <p>{webSocket.webSocketConnectionInformation.nextReconnectAt?.toLocaleString()}</p>
+                            <p>
+                                {webSocketViaSharedWorker.webSocketConnectionInformation.nextReconnectAt?.toLocaleString()}
+                            </p>
                         </>
                     )}
 
-                    {webSocket.webSocketConnectionInformation.maximumReconnectDelayInMilliseconds !== undefined && (
+                    {webSocketViaSharedWorker.webSocketConnectionInformation.maximumReconnectDelayInMilliseconds !==
+                        undefined && (
                         <>
                             <p className="font-bold">Max Reconnect Delay</p>
-                            <p>{webSocket.webSocketConnectionInformation.maximumReconnectDelayInMilliseconds}ms</p>
+                            <p>
+                                {
+                                    webSocketViaSharedWorker.webSocketConnectionInformation
+                                        .maximumReconnectDelayInMilliseconds
+                                }
+                                ms
+                            </p>
                         </>
                     )}
 
                     {/* Statistics */}
-                    {webSocket.webSocketConnectionInformation.statistics && (
+                    {webSocketViaSharedWorker.webSocketConnectionInformation.statistics && (
                         <>
                             <p className="col-span-2 mt-4 border-t pt-2 text-lg font-bold">WebSocket Statistics</p>
 
-                            {webSocket.webSocketConnectionInformation.statistics.connectedAt && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics.connectedAt && (
                                 <>
                                     <p className="font-bold">Connected Since</p>
                                     <p>{formattedTimes.connectedSince}</p>
                                 </>
                             )}
 
-                            {webSocket.webSocketConnectionInformation.statistics.messagesSent !== undefined && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics.messagesSent !==
+                                undefined && (
                                 <>
                                     <p className="font-bold">Messages Sent</p>
-                                    <p>{webSocket.webSocketConnectionInformation.statistics.messagesSent}</p>
+                                    <p>
+                                        {
+                                            webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                                                .messagesSent
+                                        }
+                                    </p>
                                 </>
                             )}
 
-                            {webSocket.webSocketConnectionInformation.statistics.messagesReceived !== undefined && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics.messagesReceived !==
+                                undefined && (
                                 <>
                                     <p className="font-bold">Messages Received</p>
-                                    <p>{webSocket.webSocketConnectionInformation.statistics.messagesReceived}</p>
+                                    <p>
+                                        {
+                                            webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                                                .messagesReceived
+                                        }
+                                    </p>
                                 </>
                             )}
 
-                            {webSocket.webSocketConnectionInformation.statistics.bytesSent !== undefined && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics.bytesSent !==
+                                undefined && (
                                 <>
                                     <p className="font-bold">Bytes Sent</p>
-                                    <p>{webSocket.webSocketConnectionInformation.statistics.bytesSent} bytes</p>
+                                    <p>
+                                        {webSocketViaSharedWorker.webSocketConnectionInformation.statistics.bytesSent}{' '}
+                                        bytes
+                                    </p>
                                 </>
                             )}
 
-                            {webSocket.webSocketConnectionInformation.statistics.bytesReceived !== undefined && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics.bytesReceived !==
+                                undefined && (
                                 <>
                                     <p className="font-bold">Bytes Received</p>
-                                    <p>{webSocket.webSocketConnectionInformation.statistics.bytesReceived} bytes</p>
+                                    <p>
+                                        {
+                                            webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                                                .bytesReceived
+                                        }{' '}
+                                        bytes
+                                    </p>
                                 </>
                             )}
 
-                            {webSocket.webSocketConnectionInformation.statistics.lastMessageSentAt !== undefined &&
-                                webSocket.webSocketConnectionInformation.statistics.lastMessageSentAt !== null && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics.lastMessageSentAt !==
+                                undefined &&
+                                webSocketViaSharedWorker.webSocketConnectionInformation.statistics.lastMessageSentAt !==
+                                    null && (
                                     <>
                                         <p className="font-bold">Last Message Sent</p>
                                         <p>{formattedTimes.lastMessageSent}</p>
                                     </>
                                 )}
 
-                            {webSocket.webSocketConnectionInformation.statistics.lastMessageReceivedAt !== undefined &&
-                                webSocket.webSocketConnectionInformation.statistics.lastMessageReceivedAt !== null && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                                .lastMessageReceivedAt !== undefined &&
+                                webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                                    .lastMessageReceivedAt !== null && (
                                     <>
                                         <p className="font-bold">Last Message Received</p>
                                         <p>{formattedTimes.lastMessageReceived}</p>
                                     </>
                                 )}
 
-                            {webSocket.webSocketConnectionInformation.statistics.averageLatencyInMilliseconds !==
-                                undefined &&
-                                webSocket.webSocketConnectionInformation.statistics.averageLatencyInMilliseconds !==
-                                    null && (
+                            {webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                                .averageLatencyInMilliseconds !== undefined &&
+                                webSocketViaSharedWorker.webSocketConnectionInformation.statistics
+                                    .averageLatencyInMilliseconds !== null && (
                                     <>
                                         <p className="font-bold">Average Latency</p>
                                         <p>
                                             {Math.round(
-                                                webSocket.webSocketConnectionInformation.statistics
+                                                webSocketViaSharedWorker.webSocketConnectionInformation.statistics
                                                     .averageLatencyInMilliseconds,
                                             )}
                                             ms
@@ -283,8 +326,10 @@ export function WebSocketsPage() {
                     <Button
                         onClick={handleConnect}
                         disabled={
-                            webSocket.webSocketConnectionInformation.state === WebSocketConnectionState.Connected ||
-                            webSocket.webSocketConnectionInformation.state === WebSocketConnectionState.Connecting
+                            webSocketViaSharedWorker.webSocketConnectionInformation.state ===
+                                WebSocketConnectionState.Connected ||
+                            webSocketViaSharedWorker.webSocketConnectionInformation.state ===
+                                WebSocketConnectionState.Connecting
                         }
                     >
                         Connect
@@ -293,8 +338,10 @@ export function WebSocketsPage() {
                         onClick={handleDisconnect}
                         variant="light"
                         disabled={
-                            webSocket.webSocketConnectionInformation.state === WebSocketConnectionState.Disconnected ||
-                            webSocket.webSocketConnectionInformation.state === WebSocketConnectionState.Failed
+                            webSocketViaSharedWorker.webSocketConnectionInformation.state ===
+                                WebSocketConnectionState.Disconnected ||
+                            webSocketViaSharedWorker.webSocketConnectionInformation.state ===
+                                WebSocketConnectionState.Failed
                         }
                     >
                         Disconnect
@@ -317,7 +364,10 @@ export function WebSocketsPage() {
 
                 <Button
                     onClick={handleSendMessage}
-                    disabled={webSocket.webSocketConnectionInformation.state !== WebSocketConnectionState.Connected}
+                    disabled={
+                        webSocketViaSharedWorker.webSocketConnectionInformation.state !==
+                        WebSocketConnectionState.Connected
+                    }
                 >
                     Send Message
                 </Button>
@@ -326,7 +376,9 @@ export function WebSocketsPage() {
             <div className="mb-6">
                 <div className="mb-4 flex items-center gap-4">
                     <h2 className="text-xl font-bold">Connected Clients</h2>
-                    <Button onClick={webSocket.requestSharedWorkerServerClientConnections}>Refresh</Button>
+                    <Button onClick={webSocketViaSharedWorker.requestSharedWorkerServerClientConnections}>
+                        Refresh
+                    </Button>
                 </div>
 
                 <div className="overflow-hidden rounded-md border">
@@ -340,20 +392,20 @@ export function WebSocketsPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {webSocket.sharedWorkerServerClientConnections.length === 0 ? (
+                            {webSocketViaSharedWorker.sharedWorkerServerClientConnections.length === 0 ? (
                                 <tr>
                                     <td colSpan={4} className="p-3 text-center">
                                         No clients connected
                                     </td>
                                 </tr>
                             ) : (
-                                webSocket.sharedWorkerServerClientConnections.map(function (client) {
+                                webSocketViaSharedWorker.sharedWorkerServerClientConnections.map(function (client) {
                                     const clientTimes = formattedTimes.clientConnectedTimes[client.id] || {
                                         connectedTime: '',
                                         lastActiveTime: '',
                                     };
                                     const isCurrentClient =
-                                        client.id === webSocket.sharedWorkerClientIdAssignedFromServer;
+                                        client.id === webSocketViaSharedWorker.sharedWorkerClientIdAssignedFromServer;
 
                                     return (
                                         <tr

@@ -8,7 +8,7 @@ const ReactNamingConventionsRule = {
         type: 'suggestion',
         docs: {
             description:
-                'Enforce React naming conventions: use "properties" parameter, types end with "Properties", no "Prop"/"Props"/"Param"/"Params" suffixes',
+                'Enforce React naming conventions: use "properties" parameter, types end with "Properties", no "Prop"/"Props"/"Param"/"Params" suffixes, hook result naming',
             category: 'Stylistic Issues',
             recommended: true,
         },
@@ -25,10 +25,73 @@ const ReactNamingConventionsRule = {
         // Track component property types that need to be renamed
         const componentPropTypes = new Set();
 
+        // Track hook invocations in the file
+        const hookInvocations = new Map(); // hookName -> count
+
+        // Track hook result variables to check later
+        const hookResultsToCheck = []; // Array of { node, varName, hookName }
+
         // Check if a name likely belongs to a React component
         function isLikelyComponentName(name) {
             // Component names should be PascalCase and not start with "use" (which would be a hook)
             return /^[A-Z][A-Za-z0-9]*$/.test(name) && !name.startsWith('use');
+        }
+
+        // Get the expected variable name for a hook
+        function getExpectedHookVariableName(hookName) {
+            // useAgentQuery -> agentQuery
+            // useRouter -> router
+            // use -> empty string (edge case)
+            if(hookName.startsWith('use') && hookName.length > 3) {
+                const withoutUse = hookName.slice(3);
+                return withoutUse.charAt(0).toLowerCase() + withoutUse.slice(1);
+            }
+            return hookName;
+        }
+
+        // Check if the variable name matches the expected pattern for a hook
+        function isCorrectHookVariableName(varName, hookName) {
+            // Special cases for state management hooks where variable name describes the atom/state
+            const stateManagementHooks = ['useAtom', 'useAtomValue', 'useSetAtom', 'useRecoilState', 'useRecoilValue', 'useSetRecoilState'];
+            if(stateManagementHooks.includes(hookName)) {
+                // For state management hooks, any descriptive name is fine
+                // Just prevent generic names
+                const genericNames = ['atom', 'atomValue', 'setAtom', 'state', 'value', 'data'];
+                return !genericNames.includes(varName);
+            }
+
+            // Special case for useDebounce - variable name should describe what's being debounced
+            if(hookName === 'useDebounce') {
+                // Any name starting with "debounced" is good
+                if(varName.startsWith('debounced')) {
+                    return true;
+                }
+                // Just prevent generic names
+                return varName !== 'debounce' && varName !== 'value' && varName !== 'data';
+            }
+
+            const expected = getExpectedHookVariableName(hookName);
+            const varNameLower = varName.toLowerCase();
+            const expectedLower = expected.toLowerCase();
+
+            // Exact match
+            if(varName === expected) {
+                return true;
+            }
+
+            // Ends with the expected name (e.g., hoverSpring for useSpring)
+            if(varNameLower.endsWith(expectedLower)) {
+                return true;
+            }
+
+            // For plural hooks, check if variable name contains the singular form
+            // e.g., lineSprings for useSprings -> springs contains spring
+            if(expectedLower.endsWith('s') && varNameLower.includes(expectedLower.slice(0, -1))) {
+                return true;
+            }
+
+            // If none of the positive patterns match, it's incorrect
+            return false;
         }
 
         // Track if this file has Next.js page APIs
@@ -460,6 +523,15 @@ const ReactNamingConventionsRule = {
         }
 
         return {
+            // Track hook invocations throughout the file
+            CallExpression(node) {
+                if(node.callee.type === 'Identifier' && node.callee.name.startsWith('use')) {
+                    const hookName = node.callee.name;
+                    const count = hookInvocations.get(hookName) || 0;
+                    hookInvocations.set(hookName, count + 1);
+                }
+            },
+
             // Detect Next.js page APIs to determine if this file should allow Next.js conventions
             ExportNamedDeclaration(node) {
                 if(node.declaration && node.declaration.type === 'FunctionDeclaration' && node.declaration.id) {
@@ -575,6 +647,22 @@ const ReactNamingConventionsRule = {
 
             // React components defined as arrow functions or function expressions in variable declarations
             VariableDeclarator(node) {
+                // Check for hook result naming
+                if(node.init && node.init.type === 'CallExpression' &&
+                    node.init.callee.type === 'Identifier' &&
+                    node.init.callee.name.startsWith('use') &&
+                    node.id && node.id.type === 'Identifier') {
+
+                    const varName = node.id.name;
+                    const hookName = node.init.callee.name;
+
+                    // Get the count of this hook's invocations (will be counted after all are parsed)
+                    // For now, we'll check at Program:exit
+
+                    // Store for later checking when we know all hook invocations
+                    hookResultsToCheck.push({ node: node.id, varName, hookName });
+                }
+
                 // Check for props parameter naming in function expressions/arrow functions
                 if(
                     node.init &&
@@ -706,6 +794,40 @@ const ReactNamingConventionsRule = {
                         },
                     });
                 }
+            },
+
+            // Check hook results after all invocations have been counted
+            'Program:exit'() {
+                hookResultsToCheck.forEach(({ node, varName, hookName }) => {
+                    const hookCount = hookInvocations.get(hookName) || 0;
+
+                    // Only apply the rule if the hook is called once
+                    // If called multiple times, descriptive prefixes/suffixes are expected
+                    if(hookCount === 1 && !isCorrectHookVariableName(varName, hookName)) {
+                        const expectedName = getExpectedHookVariableName(hookName);
+                        const varNameLower = varName.toLowerCase();
+
+                        // Provide different messages based on the issue
+                        let message;
+
+                        // Check for bad patterns
+                        const badPatterns = ['result', 'data', 'value', 'state', 'hook'];
+                        const hasBadSuffix = badPatterns.some(pattern => varName.endsWith(pattern[0].toUpperCase() + pattern.slice(1)));
+
+                        if(hasBadSuffix) {
+                            message = `Hook result variable "${varName}" should not end with generic suffixes like "Result", "Data", etc. Use "${expectedName}" or something more specific.`;
+                        } else if(varNameLower === 'data' || varNameLower === 'result' || varName.length <= 2) {
+                            message = `Hook result variable "${varName}" is too generic. Use "${expectedName}" or a descriptive name.`;
+                        } else {
+                            message = `Hook result variable "${varName}" should be related to the hook name "${hookName}". Use "${expectedName}" or something more specific.`;
+                        }
+
+                        context.report({
+                            node,
+                            message,
+                        });
+                    }
+                });
             },
         };
     },

@@ -28,7 +28,7 @@ export function OrderPage(properties: OrderPageProperties) {
     const [isJsonVisible, setIsJsonVisible] = React.useState(false);
 
     // Query
-    const orderQueryState = useCommerceOrdersPrivilegedRequest({
+    const commerceOrdersPrivilegedRequest = useCommerceOrdersPrivilegedRequest({
         itemsPerPage: 1,
         filters: [
             {
@@ -53,7 +53,7 @@ export function OrderPage(properties: OrderPageProperties) {
     }
 
     // Render loading state
-    if(orderQueryState.isLoading) {
+    if(commerceOrdersPrivilegedRequest.isLoading) {
         return (
             <div className="px-6 py-4">
                 <OpsNavigationTrail />
@@ -71,13 +71,13 @@ export function OrderPage(properties: OrderPageProperties) {
     }
 
     // Render error state
-    if(orderQueryState.error) {
+    if(commerceOrdersPrivilegedRequest.error) {
         return (
             <div className="px-6 py-4 text-center">
-                <div className="mb-4 text-red-600">Error: {orderQueryState.error.message}</div>
+                <div className="mb-4 text-red-600">Error: {commerceOrdersPrivilegedRequest.error.message}</div>
                 <Button
                     onClick={function () {
-                        orderQueryState.refresh();
+                        commerceOrdersPrivilegedRequest.refresh();
                     }}
                 >
                     <ReloadIcon className="mr-2 h-4 w-4" />
@@ -88,7 +88,7 @@ export function OrderPage(properties: OrderPageProperties) {
     }
 
     // Get the order from the response
-    const order = orderQueryState.data?.commerceOrdersPrivileged.items[0];
+    const order = commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged.items[0];
     if(!order) {
         return <div className="px-6 py-4">Order not found</div>;
     }

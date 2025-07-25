@@ -51,7 +51,7 @@ function countryCodeToFlagEmoji(countryCode?: string | null): string {
 export function UsersPage() {
     // Hooks and State
     const router = useRouter();
-    const pathname = useUrlPath();
+    const urlPath = useUrlPath();
     const urlSearchParameters = useUrlSearchParameters();
 
     // Get pagination parameters from URL
@@ -145,7 +145,7 @@ export function UsersPage() {
         newUrlSearchParameters.set('itemsPerPage', newItemsPerPage.toString());
 
         // Navigate to the new URL with updated parameters
-        router.push(`${pathname}?${newUrlSearchParameters.toString()}`);
+        router.push(`${urlPath}?${newUrlSearchParameters.toString()}`);
     }
 
     // Function to handle user deletion
