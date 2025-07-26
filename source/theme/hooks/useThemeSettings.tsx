@@ -3,8 +3,8 @@ import { useAtomValue } from 'jotai';
 import { readOnlyThemeAtom, readOnlyOperatingSystemThemeAtom } from '@structure/source/theme/ThemeProvider';
 import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
 
-// Hook - useTheme
-export function useTheme() {
+// Hook - useThemeSettings
+export function useThemeSettings() {
     const theme = useAtomValue(readOnlyThemeAtom);
     const operatingSystemTheme = useAtomValue(readOnlyOperatingSystemThemeAtom);
     const themeClassName =
