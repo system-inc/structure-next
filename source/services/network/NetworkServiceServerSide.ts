@@ -58,7 +58,8 @@ export async function getServerSideNetworkService() {
             // 2. Doesn't bill us for two separate worker invocations
             // 3. Preserves the request context (preventing duplicate deviceIds)
             // Run `npm run cf-typegen` to get the types for cloudflareContext
-            fetch: cloudflareContext.env.api.fetch,
+            // IMPORTANT: Bind the fetch method to maintain its 'this' context
+            fetch: cloudflareContext.env.api.fetch.bind(cloudflareContext.env.api),
         });
     }
 }
