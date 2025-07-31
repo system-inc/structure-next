@@ -190,8 +190,13 @@ export function getThirdPartyAttributionForEvents(): Record<string, unknown> {
     // Add Google object if we have Google attribution data
     if(gclid || gbraid || wbraid) {
         const google: Record<string, unknown> = {};
+        // gclid: A unique string Google appends to landing page URLs when a user clicks a Google ad via auto‑tagging
+        // Used primarily on non‑iOS devices (like Android and desktop)
+        // On iOS devices running Apple's App Tracking Transparency (ATT), gclid is often blocked or not used unless the user opts‑in
         if(gclid) google.gclid = gclid;
+        // gbraid: A newer privacy‑compliant tracking parameter introduced by Google for iOS 14.5+ traffic
         if(gbraid) google.gbraid = gbraid;
+        // wbraid: Another privacy-aware parameter for iOS 14.5+ traffic, focused on web‑to‑app conversions.
         if(wbraid) google.wbraid = wbraid;
         attributionData.google = google;
     }
