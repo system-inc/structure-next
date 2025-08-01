@@ -10,6 +10,7 @@ import { Popover } from '@structure/source/common/popovers/Popover';
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
 import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.svg';
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
+import { ArrowSquareOut } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -129,14 +130,36 @@ export function FileCarousel(properties: FileCarouselProperties) {
                         />
                     )}
 
-                    {/* Metadata Popover */}
-                    {currentFile.metadata && (
-                        <Popover content={<MetadataContent metadata={currentFile.metadata} />} side="top" align="end">
-                            <Button variant="unstyled" className="absolute right-0 top-0 m-2">
-                                <InformationCircledIcon className="h-5 w-5" />
-                            </Button>
-                        </Popover>
-                    )}
+                    {/* Top Right Controls */}
+                    <div className="absolute right-0 top-0 m-2 flex gap-2">
+                        {/* Open in New Tab Button */}
+                        <Button
+                            variant="unstyled"
+                            className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30"
+                            onClick={() => {
+                                window.open(currentFile.url, '_blank');
+                            }}
+                            aria-label="Open in new tab"
+                        >
+                            <ArrowSquareOut className="h-5 w-5 text-light dark:text-dark" weight="bold" />
+                        </Button>
+
+                        {/* Metadata Popover */}
+                        {currentFile.metadata && (
+                            <Popover
+                                content={<MetadataContent metadata={currentFile.metadata} />}
+                                side="top"
+                                align="end"
+                            >
+                                <Button
+                                    variant="unstyled"
+                                    className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30"
+                                >
+                                    <InformationCircledIcon className="h-5 w-5 text-light dark:text-dark" />
+                                </Button>
+                            </Popover>
+                        )}
+                    </div>
                 </div>
             )}
         </>
