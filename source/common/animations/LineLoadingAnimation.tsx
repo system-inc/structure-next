@@ -3,9 +3,11 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Animation
+import { motion, useAnimationControls } from 'motion/react';
+
 // Dependencies - Utilities
 import useMeasure from 'react-use-measure';
-import { useSpring, animated, easings } from '@react-spring/web';
 
 // Component - LineLoadingAnimation
 export function LineLoadingAnimation() {
@@ -15,14 +17,24 @@ export function LineLoadingAnimation() {
     // The width of the bar
     const [domElementReference, { width }] = useMeasure();
 
-    // The spring for animating the bar
-    const barSpring = useSpring({
-        width: progressPercentage * width,
-        config: {
-            easing: easings.easeOutExpo,
-            duration: 800,
+    // Animation controls
+    const animationControls = useAnimationControls();
+
+    // Update animation when progress or width changes
+    React.useEffect(
+        function () {
+            if (width) {
+                animationControls.start({
+                    width: progressPercentage * width,
+                    transition: {
+                        duration: 0.8,
+                        ease: [0.16, 1, 0.3, 1], // easeOutExpo equivalent
+                    },
+                });
+            }
         },
-    });
+        [progressPercentage, width, animationControls],
+    );
 
     // Update the progress percentage when the width or progress percentage changes
     React.useEffect(
@@ -48,7 +60,11 @@ export function LineLoadingAnimation() {
     return (
         <div className="relative flex h-0.5 w-full items-center justify-center">
             <div ref={domElementReference} className="h-full w-full overflow-hidden bg-light-4/10 dark:bg-light/10">
-                <animated.div style={barSpring} className="h-full bg-gradient-to-r from-blue/50 to-blue" />
+                <motion.div 
+                    className="h-full bg-gradient-to-r from-blue/50 to-blue"
+                    initial={{ width: 0 }}
+                    animate={animationControls}
+                />
             </div>
         </div>
     );
