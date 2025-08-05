@@ -25,34 +25,36 @@ export function DropArea({ asChild, children, onItemIsHovering, ...componentProp
 
     const Component = asChild ? Slot : 'div';
 
+    // Effect to register the drop container
+    const setDropContainers = dragAndDrop.setDropContainers;
     React.useEffect(
         function () {
-            dragAndDrop.setDropContainers((previousDropContainers) => [
-                ...previousDropContainers,
-                dropContainerReference,
-            ]);
+            setDropContainers((previousDropContainers) => [...previousDropContainers, dropContainerReference]);
 
-            return () => {
-                dragAndDrop.setDropContainers((prev) =>
-                    prev.filter((container) => container !== dropContainerReference),
-                );
+            return function () {
+                setDropContainers((prev) => prev.filter((container) => container !== dropContainerReference));
             };
         },
-        [dragAndDrop],
+        [setDropContainers],
     );
 
+    // Effect to handle hover state
+    const currentlyHoveredDropArea = dragAndDrop.currentlyHoveredDropArea;
     React.useEffect(
         function () {
-            if(dragAndDrop.currentlyHoveredDropArea === dropContainerReference) {
-                onItemIsHovering?.();
-
-                if(dropContainerReference.current) setIsHovering(true);
+            if(currentlyHoveredDropArea === dropContainerReference) {
+                if(dropContainerReference.current && !isHovering) {
+                    setIsHovering(true);
+                    onItemIsHovering?.();
+                }
             }
             else {
-                if(dropContainerReference.current) setIsHovering(false);
+                if(dropContainerReference.current && isHovering) {
+                    setIsHovering(false);
+                }
             }
         },
-        [dragAndDrop.currentlyHoveredDropArea, onItemIsHovering],
+        [currentlyHoveredDropArea, onItemIsHovering, isHovering],
     );
 
     // Render the component
