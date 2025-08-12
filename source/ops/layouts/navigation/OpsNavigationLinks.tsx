@@ -103,6 +103,10 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
         icon: TagIcon,
         links: [
             {
+                title: 'Reviews',
+                href: '/ops/products/reviews',
+            },
+            {
                 title: 'Categories',
                 href: '/ops/products/categories',
             },
