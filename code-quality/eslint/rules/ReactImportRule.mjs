@@ -1,30 +1,43 @@
-// ESLint rule to disallow imports from 'next/navigation' and require '@structure/source/router/Navigation' instead
+// ESLint rule to disallow imports from 'next/navigation' and 'framer-motion'
 const ReactImportRule = {
     meta: {
         type: 'problem',
         docs: {
             description:
-                "Disallow imports from 'next/navigation' and require '@structure/source/router/Navigation' instead.",
+                "Disallow imports from 'next/navigation' and 'framer-motion' and require their replacements instead.",
             category: 'Possible Errors',
             recommended: false,
         },
         messages: {
-            forbiddenImport:
+            forbiddenNavigationImport:
                 "Importing from 'next/navigation' is not allowed. Use '@structure/source/router/Navigation' instead for framework-independent navigation.",
+            forbiddenMotionImport:
+                "Importing from 'framer-motion' is not allowed. Use 'motion/react' instead.",
         },
         fixable: 'code',
     },
     create(context) {
         function checkImportSource(node, importSource) {
-            if(typeof importSource === 'string' && importSource === 'next/navigation') {
-                context.report({
-                    node,
-                    messageId: 'forbiddenImport',
-                    fix(fixer) {
-                        // Provide an auto-fix that replaces 'next/navigation' with '@structure/source/router/Navigation'
-                        return fixer.replaceText(node.source, "'@structure/source/router/Navigation'");
-                    },
-                });
+            if(typeof importSource === 'string') {
+                if(importSource === 'next/navigation') {
+                    context.report({
+                        node,
+                        messageId: 'forbiddenNavigationImport',
+                        fix(fixer) {
+                            // Provide an auto-fix that replaces 'next/navigation' with '@structure/source/router/Navigation'
+                            return fixer.replaceText(node.source, "'@structure/source/router/Navigation'");
+                        },
+                    });
+                } else if(importSource === 'framer-motion') {
+                    context.report({
+                        node,
+                        messageId: 'forbiddenMotionImport',
+                        fix(fixer) {
+                            // Provide an auto-fix that replaces 'framer-motion' with 'motion/react'
+                            return fixer.replaceText(node.source, "'motion/react'");
+                        },
+                    });
+                }
             }
         }
 
