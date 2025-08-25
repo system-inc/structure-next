@@ -140,6 +140,10 @@
                         "name": "identifier",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [16]
                             }
@@ -164,6 +168,10 @@
                         "name": "description",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             }
@@ -182,6 +190,10 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -192,6 +204,10 @@
                         "required": false,
                         "name": "identifier",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [16]
@@ -205,6 +221,10 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [256]
                             }
@@ -216,6 +236,10 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]

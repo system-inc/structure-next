@@ -290,6 +290,7 @@ enum FormComponentType {
     CheckboxGrid
     Date
     Dropdown
+    Height
     LinearScale
     MultipleChoice
     MultipleChoiceGrid
@@ -300,6 +301,7 @@ enum FormComponentType {
     ShortAnswer
     Time
     TitleAndDescription
+    Weight
 }
 
 input FormCreateInput {
@@ -355,6 +357,7 @@ type FormUserData {
     formId: String!
     id: String!
     profileId: String
+    userIdentifier: String
 }
 
 """
@@ -368,7 +371,7 @@ type Mutation {
     formFork(id: String!): Form!
     formPublish(id: String!): Form!
     formUpdate(id: String!, input: FormUpdateInput!): Form!
-    submitForm(data: JSON!, emailAddress: String, identifier: String!): FormUserData!
+    submitForm(data: JSON!, emailAddress: String, identifier: String!, userIdentifier: String): FormUserData!
 }
 
 """
