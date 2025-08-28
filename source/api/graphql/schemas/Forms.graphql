@@ -72,6 +72,7 @@ union FormComponent =
     | FormComponentDataCheckboxGrid
     | FormComponentDataDate
     | FormComponentDataDropdown
+    | FormComponentDataHeight
     | FormComponentDataLinearScale
     | FormComponentDataMultipleChoice
     | FormComponentDataMultipleChoiceGrid
@@ -82,6 +83,7 @@ union FormComponent =
     | FormComponentDataShortAnswer
     | FormComponentDataTime
     | FormComponentDataTitleAndDescription
+    | FormComponentDataWeight
 
 input FormComponentCreateInput {
     data: JSON
@@ -142,6 +144,17 @@ type FormComponentDataDropdown {
     metadata: JSON
     options: [String!]!
     placeholder: String
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataHeight {
+    description: String
+    id: String!
+    metadata: JSON
     position: Int!
     required: Boolean!
     section: Int!
@@ -272,6 +285,17 @@ type FormComponentDataTime {
 }
 
 type FormComponentDataTitleAndDescription {
+    description: String
+    id: String!
+    metadata: JSON
+    position: Int!
+    required: Boolean!
+    section: Int!
+    title: String
+    type: FormComponentType!
+}
+
+type FormComponentDataWeight {
     description: String
     id: String!
     metadata: JSON

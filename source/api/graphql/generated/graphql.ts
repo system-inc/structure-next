@@ -1314,6 +1314,7 @@ export type FormComponent =
     | FormComponentDataCheckboxGrid
     | FormComponentDataDate
     | FormComponentDataDropdown
+    | FormComponentDataHeight
     | FormComponentDataLinearScale
     | FormComponentDataMultipleChoice
     | FormComponentDataMultipleChoiceGrid
@@ -1323,7 +1324,8 @@ export type FormComponent =
     | FormComponentDataSectionHeader
     | FormComponentDataShortAnswer
     | FormComponentDataTime
-    | FormComponentDataTitleAndDescription;
+    | FormComponentDataTitleAndDescription
+    | FormComponentDataWeight;
 
 export type FormComponentCreateInput = {
     data?: InputMaybe<Scalars['JSON']['input']>;
@@ -1388,6 +1390,18 @@ export type FormComponentDataDropdown = {
     metadata?: Maybe<Scalars['JSON']['output']>;
     options: Array<Scalars['String']['output']>;
     placeholder?: Maybe<Scalars['String']['output']>;
+    position: Scalars['Int']['output'];
+    required: Scalars['Boolean']['output'];
+    section: Scalars['Int']['output'];
+    title?: Maybe<Scalars['String']['output']>;
+    type: FormComponentType;
+};
+
+export type FormComponentDataHeight = {
+    __typename?: 'FormComponentDataHeight';
+    description?: Maybe<Scalars['String']['output']>;
+    id: Scalars['String']['output'];
+    metadata?: Maybe<Scalars['JSON']['output']>;
     position: Scalars['Int']['output'];
     required: Scalars['Boolean']['output'];
     section: Scalars['Int']['output'];
@@ -1528,6 +1542,18 @@ export type FormComponentDataTime = {
 
 export type FormComponentDataTitleAndDescription = {
     __typename?: 'FormComponentDataTitleAndDescription';
+    description?: Maybe<Scalars['String']['output']>;
+    id: Scalars['String']['output'];
+    metadata?: Maybe<Scalars['JSON']['output']>;
+    position: Scalars['Int']['output'];
+    required: Scalars['Boolean']['output'];
+    section: Scalars['Int']['output'];
+    title?: Maybe<Scalars['String']['output']>;
+    type: FormComponentType;
+};
+
+export type FormComponentDataWeight = {
+    __typename?: 'FormComponentDataWeight';
     description?: Maybe<Scalars['String']['output']>;
     id: Scalars['String']['output'];
     metadata?: Maybe<Scalars['JSON']['output']>;
