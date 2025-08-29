@@ -15,7 +15,7 @@ import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGenerated
 import { useCommerceOrdersPrivilegedRequest } from '@structure/source/modules/commerce/hooks/useCommerceOrdersPrivilegedRequest';
 
 // Dependencies - Utilities
-import { timeAgo, dayNameWithFullDate } from '@structure/source/utilities/Time';
+import { timeFromNow, dayNameWithFullDate } from '@structure/source/utilities/Time';
 
 // Component - OrdersPage
 export function OrdersPage() {
@@ -115,7 +115,7 @@ export function OrdersPage() {
                                     </div>
                                     <div className="mt-1 text-xs text-gray-500">
                                         dayNameWithFullDate(new Date(order.createdAt)) (
-                                        {timeAgo(new Date(order.createdAt).getTime())})
+                                        {timeFromNow(new Date(order.createdAt).getTime())})
                                     </div>
                                 </div>
 
@@ -132,7 +132,7 @@ export function OrdersPage() {
                                 </div>
                                 <div className="neutral hidden truncate md:block">
                                     {dayNameWithFullDate(new Date(order.createdAt))} (
-                                    {timeAgo(new Date(order.createdAt).getTime())})
+                                    {timeFromNow(new Date(order.createdAt).getTime())})
                                 </div>
                             </div>
                         ))}

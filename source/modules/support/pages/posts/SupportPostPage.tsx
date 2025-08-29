@@ -19,7 +19,7 @@ import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Dependencies - Utilities
 // import { titleCase } from '@structure/source/utilities/String';
-import { timeAgo } from '@structure/source/utilities/Time';
+import { timeFromNow } from '@structure/source/utilities/Time';
 
 // Component - SupportPostPage
 export interface SupportPostPageProperties {
@@ -64,7 +64,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
         navigationTrailUrlPathname + '/articles/' + properties.post.identifier + '/' + properties.post.slug;
 
     const updateAtTimeInMilliseconds = new Date(properties.post.updatedAt).getTime();
-    let updatedTimeAgoString = timeAgo(updateAtTimeInMilliseconds);
+    let updatedTimeAgoString = timeFromNow(updateAtTimeInMilliseconds);
 
     // If it has been over a week
     if(updateAtTimeInMilliseconds < new Date().getTime() - 1000 * 60 * 60 * 24 * 7) {

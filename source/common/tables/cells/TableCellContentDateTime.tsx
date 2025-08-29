@@ -5,7 +5,7 @@ import React from 'react';
 import { Tip } from '@structure/source/common/popovers/Tip';
 
 // Dependencies - Utilities
-import { timeAgo } from '@structure/source/utilities/Time';
+import { timeFromNow } from '@structure/source/utilities/Time';
 
 // Component - TableCellContentDateTime
 export interface TableCellContentDateTimeProperties extends React.HTMLAttributes<HTMLElement> {
@@ -87,7 +87,7 @@ export function TableCellContentDateTime(properties: TableCellContentDateTimePro
                         })}
                     </div>
                     {/* 5 minutes ago */}
-                    <div>{timeAgo(date.getTime())}</div>
+                    <div>{timeFromNow(date.getTime())}</div>
                 </div>
             }
         >

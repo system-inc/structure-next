@@ -15,7 +15,7 @@ import { AccountProfilePublicQuery } from '@structure/source/api/graphql/GraphQl
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
 
 // Dependencies - Utilities
-import { monthYear, timeAgo } from '@structure/source/utilities/Time';
+import { monthYear, timeFromNow } from '@structure/source/utilities/Time';
 
 // Component - PublicProfilePage
 export interface PublicProfilePageProperties {
@@ -44,7 +44,7 @@ export function PublicProfilePage(properties: PublicProfilePageProperties) {
                     <CalendarIcon className="h-4 w-4" />
                     <span>
                         Joined {monthYear(new Date(properties.profilePublic?.createdAt))} (
-                        {timeAgo(new Date(properties.profilePublic?.createdAt).getTime())})
+                        {timeFromNow(new Date(properties.profilePublic?.createdAt).getTime())})
                     </span>
                 </p>
             </div>

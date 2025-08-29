@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { timeAgo } from '@structure/source/utilities/Time';
+import { timeFromNow } from '@structure/source/utilities/Time';
 
 // Component - TimeAgo
 export interface TimeAgoProperties {
@@ -41,11 +41,11 @@ export function TimeAgo(properties: TimeAgoProperties) {
         <span className={mergeClassNames('', properties.className)}>
             {properties.abbreviatedOnlyAtMobileSize ? (
                 <>
-                    <span className="sm:hidden">{timeAgo(properties.startTimeInMilliseconds, true)}</span>
-                    <span className="hidden sm:inline">{timeAgo(properties.startTimeInMilliseconds)}</span>
+                    <span className="sm:hidden">{timeFromNow(properties.startTimeInMilliseconds, true)}</span>
+                    <span className="hidden sm:inline">{timeFromNow(properties.startTimeInMilliseconds)}</span>
                 </>
             ) : (
-                timeAgo(properties.startTimeInMilliseconds, properties.abbreviated)
+                timeFromNow(properties.startTimeInMilliseconds, properties.abbreviated)
             )}
         </span>
     );

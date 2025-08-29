@@ -22,7 +22,7 @@ import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGenerated
 export const accountsPrivilegedCacheKey = 'accountsPrivileged';
 
 // Dependencies - Utilities
-import { iso8601Date, timeAgo } from '@structure/source/utilities/Time';
+import { iso8601Date, timeFromNow } from '@structure/source/utilities/Time';
 
 // Function to convert a country code to a flag emoji
 function countryCodeToFlagEmoji(countryCode?: string | null): string {
@@ -294,7 +294,7 @@ export function UsersPage() {
                                     </div>
                                     <div className="hidden truncate text-sm md:block">
                                         {iso8601Date(new Date(account.profiles[0]?.createdAt))} (
-                                        {timeAgo(new Date(account.profiles[0]?.createdAt).getTime(), true)})
+                                        {timeFromNow(new Date(account.profiles[0]?.createdAt).getTime(), true)})
                                     </div>
                                     <Button
                                         variant="destructive"

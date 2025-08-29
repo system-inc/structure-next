@@ -1,52 +1,42 @@
 /**
  * Function to convert a timestamp (in milliseconds since the Unix epoch) into a
- * human-readable "time ago" string. The output string represents the elapsed time
- * (in seconds, minutes, hours, days, weeks, months, or years) since the provided timestamp.
+ * human-readable string representing time from now (past or future).
  *
  * @param {number} millisecondsSinceUnixEpoch - The timestamp to convert, represented as milliseconds since the Unix epoch.
  * @param {boolean} abbreviated - Whether to return an abbreviated format (e.g., "7s" instead of "7 seconds ago").
- * @returns {string} A string representing the elapsed time since the timestamp in a human-readable format.
+ * @returns {string} A string representing the time from now in a human-readable format.
  */
-export function timeAgo(millisecondsSinceUnixEpoch: number, abbreviated: boolean = false) {
-    const deltaMillisecondsSinceUnixEpoch = new Date().getTime() - millisecondsSinceUnixEpoch;
-    // console.log('millisecondsSinceUnixEpoch', millisecondsSinceUnixEpoch);
-    // console.log('new Date().getTime()', new Date().getTime());
-    // console.log('deltaMillisecondsSinceUnixEpoch', deltaMillisecondsSinceUnixEpoch);
+export function timeFromNow(millisecondsSinceUnixEpoch: number, abbreviated: boolean = false) {
+    const delta = new Date().getTime() - millisecondsSinceUnixEpoch;
+    const isPast = delta > 0;
+    const abs = Math.abs(delta);
 
-    const secondsAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / 1000).toFixed(0);
-    const minutesAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60)).toFixed(0);
-    const hoursAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60 * 60)).toFixed(0);
-    const daysAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60 * 60 * 24)).toFixed(0);
-    const weeksAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60 * 60 * 24 * 7)).toFixed(0);
-    const monthsAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60 * 60 * 24 * 30)).toFixed(0);
-    const yearsAgo = Math.floor(deltaMillisecondsSinceUnixEpoch / (1000 * 60 * 60 * 24 * 365)).toFixed(0);
+    const seconds = Math.floor(abs / 1000);
+    const minutes = Math.floor(abs / (1000 * 60));
+    const hours = Math.floor(abs / (1000 * 60 * 60));
+    const days = Math.floor(abs / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(abs / (1000 * 60 * 60 * 24 * 7));
+    const months = Math.floor(abs / (1000 * 60 * 60 * 24 * 30));
+    const years = Math.floor(abs / (1000 * 60 * 60 * 24 * 365));
 
-    if(Number(secondsAgo) < 5) {
-        return abbreviated ? `now` : `now`;
-    }
-    if(Number(secondsAgo) < 60) {
-        return abbreviated ? `${secondsAgo}s` : `${secondsAgo} second${Number(secondsAgo) === 1 ? '' : 's'} ago`;
-    }
-    if(Number(minutesAgo) < 60) {
-        return abbreviated ? `${minutesAgo}m` : `${minutesAgo} minute${Number(minutesAgo) === 1 ? '' : 's'} ago`;
-    }
-    if(Number(hoursAgo) < 24) {
-        return abbreviated ? `${hoursAgo}h` : `${hoursAgo} hour${Number(hoursAgo) === 1 ? '' : 's'} ago`;
-    }
-    if(Number(daysAgo) < 7) {
-        return abbreviated ? `${daysAgo}d` : `${daysAgo} day${Number(daysAgo) === 1 ? '' : 's'} ago`;
-    }
-    if(Number(weeksAgo) < 4) {
-        return abbreviated ? `${weeksAgo}w` : `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
-    }
-    if(Number(monthsAgo) < 1) {
-        return abbreviated ? `${weeksAgo}w` : `${weeksAgo} week${Number(weeksAgo) === 1 ? '' : 's'} ago`;
-    }
-    if(Number(monthsAgo) < 12) {
-        return abbreviated ? `${monthsAgo}mo` : `${monthsAgo} month${Number(monthsAgo) === 1 ? '' : 's'} ago`;
-    }
+    // Helper function to format the output
+    const formatTimeFromNow = function (value: number, unit: string, abbreviation: string) {
+        if(abbreviated) {
+            return `${value}${abbreviation}`;
+        }
+        const plural = value === 1 ? '' : 's';
+        return isPast ? `${value} ${unit}${plural} ago` : `in ${value} ${unit}${plural}`;
+    };
 
-    return abbreviated ? `${yearsAgo}y` : `${yearsAgo} year${Number(yearsAgo) === 1 ? '' : 's'} ago`;
+    if(seconds <= 5) return 'now';
+    if(seconds < 60) return formatTimeFromNow(seconds, 'second', 's');
+    if(minutes < 60) return formatTimeFromNow(minutes, 'minute', 'm');
+    if(hours < 24) return formatTimeFromNow(hours, 'hour', 'h');
+    if(days < 7) return formatTimeFromNow(days, 'day', 'd');
+    if(weeks < 4) return formatTimeFromNow(weeks, 'week', 'w');
+    if(months < 1) return formatTimeFromNow(weeks, 'week', 'w');
+    if(months < 12) return formatTimeFromNow(months, 'month', 'mo');
+    return formatTimeFromNow(years, 'year', 'y');
 }
 
 // Function to convert a date object into the format January 12, 2020
