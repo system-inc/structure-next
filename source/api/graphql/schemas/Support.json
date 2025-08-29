@@ -178,6 +178,10 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [256]
                             }
@@ -219,6 +223,10 @@
                         "required": false,
                         "name": "replyToCommentId",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isUuid"
                             }

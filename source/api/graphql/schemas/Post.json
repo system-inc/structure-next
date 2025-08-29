@@ -373,6 +373,10 @@
                         "name": "status",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -450,6 +454,10 @@
                         "name": "topicIds",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "arrayUnique"
                             },
                             {
@@ -500,6 +508,10 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [1024]
                             }
@@ -511,6 +523,10 @@
                         "required": false,
                         "name": "type",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isIn",
                                 "constraints": [["Principle", "Idea", "SupportArticle"]]
@@ -527,6 +543,10 @@
                         "required": false,
                         "name": "slug",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [160]
@@ -600,6 +620,10 @@
                         "name": "postId",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -610,6 +634,10 @@
                         "required": false,
                         "name": "commentId",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isUuid"
                             }

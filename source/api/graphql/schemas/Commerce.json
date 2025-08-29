@@ -512,6 +512,10 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -522,6 +526,10 @@
                         "required": false,
                         "name": "identifier",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [4, 24]
@@ -546,6 +554,10 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -581,6 +593,10 @@
                         "name": "status",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -606,6 +622,10 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -629,6 +649,10 @@
                         "name": "description",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             }
@@ -640,6 +664,10 @@
                         "required": false,
                         "name": "position",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isInt"
                             }
@@ -670,6 +698,10 @@
                         "name": "inventoryPolicy",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -689,6 +721,10 @@
                         "name": "sku",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [8, 128]
                             }
@@ -700,6 +736,10 @@
                         "required": false,
                         "name": "gtin",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [8, 128]
@@ -713,6 +753,10 @@
                         "name": "barcode",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [8, 128]
                             }
@@ -724,6 +768,10 @@
                         "required": false,
                         "name": "status",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -750,6 +798,10 @@
                         "name": "setDefault",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isBoolean"
                             }
                         ]
@@ -760,6 +812,10 @@
                         "required": false,
                         "name": "productId",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isUuid"
                             }
@@ -826,6 +882,10 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -836,6 +896,10 @@
                         "required": false,
                         "name": "identifier",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [4, 24]
@@ -848,6 +912,10 @@
                         "required": false,
                         "name": "status",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -868,6 +936,10 @@
                         "name": "name",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [4, 128]
                             }
@@ -879,6 +951,10 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -927,6 +1003,10 @@
                         "name": "name",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [4, 128]
                             }
@@ -939,6 +1019,10 @@
                         "name": "description",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             }
@@ -950,6 +1034,10 @@
                         "required": false,
                         "name": "position",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isInt"
                             }
@@ -967,6 +1055,10 @@
                         "required": false,
                         "name": "status",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -999,6 +1091,10 @@
                         "name": "inventoryPolicy",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -1018,6 +1114,10 @@
                         "name": "sku",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [16, 128]
                             }
@@ -1030,6 +1130,10 @@
                         "name": "gtin",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [16, 128]
                             }
@@ -1041,6 +1145,10 @@
                         "required": false,
                         "name": "barcode",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [16, 128]
@@ -1059,6 +1167,10 @@
                         "required": false,
                         "name": "setDefault",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isBoolean"
                             }
@@ -1095,6 +1207,10 @@
                         "name": "identifier",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [4, 16]
                             }
@@ -1118,6 +1234,10 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -1150,6 +1270,10 @@
                             {
                                 "type": "isLength",
                                 "constraints": [4, 16]
+                            },
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
                             }
                         ]
                     },
@@ -1162,6 +1286,10 @@
                             {
                                 "type": "isLength",
                                 "constraints": [4, 128]
+                            },
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
                             }
                         ]
                     },
@@ -1174,6 +1302,10 @@
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
+                            },
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
                             }
                         ]
                     },
@@ -1230,6 +1362,10 @@
                         "name": "lowInventoryThreshold",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "min",
                                 "constraints": [0]
                             }
@@ -1259,6 +1395,10 @@
                         "name": "quantity",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "min",
                                 "constraints": [0]
                             }
@@ -1270,6 +1410,10 @@
                         "required": false,
                         "name": "quantityUpdateType",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -1289,6 +1433,10 @@
                         "required": false,
                         "name": "lowInventoryThreshold",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "min",
                                 "constraints": [0]
@@ -1312,6 +1460,10 @@
                         "required": false,
                         "name": "id",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isUuid"
                             }
@@ -1358,6 +1510,10 @@
                         "required": false,
                         "name": "name",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [128]

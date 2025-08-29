@@ -70,6 +70,10 @@
                         "name": "category",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [64]
                             },
@@ -85,6 +89,10 @@
                         "name": "deviceProperties",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "unknown"
                             }
                         ]
@@ -96,6 +104,10 @@
                         "name": "clientProperties",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "unknown"
                             }
                         ]
@@ -106,6 +118,10 @@
                         "required": false,
                         "name": "eventContext",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "unknown"
                             }
@@ -123,6 +139,10 @@
                         "required": false,
                         "name": "orientation",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -154,6 +174,10 @@
                         "name": "environment",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [64]
                             },
@@ -175,6 +199,10 @@
                         "name": "viewIdentifier",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             },
@@ -190,6 +218,10 @@
                         "name": "traceId",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -201,6 +233,10 @@
                         "name": "traceSequenceNumber",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isInt"
                             }
                         ]
@@ -211,6 +247,10 @@
                         "required": false,
                         "name": "referrer",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isUrl"
                             },
@@ -227,6 +267,10 @@
                         "name": "viewTitle",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isNotEmpty"
                             },
                             {
@@ -242,6 +286,10 @@
                         "name": "sessionDurationInMilliseconds",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isPositive"
                             },
                             {
@@ -255,6 +303,10 @@
                         "required": false,
                         "name": "loggedAt",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isDate"
                             }

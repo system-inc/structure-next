@@ -326,6 +326,10 @@
                         "name": "username",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [3, 32]
                             },
@@ -341,6 +345,10 @@
                         "name": "displayName",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [128]
                             }
@@ -352,6 +360,10 @@
                         "required": false,
                         "name": "givenName",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [128]
@@ -365,6 +377,10 @@
                         "name": "familyName",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [128]
                             }
@@ -376,6 +392,10 @@
                         "required": false,
                         "name": "middleName",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [128]
@@ -389,6 +409,10 @@
                         "name": "preferredName",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [128]
                             }
@@ -401,7 +425,12 @@
                         "name": "phoneNumber",
                         "validation": [
                             {
-                                "type": "isPhoneNumber"
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
+                                "type": "IsPhoneNumberLite",
+                                "constraints": [{}]
                             }
                         ]
                     },
@@ -411,6 +440,10 @@
                         "required": false,
                         "name": "birthday",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isDate"
                             }
@@ -422,6 +455,10 @@
                         "required": false,
                         "name": "gender",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [32]
@@ -641,6 +678,10 @@
                         "name": "password",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "minLength",
                                 "constraints": [8]
                             },
@@ -657,6 +698,10 @@
                         "name": "username",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [3, 32]
                             }
@@ -668,6 +713,10 @@
                         "required": false,
                         "name": "displayName",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [3, 32]
@@ -693,7 +742,12 @@
                         "name": "phoneNumber",
                         "validation": [
                             {
-                                "type": "isPhoneNumber"
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
+                                "type": "IsPhoneNumberLite",
+                                "constraints": [{}]
                             }
                         ]
                     },

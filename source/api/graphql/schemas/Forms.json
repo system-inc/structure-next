@@ -38,6 +38,8 @@
                     "Date",
                     "Time",
                     "Number",
+                    "Weight",
+                    "Height",
                     "TitleAndDescription",
                     "SectionHeader"
                 ]
@@ -171,6 +173,10 @@
                         "name": "identifier",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [24]
                             }
@@ -183,6 +189,10 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [128]
                             }
@@ -194,6 +204,10 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -306,6 +320,8 @@
                                         "Date": "Date",
                                         "Time": "Time",
                                         "Number": "Number",
+                                        "Weight": "Weight",
+                                        "Height": "Height",
                                         "TitleAndDescription": "TitleAndDescription",
                                         "SectionHeader": "SectionHeader"
                                     },
@@ -322,6 +338,8 @@
                                         "Date",
                                         "Time",
                                         "Number",
+                                        "Weight",
+                                        "Height",
                                         "TitleAndDescription",
                                         "SectionHeader"
                                     ]
@@ -336,6 +354,10 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [128]
                             }
@@ -347,6 +369,10 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -390,6 +416,10 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [128]
                             }
@@ -401,6 +431,10 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "unknown",
+                                "constraints": [null]
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
