@@ -32,18 +32,12 @@ export type { AppOrStructureTypedDocumentString as AnyTypedDocumentString } from
 // Export statistics interface
 export type { NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';
 
-// Types
-export interface UseRequestOptionsInterface<TData, TVariables = void, TSelected = TData> {
+// Base options shared by both queries and mutations
+interface UseRequestOptionsBase<TData, TVariables = void, TSelected = TData> {
     // The async function to execute that fetches or mutates data
     request: (variables: TVariables) => Promise<TData>;
-    // Unique identifier for caching - use array for cached queries, false for mutations
-    cacheKey: CacheKey | false;
     // Transform or select part of the data (affects returned data but not cache)
     select?: (data: TData) => TSelected;
-    // Callback function called when the request succeeds
-    onSuccess?: (data: TData) => void;
-    // Callback function called when the request fails
-    onError?: (error: Error) => void;
     // Whether this query should execute - useful for dependent queries
     enabled?: boolean;
     // How long the data is considered fresh (won't refetch) in milliseconds
@@ -69,6 +63,32 @@ export interface UseRequestOptionsInterface<TData, TVariables = void, TSelected 
     // Attach metadata to the query for debugging, logging, or filtering
     metadata?: Record<string, unknown>;
 }
+
+// Read-specific options (queries, cached)
+// onSuccess and onError are intentionally omitted when using cached queries
+// because they lead to confusing behavior. Instead, handle success/error states
+// using effects or directly in your request function.
+export interface UseReadRequestOptionsInterface<TData, TVariables = void, TSelected = TData>
+    extends UseRequestOptionsBase<TData, TVariables, TSelected> {
+    // Unique identifier for caching
+    cacheKey: CacheKey;
+}
+
+// Write-specific options (mutations, not cached, has callbacks)
+export interface UseWriteRequestOptionsInterface<TData, TVariables = void, TSelected = TData>
+    extends UseRequestOptionsBase<TData, TVariables, TSelected> {
+    // Set to false for mutations
+    cacheKey: false;
+    // Callback function called when the request succeeds
+    onSuccess?: (data: TData) => void;
+    // Callback function called when the request fails
+    onError?: (error: Error) => void;
+}
+
+// Union type for backwards compatibility
+export type UseRequestOptionsInterface<TData, TVariables = void, TSelected = TData> =
+    | UseReadRequestOptionsInterface<TData, TVariables, TSelected>
+    | UseWriteRequestOptionsInterface<TData, TVariables, TSelected>;
 
 // Base interface with common properties
 interface UseRequestResultBase<TData> {
@@ -360,10 +380,10 @@ export class NetworkService {
 
     // Main hook with overloads
     useRequest<TData, TVariables = void, TSelected = TData>(
-        options: UseRequestOptionsInterface<TData, TVariables, TSelected> & { cacheKey: CacheKey },
+        options: UseReadRequestOptionsInterface<TData, TVariables, TSelected>,
     ): UseGraphQlQueryRequestResultInterface<TSelected>;
     useRequest<TData, TVariables = void>(
-        options: UseRequestOptionsInterface<TData, TVariables> & { cacheKey: false },
+        options: UseWriteRequestOptionsInterface<TData, TVariables>,
     ): UseGraphQlMutationRequestResultInterface<TData, TVariables>;
     useRequest<TData, TVariables = void, TSelected = TData>(
         options: UseRequestOptionsInterface<TData, TVariables, TSelected>,
