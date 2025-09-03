@@ -512,6 +512,9 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -522,6 +525,9 @@
                         "required": false,
                         "name": "identifier",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [4, 24]
@@ -546,6 +552,9 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -581,6 +590,9 @@
                         "name": "status",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -606,6 +618,9 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -629,6 +644,9 @@
                         "name": "description",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             }
@@ -640,6 +658,9 @@
                         "required": false,
                         "name": "position",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isInt"
                             }
@@ -670,6 +691,9 @@
                         "name": "inventoryPolicy",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -689,6 +713,9 @@
                         "name": "sku",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [8, 128]
                             }
@@ -700,6 +727,9 @@
                         "required": false,
                         "name": "gtin",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [8, 128]
@@ -713,6 +743,9 @@
                         "name": "barcode",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [8, 128]
                             }
@@ -724,6 +757,9 @@
                         "required": false,
                         "name": "status",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -750,6 +786,9 @@
                         "name": "setDefault",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isBoolean"
                             }
                         ]
@@ -760,6 +799,9 @@
                         "required": false,
                         "name": "productId",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isUuid"
                             }
@@ -826,6 +868,9 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -836,6 +881,9 @@
                         "required": false,
                         "name": "identifier",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [4, 24]
@@ -848,6 +896,9 @@
                         "required": false,
                         "name": "status",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -868,6 +919,9 @@
                         "name": "name",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [4, 128]
                             }
@@ -879,6 +933,9 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -927,6 +984,9 @@
                         "name": "name",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [4, 128]
                             }
@@ -939,6 +999,9 @@
                         "name": "description",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             }
@@ -950,6 +1013,9 @@
                         "required": false,
                         "name": "position",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isInt"
                             }
@@ -967,6 +1033,9 @@
                         "required": false,
                         "name": "status",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -999,6 +1068,9 @@
                         "name": "inventoryPolicy",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -1018,6 +1090,9 @@
                         "name": "sku",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [16, 128]
                             }
@@ -1030,6 +1105,9 @@
                         "name": "gtin",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [16, 128]
                             }
@@ -1041,6 +1119,9 @@
                         "required": false,
                         "name": "barcode",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isLength",
                                 "constraints": [16, 128]
@@ -1059,6 +1140,9 @@
                         "required": false,
                         "name": "setDefault",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isBoolean"
                             }
@@ -1095,6 +1179,9 @@
                         "name": "identifier",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isLength",
                                 "constraints": [4, 16]
                             }
@@ -1118,6 +1205,9 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
@@ -1150,6 +1240,9 @@
                             {
                                 "type": "isLength",
                                 "constraints": [4, 16]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -1162,6 +1255,9 @@
                             {
                                 "type": "isLength",
                                 "constraints": [4, 128]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -1174,6 +1270,9 @@
                             {
                                 "type": "maxLength",
                                 "constraints": [512]
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -1230,6 +1329,9 @@
                         "name": "lowInventoryThreshold",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "min",
                                 "constraints": [0]
                             }
@@ -1259,6 +1361,9 @@
                         "name": "quantity",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "min",
                                 "constraints": [0]
                             }
@@ -1270,6 +1375,9 @@
                         "required": false,
                         "name": "quantityUpdateType",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isEnum",
                                 "constraints": [
@@ -1289,6 +1397,9 @@
                         "required": false,
                         "name": "lowInventoryThreshold",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "min",
                                 "constraints": [0]
@@ -1312,6 +1423,9 @@
                         "required": false,
                         "name": "id",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isUuid"
                             }
@@ -1358,6 +1472,9 @@
                         "required": false,
                         "name": "name",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [128]

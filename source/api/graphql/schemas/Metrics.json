@@ -89,9 +89,6 @@
                         "validation": [
                             {
                                 "type": "isOptional"
-                            },
-                            {
-                                "type": "unknown"
                             }
                         ]
                     },
@@ -103,9 +100,6 @@
                         "validation": [
                             {
                                 "type": "isOptional"
-                            },
-                            {
-                                "type": "unknown"
                             }
                         ]
                     },
@@ -117,9 +111,6 @@
                         "validation": [
                             {
                                 "type": "isOptional"
-                            },
-                            {
-                                "type": "unknown"
                             }
                         ]
                     }
@@ -139,7 +130,15 @@
                                 "type": "isOptional"
                             },
                             {
-                                "type": "isEnum"
+                                "type": "isEnum",
+                                "constraints": [
+                                    {
+                                        "Portrait": "Portrait",
+                                        "Landscape": "Landscape",
+                                        "NotAvailable": "NotAvailable"
+                                    },
+                                    ["Portrait", "Landscape", "NotAvailable"]
+                                ]
                             }
                         ]
                     }

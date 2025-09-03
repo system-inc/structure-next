@@ -6105,6 +6105,9 @@ export namespace GraphQLInputTypes {
                 required: true,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'arrayNotEmpty',
                     },
                     {
@@ -6388,6 +6391,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'isEnum',
                         constraints: [
                             { Draft: 'Draft', Published: 'Published', Deleted: 'Deleted' },
@@ -6461,6 +6467,9 @@ export namespace GraphQLInputTypes {
                 required: true,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'arrayUnique',
                     },
                     {
@@ -6518,6 +6527,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'isUuid',
                     },
                 ],
@@ -6528,6 +6540,9 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'isUuid',
                     },
@@ -6571,6 +6586,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'maxLength',
                         constraints: [1024],
                     },
@@ -6582,6 +6600,9 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'isIn',
                         constraints: [['Principle', 'Idea', 'SupportArticle']],
@@ -6598,6 +6619,9 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'maxLength',
                         constraints: [160],
@@ -6833,6 +6857,10 @@ export namespace GraphQLInputTypes {
                     },
                     {
                         type: 'isEnum',
+                        constraints: [
+                            { Portrait: 'Portrait', Landscape: 'Landscape', NotAvailable: 'NotAvailable' },
+                            ['Portrait', 'Landscape', 'NotAvailable'],
+                        ],
                     },
                 ],
             },
@@ -6885,9 +6913,6 @@ export namespace GraphQLInputTypes {
                     {
                         type: 'isOptional',
                     },
-                    {
-                        type: 'unknown',
-                    },
                 ],
             },
             {
@@ -6899,9 +6924,6 @@ export namespace GraphQLInputTypes {
                     {
                         type: 'isOptional',
                     },
-                    {
-                        type: 'unknown',
-                    },
                 ],
             },
             {
@@ -6912,9 +6934,6 @@ export namespace GraphQLInputTypes {
                 validation: [
                     {
                         type: 'isOptional',
-                    },
-                    {
-                        type: 'unknown',
                     },
                 ],
             },
@@ -6981,6 +7000,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'isLength',
                         constraints: [3, 32],
                     },
@@ -6996,6 +7018,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'maxLength',
                         constraints: [128],
                     },
@@ -7007,6 +7032,9 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'maxLength',
                         constraints: [128],
@@ -7020,6 +7048,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'maxLength',
                         constraints: [128],
                     },
@@ -7031,6 +7062,9 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'maxLength',
                         constraints: [128],
@@ -7044,6 +7078,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'maxLength',
                         constraints: [128],
                     },
@@ -7056,7 +7093,11 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
-                        type: 'isPhoneNumber',
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'IsPhoneNumberLite',
+                        constraints: [{}],
                     },
                 ],
             },
@@ -7066,6 +7107,9 @@ export namespace GraphQLInputTypes {
                 type: 'DateTimeISO',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'isDate',
                     },
@@ -7077,6 +7121,9 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'maxLength',
                         constraints: [32],
@@ -7394,6 +7441,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'minLength',
                         constraints: [8],
                     },
@@ -7410,6 +7460,9 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
+                        type: 'isOptional',
+                    },
+                    {
                         type: 'isLength',
                         constraints: [3, 32],
                     },
@@ -7421,6 +7474,9 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
                 validation: [
+                    {
+                        type: 'isOptional',
+                    },
                     {
                         type: 'isLength',
                         constraints: [3, 32],
@@ -7446,7 +7502,11 @@ export namespace GraphQLInputTypes {
                 required: false,
                 validation: [
                     {
-                        type: 'isPhoneNumber',
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'IsPhoneNumberLite',
+                        constraints: [{}],
                     },
                 ],
             },

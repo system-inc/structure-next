@@ -373,6 +373,9 @@
                         "name": "status",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isEnum",
                                 "constraints": [
                                     {
@@ -450,6 +453,9 @@
                         "name": "topicIds",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "arrayUnique"
                             },
                             {
@@ -500,6 +506,9 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [1024]
                             }
@@ -511,6 +520,9 @@
                         "required": false,
                         "name": "type",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isIn",
                                 "constraints": [["Principle", "Idea", "SupportArticle"]]
@@ -527,6 +539,9 @@
                         "required": false,
                         "name": "slug",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [160]
@@ -600,6 +615,9 @@
                         "name": "postId",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -610,6 +628,9 @@
                         "required": false,
                         "name": "commentId",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isUuid"
                             }

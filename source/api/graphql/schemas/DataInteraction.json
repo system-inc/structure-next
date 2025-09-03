@@ -198,6 +198,9 @@
                         "name": "timeIntervals",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "arrayNotEmpty"
                             },
                             {

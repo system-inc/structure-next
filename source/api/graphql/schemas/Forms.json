@@ -302,7 +302,45 @@
                         "name": "type",
                         "validation": [
                             {
-                                "type": "isEnum"
+                                "type": "isEnum",
+                                "constraints": [
+                                    {
+                                        "ShortAnswer": "ShortAnswer",
+                                        "Paragraph": "Paragraph",
+                                        "MultipleChoice": "MultipleChoice",
+                                        "Checkbox": "Checkbox",
+                                        "Dropdown": "Dropdown",
+                                        "LinearScale": "LinearScale",
+                                        "Rating": "Rating",
+                                        "MultipleChoiceGrid": "MultipleChoiceGrid",
+                                        "CheckboxGrid": "CheckboxGrid",
+                                        "Date": "Date",
+                                        "Time": "Time",
+                                        "Number": "Number",
+                                        "Weight": "Weight",
+                                        "Height": "Height",
+                                        "TitleAndDescription": "TitleAndDescription",
+                                        "SectionHeader": "SectionHeader"
+                                    },
+                                    [
+                                        "ShortAnswer",
+                                        "Paragraph",
+                                        "MultipleChoice",
+                                        "Checkbox",
+                                        "Dropdown",
+                                        "LinearScale",
+                                        "Rating",
+                                        "MultipleChoiceGrid",
+                                        "CheckboxGrid",
+                                        "Date",
+                                        "Time",
+                                        "Number",
+                                        "Weight",
+                                        "Height",
+                                        "TitleAndDescription",
+                                        "SectionHeader"
+                                    ]
+                                ]
                             }
                         ]
                     },
