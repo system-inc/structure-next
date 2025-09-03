@@ -61,6 +61,7 @@ type Mutation {
     supportTicketCommentCreate(input: SupportTicketCommentCreateInput!): SupportTicketComment!
     supportTicketCommentCreatePrivileged(input: SupportTicketCommentCreateInput!): SupportTicketComment!
     supportTicketCreate(input: SupportTicketCreateInput!): SupportTicket!
+    supportTicketCreatePrivileged(input: SupportTicketCreateInput!): SupportTicket!
     supportTicketUpdatePrivileged(input: SupportTicketUpdateInput!): SupportTicket!
     supportTicketUpdateStatusPrivileged(id: String!, status: SupportTicketStatus!): SupportTicket!
 }

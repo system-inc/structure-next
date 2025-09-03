@@ -140,6 +140,9 @@
                         "name": "identifier",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [16]
                             }
@@ -164,6 +167,9 @@
                         "name": "description",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             }
@@ -182,6 +188,9 @@
                         "name": "id",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -192,6 +201,9 @@
                         "required": false,
                         "name": "identifier",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [16]
@@ -205,6 +217,9 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [256]
                             }
@@ -216,6 +231,9 @@
                         "required": false,
                         "name": "description",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [512]

@@ -70,6 +70,9 @@
                         "name": "category",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [64]
                             },
@@ -85,6 +88,9 @@
                         "name": "deviceProperties",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "unknown"
                             }
                         ]
@@ -96,6 +102,9 @@
                         "name": "clientProperties",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "unknown"
                             }
                         ]
@@ -106,6 +115,9 @@
                         "required": false,
                         "name": "eventContext",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "unknown"
                             }
@@ -124,15 +136,10 @@
                         "name": "orientation",
                         "validation": [
                             {
-                                "type": "isEnum",
-                                "constraints": [
-                                    {
-                                        "Portrait": "Portrait",
-                                        "Landscape": "Landscape",
-                                        "NotAvailable": "NotAvailable"
-                                    },
-                                    ["Portrait", "Landscape", "NotAvailable"]
-                                ]
+                                "type": "isOptional"
+                            },
+                            {
+                                "type": "isEnum"
                             }
                         ]
                     }
@@ -153,6 +160,9 @@
                         "required": false,
                         "name": "environment",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "maxLength",
                                 "constraints": [64]
@@ -175,6 +185,9 @@
                         "name": "viewIdentifier",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [512]
                             },
@@ -190,6 +203,9 @@
                         "name": "traceId",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isUuid"
                             }
                         ]
@@ -201,6 +217,9 @@
                         "name": "traceSequenceNumber",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isInt"
                             }
                         ]
@@ -211,6 +230,9 @@
                         "required": false,
                         "name": "referrer",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isUrl"
                             },
@@ -227,6 +249,9 @@
                         "name": "viewTitle",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isNotEmpty"
                             },
                             {
@@ -242,6 +267,9 @@
                         "name": "sessionDurationInMilliseconds",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "isPositive"
                             },
                             {
@@ -255,6 +283,9 @@
                         "required": false,
                         "name": "loggedAt",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isDate"
                             }

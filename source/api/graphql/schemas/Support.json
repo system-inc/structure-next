@@ -178,6 +178,9 @@
                         "name": "title",
                         "validation": [
                             {
+                                "type": "isOptional"
+                            },
+                            {
                                 "type": "maxLength",
                                 "constraints": [256]
                             }
@@ -219,6 +222,9 @@
                         "required": false,
                         "name": "replyToCommentId",
                         "validation": [
+                            {
+                                "type": "isOptional"
+                            },
                             {
                                 "type": "isUuid"
                             }

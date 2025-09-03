@@ -1,0 +1,11 @@
+schema {
+    query: Query
+}
+
+type OperationResult {
+    success: Boolean!
+}
+
+type Query {
+    deviceId: OperationResult!
+}
