@@ -1,8 +1,5 @@
 'use client'; // This component uses client-only features
 
-// Dependencies - Project
-import { ProjectSettings } from '@project/ProjectSettings';
-
 // Dependencies - React and Next.js
 import React from 'react';
 
@@ -92,20 +89,6 @@ operatingSystemThemeAtom.onMount = function (setOperatingSystemThemeAtom) {
         // Update the operatingSystemThemeAtom
         setOperatingSystemThemeAtom(operatingSystemTheme);
 
-        // Get the favicon element
-        const favicon = document.querySelector('link[rel="icon"]');
-        // console.log('favicon', favicon);
-
-        // Determine if the favicon should be light or dark based on the operating system theme
-        const faviconHref =
-            operatingSystemTheme === OperatingSystemTheme.Dark
-                ? ProjectSettings.assets.favicon.dark.location
-                : ProjectSettings.assets.favicon.light.location;
-        // console.log('faviconHref', faviconHref);
-
-        // Set the favicon href
-        favicon?.setAttribute('href', faviconHref);
-
         // If the theme is OperatingSystem, we need to update the theme class name
         // console.log('globalStore.get(readOnlyThemeAtom)', globalStore.get(readOnlyThemeAtom));
         if(globalStore.get(readOnlyThemeAtom) === Theme.OperatingSystem) {
@@ -120,7 +103,7 @@ operatingSystemThemeAtom.onMount = function (setOperatingSystemThemeAtom) {
         }
     }
 
-    // Update the favicon and DOM class on mount
+    // Update DOM class on mount
     handleOperatingSystemThemeChange();
 
     // Listen for changes to the operating system theme and update the favicon and DOM class

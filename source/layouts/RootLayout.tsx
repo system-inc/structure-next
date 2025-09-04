@@ -20,28 +20,12 @@ import '@project/app/_theme/styles/theme.css';
 
 // Next.js Metadata
 export async function generateMetadata(): Promise<Metadata> {
-    // Get the cookies from the response headers
-    const cookieStore = cookies();
-
-    // Read the operating system theme from the cookies
-    const operatingSystemTheme = cookieStore.get(operatingSystemThemeKey)?.value;
-    // console.log('generateMetadata: operatingSystemTheme', operatingSystemTheme);
-
-    // Determine the favicon based on the operating system theme
-    const favicon =
-        operatingSystemTheme === OperatingSystemTheme.Dark
-            ? ProjectSettings.assets.favicon.dark.location
-            : ProjectSettings.assets.favicon.light.location;
-
     return {
         title: {
             template: '%s • ' + ProjectSettings.title,
             default: ProjectSettings.title + ' • ' + ProjectSettings.tagline, // default is required when creating a template
         },
         description: ProjectSettings.description,
-        icons: {
-            icon: favicon,
-        },
     };
 }
 
