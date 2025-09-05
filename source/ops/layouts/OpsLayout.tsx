@@ -8,7 +8,7 @@ import React from 'react';
 // import { SideNavigationLayoutNavigation } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 // import { SideNavigationLayoutContent } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContent';
 // import { SideNavigationLayoutContentBody } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContentBody';
-import { OpsDialogMenu } from '@structure/source/ops/layouts/navigation/OpsDialogMenu';
+// import { OpsDialogMenu } from '@structure/source/ops/layouts/navigation/OpsDialogMenu';
 import { OpsNavigationBar } from './OpsNavigationBar';
 
 // Import SideNavigation components with next/dynamic to avoid server-side rendering
@@ -72,7 +72,7 @@ export function OpsLayout(properties: OpsLayoutProperties) {
             {/*</SideNavigationLayoutContent>*/}
 
             {/* Dialog Menu */}
-            <OpsDialogMenu />
+            {/* <OpsDialogMenu /> */}
         </>
     );
 }

@@ -1,7 +1,9 @@
-'use client';
+'use client'; // This component uses client-only features
 
+// Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Main Components
 import * as Dialog from '@radix-ui/react-dialog';
 import { Button } from '@structure/source/common/buttons/Button';
 import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
@@ -13,24 +15,33 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { atom, useAtom } from 'jotai';
 
+// State
 export const opsNavigationOpenAtom = atom(false);
+
+// Component - OpsNavigationBar
 export function OpsNavigationBar() {
+    // State
     const [open, setOpen] = useAtom(opsNavigationOpenAtom);
 
+    // Effect to handle the keyboard shortcut (CMD+K or CTRL+K)
     React.useEffect(
         function () {
             function handleSlashKey(event: KeyboardEvent) {
-                if(event.key === '/') {
+                if((event.metaKey || event.ctrlKey) && event.key === 'k') {
+                    event.preventDefault();
                     setOpen((prev) => !prev);
                 }
             }
 
             window.addEventListener('keydown', handleSlashKey);
-            return () => window.removeEventListener('keydown', handleSlashKey);
+            return function () {
+                window.removeEventListener('keydown', handleSlashKey);
+            };
         },
         [setOpen],
     );
 
+    // Render the component
     return (
         <Dialog.Root open={open} onOpenChange={setOpen} modal={false}>
             {/* Top Bar Bottom Border */}
@@ -75,9 +86,9 @@ export function OpsNavigationBar() {
                                     />
                                 </svg>
                                 Ops
-                                <span className="ml-2 inline-block rounded-small border bg-opsis-background-tetriary px-2 text-opsis-content-placeholder">
-                                    /
-                                </span>
+                                {/* <span className="ml-2 inline-flex items-center gap-1 rounded-small border bg-opsis-background-tetriary px-2 text-opsis-content-placeholder">
+                                    CMD+K
+                                </span> */}
                             </Button>
                         </Dialog.Trigger>
                     </div>
