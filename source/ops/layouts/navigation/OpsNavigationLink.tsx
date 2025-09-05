@@ -6,6 +6,8 @@ import { Link } from '@structure/source/common/navigation/Link';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { useSetAtom } from 'jotai';
+import { opsNavigationOpenAtom } from '../OpsNavigationBar';
 
 // NavigationLink
 export interface OpsNavigationLinkProperties {
@@ -17,6 +19,11 @@ export interface OpsNavigationLinkProperties {
 }
 export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
     // console.log('OpsNavigationLink', properties.title, 'active', properties.active);
+    const setOpsNavigationState = useSetAtom(opsNavigationOpenAtom);
+
+    function handleClick() {
+        setOpsNavigationState(false);
+    }
 
     // Render the component
     return (
@@ -30,6 +37,7 @@ export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
                     : // If the link is not active
                       '',
             )}
+            onClick={handleClick}
         >
             {properties.icon && (
                 <div className="relative h-4 w-4">
