@@ -4311,6 +4311,36 @@ export type AccountQuery = {
     };
 };
 
+export type AccountQueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountQueryQuery = {
+    __typename?: 'Query';
+    account: {
+        __typename?: 'Account';
+        emailAddress: string;
+        accessRoles: Array<string>;
+        createdAt: any;
+        profile: {
+            __typename?: 'Profile';
+            id: string;
+            username: string;
+            displayName?: string | null;
+            givenName?: string | null;
+            familyName?: string | null;
+            updatedAt: any;
+            createdAt: any;
+            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+        };
+    };
+};
+
+export type AccountSignOutMutationMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountSignOutMutationMutation = {
+    __typename?: 'Mutation';
+    accountSignOut: { __typename?: 'OperationResult'; success: boolean };
+};
+
 export type CommerceOrdersPrivilegedQueryVariables = Exact<{
     pagination: PaginationInput;
 }>;
@@ -5412,6 +5442,35 @@ export const AccountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
+export const AccountQueryDocument = new TypedDocumentString(`
+    query AccountQuery {
+  account {
+    emailAddress
+    profile {
+      id
+      username
+      displayName
+      givenName
+      familyName
+      images {
+        url
+        variant
+      }
+      updatedAt
+      createdAt
+    }
+    accessRoles
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountQueryQuery, AccountQueryQueryVariables>;
+export const AccountSignOutMutationDocument = new TypedDocumentString(`
+    mutation AccountSignOutMutation {
+  accountSignOut {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountSignOutMutationMutation, AccountSignOutMutationMutationVariables>;
 export const CommerceOrdersPrivilegedDocument = new TypedDocumentString(`
     query CommerceOrdersPrivileged($pagination: PaginationInput!) {
   commerceOrdersPrivileged(pagination: $pagination) {

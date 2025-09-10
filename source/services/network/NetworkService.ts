@@ -171,7 +171,7 @@ export class NetworkService {
                         // For other errors, use default retry logic (respects maximumRetries)
                         return failureCount < 1; // Default was retry: 1
                     },
-                    refetchOnWindowFocus: false,
+                    refetchOnWindowFocus: true,
                 },
                 mutations: {
                     retry: 0,
