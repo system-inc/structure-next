@@ -16,6 +16,9 @@ const xTwclidKey = 'EngagementXTwclid';
 // Reddit Attribution Constants
 const redditRdtCidKey = 'EngagementRedditRdtCid';
 
+// Pinterest Attribution Constants
+const pinterestEpikKey = 'EngagementPinterestEpik';
+
 // Function to get current Google attribution data
 function getGoogleAttributionData(): { gclid?: string; gbraid?: string; wbraid?: string } {
     const gclid = localStorageService.get<string>(googleGclidKey) || undefined;
@@ -126,6 +129,19 @@ function handleRedditRdtCid(rdtCid: string): string {
     return rdtCid;
 }
 
+// Function to get current Pinterest attribution data
+function getPinterestAttributionData(): { epik?: string } {
+    const epik = localStorageService.get<string>(pinterestEpikKey) || undefined;
+    return { epik };
+}
+
+// Function to handle Pinterest epik and store attribution
+function handlePinterestEpik(epik: string): string {
+    localStorageService.set(pinterestEpikKey, epik);
+
+    return epik;
+}
+
 // Function to initialize third-party attribution from URL parameters
 export function initializeThirdPartyAttribution(urlSearchParameters: URLSearchParams | null): void {
     // Return early if not in browser
@@ -178,6 +194,13 @@ export function initializeThirdPartyAttribution(urlSearchParameters: URLSearchPa
         // Handle new Reddit ad click - store rdt_cid
         handleRedditRdtCid(rdtCid);
     }
+
+    // Check for epik in URL parameters
+    const epik = urlSearchParameters?.get('epik');
+    if(epik) {
+        // Handle new Pinterest ad click - store epik
+        handlePinterestEpik(epik);
+    }
 }
 
 // Function to get third-party attribution data for engagement events
@@ -226,6 +249,14 @@ export function getThirdPartyAttributionForEvents(): Record<string, unknown> {
     // Add Reddit object if we have Reddit attribution data
     if(rdt_cid) {
         attributionData.reddit = { rdt_cid };
+    }
+
+    // Pinterest
+    const { epik } = getPinterestAttributionData();
+
+    // Add Pinterest object if we have Pinterest attribution data
+    if(epik) {
+        attributionData.pinterest = { epik };
     }
 
     return attributionData;
