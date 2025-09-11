@@ -20,7 +20,17 @@ export enum ClientToSharedWorkerServerMessageType {
 
 // SharedWorker Message Base Interface
 export interface SharedWorkerBaseMessageInterface {
+    // The worker the message is coming from
+    origin?: string;
+
+    /**
+     * The type of message being sent.
+     * Use this to determine how to process the message arguments.
+     */
     type: string;
+
+    // The arguments for the message, if any
+    arguments?: unknown[];
 }
 
 // Server-to-client - Ping Message Interface

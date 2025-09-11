@@ -141,12 +141,12 @@ export const graphQlErrorToMessage = function (mutationError?: GraphQlError | Er
 };
 
 // Function to parse GraphQL errors from response
-export function parseGraphQlErrors(response: GraphQlResponseInterface): string | null {
+export function parseGraphQlErrors(response: GraphQlResponseInterface): GraphQlErrorInterface | null {
     if(response.errors && response.errors.length > 0 && response.errors[0]) {
-        return response.errors[0].message;
+        return response.errors[0];
     }
     if(response.error) {
-        return response.error.message;
+        return response.error;
     }
     return null;
 }

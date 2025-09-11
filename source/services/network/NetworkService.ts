@@ -203,9 +203,6 @@ export class NetworkService {
     private isInternalApiUrl(input: RequestInfo | URL): boolean {
         if(!ProjectSettings.apis?.base?.host) return false;
 
-        const apiHost = ProjectSettings.apis.base.host;
-        const baseDomain = apiHost.split('.').slice(-2).join('.');
-
         const getHostname = (url: string | URL | Request): string => {
             try {
                 if(typeof url === 'string') return new URL(url).hostname;
@@ -217,8 +214,16 @@ export class NetworkService {
             }
         };
 
-        const hostname = getHostname(input);
-        return hostname === apiHost || hostname.endsWith('.' + baseDomain);
+        const apiHost = ProjectSettings.apis.base.host;
+        const apiBaseDomain = apiHost
+            .split('.')
+            .slice(-2)
+            .join('.') // strip off any subdomains
+            .replace(/^\[|\]$/g, '') // remove IPv6 brackets
+            .replace(/:\d+$/, ''); // remove port if present
+
+        const inputHostname = getHostname(input);
+        return inputHostname === apiHost || inputHostname.endsWith('.' + apiBaseDomain);
     }
 
     // Helper to augment error with additional properties
@@ -365,7 +370,7 @@ export class NetworkService {
 
         // Check for GraphQL errors
         if(hasGraphQlErrors(graphQlResponse)) {
-            const errorMessage = parseGraphQlErrors(graphQlResponse) || 'GraphQL request failed';
+            const errorMessage = parseGraphQlErrors(graphQlResponse)?.message || 'GraphQL request failed';
             const error = new Error(errorMessage);
 
             // Attach the full error details for better debugging
