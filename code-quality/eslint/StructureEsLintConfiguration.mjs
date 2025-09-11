@@ -36,6 +36,7 @@ export const structureIgnorePatterns = [
     '**/dist/**',
     // *.code.js files
     '**/*.code.js',
+    '.vscode/**',
 ];
 
 // ESLint JavaScript configuration
