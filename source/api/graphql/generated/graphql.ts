@@ -3844,6 +3844,40 @@ export type NoOpQueryVariables = Exact<{ [key: string]: never }>;
 
 export type NoOpQuery = { __typename: 'Query' };
 
+export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountMaintenanceSessionCreateMutation = {
+    __typename?: 'Mutation';
+    accountMaintenanceSessionCreate: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        updatedAt: any;
+        createdAt: any;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    };
+};
+
+export type AccountMaintenenceAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountMaintenenceAuthenticationQuery = {
+    __typename?: 'Query';
+    accountAuthentication?: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    } | null;
+};
+
 export type AccountAccessRolesPrivilegedQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AccountAccessRolesPrivilegedQuery = {
@@ -4228,24 +4262,6 @@ export type AccountEnrolledChallengesQueryVariables = Exact<{ [key: string]: nev
 export type AccountEnrolledChallengesQuery = {
     __typename?: 'Query';
     account: { __typename?: 'Account'; enrolledChallenges: Array<string> };
-};
-
-export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountMaintenanceSessionCreateMutation = {
-    __typename?: 'Mutation';
-    accountMaintenanceSessionCreate: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        updatedAt: any;
-        createdAt: any;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    };
 };
 
 export type AccountPasswordUpdateMutationVariables = Exact<{
@@ -4988,6 +5004,38 @@ export const NoOpDocument = new TypedDocumentString(`
   __typename
 }
     `) as unknown as TypedDocumentString<NoOpQuery, NoOpQueryVariables>;
+export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
+    mutation AccountMaintenanceSessionCreate {
+  accountMaintenanceSessionCreate {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountMaintenanceSessionCreateMutation,
+    AccountMaintenanceSessionCreateMutationVariables
+>;
+export const AccountMaintenenceAuthenticationDocument = new TypedDocumentString(`
+    query AccountMaintenenceAuthentication {
+  accountAuthentication {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountMaintenenceAuthenticationQuery,
+    AccountMaintenenceAuthenticationQueryVariables
+>;
 export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
     query AccountAccessRolesPrivileged {
   accountAccessRolesPrivileged {
@@ -5339,23 +5387,6 @@ export const AccountEnrolledChallengesDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountEnrolledChallengesQuery, AccountEnrolledChallengesQueryVariables>;
-export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
-    mutation AccountMaintenanceSessionCreate {
-  accountMaintenanceSessionCreate {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountMaintenanceSessionCreateMutation,
-    AccountMaintenanceSessionCreateMutationVariables
->;
 export const AccountPasswordUpdateDocument = new TypedDocumentString(`
     mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
   accountPasswordUpdate(input: $input) {
