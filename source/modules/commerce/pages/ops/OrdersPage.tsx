@@ -11,11 +11,12 @@ import { Pagination } from '@structure/source/common/navigation/pagination/Pagin
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 
 // Dependencies - API
-import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { ColumnFilterConditionOperator, ColumnFilterInput, OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { useCommerceOrdersPrivilegedRequest } from '@structure/source/modules/commerce/hooks/useCommerceOrdersPrivilegedRequest';
 
 // Dependencies - Utilities
 import { timeFromNow, dayNameWithFullDate } from '@structure/source/utilities/Time';
+import { OrdersFilter, OrdersFilterInterface } from '../../components/OrdersFilter';
 
 // Component - OrdersPage
 export function OrdersPage() {
@@ -24,6 +25,25 @@ export function OrdersPage() {
     const page = parseInt(urlSearchParameters?.get('page') as string) || 1;
     const itemsPerPage = 10;
     const [totalOrders, setTotalOrders] = React.useState<number>(0);
+    const [filters, setFilters] = React.useState<OrdersFilterInterface>({});
+
+    // Build filters for the query
+    const queryFilters: ColumnFilterInput[] = [];
+    if(filters.emailAddress) {
+        queryFilters.push({
+            column: 'emailAddress',
+            operator: ColumnFilterConditionOperator.Like,
+            value: `%${filters.emailAddress}%`,
+            caseSensitive: false,
+        });
+    }
+    if(filters.status) {
+        queryFilters.push({
+            column: 'status',
+            operator: ColumnFilterConditionOperator.Equal,
+            value: filters.status,
+        });
+    }
 
     // Query
     const commerceOrdersPrivilegedRequest = useCommerceOrdersPrivilegedRequest({
@@ -35,6 +55,7 @@ export function OrdersPage() {
                 direction: OrderByDirection.Descending,
             },
         ],
+        filters: queryFilters.length > 0 ? queryFilters : undefined,
     });
 
     // Effects
@@ -52,12 +73,28 @@ export function OrdersPage() {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
     }
 
+    function handleFiltersChange(newFilters: OrdersFilterInterface) {
+        setFilters(newFilters);
+    }
+
+    type OrderItem = NonNullable<typeof commerceOrdersPrivilegedRequest.data>['commerceOrdersPrivileged']['items'][number];
+
+    function getFullName(order: OrderItem): string {
+        const firstName = order.shippingInfo?.shippingAddress?.firstName || '';
+        const lastName = order.shippingInfo?.shippingAddress?.lastName || '';
+        const fullName = `${firstName} ${lastName}`.trim();
+        return fullName || 'N/A';
+    }
+
     // Render the component
     return (
         <div className="px-6 py-4">
             {/* Header */}
             <OpsNavigationTrail />
             <h1 className="mb-6">Orders</h1>
+
+            {/* Filters */}
+            <OrdersFilter onFiltersChange={handleFiltersChange} />
 
             {/* Content */}
             <div className="divide-y divide-neutral/10">
@@ -67,16 +104,18 @@ export function OrdersPage() {
                         {[...Array(itemsPerPage)].map((_, index) => (
                             <div
                                 key={index}
-                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px]"
+                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_200px_120px_120px]"
                             >
                                 {/* Mobile: Stacked Info Placeholders */}
                                 <div className="flex flex-col space-y-2 md:hidden">
                                     <PlaceholderAnimation className="h-5 w-40" />
                                     <PlaceholderAnimation className="h-3.5 w-40" />
                                     <PlaceholderAnimation className="h-3.5 w-40" />
+                                    <PlaceholderAnimation className="h-3.5 w-40" />
                                 </div>
 
                                 {/* Desktop: Column Info Placeholders */}
+                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
                                 <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
                                 <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
                                 <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
@@ -93,8 +132,9 @@ export function OrdersPage() {
                 {commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged.items && (
                     <>
                         {/* Header Row */}
-                        <div className="hidden grid-cols-[200px_200px_120px_120px] items-center gap-3 py-2 font-medium md:grid">
+                        <div className="hidden grid-cols-[200px_200px_200px_120px_120px] items-center gap-3 py-2 font-medium md:grid">
                             <div>Order ID</div>
+                            <div>Name</div>
                             <div>Email</div>
                             <div>Status</div>
                             <div>Amount</div>
@@ -103,11 +143,12 @@ export function OrdersPage() {
                         {commerceOrdersPrivilegedRequest.data.commerceOrdersPrivileged.items.map((order) => (
                             <div
                                 key={order.id}
-                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px_400px]"
+                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_200px_120px_120px_400px]"
                             >
                                 {/* Mobile View */}
                                 <div className="md:hidden">
                                     <div className="font-medium">{order.identifier}</div>
+                                    <div className="neutral text-sm">{getFullName(order)}</div>
                                     <div className="neutral text-sm">{order.emailAddress}</div>
                                     <div className="neutral text-sm">{order.status}</div>
                                     <div className="neutral text-sm">
@@ -125,6 +166,7 @@ export function OrdersPage() {
                                         {order.identifier}
                                     </Link>
                                 </div>
+                                <div className="neutral hidden truncate md:block">{getFullName(order)}</div>
                                 <div className="neutral hidden truncate md:block">{order.emailAddress}</div>
                                 <div className="neutral hidden truncate md:block">{order.status}</div>
                                 <div className="neutral hidden truncate md:block">
