@@ -52,6 +52,15 @@ export function OrdersPage() {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
     }
 
+    type OrderItem = NonNullable<typeof commerceOrdersPrivilegedRequest.data>['commerceOrdersPrivileged']['items'][number];
+
+    function getFullName(order: OrderItem): string {
+        const firstName = order.shippingInfo?.shippingAddress?.firstName || '';
+        const lastName = order.shippingInfo?.shippingAddress?.lastName || '';
+        const fullName = `${firstName} ${lastName}`.trim();
+        return fullName || 'N/A';
+    }
+
     // Render the component
     return (
         <div className="px-6 py-4">
@@ -67,16 +76,18 @@ export function OrdersPage() {
                         {[...Array(itemsPerPage)].map((_, index) => (
                             <div
                                 key={index}
-                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px]"
+                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_200px_120px_120px]"
                             >
                                 {/* Mobile: Stacked Info Placeholders */}
                                 <div className="flex flex-col space-y-2 md:hidden">
                                     <PlaceholderAnimation className="h-5 w-40" />
                                     <PlaceholderAnimation className="h-3.5 w-40" />
                                     <PlaceholderAnimation className="h-3.5 w-40" />
+                                    <PlaceholderAnimation className="h-3.5 w-40" />
                                 </div>
 
                                 {/* Desktop: Column Info Placeholders */}
+                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
                                 <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
                                 <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
                                 <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
@@ -93,8 +104,9 @@ export function OrdersPage() {
                 {commerceOrdersPrivilegedRequest.data?.commerceOrdersPrivileged.items && (
                     <>
                         {/* Header Row */}
-                        <div className="hidden grid-cols-[200px_200px_120px_120px] items-center gap-3 py-2 font-medium md:grid">
+                        <div className="hidden grid-cols-[200px_200px_200px_120px_120px] items-center gap-3 py-2 font-medium md:grid">
                             <div>Order ID</div>
+                            <div>Name</div>
                             <div>Email</div>
                             <div>Status</div>
                             <div>Amount</div>
@@ -103,11 +115,12 @@ export function OrdersPage() {
                         {commerceOrdersPrivilegedRequest.data.commerceOrdersPrivileged.items.map((order) => (
                             <div
                                 key={order.id}
-                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_120px_120px_400px]"
+                                className="grid grid-cols-[1fr] items-center gap-3 py-2 md:grid-cols-[200px_200px_200px_120px_120px_400px]"
                             >
                                 {/* Mobile View */}
                                 <div className="md:hidden">
                                     <div className="font-medium">{order.identifier}</div>
+                                    <div className="neutral text-sm">{getFullName(order)}</div>
                                     <div className="neutral text-sm">{order.emailAddress}</div>
                                     <div className="neutral text-sm">{order.status}</div>
                                     <div className="neutral text-sm">
@@ -125,6 +138,7 @@ export function OrdersPage() {
                                         {order.identifier}
                                     </Link>
                                 </div>
+                                <div className="neutral hidden truncate md:block">{getFullName(order)}</div>
                                 <div className="neutral hidden truncate md:block">{order.emailAddress}</div>
                                 <div className="neutral hidden truncate md:block">{order.status}</div>
                                 <div className="neutral hidden truncate md:block">
