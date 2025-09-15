@@ -45,21 +45,12 @@ export function OrdersFilter(properties: OrdersFilterProperties) {
         properties.onFiltersChange({});
     }
 
-    // Function to format enum value for display
-    function formatStatusLabel(status: string): string {
-        // Add spaces before capital letters and handle special cases
-        return status
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/^\s/, '')
-            .replace('Wait Payment', 'Waiting Payment');
-    }
-
     // Generate status options from enum
     const statusOptions = [
         { value: 'all', content: 'All Statuses' },
         ...Object.values(CommerceOrderStatus).map(status => ({
             value: status,
-            content: formatStatusLabel(status)
+            content: status
         }))
     ];
 
@@ -69,6 +60,7 @@ export function OrdersFilter(properties: OrdersFilterProperties) {
             <h3 className="mb-2  text-base font-medium">Search</h3>
             <div className="grid gap-4 md:grid-cols-4">
                 {/* Email Search */}
+                <div>
                     <label className="mb-1 block text-sm font-medium">Email</label>
                     <InputText
                         id="email-filter"
