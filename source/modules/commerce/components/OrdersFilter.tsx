@@ -11,10 +11,6 @@ import { InputSelect } from '@structure/source/common/forms/InputSelect';
 // Dependencies - API
 import { CommerceOrderStatus } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-// Dependencies - Assets
-import SearchIcon from '@structure/assets/icons/navigation/SearchIcon.svg';
-import FilterIcon from '@structure/assets/icons/interface/FilterIcon.svg';
-
 // Interface - OrdersFilterInterface
 export interface OrdersFilterInterface {
     emailAddress?: string;
@@ -48,10 +44,10 @@ export function OrdersFilter(properties: OrdersFilterProperties) {
     // Generate status options from enum
     const statusOptions = [
         { value: 'all', content: 'All Statuses' },
-        ...Object.values(CommerceOrderStatus).map(status => ({
+        ...Object.values(CommerceOrderStatus).map((status) => ({
             value: status,
-            content: status
-        }))
+            content: status,
+        })),
     ];
 
     // Render the component
@@ -70,11 +66,11 @@ export function OrdersFilter(properties: OrdersFilterProperties) {
                             setEmailAddress(value || '');
                         }}
                         onKeyDown={function (event) {
-                            if (event.key === 'Enter') {
+                            if(event.key === 'Enter') {
                                 handleApplyFilters();
                             }
                         }}
-                        variant='search'
+                        variant="search"
                     />
                 </div>
 
