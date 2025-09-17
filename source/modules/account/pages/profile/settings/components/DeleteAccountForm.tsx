@@ -79,9 +79,6 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
 
             {!success && (
                 <>
-                    <h2 className="text-xl font-medium">Delete Account</h2>
-                    <p className="mt-4">Are you sure you want to delete your account?</p>
-
                     <Form
                         className="mt-6"
                         formInputs={[
