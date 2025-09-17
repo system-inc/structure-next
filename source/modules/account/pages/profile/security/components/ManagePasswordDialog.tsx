@@ -14,22 +14,40 @@ export interface ManagePasswordDialogProperties extends DialogProperties {
 export function ManagePasswordDialog(properties: ManagePasswordDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
+    const [showForm, setShowForm] = React.useState(properties.open ?? false);
 
     // Effect to update the open state when the open property changes
     React.useEffect(
         function () {
-            setOpen(properties.open ?? false);
+            if(properties.open) {
+                setOpen(true);
+                setShowForm(true);
+            } else {
+                // Hide form immediately, then close dialog after animation
+                setShowForm(false);
+                setTimeout(function() {
+                    setOpen(false);
+                }, 0);
+            }
         },
         [properties.open],
     );
 
     // Function to intercept the onOpenChange event
     function onOpenChangeIntercept(open: boolean) {
-        // Optionally call the onOpenChange callback
-        properties.onOpenChange?.(open);
-
-        // Update the open state
-        setOpen(open);
+        if(!open) {
+            // Hide form first
+            setShowForm(false);
+            // Then notify parent
+            setTimeout(function() {
+                properties.onOpenChange?.(false);
+                setOpen(false);
+            }, 0);
+        } else {
+            properties.onOpenChange?.(true);
+            setOpen(true);
+            setShowForm(true);
+        }
     }
 
     // Render the component
@@ -38,17 +56,15 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
             className="p-6"
             accessibilityTitle={properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
             content={
-                <ManagePasswordForm
-                    accountHasPasswordSet={properties.accountHasPasswordSet}
-                    onComplete={function () {
-                        onOpenChangeIntercept(false);
-                    }}
-                />
+                showForm ? (
+                    <ManagePasswordForm
+                        accountHasPasswordSet={properties.accountHasPasswordSet}
+                        onComplete={function () {
+                            onOpenChangeIntercept(false);
+                        }}
+                    />
+                ) : <div style={{ minHeight: '200px' }} />
             }
-            onOpenAutoFocus={function(event) {
-                // Prevent auto-focus which might trigger validation
-                event.preventDefault();
-            }}
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
             open={open}
