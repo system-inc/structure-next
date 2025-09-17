@@ -21,6 +21,9 @@ export interface DeleteAccountFormProperties {
     onComplete?: () => void;
 }
 export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
+    // State
+    const [success, setSuccess] = React.useState(false);
+
     // Hooks
     const accountDeleteRequest = networkService.useGraphQlMutation(
         gql(`
@@ -31,9 +34,6 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
             }
         `),
     );
-
-    // State
-    const [success, setSuccess] = React.useState(false);
 
     // Function to handle form submission
     async function handleSubmit(formValues: { reason?: string }): Promise<FormSubmitResponseInterface> {

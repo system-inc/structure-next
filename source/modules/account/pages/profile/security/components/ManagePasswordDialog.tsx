@@ -22,10 +22,11 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
             if(properties.open) {
                 setOpen(true);
                 setShowForm(true);
-            } else {
+            }
+            else {
                 // Hide form immediately, then close dialog after animation
                 setShowForm(false);
-                setTimeout(function() {
+                setTimeout(function () {
                     setOpen(false);
                 }, 0);
             }
@@ -39,11 +40,12 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
             // Hide form first
             setShowForm(false);
             // Then notify parent
-            setTimeout(function() {
+            setTimeout(function () {
                 properties.onOpenChange?.(false);
                 setOpen(false);
             }, 0);
-        } else {
+        }
+        else {
             properties.onOpenChange?.(true);
             setOpen(true);
             setShowForm(true);
@@ -63,7 +65,9 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
                             onOpenChangeIntercept(false);
                         }}
                     />
-                ) : <div style={{ minHeight: '200px' }} />
+                ) : (
+                    <div style={{ minHeight: '200px' }} />
+                )
             }
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten

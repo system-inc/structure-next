@@ -146,7 +146,15 @@ export function DataSource(properties: DataSourceProperties) {
         },
         {
             enabled: !properties.error && !!columnToMeasure, // Skip if there is an error or if there is no column to measure
-            onSuccess: (data) => {
+        },
+    );
+
+    // Handle success state
+    React.useEffect(
+        function () {
+            if(dataInteractionDatabaseTableMetricsRequest.data) {
+                const data = dataInteractionDatabaseTableMetricsRequest.data;
+
                 // Set the loading state to false
                 properties.setLoading(false);
 
@@ -195,13 +203,21 @@ export function DataSource(properties: DataSourceProperties) {
                         ];
                     }
                 });
-            },
-            onError: function () {
+            }
+        },
+        [dataInteractionDatabaseTableMetricsRequest.data, columnToMeasure, properties],
+    );
+
+    // Handle error state
+    React.useEffect(
+        function () {
+            if(dataInteractionDatabaseTableMetricsRequest.isError) {
                 properties.setDataSourcesWithMetrics((old) => {
                     return old.filter((old) => old.id !== properties.settings.id);
                 });
-            },
+            }
         },
+        [dataInteractionDatabaseTableMetricsRequest.isError, properties],
     );
 
     // Function to handle changing the database and table

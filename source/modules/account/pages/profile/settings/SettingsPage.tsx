@@ -19,16 +19,17 @@ export async function generateMetadata(): Promise<Metadata> {
 // Component - SettingsPage
 export function SettingsPage() {
     // State
-    const [needsAuth, setNeedsAuth] = React.useState(false);
+    const [needsAuthentication, setNeedsAuthentication] = React.useState(false);
     const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = React.useState(false);
 
-    // Functions
+    // Function to handle delete button click
     function handleDeleteClick() {
-        setNeedsAuth(true);
+        setNeedsAuthentication(true);
     }
 
+    // Function to handle successful authentication
     async function handleAuthenticated() {
-        setNeedsAuth(false);
+        setNeedsAuthentication(false);
         setDeleteAccountDialogOpen(true);
     }
 
@@ -38,20 +39,17 @@ export function SettingsPage() {
             <h1>Settings</h1>
 
             <div className="mt-10">
-                <Button
-                    variant="destructive"
-                    onClick={handleDeleteClick}
-                >
+                <Button variant="destructive" onClick={handleDeleteClick}>
                     Delete Account
                 </Button>
             </div>
 
-            {/* Account Maintenance Dialog - Shows when auth is needed */}
+            {/* Account Maintenance Dialog - Shows when authentication is needed */}
             <AccountMaintenanceDialog
-                open={needsAuth}
+                open={needsAuthentication}
                 onOpenChange={function (open) {
                     if(!open) {
-                        setNeedsAuth(false);
+                        setNeedsAuthentication(false);
                     }
                 }}
                 actionText="delete your account"
@@ -59,10 +57,7 @@ export function SettingsPage() {
             />
 
             {/* Delete Account Dialog - Shows after authentication */}
-            <DeleteAccountDialog
-                open={deleteAccountDialogOpen}
-                onOpenChange={setDeleteAccountDialogOpen}
-            />
+            <DeleteAccountDialog open={deleteAccountDialogOpen} onOpenChange={setDeleteAccountDialogOpen} />
         </>
     );
 }
