@@ -3844,6 +3844,22 @@ export type NoOpQueryVariables = Exact<{ [key: string]: never }>;
 
 export type NoOpQuery = { __typename: 'Query' };
 
+export type AccountMaintenanceAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountMaintenanceAuthenticationQuery = {
+    __typename?: 'Query';
+    accountAuthentication?: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    } | null;
+};
+
 export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
 
 export type AccountMaintenanceSessionCreateMutation = {
@@ -5004,6 +5020,21 @@ export const NoOpDocument = new TypedDocumentString(`
   __typename
 }
     `) as unknown as TypedDocumentString<NoOpQuery, NoOpQueryVariables>;
+export const AccountMaintenanceAuthenticationDocument = new TypedDocumentString(`
+    query AccountMaintenanceAuthentication {
+  accountAuthentication {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountMaintenanceAuthenticationQuery,
+    AccountMaintenanceAuthenticationQueryVariables
+>;
 export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
     mutation AccountMaintenanceSessionCreate {
   accountMaintenanceSessionCreate {
