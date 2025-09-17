@@ -28,7 +28,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
     // Check current authentication session - using mutation to get fresh data
     const accountAuthenticationCheck = networkService.useGraphQlMutation(
         gql(`
-            query AccountAuthentication {
+            query AccountMaintenanceAuthentication {
                 accountAuthentication {
                     status
                     scopeType
@@ -38,7 +38,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                     }
                 }
             }
-        `)
+        `),
     );
 
     // Effect to handle dialog opening and closing
@@ -57,13 +57,13 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
     );
 
     // Ref to track if we should proceed with auth callback
-    const shouldProceedRef = React.useRef(true);
+    const shouldProceedReference = React.useRef(true);
 
     // Effect to check authentication when dialog opens
     React.useEffect(
         function () {
             // Reset the flag when dialog state changes
-            shouldProceedRef.current = open;
+            shouldProceedReference.current = open;
 
             // Only check auth if dialog is open and we haven't checked yet
             if(open && !hasCheckedAuth && !checkingAuth) {
@@ -71,46 +71,49 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                 setHasCheckedAuth(true);
 
                 // Execute the authentication check
-                accountAuthenticationCheck.execute().then(function(result) {
-                    // Don't proceed if dialog was closed while checking
-                    if(!shouldProceedRef.current) {
-                        setCheckingAuth(false);
-                        return;
-                    }
+                accountAuthenticationCheck
+                    .execute()
+                    .then(function (result) {
+                        // Don't proceed if dialog was closed while checking
+                        if(!shouldProceedReference.current) {
+                            setCheckingAuth(false);
+                            return;
+                        }
 
-                    const authData = result?.accountAuthentication;
-                    if(
-                        authData?.status === AuthenticationSessionStatus.Authenticated &&
-                        authData?.scopeType === 'AccountMaintenance'
-                    ) {
-                        // Already authenticated
-                        setIsAuthenticated(true);
-                        // Small delay to show the success state
-                        setTimeout(function () {
-                            // Check again if we should still proceed
-                            if(shouldProceedRef.current) {
-                                properties.onAuthenticated();
-                                setOpen(false);
-                                properties.onOpenChange?.(false);
-                            }
-                        }, 500);
-                    }
-                    // Always stop checking auth after we've checked
-                    setCheckingAuth(false);
-                }).catch(function(error) {
-                    console.error('Failed to check authentication:', error);
-                    setCheckingAuth(false);
-                });
+                        const authData = result?.accountAuthentication;
+                        if(
+                            authData?.status === AuthenticationSessionStatus.Authenticated &&
+                            authData?.scopeType === 'AccountMaintenance'
+                        ) {
+                            // Already authenticated
+                            setIsAuthenticated(true);
+                            // Small delay to show the success state
+                            setTimeout(function () {
+                                // Check again if we should still proceed
+                                if(shouldProceedReference.current) {
+                                    properties.onAuthenticated();
+                                    setOpen(false);
+                                    properties.onOpenChange?.(false);
+                                }
+                            }, 500);
+                        }
+                        // Always stop checking auth after we've checked
+                        setCheckingAuth(false);
+                    })
+                    .catch(function (error) {
+                        console.error('Failed to check authentication:', error);
+                        setCheckingAuth(false);
+                    });
             }
         },
-        [open, hasCheckedAuth, checkingAuth],
+        [open, hasCheckedAuth, checkingAuth, accountAuthenticationCheck, properties],
     );
 
     // Function to intercept the onOpenChange event
     function onOpenChangeIntercept(open: boolean) {
         // Mark that we should not proceed if closing
         if(!open) {
-            shouldProceedRef.current = false;
+            shouldProceedReference.current = false;
         }
 
         // Optionally call the onOpenChange callback
@@ -143,7 +146,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
         // Show the authentication form only if not checking and not authenticated
         content = (
             <div className="p-6">
-                {shouldProceedRef.current ? (
+                {shouldProceedReference.current ? (
                     <AccountMaintenanceSession
                         title="Verify Identity"
                         description={`To ${properties.actionText}, please verify your identity for security purposes.`}

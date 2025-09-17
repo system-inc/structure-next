@@ -14,6 +14,7 @@ import * as types from './graphql';
  */
 type Documents = {
     'query NoOp { __typename }': typeof types.NoOpDocument;
+    '\n            query AccountMaintenanceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountMaintenanceAuthenticationDocument;
     '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountMaintenanceSessionCreateDocument;
     '\n            query AccountMaintenenceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountMaintenenceAuthenticationDocument;
     '\n            query AccountAccessRolesPrivileged {\n                accountAccessRolesPrivileged {\n                    type\n                    description\n                }\n            }\n        ': typeof types.AccountAccessRolesPrivilegedDocument;
@@ -71,6 +72,8 @@ type Documents = {
 };
 const documents: Documents = {
     'query NoOp { __typename }': types.NoOpDocument,
+    '\n            query AccountMaintenanceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
+        types.AccountMaintenanceAuthenticationDocument,
     '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
         types.AccountMaintenanceSessionCreateDocument,
     '\n            query AccountMaintenenceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
@@ -185,6 +188,12 @@ const documents: Documents = {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: 'query NoOp { __typename }'): typeof import('./graphql').NoOpDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            query AccountMaintenanceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountMaintenanceAuthenticationDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
