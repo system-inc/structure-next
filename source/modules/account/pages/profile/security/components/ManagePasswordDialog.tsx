@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { ManagePassword } from '@structure/source/modules/account/pages/profile/security/components/ManagePassword';
+import { ManagePasswordForm } from '@structure/source/modules/account/pages/profile/security/components/ManagePasswordForm';
 
 // Component - ManagePasswordDialog
 export interface ManagePasswordDialogProperties extends DialogProperties {
@@ -35,10 +35,10 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
     // Render the component
     return (
         <Dialog
-            className="p-12"
-            accessibilityTitle="Manage Password"
+            className="p-6"
+            accessibilityTitle={properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
             content={
-                <ManagePassword
+                <ManagePasswordForm
                     accountHasPasswordSet={properties.accountHasPasswordSet}
                     onComplete={function () {
                         onOpenChangeIntercept(false);

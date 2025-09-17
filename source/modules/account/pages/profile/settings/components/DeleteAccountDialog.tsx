@@ -6,7 +6,7 @@ import { useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { DeleteAccount } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccount';
+import { DeleteAccountForm } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccountForm';
 
 // Component - DeleteAccountDialog
 export type DeleteAccountDialogProperties = DialogProperties;
@@ -37,14 +37,20 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
     // Render the component
     return (
         <Dialog
-            className="p-12"
+            className="p-6"
             accessibilityTitle="Delete Account"
             content={
-                <DeleteAccount
-                    onComplete={function () {
-                        router.push('/');
-                    }}
-                />
+                <div>
+                    <h2 className="mb-4 text-lg font-semibold text-red-600">Delete Account</h2>
+                    <p className="mb-4 text-sm text-foreground-secondary">
+                        This action cannot be undone. All your data will be permanently deleted.
+                    </p>
+                    <DeleteAccountForm
+                        onComplete={function () {
+                            router.push('/');
+                        }}
+                    />
+                </div>
             }
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten

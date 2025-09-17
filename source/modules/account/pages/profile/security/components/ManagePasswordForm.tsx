@@ -83,10 +83,10 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
 
             {!success && (
                 <>
-                    <h2 className="text-xl font-medium">
+                    <h2 className="text-lg font-semibold">
                         {properties.accountHasPasswordSet ? 'Change' : 'Set'} Password
                     </h2>
-                    <p className="mt-4">
+                    <p className="mt-2 text-sm text-foreground-secondary">
                         {properties.accountHasPasswordSet
                             ? 'Use this form to change your account password.'
                             : 'Improve the security of your account by setting a password.'}
