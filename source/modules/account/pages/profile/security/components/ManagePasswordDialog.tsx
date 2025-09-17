@@ -45,6 +45,10 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
                     }}
                 />
             }
+            onOpenAutoFocus={function(event) {
+                // Prevent auto-focus which might trigger validation
+                event.preventDefault();
+            }}
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
             open={open}
