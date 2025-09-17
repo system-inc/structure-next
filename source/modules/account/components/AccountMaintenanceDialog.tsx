@@ -56,9 +56,15 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
         [properties.open],
     );
 
+    // Ref to track if we should proceed with auth callback
+    const shouldProceedRef = React.useRef(true);
+
     // Effect to check authentication when dialog opens
     React.useEffect(
         function () {
+            // Reset the flag when dialog state changes
+            shouldProceedRef.current = open;
+
             // Only check auth if dialog is open and we haven't checked yet
             if(open && !hasCheckedAuth && !checkingAuth) {
                 setCheckingAuth(true);
@@ -66,6 +72,12 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
 
                 // Execute the authentication check
                 accountAuthenticationCheck.execute().then(function(result) {
+                    // Don't proceed if dialog was closed while checking
+                    if(!shouldProceedRef.current) {
+                        setCheckingAuth(false);
+                        return;
+                    }
+
                     const authData = result?.accountAuthentication;
                     if(
                         authData?.status === AuthenticationSessionStatus.Authenticated &&
@@ -75,9 +87,12 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                         setIsAuthenticated(true);
                         // Small delay to show the success state
                         setTimeout(function () {
-                            properties.onAuthenticated();
-                            setOpen(false);
-                            properties.onOpenChange?.(false);
+                            // Check again if we should still proceed
+                            if(shouldProceedRef.current) {
+                                properties.onAuthenticated();
+                                setOpen(false);
+                                properties.onOpenChange?.(false);
+                            }
                         }, 500);
                     }
                     // Always stop checking auth after we've checked
@@ -93,6 +108,11 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
 
     // Function to intercept the onOpenChange event
     function onOpenChangeIntercept(open: boolean) {
+        // Mark that we should not proceed if closing
+        if(!open) {
+            shouldProceedRef.current = false;
+        }
+
         // Optionally call the onOpenChange callback
         properties.onOpenChange?.(open);
 
