@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 // Component - SecurityPage
 export function SecurityPage() {
     // State
-    const [needsAuth, setNeedsAuth] = React.useState(false);
+    const [needsAuthentication, setNeedsAuthentication] = React.useState(false);
     const [showPasswordForm, setShowPasswordForm] = React.useState(false);
 
     // Hooks - API - Queries
@@ -43,11 +43,11 @@ export function SecurityPage() {
 
     // Functions
     function handlePasswordClick() {
-        setNeedsAuth(true);
+        setNeedsAuthentication(true);
     }
 
     async function handleAuthenticated() {
-        setNeedsAuth(false);
+        setNeedsAuthentication(false);
         setShowPasswordForm(true);
     }
 
@@ -65,10 +65,10 @@ export function SecurityPage() {
 
             {/* Account Maintenance Dialog - Shows when auth is needed */}
             <AccountMaintenanceDialog
-                open={needsAuth}
+                open={needsAuthentication}
                 onOpenChange={function (open) {
                     if(!open) {
-                        setNeedsAuth(false);
+                        setNeedsAuthentication(false);
                     }
                 }}
                 actionText={accountHasPasswordSet ? 'change your password' : 'set your password'}

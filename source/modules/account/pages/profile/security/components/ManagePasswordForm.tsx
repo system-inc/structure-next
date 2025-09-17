@@ -23,6 +23,9 @@ export interface ManagePasswordFormProperties {
     onComplete?: () => void;
 }
 export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
+    // State
+    const [success, setSuccess] = React.useState(false);
+
     // Hooks
     const accountPasswordUpdateRequest = networkService.useGraphQlMutation(
         gql(`
@@ -33,9 +36,6 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
             }
         `),
     );
-
-    // State
-    const [success, setSuccess] = React.useState(false);
 
     // Function to handle form submission
     async function handleSubmit(formValues: { newPassword?: string }): Promise<FormSubmitResponseInterface> {
@@ -86,7 +86,7 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
                     <h2 className="text-lg font-semibold">
                         {properties.accountHasPasswordSet ? 'Change' : 'Set'} Password
                     </h2>
-                    <p className="mt-2 text-sm text-foreground-secondary">
+                    <p className="text-foreground-secondary mt-2 text-sm">
                         {properties.accountHasPasswordSet
                             ? 'Use this form to change your account password.'
                             : 'Improve the security of your account by setting a password.'}
