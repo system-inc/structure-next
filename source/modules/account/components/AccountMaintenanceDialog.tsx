@@ -143,21 +143,26 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
         // Show the authentication form only if not checking and not authenticated
         content = (
             <div className="p-6">
-                <AccountMaintenanceSession
-                    title="Verify Identity"
-                    description={`To ${properties.actionText}, please verify your identity for security purposes.`}
-                    buttonText="Continue"
-                    onAuthenticated={properties.onAuthenticated}
-                >
-                    {/* This will be shown after authentication completes */}
-                    <div className="text-center">
-                        <div className="mb-4 flex justify-center">
-                            <LoadingAnimation className="h-12 w-12" />
+                {shouldProceedRef.current ? (
+                    <AccountMaintenanceSession
+                        title="Verify Identity"
+                        description={`To ${properties.actionText}, please verify your identity for security purposes.`}
+                        buttonText="Continue"
+                        onAuthenticated={properties.onAuthenticated}
+                    >
+                        {/* This will be shown after authentication completes */}
+                        <div className="text-center">
+                            <div className="mb-4 flex justify-center">
+                                <LoadingAnimation className="h-12 w-12" />
+                            </div>
+                            <h2 className="mb-2 text-lg font-semibold">Authentication Successful</h2>
+                            <p className="text-sm text-foreground-secondary">Processing your request...</p>
                         </div>
-                        <h2 className="mb-2 text-lg font-semibold">Authentication Successful</h2>
-                        <p className="text-sm text-foreground-secondary">Processing your request...</p>
-                    </div>
-                </AccountMaintenanceSession>
+                    </AccountMaintenanceSession>
+                ) : (
+                    // Dialog is closing, show empty content to prevent flash
+                    <div />
+                )}
             </div>
         );
     }
