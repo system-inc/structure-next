@@ -38,8 +38,25 @@ interface UseRequestOptionsBase<TData, TVariables = void, TSelected = TData> {
     request: (variables: TVariables) => Promise<TData>;
     // Transform or select part of the data (affects returned data but not cache)
     select?: (data: TData) => TSelected;
-    // Whether this query should execute - useful for dependent queries
+    // Whether this request should execute - useful for dependent requests
     enabled?: boolean;
+    // Number of retry attempts for failed requests (true = 3, false = 0)
+    maximumRetries?: boolean | number;
+    // Attach metadata to the request for debugging, logging, or filtering
+    metadata?: Record<string, unknown>;
+}
+
+// Read-specific options (queries)
+// Queries always have a cache key and can control caching behavior
+// onSuccess and onError are intentionally omitted when using queries
+// because they lead to confusing behavior. Instead, handle success/error states
+// using effects or directly in your request function
+export interface UseReadRequestOptionsInterface<TData, TVariables = void, TSelected = TData>
+    extends UseRequestOptionsBase<TData, TVariables, TSelected> {
+    // Cache control - when false, query always fetches fresh data from network
+    cache?: boolean;
+    // Unique identifier for caching - required for all queries to identify and deduplicate requests
+    cacheKey: CacheKey;
     // How long the data is considered fresh (won't refetch) in milliseconds
     validDurationInMilliseconds?: number;
     // How long to keep unused data in cache before garbage collection
@@ -52,43 +69,26 @@ interface UseRequestOptionsBase<TData, TVariables = void, TSelected = TData> {
     refreshOnWindowFocus?: boolean;
     // Whether to refresh data when reconnecting to the internet
     refreshOnReconnect?: boolean;
-    // Number of retry attempts for failed requests (true = 3, false = 0)
-    maximumRetries?: boolean | number;
     // Initial data to be set as the query's initial data
     initialData?: TData;
     // Placeholder data to show while the query is loading (not cached)
     placeholderData?: TData | (() => TData | undefined);
     // Keep previous data when query key changes (useful for pagination)
     keepPreviousData?: boolean;
-    // Attach metadata to the query for debugging, logging, or filtering
-    metadata?: Record<string, unknown>;
 }
 
-// Read-specific options (queries, cached)
-// onSuccess and onError are intentionally omitted when using cached queries
-// because they lead to confusing behavior. Instead, handle success/error states
-// using effects or directly in your request function.
-export interface UseReadRequestOptionsInterface<TData, TVariables = void, TSelected = TData>
-    extends UseRequestOptionsBase<TData, TVariables, TSelected> {
-    // Unique identifier for caching
-    cacheKey: CacheKey;
-}
-
-// Write-specific options (mutations, not cached, has callbacks)
+// Write-specific options (mutations)
+// Mutations are for operations that modify data on the server
+// They are never cached and are executed manually via execute()
 export interface UseWriteRequestOptionsInterface<TData, TVariables = void, TSelected = TData>
     extends UseRequestOptionsBase<TData, TVariables, TSelected> {
-    // Set to false for mutations
-    cacheKey: false;
+    // Mutations don't have a cache key - they are never cached
+    // Removing cacheKey entirely makes it clear this is a mutation
     // Callback function called when the request succeeds
     onSuccess?: (data: TData) => void;
     // Callback function called when the request fails
     onError?: (error: Error) => void;
 }
-
-// Union type for backwards compatibility
-export type UseRequestOptionsInterface<TData, TVariables = void, TSelected = TData> =
-    | UseReadRequestOptionsInterface<TData, TVariables, TSelected>
-    | UseWriteRequestOptionsInterface<TData, TVariables, TSelected>;
 
 // Base interface with common properties
 interface UseRequestResultBase<TData> {
@@ -383,92 +383,106 @@ export class NetworkService {
         return graphQlResponse.data as TResult;
     }
 
-    // Main hook with overloads
-    useRequest<TData, TVariables = void, TSelected = TData>(
+    // Read request hook - for fetching/reading data from the server
+    // Always returns a result with refresh() method for re-fetching
+    // Supports both cached and uncached reads via the 'cache' option
+    useReadRequest<TData, TVariables = void, TSelected = TData>(
         options: UseReadRequestOptionsInterface<TData, TVariables, TSelected>,
-    ): UseGraphQlQueryRequestResultInterface<TSelected>;
-    useRequest<TData, TVariables = void>(
-        options: UseWriteRequestOptionsInterface<TData, TVariables>,
-    ): UseGraphQlMutationRequestResultInterface<TData, TVariables>;
-    useRequest<TData, TVariables = void, TSelected = TData>(
-        options: UseRequestOptionsInterface<TData, TVariables, TSelected>,
-    ): UseGraphQlQueryRequestResultInterface<TSelected> | UseGraphQlMutationRequestResultInterface<TData, TVariables> {
+    ): UseGraphQlQueryRequestResultInterface<TSelected> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
-        // If cacheKey is not false, we treat this as a query
-        if(options.cacheKey !== false) {
-            // Cached behavior (like useQuery)
-            const baseQueryOptions = {
-                queryKey: options.cacheKey,
-                queryFn: () =>
-                    this.trackAsyncOperation(() => (options.request as (variables?: unknown) => Promise<TData>)()),
-                enabled: options.enabled,
-                staleTime: options.validDurationInMilliseconds,
-                gcTime: options.clearAfterUnusedDurationInMilliseconds,
-                refetchInterval: options.refreshIntervalInMilliseconds,
-                refetchIntervalInBackground: options.refreshIntervalInBackground,
-                refetchOnWindowFocus: options.refreshOnWindowFocus,
-                refetchOnReconnect: options.refreshOnReconnect,
-                ...(options.maximumRetries !== undefined ? { retry: options.maximumRetries } : {}),
-                initialData: options.initialData,
-                select: options.select,
-                meta: options.metadata,
-            };
+        // Determine cache behavior based on the 'cache' option
+        // When cache is false, we use aggressive cache invalidation to ensure fresh data
+        const shouldCache = options.cache !== false;
 
-            // Build complete options with placeholderData if needed
-            const completeQueryOptions = {
-                ...baseQueryOptions,
-                ...(options.keepPreviousData ? { placeholderData: keepPreviousData } : {}),
-                ...(options.placeholderData !== undefined && !options.keepPreviousData
-                    ? { placeholderData: options.placeholderData }
-                    : {}),
-            } as Parameters<typeof tanStackReactQueryUseQuery>[0];
+        // Configure TanStack Query options based on cache preference
+        const cacheConfiguration = shouldCache
+            ? {
+                  // Normal caching behavior
+                  staleTime: options.validDurationInMilliseconds,
+                  gcTime: options.clearAfterUnusedDurationInMilliseconds,
+              }
+            : {
+                  // Uncached behavior: data is immediately stale and garbage collected
+                  // This ensures every access fetches fresh data from the network
+                  staleTime: 0,
+                  gcTime: 0,
+              };
+        const baseQueryOptions = {
+            queryKey: options.cacheKey,
+            queryFn: () =>
+                this.trackAsyncOperation(() => (options.request as (variables?: unknown) => Promise<TData>)()),
+            enabled: options.enabled,
+            ...cacheConfiguration, // Apply cache configuration
+            refetchInterval: options.refreshIntervalInMilliseconds,
+            refetchIntervalInBackground: options.refreshIntervalInBackground,
+            refetchOnWindowFocus: options.refreshOnWindowFocus,
+            refetchOnReconnect: options.refreshOnReconnect,
+            ...(options.maximumRetries !== undefined ? { retry: options.maximumRetries } : {}),
+            initialData: options.initialData,
+            select: options.select,
+            meta: options.metadata,
+        };
 
-            const queryResult = tanStackReactQueryUseQuery(completeQueryOptions, this.tanStackReactQueryClient);
+        // Build complete options with placeholderData if needed
+        const completeQueryOptions = {
+            ...baseQueryOptions,
+            ...(options.keepPreviousData ? { placeholderData: keepPreviousData } : {}),
+            ...(options.placeholderData !== undefined && !options.keepPreviousData
+                ? { placeholderData: options.placeholderData }
+                : {}),
+        } as Parameters<typeof tanStackReactQueryUseQuery>[0];
 
-            return {
-                data: queryResult.data,
-                error: queryResult.error,
-                isLoading: queryResult.isLoading,
-                isError: queryResult.isError,
-                isSuccess: queryResult.isSuccess,
-                refresh: queryResult.refetch,
-                isRefreshing: queryResult.isRefetching,
-                cancel: () => queryClient.cancelQueries({ queryKey: options.cacheKey as CacheKey }),
-            } as UseGraphQlQueryRequestResultInterface<TSelected>;
-        }
-        else {
-            // Non-cached behavior (like useMutation)
-            const mutationResult = tanStackReactQueryUseMutation(
-                {
-                    mutationFn: (variables: TVariables) => this.trackAsyncOperation(() => options.request(variables)),
-                    onSuccess: options.onSuccess,
-                    onError: options.onError,
-                    meta: options.metadata,
-                },
-                this.tanStackReactQueryClient,
-            );
+        const queryResult = tanStackReactQueryUseQuery(completeQueryOptions, this.tanStackReactQueryClient);
 
-            return {
-                data: mutationResult.data,
-                error: mutationResult.error,
-                isLoading: mutationResult.isPending,
-                isError: mutationResult.isError,
-                isSuccess: mutationResult.isSuccess,
-                execute: mutationResult.mutateAsync,
-                isPending: mutationResult.isPending,
-                variables: mutationResult.variables,
-                cancel: () => {
-                    // Mutations don't have a built-in cancel, but we can track it
-                    this.statisticsManager.trackCancellation();
-                },
-            } as UseGraphQlMutationRequestResultInterface<TData, TVariables>;
-        }
+        return {
+            data: queryResult.data,
+            error: queryResult.error,
+            isLoading: queryResult.isLoading,
+            isError: queryResult.isError,
+            isSuccess: queryResult.isSuccess,
+            refresh: queryResult.refetch,
+            isRefreshing: queryResult.isRefetching,
+            cancel: () => queryClient.cancelQueries({ queryKey: options.cacheKey }),
+        } as UseGraphQlQueryRequestResultInterface<TSelected>;
     }
 
-    // Suspense query method
-    useSuspenseRequest<TData, TSelected = TData>(
-        options: Omit<UseRequestOptionsInterface<TData, void, TSelected>, 'enabled'> & { cacheKey: CacheKey },
+    // Write request hook - for modifying/writing data to the server
+    // Always returns a result with execute() method for manual execution
+    // Write requests are never cached and must be triggered explicitly
+    useWriteRequest<TData, TVariables = void>(
+        options: UseWriteRequestOptionsInterface<TData, TVariables>,
+    ): UseGraphQlMutationRequestResultInterface<TData, TVariables> {
+        const mutationResult = tanStackReactQueryUseMutation(
+            {
+                mutationFn: (variables: TVariables) => this.trackAsyncOperation(() => options.request(variables)),
+                onSuccess: options.onSuccess,
+                onError: options.onError,
+                meta: options.metadata,
+            },
+            this.tanStackReactQueryClient,
+        );
+
+        return {
+            data: mutationResult.data,
+            error: mutationResult.error,
+            isLoading: mutationResult.isPending,
+            isError: mutationResult.isError,
+            isSuccess: mutationResult.isSuccess,
+            execute: mutationResult.mutateAsync,
+            isPending: mutationResult.isPending,
+            variables: mutationResult.variables,
+            cancel: () => {
+                // Mutations don't have a built-in cancel, but we can track it
+                this.statisticsManager.trackCancellation();
+            },
+        } as UseGraphQlMutationRequestResultInterface<TData, TVariables>;
+    }
+
+    // Suspense read request method - for use with React Suspense
+    // Similar to useReadRequest but throws promises for Suspense boundaries
+    useSuspenseReadRequest<TData, TSelected = TData>(
+        options: Omit<UseReadRequestOptionsInterface<TData, void, TSelected>, 'enabled'>,
     ): UseSuspenseRequestResultInterface<TSelected> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
@@ -501,39 +515,44 @@ export class NetworkService {
     useGraphQlQuery<TResult, TVariables>(
         query: AppOrStructureTypedDocumentString<TResult, TVariables>,
         ...[variables, options]: TVariables extends Record<string, never>
-            ? [variables?: undefined, options?: Partial<UseRequestOptionsInterface<TResult, void>>]
-            : [variables: TVariables, options?: Partial<UseRequestOptionsInterface<TResult, void>>]
+            ? [variables?: undefined, options?: Partial<UseReadRequestOptionsInterface<TResult, void>>]
+            : [variables: TVariables, options?: Partial<UseReadRequestOptionsInterface<TResult, void>>]
     ) {
-        return this.useRequest<TResult>({
+        // GraphQL queries are read operations that fetch data
+        // Use the 'cache: false' option for security-critical queries like auth checks
+        return this.useReadRequest<TResult>({
             cacheKey: [query.toString(), variables],
             request: () => this.graphQlRequest(query, variables),
             ...options,
-        } as UseRequestOptionsInterface<TResult, void> & { cacheKey: CacheKey });
+        });
     }
 
     useGraphQlMutation<TResult, TVariables>(
         mutation: AppOrStructureTypedDocumentString<TResult, TVariables>,
-        options?: Partial<UseRequestOptionsInterface<TResult, TVariables>>,
+        options?: Partial<UseWriteRequestOptionsInterface<TResult, TVariables>>,
     ) {
-        return this.useRequest<TResult, TVariables>({
-            cacheKey: false,
+        // GraphQL mutations are write operations that modify server data
+        // They are never cached and must be executed explicitly via execute()
+        return this.useWriteRequest<TResult, TVariables>({
             request: (variables: TVariables) => this.graphQlRequest(mutation, variables),
             ...options,
-        } as UseRequestOptionsInterface<TResult, TVariables> & { cacheKey: false });
+        });
     }
 
     // GraphQL suspense query helper
     useSuspenseGraphQlQuery<TResult, TVariables>(
         query: AppOrStructureTypedDocumentString<TResult, TVariables>,
         ...[variables, options]: TVariables extends Record<string, never>
-            ? [variables?: undefined, options?: Partial<Omit<UseRequestOptionsInterface<TResult, void>, 'enabled'>>]
-            : [variables: TVariables, options?: Partial<Omit<UseRequestOptionsInterface<TResult, void>, 'enabled'>>]
+            ? [variables?: undefined, options?: Partial<Omit<UseReadRequestOptionsInterface<TResult, void>, 'enabled'>>]
+            : [variables: TVariables, options?: Partial<Omit<UseReadRequestOptionsInterface<TResult, void>, 'enabled'>>]
     ): UseSuspenseRequestResultInterface<TResult> {
-        return this.useSuspenseRequest<TResult>({
+        // Suspense queries are always read operations
+        // They work with React Suspense boundaries for loading states
+        return this.useSuspenseReadRequest<TResult>({
             cacheKey: [query.toString(), variables],
             request: () => this.graphQlRequest(query, variables),
             ...options,
-        } as Omit<UseRequestOptionsInterface<TResult, void>, 'enabled'> & { cacheKey: CacheKey });
+        });
     }
 
     // Cache management methods
