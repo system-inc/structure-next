@@ -105,6 +105,23 @@ export async function RootLayout(properties: RootLayoutProperties) {
     // Render the component
     return (
         <html lang="en" className={mergeClassNames(properties.htmlClassName, themeClassName)}>
+            <head>
+                {/* Dynamic favicon based on system theme */}
+                {ProjectSettings.assets?.favicon?.dark?.location && (
+                    <link
+                        rel="icon"
+                        href={ProjectSettings.assets.favicon.dark.location}
+                        media="(prefers-color-scheme: dark)"
+                    />
+                )}
+                {ProjectSettings.assets?.favicon?.light?.location && (
+                    <link
+                        rel="icon"
+                        href={ProjectSettings.assets.favicon.light.location}
+                        media="(prefers-color-scheme: light)"
+                    />
+                )}
+            </head>
             <body
                 className={mergeClassNames(
                     'bg-background font-sans text-foreground transition-colors',
