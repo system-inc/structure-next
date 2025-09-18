@@ -4,7 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { AccountMaintenanceSession } from '@structure/source/modules/account/components/AccountMaintenanceSession';
+import {
+    AccountAuthenticatedSession,
+    AccountSessionScopeType,
+} from '@structure/source/modules/account/components/AccountAuthenticatedSession';
 import { DeleteAccountForm } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccountForm';
 
 // Component - DeleteAccount
@@ -14,12 +17,13 @@ export interface DeleteAccountProperties {
 export function DeleteAccount(properties: DeleteAccountProperties) {
     // Render the component
     return (
-        <AccountMaintenanceSession
+        <AccountAuthenticatedSession
+            scopeType={AccountSessionScopeType.AccountMaintenance}
             title="Delete Account"
             description="To delete your account, please verify your identity."
             buttonText="Continue"
         >
             <DeleteAccountForm onComplete={properties.onComplete} />
-        </AccountMaintenanceSession>
+        </AccountAuthenticatedSession>
     );
 }

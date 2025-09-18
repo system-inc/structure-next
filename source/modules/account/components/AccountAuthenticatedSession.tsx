@@ -18,8 +18,15 @@ import {
     AuthenticationSessionStatus,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-// Component - AccountMaintenanceSession
-export interface AccountMaintenanceSessionProperties {
+// Enum for session scope types
+export enum AccountSessionScopeType {
+    AccountMaintenance = 'AccountMaintenance',
+    AdministratorPrivilege = 'AdministratorPrivilege',
+}
+
+// Component - AccountAuthenticatedSession
+export interface AccountAuthenticatedSessionProperties {
+    scopeType: AccountSessionScopeType;
     title: string;
     description: string;
     buttonText?: string;
@@ -27,7 +34,7 @@ export interface AccountMaintenanceSessionProperties {
     onAuthenticated?: () => void;
 }
 
-export function AccountMaintenanceSession(properties: AccountMaintenanceSessionProperties) {
+export function AccountAuthenticatedSession(properties: AccountAuthenticatedSessionProperties) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
         AccountAuthenticationQuery['accountAuthentication'] | undefined
@@ -38,7 +45,7 @@ export function AccountMaintenanceSession(properties: AccountMaintenanceSessionP
     const account = useAccount();
     const emailAddress = account.data?.emailAddress ?? '';
 
-    // Hooks - API - Mutations
+    // Hooks - API - Mutations for AccountMaintenance
     const accountMaintenanceSessionCreateRequest = networkService.useGraphQlMutation(
         gql(`
             mutation AccountMaintenanceSessionCreate {
@@ -56,17 +63,46 @@ export function AccountMaintenanceSession(properties: AccountMaintenanceSessionP
         `),
     );
 
-    // Function to create the account maintenance session
-    // This initiates the authentication flow for sensitive account operations
-    async function createAccountMaintenanceSession() {
-        await accountMaintenanceSessionCreateRequest.execute();
+    // Hooks - API - Mutations for Administrator
+    const accountAdministratorSessionCreateRequest = networkService.useGraphQlMutation(
+        gql(`
+            mutation AccountAdministratorSessionCreate {
+                accountAdministratorSessionCreate {
+                    status
+                    scopeType
+                    currentChallenge {
+                        challengeType
+                        status
+                    }
+                    updatedAt
+                    createdAt
+                }
+            }
+        `),
+    );
+
+    // Select the appropriate request based on scope type
+    const sessionCreateRequest =
+        properties.scopeType === AccountSessionScopeType.AccountMaintenance
+            ? accountMaintenanceSessionCreateRequest
+            : accountAdministratorSessionCreateRequest;
+
+    // Function to create the authentication session
+    // This initiates the authentication flow for the specified scope
+    async function createAuthenticationSession() {
+        await sessionCreateRequest.execute();
+
+        // Get the response data based on scope type
+        const sessionData =
+            properties.scopeType === AccountSessionScopeType.AccountMaintenance
+                ? accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate
+                : accountAdministratorSessionCreateRequest.data?.accountAdministratorSessionCreate;
 
         // Check if immediately authenticated (no challenges required)
         // This can happen if the user recently completed authentication
-        const sessionData = accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate;
         if(
             sessionData?.status === AuthenticationSessionStatus.Authenticated &&
-            sessionData?.scopeType === 'AccountMaintenance'
+            sessionData?.scopeType === properties.scopeType
         ) {
             setIsAuthenticated(true);
             properties.onAuthenticated?.();
@@ -78,7 +114,7 @@ export function AccountMaintenanceSession(properties: AccountMaintenanceSessionP
         function () {
             if(
                 authenticationSession?.status === AuthenticationSessionStatus.Authenticated &&
-                authenticationSession?.scopeType === 'AccountMaintenance'
+                authenticationSession?.scopeType === properties.scopeType
             ) {
                 setIsAuthenticated(true);
                 properties.onAuthenticated?.();
@@ -87,25 +123,30 @@ export function AccountMaintenanceSession(properties: AccountMaintenanceSessionP
         [authenticationSession, properties],
     );
 
-    // Helper function to check if the user is authenticated for account maintenance
+    // Helper function to check if the user is authenticated for the specified scope
     // This checks both the newly created session and any existing authentication session
-    function isAuthenticatedForMaintenance() {
+    function isAuthenticatedForScope() {
         // Check if already marked as authenticated
         if(isAuthenticated) return true;
 
-        // Check if the newly created maintenance session is authenticated
-        const newSession = accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate;
+        // Get the session data based on scope type
+        const newSession =
+            properties.scopeType === AccountSessionScopeType.AccountMaintenance
+                ? accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate
+                : accountAdministratorSessionCreateRequest.data?.accountAdministratorSessionCreate;
+
+        // Check if the newly created session is authenticated
         if(
             newSession?.status === AuthenticationSessionStatus.Authenticated &&
-            newSession?.scopeType === 'AccountMaintenance'
+            newSession?.scopeType === properties.scopeType
         ) {
             return true;
         }
 
-        // Check if the existing authentication session is valid for maintenance
+        // Check if the existing authentication session is valid for this scope
         if(
             authenticationSession?.status === AuthenticationSessionStatus.Authenticated &&
-            authenticationSession?.scopeType === 'AccountMaintenance'
+            authenticationSession?.scopeType === properties.scopeType
         ) {
             return true;
         }
@@ -115,23 +156,29 @@ export function AccountMaintenanceSession(properties: AccountMaintenanceSessionP
 
     // Helper function to check if the user is currently being challenged
     function isBeingChallenged() {
-        return (
-            accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate.status ===
-            AuthenticationSessionStatus.Challenged
-        );
+        const sessionData =
+            properties.scopeType === AccountSessionScopeType.AccountMaintenance
+                ? accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate
+                : accountAdministratorSessionCreateRequest.data?.accountAdministratorSessionCreate;
+
+        return sessionData?.status === AuthenticationSessionStatus.Challenged;
     }
 
     // Helper function to get the current challenge type
     function getCurrentChallengeType() {
-        return accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate.currentChallenge
-            ?.challengeType;
+        const sessionData =
+            properties.scopeType === AccountSessionScopeType.AccountMaintenance
+                ? accountMaintenanceSessionCreateRequest.data?.accountMaintenanceSessionCreate
+                : accountAdministratorSessionCreateRequest.data?.accountAdministratorSessionCreate;
+
+        return sessionData?.currentChallenge?.challengeType;
     }
 
     // The current authentication component based on the authentication state
     let currentAuthenticationComponent = null;
 
     // Authenticated - show the protected content
-    if(isAuthenticatedForMaintenance()) {
+    if(isAuthenticatedForScope()) {
         currentAuthenticationComponent = <>{properties.children}</>;
     }
     // Challenged - show the appropriate challenge
@@ -166,10 +213,10 @@ export function AccountMaintenanceSession(properties: AccountMaintenanceSessionP
                 <h2 className="text-base font-medium">{properties.title}</h2>
                 <p className="mt-4 text-sm">{properties.description}</p>
                 <Button
-                    loading={accountMaintenanceSessionCreateRequest.isLoading}
+                    loading={sessionCreateRequest.isLoading}
                     className="mt-6"
                     onClick={function () {
-                        createAccountMaintenanceSession();
+                        createAuthenticationSession();
                     }}
                 >
                     {properties.buttonText || 'Continue'}
@@ -182,17 +229,17 @@ export function AccountMaintenanceSession(properties: AccountMaintenanceSessionP
     return <div>{currentAuthenticationComponent}</div>;
 }
 
-// Hook to check if user is in an authenticated maintenance session
+// Hook to check if user is in an authenticated session with specified scope
 // This can be used by other components to verify if the user has already
-// completed authentication for sensitive account operations
-export function useAccountMaintenanceSession() {
+// completed authentication for specific operations
+export function useAccountAuthenticatedSession(scopeType: AccountSessionScopeType) {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
 
     // Hooks - API - Queries
     const accountAuthenticationQuery = networkService.useGraphQlQuery(
         gql(`
-            query AccountMaintenenceAuthentication {
+            query AccountAuthenticatedSessionCheck {
                 accountAuthentication {
                     status
                     scopeType
@@ -203,21 +250,21 @@ export function useAccountMaintenanceSession() {
                 }
             }
         `),
+        undefined,
     );
 
     // Effect to update authentication state based on query results
     React.useEffect(
         function () {
-            // Check if the current authentication session is valid for account maintenance
+            // Check if the current authentication session is valid for the specified scope
             const authData = accountAuthenticationQuery.data?.accountAuthentication;
-            const isValidMaintenanceSession =
-                authData?.status === AuthenticationSessionStatus.Authenticated &&
-                authData?.scopeType === 'AccountMaintenance';
+            const isValidSession =
+                authData?.status === AuthenticationSessionStatus.Authenticated && authData?.scopeType === scopeType;
 
-            setIsAuthenticated(isValidMaintenanceSession);
+            setIsAuthenticated(isValidSession);
             setIsLoading(accountAuthenticationQuery.isLoading);
         },
-        [accountAuthenticationQuery.data, accountAuthenticationQuery.isLoading],
+        [accountAuthenticationQuery.data, accountAuthenticationQuery.isLoading, scopeType],
     );
 
     return {

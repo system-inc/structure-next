@@ -3844,22 +3844,6 @@ export type NoOpQueryVariables = Exact<{ [key: string]: never }>;
 
 export type NoOpQuery = { __typename: 'Query' };
 
-export type AccountMaintenanceDialogAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountMaintenanceDialogAuthenticationQuery = {
-    __typename?: 'Query';
-    accountAuthentication?: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    } | null;
-};
-
 export type AccountMaintenanceSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
 
 export type AccountMaintenanceSessionCreateMutation = {
@@ -3878,9 +3862,43 @@ export type AccountMaintenanceSessionCreateMutation = {
     };
 };
 
-export type AccountMaintenenceAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountAdministratorSessionCreateMutationVariables = Exact<{ [key: string]: never }>;
 
-export type AccountMaintenenceAuthenticationQuery = {
+export type AccountAdministratorSessionCreateMutation = {
+    __typename?: 'Mutation';
+    accountAdministratorSessionCreate: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        updatedAt: any;
+        createdAt: any;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    };
+};
+
+export type AccountAuthenticatedSessionCheckQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountAuthenticatedSessionCheckQuery = {
+    __typename?: 'Query';
+    accountAuthentication?: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    } | null;
+};
+
+export type AccountMaintenanceDialogAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountMaintenanceDialogAuthenticationQuery = {
     __typename?: 'Query';
     accountAuthentication?: {
         __typename?: 'AuthenticationSession';
@@ -5020,21 +5038,6 @@ export const NoOpDocument = new TypedDocumentString(`
   __typename
 }
     `) as unknown as TypedDocumentString<NoOpQuery, NoOpQueryVariables>;
-export const AccountMaintenanceDialogAuthenticationDocument = new TypedDocumentString(`
-    query AccountMaintenanceDialogAuthentication {
-  accountAuthentication {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountMaintenanceDialogAuthenticationQuery,
-    AccountMaintenanceDialogAuthenticationQueryVariables
->;
 export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
     mutation AccountMaintenanceSessionCreate {
   accountMaintenanceSessionCreate {
@@ -5052,8 +5055,25 @@ export const AccountMaintenanceSessionCreateDocument = new TypedDocumentString(`
     AccountMaintenanceSessionCreateMutation,
     AccountMaintenanceSessionCreateMutationVariables
 >;
-export const AccountMaintenenceAuthenticationDocument = new TypedDocumentString(`
-    query AccountMaintenenceAuthentication {
+export const AccountAdministratorSessionCreateDocument = new TypedDocumentString(`
+    mutation AccountAdministratorSessionCreate {
+  accountAdministratorSessionCreate {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAdministratorSessionCreateMutation,
+    AccountAdministratorSessionCreateMutationVariables
+>;
+export const AccountAuthenticatedSessionCheckDocument = new TypedDocumentString(`
+    query AccountAuthenticatedSessionCheck {
   accountAuthentication {
     status
     scopeType
@@ -5064,8 +5084,23 @@ export const AccountMaintenenceAuthenticationDocument = new TypedDocumentString(
   }
 }
     `) as unknown as TypedDocumentString<
-    AccountMaintenenceAuthenticationQuery,
-    AccountMaintenenceAuthenticationQueryVariables
+    AccountAuthenticatedSessionCheckQuery,
+    AccountAuthenticatedSessionCheckQueryVariables
+>;
+export const AccountMaintenanceDialogAuthenticationDocument = new TypedDocumentString(`
+    query AccountMaintenanceDialogAuthentication {
+  accountAuthentication {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountMaintenanceDialogAuthenticationQuery,
+    AccountMaintenanceDialogAuthenticationQueryVariables
 >;
 export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
     query AccountAccessRolesPrivileged {

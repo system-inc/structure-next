@@ -5,7 +5,10 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { AccountMaintenanceSession } from '@structure/source/modules/account/components/AccountMaintenanceSession';
+import {
+    AccountAuthenticatedSession,
+    AccountSessionScopeType,
+} from '@structure/source/modules/account/components/AccountAuthenticatedSession';
 import { LoadingAnimation } from '@structure/source/common/animations/LoadingAnimation';
 
 // Dependencies - API
@@ -177,7 +180,8 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
         content = (
             <div className="p-6">
                 {shouldProceedReference.current ? (
-                    <AccountMaintenanceSession
+                    <AccountAuthenticatedSession
+                        scopeType={AccountSessionScopeType.AccountMaintenance}
                         title="Verify Identity"
                         description={`To ${properties.actionText}, please verify your identity for security purposes.`}
                         buttonText="Continue"
@@ -191,7 +195,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                             <h2 className="mb-2 text-lg font-semibold">Authentication Successful</h2>
                             <p className="text-foreground-secondary text-sm">Processing your request...</p>
                         </div>
-                    </AccountMaintenanceSession>
+                    </AccountAuthenticatedSession>
                 ) : (
                     // Dialog is closing, show empty content to prevent flash
                     <div />

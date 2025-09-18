@@ -14,9 +14,10 @@ import * as types from './graphql';
  */
 type Documents = {
     'query NoOp { __typename }': typeof types.NoOpDocument;
-    '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountMaintenanceDialogAuthenticationDocument;
     '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountMaintenanceSessionCreateDocument;
-    '\n            query AccountMaintenenceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountMaintenenceAuthenticationDocument;
+    '\n            mutation AccountAdministratorSessionCreate {\n                accountAdministratorSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ': typeof types.AccountAdministratorSessionCreateDocument;
+    '\n            query AccountAuthenticatedSessionCheck {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountAuthenticatedSessionCheckDocument;
+    '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ': typeof types.AccountMaintenanceDialogAuthenticationDocument;
     '\n            query AccountAccessRolesPrivileged {\n                accountAccessRolesPrivileged {\n                    type\n                    description\n                }\n            }\n        ': typeof types.AccountAccessRolesPrivilegedDocument;
     '\n            query AccountPrivileged($input: AccountInput!) {\n                accountPrivileged(input: $input) {\n                    profiles {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                    }\n                }\n            }\n        ': typeof types.AccountPrivilegedDocument;
     '\n            mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {\n                accountAccessRoleAssignmentCreatePrivileged(input: $input) {\n                    id\n                    accessRole {\n                        id\n                        type\n                        description\n                    }\n                    status\n                    profile {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                        createdAt\n                    }\n                    expiresAt\n                    createdAt\n                    updatedAt\n                }\n            }\n        ': typeof types.AccountAccessRoleAssignmentCreatePrivilegedDocument;
@@ -72,12 +73,14 @@ type Documents = {
 };
 const documents: Documents = {
     'query NoOp { __typename }': types.NoOpDocument,
-    '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
-        types.AccountMaintenanceDialogAuthenticationDocument,
     '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
         types.AccountMaintenanceSessionCreateDocument,
-    '\n            query AccountMaintenenceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
-        types.AccountMaintenenceAuthenticationDocument,
+    '\n            mutation AccountAdministratorSessionCreate {\n                accountAdministratorSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ':
+        types.AccountAdministratorSessionCreateDocument,
+    '\n            query AccountAuthenticatedSessionCheck {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
+        types.AccountAuthenticatedSessionCheckDocument,
+    '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ':
+        types.AccountMaintenanceDialogAuthenticationDocument,
     '\n            query AccountAccessRolesPrivileged {\n                accountAccessRolesPrivileged {\n                    type\n                    description\n                }\n            }\n        ':
         types.AccountAccessRolesPrivilegedDocument,
     '\n            query AccountPrivileged($input: AccountInput!) {\n                accountPrivileged(input: $input) {\n                    profiles {\n                        username\n                        displayName\n                        images {\n                            url\n                            variant\n                        }\n                    }\n                }\n            }\n        ':
@@ -192,20 +195,26 @@ export function graphql(source: 'query NoOp { __typename }'): typeof import('./g
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountMaintenanceDialogAuthenticationDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
     source: '\n            mutation AccountMaintenanceSessionCreate {\n                accountMaintenanceSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
 ): typeof import('./graphql').AccountMaintenanceSessionCreateDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-    source: '\n            query AccountMaintenenceAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ',
-): typeof import('./graphql').AccountMaintenenceAuthenticationDocument;
+    source: '\n            mutation AccountAdministratorSessionCreate {\n                accountAdministratorSessionCreate {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                    updatedAt\n                    createdAt\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAdministratorSessionCreateDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            query AccountAuthenticatedSessionCheck {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountAuthenticatedSessionCheckDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+    source: '\n            query AccountMaintenanceDialogAuthentication {\n                accountAuthentication {\n                    status\n                    scopeType\n                    currentChallenge {\n                        challengeType\n                        status\n                    }\n                }\n            }\n        ',
+): typeof import('./graphql').AccountMaintenanceDialogAuthenticationDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -11,6 +11,10 @@ import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 import { AccountRoleGrantForm } from '@structure/source/modules/account/components/AccountRoleGrantForm';
+import {
+    AccountAuthenticatedSession,
+    AccountSessionScopeType,
+} from '@structure/source/modules/account/components/AccountAuthenticatedSession';
 
 // Dependencies - Animations
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
@@ -170,11 +174,18 @@ export function UsersRolesPage() {
 
             <div className="space-y-12">
                 {/* Role Granting Form */}
-                <AccountRoleGrantForm
-                    onRoleGranted={function () {
-                        networkService.invalidateCache([accountAccessRoleAssignmentsPrivilegedCacheKey]);
-                    }}
-                />
+                <AccountAuthenticatedSession
+                    scopeType={AccountSessionScopeType.AdministratorPrivilege}
+                    title="Grant Role"
+                    description="To grant roles to users, please verify your administrator privileges."
+                    buttonText="Verify Administrator Access"
+                >
+                    <AccountRoleGrantForm
+                        onRoleGranted={function () {
+                            networkService.invalidateCache([accountAccessRoleAssignmentsPrivilegedCacheKey]);
+                        }}
+                    />
+                </AccountAuthenticatedSession>
 
                 {/* Assigned Roles Section */}
                 <section>
