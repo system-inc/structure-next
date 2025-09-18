@@ -3,6 +3,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import { Metadata, Viewport } from 'next';
+import Head from 'next/head';
 import { cookies } from 'next/headers';
 
 // Dependencies - Main Components
@@ -105,7 +106,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
     // Render the component
     return (
         <html lang="en" className={mergeClassNames(properties.htmlClassName, themeClassName)}>
-            <head>
+            <Head>
                 {/* Dynamic favicon based on system theme */}
                 {ProjectSettings.assets?.favicon?.dark?.location && (
                     <link
@@ -121,7 +122,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
                         media="(prefers-color-scheme: light)"
                     />
                 )}
-            </head>
+            </Head>
             <body
                 className={mergeClassNames(
                     'bg-background font-sans text-foreground transition-colors',
