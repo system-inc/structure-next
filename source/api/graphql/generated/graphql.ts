@@ -16,12 +16,8 @@ export type Scalars = {
     Float: { input: number; output: number };
     /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format. */
     DateTimeISO: { input: any; output: any };
-    /** Decimal custom scalar type */
-    Decimal: { input: any; output: any };
     /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
     JSON: { input: any; output: any };
-    /** Monetary decimal custom scalar type, we stored and operate the value in cents, and this scalar will convert the value to dollar when read and convert the value to cents when write. */
-    MonetaryDecimal: { input: any; output: any };
 };
 
 export type AccessRole = {
@@ -227,15 +223,6 @@ export enum AccountStatus {
     Locked = 'Locked',
 }
 
-export type AppleStoreTransactionOrderMapping = {
-    __typename?: 'AppleStoreTransactionOrderMapping';
-    commerceOrder: CommerceOrder;
-    commerceOrderId: Scalars['String']['output'];
-    createdAt: Scalars['DateTimeISO']['output'];
-    id: Scalars['String']['output'];
-    transactionId: Scalars['String']['output'];
-};
-
 export type AuthenticationChallenge = {
     __typename?: 'AuthenticationChallenge';
     challengeType: Scalars['String']['output'];
@@ -290,11 +277,6 @@ export enum AuthenticationSessionStatus {
     OpenStatuses = 'openStatuses',
 }
 
-export type CheckoutSessionCreateDirectItemInput = {
-    productVariantId: Scalars['String']['input'];
-    quantity: Scalars['Int']['input'];
-};
-
 export type ClientPropertiesInput = {
     environment?: InputMaybe<Scalars['String']['input']>;
 };
@@ -331,159 +313,6 @@ export type ColumnFilterInput = {
     column: Scalars['String']['input'];
     operator: ColumnFilterConditionOperator;
     value: Scalars['JSON']['input'];
-};
-
-export type CommerceCheckoutSession = {
-    __typename?: 'CommerceCheckoutSession';
-    appliedDiscounts?: Maybe<Array<CommerceOrderDiscount>>;
-    closedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    completedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    externalMetadata?: Maybe<Scalars['JSON']['output']>;
-    failedCount: Scalars['Float']['output'];
-    id: Scalars['String']['output'];
-    order?: Maybe<CommerceOrder>;
-    orderMetadata?: Maybe<Scalars['JSON']['output']>;
-    paymentProcessorType: PaymentProcessorType;
-    priceInfo?: Maybe<CommerceOrderPrice>;
-    status: CommerceCheckoutSessionStatus;
-};
-
-export type CommerceCheckoutSessionCreateDirectInput = {
-    emailAddress?: InputMaybe<Scalars['String']['input']>;
-    items: Array<CheckoutSessionCreateDirectItemInput>;
-    orderMetadata?: InputMaybe<Scalars['JSON']['input']>;
-    paymentProcessorType?: PaymentProcessorType;
-    returnBaseUrl: Scalars['String']['input'];
-};
-
-export enum CommerceCheckoutSessionStatus {
-    Closed = 'Closed',
-    Complete = 'Complete',
-    Expired = 'Expired',
-    Failed = 'Failed',
-    Pending = 'Pending',
-}
-
-export type CommerceOrder = {
-    __typename?: 'CommerceOrder';
-    appliedDiscounts?: Maybe<Array<CommerceOrderDiscount>>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    emailAddress: Scalars['String']['output'];
-    fulfillmentSource?: Maybe<Scalars['String']['output']>;
-    fulfillmentStatus: CommerceOrderFulfillmentStatus;
-    id: Scalars['String']['output'];
-    identifier: Scalars['String']['output'];
-    lineItems?: Maybe<Array<CommerceOrderLineItem>>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    payment?: Maybe<Payment>;
-    paymentStatus?: Maybe<PaymentStatus>;
-    priceInfo: CommerceOrderPrice;
-    refunds?: Maybe<Array<Refund>>;
-    shipments?: Maybe<Array<Shipment>>;
-    shippingInfo?: Maybe<CommerceOrderShippingInfo>;
-    source: Scalars['String']['output'];
-    status: CommerceOrderStatus;
-    statusRecords?: Maybe<Array<StatusRecord>>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type CommerceOrderDiscount = {
-    __typename?: 'CommerceOrderDiscount';
-    amount: Scalars['MonetaryDecimal']['output'];
-    code?: Maybe<Scalars['String']['output']>;
-    colorOption?: Maybe<LabelColorOption>;
-    iconAlt?: Maybe<Scalars['String']['output']>;
-    iconUrl?: Maybe<Scalars['String']['output']>;
-    items?: Maybe<Array<CommerceOrderLineItemDiscount>>;
-};
-
-/** The fulfillment status of the order */
-export enum CommerceOrderFulfillmentStatus {
-    Cancelled = 'Cancelled',
-    Fulfilled = 'Fulfilled',
-    NotStart = 'NotStart',
-    PartiallyFulfilled = 'PartiallyFulfilled',
-    Shipped = 'Shipped',
-    Unfulfilled = 'Unfulfilled',
-}
-
-export type CommerceOrderLineItem = {
-    __typename?: 'CommerceOrderLineItem';
-    createdAt: Scalars['DateTimeISO']['output'];
-    id: Scalars['String']['output'];
-    indexId: Scalars['Int']['output'];
-    originalQuantity?: Maybe<Scalars['Int']['output']>;
-    productVariantId: Scalars['String']['output'];
-    quantity: Scalars['Int']['output'];
-    status: CommerceOrderLineItemStatus;
-    statusRecords?: Maybe<Array<StatusRecord>>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type CommerceOrderLineItemDiscount = {
-    __typename?: 'CommerceOrderLineItemDiscount';
-    amount: Scalars['MonetaryDecimal']['output'];
-    indexId: Scalars['Int']['output'];
-    unitAmount?: Maybe<Scalars['MonetaryDecimal']['output']>;
-};
-
-export type CommerceOrderLineItemPrice = {
-    __typename?: 'CommerceOrderLineItemPrice';
-    indexId: Scalars['Int']['output'];
-    originalSubtotal: Scalars['MonetaryDecimal']['output'];
-    originalUnitPrice?: Maybe<Scalars['MonetaryDecimal']['output']>;
-    subtotal: Scalars['MonetaryDecimal']['output'];
-    unitPrice?: Maybe<Scalars['MonetaryDecimal']['output']>;
-};
-
-/** The status of the order line item */
-export enum CommerceOrderLineItemStatus {
-    Cancelled = 'Cancelled',
-    Pending = 'Pending',
-    Shipped = 'Shipped',
-}
-
-export type CommerceOrderPrice = {
-    __typename?: 'CommerceOrderPrice';
-    amount: Scalars['MonetaryDecimal']['output'];
-    currencyCode: Scalars['String']['output'];
-    lineItemPrices: Array<CommerceOrderLineItemPrice>;
-    originalSubtotal: Scalars['MonetaryDecimal']['output'];
-    shippingRate: CommerceOrderShippingRate;
-    subtotal: Scalars['MonetaryDecimal']['output'];
-    tax: CommerceOrderTax;
-};
-
-export type CommerceOrderResult = CommerceOrder | PublicCommerceOrder;
-
-export type CommerceOrderShippingInfo = {
-    __typename?: 'CommerceOrderShippingInfo';
-    shippingAddress: StreetAddressObject;
-    shippingMethod?: Maybe<Scalars['String']['output']>;
-};
-
-export type CommerceOrderShippingRate = {
-    __typename?: 'CommerceOrderShippingRate';
-    amount: Scalars['MonetaryDecimal']['output'];
-    originalAmount: Scalars['MonetaryDecimal']['output'];
-};
-
-/** The status of the order */
-export enum CommerceOrderStatus {
-    Cancelled = 'Cancelled',
-    Complete = 'Complete',
-    Open = 'Open',
-    OutOfStock = 'OutOfStock',
-    Pending = 'Pending',
-    Refunded = 'Refunded',
-    WaitPayment = 'WaitPayment',
-}
-
-export type CommerceOrderTax = {
-    __typename?: 'CommerceOrderTax';
-    shipping: Scalars['MonetaryDecimal']['output'];
-    total: Scalars['MonetaryDecimal']['output'];
 };
 
 export type ContactList = {
@@ -557,79 +386,6 @@ export type CreateEngagementEventInput = {
     eventContext?: InputMaybe<EngagementEventContextInput>;
     name: Scalars['String']['input'];
 };
-
-export type CreateFulfillmentInput = {
-    baseUrl: Scalars['String']['input'];
-    items: Array<CreateFulfillmentItemInput>;
-    orderIdentifier: Scalars['String']['input'];
-    originAddress: StreetAddressInput;
-    trackingInfo: CreateFulfillmentTrackingInfoInput;
-};
-
-export type CreateFulfillmentItemInput = {
-    id: Scalars['Float']['input'];
-    quantity: Scalars['Float']['input'];
-};
-
-export type CreateFulfillmentTrackingInfoInput = {
-    company: Scalars['String']['input'];
-    number: Scalars['String']['input'];
-    serviceType: ShippingServiceType;
-    url: Scalars['String']['input'];
-};
-
-export type CreateOrderRefundInput = {
-    lineItems: Array<CreateOrderRefundLineItemInput>;
-    orderId: Scalars['String']['input'];
-    reason?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateOrderRefundLineItemInput = {
-    orderLineItemId: Scalars['Float']['input'];
-    quantity: Scalars['Float']['input'];
-};
-
-export type CreateProductInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    name: Scalars['String']['input'];
-    status?: InputMaybe<ProductStatus>;
-    variants: Array<CreateProductVariantInput>;
-    vendorId: Scalars['String']['input'];
-};
-
-export type CreateProductVariantInput = {
-    attributes?: InputMaybe<Array<ProductVariantAttributeInput>>;
-    barcode?: InputMaybe<Scalars['String']['input']>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    gtin?: InputMaybe<Scalars['String']['input']>;
-    id?: InputMaybe<Scalars['String']['input']>;
-    inventoryPolicy?: InputMaybe<ProductVariantInventoryPolicy>;
-    isVirtual?: InputMaybe<Scalars['Boolean']['input']>;
-    name: Scalars['String']['input'];
-    position?: InputMaybe<Scalars['Float']['input']>;
-    price: ProductVariantPriceInput;
-    productId?: InputMaybe<Scalars['String']['input']>;
-    setDefault?: InputMaybe<Scalars['Boolean']['input']>;
-    sku?: InputMaybe<Scalars['String']['input']>;
-    status?: InputMaybe<ProductVariantStatus>;
-    taxCode?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateVendorInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    name: Scalars['String']['input'];
-};
-
-export enum CreditCardType {
-    Amex = 'Amex',
-    Discover = 'Discover',
-    Mastercard = 'Mastercard',
-    Unknown = 'Unknown',
-    Visa = 'Visa',
-}
 
 export type DataInteractionDatabaseMetrics = {
     __typename?: 'DataInteractionDatabaseMetrics';
@@ -735,15 +491,6 @@ export type DatebaseMetadata = {
     __typename?: 'DatebaseMetadata';
     databaseName: Scalars['String']['output'];
 };
-
-/** The status of the delivery */
-export enum DeliveryStatus {
-    AttemptedDelivery = 'AttemptedDelivery',
-    Delivered = 'Delivered',
-    InTransit = 'InTransit',
-    OutForDelivery = 'OutForDelivery',
-    ReadyForPickup = 'ReadyForPickup',
-}
 
 export enum DeviceOrientation {
     Landscape = 'Landscape',
@@ -856,412 +603,12 @@ export type EntitlementUpdateInput = {
     id: Scalars['String']['input'];
 };
 
-export type FontConfig = {
-    __typename?: 'FontConfig';
-    fontFamily: Scalars['String']['output'];
-    fontSize: Scalars['Int']['output'];
-};
-
-export type FontConfigInput = {
-    fontFamily: Scalars['String']['input'];
-    fontSize: Scalars['Int']['input'];
-};
-
-export type Form = {
-    __typename?: 'Form';
-    archivedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    components?: Maybe<Array<FormComponent>>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    identifier: Scalars['String']['output'];
-    metadata?: Maybe<FormMetadata>;
-    originalFormId?: Maybe<Scalars['String']['output']>;
-    publishedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    status: FormStatus;
-    title?: Maybe<Scalars['String']['output']>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type FormComponent =
-    | FormComponentDataCheckbox
-    | FormComponentDataCheckboxGrid
-    | FormComponentDataDate
-    | FormComponentDataDropdown
-    | FormComponentDataHeight
-    | FormComponentDataLinearScale
-    | FormComponentDataMultipleChoice
-    | FormComponentDataMultipleChoiceGrid
-    | FormComponentDataNumber
-    | FormComponentDataParagraph
-    | FormComponentDataRating
-    | FormComponentDataSectionHeader
-    | FormComponentDataShortAnswer
-    | FormComponentDataTime
-    | FormComponentDataTitleAndDescription
-    | FormComponentDataWeight;
-
-export type FormComponentCreateInput = {
-    data?: InputMaybe<Scalars['JSON']['input']>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-    required: Scalars['Boolean']['input'];
-    section: Scalars['Int']['input'];
-    title?: InputMaybe<Scalars['String']['input']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataCheckbox = {
-    __typename?: 'FormComponentDataCheckbox';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    maxSelections?: Maybe<Scalars['Int']['output']>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    options: Array<Scalars['String']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataCheckboxGrid = {
-    __typename?: 'FormComponentDataCheckboxGrid';
-    allowEmpty?: Maybe<Scalars['Boolean']['output']>;
-    columns: Array<Scalars['String']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    maxSelectionsPerRow?: Maybe<Scalars['Int']['output']>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    rows: Array<Scalars['String']['output']>;
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataDate = {
-    __typename?: 'FormComponentDataDate';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    initialDate?: Maybe<Scalars['DateTimeISO']['output']>;
-    maxDate?: Maybe<Scalars['DateTimeISO']['output']>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    minDate?: Maybe<Scalars['DateTimeISO']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataDropdown = {
-    __typename?: 'FormComponentDataDropdown';
-    defaultOption?: Maybe<Scalars['Int']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    options: Array<Scalars['String']['output']>;
-    placeholder?: Maybe<Scalars['String']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataHeight = {
-    __typename?: 'FormComponentDataHeight';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataLinearScale = {
-    __typename?: 'FormComponentDataLinearScale';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    leftLabel?: Maybe<Scalars['String']['output']>;
-    max: Scalars['Int']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    min: Scalars['Int']['output'];
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    rightLabel?: Maybe<Scalars['String']['output']>;
-    section: Scalars['Int']['output'];
-    step: Scalars['Decimal']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataMultipleChoice = {
-    __typename?: 'FormComponentDataMultipleChoice';
-    defaultOption?: Maybe<Scalars['Int']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    options: Array<Scalars['String']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataMultipleChoiceGrid = {
-    __typename?: 'FormComponentDataMultipleChoiceGrid';
-    columns: Array<Scalars['String']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    rows: Array<Scalars['String']['output']>;
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataNumber = {
-    __typename?: 'FormComponentDataNumber';
-    allowFloat?: Maybe<Scalars['Boolean']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    max?: Maybe<Scalars['Decimal']['output']>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    min?: Maybe<Scalars['Decimal']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataParagraph = {
-    __typename?: 'FormComponentDataParagraph';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    placeholder?: Maybe<Scalars['String']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataRating = {
-    __typename?: 'FormComponentDataRating';
-    allowHalf?: Maybe<Scalars['Boolean']['output']>;
-    allowZero?: Maybe<Scalars['Boolean']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    icon: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    max: Scalars['Int']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataSectionHeader = {
-    __typename?: 'FormComponentDataSectionHeader';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataShortAnswer = {
-    __typename?: 'FormComponentDataShortAnswer';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    placeholder?: Maybe<Scalars['String']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataTime = {
-    __typename?: 'FormComponentDataTime';
-    allowSeconds?: Maybe<Scalars['Boolean']['output']>;
-    ampm?: Maybe<Scalars['Boolean']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    initialTime?: Maybe<Scalars['DateTimeISO']['output']>;
-    maxTime?: Maybe<Scalars['DateTimeISO']['output']>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    minTime?: Maybe<Scalars['DateTimeISO']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataTitleAndDescription = {
-    __typename?: 'FormComponentDataTitleAndDescription';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-export type FormComponentDataWeight = {
-    __typename?: 'FormComponentDataWeight';
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    position: Scalars['Int']['output'];
-    required: Scalars['Boolean']['output'];
-    section: Scalars['Int']['output'];
-    title?: Maybe<Scalars['String']['output']>;
-    type: FormComponentType;
-};
-
-/** The type of component in a form */
-export enum FormComponentType {
-    Checkbox = 'Checkbox',
-    CheckboxGrid = 'CheckboxGrid',
-    Date = 'Date',
-    Dropdown = 'Dropdown',
-    Height = 'Height',
-    LinearScale = 'LinearScale',
-    MultipleChoice = 'MultipleChoice',
-    MultipleChoiceGrid = 'MultipleChoiceGrid',
-    Number = 'Number',
-    Paragraph = 'Paragraph',
-    Rating = 'Rating',
-    SectionHeader = 'SectionHeader',
-    ShortAnswer = 'ShortAnswer',
-    Time = 'Time',
-    TitleAndDescription = 'TitleAndDescription',
-    Weight = 'Weight',
-}
-
-export type FormCreateInput = {
-    components?: InputMaybe<Array<FormComponentCreateInput>>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    metadata?: InputMaybe<FormMetadataInput>;
-    title?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type FormMetadata = {
-    __typename?: 'FormMetadata';
-    theme?: Maybe<FormThemeMetadata>;
-};
-
-export type FormMetadataInput = {
-    theme?: InputMaybe<FormThemeMetadataInput>;
-};
-
-export enum FormStatus {
-    Archived = 'Archived',
-    Draft = 'Draft',
-    Published = 'Published',
-}
-
-export type FormThemeMetadata = {
-    __typename?: 'FormThemeMetadata';
-    backgroundColor?: Maybe<Scalars['String']['output']>;
-    header?: Maybe<FontConfig>;
-    primaryColor?: Maybe<Scalars['String']['output']>;
-    question?: Maybe<FontConfig>;
-    text?: Maybe<FontConfig>;
-};
-
-export type FormThemeMetadataInput = {
-    backgroundColor?: InputMaybe<Scalars['String']['input']>;
-    header?: InputMaybe<FontConfigInput>;
-    primaryColor?: InputMaybe<Scalars['String']['input']>;
-    question?: InputMaybe<FontConfigInput>;
-    text?: InputMaybe<FontConfigInput>;
-};
-
-export type FormUpdateInput = {
-    components?: InputMaybe<Array<FormComponentCreateInput>>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    metadata?: InputMaybe<FormMetadataInput>;
-    title?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type FormUserData = {
-    __typename?: 'FormUserData';
-    accountId?: Maybe<Scalars['String']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    data: Scalars['JSON']['output'];
-    emailAddress?: Maybe<Scalars['String']['output']>;
-    formId: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    profileId?: Maybe<Scalars['String']['output']>;
-    userIdentifier?: Maybe<Scalars['String']['output']>;
-};
-
-export type FulfillmentOrder = {
-    __typename?: 'FulfillmentOrder';
-    createdAt: Scalars['DateTimeISO']['output'];
-    emailAddress: Scalars['String']['output'];
-    holdOnShipping: Scalars['Boolean']['output'];
-    identifier: Scalars['String']['output'];
-    lineItems: Array<FulfillmentOrderLineItem>;
-    shipments: Array<Shipment>;
-    shippingAddress: StreetAddressObject;
-};
-
-export type FulfillmentOrderLineItem = {
-    __typename?: 'FulfillmentOrderLineItem';
-    orderLineItemId: Scalars['String']['output'];
-    productVariant: FulfillmentProductVariant;
-    productVariantId: Scalars['String']['output'];
-    quantity: Scalars['Int']['output'];
-};
-
-export type FulfillmentProductVariant = {
-    __typename?: 'FulfillmentProductVariant';
-    barcode?: Maybe<Scalars['String']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    gtin?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    name: Scalars['String']['output'];
-    sku?: Maybe<Scalars['String']['output']>;
-};
-
 export type ImageObject = {
     __typename?: 'ImageObject';
     type: MediaObjectType;
     url: Scalars['String']['output'];
     variant?: Maybe<Scalars['String']['output']>;
 };
-
-/** The label color to be used for display */
-export enum LabelColorOption {
-    Blue = 'Blue',
-    Green = 'Green',
-}
 
 export type MediaObject = {
     __typename?: 'MediaObject';
@@ -1317,15 +664,6 @@ export type Mutation = {
     accountProfileUpdate: Profile;
     accountSessionDelete: OperationResult;
     accountSignOut: OperationResult;
-    commerceCheckoutSessionCreateDirect: CommerceCheckoutSession;
-    commerceCreateFulfillment: Shipment;
-    commerceOrderCancel: OperationResult;
-    commerceOrderRefund: Refund;
-    commerceProductCreate: Product;
-    commerceProductUpdate: Product;
-    commerceRefundRequestRejectPrivileged: Refund;
-    commerceVendorCreate: Vendor;
-    commerceVendorUpdate: Vendor;
     contactListCreatePrivileged: ContactList;
     contactListDeletePrivileged: OperationResult;
     contactListEntryCreate: ContactListEntry;
@@ -1338,11 +676,6 @@ export type Mutation = {
     dataInteractionDatabaseTableRowsDelete: Scalars['Int']['output'];
     engagementEventCreate: OperationResult;
     engagementEventsCreate: OperationResult;
-    formArchive: Form;
-    formCreate: Form;
-    formFork: Form;
-    formPublish: Form;
-    formUpdate: Form;
     postCommentCreate: PostComment;
     postCommentDelete: OperationResult;
     postCreatePrivileged: Post;
@@ -1364,10 +697,6 @@ export type Mutation = {
     postUpdate: Post;
     postUpdatePrivileged: Post;
     postVote: OperationResult;
-    productVariantRemoveGalleryAsset: ProductVariant;
-    productVariantReorderGallery: ProductVariant;
-    stripePaymentCreateSetupIntent: StripeSetupIntentCreateResult;
-    submitForm: FormUserData;
     supportTicketAssign: SupportTicket;
     supportTicketCommentCreate: SupportTicketComment;
     supportTicketCommentCreatePrivileged: SupportTicketComment;
@@ -1375,12 +704,6 @@ export type Mutation = {
     supportTicketCreatePrivileged: SupportTicket;
     supportTicketUpdatePrivileged: SupportTicket;
     supportTicketUpdateStatusPrivileged: SupportTicket;
-    warehouseCreate: Warehouse;
-    warehouseDelete: OperationResult;
-    warehouseInventoryCreate: WarehouseInventory;
-    warehouseInventoryDelete: OperationResult;
-    warehouseInventoryUpdate: WarehouseInventory;
-    warehouseUpdate: Warehouse;
 };
 
 export type MutationAccountAccessRoleAssignmentCreatePrivilegedArgs = {
@@ -1475,43 +798,6 @@ export type MutationAccountSessionDeleteArgs = {
     input: AccountSessionDeleteInput;
 };
 
-export type MutationCommerceCheckoutSessionCreateDirectArgs = {
-    input: CommerceCheckoutSessionCreateDirectInput;
-};
-
-export type MutationCommerceCreateFulfillmentArgs = {
-    input: CreateFulfillmentInput;
-};
-
-export type MutationCommerceOrderCancelArgs = {
-    orderId: Scalars['String']['input'];
-};
-
-export type MutationCommerceOrderRefundArgs = {
-    input: CreateOrderRefundInput;
-};
-
-export type MutationCommerceProductCreateArgs = {
-    input: CreateProductInput;
-};
-
-export type MutationCommerceProductUpdateArgs = {
-    input: UpdateProductInput;
-};
-
-export type MutationCommerceRefundRequestRejectPrivilegedArgs = {
-    id: Scalars['String']['input'];
-    reason?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type MutationCommerceVendorCreateArgs = {
-    input: CreateVendorInput;
-};
-
-export type MutationCommerceVendorUpdateArgs = {
-    input: UpdateVendorInput;
-};
-
 export type MutationContactListCreatePrivilegedArgs = {
     data: ContactListCreationInput;
 };
@@ -1567,27 +853,6 @@ export type MutationEngagementEventCreateArgs = {
 
 export type MutationEngagementEventsCreateArgs = {
     inputs: Array<CreateEngagementEventInput>;
-};
-
-export type MutationFormArchiveArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationFormCreateArgs = {
-    input: FormCreateInput;
-};
-
-export type MutationFormForkArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationFormPublishArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationFormUpdateArgs = {
-    id: Scalars['String']['input'];
-    input: FormUpdateInput;
 };
 
 export type MutationPostCommentCreateArgs = {
@@ -1691,23 +956,6 @@ export type MutationPostVoteArgs = {
     type?: InputMaybe<PostVoteType>;
 };
 
-export type MutationProductVariantRemoveGalleryAssetArgs = {
-    assetId: Scalars['String']['input'];
-    id: Scalars['String']['input'];
-};
-
-export type MutationProductVariantReorderGalleryArgs = {
-    assetIds: Array<Scalars['String']['input']>;
-    id: Scalars['String']['input'];
-};
-
-export type MutationSubmitFormArgs = {
-    data: Scalars['JSON']['input'];
-    emailAddress?: InputMaybe<Scalars['String']['input']>;
-    identifier: Scalars['String']['input'];
-    userIdentifier?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type MutationSupportTicketAssignArgs = {
     ticketId: Scalars['String']['input'];
     username?: InputMaybe<Scalars['String']['input']>;
@@ -1738,30 +986,6 @@ export type MutationSupportTicketUpdateStatusPrivilegedArgs = {
     status: SupportTicketStatus;
 };
 
-export type MutationWarehouseCreateArgs = {
-    input: WarehouseCreateInput;
-};
-
-export type MutationWarehouseDeleteArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationWarehouseInventoryCreateArgs = {
-    input: WarehouseInventoryCreateInput;
-};
-
-export type MutationWarehouseInventoryDeleteArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationWarehouseInventoryUpdateArgs = {
-    input: WarehouseInventoryUpdateInput;
-};
-
-export type MutationWarehouseUpdateArgs = {
-    input: WarehouseUpdateInput;
-};
-
 export type OperationResult = {
     __typename?: 'OperationResult';
     success: Scalars['Boolean']['output'];
@@ -1776,12 +1000,6 @@ export enum OrderByDirection {
 export type OrderByInput = {
     direction?: InputMaybe<OrderByDirection>;
     key: Scalars['String']['input'];
-};
-
-export type OrderLineItemInput = {
-    indexId: Scalars['Int']['input'];
-    productVariantId: Scalars['String']['input'];
-    quantity: Scalars['Int']['input'];
 };
 
 export type PagedAccessRoleAssignments = {
@@ -1843,18 +1061,6 @@ export type Pagination = {
     pagesTotal: Scalars['Int']['output'];
 };
 
-export type PaginationFormResult = {
-    __typename?: 'PaginationFormResult';
-    items: Array<Form>;
-    pagination: Pagination;
-};
-
-export type PaginationFulfillmentOrderResult = {
-    __typename?: 'PaginationFulfillmentOrderResult';
-    items: Array<FulfillmentOrder>;
-    pagination: Pagination;
-};
-
 export type PaginationInput = {
     filters?: InputMaybe<Array<ColumnFilterInput>>;
     itemIndex?: InputMaybe<Scalars['Int']['input']>;
@@ -1862,87 +1068,11 @@ export type PaginationInput = {
     orderBy?: InputMaybe<Array<OrderByInput>>;
 };
 
-export type PaginationOrderResult = {
-    __typename?: 'PaginationOrderResult';
-    items: Array<CommerceOrder>;
-    pagination: Pagination;
-};
-
-export type PaginationRefundResult = {
-    __typename?: 'PaginationRefundResult';
-    items: Array<Refund>;
-    pagination: Pagination;
-};
-
 export type PaginationSupportTicketResult = {
     __typename?: 'PaginationSupportTicketResult';
     items: Array<SupportTicket>;
     pagination: Pagination;
 };
-
-export type Payment = {
-    __typename?: 'Payment';
-    amount: Scalars['MonetaryDecimal']['output'];
-    authorizedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    cancelledAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    capturedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    confirmedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    currencyCode: Scalars['String']['output'];
-    externalReferenceId?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    paymentMethod?: Maybe<PaymentMethod>;
-    paymentProcessorType: PaymentProcessorType;
-    status: PaymentStatus;
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type PaymentMethod = {
-    externalResourceId?: Maybe<Scalars['String']['output']>;
-    paymentProcessorType: PaymentProcessorType;
-    type: PaymentMethodType;
-};
-
-export type PaymentMethodAppleInAppPurchase = PaymentMethod & {
-    __typename?: 'PaymentMethodAppleInAppPurchase';
-    externalResourceId?: Maybe<Scalars['String']['output']>;
-    paymentProcessorType: PaymentProcessorType;
-    type: PaymentMethodType;
-};
-
-export type PaymentMethodCreditCard = PaymentMethod & {
-    __typename?: 'PaymentMethodCreditCard';
-    billingAddress: StreetAddressObject;
-    cardType: CreditCardType;
-    expirationMonth: Scalars['Int']['output'];
-    expirationYear: Scalars['Int']['output'];
-    externalResourceId?: Maybe<Scalars['String']['output']>;
-    last4: Scalars['String']['output'];
-    paymentProcessorType: PaymentProcessorType;
-    type: PaymentMethodType;
-};
-
-export enum PaymentMethodType {
-    AppleInAppPurchase = 'AppleInAppPurchase',
-    CreditCard = 'CreditCard',
-}
-
-export enum PaymentProcessorType {
-    AppleInAppPurchase = 'AppleInAppPurchase',
-    Stripe = 'Stripe',
-    StripeEmbedded = 'StripeEmbedded',
-    Test = 'Test',
-}
-
-/** The status of the payment */
-export enum PaymentStatus {
-    Authorized = 'Authorized',
-    Cancelled = 'Cancelled',
-    Captured = 'Captured',
-    Confirmed = 'Confirmed',
-    FailToAuthorize = 'FailToAuthorize',
-    Pending = 'Pending',
-}
 
 export type Post = {
     __typename?: 'Post';
@@ -2156,116 +1286,6 @@ export enum PostVoteType {
     Upvote = 'Upvote',
 }
 
-export type Product = {
-    __typename?: 'Product';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    defaultVariantId?: Maybe<Scalars['String']['output']>;
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    identifier: Scalars['String']['output'];
-    name: Scalars['String']['output'];
-    status: ProductStatus;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-    variants?: Maybe<Array<ProductVariant>>;
-    vendor?: Maybe<Vendor>;
-    vendorId?: Maybe<Scalars['String']['output']>;
-};
-
-export enum ProductStatus {
-    Active = 'Active',
-    Archived = 'Archived',
-    Draft = 'Draft',
-}
-
-export type ProductVariant = {
-    __typename?: 'ProductVariant';
-    attributes?: Maybe<Array<ProductVariantAttributeObject>>;
-    barcode?: Maybe<Scalars['String']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    galleryUrls?: Maybe<Array<ProductVariantGalleryUrl>>;
-    gtin?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    inventoryPolicy: ProductVariantInventoryPolicy;
-    isVirtual: Scalars['Boolean']['output'];
-    name: Scalars['String']['output'];
-    position?: Maybe<Scalars['Float']['output']>;
-    price: ProductVariantPriceObject;
-    sku?: Maybe<Scalars['String']['output']>;
-    status: ProductVariantStatus;
-    taxCode?: Maybe<Scalars['String']['output']>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type ProductVariantAttributeInput = {
-    displayName: Scalars['String']['input'];
-    key: ProductVariantAttributeKey;
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-    value: Scalars['String']['input'];
-};
-
-export enum ProductVariantAttributeKey {
-    AppStore = 'AppStore',
-    Color = 'Color',
-    Credits = 'Credits',
-    Size = 'Size',
-    SubscriptionPlan = 'SubscriptionPlan',
-}
-
-export type ProductVariantAttributeObject = {
-    __typename?: 'ProductVariantAttributeObject';
-    createdAt: Scalars['DateTimeISO']['output'];
-    displayName: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    key: ProductVariantAttributeKey;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    value: Scalars['String']['output'];
-};
-
-export type ProductVariantGalleryUrl = {
-    __typename?: 'ProductVariantGalleryURL';
-    variants: Array<MediaObject>;
-};
-
-/** Whether customers are allowed to place an order for the product variant when it's out of stock. */
-export enum ProductVariantInventoryPolicy {
-    AllowBackorder = 'AllowBackorder',
-    AllowWaitlist = 'AllowWaitlist',
-    Deny = 'Deny',
-}
-
-export type ProductVariantPriceInput = {
-    amount: Scalars['MonetaryDecimal']['input'];
-    currencyCode: Scalars['String']['input'];
-};
-
-export type ProductVariantPriceObject = {
-    __typename?: 'ProductVariantPriceObject';
-    amount: Scalars['MonetaryDecimal']['output'];
-    currencyCode: Scalars['String']['output'];
-};
-
-/** The status of the product variant. */
-export enum ProductVariantStatus {
-    Active = 'Active',
-    Archived = 'Archived',
-    Draft = 'Draft',
-}
-
-export type ProductsPaginationResult = {
-    __typename?: 'ProductsPaginationResult';
-    items: Array<Product>;
-    pagination: Pagination;
-};
-
 export type Profile = {
     __typename?: 'Profile';
     birthday?: Maybe<Scalars['DateTimeISO']['output']>;
@@ -2326,48 +1346,12 @@ export enum ProfileEntitlementStatus {
     Revoked = 'Revoked',
 }
 
-export type PublicCommerceOrder = {
-    __typename?: 'PublicCommerceOrder';
-    appliedDiscounts?: Maybe<Array<CommerceOrderDiscount>>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    fulfillmentStatus: CommerceOrderFulfillmentStatus;
-    identifier: Scalars['String']['output'];
-    lineItems?: Maybe<Array<PublicCommerceOrderLineItem>>;
-    paymentStatus?: Maybe<PaymentStatus>;
-    priceInfo: CommerceOrderPrice;
-    shipments?: Maybe<Array<PublicShipment>>;
-    source: Scalars['String']['output'];
-    status: CommerceOrderStatus;
-};
-
-export type PublicCommerceOrderLineItem = {
-    __typename?: 'PublicCommerceOrderLineItem';
-    id: Scalars['String']['output'];
-    indexId: Scalars['Int']['output'];
-    productVariantId: Scalars['String']['output'];
-    quantity: Scalars['Int']['output'];
-    status: CommerceOrderLineItemStatus;
-};
-
 export type PublicProfile = {
     __typename?: 'PublicProfile';
     createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
     displayName?: Maybe<Scalars['String']['output']>;
     images?: Maybe<Array<ImageObject>>;
     username: Scalars['String']['output'];
-};
-
-export type PublicShipment = {
-    __typename?: 'PublicShipment';
-    cancelledAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    deliveredAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    deliveryStatus: DeliveryStatus;
-    label?: Maybe<ShippingLabel>;
-    orderIndexId: Scalars['Int']['output'];
-    packageInfo: ShippingPackageInfo;
-    shippedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    status: ShipmentStatus;
 };
 
 export type Query = {
@@ -2396,22 +1380,6 @@ export type Query = {
     accountProfileUsernameValidate: UniqueFieldValidationResult;
     accountSessions: Array<AccountSession>;
     accountsPrivileged: PagedAccounts;
-    appleStoreTransactionWithOrderInfo?: Maybe<AppleStoreTransactionOrderMapping>;
-    commerceCheckoutSession: CommerceCheckoutSession;
-    commerceCheckoutSessionLatest: CommerceCheckoutSession;
-    commerceOrder: CommerceOrderResult;
-    commerceOrderPrivileged: CommerceOrder;
-    commerceOrders: PaginationOrderResult;
-    commerceOrdersByCheckoutSession: Array<CommerceOrderResult>;
-    commerceOrdersPrivileged: PaginationOrderResult;
-    commerceOrdersReadyToFulfill: PaginationFulfillmentOrderResult;
-    commerceProduct: Product;
-    commerceProductPrivileged: Product;
-    commerceProducts: ProductsPaginationResult;
-    commerceProductsPrivileged: ProductsPaginationResult;
-    commerceRefundRequestsPrivileged: PaginationRefundResult;
-    commerceVendor: Vendor;
-    commerceVendors: VendorsResult;
     contactLists: ContactListResult;
     contactListsPrivileged: ContactListResult;
     dataInteractionDatabaseTable: DatabaseTableMetadata;
@@ -2423,9 +1391,6 @@ export type Query = {
     deviceId: OperationResult;
     engagementEvents: Array<EngagementEvent>;
     engagementOverview: EngagementOverview;
-    form: Form;
-    formPrivileged: Form;
-    formsPrivileged: PaginationFormResult;
     post: Post;
     postComments: PagedPostComments;
     postPrivileged: Post;
@@ -2438,13 +1403,10 @@ export type Query = {
     postsByTopic: PagedPosts;
     postsMine: PagedPosts;
     postsPrivileged: PagedPosts;
-    queryOrderPrice: QueryCommerceOrderPriceResult;
     supportAllSupportProfiles: Array<PublicProfile>;
     supportTicket: SupportTicket;
     supportTickets: PaginationSupportTicketResult;
     supportTicketsPrivileged: PaginationSupportTicketResult;
-    warehouse: Warehouse;
-    warehouses: Array<Warehouse>;
 };
 
 export type QueryAccountAccessRoleAssignmentsPrivilegedArgs = {
@@ -2492,73 +1454,6 @@ export type QueryAccountsPrivilegedArgs = {
     pagination: PaginationInput;
 };
 
-export type QueryAppleStoreTransactionWithOrderInfoArgs = {
-    originalTransactionId?: InputMaybe<Scalars['String']['input']>;
-    transactionId: Scalars['String']['input'];
-};
-
-export type QueryCommerceCheckoutSessionArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type QueryCommerceOrderArgs = {
-    identifier: Scalars['String']['input'];
-};
-
-export type QueryCommerceOrderPrivilegedArgs = {
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryCommerceOrdersArgs = {
-    pagination: PaginationInput;
-};
-
-export type QueryCommerceOrdersByCheckoutSessionArgs = {
-    checkoutSessionId: Scalars['String']['input'];
-};
-
-export type QueryCommerceOrdersPrivilegedArgs = {
-    pagination: PaginationInput;
-};
-
-export type QueryCommerceOrdersReadyToFulfillArgs = {
-    pagination: PaginationInput;
-};
-
-export type QueryCommerceProductArgs = {
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryCommerceProductPrivilegedArgs = {
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryCommerceProductsArgs = {
-    pagination: PaginationInput;
-};
-
-export type QueryCommerceProductsPrivilegedArgs = {
-    pagination: PaginationInput;
-};
-
-export type QueryCommerceRefundRequestsPrivilegedArgs = {
-    pagination: PaginationInput;
-};
-
-export type QueryCommerceVendorArgs = {
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryCommerceVendorsArgs = {
-    pagination: PaginationInput;
-};
-
 export type QueryContactListsArgs = {
     pagination: PaginationInput;
 };
@@ -2600,19 +1495,6 @@ export type QueryDataInteractionDatabasesArgs = {
 
 export type QueryEngagementOverviewArgs = {
     input?: InputMaybe<EngagementOverviewInput>;
-};
-
-export type QueryFormArgs = {
-    identifier: Scalars['String']['input'];
-};
-
-export type QueryFormPrivilegedArgs = {
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryFormsPrivilegedArgs = {
-    pagination: PaginationInput;
 };
 
 export type QueryPostArgs = {
@@ -2677,10 +1559,6 @@ export type QueryPostsPrivilegedArgs = {
     pagination: PaginationInput;
 };
 
-export type QueryQueryOrderPriceArgs = {
-    input: QueryCommerceOrderPriceInput;
-};
-
 export type QuerySupportTicketArgs = {
     identifier: Scalars['String']['input'];
 };
@@ -2693,158 +1571,12 @@ export type QuerySupportTicketsPrivilegedArgs = {
     pagination: PaginationInput;
 };
 
-export type QueryWarehouseArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type QueryCommerceOrderPriceInput = {
-    emailAddress?: InputMaybe<Scalars['String']['input']>;
-    lineItems: Array<OrderLineItemInput>;
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-    shippingAddress?: InputMaybe<StreetAddressInput>;
-};
-
-export type QueryCommerceOrderPriceResult = {
-    __typename?: 'QueryCommerceOrderPriceResult';
-    appliedDiscounts: Array<CommerceOrderDiscount>;
-    orderPrice: CommerceOrderPrice;
-};
-
-export type Refund = {
-    __typename?: 'Refund';
-    amount?: Maybe<Scalars['MonetaryDecimal']['output']>;
-    commerceOrder?: Maybe<CommerceOrder>;
-    commerceOrderId: Scalars['String']['output'];
-    createdAt: Scalars['DateTimeISO']['output'];
-    id: Scalars['String']['output'];
-    items: Array<RefundItem>;
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    reason?: Maybe<Scalars['String']['output']>;
-    status: RefundStatus;
-    statusRecords?: Maybe<Array<StatusRecord>>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type RefundItem = {
-    __typename?: 'RefundItem';
-    lineItemId: Scalars['Float']['output'];
-    quantity: Scalars['Float']['output'];
-};
-
-/** The status of a refund. */
-export enum RefundStatus {
-    Cancelled = 'Cancelled',
-    Created = 'Created',
-    Failed = 'Failed',
-    Issued = 'Issued',
-    Pending = 'Pending',
-    Rejected = 'Rejected',
-    RequiresAction = 'RequiresAction',
-}
-
 /** The format of the string rich-content */
 export enum RichContentFormat {
     Html = 'Html',
     Markdown = 'Markdown',
     PlainText = 'PlainText',
 }
-
-export type Shipment = {
-    __typename?: 'Shipment';
-    cancelledAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId?: Maybe<Scalars['String']['output']>;
-    createdByProfileId?: Maybe<Scalars['String']['output']>;
-    deliveredAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    deliveryStatus: DeliveryStatus;
-    id: Scalars['String']['output'];
-    label?: Maybe<ShippingLabel>;
-    orderIndexId: Scalars['Int']['output'];
-    packageInfo: ShippingPackageInfo;
-    shippedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    source: Scalars['String']['output'];
-    status: ShipmentStatus;
-    toAddress: StreetAddressObject;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-/** The status of the shipping */
-export enum ShipmentStatus {
-    Cancelled = 'Cancelled',
-    Delivered = 'Delivered',
-    LabelPrinted = 'LabelPrinted',
-    LabelPurchased = 'LabelPurchased',
-    Pending = 'Pending',
-    Shipped = 'Shipped',
-}
-
-export type ShippingLabel = {
-    __typename?: 'ShippingLabel';
-    carrier: Scalars['String']['output'];
-    serviceType: ShippingServiceType;
-    trackingNumber: Scalars['String']['output'];
-    trackingUrl?: Maybe<Scalars['String']['output']>;
-};
-
-export type ShippingPackageInfo = {
-    __typename?: 'ShippingPackageInfo';
-    items: Array<ShippingPackageItem>;
-    packageIndexId: Scalars['Float']['output'];
-};
-
-export type ShippingPackageItem = {
-    __typename?: 'ShippingPackageItem';
-    indexId: Scalars['Float']['output'];
-    quantity: Scalars['Float']['output'];
-};
-
-export enum ShippingServiceType {
-    UpsGround = 'UPSGround',
-    UspsStandard = 'USPSStandard',
-}
-
-export type StatusRecord = {
-    __typename?: 'StatusRecord';
-    description?: Maybe<Scalars['String']['output']>;
-    status: Scalars['String']['output'];
-    timestamp: Scalars['DateTimeISO']['output'];
-};
-
-export type StreetAddressInput = {
-    city: Scalars['String']['input'];
-    company?: InputMaybe<Scalars['String']['input']>;
-    country: Scalars['String']['input'];
-    firstName: Scalars['String']['input'];
-    lastName: Scalars['String']['input'];
-    line1: Scalars['String']['input'];
-    line2?: InputMaybe<Scalars['String']['input']>;
-    phoneNumber?: InputMaybe<Scalars['String']['input']>;
-    postalCode: Scalars['String']['input'];
-    state: Scalars['String']['input'];
-};
-
-export type StreetAddressObject = {
-    __typename?: 'StreetAddressObject';
-    city: Scalars['String']['output'];
-    company?: Maybe<Scalars['String']['output']>;
-    country: Scalars['String']['output'];
-    firstName: Scalars['String']['output'];
-    lastName: Scalars['String']['output'];
-    line1: Scalars['String']['output'];
-    line2?: Maybe<Scalars['String']['output']>;
-    phoneNumber?: Maybe<Scalars['String']['output']>;
-    postalCode: Scalars['String']['output'];
-    state: Scalars['String']['output'];
-};
-
-export type StripeSetupIntentCreateResult = {
-    __typename?: 'StripeSetupIntentCreateResult';
-    clientSecret: Scalars['String']['output'];
-    setupIntentId: Scalars['String']['output'];
-    stripeCustomerId: Scalars['String']['output'];
-};
 
 export type SupportTicket = {
     __typename?: 'SupportTicket';
@@ -2937,134 +1669,6 @@ export enum UniqueFieldValidationResult {
     Invalid = 'Invalid',
     Taken = 'Taken',
 }
-
-export type UpdateProductInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    name?: InputMaybe<Scalars['String']['input']>;
-    newVariants?: InputMaybe<Array<CreateProductVariantInput>>;
-    removedVariantIds?: InputMaybe<Array<Scalars['String']['input']>>;
-    status?: InputMaybe<ProductStatus>;
-    updatedVariants?: InputMaybe<Array<UpdateProductVariantInput>>;
-};
-
-export type UpdateProductVariantAttributeInput = {
-    attributeToUpsert?: InputMaybe<ProductVariantAttributeInput>;
-    idToDelete?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateProductVariantInput = {
-    attributes?: InputMaybe<Array<UpdateProductVariantAttributeInput>>;
-    barcode?: InputMaybe<Scalars['String']['input']>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    gtin?: InputMaybe<Scalars['String']['input']>;
-    id: Scalars['String']['input'];
-    inventoryPolicy?: InputMaybe<ProductVariantInventoryPolicy>;
-    isVirtual?: InputMaybe<Scalars['Boolean']['input']>;
-    name?: InputMaybe<Scalars['String']['input']>;
-    position?: InputMaybe<Scalars['Float']['input']>;
-    price?: InputMaybe<ProductVariantPriceInput>;
-    setDefault?: InputMaybe<Scalars['Boolean']['input']>;
-    sku?: InputMaybe<Scalars['String']['input']>;
-    status?: InputMaybe<ProductVariantStatus>;
-    taxCode?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateVendorInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    id: Scalars['String']['input'];
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    name?: InputMaybe<Scalars['String']['input']>;
-    status?: InputMaybe<VendorStatus>;
-};
-
-export type Vendor = {
-    __typename?: 'Vendor';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    identifier: Scalars['String']['output'];
-    name: Scalars['String']['output'];
-    pagedProducts?: Maybe<ProductsPaginationResult>;
-    products: ProductsPaginationResult;
-    status: VendorStatus;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type VendorProductsArgs = {
-    pagination: PaginationInput;
-};
-
-export enum VendorStatus {
-    Active = 'Active',
-    Archived = 'Archived',
-    Inactive = 'Inactive',
-}
-
-export type VendorsResult = {
-    __typename?: 'VendorsResult';
-    items: Array<Vendor>;
-    pagination: Pagination;
-};
-
-export type Warehouse = {
-    __typename?: 'Warehouse';
-    address: StreetAddressObject;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    name: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type WarehouseCreateInput = {
-    address: StreetAddressInput;
-    id?: InputMaybe<Scalars['String']['input']>;
-    name: Scalars['String']['input'];
-};
-
-export type WarehouseInventory = {
-    __typename?: 'WarehouseInventory';
-    createdAt: Scalars['DateTimeISO']['output'];
-    id: Scalars['String']['output'];
-    lowInventoryThreshold?: Maybe<Scalars['Int']['output']>;
-    quantity: Scalars['Int']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type WarehouseInventoryCreateInput = {
-    lowInventoryThreshold?: InputMaybe<Scalars['Int']['input']>;
-    productVariantId: Scalars['String']['input'];
-    quantity: Scalars['Int']['input'];
-    warehouseId: Scalars['String']['input'];
-};
-
-export type WarehouseInventoryUpdateInput = {
-    id: Scalars['String']['input'];
-    lowInventoryThreshold?: InputMaybe<Scalars['Int']['input']>;
-    quantity?: InputMaybe<Scalars['Int']['input']>;
-    quantityUpdateType?: InputMaybe<WarehouseInventoryUpdateType>;
-};
-
-export enum WarehouseInventoryUpdateType {
-    Add = 'Add',
-    Set = 'Set',
-    Subtract = 'Subtract',
-}
-
-export type WarehouseUpdateInput = {
-    address?: InputMaybe<StreetAddressInput>;
-    id: Scalars['String']['input'];
-    name?: InputMaybe<Scalars['String']['input']>;
-};
 
 export type NoOpQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -3587,165 +2191,6 @@ export type AccountQuery = {
     };
 };
 
-export type CommerceOrdersPrivilegedQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type CommerceOrdersPrivilegedQuery = {
-    __typename?: 'Query';
-    commerceOrdersPrivileged: {
-        __typename?: 'PaginationOrderResult';
-        items: Array<{
-            __typename?: 'CommerceOrder';
-            createdAt: any;
-            emailAddress: string;
-            fulfillmentSource?: string | null;
-            fulfillmentStatus: CommerceOrderFulfillmentStatus;
-            id: string;
-            identifier: string;
-            metadata?: any | null;
-            paymentStatus?: PaymentStatus | null;
-            source: string;
-            status: CommerceOrderStatus;
-            updatedAt: any;
-            lineItems?: Array<{
-                __typename?: 'CommerceOrderLineItem';
-                createdAt: any;
-                id: string;
-                indexId: number;
-                productVariantId: string;
-                quantity: number;
-                status: CommerceOrderLineItemStatus;
-                updatedAt: any;
-            }> | null;
-            payment?: {
-                __typename?: 'Payment';
-                amount: any;
-                authorizedAt?: any | null;
-                cancelledAt?: any | null;
-                capturedAt?: any | null;
-                confirmedAt?: any | null;
-                createdAt: any;
-                currencyCode: string;
-                externalReferenceId?: string | null;
-                id: string;
-                paymentProcessorType: PaymentProcessorType;
-                status: PaymentStatus;
-                updatedAt: any;
-                paymentMethod?:
-                    | {
-                          __typename?: 'PaymentMethodAppleInAppPurchase';
-                          externalResourceId?: string | null;
-                          paymentProcessorType: PaymentProcessorType;
-                          type: PaymentMethodType;
-                      }
-                    | {
-                          __typename?: 'PaymentMethodCreditCard';
-                          externalResourceId?: string | null;
-                          cardType: CreditCardType;
-                          expirationMonth: number;
-                          expirationYear: number;
-                          last4: string;
-                          paymentProcessorType: PaymentProcessorType;
-                          type: PaymentMethodType;
-                          billingAddress: {
-                              __typename?: 'StreetAddressObject';
-                              city: string;
-                              company?: string | null;
-                              country: string;
-                              firstName: string;
-                              lastName: string;
-                              line1: string;
-                              line2?: string | null;
-                              postalCode: string;
-                              state: string;
-                              phoneNumber?: string | null;
-                          };
-                      }
-                    | null;
-            } | null;
-            priceInfo: {
-                __typename?: 'CommerceOrderPrice';
-                amount: any;
-                currencyCode: string;
-                originalSubtotal: any;
-                subtotal: any;
-                lineItemPrices: Array<{
-                    __typename?: 'CommerceOrderLineItemPrice';
-                    indexId: number;
-                    originalSubtotal: any;
-                    subtotal: any;
-                }>;
-                shippingRate: { __typename?: 'CommerceOrderShippingRate'; amount: any; originalAmount: any };
-                tax: { __typename?: 'CommerceOrderTax'; shipping: any; total: any };
-            };
-            shipments?: Array<{
-                __typename?: 'Shipment';
-                cancelledAt?: any | null;
-                createdAt: any;
-                createdByAccountId?: string | null;
-                createdByProfileId?: string | null;
-                deliveredAt?: any | null;
-                deliveryStatus: DeliveryStatus;
-                id: string;
-                orderIndexId: number;
-                shippedAt?: any | null;
-                source: string;
-                status: ShipmentStatus;
-                updatedAt: any;
-                updatedByAccountId?: string | null;
-                updatedByProfileId?: string | null;
-                label?: {
-                    __typename?: 'ShippingLabel';
-                    carrier: string;
-                    serviceType: ShippingServiceType;
-                    trackingNumber: string;
-                    trackingUrl?: string | null;
-                } | null;
-                toAddress: {
-                    __typename?: 'StreetAddressObject';
-                    city: string;
-                    company?: string | null;
-                    country: string;
-                    firstName: string;
-                    lastName: string;
-                    line1: string;
-                    line2?: string | null;
-                    phoneNumber?: string | null;
-                    state: string;
-                    postalCode: string;
-                };
-            }> | null;
-            shippingInfo?: {
-                __typename?: 'CommerceOrderShippingInfo';
-                shippingAddress: {
-                    __typename?: 'StreetAddressObject';
-                    city: string;
-                    country: string;
-                    company?: string | null;
-                    lastName: string;
-                    firstName: string;
-                    line1: string;
-                    line2?: string | null;
-                    phoneNumber?: string | null;
-                    postalCode: string;
-                    state: string;
-                };
-            } | null;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemsTotal: number;
-            itemsPerPage: number;
-            page: number;
-            pagesTotal: number;
-            itemIndex: number;
-            itemIndexForNextPage?: number | null;
-            itemIndexForPreviousPage?: number | null;
-        };
-    };
-};
-
 export type ContactListEntryCreateMutationVariables = Exact<{
     data: ContactListEntryInput;
 }>;
@@ -4187,56 +2632,6 @@ export type DataInteractionDatabaseTableMetricsQuery = {
         timeInterval: TimeInterval;
         data: Array<any>;
     }>;
-};
-
-export type EngagementOverviewQueryVariables = Exact<{
-    input?: InputMaybe<EngagementOverviewInput>;
-}>;
-
-export type EngagementOverviewQuery = {
-    __typename?: 'Query';
-    engagementOverview: {
-        __typename?: 'EngagementOverview';
-        uniqueDeviceIds: number;
-        deviceCategoryPercentages?: any | null;
-        views?: Array<{
-            __typename?: 'EngagementViewOverview';
-            uniqueDeviceCount: number;
-            viewIdentifier?: string | null;
-        }> | null;
-        locations: Array<{
-            __typename?: 'EngagementLocationOverview';
-            uniqueDeviceCount: number;
-            countryCode?: string | null;
-            latitude?: string | null;
-            longitude?: string | null;
-        }>;
-        referrers?: Array<{
-            __typename?: 'EngagementReferrerOverview';
-            referrer?: string | null;
-            uniqueDeviceCount: number;
-        }> | null;
-    };
-};
-
-export type CommerceOrdersPrivilegedChartQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type CommerceOrdersPrivilegedChartQuery = {
-    __typename?: 'Query';
-    commerceOrdersPrivileged: {
-        __typename?: 'PaginationOrderResult';
-        items: Array<{ __typename?: 'CommerceOrder'; createdAt: any }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-        };
-    };
 };
 
 export class TypedDocumentString<TResult, TVariables>
@@ -4737,155 +3132,6 @@ export const AccountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
-export const CommerceOrdersPrivilegedDocument = new TypedDocumentString(`
-    query CommerceOrdersPrivileged($pagination: PaginationInput!) {
-  commerceOrdersPrivileged(pagination: $pagination) {
-    items {
-      createdAt
-      emailAddress
-      fulfillmentSource
-      fulfillmentStatus
-      id
-      identifier
-      lineItems {
-        createdAt
-        id
-        indexId
-        productVariantId
-        quantity
-        status
-        updatedAt
-      }
-      metadata
-      payment {
-        amount
-        authorizedAt
-        cancelledAt
-        capturedAt
-        confirmedAt
-        createdAt
-        currencyCode
-        externalReferenceId
-        id
-        paymentMethod {
-          externalResourceId
-          paymentProcessorType
-          type
-          ... on PaymentMethodCreditCard {
-            externalResourceId
-            billingAddress {
-              city
-              company
-              country
-              firstName
-              lastName
-              line1
-              line2
-              postalCode
-              state
-              phoneNumber
-            }
-            cardType
-            expirationMonth
-            expirationYear
-            last4
-            paymentProcessorType
-            type
-          }
-          ... on PaymentMethodAppleInAppPurchase {
-            externalResourceId
-            paymentProcessorType
-            type
-          }
-        }
-        paymentProcessorType
-        status
-        updatedAt
-      }
-      paymentStatus
-      priceInfo {
-        amount
-        currencyCode
-        lineItemPrices {
-          indexId
-          originalSubtotal
-          subtotal
-        }
-        originalSubtotal
-        shippingRate {
-          amount
-          originalAmount
-        }
-        subtotal
-        tax {
-          shipping
-          total
-        }
-      }
-      shipments {
-        cancelledAt
-        createdAt
-        createdByAccountId
-        createdByProfileId
-        deliveredAt
-        deliveryStatus
-        id
-        orderIndexId
-        label {
-          carrier
-          serviceType
-          trackingNumber
-          trackingUrl
-        }
-        shippedAt
-        source
-        status
-        toAddress {
-          city
-          company
-          country
-          firstName
-          lastName
-          line1
-          line2
-          phoneNumber
-          state
-          postalCode
-        }
-        updatedAt
-        updatedByAccountId
-        updatedByProfileId
-      }
-      shippingInfo {
-        shippingAddress {
-          city
-          country
-          company
-          lastName
-          firstName
-          line1
-          line2
-          phoneNumber
-          postalCode
-          state
-        }
-      }
-      source
-      status
-      updatedAt
-    }
-    pagination {
-      itemsTotal
-      itemsPerPage
-      page
-      pagesTotal
-      itemIndex
-      itemIndexForNextPage
-      itemIndexForPreviousPage
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<CommerceOrdersPrivilegedQuery, CommerceOrdersPrivilegedQueryVariables>;
 export const ContactListEntryCreateDocument = new TypedDocumentString(`
     mutation ContactListEntryCreate($data: ContactListEntryInput!) {
   contactListEntryCreate(data: $data) {
@@ -5256,47 +3502,6 @@ export const DataInteractionDatabaseTableMetricsDocument = new TypedDocumentStri
     DataInteractionDatabaseTableMetricsQuery,
     DataInteractionDatabaseTableMetricsQueryVariables
 >;
-export const EngagementOverviewDocument = new TypedDocumentString(`
-    query EngagementOverview($input: EngagementOverviewInput) {
-  engagementOverview(input: $input) {
-    uniqueDeviceIds
-    views {
-      uniqueDeviceCount
-      viewIdentifier
-    }
-    locations {
-      uniqueDeviceCount
-      countryCode
-      latitude
-      longitude
-    }
-    referrers {
-      referrer
-      uniqueDeviceCount
-    }
-    deviceCategoryPercentages
-  }
-}
-    `) as unknown as TypedDocumentString<EngagementOverviewQuery, EngagementOverviewQueryVariables>;
-export const CommerceOrdersPrivilegedChartDocument = new TypedDocumentString(`
-    query CommerceOrdersPrivilegedChart($pagination: PaginationInput!) {
-  commerceOrdersPrivileged(pagination: $pagination) {
-    items {
-      createdAt
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    CommerceOrdersPrivilegedChartQuery,
-    CommerceOrdersPrivilegedChartQueryVariables
->;
 export type GraphQLInputTypeMetadata =
     | GraphQLInputScalarTypeMetadata
     | GraphQLInputEnumTypeMetadata
@@ -5373,25 +3578,6 @@ export interface GraphQLInputObjectFieldValidationMetadata {
 }
 
 export namespace GraphQLInputTypes {
-    export const EngagementOverviewInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'EngagementOverviewInput',
-        fields: [
-            {
-                name: 'startTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'endTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-        ],
-    };
-
     export const TimeInterval: GraphQLInputEnumTypeMetadata = {
         kind: 'enum',
         type: 'TimeInterval',
@@ -7248,20 +5434,6 @@ export const AccountProfilePublicOperation: GraphQLOperationMetadata<typeof Acco
     ],
 };
 
-export const CommerceOrdersPrivilegedOperation: GraphQLOperationMetadata<typeof CommerceOrdersPrivilegedDocument> = {
-    operation: 'CommerceOrdersPrivileged',
-    operationType: 'query',
-    document: CommerceOrdersPrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
 export const ContactListEntryCreateOperation: GraphQLOperationMetadata<typeof ContactListEntryCreateDocument> = {
     operation: 'ContactListEntryCreate',
     operationType: 'mutation',
@@ -7668,36 +5840,6 @@ export const DataInteractionDatabaseTableMetricsOperation: GraphQLOperationMetad
             required: true,
             kind: 'object',
             type: GraphQLInputTypes.DataInteractionDatabaseTableMetricsQueryInput,
-        },
-    ],
-};
-
-export const EngagementOverviewOperation: GraphQLOperationMetadata<typeof EngagementOverviewDocument> = {
-    operation: 'EngagementOverview',
-    operationType: 'query',
-    document: EngagementOverviewDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: false,
-            kind: 'object',
-            type: GraphQLInputTypes.EngagementOverviewInput,
-        },
-    ],
-};
-
-export const CommerceOrdersPrivilegedChartOperation: GraphQLOperationMetadata<
-    typeof CommerceOrdersPrivilegedChartDocument
-> = {
-    operation: 'CommerceOrdersPrivilegedChart',
-    operationType: 'query',
-    document: CommerceOrdersPrivilegedChartDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
         },
     ],
 };

@@ -46,40 +46,62 @@ while [[ $# -gt 0 ]]; do
 done
 
 
-# Echo
-echo "Updating GraphQL generated code..."
+# ==================================================
+# GraphQL Schema Update Script
+# ==================================================
 
-# Change to the api directory and pull the latest code
-echo "Changing to the $apiDirectory directory..."
+echo ""
+echo "🔄 Starting GraphQL schema update..."
+echo "=================================================="
+echo ""
+
+# --------------------------------------------------
+# Step 1: Update API Directory
+# --------------------------------------------------
+echo "📁 Updating API directory..."
+echo "  → Changing to: $apiDirectory"
 cd ../$apiDirectory
 apiDirectory=$PWD
 
 # Initialize and update git submodules in the api directory
-echo "Initializing and updating git submodules..."
+echo "  → Initializing and updating git submodules..."
 git submodule update --init --recursive
 
-echo "Pulling the latest api code..."
+echo "  → Pulling the latest API code from branch: $projectBranch"
 git checkout $projectBranch
 git pull
+echo "  ✓ API directory updated"
+echo ""
 
-# Change to the nexus directory and pull the latest code
-echo "Changing to the nexus library directory..."
-cd libraries/nexus
-echo "Pulling the latest nexus library code..."
-# git checkout main
-git pull origin main
-cd ../../
+# --------------------------------------------------
+# Step 2: Update Nexus Library (if exists)
+# --------------------------------------------------
+if [ -d "libraries/nexus" ]; then
+    echo "📚 Updating Nexus library..."
+    echo "  → Changing to libraries/nexus"
+    cd libraries/nexus
+    echo "  → Pulling latest Nexus code from origin/main"
+    git pull origin main
+    cd ../../
+    echo "  ✓ Nexus library updated"
+else
+    echo "⚠️  Nexus library directory not found, skipping..."
+fi
+echo ""
 
-# Change to the base directory and pull the latest code
-echo "Changing to the base library directory..."
+# --------------------------------------------------
+# Step 3: Update Base Library
+# --------------------------------------------------
+echo "📚 Updating Base library..."
+echo "  → Changing to libraries/base"
 cd libraries/base
 baseLibraryDirectory=$PWD
-echo "Pulling the latest base library code..."
-# git checkout main
-git pull
+echo "  → Pulling latest Base library code from origin/main"
+git pull origin main
+echo "  ✓ Base library updated"
+echo ""
 
 # Install npm packages
-echo "Changing to the api directory..."
 cd ../../
 
 # Load nvm if available
@@ -91,10 +113,20 @@ else
     echo "nvm not found, continuing with current node version: $(node --version)"
 fi
 
-echo "install packages..."
-npm i
+# --------------------------------------------------
+# Step 4: Install Dependencies
+# --------------------------------------------------
+echo "📦 Installing dependencies..."
+echo "  → Running npm install"
+npm i --no-audit
+echo "  ✓ Dependencies installed"
+echo ""
 
-echo "Generating base library GraphQL code..."
+# --------------------------------------------------
+# Step 5: Generate GraphQL Schemas
+# --------------------------------------------------
+echo "🔨 Generating GraphQL schemas..."
+echo "  → Running base.js graphql schema:generate"
 node base.js graphql schema:generate -w api -e Production -s -m
 
 # Function to check if a module belongs in structure
@@ -108,15 +140,19 @@ is_structure_module() {
     return 1
 }
 
-# Clean up existing schema files before copying new ones
-echo "Cleaning up existing schema files..."
+# --------------------------------------------------
+# Step 6: Clean and Organize Schema Files
+# --------------------------------------------------
+echo ""
+echo "🧹 Cleaning up existing schema files..."
 # Remove all .graphql and .json files from both directories (except .DS_Store)
 find "$projectDirectory/app/_api/graphql/schemas" -type f \( -name "*.graphql" -o -name "*.json" \) ! -name ".DS_Store" -exec rm -f {} \;
 find "$projectDirectory/libraries/structure/source/api/graphql/schemas" -type f \( -name "*.graphql" -o -name "*.json" \) ! -name ".DS_Store" -exec rm -f {} \;
 echo "  → Removed existing schema files"
 
 # Copy the files from apiDirectory/workers/graphql/graphql/schemas intelligently
-echo "Copying the generated GraphQL files to the appropriate directory..."
+echo ""
+echo "📋 Organizing schema files by module type..."
 cp -r $apiDirectory/workers/api/graphql/schemas /tmp/api_schemas_temp
 
 # Function to determine where each schema file should go based on module list
@@ -136,7 +172,6 @@ place_schema_file() {
 }
 
 # Process each schema file intelligently
-echo "Processing schema files..."
 cd /tmp/api_schemas_temp
 for file in *.graphql *.json; do
     if [ -f "$file" ]; then
@@ -156,11 +191,21 @@ done
 # Clean up temp directory
 rm -rf /tmp/api_schemas_temp
 
-# Format the schema files with prettier before generating code
-echo "Formatting schema files with Prettier..."
+# --------------------------------------------------
+# Step 7: Format and Generate TypeScript Code
+# --------------------------------------------------
 cd $projectDirectory
+echo ""
+echo "💅 Formatting schema files..."
 npm run graphql:prettier
 
 # Generate GraphQL code (which includes formatting)
-echo "Generating GraphQL code..."
+echo ""
+echo "🚀 Generating TypeScript code from schemas..."
 npm run graphql:generate
+
+echo ""
+echo "=================================================="
+echo "✅ GraphQL schema update complete!"
+echo "=================================================="
+echo ""
