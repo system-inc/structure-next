@@ -5,11 +5,8 @@ projectDirectory=$PWD
 # These modules are shared across projects and part of the structure framework
 STRUCTURE_MODULES=(
     "Account"
-    "AppleAppStore"
-    "Commerce"
     "Contact"
     "DataInteraction"
-    "Forms"
     "Logging"
     "Metrics"
     "Post"
@@ -57,22 +54,42 @@ echo "Changing to the $apiDirectory directory..."
 cd ../$apiDirectory
 apiDirectory=$PWD
 
+# Initialize and update git submodules in the api directory
+echo "Initializing and updating git submodules..."
+git submodule update --init --recursive
+
 echo "Pulling the latest api code..."
 git checkout $projectBranch
 git pull
+
+# Change to the nexus directory and pull the latest code
+echo "Changing to the nexus library directory..."
+cd libraries/nexus
+echo "Pulling the latest nexus library code..."
+# git checkout main
+git pull origin main
+cd ../../
 
 # Change to the base directory and pull the latest code
 echo "Changing to the base library directory..."
 cd libraries/base
 baseLibraryDirectory=$PWD
-
 echo "Pulling the latest base library code..."
 # git checkout main
 git pull
 
-# Generating the base library GraphQL code
+# Install npm packages
 echo "Changing to the api directory..."
 cd ../../
+
+# Load nvm if available
+export NVM_DIR="$HOME/.nvm"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+    . "$NVM_DIR/nvm.sh"
+    nvm use
+else
+    echo "nvm not found, continuing with current node version: $(node --version)"
+fi
 
 echo "install packages..."
 npm i
