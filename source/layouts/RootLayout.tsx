@@ -3,7 +3,6 @@ import { ProjectSettings } from '@project/ProjectSettings';
 
 // Dependencies - React and Next.js
 import { Metadata, Viewport } from 'next';
-import Head from 'next/head';
 import { cookies } from 'next/headers';
 
 // Dependencies - Main Components
@@ -21,12 +20,33 @@ import '@project/app/_theme/styles/theme.css';
 
 // Next.js Metadata
 export async function generateMetadata(): Promise<Metadata> {
+    const icons: Metadata['icons'] = [];
+
+    // Add dark mode favicon
+    if(ProjectSettings.assets?.favicon?.dark?.location) {
+        icons.push({
+            rel: 'icon',
+            url: ProjectSettings.assets.favicon.dark.location,
+            media: '(prefers-color-scheme: dark)',
+        });
+    }
+
+    // Add light mode favicon
+    if(ProjectSettings.assets?.favicon?.light?.location) {
+        icons.push({
+            rel: 'icon',
+            url: ProjectSettings.assets.favicon.light.location,
+            media: '(prefers-color-scheme: light)',
+        });
+    }
+
     return {
         title: {
             template: '%s • ' + ProjectSettings.title,
             default: ProjectSettings.title + ' • ' + ProjectSettings.tagline, // default is required when creating a template
         },
         description: ProjectSettings.description,
+        icons: icons.length > 0 ? icons : undefined,
     };
 }
 
@@ -106,23 +126,6 @@ export async function RootLayout(properties: RootLayoutProperties) {
     // Render the component
     return (
         <html lang="en" className={mergeClassNames(properties.htmlClassName, themeClassName)}>
-            <Head>
-                {/* Dynamic favicon based on system theme */}
-                {ProjectSettings.assets?.favicon?.dark?.location && (
-                    <link
-                        rel="icon"
-                        href={ProjectSettings.assets.favicon.dark.location}
-                        media="(prefers-color-scheme: dark)"
-                    />
-                )}
-                {ProjectSettings.assets?.favicon?.light?.location && (
-                    <link
-                        rel="icon"
-                        href={ProjectSettings.assets.favicon.light.location}
-                        media="(prefers-color-scheme: light)"
-                    />
-                )}
-            </Head>
             <body
                 className={mergeClassNames(
                     'bg-background font-sans text-foreground transition-colors',
