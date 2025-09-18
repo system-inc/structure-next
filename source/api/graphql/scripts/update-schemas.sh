@@ -1,6 +1,21 @@
 # Store the project directory
 projectDirectory=$PWD
 
+# Define which modules belong in the structure library
+# These modules are shared across projects and part of the structure framework
+STRUCTURE_MODULES=(
+    "Account"
+    "AppleAppStore"
+    "Commerce"
+    "Contact"
+    "DataInteraction"
+    "Forms"
+    "Logging"
+    "Metrics"
+    "Post"
+    "Support"
+)
+
 # Extract project title from ProjectSettings.ts
 echo "Reading project title from ProjectSettings.ts..."
 projectTitle=$(grep "title:" $projectDirectory/ProjectSettings.ts | head -1 | sed "s/.*title: '//" | sed "s/',.*//")
@@ -65,21 +80,40 @@ npm i
 echo "Generating base library GraphQL code..."
 node base.js graphql schema:generate -w api -e Production -s -m
 
+# Function to check if a module belongs in structure
+is_structure_module() {
+    local module_name="$1"
+    for structure_module in "${STRUCTURE_MODULES[@]}"; do
+        if [ "$structure_module" = "$module_name" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+# Clean up existing schema files before copying new ones
+echo "Cleaning up existing schema files..."
+# Remove all .graphql and .json files from both directories (except .DS_Store)
+find "$projectDirectory/app/_api/graphql/schemas" -type f \( -name "*.graphql" -o -name "*.json" \) ! -name ".DS_Store" -exec rm -f {} \;
+find "$projectDirectory/libraries/structure/source/api/graphql/schemas" -type f \( -name "*.graphql" -o -name "*.json" \) ! -name ".DS_Store" -exec rm -f {} \;
+echo "  → Removed existing schema files"
+
 # Copy the files from apiDirectory/workers/graphql/graphql/schemas intelligently
 echo "Copying the generated GraphQL files to the appropriate directory..."
 cp -r $apiDirectory/workers/api/graphql/schemas /tmp/api_schemas_temp
 
-# Function to determine where each schema file should go
+# Function to determine where each schema file should go based on module list
 place_schema_file() {
     local filename="$1"
+    local module_name="${filename%%.*}"  # Extract module name without extension
     local structure_path="$projectDirectory/libraries/structure/source/api/graphql/schemas/$filename"
     local project_path="$projectDirectory/app/_api/graphql/schemas/$filename"
-    
-    if [ -f "$structure_path" ]; then
-        echo "  → $filename exists in structure, updating structure location"
+
+    if is_structure_module "$module_name"; then
+        echo "  → $filename is a structure module, placing in structure location"
         cp "/tmp/api_schemas_temp/$filename" "$structure_path"
     else
-        echo "  → $filename not in structure, placing in project location"
+        echo "  → $filename is a project module, placing in project location"
         cp "/tmp/api_schemas_temp/$filename" "$project_path"
     fi
 }
@@ -96,7 +130,7 @@ for file in *.graphql *.json; do
             echo "  → Renaming $file to $project_filename for project"
             cp "$file" "$projectDirectory/app/_api/graphql/schemas/$project_filename"
         else
-            # Handle other schema files intelligently
+            # Handle other schema files based on module list
             place_schema_file "$file"
         fi
     fi
@@ -105,7 +139,11 @@ done
 # Clean up temp directory
 rm -rf /tmp/api_schemas_temp
 
-# Generate GraphQL code (which includes formatting)
-echo "Generating GraphQL code and formatting..."
+# Format the schema files with prettier before generating code
+echo "Formatting schema files with Prettier..."
 cd $projectDirectory
+npm run graphql:prettier
+
+# Generate GraphQL code (which includes formatting)
+echo "Generating GraphQL code..."
 npm run graphql:generate
