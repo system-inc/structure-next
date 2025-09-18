@@ -10,12 +10,12 @@ import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQ
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
-import { WaitListCreatePrivilegedOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { ContactListCreatePrivilegedOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // GraphQL Operations
 gql(`
-    mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
-        waitListCreatePrivileged(data: $data) {
+    mutation ContactListCreatePrivileged($data: ContactListCreationInput!) {
+        contactListCreatePrivileged(data: $data) {
             id
             identifier
             title
@@ -26,22 +26,22 @@ gql(`
     }
 `);
 
-// Component - UsersWaitListsPage
-export function UsersWaitListsPage() {
+// Component - UsersContactListsPage
+export function UsersContactListsPage() {
     // Render the component
     return (
         <div className="px-6 py-4">
             <OpsNavigationTrail />
 
-            <h1 className="mb-6">Wait Lists</h1>
+            <h1 className="mb-6">Contact Lists</h1>
 
-            <GraphQlOperationForm className="mb-12" operation={WaitListCreatePrivilegedOperation} />
+            <GraphQlOperationForm className="mb-12" operation={ContactListCreatePrivilegedOperation} />
 
             <GraphQlQueryTable
                 className=""
                 queryDocument={gql(`
-                    query WaitListsPrivileged($pagination: PaginationInput!) {
-                        waitListsPrivileged(pagination: $pagination) {
+                    query ContactListsPrivileged($pagination: PaginationInput!) {
+                        contactListsPrivileged(pagination: $pagination) {
                             pagination {
                                 itemIndex
                                 itemIndexForNextPage

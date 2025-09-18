@@ -100,6 +100,7 @@ type CommerceOrderPrice {
 
 type CommerceOrderShippingInfo {
     shippingAddress: StreetAddressObject!
+    shippingMethod: String
 }
 
 type CommerceOrderShippingRate {

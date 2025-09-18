@@ -9,10 +9,10 @@ import React from 'react';
 // Dependencies - Main Components
 import { Link } from '@structure/source/common/navigation/Link';
 import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
-import { WaitListForm } from '@structure/source/modules/wait-list/WaitListForm';
+import { ContactListForm } from '@structure/source/modules/contact-list/ContactListForm';
 
-// Component - WaitListPage
-export function WaitListPage() {
+// Component - ContactListPage
+export function ContactListPage() {
     const currentYear = new Date().getFullYear();
 
     // Function to render social links
@@ -59,8 +59,8 @@ export function WaitListPage() {
                         {/* Project description */}
                         <h1 className="mb-5 leading-10">{ProjectSettings.description}</h1>
 
-                        {/* Wait List form */}
-                        <WaitListForm />
+                        {/* Contact List form */}
+                        <ContactListForm />
 
                         {/* Footer */}
                         <p className="mt-6 text-sm font-light">

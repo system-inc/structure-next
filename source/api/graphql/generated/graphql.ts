@@ -40,7 +40,7 @@ export type AccessRole = {
 
 export type AccessRoleAssignment = {
     __typename?: 'AccessRoleAssignment';
-    accessRole: AccessRole;
+    accessRole?: Maybe<AccessRole>;
     accessRoleId: Scalars['String']['output'];
     createdAt: Scalars['DateTimeISO']['output'];
     createdByAccountId: Scalars['String']['output'];
@@ -290,38 +290,6 @@ export enum AuthenticationSessionStatus {
     OpenStatuses = 'openStatuses',
 }
 
-export type AvailableMetadata = {
-    __typename?: 'AvailableMetadata';
-    dataType: Scalars['String']['output'];
-    key: Scalars['String']['output'];
-};
-
-export type AvailableMetadataInput = {
-    dataType: Scalars['String']['input'];
-    key: Scalars['String']['input'];
-};
-
-export type CampaignDeliveryStage = {
-    __typename?: 'CampaignDeliveryStage';
-    completedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    emailTemplateContentId?: Maybe<Scalars['String']['output']>;
-    emailTemplateId?: Maybe<Scalars['String']['output']>;
-    emailsSent?: Maybe<Scalars['Int']['output']>;
-    indexId: Scalars['Int']['output'];
-    percentSent?: Maybe<Scalars['Int']['output']>;
-    percentToSend: Scalars['Int']['output'];
-    stageStatus: CampaignDeliveryStageStatus;
-    startedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-};
-
-/** The status of the delivery stage */
-export enum CampaignDeliveryStageStatus {
-    Complete = 'Complete',
-    InProgress = 'InProgress',
-    NotStarted = 'NotStarted',
-    PausingForError = 'PausingForError',
-}
-
 export type CheckoutSessionCreateDirectItemInput = {
     productVariantId: Scalars['String']['input'];
     quantity: Scalars['Int']['input'];
@@ -329,13 +297,6 @@ export type CheckoutSessionCreateDirectItemInput = {
 
 export type ClientPropertiesInput = {
     environment?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ColumnFilter = {
-    caseSensitive?: InputMaybe<Scalars['Boolean']['input']>;
-    column: Scalars['String']['input'];
-    operator: ColumnFilterConditionOperator;
-    value: Scalars['JSON']['input'];
 };
 
 /** The operator of a field filter */
@@ -499,6 +460,7 @@ export type CommerceOrderResult = CommerceOrder | PublicCommerceOrder;
 export type CommerceOrderShippingInfo = {
     __typename?: 'CommerceOrderShippingInfo';
     shippingAddress: StreetAddressObject;
+    shippingMethod?: Maybe<Scalars['String']['output']>;
 };
 
 export type CommerceOrderShippingRate = {
@@ -524,109 +486,68 @@ export type CommerceOrderTax = {
     total: Scalars['MonetaryDecimal']['output'];
 };
 
-export type Contact = {
-    __typename?: 'Contact';
+export type ContactList = {
+    __typename?: 'ContactList';
     createdAt: Scalars['DateTimeISO']['output'];
     createdByAccountId: Scalars['String']['output'];
     createdByProfileId: Scalars['String']['output'];
-    fields?: Maybe<Array<ContactField>>;
+    description?: Maybe<Scalars['String']['output']>;
     id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    name: Scalars['String']['output'];
-    note?: Maybe<Scalars['String']['output']>;
-    source: Scalars['String']['output'];
-    type: ContactType;
+    identifier: Scalars['String']['output'];
+    title: Scalars['String']['output'];
     updatedAt: Scalars['DateTimeISO']['output'];
     updatedByAccountId?: Maybe<Scalars['String']['output']>;
     updatedByProfileId?: Maybe<Scalars['String']['output']>;
+    userEnrolled?: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type ContactCreateInput = {
-    fields?: InputMaybe<Array<ContactFieldCreateInput>>;
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-    name: Scalars['String']['input'];
-    note?: InputMaybe<Scalars['String']['input']>;
-    source: Scalars['String']['input'];
-    type: ContactType;
-};
-
-export type ContactField = {
-    __typename?: 'ContactField';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    label?: Maybe<Scalars['String']['output']>;
-    type: ContactFieldType;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-    value: Scalars['JSON']['output'];
-};
-
-export type ContactFieldCreateInput = {
-    label?: InputMaybe<Scalars['String']['input']>;
-    type: ContactFieldType;
-    value: Scalars['JSON']['input'];
-};
-
-/** Type of contact field */
-export enum ContactFieldType {
-    EmailAddress = 'EmailAddress',
-    PhoneNumber = 'PhoneNumber',
-    StreetAddress = 'StreetAddress',
-}
-
-export type ContactFieldUpdateInput = {
-    action: ListEntryAction;
-    id?: InputMaybe<Scalars['String']['input']>;
-    label?: InputMaybe<Scalars['String']['input']>;
-    type?: InputMaybe<ContactFieldType>;
-    value?: InputMaybe<Scalars['JSON']['input']>;
-};
-
-/** Type of contact */
-export enum ContactType {
-    Company = 'Company',
-    Person = 'Person',
-}
-
-export type ContactUpdateInput = {
-    id: Scalars['String']['input'];
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-    name?: InputMaybe<Scalars['String']['input']>;
-    note?: InputMaybe<Scalars['String']['input']>;
-    source?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateEmailListEntryInput = {
-    emailAddress: Scalars['String']['input'];
-    familyName?: InputMaybe<Scalars['String']['input']>;
-    givenName?: InputMaybe<Scalars['String']['input']>;
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-};
-
-export type CreateEmailListInput = {
-    entries: Array<CreateEmailListEntryInput>;
+export type ContactListCreationInput = {
+    description?: InputMaybe<Scalars['String']['input']>;
     identifier?: InputMaybe<Scalars['String']['input']>;
     title: Scalars['String']['input'];
 };
 
-export type CreateEmailTemplateContentInput = {
-    body: Scalars['String']['input'];
-    contentFormat?: InputMaybe<EmailContentFormat>;
-    languageCode?: InputMaybe<Scalars['String']['input']>;
-    metadata?: InputMaybe<EmailTemplateMetadataInput>;
-    notes?: InputMaybe<Scalars['String']['input']>;
-    subject: Scalars['String']['input'];
+export type ContactListEntry = {
+    __typename?: 'ContactListEntry';
+    accountId?: Maybe<Scalars['String']['output']>;
+    contactList?: Maybe<ContactList>;
+    contactListId: Scalars['String']['output'];
+    countryCode?: Maybe<Scalars['String']['output']>;
+    createdAt: Scalars['DateTimeISO']['output'];
+    emailAddress: Scalars['String']['output'];
+    id: Scalars['String']['output'];
+    ipAddress?: Maybe<Scalars['String']['output']>;
+    lastContactedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    name?: Maybe<Scalars['String']['output']>;
+    profileId?: Maybe<Scalars['String']['output']>;
+    updatedAt: Scalars['DateTimeISO']['output'];
+    userAgent?: Maybe<Scalars['String']['output']>;
+    userUnsubscribed: Scalars['Boolean']['output'];
 };
 
-export type CreateEmailTemplateInput = {
-    alias?: InputMaybe<Scalars['String']['input']>;
-    connectToAutomationKey?: InputMaybe<Scalars['String']['input']>;
-    content: CreateEmailTemplateContentInput;
+export type ContactListEntryCreatePrivilegedInput = {
+    contactListId: Scalars['String']['input'];
+    emailAddress: Scalars['String']['input'];
+    name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ContactListEntryInput = {
+    contactListIdentifier: Scalars['String']['input'];
+    emailAddress: Scalars['String']['input'];
+    name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ContactListResult = {
+    __typename?: 'ContactListResult';
+    items: Array<ContactList>;
+    pagination: Pagination;
+};
+
+export type ContactListUpdateInput = {
     description?: InputMaybe<Scalars['String']['input']>;
-    title: Scalars['String']['input'];
+    id?: InputMaybe<Scalars['String']['input']>;
+    identifier?: InputMaybe<Scalars['String']['input']>;
+    title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateEngagementEventInput = {
@@ -832,349 +753,6 @@ export enum DeviceOrientation {
 
 export type DevicePropertiesInput = {
     orientation?: InputMaybe<DeviceOrientation>;
-};
-
-export type DiscordWebhookMessageCreateEmbedInput = {
-    authorName?: InputMaybe<Scalars['String']['input']>;
-    color?: InputMaybe<Scalars['Int']['input']>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    timestamp?: InputMaybe<Scalars['DateTimeISO']['input']>;
-    title?: InputMaybe<Scalars['String']['input']>;
-    url?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type DiscordWebhookMessageCreateInput = {
-    content?: InputMaybe<Scalars['String']['input']>;
-    embeds?: InputMaybe<Array<DiscordWebhookMessageCreateEmbedInput>>;
-    token: Scalars['String']['input'];
-    username?: InputMaybe<Scalars['String']['input']>;
-    webhookId: Scalars['String']['input'];
-};
-
-export type EmailAutomation = {
-    __typename?: 'EmailAutomation';
-    automationKey: Scalars['String']['output'];
-    availableMetadata?: Maybe<Array<AvailableMetadata>>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    emailTemplate?: Maybe<EmailTemplate>;
-    emailTemplateId?: Maybe<Scalars['String']['output']>;
-    fromEmail: Scalars['String']['output'];
-    fromName: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    subject: Scalars['String']['output'];
-    type: EmailAutomationType;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type EmailAutomationResult = {
-    __typename?: 'EmailAutomationResult';
-    items: Array<EmailAutomation>;
-    pagination?: Maybe<Pagination>;
-};
-
-/** Email automation type */
-export enum EmailAutomationType {
-    BuiltIn = 'BuiltIn',
-    Custom = 'Custom',
-}
-
-export type EmailCampaign = {
-    __typename?: 'EmailCampaign';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    currentStageIndexId: Scalars['Int']['output'];
-    deliveryStages: Array<CampaignDeliveryStage>;
-    description?: Maybe<Scalars['String']['output']>;
-    fromEmail: Scalars['String']['output'];
-    fromName: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    pagedEmailAddresses?: Maybe<PagedEmailCampaignEmailAddress>;
-    status: EmailCampaignStatus;
-    title: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type EmailCampaignPagedEmailAddressesArgs = {
-    pagination?: InputMaybe<PaginationInput>;
-};
-
-export type EmailCampaignCreateInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    emailAddressInputs?: InputMaybe<Array<EmailCampaignEmailAddressInput>>;
-    emailListInputs?: InputMaybe<Array<EmailCampaignEmailListInput>>;
-    emailTemplateContentId?: InputMaybe<Scalars['String']['input']>;
-    emailTemplateId?: InputMaybe<Scalars['String']['input']>;
-    fromEmail: Scalars['String']['input'];
-    fromName: Scalars['String']['input'];
-    stageInputs: Array<EmailCampaignStageInput>;
-    title: Scalars['String']['input'];
-};
-
-export type EmailCampaignEmailAddress = {
-    __typename?: 'EmailCampaignEmailAddress';
-    createdAt: Scalars['DateTimeISO']['output'];
-    emailAddress: Scalars['String']['output'];
-    emailContent?: Maybe<EmailCampaignEmailContent>;
-    id: Scalars['String']['output'];
-    presetSendStage?: Maybe<Scalars['Int']['output']>;
-    sendAttempts?: Maybe<Scalars['Int']['output']>;
-    sentAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    sentStage?: Maybe<Scalars['Int']['output']>;
-    status: EmailCampaignEmailAddressStatus;
-    statusDescription?: Maybe<Scalars['String']['output']>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-};
-
-export type EmailCampaignEmailAddressInput = {
-    emailAddress: Scalars['String']['input'];
-    presetSendStage?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** The status of an email address in an email campaign */
-export enum EmailCampaignEmailAddressStatus {
-    Pending = 'Pending',
-    PermanentFailure = 'PermanentFailure',
-    SendFailed = 'SendFailed',
-    Sent = 'Sent',
-}
-
-export type EmailCampaignEmailAddressUpdateInput = {
-    action: ListEntryAction;
-    emailAddress: Scalars['String']['input'];
-    presetSendStage?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type EmailCampaignEmailContent = {
-    __typename?: 'EmailCampaignEmailContent';
-    content: Scalars['String']['output'];
-    contentFormat: EmailContentFormat;
-    fromEmailAddress: Scalars['String']['output'];
-    fromName: Scalars['String']['output'];
-    subject: Scalars['String']['output'];
-};
-
-export type EmailCampaignEmailListInput = {
-    emailListId: Scalars['String']['input'];
-    presetSendStage?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type EmailCampaignStageInput = {
-    emailTemplateContentId?: InputMaybe<Scalars['String']['input']>;
-    emailTemplateId?: InputMaybe<Scalars['String']['input']>;
-    indexId: Scalars['Int']['input'];
-    percentToSend: Scalars['Int']['input'];
-};
-
-export type EmailCampaignStageUpdateInput = {
-    action: ListEntryAction;
-    emailTemplateContentId?: InputMaybe<Scalars['String']['input']>;
-    emailTemplateId?: InputMaybe<Scalars['String']['input']>;
-    indexId: Scalars['Int']['input'];
-    percentToSend?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** The status of the email campaign */
-export enum EmailCampaignStatus {
-    Active = 'Active',
-    Archive = 'Archive',
-    Complete = 'Complete',
-    Draft = 'Draft',
-    InProgress = 'InProgress',
-}
-
-export type EmailCampaignUpdateInput = {
-    id: Scalars['String']['input'];
-    newDescription?: InputMaybe<Scalars['String']['input']>;
-    newFromEmail?: InputMaybe<Scalars['String']['input']>;
-    newFromName?: InputMaybe<Scalars['String']['input']>;
-    newTitle?: InputMaybe<Scalars['String']['input']>;
-    stagesToUpdate?: InputMaybe<Array<EmailCampaignStageUpdateInput>>;
-};
-
-export type EmailContactInput = {
-    content: Scalars['String']['input'];
-    contentFormat?: InputMaybe<EmailContentFormat>;
-    fromAddress: Scalars['String']['input'];
-    fromName?: InputMaybe<Scalars['String']['input']>;
-    subject: Scalars['String']['input'];
-};
-
-/** The format of an email content */
-export enum EmailContentFormat {
-    Html = 'HTML',
-    Plain = 'Plain',
-    ToContentType = 'toContentType',
-}
-
-export type EmailList = {
-    __typename?: 'EmailList';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    identifier: Scalars['String']['output'];
-    pagedEmailListEntries?: Maybe<PagedEmailListEntries>;
-    title: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type EmailListPagedEmailListEntriesArgs = {
-    pagination?: InputMaybe<PaginationInput>;
-};
-
-export type EmailListEntry = {
-    __typename?: 'EmailListEntry';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    emailAddress: Scalars['String']['output'];
-    familyName?: Maybe<Scalars['String']['output']>;
-    givenName?: Maybe<Scalars['String']['output']>;
-    hashCode: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    metadata?: Maybe<Scalars['JSON']['output']>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type EmailTemplate = {
-    __typename?: 'EmailTemplate';
-    alias: Scalars['String']['output'];
-    contentHistory: Array<EmailTemplateContent>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    currentContent?: Maybe<EmailTemplateContent>;
-    currentVersion: Scalars['Float']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    status: EmailTemplateStatus;
-    title: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-};
-
-export type EmailTemplateContent = {
-    __typename?: 'EmailTemplateContent';
-    activatedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    body: Scalars['String']['output'];
-    contentFormat: EmailContentFormat;
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    languageCode: Scalars['String']['output'];
-    metadata?: Maybe<EmailTemplateMetadataObject>;
-    notes?: Maybe<Scalars['String']['output']>;
-    subject: Scalars['String']['output'];
-    version: Scalars['Float']['output'];
-};
-
-export type EmailTemplateContentEngagementMetrics = {
-    __typename?: 'EmailTemplateContentEngagementMetrics';
-    links: Array<EmailTemplateContentLinkEngagementMetrics>;
-    opened: Scalars['Int']['output'];
-    openedUnique: Scalars['Int']['output'];
-    sent: Scalars['Int']['output'];
-    sentError: Scalars['Int']['output'];
-    sentErrorUnique: Scalars['Int']['output'];
-    sentUnique: Scalars['Int']['output'];
-};
-
-export type EmailTemplateContentLinkEngagementMetrics = {
-    __typename?: 'EmailTemplateContentLinkEngagementMetrics';
-    clicked: Scalars['Int']['output'];
-    clickedUnique: Scalars['Int']['output'];
-    url: Scalars['String']['output'];
-};
-
-export type EmailTemplateImageAsset = {
-    __typename?: 'EmailTemplateImageAsset';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    imageUrl: Scalars['String']['output'];
-};
-
-export type EmailTemplateImageAssetsResult = {
-    __typename?: 'EmailTemplateImageAssetsResult';
-    items: Array<EmailTemplateImageAsset>;
-    pagination?: Maybe<Pagination>;
-};
-
-export type EmailTemplateLinkMetadataInput = {
-    linkUrl: Scalars['String']['input'];
-    replaceKey: Scalars['String']['input'];
-};
-
-export type EmailTemplateLinkMetadataObject = {
-    __typename?: 'EmailTemplateLinkMetadataObject';
-    linkUrl: Scalars['String']['output'];
-    replaceKey: Scalars['String']['output'];
-};
-
-export type EmailTemplateMediaMetadataInput = {
-    assetId: Scalars['String']['input'];
-    replaceKey?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type EmailTemplateMediaMetadataObject = {
-    __typename?: 'EmailTemplateMediaMetadataObject';
-    assetId: Scalars['String']['output'];
-    replaceKey?: Maybe<Scalars['String']['output']>;
-};
-
-export type EmailTemplateMetadataInput = {
-    links: Array<EmailTemplateLinkMetadataInput>;
-    mediaAssets: Array<EmailTemplateMediaMetadataInput>;
-    replaceableMarkups: Array<EmailTemplateReplaceableMarkupInput>;
-};
-
-export type EmailTemplateMetadataObject = {
-    __typename?: 'EmailTemplateMetadataObject';
-    links: Array<EmailTemplateLinkMetadataObject>;
-    mediaAssets: Array<EmailTemplateMediaMetadataObject>;
-    replaceableMarkups: Array<EmailTemplateReplaceableMarkupObject>;
-};
-
-export type EmailTemplateReplaceableMarkupInput = {
-    markup: Scalars['String']['input'];
-    placeHoldValue: Scalars['String']['input'];
-    replaceKey: Scalars['String']['input'];
-};
-
-export type EmailTemplateReplaceableMarkupObject = {
-    __typename?: 'EmailTemplateReplaceableMarkupObject';
-    markup: Scalars['String']['output'];
-    placeHoldValue: Scalars['String']['output'];
-    replaceKey: Scalars['String']['output'];
-};
-
-/** The status of an email template */
-export enum EmailTemplateStatus {
-    Active = 'Active',
-    Draft = 'Draft',
-    Inactive = 'Inactive',
-}
-
-export type EmailTemplatesResult = {
-    __typename?: 'EmailTemplatesResult';
-    items: Array<EmailTemplate>;
-    pagination?: Maybe<Pagination>;
 };
 
 export type EmailVerification = {
@@ -1685,12 +1263,6 @@ export enum LabelColorOption {
     Green = 'Green',
 }
 
-export enum ListEntryAction {
-    Add = 'Add',
-    Remove = 'Remove',
-    Update = 'Update',
-}
-
 export type MediaObject = {
     __typename?: 'MediaObject';
     type: MediaObjectType;
@@ -1754,30 +1326,16 @@ export type Mutation = {
     commerceRefundRequestRejectPrivileged: Refund;
     commerceVendorCreate: Vendor;
     commerceVendorUpdate: Vendor;
-    contactCreate: Contact;
-    contactDelete: OperationResult;
-    contactFieldUpdate: Contact;
-    contactUpdate: Contact;
+    contactListCreatePrivileged: ContactList;
+    contactListDeletePrivileged: OperationResult;
+    contactListEntryCreate: ContactListEntry;
+    contactListEntryCreatePrivileged: ContactListEntry;
+    contactListEntryUnsubscribe: OperationResult;
+    contactListUpdatePrivileged: ContactList;
     dataInteractionDatabaseTableRowCreate: Scalars['JSON']['output'];
     dataInteractionDatabaseTableRowDelete: OperationResult;
     dataInteractionDatabaseTableRowUpdate: Scalars['JSON']['output'];
     dataInteractionDatabaseTableRowsDelete: Scalars['Int']['output'];
-    discordWebhookMessageCreate: OperationResult;
-    emailAutomationUpsert: EmailAutomation;
-    emailCampaignCreate: EmailCampaign;
-    emailCampaignEditEmailAddresses: EmailCampaign;
-    emailCampaignStartStage: EmailCampaign;
-    emailCampaignUpdate: EmailCampaign;
-    emailCampaignUpdateStatus: EmailCampaign;
-    emailContact: Scalars['String']['output'];
-    emailListCreate: EmailList;
-    emailListUpdate: EmailList;
-    emailTemplateContentUpsert: EmailTemplate;
-    emailTemplateCreate: EmailTemplate;
-    emailTemplateImageAssetDelete: Scalars['Boolean']['output'];
-    emailTemplateImageAssetSetDescription: EmailTemplateImageAsset;
-    emailTemplatePreview: Scalars['String']['output'];
-    emailTemplateUpdate: EmailTemplate;
     engagementEventCreate: OperationResult;
     engagementEventsCreate: OperationResult;
     formArchive: Form;
@@ -1808,7 +1366,6 @@ export type Mutation = {
     postVote: OperationResult;
     productVariantRemoveGalleryAsset: ProductVariant;
     productVariantReorderGallery: ProductVariant;
-    sendEmail: Scalars['String']['output'];
     stripePaymentCreateSetupIntent: StripeSetupIntentCreateResult;
     submitForm: FormUserData;
     supportTicketAssign: SupportTicket;
@@ -1818,11 +1375,6 @@ export type Mutation = {
     supportTicketCreatePrivileged: SupportTicket;
     supportTicketUpdatePrivileged: SupportTicket;
     supportTicketUpdateStatusPrivileged: SupportTicket;
-    waitListCreatePrivileged: WaitList;
-    waitListDeletePrivileged: OperationResult;
-    waitListEntryCreate: WaitListEntry;
-    waitListEntryDelete: OperationResult;
-    waitListUpdatePrivileged: WaitList;
     warehouseCreate: Warehouse;
     warehouseDelete: OperationResult;
     warehouseInventoryCreate: WarehouseInventory;
@@ -1960,21 +1512,31 @@ export type MutationCommerceVendorUpdateArgs = {
     input: UpdateVendorInput;
 };
 
-export type MutationContactCreateArgs = {
-    input: ContactCreateInput;
+export type MutationContactListCreatePrivilegedArgs = {
+    data: ContactListCreationInput;
 };
 
-export type MutationContactDeleteArgs = {
+export type MutationContactListDeletePrivilegedArgs = {
+    forceDelete?: InputMaybe<Scalars['Boolean']['input']>;
     id: Scalars['String']['input'];
 };
 
-export type MutationContactFieldUpdateArgs = {
-    contactId: Scalars['String']['input'];
-    input: ContactFieldUpdateInput;
+export type MutationContactListEntryCreateArgs = {
+    data: ContactListEntryInput;
 };
 
-export type MutationContactUpdateArgs = {
-    input: ContactUpdateInput;
+export type MutationContactListEntryCreatePrivilegedArgs = {
+    data: ContactListEntryCreatePrivilegedInput;
+};
+
+export type MutationContactListEntryUnsubscribeArgs = {
+    contactListIdentifier: Scalars['String']['input'];
+    emailAddress: Scalars['String']['input'];
+    reason?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type MutationContactListUpdatePrivilegedArgs = {
+    input: ContactListUpdateInput;
 };
 
 export type MutationDataInteractionDatabaseTableRowCreateArgs = {
@@ -1997,73 +1559,6 @@ export type MutationDataInteractionDatabaseTableRowsDeleteArgs = {
     ids: Array<Scalars['String']['input']>;
     ignoreOrphantCheck?: InputMaybe<Scalars['Boolean']['input']>;
     tableName: Scalars['String']['input'];
-};
-
-export type MutationDiscordWebhookMessageCreateArgs = {
-    input: DiscordWebhookMessageCreateInput;
-};
-
-export type MutationEmailAutomationUpsertArgs = {
-    input: UpsertEmailAutomationInput;
-};
-
-export type MutationEmailCampaignCreateArgs = {
-    input: EmailCampaignCreateInput;
-};
-
-export type MutationEmailCampaignEditEmailAddressesArgs = {
-    campaignId: Scalars['String']['input'];
-    emailAddressInputs: Array<EmailCampaignEmailAddressUpdateInput>;
-};
-
-export type MutationEmailCampaignStartStageArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationEmailCampaignUpdateArgs = {
-    input: EmailCampaignUpdateInput;
-};
-
-export type MutationEmailCampaignUpdateStatusArgs = {
-    id: Scalars['String']['input'];
-    status: EmailCampaignStatus;
-};
-
-export type MutationEmailContactArgs = {
-    input: EmailContactInput;
-};
-
-export type MutationEmailListCreateArgs = {
-    input: CreateEmailListInput;
-};
-
-export type MutationEmailListUpdateArgs = {
-    input: UpdateEmailListInput;
-};
-
-export type MutationEmailTemplateContentUpsertArgs = {
-    data: UpsertEmailTemplateContentInput;
-};
-
-export type MutationEmailTemplateCreateArgs = {
-    data: CreateEmailTemplateInput;
-};
-
-export type MutationEmailTemplateImageAssetDeleteArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type MutationEmailTemplateImageAssetSetDescriptionArgs = {
-    description: Scalars['String']['input'];
-    id: Scalars['String']['input'];
-};
-
-export type MutationEmailTemplatePreviewArgs = {
-    input: PreviewEmailTemplateInput;
-};
-
-export type MutationEmailTemplateUpdateArgs = {
-    data: UpdateEmailTemplateInput;
 };
 
 export type MutationEngagementEventCreateArgs = {
@@ -2206,10 +1701,6 @@ export type MutationProductVariantReorderGalleryArgs = {
     id: Scalars['String']['input'];
 };
 
-export type MutationSendEmailArgs = {
-    data: SendEmailInput;
-};
-
 export type MutationSubmitFormArgs = {
     data: Scalars['JSON']['input'];
     emailAddress?: InputMaybe<Scalars['String']['input']>;
@@ -2245,31 +1736,6 @@ export type MutationSupportTicketUpdatePrivilegedArgs = {
 export type MutationSupportTicketUpdateStatusPrivilegedArgs = {
     id: Scalars['String']['input'];
     status: SupportTicketStatus;
-};
-
-export type MutationWaitListCreatePrivilegedArgs = {
-    data: WaitListCreationInput;
-};
-
-export type MutationWaitListDeletePrivilegedArgs = {
-    forceDelete?: InputMaybe<Scalars['Boolean']['input']>;
-    id: Scalars['String']['input'];
-};
-
-export type MutationWaitListEntryCreateArgs = {
-    emailAddress: Scalars['String']['input'];
-    waitListIdentifier: Scalars['String']['input'];
-};
-
-export type MutationWaitListEntryDeleteArgs = {
-    emailAddress?: InputMaybe<Scalars['String']['input']>;
-    id?: InputMaybe<Scalars['String']['input']>;
-    reason?: InputMaybe<Scalars['String']['input']>;
-    waitListIdentifier?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type MutationWaitListUpdatePrivilegedArgs = {
-    input: WaitListUpdateInput;
 };
 
 export type MutationWarehouseCreateArgs = {
@@ -2330,40 +1796,10 @@ export type PagedAccounts = {
     pagination: Pagination;
 };
 
-export type PagedContactResult = {
-    __typename?: 'PagedContactResult';
-    items: Array<Contact>;
-    pagination: Pagination;
-};
-
 export type PagedDatabasesResult = {
     __typename?: 'PagedDatabasesResult';
     items: Array<DatebaseMetadata>;
     pagination: Pagination;
-};
-
-export type PagedEmailCampaignEmailAddress = {
-    __typename?: 'PagedEmailCampaignEmailAddress';
-    items: Array<EmailCampaignEmailAddress>;
-    pagination?: Maybe<Pagination>;
-};
-
-export type PagedEmailCampaigns = {
-    __typename?: 'PagedEmailCampaigns';
-    items: Array<EmailCampaign>;
-    pagination?: Maybe<Pagination>;
-};
-
-export type PagedEmailListEntries = {
-    __typename?: 'PagedEmailListEntries';
-    items: Array<EmailListEntry>;
-    pagination?: Maybe<Pagination>;
-};
-
-export type PagedEmailLists = {
-    __typename?: 'PagedEmailLists';
-    items: Array<EmailList>;
-    pagination?: Maybe<Pagination>;
 };
 
 export type PagedPostComments = {
@@ -2424,12 +1860,6 @@ export type PaginationInput = {
     itemIndex?: InputMaybe<Scalars['Int']['input']>;
     itemsPerPage: Scalars['Int']['input'];
     orderBy?: InputMaybe<Array<OrderByInput>>;
-};
-
-export type PaginationInputWithFilters = {
-    filters?: InputMaybe<Array<ColumnFilter>>;
-    itemIndex?: InputMaybe<Scalars['Int']['input']>;
-    itemsPerPage: Scalars['Int']['input'];
 };
 
 export type PaginationOrderResult = {
@@ -2726,15 +2156,6 @@ export enum PostVoteType {
     Upvote = 'Upvote',
 }
 
-export type PreviewEmailTemplateInput = {
-    contentId?: InputMaybe<Scalars['String']['input']>;
-    id: Scalars['String']['input'];
-    languageCode: Scalars['String']['input'];
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-    toAddress: Scalars['String']['input'];
-    withEngagement?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type Product = {
     __typename?: 'Product';
     createdAt: Scalars['DateTimeISO']['output'];
@@ -2991,8 +2412,8 @@ export type Query = {
     commerceRefundRequestsPrivileged: PaginationRefundResult;
     commerceVendor: Vendor;
     commerceVendors: VendorsResult;
-    contact: Contact;
-    contacts: PagedContactResult;
+    contactLists: ContactListResult;
+    contactListsPrivileged: ContactListResult;
     dataInteractionDatabaseTable: DatabaseTableMetadata;
     dataInteractionDatabaseTableMetrics: Array<DataInteractionDatabaseMetrics>;
     dataInteractionDatabaseTableRow: DatabaseTableRowData;
@@ -3000,20 +2421,6 @@ export type Query = {
     dataInteractionDatabaseTables: DatabaseTablesResult;
     dataInteractionDatabases: PagedDatabasesResult;
     deviceId: OperationResult;
-    discordWebhookQuery: OperationResult;
-    emailAutomation: EmailAutomation;
-    emailAutomationBuiltInAvailable: Array<EmailAutomation>;
-    emailAutomations: EmailAutomationResult;
-    emailCampaign: EmailCampaign;
-    emailCampaigns: PagedEmailCampaigns;
-    emailList: EmailList;
-    emailListEntries: PagedEmailLists;
-    emailListEntry: EmailList;
-    emailLists: PagedEmailLists;
-    emailTemplate: EmailTemplate;
-    emailTemplateContentEngagementMetrics: EmailTemplateContentEngagementMetrics;
-    emailTemplateImageAssets: EmailTemplateImageAssetsResult;
-    emailTemplates: EmailTemplatesResult;
     engagementEvents: Array<EngagementEvent>;
     engagementOverview: EngagementOverview;
     form: Form;
@@ -3036,9 +2443,6 @@ export type Query = {
     supportTicket: SupportTicket;
     supportTickets: PaginationSupportTicketResult;
     supportTicketsPrivileged: PaginationSupportTicketResult;
-    waitListEntriesPrivileged: WaitListEntriesResult;
-    waitLists: WaitListResult;
-    waitListsPrivileged: WaitListResult;
     warehouse: Warehouse;
     warehouses: Array<Warehouse>;
 };
@@ -3155,11 +2559,11 @@ export type QueryCommerceVendorsArgs = {
     pagination: PaginationInput;
 };
 
-export type QueryContactArgs = {
-    id: Scalars['String']['input'];
+export type QueryContactListsArgs = {
+    pagination: PaginationInput;
 };
 
-export type QueryContactsArgs = {
+export type QueryContactListsPrivilegedArgs = {
     pagination: PaginationInput;
 };
 
@@ -3192,56 +2596,6 @@ export type QueryDataInteractionDatabaseTablesArgs = {
 
 export type QueryDataInteractionDatabasesArgs = {
     pagination: PaginationInput;
-};
-
-export type QueryEmailAutomationArgs = {
-    automationKey: Scalars['String']['input'];
-};
-
-export type QueryEmailAutomationsArgs = {
-    input?: InputMaybe<PaginationInput>;
-};
-
-export type QueryEmailCampaignArgs = {
-    id: Scalars['String']['input'];
-};
-
-export type QueryEmailCampaignsArgs = {
-    input?: InputMaybe<PaginationInputWithFilters>;
-};
-
-export type QueryEmailListArgs = {
-    identifier: Scalars['String']['input'];
-};
-
-export type QueryEmailListEntriesArgs = {
-    pagination?: InputMaybe<PaginationInput>;
-};
-
-export type QueryEmailListEntryArgs = {
-    emailAddress?: InputMaybe<Scalars['String']['input']>;
-    hashCode?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryEmailListsArgs = {
-    pagination?: InputMaybe<PaginationInput>;
-};
-
-export type QueryEmailTemplateArgs = {
-    alias?: InputMaybe<Scalars['String']['input']>;
-    id?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryEmailTemplateContentEngagementMetricsArgs = {
-    emailTemplateContentId: Scalars['String']['input'];
-};
-
-export type QueryEmailTemplateImageAssetsArgs = {
-    input?: InputMaybe<PaginationInputWithFilters>;
-};
-
-export type QueryEmailTemplatesArgs = {
-    input?: InputMaybe<PaginationInputWithFilters>;
 };
 
 export type QueryEngagementOverviewArgs = {
@@ -3339,20 +2693,6 @@ export type QuerySupportTicketsPrivilegedArgs = {
     pagination: PaginationInput;
 };
 
-export type QueryWaitListEntriesPrivilegedArgs = {
-    pagination: PaginationInput;
-    waitListId?: InputMaybe<Scalars['String']['input']>;
-    waitListIdentifier?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type QueryWaitListsArgs = {
-    pagination: PaginationInput;
-};
-
-export type QueryWaitListsPrivilegedArgs = {
-    pagination: PaginationInput;
-};
-
 export type QueryWarehouseArgs = {
     id: Scalars['String']['input'];
 };
@@ -3408,15 +2748,6 @@ export enum RichContentFormat {
     Markdown = 'Markdown',
     PlainText = 'PlainText',
 }
-
-export type SendEmailInput = {
-    content: Scalars['String']['input'];
-    contentFormat?: InputMaybe<EmailContentFormat>;
-    fromAddress: Scalars['String']['input'];
-    fromName?: InputMaybe<Scalars['String']['input']>;
-    subject: Scalars['String']['input'];
-    toAddress: Scalars['String']['input'];
-};
 
 export type Shipment = {
     __typename?: 'Shipment';
@@ -3607,29 +2938,6 @@ export enum UniqueFieldValidationResult {
     Taken = 'Taken',
 }
 
-export type UpdateEmailListEntryInput = {
-    action: ListEntryAction;
-    emailAddress: Scalars['String']['input'];
-    familyName?: InputMaybe<Scalars['String']['input']>;
-    givenName?: InputMaybe<Scalars['String']['input']>;
-    metadata?: InputMaybe<Scalars['JSON']['input']>;
-};
-
-export type UpdateEmailListInput = {
-    emailListEntryInputs?: InputMaybe<Array<UpdateEmailListEntryInput>>;
-    id: Scalars['String']['input'];
-    newIdentifier?: InputMaybe<Scalars['String']['input']>;
-    newTitle?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateEmailTemplateInput = {
-    alias?: InputMaybe<Scalars['String']['input']>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    id: Scalars['String']['input'];
-    status?: InputMaybe<EmailTemplateStatus>;
-    title?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type UpdateProductInput = {
     description?: InputMaybe<Scalars['String']['input']>;
     id?: InputMaybe<Scalars['String']['input']>;
@@ -3671,28 +2979,6 @@ export type UpdateVendorInput = {
     status?: InputMaybe<VendorStatus>;
 };
 
-export type UpsertEmailAutomationInput = {
-    automationKey: Scalars['String']['input'];
-    availableMetadata?: InputMaybe<Array<AvailableMetadataInput>>;
-    description?: InputMaybe<Scalars['String']['input']>;
-    emailTemplateId?: InputMaybe<Scalars['String']['input']>;
-    fromEmail?: InputMaybe<Scalars['String']['input']>;
-    fromName?: InputMaybe<Scalars['String']['input']>;
-    subject?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpsertEmailTemplateContentInput = {
-    body?: InputMaybe<Scalars['String']['input']>;
-    contentFormat?: InputMaybe<EmailContentFormat>;
-    emailTemplateId: Scalars['String']['input'];
-    languageCode?: InputMaybe<Scalars['String']['input']>;
-    markCurrent?: InputMaybe<Scalars['Boolean']['input']>;
-    metadata?: InputMaybe<EmailTemplateMetadataInput>;
-    notes?: InputMaybe<Scalars['String']['input']>;
-    referencedContentId?: InputMaybe<Scalars['String']['input']>;
-    subject?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type Vendor = {
     __typename?: 'Vendor';
     createdAt: Scalars['DateTimeISO']['output'];
@@ -3724,66 +3010,6 @@ export type VendorsResult = {
     __typename?: 'VendorsResult';
     items: Array<Vendor>;
     pagination: Pagination;
-};
-
-export type WaitList = {
-    __typename?: 'WaitList';
-    createdAt: Scalars['DateTimeISO']['output'];
-    createdByAccountId: Scalars['String']['output'];
-    createdByProfileId: Scalars['String']['output'];
-    description?: Maybe<Scalars['String']['output']>;
-    id: Scalars['String']['output'];
-    identifier: Scalars['String']['output'];
-    title: Scalars['String']['output'];
-    updatedAt: Scalars['DateTimeISO']['output'];
-    updatedByAccountId?: Maybe<Scalars['String']['output']>;
-    updatedByProfileId?: Maybe<Scalars['String']['output']>;
-    userEnrolled?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export type WaitListCreationInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    title: Scalars['String']['input'];
-};
-
-export type WaitListEntriesResult = {
-    __typename?: 'WaitListEntriesResult';
-    items: Array<WaitListEntry>;
-    pagination: Pagination;
-};
-
-export type WaitListEntry = {
-    __typename?: 'WaitListEntry';
-    accountId?: Maybe<Scalars['String']['output']>;
-    contactedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    countryCode?: Maybe<Scalars['String']['output']>;
-    createdAt: Scalars['DateTimeISO']['output'];
-    emailAddress: Scalars['String']['output'];
-    id: Scalars['String']['output'];
-    ipAddress?: Maybe<Scalars['String']['output']>;
-    message?: Maybe<Scalars['String']['output']>;
-    name?: Maybe<Scalars['String']['output']>;
-    notifiedAt?: Maybe<Scalars['DateTimeISO']['output']>;
-    profileId?: Maybe<Scalars['String']['output']>;
-    referredBy?: Maybe<Scalars['String']['output']>;
-    updatedAt: Scalars['DateTimeISO']['output'];
-    userAgent?: Maybe<Scalars['String']['output']>;
-    waitList?: Maybe<WaitList>;
-    waitListId: Scalars['String']['output'];
-};
-
-export type WaitListResult = {
-    __typename?: 'WaitListResult';
-    items: Array<WaitList>;
-    pagination: Pagination;
-};
-
-export type WaitListUpdateInput = {
-    description?: InputMaybe<Scalars['String']['input']>;
-    id?: InputMaybe<Scalars['String']['input']>;
-    identifier?: InputMaybe<Scalars['String']['input']>;
-    title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Warehouse = {
@@ -3949,7 +3175,7 @@ export type AccountAccessRoleAssignmentCreatePrivilegedMutation = {
         expiresAt?: any | null;
         createdAt: any;
         updatedAt: any;
-        accessRole: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null };
+        accessRole?: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null } | null;
         profile: {
             __typename?: 'Profile';
             username: string;
@@ -4124,6 +3350,53 @@ export type AccountAuthenticationEmailVerificationSendMutation = {
     };
 };
 
+export type ContactListCreatePrivilegedMutationVariables = Exact<{
+    data: ContactListCreationInput;
+}>;
+
+export type ContactListCreatePrivilegedMutation = {
+    __typename?: 'Mutation';
+    contactListCreatePrivileged: {
+        __typename?: 'ContactList';
+        id: string;
+        identifier: string;
+        title: string;
+        description?: string | null;
+        updatedAt: any;
+        createdAt: any;
+    };
+};
+
+export type ContactListsPrivilegedQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type ContactListsPrivilegedQuery = {
+    __typename?: 'Query';
+    contactListsPrivileged: {
+        __typename?: 'ContactListResult';
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForNextPage?: number | null;
+            itemIndexForPreviousPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            page: number;
+            pagesTotal: number;
+        };
+        items: Array<{
+            __typename?: 'ContactList';
+            id: string;
+            identifier: string;
+            title: string;
+            description?: string | null;
+            updatedAt: any;
+            createdAt: any;
+        }>;
+    };
+};
+
 export type AccountsPrivilegedQueryVariables = Exact<{
     pagination: PaginationInput;
 }>;
@@ -4186,7 +3459,7 @@ export type AccountAccessRoleAssignmentsPrivilegedQuery = {
             expiresAt?: any | null;
             createdAt: any;
             updatedAt: any;
-            accessRole: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null };
+            accessRole?: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null } | null;
             profile: {
                 __typename?: 'Profile';
                 username: string;
@@ -4215,53 +3488,6 @@ export type AccountAccessRoleAssignmentRevokePrivilegedMutationVariables = Exact
 export type AccountAccessRoleAssignmentRevokePrivilegedMutation = {
     __typename?: 'Mutation';
     accountAccessRoleAssignmentRevokePrivileged: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type WaitListCreatePrivilegedMutationVariables = Exact<{
-    data: WaitListCreationInput;
-}>;
-
-export type WaitListCreatePrivilegedMutation = {
-    __typename?: 'Mutation';
-    waitListCreatePrivileged: {
-        __typename?: 'WaitList';
-        id: string;
-        identifier: string;
-        title: string;
-        description?: string | null;
-        updatedAt: any;
-        createdAt: any;
-    };
-};
-
-export type WaitListsPrivilegedQueryVariables = Exact<{
-    pagination: PaginationInput;
-}>;
-
-export type WaitListsPrivilegedQuery = {
-    __typename?: 'Query';
-    waitListsPrivileged: {
-        __typename?: 'WaitListResult';
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForNextPage?: number | null;
-            itemIndexForPreviousPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            page: number;
-            pagesTotal: number;
-        };
-        items: Array<{
-            __typename?: 'WaitList';
-            id: string;
-            identifier: string;
-            title: string;
-            description?: string | null;
-            updatedAt: any;
-            createdAt: any;
-        }>;
-    };
 };
 
 export type AccountProfileUpdateMutationVariables = Exact<{
@@ -4518,6 +3744,15 @@ export type CommerceOrdersPrivilegedQuery = {
             itemIndexForPreviousPage?: number | null;
         };
     };
+};
+
+export type ContactListEntryCreateMutationVariables = Exact<{
+    data: ContactListEntryInput;
+}>;
+
+export type ContactListEntryCreateMutation = {
+    __typename?: 'Mutation';
+    contactListEntryCreate: { __typename?: 'ContactListEntry'; id: string; emailAddress: string };
 };
 
 export type DataInteractionDatabaseTableRowsQueryVariables = Exact<{
@@ -4881,16 +4116,6 @@ export type PostTopicByIdQuery = {
         postCount: number;
         createdAt: any;
     };
-};
-
-export type WaitListEntryCreateMutationVariables = Exact<{
-    emailAddress: Scalars['String']['input'];
-    waitListIdentifier?: Scalars['String']['input'];
-}>;
-
-export type WaitListEntryCreateMutation = {
-    __typename?: 'Mutation';
-    waitListEntryCreate: { __typename?: 'WaitListEntry'; id: string; emailAddress: string };
 };
 
 export type DataInteractionDatabaseTablesQueryVariables = Exact<{
@@ -5296,6 +4521,44 @@ export const AccountAuthenticationEmailVerificationSendDocument = new TypedDocum
     AccountAuthenticationEmailVerificationSendMutation,
     AccountAuthenticationEmailVerificationSendMutationVariables
 >;
+export const ContactListCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation ContactListCreatePrivileged($data: ContactListCreationInput!) {
+  contactListCreatePrivileged(data: $data) {
+    id
+    identifier
+    title
+    description
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+    ContactListCreatePrivilegedMutation,
+    ContactListCreatePrivilegedMutationVariables
+>;
+export const ContactListsPrivilegedDocument = new TypedDocumentString(`
+    query ContactListsPrivileged($pagination: PaginationInput!) {
+  contactListsPrivileged(pagination: $pagination) {
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+    items {
+      id
+      identifier
+      title
+      description
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<ContactListsPrivilegedQuery, ContactListsPrivilegedQueryVariables>;
 export const AccountsPrivilegedDocument = new TypedDocumentString(`
     query AccountsPrivileged($pagination: PaginationInput!) {
   accountsPrivileged(pagination: $pagination) {
@@ -5387,41 +4650,6 @@ export const AccountAccessRoleAssignmentRevokePrivilegedDocument = new TypedDocu
     AccountAccessRoleAssignmentRevokePrivilegedMutation,
     AccountAccessRoleAssignmentRevokePrivilegedMutationVariables
 >;
-export const WaitListCreatePrivilegedDocument = new TypedDocumentString(`
-    mutation WaitListCreatePrivileged($data: WaitListCreationInput!) {
-  waitListCreatePrivileged(data: $data) {
-    id
-    identifier
-    title
-    description
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<WaitListCreatePrivilegedMutation, WaitListCreatePrivilegedMutationVariables>;
-export const WaitListsPrivilegedDocument = new TypedDocumentString(`
-    query WaitListsPrivileged($pagination: PaginationInput!) {
-  waitListsPrivileged(pagination: $pagination) {
-    pagination {
-      itemIndex
-      itemIndexForNextPage
-      itemIndexForPreviousPage
-      itemsPerPage
-      itemsTotal
-      page
-      pagesTotal
-    }
-    items {
-      id
-      identifier
-      title
-      description
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<WaitListsPrivilegedQuery, WaitListsPrivilegedQueryVariables>;
 export const AccountProfileUpdateDocument = new TypedDocumentString(`
     mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
   accountProfileUpdate(input: $input) {
@@ -5658,6 +4886,14 @@ export const CommerceOrdersPrivilegedDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CommerceOrdersPrivilegedQuery, CommerceOrdersPrivilegedQueryVariables>;
+export const ContactListEntryCreateDocument = new TypedDocumentString(`
+    mutation ContactListEntryCreate($data: ContactListEntryInput!) {
+  contactListEntryCreate(data: $data) {
+    id
+    emailAddress
+  }
+}
+    `) as unknown as TypedDocumentString<ContactListEntryCreateMutation, ContactListEntryCreateMutationVariables>;
 export const DataInteractionDatabaseTableRowsDocument = new TypedDocumentString(`
     query DataInteractionDatabaseTableRows($databaseName: String!, $tableName: String!, $pagination: PaginationInput!, $filters: ColumnFilterGroupInput) {
   dataInteractionDatabaseTableRows(
@@ -5957,17 +5193,6 @@ export const PostTopicByIdDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
-export const WaitListEntryCreateDocument = new TypedDocumentString(`
-    mutation WaitListEntryCreate($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
-  waitListEntryCreate(
-    emailAddress: $emailAddress
-    waitListIdentifier: $waitListIdentifier
-  ) {
-    id
-    emailAddress
-  }
-}
-    `) as unknown as TypedDocumentString<WaitListEntryCreateMutation, WaitListEntryCreateMutationVariables>;
 export const DataInteractionDatabaseTablesDocument = new TypedDocumentString(`
     query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
   dataInteractionDatabaseTables(
@@ -7068,6 +6293,51 @@ export namespace GraphQLInputTypes {
         ],
     };
 
+    export const ContactListEntryInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'ContactListEntryInput',
+        fields: [
+            {
+                name: 'contactListIdentifier',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [16],
+                    },
+                ],
+            },
+            {
+                name: 'emailAddress',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isEmail',
+                    },
+                ],
+            },
+            {
+                name: 'name',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [256],
+                    },
+                ],
+            },
+        ],
+    };
+
     export const AccountPasswordUpdateInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
         type: 'AccountPasswordUpdateInput',
@@ -7224,55 +6494,6 @@ export namespace GraphQLInputTypes {
                     {
                         type: 'maxLength',
                         constraints: [32],
-                    },
-                ],
-            },
-        ],
-    };
-
-    export const WaitListCreationInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'WaitListCreationInput',
-        fields: [
-            {
-                name: 'identifier',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [16],
-                    },
-                ],
-            },
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [512],
                     },
                 ],
             },
@@ -7450,6 +6671,55 @@ export namespace GraphQLInputTypes {
                 kind: 'object',
                 type: GraphQLInputTypes.OrderByInput,
                 required: true,
+            },
+        ],
+    };
+
+    export const ContactListCreationInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'ContactListCreationInput',
+        fields: [
+            {
+                name: 'identifier',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [16],
+                    },
+                ],
+            },
+            {
+                name: 'title',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'maxLength',
+                        constraints: [256],
+                    },
+                ],
+            },
+            {
+                name: 'description',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [512],
+                    },
+                ],
             },
         ],
     };
@@ -7808,6 +7078,36 @@ export const AccountAuthenticationEmailVerificationVerifyOperation: GraphQLOpera
     ],
 };
 
+export const ContactListCreatePrivilegedOperation: GraphQLOperationMetadata<
+    typeof ContactListCreatePrivilegedDocument
+> = {
+    operation: 'ContactListCreatePrivileged',
+    operationType: 'mutation',
+    document: ContactListCreatePrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'data',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.ContactListCreationInput,
+        },
+    ],
+};
+
+export const ContactListsPrivilegedOperation: GraphQLOperationMetadata<typeof ContactListsPrivilegedDocument> = {
+    operation: 'ContactListsPrivileged',
+    operationType: 'query',
+    document: ContactListsPrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
 export const AccountsPrivilegedOperation: GraphQLOperationMetadata<typeof AccountsPrivilegedDocument> = {
     operation: 'AccountsPrivileged',
     operationType: 'query',
@@ -7872,34 +7172,6 @@ export const AccountAccessRoleAssignmentRevokePrivilegedOperation: GraphQLOperat
             required: true,
             kind: 'object',
             type: GraphQLInputTypes.AccessRoleAssignmentRevokeInput,
-        },
-    ],
-};
-
-export const WaitListCreatePrivilegedOperation: GraphQLOperationMetadata<typeof WaitListCreatePrivilegedDocument> = {
-    operation: 'WaitListCreatePrivileged',
-    operationType: 'mutation',
-    document: WaitListCreatePrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'data',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.WaitListCreationInput,
-        },
-    ],
-};
-
-export const WaitListsPrivilegedOperation: GraphQLOperationMetadata<typeof WaitListsPrivilegedDocument> = {
-    operation: 'WaitListsPrivileged',
-    operationType: 'query',
-    document: WaitListsPrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
         },
     ],
 };
@@ -7986,6 +7258,20 @@ export const CommerceOrdersPrivilegedOperation: GraphQLOperationMetadata<typeof 
             required: true,
             kind: 'object',
             type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const ContactListEntryCreateOperation: GraphQLOperationMetadata<typeof ContactListEntryCreateDocument> = {
+    operation: 'ContactListEntryCreate',
+    operationType: 'mutation',
+    document: ContactListEntryCreateDocument,
+    parameters: [
+        {
+            parameter: 'data',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.ContactListEntryInput,
         },
     ],
 };
@@ -8319,26 +7605,6 @@ export const PostTopicByIdOperation: GraphQLOperationMetadata<typeof PostTopicBy
     parameters: [
         {
             parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const WaitListEntryCreateOperation: GraphQLOperationMetadata<typeof WaitListEntryCreateDocument> = {
-    operation: 'WaitListEntryCreate',
-    operationType: 'mutation',
-    document: WaitListEntryCreateDocument,
-    parameters: [
-        {
-            parameter: 'emailAddress',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'waitListIdentifier',
             required: true,
             kind: 'scalar',
             type: 'String',

@@ -154,11 +154,13 @@ export function UsersRolesPage() {
                 },
                 accessRoleAssignment,
             ) => {
-                const type = accessRoleAssignment.accessRole.type;
-                if(!groups[type]) {
-                    groups[type] = [];
+                const type = accessRoleAssignment.accessRole?.type;
+                if(type) {
+                    if(!groups[type]) {
+                        groups[type] = [];
+                    }
+                    groups[type].push(accessRoleAssignment);
                 }
-                groups[type].push(accessRoleAssignment);
                 return groups;
             },
             {},
@@ -271,7 +273,7 @@ export function UsersRolesPage() {
                                                         onClick={() => {
                                                             setSelectedRole({
                                                                 id: role.id,
-                                                                type: role.accessRole.type,
+                                                                type: role.accessRole?.type || '',
                                                                 emailAddress: role.emailAddress || '',
                                                                 username: role.profile?.username || '',
                                                             });
@@ -310,7 +312,7 @@ export function UsersRolesPage() {
                                                     onClick={() => {
                                                         setSelectedRole({
                                                             id: role.id,
-                                                            type: role.accessRole.type,
+                                                            type: role.accessRole?.type || '',
                                                             username: role.profile?.username || '',
                                                             emailAddress: role.emailAddress || '',
                                                         });

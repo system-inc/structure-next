@@ -10,21 +10,21 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
-import { WaitListEntryCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { ContactListEntryCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { isUniqueConstraintError } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // GraphQL Operations
 gql(`
-    mutation WaitListEntryCreate($emailAddress: String!, $waitListIdentifier: String! = "earlyAccess") {
-        waitListEntryCreate(emailAddress: $emailAddress, waitListIdentifier: $waitListIdentifier) {
+    mutation ContactListEntryCreate($data: ContactListEntryInput!) {
+        contactListEntryCreate(data: $data) {
             id
             emailAddress
         }
     }
 `);
 
-// Component - WaitListForm
-export function WaitListForm() {
+// Component - ContactListForm
+export function ContactListForm() {
     // Message state to display custom message
     const [formMessage, setFormMessage] = React.useState<React.ReactNode | null>(null);
 
@@ -33,7 +33,7 @@ export function WaitListForm() {
         <>
             {formMessage && <div className="mb-4">{formMessage}</div>}
             <GraphQlOperationForm
-                operation={WaitListEntryCreateOperation}
+                operation={ContactListEntryCreateOperation}
                 className="relative w-full max-w-[380px]"
                 description={<p className="font-light">Enter your email to register for early access.</p>}
                 buttonProperties={{
@@ -50,8 +50,8 @@ export function WaitListForm() {
                         if(isUniqueConstraintError(mutationResponseError)) {
                             message = (
                                 <Alert icon={CheckCircledIcon} title={<b>Already Signed Up</b>}>
-                                    <b>{formValues.emailAddress}</b> is already signed up! Please check your spam folder
-                                    if you haven&apos;t received the confirmation email yet.
+                                    <b>{formValues.data.emailAddress}</b> is already signed up! Please check your spam
+                                    folder if you haven&apos;t received the confirmation email yet.
                                 </Alert>
                             );
                         }
@@ -69,7 +69,7 @@ export function WaitListForm() {
                         message = (
                             <Alert icon={CheckCircledIcon} title={<b>Signed Up!</b>}>
                                 Thank you for signing up! You will receive a confirmation email at{' '}
-                                <b>{formValues.emailAddress}</b> soon.
+                                <b>{formValues.data.emailAddress}</b> soon.
                             </Alert>
                         );
                     }

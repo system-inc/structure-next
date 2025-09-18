@@ -17,7 +17,7 @@ type AccessRole {
 }
 
 type AccessRoleAssignment {
-    accessRole: AccessRole!
+    accessRole: AccessRole
     accessRoleId: String!
     createdAt: DateTimeISO!
     createdByAccountId: String!

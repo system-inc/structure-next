@@ -149,10 +149,10 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
                 title: 'Segments',
                 href: '/ops/users/segments',
             },
-            // Wait Lists
+            // Contact Lists
             {
-                title: 'Wait Lists',
-                href: '/ops/users/wait-lists',
+                title: 'Contact Lists',
+                href: '/ops/users/contact-lists',
             },
         ],
     },
