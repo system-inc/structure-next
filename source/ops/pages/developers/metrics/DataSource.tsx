@@ -149,6 +149,16 @@ export function DataSource(properties: DataSourceProperties) {
         },
     );
 
+    // Extract properties for the first useEffect dependency
+    const propertiesSettingsId = properties.settings.id;
+    const propertiesSettingsDatabaseName = properties.settings.databaseName;
+    const propertiesSettingsTableName = properties.settings.tableName;
+    const propertiesSettingsColor = properties.settings.color;
+    const propertiesSettingsYAxisAlignment = properties.settings.yAxisAlignment;
+    const propertiesSettingsLineStyle = properties.settings.lineStyle;
+    const propertiesSetLoading = properties.setLoading;
+    const propertiesSetDataSourcesWithMetrics = properties.setDataSourcesWithMetrics;
+
     // Handle success state
     React.useEffect(
         function () {
@@ -156,31 +166,31 @@ export function DataSource(properties: DataSourceProperties) {
                 const data = dataInteractionDatabaseTableMetricsRequest.data;
 
                 // Set the loading state to false
-                properties.setLoading(false);
+                propertiesSetLoading(false);
 
                 // If there is no data, return
                 if(!data) return;
 
-                properties.setDataSourcesWithMetrics((oldData) => {
+                propertiesSetDataSourcesWithMetrics((oldData) => {
                     if(!data.dataInteractionDatabaseTableMetrics[0])
-                        return oldData.filter((old) => old.id !== properties.settings.id);
+                        return oldData.filter((old) => old.id !== propertiesSettingsId);
 
                     // Find if the data already exists in the array
                     // console.log(oldData, properties.queryConfig.id);
-                    const index = oldData.findIndex((old) => old.id === properties.settings.id);
+                    const index = oldData.findIndex((old) => old.id === propertiesSettingsId);
 
                     // If the data doesn't exist, add it to the array
                     if(index === -1) {
                         return [
                             ...oldData,
                             {
-                                id: properties.settings.id,
-                                databaseName: properties.settings.databaseName,
-                                tableName: properties.settings.tableName,
+                                id: propertiesSettingsId,
+                                databaseName: propertiesSettingsDatabaseName,
+                                tableName: propertiesSettingsTableName,
                                 columnName: columnToMeasure,
-                                color: properties.settings.color,
-                                yAxisAlignment: properties.settings.yAxisAlignment,
-                                lineStyle: properties.settings.lineStyle,
+                                color: propertiesSettingsColor,
+                                yAxisAlignment: propertiesSettingsYAxisAlignment,
+                                lineStyle: propertiesSettingsLineStyle,
                                 metrics: data.dataInteractionDatabaseTableMetrics[0],
                             },
                         ];
@@ -190,13 +200,13 @@ export function DataSource(properties: DataSourceProperties) {
                         return [
                             ...oldData.slice(0, index),
                             {
-                                id: properties.settings.id,
-                                databaseName: properties.settings.databaseName,
-                                tableName: properties.settings.tableName,
+                                id: propertiesSettingsId,
+                                databaseName: propertiesSettingsDatabaseName,
+                                tableName: propertiesSettingsTableName,
                                 columnName: columnToMeasure,
-                                color: properties.settings.color,
-                                yAxisAlignment: properties.settings.yAxisAlignment,
-                                lineStyle: properties.settings.lineStyle,
+                                color: propertiesSettingsColor,
+                                yAxisAlignment: propertiesSettingsYAxisAlignment,
+                                lineStyle: propertiesSettingsLineStyle,
                                 metrics: data.dataInteractionDatabaseTableMetrics[0],
                             },
                             ...oldData.slice(index + 1),
@@ -205,19 +215,30 @@ export function DataSource(properties: DataSourceProperties) {
                 });
             }
         },
-        [dataInteractionDatabaseTableMetricsRequest.data, columnToMeasure, properties],
+        [
+            dataInteractionDatabaseTableMetricsRequest.data,
+            columnToMeasure,
+            propertiesSettingsId,
+            propertiesSettingsDatabaseName,
+            propertiesSettingsTableName,
+            propertiesSettingsColor,
+            propertiesSettingsYAxisAlignment,
+            propertiesSettingsLineStyle,
+            propertiesSetLoading,
+            propertiesSetDataSourcesWithMetrics,
+        ],
     );
 
-    // Handle error state
+    // Effect to handle error state
     React.useEffect(
         function () {
             if(dataInteractionDatabaseTableMetricsRequest.isError) {
-                properties.setDataSourcesWithMetrics((old) => {
-                    return old.filter((old) => old.id !== properties.settings.id);
+                propertiesSetDataSourcesWithMetrics(function (old) {
+                    return old.filter((old) => old.id !== propertiesSettingsId);
                 });
             }
         },
-        [dataInteractionDatabaseTableMetricsRequest.isError, properties],
+        [dataInteractionDatabaseTableMetricsRequest.isError, propertiesSettingsId, propertiesSetDataSourcesWithMetrics],
     );
 
     // Function to handle changing the database and table

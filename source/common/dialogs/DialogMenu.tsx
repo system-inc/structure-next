@@ -61,19 +61,14 @@ export function DialogMenu(properties: DialogMenuProperties) {
         }, 25);
     }, []);
 
-    const menu = React.useMemo(
-        function () {
-            return (
-                <Menu
-                    {...properties}
-                    className={mergeClassNames('max-h-[30vh]', properties.className)}
-                    onItemSelected={function () {
-                        setOpen(false);
-                    }}
-                />
-            );
-        },
-        [properties],
+    const menu = (
+        <Menu
+            {...properties}
+            className={mergeClassNames('max-h-[30vh]', properties.className)}
+            onItemSelected={function () {
+                setOpen(false);
+            }}
+        />
     );
 
     // Render the component

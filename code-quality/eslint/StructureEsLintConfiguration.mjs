@@ -12,6 +12,7 @@ import ReactDestructuringRule from './rules/ReactDestructuringRule.mjs';
 import ReactExportRule from './rules/ReactExportRule.mjs';
 import ReactFileOrganizationRule from './rules/ReactFileOrganizationRule.mjs';
 import ReactFunctionStyleRule from './rules/ReactFunctionStyleRule.mjs';
+import ReactHookDependenciesRule from './rules/ReactHookDependenciesRule.mjs';
 import ReactImportRule from './rules/ReactImportRule.mjs';
 import ReactNamingConventionsRule from './rules/ReactNamingConventionsRule.mjs';
 import ReactNoArrowFunctionsAsHookParametersRule from './rules/ReactNoArrowFunctionsAsHookParametersRule.mjs';
@@ -120,6 +121,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
             'react-export-rule': ReactExportRule,
             'react-file-organization-rule': ReactFileOrganizationRule,
             'react-function-style-rule': ReactFunctionStyleRule,
+            'react-hook-dependencies-rule': ReactHookDependenciesRule,
             'react-import-rule': ReactImportRule,
             'react-naming-conventions-rule': ReactNamingConventionsRule,
             'react-no-arrow-functions-as-hook-parameters-rule': ReactNoArrowFunctionsAsHookParametersRule,
@@ -148,6 +150,7 @@ export const structureJavaScriptAndTypeScriptRules = {
     'structure/react-export-rule': 'error',
     'structure/react-file-organization-rule': 'error',
     'structure/react-function-style-rule': 'error',
+    'structure/react-hook-dependencies-rule': 'error',
     'structure/react-import-rule': 'error',
     'structure/react-naming-conventions-rule': 'error',
     'structure/react-no-arrow-functions-as-hook-parameters-rule': 'error',

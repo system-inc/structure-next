@@ -32,24 +32,21 @@ export function TableRow(properties: TableRowProperties) {
     // console.log('cells', cells);
 
     // Function to intercept the onClick event
-    const onClickIntercept = React.useCallback(
-        function (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>) {
-            // If the click originated from a td elemement
-            if((event.target as HTMLElement).tagName === 'TD') {
-                // Select the row
-                if(properties.onSelectChange) {
-                    // console.log('Toggling row selection');
-                    properties.onSelectChange(properties, !properties.selected);
-                }
+    const onClickIntercept = function (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>) {
+        // If the click originated from a td elemement
+        if((event.target as HTMLElement).tagName === 'TD') {
+            // Select the row
+            if(properties.onSelectChange) {
+                // console.log('Toggling row selection');
+                properties.onSelectChange(properties, !properties.selected);
             }
+        }
 
-            // Call the onChange callback if it exists
-            if(properties.onClick) {
-                properties.onClick(event);
-            }
-        },
-        [properties],
-    );
+        // Call the onChange callback if it exists
+        if(properties.onClick) {
+            properties.onClick(event);
+        }
+    };
 
     // Render the component
     return (

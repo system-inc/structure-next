@@ -269,6 +269,11 @@ export function Form(properties: FormProperties) {
         [properties.formInputs, formInputsReferencesMap, validateFormInput],
     );
 
+    // Extract properties for the useCallback dependency
+    const propertiesOnSubmit = properties.onSubmit;
+    const propertiesOnSubmitSuccess = properties.onSubmitSuccess;
+    const propertiesFormInputs = properties.formInputs;
+
     // Function to handle form submission
     const onSubmitIntercept = React.useCallback(
         async function (event: React.FormEvent<HTMLFormElement>) {
@@ -310,19 +315,19 @@ export function Form(properties: FormProperties) {
                 else {
                     // Gather the form values
                     const formValues: FormValuesInterface = {};
-                    properties.formInputs.forEach(function (formInput) {
+                    propertiesFormInputs.forEach(function (formInput) {
                         formValues[formInput.props.id] = formInputsReferencesMap.get(formInput.props.id)?.getValue();
                     });
 
                     // Proceed with form submission
-                    const formSubmitResponse = await properties.onSubmit(formValues);
+                    const formSubmitResponse = await propertiesOnSubmit(formValues);
 
                     // The form submission may return validation results from the API for individual form inputs
 
                     // If the form submission was successful
                     if(formSubmitResponse.success) {
                         // Optionally run the onSubmitSuccess callback
-                        properties.onSubmitSuccess?.(formSubmitResponse);
+                        propertiesOnSubmitSuccess?.(formSubmitResponse);
 
                         // Optionally reset the form
                         if(resetOnSubmitSuccess) {
@@ -373,7 +378,15 @@ export function Form(properties: FormProperties) {
                 setSubmitting(false);
             }
         },
-        [reset, resetOnSubmitSuccess, formInputsReferencesMap, validateFormInputs, properties],
+        [
+            reset,
+            resetOnSubmitSuccess,
+            formInputsReferencesMap,
+            validateFormInputs,
+            propertiesOnSubmit,
+            propertiesOnSubmitSuccess,
+            propertiesFormInputs,
+        ],
     );
 
     // Attach a reference to each form input

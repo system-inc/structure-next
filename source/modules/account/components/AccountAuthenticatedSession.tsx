@@ -109,18 +109,22 @@ export function AccountAuthenticatedSession(properties: AccountAuthenticatedSess
         }
     }
 
+    // Extract properties for the useEffect dependency
+    const propertiesScopeType = properties.scopeType;
+    const propertiesOnAuthenticated = properties.onAuthenticated;
+
     // Effect to handle authentication state changes
     React.useEffect(
         function () {
             if(
                 authenticationSession?.status === AuthenticationSessionStatus.Authenticated &&
-                authenticationSession?.scopeType === properties.scopeType
+                authenticationSession?.scopeType === propertiesScopeType
             ) {
                 setIsAuthenticated(true);
-                properties.onAuthenticated?.();
+                propertiesOnAuthenticated?.();
             }
         },
-        [authenticationSession, properties],
+        [authenticationSession, propertiesScopeType, propertiesOnAuthenticated],
     );
 
     // Helper function to check if the user is authenticated for the specified scope
