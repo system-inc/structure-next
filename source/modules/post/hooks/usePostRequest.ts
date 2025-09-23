@@ -1,13 +1,16 @@
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { networkService, gql, InferUseGraphQlQueryOptions } from '@structure/source/services/network/NetworkService';
+import { PostDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 export interface UsePostRequestInterface {
     id?: string;
     identifier?: string;
     slug?: string;
-    enabled?: boolean;
 }
-export function usePostRequest(properties: UsePostRequestInterface) {
+export function usePostRequest(
+    variables: UsePostRequestInterface,
+    options?: InferUseGraphQlQueryOptions<typeof PostDocument>,
+) {
     return networkService.useGraphQlQuery(
         gql(`
             query Post($id: String, $slug: String, $identifier: String) {
@@ -46,12 +49,10 @@ export function usePostRequest(properties: UsePostRequestInterface) {
             }
         `),
         {
-            id: properties.id,
-            slug: properties.slug,
-            identifier: properties.identifier,
+            id: variables.id,
+            slug: variables.slug,
+            identifier: variables.identifier,
         },
-        {
-            enabled: properties.enabled,
-        },
+        options,
     );
 }

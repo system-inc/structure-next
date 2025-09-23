@@ -1,27 +1,11 @@
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
-import { ColumnFilterConditionOperator, OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { networkService, gql, InferUseGraphQlQueryOptions } from '@structure/source/services/network/NetworkService';
+import { PaginationInput, PostsDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-export interface UsePostsRequestInterface {
-    itemsPerPage?: number;
-    page?: number;
-    orderBy?: Array<{
-        key: string;
-        direction: OrderByDirection;
-    }>;
-    filters?: Array<{
-        column: string;
-        operator: ColumnFilterConditionOperator;
-        value: string;
-    }>;
-}
-export function usePostsRequest(properties?: UsePostsRequestInterface) {
-    const itemsPerPage = properties?.itemsPerPage || 10;
-    const page = properties?.page || 1;
-    const orderBy = properties?.orderBy || [];
-    const filters = properties?.filters || [];
-
-    // Queries
+export function usePostsRequest(
+    pagination?: Partial<PaginationInput>,
+    options?: InferUseGraphQlQueryOptions<typeof PostsDocument>,
+) {
     return networkService.useGraphQlQuery(
         gql(`
             query Posts($pagination: PaginationInput!) {
@@ -72,11 +56,12 @@ export function usePostsRequest(properties?: UsePostsRequestInterface) {
         `),
         {
             pagination: {
-                itemsPerPage: itemsPerPage,
-                itemIndex: page ? (page - 1) * itemsPerPage : 0,
-                orderBy: orderBy,
-                filters: filters,
+                itemIndex: pagination?.itemIndex ?? 0,
+                itemsPerPage: pagination?.itemsPerPage ?? 10,
+                filters: pagination?.filters,
+                orderBy: pagination?.orderBy,
             },
         },
+        options,
     );
 }

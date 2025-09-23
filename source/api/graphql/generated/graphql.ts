@@ -2249,6 +2249,99 @@ export type DataInteractionDatabaseTableRowsQuery = {
     };
 };
 
+export type DataInteractionDatabaseTableMetricsQueryVariables = Exact<{
+    input: DataInteractionDatabaseTableMetricsQueryInput;
+}>;
+
+export type DataInteractionDatabaseTableMetricsQuery = {
+    __typename?: 'Query';
+    dataInteractionDatabaseTableMetrics: Array<{
+        __typename?: 'DataInteractionDatabaseMetrics';
+        timeInterval: TimeInterval;
+        data: Array<any>;
+    }>;
+};
+
+export type DataInteractionDatabaseTableQueryVariables = Exact<{
+    databaseName: Scalars['String']['input'];
+    tableName: Scalars['String']['input'];
+}>;
+
+export type DataInteractionDatabaseTableQuery = {
+    __typename?: 'Query';
+    dataInteractionDatabaseTable: {
+        __typename?: 'DatabaseTableMetadata';
+        databaseName: string;
+        tableName: string;
+        columns?: Array<{
+            __typename?: 'DatabaseTableColumn';
+            name: string;
+            type: string;
+            isKey: boolean;
+            isPrimaryKey: boolean;
+            keyTableName?: string | null;
+            possibleValues?: Array<string> | null;
+            isNullable: boolean;
+            isGenerated: boolean;
+            length: string;
+        }> | null;
+        relations?: Array<{
+            __typename?: 'DatabaseTableRelation';
+            fieldName: string;
+            type: string;
+            tableName: string;
+            inverseFieldName?: string | null;
+            inverseType?: string | null;
+            inverseTableName?: string | null;
+        }> | null;
+    };
+};
+
+export type DataInteractionDatabaseTablesQueryVariables = Exact<{
+    databaseName: Scalars['String']['input'];
+    pagination: PaginationInput;
+}>;
+
+export type DataInteractionDatabaseTablesQuery = {
+    __typename?: 'Query';
+    dataInteractionDatabaseTables: {
+        __typename?: 'DatabaseTablesResult';
+        items: Array<{ __typename?: 'DatabaseTableMetadata'; databaseName: string; tableName: string }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
+    };
+};
+
+export type DataInteractionDatabasesQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type DataInteractionDatabasesQuery = {
+    __typename?: 'Query';
+    dataInteractionDatabases: {
+        __typename?: 'PagedDatabasesResult';
+        items: Array<{ __typename?: 'DatebaseMetadata'; databaseName: string }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
+    };
+};
+
 export type EngagementEventsCreateMutationVariables = Exact<{
     inputs: Array<CreateEngagementEventInput> | CreateEngagementEventInput;
 }>;
@@ -2561,77 +2654,6 @@ export type PostTopicByIdQuery = {
         postCount: number;
         createdAt: any;
     };
-};
-
-export type DataInteractionDatabaseTablesQueryVariables = Exact<{
-    databaseName: Scalars['String']['input'];
-    pagination: PaginationInput;
-}>;
-
-export type DataInteractionDatabaseTablesQuery = {
-    __typename?: 'Query';
-    dataInteractionDatabaseTables: {
-        __typename?: 'DatabaseTablesResult';
-        items: Array<{ __typename?: 'DatabaseTableMetadata'; databaseName: string; tableName: string }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
-    };
-};
-
-export type DataInteractionDatabaseTableQueryVariables = Exact<{
-    databaseName: Scalars['String']['input'];
-    tableName: Scalars['String']['input'];
-}>;
-
-export type DataInteractionDatabaseTableQuery = {
-    __typename?: 'Query';
-    dataInteractionDatabaseTable: {
-        __typename?: 'DatabaseTableMetadata';
-        databaseName: string;
-        tableName: string;
-        columns?: Array<{
-            __typename?: 'DatabaseTableColumn';
-            name: string;
-            type: string;
-            isKey: boolean;
-            isPrimaryKey: boolean;
-            keyTableName?: string | null;
-            possibleValues?: Array<string> | null;
-            isNullable: boolean;
-            isGenerated: boolean;
-            length: string;
-        }> | null;
-        relations?: Array<{
-            __typename?: 'DatabaseTableRelation';
-            fieldName: string;
-            type: string;
-            tableName: string;
-            inverseFieldName?: string | null;
-            inverseType?: string | null;
-            inverseTableName?: string | null;
-        }> | null;
-    };
-};
-
-export type DataInteractionDatabaseTableMetricsQueryVariables = Exact<{
-    input: DataInteractionDatabaseTableMetricsQueryInput;
-}>;
-
-export type DataInteractionDatabaseTableMetricsQuery = {
-    __typename?: 'Query';
-    dataInteractionDatabaseTableMetrics: Array<{
-        __typename?: 'DataInteractionDatabaseMetrics';
-        timeInterval: TimeInterval;
-        data: Array<any>;
-    }>;
 };
 
 export class TypedDocumentString<TResult, TVariables>
@@ -3186,6 +3208,87 @@ export const DataInteractionDatabaseTableRowsDocument = new TypedDocumentString(
     DataInteractionDatabaseTableRowsQuery,
     DataInteractionDatabaseTableRowsQueryVariables
 >;
+export const DataInteractionDatabaseTableMetricsDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
+  dataInteractionDatabaseTableMetrics(input: $input) {
+    timeInterval
+    data
+  }
+}
+    `) as unknown as TypedDocumentString<
+    DataInteractionDatabaseTableMetricsQuery,
+    DataInteractionDatabaseTableMetricsQueryVariables
+>;
+export const DataInteractionDatabaseTableDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTable($databaseName: String!, $tableName: String!) {
+  dataInteractionDatabaseTable(databaseName: $databaseName, tableName: $tableName) {
+    databaseName
+    tableName
+    columns {
+      name
+      type
+      isKey
+      isPrimaryKey
+      keyTableName
+      possibleValues
+      isNullable
+      isGenerated
+      length
+    }
+    relations {
+      fieldName
+      type
+      tableName
+      inverseFieldName
+      inverseType
+      inverseTableName
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<DataInteractionDatabaseTableQuery, DataInteractionDatabaseTableQueryVariables>;
+export const DataInteractionDatabaseTablesDocument = new TypedDocumentString(`
+    query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
+  dataInteractionDatabaseTables(
+    databaseName: $databaseName
+    pagination: $pagination
+  ) {
+    items {
+      databaseName
+      tableName
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    DataInteractionDatabaseTablesQuery,
+    DataInteractionDatabaseTablesQueryVariables
+>;
+export const DataInteractionDatabasesDocument = new TypedDocumentString(`
+    query DataInteractionDatabases($pagination: PaginationInput!) {
+  dataInteractionDatabases(pagination: $pagination) {
+    items {
+      databaseName
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<DataInteractionDatabasesQuery, DataInteractionDatabasesQueryVariables>;
 export const EngagementEventsCreateDocument = new TypedDocumentString(`
     mutation EngagementEventsCreate($inputs: [CreateEngagementEventInput!]!) {
   engagementEventsCreate(inputs: $inputs) {
@@ -3439,69 +3542,6 @@ export const PostTopicByIdDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostTopicByIdQuery, PostTopicByIdQueryVariables>;
-export const DataInteractionDatabaseTablesDocument = new TypedDocumentString(`
-    query DataInteractionDatabaseTables($databaseName: String!, $pagination: PaginationInput!) {
-  dataInteractionDatabaseTables(
-    databaseName: $databaseName
-    pagination: $pagination
-  ) {
-    items {
-      databaseName
-      tableName
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      pagesTotal
-      page
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    DataInteractionDatabaseTablesQuery,
-    DataInteractionDatabaseTablesQueryVariables
->;
-export const DataInteractionDatabaseTableDocument = new TypedDocumentString(`
-    query DataInteractionDatabaseTable($databaseName: String!, $tableName: String!) {
-  dataInteractionDatabaseTable(databaseName: $databaseName, tableName: $tableName) {
-    databaseName
-    tableName
-    columns {
-      name
-      type
-      isKey
-      isPrimaryKey
-      keyTableName
-      possibleValues
-      isNullable
-      isGenerated
-      length
-    }
-    relations {
-      fieldName
-      type
-      tableName
-      inverseFieldName
-      inverseType
-      inverseTableName
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<DataInteractionDatabaseTableQuery, DataInteractionDatabaseTableQueryVariables>;
-export const DataInteractionDatabaseTableMetricsDocument = new TypedDocumentString(`
-    query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
-  dataInteractionDatabaseTableMetrics(input: $input) {
-    timeInterval
-    data
-  }
-}
-    `) as unknown as TypedDocumentString<
-    DataInteractionDatabaseTableMetricsQuery,
-    DataInteractionDatabaseTableMetricsQueryVariables
->;
 export type GraphQLInputTypeMetadata =
     | GraphQLInputScalarTypeMetadata
     | GraphQLInputEnumTypeMetadata
@@ -3578,66 +3618,6 @@ export interface GraphQLInputObjectFieldValidationMetadata {
 }
 
 export namespace GraphQLInputTypes {
-    export const TimeInterval: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'TimeInterval',
-        values: ['Hour', 'HourOfDay', 'Day', 'DayOfWeek', 'DayOfMonth', 'Month', 'MonthOfYear', 'Quarter', 'Year'],
-    };
-
-    export const DataInteractionDatabaseTableMetricsQueryInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'DataInteractionDatabaseTableMetricsQueryInput',
-        fields: [
-            {
-                name: 'columnName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'startTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'endTime',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'timeIntervals',
-                kind: 'enum',
-                type: GraphQLInputTypes.TimeInterval,
-                required: true,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'arrayNotEmpty',
-                    },
-                    {
-                        type: 'isArray',
-                    },
-                ],
-            },
-            {
-                name: 'tableName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'databaseName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
-
     export const PostTopicUpdateInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
         type: 'PostTopicUpdateInput',
@@ -4444,6 +4424,66 @@ export namespace GraphQLInputTypes {
                         type: 'isOptional',
                     },
                 ],
+            },
+        ],
+    };
+
+    export const TimeInterval: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'TimeInterval',
+        values: ['Hour', 'HourOfDay', 'Day', 'DayOfWeek', 'DayOfMonth', 'Month', 'MonthOfYear', 'Quarter', 'Year'],
+    };
+
+    export const DataInteractionDatabaseTableMetricsQueryInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'DataInteractionDatabaseTableMetricsQueryInput',
+        fields: [
+            {
+                name: 'columnName',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'startTime',
+                kind: 'scalar',
+                type: 'DateTimeISO',
+                required: false,
+            },
+            {
+                name: 'endTime',
+                kind: 'scalar',
+                type: 'DateTimeISO',
+                required: false,
+            },
+            {
+                name: 'timeIntervals',
+                kind: 'enum',
+                type: GraphQLInputTypes.TimeInterval,
+                required: true,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'arrayNotEmpty',
+                    },
+                    {
+                        type: 'isArray',
+                    },
+                ],
+            },
+            {
+                name: 'tableName',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'databaseName',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
             },
         ],
     };
@@ -5482,6 +5522,80 @@ export const DataInteractionDatabaseTableRowsOperation: GraphQLOperationMetadata
     ],
 };
 
+export const DataInteractionDatabaseTableMetricsOperation: GraphQLOperationMetadata<
+    typeof DataInteractionDatabaseTableMetricsDocument
+> = {
+    operation: 'DataInteractionDatabaseTableMetrics',
+    operationType: 'query',
+    document: DataInteractionDatabaseTableMetricsDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.DataInteractionDatabaseTableMetricsQueryInput,
+        },
+    ],
+};
+
+export const DataInteractionDatabaseTableOperation: GraphQLOperationMetadata<
+    typeof DataInteractionDatabaseTableDocument
+> = {
+    operation: 'DataInteractionDatabaseTable',
+    operationType: 'query',
+    document: DataInteractionDatabaseTableDocument,
+    parameters: [
+        {
+            parameter: 'databaseName',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'tableName',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const DataInteractionDatabaseTablesOperation: GraphQLOperationMetadata<
+    typeof DataInteractionDatabaseTablesDocument
+> = {
+    operation: 'DataInteractionDatabaseTables',
+    operationType: 'query',
+    document: DataInteractionDatabaseTablesDocument,
+    parameters: [
+        {
+            parameter: 'databaseName',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const DataInteractionDatabasesOperation: GraphQLOperationMetadata<typeof DataInteractionDatabasesDocument> = {
+    operation: 'DataInteractionDatabases',
+    operationType: 'query',
+    document: DataInteractionDatabasesDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
 export const EngagementEventsCreateOperation: GraphQLOperationMetadata<typeof EngagementEventsCreateDocument> = {
     operation: 'EngagementEventsCreate',
     operationType: 'mutation',
@@ -5780,66 +5894,6 @@ export const PostTopicByIdOperation: GraphQLOperationMetadata<typeof PostTopicBy
             required: true,
             kind: 'scalar',
             type: 'String',
-        },
-    ],
-};
-
-export const DataInteractionDatabaseTablesOperation: GraphQLOperationMetadata<
-    typeof DataInteractionDatabaseTablesDocument
-> = {
-    operation: 'DataInteractionDatabaseTables',
-    operationType: 'query',
-    document: DataInteractionDatabaseTablesDocument,
-    parameters: [
-        {
-            parameter: 'databaseName',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'pagination',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
-        },
-    ],
-};
-
-export const DataInteractionDatabaseTableOperation: GraphQLOperationMetadata<
-    typeof DataInteractionDatabaseTableDocument
-> = {
-    operation: 'DataInteractionDatabaseTable',
-    operationType: 'query',
-    document: DataInteractionDatabaseTableDocument,
-    parameters: [
-        {
-            parameter: 'databaseName',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'tableName',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const DataInteractionDatabaseTableMetricsOperation: GraphQLOperationMetadata<
-    typeof DataInteractionDatabaseTableMetricsDocument
-> = {
-    operation: 'DataInteractionDatabaseTableMetrics',
-    operationType: 'query',
-    document: DataInteractionDatabaseTableMetricsDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.DataInteractionDatabaseTableMetricsQueryInput,
         },
     ],
 };

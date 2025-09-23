@@ -1,7 +1,8 @@
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { networkService, gql, InferUseGraphQlQueryOptions } from '@structure/source/services/network/NetworkService';
+import { AccountEmailsDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
-export function useAccountEmailAddressesRequest() {
+export function useAccountEmailAddressesRequest(options?: InferUseGraphQlQueryOptions<typeof AccountEmailsDocument>) {
     return networkService.useGraphQlQuery(
         gql(`
             query AccountEmails {
@@ -15,5 +16,7 @@ export function useAccountEmailAddressesRequest() {
                 }
             }
         `),
+        undefined, // No variables
+        options,
     );
 }

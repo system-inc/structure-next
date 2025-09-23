@@ -12,8 +12,11 @@ import { Popover } from '@structure/source/common/popovers/Popover';
 import { Tip } from '@structure/source/common/popovers/Tip';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+
+// Dependencies - Hooks
+import { useDataInteractionDatabaseTableRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabaseTableRequest';
+import { useDataInteractionDatabaseTableMetricsRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabaseTableMetricsRequest';
 
 // Dependencies - Assets
 import DragIcon from '@structure/assets/icons/interface/DragIcon.svg';
@@ -46,38 +49,9 @@ export interface DataSourceProperties {
 }
 export function DataSource(properties: DataSourceProperties) {
     // Query the API for the available columns for the current table table
-    const dataInteractionDatabaseTableRequest = networkService.useGraphQlQuery(
-        gql(`
-            query DataInteractionDatabaseTable($databaseName: String!, $tableName: String!) {
-                dataInteractionDatabaseTable(databaseName: $databaseName, tableName: $tableName) {
-                    databaseName
-                    tableName
-                    columns {
-                        name
-                        type
-                        isKey
-                        isPrimaryKey
-                        keyTableName
-                        possibleValues
-                        isNullable
-                        isGenerated
-                        length
-                    }
-                    relations {
-                        fieldName
-                        type
-                        tableName
-                        inverseFieldName
-                        inverseType
-                        inverseTableName
-                    }
-                }
-            }
-        `),
-        {
-            databaseName: properties.settings.databaseName,
-            tableName: properties.settings.tableName,
-        },
+    const dataInteractionDatabaseTableRequest = useDataInteractionDatabaseTableRequest(
+        properties.settings.databaseName,
+        properties.settings.tableName,
     );
     // console.log('dataInteractionDatabaseTableQueryState', dataInteractionDatabaseTableQueryState);
 
@@ -125,24 +99,14 @@ export function DataSource(properties: DataSourceProperties) {
     }
 
     // Get the table metrics and update the aggregate metrics data when the data is fetched
-    const dataInteractionDatabaseTableMetricsRequest = networkService.useGraphQlQuery(
-        gql(`
-            query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
-                dataInteractionDatabaseTableMetrics(input: $input) {
-                    timeInterval
-                    data
-                }
-            }
-        `),
+    const dataInteractionDatabaseTableMetricsRequest = useDataInteractionDatabaseTableMetricsRequest(
         {
-            input: {
-                databaseName: properties.settings.databaseName as string,
-                tableName: properties.settings.tableName as string,
-                columnName: columnToMeasure,
-                timeIntervals: [properties.settings.timeInterval ?? TimeInterval.Day],
-                startTime: properties.settings.startTime?.toISOString(),
-                endTime: properties.settings.endTime?.toISOString(),
-            },
+            databaseName: properties.settings.databaseName as string,
+            tableName: properties.settings.tableName as string,
+            columnName: columnToMeasure,
+            timeIntervals: [properties.settings.timeInterval ?? TimeInterval.Day],
+            startTime: properties.settings.startTime?.toISOString(),
+            endTime: properties.settings.endTime?.toISOString(),
         },
         {
             enabled: !properties.error && !!columnToMeasure, // Skip if there is an error or if there is no column to measure
