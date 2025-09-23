@@ -85,9 +85,12 @@ export interface UseWriteRequestOptionsInterface<TData, TVariables = void, TSele
     // Mutations don't have a cache key - they are never cached
     // Removing cacheKey entirely makes it clear this is a mutation
     // Callback function called when the request succeeds
-    onSuccess?: (data: TData) => void;
+    onSuccess?: (data: TData, variables: TVariables, context: unknown) => void;
     // Callback function called when the request fails
     onError?: (error: Error) => void;
+    // Cache keys to invalidate when the mutation succeeds
+    // Can be an array of keys or a function that returns keys based on variables
+    invalidateOnSuccess?: CacheKey[] | ((variables: TVariables) => CacheKey[]);
 }
 
 // Base interface with common properties
@@ -113,6 +116,23 @@ export interface UseGraphQlMutationRequestResultInterface<TData, TVariables = vo
     isPending: boolean;
     variables?: TVariables;
 }
+
+// Utility type to infer useGraphQlQuery options from a generated Document type
+export type InferUseGraphQlQueryOptions<TDocument> = TDocument extends AppOrStructureTypedDocumentString<
+    infer TResult,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    infer TVariables // Infer but don't use
+>
+    ? Partial<UseReadRequestOptionsInterface<TResult, void>>
+    : never;
+
+// Utility type to infer useGraphQlMutation options from a generated Document type
+export type InferUseGraphQlMutationOptions<TDocument> = TDocument extends AppOrStructureTypedDocumentString<
+    infer TResult,
+    infer TVariables
+>
+    ? Partial<UseWriteRequestOptionsInterface<TResult, TVariables>>
+    : never;
 
 // Suspense query result interface (no loading/error states - those are handled by Suspense/ErrorBoundary)
 export interface UseSuspenseRequestResultInterface<TData> {
@@ -453,10 +473,31 @@ export class NetworkService {
     useWriteRequest<TData, TVariables = void>(
         options: UseWriteRequestOptionsInterface<TData, TVariables>,
     ): UseGraphQlMutationRequestResultInterface<TData, TVariables> {
+        // Wrap onSuccess to handle cache invalidation
+        const onSuccessWithCacheInvalidation = options.invalidateOnSuccess
+            ? async (data: TData, variables: TVariables, context: unknown) => {
+                  // Get cache keys to invalidate
+                  const keysToInvalidate =
+                      typeof options.invalidateOnSuccess === 'function'
+                          ? options.invalidateOnSuccess(variables)
+                          : options.invalidateOnSuccess;
+
+                  // Invalidate each cache key
+                  if(keysToInvalidate !== undefined) {
+                      for(const key of keysToInvalidate) {
+                          await this.invalidateCache(key);
+                      }
+                  }
+
+                  // Call original onSuccess if provided
+                  options.onSuccess?.(data, variables, context);
+              }
+            : options.onSuccess;
+
         const mutationResult = tanStackReactQueryUseMutation(
             {
                 mutationFn: (variables: TVariables) => this.trackAsyncOperation(() => options.request(variables)),
-                onSuccess: options.onSuccess,
+                onSuccess: onSuccessWithCacheInvalidation,
                 onError: options.onError,
                 meta: options.metadata,
             },
