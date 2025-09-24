@@ -198,7 +198,7 @@ export function DataSources(properties: DataSourcesProperties) {
         <>
             {/* Controls */}
             <div className="relative">
-                <div className="overflow-x-auto">
+                <div className="min-w-0">
                     {/* Header */}
                     {properties.settings.dataSources.length > 0 && (
                         <div className="mb-1 w-[520px] text-sm font-medium">

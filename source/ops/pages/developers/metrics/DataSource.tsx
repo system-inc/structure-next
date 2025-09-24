@@ -48,6 +48,27 @@ export interface DataSourceProperties {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export function DataSource(properties: DataSourceProperties) {
+    // State
+    const [isDraggingColor, setIsDraggingColor] = React.useState(false);
+    const [localColor, setLocalColor] = React.useState<RgbColor | null>(null);
+    const latestColorReference = React.useRef<RgbColor | null>(null);
+
+    // Parse the current color from props
+    const currentColor = React.useMemo(
+        function () {
+            const matches = properties.settings.color.match(/\d+/g);
+            if(matches && matches.length >= 3) {
+                return {
+                    r: Number(matches[0]),
+                    g: Number(matches[1]),
+                    b: Number(matches[2]),
+                };
+            }
+            return { r: 0, g: 0, b: 0 };
+        },
+        [properties.settings.color],
+    );
+
     // Query the API for the available columns for the current table table
     const dataInteractionDatabaseTableRequest = useDataInteractionDatabaseTableRequest(
         properties.settings.databaseName,
@@ -117,9 +138,6 @@ export function DataSource(properties: DataSourceProperties) {
     const propertiesSettingsId = properties.settings.id;
     const propertiesSettingsDatabaseName = properties.settings.databaseName;
     const propertiesSettingsTableName = properties.settings.tableName;
-    const propertiesSettingsColor = properties.settings.color;
-    const propertiesSettingsYAxisAlignment = properties.settings.yAxisAlignment;
-    const propertiesSettingsLineStyle = properties.settings.lineStyle;
     const propertiesSetLoading = properties.setLoading;
     const propertiesSetDataSourcesWithMetrics = properties.setDataSourcesWithMetrics;
 
@@ -152,9 +170,9 @@ export function DataSource(properties: DataSourceProperties) {
                                 databaseName: propertiesSettingsDatabaseName,
                                 tableName: propertiesSettingsTableName,
                                 columnName: columnToMeasure,
-                                color: propertiesSettingsColor,
-                                yAxisAlignment: propertiesSettingsYAxisAlignment,
-                                lineStyle: propertiesSettingsLineStyle,
+                                color: properties.settings.color,
+                                yAxisAlignment: properties.settings.yAxisAlignment,
+                                lineStyle: properties.settings.lineStyle,
                                 metrics: data.dataInteractionDatabaseTableMetrics[0],
                             },
                         ];
@@ -168,9 +186,9 @@ export function DataSource(properties: DataSourceProperties) {
                                 databaseName: propertiesSettingsDatabaseName,
                                 tableName: propertiesSettingsTableName,
                                 columnName: columnToMeasure,
-                                color: propertiesSettingsColor,
-                                yAxisAlignment: propertiesSettingsYAxisAlignment,
-                                lineStyle: propertiesSettingsLineStyle,
+                                color: properties.settings.color,
+                                yAxisAlignment: properties.settings.yAxisAlignment,
+                                lineStyle: properties.settings.lineStyle,
                                 metrics: data.dataInteractionDatabaseTableMetrics[0],
                             },
                             ...oldData.slice(index + 1),
@@ -179,17 +197,17 @@ export function DataSource(properties: DataSourceProperties) {
                 });
             }
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [
             dataInteractionDatabaseTableMetricsRequest.data,
             columnToMeasure,
             propertiesSettingsId,
             propertiesSettingsDatabaseName,
             propertiesSettingsTableName,
-            propertiesSettingsColor,
-            propertiesSettingsYAxisAlignment,
-            propertiesSettingsLineStyle,
             propertiesSetLoading,
             propertiesSetDataSourcesWithMetrics,
+            // Intentionally excluding visual properties (color, lineStyle, yAxisAlignment)
+            // to prevent re-fetching data when only visual properties change
         ],
     );
 
@@ -240,10 +258,15 @@ export function DataSource(properties: DataSourceProperties) {
         properties.deleteDataSource(properties.settings.id);
     }
 
-    // Function to handle changing the color
-    // TODO: Andrew was using debouence here
-    function handleColorChange(color: RgbColor) {
-        // Update the color of the chart data
+    // Function to handle changing the color (visual update only)
+    function handleColorChangeVisual(color: RgbColor) {
+        const colorString = `rgba(${color.r}, ${color.g}, ${color.b}, 1)`;
+
+        // Store latest color in ref and state
+        latestColorReference.current = color;
+        setLocalColor(color);
+
+        // Update the color of the chart data (for immediate visual feedback)
         properties.setDataSourcesWithMetrics((oldData) => {
             // Find the index of the current config
             const configurationIndex = oldData?.findIndex(
@@ -254,7 +277,7 @@ export function DataSource(properties: DataSourceProperties) {
                 if(id === configurationIndex) {
                     return {
                         ...configuration,
-                        color: `rgba(${color.r}, ${color.g}, ${color.b}, 100%)`,
+                        color: colorString,
                     };
                 }
                 else {
@@ -262,8 +285,16 @@ export function DataSource(properties: DataSourceProperties) {
                 }
             });
         });
+    }
 
-        // Update the color of the query config
+    // Function to commit color change to URL state
+    function handleColorChangeCommit() {
+        if(!latestColorReference.current) return;
+
+        const color = latestColorReference.current;
+        const colorString = `rgba(${color.r}, ${color.g}, ${color.b}, 1)`;
+
+        // Update the color of the query config (URL state)
         properties.setDataSources((oldConfigurationArray) => {
             // Find the index of the current config
             const configurationIndex = oldConfigurationArray?.findIndex(
@@ -274,7 +305,7 @@ export function DataSource(properties: DataSourceProperties) {
                 if(id === configurationIndex) {
                     return {
                         ...configuration,
-                        color: `rgba(${color.r}, ${color.g}, ${color.b}, 100%)`,
+                        color: colorString,
                     };
                 }
                 else {
@@ -282,6 +313,10 @@ export function DataSource(properties: DataSourceProperties) {
                 }
             });
         });
+
+        // Clear latest color ref and state
+        latestColorReference.current = null;
+        setLocalColor(null);
     }
 
     // Function to handle changing the hex color
@@ -297,12 +332,15 @@ export function DataSource(properties: DataSourceProperties) {
         // If the color is not a valid rgb color, return
         if(!rgbColor) return;
 
-        // Update the color of the chart data
-        handleColorChange({
+        const colorObj = {
             r: Number(rgbColor[0]),
             g: Number(rgbColor[1]),
             b: Number(rgbColor[2]),
-        });
+        };
+
+        // Update both visual and URL state (hex input is not draggable)
+        handleColorChangeVisual(colorObj);
+        handleColorChangeCommit();
     }
 
     // Function to handle changing the yAxis alignment
@@ -553,25 +591,49 @@ export function DataSource(properties: DataSourceProperties) {
                 <div className="flex items-center space-x-2">
                     {/* The corresponding color of the bar */}
                     <Popover
+                        side="bottom"
+                        align="start"
+                        sideOffset={8}
+                        collisionPadding={20}
                         content={
-                            <div className="w-min p-1">
+                            <div
+                                className="w-min overflow-visible p-1"
+                                onMouseDown={() => setIsDraggingColor(true)}
+                                onMouseUp={() => {
+                                    if(isDraggingColor) {
+                                        handleColorChangeCommit();
+                                    }
+                                    setIsDraggingColor(false);
+                                }}
+                                onMouseLeave={() => {
+                                    if(isDraggingColor) {
+                                        handleColorChangeCommit();
+                                        setIsDraggingColor(false);
+                                    }
+                                }}
+                                onTouchStart={() => setIsDraggingColor(true)}
+                                onTouchEnd={() => {
+                                    if(isDraggingColor) {
+                                        handleColorChangeCommit();
+                                    }
+                                    setIsDraggingColor(false);
+                                }}
+                            >
                                 <RgbColorPicker
-                                    color={{
-                                        r: Number(properties.settings.color.split('(')[1]?.split(',')[0]),
-                                        g: Number(properties.settings.color.split('(')[1]?.split(',')[1]),
-                                        b: Number(properties.settings.color.split('(')[1]?.split(',')[2]),
-                                    }}
+                                    color={localColor || currentColor}
                                     onChange={(color) => {
                                         // Update the input value
                                         const input = document.getElementById(
-                                            'color-input-' + properties.settings.id,
+                                            'color-' + properties.settings.id,
                                         ) as HTMLInputElement;
-                                        input.value = rgbStringToHexString(
-                                            `rgba(${color.r}, ${color.g}, ${color.b}, 100%)`,
-                                        ).slice(1);
+                                        if(input) {
+                                            input.value = rgbStringToHexString(
+                                                `rgba(${color.r}, ${color.g}, ${color.b}, 1)`,
+                                            ).slice(1);
+                                        }
 
-                                        // Update the color
-                                        handleColorChange(color);
+                                        // Update the color visually
+                                        handleColorChangeVisual(color);
                                     }}
                                 />
                                 {/* Input for a HEX color */}
