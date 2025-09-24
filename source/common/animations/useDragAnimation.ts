@@ -24,21 +24,21 @@ export function useDragAnimation() {
 
         return active && index === originalIndex
             ? {
-                  y: currentIndex * height + y,
                   scale: 1.1,
                   zIndex: 1,
                   shadow: 15,
                   immediate: (key: string) => key === 'zIndex',
                   config: (key: string) => (key === 'y' ? springConfiguration.stiff : springConfiguration.default),
                   ...properties,
+                  y: currentIndex * height + y, // Calculate y AFTER spreading to prevent override
               }
             : {
-                  y: properties.order.indexOf(index) * height,
                   scale: 1,
                   zIndex: 0,
                   shadow: 1,
                   immediate: false,
                   ...properties,
+                  y: properties.order.indexOf(index) * height, // Calculate y AFTER spreading to prevent override
               };
     };
     return getDragAnimationProperties;

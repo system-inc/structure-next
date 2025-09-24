@@ -140,7 +140,7 @@ export function DataSources(properties: DataSourcesProperties) {
                     y,
                     height: rowHeight,
                     // Once the animation is complete, update the queryConfig and the visual order
-                    onRest: () => {
+                    onRest: function () {
                         if(!active) {
                             // Check if the order of the datasources is the same as the visual order
                             const datasourceOrder = properties.settings.dataSources.map((datasource) => datasource.id);
@@ -153,11 +153,11 @@ export function DataSources(properties: DataSourcesProperties) {
                             // If not, update the order of the data sources
 
                             // Update the data sources
-                            console.log('Updating the order of the data sources.');
+                            // console.log('Updating the order of the data sources.');
                             const newDataSourcesOrder: DataSourceType[] = newOrder
                                 .map((index) => properties.settings.dataSources[index])
                                 .filter((configuration): configuration is DataSourceType => Boolean(configuration));
-                            console.log(newDataSourcesOrder);
+                            // console.log(newDataSourcesOrder);
                             properties.setDataSources(newDataSourcesOrder);
                         }
                     },
