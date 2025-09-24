@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as Dialog from '@radix-ui/react-dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Button } from '@structure/source/common/buttons/Button';
 import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
 import { OpsNavigation } from './navigation/OpsNavigation';
@@ -100,30 +101,38 @@ export function OpsNavigationBar() {
                 </div>
             </div>
 
-            <AnimatePresence mode="popLayout">
-                {open && (
-                    <Dialog.Portal forceMount>
-                        <Dialog.Content asChild>
-                            <motion.div
-                                // onMouseLeave={handleMouseLeave}
-                                initial={{ transform: 'translateX(-100%)' }}
-                                animate={{ transform: 'translateX(0)' }}
-                                exit={{ transform: 'translateX(-100%)' }}
-                                transition={{
-                                    type: 'tween',
-                                    duration: 0.5,
-                                    ease: [0.075, 0.82, 0.165, 1],
-                                }}
-                                className="fixed inset-y-0 left-0 top-14 h-full p-2"
-                            >
-                                <div className="h-full w-56 rounded-medium border bg-opsis-background-tetriary">
-                                    <OpsNavigation />
-                                </div>
-                            </motion.div>
-                        </Dialog.Content>
-                    </Dialog.Portal>
-                )}
-            </AnimatePresence>
+            <Dialog.Portal forceMount>
+                <div>
+                    <AnimatePresence>
+                        {open && (
+                            <Dialog.Content forceMount>
+                                <VisuallyHidden.Root>
+                                    <Dialog.Title>Ops Menu</Dialog.Title>
+                                    <Dialog.Description>
+                                        Navigate through various operational tools and settings.
+                                    </Dialog.Description>
+                                </VisuallyHidden.Root>
+                                <motion.div
+                                    // onMouseLeave={handleMouseLeave}
+                                    initial={{ x: '-100%' }}
+                                    animate={{ x: '0%' }}
+                                    exit={{ x: '-100%' }}
+                                    transition={{
+                                        type: 'tween',
+                                        duration: 0.5,
+                                        ease: [0.075, 0.82, 0.165, 1],
+                                    }}
+                                    className="fixed inset-y-0 left-0 top-14 h-full p-2"
+                                >
+                                    <div className="h-full w-56 rounded-medium border bg-opsis-background-tetriary">
+                                        <OpsNavigation />
+                                    </div>
+                                </motion.div>
+                            </Dialog.Content>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </Dialog.Portal>
         </Dialog.Root>
     );
 }
