@@ -171,43 +171,146 @@ export function Metrics() {
     // Keep track of the chart active label
     const [chartActiveLabel, setChartActiveLabel] = React.useState<string | null>(null);
 
+    // Function to calculate number of data points for a given interval
+    const calculateDataPoints = React.useCallback(function (interval: TimeInterval, start: Date, end: Date) {
+        if(!start || !end) return 0;
+
+        if(interval === TimeInterval.Year) {
+            return end.getFullYear() - start.getFullYear() + 1;
+        }
+        else if(interval === TimeInterval.Quarter) {
+            return Math.ceil((end.getFullYear() - start.getFullYear() + 1) * 4);
+        }
+        else if(interval === TimeInterval.Month) {
+            return (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
+        }
+        else if(interval === TimeInterval.Day) {
+            return Math.ceil((end.getTime() - start.getTime()) / (1000 * 3600 * 24)) + 1;
+        }
+        else if(interval === TimeInterval.Hour) {
+            return Math.ceil((end.getTime() - start.getTime()) / (1000 * 3600)) + 1;
+        }
+        return 0;
+    }, []);
+
+    // Track if we're adjusting to prevent infinite loops
+    const isAdjustingReference = React.useRef(false);
+
+    // Automatically adjust interval or date range if too many data points
+    React.useEffect(
+        function () {
+            if(!startTime || !endTime) return;
+
+            // Prevent re-entry while adjusting
+            if(isAdjustingReference.current) return;
+
+            const maxDataPoints = 999;
+            const currentDataPoints = calculateDataPoints(timeInterval, startTime, endTime);
+
+            // If current interval has too many data points
+            if(currentDataPoints >= maxDataPoints) {
+                isAdjustingReference.current = true;
+
+                // For fine intervals (Hour, Day), adjust the date range to fit within the limit
+                // This keeps the detail level the user wants
+                if(timeInterval === TimeInterval.Hour) {
+                    // Calculate how many hours we can show
+                    const maxHours = maxDataPoints - 1;
+                    try {
+                        // Make sure we have valid dates
+                        const endDate = new Date(endTime);
+                        const newStartDate = subHours(endDate, maxHours);
+
+                        // Only update if we get valid dates AND it's actually different
+                        if(
+                            !isNaN(newStartDate.getTime()) &&
+                            !isNaN(endDate.getTime()) &&
+                            newStartDate.getTime() !== startTime.getTime()
+                        ) {
+                            setTimeRange({ startTime: newStartDate, endTime: endDate });
+                        }
+                        else if(isNaN(newStartDate.getTime()) || isNaN(endDate.getTime())) {
+                            // Fall back to switching interval
+                            setTimeInterval(TimeInterval.Day);
+                        }
+                    }
+                    catch(error) {
+                        console.error('Error adjusting hour range:', error);
+                        // Fall back to switching interval
+                        setTimeInterval(TimeInterval.Day);
+                    }
+                }
+                else if(timeInterval === TimeInterval.Day) {
+                    // Calculate how many days we can show
+                    const maxDays = maxDataPoints - 1;
+                    try {
+                        // Make sure we have valid dates
+                        const endDate = new Date(endTime);
+                        const newStartDate = subDays(endDate, maxDays);
+
+                        // Only update if we get valid dates AND it's actually different
+                        if(
+                            !isNaN(newStartDate.getTime()) &&
+                            !isNaN(endDate.getTime()) &&
+                            newStartDate.getTime() !== startTime.getTime()
+                        ) {
+                            setTimeRange({ startTime: newStartDate, endTime: endDate });
+                        }
+                        else if(isNaN(newStartDate.getTime()) || isNaN(endDate.getTime())) {
+                            // Fall back to switching interval
+                            setTimeInterval(TimeInterval.Month);
+                        }
+                    }
+                    catch(error) {
+                        console.error('Error adjusting day range:', error);
+                        // Fall back to switching interval
+                        setTimeInterval(TimeInterval.Month);
+                    }
+                }
+                else {
+                    // For coarser intervals (Month, Quarter, Year), switch to a coarser interval
+                    const intervals = [
+                        TimeInterval.Hour,
+                        TimeInterval.Day,
+                        TimeInterval.Month,
+                        TimeInterval.Quarter,
+                        TimeInterval.Year,
+                    ];
+
+                    // Find the finest interval that stays under the limit
+                    for(let i = intervals.length - 1; i >= 0; i--) {
+                        const testInterval = intervals[i];
+                        if(!testInterval) continue;
+
+                        const testDataPoints = calculateDataPoints(testInterval, startTime, endTime);
+
+                        if(testDataPoints < maxDataPoints) {
+                            // Found a good interval
+                            if(testInterval !== timeInterval) {
+                                setTimeInterval(testInterval);
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Reset the flag after a short delay to allow for user changes
+                setTimeout(() => {
+                    isAdjustingReference.current = false;
+                }, 100);
+            }
+        },
+        [startTime, endTime, timeInterval, calculateDataPoints, setTimeInterval, setTimeRange],
+    );
+
     // Memoize the chart error message
     const chartError = React.useMemo<{
         message: string;
         type: 'error' | 'warning';
     } | null>(
         function () {
-            // Use the interval and start and end dates to determine how many data points will be generated
-            let numberOfDataPoints = 0;
-            if(startTime && endTime) {
-                if(timeInterval === TimeInterval.Year) {
-                    numberOfDataPoints = endTime.getFullYear() - startTime.getFullYear() + 1;
-                }
-                else if(timeInterval === TimeInterval.Quarter) {
-                    numberOfDataPoints = 4 * (endTime.getFullYear() - startTime.getFullYear()) + 4;
-                }
-                else if(timeInterval === TimeInterval.Month) {
-                    numberOfDataPoints = 12 * (endTime.getFullYear() - startTime.getFullYear()) + 12;
-                }
-                else if(timeInterval === TimeInterval.Day) {
-                    numberOfDataPoints = Math.ceil((endTime.getTime() - startTime.getTime()) / (1000 * 3600 * 24));
-                }
-                else if(timeInterval === TimeInterval.Hour) {
-                    numberOfDataPoints = Math.ceil((endTime.getTime() - startTime.getTime()) / (1000 * 3600));
-                }
-            }
-
-            // If there are more than 1,000 data points, display an error message
-            if(numberOfDataPoints >= 1000) {
-                setDataSourcesWithMetrics([]);
-
-                return {
-                    message: 'Too many data points to display. Select a smaller date range or change your interval.',
-                    type: 'error',
-                };
-            }
             // If there are no data sources, display a warning message
-            else if(dataSources.length <= 0) {
+            if(dataSources.length <= 0) {
                 return {
                     message: 'No data to display. Add a data source.',
                     type: 'warning',
@@ -230,7 +333,7 @@ export function Metrics() {
 
             return null;
         },
-        [endTime, timeInterval, startTime, dataSourcesWithMetricsLength, chartLoading, dataSources.length],
+        [dataSourcesWithMetricsLength, chartLoading, dataSources.length],
     );
 
     // Sort dataSourcesWithMetrics by the order of the dataSources array
@@ -680,9 +783,15 @@ export function Metrics() {
             endIntervalTime = rightIntervalTime;
         }
 
-        // Update the end interval date to be the end of the year, month, day, or hour
+        // Update the end interval date to be the end of the year, quarter, month, day, or hour
         if(timeInterval === TimeInterval.Year) {
             endIntervalTime = endOfYear(endIntervalTime);
+        }
+        else if(timeInterval === TimeInterval.Quarter) {
+            // For quarters, set to the end of the last month of the quarter
+            const quarter = Math.ceil((endIntervalTime.getMonth() + 1) / 3);
+            const lastMonthOfQuarter = quarter * 3 - 1;
+            endIntervalTime = endOfMonth(new Date(endIntervalTime.getFullYear(), lastMonthOfQuarter, 1));
         }
         else if(timeInterval === TimeInterval.Month) {
             endIntervalTime = endOfMonth(endIntervalTime);
@@ -698,6 +807,10 @@ export function Metrics() {
         let intervalsAreAdjacent = false;
         if(timeInterval === TimeInterval.Year) {
             intervalsAreAdjacent = addYears(startIntervalTime, 1).getFullYear() === endIntervalTime.getFullYear();
+        }
+        else if(timeInterval === TimeInterval.Quarter) {
+            // For quarters, check if they are 3 months apart
+            intervalsAreAdjacent = addMonths(startIntervalTime, 3).getTime() === endIntervalTime.getTime();
         }
         else if(timeInterval === TimeInterval.Month) {
             intervalsAreAdjacent = addMonths(startIntervalTime, 1).getMonth() === endIntervalTime.getMonth();
@@ -717,6 +830,14 @@ export function Metrics() {
                 newTimeInterval = TimeInterval.Month;
                 startIntervalTime = startOfYear(startIntervalTime);
                 endIntervalTime = endOfYear(endIntervalTime);
+            }
+            else if(timeInterval === TimeInterval.Quarter) {
+                newTimeInterval = TimeInterval.Month;
+                // For quarters, we need to find the start and end of the quarter
+                const quarter = Math.ceil((startIntervalTime.getMonth() + 1) / 3);
+                const quarterStartMonth = (quarter - 1) * 3;
+                startIntervalTime = new Date(startIntervalTime.getFullYear(), quarterStartMonth, 1);
+                endIntervalTime = new Date(startIntervalTime.getFullYear(), quarterStartMonth + 3, 0, 23, 59, 59, 999);
             }
             else if(timeInterval === TimeInterval.Month) {
                 newTimeInterval = TimeInterval.Day;

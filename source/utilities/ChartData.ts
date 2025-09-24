@@ -302,6 +302,9 @@ export function calculateRange(from: Date, to: Date, timeInterval: string) {
         case TimeInterval.Month:
             range = to && from ? differenceInMonths(endOfMonth(to), startOfMonth(from)) + 1 : 0;
             break;
+        case TimeInterval.Quarter:
+            range = to && from ? Math.floor(differenceInMonths(endOfMonth(to), startOfMonth(from)) / 3) + 1 : 0;
+            break;
         case TimeInterval.Year:
             range = to && from ? differenceInYears(endOfYear(to), startOfYear(from)) + 1 : 0;
             break;
@@ -338,6 +341,10 @@ export function calculateTimeIntervalValueStartAndEndDate(timeIntervalValue: str
         case TimeInterval.Month:
             startDate = new Date(timeIntervalValueDate);
             endDate = addMonths(startDate, 1);
+            break;
+        case TimeInterval.Quarter:
+            startDate = new Date(timeIntervalValueDate);
+            endDate = addMonths(startDate, 3);
             break;
         case TimeInterval.Year:
             startDate = new Date(timeIntervalValueDate);

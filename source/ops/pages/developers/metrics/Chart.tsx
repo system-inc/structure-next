@@ -3,9 +3,6 @@
 // Dependencies - Core React Libraries
 import React from 'react';
 
-// Dependencies - Configuration
-import { TailwindConfiguration } from '@project/tailwind.config';
-
 // Dependencies - Main Components
 import { DataSourceWithMetricsType } from './Metrics';
 
@@ -23,7 +20,7 @@ import {
 } from 'recharts';
 
 // Dependencies - Styles
-// import { useTheme } from '@structure/source/theme/ThemeProvider';
+import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
 
 // Dependencies - Utilities
 import useMeasure from 'react-use-measure';
@@ -32,14 +29,14 @@ import { addCommas } from '@structure/source/utilities/Number';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 
 // Helper Function - Tick Formatter
-const tickFormatter = (
+const tickFormatter = function (
     type: string,
     timeInterval: string,
     value: string,
     index: number,
     previousTickValue: string,
     totalTicks: number,
-) => {
+) {
     // console.log("type", type, "timeInterval", timeInterval, "value", value, "index", index, "previousTickValue", previousTickValue, "totalTicks", totalTicks);
 
     let tickValue = '';
@@ -523,8 +520,7 @@ export interface ChartProperties {
 }
 export function Chart(properties: ChartProperties) {
     // Use the theme hook
-    // const { themeClassName } = useTheme();
-    const themeClassName = 'light';
+    const themeSettings = useThemeSettings();
 
     // Store a reference to the chart wrapper
     const [chartWrapperDomElementReference, wrapperDimensions] = useMeasure();
@@ -655,8 +651,11 @@ export function Chart(properties: ChartProperties) {
                 <CartesianGrid
                     // strokeDasharray="3 3"
                     stroke={
-                        themeClassName === 'light' ? undefined : TailwindConfiguration.theme.extend.colors['dark-4']
+                        themeSettings.themeClassName === 'light'
+                            ? 'var(--border-primary)' // var(--white-700) = #e7e7e7 in light mode
+                            : 'var(--border-primary)' // var(--black-300) = #383838 in dark mode
                     }
+                    strokeOpacity={0.5}
                     vertical={properties.errorMessage ? true : false}
                 />
 
@@ -670,22 +669,22 @@ export function Chart(properties: ChartProperties) {
                             //     borderRadius: "8px",
                             // }}
                             cursor={{
-                                fill: themeClassName === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.2)',
+                                fill: themeSettings.themeClassName === 'light' ? 'var(--dark-50)' : 'var(--light-100)',
                                 stroke:
                                     // If the theme is light
-                                    themeClassName === 'light'
+                                    themeSettings.themeClassName === 'light'
                                         ? // And the chart type is bar
                                           properties.chartType === 'bar'
                                             ? // Bar chart stroke color
-                                              'rgba(0, 0, 0, 0.05)'
+                                              'var(--dark-50)'
                                             : // Other chart types stroke color
-                                              '#CCCCCC'
+                                              'var(--border-primary)'
                                         : // If the theme is dark
                                           properties.chartType === 'bar'
                                           ? // Bar chart stroke color
-                                            'rgba(255, 255, 255, 0.05)'
+                                            'var(--light-50)'
                                           : // Other chart types stroke color
-                                            TailwindConfiguration.theme.extend.colors['dark-4'],
+                                            'var(--border-primary)',
                                 // If the chart is a bar chart, the stroke width is the number of data points divided by the width of the chart minus the margins
                                 strokeWidth:
                                     properties.chartType === 'bar'
@@ -726,7 +725,7 @@ export function Chart(properties: ChartProperties) {
                                                                             ? 'dashed'
                                                                             : 'solid',
                                                                     backgroundColor:
-                                                                        themeClassName === 'light'
+                                                                        themeSettings.themeClassName === 'light'
                                                                             ? lightenColor(payload.color || '', 0.2)
                                                                             : darkenColor(payload.color || '', 0.2),
                                                                 }}
@@ -760,6 +759,12 @@ export function Chart(properties: ChartProperties) {
                                             fill={dataSourceWithMetrics.color}
                                             radius={[4, 4, 0, 0]}
                                             yAxisId={dataSourceWithMetrics.yAxisAlignment}
+                                            activeBar={{
+                                                fill:
+                                                    themeSettings.themeClassName === 'light'
+                                                        ? lightenColor(dataSourceWithMetrics.color, 0.15)
+                                                        : lightenColor(dataSourceWithMetrics.color, 0.15),
+                                            }}
                                         />
                                     );
                                 case 'line':
@@ -793,7 +798,7 @@ export function Chart(properties: ChartProperties) {
                                             strokeWidth={2}
                                             strokeDasharray={dataSourceWithMetrics.lineStyle === 'dashed' ? '5 5' : ''}
                                             fill={setTransparency(
-                                                themeClassName == 'light'
+                                                themeSettings.themeClassName == 'light'
                                                     ? lightenColor(dataSourceWithMetrics.color, 0.2)
                                                     : darkenColor(dataSourceWithMetrics.color, 0.2),
                                                 0.75,
@@ -823,6 +828,8 @@ export function Chart(properties: ChartProperties) {
                     xAxisId="0"
                     dataKey="metricIndex"
                     className="text-sm"
+                    stroke="var(--border-primary)"
+                    tick={{ fill: 'var(--foreground-secondary)' }}
                     interval={properties.timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
                     tickFormatter={(value: string, index: number) => {
                         return tickFormatter(
@@ -845,6 +852,8 @@ export function Chart(properties: ChartProperties) {
                         xAxisId="1"
                         dataKey="metricIndex"
                         className="text-sm"
+                        stroke="var(--border-primary)"
+                        tick={{ fill: 'var(--foreground-tertiary)' }}
                         interval={properties.timeInterval === TimeInterval.Day ? 0 : 'preserveStartEnd'}
                         tickFormatter={(value: string, index: number) => {
                             return tickFormatter(
@@ -863,8 +872,22 @@ export function Chart(properties: ChartProperties) {
                 )}
 
                 {/* The y-axis shows the total values of the data points */}
-                <YAxis yAxisId="left" orientation="left" className="text-sm" width={44} />
-                <YAxis yAxisId="right" orientation="right" className="text-sm" width={44} />
+                <YAxis
+                    yAxisId="left"
+                    orientation="left"
+                    className="text-sm"
+                    width={44}
+                    stroke="var(--border-primary)"
+                    tick={{ fill: 'var(--foreground-secondary)' }}
+                />
+                <YAxis
+                    yAxisId="right"
+                    orientation="right"
+                    className="text-sm"
+                    width={44}
+                    stroke="var(--border-primary)"
+                    tick={{ fill: 'var(--foreground-secondary)' }}
+                />
 
                 {/* An optional second y-axis */}
                 {/* <YAxis yAxisId={"2"} orientation="right" /> */}
