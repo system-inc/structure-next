@@ -1,46 +1,32 @@
+// ================================================================================================
+// Date Formatting
+// ================================================================================================
+
 /**
- * Function to convert a timestamp (in milliseconds since the Unix epoch) into a
- * human-readable string representing time from now (past or future).
+ * Formats a date as ISO 8601 format (YYYY-MM-DD).
  *
- * @param {number} millisecondsSinceUnixEpoch - The timestamp to convert, represented as milliseconds since the Unix epoch.
- * @param {boolean} abbreviated - Whether to return an abbreviated format (e.g., "7s" instead of "7 seconds ago").
- * @returns {string} A string representing the time from now in a human-readable format.
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date string
+ *
+ * @example
+ * dateIso8601(new Date('2025-01-15T14:30:00'))
+ * // Returns: "2025-01-15"
  */
-export function timeFromNow(millisecondsSinceUnixEpoch: number, abbreviated: boolean = false) {
-    const delta = new Date().getTime() - millisecondsSinceUnixEpoch;
-    const isPast = delta > 0;
-    const abs = Math.abs(delta);
-
-    const seconds = Math.floor(abs / 1000);
-    const minutes = Math.floor(abs / (1000 * 60));
-    const hours = Math.floor(abs / (1000 * 60 * 60));
-    const days = Math.floor(abs / (1000 * 60 * 60 * 24));
-    const weeks = Math.floor(abs / (1000 * 60 * 60 * 24 * 7));
-    const months = Math.floor(abs / (1000 * 60 * 60 * 24 * 30));
-    const years = Math.floor(abs / (1000 * 60 * 60 * 24 * 365));
-
-    // Helper function to format the output
-    const formatTimeFromNow = function (value: number, unit: string, abbreviation: string) {
-        if(abbreviated) {
-            return `${value}${abbreviation}`;
-        }
-        const plural = value === 1 ? '' : 's';
-        return isPast ? `${value} ${unit}${plural} ago` : `in ${value} ${unit}${plural}`;
-    };
-
-    if(seconds <= 5) return 'now';
-    if(seconds < 60) return formatTimeFromNow(seconds, 'second', 's');
-    if(minutes < 60) return formatTimeFromNow(minutes, 'minute', 'm');
-    if(hours < 24) return formatTimeFromNow(hours, 'hour', 'h');
-    if(days < 7) return formatTimeFromNow(days, 'day', 'd');
-    if(weeks < 4) return formatTimeFromNow(weeks, 'week', 'w');
-    if(months < 1) return formatTimeFromNow(weeks, 'week', 'w');
-    if(months < 12) return formatTimeFromNow(months, 'month', 'mo');
-    return formatTimeFromNow(years, 'year', 'y');
+export function dateIso8601(date: Date): string {
+    return date.toISOString().split('T')[0] || '';
 }
 
-// Function to convert a date object into the format January 12, 2020
-export function fullDate(date: Date) {
+/**
+ * Formats a date with full month name, day, and year.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date string
+ *
+ * @example
+ * dateFull(new Date('2025-01-15'))
+ * // Returns: "January 15, 2025"
+ */
+export function dateFull(date: Date): string {
     return date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -48,8 +34,17 @@ export function fullDate(date: Date) {
     });
 }
 
-// Function to convert a date object into the format Friday, January 12, 2020
-export function dayNameWithFullDate(date: Date) {
+/**
+ * Formats a date with weekday name, full month, day, and year.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date string
+ *
+ * @example
+ * weekdayDate(new Date('2025-01-15'))
+ * // Returns: "Wednesday, January 15, 2025"
+ */
+export function weekdayDate(date: Date): string {
     return date.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -58,68 +53,58 @@ export function dayNameWithFullDate(date: Date) {
     });
 }
 
-// Function to convert a date object into the format January 12, 2020 at 3:30 PM
-export function fullDateWithTime(date: Date) {
-    return (
-        date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        }) +
-        ' at ' +
-        date.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-        })
-    );
+/**
+ * Formats a date with abbreviated weekday, month, day, and year.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date string
+ *
+ * @example
+ * weekdayDateCompact(new Date('2025-01-15'))
+ * // Returns: "Wed, Jan 15, 2025"
+ */
+export function weekdayDateCompact(date: Date): string {
+    return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    });
 }
 
-// Function to convert a date object into the ISO 8601 format 2020-01-12
-export function iso8601Date(date: Date) {
-    return date.toISOString().split('T')[0];
-}
-
-// Function to convert a date object into the format 2020-01-12 12:30 PM
-export function iso8601DateWithTime(date: Date) {
-    return (
-        date.toISOString().split('T')[0] +
-        ' ' +
-        date.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-        })
-    );
-}
-
-// Function to convert a date object into January 2024
-export function monthYear(date: Date) {
+/**
+ * Formats a date as month and year only.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted month and year
+ *
+ * @example
+ * monthYear(new Date('2025-01-15'))
+ * // Returns: "January 2025"
+ */
+export function monthYear(date: Date): string {
     return date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
     });
 }
 
-// Function to format the date with time if the date is today, otherwise just the date
-export function formatDateWithTimeIfToday(date: Date): string {
-    const today = new Date();
-    const isToday =
-        date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear();
+// ================================================================================================
+// Date with Contextual Formatting
+// ================================================================================================
 
-    if(isToday) {
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        const hour = hours % 12 || 12; // Convert 0 to 12
-        return `${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
-    }
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-
-// Function to format the date to "Today", "Yesterday", or the date
-// Example: "Today" or "Yesterday" or "Wednesday, March 26"
-export function formatDateToTodayYesterdayOrDate(date: Date): string {
+/**
+ * Formats a date as "Today", "Yesterday", or the full date.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date string
+ *
+ * @example
+ * dateToTodayYesterdayOrDate(new Date()) // Returns: "Today"
+ * dateToTodayYesterdayOrDate(yesterday)  // Returns: "Yesterday"
+ * dateToTodayYesterdayOrDate(oldDate)    // Returns: "Wednesday, March 26"
+ */
+export function dateToTodayYesterdayOrDate(date: Date): string {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today);
@@ -142,9 +127,94 @@ export function formatDateToTodayYesterdayOrDate(date: Date): string {
     }
 }
 
-// Function to format the date to a short date with time
-// Example: "Feb 12, 2025 at 12:12 pm"
-export function formatDateToShortDateWithTime(date: Date): string {
+/**
+ * Formats a date showing time if today, otherwise shows the date.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted string
+ *
+ * @example
+ * dateToTimeIfTodayOrDate(new Date()) // Returns: "2:30 PM" (if today)
+ * dateToTimeIfTodayOrDate(oldDate)    // Returns: "Jan 15" (if not today)
+ */
+export function dateToTimeIfTodayOrDate(date: Date): string {
+    const today = new Date();
+    const isToday =
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
+
+    if(isToday) {
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const hour = hours % 12 || 12; // Convert 0 to 12
+        return `${hour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+    }
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// ================================================================================================
+// Date and Time Formatting
+// ================================================================================================
+
+/**
+ * Formats a date with ISO date and 12-hour time.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date and time string
+ *
+ * @example
+ * dateIso8601WithTime(new Date('2025-01-15T14:30:00'))
+ * // Returns: "2025-01-15 2:30 PM"
+ */
+export function dateIso8601WithTime(date: Date): string {
+    return (
+        (date.toISOString().split('T')[0] || '') +
+        ' ' +
+        date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+        })
+    );
+}
+
+/**
+ * Formats a date with full date and time using "at" separator.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date and time string
+ *
+ * @example
+ * dateTimeFull(new Date('2025-01-15T14:30:00'))
+ * // Returns: "January 15, 2025 at 2:30 PM"
+ */
+export function dateTimeFull(date: Date): string {
+    return (
+        date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        }) +
+        ' at ' +
+        date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+        })
+    );
+}
+
+/**
+ * Formats a date with compact date and time using "at" separator.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date and time string
+ *
+ * @example
+ * dateTimeCompact(new Date('2025-01-15T14:30:00'))
+ * // Returns: "Jan 15, 2025 at 2:30 pm"
+ */
+export function dateTimeCompact(date: Date): string {
     const timeString = date
         .toLocaleTimeString('en-US', {
             hour: 'numeric',
@@ -163,40 +233,18 @@ export function formatDateToShortDateWithTime(date: Date): string {
     );
 }
 
-// Function to format the date to just show the time and am/pm
-// If the date is today or yesterday, it will show "Today" or "Yesterday" in front of the time
-// If not today or yesterday, it will show just the time
-// Example: "Today, 12:45 am" or "Yesterday, 3:30 pm" or "3:30 pm"
-export function formatDateToTimeWithTodayOrYesterday(date: Date): string {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-    let prefix = '';
-    if(inputDate.getTime() === today.getTime()) {
-        prefix = 'Today, ';
-    }
-    else if(inputDate.getTime() === yesterday.getTime()) {
-        prefix = 'Yesterday, ';
-    }
-
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'pm' : 'am';
-    const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes.toString().padStart(2, '0');
-
-    return `${prefix}${formattedHours}:${formattedMinutes} ${ampm}`;
-}
-
-// Function to format the date to show the date and time using date "at" time
-// If the date is today or yesterday, it will show "Today" or "Yesterday" in front of the time
-// If not today or yesterday, it will show the date in front of the time
-// Example: "Today at 12:45 am" or "Yesterday at 3:30 pm" or "Jan 12, 2025 at 3:30 pm"
-export function formatDateToDateAtTime(date: Date): string {
+/**
+ * Formats a date with contextual prefix (Today/Yesterday/Date) and time.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted date and time string
+ *
+ * @example
+ * dateAtTime(new Date())    // Returns: "Today at 2:30 pm"
+ * dateAtTime(yesterday)     // Returns: "Yesterday at 3:45 pm"
+ * dateAtTime(oldDate)       // Returns: "Jan 15, 2025 at 2:30 pm"
+ */
+export function dateAtTime(date: Date): string {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today);
@@ -229,31 +277,150 @@ export function formatDateToDateAtTime(date: Date): string {
     return `${prefix}${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
-// Function to format the date to show the day of the ween and the date
-// Example: "Mon, Jan 12, 2025"
-export function formatDateToDayOfWeekAndDate(date: Date): string {
-    return date.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    });
+// ================================================================================================
+// Time Formatting
+// ================================================================================================
+
+/**
+ * Formats a date to show only the time in 12-hour format.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted time string
+ *
+ * @example
+ * timeOnly(new Date('2025-01-15T14:30:00')) // Returns: "2:30 pm"
+ * timeOnly(new Date('2025-01-15T09:05:00')) // Returns: "9:05 am"
+ */
+export function timeOnly(date: Date): string {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const amOrPm = hours >= 12 ? 'pm' : 'am';
+    const formattedHours = hours % 12 || 12;
+
+    return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${amOrPm}`;
 }
 
-// Function to format the date to just show the time and am/pm
-// Example: "12:45 am" or "3:30 pm"
-export function formatDateOnlyTime(date: Date): string {
+/**
+ * Formats time with contextual day prefix (Today/Yesterday) if applicable.
+ *
+ * @param {Date} date - The date to format
+ * @returns {string} The formatted time string with optional day prefix
+ *
+ * @example
+ * dateToTimeWithTodayOrYesterday(new Date())  // Returns: "Today, 2:30 pm"
+ * dateToTimeWithTodayOrYesterday(yesterday)   // Returns: "Yesterday, 3:45 pm"
+ * dateToTimeWithTodayOrYesterday(oldDate)     // Returns: "2:30 pm"
+ */
+export function dateToTimeWithTodayOrYesterday(date: Date): string {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+    let prefix = '';
+    if(inputDate.getTime() === today.getTime()) {
+        prefix = 'Today, ';
+    }
+    else if(inputDate.getTime() === yesterday.getTime()) {
+        prefix = 'Yesterday, ';
+    }
+
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const ampm = hours >= 12 ? 'pm' : 'am';
     const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes.toString().padStart(2, '0');
 
-    return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+    return `${prefix}${formattedHours}:${formattedMinutes} ${ampm}`;
 }
 
-// Function to convert milliseconds into Years:Months:Days:Hours:Minutes:Seconds
-// It will not show leading zeros for hours or minutes, but always show minutes and seconds
-export function millisecondsToDuration(milliseconds: number) {
+/**
+ * Formats an hour value (0-23) to compact 12-hour format with am/pm.
+ *
+ * @param {number} hour - The hour in 24-hour format (0-23)
+ * @returns {string} The formatted hour string
+ *
+ * @example
+ * hourCompact(0)   // Returns: "12am"
+ * hourCompact(9)   // Returns: "9am"
+ * hourCompact(12)  // Returns: "12pm"
+ * hourCompact(15)  // Returns: "3pm"
+ */
+export function hourCompact(hour: number): string {
+    if(hour === 0) return '12am';
+    if(hour < 12) return `${hour}am`;
+    if(hour === 12) return '12pm';
+    return `${hour - 12}pm`;
+}
+
+// ================================================================================================
+// Relative Time
+// ================================================================================================
+
+/**
+ * Converts a timestamp to a human-readable relative time string.
+ *
+ * @param {number} millisecondsSinceUnixEpoch - The timestamp in milliseconds since Unix epoch
+ * @param {boolean} [abbreviated=false] - Whether to use abbreviated format
+ * @returns {string} The relative time string
+ *
+ * @example
+ * timeFromNow(Date.now() - 5000)        // Returns: "5 seconds ago"
+ * timeFromNow(Date.now() - 3600000)     // Returns: "1 hour ago"
+ * timeFromNow(Date.now() - 3600000, true) // Returns: "1h"
+ * timeFromNow(Date.now() + 86400000)    // Returns: "in 1 day"
+ */
+export function timeFromNow(millisecondsSinceUnixEpoch: number, abbreviated: boolean = false): string {
+    const delta = new Date().getTime() - millisecondsSinceUnixEpoch;
+    const isPast = delta > 0;
+    const abs = Math.abs(delta);
+
+    const seconds = Math.floor(abs / 1000);
+    const minutes = Math.floor(abs / (1000 * 60));
+    const hours = Math.floor(abs / (1000 * 60 * 60));
+    const days = Math.floor(abs / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(abs / (1000 * 60 * 60 * 24 * 7));
+    const months = Math.floor(abs / (1000 * 60 * 60 * 24 * 30));
+    const years = Math.floor(abs / (1000 * 60 * 60 * 24 * 365));
+
+    // Helper function to format the output
+    const formatTimeFromNow = function (value: number, unit: string, abbreviation: string) {
+        if(abbreviated) {
+            return `${value}${abbreviation}`;
+        }
+        const plural = value === 1 ? '' : 's';
+        return isPast ? `${value} ${unit}${plural} ago` : `in ${value} ${unit}${plural}`;
+    };
+
+    if(seconds <= 5) return 'now';
+    if(seconds < 60) return formatTimeFromNow(seconds, 'second', 's');
+    if(minutes < 60) return formatTimeFromNow(minutes, 'minute', 'm');
+    if(hours < 24) return formatTimeFromNow(hours, 'hour', 'h');
+    if(days < 7) return formatTimeFromNow(days, 'day', 'd');
+    if(weeks < 4) return formatTimeFromNow(weeks, 'week', 'w');
+    if(months < 1) return formatTimeFromNow(weeks, 'week', 'w');
+    if(months < 12) return formatTimeFromNow(months, 'month', 'mo');
+    return formatTimeFromNow(years, 'year', 'y');
+}
+
+// ================================================================================================
+// Duration Formatting
+// ================================================================================================
+
+/**
+ * Converts milliseconds to a duration string format.
+ *
+ * @param {number} milliseconds - The duration in milliseconds
+ * @returns {string} The formatted duration string
+ *
+ * @example
+ * millisecondsToDuration(3661000) // Returns: "1:1:01" (1 hour, 1 minute, 1 second)
+ * millisecondsToDuration(90000)   // Returns: "1:30" (1 minute, 30 seconds)
+ * millisecondsToDuration(5000)    // Returns: "0:05" (5 seconds)
+ */
+export function millisecondsToDuration(milliseconds: number): string {
     const seconds = Math.floor(milliseconds / 1000);
 
     const years = Math.floor(seconds / (365 * 24 * 3600));
@@ -283,4 +450,25 @@ export function millisecondsToDuration(milliseconds: number) {
     parts.push(`${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`);
 
     return parts.join(':');
+}
+
+// ================================================================================================
+// Month Helpers
+// ================================================================================================
+
+/**
+ * Gets the abbreviated month name for a given month number (1-based).
+ *
+ * @param {number} month - The month number (1 = January, 12 = December)
+ * @returns {string} The three-letter abbreviated month name
+ *
+ * @example
+ * monthAbbreviation(1)  // Returns: "Jan"
+ * monthAbbreviation(6)  // Returns: "Jun"
+ * monthAbbreviation(12) // Returns: "Dec"
+ */
+export function monthAbbreviation(month: number): string {
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // Convert from 1-based to 0-based index
+    return monthNames[month - 1] || '';
 }

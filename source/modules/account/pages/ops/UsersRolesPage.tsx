@@ -31,7 +31,7 @@ import {
 export const accountAccessRoleAssignmentsPrivilegedCacheKey = 'accountAccessRoleAssignmentsPrivileged';
 
 // Dependencies - Utilities
-import { fullDate } from '@structure/source/utilities/Time';
+import { dateFull } from '@structure/source/utilities/Time';
 
 // Component - UsersRolesPage
 export function UsersRolesPage() {
@@ -261,9 +261,9 @@ export function UsersRolesPage() {
                                                     </div>
                                                     <div className="text-neutral-500 text-sm">{role.emailAddress}</div>
                                                     <div className="text-neutral-500 text-sm">
-                                                        Added {fullDate(new Date(role.createdAt))}
+                                                        Added {dateFull(new Date(role.createdAt))}
                                                         {role.expiresAt && (
-                                                            <div>Expires {fullDate(new Date(role.expiresAt))}</div>
+                                                            <div>Expires {dateFull(new Date(role.expiresAt))}</div>
                                                         )}
                                                     </div>
                                                     <Button
@@ -299,9 +299,9 @@ export function UsersRolesPage() {
                                                 </div>
 
                                                 <div className="text-neutral-500 hidden text-sm md:block">
-                                                    Added {fullDate(new Date(role.createdAt))}
+                                                    Added {dateFull(new Date(role.createdAt))}
                                                     {role.expiresAt && (
-                                                        <div>Expires {fullDate(new Date(role.expiresAt))}</div>
+                                                        <div>Expires {dateFull(new Date(role.expiresAt))}</div>
                                                     )}
                                                 </div>
 
