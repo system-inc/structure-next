@@ -122,9 +122,9 @@ export function OpsNavigationBar() {
                                         duration: 0.5,
                                         ease: [0.075, 0.82, 0.165, 1],
                                     }}
-                                    className="fixed inset-y-0 left-0 top-14 h-full p-2"
+                                    className="fixed bottom-0 left-0 top-14 p-2"
                                 >
-                                    <div className="h-full w-56 rounded-medium border bg-opsis-background-tetriary">
+                                    <div className="h-full w-56 overflow-y-auto rounded-medium border bg-opsis-background-tetriary">
                                         <OpsNavigation />
                                     </div>
                                 </motion.div>

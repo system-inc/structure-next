@@ -4,6 +4,11 @@
 import React from 'react';
 // import dynamic from 'next/dynamic';
 
+// Dependencies - Theme - Styles
+import '@structure/source/theme/styles/variables.css';
+import '@structure/source/theme/styles/global.css';
+import '@project/app/_theme/styles/theme.css'; // TODO: Do not import stuff from project, fix when revisiting theming
+
 // Dependencies - Main Components
 // import { SideNavigationLayoutNavigation } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 // import { SideNavigationLayoutContent } from '@structure/source/layouts/side-navigation/SideNavigationLayoutContent';
