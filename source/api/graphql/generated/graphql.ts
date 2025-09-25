@@ -427,6 +427,11 @@ export type DataInteractionDatabaseTableRowUpdateInput = {
     tableName: Scalars['String']['input'];
 };
 
+export type DatabaseMetadata = {
+    __typename?: 'DatabaseMetadata';
+    databaseName: Scalars['String']['output'];
+};
+
 export type DatabaseTableColumn = {
     __typename?: 'DatabaseTableColumn';
     isGenerated: Scalars['Boolean']['output'];
@@ -485,11 +490,6 @@ export type DatabaseTablesResult = {
     __typename?: 'DatabaseTablesResult';
     items: Array<DatabaseTableMetadata>;
     pagination: Pagination;
-};
-
-export type DatebaseMetadata = {
-    __typename?: 'DatebaseMetadata';
-    databaseName: Scalars['String']['output'];
 };
 
 export enum DeviceOrientation {
@@ -1016,7 +1016,7 @@ export type PagedAccounts = {
 
 export type PagedDatabasesResult = {
     __typename?: 'PagedDatabasesResult';
-    items: Array<DatebaseMetadata>;
+    items: Array<DatabaseMetadata>;
     pagination: Pagination;
 };
 
@@ -2328,7 +2328,7 @@ export type DataInteractionDatabasesQuery = {
     __typename?: 'Query';
     dataInteractionDatabases: {
         __typename?: 'PagedDatabasesResult';
-        items: Array<{ __typename?: 'DatebaseMetadata'; databaseName: string }>;
+        items: Array<{ __typename?: 'DatabaseMetadata'; databaseName: string }>;
         pagination: {
             __typename?: 'Pagination';
             itemIndex: number;

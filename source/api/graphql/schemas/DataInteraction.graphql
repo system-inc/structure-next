@@ -78,6 +78,10 @@ input DataInteractionDatabaseTableRowUpdateInput {
     tableName: String!
 }
 
+type DatabaseMetadata {
+    databaseName: String!
+}
+
 type DatabaseTableColumn {
     isGenerated: Boolean!
     isKey: Boolean!
@@ -137,10 +141,6 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-type DatebaseMetadata {
-    databaseName: String!
-}
-
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -181,7 +181,7 @@ input OrderByInput {
 }
 
 type PagedDatabasesResult {
-    items: [DatebaseMetadata!]!
+    items: [DatabaseMetadata!]!
     pagination: Pagination!
 }
 
