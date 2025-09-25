@@ -8,6 +8,7 @@
 
     /* Light Scale (Transparent Whites, Opacity 0 to 1) */
     --light-0: rgba(255 255 255 / 0);
+    --light-10: rgba(255 255 255 / 0.01);
     --light-50: rgba(255 255 255 / 0.05);
     --light-100: rgba(255 255 255 / 0.1);
     --light-150: rgba(255 255 255 / 0.15);
@@ -27,10 +28,12 @@
     --light-850: rgba(255 255 255 / 0.85);
     --light-900: rgba(255 255 255 / 0.9);
     --light-950: rgba(255 255 255 / 0.95);
+    --light-990: rgba(255 255 255 / 0.99);
     --light-1000: #ffffff;
 
     /* Dark Scale (Transparent Blacks, Opacity 0 to 1) */
     --dark-0: rgba(0 0 0 / 0);
+    --dark-10: rgba(0 0 0 / 0.01);
     --dark-50: rgba(0 0 0 / 0.05);
     --dark-100: rgba(0 0 0 / 0.1);
     --dark-150: rgba(0 0 0 / 0.15);
@@ -50,6 +53,7 @@
     --dark-850: rgba(0 0 0 / 0.85);
     --dark-900: rgba(0 0 0 / 0.9);
     --dark-950: rgba(0 0 0 / 0.95);
+    --dark-990: rgba(0 0 0 / 0.99);
     --dark-1000: var(--black-1000);
 
     /* Black Scale (Lightest to Darkest) */
