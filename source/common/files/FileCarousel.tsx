@@ -10,7 +10,7 @@ import { Popover } from '@structure/source/common/popovers/Popover';
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
 import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.svg';
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
-import { ArrowSquareOut } from '@phosphor-icons/react';
+import { ArrowSquareOutIcon } from '@phosphor-icons/react/ssr';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -141,7 +141,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                             }}
                             aria-label="Open in new tab"
                         >
-                            <ArrowSquareOut className="h-5 w-5 text-light dark:text-dark" weight="bold" />
+                            <ArrowSquareOutIcon className="h-5 w-5 text-light dark:text-dark" weight="bold" />
                         </Button>
 
                         {/* Metadata Popover */}
