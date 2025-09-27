@@ -109,8 +109,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
         undefined,
         {
             cacheKey: [accountCacheKey],
-            // Delay enabling query until after mount to avoid hydration issues
-            enabled: shouldEnableAccountQuery,
+            enabled: shouldEnableAccountQuery, // Do not execute query if not signed in
             cache: 'LocalStorage', // Enable localStorage persistence
             validDurationInMilliseconds: Infinity, // Never stale, account data is validated by a signed in cookie
         },

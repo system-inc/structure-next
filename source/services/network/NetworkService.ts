@@ -12,8 +12,6 @@ import {
     keepPreviousData,
     Query,
 } from '@tanstack/react-query';
-import { persistQueryClient } from '@tanstack/react-query-persist-client';
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 
 // Dependencies - API
 import {
@@ -236,76 +234,6 @@ export class NetworkService {
                 },
             },
         });
-
-        // Initialize persistence if in browser environment
-        if(!this.isServerSide()) {
-            // Helper to initialize persistence for a storage type
-            const initializePersistence = (storageType: 'LocalStorage' | 'SessionStorage') => {
-                // Create async storage adapter with error handling
-                const createAsyncStorageAdapter = function (storage: Storage) {
-                    return {
-                        getItem: async function (key: string) {
-                            try {
-                                return storage.getItem(key);
-                            }
-                            catch(error) {
-                                console.warn(`[NetworkService] Failed to read from ${storageType}:`, error);
-                                return null;
-                            }
-                        },
-                        setItem: async function (key: string, value: string) {
-                            try {
-                                storage.setItem(key, value);
-                                const size = new Blob([value]).size;
-                                console.log(
-                                    `[NetworkService] Persisted ${(size / 1024).toFixed(2)}KB to ${storageType}`,
-                                );
-                            }
-                            catch(error) {
-                                console.warn(`[NetworkService] Failed to persist to ${storageType}:`, error);
-                            }
-                        },
-                        removeItem: async function (key: string) {
-                            try {
-                                storage.removeItem(key);
-                            }
-                            catch(error) {
-                                console.warn(`[NetworkService] Failed to remove from ${storageType}:`, error);
-                            }
-                        },
-                    };
-                };
-
-                // Get the appropriate storage object
-                let storage: Storage;
-                if(storageType === 'LocalStorage') {
-                    storage = window.localStorage;
-                }
-                else {
-                    storage = window.sessionStorage;
-                }
-
-                // Create persister with the storage adapter
-                const persister = createAsyncStoragePersister({
-                    storage: createAsyncStorageAdapter(storage),
-                    key: networkServiceCacheKey,
-                });
-
-                // Configure persistence for this storage type
-                persistQueryClient({
-                    queryClient: this.tanStackReactQueryClient,
-                    persister,
-                    maxAge: Infinity, // No expiration, let staleTime handle freshness
-                    dehydrateOptions: {
-                        shouldDehydrateQuery: (query) => query.meta?.cache === storageType,
-                    },
-                });
-            };
-
-            // Initialize both storage persisters
-            initializePersistence('LocalStorage');
-            initializePersistence('SessionStorage');
-        }
     }
 
     // Get the async client for provider setup
