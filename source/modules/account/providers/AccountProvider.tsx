@@ -40,7 +40,7 @@ export interface AccountProviderProperties {
 export function AccountProvider(properties: AccountProviderProperties) {
     // State
     const [signedIn, setSignedIn] = React.useState<boolean>(properties.signedIn); // Initialized using response header cookie
-    // console.log('AccountProvider: signedIn', signedIn);
+    // console.log('AccountProvider mounting, signedIn from props:', properties.signedIn);
     const [authenticationDialogOpen, setAuthenticationDialogOpen] = React.useState(false);
 
     // Hooks
@@ -55,6 +55,31 @@ export function AccountProvider(properties: AccountProviderProperties) {
                 }
             }
         `),
+    );
+
+    // Compute whether to enable the account query
+    // This handles the edge case where cookies are cleared but localStorage persists
+    const shouldEnableAccountQuery = React.useMemo(
+        function () {
+            // If signed in via cookie, enable the query
+            if(signedIn) {
+                return true;
+            }
+
+            // Only perform cache operations on the client side
+            if(typeof window !== 'undefined') {
+                // If not signed in but have cached account data, it's stale - clear it
+                const cachedAccount = networkService.getCache([accountCacheKey]);
+                if(!signedIn && cachedAccount) {
+                    // Wipe the cache
+                    networkService.clearCache();
+                    console.log('[AccountProvider] Cleared stale account cache - cookies indicate signed out');
+                }
+            }
+
+            return false;
+        },
+        [signedIn],
     );
 
     // Queries
@@ -84,8 +109,10 @@ export function AccountProvider(properties: AccountProviderProperties) {
         undefined,
         {
             cacheKey: [accountCacheKey],
-            // Do not run the query if the account is not signed in
-            enabled: signedIn,
+            // Delay enabling query until after mount to avoid hydration issues
+            enabled: shouldEnableAccountQuery,
+            cache: 'LocalStorage', // Enable localStorage persistence
+            validDurationInMilliseconds: Infinity, // Never stale, account data is validated by a signed in cookie
         },
     );
 
@@ -155,11 +182,14 @@ export function AccountProvider(properties: AccountProviderProperties) {
             // Invoke the GraphQL mutation
             try {
                 // Invoke the mutation
-                await accountSignOutRequest.execute({});
+                await accountSignOutRequest.execute();
             }
             catch(error) {
                 console.log('error', JSON.stringify(error));
             }
+
+            // Clear all cache (memory + localStorage + sessionStorage)
+            networkService.clearCache();
 
             // Update the signed in state
             updateSignedIn(false);
@@ -193,7 +223,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
             // initialized us as signed out (due to missing cross-domain cookies),
             // update the state to trigger the account query
             if(storedSignedIn === true && !signedIn) {
-                // console.log('AccountProvider: localStorage indicates signed in, updating state');
+                // console.log('AccountProvider: localStorage says signed in, but state is signed out. Updating state to true');
                 setSignedIn(true);
             }
             // Note: We don't handle the opposite case (stored false, state true)

@@ -12,6 +12,8 @@ import {
     keepPreviousData,
     Query,
 } from '@tanstack/react-query';
+import { persistQueryClient } from '@tanstack/react-query-persist-client';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 
 // Dependencies - API
 import {
@@ -24,6 +26,9 @@ import {
 import { NetworkStatistics, NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';
 import { AppOrStructureTypedDocumentString } from './internal/NetworkServiceGraphQl';
 import { NetworkServiceDeviceId } from './internal/NetworkServiceDeviceId';
+
+// Constants
+export const networkServiceCacheKey = `${ProjectSettings.identifier}NetworkServiceCache`;
 
 // Export GraphQL utilities
 export { gql } from './internal/NetworkServiceGraphQl';
@@ -53,8 +58,41 @@ interface UseRequestOptionsBase<TData, TVariables = void, TSelected = TData> {
 // using effects or directly in your request function
 export interface UseReadRequestOptionsInterface<TData, TVariables = void, TSelected = TData>
     extends UseRequestOptionsBase<TData, TVariables, TSelected> {
-    // Cache control - when false, query always fetches fresh data from network
-    cache?: boolean;
+    /**
+     * Cache control - determines where and how to cache query results:
+     *
+     * @default 'Memory'
+     *
+     * - `false`: No caching at all, always fetch fresh from network
+     *   Use for: real-time data, sensitive data that shouldn't be cached
+     *
+     * - `'Memory'`: Cache in memory only (default behavior)
+     *   Use for: standard queries that don't need to survive page refresh
+     *   Cleared: On page refresh or tab close
+     *
+     * - `'SessionStorage'`: Cache in memory + persist to sessionStorage
+     *   Use for: Data that should survive page refresh but not tab close
+     *   Cleared: When the tab is closed
+     *   Scope: Per-tab storage, not shared across tabs
+     *
+     * - `'LocalStorage'`: Cache in memory + persist to localStorage
+     *   Use for: User preferences, account data, or other data that should persist
+     *   Cleared: Only when explicitly cleared or cache expires
+     *   Scope: Shared across all tabs and windows
+     *
+     * @example
+     * // Real-time data that should never be cached
+     * { cache: false }
+     *
+     * @example
+     * // User account data that should persist across sessions
+     * { cache: 'LocalStorage', validDurationInMilliseconds: Infinity }
+     *
+     * @example
+     * // Form draft that should survive refresh but not tab close
+     * { cache: 'SessionStorage' }
+     */
+    cache?: false | 'Memory' | 'SessionStorage' | 'LocalStorage';
     // Unique identifier for caching - required for all queries to identify and deduplicate requests
     cacheKey: CacheKey;
     // How long the data is considered fresh (won't refetch) in milliseconds
@@ -198,6 +236,76 @@ export class NetworkService {
                 },
             },
         });
+
+        // Initialize persistence if in browser environment
+        if(!this.isServerSide()) {
+            // Helper to initialize persistence for a storage type
+            const initializePersistence = (storageType: 'LocalStorage' | 'SessionStorage') => {
+                // Create async storage adapter with error handling
+                const createAsyncStorageAdapter = function (storage: Storage) {
+                    return {
+                        getItem: async function (key: string) {
+                            try {
+                                return storage.getItem(key);
+                            }
+                            catch(error) {
+                                console.warn(`[NetworkService] Failed to read from ${storageType}:`, error);
+                                return null;
+                            }
+                        },
+                        setItem: async function (key: string, value: string) {
+                            try {
+                                storage.setItem(key, value);
+                                const size = new Blob([value]).size;
+                                console.log(
+                                    `[NetworkService] Persisted ${(size / 1024).toFixed(2)}KB to ${storageType}`,
+                                );
+                            }
+                            catch(error) {
+                                console.warn(`[NetworkService] Failed to persist to ${storageType}:`, error);
+                            }
+                        },
+                        removeItem: async function (key: string) {
+                            try {
+                                storage.removeItem(key);
+                            }
+                            catch(error) {
+                                console.warn(`[NetworkService] Failed to remove from ${storageType}:`, error);
+                            }
+                        },
+                    };
+                };
+
+                // Get the appropriate storage object
+                let storage: Storage;
+                if(storageType === 'LocalStorage') {
+                    storage = window.localStorage;
+                }
+                else {
+                    storage = window.sessionStorage;
+                }
+
+                // Create persister with the storage adapter
+                const persister = createAsyncStoragePersister({
+                    storage: createAsyncStorageAdapter(storage),
+                    key: networkServiceCacheKey,
+                });
+
+                // Configure persistence for this storage type
+                persistQueryClient({
+                    queryClient: this.tanStackReactQueryClient,
+                    persister,
+                    maxAge: Infinity, // No expiration, let staleTime handle freshness
+                    dehydrateOptions: {
+                        shouldDehydrateQuery: (query) => query.meta?.cache === storageType,
+                    },
+                });
+            };
+
+            // Initialize both storage persisters
+            initializePersistence('LocalStorage');
+            initializePersistence('SessionStorage');
+        }
     }
 
     // Get the async client for provider setup
@@ -411,11 +519,13 @@ export class NetworkService {
     ): UseGraphQlQueryRequestResultInterface<TSelected> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
-        // Determine cache behavior based on the 'cache' option
-        // When cache is false, we use aggressive cache invalidation to ensure fresh data
-        const shouldCache = options.cache !== false;
+        // Handle the cache option - defaults to 'Memory'
+        const cacheMode = options.cache ?? 'Memory';
 
-        // Configure TanStack Query options based on cache preference
+        // Determine if we should use TanStack cache at all
+        const shouldCache = cacheMode !== false;
+
+        // Configure TanStack Query options based on cache mode
         const cacheConfiguration = shouldCache
             ? {
                   // Normal caching behavior
@@ -423,11 +533,17 @@ export class NetworkService {
                   gcTime: options.clearAfterUnusedDurationInMilliseconds,
               }
             : {
-                  // Uncached behavior: data is immediately stale and garbage collected
-                  // This ensures every access fetches fresh data from the network
+                  // cache: false behavior - always fetch fresh
                   staleTime: 0,
                   gcTime: 0,
               };
+
+        // Add meta to track which storage type for persistence
+        const queryMeta = {
+            ...options.metadata,
+            cache: cacheMode === 'SessionStorage' || cacheMode === 'LocalStorage' ? cacheMode : undefined,
+        };
+
         const baseQueryOptions = {
             queryKey: options.cacheKey,
             queryFn: () =>
@@ -441,7 +557,7 @@ export class NetworkService {
             ...(options.maximumRetries !== undefined ? { retry: options.maximumRetries } : {}),
             initialData: options.initialData,
             select: options.select,
-            meta: options.metadata,
+            meta: queryMeta,
         };
 
         // Build complete options with placeholderData if needed
@@ -621,7 +737,11 @@ export class NetworkService {
     }
 
     clearCache(): void {
+        // Clear in-memory cache
         this.tanStackReactQueryClient.clear();
+
+        // Also clear all persisted cache (localStorage and sessionStorage)
+        this.clearPersistedCache('All');
     }
 
     async prefetchCache<TData>(key: CacheKey, fn: () => Promise<TData>): Promise<void> {
@@ -649,6 +769,46 @@ export class NetworkService {
 
     async refreshActiveRequests(): Promise<void> {
         return this.refreshRequests({ type: 'active' });
+    }
+
+    // Function to clear persisted cache from storage
+    clearPersistedCache(storage: 'LocalStorage' | 'SessionStorage' | 'All' = 'All'): void {
+        // Only clear if in browser environment
+        if(this.isServerSide()) {
+            return;
+        }
+
+        // Clear from storage based on the specified type
+        if(storage === 'LocalStorage' || storage === 'All') {
+            // eslint-disable-next-line structure/local-storage-service-rule
+            window.localStorage.removeItem(networkServiceCacheKey);
+        }
+        else if(storage === 'SessionStorage' || storage === 'All') {
+            window.sessionStorage.removeItem(networkServiceCacheKey);
+        }
+    }
+
+    // Function to get the size of the persisted cache in bytes
+    getPersistedCacheSizeInBytes(storage: 'LocalStorage' | 'SessionStorage'): number {
+        if(this.isServerSide()) {
+            return 0;
+        }
+
+        try {
+            if(storage === 'LocalStorage') {
+                // eslint-disable-next-line structure/local-storage-service-rule
+                const data = window.localStorage.getItem(networkServiceCacheKey);
+                return data ? new Blob([data]).size : 0;
+            }
+            else {
+                const data = window.sessionStorage.getItem(networkServiceCacheKey);
+                return data ? new Blob([data]).size : 0;
+            }
+        }
+        catch(error) {
+            console.warn(`[NetworkService] Failed to get ${storage} cache size:`, error);
+            return 0;
+        }
     }
 
     // Statistics methods
