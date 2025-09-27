@@ -1,0 +1,248 @@
+// Dependencies - API
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+
+// Dependencies - Utilities
+import {
+    startOfHour,
+    startOfDay,
+    startOfMonth,
+    startOfQuarter,
+    startOfYear,
+    endOfHour,
+    endOfDay,
+    endOfMonth,
+    endOfQuarter,
+    endOfYear,
+    addHours,
+    addDays,
+    addMonths,
+    addQuarters,
+    addYears,
+    differenceInHours,
+    differenceInDays,
+    differenceInMonths,
+    differenceInQuarters,
+    differenceInYears,
+} from 'date-fns';
+
+// Type - TimeSeriesRawDataPoint
+export interface TimeSeriesRawDataPoint {
+    timeIntervalValue: string | number;
+    total: number;
+}
+
+// Type - TimeSeriesProcessedDataPoint
+export interface TimeSeriesProcessedDataPoint {
+    label: string;
+    [key: string]: number | string;
+}
+
+// Function to fill missing interval values with zeroes
+export function fillMissingTimeIntervalValuesWithZeroes(
+    data: TimeSeriesRawDataPoint[],
+    startDate: Date,
+    endDate: Date,
+    interval: TimeInterval,
+): TimeSeriesRawDataPoint[] {
+    if(!data || data.length === 0) {
+        return generateEmptyDataPoints(startDate, endDate, interval);
+    }
+
+    // Create a map of existing data points
+    const dataMap = new Map<string, number>();
+    data.forEach(function (point) {
+        dataMap.set(String(point.timeIntervalValue), point.total);
+    });
+
+    // Generate all expected intervals
+    const filledData: TimeSeriesRawDataPoint[] = [];
+    let currentDate = getTimeIntervalStart(startDate, interval);
+    const endIntervalDate = getTimeIntervalEnd(endDate, interval);
+
+    // Iterate over each interval and fill missing data points with zeroes
+    while(currentDate <= endIntervalDate) {
+        const intervalKey = formatTimeIntervalKey(currentDate, interval);
+        filledData.push({
+            timeIntervalValue: intervalKey,
+            total: dataMap.get(intervalKey) || 0,
+        });
+        currentDate = addTimeInterval(currentDate, interval, 1);
+    }
+
+    return filledData;
+}
+
+// Function to generate empty data points for a date range
+export function generateEmptyDataPoints(
+    startDate: Date,
+    endDate: Date,
+    interval: TimeInterval,
+): TimeSeriesRawDataPoint[] {
+    const dataPoints: TimeSeriesRawDataPoint[] = [];
+    let currentDate = getTimeIntervalStart(startDate, interval);
+    const endIntervalDate = getTimeIntervalEnd(endDate, interval);
+
+    while(currentDate <= endIntervalDate) {
+        dataPoints.push({
+            timeIntervalValue: formatTimeIntervalKey(currentDate, interval),
+            total: 0,
+        });
+        currentDate = addTimeInterval(currentDate, interval, 1);
+    }
+
+    return dataPoints;
+}
+
+// Function to get the start of an interval
+export function getTimeIntervalStart(date: Date, interval: TimeInterval): Date {
+    switch(interval) {
+        case TimeInterval.Hour:
+            return startOfHour(date);
+        case TimeInterval.Day:
+            return startOfDay(date);
+        case TimeInterval.Month:
+            return startOfMonth(date);
+        case TimeInterval.Quarter:
+            return startOfQuarter(date);
+        case TimeInterval.Year:
+            return startOfYear(date);
+        default:
+            return startOfDay(date);
+    }
+}
+
+// Function to get the end of an interval
+export function getTimeIntervalEnd(date: Date, interval: TimeInterval): Date {
+    switch(interval) {
+        case TimeInterval.Hour:
+            return endOfHour(date);
+        case TimeInterval.Day:
+            return endOfDay(date);
+        case TimeInterval.Month:
+            return endOfMonth(date);
+        case TimeInterval.Quarter:
+            return endOfQuarter(date);
+        case TimeInterval.Year:
+            return endOfYear(date);
+        default:
+            return endOfDay(date);
+    }
+}
+
+// Function to add intervals to a date
+export function addTimeInterval(date: Date, interval: TimeInterval, count: number): Date {
+    switch(interval) {
+        case TimeInterval.Hour:
+            return addHours(date, count);
+        case TimeInterval.Day:
+            return addDays(date, count);
+        case TimeInterval.Month:
+            return addMonths(date, count);
+        case TimeInterval.Quarter:
+            return addQuarters(date, count);
+        case TimeInterval.Year:
+            return addYears(date, count);
+        default:
+            return addDays(date, count);
+    }
+}
+
+// Function to calculate difference between dates in intervals
+export function differenceInTimeIntervals(startDate: Date, endDate: Date, interval: TimeInterval): number {
+    switch(interval) {
+        case TimeInterval.Hour:
+            return differenceInHours(endDate, startDate);
+        case TimeInterval.Day:
+            return differenceInDays(endDate, startDate);
+        case TimeInterval.Month:
+            return differenceInMonths(endDate, startDate);
+        case TimeInterval.Quarter:
+            return differenceInQuarters(endDate, startDate);
+        case TimeInterval.Year:
+            return differenceInYears(endDate, startDate);
+        default:
+            return differenceInDays(endDate, startDate);
+    }
+}
+
+// Function to format interval key for consistent data mapping
+export function formatTimeIntervalKey(date: Date, interval: TimeInterval): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+
+    switch(interval) {
+        case TimeInterval.Hour:
+            return `${year}-${month}-${day}T${hour}:00:00`;
+        case TimeInterval.Day:
+            return `${year}-${month}-${day}`;
+        case TimeInterval.Month:
+            return `${year}-${month}`;
+        case TimeInterval.Quarter: {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            return `${year}-Q${quarter}`;
+        }
+        case TimeInterval.Year:
+            return String(year);
+        default:
+            return `${year}-${month}-${day}`;
+    }
+}
+
+// Function to convert raw data to processed format for chart consumption
+export function processTimeSeriesData(
+    rawData: TimeSeriesRawDataPoint[],
+    dataKey: string,
+): TimeSeriesProcessedDataPoint[] {
+    return rawData.map((point) => ({
+        label: String(point.timeIntervalValue),
+        [dataKey]: point.total,
+    }));
+}
+
+// Function to merge multiple data series into a single dataset
+export function mergeTimeSeriesData(
+    dataSeries: Array<{ key: string; data: TimeSeriesRawDataPoint[] }>,
+): TimeSeriesProcessedDataPoint[] {
+    // Create a map to store merged data
+    const mergedMap = new Map<string, TimeSeriesProcessedDataPoint>();
+
+    // Process each data series
+    dataSeries.forEach(function ({ key, data }) {
+        data.forEach(function (point) {
+            const label = String(point.timeIntervalValue);
+            const existing = mergedMap.get(label) || { label };
+            existing[key] = point.total;
+            mergedMap.set(label, existing);
+        });
+    });
+
+    // Convert map to array and sort by label
+    return Array.from(mergedMap.values()).sort((a, b) => a.label.localeCompare(b.label));
+}
+
+// Calculate optimal interval based on date range
+export function calculateOptimalInterval(startDate: Date, endDate: Date, maxDataPoints: number = 999): TimeInterval {
+    const hours = differenceInHours(endDate, startDate);
+    const days = differenceInDays(endDate, startDate);
+    const months = differenceInMonths(endDate, startDate);
+    const years = differenceInYears(endDate, startDate);
+
+    // Choose interval based on range and max data points
+    if(hours <= maxDataPoints && hours <= 72) {
+        return TimeInterval.Hour;
+    }
+    if(days <= maxDataPoints && days <= 90) {
+        return TimeInterval.Day;
+    }
+    if(months <= maxDataPoints && months <= 36) {
+        return TimeInterval.Month;
+    }
+    if(years <= maxDataPoints && years <= 10) {
+        return TimeInterval.Year;
+    }
+
+    // Default to month for larger ranges
+    return TimeInterval.Month;
+}
