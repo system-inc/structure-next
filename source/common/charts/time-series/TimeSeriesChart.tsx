@@ -15,9 +15,10 @@ import {
     Bar,
     Line,
     Area,
+    XAxis,
+    YAxis,
 } from 'recharts';
 import { TimeSeriesTip } from './TimeSeriesTip';
-import { TimeSeriesAxes } from './components/TimeSeriesAxes';
 import { TimeSeriesReferenceArea } from './components/TimeSeriesReferenceArea';
 
 // Dependencies - Hooks
@@ -29,6 +30,8 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 // Dependencies - Utilities
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
+import { addCommas } from '@structure/source/utilities/Number';
+import { formatAxisTick, calculateTickInterval } from './utilities/TimeSeriesFormatters';
 
 // Type - TimeSeriesDataPoint
 export interface TimeSeriesDataPoint {
@@ -86,6 +89,12 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
     const [containerWidth, setContainerWidth] = React.useState<number>(600);
     const containerReference = React.useRef<HTMLDivElement>(null);
 
+    // Previous tick value tracking for formatters
+    const previousTickValueReference = React.useRef<string>('');
+
+    // Calculate tick interval
+    const tickInterval = calculateTickInterval(properties.data.length);
+
     // Effect to observe container size changes
     React.useEffect(function () {
         if(!containerReference.current) return;
@@ -118,13 +127,95 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                         <CartesianGrid strokeDasharray="3 3" stroke="var(--border-tertiary)" vertical={false} />
                     )}
 
-                    <TimeSeriesAxes
-                        showXAxis={showXAxis}
-                        showYAxis={showYAxis}
-                        data={properties.data}
-                        dataSources={properties.dataSources}
-                        timeInterval={properties.timeInterval || TimeInterval.Day}
-                    />
+                    {/* X Axes */}
+                    {showXAxis && (
+                        <>
+                            <XAxis
+                                xAxisId="0"
+                                dataKey="label"
+                                stroke="var(--border-primary)"
+                                tick={{ fill: 'var(--foreground-secondary)' }}
+                                interval={tickInterval}
+                                tickFormatter={function (value: string | number | undefined, index: number) {
+                                    const stringValue = String(value || '');
+                                    const result = formatAxisTick(
+                                        'primary',
+                                        properties.timeInterval || TimeInterval.Day,
+                                        stringValue,
+                                        index,
+                                        previousTickValueReference.current,
+                                        properties.data.length,
+                                    );
+                                    previousTickValueReference.current = stringValue;
+                                    return result;
+                                }}
+                                className="text-sm"
+                            />
+                            <XAxis
+                                xAxisId="1"
+                                dataKey="label"
+                                axisLine={false}
+                                tickLine={false}
+                                stroke="var(--border-primary)"
+                                tick={{ fill: 'var(--foreground-tertiary)' }}
+                                interval={tickInterval}
+                                tickFormatter={function (value: string | number | undefined, index: number) {
+                                    return formatAxisTick(
+                                        'secondary',
+                                        properties.timeInterval || TimeInterval.Day,
+                                        String(value || ''),
+                                        index,
+                                        (index > 0 && properties.data && properties.data[index - 1]?.label) || '',
+                                        properties.data.length,
+                                    );
+                                }}
+                                allowDuplicatedCategory={false}
+                                className="text-sm"
+                            />
+                        </>
+                    )}
+
+                    {/* Y Axes */}
+                    {showYAxis && (
+                        <>
+                            <YAxis
+                                yAxisId="left"
+                                orientation="left"
+                                stroke="var(--border-primary)"
+                                tick={{ fill: 'var(--foreground-secondary)' }}
+                                tickFormatter={function (value) {
+                                    // Find the first data source using left axis
+                                    const leftDataSource = properties.dataSources.find(
+                                        (currentDataSource) =>
+                                            !currentDataSource.yAxisAlignment ||
+                                            currentDataSource.yAxisAlignment === 'left',
+                                    );
+                                    if(leftDataSource?.formatValue) {
+                                        return leftDataSource.formatValue(value, 'Axis');
+                                    }
+                                    return addCommas(value);
+                                }}
+                                className="text-sm"
+                            />
+                            <YAxis
+                                yAxisId="right"
+                                orientation="right"
+                                stroke="var(--border-primary)"
+                                tick={{ fill: 'var(--foreground-secondary)' }}
+                                tickFormatter={function (value) {
+                                    // Find the first data source using right axis
+                                    const rightDataSource = properties.dataSources.find(
+                                        (currentDataSource) => currentDataSource.yAxisAlignment === 'right',
+                                    );
+                                    if(rightDataSource?.formatValue) {
+                                        return rightDataSource.formatValue(value, 'Axis');
+                                    }
+                                    return addCommas(value);
+                                }}
+                                className="text-sm"
+                            />
+                        </>
+                    )}
 
                     {showTooltip && (
                         <RechartsTooltip
