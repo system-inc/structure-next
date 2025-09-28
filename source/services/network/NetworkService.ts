@@ -12,6 +12,7 @@ import {
     keepPreviousData,
     Query,
 } from '@tanstack/react-query';
+import { experimental_createQueryPersister } from '@tanstack/query-persist-client-core';
 
 // Dependencies - API
 import {
@@ -186,7 +187,27 @@ export interface NetworkServiceOptions {
 
 // NetworkService class
 export class NetworkService {
+    // TanStack
     private tanStackReactQueryClient: tanStackReactQueryClient;
+    private tanStackReactQueryLocalStoragePersister =
+        typeof window !== 'undefined'
+            ? experimental_createQueryPersister({
+                  storage: window.localStorage,
+                  maxAge: Infinity, // Let query staleTime control expiry
+                  prefix: networkServiceCacheKey,
+                  buster: ProjectSettings.version,
+              })
+            : null;
+    private tanStackReactQuerySessionStoragePersister =
+        typeof window !== 'undefined'
+            ? experimental_createQueryPersister({
+                  storage: window.sessionStorage,
+                  maxAge: Infinity, // Let query staleTime control expiry
+                  prefix: networkServiceCacheKey,
+                  buster: ProjectSettings.version,
+              })
+            : null;
+
     private options: NetworkServiceOptions;
     private statisticsManager: NetworkStatistics;
     private deviceIdManager: NetworkServiceDeviceId;
@@ -239,6 +260,18 @@ export class NetworkService {
     // Get the async client for provider setup
     getTanStackReactQueryClient(): tanStackReactQueryClient {
         return this.tanStackReactQueryClient;
+    }
+
+    // Get the appropriate persister function based on cache mode
+    private getTanStackReactQueryPersisterFunction(cache?: false | 'Memory' | 'SessionStorage' | 'LocalStorage') {
+        switch(cache) {
+            case 'LocalStorage':
+                return this.tanStackReactQueryLocalStoragePersister?.persisterFn;
+            case 'SessionStorage':
+                return this.tanStackReactQuerySessionStoragePersister?.persisterFn;
+            default:
+                return undefined; // Memory only or cache disabled
+        }
     }
 
     // Check if running on server side
@@ -466,17 +499,12 @@ export class NetworkService {
                   gcTime: 0,
               };
 
-        // Add meta to track which storage type for persistence
-        const queryMeta = {
-            ...options.metadata,
-            cache: cacheMode === 'SessionStorage' || cacheMode === 'LocalStorage' ? cacheMode : undefined,
-        };
-
         const baseQueryOptions = {
             queryKey: options.cacheKey,
             queryFn: () =>
                 this.trackAsyncOperation(() => (options.request as (variables?: unknown) => Promise<TData>)()),
             enabled: options.enabled,
+            persister: this.getTanStackReactQueryPersisterFunction(cacheMode), // Use per-query persister
             ...cacheConfiguration, // Apply cache configuration
             refetchInterval: options.refreshIntervalInMilliseconds,
             refetchIntervalInBackground: options.refreshIntervalInBackground,
@@ -485,7 +513,7 @@ export class NetworkService {
             ...(options.maximumRetries !== undefined ? { retry: options.maximumRetries } : {}),
             initialData: options.initialData,
             select: options.select,
-            meta: queryMeta,
+            meta: options.metadata,
         };
 
         // Build complete options with placeholderData if needed
@@ -571,12 +599,25 @@ export class NetworkService {
     ): UseSuspenseRequestResultInterface<TSelected> {
         const queryClient = tanStackReactQueryUseQueryClient();
 
+        // Handle cache option for suspense queries
+        const cacheMode = options.cache ?? 'Memory';
+        const shouldCache = cacheMode !== false;
+        const cacheConfiguration = shouldCache
+            ? {
+                  staleTime: options.validDurationInMilliseconds,
+                  gcTime: options.clearAfterUnusedDurationInMilliseconds,
+              }
+            : {
+                  staleTime: 0,
+                  gcTime: 0,
+              };
+
         const queryResult = tanStackReactQueryUseSuspenseQuery(
             {
                 queryKey: options.cacheKey,
                 queryFn: () => this.trackAsyncOperation(() => options.request()),
-                staleTime: options.validDurationInMilliseconds,
-                gcTime: options.clearAfterUnusedDurationInMilliseconds,
+                persister: this.getTanStackReactQueryPersisterFunction(cacheMode), // Use per-query persister
+                ...cacheConfiguration,
                 refetchInterval: options.refreshIntervalInMilliseconds,
                 refetchIntervalInBackground: options.refreshIntervalInBackground,
                 refetchOnWindowFocus: options.refreshOnWindowFocus,
@@ -584,6 +625,7 @@ export class NetworkService {
                 ...(options.maximumRetries !== undefined ? { retry: options.maximumRetries } : {}),
                 initialData: options.initialData,
                 select: options.select,
+                meta: options.metadata,
             },
             this.tanStackReactQueryClient,
         );
@@ -706,37 +748,41 @@ export class NetworkService {
             return;
         }
 
-        // Clear from storage based on the specified type
+        // With per-query persistence, we need to clear all keys that match our pattern
+        // Keys are stored as: networkServiceCacheKey + '-' + queryHash
+        const keyPrefix = networkServiceCacheKey + '-';
+
+        // Clear localStorage
         if(storage === 'LocalStorage' || storage === 'All') {
+            const keysToRemove: string[] = [];
             // eslint-disable-next-line structure/local-storage-service-rule
-            window.localStorage.removeItem(networkServiceCacheKey);
+            for(let i = 0; i < window.localStorage.length; i++) {
+                // eslint-disable-next-line structure/local-storage-service-rule
+                const key = window.localStorage.key(i);
+                if(key && key.startsWith(keyPrefix)) {
+                    keysToRemove.push(key);
+                }
+            }
+            // eslint-disable-next-line structure/local-storage-service-rule
+            keysToRemove.forEach((key) => window.localStorage.removeItem(key));
         }
-        else if(storage === 'SessionStorage' || storage === 'All') {
-            window.sessionStorage.removeItem(networkServiceCacheKey);
+
+        // Clear sessionStorage
+        if(storage === 'SessionStorage' || storage === 'All') {
+            const keysToRemove: string[] = [];
+            for(let i = 0; i < window.sessionStorage.length; i++) {
+                const key = window.sessionStorage.key(i);
+                if(key && key.startsWith(keyPrefix)) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach((key) => window.sessionStorage.removeItem(key));
         }
     }
 
     // Function to get the size of the persisted cache in bytes
     getPersistedCacheSizeInBytes(storage: 'LocalStorage' | 'SessionStorage'): number {
-        if(this.isServerSide()) {
-            return 0;
-        }
-
-        try {
-            if(storage === 'LocalStorage') {
-                // eslint-disable-next-line structure/local-storage-service-rule
-                const data = window.localStorage.getItem(networkServiceCacheKey);
-                return data ? new Blob([data]).size : 0;
-            }
-            else {
-                const data = window.sessionStorage.getItem(networkServiceCacheKey);
-                return data ? new Blob([data]).size : 0;
-            }
-        }
-        catch(error) {
-            console.warn(`[NetworkService] Failed to get ${storage} cache size:`, error);
-            return 0;
-        }
+        return this.statisticsManager.getPersistedCacheSizeInBytes(storage, networkServiceCacheKey);
     }
 
     // Statistics methods

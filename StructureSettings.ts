@@ -38,6 +38,7 @@ interface Platform {
 
 // Interface - StructureSettingsInterface
 export interface StructureSettingsInterface {
+    version: string;
     identifier: string;
     title: string;
     ownerDisplayName: string;
@@ -89,6 +90,7 @@ export interface StructureSettingsInterface {
 
 // Default - StructureSettings
 export const StructureSettings: StructureSettingsInterface = {
+    version: '1.0.0',
     identifier: 'system',
     title: 'Structure',
     ownerDisplayName: 'System, Inc.',
