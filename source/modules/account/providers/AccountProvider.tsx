@@ -110,8 +110,8 @@ export function AccountProvider(properties: AccountProviderProperties) {
         {
             cacheKey: [accountCacheKey],
             enabled: shouldEnableAccountQuery, // Do not execute query if not signed in
-            cache: 'LocalStorage', // Enable localStorage persistence
-            validDurationInMilliseconds: Infinity, // Never stale, account data is validated by a signed in cookie
+            cache: 'LocalStorage', // LocalStorage to immediately show account information
+            validDurationInMilliseconds: 0, // Refresh on each page load in the background
         },
     );
 
