@@ -30,7 +30,7 @@ export function AccountMenuButton() {
     // Get the profile image alternate text
     let profileImageAlternateText = undefined;
     if(account.data) {
-        profileImageAlternateText = account.data.getPublicDisplayName();
+        profileImageAlternateText = account.data.profileDisplayName;
     }
 
     // Effect to close the popover when the pathname changes

@@ -57,27 +57,6 @@ export class Account {
     }
 
     /**
-     * Gets the public display name for the account
-     * @deprecated Use the profileDisplayName getter instead
-     * @returns The public display name string
-     */
-    getPublicDisplayName() {
-        let publicDisplayName = '';
-
-        // Use the display name from the profile
-        if(this.profile?.displayName) {
-            publicDisplayName = this.profile.displayName;
-        }
-        // If there is no display name, use username
-        else if(this.profile?.username) {
-            // Use the username
-            publicDisplayName = '@' + this.profile.username;
-        }
-
-        return publicDisplayName;
-    }
-
-    /**
      * Checks if the account has a specific role
      * @param role The role to check
      * @returns True if the account has the specified role

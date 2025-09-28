@@ -39,8 +39,8 @@ export function ProfilePage() {
                     {account.isLoading ? (
                         <PlaceholderAnimation className="h-8 w-48" />
                     ) : (
-                        account.data?.getPublicDisplayName() && (
-                            <h2 className="text-2xl font-semibold">{account.data.getPublicDisplayName()}</h2>
+                        account.data?.profileDisplayName && (
+                            <h2 className="text-2xl font-semibold">{account.data.profileDisplayName}</h2>
                         )
                     )}
 
