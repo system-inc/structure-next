@@ -149,15 +149,19 @@ export const sideNavigationLayoutNavigationSpringConfiguration = {
 // Component - SideNavigationLayoutNavigation
 export interface SideNavigationLayoutNavigationProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
+    layout?: 'Fixed' | 'Flex'; // Layout mode: 'Fixed' for standalone pages, 'Flex' for nested in flex containers (default: 'Fixed')
     children: React.ReactNode;
     className?: string;
     topClassName?: string;
-    topBar?: boolean;
+    showHeader?: boolean;
+    showHeaderBorder?: boolean;
     topTitle?: React.ReactNode;
 }
 export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutNavigationProperties) {
     // Defaults
-    const topBar = properties.topBar ?? false;
+    const layout = properties.layout ?? 'Fixed';
+    const showHeader = properties.showHeader ?? false;
+    const showHeaderBorder = properties.showHeaderBorder ?? true;
 
     // Render the component
     return (
@@ -166,15 +170,17 @@ export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutN
             <SideNavigationLayoutNavigationTop
                 layoutIdentifier={properties.layoutIdentifier}
                 className={properties.topClassName}
-                topBar={topBar}
+                showHeader={showHeader}
+                showHeaderBorder={showHeaderBorder}
                 title={properties.topTitle}
             />
 
             {/* Side */}
             <SideNavigationLayoutNavigationSide
                 layoutIdentifier={properties.layoutIdentifier}
+                layout={layout}
                 className={properties.className}
-                topBar={topBar}
+                showHeader={showHeader}
             >
                 {properties.children}
             </SideNavigationLayoutNavigationSide>

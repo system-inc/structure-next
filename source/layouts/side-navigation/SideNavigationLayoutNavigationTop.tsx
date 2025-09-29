@@ -25,11 +25,13 @@ export interface SideNavigationLayoutNavigationTopProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
     title?: React.ReactNode;
     className?: string;
-    topBar?: boolean;
+    showHeader?: boolean;
+    showHeaderBorder?: boolean;
 }
 export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayoutNavigationTopProperties) {
     // Defaults
-    const topBar = properties.topBar ?? false;
+    const showHeader = properties.showHeader ?? false;
+    const showHeaderBorder = properties.showHeaderBorder ?? true;
 
     // References
     const firstMount = React.useRef(true);
@@ -55,8 +57,8 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
     // Effect to animate the top bar bottom border left margin when the navigation is opened, closed, or resized
     React.useEffect(
         function () {
-            // Only if the top bar is enabled and the top bar bottom border div reference exists
-            if(topBar && topBarBottomBorderDivReference.current) {
+            // Only if the header border is enabled and the top bar bottom border div reference exists
+            if(showHeaderBorder && topBarBottomBorderDivReference.current) {
                 // Animate the left margin
                 topBarBottomBorderDivSpringControl.start({
                     marginLeft:
@@ -90,11 +92,19 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
         [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 
+    // Early return if no header wanted (after all hooks)
+    if(!showHeader) {
+        return null;
+    }
+
     // Render the component
     return (
         <>
+            {/* Top Bar Background */}
+            <div className="pointer-events-none fixed z-30 h-14 w-full bg-light dark:bg-dark-1" />
+
             {/* Top Bar Bottom Border */}
-            {topBar && (
+            {showHeaderBorder && (
                 <animated.div
                     ref={topBarBottomBorderDivReference}
                     style={topBarBottomBorderDivSpring}

@@ -35,21 +35,66 @@ const SideNavigationLayoutNavigation = dynamic(
 // Component - SideNavigationLayout
 export interface SideNavigationLayoutProperties {
     identifier: string;
+    layout?: 'Fixed' | 'Flex'; // Layout mode: 'Fixed' for standalone pages, 'Flex' for nested in flex containers (default: 'Fixed')
     navigation: React.ReactNode;
     contentBody: React.ReactNode;
     children?: React.ReactNode;
-    topBar?: boolean;
+    showHeader?: boolean;
+    showHeaderBorder?: boolean;
     topTitle?: React.ReactNode;
+    navigationClassName?: string; // Additional classes for the navigation sidebar
+    contentClassName?: string; // Additional classes for the content area
 }
 export function SideNavigationLayout(properties: SideNavigationLayoutProperties) {
+    // Defaults
+    const layout = properties.layout ?? 'Fixed';
+
     // Render the component
+    // For Flex layout, wrap in a flex container
+    // For Fixed layout, render as siblings (navigation overlays content)
+    if(layout === 'Flex') {
+        return (
+            <div className="flex h-full w-full">
+                {/* Navigation */}
+                <SideNavigationLayoutNavigation
+                    layoutIdentifier={properties.identifier}
+                    layout={layout}
+                    showHeader={properties.showHeader}
+                    showHeaderBorder={properties.showHeaderBorder}
+                    topTitle={properties.topTitle}
+                    className={properties.navigationClassName}
+                >
+                    {properties.navigation}
+                </SideNavigationLayoutNavigation>
+
+                {/* Content */}
+                <SideNavigationLayoutContent
+                    layoutIdentifier={properties.identifier}
+                    layout={layout}
+                    showHeader={properties.showHeader}
+                    topTitle={properties.topTitle}
+                    className={properties.contentClassName}
+                >
+                    <SideNavigationLayoutContentBody>{properties.contentBody}</SideNavigationLayoutContentBody>
+                </SideNavigationLayoutContent>
+
+                {/* Children */}
+                {properties.children}
+            </div>
+        );
+    }
+
+    // Fixed layout - render as siblings
     return (
         <>
             {/* Navigation */}
             <SideNavigationLayoutNavigation
                 layoutIdentifier={properties.identifier}
-                topBar={properties.topBar}
+                layout={layout}
+                showHeader={properties.showHeader}
+                showHeaderBorder={properties.showHeaderBorder}
                 topTitle={properties.topTitle}
+                className={properties.navigationClassName}
             >
                 {properties.navigation}
             </SideNavigationLayoutNavigation>
@@ -57,7 +102,10 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
             {/* Content */}
             <SideNavigationLayoutContent
                 layoutIdentifier={properties.identifier}
-                // topTitle={properties.topTitle}
+                layout={layout}
+                showHeader={properties.showHeader}
+                topTitle={properties.topTitle}
+                className={properties.contentClassName}
             >
                 <SideNavigationLayoutContentBody>{properties.contentBody}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>

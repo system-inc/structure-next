@@ -3,9 +3,6 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - Main Components
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
-
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
@@ -20,14 +17,9 @@ export interface SideNavigationLayoutContentBodyProperties {
 export function SideNavigationLayoutContentBody(properties: SideNavigationLayoutContentBodyProperties) {
     // Render the component
     return (
-        <ScrollArea
-            ref={properties.scrollAreaReference}
-            containerClassName={mergeClassNames('h-full', properties.containerClassName)}
-        >
+        <div className={mergeClassNames('h-full', properties.containerClassName)}>
             {/* This child div is necessary for easily managing multiple page layouts */}
-            <div className={mergeClassNames('h-full max-h-[calc(100vh-3.5rem)]', properties.className)}>
-                {properties.children}
-            </div>
-        </ScrollArea>
+            <div className={mergeClassNames('h-full', properties.className)}>{properties.children}</div>
+        </div>
     );
 }

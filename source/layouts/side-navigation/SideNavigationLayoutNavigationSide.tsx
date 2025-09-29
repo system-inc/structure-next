@@ -5,7 +5,6 @@ import React from 'react';
 import { useUrlPath, useUrlParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import { useDrag } from '@use-gesture/react';
 import {
     desktopMinimumWidth,
@@ -39,13 +38,15 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - SideNavigationLayoutNavigationSide
 export interface SideNavigationLayoutNavigationSideProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
+    layout?: 'Fixed' | 'Flex'; // Layout mode: 'Fixed' for standalone pages, 'Flex' for nested in flex containers (default: 'Fixed')
     children: React.ReactNode;
     className?: string;
-    topBar?: boolean;
+    showHeader?: boolean;
 }
 export function SideNavigationLayoutNavigationSide(properties: SideNavigationLayoutNavigationSideProperties) {
     // Defaults
-    const topBar = properties.topBar ?? false;
+    const layout = properties.layout ?? 'Fixed';
+    const showHeader = properties.showHeader ?? false;
 
     // Hooks
     const urlPath = useUrlPath();
@@ -83,12 +84,20 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     // Spring to animate the container
     const [containerSpring, containerSpringControl] = useSpring(function () {
         return {
+            // For Fixed layout: animate x position (leave 4px drag bar visible when closed)
             x:
-                sideNavigationLayoutNavigationOpen === true
-                    ? // If the navigation is open, animate the container to be at the left edge
-                      0
-                    : // Otherwise, animate the container to be at negative width to hide it
-                      -sideNavigationLayoutNavigationWidth,
+                layout === 'Fixed'
+                    ? sideNavigationLayoutNavigationOpen === true
+                        ? 0
+                        : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
+                    : 0,
+            // For Flex layout: animate marginLeft position (similar to Fixed's x)
+            marginLeft:
+                layout === 'Flex'
+                    ? sideNavigationLayoutNavigationOpen === true
+                        ? 0
+                        : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
+                    : 0,
             // If the navigation is open, animate the overlay to be at 1 opacity
             overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
         };
@@ -105,27 +114,16 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationIsResizing(false);
             }
 
-            // Set the width equal to the starting with plus the movement x
+            // Set the width equal to the starting width plus the movement x
             containerDivWidthReference.current = defaultNavigationWidth + dragState.offset[0];
 
-            // Bound the width to the minimum and maximum
-            if(containerDivWidthReference.current > maximumNavigationWidth) {
-                containerDivWidthReference.current = maximumNavigationWidth;
-            }
-            else if(containerDivWidthReference.current < minimumNavigationWidth) {
-                containerDivWidthReference.current = minimumNavigationWidth;
-            }
+            // Check if dragging far enough past minimum to trigger collapse
+            // When width would go below 100px (well past minimum of 244px), collapse instead
+            const wouldCollapseWidth = 100;
+            const shouldCollapse = containerDivWidthReference.current < wouldCollapseWidth;
 
-            // Snap +/- 10 pixels from defaultNavigationWidth
-            if(
-                containerDivWidthReference.current >= defaultNavigationWidth - 10 &&
-                containerDivWidthReference.current <= defaultNavigationWidth + 10
-            ) {
-                containerDivWidthReference.current = defaultNavigationWidth;
-            }
-
-            // If dragging far enough to the left, close the navigation
-            if(dragState.offset[0] < -minimumNavigationWidth) {
+            // If should collapse, close the navigation
+            if(shouldCollapse) {
                 // Close the navigation
                 setSideNavigationLayoutNavigationOpen(false);
 
@@ -136,8 +134,27 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 }
             }
             else {
-                // If the navigation is closed
-                if(sideNavigationLayoutNavigationOpen === false) {
+                // Not collapsing - handle normal resize behavior
+
+                // Bound the width to the minimum and maximum
+                if(containerDivWidthReference.current > maximumNavigationWidth) {
+                    containerDivWidthReference.current = maximumNavigationWidth;
+                }
+                else if(containerDivWidthReference.current < minimumNavigationWidth) {
+                    containerDivWidthReference.current = minimumNavigationWidth;
+                }
+
+                // Snap +/- 10 pixels from defaultNavigationWidth
+                if(
+                    containerDivWidthReference.current >= defaultNavigationWidth - 10 &&
+                    containerDivWidthReference.current <= defaultNavigationWidth + 10
+                ) {
+                    containerDivWidthReference.current = defaultNavigationWidth;
+                }
+                // If the navigation is closed, we're restoring from collapse
+                const isRestoringFromCollapse = sideNavigationLayoutNavigationOpen === false;
+
+                if(isRestoringFromCollapse) {
                     // console.log('Opening navigation by drag');
                     setSideNavigationLayoutNavigationIsOpeningByDrag(true);
                 }
@@ -182,7 +199,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             target: containerResizeHandleDivReference,
             // Bound the drag
             bounds: {
-                // left: minimumNavigationWidth - defaultNavigationWidth,
+                // No left bound to allow dragging far left for collapse gesture
                 right: maximumNavigationWidth - defaultNavigationWidth,
             },
             from: [sideNavigationLayoutNavigationWidth - defaultNavigationWidth, 0],
@@ -239,8 +256,20 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     React.useEffect(
         function () {
             containerSpringControl.start({
-                // If the navigation is open, animate the container to be at the left edge
-                x: sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth,
+                // For Fixed layout: animate x position (leave 4px drag bar visible when closed)
+                x:
+                    layout === 'Fixed'
+                        ? sideNavigationLayoutNavigationOpen === true
+                            ? 0
+                            : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
+                        : 0,
+                // For Flex layout: animate marginLeft position (similar to Fixed's x)
+                marginLeft:
+                    layout === 'Flex'
+                        ? sideNavigationLayoutNavigationOpen === true
+                            ? 0
+                            : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
+                        : 0,
                 // If the navigation is open, animate the overlay to be at 1 opacity
                 overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
                 // Use the imported spring configuration for consistent animation
@@ -406,40 +435,64 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             <animated.div
                 ref={containerDivReference}
                 className={mergeClassNames(
-                    'fixed top-0 z-20 flex h-full flex-col bg-light dark:bg-dark-1',
-                    // If there is no top bar or the window is less than the desktop minimum width and the side navigation is not closing by window resize
-                    // add a border to the right
-                    !topBar ||
+                    // Use fixed positioning for Fixed layout, relative for Flex layout
+                    layout === 'Fixed' ? 'fixed z-20' : 'relative',
+                    'flex h-full flex-col bg-light dark:bg-dark-1',
+                    // For Flex layout, prevent flexbox from shrinking the navigation
+                    layout === 'Flex' ? 'flex-shrink-0' : '',
+                    // Hide overflow when closed for both layouts
+                    !sideNavigationLayoutNavigationOpen ? 'overflow-hidden' : '',
+                    // If there is no header or the window is less than the desktop minimum width and the side navigation is not closing by window resize
+                    // add a border to the right (but hide it when collapsed for both layouts)
+                    (!showHeader ||
                         (windowInnerWidth < desktopMinimumWidth &&
-                            !sideNavigationLayoutNavigationIsClosingByWindowResize)
+                            !sideNavigationLayoutNavigationIsClosingByWindowResize)) &&
+                        sideNavigationLayoutNavigationOpen // Only show border when open
                         ? 'border-r border-r-light-4 dark:border-r-dark-4'
                         : '',
                     properties.className,
                 )}
-                style={{ width: sideNavigationLayoutNavigationWidth + 'px', ...containerSpring }}
+                style={{
+                    // Both layouts: use static width (immediate updates during drag)
+                    width: sideNavigationLayoutNavigationWidth + 'px',
+                    // For Fixed layout: animate x position
+                    // For Flex layout: animate marginLeft position
+                    ...(layout === 'Fixed'
+                        ? {
+                              x: containerSpring.x,
+                              overlayOpacity: containerSpring.overlayOpacity,
+                          }
+                        : {
+                              marginLeft: containerSpring.marginLeft,
+                              overlayOpacity: containerSpring.overlayOpacity,
+                          }),
+                }}
             >
-                <ScrollArea
-                    containerClassName={mergeClassNames(
-                        'mt-14 h-full',
-                        // If there is a top bar and the window is at least the desktop minimum width
-                        // add a border to the right
-                        topBar && windowInnerWidth >= desktopMinimumWidth
+                {/* Wrapper for content - no ScrollArea here, let children handle their own scrolling */}
+                <div
+                    className={mergeClassNames(
+                        'h-full',
+                        // If there is a header, add margin top for header height
+                        showHeader ? 'mt-14' : '',
+                        // If there is a header and the window is at least the desktop minimum width
+                        // add a border to the right (but only when open)
+                        showHeader && windowInnerWidth >= desktopMinimumWidth && sideNavigationLayoutNavigationOpen
                             ? 'border-r border-r-light-4 dark:border-r-dark-4'
                             : '',
                     )}
                 >
                     {properties.children}
-                </ScrollArea>
+                </div>
 
                 {/* Navigation Resize Handle */}
                 <div
                     ref={containerResizeHandleDivReference}
                     className={mergeClassNames(
                         'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none select-none bg-transparent duration-500 hover:bg-blue active:bg-purple-500',
-                        // If the top bar is enabled, offset the handle by the height of the top bar
-                        topBar && windowInnerWidth >= desktopMinimumWidth ? 'top-16' : '',
-                        // If the navigation is open, show the handle, otherwise disable interacting with it
-                        sideNavigationLayoutNavigationOpen ? 'pointer-events-auto' : 'pointer-events-none',
+                        // If there is a header, offset the handle by the height of the header (h-14 = 56px)
+                        showHeader && windowInnerWidth >= desktopMinimumWidth ? 'top-14' : '',
+                        // Always allow pointer events for drag-to-open functionality
+                        'pointer-events-auto',
                     )}
                 ></div>
             </animated.div>

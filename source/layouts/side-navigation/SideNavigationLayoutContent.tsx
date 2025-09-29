@@ -27,11 +27,16 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Component - SideNavigationLayoutContent
 export interface SideNavigationLayoutContentProperties {
     layoutIdentifier: string; // Used to differentiate between different implementations of side navigations (and their local storage keys)
+    layout?: 'Fixed' | 'Flex'; // Layout mode: 'Fixed' for standalone pages, 'Flex' for nested in flex containers (default: 'Fixed')
+    showHeader?: boolean;
     topTitle?: React.ReactNode;
     children: React.ReactNode;
     className?: string;
 }
 export function SideNavigationLayoutContent(properties: SideNavigationLayoutContentProperties) {
+    // Defaults
+    const layout = properties.layout ?? 'Fixed';
+    const showHeader = properties.showHeader ?? false;
     // References
     const firstMount = React.useRef(true);
 
@@ -57,32 +62,36 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
     });
 
     // Effect to animate the content div padding when the navigation is opened, closed, or resized
+    // Only applies to Fixed layout
     React.useEffect(
         function () {
-            // Animate the padding
-            contentDivSpringControl.start({
-                paddingLeft:
-                    // Do not apply the padding
-                    // On mobile
-                    window.innerWidth < desktopMinimumWidth ||
-                    // Or if the navigation is closed
-                    sideNavigationLayoutNavigationOpen === false
-                        ? 0
-                        : sideNavigationLayoutNavigationWidth,
-                // Use the imported spring configuration for consistent animation
-                config: sideNavigationLayoutNavigationSpringConfiguration,
-                immediate:
-                    // Conditionally apply the animation immediately
-                    // If on first mount
-                    // Using first mount prevents the animation from running on the first render, which would animate
-                    // content on the screen on the first load
-                    firstMount.current ||
-                    // Or if the navigation is open and is resizing and not opening by drag and not closing by window resize
-                    (sideNavigationLayoutNavigationOpen &&
-                        sideNavigationLayoutNavigationIsResizing &&
-                        !sideNavigationLayoutNavigationIsOpeningByDrag &&
-                        !sideNavigationLayoutNavigationIsClosingByWindowResize),
-            });
+            // Only animate padding for Fixed layout
+            if(layout === 'Fixed') {
+                // Animate the padding
+                contentDivSpringControl.start({
+                    paddingLeft:
+                        // Do not apply the padding
+                        // On mobile
+                        window.innerWidth < desktopMinimumWidth ||
+                        // Or if the navigation is closed
+                        sideNavigationLayoutNavigationOpen === false
+                            ? 0
+                            : sideNavigationLayoutNavigationWidth,
+                    // Use the imported spring configuration for consistent animation
+                    config: sideNavigationLayoutNavigationSpringConfiguration,
+                    immediate:
+                        // Conditionally apply the animation immediately
+                        // If on first mount
+                        // Using first mount prevents the animation from running on the first render, which would animate
+                        // content on the screen on the first load
+                        firstMount.current ||
+                        // Or if the navigation is open and is resizing and not opening by drag and not closing by window resize
+                        (sideNavigationLayoutNavigationOpen &&
+                            sideNavigationLayoutNavigationIsResizing &&
+                            !sideNavigationLayoutNavigationIsOpeningByDrag &&
+                            !sideNavigationLayoutNavigationIsClosingByWindowResize),
+                });
+            }
             // Set first mount to false
             firstMount.current = false;
         },
@@ -94,8 +103,17 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
     // Render the component
     return (
         <animated.div
-            style={contentDivSpring}
-            className={mergeClassNames('relative h-screen w-screen overscroll-none', properties.className)}
+            style={layout === 'Fixed' ? contentDivSpring : {}}
+            className={mergeClassNames(
+                'relative overscroll-none',
+                // Use h-screen for Fixed layout, h-full for Flex layout
+                layout === 'Fixed' ? 'h-screen w-screen' : 'h-full w-full',
+                // For Fixed layout, use z-10 to stay below the header (z-30) but above other content
+                layout === 'Fixed' ? 'z-10' : '',
+                // For Flex layout, grow to fill remaining space and allow shrinking below content width
+                layout === 'Flex' ? 'min-w-0 flex-1' : '',
+                properties.className,
+            )}
             suppressHydrationWarning
         >
             {/* Show the line loading animation when the page is loading */}
@@ -107,8 +125,21 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
                 }
             >
                 {/* Page */}
-                <div className="flex h-14 items-center justify-center px-4 md:justify-start">{properties.topTitle}</div>
-                <div className="flex h-[calc(100vh-3.5rem)] w-full flex-col overscroll-none">{properties.children}</div>
+                {/* Only render content header if topTitle exists AND there's no fixed header */}
+                {!showHeader && properties.topTitle && (
+                    <div className="flex h-14 items-center justify-center px-4 md:justify-start">
+                        {properties.topTitle}
+                    </div>
+                )}
+                <div
+                    className={mergeClassNames(
+                        'flex h-full w-full flex-col overscroll-none',
+                        // When showHeader={true}: Add top padding to prevent content from going under fixed header
+                        showHeader ? 'pt-14' : '',
+                    )}
+                >
+                    {properties.children}
+                </div>
             </React.Suspense>
         </animated.div>
     );
