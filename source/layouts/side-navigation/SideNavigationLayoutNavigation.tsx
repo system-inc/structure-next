@@ -55,7 +55,9 @@ export function getAtomForNavigationOpen(identifier: string) {
 }
 
 // Function to get an atom for navigation width
-export function getAtomForNavigationWidth(identifier: string) {
+export function getAtomForNavigationWidth(identifier: string, customDefaultWidth?: number) {
+    const defaultWidth = customDefaultWidth ?? defaultNavigationWidth;
+
     // If the atom does not exist
     if(!atomsForNavigationWidth.has(identifier)) {
         // Create the atom
@@ -63,7 +65,7 @@ export function getAtomForNavigationWidth(identifier: string) {
             identifier,
             atomWithStorage<number>(
                 getSideNavigationLayoutLocalStorageKey(identifier) + 'Width', // Key
-                defaultNavigationWidth, // Default value
+                defaultWidth, // Default value
                 // Use session storage to isolate the state to the current tab
                 typeof sessionStorage !== 'undefined'
                     ? createJSONStorage(function () {
@@ -156,6 +158,9 @@ export interface SideNavigationLayoutNavigationProperties {
     showHeader?: boolean;
     showHeaderBorder?: boolean;
     topTitle?: React.ReactNode;
+    defaultNavigationWidth?: number; // Default width of the navigation sidebar in pixels (default: 288)
+    minimumNavigationWidth?: number; // Minimum width of the navigation sidebar in pixels (default: 244)
+    maximumNavigationWidth?: number; // Maximum width of the navigation sidebar in pixels (default: 488)
 }
 export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutNavigationProperties) {
     // Defaults
@@ -181,6 +186,9 @@ export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutN
                 layout={layout}
                 className={properties.className}
                 showHeader={showHeader}
+                defaultNavigationWidth={properties.defaultNavigationWidth}
+                minimumNavigationWidth={properties.minimumNavigationWidth}
+                maximumNavigationWidth={properties.maximumNavigationWidth}
             >
                 {properties.children}
             </SideNavigationLayoutNavigationSide>

@@ -42,11 +42,19 @@ export interface SideNavigationLayoutNavigationSideProperties {
     children: React.ReactNode;
     className?: string;
     showHeader?: boolean;
+    defaultNavigationWidth?: number; // Default width of the navigation sidebar in pixels (default: 288)
+    minimumNavigationWidth?: number; // Minimum width of the navigation sidebar in pixels (default: 244)
+    maximumNavigationWidth?: number; // Maximum width of the navigation sidebar in pixels (default: 488)
 }
 export function SideNavigationLayoutNavigationSide(properties: SideNavigationLayoutNavigationSideProperties) {
     // Defaults
     const layout = properties.layout ?? 'Fixed';
     const showHeader = properties.showHeader ?? false;
+
+    // Width configuration with defaults from the imported constants
+    const configuredDefaultNavigationWidth = properties.defaultNavigationWidth ?? defaultNavigationWidth;
+    const configuredMinimumNavigationWidth = properties.minimumNavigationWidth ?? minimumNavigationWidth;
+    const configuredMaximumNavigationWidth = properties.maximumNavigationWidth ?? maximumNavigationWidth;
 
     // Hooks
     const urlPath = useUrlPath();
@@ -57,7 +65,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         getAtomForNavigationOpen(properties.layoutIdentifier),
     );
     const [sideNavigationLayoutNavigationWidth, setSideNavigationLayoutNavigationWidth] = useAtom(
-        getAtomForNavigationWidth(properties.layoutIdentifier),
+        getAtomForNavigationWidth(properties.layoutIdentifier, configuredDefaultNavigationWidth),
     );
     const [sideNavigationLayoutNavigationManuallyClosed, setSideNavigationLayoutNavigationManuallyClosed] = useAtom(
         getAtomForNavigationManuallyClosed(properties.layoutIdentifier),
@@ -115,7 +123,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             }
 
             // Set the width equal to the starting width plus the movement x
-            containerDivWidthReference.current = defaultNavigationWidth + dragState.offset[0];
+            containerDivWidthReference.current = configuredDefaultNavigationWidth + dragState.offset[0];
 
             // Check if dragging far enough past minimum to trigger collapse
             // When width would go below 100px (well past minimum of 244px), collapse instead
@@ -137,19 +145,19 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 // Not collapsing - handle normal resize behavior
 
                 // Bound the width to the minimum and maximum
-                if(containerDivWidthReference.current > maximumNavigationWidth) {
-                    containerDivWidthReference.current = maximumNavigationWidth;
+                if(containerDivWidthReference.current > configuredMaximumNavigationWidth) {
+                    containerDivWidthReference.current = configuredMaximumNavigationWidth;
                 }
-                else if(containerDivWidthReference.current < minimumNavigationWidth) {
-                    containerDivWidthReference.current = minimumNavigationWidth;
+                else if(containerDivWidthReference.current < configuredMinimumNavigationWidth) {
+                    containerDivWidthReference.current = configuredMinimumNavigationWidth;
                 }
 
-                // Snap +/- 10 pixels from defaultNavigationWidth
+                // Snap +/- 10 pixels from configuredDefaultNavigationWidth
                 if(
-                    containerDivWidthReference.current >= defaultNavigationWidth - 10 &&
-                    containerDivWidthReference.current <= defaultNavigationWidth + 10
+                    containerDivWidthReference.current >= configuredDefaultNavigationWidth - 10 &&
+                    containerDivWidthReference.current <= configuredDefaultNavigationWidth + 10
                 ) {
-                    containerDivWidthReference.current = defaultNavigationWidth;
+                    containerDivWidthReference.current = configuredDefaultNavigationWidth;
                 }
                 // If the navigation is closed, we're restoring from collapse
                 const isRestoringFromCollapse = sideNavigationLayoutNavigationOpen === false;
@@ -200,9 +208,9 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             // Bound the drag
             bounds: {
                 // No left bound to allow dragging far left for collapse gesture
-                right: maximumNavigationWidth - defaultNavigationWidth,
+                right: configuredMaximumNavigationWidth - configuredDefaultNavigationWidth,
             },
-            from: [sideNavigationLayoutNavigationWidth - defaultNavigationWidth, 0],
+            from: [sideNavigationLayoutNavigationWidth - configuredDefaultNavigationWidth, 0],
             filterTaps: true, // Prevent taps from triggering the drag
         },
     );
@@ -219,20 +227,20 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             // Function to handle the double click event
             function handleDoubleClick() {
                 // Reset the width to the default width
-                containerDivWidthReference.current = defaultNavigationWidth;
+                containerDivWidthReference.current = configuredDefaultNavigationWidth;
 
                 // Update the container width
                 if(containerDivReference.current) {
-                    containerDivReference.current.style.width = `${defaultNavigationWidth}px`;
+                    containerDivReference.current.style.width = `${configuredDefaultNavigationWidth}px`;
                 }
 
                 // Update the shared state
-                setSideNavigationLayoutNavigationWidth(defaultNavigationWidth);
+                setSideNavigationLayoutNavigationWidth(configuredDefaultNavigationWidth);
 
                 // Update the local storage
                 localStorageService.set<number>(
                     getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
-                    defaultNavigationWidth,
+                    configuredDefaultNavigationWidth,
                 );
             }
 
@@ -249,7 +257,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 }
             };
         },
-        [setSideNavigationLayoutNavigationWidth, properties.layoutIdentifier],
+        [setSideNavigationLayoutNavigationWidth, properties.layoutIdentifier, configuredDefaultNavigationWidth],
     );
 
     // Effect to animate the navigation when opening, closing, or resizing

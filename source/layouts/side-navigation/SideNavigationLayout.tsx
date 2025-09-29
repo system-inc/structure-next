@@ -44,6 +44,9 @@ export interface SideNavigationLayoutProperties {
     topTitle?: React.ReactNode;
     navigationClassName?: string; // Additional classes for the navigation sidebar
     contentClassName?: string; // Additional classes for the content area
+    defaultNavigationWidth?: number; // Default width of the navigation sidebar in pixels (default: 288)
+    minimumNavigationWidth?: number; // Minimum width of the navigation sidebar in pixels (default: 244)
+    maximumNavigationWidth?: number; // Maximum width of the navigation sidebar in pixels (default: 488)
 }
 export function SideNavigationLayout(properties: SideNavigationLayoutProperties) {
     // Defaults
@@ -63,6 +66,9 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
                     showHeaderBorder={properties.showHeaderBorder}
                     topTitle={properties.topTitle}
                     className={properties.navigationClassName}
+                    defaultNavigationWidth={properties.defaultNavigationWidth}
+                    minimumNavigationWidth={properties.minimumNavigationWidth}
+                    maximumNavigationWidth={properties.maximumNavigationWidth}
                 >
                     {properties.navigation}
                 </SideNavigationLayoutNavigation>
@@ -95,6 +101,9 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
                 showHeaderBorder={properties.showHeaderBorder}
                 topTitle={properties.topTitle}
                 className={properties.navigationClassName}
+                defaultNavigationWidth={properties.defaultNavigationWidth}
+                minimumNavigationWidth={properties.minimumNavigationWidth}
+                maximumNavigationWidth={properties.maximumNavigationWidth}
             >
                 {properties.navigation}
             </SideNavigationLayoutNavigation>
