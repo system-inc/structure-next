@@ -45,10 +45,10 @@ export function OpsNavigationBar() {
     // Render the component
     return (
         <Dialog.Root open={open} onOpenChange={setOpen} modal={false}>
-            {/* Top Bar Bottom Border */}
-            <div className="relative z-30 h-14 w-full border-b border-b-light-4 bg-opsis-background-primary dark:border-b-dark-4">
+            {/* Top Bar */}
+            <div className="relative z-30 h-12 w-full bg-opsis-background-primary">
                 {/* Top Left */}
-                <div className="absolute left-4 z-30 flex h-14 items-center">
+                <div className="absolute left-[10px] z-30 flex h-12 items-center">
                     <div className={mergeClassNames('mr-4 flex flex-shrink-0 items-center space-x-2')}>
                         {/* Logo */}
                         <Link href="/">
@@ -72,7 +72,7 @@ export function OpsNavigationBar() {
 
                         {/* Menu button */}
                         <Dialog.Trigger asChild>
-                            <Button className="rounded-small !bg-transparent">
+                            <Button className="h-auto rounded-small !bg-transparent py-[6px]">
                                 <svg
                                     width="16"
                                     height="16"
@@ -96,7 +96,7 @@ export function OpsNavigationBar() {
                 </div>
 
                 {/* Top Right */}
-                <div className="absolute right-4 z-30 flex h-14 items-center">
+                <div className="absolute right-3 z-30 flex h-12 items-center">
                     <AccountMenuButton />
                 </div>
             </div>
@@ -122,9 +122,9 @@ export function OpsNavigationBar() {
                                         duration: 0.5,
                                         ease: [0.075, 0.82, 0.165, 1],
                                     }}
-                                    className="fixed bottom-0 left-0 top-14 p-2"
+                                    className="fixed bottom-0 left-0 top-10 p-2"
                                 >
-                                    <div className="h-full w-56 overflow-y-auto rounded-medium border bg-opsis-background-tetriary">
+                                    <div className="h-full w-56 overflow-y-auto rounded-lg border bg-opsis-background-tetriary">
                                         <OpsNavigation />
                                     </div>
                                 </motion.div>

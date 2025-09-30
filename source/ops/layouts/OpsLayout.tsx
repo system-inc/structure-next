@@ -24,8 +24,13 @@ export function OpsLayout(properties: OpsLayoutProperties) {
                 <OpsNavigationBar />
             </div>
 
-            {/* Content - Takes remaining space */}
-            <div className="flex-1 overflow-auto">{properties.children}</div>
+            {/* Main Content - Wrapper with padding */}
+            <div className="flex min-h-0 flex-1 bg-opsis-background-primary px-2 pb-2 pt-0">
+                {/* Content Container - Rounded border box */}
+                <div className="flex-1 overflow-auto rounded-lg border border-opsis-border-primary">
+                    {properties.children}
+                </div>
+            </div>
 
             {/* Dialog Menu */}
             {/* <OpsDialogMenu /> */}
