@@ -47,6 +47,7 @@ export interface SideNavigationLayoutProperties {
     defaultNavigationWidth?: number; // Default width of the navigation sidebar in pixels (default: 288)
     minimumNavigationWidth?: number; // Minimum width of the navigation sidebar in pixels (default: 244)
     maximumNavigationWidth?: number; // Maximum width of the navigation sidebar in pixels (default: 488)
+    alwaysShowNavigationOnDesktop?: boolean; // When true, prevents navigation from being collapsed or hidden on desktop (mobile behavior unchanged)
 }
 export function SideNavigationLayout(properties: SideNavigationLayoutProperties) {
     // Defaults
@@ -69,6 +70,7 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
                     defaultNavigationWidth={properties.defaultNavigationWidth}
                     minimumNavigationWidth={properties.minimumNavigationWidth}
                     maximumNavigationWidth={properties.maximumNavigationWidth}
+                    alwaysShowNavigationOnDesktop={properties.alwaysShowNavigationOnDesktop}
                 >
                     {properties.navigation}
                 </SideNavigationLayoutNavigation>
@@ -104,6 +106,7 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
                 defaultNavigationWidth={properties.defaultNavigationWidth}
                 minimumNavigationWidth={properties.minimumNavigationWidth}
                 maximumNavigationWidth={properties.maximumNavigationWidth}
+                alwaysShowNavigationOnDesktop={properties.alwaysShowNavigationOnDesktop}
             >
                 {properties.navigation}
             </SideNavigationLayoutNavigation>

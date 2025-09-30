@@ -45,6 +45,7 @@ export interface SideNavigationLayoutNavigationSideProperties {
     defaultNavigationWidth?: number; // Default width of the navigation sidebar in pixels (default: 288)
     minimumNavigationWidth?: number; // Minimum width of the navigation sidebar in pixels (default: 244)
     maximumNavigationWidth?: number; // Maximum width of the navigation sidebar in pixels (default: 488)
+    alwaysShowNavigationOnDesktop?: boolean; // When true, prevents navigation from being collapsed or hidden on desktop (mobile behavior unchanged)
 }
 export function SideNavigationLayoutNavigationSide(properties: SideNavigationLayoutNavigationSideProperties) {
     // Defaults
@@ -129,14 +130,15 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             // When width would go below 100px (well past minimum of 244px), collapse instead
             const wouldCollapseWidth = 100;
             const shouldCollapse = containerDivWidthReference.current < wouldCollapseWidth;
+            const isDesktop = window.innerWidth >= desktopMinimumWidth;
 
-            // If should collapse, close the navigation
-            if(shouldCollapse) {
+            // If should collapse and not locked on desktop, close the navigation
+            if(shouldCollapse && !(properties.alwaysShowNavigationOnDesktop && isDesktop)) {
                 // Close the navigation
                 setSideNavigationLayoutNavigationOpen(false);
 
                 // If on desktop
-                if(window.innerWidth >= desktopMinimumWidth) {
+                if(isDesktop) {
                     // Mark the navigation as manually closed
                     setSideNavigationLayoutNavigationManuallyClosed(true);
                 }
@@ -301,8 +303,10 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         function () {
             // Function to handle the window resize
             function handleWindowResize() {
+                const isDesktop = window.innerWidth >= desktopMinimumWidth;
+
                 // If the window resizes to mobile
-                if(window.innerWidth < desktopMinimumWidth) {
+                if(!isDesktop) {
                     // Mark the navigation as closing by window resize
                     setSideNavigationLayoutNavigationIsClosingByWindowResize(true);
                     // console.log('Closing navigation by window resize');
@@ -315,8 +319,13 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     // Mark the navigation as not closing by window resize
                     setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
 
-                    // Set the navigation to the preferred state
-                    setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationManuallyClosed);
+                    // If always show on desktop, force open; otherwise use preferred state
+                    if(properties.alwaysShowNavigationOnDesktop) {
+                        setSideNavigationLayoutNavigationOpen(true);
+                    }
+                    else {
+                        setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationManuallyClosed);
+                    }
                 }
             }
 
@@ -332,6 +341,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             setSideNavigationLayoutNavigationOpen,
             sideNavigationLayoutNavigationManuallyClosed,
             setSideNavigationLayoutNavigationIsClosingByWindowResize,
+            properties.alwaysShowNavigationOnDesktop,
         ],
     );
 
@@ -359,8 +369,10 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationWidth(localStorageWidth);
             }
 
+            const isDesktop = window.innerWidth >= desktopMinimumWidth;
+
             // If on mobile
-            if(window.innerWidth < desktopMinimumWidth) {
+            if(!isDesktop) {
                 // Close the navigation
                 setSideNavigationLayoutNavigationOpen(false);
 
@@ -378,15 +390,16 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             }
             // If on desktop
             else {
-                // Set the navigation to the preferred state
-                setSideNavigationLayoutNavigationOpen(sideNavigationLayoutNavigationOpen);
+                // If always show on desktop, force open; otherwise use preferred state
+                const shouldBeOpen = properties.alwaysShowNavigationOnDesktop || sideNavigationLayoutNavigationOpen;
+                setSideNavigationLayoutNavigationOpen(shouldBeOpen);
 
                 // Animate the navigation to be the preferred state
                 containerSpringControl.start({
                     // Animate the container to be at the left edge if the navigation is open
-                    x: sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth,
+                    x: shouldBeOpen === true ? 0 : -sideNavigationLayoutNavigationWidth,
                     // Animate the overlay to be at 1 opacity if the navigation is open
-                    overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
+                    overlayOpacity: shouldBeOpen === true ? 1 : 0,
                     // Use the imported spring configuration for consistent animation
                     config: sideNavigationLayoutNavigationSpringConfiguration,
                     // Apply the animation immediately
