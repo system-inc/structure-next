@@ -46,7 +46,7 @@ export function OpsNavigationBar() {
     return (
         <Dialog.Root open={open} onOpenChange={setOpen} modal={false}>
             {/* Top Bar */}
-            <div className="relative z-30 h-12 w-full bg-opsis-background-primary">
+            <div className="relative z-30 h-12 w-full">
                 {/* Top Left */}
                 <div className="absolute left-[10px] z-30 flex h-12 items-center">
                     <div className={mergeClassNames('mr-4 flex flex-shrink-0 items-center space-x-2')}>

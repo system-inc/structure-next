@@ -18,16 +18,16 @@ export interface OpsLayoutProperties {
 export function OpsLayout(properties: OpsLayoutProperties) {
     // Render the component
     return (
-        <div className="flex h-screen flex-col overflow-hidden">
+        <div className="flex h-screen flex-col overflow-hidden dark:bg-[#161616]">
             {/* Navigation - Fixed at top */}
             <div className="flex-shrink-0">
                 <OpsNavigationBar />
             </div>
 
             {/* Main Content - Wrapper with padding */}
-            <div className="flex min-h-0 flex-1 bg-opsis-background-primary px-2 pb-2 pt-0">
+            <div className="flex min-h-0 flex-1 px-2 pb-2 pt-0">
                 {/* Content Container - Rounded border box */}
-                <div className="flex-1 overflow-auto rounded-lg border border-opsis-border-primary">
+                <div className="flex-1 overflow-auto rounded-lg border border-opsis-border-primary bg-opsis-background-primary">
                     {properties.children}
                 </div>
             </div>

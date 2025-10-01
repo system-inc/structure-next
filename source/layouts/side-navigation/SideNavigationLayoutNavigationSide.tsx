@@ -458,7 +458,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 className={mergeClassNames(
                     // Use fixed positioning for Fixed layout, relative for Flex layout
                     layout === 'Fixed' ? 'fixed z-20' : 'relative',
-                    'flex h-full flex-col bg-light dark:bg-dark-1',
+                    'flex h-full flex-col',
                     // For Flex layout, prevent flexbox from shrinking the navigation
                     layout === 'Flex' ? 'flex-shrink-0' : '',
                     // Hide overflow when closed for both layouts
