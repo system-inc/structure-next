@@ -21,7 +21,6 @@ import CoinsIcon from '@structure/assets/icons/finance/CoinsIcon.svg';
 import GearIcon from '@structure/assets/icons/tools/GearIcon.svg';
 import TagIcon from '@structure/assets/icons/commerce/TagIcon.svg';
 import CodeIcon from '@structure/assets/icons/technology/CodeIcon.svg';
-import { ArrowsClockwise } from '@phosphor-icons/react';
 
 // Ops Navigation Links with role-based access control
 // Note: Administrator role has implicit access to all links (checked in OpsNavigation.tsx)
