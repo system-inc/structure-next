@@ -13,13 +13,14 @@ import {
     Tooltip as RechartsTooltip,
     ResponsiveContainer,
     Bar,
+    Cell,
     Line,
     Area,
     XAxis,
     YAxis,
+    ReferenceArea,
 } from 'recharts';
 import { TimeSeriesTip } from './TimeSeriesTip';
-import { TimeSeriesReferenceArea } from './components/TimeSeriesReferenceArea';
 
 // Dependencies - Hooks
 import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
@@ -28,10 +29,12 @@ import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
 
 // Dependencies - Utilities
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { TimeInterval } from './TimeInterval';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
 import { formatAxisTick, calculateTickInterval } from './utilities/TimeSeriesFormatters';
+import { getTopBarDataKey } from './utilities/TimeSeriesProcessors';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Type - TimeSeriesDataPoint
 export interface TimeSeriesDataPoint {
@@ -114,7 +117,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
     // Render the component
     return (
-        <div className={properties.className} ref={containerReference}>
+        <div className={mergeClassNames('select-none', properties.className)} ref={containerReference}>
             <ResponsiveContainer width="100%" height={chartHeight}>
                 <ComposedChart
                     data={properties.data}
@@ -235,6 +238,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                 <TimeSeriesTip
                                     dataSources={properties.dataSources}
                                     sortByValue={properties.tipSortOrder}
+                                    timeInterval={properties.timeInterval}
                                 />
                             }
                         />
@@ -252,10 +256,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
                         if(properties.chartType === 'Bar') {
                             const isStackedBar = dataSource.stackId || properties.isStacked;
-                            // Use rounded corners only for non-stacked bars
-                            const barRadius: [number, number, number, number] = isStackedBar
-                                ? [0, 0, 0, 0]
-                                : [4, 4, 0, 0];
+                            // Default radius for all bars
+                            const defaultRadius: [number, number, number, number] = [4, 4, 0, 0];
 
                             return (
                                 <Bar
@@ -263,7 +265,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     dataKey={dataSource.dataKey}
                                     name={dataSource.name}
                                     fill={dataSource.color}
-                                    radius={barRadius}
+                                    radius={defaultRadius}
                                     yAxisId={yAxisId}
                                     animationDuration={0}
                                     stackId={isStackedBar ? 'stack' : undefined}
@@ -273,7 +275,32 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                                 ? lightenColor(dataSource.color, 0.05)
                                                 : lightenColor(dataSource.color, 0.05),
                                     }}
-                                />
+                                >
+                                    {/* Apply dynamic radius per cell for stacked bars */}
+                                    {isStackedBar &&
+                                        properties.data.map(function (dataPoint, index) {
+                                            const stackedDataKeys = properties.dataSources
+                                                .filter(function (currentDataSource) {
+                                                    return currentDataSource.stackId || properties.isStacked;
+                                                })
+                                                .map(function (currentDataSource) {
+                                                    return currentDataSource.dataKey;
+                                                });
+                                            const topBarDataKey = getTopBarDataKey(dataPoint, stackedDataKeys);
+
+                                            // Only apply radius if this bar is the top bar for this data point
+                                            const shouldRound = topBarDataKey === dataSource.dataKey;
+
+                                            return (
+                                                <Cell
+                                                    key={`cell-${index}`}
+                                                    radius={
+                                                        shouldRound ? (defaultRadius as never) : ([0, 0, 0, 0] as never)
+                                                    }
+                                                />
+                                            );
+                                        })}
+                                </Bar>
                             );
                         }
                         else if(properties.chartType === 'Area') {
@@ -332,11 +359,16 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                         }
                     })}
 
-                    <TimeSeriesReferenceArea
-                        referenceAreaStart={referenceAreaSelection.referenceAreaStart}
-                        referenceAreaEnd={referenceAreaSelection.referenceAreaEnd}
-                        onReferenceAreaSelect={properties.onReferenceAreaSelect}
-                    />
+                    {/* Reference Area for drag selection */}
+                    {referenceAreaSelection.referenceAreaStart && referenceAreaSelection.referenceAreaEnd && (
+                        <ReferenceArea
+                            yAxisId="left"
+                            x1={referenceAreaSelection.referenceAreaStart}
+                            x2={referenceAreaSelection.referenceAreaEnd}
+                            strokeOpacity={0.5}
+                            fillOpacity={isDarkMode ? 0.1 : 0.2}
+                        />
+                    )}
                 </ComposedChart>
             </ResponsiveContainer>
         </div>

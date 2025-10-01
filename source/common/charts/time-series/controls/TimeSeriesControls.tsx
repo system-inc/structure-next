@@ -12,8 +12,8 @@ import { TimeIntervalFormInputSelect } from './TimeIntervalFormInputSelect';
 import { ChartTypeFormInputSelect, ChartType } from './ChartTypeFormInputSelect';
 import { SortOrderToggle, SortOrderType } from './SortOrderToggle';
 
-// Dependencies - API
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+// Dependencies - Types
+import { TimeInterval } from '../TimeInterval';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

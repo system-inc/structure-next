@@ -47,6 +47,9 @@ export function useReferenceAreaSelection(
             if(isSelecting && referenceAreaStart && referenceAreaEnd && onReferenceAreaSelect) {
                 onReferenceAreaSelect(referenceAreaStart, referenceAreaEnd);
             }
+            else if(isSelecting && referenceAreaStart && !referenceAreaEnd && onReferenceAreaSelect) {
+                onReferenceAreaSelect(referenceAreaStart, referenceAreaStart);
+            }
             setReferenceAreaStart(null);
             setReferenceAreaEnd(null);
             setIsSelecting(false);

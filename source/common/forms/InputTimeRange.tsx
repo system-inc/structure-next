@@ -242,7 +242,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                                         }
                                                     }}
                                                 >
-                                                    {format(value.startTime, 'LLL dd, y')}
+                                                    {format(value.startTime, 'LLL d, y')}
                                                 </button>
                                             )}
                                             <span className="px-1">-</span>
@@ -255,7 +255,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                                     }
                                                 }}
                                             >
-                                                {format(value.endTime, 'LLL dd, y')}
+                                                {format(value.endTime, 'LLL d, y')}
                                             </button>
                                         </>
                                     )}
@@ -311,10 +311,10 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                 {value?.startTime ? (
                     value.endTime ? (
                         <>
-                            {format(value.startTime, 'LLL dd, y')} - {format(value.endTime, 'LLL dd, y')}
+                            {format(value.startTime, 'LLL d, y')} - {format(value.endTime, 'LLL d, y')}
                         </>
                     ) : (
-                        format(value.startTime, 'LLL dd, y')
+                        format(value.startTime, 'LLL d, y')
                     )
                 ) : (
                     <span>{placeholder}</span>

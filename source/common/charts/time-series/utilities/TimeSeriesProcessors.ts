@@ -1,25 +1,34 @@
-// Dependencies - API
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+// Dependencies - Types
+import { TimeInterval } from '../TimeInterval';
 
 // Dependencies - Utilities
 import {
+    startOfMinute,
     startOfHour,
     startOfDay,
+    startOfWeek,
     startOfMonth,
     startOfQuarter,
     startOfYear,
+    endOfMinute,
     endOfHour,
     endOfDay,
+    endOfWeek,
     endOfMonth,
     endOfQuarter,
     endOfYear,
+    addMinutes,
     addHours,
     addDays,
+    addWeeks,
     addMonths,
     addQuarters,
     addYears,
+    getWeek,
+    differenceInMinutes,
     differenceInHours,
     differenceInDays,
+    differenceInWeeks,
     differenceInMonths,
     differenceInQuarters,
     differenceInYears,
@@ -96,10 +105,14 @@ export function generateEmptyDataPoints(
 // Function to get the start of an interval
 export function getTimeIntervalStart(date: Date, interval: TimeInterval): Date {
     switch(interval) {
+        case TimeInterval.Minute:
+            return startOfMinute(date);
         case TimeInterval.Hour:
             return startOfHour(date);
         case TimeInterval.Day:
             return startOfDay(date);
+        case TimeInterval.Week:
+            return startOfWeek(date);
         case TimeInterval.Month:
             return startOfMonth(date);
         case TimeInterval.Quarter:
@@ -114,10 +127,14 @@ export function getTimeIntervalStart(date: Date, interval: TimeInterval): Date {
 // Function to get the end of an interval
 export function getTimeIntervalEnd(date: Date, interval: TimeInterval): Date {
     switch(interval) {
+        case TimeInterval.Minute:
+            return endOfMinute(date);
         case TimeInterval.Hour:
             return endOfHour(date);
         case TimeInterval.Day:
             return endOfDay(date);
+        case TimeInterval.Week:
+            return endOfWeek(date);
         case TimeInterval.Month:
             return endOfMonth(date);
         case TimeInterval.Quarter:
@@ -132,10 +149,14 @@ export function getTimeIntervalEnd(date: Date, interval: TimeInterval): Date {
 // Function to add intervals to a date
 export function addTimeInterval(date: Date, interval: TimeInterval, count: number): Date {
     switch(interval) {
+        case TimeInterval.Minute:
+            return addMinutes(date, count);
         case TimeInterval.Hour:
             return addHours(date, count);
         case TimeInterval.Day:
             return addDays(date, count);
+        case TimeInterval.Week:
+            return addWeeks(date, count);
         case TimeInterval.Month:
             return addMonths(date, count);
         case TimeInterval.Quarter:
@@ -150,10 +171,14 @@ export function addTimeInterval(date: Date, interval: TimeInterval, count: numbe
 // Function to calculate difference between dates in intervals
 export function differenceInTimeIntervals(startDate: Date, endDate: Date, interval: TimeInterval): number {
     switch(interval) {
+        case TimeInterval.Minute:
+            return differenceInMinutes(endDate, startDate);
         case TimeInterval.Hour:
             return differenceInHours(endDate, startDate);
         case TimeInterval.Day:
             return differenceInDays(endDate, startDate);
+        case TimeInterval.Week:
+            return differenceInWeeks(endDate, startDate);
         case TimeInterval.Month:
             return differenceInMonths(endDate, startDate);
         case TimeInterval.Quarter:
@@ -171,12 +196,19 @@ export function formatTimeIntervalKey(date: Date, interval: TimeInterval): strin
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
 
     switch(interval) {
+        case TimeInterval.Minute:
+            return `${year}-${month}-${day}T${hour}:${minute}:00`;
         case TimeInterval.Hour:
             return `${year}-${month}-${day}T${hour}:00:00`;
         case TimeInterval.Day:
             return `${year}-${month}-${day}`;
+        case TimeInterval.Week: {
+            const weekNumber = getWeek(date);
+            return `${year}-W${String(weekNumber).padStart(2, '0')}`;
+        }
         case TimeInterval.Month:
             return `${year}-${month}`;
         case TimeInterval.Quarter: {
@@ -245,4 +277,22 @@ export function calculateOptimalInterval(startDate: Date, endDate: Date, maxData
 
     // Default to month for larger ranges
     return TimeInterval.Month;
+}
+
+// Get the topmost non-zero bar in a stacked chart
+export function getTopBarDataKey<T extends Record<string, number | string>>(
+    dataPoint: T,
+    dataKeys: string[],
+): string | null {
+    // Iterate dataKeys in reverse (they're rendered bottom-to-top in stacked charts)
+    for(let i = dataKeys.length - 1; i >= 0; i--) {
+        const dataKey = dataKeys[i];
+        if(!dataKey) continue;
+
+        const value = dataPoint[dataKey];
+        if(typeof value === 'number' && value > 0) {
+            return dataKey;
+        }
+    }
+    return null;
 }

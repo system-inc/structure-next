@@ -3,6 +3,7 @@ import React from 'react';
 
 // Dependencies - Types
 import { TimeSeriesDataPoint, TimeSeriesDataSource } from './TimeSeriesChart';
+import { TimeInterval } from './TimeInterval';
 
 // Dependencies - Styles
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
@@ -10,7 +11,7 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 // Dependencies - Utilities
 import { lightenColor, darkenColor } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
-import { dateFull } from '@structure/source/utilities/Time';
+import { formatTipLabelByTimeInterval } from './utilities/TimeSeriesFormatters';
 
 // Component - TimeSeriesTip
 export interface TimeSeriesTipProperties {
@@ -24,6 +25,7 @@ export interface TimeSeriesTipProperties {
     }>;
     dataSources?: TimeSeriesDataSource[];
     sortByValue?: 'Descending' | 'Ascending' | false; // Add option to sort by value
+    timeInterval?: TimeInterval; // Add time interval for proper date formatting
 }
 export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
     // Hooks
@@ -50,7 +52,9 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
         return (
             <div className="rounded-extra-small border border-light-4 bg-light dark:border-dark-4 dark:bg-dark">
                 <div className="border-b p-2 text-xs text-dark/60 dark:text-light-4/60">
-                    {dateFull(new Date(dataPoint.label))}
+                    {properties.timeInterval
+                        ? formatTipLabelByTimeInterval(dataPoint.label, properties.timeInterval)
+                        : dataPoint.label}
                 </div>
                 <table className="">
                     <tbody className="">

@@ -4,8 +4,8 @@ import React from 'react';
 // Dependencies - Main Components
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 
-// Dependencies - API
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+// Dependencies - Types
+import { TimeInterval } from '../TimeInterval';
 
 // Component - TimeIntervalFormInputSelect
 export interface TimeIntervalFormInputSelectProperties {
@@ -20,8 +20,10 @@ export function TimeIntervalFormInputSelect(properties: TimeIntervalFormInputSel
 
     // Default available intervals
     const availableIntervals = properties.availableIntervals || [
+        TimeInterval.Minute,
         TimeInterval.Hour,
         TimeInterval.Day,
+        TimeInterval.Week,
         TimeInterval.Month,
         TimeInterval.Quarter,
         TimeInterval.Year,
