@@ -23,7 +23,7 @@ export function LineLoadingAnimation() {
     // Update animation when progress or width changes
     React.useEffect(
         function () {
-            if (width) {
+            if(width) {
                 animationControls.start({
                     width: progressPercentage * width,
                     transition: {
@@ -60,7 +60,7 @@ export function LineLoadingAnimation() {
     return (
         <div className="relative flex h-0.5 w-full items-center justify-center">
             <div ref={domElementReference} className="h-full w-full overflow-hidden bg-light-4/10 dark:bg-light/10">
-                <motion.div 
+                <motion.div
                     className="h-full bg-gradient-to-r from-blue/50 to-blue"
                     initial={{ width: 0 }}
                     animate={animationControls}

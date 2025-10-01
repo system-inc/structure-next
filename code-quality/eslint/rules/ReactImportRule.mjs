@@ -11,8 +11,7 @@ const ReactImportRule = {
         messages: {
             forbiddenNavigationImport:
                 "Importing from 'next/navigation' is not allowed. Use '@structure/source/router/Navigation' instead for framework-independent navigation.",
-            forbiddenMotionImport:
-                "Importing from 'framer-motion' is not allowed. Use 'motion/react' instead.",
+            forbiddenMotionImport: "Importing from 'framer-motion' is not allowed. Use 'motion/react' instead.",
         },
         fixable: 'code',
     },
@@ -28,7 +27,8 @@ const ReactImportRule = {
                             return fixer.replaceText(node.source, "'@structure/source/router/Navigation'");
                         },
                     });
-                } else if(importSource === 'framer-motion') {
+                }
+                else if(importSource === 'framer-motion') {
                     context.report({
                         node,
                         messageId: 'forbiddenMotionImport',

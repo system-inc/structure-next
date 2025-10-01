@@ -32,7 +32,13 @@ const ReactHookDependenciesRule = {
                     const hookName = node.callee.property.name;
 
                     // Only check hooks that have dependency arrays
-                    const hooksWithDependencies = ['useCallback', 'useMemo', 'useEffect', 'useLayoutEffect', 'useImperativeHandle'];
+                    const hooksWithDependencies = [
+                        'useCallback',
+                        'useMemo',
+                        'useEffect',
+                        'useLayoutEffect',
+                        'useImperativeHandle',
+                    ];
                     if(!hooksWithDependencies.includes(hookName)) {
                         return;
                     }
@@ -42,7 +48,8 @@ const ReactHookDependenciesRule = {
                     if(hookName === 'useImperativeHandle') {
                         // useImperativeHandle has deps as third argument
                         dependenciesArgument = node.arguments[2];
-                    } else {
+                    }
+                    else {
                         // Other hooks have deps as second argument
                         dependenciesArgument = node.arguments[1];
                     }
@@ -53,26 +60,30 @@ const ReactHookDependenciesRule = {
                     }
 
                     // Check each dependency
-                    dependenciesArgument.elements.forEach(element => {
+                    dependenciesArgument.elements.forEach((element) => {
                         if(element && element.type === 'Identifier' && element.name === 'properties') {
                             // Check if we're in a component (function starting with capital letter)
                             let isInComponent = false;
                             let componentNode = node;
 
                             while(componentNode) {
-                                if(componentNode.type === 'FunctionDeclaration' ||
+                                if(
+                                    componentNode.type === 'FunctionDeclaration' ||
                                     componentNode.type === 'FunctionExpression' ||
-                                    componentNode.type === 'ArrowFunctionExpression') {
-
+                                    componentNode.type === 'ArrowFunctionExpression'
+                                ) {
                                     // Check if this function is likely a component
                                     let functionName = null;
 
                                     if(componentNode.id && componentNode.id.name) {
                                         functionName = componentNode.id.name;
-                                    } else if(componentNode.parent &&
+                                    }
+                                    else if(
+                                        componentNode.parent &&
                                         componentNode.parent.type === 'VariableDeclarator' &&
                                         componentNode.parent.id &&
-                                        componentNode.parent.id.name) {
+                                        componentNode.parent.id.name
+                                    ) {
                                         functionName = componentNode.parent.id.name;
                                     }
 

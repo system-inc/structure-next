@@ -154,8 +154,7 @@ export default {
             // Check for InferUseGraphQlQueryOptions or InferUseGraphQlMutationOptions
             if(typeAnnotation.type === 'TSTypeReference' && typeAnnotation.typeName) {
                 const typeName = typeAnnotation.typeName.name;
-                return typeName === 'InferUseGraphQlQueryOptions' ||
-                    typeName === 'InferUseGraphQlMutationOptions';
+                return typeName === 'InferUseGraphQlQueryOptions' || typeName === 'InferUseGraphQlMutationOptions';
             }
 
             return false;
@@ -180,7 +179,7 @@ export default {
                         node,
                         methodName,
                         argumentsCount,
-                        arguments: node.arguments
+                        arguments: node.arguments,
                     });
                 }
 
@@ -194,7 +193,8 @@ export default {
                                     traverse(item);
                                 }
                             }
-                        } else if(node[key].type) {
+                        }
+                        else if(node[key].type) {
                             traverse(node[key]);
                         }
                     }
@@ -220,7 +220,9 @@ export default {
 
                 if(!isQuery && !isMutation) continue;
 
-                const expectedType = isQuery ? 'InferUseGraphQlQueryOptions<typeof DocumentName>' : 'InferUseGraphQlMutationOptions<typeof DocumentName>';
+                const expectedType = isQuery
+                    ? 'InferUseGraphQlQueryOptions<typeof DocumentName>'
+                    : 'InferUseGraphQlMutationOptions<typeof DocumentName>';
 
                 // For queries, check if variables are being passed
                 let optionsArgumentIndex = 1; // Default for mutations
@@ -231,19 +233,26 @@ export default {
                     if(networkCallArguments.length >= 2 && networkCallArguments[1]) {
                         // If second arg is not undefined/null literal and not named 'options', assume it's variables
                         const secondArg = networkCallArguments[1];
-                        if(secondArg.type === 'Identifier' && secondArg.name && secondArg.name.toLowerCase().includes('option')) {
+                        if(
+                            secondArg.type === 'Identifier' &&
+                            secondArg.name &&
+                            secondArg.name.toLowerCase().includes('option')
+                        ) {
                             // Second arg looks like options, so no variables
                             optionsArgumentIndex = 1;
                             expectedPosition = 'second';
-                        } else if(secondArg.type === 'Identifier' && secondArg.name === 'undefined') {
+                        }
+                        else if(secondArg.type === 'Identifier' && secondArg.name === 'undefined') {
                             // Explicit undefined for variables
                             optionsArgumentIndex = 2;
                             expectedPosition = 'third';
-                        } else if(secondArg.type === 'Literal' && secondArg.value === null) {
+                        }
+                        else if(secondArg.type === 'Literal' && secondArg.value === null) {
                             // Explicit null for variables
                             optionsArgumentIndex = 2;
                             expectedPosition = 'third';
-                        } else {
+                        }
+                        else {
                             // Assume it's variables
                             optionsArgumentIndex = 2;
                             expectedPosition = 'third';
@@ -266,10 +275,17 @@ export default {
                     // Check if last parameter name includes 'option'
                     if(lastParameter.type === 'Identifier') {
                         optionsParameterName = lastParameter.name;
-                        hasOptionsParameter = optionsParameterName && optionsParameterName.toLowerCase().includes('option');
-                    } else if(lastParameter.type === 'AssignmentPattern' && lastParameter.left && lastParameter.left.type === 'Identifier') {
+                        hasOptionsParameter =
+                            optionsParameterName && optionsParameterName.toLowerCase().includes('option');
+                    }
+                    else if(
+                        lastParameter.type === 'AssignmentPattern' &&
+                        lastParameter.left &&
+                        lastParameter.left.type === 'Identifier'
+                    ) {
                         optionsParameterName = lastParameter.left.name;
-                        hasOptionsParameter = optionsParameterName && optionsParameterName.toLowerCase().includes('option');
+                        hasOptionsParameter =
+                            optionsParameterName && optionsParameterName.toLowerCase().includes('option');
                     }
 
                     // Check if it has the correct type annotation
@@ -279,8 +295,8 @@ export default {
                             messageId: 'incorrectOptionsParameterType',
                             data: {
                                 hookName: functionName,
-                                expectedType: expectedType
-                            }
+                                expectedType: expectedType,
+                            },
                         });
                     }
                 }
@@ -294,10 +310,11 @@ export default {
                         data: {
                             hookName: functionName,
                             methodName: methodName,
-                            expectedType: expectedType
-                        }
+                            expectedType: expectedType,
+                        },
                     });
-                } else {
+                }
+                else {
                     // Check if options are passed through to the networkService call
                     let hasOptionsArgument = false;
 
@@ -309,11 +326,12 @@ export default {
                         }
                         // Check if it's an object expression that spreads the options
                         else if(optionArg.type === 'ObjectExpression' && optionArg.properties) {
-                            hasOptionsArgument = optionArg.properties.some(prop =>
-                                prop.type === 'SpreadElement' &&
-                                prop.argument &&
-                                prop.argument.type === 'Identifier' &&
-                                prop.argument.name === optionsParameterName
+                            hasOptionsArgument = optionArg.properties.some(
+                                (prop) =>
+                                    prop.type === 'SpreadElement' &&
+                                    prop.argument &&
+                                    prop.argument.type === 'Identifier' &&
+                                    prop.argument.name === optionsParameterName,
                             );
                         }
                     }
@@ -325,8 +343,8 @@ export default {
                             data: {
                                 hookName: functionName,
                                 methodName: methodName,
-                                position: expectedPosition
-                            }
+                                position: expectedPosition,
+                            },
                         });
                     }
                 }
@@ -678,7 +696,8 @@ export default {
 
                     if(
                         declarator.init &&
-                        (declarator.init.type === 'ArrowFunctionExpression' || declarator.init.type === 'FunctionExpression')
+                        (declarator.init.type === 'ArrowFunctionExpression' ||
+                            declarator.init.type === 'FunctionExpression')
                     ) {
                         if(declarator.init.body && checkForNetworkService(declarator.init.body)) {
                             networkServiceHooks.set(functionName, declarator);
@@ -706,7 +725,11 @@ export default {
             'Property[key.name="onSuccess"] CallExpression[callee.property.name="invalidateCache"]'(node) {
                 // Check if it's networkService.invalidateCache or similar
                 const objectName = node.callee.object?.name;
-                if(objectName === 'networkService' || objectName?.includes('service') || objectName?.includes('Service')) {
+                if(
+                    objectName === 'networkService' ||
+                    objectName?.includes('service') ||
+                    objectName?.includes('Service')
+                ) {
                     context.report({
                         node,
                         messageId: 'noInvalidateCacheInOnSuccess',
