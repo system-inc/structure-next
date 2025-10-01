@@ -11,7 +11,7 @@ import { Tip } from '@structure/source/common/popovers/Tip';
 import { PopoverProperties } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Animations
-import { useSpring, animated, easings, useTransition } from '@react-spring/web';
+import { motion, AnimatePresence, type Variants, type Transition, cubicBezier } from 'motion/react';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -84,7 +84,6 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
     // State
     const [processingState, setProcessingState] = React.useState<boolean>(processing ?? false);
     const [processingAnimationRunning, setProcessingAnimationRunning] = React.useState<boolean>(false);
-    const [processingIconRotation, setProcessingIconRotation] = React.useState<number>(0);
     const [processed, setProcessed] = React.useState<boolean>(false);
     const [processingError, setProcessingError] = React.useState<boolean>(false);
     const [tipContent, setTipContent] = React.useState<string | React.ReactNode>(tip);
@@ -268,40 +267,15 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
     );
 
     // Animation - Processing State Icon Transition
-    const processingIconTransition = useTransition(processed, {
-        initial: { opacity: 1, transform: 'scale(1)' },
-        from: { opacity: 0, transform: 'scale(0.5)' },
-        enter: { opacity: 1, transform: 'scale(1)' },
-        leave: { opacity: 0, transform: 'scale(0.5)' },
-        config: {
-            easing: easings.easeOutQuart,
-            duration: 200,
-        },
-    });
+    const processingIconVariants: Variants = {
+        hidden: { opacity: 0, transform: 'scale(0.5)' },
+        show: { opacity: 1, transform: 'scale(1)' },
+    };
 
-    // Animation - Processing Icon Rotation
-    const processingIconRotationSpring = useSpring({
-        initial: { rotate: 0 },
-        from: { rotate: 0 },
-        to: { rotate: processingState ? processingIconRotation + 180 : processingIconRotation },
-        config: {
-            easing: easings.linear,
-            duration: 350,
-        },
-        onRest: () => {
-            if(processingState) {
-                setProcessingIconRotation(processingIconRotation + 180);
-            }
-            else {
-                setProcessingIconRotation(0);
-
-                // Wait a little bit before ending the animation
-                processingAnimationRunningTimeoutReference.current = setTimeout(function () {
-                    setProcessingAnimationRunning(false);
-                }, 500);
-            }
-        },
-    });
+    const processingIconTransition: Transition = {
+        ease: cubicBezier(0.165, 0.84, 0.44, 1),
+        duration: 200,
+    };
 
     // Use the provided icon, or the default icon
     const ProcessingIcon = processingIcon || BrokenCircleIcon;
@@ -329,35 +303,54 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
     // If the processing animation is enabled and running
     if(processingAnimationEnabled && processingAnimationRunning) {
         const processingAnimatedDivClassName = 'absolute inset-0 flex h-full w-full items-center justify-center';
-        const processingAnimatedDiv = processingIconTransition(
-            (processingStateTransitionStyle, processingStateTransitionCompleted) =>
-                processingStateTransitionCompleted && processingError ? (
-                    <animated.div
-                        style={processingStateTransitionStyle}
+        const processingAnimatedDiv = (
+            <AnimatePresence mode="popLayout" initial={false}>
+                {processed && processingError ? (
+                    <motion.div
+                        key="processing-error"
+                        variants={processingIconVariants}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
+                        transition={processingIconTransition}
                         className={mergeClassNames(processingAnimatedDivClassName, 'text-red-500')}
                     >
                         {/* If we have a processing error icon, use it, otherwise show nothing */}
                         {ProcessingErrorIcon && <ProcessingErrorIcon className="h-5 w-5" />}
-                    </animated.div>
-                ) : processingStateTransitionCompleted ? (
-                    <animated.div
-                        style={processingStateTransitionStyle}
+                    </motion.div>
+                ) : processed ? (
+                    <motion.div
+                        key="processed"
+                        variants={processingIconVariants}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
+                        transition={processingIconTransition}
                         className={mergeClassNames(processingAnimatedDivClassName, 'text-emerald-500')}
                     >
                         {/* If we have a processing success icon, use it, otherwise show nothing */}
                         {ProcessingSuccessIcon && <ProcessingSuccessIcon className="h-5 w-5" />}
-                    </animated.div>
+                    </motion.div>
                 ) : (
-                    <animated.div
-                        style={{ ...processingStateTransitionStyle, ...processingIconRotationSpring }}
-                        className={mergeClassNames(
-                            processingAnimatedDivClassName,
-                            'transition-transform duration-500 ease-out',
-                        )}
+                    <motion.div
+                        key="processing"
+                        variants={processingIconVariants}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
+                        transition={processingIconTransition}
+                        className={mergeClassNames(processingAnimatedDivClassName)}
                     >
-                        <ProcessingIcon className="h-5 w-5" />
-                    </animated.div>
-                ),
+                        <motion.span
+                            initial={{ rotate: 0 }}
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 0.35, repeat: Infinity, type: 'tween', ease: 'linear' }}
+                        >
+                            <ProcessingIcon className="h-5 w-5" />
+                        </motion.span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         );
 
         // If processed, revert back to the children (unless we have success/error icons to show)
