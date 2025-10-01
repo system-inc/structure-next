@@ -294,7 +294,7 @@ export function dateAtTime(date: Date): string {
 export function timeOnly(date: Date): string {
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const amOrPm = hours >= 12 ? 'pm' : 'am';
+    const amOrPm = hours >= 12 ? 'PM' : 'AM';
     const formattedHours = hours % 12 || 12;
 
     return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${amOrPm}`;
