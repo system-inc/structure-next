@@ -520,7 +520,7 @@ export type EngagementEvent = {
     __typename?: 'EngagementEvent';
     createdAt: Scalars['DateTimeISO']['output'];
     id: Scalars['String']['output'];
-    loggedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    loggedAt: Scalars['DateTimeISO']['output'];
     name: Scalars['String']['output'];
 };
 
@@ -528,11 +528,12 @@ export type EngagementEventContextInput = {
     additionalData?: InputMaybe<Scalars['JSON']['input']>;
     loggedAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
     referrer?: InputMaybe<Scalars['String']['input']>;
-    sessionDurationInMilliseconds?: InputMaybe<Scalars['Int']['input']>;
     traceId?: InputMaybe<Scalars['String']['input']>;
     traceSequenceNumber?: InputMaybe<Scalars['Int']['input']>;
     viewIdentifier?: InputMaybe<Scalars['String']['input']>;
     viewTitle?: InputMaybe<Scalars['String']['input']>;
+    visitId?: InputMaybe<Scalars['String']['input']>;
+    visitStartAt?: InputMaybe<Scalars['DateTimeISO']['input']>;
 };
 
 export type EngagementLocationOverview = {
@@ -4260,19 +4261,30 @@ export namespace GraphQLInputTypes {
                 ],
             },
             {
-                name: 'sessionDurationInMilliseconds',
+                name: 'visitStartAt',
                 kind: 'scalar',
-                type: 'Int',
+                type: 'DateTimeISO',
                 required: false,
                 validation: [
                     {
                         type: 'isOptional',
                     },
                     {
-                        type: 'isPositive',
+                        type: 'isDate',
+                    },
+                ],
+            },
+            {
+                name: 'visitId',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
                     },
                     {
-                        type: 'isInt',
+                        type: 'isUuid',
                     },
                 ],
             },

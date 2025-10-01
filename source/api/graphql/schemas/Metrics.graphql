@@ -33,7 +33,7 @@ input DevicePropertiesInput {
 type EngagementEvent {
     createdAt: DateTimeISO!
     id: String!
-    loggedAt: DateTimeISO
+    loggedAt: DateTimeISO!
     name: String!
 }
 
@@ -41,11 +41,12 @@ input EngagementEventContextInput {
     additionalData: JSON
     loggedAt: DateTimeISO
     referrer: String
-    sessionDurationInMilliseconds: Int
     traceId: String
     traceSequenceNumber: Int
     viewIdentifier: String
     viewTitle: String
+    visitId: String
+    visitStartAt: DateTimeISO
 }
 
 type EngagementLocationOverview {

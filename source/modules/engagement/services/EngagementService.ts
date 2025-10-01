@@ -62,9 +62,6 @@ class EngagementService {
         // Get the view title
         const viewTitle = document.title;
 
-        // Get session duration
-        const sessionDurationInMilliseconds = sessionManager.getSessionDurationInMilliseconds();
-
         // Get third-party attribution data
         const thirdPartyAttributionData = getThirdPartyAttributionForEvents();
 
@@ -91,7 +88,8 @@ class EngagementService {
                 viewIdentifier: viewIdentifier,
                 viewTitle: viewTitle || null,
                 referrer: document.referrer || undefined,
-                sessionDurationInMilliseconds: sessionDurationInMilliseconds || undefined,
+                visitId: sessionManager.getVisitId(),
+                visitStartAt: sessionManager.getVisitStartAt(),
                 additionalData: Object.keys(mergedAdditionalData).length > 0 ? mergedAdditionalData : undefined,
                 loggedAt: new Date().toISOString(),
             },

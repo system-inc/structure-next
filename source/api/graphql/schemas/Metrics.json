@@ -261,18 +261,29 @@
                     },
                     {
                         "kind": "scalar",
-                        "type": "Int",
+                        "type": "DateTimeISO",
                         "required": false,
-                        "name": "sessionDurationInMilliseconds",
+                        "name": "visitStartAt",
                         "validation": [
                             {
                                 "type": "isOptional"
                             },
                             {
-                                "type": "isPositive"
+                                "type": "isDate"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "visitId",
+                        "validation": [
+                            {
+                                "type": "isOptional"
                             },
                             {
-                                "type": "isInt"
+                                "type": "isUuid"
                             }
                         ]
                     },

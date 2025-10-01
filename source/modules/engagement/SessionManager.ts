@@ -1,31 +1,47 @@
 // Class - SessionManager
 class SessionManager {
-    private sessionStartTime: number | null = null;
+    private visitId: string | null = null;
+    private visitStartAt: Date | null = null;
+    private readonly sessionTimeoutInMilliseconds = 30 * 60 * 1000; // 30 minutes
 
     initializeSession(): void {
-        if(this.sessionStartTime === null) {
-            this.sessionStartTime = Date.now();
+        if(this.visitId === null || this.visitStartAt === null) {
+            this.createNewVisit();
         }
     }
 
-    getSessionDurationInMilliseconds(): number {
-        if(this.sessionStartTime === null) {
-            return 0;
+    private createNewVisit(): void {
+        // Generate a unique visit ID using browser crypto API
+        this.visitId = crypto.randomUUID();
+        this.visitStartAt = new Date();
+    }
+
+    private checkAndResetSession(): void {
+        // If no session exists, create one
+        if(this.visitStartAt === null) {
+            this.createNewVisit();
+            return;
         }
 
-        const duration = Date.now() - this.sessionStartTime;
-
-        // Reset after 30 minutes (same logic as EngagementProvider)
-        if(duration > 30 * 60 * 1000) {
-            this.sessionStartTime = Date.now();
-            return 0;
+        // Check if 30 minutes have passed since session start
+        const timeSinceSessionStart = Date.now() - this.visitStartAt.getTime();
+        if(timeSinceSessionStart > this.sessionTimeoutInMilliseconds) {
+            this.createNewVisit();
         }
+    }
 
-        return duration;
+    getVisitId(): string {
+        this.checkAndResetSession();
+        return this.visitId!;
+    }
+
+    getVisitStartAt(): string {
+        this.checkAndResetSession();
+        return this.visitStartAt!.toISOString();
     }
 
     resetSession(): void {
-        this.sessionStartTime = Date.now();
+        this.createNewVisit();
     }
 }
 
