@@ -1,7 +1,11 @@
 // Common email client quote patterns
-const GMAIL_QUOTE_PATTERNS = [/<div class="gmail_quote">/i, /<blockquote class="gmail_quote"/i];
+const gmailQuotePatterns = [
+    /<div class="gmail_quote">/i,
+    /<blockquote class="gmail_quote"/i,
+    /<blockquote type="cite">/i, // Apple Mail quoted content
+];
 
-const COMMON_EMAIL_MARKERS = [
+const commonEmailMarkers = [
     /On.*wrote:$/m, // "On [date] [name] wrote:"
     /-{2,}Original Message-{2,}/, // "----Original Message----"
     /From:[\s\S]*Sent:[\s\S]*To:[\s\S]*Subject:/, // Email headers
@@ -10,8 +14,8 @@ const COMMON_EMAIL_MARKERS = [
 
 // Extracts the latest email content from a thread
 export function extractLatestEmailContent(threadHtml: string): string {
-    // If thread HTML is empty, return empty string
-    if(!threadHtml) return '';
+    // If thread HTML is empty or the literal string "null", return empty string
+    if(!threadHtml || threadHtml === 'null') return '';
 
     // Convert to string if it's not already
     let latestEmailContent = threadHtml.toString();
@@ -21,7 +25,7 @@ export function extractLatestEmailContent(threadHtml: string): string {
         let firstIndex = text.length;
 
         // Check Gmail specific patterns
-        for(const pattern of GMAIL_QUOTE_PATTERNS) {
+        for(const pattern of gmailQuotePatterns) {
             const match = text.match(pattern);
             if(match && match.index !== undefined && match.index < firstIndex) {
                 firstIndex = match.index;
@@ -29,7 +33,7 @@ export function extractLatestEmailContent(threadHtml: string): string {
         }
 
         // Check common email markers
-        for(const pattern of COMMON_EMAIL_MARKERS) {
+        for(const pattern of commonEmailMarkers) {
             const match = text.match(pattern);
             if(match && match.index !== undefined && match.index < firstIndex) {
                 firstIndex = match.index;
