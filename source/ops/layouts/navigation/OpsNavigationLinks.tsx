@@ -1,6 +1,9 @@
 // Dependencies - Main Components
 import { OpsNavigationLinkProperties } from './OpsNavigationLink';
 
+// Dependencies - Account
+import { AccountRole } from '@structure/source/modules/account/Account';
+
 // Dependencies - Assets
 import HomeIcon from '@structure/assets/icons/structures/HomeIcon.svg';
 import TeamIcon from '@structure/assets/icons/people/TeamIcon.svg';
@@ -19,16 +22,16 @@ import GearIcon from '@structure/assets/icons/tools/GearIcon.svg';
 import TagIcon from '@structure/assets/icons/commerce/TagIcon.svg';
 import CodeIcon from '@structure/assets/icons/technology/CodeIcon.svg';
 
-// TODO: This should use access control
-// Internal Navigation Links
+// Ops Navigation Links with role-based access control
+// Note: Administrator role has implicit access to all links (checked in OpsNavigation.tsx)
 export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
-    // Home
+    // Home - Administrator only
     {
         title: 'Home',
         href: '/ops',
         icon: HomeIcon,
     },
-    // Team Group
+    // Team - Administrator only
     {
         title: 'Team',
         href: '/ops/team',
@@ -44,192 +47,203 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
-    // Communication Group
+    // Communication - Marketer role
     {
         title: 'Communication',
         href: '/ops/communication',
         icon: MailIcon,
+        accessibleRoles: [AccountRole.Marketer],
         links: [
             {
                 title: 'Email Campaigns',
                 href: '/ops/communication/email-campaigns',
+                accessibleRoles: [AccountRole.Marketer],
             },
             {
                 title: 'Email Lists',
                 href: '/ops/communication/email-lists',
+                accessibleRoles: [AccountRole.Marketer],
             },
         ],
     },
-    // Orders Group
+    // Orders - OrderViewer role
     {
         title: 'Orders',
         href: '/ops/orders',
         icon: BagIcon,
+        accessibleRoles: [AccountRole.OrderViewer],
         links: [
             {
                 title: 'Drafts',
                 href: '/ops/orders/drafts',
+                accessibleRoles: [AccountRole.OrderViewer],
             },
             {
                 title: 'Abandoned Checkouts',
                 href: '/ops/orders/abandoned-checkouts',
+                accessibleRoles: [AccountRole.OrderViewer],
             },
         ],
     },
-    // Fulfillment Group
+    // Fulfillment - FulfillmentManager role
     {
         title: 'Fulfillment',
         href: '/ops/fulfillment',
         icon: TruckIcon,
+        accessibleRoles: [AccountRole.FulfillmentManager],
         links: [
             {
                 title: 'Held Orders',
                 href: '/ops/fulfillment/held-orders',
+                accessibleRoles: [AccountRole.FulfillmentManager],
             },
             {
                 title: 'Shipping Labels',
                 href: '/ops/fulfillment/shipping-labels',
+                accessibleRoles: [AccountRole.FulfillmentManager],
             },
             {
                 title: 'Ship Orders',
                 href: '/ops/fulfillment/ship-orders',
+                accessibleRoles: [AccountRole.FulfillmentManager],
             },
         ],
     },
-    // Products Group
+    // Products - ProductManager role
     {
         title: 'Products',
         href: '/ops/products',
         icon: TagIcon,
+        accessibleRoles: [AccountRole.ProductManager],
         links: [
             {
                 title: 'Reviews',
                 href: '/ops/products/reviews',
+                accessibleRoles: [AccountRole.Support, AccountRole.ProductManager],
             },
             {
                 title: 'Categories',
                 href: '/ops/products/categories',
+                accessibleRoles: [AccountRole.ProductManager],
             },
             {
                 title: 'Collections',
                 href: '/ops/products/collections',
+                accessibleRoles: [AccountRole.ProductManager],
             },
             {
                 title: 'Gift Cards',
                 href: '/ops/products/gift-cards',
+                accessibleRoles: [AccountRole.ProductManager],
             },
         ],
     },
-    // Inventory Group
+    // Inventory - FulfillmentManager role
     {
         title: 'Inventory',
         href: '/ops/inventory',
         icon: ShippingBoxIcon,
+        accessibleRoles: [AccountRole.FulfillmentManager],
         links: [
-            // Transfers Page
             {
                 title: 'Transfers',
                 href: '/ops/inventory/transfers',
+                accessibleRoles: [AccountRole.FulfillmentManager],
             },
         ],
     },
-    // Users Group
+    // Users - Administrator only
     {
         title: 'Users',
         href: '/ops/users',
         icon: UsersIcon,
         links: [
-            // Roles Page
             {
                 title: 'Roles',
                 href: '/ops/users/roles',
             },
-            // Segments Page
             {
                 title: 'Segments',
                 href: '/ops/users/segments',
             },
-            // Contact Lists
             {
                 title: 'Contact Lists',
                 href: '/ops/users/contact-lists',
             },
         ],
     },
-    // Support Page
+    // Support - Support role
     {
         title: 'Support',
         href: '/ops/support',
         icon: SupportIcon,
+        accessibleRoles: [AccountRole.Support],
     },
-    // Content Group
+    // Content - Administrator only
     {
         title: 'Content',
         href: '/ops/content',
         icon: TextAlignLeftIcon,
         links: [
-            // Files Page
             {
                 title: 'Files',
                 href: '/ops/content/files',
             },
         ],
     },
-    // Finances Group
+    // Finances - Administrator only
     {
         title: 'Finances',
         href: '/ops/finances',
         icon: BankIcon,
         links: [
-            // Payout Page
             {
                 title: 'Payout',
                 href: '/ops/finances/payout',
             },
         ],
     },
-    // Analytics Group
+    // Analytics - Administrator only
     {
         title: 'Analytics',
         href: '/ops/analytics',
         icon: LineGraphIcon,
         links: [
-            // Live Page
             {
                 title: 'Live',
                 href: '/ops/analytics/live',
             },
-            // Reports Page
             {
                 title: 'Reports',
                 href: '/ops/analytics/reports',
             },
         ],
     },
-    // Marketing Group
+    // Marketing - Marketer and SocialMediaManager roles
     {
         title: 'Marketing',
         href: '/ops/marketing',
         icon: NewsIcon,
+        accessibleRoles: [AccountRole.Marketer, AccountRole.SocialMediaManager],
         links: [
-            // Campaigns Page
             {
                 title: 'Campaigns',
                 href: '/ops/marketing/campaigns',
+                accessibleRoles: [AccountRole.Marketer],
             },
-            // Automations Page
             {
                 title: 'Automations',
                 href: '/ops/marketing/automations',
+                accessibleRoles: [AccountRole.Marketer],
             },
-            // Social Media Page
             {
                 title: 'Social Media',
                 href: '/ops/marketing/social-media',
+                accessibleRoles: [AccountRole.SocialMediaManager],
             },
         ],
     },
-    // Discounts Group
+    // Discounts - Administrator only
     {
         title: 'Discounts',
         href: '/ops/discounts',
@@ -241,7 +255,7 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
-    // Developers Group
+    // Developers - Administrator only
     {
         title: 'Developers',
         href: '/ops/developers',
@@ -273,7 +287,7 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
-    // Settings Page
+    // Settings - Administrator only
     {
         title: 'Settings',
         href: '/ops/settings',

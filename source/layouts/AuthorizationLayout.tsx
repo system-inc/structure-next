@@ -14,6 +14,7 @@ import { LineLoadingAnimation } from '@structure/source/common/animations/LineLo
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { AccountRole } from '@structure/source/modules/account/Account';
 
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutProperties {
@@ -21,7 +22,7 @@ export interface AuthorizationLayoutProperties {
     mustBeAdministrator?: boolean;
     // If defined, further restrictions are applied and the user is only
     // authorized if the user has any one of these roles.
-    accessibleRoles?: string[];
+    accessibleRoles?: AccountRole[];
 }
 
 // Component that validates the user's authorization (logged in state) and renders the children if authorized.

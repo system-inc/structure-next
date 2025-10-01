@@ -1,8 +1,14 @@
 // Dependencies - API
 import { AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
+// Dependencies - Account
+import { AccountRole } from './AccountRole';
+
 // Account variables shared across the application
 export const accountSignedInKey = 'AccountSignedIn';
+
+// Re-export AccountRole for convenience
+export { AccountRole };
 
 // Class - Account
 
@@ -61,7 +67,7 @@ export class Account {
      * @param role The role to check
      * @returns True if the account has the specified role
      */
-    hasRole(role: string) {
+    hasRole(role: AccountRole) {
         return this.accessRoles.includes(role);
     }
 
@@ -70,7 +76,7 @@ export class Account {
      * @param roles Array of roles to check against
      * @returns True if the account has any of the specified roles
      */
-    hasAnyRole(roles: string[]) {
+    hasAnyRole(roles: AccountRole[]) {
         return roles.some((role) => this.hasRole(role));
     }
 
@@ -79,6 +85,6 @@ export class Account {
      * @returns True if the account is an administrator
      */
     isAdministator() {
-        return this.hasRole('Administrator');
+        return this.hasRole(AccountRole.Administrator);
     }
 }

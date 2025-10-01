@@ -12,16 +12,62 @@ import {
 } from '@structure/source/ops/layouts/navigation/OpsNavigationLink';
 import { OpsNavigationLinkGroup } from '@structure/source/ops/layouts/navigation/OpsNavigationLinkGroup';
 
+// Dependencies - Account
+import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+
 // Component - OpsNavigation
 export function OpsNavigation() {
-    // Get the current pathname from the URL using the usePathname hook
+    // Hooks
+    const account = useAccount();
     const urlPath = useUrlPath() ?? '';
 
-    // Memoize the internal navigation links based on the current URL
+    // Memoize the internal navigation links based on the current URL and user roles
     const memoizedOpsNavigationLinks = React.useMemo(
         function () {
-            function setActiveFlag(opsNavigationLink: OpsNavigationLinkProperties): OpsNavigationLinkProperties {
-                // Check if the link is active, and handle a special case for the root link
+            // Helper function to check if user has access to a navigation link
+            function hasAccess(opsNavigationLink: OpsNavigationLinkProperties): boolean {
+                // If no account data, deny access
+                if(!account.data) {
+                    return false;
+                }
+
+                // Administrator has access to everything
+                if(account.data.isAdministator()) {
+                    return true;
+                }
+
+                // If no roles specified, only Administrator can access (already checked above)
+                if(!opsNavigationLink.accessibleRoles || opsNavigationLink.accessibleRoles.length === 0) {
+                    return false;
+                }
+
+                // Check if user has any of the required roles
+                return account.data.hasAnyRole(opsNavigationLink.accessibleRoles);
+            }
+
+            // Helper function to filter and set active flags on navigation links
+            function filterAndSetActiveFlag(
+                opsNavigationLink: OpsNavigationLinkProperties,
+            ): OpsNavigationLinkProperties | null {
+                // Check if user has access to this link
+                if(!hasAccess(opsNavigationLink)) {
+                    return null;
+                }
+
+                // Filter sub-links if they exist
+                if(opsNavigationLink.links) {
+                    const filteredSubLinks = opsNavigationLink.links
+                        .map(filterAndSetActiveFlag)
+                        .filter((link): link is OpsNavigationLinkProperties => link !== null);
+
+                    // If all sub-links are filtered out, hide the parent link too
+                    if(filteredSubLinks.length === 0) {
+                        return null;
+                    }
+
+                    opsNavigationLink.links = filteredSubLinks;
+                }
+
                 if(opsNavigationLink.title === 'Home') {
                     opsNavigationLink.active = urlPath === '/ops';
                 }
@@ -31,17 +77,15 @@ export function OpsNavigation() {
                         opsNavigationLink.href === urlPath || urlPath.includes(opsNavigationLink.href + '/');
                 }
 
-                // If the link is a group, recursively set the active flag on the links
-                if(opsNavigationLink.links) {
-                    opsNavigationLink.links = opsNavigationLink.links.map(setActiveFlag);
-                }
-
                 return opsNavigationLink;
             }
 
-            return OpsNavigationLinks.map(setActiveFlag);
+            // Filter links by role access and set active flags
+            return OpsNavigationLinks.map(filterAndSetActiveFlag).filter(
+                (link): link is OpsNavigationLinkProperties => link !== null,
+            );
         },
-        [urlPath],
+        [urlPath, account.data],
     );
 
     // Memoize the navigation list

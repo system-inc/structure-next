@@ -4,6 +4,9 @@ import React from 'react';
 // Dependencies - Main Components
 import { Link } from '@structure/source/common/navigation/Link';
 
+// Dependencies - Account
+import { AccountRole } from '@structure/source/modules/account/Account';
+
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 import { useSetAtom } from 'jotai';
@@ -16,6 +19,8 @@ export interface OpsNavigationLinkProperties {
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     active?: boolean;
     links?: OpsNavigationLinkProperties[];
+    // Roles that can access this navigation item. If empty/undefined, only Administrator can access
+    accessibleRoles?: AccountRole[];
 }
 export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
     // console.log('OpsNavigationLink', properties.title, 'active', properties.active);
