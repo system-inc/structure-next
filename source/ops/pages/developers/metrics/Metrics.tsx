@@ -1094,7 +1094,6 @@ export function Metrics() {
 
             {/* DataSources */}
             <DataSources
-                key={dataSources[0]?.id}
                 settings={{
                     timeInterval: timeInterval,
                     dataSources: dataSources,

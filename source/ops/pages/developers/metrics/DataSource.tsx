@@ -23,10 +23,10 @@ import DragIcon from '@structure/assets/icons/interface/DragIcon.svg';
 import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';
 
 // Dependencies - Utilities
-import { useDrag } from '@use-gesture/react';
 import { RgbColor, RgbColorPicker } from 'react-colorful';
 import { rgbStringToHexString, hexStringToRgb } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
+import { Reorder, useDragControls } from 'motion/react';
 
 // Component - DataSource
 export interface DataSourceProperties {
@@ -43,15 +43,19 @@ export interface DataSourceProperties {
     deleteDataSource: (id: string) => void;
     setDataSourcesWithMetrics: React.Dispatch<React.SetStateAction<DataSourceWithMetricsType[]>>;
     isFirst?: boolean;
-    dragEventListener: ReturnType<typeof useDrag>;
     error?: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    datasource: DataSourceType;
+    containerReference: React.RefObject<HTMLDivElement>;
 }
 export function DataSource(properties: DataSourceProperties) {
     // State
     const [isDraggingColor, setIsDraggingColor] = React.useState(false);
     const [localColor, setLocalColor] = React.useState<RgbColor | null>(null);
     const latestColorReference = React.useRef<RgbColor | null>(null);
+
+    // Drag controller
+    const dragControls = useDragControls();
 
     // Parse the current color from props
     const currentColor = React.useMemo(
@@ -576,251 +580,282 @@ export function DataSource(properties: DataSourceProperties) {
 
     // Render the component
     return (
-        <div className="relative my-2 flex w-full items-center justify-start space-x-2">
-            {/* Drag Icon */}
-            <div
-                {...properties.dragEventListener}
-                className={`relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab hover:bg-dark-4/10 active:cursor-grabbing hover:dark:bg-light-4/10 
+        <Reorder.Item
+            key={properties.datasource.id}
+            id={properties.datasource.id}
+            value={properties.datasource}
+            dragListener={false}
+            dragControls={dragControls}
+            dragConstraints={properties.containerReference}
+            dragElastic={0.05}
+            initial={{
+                height: 0,
+            }}
+            animate={{
+                height: 'auto',
+            }}
+            exit={{
+                height: 0,
+            }}
+            transition={{
+                type: 'spring',
+                visualDuration: 0.2,
+                bounce: 0,
+            }}
+            className="relative overflow-y-clip"
+        >
+            <div className="relative flex w-full items-center justify-start space-x-2 py-1">
+                {/* Drag Icon */}
+                <div
+                    // Drag controls automatically stop on pointer up.
+                    onPointerDown={(event) => {
+                        event.preventDefault();
+                        dragControls.start(event);
+                    }}
+                    className={`relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab hover:bg-dark-4/10 active:cursor-grabbing hover:dark:bg-light-4/10
                 `}
-            >
-                <DragIcon className="h-full w-full rotate-90" />
-            </div>
-
-            {/* Bar color, database name, and table selector */}
-            <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2">
-                    {/* The corresponding color of the bar */}
-                    <Popover
-                        side="bottom"
-                        align="start"
-                        sideOffset={8}
-                        collisionPadding={20}
-                        content={
-                            <div
-                                className="w-min overflow-visible p-1"
-                                onMouseDown={() => setIsDraggingColor(true)}
-                                onMouseUp={() => {
-                                    if(isDraggingColor) {
-                                        handleColorChangeCommit();
-                                    }
-                                    setIsDraggingColor(false);
-                                }}
-                                onMouseLeave={() => {
-                                    if(isDraggingColor) {
-                                        handleColorChangeCommit();
-                                        setIsDraggingColor(false);
-                                    }
-                                }}
-                                onTouchStart={() => setIsDraggingColor(true)}
-                                onTouchEnd={() => {
-                                    if(isDraggingColor) {
-                                        handleColorChangeCommit();
-                                    }
-                                    setIsDraggingColor(false);
-                                }}
-                            >
-                                <RgbColorPicker
-                                    color={localColor || currentColor}
-                                    onChange={(color) => {
-                                        // Update the input value
-                                        const input = document.getElementById(
-                                            'color-' + properties.settings.id,
-                                        ) as HTMLInputElement;
-                                        if(input) {
-                                            input.value = rgbStringToHexString(
-                                                `rgba(${color.r}, ${color.g}, ${color.b}, 1)`,
-                                            ).slice(1);
-                                        }
-
-                                        // Update the color visually
-                                        handleColorChangeVisual(color);
-                                    }}
-                                />
-                                {/* Input for a HEX color */}
-                                <div className="relative mt-1 flex items-center">
-                                    <span className="text-gray/50 dark:text-gray-secondary/50 absolute left-3">#</span>
-                                    <InputText
-                                        id={'color-' + properties.settings.id}
-                                        defaultValue={rgbStringToHexString(properties.settings.color).slice(1)}
-                                        onChange={function (value) {
-                                            handleHexColorChange('#' + value);
-                                        }}
-                                        className="pl-7 font-mono"
-                                        placeholder="000000"
-                                    />
-                                </div>
-                            </div>
-                        }
-                    >
-                        <div
-                            className="h-6 w-6 flex-shrink-0 cursor-pointer rounded-medium"
-                            style={{
-                                backgroundColor: properties.settings.color,
-                            }}
-                        ></div>
-                    </Popover>
+                >
+                    <DragIcon className="h-full w-full rotate-90" />
                 </div>
-            </div>
 
-            <DatabaseAndTableFormInputSelects
-                databaseNameFormInputSelectProperties={{
-                    className: 'w-40',
-                    label: undefined,
-                    defaultValue: !properties.settings.databaseName ? undefined : properties.settings.databaseName,
-                }}
-                tableNameFormInputSelectProperties={{
-                    className: 'w-48',
-                    label: undefined,
-                    defaultValue: !properties.settings.tableName ? undefined : properties.settings.tableName,
-                }}
-                onChange={function (databaseName?: string, tableName?: string) {
-                    handleDatabaseAndTableChange(databaseName, tableName);
-                }}
-            />
+                {/* Bar color, database name, and table selector */}
+                <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
+                        {/* The corresponding color of the bar */}
+                        <Popover
+                            side="bottom"
+                            align="start"
+                            sideOffset={8}
+                            collisionPadding={20}
+                            content={
+                                <div
+                                    className="w-min overflow-visible p-1"
+                                    onMouseDown={() => setIsDraggingColor(true)}
+                                    onMouseUp={() => {
+                                        if(isDraggingColor) {
+                                            handleColorChangeCommit();
+                                        }
+                                        setIsDraggingColor(false);
+                                    }}
+                                    onMouseLeave={() => {
+                                        if(isDraggingColor) {
+                                            handleColorChangeCommit();
+                                            setIsDraggingColor(false);
+                                        }
+                                    }}
+                                    onTouchStart={() => setIsDraggingColor(true)}
+                                    onTouchEnd={() => {
+                                        if(isDraggingColor) {
+                                            handleColorChangeCommit();
+                                        }
+                                        setIsDraggingColor(false);
+                                    }}
+                                >
+                                    <RgbColorPicker
+                                        color={localColor || currentColor}
+                                        onChange={(color) => {
+                                            // Update the input value
+                                            const input = document.getElementById(
+                                                'color-' + properties.settings.id,
+                                            ) as HTMLInputElement;
+                                            if(input) {
+                                                input.value = rgbStringToHexString(
+                                                    `rgba(${color.r}, ${color.g}, ${color.b}, 1)`,
+                                                ).slice(1);
+                                            }
 
-            {/* Column selector */}
-            <FormInputSelect
-                key={properties.settings.tableName + columnToMeasure}
-                id="column-name"
-                className="w-40"
-                componentClassName="w-40"
-                // className="flex items-center space-x-2"
-                placeholder="Column"
-                items={
-                    availableColumns?.map((column) => ({
-                        value: column,
-                        content: column,
-                    })) ?? []
-                }
-                defaultValue={
-                    // Check if the properties.settings.columnName exists in the available columns
-                    availableColumns?.includes(properties.settings.columnName)
-                        ? properties.settings.columnName
-                        : // If not, default to the first available column
-                          availableColumns?.at(0)
-                }
-                disabled={dataInteractionDatabaseTableRequest.isLoading || !availableColumns}
-                onChange={(value) => setColumnToMeasureOnDataSources(value as string)}
-            />
+                                            // Update the color visually
+                                            handleColorChangeVisual(color);
+                                        }}
+                                    />
+                                    {/* Input for a HEX color */}
+                                    <div className="relative mt-1 flex items-center">
+                                        <span className="text-gray/50 dark:text-gray-secondary/50 absolute left-3">
+                                            #
+                                        </span>
+                                        <InputText
+                                            id={'color-' + properties.settings.id}
+                                            defaultValue={rgbStringToHexString(properties.settings.color).slice(1)}
+                                            onChange={function (value) {
+                                                handleHexColorChange('#' + value);
+                                            }}
+                                            className="pl-7 font-mono"
+                                            placeholder="000000"
+                                        />
+                                    </div>
+                                </div>
+                            }
+                        >
+                            <div
+                                className="h-6 w-6 flex-shrink-0 cursor-pointer rounded-medium"
+                                style={{
+                                    backgroundColor: properties.settings.color,
+                                }}
+                            ></div>
+                        </Popover>
+                    </div>
+                </div>
 
-            {/* Y Axis Selector */}
-            <FormInputSelect
-                id="y-axis-alignment"
-                className="w-28"
-                componentClassName="w-28"
-                // className="flex items-center space-x-2 pr-20 md:pr-0"
-                // label="Y Axis Alignment"
-                defaultValue={properties.settings.yAxisAlignment}
-                items={[
-                    {
-                        value: 'left',
-                        content: 'Left',
-                    },
-                    {
-                        value: 'right',
-                        content: 'Right',
-                    },
-                ]}
-                onChange={(value) => handleYAxisChange(value as 'left' | 'right')}
-            />
+                <DatabaseAndTableFormInputSelects
+                    databaseNameFormInputSelectProperties={{
+                        className: 'w-40',
+                        label: undefined,
+                        defaultValue: !properties.settings.databaseName ? undefined : properties.settings.databaseName,
+                    }}
+                    tableNameFormInputSelectProperties={{
+                        className: 'w-48',
+                        label: undefined,
+                        defaultValue: !properties.settings.tableName ? undefined : properties.settings.tableName,
+                    }}
+                    onChange={function (databaseName?: string, tableName?: string) {
+                        handleDatabaseAndTableChange(databaseName, tableName);
+                    }}
+                />
 
-            {/* Line Style Selector */}
-            {(properties.settings.chartType === 'line' || properties.settings.chartType === 'area') && (
+                {/* Column selector */}
                 <FormInputSelect
-                    id="line-style"
+                    key={properties.settings.tableName + columnToMeasure}
+                    id="column-name"
+                    className="w-40"
+                    componentClassName="w-40"
+                    // className="flex items-center space-x-2"
+                    placeholder="Column"
+                    items={
+                        availableColumns?.map((column) => ({
+                            value: column,
+                            content: column,
+                        })) ?? []
+                    }
+                    defaultValue={
+                        // Check if the properties.settings.columnName exists in the available columns
+                        availableColumns?.includes(properties.settings.columnName)
+                            ? properties.settings.columnName
+                            : // If not, default to the first available column
+                              availableColumns?.at(0)
+                    }
+                    disabled={dataInteractionDatabaseTableRequest.isLoading || !availableColumns}
+                    onChange={(value) => setColumnToMeasureOnDataSources(value as string)}
+                />
+
+                {/* Y Axis Selector */}
+                <FormInputSelect
+                    id="y-axis-alignment"
                     className="w-28"
                     componentClassName="w-28"
                     // className="flex items-center space-x-2 pr-20 md:pr-0"
-                    // label="Line Style"
+                    // label="Y Axis Alignment"
+                    defaultValue={properties.settings.yAxisAlignment}
                     items={[
                         {
-                            value: 'solid',
-                            content: 'Solid',
+                            value: 'left',
+                            content: 'Left',
                         },
                         {
-                            value: 'dashed',
-                            content: 'Dashed',
+                            value: 'right',
+                            content: 'Right',
                         },
                     ]}
-                    defaultValue={properties.settings.lineStyle}
-                    onChange={(value) => handleLineStyleChange(value as 'solid' | 'dashed')}
-                />
-            )}
-
-            <div className="flex items-center space-x-2 overflow-visible pr-2">
-                <Button
-                    variant="ghostDestructive"
-                    size="icon"
-                    className="relative left-0.5 aspect-square p-1"
-                    icon={MinusCircledIcon}
-                    onClick={handleDelete}
+                    onChange={(value) => handleYAxisChange(value as 'left' | 'right')}
                 />
 
-                {/* Tooltip Content */}
-                <Tip
-                    content={
-                        <div className="p-2">
-                            {!dataInteractionDatabaseTableMetricsRequest.isLoading && (
-                                <div>
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td className="">Count</td>
-                                                <td className="pl-4">{statistics.count}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Sum</td>
-                                                <td className="pl-4">{addCommas(statistics.sum)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Minimum</td>
-                                                <td className="pl-4">{addCommas(statistics.minimum)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Maximum</td>
-                                                <td className="pl-4">{addCommas(statistics.maximum)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Range</td>
-                                                <td className="pl-4">{addCommas(statistics.range)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Average</td>
-                                                <td className="pl-4">{addCommas(statistics.average)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Median</td>
-                                                <td className="pl-4">{addCommas(statistics.median)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Mode</td>
-                                                <td className="pl-4">{addCommas(statistics.mode)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td className="">Standard Deviation</td>
-                                                <td className="pl-4">
-                                                    {addCommas(statistics.standardDeviation)} (
-                                                    {statistics.standardDeviationMessage})
-                                                </td>
-                                            </tr>
-                                            {Array.from(statistics.percentiles.entries()).map(([key, value]) => (
-                                                <tr key={key}>
-                                                    <td className="">{key}th Percentile</td>
-                                                    <td className="pl-4">{addCommas(value ?? 0)}</td>
+                {/* Line Style Selector */}
+                {(properties.settings.chartType === 'line' || properties.settings.chartType === 'area') && (
+                    <FormInputSelect
+                        id="line-style"
+                        className="w-28"
+                        componentClassName="w-28"
+                        // className="flex items-center space-x-2 pr-20 md:pr-0"
+                        // label="Line Style"
+                        items={[
+                            {
+                                value: 'solid',
+                                content: 'Solid',
+                            },
+                            {
+                                value: 'dashed',
+                                content: 'Dashed',
+                            },
+                        ]}
+                        defaultValue={properties.settings.lineStyle}
+                        onChange={(value) => handleLineStyleChange(value as 'solid' | 'dashed')}
+                    />
+                )}
+
+                <div className="flex items-center space-x-2 overflow-visible pr-2">
+                    <Button
+                        variant="ghostDestructive"
+                        size="icon"
+                        className="relative left-0.5 aspect-square p-1"
+                        icon={MinusCircledIcon}
+                        onClick={handleDelete}
+                    />
+
+                    {/* Tooltip Content */}
+                    <Tip
+                        content={
+                            <div className="p-2">
+                                {!dataInteractionDatabaseTableMetricsRequest.isLoading && (
+                                    <div>
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td className="">Count</td>
+                                                    <td className="pl-4">{statistics.count}</td>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
-                        </div>
-                    }
-                >
-                    <p className="relative cursor-default text-end italic text-dark/30 dark:text-light-4/50">
-                        {dataInteractionDatabaseTableMetricsRequest.isLoading ? '...' : addCommas(statistics.sum)}
-                    </p>
-                </Tip>
+                                                <tr>
+                                                    <td className="">Sum</td>
+                                                    <td className="pl-4">{addCommas(statistics.sum)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="">Minimum</td>
+                                                    <td className="pl-4">{addCommas(statistics.minimum)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="">Maximum</td>
+                                                    <td className="pl-4">{addCommas(statistics.maximum)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="">Range</td>
+                                                    <td className="pl-4">{addCommas(statistics.range)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="">Average</td>
+                                                    <td className="pl-4">{addCommas(statistics.average)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="">Median</td>
+                                                    <td className="pl-4">{addCommas(statistics.median)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="">Mode</td>
+                                                    <td className="pl-4">{addCommas(statistics.mode)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="">Standard Deviation</td>
+                                                    <td className="pl-4">
+                                                        {addCommas(statistics.standardDeviation)} (
+                                                        {statistics.standardDeviationMessage})
+                                                    </td>
+                                                </tr>
+                                                {Array.from(statistics.percentiles.entries()).map(([key, value]) => (
+                                                    <tr key={key}>
+                                                        <td className="">{key}th Percentile</td>
+                                                        <td className="pl-4">{addCommas(value ?? 0)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+                        }
+                    >
+                        <p className="relative cursor-default text-end italic text-dark/30 dark:text-light-4/50">
+                            {dataInteractionDatabaseTableMetricsRequest.isLoading ? '...' : addCommas(statistics.sum)}
+                        </p>
+                    </Tip>
+                </div>
             </div>
-        </div>
+        </Reorder.Item>
     );
 }
