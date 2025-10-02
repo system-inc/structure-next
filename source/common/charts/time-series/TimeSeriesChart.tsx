@@ -319,8 +319,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     activeBar={{
                                         fill:
                                             themeSettings.themeClassName === 'light'
-                                                ? lightenColor(dataSource.color, 0.05)
-                                                : lightenColor(dataSource.color, 0.05),
+                                                ? lightenColor(dataSource.color, 0.15)
+                                                : lightenColor(dataSource.color, 0.15),
                                     }}
                                 >
                                     {/* Apply dynamic radius per cell for stacked bars */}

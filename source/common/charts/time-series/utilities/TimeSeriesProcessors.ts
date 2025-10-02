@@ -123,6 +123,14 @@ export function fillMissingTimeIntervalValuesWithZeroes(
         return sortSpecializedIntervalData(data, interval);
     }
 
+    // Check if expected data points would exceed the maximum limit
+    // This prevents browser freezing when trying to generate too many data points
+    const expectedDataPoints = differenceInTimeIntervals(startDate, endDate, interval) + 1;
+    if(exceedsMaximumDataPoints(expectedDataPoints)) {
+        // Return empty array - the chart will show the error state
+        return [];
+    }
+
     if(!data || data.length === 0) {
         return generateEmptyDataPoints(startDate, endDate, interval);
     }
