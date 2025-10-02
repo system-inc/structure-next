@@ -353,3 +353,12 @@ export function getTopBarDataKey<T extends Record<string, number | string>>(
     }
     return null;
 }
+
+// Maximum number of data points allowed in a time series chart
+export const maximumDataPoints = 370;
+
+// Function to check if data points exceed maximum allowed
+export function exceedsMaximumDataPoints(dataPointCount: number, maximum?: number): boolean {
+    const limit = maximum ?? maximumDataPoints;
+    return dataPointCount > limit;
+}

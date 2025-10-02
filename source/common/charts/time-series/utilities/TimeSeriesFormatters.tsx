@@ -40,7 +40,7 @@ export function formatTipLabelByTimeInterval(label: string, interval: TimeInterv
             const parts = label.split('-Q');
             const year = parts[0];
             const quarter = parts[1];
-            return `Q${quarter} ${year}`;
+            return `${year} Q${quarter}`;
         }
         case TimeInterval.Month: {
             // Parse month directly from string to avoid timezone issues
@@ -59,16 +59,21 @@ export function formatTipLabelByTimeInterval(label: string, interval: TimeInterv
             const month = parseInt(parts[1] || '1', 10);
             const day = parseInt(parts[2] || '1', 10);
             const date = new Date(year, month - 1, day);
-            return format(date, 'MMM d, yyyy');
+            return (
+                <div>
+                    <div>{format(date, 'MMMM d, yyyy')}</div>
+                    <div>{format(date, 'EEEE')}</div>
+                </div>
+            );
         }
         case TimeInterval.Hour: {
             const date = new Date(label);
             return (
                 <div>
+                    <div>{format(date, 'MMMM d, yyyy')}</div>
                     <div>
-                        {format(date, 'yyyy-MM-dd')} ({format(date, 'EEEE')})
+                        {timeOnly(date)} ({format(date, 'EEEE')})
                     </div>
-                    <div>{timeOnly(date)}</div>
                 </div>
             );
         }
@@ -76,10 +81,10 @@ export function formatTipLabelByTimeInterval(label: string, interval: TimeInterv
             const date = new Date(label);
             return (
                 <div>
+                    <div>{format(date, 'MMMM d, yyyy')}</div>
                     <div>
-                        {format(date, 'yyyy-MM-dd')} ({format(date, 'EEEE')})
+                        {timeOnly(date)} ({format(date, 'EEEE')})
                     </div>
-                    <div>{timeOnly(date)}</div>
                 </div>
             );
         }
@@ -187,17 +192,55 @@ export function formatAxisTick(
     // Handle years
     if(timeInterval === TimeInterval.Year) {
         if(type === 'primary') {
-            if(totalTicks <= 25) {
+            if(totalTicks <= 10) {
+                // Show all years for 10 or fewer
                 tickValue = value;
             }
+            else if(totalTicks <= 20) {
+                // Show every other year, with smart first/last
+                const year = parseInt(value);
+                const isDivisibleBy2 = year % 2 === 0;
+                const isFirst = index === 0;
+                const isLast = index === totalTicks - 1;
+
+                // Only show first/last if they're at least 2 years from nearest even year
+                if(isDivisibleBy2 || (isFirst && year % 2 !== 0) || (isLast && year % 2 !== 0)) {
+                    tickValue = value;
+                }
+            }
             else if(totalTicks <= 50) {
-                if(index === 0 || index == totalTicks - 1 || parseInt(value) % 5 === 0) {
+                // Show every 5th year, with smart first/last
+                const year = parseInt(value);
+                const isDivisibleBy5 = year % 5 === 0;
+                const isFirst = index === 0;
+                const isLast = index === totalTicks - 1;
+                const yearMod = year % 5;
+
+                // Only show first/last if they're at least 2 years from nearest multiple of 5
+                // yearMod of 1 or 4 means too close (only 1 year away), 2 or 3 means far enough
+                if(
+                    isDivisibleBy5 ||
+                    (isFirst && yearMod >= 2 && yearMod <= 3) ||
+                    (isLast && yearMod >= 2 && yearMod <= 3)
+                ) {
                     tickValue = value;
                 }
             }
             else {
-                if(index === 0 || index == totalTicks - 1 || parseInt(value) % 10 === 0) {
-                    tickValue = value.toString().slice(-2);
+                // Show every 10th year with 2-digit format, with smart first/last
+                const year = parseInt(value);
+                const isDivisibleBy10 = year % 10 === 0;
+                const isFirst = index === 0;
+                const isLast = index === totalTicks - 1;
+                const yearMod = year % 10;
+
+                // Only show first/last if they're at least 3 years from nearest multiple of 10
+                if(
+                    isDivisibleBy10 ||
+                    (isFirst && yearMod >= 3 && yearMod <= 7) ||
+                    (isLast && yearMod >= 3 && yearMod <= 7)
+                ) {
+                    tickValue = year.toString().slice(-2);
                 }
             }
         }
@@ -433,21 +476,12 @@ export function formatAxisTick(
         const weekMatch = value.match(/^(\d{4})-W(\d{2})$/);
         if(weekMatch) {
             const year = weekMatch[1]!;
-            const week = weekMatch[2]!;
+            const weekNumber = parseInt(weekMatch[2]!, 10); // Parse to remove leading zeros
             const previousYear = previousTickValue.slice(0, 4);
 
             if(type === 'primary') {
-                if(index === 0 || index === totalTicks - 1) {
-                    tickValue = `W${week}`;
-                }
-                else if(totalTicks <= 20) {
-                    tickValue = `W${week}`;
-                }
-                else {
-                    if(parseInt(week) % 4 === 0) {
-                        tickValue = `W${week}`;
-                    }
-                }
+                // Show all ticks that are rendered (calculateTickInterval already filtered them)
+                tickValue = `W${weekNumber}`;
             }
             else if(type === 'secondary') {
                 if(index === 0 || year !== previousYear) {
@@ -577,6 +611,26 @@ export function calculateTickInterval(dataLength: number, timeInterval?: TimeInt
             return 0; // Show all days
         }
         return 0; // Show all days
+    }
+
+    // For Week interval, control tick rendering based on range
+    if(timeInterval === TimeInterval.Week) {
+        // ≤52 weeks (1 year): Show every 4th week (~13 ticks)
+        if(dataLength <= 52) {
+            return 3; // Every 4th week
+        }
+        // 53-104 weeks (1-2 years): Show every 8th week (~13 ticks)
+        else if(dataLength <= 104) {
+            return 7; // Every 8th week
+        }
+        // 105-156 weeks (2-3 years): Show every 12th week (~13 ticks)
+        else if(dataLength <= 156) {
+            return 11; // Every 12th week
+        }
+        // >156 weeks: Show every 16th week
+        else {
+            return 15; // Every 16th week
+        }
     }
 
     // Default logic for other intervals

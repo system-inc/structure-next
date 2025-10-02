@@ -7,6 +7,9 @@ import React from 'react';
 import { TimeInterval } from '../TimeInterval';
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 
+// Dependencies - Utilities
+import { differenceInTimeIntervals, exceedsMaximumDataPoints } from '../utilities/TimeSeriesProcessors';
+
 // Type - CachedDataEntry
 interface CachedDataEntry {
     startTime: Date;
@@ -38,6 +41,8 @@ export interface UseTimeSeriesDataWithCacheResult<TVariables> {
     cacheData: (data: unknown, actualStartTime: Date, actualEndTime: Date, actualInterval: TimeInterval) => void;
     // Function to get cached data
     getCachedData: () => unknown | null;
+    // Expected data point count (when fetch is disabled due to exceeding limit)
+    expectedDataPointCount?: number;
 }
 
 // Helper function to check if cached data covers the requested range
@@ -79,6 +84,10 @@ export function useTimeSeriesDataWithCache<TVariables extends Record<string, unk
     const startTime = currentTimeRange.startTime || new Date();
     const endTime = currentTimeRange.endTime || new Date();
 
+    // Calculate expected data points
+    const expectedDataPoints = differenceInTimeIntervals(startTime, endTime, currentInterval) + 1;
+    const tooManyDataPoints = exceedsMaximumDataPoints(expectedDataPoints);
+
     // Check if we can use cached data
     const canUseCachedData = cachedDataCoversRange(cacheReference.current, startTime, endTime, currentInterval);
 
@@ -104,8 +113,11 @@ export function useTimeSeriesDataWithCache<TVariables extends Record<string, unk
 
     return {
         fetchVariables: variables,
-        useCachedData: canUseCachedData,
+        // Use cached data OR disable if too many data points
+        useCachedData: canUseCachedData || tooManyDataPoints,
         cacheData,
         getCachedData,
+        // Only set expectedDataPointCount when we're blocking due to too many points
+        expectedDataPointCount: tooManyDataPoints ? expectedDataPoints : undefined,
     };
 }

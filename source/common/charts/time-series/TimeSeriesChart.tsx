@@ -30,10 +30,15 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 
 // Dependencies - Utilities
 import { TimeInterval } from './TimeInterval';
+import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
 import { formatAxisTick, calculateTickInterval } from './utilities/TimeSeriesFormatters';
-import { getTopBarDataKey } from './utilities/TimeSeriesProcessors';
+import {
+    getTopBarDataKey,
+    exceedsMaximumDataPoints,
+    differenceInTimeIntervals,
+} from './utilities/TimeSeriesProcessors';
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Type - TimeSeriesDataPoint
@@ -60,6 +65,7 @@ export interface TimeSeriesChartProperties {
     className?: string;
     chartType?: ChartType;
     timeInterval?: TimeInterval;
+    timeRange?: TimeRangeType;
     height?: number;
     showGrid?: boolean;
     showXAxis?: boolean;
@@ -70,6 +76,7 @@ export interface TimeSeriesChartProperties {
     onReferenceAreaSelect?: (startLabel: string, endLabel: string) => void;
     isStacked?: boolean;
     tipSortOrder?: 'Descending' | 'Ascending' | false;
+    maximumDataPoints?: number; // Override default 370 limit
 }
 
 // Component - TimeSeriesChart
@@ -99,6 +106,18 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
     // Calculate tick interval
     const tickInterval = calculateTickInterval(properties.data.length, properties.timeInterval);
 
+    // Check if data points exceed maximum
+    // If data is empty but we have timeRange and timeInterval, calculate expected count
+    let dataPointCount = properties.data.length;
+    if(dataPointCount === 0 && properties.timeRange && properties.timeInterval) {
+        const startTime = properties.timeRange.startTime;
+        const endTime = properties.timeRange.endTime;
+        if(startTime && endTime) {
+            dataPointCount = differenceInTimeIntervals(startTime, endTime, properties.timeInterval) + 1;
+        }
+    }
+    const exceedsLimit = exceedsMaximumDataPoints(dataPointCount, properties.maximumDataPoints);
+
     // Effect to observe container size changes
     React.useEffect(function () {
         if(!containerReference.current) return;
@@ -115,6 +134,25 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
             resizeObserver.disconnect();
         };
     }, []);
+
+    // Show warning if too many data points
+    if(exceedsLimit) {
+        return (
+            <div
+                className={mergeClassNames('flex items-center justify-center', properties.className)}
+                style={{ height: chartHeight }}
+            >
+                <div className="text-center">
+                    <p className="text-neutral-700 dark:text-neutral-300 text-sm font-medium">
+                        Too many data points ({addCommas(dataPointCount)}).
+                    </p>
+                    <p className="text-neutral-700 dark:text-neutral-300 text-sm font-medium">
+                        Adjust your time range or interval.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     // Render the component
     return (
