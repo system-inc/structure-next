@@ -46,6 +46,61 @@ export interface TimeSeriesProcessedDataPoint {
     [key: string]: number | string;
 }
 
+// Function to sort specialized interval data in correct order
+function sortSpecializedIntervalData(data: TimeSeriesRawDataPoint[], interval: TimeInterval): TimeSeriesRawDataPoint[] {
+    const sorted = [...data];
+
+    switch(interval) {
+        case TimeInterval.DayOfWeek: {
+            // Sort by day of week: Sunday (0) through Saturday (6)
+            const dayOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            sorted.sort(function (a, b) {
+                const aIndex = dayOrder.indexOf(String(a.timeIntervalValue));
+                const bIndex = dayOrder.indexOf(String(b.timeIntervalValue));
+                return aIndex - bIndex;
+            });
+            break;
+        }
+        case TimeInterval.MonthOfYear: {
+            // Sort by month: January (1) through December (12)
+            const monthOrder = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ];
+            sorted.sort(function (a, b) {
+                const aValue = String(a.timeIntervalValue);
+                const bValue = String(b.timeIntervalValue);
+                // Handle both numeric (1-12) and string (January-December) formats
+                const aIndex = isNaN(Number(aValue)) ? monthOrder.indexOf(aValue) : Number(aValue) - 1;
+                const bIndex = isNaN(Number(bValue)) ? monthOrder.indexOf(bValue) : Number(bValue) - 1;
+                return aIndex - bIndex;
+            });
+            break;
+        }
+        case TimeInterval.HourOfDay:
+        case TimeInterval.DayOfMonth:
+        case TimeInterval.WeekOfYear: {
+            // Sort numerically
+            sorted.sort(function (a, b) {
+                return Number(a.timeIntervalValue) - Number(b.timeIntervalValue);
+            });
+            break;
+        }
+    }
+
+    return sorted;
+}
+
 // Function to fill missing interval values with zeroes
 export function fillMissingTimeIntervalValuesWithZeroes(
     data: TimeSeriesRawDataPoint[],
@@ -53,6 +108,21 @@ export function fillMissingTimeIntervalValuesWithZeroes(
     endDate: Date,
     interval: TimeInterval,
 ): TimeSeriesRawDataPoint[] {
+    // For specialized intervals (DayOfWeek, HourOfDay, etc.), the backend provides
+    // all buckets, so just return the data sorted in the correct order
+    const specializedIntervals = [
+        TimeInterval.DayOfWeek,
+        TimeInterval.HourOfDay,
+        TimeInterval.DayOfMonth,
+        TimeInterval.MonthOfYear,
+        TimeInterval.WeekOfYear,
+    ];
+
+    if(specializedIntervals.includes(interval)) {
+        // Sort specialized interval data in correct order
+        return sortSpecializedIntervalData(data, interval);
+    }
+
     if(!data || data.length === 0) {
         return generateEmptyDataPoints(startDate, endDate, interval);
     }
@@ -218,17 +288,17 @@ export function differenceInTimeIntervals(startDate: Date, endDate: Date, interv
             return differenceInQuarters(endDate, startDate);
         case TimeInterval.Year:
             return differenceInYears(endDate, startDate);
-        // Specialized intervals use their base unit for difference calculation
+        // Specialized intervals return fixed differences (caller adds 1 for total count)
         case TimeInterval.HourOfDay:
-            return differenceInHours(endDate, startDate);
+            return 23; // Hours 0-23 = 23 intervals between them
         case TimeInterval.DayOfWeek:
-            return differenceInDays(endDate, startDate);
+            return 6; // Days 0-6 = 6 intervals between them
         case TimeInterval.DayOfMonth:
-            return differenceInDays(endDate, startDate);
+            return 30; // Days 1-31 = 30 intervals between them
         case TimeInterval.MonthOfYear:
-            return differenceInMonths(endDate, startDate);
+            return 11; // Months 1-12 = 11 intervals between them
         case TimeInterval.WeekOfYear:
-            return differenceInWeeks(endDate, startDate);
+            return 51; // Weeks 1-52 = 51 intervals between them
         default:
             return differenceInDays(endDate, startDate);
     }
@@ -264,8 +334,11 @@ export function formatTimeIntervalKey(date: Date, interval: TimeInterval): strin
         // Specialized intervals return just the component value
         case TimeInterval.HourOfDay:
             return String(date.getHours());
-        case TimeInterval.DayOfWeek:
-            return String(date.getDay()); // 0 = Sunday, 6 = Saturday
+        case TimeInterval.DayOfWeek: {
+            // Return full day name to match backend format
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return dayNames[date.getDay()]!;
+        }
         case TimeInterval.DayOfMonth:
             return String(date.getDate());
         case TimeInterval.MonthOfYear:
@@ -297,6 +370,9 @@ export function mergeTimeSeriesData(
     // Create a map to store merged data
     const mergedMap = new Map<string, TimeSeriesProcessedDataPoint>();
 
+    // Track insertion order for labels (important for specialized intervals)
+    const labelOrder: string[] = [];
+
     // Process each data series
     dataSeries.forEach(function ({ key, data }) {
         data.forEach(function (point) {
@@ -304,11 +380,18 @@ export function mergeTimeSeriesData(
             const existing = mergedMap.get(label) || { label };
             existing[key] = point.total;
             mergedMap.set(label, existing);
+
+            // Track insertion order (only add if not already tracked)
+            if(!labelOrder.includes(label)) {
+                labelOrder.push(label);
+            }
         });
     });
 
-    // Convert map to array and sort by label
-    return Array.from(mergedMap.values()).sort((a, b) => a.label.localeCompare(b.label));
+    // Return data in insertion order (preserves sorting from fillMissingTimeIntervalValuesWithZeroes)
+    return labelOrder.map(function (label) {
+        return mergedMap.get(label)!;
+    });
 }
 
 // Calculate optimal interval based on date range

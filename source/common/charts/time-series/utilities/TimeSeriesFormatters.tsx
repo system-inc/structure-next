@@ -513,16 +513,8 @@ export function formatAxisTick(
     // Handle DayOfWeek
     else if(timeInterval === TimeInterval.DayOfWeek) {
         if(type === 'primary') {
-            // Value could be "Monday" or "0"-"6"
-            const dayNumber = parseInt(value, 10);
-            if(!isNaN(dayNumber)) {
-                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                tickValue = days[dayNumber] || value;
-            }
-            else {
-                // If already a string like "Monday", use first 3 chars
-                tickValue = value.slice(0, 3);
-            }
+            // Use the bucket name from the server as-is (Sunday, Monday, etc.)
+            tickValue = value;
         }
     }
     // Handle DayOfMonth (1-31)
@@ -631,6 +623,16 @@ export function calculateTickInterval(dataLength: number, timeInterval?: TimeInt
         else {
             return 15; // Every 16th week
         }
+    }
+
+    // For DayOfWeek interval, always show all 7 days
+    if(timeInterval === TimeInterval.DayOfWeek) {
+        return 0; // Show all 7 days
+    }
+
+    // For DayOfMonth interval, always show all 31 days
+    if(timeInterval === TimeInterval.DayOfMonth) {
+        return 0; // Show all 31 days
     }
 
     // Default logic for other intervals

@@ -29,7 +29,7 @@ import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
 
 // Dependencies - Utilities
-import { TimeInterval } from './TimeInterval';
+import { TimeInterval, isSpecializedInterval } from './TimeInterval';
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
@@ -85,8 +85,13 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
     const themeSettings = useThemeSettings();
     const isDarkMode = themeSettings.themeClassName === 'dark';
 
-    // Hooks for reference area selection
-    const referenceAreaSelection = useReferenceAreaSelection(properties.onReferenceAreaSelect);
+    // Check if current interval is specialized (disable zoom/selection for these)
+    const isSpecialized = properties.timeInterval ? isSpecializedInterval(properties.timeInterval) : false;
+
+    // Hooks for reference area selection (disabled for specialized intervals)
+    const referenceAreaSelection = useReferenceAreaSelection(
+        isSpecialized ? undefined : properties.onReferenceAreaSelect,
+    );
 
     // Memoized values
     const chartHeight = properties.height || 300;
