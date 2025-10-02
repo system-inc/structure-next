@@ -7,33 +7,44 @@ import {
     // subHours,
     addDays,
     // subDays,
+    addWeeks,
     addMonths,
     // subMonths,
     addYears,
     // subYears,
+    addMinutes,
 
     // Marking the start of a period
     startOfHour,
     startOfDay,
     // startOfToday,
+    startOfWeek,
     startOfMonth,
     startOfYear,
+    startOfMinute,
 
     // Marking the end of a period
     endOfHour,
     endOfDay,
     // endOfToday,
+    endOfWeek,
     endOfMonth,
     endOfYear,
+    endOfMinute,
 
     // Calculating the difference between two dates
     differenceInHours,
     differenceInDays,
+    differenceInWeeks,
     differenceInMonths,
     differenceInYears,
+    differenceInMinutes,
+
+    // Week utilities
+    getWeek,
 } from 'date-fns';
 
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { TimeInterval } from '@structure/source/common/charts/time-series/TimeInterval';
 
 // Fills in missing interval values with zeroes
 export function fillMissingIntervalValuesWithZeroes(
@@ -172,6 +183,37 @@ const generateCompleteIntervalList = (
             }
             break;
         }
+        case TimeInterval.Minute: {
+            const currentMinute = new Date(startTimeIntervalValue);
+            const endMinute = new Date(endTimeIntervalValue);
+
+            // Set the endMinute to the end of the minute
+            endMinute.setSeconds(59);
+            endMinute.setMilliseconds(999);
+
+            while(currentMinute <= endMinute) {
+                // Format as "YYYY-MM-DDTHH:MM:00"
+                const minuteString = currentMinute.toISOString().replace('T', ' ').substring(0, 16) + ':00';
+                completeList.push(minuteString);
+
+                currentMinute.setMinutes(currentMinute.getMinutes() + 1);
+            }
+            break;
+        }
+        case TimeInterval.Week: {
+            // Start from the beginning of the week that contains the start date
+            const currentWeek = startOfWeek(new Date(startTimeIntervalValue));
+            const endWeek = endOfWeek(new Date(endTimeIntervalValue));
+
+            while(currentWeek <= endWeek) {
+                const year = currentWeek.getFullYear();
+                const weekNumber = getWeek(currentWeek);
+                completeList.push(`${year}-W${String(weekNumber).padStart(2, '0')}`);
+
+                currentWeek.setDate(currentWeek.getDate() + 7);
+            }
+            break;
+        }
         case TimeInterval.MonthOfYear:
             // Assume a fixed list of months in a year, 01 to 12
             for(let i = 1; i <= 12; i++) {
@@ -221,6 +263,19 @@ export function convertDateToTimeIntervalValue(date: Date, timeInterval: TimeInt
                 .padStart(2, '0')}`;
         case TimeInterval.Hour:
             return date.toString();
+        case TimeInterval.Minute: {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hour = date.getHours().toString().padStart(2, '0');
+            const minute = date.getMinutes().toString().padStart(2, '0');
+            return `${year}-${month}-${day}T${hour}:${minute}:00`;
+        }
+        case TimeInterval.Week: {
+            const year = date.getFullYear();
+            const weekNumber = getWeek(date);
+            return `${year}-W${String(weekNumber).padStart(2, '0')}`;
+        }
         case TimeInterval.MonthOfYear:
             return (date.getMonth() + 1).toString().padStart(2, '0');
         case TimeInterval.DayOfMonth:
@@ -258,16 +313,30 @@ export function convertIntervalValueToDate(timeIntervalValue: string, timeInterv
                 parseInt(timeIntervalValue.split('-')[1]!, 10) - 1,
                 parseInt(timeIntervalValue.split('-')[2]!, 10),
             );
+        case TimeInterval.Week: {
+            // Week interval values are formatted as "YYYY-WWW" (e.g., "2025-W40")
+            const weekMatch = timeIntervalValue.match(/^(\d{4})-W(\d{2})$/);
+            if(weekMatch) {
+                const year = parseInt(weekMatch[1]!, 10);
+                const week = parseInt(weekMatch[2]!, 10);
+                // Get first day of year and add weeks
+                const firstDayOfYear = new Date(year, 0, 1);
+                const daysToAdd = (week - 1) * 7;
+                const weekStart = new Date(firstDayOfYear);
+                weekStart.setDate(firstDayOfYear.getDate() + daysToAdd);
+                return weekStart;
+            }
+            return new Date(timeIntervalValue);
+        }
         case TimeInterval.Hour: {
-            const date = new Date(timeIntervalValue);
-            // TODO: need to adjust this to client timezone
-            // Get the hour in the local time zone, we multiply by 60000 to convert minutes to milliseconds
-            const timeZoneOffset = date.getTimezoneOffset() * 60000;
-
-            // Adjust the date to the local time zone
-            const localDate = new Date(date.getTime() - timeZoneOffset);
-
-            return localDate;
+            // Hour interval values are formatted as "YYYY-MM-DDTHH:00:00" in local time
+            // JavaScript's Date constructor correctly parses this as local time (no Z suffix = local)
+            return new Date(timeIntervalValue);
+        }
+        case TimeInterval.Minute: {
+            // Minute interval values are formatted as "YYYY-MM-DDTHH:MM:00" in local time
+            // JavaScript's Date constructor correctly parses this as local time (no Z suffix = local)
+            return new Date(timeIntervalValue);
         }
         case TimeInterval.MonthOfYear:
             return new Date(0, parseInt(timeIntervalValue, 10) - 1, 1);
@@ -293,11 +362,17 @@ export function convertIntervalValueToDate(timeIntervalValue: string, timeInterv
 export function calculateRange(from: Date, to: Date, timeInterval: string) {
     let range;
     switch(timeInterval) {
+        case TimeInterval.Minute:
+            range = to && from ? differenceInMinutes(endOfMinute(to), startOfMinute(from)) + 1 : 0;
+            break;
         case TimeInterval.Hour:
             range = to && from ? differenceInHours(endOfHour(to), startOfHour(from)) + 1 : 0;
             break;
         case TimeInterval.Day:
             range = to && from ? differenceInDays(endOfDay(to), startOfDay(from)) + 1 : 0;
+            break;
+        case TimeInterval.Week:
+            range = to && from ? differenceInWeeks(endOfWeek(to), startOfWeek(from)) + 1 : 0;
             break;
         case TimeInterval.Month:
             range = to && from ? differenceInMonths(endOfMonth(to), startOfMonth(from)) + 1 : 0;
@@ -330,6 +405,10 @@ export function calculateTimeIntervalValueStartAndEndDate(timeIntervalValue: str
     const timeIntervalValueDate = convertIntervalValueToDate(timeIntervalValue, timeInterval);
 
     switch(timeInterval) {
+        case TimeInterval.Minute:
+            startDate = new Date(timeIntervalValueDate);
+            endDate = addMinutes(startDate, 1);
+            break;
         case TimeInterval.Hour:
             startDate = new Date(timeIntervalValueDate);
             endDate = addHours(startDate, 1);
@@ -337,6 +416,10 @@ export function calculateTimeIntervalValueStartAndEndDate(timeIntervalValue: str
         case TimeInterval.Day:
             startDate = new Date(timeIntervalValueDate);
             endDate = addDays(startDate, 1);
+            break;
+        case TimeInterval.Week:
+            startDate = new Date(timeIntervalValueDate);
+            endDate = addWeeks(startDate, 1);
             break;
         case TimeInterval.Month:
             startDate = new Date(timeIntervalValueDate);

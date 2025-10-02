@@ -1,25 +1,34 @@
-// Dependencies - API
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+// Dependencies - Types
+import { TimeInterval } from '../TimeInterval';
 
 // Dependencies - Utilities
 import {
+    startOfMinute,
     startOfHour,
     startOfDay,
+    startOfWeek,
     startOfMonth,
     startOfQuarter,
     startOfYear,
+    endOfMinute,
     endOfHour,
     endOfDay,
+    endOfWeek,
     endOfMonth,
     endOfQuarter,
     endOfYear,
+    addMinutes,
     addHours,
     addDays,
+    addWeeks,
     addMonths,
     addQuarters,
     addYears,
+    getWeek,
+    differenceInMinutes,
     differenceInHours,
     differenceInDays,
+    differenceInWeeks,
     differenceInMonths,
     differenceInQuarters,
     differenceInYears,
@@ -37,6 +46,61 @@ export interface TimeSeriesProcessedDataPoint {
     [key: string]: number | string;
 }
 
+// Function to sort specialized interval data in correct order
+function sortSpecializedIntervalData(data: TimeSeriesRawDataPoint[], interval: TimeInterval): TimeSeriesRawDataPoint[] {
+    const sorted = [...data];
+
+    switch(interval) {
+        case TimeInterval.DayOfWeek: {
+            // Sort by day of week: Sunday (0) through Saturday (6)
+            const dayOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            sorted.sort(function (a, b) {
+                const aIndex = dayOrder.indexOf(String(a.timeIntervalValue));
+                const bIndex = dayOrder.indexOf(String(b.timeIntervalValue));
+                return aIndex - bIndex;
+            });
+            break;
+        }
+        case TimeInterval.MonthOfYear: {
+            // Sort by month: January (1) through December (12)
+            const monthOrder = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+            ];
+            sorted.sort(function (a, b) {
+                const aValue = String(a.timeIntervalValue);
+                const bValue = String(b.timeIntervalValue);
+                // Handle both numeric (1-12) and string (January-December) formats
+                const aIndex = isNaN(Number(aValue)) ? monthOrder.indexOf(aValue) : Number(aValue) - 1;
+                const bIndex = isNaN(Number(bValue)) ? monthOrder.indexOf(bValue) : Number(bValue) - 1;
+                return aIndex - bIndex;
+            });
+            break;
+        }
+        case TimeInterval.HourOfDay:
+        case TimeInterval.DayOfMonth:
+        case TimeInterval.WeekOfYear: {
+            // Sort numerically
+            sorted.sort(function (a, b) {
+                return Number(a.timeIntervalValue) - Number(b.timeIntervalValue);
+            });
+            break;
+        }
+    }
+
+    return sorted;
+}
+
 // Function to fill missing interval values with zeroes
 export function fillMissingTimeIntervalValuesWithZeroes(
     data: TimeSeriesRawDataPoint[],
@@ -44,6 +108,29 @@ export function fillMissingTimeIntervalValuesWithZeroes(
     endDate: Date,
     interval: TimeInterval,
 ): TimeSeriesRawDataPoint[] {
+    // For specialized intervals (DayOfWeek, HourOfDay, etc.), the backend provides
+    // all buckets, so just return the data sorted in the correct order
+    const specializedIntervals = [
+        TimeInterval.DayOfWeek,
+        TimeInterval.HourOfDay,
+        TimeInterval.DayOfMonth,
+        TimeInterval.MonthOfYear,
+        TimeInterval.WeekOfYear,
+    ];
+
+    if(specializedIntervals.includes(interval)) {
+        // Sort specialized interval data in correct order
+        return sortSpecializedIntervalData(data, interval);
+    }
+
+    // Check if expected data points would exceed the maximum limit
+    // This prevents browser freezing when trying to generate too many data points
+    const expectedDataPoints = differenceInTimeIntervals(startDate, endDate, interval) + 1;
+    if(exceedsMaximumDataPoints(expectedDataPoints)) {
+        // Return empty array - the chart will show the error state
+        return [];
+    }
+
     if(!data || data.length === 0) {
         return generateEmptyDataPoints(startDate, endDate, interval);
     }
@@ -96,16 +183,31 @@ export function generateEmptyDataPoints(
 // Function to get the start of an interval
 export function getTimeIntervalStart(date: Date, interval: TimeInterval): Date {
     switch(interval) {
+        case TimeInterval.Minute:
+            return startOfMinute(date);
         case TimeInterval.Hour:
             return startOfHour(date);
         case TimeInterval.Day:
             return startOfDay(date);
+        case TimeInterval.Week:
+            return startOfWeek(date);
         case TimeInterval.Month:
             return startOfMonth(date);
         case TimeInterval.Quarter:
             return startOfQuarter(date);
         case TimeInterval.Year:
             return startOfYear(date);
+        // Specialized intervals use hour as base unit
+        case TimeInterval.HourOfDay:
+            return startOfHour(date);
+        case TimeInterval.DayOfWeek:
+            return startOfDay(date);
+        case TimeInterval.DayOfMonth:
+            return startOfDay(date);
+        case TimeInterval.MonthOfYear:
+            return startOfMonth(date);
+        case TimeInterval.WeekOfYear:
+            return startOfWeek(date);
         default:
             return startOfDay(date);
     }
@@ -114,16 +216,31 @@ export function getTimeIntervalStart(date: Date, interval: TimeInterval): Date {
 // Function to get the end of an interval
 export function getTimeIntervalEnd(date: Date, interval: TimeInterval): Date {
     switch(interval) {
+        case TimeInterval.Minute:
+            return endOfMinute(date);
         case TimeInterval.Hour:
             return endOfHour(date);
         case TimeInterval.Day:
             return endOfDay(date);
+        case TimeInterval.Week:
+            return endOfWeek(date);
         case TimeInterval.Month:
             return endOfMonth(date);
         case TimeInterval.Quarter:
             return endOfQuarter(date);
         case TimeInterval.Year:
             return endOfYear(date);
+        // Specialized intervals use hour/day/month/week/year as base unit
+        case TimeInterval.HourOfDay:
+            return endOfHour(date);
+        case TimeInterval.DayOfWeek:
+            return endOfDay(date);
+        case TimeInterval.DayOfMonth:
+            return endOfDay(date);
+        case TimeInterval.MonthOfYear:
+            return endOfMonth(date);
+        case TimeInterval.WeekOfYear:
+            return endOfWeek(date);
         default:
             return endOfDay(date);
     }
@@ -132,16 +249,31 @@ export function getTimeIntervalEnd(date: Date, interval: TimeInterval): Date {
 // Function to add intervals to a date
 export function addTimeInterval(date: Date, interval: TimeInterval, count: number): Date {
     switch(interval) {
+        case TimeInterval.Minute:
+            return addMinutes(date, count);
         case TimeInterval.Hour:
             return addHours(date, count);
         case TimeInterval.Day:
             return addDays(date, count);
+        case TimeInterval.Week:
+            return addWeeks(date, count);
         case TimeInterval.Month:
             return addMonths(date, count);
         case TimeInterval.Quarter:
             return addQuarters(date, count);
         case TimeInterval.Year:
             return addYears(date, count);
+        // Specialized intervals increment by their base unit
+        case TimeInterval.HourOfDay:
+            return addHours(date, count);
+        case TimeInterval.DayOfWeek:
+            return addDays(date, count);
+        case TimeInterval.DayOfMonth:
+            return addDays(date, count);
+        case TimeInterval.MonthOfYear:
+            return addMonths(date, count);
+        case TimeInterval.WeekOfYear:
+            return addWeeks(date, count);
         default:
             return addDays(date, count);
     }
@@ -150,16 +282,31 @@ export function addTimeInterval(date: Date, interval: TimeInterval, count: numbe
 // Function to calculate difference between dates in intervals
 export function differenceInTimeIntervals(startDate: Date, endDate: Date, interval: TimeInterval): number {
     switch(interval) {
+        case TimeInterval.Minute:
+            return differenceInMinutes(endDate, startDate);
         case TimeInterval.Hour:
             return differenceInHours(endDate, startDate);
         case TimeInterval.Day:
             return differenceInDays(endDate, startDate);
+        case TimeInterval.Week:
+            return differenceInWeeks(endDate, startDate);
         case TimeInterval.Month:
             return differenceInMonths(endDate, startDate);
         case TimeInterval.Quarter:
             return differenceInQuarters(endDate, startDate);
         case TimeInterval.Year:
             return differenceInYears(endDate, startDate);
+        // Specialized intervals return fixed differences (caller adds 1 for total count)
+        case TimeInterval.HourOfDay:
+            return 23; // Hours 0-23 = 23 intervals between them
+        case TimeInterval.DayOfWeek:
+            return 6; // Days 0-6 = 6 intervals between them
+        case TimeInterval.DayOfMonth:
+            return 30; // Days 1-31 = 30 intervals between them
+        case TimeInterval.MonthOfYear:
+            return 11; // Months 1-12 = 11 intervals between them
+        case TimeInterval.WeekOfYear:
+            return 51; // Weeks 1-52 = 51 intervals between them
         default:
             return differenceInDays(endDate, startDate);
     }
@@ -171,12 +318,19 @@ export function formatTimeIntervalKey(date: Date, interval: TimeInterval): strin
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
 
     switch(interval) {
+        case TimeInterval.Minute:
+            return `${year}-${month}-${day}T${hour}:${minute}:00`;
         case TimeInterval.Hour:
             return `${year}-${month}-${day}T${hour}:00:00`;
         case TimeInterval.Day:
             return `${year}-${month}-${day}`;
+        case TimeInterval.Week: {
+            const weekNumber = getWeek(date);
+            return `${year}-W${String(weekNumber).padStart(2, '0')}`;
+        }
         case TimeInterval.Month:
             return `${year}-${month}`;
         case TimeInterval.Quarter: {
@@ -185,6 +339,22 @@ export function formatTimeIntervalKey(date: Date, interval: TimeInterval): strin
         }
         case TimeInterval.Year:
             return String(year);
+        // Specialized intervals return just the component value
+        case TimeInterval.HourOfDay:
+            return String(date.getHours());
+        case TimeInterval.DayOfWeek: {
+            // Return full day name to match backend format
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return dayNames[date.getDay()]!;
+        }
+        case TimeInterval.DayOfMonth:
+            return String(date.getDate());
+        case TimeInterval.MonthOfYear:
+            return String(date.getMonth() + 1); // 1 = January, 12 = December
+        case TimeInterval.WeekOfYear: {
+            const weekNumber = getWeek(date);
+            return String(weekNumber);
+        }
         default:
             return `${year}-${month}-${day}`;
     }
@@ -208,6 +378,9 @@ export function mergeTimeSeriesData(
     // Create a map to store merged data
     const mergedMap = new Map<string, TimeSeriesProcessedDataPoint>();
 
+    // Track insertion order for labels (important for specialized intervals)
+    const labelOrder: string[] = [];
+
     // Process each data series
     dataSeries.forEach(function ({ key, data }) {
         data.forEach(function (point) {
@@ -215,11 +388,18 @@ export function mergeTimeSeriesData(
             const existing = mergedMap.get(label) || { label };
             existing[key] = point.total;
             mergedMap.set(label, existing);
+
+            // Track insertion order (only add if not already tracked)
+            if(!labelOrder.includes(label)) {
+                labelOrder.push(label);
+            }
         });
     });
 
-    // Convert map to array and sort by label
-    return Array.from(mergedMap.values()).sort((a, b) => a.label.localeCompare(b.label));
+    // Return data in insertion order (preserves sorting from fillMissingTimeIntervalValuesWithZeroes)
+    return labelOrder.map(function (label) {
+        return mergedMap.get(label)!;
+    });
 }
 
 // Calculate optimal interval based on date range
@@ -245,4 +425,31 @@ export function calculateOptimalInterval(startDate: Date, endDate: Date, maxData
 
     // Default to month for larger ranges
     return TimeInterval.Month;
+}
+
+// Get the topmost non-zero bar in a stacked chart
+export function getTopBarDataKey<T extends Record<string, number | string>>(
+    dataPoint: T,
+    dataKeys: string[],
+): string | null {
+    // Iterate dataKeys in reverse (they're rendered bottom-to-top in stacked charts)
+    for(let i = dataKeys.length - 1; i >= 0; i--) {
+        const dataKey = dataKeys[i];
+        if(!dataKey) continue;
+
+        const value = dataPoint[dataKey];
+        if(typeof value === 'number' && value > 0) {
+            return dataKey;
+        }
+    }
+    return null;
+}
+
+// Maximum number of data points allowed in a time series chart
+export const maximumDataPoints = 370;
+
+// Function to check if data points exceed maximum allowed
+export function exceedsMaximumDataPoints(dataPointCount: number, maximum?: number): boolean {
+    const limit = maximum ?? maximumDataPoints;
+    return dataPointCount > limit;
 }

@@ -13,13 +13,14 @@ import {
     Tooltip as RechartsTooltip,
     ResponsiveContainer,
     Bar,
+    Cell,
     Line,
     Area,
     XAxis,
     YAxis,
+    ReferenceArea,
 } from 'recharts';
 import { TimeSeriesTip } from './TimeSeriesTip';
-import { TimeSeriesReferenceArea } from './components/TimeSeriesReferenceArea';
 
 // Dependencies - Hooks
 import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
@@ -28,10 +29,17 @@ import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
 
 // Dependencies - Utilities
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { TimeInterval, isSpecializedInterval } from './TimeInterval';
+import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
 import { formatAxisTick, calculateTickInterval } from './utilities/TimeSeriesFormatters';
+import {
+    getTopBarDataKey,
+    exceedsMaximumDataPoints,
+    differenceInTimeIntervals,
+} from './utilities/TimeSeriesProcessors';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Type - TimeSeriesDataPoint
 export interface TimeSeriesDataPoint {
@@ -57,6 +65,7 @@ export interface TimeSeriesChartProperties {
     className?: string;
     chartType?: ChartType;
     timeInterval?: TimeInterval;
+    timeRange?: TimeRangeType;
     height?: number;
     showGrid?: boolean;
     showXAxis?: boolean;
@@ -67,6 +76,7 @@ export interface TimeSeriesChartProperties {
     onReferenceAreaSelect?: (startLabel: string, endLabel: string) => void;
     isStacked?: boolean;
     tipSortOrder?: 'Descending' | 'Ascending' | false;
+    maximumDataPoints?: number; // Override default 370 limit
 }
 
 // Component - TimeSeriesChart
@@ -75,8 +85,13 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
     const themeSettings = useThemeSettings();
     const isDarkMode = themeSettings.themeClassName === 'dark';
 
-    // Hooks for reference area selection
-    const referenceAreaSelection = useReferenceAreaSelection(properties.onReferenceAreaSelect);
+    // Check if current interval is specialized (disable zoom/selection for these)
+    const isSpecialized = properties.timeInterval ? isSpecializedInterval(properties.timeInterval) : false;
+
+    // Hooks for reference area selection (disabled for specialized intervals)
+    const referenceAreaSelection = useReferenceAreaSelection(
+        isSpecialized ? undefined : properties.onReferenceAreaSelect,
+    );
 
     // Memoized values
     const chartHeight = properties.height || 300;
@@ -91,9 +106,22 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
     // Previous tick value tracking for formatters
     const previousTickValueReference = React.useRef<string>('');
+    const previousSecondaryTickValueReference = React.useRef<string>('');
 
     // Calculate tick interval
-    const tickInterval = calculateTickInterval(properties.data.length);
+    const tickInterval = calculateTickInterval(properties.data.length, properties.timeInterval);
+
+    // Check if data points exceed maximum
+    // If data is empty but we have timeRange and timeInterval, calculate expected count
+    let dataPointCount = properties.data.length;
+    if(dataPointCount === 0 && properties.timeRange && properties.timeInterval) {
+        const startTime = properties.timeRange.startTime;
+        const endTime = properties.timeRange.endTime;
+        if(startTime && endTime) {
+            dataPointCount = differenceInTimeIntervals(startTime, endTime, properties.timeInterval) + 1;
+        }
+    }
+    const exceedsLimit = exceedsMaximumDataPoints(dataPointCount, properties.maximumDataPoints);
 
     // Effect to observe container size changes
     React.useEffect(function () {
@@ -112,9 +140,28 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
         };
     }, []);
 
+    // Show warning if too many data points
+    if(exceedsLimit) {
+        return (
+            <div
+                className={mergeClassNames('flex items-center justify-center', properties.className)}
+                style={{ height: chartHeight }}
+            >
+                <div className="text-center">
+                    <p className="text-neutral-700 dark:text-neutral-300 text-sm font-medium">
+                        Too many data points ({addCommas(dataPointCount)}).
+                    </p>
+                    <p className="text-neutral-700 dark:text-neutral-300 text-sm font-medium">
+                        Adjust your time range or interval.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     // Render the component
     return (
-        <div className={properties.className} ref={containerReference}>
+        <div className={mergeClassNames('select-none', properties.className)} ref={containerReference}>
             <ResponsiveContainer width="100%" height={chartHeight}>
                 <ComposedChart
                     data={properties.data}
@@ -160,14 +207,17 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                 tick={{ fill: 'var(--foreground-tertiary)' }}
                                 interval={tickInterval}
                                 tickFormatter={function (value: string | number | undefined, index: number) {
-                                    return formatAxisTick(
+                                    const stringValue = String(value || '');
+                                    const result = formatAxisTick(
                                         'secondary',
                                         properties.timeInterval || TimeInterval.Day,
-                                        String(value || ''),
+                                        stringValue,
                                         index,
-                                        (index > 0 && properties.data && properties.data[index - 1]?.label) || '',
+                                        previousSecondaryTickValueReference.current,
                                         properties.data.length,
                                     );
+                                    previousSecondaryTickValueReference.current = stringValue;
+                                    return result;
                                 }}
                                 allowDuplicatedCategory={false}
                                 className="text-sm"
@@ -235,6 +285,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                 <TimeSeriesTip
                                     dataSources={properties.dataSources}
                                     sortByValue={properties.tipSortOrder}
+                                    timeInterval={properties.timeInterval}
                                 />
                             }
                         />
@@ -252,10 +303,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
                         if(properties.chartType === 'Bar') {
                             const isStackedBar = dataSource.stackId || properties.isStacked;
-                            // Use rounded corners only for non-stacked bars
-                            const barRadius: [number, number, number, number] = isStackedBar
-                                ? [0, 0, 0, 0]
-                                : [4, 4, 0, 0];
+                            // Default radius for all bars
+                            const defaultRadius: [number, number, number, number] = [4, 4, 0, 0];
 
                             return (
                                 <Bar
@@ -263,17 +312,42 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     dataKey={dataSource.dataKey}
                                     name={dataSource.name}
                                     fill={dataSource.color}
-                                    radius={barRadius}
+                                    radius={defaultRadius}
                                     yAxisId={yAxisId}
                                     animationDuration={0}
                                     stackId={isStackedBar ? 'stack' : undefined}
                                     activeBar={{
                                         fill:
                                             themeSettings.themeClassName === 'light'
-                                                ? lightenColor(dataSource.color, 0.05)
-                                                : lightenColor(dataSource.color, 0.05),
+                                                ? lightenColor(dataSource.color, 0.15)
+                                                : lightenColor(dataSource.color, 0.15),
                                     }}
-                                />
+                                >
+                                    {/* Apply dynamic radius per cell for stacked bars */}
+                                    {isStackedBar &&
+                                        properties.data.map(function (dataPoint, index) {
+                                            const stackedDataKeys = properties.dataSources
+                                                .filter(function (currentDataSource) {
+                                                    return currentDataSource.stackId || properties.isStacked;
+                                                })
+                                                .map(function (currentDataSource) {
+                                                    return currentDataSource.dataKey;
+                                                });
+                                            const topBarDataKey = getTopBarDataKey(dataPoint, stackedDataKeys);
+
+                                            // Only apply radius if this bar is the top bar for this data point
+                                            const shouldRound = topBarDataKey === dataSource.dataKey;
+
+                                            return (
+                                                <Cell
+                                                    key={`cell-${index}`}
+                                                    radius={
+                                                        shouldRound ? (defaultRadius as never) : ([0, 0, 0, 0] as never)
+                                                    }
+                                                />
+                                            );
+                                        })}
+                                </Bar>
                             );
                         }
                         else if(properties.chartType === 'Area') {
@@ -332,11 +406,16 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                         }
                     })}
 
-                    <TimeSeriesReferenceArea
-                        referenceAreaStart={referenceAreaSelection.referenceAreaStart}
-                        referenceAreaEnd={referenceAreaSelection.referenceAreaEnd}
-                        onReferenceAreaSelect={properties.onReferenceAreaSelect}
-                    />
+                    {/* Reference Area for drag selection */}
+                    {referenceAreaSelection.referenceAreaStart && referenceAreaSelection.referenceAreaEnd && (
+                        <ReferenceArea
+                            yAxisId="left"
+                            x1={referenceAreaSelection.referenceAreaStart}
+                            x2={referenceAreaSelection.referenceAreaEnd}
+                            strokeOpacity={0.5}
+                            fillOpacity={isDarkMode ? 0.1 : 0.2}
+                        />
+                    )}
                 </ComposedChart>
             </ResponsiveContainer>
         </div>

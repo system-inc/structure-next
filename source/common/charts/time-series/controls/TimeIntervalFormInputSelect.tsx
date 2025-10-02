@@ -4,8 +4,11 @@ import React from 'react';
 // Dependencies - Main Components
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 
-// Dependencies - API
-import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+// Dependencies - Types
+import { TimeInterval } from '../TimeInterval';
+
+// Dependencies - Utilities
+import { titleCase } from '@structure/source/utilities/String';
 
 // Component - TimeIntervalFormInputSelect
 export interface TimeIntervalFormInputSelectProperties {
@@ -20,18 +23,25 @@ export function TimeIntervalFormInputSelect(properties: TimeIntervalFormInputSel
 
     // Default available intervals
     const availableIntervals = properties.availableIntervals || [
+        TimeInterval.Minute,
         TimeInterval.Hour,
         TimeInterval.Day,
+        TimeInterval.Week,
         TimeInterval.Month,
         TimeInterval.Quarter,
         TimeInterval.Year,
+        TimeInterval.HourOfDay,
+        TimeInterval.DayOfWeek,
+        TimeInterval.DayOfMonth,
+        TimeInterval.MonthOfYear,
+        TimeInterval.WeekOfYear,
     ];
 
     // Create items for the select
     const items = availableIntervals.map(function (interval) {
         return {
             value: interval,
-            content: interval.charAt(0).toUpperCase() + interval.slice(1).toLowerCase(),
+            content: titleCase(interval),
         };
     });
 
