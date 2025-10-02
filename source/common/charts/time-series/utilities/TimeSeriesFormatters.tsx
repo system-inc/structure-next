@@ -1,9 +1,12 @@
+// Dependencies - React
+import React from 'react';
+
 // Dependencies - Types
 import { TimeInterval } from '../TimeInterval';
 
 // Dependencies - Utilities
 import { format } from 'date-fns';
-import { monthAbbreviation } from '@structure/source/utilities/Time';
+import { monthAbbreviation, timeOnly } from '@structure/source/utilities/Time';
 
 // Function to format a date value based on the interval
 export function formatDateByTimeInterval(date: Date, interval: TimeInterval): string {
@@ -26,22 +29,108 @@ export function formatDateByTimeInterval(date: Date, interval: TimeInterval): st
 }
 
 // Function to format a tip label based on interval
-export function formatTipLabelByTimeInterval(label: string, interval: TimeInterval): string {
-    const date = new Date(label);
-
+export function formatTipLabelByTimeInterval(label: string, interval: TimeInterval): string | React.ReactNode {
     switch(interval) {
         case TimeInterval.Year:
-            return format(date, 'yyyy');
+            // Backend sends "2025", use as-is to avoid timezone issues
+            return label;
         case TimeInterval.Quarter: {
-            const quarter = Math.floor(date.getMonth() / 3) + 1;
-            return `Q${quarter} ${format(date, 'yyyy')}`;
+            // Backend sends "2025-Q4", parse directly to avoid timezone issues
+            // Format is "YYYY-QN"
+            const parts = label.split('-Q');
+            const year = parts[0];
+            const quarter = parts[1];
+            return `Q${quarter} ${year}`;
         }
-        case TimeInterval.Month:
-            return format(date, 'MMMM yyyy');
-        case TimeInterval.Day:
+        case TimeInterval.Month: {
+            // Parse month directly from string to avoid timezone issues
+            // Format is "YYYY-MM"
+            const parts = label.split('-');
+            const year = parts[0];
+            const month = parseInt(parts[1] || '1', 10);
+            const monthDate = new Date(parseInt(year || '2025', 10), month - 1, 1);
+            return format(monthDate, 'MMMM yyyy');
+        }
+        case TimeInterval.Day: {
+            // Parse date directly from string to avoid timezone issues
+            // Format is "YYYY-MM-DD"
+            const parts = label.split('-');
+            const year = parseInt(parts[0] || '2025', 10);
+            const month = parseInt(parts[1] || '1', 10);
+            const day = parseInt(parts[2] || '1', 10);
+            const date = new Date(year, month - 1, day);
             return format(date, 'MMM d, yyyy');
-        case TimeInterval.Hour:
-            return format(date, "MMMM d, yyyy 'at' h a");
+        }
+        case TimeInterval.Hour: {
+            const date = new Date(label);
+            return (
+                <div>
+                    <div>
+                        {format(date, 'yyyy-MM-dd')} ({format(date, 'EEEE')})
+                    </div>
+                    <div>{timeOnly(date)}</div>
+                </div>
+            );
+        }
+        case TimeInterval.Minute: {
+            const date = new Date(label);
+            return (
+                <div>
+                    <div>
+                        {format(date, 'yyyy-MM-dd')} ({format(date, 'EEEE')})
+                    </div>
+                    <div>{timeOnly(date)}</div>
+                </div>
+            );
+        }
+        case TimeInterval.HourOfDay: {
+            // Label is "0" to "23"
+            const hour = parseInt(label, 10);
+            return hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`;
+        }
+        case TimeInterval.DayOfWeek: {
+            // Label could be "Monday" or "0"-"6"
+            const dayNumber = parseInt(label, 10);
+            if(!isNaN(dayNumber)) {
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                return days[dayNumber] || label;
+            }
+            return label;
+        }
+        case TimeInterval.DayOfMonth: {
+            // Label is "1" to "31"
+            return `Day ${label}`;
+        }
+        case TimeInterval.MonthOfYear: {
+            // Label could be "1"-"12" or "January"-"December"
+            const monthNumber = parseInt(label, 10);
+            if(!isNaN(monthNumber)) {
+                const months = [
+                    'January',
+                    'February',
+                    'March',
+                    'April',
+                    'May',
+                    'June',
+                    'July',
+                    'August',
+                    'September',
+                    'October',
+                    'November',
+                    'December',
+                ];
+                return months[monthNumber - 1] || label;
+            }
+            return label;
+        }
+        case TimeInterval.WeekOfYear: {
+            // Label is "1" to "52" or "W01" to "W52"
+            const weekMatch = label.match(/^W?(\d+)$/);
+            if(weekMatch) {
+                return `Week ${weekMatch[1]}`;
+            }
+            return label;
+        }
         default:
             return label;
     }
@@ -71,6 +160,9 @@ let lastSeenDay: number | null = null;
 // Track month changes for secondary axis (reset when index is 0)
 let lastSeenMonth: number | null = null;
 
+// Track highest index seen for detecting last tick
+let highestIndexSeen = -1;
+
 // Format tick for chart axis based on interval and position
 export function formatAxisTick(
     type: 'primary' | 'secondary',
@@ -81,6 +173,16 @@ export function formatAxisTick(
     totalTicks: number,
 ): string {
     let tickValue = '';
+
+    // Track if this is the last tick by monitoring the highest index seen
+    // Reset when we see index 0 (new render cycle)
+    if(index === 0) {
+        highestIndexSeen = 0;
+    }
+    const isLastTick = index > highestIndexSeen;
+    if(isLastTick) {
+        highestIndexSeen = index;
+    }
 
     // Handle years
     if(timeInterval === TimeInterval.Year) {
@@ -179,35 +281,43 @@ export function formatAxisTick(
 
         if(type === 'primary') {
             // Show day numbers based on density
-            if(index === 0 || index === totalTicks - 1) {
+            if(totalTicks <= 31) {
+                // Show every day for a month or less
                 tickValue = day.toString();
             }
-            else if(totalTicks <= 7) {
-                // Show all days for a week or less
-                tickValue = day.toString();
-            }
-            else if(totalTicks <= 14) {
-                // Show every other day
+            else if(totalTicks <= 62) {
+                // Show every other day for ~2 months
                 if(day % 2 === 1) {
                     tickValue = day.toString();
                 }
             }
-            else if(totalTicks <= 31) {
-                // Show every 3rd day
+            else if(totalTicks <= 90) {
+                // Show every 3rd day for ~3 months
                 if(day % 3 === 0 || day === 1) {
                     tickValue = day.toString();
                 }
             }
-            else {
-                // Show every 5th day for longer ranges
+            else if(totalTicks <= 180) {
+                // Show every 5th day for ~6 months
                 if(day % 5 === 0 || day === 1) {
+                    tickValue = day.toString();
+                }
+            }
+            else {
+                // For a full year (365 days), show day 1 and 15 of each month
+                if(day === 1 || day === 15) {
                     tickValue = day.toString();
                 }
             }
         }
         else if(type === 'secondary') {
-            // Show month name when it changes or at the start
-            if(index === 0 || !previousDate || date.getMonth() !== previousDate.getMonth()) {
+            // Show month name when month changes
+            if(index === 0) {
+                // Always show first tick
+                tickValue = monthAbbreviation(date.getMonth() + 1);
+            }
+            else if(previousDate && date.getMonth() !== previousDate.getMonth()) {
+                // Show when month actually changes from previous tick
                 tickValue = monthAbbreviation(date.getMonth() + 1);
             }
         }
@@ -296,35 +406,21 @@ export function formatAxisTick(
         const date = new Date(value);
         const minute = date.getMinutes();
         const hour = date.getHours();
-        const previousDate = previousTickValue ? new Date(previousTickValue) : null;
 
         if(type === 'primary') {
-            const minuteString = `:${String(minute).padStart(2, '0')}`;
+            // Format hour in 12-hour format
+            const hour12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+            const minuteString = `${hour12}:${String(minute).padStart(2, '0')}`;
 
-            if(index === 0 || index === totalTicks - 1) {
-                tickValue = minuteString;
-            }
-            else if(totalTicks <= 15) {
-                tickValue = minuteString;
-            }
-            else if(totalTicks <= 60) {
-                if(minute % 5 === 0) {
-                    tickValue = minuteString;
-                }
-            }
-            else if(totalTicks <= 180) {
-                if(minute % 15 === 0) {
-                    tickValue = minuteString;
-                }
-            }
-            else {
-                if(minute === 0 || minute === 30) {
-                    tickValue = minuteString;
-                }
-            }
+            // Show all ticks (filtering is done by calculateTickInterval)
+            tickValue = minuteString;
         }
         else if(type === 'secondary') {
-            if(index === 0 || !previousDate || date.getHours() !== previousDate.getHours()) {
+            const isFirstTick = index === 0;
+            const isEvery3Hours = minute === 0 && hour % 3 === 0; // Show every 3 hours on the hour
+
+            // Only show labels at: first tick or every 3 hours on the hour
+            if(isFirstTick || isEvery3Hours) {
                 const hourString =
                     hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`;
                 tickValue = hourString;
@@ -360,12 +456,130 @@ export function formatAxisTick(
             }
         }
     }
+    // Handle HourOfDay (0-23)
+    else if(timeInterval === TimeInterval.HourOfDay) {
+        const hour = parseInt(value, 10);
+
+        if(type === 'primary') {
+            if(totalTicks <= 24) {
+                // Show all hours
+                const hourString = hour === 0 ? '12a' : hour < 12 ? `${hour}a` : hour === 12 ? '12p' : `${hour - 12}p`;
+                tickValue = hourString;
+            }
+            else {
+                // Show every 3 hours
+                if(hour % 3 === 0) {
+                    const hourString =
+                        hour === 0 ? '12a' : hour < 12 ? `${hour}a` : hour === 12 ? '12p' : `${hour - 12}p`;
+                    tickValue = hourString;
+                }
+            }
+        }
+    }
+    // Handle DayOfWeek
+    else if(timeInterval === TimeInterval.DayOfWeek) {
+        if(type === 'primary') {
+            // Value could be "Monday" or "0"-"6"
+            const dayNumber = parseInt(value, 10);
+            if(!isNaN(dayNumber)) {
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                tickValue = days[dayNumber] || value;
+            }
+            else {
+                // If already a string like "Monday", use first 3 chars
+                tickValue = value.slice(0, 3);
+            }
+        }
+    }
+    // Handle DayOfMonth (1-31)
+    else if(timeInterval === TimeInterval.DayOfMonth) {
+        if(type === 'primary') {
+            const day = parseInt(value, 10);
+            if(totalTicks <= 31) {
+                tickValue = day.toString();
+            }
+            else {
+                // Show every 5th day
+                if(day % 5 === 0 || day === 1) {
+                    tickValue = day.toString();
+                }
+            }
+        }
+    }
+    // Handle MonthOfYear
+    else if(timeInterval === TimeInterval.MonthOfYear) {
+        if(type === 'primary') {
+            // Value could be "1"-"12" or "January"-"December"
+            const monthNumber = parseInt(value, 10);
+            if(!isNaN(monthNumber)) {
+                tickValue = monthAbbreviation(monthNumber);
+            }
+            else {
+                // If already a string like "January", use first 3 chars
+                tickValue = value.slice(0, 3);
+            }
+        }
+    }
+    // Handle WeekOfYear (1-52)
+    else if(timeInterval === TimeInterval.WeekOfYear) {
+        if(type === 'primary') {
+            const weekMatch = value.match(/^W?(\d+)$/);
+            const week = weekMatch ? parseInt(weekMatch[1]!, 10) : parseInt(value, 10);
+
+            if(totalTicks <= 20) {
+                tickValue = `W${week}`;
+            }
+            else {
+                // Show every 4th week
+                if(week % 4 === 0 || week === 1) {
+                    tickValue = `W${week}`;
+                }
+            }
+        }
+    }
 
     return tickValue;
 }
 
 // Calculate tick interval based on data density
-export function calculateTickInterval(dataLength: number): number {
+export function calculateTickInterval(dataLength: number, timeInterval?: TimeInterval): number {
+    // For Minute interval, show ticks based on total range
+    if(timeInterval === TimeInterval.Minute) {
+        if(dataLength > 360) {
+            // For 6+ hours, show every hour (every 60th minute)
+            return 59; // 0-indexed, so 59 means every 60th item
+        }
+        else if(dataLength > 120) {
+            // For 2-6 hours, show every 30 minutes
+            return 29; // Every 30th item
+        }
+        else if(dataLength > 60) {
+            // For 1-2 hours, show every 15 minutes
+            return 14; // Every 15th item
+        }
+        else if(dataLength > 15) {
+            // For less than 1 hour, show every 5 minutes
+            return 4; // Every 5th item
+        }
+        return 0; // Show all ticks for very short ranges
+    }
+
+    // For Day interval, control ticks based on range
+    if(timeInterval === TimeInterval.Day) {
+        if(dataLength > 180) {
+            // For full year, render all ticks but let formatAxisTick control which show labels
+            return 0; // Show all ticks
+        }
+        else if(dataLength > 90) {
+            return 1; // Every other day
+        }
+        else if(dataLength > 30) {
+            return 0; // Show all days
+        }
+        return 0; // Show all days
+    }
+
+    // Default logic for other intervals
     if(dataLength > 180) {
         return Math.floor(dataLength / 30);
     }

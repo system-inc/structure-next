@@ -94,9 +94,10 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
     // Previous tick value tracking for formatters
     const previousTickValueReference = React.useRef<string>('');
+    const previousSecondaryTickValueReference = React.useRef<string>('');
 
     // Calculate tick interval
-    const tickInterval = calculateTickInterval(properties.data.length);
+    const tickInterval = calculateTickInterval(properties.data.length, properties.timeInterval);
 
     // Effect to observe container size changes
     React.useEffect(function () {
@@ -163,14 +164,17 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                 tick={{ fill: 'var(--foreground-tertiary)' }}
                                 interval={tickInterval}
                                 tickFormatter={function (value: string | number | undefined, index: number) {
-                                    return formatAxisTick(
+                                    const stringValue = String(value || '');
+                                    const result = formatAxisTick(
                                         'secondary',
                                         properties.timeInterval || TimeInterval.Day,
-                                        String(value || ''),
+                                        stringValue,
                                         index,
-                                        (index > 0 && properties.data && properties.data[index - 1]?.label) || '',
+                                        previousSecondaryTickValueReference.current,
                                         properties.data.length,
                                     );
+                                    previousSecondaryTickValueReference.current = stringValue;
+                                    return result;
                                 }}
                                 allowDuplicatedCategory={false}
                                 className="text-sm"

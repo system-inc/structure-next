@@ -56,7 +56,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                         ? formatTipLabelByTimeInterval(dataPoint.label, properties.timeInterval)
                         : dataPoint.label}
                 </div>
-                <table className="">
+                <table className="w-full">
                     <tbody className="">
                         {sortedPayload.map((entry, index) => (
                             <tr
@@ -83,20 +83,22 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                         })()}
                                     </b>
                                 </td>
-                                <td className="border-l p-2">
-                                    <div
-                                        style={{
-                                            borderColor: entry.color,
-                                            borderStyle: 'solid',
-                                            backgroundColor:
-                                                themeSettings.themeClassName === 'light'
-                                                    ? lightenColor(entry.color || '', 0.2)
-                                                    : darkenColor(entry.color || '', 0.2),
-                                        }}
-                                        className="h-4 w-4 rounded-extra-small border"
-                                    />
+                                <td className="border-l p-2 pr-4">
+                                    <div className="flex items-center gap-2">
+                                        <div
+                                            style={{
+                                                borderColor: entry.color,
+                                                borderStyle: 'solid',
+                                                backgroundColor:
+                                                    themeSettings.themeClassName === 'light'
+                                                        ? lightenColor(entry.color || '', 0.2)
+                                                        : darkenColor(entry.color || '', 0.2),
+                                            }}
+                                            className="h-4 w-4 rounded-extra-small border"
+                                        />
+                                        <span>{entry.name}</span>
+                                    </div>
                                 </td>
-                                <td className="pr-4">{entry.name}</td>
                             </tr>
                         ))}
                     </tbody>

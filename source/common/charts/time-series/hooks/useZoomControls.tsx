@@ -285,12 +285,26 @@ function determineNewTimeRangeAndInterval(
     else {
         // Zoom Out Logic - Expand the range, step to coarser interval when appropriate
         switch(currentInterval) {
-            case TimeInterval.Minute:
-                // Always zoom out to show full 24 hours (Day interval)
-                newTimeInterval = TimeInterval.Hour;
-                newStartTime = startOfDay(startTime);
-                newEndTime = endOfDay(endTime);
+            case TimeInterval.Minute: {
+                // Check if we're already showing a full hour
+                const isFullHour =
+                    startOfHour(startTime).getTime() === startTime.getTime() &&
+                    endOfHour(endTime).getTime() === endTime.getTime() &&
+                    differenceInMinutes(endTime, startTime) === 59;
+
+                // If showing full hour, zoom out to show full 24 hours at Hour interval
+                if(isFullHour) {
+                    newTimeInterval = TimeInterval.Hour;
+                    newStartTime = startOfDay(startTime);
+                    newEndTime = endOfDay(endTime);
+                }
+                // If less than full hour, first snap to full hour at Minute interval
+                else {
+                    newStartTime = startOfHour(startTime);
+                    newEndTime = endOfHour(endTime);
+                }
                 break;
+            }
 
             case TimeInterval.Hour:
                 // If less than 24 hours are currently being shown
@@ -321,31 +335,10 @@ function determineNewTimeRangeAndInterval(
                 break;
 
             case TimeInterval.Day:
-                // If less than two weeks are currently being shown
-                if(differenceInWeeks(endTime, startTime) <= 2) {
-                    // If exactly one week is already being shown
-                    if(
-                        startOfWeek(startTime).getTime() === startTime.getTime() &&
-                        endOfWeek(endTime).getTime() === endTime.getTime()
-                    ) {
-                        // Zoom out to the week boundary and show the surrounding two weeks
-                        newTimeInterval = TimeInterval.Week;
-                        newStartTime = subWeeks(startTime, 1);
-                        newEndTime = addWeeks(endTime, 1);
-                    }
-                    // Zoom out to the week boundary
-                    else {
-                        newStartTime = startOfWeek(startTime);
-                        newEndTime = endOfWeek(endTime);
-                    }
-                }
-                // If more than two weeks are being shown
-                else {
-                    // Switch to week interval
-                    newTimeInterval = TimeInterval.Week;
-                    newStartTime = startTime;
-                    newEndTime = endTime;
-                }
+                // Always zoom out to Month and show current month plus left and right months
+                newTimeInterval = TimeInterval.Month;
+                newStartTime = subMonths(startOfMonth(startTime), 1);
+                newEndTime = addMonths(endOfMonth(endTime), 1);
                 break;
 
             case TimeInterval.Week:
@@ -377,8 +370,18 @@ function determineNewTimeRangeAndInterval(
                 break;
 
             case TimeInterval.Month:
+                // If exactly one month is being shown
+                if(
+                    startOfMonth(startTime).getTime() === startTime.getTime() &&
+                    endOfMonth(endTime).getTime() === endTime.getTime() &&
+                    differenceInMonths(endTime, startTime) === 0
+                ) {
+                    // Show current month plus left and right months
+                    newStartTime = subMonths(startTime, 1);
+                    newEndTime = addMonths(endTime, 1);
+                }
                 // If less than two years are currently being shown
-                if(differenceInMonths(endTime, startTime) < 24) {
+                else if(differenceInMonths(endTime, startTime) < 24) {
                     // If exactly one year is already being shown
                     if(
                         startOfYear(startTime).getTime() === startTime.getTime() &&

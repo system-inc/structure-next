@@ -7,6 +7,9 @@ import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect'
 // Dependencies - Types
 import { TimeInterval } from '../TimeInterval';
 
+// Dependencies - Utilities
+import { titleCase } from '@structure/source/utilities/String';
+
 // Component - TimeIntervalFormInputSelect
 export interface TimeIntervalFormInputSelectProperties {
     value: TimeInterval;
@@ -27,13 +30,18 @@ export function TimeIntervalFormInputSelect(properties: TimeIntervalFormInputSel
         TimeInterval.Month,
         TimeInterval.Quarter,
         TimeInterval.Year,
+        TimeInterval.HourOfDay,
+        TimeInterval.DayOfWeek,
+        TimeInterval.DayOfMonth,
+        TimeInterval.MonthOfYear,
+        TimeInterval.WeekOfYear,
     ];
 
     // Create items for the select
     const items = availableIntervals.map(function (interval) {
         return {
             value: interval,
-            content: interval.charAt(0).toUpperCase() + interval.slice(1).toLowerCase(),
+            content: titleCase(interval),
         };
     });
 

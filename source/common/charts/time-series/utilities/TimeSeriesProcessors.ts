@@ -119,6 +119,17 @@ export function getTimeIntervalStart(date: Date, interval: TimeInterval): Date {
             return startOfQuarter(date);
         case TimeInterval.Year:
             return startOfYear(date);
+        // Specialized intervals use hour as base unit
+        case TimeInterval.HourOfDay:
+            return startOfHour(date);
+        case TimeInterval.DayOfWeek:
+            return startOfDay(date);
+        case TimeInterval.DayOfMonth:
+            return startOfDay(date);
+        case TimeInterval.MonthOfYear:
+            return startOfMonth(date);
+        case TimeInterval.WeekOfYear:
+            return startOfWeek(date);
         default:
             return startOfDay(date);
     }
@@ -141,6 +152,17 @@ export function getTimeIntervalEnd(date: Date, interval: TimeInterval): Date {
             return endOfQuarter(date);
         case TimeInterval.Year:
             return endOfYear(date);
+        // Specialized intervals use hour/day/month/week/year as base unit
+        case TimeInterval.HourOfDay:
+            return endOfHour(date);
+        case TimeInterval.DayOfWeek:
+            return endOfDay(date);
+        case TimeInterval.DayOfMonth:
+            return endOfDay(date);
+        case TimeInterval.MonthOfYear:
+            return endOfMonth(date);
+        case TimeInterval.WeekOfYear:
+            return endOfWeek(date);
         default:
             return endOfDay(date);
     }
@@ -163,6 +185,17 @@ export function addTimeInterval(date: Date, interval: TimeInterval, count: numbe
             return addQuarters(date, count);
         case TimeInterval.Year:
             return addYears(date, count);
+        // Specialized intervals increment by their base unit
+        case TimeInterval.HourOfDay:
+            return addHours(date, count);
+        case TimeInterval.DayOfWeek:
+            return addDays(date, count);
+        case TimeInterval.DayOfMonth:
+            return addDays(date, count);
+        case TimeInterval.MonthOfYear:
+            return addMonths(date, count);
+        case TimeInterval.WeekOfYear:
+            return addWeeks(date, count);
         default:
             return addDays(date, count);
     }
@@ -185,6 +218,17 @@ export function differenceInTimeIntervals(startDate: Date, endDate: Date, interv
             return differenceInQuarters(endDate, startDate);
         case TimeInterval.Year:
             return differenceInYears(endDate, startDate);
+        // Specialized intervals use their base unit for difference calculation
+        case TimeInterval.HourOfDay:
+            return differenceInHours(endDate, startDate);
+        case TimeInterval.DayOfWeek:
+            return differenceInDays(endDate, startDate);
+        case TimeInterval.DayOfMonth:
+            return differenceInDays(endDate, startDate);
+        case TimeInterval.MonthOfYear:
+            return differenceInMonths(endDate, startDate);
+        case TimeInterval.WeekOfYear:
+            return differenceInWeeks(endDate, startDate);
         default:
             return differenceInDays(endDate, startDate);
     }
@@ -217,6 +261,19 @@ export function formatTimeIntervalKey(date: Date, interval: TimeInterval): strin
         }
         case TimeInterval.Year:
             return String(year);
+        // Specialized intervals return just the component value
+        case TimeInterval.HourOfDay:
+            return String(date.getHours());
+        case TimeInterval.DayOfWeek:
+            return String(date.getDay()); // 0 = Sunday, 6 = Saturday
+        case TimeInterval.DayOfMonth:
+            return String(date.getDate());
+        case TimeInterval.MonthOfYear:
+            return String(date.getMonth() + 1); // 1 = January, 12 = December
+        case TimeInterval.WeekOfYear: {
+            const weekNumber = getWeek(date);
+            return String(weekNumber);
+        }
         default:
             return `${year}-${month}-${day}`;
     }
