@@ -8,11 +8,10 @@ import { SideNavigationLink } from '@structure/source/common/navigation/side-nav
 
 // Dependencies - Animation
 import { Collapse } from '@structure/source/common/interactions/Collapse';
-import { easings, useSpring, animated } from '@react-spring/web';
+import { cubicBezier, motion, Transition } from 'motion/react';
 
 // Dependencies - Assets
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
-const AnimatedChevronRightIcon = animated(ChevronRightIcon);
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -33,11 +32,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
     const [isOpen, setIsOpen] = React.useState(properties.children?.some((child) => child.href === urlPath) || false);
 
     // Animation
-    const animationConfiguration = { duration: 500, easing: easings.easeOutExpo };
-    const rotationSpring = useSpring({
-        rotate: isOpen ? 270 : 90,
-        config: animationConfiguration,
-    });
+    const transition: Transition = { duration: 0.25, ease: cubicBezier(0.075, 0.82, 0.165, 1) };
 
     // Components
 
@@ -70,12 +65,14 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                             className="relative flex aspect-square w-6 items-center justify-center rounded text-dark hover:bg-dark/10 dark:text-white dark:hover:bg-light/10"
                             onClick={() => setIsOpen(!isOpen)}
                         >
-                            <AnimatedChevronRightIcon
-                                className="h-4 w-4"
-                                style={{
-                                    transform: rotationSpring.rotate.to((rotate) => `rotate(${rotate}deg)`),
+                            <motion.span
+                                animate={{
+                                    transform: isOpen ? `rotate(270deg)` : `rotate(90deg)`,
                                 }}
-                            />
+                                transition={transition}
+                            >
+                                <ChevronRightIcon className="h-4 w-4" />
+                            </motion.span>
                         </button>
                     </div>
                 ) : (
@@ -85,10 +82,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
 
             {/* Children */}
             {properties.children && (
-                <Collapse
-                    isOpen={isOpen || properties.isHeader === true}
-                    animationConfiguration={animationConfiguration}
-                >
+                <Collapse isOpen={isOpen || properties.isHeader === true} animationConfiguration={transition}>
                     <div
                         className={`space-y-0.5 ${
                             properties.isHeader ? '' : 'ml-3 border-l border-l-light-4 pl-4 dark:border-l-dark-4'
