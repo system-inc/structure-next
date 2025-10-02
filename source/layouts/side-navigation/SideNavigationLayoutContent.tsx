@@ -18,7 +18,7 @@ import {
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Animation
-import { useSpring, animated } from '@react-spring/web';
+import { motion, useSpring } from 'motion/react';
 import { LineLoadingAnimation } from '@structure/source/common/animations/LineLoadingAnimation';
 
 // Dependencies - Utilities
@@ -54,12 +54,12 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
     );
 
     // Spring to animate the content div padding when the navigation is opened or closed
-    const [contentDivSpring, contentDivSpringControl] = useSpring(function () {
-        return {
-            // If the side navigation is closed set the left padding to 0, otherwise set it to the navigation width
-            paddingLeft: sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
-        };
-    });
+    const contentDivPaddingLeftSpring = useSpring(
+        sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
+        {
+            ...sideNavigationLayoutNavigationSpringConfiguration,
+        },
+    );
 
     // Effect to animate the content div padding when the navigation is opened, closed, or resized
     // Only applies to Fixed layout
@@ -67,30 +67,43 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
         function () {
             // Only animate padding for Fixed layout
             if(layout === 'Fixed') {
-                // Animate the padding
-                contentDivSpringControl.start({
-                    paddingLeft:
+                if(
+                    // Conditionally apply the animation immediately
+                    // If on first mount
+                    // Using first mount prevents the animation from running on the first render, which would animate
+                    // content on the screen on the first load
+                    firstMount.current ||
+                    // Or if the navigation is open and is resizing and not opening by drag and not closing by window resize
+                    (sideNavigationLayoutNavigationOpen &&
+                        sideNavigationLayoutNavigationIsResizing &&
+                        !sideNavigationLayoutNavigationIsOpeningByDrag &&
+                        !sideNavigationLayoutNavigationIsClosingByWindowResize)
+                ) {
+                    // Animate the padding
+                    contentDivPaddingLeftSpring.jump(
                         // Do not apply the padding
                         // On mobile
                         window.innerWidth < desktopMinimumWidth ||
-                        // Or if the navigation is closed
-                        sideNavigationLayoutNavigationOpen === false
+                            // Or if the navigation is closed
+                            sideNavigationLayoutNavigationOpen === false
                             ? 0
                             : sideNavigationLayoutNavigationWidth,
-                    // Use the imported spring configuration for consistent animation
-                    config: sideNavigationLayoutNavigationSpringConfiguration,
-                    immediate:
-                        // Conditionally apply the animation immediately
-                        // If on first mount
-                        // Using first mount prevents the animation from running on the first render, which would animate
-                        // content on the screen on the first load
-                        firstMount.current ||
-                        // Or if the navigation is open and is resizing and not opening by drag and not closing by window resize
-                        (sideNavigationLayoutNavigationOpen &&
-                            sideNavigationLayoutNavigationIsResizing &&
-                            !sideNavigationLayoutNavigationIsOpeningByDrag &&
-                            !sideNavigationLayoutNavigationIsClosingByWindowResize),
-                });
+                    );
+                }
+                else {
+                    // Otherwise, animate the changes
+
+                    // Animate the padding
+                    contentDivPaddingLeftSpring.set(
+                        // Do not apply the padding
+                        // On mobile
+                        window.innerWidth < desktopMinimumWidth ||
+                            // Or if the navigation is closed
+                            sideNavigationLayoutNavigationOpen === false
+                            ? 0
+                            : sideNavigationLayoutNavigationWidth,
+                    );
+                }
             }
             // Set first mount to false
             firstMount.current = false;
@@ -102,8 +115,10 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
 
     // Render the component
     return (
-        <animated.div
-            style={layout === 'Fixed' ? contentDivSpring : {}}
+        <motion.div
+            style={{
+                paddingLeft: layout === 'Fixed' ? contentDivPaddingLeftSpring : 0,
+            }}
             className={mergeClassNames(
                 'relative overscroll-none',
                 // Use h-screen for Fixed layout, h-full for Flex layout
@@ -141,6 +156,6 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
                     {properties.children}
                 </div>
             </React.Suspense>
-        </animated.div>
+        </motion.div>
     );
 }

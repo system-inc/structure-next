@@ -30,7 +30,7 @@ import {
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
 // Dependencies - Animation
-import { useSpring, animated } from '@react-spring/web';
+import { useSpring, motion } from 'motion/react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -91,26 +91,33 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     const containerResizeHandleDivReference = React.useRef<HTMLDivElement>(null);
 
     // Spring to animate the container
-    const [containerSpring, containerSpringControl] = useSpring(function () {
-        return {
-            // For Fixed layout: animate x position (leave 4px drag bar visible when closed)
-            x:
-                layout === 'Fixed'
-                    ? sideNavigationLayoutNavigationOpen === true
-                        ? 0
-                        : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
-                    : 0,
-            // For Flex layout: animate marginLeft position (similar to Fixed's x)
-            marginLeft:
-                layout === 'Flex'
-                    ? sideNavigationLayoutNavigationOpen === true
-                        ? 0
-                        : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
-                    : 0,
-            // If the navigation is open, animate the overlay to be at 1 opacity
-            overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
-        };
-    });
+    const containerOffsetSpring = useSpring(
+        sideNavigationLayoutNavigationOpen === true ? 0 : -(sideNavigationLayoutNavigationWidth - 4), // When closed, show just the drag bar (4px)
+        {
+            ...sideNavigationLayoutNavigationSpringConfiguration,
+        },
+    );
+
+    // function () {
+    //     return {
+    //         // For Fixed layout: animate x position (leave 4px drag bar visible when closed)
+    //         x:
+    //             layout === 'Fixed'
+    //                 ? sideNavigationLayoutNavigationOpen === true
+    //                     ? 0
+    //                     : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
+    //                 : 0,
+    //         // For Flex layout: animate marginLeft position (similar to Fixed's x)
+    //         marginLeft:
+    //             layout === 'Flex'
+    //                 ? sideNavigationLayoutNavigationOpen === true
+    //                     ? 0
+    //                     : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
+    //                 : 0,
+    //         // If the navigation is open, animate the overlay to be at 1 opacity
+    //         overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
+    //     };
+    // });
 
     // Hook to handle the drag gesture on the container resize handle
     useDrag(
@@ -265,33 +272,12 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     // Effect to animate the navigation when opening, closing, or resizing
     React.useEffect(
         function () {
-            containerSpringControl.start({
-                // For Fixed layout: animate x position (leave 4px drag bar visible when closed)
-                x:
-                    layout === 'Fixed'
-                        ? sideNavigationLayoutNavigationOpen === true
-                            ? 0
-                            : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
-                        : 0,
-                // For Flex layout: animate marginLeft position (similar to Fixed's x)
-                marginLeft:
-                    layout === 'Flex'
-                        ? sideNavigationLayoutNavigationOpen === true
-                            ? 0
-                            : -(sideNavigationLayoutNavigationWidth - 4) // When closed, show just the drag bar (4px)
-                        : 0,
-                // If the navigation is open, animate the overlay to be at 1 opacity
-                overlayOpacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0,
-                // Use the imported spring configuration for consistent animation
-                config: sideNavigationLayoutNavigationSpringConfiguration,
-                // On rest
-                onRest: function () {
-                    // console.log('Navigation animation finished');
+            containerOffsetSpring.set(
+                sideNavigationLayoutNavigationOpen === true ? 0 : -(sideNavigationLayoutNavigationWidth - 4), // When closed, show just the drag bar (4px)
+            );
 
-                    // Mark the navigation as not closing by window resize
-                    setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
-                },
-            });
+            // Mark the navigation as not closing by window resize
+            setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
         },
         // Just when the navigation open state or width changes
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -377,16 +363,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationOpen(false);
 
                 // Animate the navigation to be offscreen
-                containerSpringControl.start({
-                    // Animate the container to be offscreen
-                    x: -sideNavigationLayoutNavigationWidth,
-                    // Animate the overlay to be at 0 opacity
-                    overlayOpacity: 0,
-                    // Use the imported spring configuration for consistent animation
-                    config: sideNavigationLayoutNavigationSpringConfiguration,
-                    // Apply the animation immediately
-                    immediate: true,
-                });
+                containerOffsetSpring.jump(-sideNavigationLayoutNavigationWidth);
             }
             // If on desktop
             else {
@@ -395,16 +372,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationOpen(shouldBeOpen);
 
                 // Animate the navigation to be the preferred state
-                containerSpringControl.start({
-                    // Animate the container to be at the left edge if the navigation is open
-                    x: shouldBeOpen === true ? 0 : -sideNavigationLayoutNavigationWidth,
-                    // Animate the overlay to be at 1 opacity if the navigation is open
-                    overlayOpacity: shouldBeOpen === true ? 1 : 0,
-                    // Use the imported spring configuration for consistent animation
-                    config: sideNavigationLayoutNavigationSpringConfiguration,
-                    // Apply the animation immediately
-                    immediate: true,
-                });
+                containerOffsetSpring.set(shouldBeOpen === true ? 0 : -sideNavigationLayoutNavigationWidth);
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -453,7 +421,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     return (
         <>
             {/* Navigation Container */}
-            <animated.div
+            <motion.div
                 ref={containerDivReference}
                 className={mergeClassNames(
                     // Use fixed positioning for Fixed layout, relative for Flex layout
@@ -480,12 +448,10 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     // For Flex layout: animate marginLeft position
                     ...(layout === 'Fixed'
                         ? {
-                              x: containerSpring.x,
-                              overlayOpacity: containerSpring.overlayOpacity,
+                              x: containerOffsetSpring,
                           }
                         : {
-                              marginLeft: containerSpring.marginLeft,
-                              overlayOpacity: containerSpring.overlayOpacity,
+                              marginLeft: containerOffsetSpring,
                           }),
                 }}
             >
@@ -516,11 +482,11 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                         'pointer-events-auto',
                     )}
                 ></div>
-            </animated.div>
+            </motion.div>
 
             {/* Dimmed Overlay (mobile only) */}
-            <animated.div
-                style={{ opacity: containerSpring.overlayOpacity }}
+            <motion.div
+                animate={{ opacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0 }}
                 className={mergeClassNames(
                     'fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden',
                     // If the navigation is closing by window resize, do not show the overlay

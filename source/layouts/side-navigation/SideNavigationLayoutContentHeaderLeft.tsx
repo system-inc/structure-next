@@ -12,7 +12,7 @@ import {
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Animation
-import { useSpring, animated } from '@react-spring/web';
+import { useSpring, motion } from 'motion/react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
@@ -43,24 +43,22 @@ export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigation
     );
 
     // Spring to animate the padding when the side navigation is opened or closed
-    const [containerDivSpring, containerDivSpringControl] = useSpring(function () {
-        return {
-            paddingLeft: getPaddingLeft(sideNavigationLayoutNavigationOpen),
-            config: sideNavigationLayoutNavigationSpringConfiguration,
-        };
+    const containerDivPaddingLeftSpring = useSpring(getPaddingLeft(sideNavigationLayoutNavigationOpen), {
+        ...sideNavigationLayoutNavigationSpringConfiguration,
     });
 
     // Animate the padding when the side navigation is opened or closed
     React.useEffect(
         function () {
             // Animate the padding
-            containerDivSpringControl.start({
-                paddingLeft: getPaddingLeft(sideNavigationLayoutNavigationOpen),
-                config: sideNavigationLayoutNavigationSpringConfiguration,
-                immediate: window.innerWidth < desktopMinimumWidth,
-            });
+            if(window.innerWidth < desktopMinimumWidth) {
+                containerDivPaddingLeftSpring.jump(getPaddingLeft(sideNavigationLayoutNavigationOpen));
+            }
+            else {
+                containerDivPaddingLeftSpring.set(getPaddingLeft(sideNavigationLayoutNavigationOpen));
+            }
         },
-        [getPaddingLeft, sideNavigationLayoutNavigationOpen, containerDivSpringControl],
+        [getPaddingLeft, sideNavigationLayoutNavigationOpen, containerDivPaddingLeftSpring],
     );
 
     // Render the component
@@ -68,12 +66,14 @@ export function SideNavigationLayoutContentHeaderLeft(properties: SideNavigation
         // Wrapping the animated.div in another div to prevent the Next JS warning:
         // "Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element"
         <div className="">
-            <animated.div
-                style={containerDivSpring}
+            <motion.div
+                style={{
+                    paddingLeft: containerDivPaddingLeftSpring,
+                }}
                 className={mergeClassNames('fixed top-0 flex h-16 items-center pr-4', properties.className)}
             >
                 {properties.children}
-            </animated.div>
+            </motion.div>
         </div>
     );
 }

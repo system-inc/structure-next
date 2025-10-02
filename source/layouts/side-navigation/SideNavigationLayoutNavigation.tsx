@@ -7,7 +7,7 @@ import { atom } from 'jotai';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
 // Dependencies - Animation
-import { easings } from '@react-spring/web';
+import { type SpringOptions } from 'motion/react';
 
 // Settings
 export const desktopMinimumWidth = 768;
@@ -143,9 +143,9 @@ export function getAtomForNavigationIsClosingByWindowResize(identifier: string) 
 
 // Spring to animate the navigation
 // Shared with SideNavigationLayoutContent for consistent animation
-export const sideNavigationLayoutNavigationSpringConfiguration = {
-    easing: easings.easeOutExpo,
-    duration: 400,
+export const sideNavigationLayoutNavigationSpringConfiguration: SpringOptions = {
+    visualDuration: 0.25,
+    bounce: 0,
 };
 
 // Component - SideNavigationLayoutNavigation
