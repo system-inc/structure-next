@@ -17,8 +17,8 @@ import BarGraphIcon from '@structure/assets/icons/analytics/BarGraphIcon.svg';
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { OrderByDirection, ColumnFilterGroupInput } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { useDataInteractionDatabaseTableRowsRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabaseTableRowsRequest';
 
 // Dependencies - Utilities
 import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
@@ -65,75 +65,21 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
     }
 
     // Hooks
-    const dataInteractionDatabaseTableRowsRequest = networkService.useGraphQlQuery(
-        gql(`
-            query DataInteractionDatabaseTableRows(
-                $databaseName: String!
-                $tableName: String!
-                $pagination: PaginationInput!
-                $filters: ColumnFilterGroupInput
-            ) {
-                dataInteractionDatabaseTableRows(
-                    databaseName: $databaseName
-                    tableName: $tableName
-                    pagination: $pagination
-                    filters: $filters
-                ) {
-                    items
-                    databaseName
-                    tableName
-                    rowCount
-                    columns {
-                        name
-                        type
-                        isKey
-                        isPrimaryKey
-                        keyTableName
-                        possibleValues
-                        isNullable
-                        isGenerated
-                        length
-                    }
-                    relations {
-                        fieldName
-                        tableName
-                        type
-                        inverseFieldName
-                        inverseType
-                        inverseTableName
-                    }
-                    pagination {
-                        itemIndex
-                        itemIndexForPreviousPage
-                        itemIndexForNextPage
-                        itemsPerPage
-                        itemsTotal
-                        pagesTotal
-                        page
-                    }
-                }
-            }
-        `),
+    const dataInteractionDatabaseTableRowsRequest = useDataInteractionDatabaseTableRowsRequest(
+        databaseName!,
+        tableName!,
         {
-            databaseName: databaseName!,
-            tableName: tableName!,
-            pagination: {
-                itemsPerPage: queryPagination.itemsPerPage,
-                itemIndex: queryPagination.itemsPerPage * (queryPagination.page - 1),
-                // By default, order by createdAt descending
-                orderBy: [
-                    {
-                        key: 'createdAt',
-                        direction: OrderByDirection.Descending,
-                    },
-                ],
-            },
-            filters,
+            itemsPerPage: queryPagination.itemsPerPage,
+            itemIndex: queryPagination.itemsPerPage * (queryPagination.page - 1),
+            // By default, order by createdAt descending
+            orderBy: [
+                {
+                    key: 'createdAt',
+                    direction: OrderByDirection.Descending,
+                },
+            ],
         },
-        {
-            enabled: !!(databaseName && tableName),
-            keepPreviousData: true, // Smooth transitions between pages
-        },
+        filters,
     );
 
     // Memoize the columns

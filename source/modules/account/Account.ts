@@ -19,6 +19,8 @@ export class Account {
     profile: AccountQuery['account']['profile'];
     // Access roles assigned to this account
     accessRoles: AccountQuery['account']['accessRoles'];
+    // Entitlements assigned to this account
+    entitlements: AccountQuery['account']['entitlements'];
     // Date when the account was created
     createdAt: Date;
 
@@ -34,6 +36,7 @@ export class Account {
         this.emailAddress = accountCurrentQueryData.emailAddress;
         this.profile = accountCurrentQueryData.profile;
         this.accessRoles = accountCurrentQueryData.accessRoles;
+        this.entitlements = accountCurrentQueryData.entitlements;
     }
 
     /**
@@ -86,5 +89,14 @@ export class Account {
      */
     isAdministator() {
         return this.hasRole(AccountRole.Administrator);
+    }
+
+    /**
+     * Checks if the account has a specific entitlement
+     * @param entitlement The entitlement to check (string)
+     * @returns True if the account has the specified entitlement
+     */
+    hasEntitlement(entitlement: string) {
+        return this.entitlements.includes(entitlement);
     }
 }
