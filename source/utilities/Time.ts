@@ -162,21 +162,35 @@ export function dateToTimeIfTodayOrDate(date: Date): string {
  * Formats a date with ISO date and 12-hour time.
  *
  * @param {Date} date - The date to format
+ * @param {boolean} [useLocalTimezone=false] - Whether to use local timezone for the date portion
  * @returns {string} The formatted date and time string
  *
  * @example
  * dateIso8601WithTime(new Date('2025-01-15T14:30:00'))
- * // Returns: "2025-01-15 2:30 PM"
+ * // Returns: "2025-01-15 2:30 PM" (UTC date, local time)
+ *
+ * dateIso8601WithTime(new Date('2025-01-15T14:30:00'), true)
+ * // Returns: "2025-01-15 2:30 PM" (local date and time)
  */
-export function dateIso8601WithTime(date: Date): string {
-    return (
-        (date.toISOString().split('T')[0] || '') +
-        ' ' +
-        date.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-        })
-    );
+export function dateIso8601WithTime(date: Date, useLocalTimezone: boolean = false): string {
+    let isoDate: string;
+
+    if(useLocalTimezone) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        isoDate = `${year}-${month}-${day}`;
+    }
+    else {
+        isoDate = date.toISOString().split('T')[0] || '';
+    }
+
+    const time = date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+    });
+
+    return `${isoDate} ${time}`;
 }
 
 /**
