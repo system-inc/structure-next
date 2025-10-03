@@ -102,6 +102,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
                         createdAt
                     }
                     accessRoles
+                    entitlements
                     createdAt
                 }
             }

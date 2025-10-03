@@ -2177,6 +2177,7 @@ export type AccountQuery = {
         __typename?: 'Account';
         emailAddress: string;
         accessRoles: Array<string>;
+        entitlements: Array<string>;
         createdAt: any;
         profile: {
             __typename?: 'Profile';
@@ -3151,6 +3152,7 @@ export const AccountDocument = new TypedDocumentString(`
       createdAt
     }
     accessRoles
+    entitlements
     createdAt
   }
 }
