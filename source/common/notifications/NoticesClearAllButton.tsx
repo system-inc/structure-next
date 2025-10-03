@@ -8,11 +8,11 @@ import { ButtonProperties, Button } from '@structure/source/common/buttons/Butto
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { animated, easings, useSpring } from '@react-spring/web';
+import { cubicBezier, motion } from 'motion/react';
 import { useNotice } from './NoticeProvider';
 
 // Component - AnimatedButton
-const AnimatedButton = animated(Button);
+const MotionButton = motion.create(Button);
 
 // Component - Notice
 export interface NoticesClearAllButtonProperties extends ButtonProperties {
@@ -24,43 +24,35 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
         // Hooks
         const notice = useNotice();
 
-        // Springs
-        const buttonSpring = useSpring({
-            opacity: properties.show ? 1 : 0,
-            height: 28,
-            width: 75,
-            config: {
-                easing: easings.easeOutExpo,
-                duration: 500,
-            },
-        });
-
-        // Function to handle the click
-        const handleClick = React.useCallback(
-            async function () {
-                buttonSpring.opacity.start(0);
-
-                properties.xSpringFunction(200, () => {
-                    notice.removeAllNotices();
-                });
-            },
-            [notice, properties, buttonSpring],
-        );
-
         // Render the component
         return (
-            <AnimatedButton
+            <MotionButton
+                layout
                 ref={reference}
                 className={mergeClassNames(
                     'relative overflow-hidden rounded-full p-1 px-2',
                     !properties.show && 'pointer-events-none',
                     properties.className,
                 )}
-                onClick={handleClick}
-                style={buttonSpring}
+                initial={{
+                    opacity: 0,
+                }}
+                animate={{
+                    opacity: properties.show ? 1 : 0,
+                }}
+                transition={{
+                    ease: cubicBezier(0.075, 0.82, 0.165, 1),
+                    duration: 0.5,
+                    type: 'tween',
+                }}
+                onClick={() => notice.removeAllNotices()}
+                style={{
+                    height: 28,
+                    width: 75,
+                }}
             >
                 <div className={'absolute text-xs font-light'}>Clear All</div>
-            </AnimatedButton>
+            </MotionButton>
         );
     },
 );
