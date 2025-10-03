@@ -100,7 +100,7 @@ export function Pagination(properties: PaginationProperties) {
     return (
         <div className={mergeClassNames('flex items-center justify-end space-x-10 text-sm', properties.className)}>
             {itemsPerPageControl && (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                     {properties.itemsTotal && <p className="mr-10">{addCommas(properties.itemsTotal)} records</p>}
 
                     <p>Show</p>
