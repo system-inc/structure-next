@@ -11,11 +11,9 @@ import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
-import { animated, useSpring } from '@react-spring/web';
-import { useDrag } from '@use-gesture/react';
+import { motion, PanInfo } from 'motion/react';
 
-// Component - AnimatedButton
-const AnimatedButton = animated(Button);
+const MotionButton = motion.create(Button);
 
 // Component - Notice
 export interface NoticeInterface {
@@ -24,7 +22,7 @@ export interface NoticeInterface {
     style?: React.CSSProperties;
     title?: React.ReactNode;
     content?: React.ReactNode;
-    closeButtonProperties?: ButtonProperties;
+    closeButtonProperties?: React.ComponentPropsWithoutRef<typeof MotionButton>;
     buttonProperties?: ButtonProperties;
     dismissTimeout?: number | boolean;
 }
@@ -32,59 +30,29 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
     // State
     const [hovered, setHovered] = React.useState(true);
 
-    // Springs
-    const [noticeSpring, noticeSpringControl] = useSpring(function () {
-        return {
-            opacity: 1,
-            x: 0,
-        };
-    });
-    const buttonSpring = useSpring({
-        opacity: hovered ? 1 : 0,
-    });
-
     // Function to handle removal
-    const handleRemoval = React.useCallback(
-        async function handleRemoval(event: unknown) {
-            if(properties.closeButtonProperties?.onClick) {
-                properties.closeButtonProperties.onClick(event as React.MouseEvent<HTMLElement, MouseEvent>);
-            }
-        },
-        [properties.closeButtonProperties],
-    );
+    async function handleRemoval(event: unknown) {
+        if(properties.closeButtonProperties?.onClick) {
+            properties.closeButtonProperties.onClick(event as React.MouseEvent<HTMLElement, MouseEvent>);
+        }
+    }
 
-    // Function to bind the drag
-    const bindDrag = useDrag(
-        function (state) {
-            noticeSpringControl.start({
-                x: state.movement[0],
-            });
-            noticeSpring.opacity.start(1 - Math.abs(state.movement[0]) / 200);
-
-            if(state.movement[0] > 200 || state.movement[0] < -200) {
-                if(state._pointerActive === false) {
-                    handleRemoval(state.event);
-                }
-            }
-            else {
-                if(state._pointerActive === false) {
-                    noticeSpringControl.start({
-                        x: 0,
-                        opacity: 1,
-                    });
-                }
-            }
-        },
-        {
-            axis: 'x',
-        },
-    );
+    async function handleDrag(dragState: DragEvent, { offset }: PanInfo) {
+        const DRAG_OFFSET_FOR_DISMISSAL = 200;
+        // Handle drag event -- Remove notice if offset by 200px in either x-axis direction.
+        if(offset.x > DRAG_OFFSET_FOR_DISMISSAL || offset.x < -DRAG_OFFSET_FOR_DISMISSAL) {
+            handleRemoval(dragState);
+        }
+    }
 
     // Render the component
     return (
-        <animated.div
+        <motion.div
             ref={reference}
-            style={{ ...properties.style, ...noticeSpring }}
+            style={{ ...properties.style }}
+            drag="x"
+            dragSnapToOrigin
+            onDragEnd={handleDrag}
             className={mergeClassNames(
                 'relative box-border flex h-auto touch-none items-center rounded-medium border bg-light p-7 dark:bg-dark+2',
                 properties.className,
@@ -101,21 +69,27 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             onBlurCapture={function () {
                 setHovered(false);
             }}
-            {...bindDrag()}
         >
             {/* Close Button */}
-            <AnimatedButton
+            <MotionButton
                 {...properties.closeButtonProperties}
                 tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
                 variant="unstyled"
                 size="unstyled"
                 className="absolute -left-2 -top-2 inline-flex select-none items-center justify-center whitespace-nowrap rounded-full border border-light-3 bg-light p-1 hover:bg-light-2 hover:text-dark focus-visible:outline-none focus-visible:ring-0 dark:border-dark-3 dark:bg-dark+2 dark:text-neutral+3 dark:hover:bg-dark-3 dark:hover:text-light"
-                style={buttonSpring}
+                animate={{
+                    opacity: hovered ? 1 : 0,
+                }}
                 data-show={hovered}
                 onClick={handleRemoval}
+                transition={{
+                    type: 'spring',
+                    visualDuration: 0.35,
+                    bounce: 0.1,
+                }}
             >
                 <CloseIcon className="h-4 w-4 text-neutral" />
-            </AnimatedButton>
+            </MotionButton>
 
             <div className="flex w-full items-center justify-between">
                 {/* Title and Content */}
@@ -133,7 +107,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
                     {properties?.buttonProperties?.children ? properties.buttonProperties.children : 'Dismiss'}
                 </Button>
             </div>
-        </animated.div>
+        </motion.div>
     );
 });
 
