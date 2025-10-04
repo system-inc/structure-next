@@ -11,6 +11,7 @@ import {
 
 // Dependencies - Main Components
 import { EngagementActivityCard } from './EngagementActivityCard';
+import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 
 // Dependencies - Hooks
 import { useUserDevicesRequest } from '@structure/source/modules/engagement/hooks/useUserDevicesRequest';
@@ -268,21 +269,20 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         [visitorActivities, dataInteractionDatabaseTableRowsRequest.data],
     );
 
-    // Render loading state
+    // Determine content based on state
+    let content;
     if(dataInteractionDatabaseTableRowsRequest.isLoading && events.length === 0) {
-        return (
-            <div className={properties.className}>
+        content = (
+            <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
                 <div className="text-neutral-400 dark:text-neutral-500 text-sm">Loading sessions...</div>
-            </div>
+            </>
         );
     }
-
-    // Render error state
-    if(dataInteractionDatabaseTableRowsRequest.error) {
+    else if(dataInteractionDatabaseTableRowsRequest.error) {
         const errorMessage = dataInteractionDatabaseTableRowsRequest.error.message || 'Error loading sessions';
-        return (
-            <div className={properties.className}>
+        content = (
+            <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
                 <div className="text-sm text-red-500">
                     <div className="font-medium">Error:</div>
@@ -291,48 +291,51 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                         Database: {properties.databaseName}
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
-
-    // Render empty state
-    if(sortedVisitors.length === 0) {
-        return (
-            <div className={properties.className}>
+    else if(sortedVisitors.length === 0) {
+        content = (
+            <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
                 <div className="text-neutral-400 dark:text-neutral-500 text-sm">No active sessions</div>
-            </div>
+            </>
+        );
+    }
+    else {
+        content = (
+            <>
+                {/* Header - fixed */}
+                <div className="mb-4 flex shrink-0 items-center gap-2">
+                    <h2 className="text-lg font-semibold">
+                        {title} ({sortedVisitors.length})
+                    </h2>
+                    <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+                </div>
+
+                {/* Visitors list - scrollable, takes remaining height */}
+                <ScrollArea className="flex-1 pb-3 pr-2.5">
+                    <div ref={containerReference} className="space-y-3 pb-6">
+                        <AnimatePresence>
+                            {sortedVisitors.map(function (visitor) {
+                                const isNew = newVisitorIds.has(visitor.visitorId);
+                                const wasUpdated = updatedVisitorIds.has(visitor.visitorId);
+                                return (
+                                    <EngagementActivityCard
+                                        key={visitor.visitorId}
+                                        visitorActivity={visitor}
+                                        isNew={isNew}
+                                        wasUpdated={wasUpdated}
+                                    />
+                                );
+                            })}
+                        </AnimatePresence>
+                    </div>
+                </ScrollArea>
+            </>
         );
     }
 
     // Render the component
-    return (
-        <div className={mergeClassNames('flex h-full flex-col', properties.className)}>
-            {/* Header - fixed */}
-            <div className="mb-4 flex shrink-0 items-center gap-2">
-                <h2 className="text-lg font-semibold">
-                    {title} ({sortedVisitors.length})
-                </h2>
-                <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-            </div>
-
-            {/* Visitors list - scrollable, takes remaining height */}
-            <div ref={containerReference} className="flex-1 space-y-3 overflow-y-auto pb-20">
-                <AnimatePresence>
-                    {sortedVisitors.map(function (visitor) {
-                        const isNew = newVisitorIds.has(visitor.visitorId);
-                        const wasUpdated = updatedVisitorIds.has(visitor.visitorId);
-                        return (
-                            <EngagementActivityCard
-                                key={visitor.visitorId}
-                                visitorActivity={visitor}
-                                isNew={isNew}
-                                wasUpdated={wasUpdated}
-                            />
-                        );
-                    })}
-                </AnimatePresence>
-            </div>
-        </div>
-    );
+    return <div className={mergeClassNames('flex w-80 shrink-0 flex-col', properties.className)}>{content}</div>;
 }
