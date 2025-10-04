@@ -11,11 +11,15 @@ import {
     ComposedChart,
     CartesianGrid,
     Tooltip as RechartsTooltip,
+    TooltipProps as RechartsTooltipProperties,
     ResponsiveContainer,
     Bar,
+    BarProps as RechartsBarProperties,
     Cell,
     Line,
+    LineProps as RechartsLineProperties,
     Area,
+    AreaProps as RechartsAreaProperties,
     XAxis,
     YAxis,
     ReferenceArea,
@@ -71,11 +75,15 @@ export interface TimeSeriesChartProperties {
     showXAxis?: boolean;
     showYAxis?: boolean;
     showTooltip?: boolean;
+    tipProperties?: Partial<RechartsTooltipProperties<number, string>>;
+    tipSortOrder?: 'Descending' | 'Ascending' | false;
+    barProperties?: Partial<Omit<RechartsBarProperties, 'ref'>>;
+    lineProperties?: Partial<Omit<RechartsLineProperties, 'ref'>>;
+    areaProperties?: Partial<Omit<RechartsAreaProperties, 'ref'>>;
     activeLabel?: string | null;
     onLabelClick?: (label: string) => void;
     onReferenceAreaSelect?: (startLabel: string, endLabel: string) => void;
     isStacked?: boolean;
-    tipSortOrder?: 'Descending' | 'Ascending' | false;
     maximumDataPoints?: number; // Override default 370 limit
 }
 
@@ -288,6 +296,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     timeInterval={properties.timeInterval}
                                 />
                             }
+                            isAnimationActive={false}
+                            {...properties.tipProperties}
                         />
                     )}
 
@@ -303,7 +313,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
                         if(properties.chartType === 'Bar') {
                             const isStackedBar = dataSource.stackId || properties.isStacked;
-                            // Default radius for all bars
+                            // Default radius for all bars (topLeft, topRight, bottomRight, bottomLeft)
                             const defaultRadius: [number, number, number, number] = [4, 4, 0, 0];
 
                             return (
@@ -322,6 +332,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                                 ? lightenColor(dataSource.color, 0.15)
                                                 : lightenColor(dataSource.color, 0.15),
                                     }}
+                                    {...properties.barProperties}
                                 >
                                     {/* Apply dynamic radius per cell for stacked bars */}
                                     {isStackedBar &&
@@ -335,17 +346,49 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                                 });
                                             const topBarDataKey = getTopBarDataKey(dataPoint, stackedDataKeys);
 
-                                            // Only apply radius if this bar is the top bar for this data point
-                                            const shouldRound = topBarDataKey === dataSource.dataKey;
+                                            // Find the bottom bar (first one with a value > 0)
+                                            let bottomBarDataKey: string | null = null;
+                                            for(let i = 0; i < stackedDataKeys.length; i++) {
+                                                const dataKey = stackedDataKeys[i];
+                                                if(!dataKey) continue;
+                                                const value = dataPoint[dataKey];
+                                                if(typeof value === 'number' && value > 0) {
+                                                    bottomBarDataKey = dataKey;
+                                                    break;
+                                                }
+                                            }
 
-                                            return (
-                                                <Cell
-                                                    key={`cell-${index}`}
-                                                    radius={
-                                                        shouldRound ? (defaultRadius as never) : ([0, 0, 0, 0] as never)
-                                                    }
-                                                />
-                                            );
+                                            // Determine which bar this is in the stack
+                                            const isTopBar = topBarDataKey === dataSource.dataKey;
+                                            const isBottomBar = bottomBarDataKey === dataSource.dataKey;
+
+                                            // Get the radius from barProperties or use default
+                                            const radiusFromProperties = properties.barProperties?.radius as
+                                                | [number, number, number, number]
+                                                | undefined;
+                                            const topRadius = radiusFromProperties || defaultRadius;
+                                            const bottomRadius = radiusFromProperties || [0, 0, 0, 0];
+
+                                            // Apply top radius to top bar, bottom radius to bottom bar, no radius to middle bars
+                                            let cellRadius: [number, number, number, number];
+                                            if(isTopBar && isBottomBar) {
+                                                // Single bar - use full radius if provided, otherwise top radius
+                                                cellRadius = radiusFromProperties || topRadius;
+                                            }
+                                            else if(isTopBar) {
+                                                // Top bar - use top corners only [topLeft, topRight, 0, 0]
+                                                cellRadius = [topRadius[0], topRadius[1], 0, 0];
+                                            }
+                                            else if(isBottomBar) {
+                                                // Bottom bar - use bottom corners only [0, 0, bottomRight, bottomLeft]
+                                                cellRadius = [0, 0, bottomRadius[2], bottomRadius[3]];
+                                            }
+                                            else {
+                                                // Middle bar - no radius
+                                                cellRadius = [0, 0, 0, 0];
+                                            }
+
+                                            return <Cell key={`cell-${index}`} radius={cellRadius as never} />;
                                         })}
                                 </Bar>
                             );
@@ -378,6 +421,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     yAxisId={yAxisId}
                                     animationDuration={0}
                                     stackId={dataSource.stackId || properties.isStacked ? 'stack' : undefined}
+                                    {...properties.areaProperties}
                                 />
                             );
                         }
@@ -401,6 +445,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     }}
                                     yAxisId={yAxisId}
                                     animationDuration={0}
+                                    {...properties.lineProperties}
                                 />
                             );
                         }

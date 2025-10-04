@@ -16,7 +16,7 @@ import { EngagementContainer } from '@structure/source/modules/engagement/Engage
 // Dependencies - Utilities
 import { engagementService } from '@structure/source/modules/engagement/services/EngagementService';
 import { sessionManager } from '@structure/source/modules/engagement/SessionManager';
-import { initializeThirdPartyAttribution } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
+import { initializeThirdPartyAttribution } from '@structure/source/modules/engagement/services/utilities/EngagementServiceUtilities';
 
 // Track if the provider is mounted in order to avoid sending two events in development mode
 let engagementProviderMounted = false;

@@ -4,9 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemProperties, MenuItem } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { MenuItemsList } from '@structure/source/common/menus/MenuItemsList';
+import { MenuSearch } from '@structure/source/common/menus/MenuSearch';
 import { InputReferenceInterface } from '@structure/source/common/forms/Input';
-import { InputText } from '@structure/source/common/forms/InputText';
 // import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 
 // Dependencies - Assets
@@ -77,7 +78,7 @@ export function Menu(properties: MenuProperties) {
     const [itemsToRenderHighlightIndex, setItemsToRenderHighlightIndex] = React.useState(
         highlightItemOnMount ? (firstSelectedItemIndex !== -1 ? firstSelectedItemIndex : 0) : -1,
     );
-    const [highlightSource, setHighlightSource] = React.useState<'keyboard' | 'mouse' | null>(null);
+    const highlightSourceReference = React.useRef<'keyboard' | 'mouse' | null>(null);
     const [loadingItems, setLoadingItems] = React.useState<boolean>(properties.loadingItems ? true : false);
     const [loadingItemsError, setLoadingItemsError] = React.useState<React.ReactNode>(properties.loadingItemsError);
 
@@ -130,6 +131,10 @@ export function Menu(properties: MenuProperties) {
         [propertiesOnItemSelected],
     );
 
+    // Track the currently highlighted item reference and index for mouse hover
+    const currentMouseHighlightedItemReference = React.useRef<HTMLButtonElement | null>(null);
+    const currentMouseHighlightedItemIndexReference = React.useRef<number>(-1);
+
     // Intercept the onMouseMove events for items
     const itemOnMouseMoveIntercept = React.useCallback(function (
         item: MenuItemProperties,
@@ -138,11 +143,29 @@ export function Menu(properties: MenuProperties) {
     ) {
         // console.log('itemOnMouseMoveIntercept', itemIndex, event.currentTarget);
 
-        // Update the highlight source to 'mouse'
-        setHighlightSource('mouse');
+        // Skip if item is disabled or already highlighting this item
+        if(item.disabled || currentMouseHighlightedItemIndexReference.current === itemIndex) {
+            return;
+        }
 
-        // Manage highlight
-        setItemsToRenderHighlightIndex(itemIndex);
+        // Update the highlight source to 'mouse'
+        highlightSourceReference.current = 'mouse';
+
+        // Use direct DOM manipulation for mouse hover to avoid React re-renders
+        const targetElement = event.currentTarget;
+
+        // Remove highlight from previously highlighted item
+        if(
+            currentMouseHighlightedItemReference.current &&
+            currentMouseHighlightedItemReference.current !== targetElement
+        ) {
+            currentMouseHighlightedItemReference.current.removeAttribute('data-highlighted');
+        }
+
+        // Add highlight to current item
+        targetElement.setAttribute('data-highlighted', 'true');
+        currentMouseHighlightedItemReference.current = targetElement;
+        currentMouseHighlightedItemIndexReference.current = itemIndex;
 
         // Call the onMouseMove handler for the menu item
         if(item.onMouseMove !== undefined) {
@@ -196,7 +219,7 @@ export function Menu(properties: MenuProperties) {
                 if(typeaheadTimeoutReference.current !== null) {
                     clearTimeout(typeaheadTimeoutReference.current);
                 }
-                typeaheadTimeoutReference.current = setTimeout(() => {
+                typeaheadTimeoutReference.current = setTimeout(function () {
                     typeaheadSearchReference.current = '';
                 }, 300); // Reset after a delay
 
@@ -220,10 +243,17 @@ export function Menu(properties: MenuProperties) {
 
             // Update focus
             if(newHighlightedMenuItemIndex !== undefined) {
-                // Update the highlight source to 'keyboard'
-                setHighlightSource('keyboard');
+                // Clear any mouse highlight before switching to keyboard mode
+                if(currentMouseHighlightedItemReference.current) {
+                    currentMouseHighlightedItemReference.current.removeAttribute('data-highlighted');
+                    currentMouseHighlightedItemReference.current = null;
+                    currentMouseHighlightedItemIndexReference.current = -1;
+                }
 
-                // Set the new highlighted item index
+                // Update the highlight source to 'keyboard'
+                highlightSourceReference.current = 'keyboard';
+
+                // Set the new highlighted item index (this will use React state for keyboard highlighting)
                 setItemsToRenderHighlightIndex(newHighlightedMenuItemIndex);
             }
         },
@@ -280,7 +310,7 @@ export function Menu(properties: MenuProperties) {
             const container = itemReference?.parentNode;
 
             // Only scroll if the highlight source is keyboard
-            if(highlightSource == 'keyboard' && itemReference && container instanceof HTMLElement) {
+            if(highlightSourceReference.current == 'keyboard' && itemReference && container instanceof HTMLElement) {
                 // console.log('Checking scroll position', 'item', item, 'container', container);
 
                 // First, get the positions of the item and the container
@@ -306,7 +336,7 @@ export function Menu(properties: MenuProperties) {
                 }
             }
         },
-        [highlightSource, itemsToRenderHighlightIndex],
+        [itemsToRenderHighlightIndex],
     );
 
     // Scroll the highlighted item into view when the highlighted item index changes
@@ -406,59 +436,20 @@ export function Menu(properties: MenuProperties) {
                 <>
                     {/* Search */}
                     {properties.search && (
-                        <InputText
-                            ref={searchInputTextReference}
-                            id="menuSearch"
-                            variant="menuSearch"
-                            placeholder="Search..."
-                            autoComplete="off"
-                            onKeyDown={function (event: React.KeyboardEvent<HTMLInputElement>) {
-                                // Prevent any keys except for arrow and escape keys to bubble up to the menu
-                                if(
-                                    event.key !== 'ArrowDown' &&
-                                    event.key !== 'ArrowUp' &&
-                                    event.key !== 'Escape' &&
-                                    event.key !== 'Enter'
-                                ) {
-                                    event.stopPropagation();
-                                }
-                            }}
-                            onChange={function (
-                                value: string | undefined,
-                                // event?: React.ChangeEvent<HTMLInputElement>,
-                            ) {
-                                // console.log('onChange', event.currentTarget.value);
-                                // Search on all change events
-                                search((value = value ?? ''));
-                            }}
-                        />
+                        <MenuSearch searchInputTextReference={searchInputTextReference} onSearch={search} />
                     )}
 
                     {/* Menu Items */}
                     {itemsToRender.length ? (
                         // If there are menu items
-                        <div className={mergeClassNames('overflow-y-auto p-1', properties.itemsClassName)}>
-                            {itemsToRender.map(function (itemToRender, itemToRenderIndex) {
-                                return (
-                                    <MenuItem
-                                        {...itemToRender}
-                                        key={itemToRenderIndex}
-                                        ref={function (element) {
-                                            itemDomElementReferences.current[itemToRenderIndex] = element;
-                                        }}
-                                        tabIndex={-1}
-                                        className={mergeClassNames('w-full', itemToRender.className)}
-                                        onClick={async function (event: React.MouseEvent<HTMLElement, MouseEvent>) {
-                                            itemOnClickIntercept(itemToRender, itemToRenderIndex, event);
-                                        }}
-                                        onMouseMove={function (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-                                            itemOnMouseMoveIntercept(itemToRender, itemToRenderIndex, event);
-                                        }}
-                                        highlighted={itemToRenderIndex === itemsToRenderHighlightIndex}
-                                    />
-                                );
-                            })}
-                        </div>
+                        <MenuItemsList
+                            itemsToRender={itemsToRender}
+                            itemsToRenderHighlightIndex={itemsToRenderHighlightIndex}
+                            itemsClassName={properties.itemsClassName}
+                            itemDomElementReferences={itemDomElementReferences}
+                            itemOnClickIntercept={itemOnClickIntercept}
+                            itemOnMouseMoveIntercept={itemOnMouseMoveIntercept}
+                        />
                     ) : (
                         // If there are no menu items
                         <div className="flex flex-grow flex-col items-center justify-center">

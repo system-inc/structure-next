@@ -11,7 +11,7 @@ import { networkService, gql } from '@structure/source/services/network/NetworkS
 import { DeviceOrientation, CreateEngagementEventInput } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { getThirdPartyAttributionForEvents } from '@structure/source/modules/engagement/utilities/EngagementUtilities';
+import { getThirdPartyAttributionForEvents } from '@structure/source/modules/engagement/services/utilities/EngagementServiceUtilities';
 
 // Class - EngagementService
 class EngagementService {
