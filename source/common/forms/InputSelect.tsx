@@ -209,14 +209,10 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
         [propertiesOnBlur, value],
     );
 
-    // Render the component
-    return (
-        <PopoverMenu
-            key={loadingItems ? 'popoverMenuLoading' : 'popoverMenuLoaded'}
-            {...properties.popoverMenuProperties}
-            className={mergeClassNames('', properties.popoverMenuProperties?.className)}
-            title={properties.title}
-            items={items.map(function (item) {
+    // Memoize the transformed items to prevent unnecessary re-renders when hovering
+    const transformedItems = React.useMemo(
+        function () {
+            return items.map(function (item) {
                 // Determine if the item is selected
                 const selected = item.value === value;
 
@@ -228,7 +224,19 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                     highlighted: selected,
                     selected: selected,
                 };
-            })}
+            });
+        },
+        [items, value],
+    );
+
+    // Render the component
+    return (
+        <PopoverMenu
+            key={loadingItems ? 'popoverMenuLoading' : 'popoverMenuLoaded'}
+            {...properties.popoverMenuProperties}
+            className={mergeClassNames('', properties.popoverMenuProperties?.className)}
+            title={properties.title}
+            items={transformedItems}
             // loadItems={properties.loadItems}
             loadingItems={loadingItems}
             loadingItemsMessage={properties.loadingItemsMessage}
