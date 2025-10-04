@@ -89,6 +89,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
             ],
         },
         {
+            cache: 'SessionStorage',
             refreshIntervalInMilliseconds: hasError ? undefined : 10000, // Stop polling on error
         },
     );
