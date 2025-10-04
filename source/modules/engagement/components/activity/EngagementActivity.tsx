@@ -24,6 +24,10 @@ import { AnimatePresence } from 'motion/react';
 
 // Dependencies - Utilities
 import { formatLocation, getAttributionMessage, parseUtcDateString } from './utilities/EngagementActivityUtilities';
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
+// Constants
+const title = 'Sessions';
 
 // Interface - VisitorActivity
 export interface VisitorActivityInterface {
@@ -268,7 +272,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     if(dataInteractionDatabaseTableRowsRequest.isLoading && events.length === 0) {
         return (
             <div className={properties.className}>
-                <div className="mb-4 text-lg font-semibold">Sessions</div>
+                <div className="mb-4 text-lg font-semibold">{title}</div>
                 <div className="text-neutral-400 dark:text-neutral-500 text-sm">Loading sessions...</div>
             </div>
         );
@@ -279,7 +283,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         const errorMessage = dataInteractionDatabaseTableRowsRequest.error.message || 'Error loading sessions';
         return (
             <div className={properties.className}>
-                <div className="mb-4 text-lg font-semibold">Live Sessions</div>
+                <div className="mb-4 text-lg font-semibold">{title}</div>
                 <div className="text-sm text-red-500">
                     <div className="font-medium">Error:</div>
                     <div className="mt-1">{errorMessage}</div>
@@ -295,7 +299,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     if(sortedVisitors.length === 0) {
         return (
             <div className={properties.className}>
-                <div className="mb-4 text-lg font-semibold">Live Sessions</div>
+                <div className="mb-4 text-lg font-semibold">{title}</div>
                 <div className="text-neutral-400 dark:text-neutral-500 text-sm">No active sessions</div>
             </div>
         );
@@ -303,10 +307,12 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
 
     // Render the component
     return (
-        <div className={`flex h-full flex-col ${properties.className || ''}`}>
+        <div className={mergeClassNames('flex h-full flex-col', properties.className)}>
             {/* Header - fixed */}
             <div className="mb-4 flex shrink-0 items-center gap-2">
-                <h2 className="text-lg font-semibold">Live Sessions ({sortedVisitors.length})</h2>
+                <h2 className="text-lg font-semibold">
+                    {title} ({sortedVisitors.length})
+                </h2>
                 <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
             </div>
 
