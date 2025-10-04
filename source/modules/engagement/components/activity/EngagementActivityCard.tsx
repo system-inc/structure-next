@@ -6,6 +6,9 @@ import React from 'react';
 // Dependencies - Types
 import { VisitorActivityInterface } from '@structure/source/modules/engagement/components/activity/EngagementActivity';
 
+// Dependencies - Main Components
+import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
+
 // Dependencies - Animation
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -207,29 +210,35 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="mb-2 max-h-64 overflow-y-auto"
+                        className="mb-2"
                     >
-                        {properties.visitorActivity.events.map(function (event) {
-                            const path = truncatePath(event.viewIdentifier);
-                            const eventTime = formatTimeAgo(event.loggedAt || event.createdAt);
-                            const isAddToCart = event.name === 'AddToCart';
+                        <ScrollArea className="max-h-64">
+                            <div className="pr-0">
+                                {properties.visitorActivity.events.map(function (event) {
+                                    const path = truncatePath(event.viewIdentifier);
+                                    const eventTime = formatTimeAgo(event.loggedAt || event.createdAt);
+                                    const isAddToCart = event.name === 'AddToCart';
 
-                            return (
-                                <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
-                                    <span className="text-neutral-400 dark:text-neutral-500">→</span>
-                                    <span
-                                        className={
-                                            isAddToCart
-                                                ? 'min-w-0 flex-1 truncate font-mono font-semibold text-green-600 dark:text-green-400'
-                                                : 'text-blue-600 dark:text-blue-400 min-w-0 flex-1 truncate font-mono'
-                                        }
-                                    >
-                                        {isAddToCart ? `🛒 ${path}` : path}
-                                    </span>
-                                    <span className="text-neutral-400 dark:text-neutral-500 shrink-0">{eventTime}</span>
-                                </div>
-                            );
-                        })}
+                                    return (
+                                        <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
+                                            <span className="text-neutral-400 dark:text-neutral-500">→</span>
+                                            <span
+                                                className={
+                                                    isAddToCart
+                                                        ? 'min-w-0 flex-1 truncate font-mono font-semibold text-green-600 dark:text-green-400'
+                                                        : 'text-blue-600 dark:text-blue-400 min-w-0 flex-1 truncate font-mono'
+                                                }
+                                            >
+                                                {isAddToCart ? `🛒 ${path}` : path}
+                                            </span>
+                                            <span className="text-neutral-400 dark:text-neutral-500 shrink-0">
+                                                {eventTime}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </ScrollArea>
                     </motion.div>
                 )}
             </AnimatePresence>

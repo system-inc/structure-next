@@ -89,6 +89,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
             ],
         },
         {
+            cache: 'SessionStorage',
             refreshIntervalInMilliseconds: hasError ? undefined : 10000, // Stop polling on error
         },
     );
@@ -314,7 +315,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                 </div>
 
                 {/* Visitors list - scrollable, takes remaining height */}
-                <ScrollArea className="flex-1 pb-3 pr-2.5">
+                <ScrollArea className="flex-1 pb-3 pr-3">
                     <div ref={containerReference} className="space-y-3 pb-6">
                         <AnimatePresence>
                             {sortedVisitors.map(function (visitor) {
