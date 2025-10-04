@@ -72,6 +72,11 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
     const oldestEvent = properties.visitorActivity.events[properties.visitorActivity.events.length - 1];
     const entrancePage = oldestEvent?.viewIdentifier?.split('?')[0] || '/';
 
+    // Check if visitor has added to cart
+    const hasAddedToCart = properties.visitorActivity.events.some(function (event) {
+        return event.name === 'AddToCart';
+    });
+
     // Determine which browser icon to show
     const browserName = properties.visitorActivity.device?.client || '';
     const browserLower = browserName.toLowerCase();
@@ -164,9 +169,11 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
             }}
             className={mergeClassNames(
                 'cursor-pointer rounded-lg border p-3 shadow-sm transition-colors',
-                isExpanded
-                    ? 'border-opsis-border-primary bg-white dark:border-opsis-border-primary dark:bg-dark-1'
-                    : 'hover:border-opsis-border-primary/50 dark:hover:border-opsis-border-primary/50 border-light-4 bg-white active:border-opsis-border-primary dark:border-dark-4 dark:bg-dark-1 dark:active:border-opsis-border-primary',
+                hasAddedToCart
+                    ? 'border-green-500 bg-white dark:border-green-500 dark:bg-dark-1'
+                    : isExpanded
+                      ? 'border-opsis-border-primary bg-white dark:border-opsis-border-primary dark:bg-dark-1'
+                      : 'hover:border-opsis-border-primary/50 dark:hover:border-opsis-border-primary/50 border-light-4 bg-white active:border-opsis-border-primary dark:border-dark-4 dark:bg-dark-1 dark:active:border-opsis-border-primary',
             )}
         >
             {/* Top row: Location with browser, platform, and device type icons */}
