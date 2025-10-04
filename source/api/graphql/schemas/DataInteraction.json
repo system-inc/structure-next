@@ -158,10 +158,13 @@
                 "type": "TimeInterval",
                 "description": "Possible time intervals used to group time series data.",
                 "values": [
+                    "Minute",
                     "Hour",
                     "HourOfDay",
                     "Day",
                     "DayOfWeek",
+                    "Week",
+                    "WeekOfYear",
                     "DayOfMonth",
                     "Month",
                     "MonthOfYear",

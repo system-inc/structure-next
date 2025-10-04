@@ -227,8 +227,11 @@ enum TimeInterval {
     DayOfWeek
     Hour
     HourOfDay
+    Minute
     Month
     MonthOfYear
     Quarter
+    Week
+    WeekOfYear
     Year
 }

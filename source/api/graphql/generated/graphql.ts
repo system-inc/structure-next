@@ -1658,9 +1658,12 @@ export enum TimeInterval {
     DayOfWeek = 'DayOfWeek',
     Hour = 'Hour',
     HourOfDay = 'HourOfDay',
+    Minute = 'Minute',
     Month = 'Month',
     MonthOfYear = 'MonthOfYear',
     Quarter = 'Quarter',
+    Week = 'Week',
+    WeekOfYear = 'WeekOfYear',
     Year = 'Year',
 }
 
@@ -4476,7 +4479,20 @@ export namespace GraphQLInputTypes {
     export const TimeInterval: GraphQLInputEnumTypeMetadata = {
         kind: 'enum',
         type: 'TimeInterval',
-        values: ['Hour', 'HourOfDay', 'Day', 'DayOfWeek', 'DayOfMonth', 'Month', 'MonthOfYear', 'Quarter', 'Year'],
+        values: [
+            'Minute',
+            'Hour',
+            'HourOfDay',
+            'Day',
+            'DayOfWeek',
+            'Week',
+            'WeekOfYear',
+            'DayOfMonth',
+            'Month',
+            'MonthOfYear',
+            'Quarter',
+            'Year',
+        ],
     };
 
     export const DataInteractionDatabaseTableMetricsQueryInput: GraphQLInputObjectTypeMetadata = {
