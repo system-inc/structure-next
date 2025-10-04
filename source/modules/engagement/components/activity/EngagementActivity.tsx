@@ -42,6 +42,7 @@ export interface VisitorActivityInterface {
 // Component - EngagementActivity
 export interface EngagementActivityProperties {
     className?: string;
+    databaseName: string;
 }
 export function EngagementActivity(properties: EngagementActivityProperties) {
     // State
@@ -50,10 +51,11 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     const [newVisitorIds, setNewVisitorIds] = React.useState<Set<string>>(new Set());
     const [updatedVisitorIds, setUpdatedVisitorIds] = React.useState<Set<string>>(new Set());
     const containerReference = React.useRef<HTMLDivElement>(null);
+    const [hasError, setHasError] = React.useState(false);
 
-    // Hooks - Query engagement events every 10 seconds
+    // Hooks - Query engagement events every 10 seconds (stop polling on error)
     const dataInteractionDatabaseTableRowsRequest = useDataInteractionDatabaseTableRowsRequest(
-        'readonly',
+        properties.databaseName,
         'EngagementEvent',
         {
             itemsPerPage: 100,
@@ -82,8 +84,18 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
             ],
         },
         {
-            refreshIntervalInMilliseconds: 10000, // Poll every 10 seconds
+            refreshIntervalInMilliseconds: hasError ? undefined : 10000, // Stop polling on error
         },
+    );
+
+    // Track errors to stop polling
+    React.useEffect(
+        function () {
+            if(dataInteractionDatabaseTableRowsRequest.error) {
+                setHasError(true);
+            }
+        },
+        [dataInteractionDatabaseTableRowsRequest.error],
     );
 
     // Extract events from response
@@ -111,7 +123,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     );
 
     // Fetch device data for all unique device IDs
-    const userDevicesRequest = useUserDevicesRequest(deviceIds);
+    const userDevicesRequest = useUserDevicesRequest(properties.databaseName, deviceIds);
 
     // Group events by visitor and merge with existing visitor data
     React.useEffect(
@@ -264,10 +276,17 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
 
     // Render error state
     if(dataInteractionDatabaseTableRowsRequest.error) {
+        const errorMessage = dataInteractionDatabaseTableRowsRequest.error.message || 'Error loading sessions';
         return (
             <div className={properties.className}>
                 <div className="mb-4 text-lg font-semibold">Live Sessions</div>
-                <div className="text-sm text-red-500">Error loading sessions</div>
+                <div className="text-sm text-red-500">
+                    <div className="font-medium">Error:</div>
+                    <div className="mt-1">{errorMessage}</div>
+                    <div className="text-neutral-400 dark:text-neutral-500 mt-2 text-xs">
+                        Database: {properties.databaseName}
+                    </div>
+                </div>
             </div>
         );
     }

@@ -11,9 +11,9 @@ import { useDataInteractionDatabaseTableRowsRequest } from '@structure/source/mo
 import { ColumnFilterConditionOperator, OrderByDirection } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Hook - useUserDevicesRequest
-export function useUserDevicesRequest(deviceIds: string[]) {
+export function useUserDevicesRequest(databaseName: string, deviceIds: string[]) {
     const dataInteractionDatabaseTableRowsRequest = useDataInteractionDatabaseTableRowsRequest(
-        'readonly',
+        databaseName,
         'UserDevice',
         {
             itemsPerPage: 100,
