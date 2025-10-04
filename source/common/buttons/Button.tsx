@@ -235,6 +235,10 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
     // Listen to changes in the processing property allowing the component to be controlled by the parent
     React.useEffect(
         function () {
+            const processingAnimationRunningTimeout = processingAnimationRunningTimeoutReference.current;
+            const processingAnimationTimeout = processingAnimationTimeoutReference.current;
+            const tipResetTimeout = tipResetTimeoutReference.current;
+
             // Listen to changes in the processing property
             if(processing !== undefined) {
                 // If the processing state changed
@@ -252,14 +256,14 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
 
             // Clear timeouts on unmount
             return function () {
-                if(processingAnimationTimeoutReference.current) {
-                    clearTimeout(processingAnimationTimeoutReference.current);
+                if(processingAnimationTimeout) {
+                    clearTimeout(processingAnimationTimeout);
                 }
-                if(tipResetTimeoutReference.current) {
-                    clearTimeout(tipResetTimeoutReference.current);
+                if(tipResetTimeout) {
+                    clearTimeout(tipResetTimeout);
                 }
-                if(processingAnimationRunningTimeoutReference.current) {
-                    clearTimeout(processingAnimationRunningTimeoutReference.current);
+                if(processingAnimationRunningTimeout) {
+                    clearTimeout(processingAnimationRunningTimeout);
                 }
             };
         },
