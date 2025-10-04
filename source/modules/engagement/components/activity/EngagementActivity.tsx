@@ -268,7 +268,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     if(dataInteractionDatabaseTableRowsRequest.isLoading && events.length === 0) {
         return (
             <div className={properties.className}>
-                <div className="mb-4 text-lg font-semibold">Live Sessions</div>
+                <div className="mb-4 text-lg font-semibold">Sessions</div>
                 <div className="text-neutral-400 dark:text-neutral-500 text-sm">Loading sessions...</div>
             </div>
         );
@@ -306,7 +306,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         <div className={`flex h-full flex-col ${properties.className || ''}`}>
             {/* Header - fixed */}
             <div className="mb-4 flex shrink-0 items-center gap-2">
-                <h2 className="text-lg font-semibold">Live Sessions</h2>
+                <h2 className="text-lg font-semibold">Live Sessions ({sortedVisitors.length})</h2>
                 <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
             </div>
 
