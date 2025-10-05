@@ -105,7 +105,7 @@ export function Menu(properties: MenuProperties) {
             );
         },
         // Do not re-render whem itemsToRender changes
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [propertiesItems],
     );
 

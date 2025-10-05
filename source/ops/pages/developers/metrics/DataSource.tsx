@@ -202,7 +202,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                     });
                 }
             },
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+
             [
                 dataInteractionDatabaseTableMetricsRequest.data,
                 columnToMeasure,

@@ -280,7 +280,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
         },
         // Just when the navigation open state or width changes
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 
@@ -375,7 +375,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 containerOffsetSpring.set(shouldBeOpen === true ? 0 : -sideNavigationLayoutNavigationWidth);
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [],
     );
 

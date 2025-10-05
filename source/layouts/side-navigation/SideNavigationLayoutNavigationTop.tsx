@@ -98,7 +98,7 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
             }
         },
         // Just when the navigation open state or width changes
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
     );
 

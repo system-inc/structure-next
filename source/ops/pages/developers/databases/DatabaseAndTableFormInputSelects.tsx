@@ -107,7 +107,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                 }
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [selectedDatabaseName, tableItems],
     );
 

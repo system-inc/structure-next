@@ -23,7 +23,7 @@ export const MenuSearch = React.memo(function (properties: MenuSearchProperties)
         function (value: string | undefined) {
             properties.onSearch(value ?? '');
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [properties.onSearch],
     );
 

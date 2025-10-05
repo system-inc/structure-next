@@ -91,7 +91,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                 properties.onChange(columnFilterGroupData);
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [columnFilterGroupData],
     );
 

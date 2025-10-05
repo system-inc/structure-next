@@ -229,7 +229,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
             // Note: We don't handle the opposite case (stored false, state true)
             // because the server's cookie check is authoritative in production
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [], // Empty dependency array - only run once on mount
     );
 

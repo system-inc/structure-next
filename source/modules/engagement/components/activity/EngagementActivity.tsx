@@ -266,7 +266,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                     return b.lastActivityTime.localeCompare(a.lastActivityTime);
                 });
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         [visitorActivities, dataInteractionDatabaseTableRowsRequest.data],
     );
 
