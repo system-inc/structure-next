@@ -622,8 +622,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                             event.preventDefault();
                             dragControls.start(event);
                         }}
-                        className={`relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab hover:bg-dark-4/10 active:cursor-grabbing hover:dark:bg-light-4/10
-                `}
+                        className={`relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab hover:bg-dark-4/10 active:cursor-grabbing hover:dark:bg-light-4/10`}
                     >
                         <DragIcon className="h-full w-full rotate-90" />
                     </div>
