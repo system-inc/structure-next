@@ -42,12 +42,15 @@ async function getServerSideProperties(username: string) {
 
 // Metadata
 export async function generateMetadata(properties: {
-    params: {
+    params: Promise<{
         username: string;
-    };
+    }>;
 }) {
+    // Await params (required in Next.js 15)
+    const urlParameters = await properties.params;
+
     // Get the server-side properties
-    const serverSideProperties = await getServerSideProperties(properties.params.username);
+    const serverSideProperties = await getServerSideProperties(urlParameters.username);
 
     // Build the title
     let title = '';
@@ -69,13 +72,16 @@ export async function generateMetadata(properties: {
 
 // Page
 export interface PublicProfilePageRouteProperties {
-    params: {
+    params: Promise<{
         username: string;
-    };
+    }>;
 }
 export async function PublicProfilePageRoute(properties: PublicProfilePageRouteProperties) {
+    // Await params (required in Next.js 15)
+    const urlParameters = await properties.params;
+
     // Get the server-side properties
-    const serverSideProperties = await getServerSideProperties(properties.params.username);
+    const serverSideProperties = await getServerSideProperties(urlParameters.username);
 
     // Render the component
     return <PublicProfilePage {...serverSideProperties} />;
