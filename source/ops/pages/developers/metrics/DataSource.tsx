@@ -863,7 +863,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                 </div>
                             }
                         >
-                            <p className="relative cursor-default text-end italic text-dark/30 dark:text-light-4/50">
+                            <p className="relative cursor-default text-end text-dark/30 italic dark:text-light-4/50">
                                 {dataInteractionDatabaseTableMetricsRequest.isLoading
                                     ? '...'
                                     : addCommas(statistics.sum)}

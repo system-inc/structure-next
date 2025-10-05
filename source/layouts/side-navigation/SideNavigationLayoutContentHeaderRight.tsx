@@ -17,7 +17,7 @@ export function SideNavigationLayoutContentHeaderRight(properties: SideNavigatio
         // Wrapping the animated.div in another div to prevent the Next JS warning:
         // "Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element"
         <div className="">
-            <div className={mergeClassNames('fixed right-16 top-0 flex h-[68px] items-center', properties.className)}>
+            <div className={mergeClassNames('fixed top-0 right-16 flex h-[68px] items-center', properties.className)}>
                 {properties.children}
             </div>
         </div>

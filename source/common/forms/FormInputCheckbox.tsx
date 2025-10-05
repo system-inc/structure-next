@@ -162,7 +162,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                         />
                         {/* Label - Rendered here as a special case for checkboxes instead of in FormInput */}
                         <label
-                            className="ml-2 cursor-pointer select-none text-sm font-medium"
+                            className="ml-2 cursor-pointer text-sm font-medium select-none"
                             onClick={function () {
                                 click();
 

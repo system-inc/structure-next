@@ -91,7 +91,7 @@ export function DownloadButton(properties: DownloadButtonProperties) {
             className={`${
                 downloadStarted
                     ? 'text-emerald-500 hover:text-emerald-500'
-                    : 'text-neutral hover:text-dark dark:text-neutral+6 dark:hover:text-light'
+                    : 'dark:text-neutral+6 text-neutral hover:text-dark dark:hover:text-light'
             } ${properties.className}`}
             onClick={onDownload}
             icon={downloadStarted ? CheckCircledIcon : DownloadIcon}

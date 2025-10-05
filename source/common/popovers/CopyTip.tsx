@@ -30,7 +30,7 @@ export function CopyTip(properties: CopyTipProperties) {
                             iconClassName="h-3.5 w-3.5"
                         />
                     </div>
-                    <div className="whitespace-nowrap p-1.5">{value}</div>
+                    <div className="p-1.5 whitespace-nowrap">{value}</div>
                 </div>
             }
             align="start"

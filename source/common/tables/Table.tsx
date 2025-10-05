@@ -524,7 +524,7 @@ export function Table(properties: TableProperties) {
                                     <Button
                                         // Fade in and out when appearing and disappearing
                                         data-show={selectedRowsIndexesSet.size > 0}
-                                        className="duration-75 data-[show=true]:flex data-[show=false]:hidden data-[show=true]:animate-in data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:fade-in"
+                                        className="duration-75 data-[show=false]:hidden data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:flex data-[show=true]:animate-in data-[show=true]:fade-in"
                                         icon={CheckCircledIcon}
                                         iconPosition="left"
                                     >

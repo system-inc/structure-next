@@ -107,7 +107,7 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
                                 <div className="text-sm">
                                     <p className="mt-3">What happens next?</p>
 
-                                    <ul className="ml-1.5 mt-1 list-inside list-disc">
+                                    <ul className="mt-1 ml-1.5 list-inside list-disc">
                                         <li>This content is now in a queue to be moderated.</li>
                                         <li>A moderator will review your report and a make a decision.</li>
                                         <li>If the content is not appropriate, it will be permanently removed.</li>

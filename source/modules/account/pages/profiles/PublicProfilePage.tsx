@@ -28,7 +28,7 @@ export function PublicProfilePage(properties: PublicProfilePageProperties) {
     // Render the component
     return (
         <AuthorizationLayout>
-            <div className="container pb-32 pt-8 text-center">
+            <div className="container pt-8 pb-32 text-center">
                 <div className="mx-auto mb-4 flex h-40 w-40">
                     <ProfileImage
                         className=""

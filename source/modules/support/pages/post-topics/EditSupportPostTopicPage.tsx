@@ -38,7 +38,7 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
 
     // Render the component
     return (
-        <div className="container pb-32 pt-12">
+        <div className="container pt-12 pb-32">
             <h1 className="mb-8">Edit Topic</h1>
 
             <p>need to do this</p>

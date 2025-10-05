@@ -228,7 +228,7 @@ export function UsersRolesPage() {
                                 ),
                             ).map(([type, roles]) => (
                                 <div key={type} className="space-y-4">
-                                    <h3 className="text-neutral-500 text-base font-medium">
+                                    <h3 className="text-base font-medium text-neutral-500">
                                         {type} ({roles.length})
                                     </h3>
                                     <div className="divide-y divide-neutral/10">
@@ -252,15 +252,15 @@ export function UsersRolesPage() {
                                                 <div className="md:hidden">
                                                     <Link
                                                         href={`/profiles/${role.profile?.username}`}
-                                                        className="hover:text-blue-500 font-medium"
+                                                        className="font-medium hover:text-blue-500"
                                                     >
                                                         {role.profile?.displayName || role.profile?.username}
                                                     </Link>
-                                                    <div className="text-neutral-500 text-sm">
+                                                    <div className="text-sm text-neutral-500">
                                                         @{role.profile?.username}
                                                     </div>
-                                                    <div className="text-neutral-500 text-sm">{role.emailAddress}</div>
-                                                    <div className="text-neutral-500 text-sm">
+                                                    <div className="text-sm text-neutral-500">{role.emailAddress}</div>
+                                                    <div className="text-sm text-neutral-500">
                                                         Added {dateFull(new Date(role.createdAt))}
                                                         {role.expiresAt && (
                                                             <div>Expires {dateFull(new Date(role.expiresAt))}</div>
@@ -288,17 +288,17 @@ export function UsersRolesPage() {
                                                 <div className="hidden md:block">
                                                     <Link
                                                         href={`/profiles/${role.profile?.username}`}
-                                                        className="hover:text-blue-500 font-medium"
+                                                        className="font-medium hover:text-blue-500"
                                                     >
                                                         {role.profile?.displayName || role.profile?.username}
                                                     </Link>
-                                                    <div className="text-neutral-500 text-sm">
+                                                    <div className="text-sm text-neutral-500">
                                                         @{role.profile?.username}
                                                     </div>
-                                                    <div className="text-neutral-500 text-sm">{role.emailAddress}</div>
+                                                    <div className="text-sm text-neutral-500">{role.emailAddress}</div>
                                                 </div>
 
-                                                <div className="text-neutral-500 hidden text-sm md:block">
+                                                <div className="hidden text-sm text-neutral-500 md:block">
                                                     Added {dateFull(new Date(role.createdAt))}
                                                     {role.expiresAt && (
                                                         <div>Expires {dateFull(new Date(role.expiresAt))}</div>

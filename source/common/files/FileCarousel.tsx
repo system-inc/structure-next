@@ -113,7 +113,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                         <Button
                             onClick={nextFile}
                             variant="unstyled"
-                            className="absolute right-0 top-1/2 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:outline-none focus-visible:ring-0 dark:focus:border-dark-3"
+                            className="absolute top-1/2 right-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-dark-3"
                         >
                             <ChevronRightIcon className="h-6 w-6" />
                         </Button>
@@ -123,7 +123,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     {properties.files.length > 1 && (
                         <Button
                             variant="unstyled"
-                            className="absolute left-0 top-1/2 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:outline-none focus-visible:ring-0 dark:focus:border-dark-3"
+                            className="absolute top-1/2 left-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-dark-3"
                             icon={ChevronLeftIcon}
                             iconClassName="h-6 w-6"
                             onClick={previousFile}
@@ -131,7 +131,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     )}
 
                     {/* Top Right Controls */}
-                    <div className="absolute right-0 top-0 m-2 flex gap-2">
+                    <div className="absolute top-0 right-0 m-2 flex gap-2">
                         {/* Open in New Tab Button */}
                         <Button
                             variant="unstyled"

@@ -49,7 +49,7 @@ export function ProfilePage() {
                         <PlaceholderAnimation className="mt-2 h-4 w-32" />
                     ) : (
                         account.data?.profile?.username && (
-                            <p className="neutral mb-2 mt-1 text-sm">@{account.data.profile.username}</p>
+                            <p className="neutral mt-1 mb-2 text-sm">@{account.data.profile.username}</p>
                         )
                     )}
 

@@ -35,7 +35,7 @@ export function CreateSupportPostTopicPage() {
 
     // Render the component
     return (
-        <div className="container pb-32 pt-12">
+        <div className="container pt-12 pb-32">
             <h1 className="mb-8">Create Topic</h1>
 
             <GraphQlOperationForm

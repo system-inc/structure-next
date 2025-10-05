@@ -140,9 +140,9 @@ export function ImageUploader(properties: ImageUploaderProperties) {
 
                                     {/* Progress bar */}
                                     {childProperties.isUploading && childProperties.progress > 0 && (
-                                        <div className="bg-neutral-200 dark:bg-neutral-700 mt-2 h-2 w-full overflow-hidden rounded-full">
+                                        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
                                             <div
-                                                className="bg-blue-500 h-full rounded-full"
+                                                className="h-full rounded-full bg-blue-500"
                                                 style={{ width: `${childProperties.progress}%` }}
                                             />
                                         </div>

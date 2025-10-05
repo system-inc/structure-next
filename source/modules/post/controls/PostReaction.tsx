@@ -163,19 +163,19 @@ export function PostReaction(properties: PostReactionProperties) {
             <div
                 className={mergeClassNames(
                     // Layout
-                    'flex cursor-pointer select-none items-center space-x-1.5 rounded-lg border px-2.5 ' +
-                        // Light
-                        'border-light-3 ' +
-                        // Dark
-                        'dark:border-dark-3 ' +
-                        // Hover - Light
-                        'hover:border-light-4 ' +
-                        // Hover - Dark
-                        'dark:hover:border-dark-4 dark:hover:bg-dark-2 ' +
-                        // Active - Light
-                        'active:border-light-6 ' +
-                        // Active - Dark
-                        'dark:active:border-dark-5 dark:active:bg-dark-3',
+                    'flex cursor-pointer items-center space-x-1.5 rounded-lg border px-2.5 select-none',
+                    // Light
+                    'border-light-3',
+                    // Dark
+                    'dark:border-dark-3',
+                    // Hover - Light
+                    'hover:border-light-4',
+                    // Hover - Dark
+                    'dark:hover:border-dark-4 dark:hover:bg-dark-2',
+                    // Active - Light
+                    'active:border-light-6',
+                    // Active - Dark
+                    'dark:active:border-dark-5 dark:active:bg-dark-3',
                     properties.reacted
                         ? 'border-purple-400 hover:border-purple-500 active:border-purple-600 dark:border-purple-500 dark:hover:border-purple-500 dark:active:border-purple-600'
                         : '',

@@ -45,9 +45,9 @@ export function SupportFeedback(properties: SupportFeedbackProperties) {
     // Function to get emoji classes
     function getEmojiClasses(emoji: string) {
         return mergeClassNames(
-            'cursor-pointer transition-all duration-300 hover:scale-150 ease-in-out', // Base classes
+            'cursor-pointer transition-all duration-300 ease-in-out hover:scale-150', // Base classes
             selectedEmoji === emoji ? 'scale-125' : 'scale-100', // Keep the selected emoji larger
-            selectedEmoji && selectedEmoji !== emoji ? 'grayscale opacity-10' : '', // Gray out unselected emojis
+            selectedEmoji && selectedEmoji !== emoji ? 'opacity-10 grayscale' : '', // Gray out unselected emojis
         );
     }
 
@@ -65,7 +65,7 @@ export function SupportFeedback(properties: SupportFeedbackProperties) {
             <div>
                 <p className="mb-4 text-center">{prompt}</p>
                 <div className="flex justify-center">
-                    <div className="flex w-36 select-none justify-between text-3xl">
+                    <div className="flex w-36 justify-between text-3xl select-none">
                         {/* Add the hover classes here for each emoji */}
                         <div
                             className={getEmojiClasses('😔')}

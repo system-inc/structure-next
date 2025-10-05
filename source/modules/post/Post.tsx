@@ -221,14 +221,14 @@ export function Post(properties: PostProperties) {
                                     <Link
                                         href="/"
                                         key={topic}
-                                        className={
+                                        className={mergeClassNames(
                                             // Layout
-                                            'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4 ' +
+                                            'ml-1.5 rounded-lg border px-1.5 align-text-top text-sm leading-4',
                                             // Light
-                                            'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500 ' +
+                                            'border-purple-500 bg-purple-200 text-purple-500 hover:border-purple-600 hover:bg-purple-300 hover:text-purple-500',
                                             // Dark
-                                            'dark:border-purple-500 dark:bg-purple-700 dark:text-purple-200 dark:hover:border-purple-400 dark:hover:bg-purple-600 dark:hover:text-purple-100'
-                                        }
+                                            'dark:border-purple-500 dark:bg-purple-700 dark:text-purple-200 dark:hover:border-purple-400 dark:hover:bg-purple-600 dark:hover:text-purple-100',
+                                        )}
                                     >
                                         {topic}
                                     </Link>

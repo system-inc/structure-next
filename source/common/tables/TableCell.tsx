@@ -150,7 +150,7 @@ export function TableCell(properties: TableCellProperties) {
             // Use dialogs for long content
             content = (
                 <Dialog
-                    className={mergeClassNames('md:min-w-lg w-full text-sm md:max-w-4xl', longContent ? '' : '')}
+                    className={mergeClassNames('w-full text-sm md:max-w-4xl md:min-w-lg', longContent ? '' : '')}
                     header={properties.column?.title}
                     content={value}
                     footer={

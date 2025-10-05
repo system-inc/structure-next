@@ -221,7 +221,7 @@ export const FormInputText = React.forwardRef<FormInputReferenceInterface, FormI
                     />
                     {properties.sibling && properties.sibling}
                     {validating && (
-                        <div className="absolute right-2.5 top-2 animate-spin">
+                        <div className="absolute top-2 right-2.5 animate-spin">
                             <BrokenCircleIcon className="h-5 w-5" />
                         </div>
                     )}

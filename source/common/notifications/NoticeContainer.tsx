@@ -144,7 +144,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
         <div
             tabIndex={0} // Make the menu focusable
             className={mergeClassNames(
-                'pointer-events-none fixed bottom-0 right-0 z-50 md:w-[420px]',
+                'pointer-events-none fixed right-0 bottom-0 z-50 md:w-[420px]',
                 hovered && 'pt-16',
                 properties.className,
             )}
@@ -155,7 +155,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             {/* Clear All Button */}
             <div
                 className={mergeClassNames(
-                    'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pb-0 pr-4 md:pr-8',
+                    'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pr-4 pb-0 md:pr-8',
                 )}
             >
                 <NoticesClearAllButton
@@ -188,7 +188,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             />
 
             <div
-                className="pointer-events-auto relative z-0 flex flex-col-reverse overflow-y-auto overflow-x-hidden border-red-500 pb-4"
+                className="pointer-events-auto relative z-0 flex flex-col-reverse overflow-x-hidden overflow-y-auto border-red-500 pb-4"
                 // Handle mouse enter when it enters notices
                 onMouseEnter={handleMouseEnter}
                 onFocus={handleMouseEnter}
@@ -213,7 +213,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                                 animate={hovered ? 'expanded' : 'visible'}
                                 exit={'exit'}
                                 layout="position"
-                                className={'relative w-full flex-shrink-0 pl-4 pr-4 pt-0 md:pr-8'}
+                                className={'relative w-full flex-shrink-0 pt-0 pr-4 pl-4 md:pr-8'}
                                 style={{ zIndex: noticesState.length - index }}
                             >
                                 <div className="pt-4">

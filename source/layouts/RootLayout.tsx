@@ -136,7 +136,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
                 {/* Fixes any z-index issues with Popovers, etc. */}
                 <main
                     className={mergeClassNames(
-                        'relative isolate z-0 h-[100dvh] overflow-y-auto overflow-x-clip',
+                        'relative isolate z-0 h-[100dvh] overflow-x-clip overflow-y-auto',
                         properties.mainClassName,
                     )}
                 >

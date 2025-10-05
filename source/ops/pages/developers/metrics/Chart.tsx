@@ -593,7 +593,7 @@ export function Chart(properties: ChartProperties) {
     return (
         <div
             ref={chartWrapperDomElementReference}
-            className={'relative h-60 w-full min-w-[300px] max-w-full select-none resize overflow-auto md:h-96'}
+            className={'relative h-60 w-full max-w-full min-w-[300px] resize overflow-auto select-none md:h-96'}
         >
             <ComposedChart
                 data={formattedDataSourceWithMetrics}

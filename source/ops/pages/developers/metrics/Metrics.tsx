@@ -1090,7 +1090,7 @@ export function Metrics() {
             </ContextMenu>
 
             {/* A line to separate the options from the graph */}
-            <div className="mb-4 mt-1 border-t border-light-4 md:mb-6 md:mt-6 dark:border-dark-4"></div>
+            <div className="mt-1 mb-4 border-t border-light-4 md:mt-6 md:mb-6 dark:border-dark-4"></div>
 
             {/* DataSources */}
             <DataSources

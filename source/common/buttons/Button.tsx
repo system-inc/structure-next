@@ -409,13 +409,13 @@ export const Button = React.forwardRef<ButtonElementType, ButtonProperties>(func
                 loadingValue ? (
                     <>
                         <div className="flex-grow" />
-                        <BrokenCircleIcon className="ml-4 h-4 w-4 animate-spin text-neutral+2 dark:text-neutral-2" />
+                        <BrokenCircleIcon className="text-neutral+2 ml-4 h-4 w-4 animate-spin dark:text-neutral-2" />
                     </>
                 ) : (
                     // The variant is form input select and the button is not loading
                     <>
                         <div className="flex-grow" />
-                        <ChevronDownIcon className="ml-4 h-4 w-4 text-neutral+2 dark:text-neutral-2" />
+                        <ChevronDownIcon className="text-neutral+2 ml-4 h-4 w-4 dark:text-neutral-2" />
                     </>
                 )
             ) : // The variant is not a form input select

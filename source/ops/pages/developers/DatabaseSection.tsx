@@ -21,7 +21,7 @@ export function DatabaseSection(properties: DatabaseSectionProperties) {
     });
 
     return (
-        <div className="mb-8 mt-6">
+        <div className="mt-6 mb-8">
             <h2 className="mb-6">{properties.databaseName}</h2>
 
             {dataInteractionDatabaseTablesRequest.isLoading ? (

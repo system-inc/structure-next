@@ -149,11 +149,11 @@ export function ContactPage(properties: ContactPageProperties) {
                         <div className="mt-3 rounded-lg border border-light-3 bg-light-1/50 p-4 text-sm dark:border-dark-3 dark:bg-dark-2/50">
                             <p className="neutral mb-2 text-xs uppercase">Email Address</p>
                             <p>{supportTicketCreateRequest.data.supportTicketCreate.userEmailAddress}</p>
-                            <p className="neutral mb-2 mt-6 text-xs uppercase">Subject</p>
+                            <p className="neutral mt-6 mb-2 text-xs uppercase">Subject</p>
                             <p>{supportTicketCreateRequest.data.supportTicketCreate.title}</p>
                             {supportTicketCreateRequest.data.supportTicketCreate.comments[0]?.content && (
                                 <>
-                                    <p className="neutral mb-2 mt-6 text-xs uppercase">Message</p>
+                                    <p className="neutral mt-6 mb-2 text-xs uppercase">Message</p>
                                     <p className="whitespace-pre-wrap">
                                         {supportTicketCreateRequest.data.supportTicketCreate.comments[0].content}
                                     </p>

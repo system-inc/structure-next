@@ -60,7 +60,7 @@ export function ProfileImage(properties: ProfileImageProperties) {
                 ) : // If we do not have a profile image, but we do have a short-hand moniker
                 shortHandMoniker !== '' ? (
                     <div
-                        className="flex select-none items-center justify-center uppercase"
+                        className="flex items-center justify-center uppercase select-none"
                         style={{ fontSize: 'calc(0.4rem + 25cqb)' }}
                     >
                         {shortHandMoniker}

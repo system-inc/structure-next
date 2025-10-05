@@ -70,7 +70,7 @@ export function PostControls(properties: PostControlsProperties) {
     // Render the component
     return (
         <div className={mergeClassNames('flex items-center justify-between space-x-2 text-sm', properties.className)}>
-            <div className="flex select-none items-center">
+            <div className="flex items-center select-none">
                 {/* Voting */}
                 {!largeVoteControl && voteControl && (
                     <PostVoteControl

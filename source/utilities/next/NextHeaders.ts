@@ -7,11 +7,9 @@ export async function getRequestCookiesHeaderString() {
     let string = '';
 
     // Iterate over all cookies in the cookieStore
-    (await NextCookies())
-        .getAll()
-        .forEach(function (cookie: { name: string; value: string }) {
-            string += cookie.name + '=' + cookie.value + '; ';
-        });
+    (await NextCookies()).getAll().forEach(function (cookie: { name: string; value: string }) {
+        string += cookie.name + '=' + cookie.value + '; ';
+    });
 
     return string;
 }

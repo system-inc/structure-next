@@ -122,7 +122,7 @@ export function OpsNavigationBar() {
                                         duration: 0.5,
                                         ease: [0.075, 0.82, 0.165, 1],
                                     }}
-                                    className="fixed bottom-0 left-0 top-10 p-2"
+                                    className="fixed top-10 bottom-0 left-0 p-2"
                                 >
                                     <div className="h-full w-56 overflow-y-auto rounded-lg border bg-opsis-background-tetriary">
                                         <OpsNavigation />

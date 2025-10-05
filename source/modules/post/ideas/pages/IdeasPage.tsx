@@ -14,7 +14,7 @@ import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 export function IdeasPage() {
     // Render the component
     return (
-        <div className="container items-center justify-center pb-32 pt-12">
+        <div className="container items-center justify-center pt-12 pb-32">
             <div className="float-end">
                 <Button
                     className="pl-3"

@@ -14,7 +14,7 @@ export function AuthenticationPage(properties: AuthenticationPageProperties) {
     return (
         <>
             {/* Theme Toggle */}
-            <div className="fixed right-5 top-5 z-10">
+            <div className="fixed top-5 right-5 z-10">
                 <ThemeToggle />
             </div>
 

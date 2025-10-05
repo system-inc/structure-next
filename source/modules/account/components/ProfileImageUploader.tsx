@@ -292,7 +292,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                 />
 
                 {/* Edit icon overlay in bottom right corner */}
-                <div className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border border-light-6 bg-light dark:border-dark-4 dark:bg-dark-2">
+                <div className="absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full border border-light-6 bg-light dark:border-dark-4 dark:bg-dark-2">
                     <EditIcon className="h-3.5 w-3.5" />
                 </div>
             </div>

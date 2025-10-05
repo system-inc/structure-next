@@ -475,7 +475,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 <div
                     ref={containerResizeHandleDivReference}
                     className={mergeClassNames(
-                        'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none select-none bg-transparent duration-500 hover:bg-blue active:bg-purple-500',
+                        'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none bg-transparent duration-500 select-none hover:bg-blue active:bg-purple-500',
                         // If there is a header, offset the handle by the height of the header (h-14 = 56px)
                         showHeader && windowInnerWidth >= desktopMinimumWidth ? 'top-14' : '',
                         // Always allow pointer events for drag-to-open functionality
@@ -488,7 +488,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             <motion.div
                 animate={{ opacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0 }}
                 className={mergeClassNames(
-                    'fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden',
+                    'bg-opacity-50 fixed inset-0 z-10 bg-black md:hidden',
                     // If the navigation is closing by window resize, do not show the overlay
                     sideNavigationLayoutNavigationIsClosingByWindowResize ? 'hidden' : '',
                     // If the navigation is open, allow pointer events, otherwise disable them

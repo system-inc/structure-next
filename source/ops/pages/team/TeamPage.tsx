@@ -21,7 +21,7 @@ export function TeamPage() {
             <OpsNavigationTrail />
             <h1>Team</h1>
 
-            <h2 className="mb-6 mt-6">Members</h2>
+            <h2 className="mt-6 mb-6">Members</h2>
 
             <Button
                 onClick={async function () {

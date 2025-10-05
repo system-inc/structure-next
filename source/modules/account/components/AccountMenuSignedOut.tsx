@@ -19,7 +19,7 @@ export function AccountMenuSignedOut() {
     return (
         <div className="w-full">
             <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
-                <p className="whitespace-nowrap font-medium">Welcome to {ProjectSettings.title}</p>
+                <p className="font-medium whitespace-nowrap">Welcome to {ProjectSettings.title}</p>
             </div>
             <div className="px-4 pt-4">
                 <Button

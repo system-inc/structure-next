@@ -387,7 +387,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Request Parameters */}
             {endpoint.requestParameters && (
                 <div className="">
-                    <hr className="mb-4 mt-6" />
+                    <hr className="mt-6 mb-4" />
                     <h3 className="mb-2 text-lg font-medium">Request Parameters</h3>
                     <RequestParametersTable
                         requestParameters={endpoint.requestParameters}
@@ -396,7 +396,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 </div>
             )}
 
-            <hr className="mb-6 mt-6" />
+            <hr className="mt-6 mb-6" />
 
             {/* Request Url with Parameters */}
             <div className="mb-4 flex items-center">

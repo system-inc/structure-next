@@ -67,13 +67,13 @@ export function JsonNode(properties: JsonNodeProperties) {
                 return <span className={mergeClassNames('text-[#0891B2] dark:text-[#22D3EE]')}>{value}</span>;
             case 'boolean':
                 return (
-                    <span className={mergeClassNames('italic text-[#0891B2] dark:text-[#22D3EE]')}>
+                    <span className={mergeClassNames('text-[#0891B2] italic dark:text-[#22D3EE]')}>
                         {value.toString()}
                     </span>
                 );
             case 'object':
                 if(value === null)
-                    return <span className={mergeClassNames('italic text-[#0891B2] dark:text-[#22D3EE]')}>null</span>;
+                    return <span className={mergeClassNames('text-[#0891B2] italic dark:text-[#22D3EE]')}>null</span>;
                 // Objects/arrays handled separately
                 return null;
             default:
@@ -134,11 +134,11 @@ export function JsonNode(properties: JsonNodeProperties) {
         if(typeof value === 'object' && value !== null) {
             if(Array.isArray(value))
                 return (
-                    <span className="json-preview italic text-[#1E293B] dark:text-[#94A3B8]">
+                    <span className="json-preview text-[#1E293B] italic dark:text-[#94A3B8]">
                         Array({value.length})
                     </span>
                 );
-            return <span className="json-preview italic text-[#1E293B] dark:text-[#94A3B8]">Object</span>;
+            return <span className="json-preview text-[#1E293B] italic dark:text-[#94A3B8]">Object</span>;
         }
         return renderPrimitiveValue(value);
     }

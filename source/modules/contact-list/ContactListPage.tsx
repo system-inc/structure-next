@@ -41,14 +41,14 @@ export function ContactListPage() {
         <>
             <div className="flex h-screen items-center md:h-screen md:items-stretch dark:bg-dark dark:text-light-2">
                 {/* Show the account menu button */}
-                <div className="absolute right-4 top-4 z-20">{<AccountMenuButton />}</div>
+                <div className="absolute top-4 right-4 z-20">{<AccountMenuButton />}</div>
 
                 {/* Primary div, shows up on left side of screen on medium displays */}
                 <div className="scrollbar-hide flex-grow items-center justify-center md:flex md:overflow-auto md:border-r md:border-r-light-4 dark:border-r dark:border-dark-4">
                     <div className="max-w-[680px] p-8 md:max-h-screen">
                         {/* Show the logo on small screens */}
                         <div
-                            className="mb-6 bg-logoLight bg-no-repeat md:hidden dark:bg-logoDark"
+                            className="bg-logoLight dark:bg-logoDark mb-6 bg-no-repeat md:hidden"
                             style={{
                                 backgroundSize: ProjectSettings.assets.logo.width + 'px',
                                 width: ProjectSettings.assets.logo.width + 'px',
@@ -87,7 +87,7 @@ export function ContactListPage() {
                         >
                             {/* Logo */}
                             <div
-                                className={`bg-logoLight bg-no-repeat dark:bg-logoDark`}
+                                className={`bg-logoLight dark:bg-logoDark bg-no-repeat`}
                                 style={{
                                     backgroundSize: ProjectSettings.assets.logo.width + 'px',
                                     width: ProjectSettings.assets.logo.width + 'px',

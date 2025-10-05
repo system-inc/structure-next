@@ -73,7 +73,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
     // Render the component
     return (
-        <div className="container pb-32 pt-8">
+        <div className="container pt-8 pb-32">
             {account.data?.isAdministator() && (
                 <div className="float-end flex space-x-2">
                     <Button
@@ -93,7 +93,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
 
                 <div className="mb-4 max-w-2xl">
                     <Link href={postHref} className="">
-                        <h1 className="inline text-3xl font-medium leading-10">{properties.post.title}</h1>
+                        <h1 className="inline text-3xl leading-10 font-medium">{properties.post.title}</h1>
                     </Link>
                 </div>
 

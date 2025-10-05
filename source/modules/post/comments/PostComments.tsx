@@ -42,7 +42,7 @@ export function PostComments(properties: PostCommentsProperties) {
 
                 <div className="">
                     {/* Comment Content */}
-                    <div className="ml-8 mt-3">This is the first principle of our company.</div>
+                    <div className="mt-3 ml-8">This is the first principle of our company.</div>
 
                     {/* Comment Controls */}
                     {/* <PostCommentControls

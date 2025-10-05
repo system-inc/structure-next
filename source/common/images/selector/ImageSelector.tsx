@@ -151,7 +151,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     accept={properties.accept || 'image/*'}
                     multiple={properties.allowMultipleFileSelection}
                     onChange={handleFileChange}
-                    className="border-neutral-200 dark:border-neutral-700 w-full cursor-pointer rounded-medium border bg-transparent p-2 text-sm"
+                    className="w-full cursor-pointer rounded-medium border border-neutral-200 bg-transparent p-2 text-sm dark:border-neutral-700"
                 />
                 {error && (
                     <Alert variant="error" className="mt-2">
@@ -221,7 +221,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                 onDrop={handleDrop}
             >
                 <div className="flex flex-col items-center justify-center text-center">
-                    <ImageIcon className="text-neutral-400 dark:text-neutral-500 mb-2 h-10 w-10" />
+                    <ImageIcon className="mb-2 h-10 w-10 text-neutral-400 dark:text-neutral-500" />
                     <p className="mt-1 text-sm font-medium">
                         {dragActive ? 'Drop files here.' : 'Drag and drop an image here or click to browse.'}
                     </p>

@@ -276,7 +276,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         content = (
             <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
-                <div className="text-neutral-400 dark:text-neutral-500 text-sm">Loading sessions...</div>
+                <div className="text-sm text-neutral-400 dark:text-neutral-500">Loading sessions...</div>
             </>
         );
     }
@@ -288,7 +288,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                 <div className="text-sm text-red-500">
                     <div className="font-medium">Error:</div>
                     <div className="mt-1">{errorMessage}</div>
-                    <div className="text-neutral-400 dark:text-neutral-500 mt-2 text-xs">
+                    <div className="mt-2 text-xs text-neutral-400 dark:text-neutral-500">
                         Database: {properties.databaseName}
                     </div>
                 </div>
@@ -299,7 +299,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         content = (
             <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
-                <div className="text-neutral-400 dark:text-neutral-500 text-sm">No active sessions</div>
+                <div className="text-sm text-neutral-400 dark:text-neutral-500">No active sessions</div>
             </>
         );
     }
@@ -315,7 +315,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                 </div>
 
                 {/* Visitors list - scrollable, takes remaining height */}
-                <ScrollArea className="flex-1 pb-3 pr-3">
+                <ScrollArea className="flex-1 pr-3 pb-3">
                     <div ref={containerReference} className="space-y-3 pb-6">
                         <AnimatePresence>
                             {sortedVisitors.map(function (visitor) {

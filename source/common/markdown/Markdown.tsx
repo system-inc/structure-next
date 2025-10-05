@@ -39,29 +39,29 @@ const components: ComponentsProperties = {
     ),
     h2: (properties) => (
         <h2
-            className="mb-6 mt-6 text-2xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="mt-6 mb-6 text-2xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
             {...properties}
         />
     ),
     h3: (properties) => (
         <h3
-            className="mb-6 mt-6 text-xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="mt-6 mb-6 text-xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
             {...properties}
         />
     ),
     h4: (properties) => (
         <h4
-            className="mb-6 mt-6 text-[18px] font-medium leading-[26px] before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="mt-6 mb-6 text-[18px] leading-[26px] font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
             {...properties}
         />
     ),
     h5: (properties) => (
         <h5
-            className="text-[16px] font-medium leading-[28px] before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="text-[16px] leading-[28px] font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
             {...properties}
         />
     ),
-    p: (properties) => <p className="mt-6 text-[16px] font-light leading-[28px] first:mt-0" {...properties} />,
+    p: (properties) => <p className="mt-6 text-[16px] leading-[28px] font-light first:mt-0" {...properties} />,
     strong: (properties) => <strong className="font-medium" {...properties} />,
     a: (properties: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
         <Link href={properties.href ?? ''} className="underline" {...properties} />
@@ -72,39 +72,39 @@ const components: ComponentsProperties = {
             {...properties}
         >
             {properties.children}
-            <span className="text-sans absolute right-3 top-3">
+            <span className="text-sans absolute top-3 right-3">
                 <CopyButton className="" iconClassName="h-3.5 w-3.5" value={getInnerText(properties.children)} />
             </span>
         </pre>
     ),
     code: (properties) => (
         <code
-            className="mb-6 whitespace-pre-wrap rounded border border-light-4 bg-light-2 px-1 py-px font-mono text-sm dark:border-dark-4 dark:bg-dark"
+            className="mb-6 rounded border border-light-4 bg-light-2 px-1 py-px font-mono text-sm whitespace-pre-wrap dark:border-dark-4 dark:bg-dark"
             {...properties}
         />
     ),
-    ul: (properties) => <ul className="mb-6 mt-6 list-disc pl-[26px]" {...properties} />,
-    ol: (properties) => <ol className="mb-6 mt-6 list-decimal pl-[26px]" {...properties} />,
+    ul: (properties) => <ul className="mt-6 mb-6 list-disc pl-[26px]" {...properties} />,
+    ol: (properties) => <ol className="mt-6 mb-6 list-decimal pl-[26px]" {...properties} />,
     li: (properties) => (
-        <li className="my-2 pl-1.5 text-[16px] font-light leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
+        <li className="my-2 pl-1.5 text-[16px] leading-[28px] font-light [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
     blockquote: (properties) => (
         <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
     ),
     hr: (properties) => <hr className="my-10 border-light-4 dark:border-dark-4" {...properties} />,
-    table: (properties) => <table className="relative mb-6 mt-6 w-full overflow-auto rounded border" {...properties} />,
+    table: (properties) => <table className="relative mt-6 mb-6 w-full overflow-auto rounded border" {...properties} />,
     thead: (properties) => <thead className="border-b bg-light-2 dark:bg-dark" {...properties} />,
     tbody: (properties) => <tbody className="" {...properties} />,
     tr: (properties) => <tr className="border-b border-light-4 last:border-b-0 dark:border-dark-4" {...properties} />,
     th: (properties) => (
         <th
-            className="border-r border-light-4 px-4 py-2 text-[16px] font-medium leading-[28px] last:border-r-0 dark:border-dark-4"
+            className="border-r border-light-4 px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0 dark:border-dark-4"
             {...properties}
         />
     ),
     td: (properties) => (
         <td
-            className="border-r border-light-4 px-4 py-2 text-[16px] font-light leading-[28px] last:border-r-0 dark:border-dark-4"
+            className="border-r border-light-4 px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0 dark:border-dark-4"
             {...properties}
         />
     ),

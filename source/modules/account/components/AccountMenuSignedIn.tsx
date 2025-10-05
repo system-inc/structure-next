@@ -41,7 +41,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
             <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
                 <Link
                     tabIndex={1}
-                    className="whitespace-nowrap font-medium hover:cursor-pointer"
+                    className="font-medium whitespace-nowrap hover:cursor-pointer"
                     href="/account/profile"
                 >
                     {displayName}
@@ -54,7 +54,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
 
             <div className="pt-4">
                 <Link
-                    className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
+                    className="flex px-4 py-1 whitespace-nowrap hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
                     href="/account/profile"
                 >
                     Profile
@@ -63,7 +63,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                 {/* If the account is an administrator */}
                 {properties.account.isAdministator() && (
                     <Link
-                        className="flex whitespace-nowrap px-4 py-1 hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
+                        className="flex px-4 py-1 whitespace-nowrap hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
                         href="/ops"
                     >
                         Ops

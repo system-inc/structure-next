@@ -56,7 +56,7 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames('container items-center justify-center pb-32 pt-8', properties.className)}>
+        <div className={mergeClassNames('container items-center justify-center pt-8 pb-32', properties.className)}>
             <h1 className="mb-6 text-3xl font-medium">Edit Post</h1>
 
             <GraphQlOperationForm

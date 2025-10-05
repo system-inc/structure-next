@@ -95,11 +95,11 @@ export function Code({
         <div
             {...divProperties}
             className={mergeClassNames(
-                'relative h-max overflow-clip rounded border border-light/10 bg-dark-3 p-1.5 font-mono tracking-wide transition-all focus-within:outline focus-within:ring dark:bg-dark',
+                'relative h-max overflow-clip rounded border border-light/10 bg-dark-3 p-1.5 font-mono tracking-wide transition-all focus-within:ring focus-within:outline dark:bg-dark',
                 className,
             )}
         >
-            <div className="absolute right-0 top-0 w-min rounded-bl bg-dark-6 px-1.5 py-0.5 text-xs dark:bg-dark-3">
+            <div className="absolute top-0 right-0 w-min rounded-bl bg-dark-6 px-1.5 py-0.5 text-xs dark:bg-dark-3">
                 <p className="text-muted-foreground">{language.toUpperCase()}</p>
             </div>
             <div ref={scrollContainerReference} className="relative h-max overflow-auto">
@@ -152,7 +152,7 @@ export function Code({
 
                 {edit && (
                     <textarea
-                        className="z-0 h-full w-full resize-none overflow-visible whitespace-pre rounded bg-transparent font-mono tracking-wide text-transparent caret-slate-100 selection:bg-slate-200/20 focus:outline-none focus:ring-0"
+                        className="z-0 h-full w-full resize-none overflow-visible rounded bg-transparent font-mono tracking-wide whitespace-pre text-transparent caret-slate-100 selection:bg-slate-200/20 focus:ring-0 focus:outline-none"
                         rows={code.split('\n').length}
                         style={{
                             marginLeft: showLineNumbers ?? true ? '2rem' : undefined,

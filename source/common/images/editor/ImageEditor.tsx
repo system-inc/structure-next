@@ -251,7 +251,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                                     overlayClassName:
                                         properties.cropShape === 'Round' ? 'rounded-full' : 'rounded-medium',
                                 }}
-                                className="border-neutral-200 dark:border-neutral-700 rounded-medium border"
+                                className="rounded-medium border border-neutral-200 dark:border-neutral-700"
                                 onUpdate={function (cropper) {
                                     // Update the preview
                                     previewReference.current?.update(cropper);
@@ -275,7 +275,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                 </>
             ) : (
                 <div
-                    className="border-neutral-200 dark:border-neutral-700 flex h-64 items-center justify-center rounded-medium border"
+                    className="flex h-64 items-center justify-center rounded-medium border border-neutral-200 dark:border-neutral-700"
                     aria-live="polite"
                 >
                     <p className="text-neutral-500">Loading image...</p>

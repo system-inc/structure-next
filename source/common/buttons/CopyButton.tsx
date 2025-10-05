@@ -58,7 +58,7 @@ export function CopyButton({ className, value, noticeData, ...buttonProperties }
             iconClassName={valueCopiedToClipboard ? 'h-4 w-4' : 'h-4 w-4'}
             {...buttonProperties}
             className={mergeClassNames(
-                !valueCopiedToClipboard ? 'text-neutral hover:text-dark dark:text-neutral+6 dark:hover:text-light' : '',
+                !valueCopiedToClipboard ? 'dark:text-neutral+6 text-neutral hover:text-dark dark:hover:text-light' : '',
                 className,
                 valueCopiedToClipboard
                     ? 'text-emerald-500 hover:text-emerald-500 dark:text-emerald-500 dark:hover:text-emerald-500'

@@ -314,7 +314,7 @@ export function StructurePage() {
     // Render the component
     return (
         <>
-            <div className="absolute right-4 top-4 z-20">{<AccountMenuButton />}</div>
+            <div className="absolute top-4 right-4 z-20">{<AccountMenuButton />}</div>
 
             <div className="mx-auto mt-10 max-w-[1024px] px-8">
                 {/* Header */}
