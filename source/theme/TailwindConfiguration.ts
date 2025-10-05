@@ -4,7 +4,6 @@ import { ProjectSettings } from './../../../../ProjectSettings';
 
 // Dependencies - Theme
 import type { Config as TailwindConfigurationInterface } from 'tailwindcss';
-import ContainerQueryPlugin from '@tailwindcss/container-queries';
 import TailwindCssAnimate from 'tailwindcss-animate';
 
 // Tailwind Configuration - Base configuration to be extended by projects
@@ -222,5 +221,5 @@ export const TailwindConfiguration = {
     },
 
     // Base plugins that would be used across projects
-    plugins: [TailwindCssAnimate, ContainerQueryPlugin],
+    plugins: [TailwindCssAnimate],
 } satisfies TailwindConfigurationInterface;

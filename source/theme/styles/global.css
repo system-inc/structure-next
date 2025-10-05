@@ -1,14 +1,9 @@
-/* Tailwind CSS Layer Imports */
-/* Base: Resets and foundational styles */
-@tailwind base;
-/* Components: Pre-built component classes */
-@tailwind components;
-/* Utilities: Atomic utility classes */
-@tailwind utilities;
+/* Tailwind CSS v4 Import */
+@import "tailwindcss";
 
 /* Class to allow full width and height for the ScrollArea component */
 /* Fix for RadixScrollArea */
-.scroll-area-viewport > :first-child {
+.scroll-area-viewport> :first-child {
     height: 100%;
     width: 100%;
     table-layout: fixed;
