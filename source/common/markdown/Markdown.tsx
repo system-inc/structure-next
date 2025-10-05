@@ -28,7 +28,7 @@ function getInnerText(node: React.ReactNode): string {
 }
 
 interface ComponentsProperties {
-    [key: string]: (properties: React.HTMLAttributes<HTMLElement>) => JSX.Element;
+    [key: string]: (properties: React.HTMLAttributes<HTMLElement>) => React.JSX.Element;
 }
 const components: ComponentsProperties = {
     h1: (properties) => (

@@ -67,8 +67,8 @@ export function WebSocketViaSharedWorkerProvider(properties: WebSocketViaSharedW
 
     // References
     const isInitializedReference = React.useRef<boolean>(false);
-    const sharedWorkerReference = React.useRef<SharedWorker>();
-    const sharedWorkerClientIdAssignedFromServerReference = React.useRef<string>();
+    const sharedWorkerReference = React.useRef<SharedWorker | undefined>(undefined);
+    const sharedWorkerClientIdAssignedFromServerReference = React.useRef<string | undefined>(undefined);
     const webSocketMessageHandlersReference = React.useRef<WebSocketMessageHandler[]>([]);
     // Use a reference for web socket connection information to avoid React state update delays
     const webSocketConnectionInformationReference = React.useRef<WebSocketConnectionInformationInterface>({

@@ -122,7 +122,7 @@ export function TableCell(properties: TableCellProperties) {
             const longContent = properties.value.length > 200;
 
             // If the value is JSON, parse it
-            let value: string | JSX.Element | JSX.Element[] = properties.value;
+            let value: string | React.JSX.Element | React.JSX.Element[] = properties.value;
             let json = null;
             try {
                 json = JSON.parse(properties.value);

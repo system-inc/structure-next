@@ -1,5 +1,5 @@
 // Type - DropContainer
-export type DropContainer = HTMLDivElement | string | React.RefObject<HTMLDivElement>;
+export type DropContainer = HTMLDivElement | string | React.RefObject<HTMLDivElement | null>;
 
 // Type - DropBounds
 export type DropBounds = {

@@ -17,7 +17,7 @@ import { ValidationSchema } from '@structure/source/utilities/validation/Validat
 // Hook - useFormInputValue
 export function useFormInputValue<T>(
     defaultValue: T | undefined,
-    inputReference: React.RefObject<FormInputReferenceInterface>,
+    inputReference: React.RefObject<FormInputReferenceInterface | null>,
 ) {
     const valueReference = React.useRef(defaultValue);
 

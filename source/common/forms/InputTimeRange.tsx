@@ -183,7 +183,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
     // Function to create all of the time range links
     const createTimeRangeLinks = React.useCallback(
         function () {
-            const links: JSX.Element[] = [];
+            const links: React.JSX.Element[] = [];
 
             // Map through the the time range presets to render TimeRangeLink components
             for(const timeRangePresetKey in TimeRangePresets) {

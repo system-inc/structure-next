@@ -82,7 +82,7 @@ export function JsonNode(properties: JsonNodeProperties) {
     }
 
     // Creates a preview string for collapsed objects/arrays
-    function renderCollapsedPreview(): JSX.Element {
+    function renderCollapsedPreview(): React.JSX.Element {
         if(!isObject || isEmpty) {
             // If it's just a primitive, just render the value
             return <> {renderPrimitiveValue(properties.data)} </>;

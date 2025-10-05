@@ -46,7 +46,7 @@ export interface DataSourceProperties {
     error?: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     datasource: DataSourceType;
-    containerReference: React.RefObject<HTMLDivElement>;
+    containerReference: React.RefObject<HTMLDivElement | null>;
 }
 export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
     function DataSource(properties, reference) {

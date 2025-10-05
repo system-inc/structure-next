@@ -8,7 +8,7 @@ import { InputText } from '@structure/source/common/forms/InputText';
 // Component - MenuSearch
 // This component is memoized to prevent re-rendering when highlight changes
 export interface MenuSearchProperties {
-    searchInputTextReference: React.RefObject<InputReferenceInterface>;
+    searchInputTextReference: React.RefObject<InputReferenceInterface | null>;
     onSearch: (value: string) => void;
 }
 export const MenuSearch = React.memo(function (properties: MenuSearchProperties) {

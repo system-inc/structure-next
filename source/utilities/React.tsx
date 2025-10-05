@@ -31,7 +31,7 @@ export function wrapForSlot(children: React.ReactElement, className?: string) {
 // Function to get the previous value of a state variable
 export function usePrevious<T>(value: T): T | undefined {
     // Create a reference to store the previous value
-    const reference = React.useRef<T>();
+    const reference = React.useRef<T | undefined>(undefined);
 
     // Store the current value in the reference
     React.useEffect(function () {
