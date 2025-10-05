@@ -1,6 +1,9 @@
 /* Tailwind CSS v4 Import */
 @import "tailwindcss";
 
+/* Point to the Tailwind configuration file (required in v4) */
+@config "../../../../../tailwind.config.ts";
+
 /* Class to allow full width and height for the ScrollArea component */
 /* Fix for RadixScrollArea */
 .scroll-area-viewport> :first-child {
