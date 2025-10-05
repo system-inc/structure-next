@@ -31,12 +31,16 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
     // Hooks
     const themeSettings = useThemeSettings();
 
+    // Use props directly (recharts passes active and payload to custom tooltip components)
+    const isActive = properties.active;
+    const payload = properties.payload;
+
     // Only render tip if active and has payload
-    if(properties.active && properties.payload && properties.payload.length > 0 && properties.payload[0]) {
-        const dataPoint = properties.payload[0].payload;
+    if(isActive && payload && payload.length > 0 && payload[0]) {
+        const dataPoint = payload[0].payload;
 
         // Sort payload if requested
-        const sortedPayload = [...properties.payload];
+        const sortedPayload = [...payload];
         if(properties.sortByValue) {
             sortedPayload.sort((a, b) => {
                 if(properties.sortByValue === 'Descending') {

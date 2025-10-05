@@ -179,7 +179,13 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                     onMouseLeave={referenceAreaSelection.handleMouseUp}
                 >
                     {showGrid && (
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-tertiary)" vertical={false} />
+                        <CartesianGrid
+                            xAxisId="0"
+                            yAxisId="left"
+                            strokeDasharray="3 3"
+                            stroke="var(--border-tertiary)"
+                            vertical={false}
+                        />
                     )}
 
                     {/* X Axes */}

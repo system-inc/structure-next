@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { DataSourceWithMetricsType } from './Metrics';
+import { MetricsChartTip } from './MetricsChartTip';
 
 // Dependencies - Supporting Components
 import {
@@ -25,7 +26,6 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 // Dependencies - Utilities
 import useMeasure from 'react-use-measure';
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { addCommas } from '@structure/source/utilities/Number';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 
 // Helper Function - Tick Formatter
@@ -390,7 +390,7 @@ const tickFormatter = function (
 };
 
 // Component - TooltipHeaderColumn
-const tooltipHeaderColumn = (timeInterval: string, label: string) => {
+export const tooltipHeaderColumn = (timeInterval: string, label: string) => {
     let secondaryLabel = null;
 
     if(!label) return null;
@@ -493,7 +493,7 @@ const tooltipHeaderColumn = (timeInterval: string, label: string) => {
 };
 
 // Component - TooltipColumn
-const tooltipColumn = (timeInterval: string, payload: { dataKey?: string; color?: string; value?: number }) => {
+export const tooltipColumn = (timeInterval: string, payload: { dataKey?: string; color?: string; value?: number }) => {
     const columnTitle = payload.dataKey?.toString().split('-').slice(1).join(' ').replace('total', '');
 
     return (
@@ -518,6 +518,7 @@ export interface ChartProperties {
     errorMessage?: string;
     onMouseDown?: (chartEvent: React.MouseEvent, mouseEvent: React.MouseEvent) => void;
 }
+
 export function Chart(properties: ChartProperties) {
     // Use the theme hook
     const themeSettings = useThemeSettings();
@@ -598,9 +599,9 @@ export function Chart(properties: ChartProperties) {
                 data={formattedDataSourceWithMetrics}
                 width={wrapperDimensions.width}
                 height={wrapperDimensions.height - 20}
-                onMouseDown={function (chartEvent, mouseEvent) {
+                onMouseDown={function (chartEvent, mouseEvent: React.SyntheticEvent) {
                     // If the button is the first button
-                    if(mouseEvent.button == 0) {
+                    if((mouseEvent as React.MouseEvent).button === 0) {
                         // Set the reference area left
                         if(chartEvent && chartEvent.activeLabel) {
                             setReferenceAreaLeft(chartEvent.activeLabel);
@@ -622,9 +623,9 @@ export function Chart(properties: ChartProperties) {
                         setReferenceAreaRight(chartEvent.activeLabel);
                     }
                 }}
-                onMouseUp={function (chartEvent, mouseEvent) {
+                onMouseUp={function (chartEvent, mouseEvent: React.SyntheticEvent) {
                     // If the button is the first button
-                    if(mouseEvent.button == 0) {
+                    if((mouseEvent as React.MouseEvent).button === 0) {
                         // console.log("onMouseUp", event);
                         const currentReferenceAreaLeft = referenceAreaLeft;
                         let currentReferenceAreaRight = referenceAreaRight;
@@ -649,6 +650,8 @@ export function Chart(properties: ChartProperties) {
                 }}
             >
                 <CartesianGrid
+                    xAxisId="0"
+                    yAxisId="left"
                     // strokeDasharray="3 3"
                     stroke={
                         themeSettings.themeClassName === 'light'
@@ -696,54 +699,7 @@ export function Chart(properties: ChartProperties) {
                                           )?.length ?? 1)
                                         : 1,
                             }}
-                            content={(values) => {
-                                return (
-                                    <div className="rounded-extra-small border border-light-4 bg-light dark:border-dark-4 dark:bg-dark">
-                                        <div className="border-b p-2 text-xs text-dark/60 dark:text-light-4/60">
-                                            {tooltipHeaderColumn(properties.timeInterval, values.label)}
-                                        </div>
-                                        <table className="">
-                                            <tbody className="">
-                                                {values.payload?.map((payload, index) => (
-                                                    <tr
-                                                        key={index}
-                                                        className={
-                                                            values.payload && index === values.payload.length - 1
-                                                                ? 'text-xs' // If this is the last row, don't show the border
-                                                                : 'border-b text-xs'
-                                                        }
-                                                    >
-                                                        <td className="p-2 text-center text-xs">
-                                                            <b>{addCommas(payload.value as number)}</b>
-                                                        </td>
-                                                        <td className="border-l p-2">
-                                                            <div
-                                                                style={{
-                                                                    borderColor: payload.color,
-                                                                    borderStyle:
-                                                                        payload.strokeDasharray == '5 5'
-                                                                            ? 'dashed'
-                                                                            : 'solid',
-                                                                    backgroundColor:
-                                                                        themeSettings.themeClassName === 'light'
-                                                                            ? lightenColor(payload.color || '', 0.2)
-                                                                            : darkenColor(payload.color || '', 0.2),
-                                                                }}
-                                                                className="h-4 w-4 rounded-extra-small border"
-                                                            />
-                                                        </td>
-                                                        {tooltipColumn(properties.timeInterval, {
-                                                            dataKey: payload.dataKey?.toString(),
-                                                            color: payload.color,
-                                                            value: payload.value as number | undefined,
-                                                        })}
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                );
-                            }}
+                            content={<MetricsChartTip timeInterval={properties.timeInterval} />}
                         />
                         {/* Render the bars or lines */}
                         {properties.dataSourcesWithMetrics.map((dataSourceWithMetrics) => {

@@ -8,8 +8,8 @@ export interface UseReferenceAreaSelectionResult {
     referenceAreaStart: string | null;
     referenceAreaEnd: string | null;
     isSelecting: boolean;
-    handleMouseDown: (event: { activeLabel?: string }) => void;
-    handleMouseMove: (event: { activeLabel?: string }) => void;
+    handleMouseDown: (event: { activeLabel?: string | number }) => void;
+    handleMouseMove: (event: { activeLabel?: string | number }) => void;
     handleMouseUp: () => void;
 }
 export function useReferenceAreaSelection(
@@ -22,20 +22,20 @@ export function useReferenceAreaSelection(
 
     // Handle mouse down for reference area selection
     const handleMouseDown = React.useCallback(
-        function (event: { activeLabel?: string }) {
-            if(event && event.activeLabel && onReferenceAreaSelect) {
-                setReferenceAreaStart(event.activeLabel);
+        function (event: { activeLabel?: string | number }) {
+            if(onReferenceAreaSelect && event.activeLabel) {
+                setReferenceAreaStart(event.activeLabel.toString());
                 setIsSelecting(true);
             }
         },
         [onReferenceAreaSelect],
     );
 
-    // Handle mouse move for reference area selection
+    // Handle mouse move to track end position
     const handleMouseMove = React.useCallback(
-        function (event: { activeLabel?: string }) {
-            if(isSelecting && event && event.activeLabel) {
-                setReferenceAreaEnd(event.activeLabel);
+        function (event: { activeLabel?: string | number }) {
+            if(isSelecting && event.activeLabel) {
+                setReferenceAreaEnd(event.activeLabel.toString());
             }
         },
         [isSelecting],
