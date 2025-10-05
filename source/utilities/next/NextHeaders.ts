@@ -2,12 +2,12 @@
 import { cookies as NextCookies, headers as NextHeaders } from 'next/headers';
 
 // Function to get all request cookies as a header string
-export function getRequestCookiesHeaderString() {
+export async function getRequestCookiesHeaderString() {
     // Initialize an empty string for the cookie header
     let string = '';
 
     // Iterate over all cookies in the cookieStore
-    NextCookies()
+    (await NextCookies())
         .getAll()
         .forEach(function (cookie: { name: string; value: string }) {
             string += cookie.name + '=' + cookie.value + '; ';
@@ -17,8 +17,8 @@ export function getRequestCookiesHeaderString() {
 }
 
 // Function to get the country code from request headers
-export function getCountryCodeFromHeaders() {
-    const headers = NextHeaders();
+export async function getCountryCodeFromHeaders() {
+    const headers = await NextHeaders();
 
     // Get the country code from various possible headers
     const countryCode =
@@ -31,8 +31,8 @@ export function getCountryCodeFromHeaders() {
 }
 
 // Function to get the public IP address from request headers
-export function getPublicIpAddressFromHeaders() {
-    const headers = NextHeaders();
+export async function getPublicIpAddressFromHeaders() {
+    const headers = await NextHeaders();
 
     // Log all headers as a string
     // console.log('All Headers:', JSON.stringify(header));

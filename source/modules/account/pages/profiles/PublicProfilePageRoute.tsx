@@ -31,7 +31,7 @@ async function getServerSideProperties(username: string) {
         },
         {
             headers: {
-                cookie: getRequestCookiesHeaderString(),
+                cookie: await getRequestCookiesHeaderString(),
             },
         },
     );

@@ -74,7 +74,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
     const ProvidersComponent = properties.providersComponent || Providers;
 
     // Get the cookies from the response headers
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     // console.log('cookieStore', cookieStore);
 
     // Determine if the account is signed in based on if the sessionId HTTP-only cookie is set
