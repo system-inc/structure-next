@@ -8,7 +8,6 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from '@structure/source/router/Navigation';
 import { useUrlPath } from '@structure/source/router/Navigation';
-import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -37,27 +36,20 @@ export interface AuthenticationProperties {
     scope: 'SignIn' | 'Maintenance';
 }
 export function Authentication(properties: AuthenticationProperties) {
-    // Hooks
-    const router = useRouter();
-    const urlPath = useUrlPath();
-    const account = useAccount();
-    const urlSearchParameters = useUrlSearchParameters();
-
-    // State - initialize with URL params
+    // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
         AccountAuthenticationQuery['accountAuthentication'] | undefined
     >(undefined);
     // const [authenticationSessionStartTime] = React.useState<number>(Date.now());
     const [authenticationSessionSuccess, setAuthenticationSessionSuccess] = React.useState<boolean>(false);
     const [authenticationSessionTimedOut] = React.useState<boolean>(false);
-    const [emailAddress, setEmailAddress] = React.useState<string | undefined>(function () {
-        const email = urlSearchParameters?.get('emailAddress');
-        return email ? decodeURIComponent(email) : undefined;
-    });
-    const [redirectUrl] = React.useState<string | null>(function () {
-        const redirect = urlSearchParameters?.get('redirectUrl');
-        return redirect ? decodeURIComponent(redirect) : null;
-    });
+    const [emailAddress, setEmailAddress] = React.useState<string | undefined>(undefined);
+    const [redirectUrl, setRedirectUrl] = React.useState<string | null>(null);
+
+    // Hooks
+    const router = useRouter();
+    const urlPath = useUrlPath();
+    const account = useAccount();
 
     // Hooks - API - Queries
     const accountAuthenticationRequest = networkService.useGraphQlQuery(
@@ -97,6 +89,15 @@ export function Authentication(properties: AuthenticationProperties) {
             }
         `),
     );
+
+    // Effect to run on mount
+    React.useEffect(function () {
+        const urlParameters = new URLSearchParams(window.location.search);
+        const redirect = urlParameters.get('redirectUrl');
+        if(redirect) {
+            setRedirectUrl(decodeURIComponent(redirect));
+        }
+    }, []);
 
     // Effect to set authentication session when data is available
     React.useEffect(
@@ -311,7 +312,6 @@ export function Authentication(properties: AuthenticationProperties) {
     else {
         currentAuthenticationComponent = (
             <EmailForm
-                initialEmailAddress={emailAddress}
                 onSuccess={function (emailAddress: string, authenticationSession) {
                     setEmailAddress(emailAddress);
                     setAuthenticationSession(authenticationSession);
@@ -328,27 +328,25 @@ export function Authentication(properties: AuthenticationProperties) {
     // Render the component
     return (
         <div className={mergeClassNames('', properties.className)}>
-            {/* Project Logo - hide when auto-submitting with email */}
-            {!(emailAddress && authenticationSession === undefined && !authenticationSessionSuccess) && (
-                <div className="mb-8">
-                    <Image
-                        src={ProjectSettings.assets.favicon.dark.location}
-                        alt="Logo"
-                        height={32}
-                        width={32}
-                        priority={true}
-                        className="hidden dark:block"
-                    />
-                    <Image
-                        src={ProjectSettings.assets.favicon.light.location}
-                        alt="Logo"
-                        height={32}
-                        width={32}
-                        priority={true}
-                        className="block dark:hidden"
-                    />
-                </div>
-            )}
+            {/* Project Logo */}
+            <div className="mb-8">
+                <Image
+                    src={ProjectSettings.assets.favicon.dark.location}
+                    alt="Logo"
+                    height={32}
+                    width={32}
+                    priority={true}
+                    className="hidden dark:block"
+                />
+                <Image
+                    src={ProjectSettings.assets.favicon.light.location}
+                    alt="Logo"
+                    height={32}
+                    width={32}
+                    priority={true}
+                    className="block dark:hidden"
+                />
+            </div>
 
             {/* The current authentication based on the authentication state */}
             {currentAuthenticationComponent}

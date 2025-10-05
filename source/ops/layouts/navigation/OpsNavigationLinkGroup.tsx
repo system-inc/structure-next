@@ -12,9 +12,7 @@ import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon
 
 // Dependencies - Animation
 import { Collapse } from '@structure/source/common/interactions/Collapse';
-import { easings, useSpring, animated } from '@react-spring/web';
-
-const AnimatedChevronRightIcon = animated(ChevronRightIcon);
+import { cubicBezier, motion, Transition } from 'motion/react';
 
 // Component - NavigationGroup
 export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) {
@@ -35,11 +33,8 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
         [urlPath, active],
     ); // Listen to changes to the pathname and active state
 
-    const animationConfiguration = { duration: 500, easing: easings.easeOutExpo };
-    const rotationSpring = useSpring({
-        rotate: isOpen ? 270 : 90,
-        config: animationConfiguration,
-    });
+    // Animation
+    const transition: Transition = { duration: 0.35, ease: cubicBezier(0.075, 0.82, 0.165, 1) };
 
     // Render the component
     return (
@@ -56,17 +51,19 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
                         className="relative flex aspect-square w-6 items-center justify-center rounded text-dark hover:bg-dark/10 dark:text-white dark:hover:bg-light/10"
                         onClick={() => setIsOpen(!isOpen)}
                     >
-                        <AnimatedChevronRightIcon
-                            className={`h-4 w-4`}
-                            style={{
-                                transform: rotationSpring.rotate.to((rotate) => `rotate(${rotate}deg)`),
+                        <motion.span
+                            animate={{
+                                transform: isOpen ? `rotate(270deg)` : `rotate(90deg)`,
                             }}
-                        />
+                            transition={transition}
+                        >
+                            <ChevronRightIcon className="h-4 w-4" />
+                        </motion.span>
                     </button>
                 </div>
             </div>
 
-            <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={animationConfiguration}>
+            <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={transition}>
                 <div className="ml-3 space-y-0.5 border-l border-l-light-4 pb-0.5 pl-4 pt-0.5 dark:border-l-dark-4">
                     {properties.links?.map((internalNavigationLink) => {
                         return (

@@ -18,7 +18,7 @@ import {
 } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Animation
-import { useSpring, animated } from '@react-spring/web';
+import { useSpring, motion } from 'motion/react';
 
 // Component - SideNavigationLayoutNavigationTop
 export interface SideNavigationLayoutNavigationTopProperties {
@@ -45,46 +45,56 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
     );
 
     // Spring to animate the top bar bottom border div left margin
-    const [topBarBottomBorderDivSpring, topBarBottomBorderDivSpringControl] = useSpring(function () {
-        return {
-            // On mobile we use left margin on the top bar bottom border div to show the navigation as a drawer without the line cutting through the drawer
-            marginLeft:
-                // If the side navigation is closed set the left margin to 0, otherwise set it to the navigation width
-                sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
-        };
-    });
+    const topBarBottomBorderDivMarginLeftSpring = useSpring(
+        // On mobile we use left margin on the top bar bottom border div to show the navigation as a drawer without the line cutting through the drawer
+        // If the side navigation is closed set the left margin to 0, otherwise set it to the navigation width
+        sideNavigationLayoutNavigationOpen === false ? 0 : sideNavigationLayoutNavigationWidth,
+        {
+            ...sideNavigationLayoutNavigationSpringConfiguration,
+        },
+    );
 
     // Effect to animate the top bar bottom border left margin when the navigation is opened, closed, or resized
     React.useEffect(
         function () {
             // Only if the header border is enabled and the top bar bottom border div reference exists
             if(showHeaderBorder && topBarBottomBorderDivReference.current) {
-                // Animate the left margin
-                topBarBottomBorderDivSpringControl.start({
-                    marginLeft:
+                if(
+                    // Apply the animation immediately if it is the first mount or the navigation is resizing
+                    // Using first mount prevents the animation from running on the first render, which would animate
+                    // content on the screen on the first load
+                    // Conditionally apply the animation immediately
+                    // If on first mount
+                    // Using first mount prevents the animation from running on the first render, which would animate
+                    // content on the screen on the first load
+                    firstMount.current ||
+                    // Or if the navigation is open and is resizing
+                    (sideNavigationLayoutNavigationOpen && sideNavigationLayoutNavigationIsResizing)
+                ) {
+                    // Animate the left margin immediately
+                    topBarBottomBorderDivMarginLeftSpring.jump(
                         // Do not apply margin
                         // If on desktop or the navigation is closed
                         window.innerWidth >= desktopMinimumWidth || sideNavigationLayoutNavigationOpen === false
                             ? 0
                             : sideNavigationLayoutNavigationWidth,
-                    // Use the imported spring configuration for consistent animation
-                    config: sideNavigationLayoutNavigationSpringConfiguration,
-                    // Apply the animation immediately if it is the first mount or the navigation is resizing
-                    // Using first mount prevents the animation from running on the first render, which would animate
-                    // content on the screen on the first load
-                    immediate:
-                        // Conditionally apply the animation immediately
-                        // If on first mount
-                        // Using first mount prevents the animation from running on the first render, which would animate
-                        // content on the screen on the first load
-                        firstMount.current ||
-                        // Or if the navigation is open and is resizing
-                        (sideNavigationLayoutNavigationOpen && sideNavigationLayoutNavigationIsResizing),
-                    onRest: function () {
-                        // Set the first mount to false
-                        firstMount.current = false;
-                    },
-                });
+                    );
+                    // Set the first mount to false now we've immediately set the initial values
+                    // Set the first mount to false
+                    firstMount.current = false;
+                }
+                else {
+                    // Otherwise, animate the values
+
+                    // Animate the left margin
+                    topBarBottomBorderDivMarginLeftSpring.set(
+                        // Do not apply margin
+                        // If on desktop or the navigation is closed
+                        window.innerWidth >= desktopMinimumWidth || sideNavigationLayoutNavigationOpen === false
+                            ? 0
+                            : sideNavigationLayoutNavigationWidth,
+                    );
+                }
             }
         },
         // Just when the navigation open state or width changes
@@ -105,9 +115,9 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
 
             {/* Top Bar Bottom Border */}
             {showHeaderBorder && (
-                <animated.div
+                <motion.div
                     ref={topBarBottomBorderDivReference}
-                    style={topBarBottomBorderDivSpring}
+                    style={{ marginLeft: topBarBottomBorderDivMarginLeftSpring }}
                     className="pointer-events-none fixed z-30 h-14 w-full border-b border-b-light-4 dark:border-b-dark-4"
                 />
             )}

@@ -72,7 +72,7 @@ export function ContactPage(properties: ContactPageProperties) {
     return (
         <div className={mergeClassNames('container pt-12', properties.className)}>
             <h1>Contact {ProjectSettings.title}</h1>
-            <p className="mt-4 text-sm text-foreground-secondary">We look forward to hearing from you.</p>
+            <p className="text-foreground-secondary mt-4 text-sm">We look forward to hearing from you.</p>
 
             <hr className="my-6" />
 
