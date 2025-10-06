@@ -170,9 +170,10 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
         return (
             <a
                 id={camelCase(properties.text)}
-                className={`cursor-pointer rounded-medium p-1.5 text-xs dark:text-light-4 dark:hover:bg-dark-4 ${
-                    properties.isActive ? 'bg-light-4/50 dark:bg-dark-4/50' : 'hover:bg-light-4'
-                }`}
+                className={mergeClassNames(
+                    'cursor-pointer rounded-medium p-1.5 text-xs text-opsis-content-secondary hover:bg-opsis-background-secondary',
+                    properties.isActive && 'bg-opsis-background-secondary',
+                )}
                 onClick={properties.onClick}
             >
                 {properties.text}
@@ -226,7 +227,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     {showTimeRangePresets && (
                         <div className="flex w-48 flex-col">
                             {/* Summary Header */}
-                            <div className="border-b border-light-4 p-2 text-xs dark:border-dark-4">
+                            <div className="border-b border-opsis-border-primary p-2 text-xs">
                                 {/* Current Selection */}
                                 <p className="font-semibold">{activeTimeRangePresetKey}</p>
                                 {/* Date Display */}
@@ -268,7 +269,12 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                             </div>
                         </div>
                     )}
-                    <div className={`flex flex-col ${showTimeRangePresets ? 'border-l' : ''}`}>
+                    <div
+                        className={mergeClassNames(
+                            'flex flex-col',
+                            showTimeRangePresets && 'border-l border-opsis-border-primary',
+                        )}
+                    >
                         <Calendar
                             mode="range"
                             showOutsideDays={false}
@@ -279,6 +285,18 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                             selected={{
                                 from: value?.startTime,
                                 to: value?.endTime,
+                            }}
+                            modifiers={{
+                                single_day: function (date) {
+                                    if(!value?.startTime || !value?.endTime) return false;
+                                    return (
+                                        date.toDateString() === value.startTime.toDateString() &&
+                                        date.toDateString() === value.endTime.toDateString()
+                                    );
+                                },
+                            }}
+                            modifiersClassNames={{
+                                single_day: 'rdp-single_day',
                             }}
                             onSelect={handleCalendarSelection}
                         />

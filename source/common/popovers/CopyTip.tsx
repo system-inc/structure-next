@@ -22,7 +22,7 @@ export function CopyTip(properties: CopyTipProperties) {
         <Tip
             content={
                 <div className="flex text-xs transition-all">
-                    <div className="flex items-center border-r">
+                    <div className="flex items-center border-r border-opsis-border-primary">
                         <CopyButton
                             value={value}
                             noticeData={noticeData}

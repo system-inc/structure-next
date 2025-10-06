@@ -36,3 +36,15 @@ input:-webkit-autofill:active {
         color 99999s;
     transition-delay: 99999s;
 }
+
+/* Calendar and InputTimeRange - react-day-picker single day selection fix */
+/* When a single day is selected in range mode, react-day-picker applies both rdp-range_start */
+/* and rdp-range_end classes to the td, causing conflicting border-radius rules on the button */
+/* (rounded-l-none + rounded-r-none = no rounding). We override this with rdp-single_day class. */
+td.rdp-single_day > button {
+    border-radius: calc(var(--radius) - 2px) !important;
+}
+
+td.rdp-single_day > button:hover {
+    border-radius: calc(var(--radius) - 2px) !important;
+}

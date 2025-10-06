@@ -12,6 +12,7 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 import { lightenColor, darkenColor } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
 import { formatTipLabelByTimeInterval } from './utilities/TimeSeriesFormatters';
+import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - TimeSeriesTip
 export interface TimeSeriesTipProperties {
@@ -54,8 +55,8 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
 
         // Render the component
         return (
-            <div className="rounded-extra-small border border-light-4 bg-light dark:border-dark-4 dark:bg-dark">
-                <div className="border-b p-2 text-xs text-dark/60 dark:text-light-4/60">
+            <div className="rounded-extra-small border border-opsis-border-primary bg-opsis-background-primary">
+                <div className="border-b border-opsis-border-primary p-2 text-xs text-opsis-content-secondary">
                     {properties.timeInterval
                         ? formatTipLabelByTimeInterval(dataPoint.label, properties.timeInterval)
                         : dataPoint.label}
@@ -65,11 +66,10 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                         {sortedPayload.map((entry, index) => (
                             <tr
                                 key={index}
-                                className={
-                                    index === sortedPayload.length - 1
-                                        ? 'text-xs' // If this is the last row, don't show the border
-                                        : 'border-b text-xs'
-                                }
+                                className={mergeClassNames(
+                                    'text-xs',
+                                    index !== sortedPayload.length - 1 && 'border-b border-opsis-border-primary',
+                                )}
                             >
                                 <td className="p-2 text-center text-xs">
                                     <b>
@@ -87,7 +87,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                         })()}
                                     </b>
                                 </td>
-                                <td className="border-l p-2 pr-4">
+                                <td className="border-l border-opsis-border-primary p-2 pr-4">
                                     <div className="flex items-center gap-2">
                                         <div
                                             style={{

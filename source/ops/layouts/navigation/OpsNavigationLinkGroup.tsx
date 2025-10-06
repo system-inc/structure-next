@@ -53,11 +53,11 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
                     >
                         <motion.span
                             animate={{
-                                transform: isOpen ? `rotate(270deg)` : `rotate(90deg)`,
+                                transform: isOpen ? `rotate(-180deg)` : `rotate(0deg)`,
                             }}
                             transition={transition}
                         >
-                            <ChevronRightIcon className="h-4 w-4" />
+                            <ChevronRightIcon className="h-4 w-4 rotate-90" />
                         </motion.span>
                     </button>
                 </div>

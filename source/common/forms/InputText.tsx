@@ -72,7 +72,7 @@ export const InputTextVariants = {
         // Layout and sizing
         `w-full pl-9 pr-4 py-3 ` +
         // Border
-        `border-b ` +
+        `border-b border-opsis-border-primary ` +
         // Background
         `bg-transparent`,
 };

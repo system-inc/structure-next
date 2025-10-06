@@ -17,7 +17,7 @@ export const PopoverVariants = {
         // Focus
         `outline-none ` +
         // Background and text
-        `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
+        `bg-opsis-background-primary text-opsis-content-primary ` +
         // Border
         `rounded-small border border-light-4 dark:border-dark-4 ` +
         // Base width and height

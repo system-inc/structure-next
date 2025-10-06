@@ -152,7 +152,7 @@ export const ButtonVariants = {
         // Border
         `rounded-small border border-light-6 dark:border-light ` +
         // Text and background
-        `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
+        `bg-opsis-background-primary text-opsis-content-primary ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-3 ` +
         // Active
@@ -175,7 +175,7 @@ export const ButtonVariants = {
         // Border
         `rounded-small border border-light-6 dark:border-dark-3 ` +
         // Light text on dark background
-        `bg-light text-dark dark:bg-dark+2 dark:text-light ` +
+        `bg-opsis-background-primary text-opsis-content-primary ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-1 ` +
         // Active

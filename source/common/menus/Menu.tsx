@@ -24,7 +24,7 @@ export const menuClassName =
     // Border
     `rounded-small border border-light-4 dark:border-dark-4 ` +
     // Background and text
-    `text-sm bg-light text-dark dark:bg-dark+2 dark:text-light`;
+    `text-sm bg-opsis-background-primary text-opsis-content-primary`;
 
 // Component - Menu
 export interface MenuProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {

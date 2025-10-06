@@ -169,7 +169,13 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames('select-none', properties.className)} ref={containerReference}>
+        <div
+            className={mergeClassNames(
+                'select-none [&_.recharts-wrapper_:focus:not(:focus-visible)]:outline-none',
+                properties.className,
+            )}
+            ref={containerReference}
+        >
             <ResponsiveContainer width="100%" height={chartHeight}>
                 <ComposedChart
                     data={properties.data}

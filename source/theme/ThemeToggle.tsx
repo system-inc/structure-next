@@ -18,6 +18,9 @@ import DesktopIcon from '@structure/assets/icons/technology/DesktopIcon.svg';
 import SunIcon from '@structure/assets/icons/nature/SunIcon.svg';
 import MoonIcon from '@structure/assets/icons/nature/MoonIcon.svg';
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
 // Component - ThemeToggle
 export function ThemeToggle() {
     // Shared State
@@ -39,9 +42,10 @@ export function ThemeToggle() {
         return (
             <Tip sideOffset={8} content={<div className="px-2 py-1 text-xs">{currentThemeText} Theme</div>}>
                 <button
-                    className={`rounded-full hover:text-dark dark:hover:text-light ${
-                        theme === currentTheme && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light'
-                    }`}
+                    className={mergeClassNames(
+                        'cursor-pointer rounded-full hover:text-dark dark:hover:text-light',
+                        theme === currentTheme && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light',
+                    )}
                     tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
                     onClick={function () {
                         handleChangeTheme(currentTheme);
