@@ -54,7 +54,7 @@ Tabs.displayName = RadixTabPrimitive.Root.displayName;
 export const tabItemVariants = cva(
     [
         // Default
-        'text-opsis-content-secondary rounded-full transition-colors relative group',
+        'text-opsis-content-secondary rounded-full transition-colors relative group cursor-pointer',
         // Hover
         'hover:text-opsis-content-primary',
         // Active

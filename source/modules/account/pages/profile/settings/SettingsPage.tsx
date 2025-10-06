@@ -2,19 +2,11 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { Metadata } from 'next';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
 import { DeleteAccountDialog } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccountDialog';
 import { AccountMaintenanceDialog } from '@structure/source/modules/account/components/AccountMaintenanceDialog';
-
-// Metadata
-export async function generateMetadata(): Promise<Metadata> {
-    return {
-        title: 'Settings',
-    };
-}
 
 // Component - SettingsPage
 export function SettingsPage() {

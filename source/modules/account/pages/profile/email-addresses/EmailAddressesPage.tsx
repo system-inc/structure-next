@@ -2,20 +2,12 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { Metadata } from 'next';
 
 // Dependencies - Animation
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
-
-// Metadata
-export async function generateMetadata(): Promise<Metadata> {
-    return {
-        title: 'Email Addresses',
-    };
-}
 
 // Component - EmailAddressesPage
 export function EmailAddressesPage() {

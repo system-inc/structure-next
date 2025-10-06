@@ -2,7 +2,6 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { Metadata } from 'next';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
@@ -11,13 +10,6 @@ import { ManagePasswordDialog } from '@structure/source/modules/account/pages/pr
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { AccountMaintenanceDialog } from '../../../components/AccountMaintenanceDialog';
-
-// Metadata
-export async function generateMetadata(): Promise<Metadata> {
-    return {
-        title: 'Security',
-    };
-}
 
 // Component - SecurityPage
 export function SecurityPage() {

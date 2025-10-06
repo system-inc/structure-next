@@ -2,7 +2,6 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import { Metadata } from 'next';
 
 // Dependencies - Main Components
 import { ProfileImageSection } from '@structure/source/modules/account/pages/profile/profile/components/ProfileImageSection';
@@ -12,13 +11,6 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
-
-// Metadata
-export async function generateMetadata(): Promise<Metadata> {
-    return {
-        title: 'Profile',
-    };
-}
 
 // Component - ProfilePage
 export function ProfilePage() {
