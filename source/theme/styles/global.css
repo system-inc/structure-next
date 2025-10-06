@@ -4,9 +4,85 @@
 /* Point to the Tailwind configuration file (required in v4) */
 @config "../../../../../tailwind.config.mts";
 
+/* Import CSS variables */
+@import './variables.css';
+
+/* Import tw-animate-css (Tailwind v4 compatible animations) */
+@import 'tw-animate-css';
+
+/* Import animations */
+@import './animations.css';
+
+/* Custom link utilities */
+@layer utilities {
+    .link-primary {
+        color: var(--link-primary-default);
+    }
+
+    .link-primary:hover {
+        color: var(--link-primary-hover);
+    }
+
+    .link-primary:active {
+        color: var(--link-primary-pressed);
+    }
+
+    .link-secondary {
+        color: var(--link-secondary-default);
+    }
+
+    .link-secondary:hover {
+        color: var(--link-secondary-hover);
+    }
+
+    .link-secondary:active {
+        color: var(--link-secondary-pressed);
+    }
+
+    .link-muted {
+        color: var(--link-muted-default);
+    }
+
+    .link-muted:hover {
+        color: var(--link-muted-hover);
+    }
+
+    .link-muted:active {
+        color: var(--link-muted-pressed);
+    }
+
+    .link-contrast {
+        color: var(--link-primary-contrast-default);
+    }
+
+    .link-contrast:hover {
+        color: var(--link-primary-contrast-hover);
+    }
+
+    .link-contrast:active {
+        color: var(--link-primary-contrast-pressed);
+    }
+
+    .link-contrast.disabled {
+        color: var(--link-primary-contrast-disabled);
+    }
+
+    .link-blue {
+        color: var(--link-blue-default);
+    }
+
+    .link-blue:hover {
+        color: var(--link-blue-hover);
+    }
+
+    .link-blue:active {
+        color: var(--link-blue-pressed);
+    }
+}
+
 /* Class to allow full width and height for the ScrollArea component */
 /* Fix for RadixScrollArea */
-.scroll-area-viewport > :first-child {
+.scroll-area-viewport> :first-child {
     height: 100%;
     width: 100%;
     table-layout: fixed;
@@ -41,10 +117,10 @@ input:-webkit-autofill:active {
 /* When a single day is selected in range mode, react-day-picker applies both rdp-range_start */
 /* and rdp-range_end classes to the td, causing conflicting border-radius rules on the button */
 /* (rounded-l-none + rounded-r-none = no rounding). We override this with rdp-single_day class. */
-td.rdp-single_day > button {
+td.rdp-single_day>button {
     border-radius: calc(var(--radius) - 2px) !important;
 }
 
-td.rdp-single_day > button:hover {
+td.rdp-single_day>button:hover {
     border-radius: calc(var(--radius) - 2px) !important;
 }
