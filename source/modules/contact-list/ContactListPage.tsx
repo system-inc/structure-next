@@ -48,7 +48,7 @@ export function ContactListPage() {
                     <div className="max-w-[680px] p-8 md:max-h-screen">
                         {/* Show the logo on small screens */}
                         <div
-                            className="bg-logo-light dark:bg-logo-dark mb-6 bg-no-repeat md:hidden"
+                            className="mb-6 bg-logo-light bg-no-repeat md:hidden dark:bg-logo-dark"
                             style={{
                                 backgroundSize: ProjectSettings.assets.logo.width + 'px',
                                 width: ProjectSettings.assets.logo.width + 'px',
@@ -87,7 +87,7 @@ export function ContactListPage() {
                         >
                             {/* Logo */}
                             <div
-                                className={`bg-logo-light dark:bg-logo-dark bg-no-repeat`}
+                                className={`bg-logo-light bg-no-repeat dark:bg-logo-dark`}
                                 style={{
                                     backgroundSize: ProjectSettings.assets.logo.width + 'px',
                                     width: ProjectSettings.assets.logo.width + 'px',
