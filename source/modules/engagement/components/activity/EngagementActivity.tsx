@@ -317,13 +317,14 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                 {/* Visitors list - scrollable, takes remaining height */}
                 <ScrollArea className="flex-1 pr-3 pb-3">
                     <div ref={containerReference} className="space-y-3 pb-6">
-                        <AnimatePresence>
+                        <AnimatePresence initial={false} propagate>
                             {sortedVisitors.map(function (visitor) {
                                 const isNew = newVisitorIds.has(visitor.visitorId);
                                 const wasUpdated = updatedVisitorIds.has(visitor.visitorId);
                                 return (
                                     <EngagementActivityCard
                                         key={visitor.visitorId}
+                                        visitorId={visitor.visitorId}
                                         visitorActivity={visitor}
                                         isNew={isNew}
                                         wasUpdated={wasUpdated}

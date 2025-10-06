@@ -10,7 +10,7 @@ import { VisitorActivityInterface } from '@structure/source/modules/engagement/c
 import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 
 // Dependencies - Animation
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, cubicBezier } from 'motion/react';
 
 // Dependencies - Assets
 import {
@@ -52,6 +52,7 @@ export interface EngagementActivityCardProperties {
     visitorActivity: VisitorActivityInterface;
     isNew?: boolean;
     wasUpdated?: boolean;
+    visitorId: string; // Required for using layout animations for the components.
 }
 export function EngagementActivityCard(properties: EngagementActivityCardProperties) {
     // State
@@ -160,6 +161,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
     // Render the component
     return (
         <motion.div
+            layoutId={properties.visitorId}
             initial={properties.isNew ? { opacity: 0, y: -20, scale: 0.95 } : false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -209,36 +211,37 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="mb-2"
+                        transition={{ duration: 0.2, ease: cubicBezier(0.075, 0.82, 0.165, 1) }}
                     >
-                        <ScrollArea className="max-h-64">
-                            <div className="pr-0">
-                                {properties.visitorActivity.events.map(function (event) {
-                                    const path = truncatePath(event.viewIdentifier);
-                                    const eventTime = formatTimeAgo(event.loggedAt || event.createdAt);
-                                    const isAddToCart = event.name === 'AddToCart';
+                        <div className="pb-2">
+                            <ScrollArea className="max-h-64">
+                                <div className="pr-0">
+                                    {properties.visitorActivity.events.map(function (event) {
+                                        const path = truncatePath(event.viewIdentifier);
+                                        const eventTime = formatTimeAgo(event.loggedAt || event.createdAt);
+                                        const isAddToCart = event.name === 'AddToCart';
 
-                                    return (
-                                        <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
-                                            <span className="text-neutral-400 dark:text-neutral-500">→</span>
-                                            <span
-                                                className={
-                                                    isAddToCart
-                                                        ? 'min-w-0 flex-1 truncate font-mono font-semibold text-green-600 dark:text-green-400'
-                                                        : 'min-w-0 flex-1 truncate font-mono text-blue-600 dark:text-blue-400'
-                                                }
-                                            >
-                                                {isAddToCart ? `🛒 ${path}` : path}
-                                            </span>
-                                            <span className="shrink-0 text-neutral-400 dark:text-neutral-500">
-                                                {eventTime}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </ScrollArea>
+                                        return (
+                                            <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
+                                                <span className="text-neutral-400 dark:text-neutral-500">→</span>
+                                                <span
+                                                    className={
+                                                        isAddToCart
+                                                            ? 'min-w-0 flex-1 truncate font-mono font-semibold text-green-600 dark:text-green-400'
+                                                            : 'min-w-0 flex-1 truncate font-mono text-blue-600 dark:text-blue-400'
+                                                    }
+                                                >
+                                                    {isAddToCart ? `🛒 ${path}` : path}
+                                                </span>
+                                                <span className="shrink-0 text-neutral-400 dark:text-neutral-500">
+                                                    {eventTime}
+                                                </span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </ScrollArea>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
