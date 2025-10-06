@@ -27,8 +27,6 @@ export const TailwindConfiguration = {
                 DEFAULT: '1.5rem',
             },
             screens: {
-                DEFAULT: '100%',
-                sm: '100%',
                 lg: '980px',
                 xl: '980px',
                 '2xl': '980px',
