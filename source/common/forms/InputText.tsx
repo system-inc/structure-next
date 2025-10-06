@@ -31,7 +31,7 @@ export const commonInputText =
 // Background styles
 export const backgroundStyle =
     // Background
-    `bg-light dark:bg-dark+2`;
+    `bg-opsis-background-primary`;
 
 // Border styles
 export const borderStyle =

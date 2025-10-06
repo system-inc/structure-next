@@ -74,7 +74,7 @@ export function ContactPage(properties: ContactPageProperties) {
             <h1>Contact {ProjectSettings.title}</h1>
             <p className="text-foreground-secondary mt-4 text-sm">We look forward to hearing from you.</p>
 
-            <hr className="my-6" />
+            <hr className="my-6 border-opsis-border-primary" />
 
             <div className="mx-auto max-w-screen-md">
                 {/* Message Not Sent */}

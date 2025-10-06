@@ -412,7 +412,11 @@ export function Menu(properties: MenuProperties) {
             }}
         >
             {/* Menu Title */}
-            {properties.title && <div className="border-b px-3 py-2.5 text-sm font-medium">{properties.title}</div>}
+            {properties.title && (
+                <div className="border-b border-opsis-border-primary px-3 py-2.5 text-sm font-medium">
+                    {properties.title}
+                </div>
+            )}
 
             {/* Menu Items */}
             {loadingItems ? (

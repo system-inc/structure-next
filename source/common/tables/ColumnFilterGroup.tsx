@@ -282,7 +282,12 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames('mr-4 inline-flex flex-col rounded-medium border p-4', properties.className)}>
+        <div
+            className={mergeClassNames(
+                'mr-4 inline-flex flex-col rounded-medium border border-opsis-border-primary p-4',
+                properties.className,
+            )}
+        >
             <div className="flex flex-col space-y-2">
                 {/* Conditions */}
                 {columnFilterGroupData.conditions.map(function (condition, conditionIndex) {

@@ -10,7 +10,7 @@ export function NotFoundPage() {
         <div>
             <h1>Page Not Found</h1>
 
-            <hr className="my-6" />
+            <hr className="my-6 border border-opsis-border-primary" />
 
             <div className="">
                 <p>The page you are looking for could not be found.</p>

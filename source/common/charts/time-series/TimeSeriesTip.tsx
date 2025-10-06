@@ -98,7 +98,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                                         ? lightenColor(entry.color || '', 0.2)
                                                         : darkenColor(entry.color || '', 0.2),
                                             }}
-                                            className="h-4 w-4 rounded-extra-small border"
+                                            className="h-4 w-4 rounded-extra-small border border-opsis-border-primary"
                                         />
                                         <span>{entry.name}</span>
                                     </div>

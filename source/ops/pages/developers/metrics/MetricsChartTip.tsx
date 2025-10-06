@@ -65,7 +65,7 @@ export function MetricsChartTip(properties: MetricsChartTipProperties) {
                                                 ? lightenColor(payload.color || '', 0.2)
                                                 : darkenColor(payload.color || '', 0.2),
                                     }}
-                                    className="h-4 w-4 rounded-extra-small border"
+                                    className="h-4 w-4 rounded-extra-small border border-opsis-border-primary"
                                 />
                             </td>
                             {tooltipColumn(properties.timeInterval, {

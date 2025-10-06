@@ -124,7 +124,7 @@ export function OpsNavigationBar() {
                                     }}
                                     className="fixed top-10 bottom-0 left-0 p-2"
                                 >
-                                    <div className="h-full w-56 overflow-y-auto rounded-lg border bg-opsis-background-tetriary">
+                                    <div className="h-full w-56 overflow-y-auto rounded-lg border border-opsis-border-primary bg-opsis-background-tetriary">
                                         <OpsNavigation />
                                     </div>
                                 </motion.div>

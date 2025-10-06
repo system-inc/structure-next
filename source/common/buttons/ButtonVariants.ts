@@ -2,6 +2,8 @@
 const commonButton =
     // Layout and container
     `inline-flex items-center whitespace-nowrap select-none ` +
+    // Cursor
+    `cursor-pointer ` +
     // Disabled states
     `disabled:cursor-not-allowed disabled:opacity-75`;
 

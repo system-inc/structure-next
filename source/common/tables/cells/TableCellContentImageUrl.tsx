@@ -33,7 +33,7 @@ export function TableCellContentImageUrl(properties: TableCellContentImageUrlPro
                 content={
                     <div className="relative min-h-[80px] w-96">
                         {!imageLoaded && !imageFailedToLoad && (
-                            <div className="absolute inset-0 flex items-center justify-center rounded-medium border">
+                            <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-opsis-border-primary">
                                 <BrokenCircleIcon className="h-8 w-8 animate-spin" />
                             </div>
                         )}
@@ -44,7 +44,7 @@ export function TableCellContentImageUrl(properties: TableCellContentImageUrlPro
                             </div>
                         ) : (
                             <Image
-                                className="rounded-medium border"
+                                className="rounded-medium border border-opsis-border-primary"
                                 src={properties.url}
                                 alt="Image"
                                 // layout="responsive"

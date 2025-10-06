@@ -61,7 +61,7 @@ const components: ComponentsProperties = {
             {...properties}
         />
     ),
-    p: (properties) => <p className="mt-6 text-[16px] leading-[28px] font-light first:mt-0" {...properties} />,
+    p: (properties) => <p className="mt-6 text-[16px] leading-[28px] first:mt-0" {...properties} />,
     strong: (properties) => <strong className="font-medium" {...properties} />,
     a: (properties: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
         <Link href={properties.href ?? ''} className="underline" {...properties} />
@@ -86,13 +86,18 @@ const components: ComponentsProperties = {
     ul: (properties) => <ul className="mt-6 mb-6 list-disc pl-[26px]" {...properties} />,
     ol: (properties) => <ol className="mt-6 mb-6 list-decimal pl-[26px]" {...properties} />,
     li: (properties) => (
-        <li className="my-2 pl-1.5 text-[16px] leading-[28px] font-light [&>ol]:my-0 [&>ul]:my-0" {...properties} />
+        <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
     blockquote: (properties) => (
         <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
     ),
     hr: (properties) => <hr className="my-10 border-light-4 dark:border-dark-4" {...properties} />,
-    table: (properties) => <table className="relative mt-6 mb-6 w-full overflow-auto rounded border" {...properties} />,
+    table: (properties) => (
+        <table
+            className="relative mt-6 mb-6 w-full overflow-auto rounded border border-opsis-border-primary"
+            {...properties}
+        />
+    ),
     thead: (properties) => <thead className="border-b bg-light-2 dark:bg-dark" {...properties} />,
     tbody: (properties) => <tbody className="" {...properties} />,
     tr: (properties) => <tr className="border-b border-light-4 last:border-b-0 dark:border-dark-4" {...properties} />,

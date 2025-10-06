@@ -329,7 +329,7 @@ export function StructurePage() {
                     return (
                         <div
                             key={number}
-                            className="mb-2 rounded-medium border p-3 text-xl"
+                            className="mb-2 rounded-medium border border-opsis-border-primary p-3 text-xl"
                             style={{
                                 borderColor: color,
                             }}
@@ -589,13 +589,13 @@ export function StructurePage() {
                 /> */}
 
                 {/* <div className="mb-10 flex flex-col space-y-4">
-                    <Button variant="menuItem" size="menuItem" className="border" icon={CheckIcon} iconPosition="left">
+                    <Button variant="menuItem" size="menuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="left">
                         Button 1
                     </Button>
-                    <Button variant="menuItem" size="menuItem" className="border" icon={CheckIcon} iconPosition="right">
+                    <Button variant="menuItem" size="menuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="right">
                         Button 2
                     </Button>
-                    <Button variant="menuItem" size="menuItem" className="border" icon={CheckIcon} iconPosition="right">
+                    <Button variant="menuItem" size="menuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="right">
                         Button 3
                     </Button>
                 </div> */}
