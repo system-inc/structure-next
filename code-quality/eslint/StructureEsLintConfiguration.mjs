@@ -156,3 +156,11 @@ export const structureJavaScriptAndTypeScriptRules = {
     'structure/react-no-arrow-functions-as-hook-parameters-rule': 'error',
     'structure/react-no-destructuring-react-rule': 'error',
 };
+
+// ESLint Next.js exception configuration
+export const structureNextJsExceptionConfiguration = {
+    files: ['next-env.d.ts'],
+    rules: {
+        '@typescript-eslint/triple-slash-reference': 'off',
+    },
+};
