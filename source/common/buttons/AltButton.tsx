@@ -263,14 +263,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProperties>(func
                         transition={processingIconTransition}
                         className={mergeClassNames(processingAnimatedDivClassName)}
                     >
-                        <motion.span
-                            initial={{ rotate: 0 }}
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 0.35, repeat: Infinity, type: 'tween', ease: 'linear' }}
-                            className="inline-block"
-                        >
-                            <ProcessingIcon className="h-5 w-5" />
-                        </motion.span>
+                        <ProcessingIcon className="h-5 w-5 animate-spin" />
                     </motion.div>
                 )}
             </AnimatePresence>
