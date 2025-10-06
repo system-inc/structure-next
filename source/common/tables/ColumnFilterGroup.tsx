@@ -319,7 +319,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm text-muted-foreground">
+                                <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -438,7 +438,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             }}
                         />
                     ) : (
-                        <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm text-muted-foreground">
+                        <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
                             {columnFilterGroupData.operator.toLowerCase()}
                         </p>
                     )}

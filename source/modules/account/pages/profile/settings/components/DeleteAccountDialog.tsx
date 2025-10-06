@@ -42,7 +42,7 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
             content={
                 <div>
                     <h2 className="mb-4 text-lg font-semibold text-red-600">Delete Account</h2>
-                    <p className="text-foreground-secondary mb-4 text-sm">
+                    <p className="mb-4 text-sm text-foreground-secondary">
                         This action cannot be undone. All your data will be permanently deleted.
                     </p>
                     <DeleteAccountForm

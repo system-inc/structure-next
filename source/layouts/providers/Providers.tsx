@@ -3,6 +3,9 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - URL State
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+
 // Dependencies - Main Components
 import { Wrapper } from '@structure/source/utilities/Wrapper';
 
@@ -56,38 +59,40 @@ export function Providers(properties: ProvidersProperties) {
     // Render the component
     return (
         // Foundation Providers
-        <FoundationProviders>
-            <NetworkServiceProvider>
-                <CookiesProvider cookies={Cookies}>
-                    {/* State Providers */}
-                    <StateProviders>
-                        <WebSocketViaSharedWorkerProvider>
-                            <SharedStateProvider>
-                                <AccountProvider signedIn={properties.accountSignedIn}>
-                                    {/* Theme Providers */}
-                                    <ThemeProviders>
-                                        <ThemeProvider>
-                                            {/* Feature Providers */}
-                                            <FeatureProviders>
-                                                <EngagementProvider>
-                                                    {/* Interaction Providers */}
-                                                    <InteractionProviders>
-                                                        <NoticeProvider>
-                                                            <TipProvider delayDuration={100}>
-                                                                {properties.children}
-                                                            </TipProvider>
-                                                        </NoticeProvider>
-                                                    </InteractionProviders>
-                                                </EngagementProvider>
-                                            </FeatureProviders>
-                                        </ThemeProvider>
-                                    </ThemeProviders>
-                                </AccountProvider>
-                            </SharedStateProvider>
-                        </WebSocketViaSharedWorkerProvider>
-                    </StateProviders>
-                </CookiesProvider>
-            </NetworkServiceProvider>
-        </FoundationProviders>
+        <NuqsAdapter>
+            <FoundationProviders>
+                <NetworkServiceProvider>
+                    <CookiesProvider cookies={Cookies}>
+                        {/* State Providers */}
+                        <StateProviders>
+                            <WebSocketViaSharedWorkerProvider>
+                                <SharedStateProvider>
+                                    <AccountProvider signedIn={properties.accountSignedIn}>
+                                        {/* Theme Providers */}
+                                        <ThemeProviders>
+                                            <ThemeProvider>
+                                                {/* Feature Providers */}
+                                                <FeatureProviders>
+                                                    <EngagementProvider>
+                                                        {/* Interaction Providers */}
+                                                        <InteractionProviders>
+                                                            <NoticeProvider>
+                                                                <TipProvider delayDuration={100}>
+                                                                    {properties.children}
+                                                                </TipProvider>
+                                                            </NoticeProvider>
+                                                        </InteractionProviders>
+                                                    </EngagementProvider>
+                                                </FeatureProviders>
+                                            </ThemeProvider>
+                                        </ThemeProviders>
+                                    </AccountProvider>
+                                </SharedStateProvider>
+                            </WebSocketViaSharedWorkerProvider>
+                        </StateProviders>
+                    </CookiesProvider>
+                </NetworkServiceProvider>
+            </FoundationProviders>
+        </NuqsAdapter>
     );
 }
