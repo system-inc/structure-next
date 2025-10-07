@@ -7,8 +7,7 @@ import React from 'react';
 import { Button, ButtonProperties } from '@structure/source/common/buttons/Button';
 
 // Dependencies - Assets
-import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
-import ReloadIcon from '@structure/assets/icons/interface/ReloadIcon.svg';
+import { CheckCircleIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
 
 // Component - RefreshButton
 export type RefreshButtonProperties = ButtonProperties;
@@ -18,8 +17,8 @@ export function RefreshButton(properties: RefreshButtonProperties) {
         <Button
             size="icon"
             tip="Refresh"
-            processingIcon={ReloadIcon}
-            processingSuccessIcon={CheckCircledIcon}
+            processingIcon={ArrowClockwiseIcon}
+            processingSuccessIcon={CheckCircleIcon}
             showProcessedTimeTip={true}
             {...properties}
         />

@@ -20,6 +20,7 @@ import { AnimatePresence, Reorder } from 'motion/react';
 
 // Dependencies - Utilities
 import { getTimeSeriesColor } from '@structure/source/common/charts/time-series/utilities/TimeSeriesColors';
+import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - DataSources
 export interface DataSourcesProperties {
@@ -41,9 +42,36 @@ export interface DataSourcesProperties {
 export function DataSources(properties: DataSourcesProperties) {
     const dataSourcesContainerReference = React.useRef<HTMLDivElement>(null);
 
+    // Local state for drag operations to prevent URL jank
+    const [localDataSources, setLocalDataSources] = React.useState<DataSourceType[]>(properties.settings.dataSources);
+    const pendingUrlSyncReference = React.useRef<DataSourceType[] | null>(null);
+
+    // Sync local state with URL state (only when URL changes externally)
+    React.useEffect(
+        function () {
+            setLocalDataSources(properties.settings.dataSources);
+        },
+        [properties.settings.dataSources],
+    );
+
+    // Handle drag end - sync to URL after drag completes and animation settles
+    const handleDragEnd = React.useCallback(
+        function () {
+            if(pendingUrlSyncReference.current) {
+                // Delay URL sync to allow drop animation to complete
+                setTimeout(function () {
+                    if(pendingUrlSyncReference.current) {
+                        properties.setDataSources(pendingUrlSyncReference.current);
+                        pendingUrlSyncReference.current = null;
+                    }
+                }, 500);
+            }
+        },
+        [properties.setDataSources],
+    );
+
     // Add a new data source
     const handleAddDataSource = async function () {
-        const uniqueId = Math.random().toString(36).substring(7);
         const newIndex = properties.settings.dataSources.length;
         const color = getTimeSeriesColor(newIndex);
 
@@ -51,7 +79,7 @@ export function DataSources(properties: DataSourcesProperties) {
         properties.setDataSources([
             ...properties.settings.dataSources,
             {
-                id: uniqueId,
+                id: uniqueIdentifier(8),
                 databaseName: '',
                 tableName: '',
                 columnName: '',
@@ -87,7 +115,7 @@ export function DataSources(properties: DataSourcesProperties) {
                 <div className="min-w-0">
                     {/* Header */}
                     {properties.settings.dataSources.length > 0 && (
-                        <div className="mb-1 w-[520px] text-sm font-medium">
+                        <div className="mb-3 w-[520px] text-sm font-medium">
                             <div className="relative top-2 flex">
                                 <div>
                                     <span className="ml-16">Database</span>
@@ -114,13 +142,19 @@ export function DataSources(properties: DataSourcesProperties) {
                     {/* Data Sources (Rows) */}
                     <div id="data-sources-container" ref={dataSourcesContainerReference}>
                         <Reorder.Group
-                            values={properties.settings.dataSources}
+                            axis="y"
+                            values={localDataSources}
                             onReorder={(values) => {
-                                properties.setDataSources(values);
+                                // Update local state immediately for smooth animation
+                                setLocalDataSources(values);
+                                // Store for URL sync after drag ends
+                                pendingUrlSyncReference.current = values;
                             }}
+                            layoutScroll
+                            style={{ position: 'relative' }}
                         >
                             <AnimatePresence mode="popLayout" initial={false} propagate>
-                                {properties.settings.dataSources.map((dataSource, index) => {
+                                {localDataSources.map((dataSource, index) => {
                                     return (
                                         <DataSource
                                             key={dataSource.id}
@@ -139,6 +173,7 @@ export function DataSources(properties: DataSourcesProperties) {
                                             error={properties.error}
                                             setLoading={properties.setLoading}
                                             containerReference={dataSourcesContainerReference}
+                                            onDragEnd={handleDragEnd}
                                         />
                                     );
                                 })}

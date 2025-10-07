@@ -28,10 +28,7 @@ import { ColumnFilterConditionOperator } from '@structure/source/api/graphql/Gra
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import MinusIcon from '@structure/assets/icons/interface/MinusIcon.svg';
-import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
-import ExportIcon from '@structure/assets/icons/interface/ExportIcon.svg';
-import StarsIcon from '@structure/assets/icons/nature/StarsIcon.svg';
+import { PlusIcon, MinusIcon, ExportIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { addDays, endOfToday } from 'date-fns';
@@ -40,6 +37,7 @@ import {
     fillMissingTimeIntervalValuesWithZeroes,
 } from '@structure/source/common/charts/time-series/utilities/TimeSeriesProcessors';
 import { calculateTimeIntervalValueStartAndEndDate } from '@structure/source/utilities/ChartData';
+import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Types - Data Source
 export type DataSourceType = {
@@ -89,6 +87,27 @@ export function Metrics() {
 
     // Chart loading state
     const [chartLoading, setChartLoading] = React.useState(true);
+
+    // Automatically add one data source on initial page load
+    React.useEffect(
+        function () {
+            if(dataSources.length === 0) {
+                setDataSources([
+                    {
+                        id: uniqueIdentifier(8),
+                        databaseName: '',
+                        tableName: '',
+                        columnName: '',
+                        color: '#3b82f6', // blue-500 (first color in palette)
+                        yAxisAlignment: 'left',
+                        lineStyle: 'solid',
+                    },
+                ]);
+            }
+        },
+        // Only run once on mount
+        [],
+    );
 
     // Chart active label for context menu
     const [chartActiveLabel, setChartActiveLabel] = React.useState<string | null>(null);
@@ -149,8 +168,19 @@ export function Metrics() {
                 return [];
             }
 
+            // Reorder dataSourcesWithMetrics to match the order in dataSources
+            const orderedDataSourcesWithMetrics = dataSources
+                .map(function (dataSource) {
+                    return dataSourcesWithMetrics.find(function (ds) {
+                        return ds.id === dataSource.id;
+                    });
+                })
+                .filter(function (ds): ds is DataSourceWithMetricsType {
+                    return ds !== undefined;
+                });
+
             // Convert each data source to the format needed by mergeTimeSeriesData
-            const dataSeries = dataSourcesWithMetrics.map(function (dataSource) {
+            const dataSeries = orderedDataSourcesWithMetrics.map(function (dataSource) {
                 const rawData = dataSource.metrics.data.map(function ([timeIntervalValue, total]) {
                     // Normalize hour and minute format: server returns "2025-10-01 20:00:00" but we need "2025-10-01T20:00:00"
                     let normalizedTimeIntervalValue = timeIntervalValue;
@@ -189,6 +219,7 @@ export function Metrics() {
         },
         [
             dataSourcesWithMetrics,
+            dataSources,
             timeSeriesState.timeRange.startTime,
             timeSeriesState.timeRange.endTime,
             timeSeriesState.timeInterval,
@@ -198,7 +229,18 @@ export function Metrics() {
     // Transform data sources to TimeSeries format
     const timeSeriesDataSources = React.useMemo(
         function () {
-            return dataSourcesWithMetrics.map(function (dataSource) {
+            // Reorder dataSourcesWithMetrics to match the order in dataSources
+            const orderedDataSourcesWithMetrics = dataSources
+                .map(function (dataSource) {
+                    return dataSourcesWithMetrics.find(function (ds) {
+                        return ds.id === dataSource.id;
+                    });
+                })
+                .filter(function (ds): ds is DataSourceWithMetricsType {
+                    return ds !== undefined;
+                });
+
+            return orderedDataSourcesWithMetrics.map(function (dataSource) {
                 return {
                     id: dataSource.id,
                     dataKey: dataSource.id,
@@ -209,7 +251,7 @@ export function Metrics() {
                 };
             });
         },
-        [dataSourcesWithMetrics],
+        [dataSourcesWithMetrics, dataSources],
     );
 
     // Create the context menu items
@@ -269,93 +311,64 @@ export function Metrics() {
         <>
             {/* Display Options */}
             <div className="mb-12 w-full overflow-x-auto">
-                <div className="mb-4 ml-auto flex w-min space-x-2">
-                    {/* Time Series Controls */}
-                    <TimeSeriesControls
-                        timeRange={timeSeriesState.timeRange}
-                        onTimeRangeChange={timeSeriesState.setTimeRange}
-                        timeInterval={timeSeriesState.timeInterval}
-                        onTimeIntervalChange={timeSeriesState.setTimeInterval}
-                        chartType={timeSeriesState.chartType}
-                        onChartTypeChange={timeSeriesState.setChartType}
-                        sortOrder={timeSeriesState.sortOrder}
-                        onSortOrderChange={timeSeriesState.setSortOrder}
+                {/* Time Series Controls */}
+                <TimeSeriesControls
+                    timeRange={timeSeriesState.timeRange}
+                    onTimeRangeChange={timeSeriesState.setTimeRange}
+                    timeInterval={timeSeriesState.timeInterval}
+                    onTimeIntervalChange={timeSeriesState.setTimeInterval}
+                    chartType={timeSeriesState.chartType}
+                    onChartTypeChange={timeSeriesState.setChartType}
+                    sortOrder={timeSeriesState.sortOrder}
+                    onSortOrderChange={timeSeriesState.setSortOrder}
+                >
+                    {/* Zoom In Button */}
+                    <Button
+                        size={'formInputIcon'}
+                        className="group relative aspect-square px-2"
+                        onClick={zoomControls.zoomIn}
+                        tip="Zoom In"
                     >
-                        {/* Zoom Out Button */}
-                        <div className="mt-[22px]">
-                            <Button
-                                size={'formInputIcon'}
-                                className="group relative aspect-square px-2"
-                                onClick={zoomControls.zoomOut}
-                                tip="Zoom Out"
-                            >
-                                <MinusIcon className="h-5 w-5" />
-                            </Button>
-                        </div>
+                        <PlusIcon size={20} />
+                    </Button>
 
-                        {/* Zoom In Button */}
-                        <div className="mt-[22px]">
-                            <Button
-                                size={'formInputIcon'}
-                                className="group relative aspect-square px-2"
-                                onClick={zoomControls.zoomIn}
-                                tip="Zoom In"
-                            >
-                                <PlusIcon className="h-5 w-5" />
-                            </Button>
-                        </div>
+                    {/* Zoom Out Button */}
+                    <Button
+                        size={'formInputIcon'}
+                        className="group relative aspect-square px-2"
+                        onClick={zoomControls.zoomOut}
+                        tip="Zoom Out"
+                    >
+                        <MinusIcon size={20} />
+                    </Button>
 
-                        {/* Export Icon */}
-                        <div className="mt-[22px]">
-                            <Dialog header="Export" content="Feature coming soon!" footerCloseButton={true}>
-                                <Button
-                                    size={'formInputIcon'}
-                                    className="group relative aspect-square px-2"
-                                    tip="Export"
-                                >
-                                    <ExportIcon className="h-full w-full scale-110" />
-                                </Button>
-                            </Dialog>
-                        </div>
+                    {/* Export Icon */}
+                    <Dialog header="Export" content="Feature coming soon!" footerCloseButton={true}>
+                        <Button size={'formInputIcon'} className="group relative aspect-square px-2" tip="Export">
+                            <ExportIcon size={20} />
+                        </Button>
+                    </Dialog>
 
-                        {/* Explain with AI Button */}
-                        <div className="mt-[22px]">
-                            <Dialog header="Explain" content="Feature coming soon!" footerCloseButton={true}>
-                                <Button
-                                    size={'formInputIcon'}
-                                    className="group relative aspect-square px-2"
-                                    tip="Explain"
-                                >
-                                    <StarsIcon className="h-full w-full scale-150" />
-                                </Button>
-                            </Dialog>
-                        </div>
+                    {/* Refresh Button */}
+                    <RefreshButton
+                        size={'formInputIcon'}
+                        onClick={async () => {
+                            await networkService.refreshActiveRequests();
+                        }}
+                    />
 
-                        {/* Refresh Button */}
-                        <div className="mt-[22px]">
-                            <RefreshButton
-                                size={'formInputIcon'}
-                                onClick={async () => {
-                                    await networkService.refreshActiveRequests();
-                                }}
-                            />
-                        </div>
-
-                        {/* Reset Zoom Button (if zoomed) */}
-                        {zoomBehavior.isZoomed && (
-                            <div className="mt-[22px]">
-                                <Button
-                                    size={'formInputIcon'}
-                                    className="group relative aspect-square px-2"
-                                    onClick={zoomBehavior.resetZoom}
-                                    tip="Reset Zoom"
-                                >
-                                    Reset
-                                </Button>
-                            </div>
-                        )}
-                    </TimeSeriesControls>
-                </div>
+                    {/* Reset Zoom Button (if zoomed) */}
+                    {zoomBehavior.isZoomed && (
+                        <Button
+                            size={'formInputIcon'}
+                            className="group relative aspect-square px-2"
+                            onClick={zoomBehavior.resetZoom}
+                            tip="Reset Zoom"
+                        >
+                            Reset
+                        </Button>
+                    )}
+                </TimeSeriesControls>
             </div>
 
             {/* Chart */}

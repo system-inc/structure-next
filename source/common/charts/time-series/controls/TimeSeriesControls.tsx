@@ -58,7 +58,30 @@ export function TimeSeriesControls(properties: TimeSeriesControlsProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames('flex flex-wrap items-center gap-4', properties.className)}>
+        <div className={mergeClassNames('flex flex-wrap items-center justify-end gap-2', properties.className)}>
+            {/* Time Interval */}
+            {showInterval && properties.timeInterval && properties.onTimeIntervalChange && (
+                <TimeIntervalFormInputSelect
+                    value={properties.timeInterval}
+                    onChange={properties.onTimeIntervalChange}
+                    availableIntervals={properties.availableTimeIntervals}
+                />
+            )}
+
+            {/* Chart Type */}
+            {showChartType && properties.chartType && properties.onChartTypeChange && (
+                <ChartTypeFormInputSelect
+                    value={properties.chartType}
+                    onChange={properties.onChartTypeChange}
+                    availableTypes={properties.availableChartTypes}
+                />
+            )}
+
+            {/* Sort Order */}
+            {showSortOrder && properties.sortOrder && properties.onSortOrderChange && (
+                <SortOrderToggle value={properties.sortOrder} onChange={properties.onSortOrderChange} />
+            )}
+
             {/* Time Range */}
             {showTimeRange && properties.timeRange && properties.onTimeRangeChange && (
                 <FormInputTimeRange
@@ -70,31 +93,6 @@ export function TimeSeriesControls(properties: TimeSeriesControlsProperties) {
                     showTimeRangePresets={true}
                 />
             )}
-
-            {/* Time Interval */}
-            <div className="flex flex-wrap items-center gap-2">
-                {showInterval && properties.timeInterval && properties.onTimeIntervalChange && (
-                    <TimeIntervalFormInputSelect
-                        value={properties.timeInterval}
-                        onChange={properties.onTimeIntervalChange}
-                        availableIntervals={properties.availableTimeIntervals}
-                    />
-                )}
-
-                {/* Chart Type */}
-                {showChartType && properties.chartType && properties.onChartTypeChange && (
-                    <ChartTypeFormInputSelect
-                        value={properties.chartType}
-                        onChange={properties.onChartTypeChange}
-                        availableTypes={properties.availableChartTypes}
-                    />
-                )}
-
-                {/* Sort Order */}
-                {showSortOrder && properties.sortOrder && properties.onSortOrderChange && (
-                    <SortOrderToggle value={properties.sortOrder} onChange={properties.onSortOrderChange} />
-                )}
-            </div>
 
             {properties.children}
         </div>

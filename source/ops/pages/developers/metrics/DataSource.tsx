@@ -49,6 +49,7 @@ export interface DataSourceProperties {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     dataSource: DataSourceType;
     containerReference: React.RefObject<HTMLDivElement | null>;
+    onDragEnd: () => void;
 }
 export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
     function DataSource(properties, reference) {
@@ -480,18 +481,32 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                 dragElastic={0.05}
                 initial={{
                     height: 0,
+                    opacity: 0,
                 }}
                 animate={{
                     height: 'auto',
+                    opacity: 1,
+                    scale: 1,
+                    x: 0,
+                    y: 0,
                 }}
                 exit={{
                     height: 0,
+                    opacity: 0,
                 }}
+                whileDrag={{
+                    scale: 1.1,
+                    zIndex: 50,
+                    cursor: 'grabbing',
+                }}
+                onDragEnd={properties.onDragEnd}
                 transition={{
                     type: 'spring',
-                    visualDuration: 0.2,
-                    bounce: 0,
+                    stiffness: 500,
+                    damping: 30,
                 }}
+                layout="position"
+                style={{ originX: 0, originY: 0 }}
                 className="relative overflow-y-clip"
             >
                 <div className="relative flex w-full items-center justify-start space-x-2 py-1">
