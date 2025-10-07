@@ -5,7 +5,7 @@ import React from 'react';
 import { useQueryState as useUrlQueryState, parseAsStringEnum, parseAsJson } from 'nuqs';
 
 // Dependencies - Types
-import { TimeInterval } from '../TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import { ChartType } from '../controls/ChartTypeFormInputSelect';
 import { SortOrderType } from '../controls/SortOrderToggle';

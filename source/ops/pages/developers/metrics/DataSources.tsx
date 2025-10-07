@@ -6,6 +6,7 @@ import { Options as NextUseQueryStateOptions } from 'nuqs';
 import { DataSourceType, DataSourceWithMetricsType } from './Metrics';
 import { DataSource } from './DataSource';
 
+// Dependencies - Types
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Supporting Components
@@ -15,13 +16,12 @@ import { Button } from '@structure/source/common/buttons/Button';
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - Animation
-
-// Dependencies - Utilities
-import { hexStringToRgbaString, getComplementaryHexColor } from '@structure/source/utilities/Color';
 import { AnimatePresence, Reorder } from 'motion/react';
 
+// Dependencies - Utilities
+import { getTimeSeriesColor } from '@structure/source/common/charts/time-series/utilities/TimeSeriesColors';
+
 // Component - DataSources
-// This component is responsible for fetching the data and passing it up to the higher level component
 export interface DataSourcesProperties {
     settings: {
         dataSources: DataSourceType[];
@@ -39,14 +39,13 @@ export interface DataSourcesProperties {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>; // Set the loading state
 }
 export function DataSources(properties: DataSourcesProperties) {
-    const datasourcesContainerReference = React.useRef<HTMLDivElement>(null);
+    const dataSourcesContainerReference = React.useRef<HTMLDivElement>(null);
 
     // Add a new data source
     const handleAddDataSource = async function () {
         const uniqueId = Math.random().toString(36).substring(7);
         const newIndex = properties.settings.dataSources.length;
-        const color = hexStringToRgbaString(getComplementaryHexColor(newIndex, '#00AAFF'), 1);
-        // console.log(uniqueId, newIndex, color);
+        const color = getTimeSeriesColor(newIndex);
 
         // Call the setDataSources function to add a new data source
         properties.setDataSources([
@@ -61,9 +60,6 @@ export function DataSources(properties: DataSourcesProperties) {
                 lineStyle: 'solid',
             },
         ]);
-
-        // Update the visual order
-        // visualOrderReference.current = [...visualOrderReference.current, newIndex];
     };
 
     const handleRemoveDataSource = (id: string) => {
@@ -81,9 +77,6 @@ export function DataSources(properties: DataSourcesProperties) {
 
             return oldData?.filter((configuration, id) => id !== configIndex);
         });
-
-        // Update the visual order
-        // visualOrderReference.current = Array.from(Array(visualOrderReference.current.length - 1).keys());
     };
 
     // Render the component
@@ -119,35 +112,33 @@ export function DataSources(properties: DataSourcesProperties) {
                     )}
 
                     {/* Data Sources (Rows) */}
-                    <div id="data-sources-container" ref={datasourcesContainerReference}>
+                    <div id="data-sources-container" ref={dataSourcesContainerReference}>
                         <Reorder.Group
                             values={properties.settings.dataSources}
                             onReorder={(values) => {
-                                console.log({ values });
-
                                 properties.setDataSources(values);
                             }}
                         >
                             <AnimatePresence mode="popLayout" initial={false} propagate>
-                                {properties.settings.dataSources.map((datasource, index) => {
+                                {properties.settings.dataSources.map((dataSource, index) => {
                                     return (
                                         <DataSource
-                                            key={datasource.id}
+                                            key={dataSource.id}
                                             settings={{
-                                                ...datasource,
+                                                ...dataSource,
                                                 startTime: properties.settings.startTime,
                                                 endTime: properties.settings.endTime,
                                                 timeInterval: properties.settings.timeInterval,
                                                 chartType: properties.settings.chartType,
                                             }}
-                                            datasource={datasource}
+                                            dataSource={dataSource}
                                             setDataSources={properties.setDataSources}
                                             setDataSourcesWithMetrics={properties.setDataSourcesWithMetrics}
                                             deleteDataSource={handleRemoveDataSource}
                                             isFirst={index === 0}
                                             error={properties.error}
                                             setLoading={properties.setLoading}
-                                            containerReference={datasourcesContainerReference}
+                                            containerReference={dataSourcesContainerReference}
                                         />
                                     );
                                 })}

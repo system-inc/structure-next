@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Types
 import { TimeSeriesDataPoint, TimeSeriesDataSource } from './TimeSeriesChart';
-import { TimeInterval } from './TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Styles
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';

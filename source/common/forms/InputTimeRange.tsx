@@ -289,9 +289,13 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                             modifiers={{
                                 single_day: function (date) {
                                     if(!value?.startTime || !value?.endTime) return false;
+                                    const startTime =
+                                        value.startTime instanceof Date ? value.startTime : new Date(value.startTime);
+                                    const endTime =
+                                        value.endTime instanceof Date ? value.endTime : new Date(value.endTime);
                                     return (
-                                        date.toDateString() === value.startTime.toDateString() &&
-                                        date.toDateString() === value.endTime.toDateString()
+                                        date.toDateString() === startTime.toDateString() &&
+                                        date.toDateString() === endTime.toDateString()
                                     );
                                 },
                             }}

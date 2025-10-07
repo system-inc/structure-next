@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Types
-import { TimeInterval } from '../TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 
 // Dependencies - Utilities

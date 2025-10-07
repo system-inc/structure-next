@@ -33,7 +33,8 @@ import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
 
 // Dependencies - Utilities
-import { TimeInterval, isSpecializedInterval } from './TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { isSpecializedInterval } from './utilities/TimeIntervalUtilities';
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
@@ -179,7 +180,20 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
             <ResponsiveContainer width="100%" height={chartHeight}>
                 <ComposedChart
                     data={properties.data}
-                    onMouseDown={referenceAreaSelection.handleMouseDown}
+                    onMouseDown={function (chartEvent, mouseEvent: React.SyntheticEvent) {
+                        const mouseEventTyped = mouseEvent as React.MouseEvent;
+
+                        // Set active label for both left and right clicks (needed for context menu)
+                        if(properties.onLabelClick && chartEvent && chartEvent.activeLabel) {
+                            properties.onLabelClick(chartEvent.activeLabel);
+                        }
+
+                        // Only handle left clicks for drag-to-zoom (button 0)
+                        if(mouseEventTyped.button === 0) {
+                            // Call the reference area selection handler for drag-to-zoom
+                            referenceAreaSelection.handleMouseDown(chartEvent);
+                        }
+                    }}
                     onMouseMove={referenceAreaSelection.handleMouseMove}
                     onMouseUp={referenceAreaSelection.handleMouseUp}
                     onMouseLeave={referenceAreaSelection.handleMouseUp}

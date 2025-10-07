@@ -180,6 +180,18 @@
                         "kind": "scalar",
                         "type": "String",
                         "required": true,
+                        "name": "databaseName"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "tableName"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
                         "name": "columnName"
                     },
                     {
@@ -198,30 +210,13 @@
                         "kind": "enum",
                         "type": "TimeInterval",
                         "required": true,
-                        "name": "timeIntervals",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "arrayNotEmpty"
-                            },
-                            {
-                                "type": "isArray"
-                            }
-                        ]
+                        "name": "timeInterval"
                     },
                     {
                         "kind": "scalar",
                         "type": "String",
-                        "required": true,
-                        "name": "tableName"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "databaseName"
+                        "required": false,
+                        "name": "timeZone"
                     }
                 ]
             },

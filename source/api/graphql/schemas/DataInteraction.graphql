@@ -61,7 +61,8 @@ input DataInteractionDatabaseTableMetricsQueryInput {
     endTime: DateTimeISO
     startTime: DateTimeISO
     tableName: String!
-    timeIntervals: [TimeInterval!]
+    timeInterval: TimeInterval!
+    timeZone: String
 }
 
 input DataInteractionDatabaseTableRowCreateInput {
@@ -206,7 +207,7 @@ type Query {
     dataInteractionDatabaseTable(databaseName: String!, tableName: String!): DatabaseTableMetadata!
     dataInteractionDatabaseTableMetrics(
         input: DataInteractionDatabaseTableMetricsQueryInput!
-    ): [DataInteractionDatabaseMetrics!]!
+    ): DataInteractionDatabaseMetrics!
     dataInteractionDatabaseTableRow(databaseName: String!, id: String!, tableName: String!): DatabaseTableRowData!
     dataInteractionDatabaseTableRows(
         databaseName: String!

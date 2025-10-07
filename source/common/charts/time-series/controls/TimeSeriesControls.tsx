@@ -13,7 +13,7 @@ import { ChartTypeFormInputSelect, ChartType } from './ChartTypeFormInputSelect'
 import { SortOrderToggle, SortOrderType } from './SortOrderToggle';
 
 // Dependencies - Types
-import { TimeInterval } from '../TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';

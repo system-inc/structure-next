@@ -3,16 +3,7 @@
 // Dependencies - Utilities
 import {
     // Adding and subtracting time
-    addHours,
-    // subHours,
-    addDays,
-    // subDays,
-    addWeeks,
     addMonths,
-    // subMonths,
-    addYears,
-    // subYears,
-    addMinutes,
 
     // Marking the start of a period
     startOfHour,
@@ -44,7 +35,7 @@ import {
     getWeek,
 } from 'date-fns';
 
-import { TimeInterval } from '@structure/source/common/charts/time-series/TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Fills in missing interval values with zeroes
 export function fillMissingIntervalValuesWithZeroes(
@@ -193,7 +184,7 @@ const generateCompleteIntervalList = (
 
             while(currentMinute <= endMinute) {
                 // Format as "YYYY-MM-DDTHH:MM:00"
-                const minuteString = currentMinute.toISOString().replace('T', ' ').substring(0, 16) + ':00';
+                const minuteString = currentMinute.toISOString().substring(0, 16) + ':00';
                 completeList.push(minuteString);
 
                 currentMinute.setMinutes(currentMinute.getMinutes() + 1);
@@ -406,32 +397,32 @@ export function calculateTimeIntervalValueStartAndEndDate(timeIntervalValue: str
 
     switch(timeInterval) {
         case TimeInterval.Minute:
-            startDate = new Date(timeIntervalValueDate);
-            endDate = addMinutes(startDate, 1);
+            startDate = startOfMinute(timeIntervalValueDate);
+            endDate = endOfMinute(timeIntervalValueDate);
             break;
         case TimeInterval.Hour:
-            startDate = new Date(timeIntervalValueDate);
-            endDate = addHours(startDate, 1);
+            startDate = startOfHour(timeIntervalValueDate);
+            endDate = endOfHour(timeIntervalValueDate);
             break;
         case TimeInterval.Day:
-            startDate = new Date(timeIntervalValueDate);
-            endDate = addDays(startDate, 1);
+            startDate = startOfDay(timeIntervalValueDate);
+            endDate = endOfDay(timeIntervalValueDate);
             break;
         case TimeInterval.Week:
-            startDate = new Date(timeIntervalValueDate);
-            endDate = addWeeks(startDate, 1);
+            startDate = startOfWeek(timeIntervalValueDate);
+            endDate = endOfWeek(timeIntervalValueDate);
             break;
         case TimeInterval.Month:
-            startDate = new Date(timeIntervalValueDate);
-            endDate = addMonths(startDate, 1);
+            startDate = startOfMonth(timeIntervalValueDate);
+            endDate = endOfMonth(timeIntervalValueDate);
             break;
         case TimeInterval.Quarter:
             startDate = new Date(timeIntervalValueDate);
-            endDate = addMonths(startDate, 3);
+            endDate = endOfMonth(addMonths(startDate, 3));
             break;
         case TimeInterval.Year:
-            startDate = new Date(timeIntervalValueDate);
-            endDate = addYears(startDate, 1);
+            startDate = startOfYear(timeIntervalValueDate);
+            endDate = endOfYear(timeIntervalValueDate);
             break;
         default:
             throw new Error('Invalid time interval for start and end date calculation.');

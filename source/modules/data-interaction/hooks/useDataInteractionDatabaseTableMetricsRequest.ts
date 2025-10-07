@@ -10,6 +10,9 @@ export function useDataInteractionDatabaseTableMetricsRequest(
     input: DataInteractionDatabaseTableMetricsQueryInput,
     options?: InferUseGraphQlQueryOptions<typeof DataInteractionDatabaseTableMetricsDocument>,
 ) {
+    // Get the user's timezone
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
     return networkService.useGraphQlQuery(
         gql(`
             query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
@@ -20,7 +23,10 @@ export function useDataInteractionDatabaseTableMetricsRequest(
             }
         `),
         {
-            input,
+            input: {
+                ...input,
+                timeZone,
+            },
         },
         options,
     );

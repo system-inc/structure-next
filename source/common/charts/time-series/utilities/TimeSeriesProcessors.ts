@@ -1,5 +1,5 @@
 // Dependencies - Types
-import { TimeInterval } from '../TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import {

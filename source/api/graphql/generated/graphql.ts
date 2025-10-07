@@ -410,7 +410,8 @@ export type DataInteractionDatabaseTableMetricsQueryInput = {
     endTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
     startTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
     tableName: Scalars['String']['input'];
-    timeIntervals?: InputMaybe<Array<TimeInterval>>;
+    timeInterval: TimeInterval;
+    timeZone?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DataInteractionDatabaseTableRowCreateInput = {
@@ -1384,7 +1385,7 @@ export type Query = {
     contactLists: ContactListResult;
     contactListsPrivileged: ContactListResult;
     dataInteractionDatabaseTable: DatabaseTableMetadata;
-    dataInteractionDatabaseTableMetrics: Array<DataInteractionDatabaseMetrics>;
+    dataInteractionDatabaseTableMetrics: DataInteractionDatabaseMetrics;
     dataInteractionDatabaseTableRow: DatabaseTableRowData;
     dataInteractionDatabaseTableRows: DatabaseTableMetadataWithRows;
     dataInteractionDatabaseTables: DatabaseTablesResult;
@@ -2211,11 +2212,11 @@ export type DataInteractionDatabaseTableMetricsQueryVariables = Exact<{
 
 export type DataInteractionDatabaseTableMetricsQuery = {
     __typename?: 'Query';
-    dataInteractionDatabaseTableMetrics: Array<{
+    dataInteractionDatabaseTableMetrics: {
         __typename?: 'DataInteractionDatabaseMetrics';
         timeInterval: TimeInterval;
         data: Array<any>;
-    }>;
+    };
 };
 
 export type DataInteractionDatabaseTableQueryVariables = Exact<{
@@ -4500,6 +4501,18 @@ export namespace GraphQLInputTypes {
         type: 'DataInteractionDatabaseTableMetricsQueryInput',
         fields: [
             {
+                name: 'databaseName',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'tableName',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
                 name: 'columnName',
                 kind: 'scalar',
                 type: 'String',
@@ -4518,33 +4531,16 @@ export namespace GraphQLInputTypes {
                 required: false,
             },
             {
-                name: 'timeIntervals',
+                name: 'timeInterval',
                 kind: 'enum',
                 type: GraphQLInputTypes.TimeInterval,
                 required: true,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'arrayNotEmpty',
-                    },
-                    {
-                        type: 'isArray',
-                    },
-                ],
             },
             {
-                name: 'tableName',
+                name: 'timeZone',
                 kind: 'scalar',
                 type: 'String',
-                required: true,
-            },
-            {
-                name: 'databaseName',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
+                required: false,
             },
         ],
     };

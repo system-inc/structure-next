@@ -10,8 +10,9 @@ import { DatabaseAndTableFormInputSelects } from '@structure/source/ops/pages/de
 import { Button } from '@structure/source/common/buttons/Button';
 import { Popover } from '@structure/source/common/popovers/Popover';
 import { Tip } from '@structure/source/common/popovers/Tip';
+import { TimeSeriesStatisticsDisplay } from '@structure/source/common/charts/time-series/components/TimeSeriesStatisticsDisplay';
 
-// Dependencies - API
+// Dependencies - Types
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Hooks
@@ -24,8 +25,9 @@ import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon
 
 // Dependencies - Utilities
 import { RgbColor, RgbColorPicker } from 'react-colorful';
-import { rgbStringToHexString, hexStringToRgb } from '@structure/source/utilities/Color';
+import { convertColorString, hexStringToRgb } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
+import { calculateStatistics } from '@structure/source/common/charts/time-series/utilities/TimeSeriesStatistics';
 import { Reorder, useDragControls } from 'motion/react';
 
 // Component - DataSource
@@ -45,7 +47,7 @@ export interface DataSourceProperties {
     isFirst?: boolean;
     error?: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    datasource: DataSourceType;
+    dataSource: DataSourceType;
     containerReference: React.RefObject<HTMLDivElement | null>;
 }
 export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
@@ -58,10 +60,25 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
         // Drag controller
         const dragControls = useDragControls();
 
-        // Parse the current color from props
+        // Parse the current color from props (handles both hex and rgba formats)
         const currentColor = React.useMemo(
             function () {
-                const matches = properties.settings.color.match(/\d+/g);
+                const color = properties.settings.color;
+
+                // If it's a hex color, convert to RGB
+                if(color.startsWith('#')) {
+                    const rgbColor = hexStringToRgb(color);
+                    if(rgbColor && rgbColor.length >= 3) {
+                        return {
+                            r: Number(rgbColor[0]),
+                            g: Number(rgbColor[1]),
+                            b: Number(rgbColor[2]),
+                        };
+                    }
+                }
+
+                // If it's an rgba color, extract the RGB values
+                const matches = color.match(/\d+/g);
                 if(matches && matches.length >= 3) {
                     return {
                         r: Number(matches[0]),
@@ -69,17 +86,17 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                         b: Number(matches[2]),
                     };
                 }
+
                 return { r: 0, g: 0, b: 0 };
             },
             [properties.settings.color],
         );
 
-        // Query the API for the available columns for the current table table
+        // Query the API for the available columns for the current table
         const dataInteractionDatabaseTableRequest = useDataInteractionDatabaseTableRequest(
             properties.settings.databaseName,
             properties.settings.tableName,
         );
-        // console.log('dataInteractionDatabaseTableQueryState', dataInteractionDatabaseTableQueryState);
 
         // Get the available columns for the table
         let availableColumns: string[] | undefined = undefined;
@@ -90,7 +107,6 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                 // Map to column names
                 .map((column) => column.name);
         }
-        // console.log('availableColumns', availableColumns);
 
         // Set the default column to measure to the searchParams column or "createdAt" if that exists in the availableColumns. Otherwise, default to the first available column
         const columnToMeasure =
@@ -100,7 +116,6 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             }) ??
             availableColumns?.at(0) ??
             '';
-        // console.log('columnToMeasure', columnToMeasure);
 
         // Function to set the column to measure
         function setColumnToMeasureOnDataSources(newColumnName: string) {
@@ -130,7 +145,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                 databaseName: properties.settings.databaseName as string,
                 tableName: properties.settings.tableName as string,
                 columnName: columnToMeasure,
-                timeIntervals: [properties.settings.timeInterval ?? TimeInterval.Day],
+                timeInterval: properties.settings.timeInterval ?? TimeInterval.Day,
                 startTime: properties.settings.startTime?.toISOString(),
                 endTime: properties.settings.endTime?.toISOString(),
             },
@@ -159,11 +174,10 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                     if(!data) return;
 
                     propertiesSetDataSourcesWithMetrics((oldData) => {
-                        if(!data.dataInteractionDatabaseTableMetrics[0])
+                        if(!data.dataInteractionDatabaseTableMetrics)
                             return oldData.filter((old) => old.id !== propertiesSettingsId);
 
                         // Find if the data already exists in the array
-                        // console.log(oldData, properties.queryConfig.id);
                         const index = oldData.findIndex((old) => old.id === propertiesSettingsId);
 
                         // If the data doesn't exist, add it to the array
@@ -178,7 +192,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                     color: properties.settings.color,
                                     yAxisAlignment: properties.settings.yAxisAlignment,
                                     lineStyle: properties.settings.lineStyle,
-                                    metrics: data.dataInteractionDatabaseTableMetrics[0],
+                                    metrics: data.dataInteractionDatabaseTableMetrics,
                                 },
                             ];
                         }
@@ -194,7 +208,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                     color: properties.settings.color,
                                     yAxisAlignment: properties.settings.yAxisAlignment,
                                     lineStyle: properties.settings.lineStyle,
-                                    metrics: data.dataInteractionDatabaseTableMetrics[0],
+                                    metrics: data.dataInteractionDatabaseTableMetrics,
                                 },
                                 ...oldData.slice(index + 1),
                             ];
@@ -438,162 +452,28 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             });
         }
 
-        interface Statistics {
-            count: number;
-            sum: number;
-            minimum: number;
-            maximum: number;
-            range: number;
-            average: number;
-            median: number;
-            mode: number;
-            standardDeviation: number;
-            standardDeviationMessage: string;
-            percentiles: Map<number, number>; // A map of percentile to value
-        }
+        // Calculate the statistics using the new utility
+        const statistics = React.useMemo(
+            function () {
+                const dataPoints =
+                    dataInteractionDatabaseTableMetricsRequest.data?.dataInteractionDatabaseTableMetrics?.data.map(
+                        function (d) {
+                            return d[1];
+                        },
+                    ) ?? [];
 
-        const calculateStatistics = (dataPoints: number[]): Statistics => {
-            // Sort the data points from smallest to largest
-            const sortedData = [...dataPoints].sort((a, b) => a - b);
-
-            // The count is the length of the sorted array
-            const count = sortedData.length;
-
-            // The sum is the sum of all the elements in the sorted array
-            const sum = sortedData.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
-
-            // The minimum is the first element in the sorted array
-            const minimum = sortedData[0] ?? 0;
-
-            // The maximum is the last element in the sorted array
-            const maximum = sortedData[sortedData.length - 1] ?? 0;
-
-            // The range is the difference between the maximum and minimum
-            const range = maximum - minimum;
-
-            // The average is the sum divided by the count, rounded to the first decimal place
-            const average = Math.round((sum / count) * 100) / 100;
-
-            // The median is the middle element of the sorted array
-            let median: number | 0;
-            // If the length of the sorted array is even, the median is the average of the two middle elements
-            if(sortedData.length % 2 === 0) {
-                const middleIndex1 = sortedData.length / 2 - 1;
-                const middleIndex2 = sortedData.length / 2;
-                const middle1 = sortedData[middleIndex1] ?? 0;
-                const middle2 = sortedData[middleIndex2] ?? 0;
-                median = middle1 !== null && middle2 !== null ? (middle1 + middle2) / 2 : 0;
-            }
-            // If the length of the sorted array is odd, the median is the middle element
-            else {
-                median = sortedData[Math.floor(sortedData.length / 2)] ?? 0;
-            }
-
-            // The mode is the most common element in the sorted array
-            let mode: number = 0;
-
-            // Initialize a Map to count occurrences
-            const frequencyMap = new Map<number, number>();
-            sortedData.forEach((number) => {
-                const count = frequencyMap.get(number) || 0;
-                frequencyMap.set(number, count + 1);
-            });
-
-            // Find the mode
-            let maxFrequency = 0;
-            frequencyMap.forEach((count, number) => {
-                if(count > maxFrequency) {
-                    maxFrequency = count;
-                    mode = number;
-                }
-            });
-
-            // Calculate the variance, which is the average of the squared differences from the mean
-            const variance =
-                dataPoints.reduce(
-                    (previousValue, currentValue) => previousValue + Math.pow(currentValue - average, 2),
-                    0,
-                ) / count;
-
-            // Calculate the standard deviation
-            const standardDeviation = Math.round(Math.sqrt(variance) * 100) / 100;
-
-            // Calculate the standard deviation message
-            let standardDeviationMessage = '';
-            const ratio = standardDeviation / average;
-            if(ratio < 0.05) {
-                standardDeviationMessage = 'High Precision, Minimal Spread';
-            }
-            else if(ratio < 0.2) {
-                standardDeviationMessage = 'Consistent Data, Limited Spread';
-            }
-            else if(ratio < 0.3) {
-                standardDeviationMessage = 'Balanced Spread, Moderate Variation';
-            }
-            else if(ratio < 0.5) {
-                standardDeviationMessage = 'Diverse Values, Noticeable Spread';
-            }
-            else {
-                standardDeviationMessage = 'Wide Range, High Variability';
-            }
-
-            // Function to calculate a specific percentile
-            const getPercentile = (sortedData: number[], p: number): number => {
-                if(sortedData.length === 0) return 0;
-
-                const position = (sortedData.length - 1) * p;
-                const base = Math.floor(position);
-                const rest = position - base;
-
-                const baseNumber = sortedData[base] as number;
-                if(base < sortedData.length - 1) {
-                    const nextValue = sortedData[base + 1] as number; // Asserting that the value is a number
-                    return Math.round(baseNumber + rest * (nextValue - baseNumber));
-                }
-                else {
-                    return Math.round(baseNumber);
-                }
-            };
-
-            // Calculate specific percentiles (e.g., 25th, 50th, 75th, 95th)
-            const percentiles = new Map<number, number>();
-            [0.05, 0.25, 0.5, 0.75, 0.95].forEach((percentage) => {
-                percentiles.set(percentage * 100, getPercentile(sortedData, percentage));
-            });
-
-            return {
-                count,
-                sum,
-                minimum,
-                maximum,
-                range,
-                median,
-                average,
-                mode,
-                standardDeviation,
-                standardDeviationMessage,
-                percentiles,
-            };
-        };
-
-        // Calculate the statistics
-        const statistics = calculateStatistics(
-            dataInteractionDatabaseTableMetricsRequest.data?.dataInteractionDatabaseTableMetrics[0]?.data.map(
-                function (d) {
-                    return d[1];
-                },
-            ) ?? [],
+                return calculateStatistics(dataPoints);
+            },
+            [dataInteractionDatabaseTableMetricsRequest.data],
         );
-
-        // console.log('availableColumns', availableColumns);
 
         // Render the component
         return (
             <Reorder.Item
                 ref={reference}
-                key={properties.datasource.id}
-                id={properties.datasource.id}
-                value={properties.datasource}
+                key={properties.dataSource.id}
+                id={properties.dataSource.id}
+                value={properties.dataSource}
                 dragListener={false}
                 dragControls={dragControls}
                 dragConstraints={properties.containerReference}
@@ -617,7 +497,6 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                 <div className="relative flex w-full items-center justify-start space-x-2 py-1">
                     {/* Drag Icon */}
                     <div
-                        // Drag controls automatically stop on pointer up.
                         onPointerDown={(event) => {
                             event.preventDefault();
                             dragControls.start(event);
@@ -668,8 +547,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                                     'color-' + properties.settings.id,
                                                 ) as HTMLInputElement;
                                                 if(input) {
-                                                    input.value = rgbStringToHexString(
+                                                    input.value = convertColorString(
                                                         `rgba(${color.r}, ${color.g}, ${color.b}, 1)`,
+                                                        'hex',
                                                     ).slice(1);
                                                 }
 
@@ -684,7 +564,10 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                             </span>
                                             <InputText
                                                 id={'color-' + properties.settings.id}
-                                                defaultValue={rgbStringToHexString(properties.settings.color).slice(1)}
+                                                defaultValue={convertColorString(
+                                                    properties.settings.color,
+                                                    'hex',
+                                                ).slice(1)}
                                                 onChange={function (value) {
                                                     handleHexColorChange('#' + value);
                                                 }}
@@ -729,7 +612,6 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                         id="column-name"
                         className="w-40"
                         componentClassName="w-40"
-                        // className="flex items-center space-x-2"
                         placeholder="Column"
                         items={
                             availableColumns?.map((column) => ({
@@ -753,8 +635,6 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                         id="y-axis-alignment"
                         className="w-28"
                         componentClassName="w-28"
-                        // className="flex items-center space-x-2 pr-20 md:pr-0"
-                        // label="Y Axis Alignment"
                         defaultValue={properties.settings.yAxisAlignment}
                         items={[
                             {
@@ -775,8 +655,6 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                             id="line-style"
                             className="w-28"
                             componentClassName="w-28"
-                            // className="flex items-center space-x-2 pr-20 md:pr-0"
-                            // label="Line Style"
                             items={[
                                 {
                                     value: 'solid',
@@ -801,66 +679,14 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                             onClick={handleDelete}
                         />
 
-                        {/* Tooltip Content */}
+                        {/* Tooltip Content with Statistics */}
                         <Tip
                             content={
-                                <div className="p-2">
-                                    {!dataInteractionDatabaseTableMetricsRequest.isLoading && (
-                                        <div>
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td className="">Count</td>
-                                                        <td className="pl-4">{statistics.count}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Sum</td>
-                                                        <td className="pl-4">{addCommas(statistics.sum)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Minimum</td>
-                                                        <td className="pl-4">{addCommas(statistics.minimum)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Maximum</td>
-                                                        <td className="pl-4">{addCommas(statistics.maximum)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Range</td>
-                                                        <td className="pl-4">{addCommas(statistics.range)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Average</td>
-                                                        <td className="pl-4">{addCommas(statistics.average)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Median</td>
-                                                        <td className="pl-4">{addCommas(statistics.median)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Mode</td>
-                                                        <td className="pl-4">{addCommas(statistics.mode)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="">Standard Deviation</td>
-                                                        <td className="pl-4">
-                                                            {addCommas(statistics.standardDeviation)} (
-                                                            {statistics.standardDeviationMessage})
-                                                        </td>
-                                                    </tr>
-                                                    {Array.from(statistics.percentiles.entries()).map(
-                                                        ([key, value]) => (
-                                                            <tr key={key}>
-                                                                <td className="">{key}th Percentile</td>
-                                                                <td className="pl-4">{addCommas(value ?? 0)}</td>
-                                                            </tr>
-                                                        ),
-                                                    )}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    )}
-                                </div>
+                                <TimeSeriesStatisticsDisplay
+                                    statistics={statistics}
+                                    isLoading={dataInteractionDatabaseTableMetricsRequest.isLoading}
+                                    className="p-2"
+                                />
                             }
                         >
                             <p className="relative cursor-default text-end text-dark/30 italic dark:text-light-4/50">

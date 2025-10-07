@@ -5,7 +5,7 @@ import React from 'react';
 import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
 
 // Dependencies - Types
-import { TimeInterval } from '../TimeInterval';
+import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { titleCase } from '@structure/source/utilities/String';
