@@ -9,8 +9,8 @@ import { Form, FormSubmitResponseInterface } from '@structure/source/common/form
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { gql, networkService } from '@structure/source/services/network/NetworkService';
 
 // Component - EmailVerificationVerifyForm
 export interface EmailVerificationVerifyFormProperties {
@@ -69,50 +69,36 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
 
     // State
     const [timeEmailSent, setTimeEmailSent] = React.useState<number>(Date.now());
-    const [timeAgoString, setTimeAgoString] = React.useState<string>('just now');
-    const [cooldownSecondsRemaining, setCooldownSecondsRemaining] = React.useState<number>(60);
+    const [timeAgoInSeconds, setTimeAgoInSeconds] = React.useState<number>(0);
 
-    // Effect to update the time ago and cooldown timer every second
+    // Effect to update the elapsed time every second
     React.useEffect(
         function () {
-            // Function to update the time ago and cooldown
-            const updateTimeAgo = function () {
-                // Calculate the time ago in seconds and minutes
-                const timeAgoInSeconds = Math.floor((Date.now() - timeEmailSent) / 1000);
-                const timeAgoInMinutes = Math.floor(timeAgoInSeconds / 60);
-
-                let timeAgoString = '';
-
-                // Less than 60 second ago
-                if(timeAgoInSeconds < 60) {
-                    timeAgoString = 'just now';
-                }
-                // More than 60 seconds ago
-                else {
-                    timeAgoString = `${timeAgoInMinutes} minute${timeAgoInMinutes === 1 ? '' : 's'} ago`;
-                }
-
-                // Set the time ago
-                setTimeAgoString(timeAgoString);
-
-                // Update cooldown timer (60 seconds cooldown)
-                const cooldownRemaining = Math.max(0, 60 - timeAgoInSeconds);
-                setCooldownSecondsRemaining(cooldownRemaining);
+            // Function to update elapsed time
+            const updateElapsedTime = function () {
+                setTimeAgoInSeconds(Math.floor((Date.now() - timeEmailSent) / 1000));
             };
 
             // Update immediately
-            updateTimeAgo();
+            updateElapsedTime();
 
-            // Set an interval to update the time ago every second
-            const updateTimeAgoInterval = setInterval(updateTimeAgo, 1000);
+            // Set an interval to update every second
+            const updateInterval = setInterval(updateElapsedTime, 1000);
 
             // Return the cleanup function
             return function () {
-                clearInterval(updateTimeAgoInterval);
+                clearInterval(updateInterval);
             };
         },
         [timeEmailSent],
     );
+
+    // Derive values from timeAgoInSeconds
+    const cooldownSecondsRemaining = Math.max(0, 60 - timeAgoInSeconds);
+    const timeAgoString =
+        timeAgoInSeconds < 60
+            ? 'just now'
+            : `${Math.floor(timeAgoInSeconds / 60)} minute${Math.floor(timeAgoInSeconds / 60) === 1 ? '' : 's'} ago`;
 
     // Render the component
     return (
