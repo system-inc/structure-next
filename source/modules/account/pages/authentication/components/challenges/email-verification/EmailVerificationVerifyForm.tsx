@@ -68,13 +68,14 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
     );
 
     // State
-    const [timeEmailSent] = React.useState<number>(Date.now());
+    const [timeEmailSent, setTimeEmailSent] = React.useState<number>(Date.now());
     const [timeAgoString, setTimeAgoString] = React.useState<string>('just now');
+    const [cooldownSecondsRemaining, setCooldownSecondsRemaining] = React.useState<number>(60);
 
-    // Effect to update the time ago every minute
+    // Effect to update the time ago and cooldown timer every second
     React.useEffect(
         function () {
-            // Function to update the time ago
+            // Function to update the time ago and cooldown
             const updateTimeAgo = function () {
                 // Calculate the time ago in seconds and minutes
                 const timeAgoInSeconds = Math.floor((Date.now() - timeEmailSent) / 1000);
@@ -93,7 +94,14 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
 
                 // Set the time ago
                 setTimeAgoString(timeAgoString);
+
+                // Update cooldown timer (60 seconds cooldown)
+                const cooldownRemaining = Math.max(0, 60 - timeAgoInSeconds);
+                setCooldownSecondsRemaining(cooldownRemaining);
             };
+
+            // Update immediately
+            updateTimeAgo();
 
             // Set an interval to update the time ago every second
             const updateTimeAgoInterval = setInterval(updateTimeAgo, 1000);
@@ -181,11 +189,18 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
                 <Button
                     variant="ghost"
                     loading={accountAuthenticationEmailVerificationSendRequest.isLoading}
-                    onClick={function () {
-                        accountAuthenticationEmailVerificationSendRequest.execute();
+                    disabled={cooldownSecondsRemaining > 0}
+                    onClick={async function () {
+                        // Execute the resend request
+                        await accountAuthenticationEmailVerificationSendRequest.execute();
+
+                        // Reset the cooldown timer
+                        setTimeEmailSent(Date.now());
                     }}
                 >
-                    Resend Verification Code
+                    {cooldownSecondsRemaining > 0
+                        ? `Resend Code (${cooldownSecondsRemaining}s)`
+                        : 'Resend Verification Code'}
                 </Button>
             </div>
         </div>
