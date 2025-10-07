@@ -67,7 +67,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
             itemIndex: 0,
             orderBy: [
                 {
-                    key: 'loggedAt',
+                    key: 'createdAt',
                     direction: OrderByDirection.Descending,
                 },
             ],
