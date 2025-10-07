@@ -96,17 +96,17 @@ export function Metrics() {
     // Use the zoom behavior hook for intelligent range selection
     const zoomBehavior = useZoomBehavior({
         currentTimeRange: timeSeriesState.timeRange,
-        currentTimeInterval: timeSeriesState.interval,
+        currentTimeInterval: timeSeriesState.timeInterval,
         onTimeRangeChange: timeSeriesState.setTimeRange,
-        onTimeIntervalChange: timeSeriesState.setInterval,
+        onTimeIntervalChange: timeSeriesState.setTimeInterval,
     });
 
     // Use the zoom controls hook for button-driven zoom in/out
     const zoomControls = useZoomControls({
         currentTimeRange: timeSeriesState.timeRange,
-        currentTimeInterval: timeSeriesState.interval,
+        currentTimeInterval: timeSeriesState.timeInterval,
         onTimeRangeChange: timeSeriesState.setTimeRange,
-        onTimeIntervalChange: timeSeriesState.setInterval,
+        onTimeIntervalChange: timeSeriesState.setTimeInterval,
     });
 
     // Memoize the chart error message
@@ -155,8 +155,8 @@ export function Metrics() {
                     // Normalize hour and minute format: server returns "2025-10-01 20:00:00" but we need "2025-10-01T20:00:00"
                     let normalizedTimeIntervalValue = timeIntervalValue;
                     if(
-                        (timeSeriesState.interval === TimeInterval.Hour ||
-                            timeSeriesState.interval === TimeInterval.Minute) &&
+                        (timeSeriesState.timeInterval === TimeInterval.Hour ||
+                            timeSeriesState.timeInterval === TimeInterval.Minute) &&
                         typeof timeIntervalValue === 'string'
                     ) {
                         normalizedTimeIntervalValue = timeIntervalValue.replace(' ', 'T');
@@ -175,7 +175,7 @@ export function Metrics() {
                     rawData,
                     startTime,
                     endTime,
-                    timeSeriesState.interval,
+                    timeSeriesState.timeInterval,
                 );
 
                 return {
@@ -191,7 +191,7 @@ export function Metrics() {
             dataSourcesWithMetrics,
             timeSeriesState.timeRange.startTime,
             timeSeriesState.timeRange.endTime,
-            timeSeriesState.interval,
+            timeSeriesState.timeInterval,
         ],
     );
 
@@ -220,7 +220,7 @@ export function Metrics() {
             if(chartActiveLabel) {
                 const timeIntervalValueStartAndEndDate = calculateTimeIntervalValueStartAndEndDate(
                     chartActiveLabel,
-                    timeSeriesState.interval,
+                    timeSeriesState.timeInterval,
                 );
 
                 const dataSourceMenuItems = dataSources.map(function (dataSource) {
@@ -261,7 +261,7 @@ export function Metrics() {
 
             return items;
         },
-        [chartActiveLabel, dataSources, timeSeriesState.interval],
+        [chartActiveLabel, dataSources, timeSeriesState.timeInterval],
     );
 
     // Render the component
@@ -274,8 +274,8 @@ export function Metrics() {
                     <TimeSeriesControls
                         timeRange={timeSeriesState.timeRange}
                         onTimeRangeChange={timeSeriesState.setTimeRange}
-                        timeInterval={timeSeriesState.interval}
-                        onTimeIntervalChange={timeSeriesState.setInterval}
+                        timeInterval={timeSeriesState.timeInterval}
+                        onTimeIntervalChange={timeSeriesState.setTimeInterval}
                         chartType={timeSeriesState.chartType}
                         onChartTypeChange={timeSeriesState.setChartType}
                         sortOrder={timeSeriesState.sortOrder}
@@ -368,7 +368,7 @@ export function Metrics() {
                         data={chartData}
                         dataSources={timeSeriesDataSources}
                         chartType={timeSeriesState.chartType}
-                        timeInterval={timeSeriesState.interval}
+                        timeInterval={timeSeriesState.timeInterval}
                         height={384}
                         showGrid={true}
                         showXAxis={true}
@@ -389,7 +389,7 @@ export function Metrics() {
             <DataSources
                 key={dataSources[0]?.id}
                 settings={{
-                    timeInterval: timeSeriesState.interval,
+                    timeInterval: timeSeriesState.timeInterval,
                     dataSources: dataSources,
                     endTime: timeSeriesState.timeRange.endTime
                         ? new Date(timeSeriesState.timeRange.endTime)

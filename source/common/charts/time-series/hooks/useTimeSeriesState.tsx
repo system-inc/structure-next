@@ -26,8 +26,8 @@ export interface TimeSeriesStateOptions {
 export interface TimeSeriesState {
     timeRange: TimeRangeType;
     setTimeRange: (value: TimeRangeType) => void;
-    interval: TimeInterval;
-    setInterval: (value: TimeInterval) => void;
+    timeInterval: TimeInterval;
+    setTimeInterval: (value: TimeInterval) => void;
     chartType: ChartType;
     setChartType: (value: ChartType) => void;
     sortOrder: SortOrderType;
@@ -119,8 +119,8 @@ export function useTimeSeriesState(options?: TimeSeriesStateOptions): TimeSeries
         setTimeRange: function (value: TimeRangeType) {
             setTimeRange(value);
         },
-        interval: timeInterval,
-        setInterval: setTimeInterval,
+        timeInterval: timeInterval,
+        setTimeInterval: setTimeInterval,
         chartType,
         setChartType,
         sortOrder,
