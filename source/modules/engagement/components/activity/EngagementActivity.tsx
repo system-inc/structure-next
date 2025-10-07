@@ -187,11 +187,9 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                     allVisitorEvents = Array.from(eventMap.values());
                 }
 
-                // Sort events by time (newest first)
+                // Sort events by time (newest first) using createdAt to avoid client clock skew
                 allVisitorEvents.sort(function (a, b) {
-                    const timeA = a.loggedAt || a.createdAt;
-                    const timeB = b.loggedAt || b.createdAt;
-                    return timeB.localeCompare(timeA);
+                    return b.createdAt.localeCompare(a.createdAt);
                 });
 
                 const mostRecentEvent = allVisitorEvents[0]!;
@@ -210,8 +208,8 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                     currentPage: mostRecentEvent.viewIdentifier || '/',
                     pageCount: allVisitorEvents.length,
                     events: allVisitorEvents,
-                    lastActivityTime: mostRecentEvent.loggedAt || mostRecentEvent.createdAt,
-                    sessionStart: oldestEvent.visitStartAt || oldestEvent.createdAt,
+                    lastActivityTime: mostRecentEvent.createdAt,
+                    sessionStart: oldestEvent.createdAt, // Use createdAt to avoid client clock skew
                     location: location,
                     device: device,
                     referrer: oldestEvent.referrer,
@@ -257,14 +255,18 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
             const now = new Date();
             const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
 
-            return Array.from(visitorActivities.values())
-                .filter(function (visitor) {
-                    const lastActivity = parseUtcDateString(visitor.lastActivityTime);
-                    return lastActivity >= thirtyMinutesAgo;
-                })
-                .sort(function (a, b) {
-                    return b.lastActivityTime.localeCompare(a.lastActivityTime);
-                });
+            const filtered = Array.from(visitorActivities.values()).filter(function (visitor) {
+                // Using createdAt (server timestamp) instead of loggedAt (client timestamp)
+                // to avoid issues with client clock skew
+                const lastActivity = parseUtcDateString(visitor.lastActivityTime);
+                return lastActivity >= thirtyMinutesAgo;
+            });
+
+            const sorted = filtered.sort(function (a, b) {
+                return b.lastActivityTime.localeCompare(a.lastActivityTime);
+            });
+
+            return sorted;
         },
 
         [visitorActivities, dataInteractionDatabaseTableRowsRequest.data],

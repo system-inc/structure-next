@@ -57,6 +57,17 @@ export interface EngagementActivityCardProperties {
 export function EngagementActivityCard(properties: EngagementActivityCardProperties) {
     // State
     const [isExpanded, setIsExpanded] = React.useState(false);
+    const [currentTime, setCurrentTime] = React.useState(new Date());
+
+    // Effects - Update current time every second for live duration updates
+    React.useEffect(function () {
+        const interval = setInterval(function () {
+            setCurrentTime(new Date());
+        }, 5000);
+        return function () {
+            clearInterval(interval);
+        };
+    }, []);
 
     // Extract data from visitor activity
     const platformIconType = getPlatformIconType(properties.visitorActivity.device?.operatingSystem);
@@ -67,9 +78,11 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
     const referrerIconType = getReferrerIconType(properties.visitorActivity.referrer);
     const referrerName = getReferrerName(properties.visitorActivity.referrer);
     const currentPath = truncatePath(properties.visitorActivity.currentPage);
+    // Calculate session duration from first event to now (not first to last event)
+    // Uses currentTime state that updates every second for live ticking
     const sessionDuration = calculateSessionDuration(
         properties.visitorActivity.sessionStart,
-        properties.visitorActivity.lastActivityTime,
+        currentTime.toISOString(),
     );
 
     // Get entrance page from oldest event
@@ -161,6 +174,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
     // Render the component
     return (
         <motion.div
+            layout
             layoutId={properties.visitorId}
             initial={properties.isNew ? { opacity: 0, y: -20, scale: 0.95 } : false}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -218,7 +232,8 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                 <div className="pr-0">
                                     {properties.visitorActivity.events.map(function (event) {
                                         const path = truncatePath(event.viewIdentifier);
-                                        const eventTime = formatTimeAgo(event.loggedAt || event.createdAt);
+                                        // Use createdAt (server timestamp) instead of loggedAt (client timestamp with potential clock skew)
+                                        const eventTime = formatTimeAgo(event.createdAt);
                                         const isAddToCart = event.name === 'AddToCart';
 
                                         return (
