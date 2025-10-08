@@ -1,12 +1,10 @@
 // Dependencies - Project
 import { ProjectSettings } from '@project/ProjectSettings';
 
-// Dependencies - Services
-import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
-
 // Constants
-const deviceIdUpdatedAtLocalStorageKey = 'DeviceIdUpdatedAt';
-const sixMonthsInMilliseconds = 6 * 30 * 24 * 60 * 60 * 1000;
+const deviceIdLockName = 'device-id-check';
+const deviceIdSessionCookieName = 'deviceIdChecked';
+const oneDayInMilliseconds = 24 * 60 * 60 * 1000; // 24 hour
 
 // Retry configuration - Gmail-style infinite retry with backoff
 const deviceIdRequestRetryConfiguration = {
@@ -67,26 +65,74 @@ export class NetworkServiceDeviceId {
         this.deviceIdPromise = null;
     }
 
-    // Function to get the last updated timestamp from localStorage
-    private getLastUpdated(): number | null {
-        return localStorageService.get<number>(deviceIdUpdatedAtLocalStorageKey);
+    // Function to check if the session cookie exists and is fresh (within 24 hours)
+    private hasDeviceIdSessionCookie(): boolean {
+        const cookies = document.cookie.split(';');
+        const deviceIdCookie = cookies.find((cookie) => cookie.trim().startsWith(`${deviceIdSessionCookieName}=`));
+
+        if(!deviceIdCookie) {
+            return false;
+        }
+
+        const cookieValue = deviceIdCookie.split('=')[1];
+        if(!cookieValue) {
+            return false;
+        }
+
+        const timestamp = parseInt(cookieValue, 10);
+        const now = Date.now();
+
+        // Check if the timestamp is valid and within the last 24 hours
+        return !isNaN(timestamp) && now - timestamp < oneDayInMilliseconds;
     }
 
-    // Function to set the last updated timestamp in localStorage
-    private setLastUpdated(timestamp: number): void {
-        localStorageService.set<number>(deviceIdUpdatedAtLocalStorageKey, timestamp);
+    // Function to set the session cookie with current timestamp
+    private setDeviceIdSessionCookie(): void {
+        const timestamp = Date.now();
+        // Session cookie (no expires/max-age = session-only, cleared when browser closes)
+        document.cookie = `${deviceIdSessionCookieName}=${timestamp}; path=/; SameSite=Lax`;
     }
 
     // Function to check if device ID is valid and request a new one if needed
     private async checkAndRequestDeviceId(): Promise<void> {
-        const lastUpdated = this.getLastUpdated();
-        const sixMonthsAgo = Date.now() - sixMonthsInMilliseconds;
-
-        if(lastUpdated && lastUpdated > sixMonthsAgo) {
-            // Valid deviceId exists
+        // Tab-local check
+        if(this.deviceIdChecked) {
             return;
         }
 
+        // Check if Web Locks API is available for cross-tab coordination
+        if('locks' in navigator) {
+            // Acquire lock (blocking - wait our turn)
+            await navigator.locks.request(deviceIdLockName, async () => {
+                // Check session cookie: did another tab already do this?
+                if(this.hasDeviceIdSessionCookie()) {
+                    // Another tab already did it, we're good
+                    console.log('Device session already exists.');
+                }
+                else {
+                    // We need to do it
+                    await this.performDeviceIdCheck();
+                    this.setDeviceIdSessionCookie();
+                }
+                this.deviceIdChecked = true;
+            });
+        }
+        else {
+            // Fallback without Web Locks: check session cookie directly
+            if(this.hasDeviceIdSessionCookie()) {
+                this.deviceIdChecked = true;
+                console.log('Device session already exists.');
+            }
+            else {
+                await this.performDeviceIdCheck();
+                this.setDeviceIdSessionCookie();
+                this.deviceIdChecked = true;
+            }
+        }
+    }
+
+    // Function to perform the actual device ID check
+    private async performDeviceIdCheck(): Promise<void> {
         // Build the deviceId endpoint URL
         const deviceIdUrl = ProjectSettings.apis?.base
             ? `https://${ProjectSettings.apis.base.host}/deviceId`
@@ -103,10 +149,11 @@ export class NetworkServiceDeviceId {
             });
 
             if(!response.ok) {
-                throw new Error(`DeviceId fetch failed with status: ${response.status}`);
+                throw new Error(`Device session failed with status: ${response.status}`);
             }
 
-            this.setLastUpdated(Date.now());
+            // Successfully obtained deviceId
+            console.log('Device session started successfully.');
         });
     }
 
@@ -114,37 +161,6 @@ export class NetworkServiceDeviceId {
     stopRetrying(): void {
         this.deviceIdPromise = null;
         this.deviceIdChecked = false;
-    }
-
-    // Function to get the status of the device ID
-    getStatus(): {
-        isValid: boolean;
-        lastUpdated: Date | null;
-        expiresAt: Date | null;
-        daysUntilExpiration: number | null;
-    } {
-        const lastUpdated = this.getLastUpdated();
-
-        if(!lastUpdated) {
-            return {
-                isValid: false,
-                lastUpdated: null,
-                expiresAt: null,
-                daysUntilExpiration: null,
-            };
-        }
-
-        const lastUpdatedDate = new Date(lastUpdated);
-        const expiresAt = new Date(lastUpdated + sixMonthsInMilliseconds);
-        const now = Date.now();
-        const daysUntilExpiration = Math.floor((expiresAt.getTime() - now) / (1000 * 60 * 60 * 24));
-
-        return {
-            isValid: now < expiresAt.getTime(),
-            lastUpdated: lastUpdatedDate,
-            expiresAt,
-            daysUntilExpiration: daysUntilExpiration > 0 ? daysUntilExpiration : 0,
-        };
     }
 
     // Function to retry a function with exponential backoff
@@ -183,7 +199,7 @@ export class NetworkServiceDeviceId {
             // Log retry attempt for debugging
             const isInSteadyState = attemptNumber >= deviceIdRequestRetryConfiguration.exponentialBackoffAttempts;
             console.warn(
-                `DeviceId fetch attempt ${nextAttempt} failed${isInSteadyState ? ' (steady state)' : ''}, ` +
+                `Device session fetch attempt ${nextAttempt} failed${isInSteadyState ? ' (steady state)' : ''}, ` +
                     `retrying in ${Math.round(delay)}ms:`,
                 error instanceof Error ? error.message : error,
             );
