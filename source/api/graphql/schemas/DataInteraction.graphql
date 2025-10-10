@@ -58,7 +58,9 @@ input DataInteractionDatabaseRelationInput {
 input DataInteractionDatabaseTableMetricsQueryInput {
     columnName: String!
     databaseName: String!
+    distinctColumnName: String
     endTime: DateTimeISO
+    filters: ColumnFilterGroupInput
     startTime: DateTimeISO
     tableName: String!
     timeInterval: TimeInterval!

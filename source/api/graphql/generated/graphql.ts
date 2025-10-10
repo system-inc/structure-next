@@ -407,7 +407,9 @@ export type DataInteractionDatabaseRelationInput = {
 export type DataInteractionDatabaseTableMetricsQueryInput = {
     columnName: Scalars['String']['input'];
     databaseName: Scalars['String']['input'];
+    distinctColumnName?: InputMaybe<Scalars['String']['input']>;
     endTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
+    filters?: InputMaybe<ColumnFilterGroupInput>;
     startTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
     tableName: Scalars['String']['input'];
     timeInterval: TimeInterval;
@@ -4538,6 +4540,18 @@ export namespace GraphQLInputTypes {
             },
             {
                 name: 'timeZone',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+            {
+                name: 'filters',
+                kind: 'object',
+                type: GraphQLInputTypes.ColumnFilterGroupInput,
+                required: false,
+            },
+            {
+                name: 'distinctColumnName',
                 kind: 'scalar',
                 type: 'String',
                 required: false,
