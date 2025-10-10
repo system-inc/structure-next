@@ -215,7 +215,14 @@ export function Metrics() {
             });
 
             // Merge all data series into a single dataset
-            return mergeTimeSeriesData(dataSeries);
+            const mergedData = mergeTimeSeriesData(dataSeries);
+
+            // Reverse the data if sort order is Descending
+            if(timeSeriesState.sortOrder === 'Descending') {
+                return [...mergedData].reverse();
+            }
+
+            return mergedData;
         },
         [
             dataSourcesWithMetrics,
@@ -223,6 +230,7 @@ export function Metrics() {
             timeSeriesState.timeRange.startTime,
             timeSeriesState.timeRange.endTime,
             timeSeriesState.timeInterval,
+            timeSeriesState.sortOrder,
         ],
     );
 
