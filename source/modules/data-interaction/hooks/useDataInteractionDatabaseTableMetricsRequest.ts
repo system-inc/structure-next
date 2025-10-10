@@ -28,6 +28,12 @@ export function useDataInteractionDatabaseTableMetricsRequest(
                 timeZone,
             },
         },
-        options,
+        {
+            ...options,
+            metadata: {
+                ...options?.metadata,
+                category: 'Metrics',
+            },
+        },
     );
 }

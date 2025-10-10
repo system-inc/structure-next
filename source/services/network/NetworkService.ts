@@ -724,21 +724,41 @@ export class NetworkService {
         });
     }
 
-    async refreshAllRequests(): Promise<void> {
-        return this.tanStackReactQueryClient.refetchQueries();
-    }
-
     async refreshRequests(filters?: {
-        type?: 'active' | 'inactive' | 'all';
+        type?: 'Active' | 'Inactive' | 'All';
+        metadata?: Record<string, unknown>;
+        queryKey?: CacheKey;
         exact?: boolean;
         predicate?: (query: Query) => boolean;
-        queryKey?: CacheKey;
     }): Promise<void> {
-        return this.tanStackReactQueryClient.refetchQueries(filters);
-    }
+        // Convert PascalCase type to lowercase for TanStack Query
+        const tanStackFilters = filters
+            ? {
+                  ...filters,
+                  type: filters.type?.toLowerCase() as 'active' | 'inactive' | 'all' | undefined,
+              }
+            : undefined;
 
-    async refreshActiveRequests(): Promise<void> {
-        return this.refreshRequests({ type: 'active' });
+        // If metadata filter provided, convert to predicate
+        if(filters?.metadata) {
+            const metadataFilter = filters.metadata;
+            return this.tanStackReactQueryClient.refetchQueries({
+                ...tanStackFilters,
+                predicate: function (query) {
+                    const queryMetadata = query.meta as Record<string, unknown> | undefined;
+                    if(!queryMetadata) return false;
+
+                    // Check if all key-value pairs in metadataFilter match the query's metadata
+                    return Object.entries(metadataFilter).every(function ([key, value]) {
+                        return queryMetadata[key] === value;
+                    });
+                },
+            });
+        }
+        // Otherwise use filters as-is
+        else {
+            return this.tanStackReactQueryClient.refetchQueries(tanStackFilters);
+        }
     }
 
     // Function to clear persisted cache from storage

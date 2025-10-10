@@ -371,7 +371,7 @@ export function Metrics() {
                     <RefreshButton
                         size={'formInputIcon'}
                         onClick={async () => {
-                            await networkService.refreshActiveRequests();
+                            await networkService.refreshRequests({ metadata: { category: 'Metrics' } });
                         }}
                     />
 
