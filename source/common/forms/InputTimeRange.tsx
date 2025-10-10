@@ -57,6 +57,12 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
         addMonths(value?.endTime ?? startOfToday(), -1),
     ); // Defaults to the previous month (for the first calendar on the left)
     const [activeTimeRangePresetKey, setActiveTimeRangePresetKey] = React.useState('Last 28 Days');
+    const [isMounted, setIsMounted] = React.useState<boolean>(false);
+
+    // Set mounted state on client only (prevents hydration mismatch for date formatting)
+    React.useEffect(function () {
+        setIsMounted(true);
+    }, []);
 
     // Defaults
     const placeholder = properties.placeholder || 'Time Range';
@@ -233,7 +239,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                 {/* Date Display */}
                                 <div className="flex py-1 font-medium">
                                     {/* Buttons to control navigating forward and backwards through months */}
-                                    {value?.startTime && value?.endTime && (
+                                    {isMounted && value?.startTime && value?.endTime && (
                                         <>
                                             {value?.startTime && (
                                                 <button
@@ -330,7 +336,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                 onBlur={onBlurIntercept}
             >
                 {/* Display the selected date range or "Pick a date" if no date is selected */}
-                {value?.startTime ? (
+                {isMounted && value?.startTime ? (
                     value.endTime ? (
                         <>
                             {format(value.startTime, 'LLL d, y')} - {format(value.endTime, 'LLL d, y')}
