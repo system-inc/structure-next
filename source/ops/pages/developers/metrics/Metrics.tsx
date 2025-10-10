@@ -13,7 +13,7 @@ import { DataSources } from './DataSources';
 // Dependencies - Supporting Components
 import { Button } from '@structure/source/common/buttons/Button';
 import { RefreshButton } from '@structure/source/common/buttons/RefreshButton';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
+import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
 import { ContextMenu } from '@structure/source/common/menus/ContextMenu';
 import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 
@@ -21,6 +21,7 @@ import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
 import { useTimeSeriesState } from '@structure/source/common/charts/time-series/hooks/useTimeSeriesState';
 import { useZoomBehavior } from '@structure/source/common/charts/time-series/hooks/useZoomBehavior';
 import { useZoomControls } from '@structure/source/common/charts/time-series/hooks/useZoomControls';
+import { useMetricsExportMenu } from './hooks/useMetricsExportMenu';
 
 // Dependencies - API
 import { networkService } from '@structure/source/services/network/NetworkService';
@@ -262,6 +263,15 @@ export function Metrics() {
         [dataSourcesWithMetrics, dataSources],
     );
 
+    // Create the export menu items using the custom hook
+    const metricsExportMenu = useMetricsExportMenu(
+        chartData,
+        dataSourcesWithMetrics,
+        timeSeriesState.timeInterval,
+        timeSeriesState.timeRange.startTime,
+        timeSeriesState.timeRange.endTime,
+    );
+
     // Create the context menu items
     const contextMenuItems: MenuItemProperties[] = React.useMemo(
         function () {
@@ -351,11 +361,11 @@ export function Metrics() {
                     </Button>
 
                     {/* Export Icon */}
-                    <Dialog header="Export" content="Feature coming soon!" footerCloseButton={true}>
+                    <PopoverMenu items={metricsExportMenu} closeOnItemSelected={true}>
                         <Button size={'formInputIcon'} className="group relative aspect-square px-2" tip="Export">
                             <ExportIcon size={20} />
                         </Button>
-                    </Dialog>
+                    </PopoverMenu>
 
                     {/* Refresh Button */}
                     <RefreshButton

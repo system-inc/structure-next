@@ -2,6 +2,9 @@
 import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
 
+// Dependencies - Utilities
+import { downloadFile } from '@structure/source/utilities/File';
+
 // Copy as JSON Action
 export const copyAsJsonAction = {
     action: 'Copy as JSON',
@@ -156,17 +159,6 @@ function convertRowsIntoCsv(
     return csv;
 }
 
-// Function to download a file
-function downloadFile(fileName: string, content: string, contentType: string) {
-    const blob = new Blob([content], { type: contentType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(url);
-}
-
 // Function to copy rows as JSON to clipboard
 export async function copyRowsAsJsonToClipboard(rows: TableRowProperties[], columns: TableColumnProperties[]) {
     const json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
@@ -188,7 +180,11 @@ export async function copyRowsAsJsonToClipboardVisibleColumns(
 export async function exportRowsAsJsonFile(rows: TableRowProperties[], columns: TableColumnProperties[]) {
     const json = JSON.stringify(convertRowsIntoObject(rows, columns), null, 4);
     console.log('json', json);
-    downloadFile('rows.json', json, 'application/json');
+    downloadFile({
+        fileName: 'rows.json',
+        content: json,
+        contentType: 'application/json',
+    });
 }
 
 // Function to export rows as JSON file (visible columns only)
@@ -198,7 +194,11 @@ export async function exportRowsAsJsonFileVisibleColumnsOnly(
 ) {
     const json = JSON.stringify(convertRowsIntoObject(rows, columns, true), null, 4);
     console.log('json', json);
-    downloadFile('rows.json', json, 'application/json');
+    downloadFile({
+        fileName: 'rows.json',
+        content: json,
+        contentType: 'application/json',
+    });
 }
 
 // Function to copy rows as CSV to clipboard
@@ -222,7 +222,11 @@ export async function copyRowsAsCsvToClipboardVisibleColumns(
 export async function exportRowsAsCsvFile(rows: TableRowProperties[], columns: TableColumnProperties[]) {
     const csv = convertRowsIntoCsv(rows, columns);
     console.log('csv', csv);
-    downloadFile('rows.csv', csv, 'text/csv');
+    downloadFile({
+        fileName: 'rows.csv',
+        content: csv,
+        contentType: 'text/csv',
+    });
 }
 
 // Function to export rows as CSV file (visible columns only)
@@ -232,5 +236,9 @@ export async function exportRowsAsCsvFileVisibleColumnsOnly(
 ) {
     const csv = convertRowsIntoCsv(rows, columns, true);
     console.log('csv', csv);
-    downloadFile('rows.csv', csv, 'text/csv');
+    downloadFile({
+        fileName: 'rows.csv',
+        content: csv,
+        contentType: 'text/csv',
+    });
 }

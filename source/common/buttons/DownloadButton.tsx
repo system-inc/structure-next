@@ -12,6 +12,7 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { downloadFile } from '@structure/source/utilities/File';
 
 // Interface - DownloadButtonInterface
 export interface DownloadButtonInterface extends Omit<ButtonProperties, 'type'> {
@@ -43,32 +44,24 @@ export function DownloadButton(properties: DownloadButtonProperties) {
 
     // Function to initiate the download
     const onDownload = function () {
-        // Create a temporary link element
-        const link = document.createElement('a');
-
-        if(properties.type === 'data') {
-            // Create a Blob URL from the data
-            const blobUrl = URL.createObjectURL(new Blob([properties.data], { type: 'application/octet-stream' }));
-            link.href = blobUrl;
-        }
-        else if(properties.type === 'url') {
-            // Set the URL as the href attribute
-            link.href = properties.url;
-        }
-
-        // Set the download attribute with the filename and extension
-        link.download = `${properties.fileName || 'download'}${
+        // Build the filename
+        const fileName = `${properties.fileName || 'download'}${
             properties.fileExtension ? `.${properties.fileExtension}` : '.txt'
         }`;
 
-        // Append the link to the document body and click it
-        document.body.appendChild(link);
-        link.click();
-
-        // Remove the link from the document body and revoke the Blob URL if necessary
-        document.body.removeChild(link);
+        // Use the downloadFile utility
         if(properties.type === 'data') {
-            URL.revokeObjectURL(link.href);
+            downloadFile({
+                fileName: fileName,
+                content: properties.data,
+                contentType: 'application/octet-stream',
+            });
+        }
+        else if(properties.type === 'url') {
+            downloadFile({
+                fileName: fileName,
+                url: properties.url,
+            });
         }
 
         // Update the state
