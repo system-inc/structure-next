@@ -45,6 +45,7 @@ import {
     differenceInTimeIntervals,
 } from './utilities/TimeSeriesProcessors';
 import { mergeClassNames } from '@structure/source/utilities/Style';
+import { getTimeSeriesColor } from './utilities/TimeSeriesColors';
 
 // Type - TimeSeriesDataPoint
 export interface TimeSeriesDataPoint {
@@ -57,7 +58,7 @@ export interface TimeSeriesDataSource {
     id: string;
     dataKey: string;
     name: string;
-    color: string;
+    color?: string; // Optional - will use automatic color from palette based on index if not provided
     yAxisAlignment?: 'left' | 'right';
     lineStyle?: 'solid' | 'dashed' | 'dotted';
     formatValue?: (value: number, context?: 'Axis' | 'Tip') => string;
@@ -328,7 +329,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                     )}
 
                     {/* Data Series - must be direct children of ComposedChart for Recharts to work */}
-                    {properties.dataSources.map((dataSource) => {
+                    {properties.dataSources.map((dataSource, index) => {
+                        const color = dataSource.color || getTimeSeriesColor(index);
                         const yAxisId = dataSource.yAxisAlignment || 'left';
                         const strokeDasharray =
                             dataSource.lineStyle === 'dashed'
@@ -347,7 +349,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     key={dataSource.id}
                                     dataKey={dataSource.dataKey}
                                     name={dataSource.name}
-                                    fill={dataSource.color}
+                                    fill={color}
                                     radius={defaultRadius}
                                     yAxisId={yAxisId}
                                     animationDuration={0}
@@ -355,8 +357,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     activeBar={{
                                         fill:
                                             themeSettings.themeClassName === 'light'
-                                                ? lightenColor(dataSource.color, 0.15)
-                                                : lightenColor(dataSource.color, 0.15),
+                                                ? lightenColor(color, 0.15)
+                                                : lightenColor(color, 0.15),
                                     }}
                                     {...properties.barProperties}
                                 >
@@ -426,19 +428,19 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     type="monotone"
                                     dataKey={dataSource.dataKey}
                                     name={dataSource.name}
-                                    stroke={dataSource.color}
+                                    stroke={color}
                                     strokeWidth={2}
                                     strokeDasharray={strokeDasharray}
                                     fill={setTransparency(
                                         themeSettings.themeClassName == 'light'
-                                            ? lightenColor(dataSource.color, 0.2)
-                                            : darkenColor(dataSource.color, 0.2),
+                                            ? lightenColor(color, 0.2)
+                                            : darkenColor(color, 0.2),
                                         0.75,
                                     )}
                                     fillOpacity={1.0}
                                     dot={{
                                         stroke: 'transparent',
-                                        fill: dataSource.color,
+                                        fill: color,
                                         r: 2.5,
                                     }}
                                     activeDot={{
@@ -458,12 +460,12 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     type="monotone"
                                     dataKey={dataSource.dataKey}
                                     name={dataSource.name}
-                                    stroke={dataSource.color}
+                                    stroke={color}
                                     strokeWidth={2}
                                     strokeDasharray={strokeDasharray}
                                     dot={{
                                         stroke: 'transparent',
-                                        fill: dataSource.color,
+                                        fill: color,
                                         r: 2.5,
                                     }}
                                     activeDot={{
