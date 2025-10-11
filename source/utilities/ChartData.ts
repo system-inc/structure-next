@@ -395,6 +395,11 @@ export function calculateTimeIntervalValueStartAndEndDate(timeIntervalValue: str
     // Format the timeIntervalValue to a date
     const timeIntervalValueDate = convertIntervalValueToDate(timeIntervalValue, timeInterval);
 
+    // Validate that we got a valid date
+    if(isNaN(timeIntervalValueDate.getTime())) {
+        throw new Error(`Invalid time interval value: ${timeIntervalValue} for interval type: ${timeInterval}`);
+    }
+
     switch(timeInterval) {
         case TimeInterval.Minute:
             startDate = startOfMinute(timeIntervalValueDate);
