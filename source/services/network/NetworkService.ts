@@ -19,6 +19,7 @@ import {
     GraphQlResponseInterface,
     hasGraphQlErrors,
     parseGraphQlErrors,
+    isDeviceIdRequiredError,
 } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Dependencies - Internal
@@ -418,10 +419,12 @@ export class NetworkService {
     }
 
     // Direct GraphQL request method (for non-hook GraphQL requests)
+    // Automatically retries once if device ID is required
     async graphQlRequest<TResult, TVariables = Record<string, never>>(
         query: AppOrStructureTypedDocumentString<TResult, TVariables>,
         variables?: TVariables,
         options?: { headers?: HeadersInit },
+        isRetry: boolean = false,
     ): Promise<TResult> {
         const graphqlEndpoint = ProjectSettings.apis?.base
             ? `https://${ProjectSettings.apis.base.host}${ProjectSettings.apis.base.graphQlPath}`
@@ -463,10 +466,25 @@ export class NetworkService {
             const error = new Error(errorMessage);
 
             // Attach the full error details for better debugging
-            throw this.augmentError(error, {
+            const augmentedError = this.augmentError(error, {
                 graphQlErrors: graphQlResponse.errors || (graphQlResponse.error ? [graphQlResponse.error] : []),
                 graphQlResponse,
             });
+
+            // Check if device ID error and not already retrying
+            if(isDeviceIdRequiredError(augmentedError) && !isRetry) {
+                console.warn('[NetworkService] GraphQL error: Device ID required. Attempting automatic recovery...');
+
+                // Force a fresh device ID check (safe for concurrent calls)
+                await this.deviceIdManager.ensure({ skipCache: true });
+
+                console.log('[NetworkService] Device ID refreshed, retrying GraphQL request');
+
+                // Retry the request once - if this fails, let it throw
+                return this.graphQlRequest(query, variables, options, true);
+            }
+
+            throw augmentedError;
         }
 
         return graphQlResponse.data as TResult;

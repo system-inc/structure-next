@@ -34,7 +34,7 @@ export class NetworkServiceDeviceId {
      * Ensures device ID is valid before making requests.
      * All requests will queue until device ID is obtained.
      */
-    async ensure(): Promise<void> {
+    async ensure(options?: { skipCache?: boolean }): Promise<void> {
         // Skip deviceId check if accounts module is disabled or on server side
         if(!ProjectSettings.modules?.accounts || this.isServerSide) {
             return;
@@ -45,13 +45,13 @@ export class NetworkServiceDeviceId {
             return this.deviceIdPromise;
         }
 
-        // If already checked this session, skip
-        if(this.deviceIdChecked) {
+        // If already checked this session and not skipping cache, skip
+        if(this.deviceIdChecked && !options?.skipCache) {
             return;
         }
 
         // Start the check
-        this.deviceIdPromise = this.checkAndRequestDeviceId();
+        this.deviceIdPromise = this.checkAndRequestDeviceId(options?.skipCache);
 
         try {
             await this.deviceIdPromise;
@@ -78,11 +78,12 @@ export class NetworkServiceDeviceId {
     }
 
     // Function to check if device ID is valid and request a new one if needed
-    private async checkAndRequestDeviceId(): Promise<void> {
+    private async checkAndRequestDeviceId(skipCache: boolean = false): Promise<void> {
         const lastUpdated = this.getLastUpdated();
         const sixMonthsAgo = Date.now() - sixMonthsInMilliseconds;
 
-        if(lastUpdated && lastUpdated > sixMonthsAgo) {
+        // Skip timestamp check if skipping cache
+        if(!skipCache && lastUpdated && lastUpdated > sixMonthsAgo) {
             // Valid deviceId exists
             return;
         }

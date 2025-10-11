@@ -99,6 +99,16 @@ export function isUniqueConstraintError(error?: GraphQlError | Error | GraphQlRe
     return !!validationErrors?.[0]?.constraints?.isUnique;
 }
 
+// Function to check if the error is a device ID required error
+export function isDeviceIdRequiredError(error: unknown): boolean {
+    if(!(error instanceof Error)) return false;
+
+    // Regex matches variations: "Device ID", "device ID", "deviceId", "deviceid", etc.
+    const deviceIdPattern = /device\s*id/i;
+
+    return deviceIdPattern.test(error.message || '');
+}
+
 // Function to convert a GraphQL error to a message
 export const graphQlErrorToMessage = function (mutationError?: GraphQlError | Error | GraphQlResponseInterface) {
     let errorMessage = 'Unknown error.';
