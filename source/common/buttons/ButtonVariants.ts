@@ -4,8 +4,8 @@ const commonButton =
     `inline-flex items-center whitespace-nowrap select-none ` +
     // Cursor
     `cursor-pointer ` +
-    // Disabled states
-    `disabled:cursor-not-allowed disabled:opacity-75`;
+    // Disabled states (works for both button[disabled] and a[aria-disabled])
+    `disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:cursor-not-allowed aria-disabled:opacity-75`;
 
 // Centered button styles: alignment, sizing, and shape
 const centeredButton =
@@ -23,8 +23,9 @@ const focusStyle =
 const hoverStyle =
     // Hover
     `hover:bg-dark-5 dark:hover:bg-dark-3 ` +
-    // Disabled
-    `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2`;
+    // Disabled (works for both button[disabled] and a[aria-disabled])
+    `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
+    `aria-disabled:hover:bg-dark-2 dark:aria-disabled:hover:bg-dark-2`;
 
 // Variants - Button
 export const ButtonVariants = {
