@@ -33,6 +33,9 @@ export function useDataInteractionDatabaseTableMetricsRequest(
             metadata: {
                 ...options?.metadata,
                 category: 'Metrics',
+                timeIntervalValue: input.timeInterval,
+                startTimeValue: input.startTime,
+                endTimeValue: input.endTime,
             },
         },
     );

@@ -371,7 +371,26 @@ export function Metrics() {
                     <RefreshButton
                         size={'formInputIcon'}
                         onClick={async () => {
-                            await networkService.refreshRequests({ metadata: { category: 'Metrics' } });
+                            // Convert time range to ISO strings for metadata matching
+                            const startTimeValue = timeSeriesState.timeRange.startTime
+                                ? typeof timeSeriesState.timeRange.startTime === 'string'
+                                    ? timeSeriesState.timeRange.startTime
+                                    : timeSeriesState.timeRange.startTime.toISOString()
+                                : undefined;
+                            const endTimeValue = timeSeriesState.timeRange.endTime
+                                ? typeof timeSeriesState.timeRange.endTime === 'string'
+                                    ? timeSeriesState.timeRange.endTime
+                                    : timeSeriesState.timeRange.endTime.toISOString()
+                                : undefined;
+
+                            await networkService.refreshRequests({
+                                metadata: {
+                                    category: 'Metrics',
+                                    timeIntervalValue: timeSeriesState.timeInterval,
+                                    startTimeValue: startTimeValue,
+                                    endTimeValue: endTimeValue,
+                                },
+                            });
                         }}
                     />
 
