@@ -43,7 +43,7 @@ export interface AnimatedButtonProperties extends ButtonProperties {
     processingIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     processingSuccessIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     processingErrorIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-    processingAnimation?: boolean;
+    showResultIconAnimation?: boolean;
     showProcessedTimeTip?: boolean;
 }
 export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButtonProperties>(function AnimatedButton(
@@ -57,7 +57,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
         processingIcon,
         processingSuccessIcon,
         processingErrorIcon,
-        processingAnimation,
+        showResultIconAnimation,
         showProcessedTimeTip,
         tip,
         tipProperties,
@@ -98,11 +98,20 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
         },
         [disabled],
     );
+    // Determine if we should show processing spinner animation
     const processingAnimationEnabled = React.useMemo(
         function () {
-            return processingAnimation || processingIcon || processingText || processing !== undefined || false;
+            return showResultIconAnimation || processingIcon || processingText || processing !== undefined || false;
         },
-        [processingAnimation, processingIcon, processingText, processing],
+        [showResultIconAnimation, processingIcon, processingText, processing],
+    );
+
+    // Determine if we should show result icons (success/error) after processing
+    const resultIconAnimationEnabled = React.useMemo(
+        function () {
+            return showResultIconAnimation || showProcessedTimeTip || false;
+        },
+        [showResultIconAnimation, showProcessedTimeTip],
     );
 
     // Defaults
@@ -158,30 +167,39 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                 }
             }
 
-            // Update states to show success/error icon
+            // Update states
             setProcessingState(false);
-            setProcessed(true);
             setProcessingError(hasError);
 
-            // Wait for success display duration, then start the exit sequence
-            processingAnimationTimeoutReference.current = setTimeout(function () {
-                // Trigger check circle scale OUT animation
+            // If result icon animation is enabled, show success/error icon sequence
+            if(resultIconAnimationEnabled) {
+                setProcessed(true);
+
+                // Wait for success display duration, then start the exit sequence
+                processingAnimationTimeoutReference.current = setTimeout(function () {
+                    // Trigger check circle scale OUT animation
+                    setProcessed(false);
+
+                    // After icon transitions complete, reset animation state
+                    processingAnimationRunningTimeoutReference.current = setTimeout(function () {
+                        setProcessingAnimationRunning(false);
+                    }, animationTimings.iconExitDuration);
+                }, animationTimings.successDisplayDuration);
+
+                // Reset the tip content after everything completes
+                tipResetTimeoutReference.current = setTimeout(function () {
+                    if(showProcessedTimeTip) {
+                        setTipContent(tip);
+                    }
+                }, animationTimings.tipResetDelay);
+            }
+            else {
+                // No result icon animation - just stop immediately
                 setProcessed(false);
-
-                // After icon transitions complete, reset animation state
-                processingAnimationRunningTimeoutReference.current = setTimeout(function () {
-                    setProcessingAnimationRunning(false);
-                }, animationTimings.iconExitDuration);
-            }, animationTimings.successDisplayDuration);
-
-            // Reset the tip content after everything completes
-            tipResetTimeoutReference.current = setTimeout(function () {
-                if(showProcessedTimeTip) {
-                    setTipContent(tip);
-                }
-            }, animationTimings.tipResetDelay);
+                setProcessingAnimationRunning(false);
+            }
         },
-        [showProcessedTimeTip, tip],
+        [showProcessedTimeTip, tip, resultIconAnimationEnabled],
     );
 
     // Function to intercept the onClick event
@@ -326,7 +344,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
 
         const displayIcon = (
             <AnimatePresence mode="wait" initial={false}>
-                {processed && processingError ? (
+                {processed && processingError && resultIconAnimationEnabled && ProcessingErrorIcon ? (
                     <motion.div
                         key="error-icon"
                         variants={iconAnimationVariants}
@@ -336,9 +354,9 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                         transition={iconAnimationTransition}
                         className="text-red-500"
                     >
-                        {ProcessingErrorIcon ? <ProcessingErrorIcon className="h-5 w-5" /> : null}
+                        <ProcessingErrorIcon className="h-5 w-5" />
                     </motion.div>
-                ) : processed ? (
+                ) : processed && resultIconAnimationEnabled && ProcessingSuccessIcon ? (
                     <motion.div
                         key="success-icon"
                         variants={iconAnimationVariants}
@@ -348,7 +366,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                         transition={iconAnimationTransition}
                         className="text-emerald-500"
                     >
-                        {ProcessingSuccessIcon ? <ProcessingSuccessIcon className="h-5 w-5" /> : null}
+                        <ProcessingSuccessIcon className="h-5 w-5" />
                     </motion.div>
                 ) : (
                     <motion.div
@@ -371,8 +389,8 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
             </AnimatePresence>
         );
 
-        // If processed, revert back to the children (unless we have success/error icons to show)
-        if(processed && !processingSuccessIcon && !ProcessingErrorIcon) {
+        // If processed, revert back to the children (unless we're showing result icons)
+        if(processed && !resultIconAnimationEnabled) {
             content = children ?? undefined;
         }
         // Otherwise, show the icon

@@ -18,6 +18,7 @@ export function RefreshButton(properties: RefreshButtonProperties) {
             size="icon"
             tip="Refresh"
             processingIcon={ArrowClockwiseIcon}
+            showResultIconAnimation={true}
             showProcessedTimeTip={true}
             {...properties}
         />

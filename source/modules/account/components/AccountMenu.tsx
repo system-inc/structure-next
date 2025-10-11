@@ -53,7 +53,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
                             onClick={async function () {
                                 await account.signOut();
                             }}
-                            processingAnimation={true}
+                            showResultIconAnimation={true}
                         >
                             Sign Out
                         </AnimatedButton>
