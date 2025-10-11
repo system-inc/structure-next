@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
+import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
 import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
@@ -188,13 +189,13 @@ export function UsernameForm() {
                     ) : (
                         <div className="mt-6 flex justify-end space-x-2">
                             <Button onClick={handleDialogClose}>Cancel</Button>
-                            <Button
+                            <AnimatedButton
                                 variant="primary"
                                 onClick={handleConfirm}
                                 processing={accountProfileUpdateRequest.isLoading}
                             >
                                 Confirm
-                            </Button>
+                            </AnimatedButton>
                         </div>
                     )
                 }

@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { AccountMenuSignedIn } from '@structure/source/modules/account/components/AccountMenuSignedIn';
 import { AccountMenuSignedOut } from '@structure/source/modules/account/components/AccountMenuSignedOut';
-import { Button } from '@structure/source/common/buttons/Button';
+import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
 import { ThemeToggle } from '@structure/source/theme/ThemeToggle';
 
 // Dependencies - Accounts
@@ -47,7 +47,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
                 {/* If signed in */}
                 {properties.account && (
                     <div className="mr-4 justify-end">
-                        <Button
+                        <AnimatedButton
                             tabIndex={1}
                             className="w-[92px]"
                             onClick={async function () {
@@ -56,7 +56,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
                             processingAnimation={true}
                         >
                             Sign Out
-                        </Button>
+                        </AnimatedButton>
                     </div>
                 )}
             </div>

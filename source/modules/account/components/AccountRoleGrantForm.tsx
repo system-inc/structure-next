@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/common/buttons/Button';
+import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';
 import { InputText } from '@structure/source/common/forms/InputText';
@@ -289,12 +290,12 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 footer={
                     <div className="flex justify-end space-x-2">
                         <Button onClick={() => setGrantDialogOpen(false)}>Cancel</Button>
-                        <Button
+                        <AnimatedButton
                             onClick={handleGrantConfirm}
                             processing={accountAccessRoleAssignmentCreatePrivilegedRequest.isLoading}
                         >
                             Grant Role
-                        </Button>
+                        </AnimatedButton>
                     </div>
                 }
             />

@@ -42,10 +42,10 @@ export const ButtonVariants = {
         `hover:bg-light-2 hover:text-dark-1 ` +
         // Dark - Hover
         `dark:hover:bg-dark-3 dark:hover:border-dark-4 dark:hover:text-light-1 ` +
-        // Light - Active
-        `active:bg-light-3 active:text-dark ` +
-        // Dark - Active
-        `dark:active:bg-dark-4 dark:active:text-light ` +
+        // Light - Active (includes when used as open popover trigger)
+        `active:bg-light-3 data-[state=open]:bg-light-3 active:text-dark data-[state=open]:text-dark ` +
+        // Dark - Active (includes when used as open popover trigger)
+        `dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 dark:active:text-light dark:data-[state=open]:text-light ` +
         // Light - Focus
         `focus:border-neutral+6  ` +
         // Dark - Focus
@@ -63,8 +63,8 @@ export const ButtonVariants = {
         `text-light bg-theme-light-primary dark:bg-theme-dark-primary ` +
         // Hover
         `hover:bg-theme-light-primary-hover dark:hover:bg-theme-dark-primary-hover ` +
-        // Active
-        `active:bg-theme-light-primary-active dark:active:bg-theme-dark-primary-active ` +
+        // Active (includes when used as open popover trigger)
+        `active:bg-theme-light-primary-active data-[state=open]:bg-theme-light-primary-active dark:active:bg-theme-dark-primary-active dark:data-[state=open]:bg-theme-dark-primary-active ` +
         // Disabled
         `disabled:opacity-100 disabled:bg-theme-light-primary-disabled disabled:dark:bg-theme-dark-primary-disabled`,
     // Light variant: light background and border with hover and active states
@@ -74,15 +74,15 @@ export const ButtonVariants = {
         `border bg-light-1 dark:bg-light-2 text-dark dark:text-dark hover:bg-light dark:hover:bg-light ` +
         // Disabled states
         `disabled:hover:bg-light-1 dark:disabled:hover:bg-light-2 ` +
-        // Active states
-        `active:bg-light-2 dark:active:bg-light-3`,
+        // Active states (includes when used as open popover trigger)
+        `active:bg-light-2 data-[state=open]:bg-light-2 dark:active:bg-light-3 dark:data-[state=open]:bg-light-3`,
     // Contrast variant: constrasted background
     contrast:
         `${commonButton} ${focusStyle} ${centeredButton} ${hoverStyle} ` +
         // Light text on dark background
         `text-white dark:text-light-2 bg-dark-2 dark:bg-dark-2 ` +
-        // Active
-        `active:bg-dark-3 dark:active:bg-dark-4 ` +
+        // Active (includes when used as open popover trigger)
+        `active:bg-dark-3 data-[state=open]:bg-dark-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
         // Border matches background
         `border border-dark-2 dark:border-dark-2`,
     // Ghost variant: transparent with accent color on hover
@@ -109,10 +109,10 @@ export const ButtonVariants = {
         `hover:border-red-500 ` +
         // Dark - Hover
         `dark:hover:border-red-500 ` +
-        // Light - Active
-        `active:bg-light-3 active:border-red-500 ` +
-        // Dark - Active
-        `dark:active:bg-dark-3 dark:active:border-red-500 ` +
+        // Light - Active (includes when used as open popover trigger)
+        `active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500 ` +
+        // Dark - Active (includes when used as open popover trigger)
+        `dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500 ` +
         // Light - Focus
         `focus:border-red-500  ` +
         // Dark - Focus
@@ -152,8 +152,8 @@ export const ButtonVariants = {
         `bg-opsis-background-primary text-opsis-content-primary ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-3 ` +
-        // Active
-        `active:bg-light-3 dark:active:bg-light ` +
+        // Active (includes when used as open popover trigger)
+        `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-light dark:data-[state=open]:bg-light ` +
         // Disabled
         // `disabled:hover:bg-dark-2 dark:disabled:data-[state=checked]:hover:bg-dark-2 ` +
         // Checked
@@ -175,8 +175,8 @@ export const ButtonVariants = {
         `bg-opsis-background-primary text-opsis-content-primary ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-1 ` +
-        // Active
-        `active:bg-light-3 dark:active:bg-dark-4 ` +
+        // Active (includes when used as open popover trigger)
+        `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
         // Disabled
         `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
         // Focus

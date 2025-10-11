@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from '@structure/source/common/navigation/Link';
 import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 import { Button } from '@structure/source/common/buttons/Button';
+import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Alert } from '@structure/source/common/notifications/Alert';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
@@ -361,13 +362,13 @@ export function UsersRolesPage() {
                     ) : (
                         <div className="flex justify-end space-x-2">
                             <Button onClick={handleDialogClose}>Cancel</Button>
-                            <Button
+                            <AnimatedButton
                                 variant="destructive"
                                 onClick={handleRevokeConfirm}
                                 processing={accountAccessRoleAssignmentRevokePrivilegedRequest.isLoading}
                             >
                                 Revoke Role
-                            </Button>
+                            </AnimatedButton>
                         </div>
                     )
                 }

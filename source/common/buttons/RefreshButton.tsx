@@ -4,21 +4,20 @@
 import React from 'react';
 
 // Dependencies - Supporting Components
-import { Button, ButtonProperties } from '@structure/source/common/buttons/Button';
+import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/common/buttons/AnimatedButton';
 
 // Dependencies - Assets
-import { CheckCircleIcon, ArrowClockwiseIcon } from '@phosphor-icons/react';
+import { ArrowClockwiseIcon } from '@phosphor-icons/react';
 
 // Component - RefreshButton
-export type RefreshButtonProperties = ButtonProperties;
+export type RefreshButtonProperties = AnimatedButtonProperties;
 export function RefreshButton(properties: RefreshButtonProperties) {
     // Render the component
     return (
-        <Button
+        <AnimatedButton
             size="icon"
             tip="Refresh"
             processingIcon={ArrowClockwiseIcon}
-            processingSuccessIcon={CheckCircleIcon}
             showProcessedTimeTip={true}
             {...properties}
         />

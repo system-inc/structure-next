@@ -38,7 +38,7 @@ export function useForm<T extends FieldValues>(properties?: UseFormProperties<T>
 // Dependencies - Main Components
 import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/common/forms/FormInput';
 import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
+import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/common/buttons/AnimatedButton';
 
 // Dependencies - Animations
 import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
@@ -77,7 +77,7 @@ export interface FormProperties {
     className?: string;
     title?: React.ReactNode;
     description?: React.ReactNode;
-    buttonProperties?: ButtonProperties;
+    buttonProperties?: Partial<AnimatedButtonProperties>;
     footer?: React.ReactNode;
     error?: React.ReactNode;
     loading?: boolean;
@@ -104,7 +104,7 @@ export function Form(properties: FormProperties) {
     const resetOnSubmitSuccess = properties.resetOnSubmitSuccess ?? false;
 
     // Memoized button properties
-    const buttonProperties: ButtonProperties = React.useMemo(
+    const buttonProperties: Partial<AnimatedButtonProperties> = React.useMemo(
         function () {
             return {
                 ...properties.buttonProperties,
@@ -520,7 +520,7 @@ export function Form(properties: FormProperties) {
             <div className="space-y-4">{renderFormInputs}</div>
 
             {/* Button */}
-            <Button
+            <AnimatedButton
                 tabIndex={1}
                 {...buttonProperties}
                 type="submit"
@@ -528,7 +528,7 @@ export function Form(properties: FormProperties) {
                 processing={submitting || buttonProperties?.processing}
             >
                 {buttonProperties?.children ?? 'Submit'}
-            </Button>
+            </AnimatedButton>
 
             {/* Error */}
             {properties.error && properties.error}

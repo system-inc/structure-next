@@ -12,6 +12,7 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { Button } from '@structure/source/common/buttons/Button';
+import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
 import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - API
@@ -364,13 +365,13 @@ export function UsersPage() {
                     ) : (
                         <div className="flex justify-end space-x-2">
                             <Button onClick={handleDialogClose}>Cancel</Button>
-                            <Button
+                            <AnimatedButton
                                 variant="destructive"
                                 onClick={handleDeleteConfirm}
                                 processing={accountDeletePrivilegedRequest.isLoading}
                             >
                                 Delete User
-                            </Button>
+                            </AnimatedButton>
                         </div>
                     )
                 }
