@@ -292,7 +292,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                         <Button onClick={() => setGrantDialogOpen(false)}>Cancel</Button>
                         <AnimatedButton
                             onClick={handleGrantConfirm}
-                            processing={accountAccessRoleAssignmentCreatePrivilegedRequest.isLoading}
+                            isProcessing={accountAccessRoleAssignmentCreatePrivilegedRequest.isLoading}
                         >
                             Grant Role
                         </AnimatedButton>

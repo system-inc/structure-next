@@ -525,7 +525,7 @@ export function Form(properties: FormProperties) {
                 {...buttonProperties}
                 type="submit"
                 disabled={properties.loading || submitting || !submittable || buttonProperties?.disabled}
-                processing={submitting || buttonProperties?.processing}
+                isProcessing={submitting || buttonProperties?.isProcessing}
             >
                 {buttonProperties?.children ?? 'Submit'}
             </AnimatedButton>

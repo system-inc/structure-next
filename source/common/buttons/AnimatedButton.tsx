@@ -38,7 +38,7 @@ const iconAnimationVariants = {
 
 // Component - AnimatedButton
 export interface AnimatedButtonProperties extends ButtonProperties {
-    processing?: boolean;
+    isProcessing?: boolean;
     processingText?: string;
     processingIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
     processingSuccessIcon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -52,7 +52,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
         size,
         disabled,
         loading,
-        processing,
+        isProcessing,
         processingText,
         processingIcon,
         processingSuccessIcon,
@@ -81,7 +81,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
     const tipResetTimeoutReference = React.useRef<NodeJS.Timeout | null>(null);
 
     // State
-    const [processingState, setProcessingState] = React.useState<boolean>(processing ?? false);
+    const [isProcessingState, setIsProcessingState] = React.useState<boolean>(isProcessing ?? false);
     const [processingAnimationRunning, setProcessingAnimationRunning] = React.useState<boolean>(false);
     const [processingIconRotation, setProcessingIconRotation] = React.useState<number>(0);
     const [processed, setProcessed] = React.useState<boolean>(false);
@@ -101,9 +101,9 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
     // Determine if we should show processing spinner animation
     const processingAnimationEnabled = React.useMemo(
         function () {
-            return showResultIconAnimation || processingIcon || processingText || processing !== undefined || false;
+            return showResultIconAnimation || processingIcon || processingText || isProcessing !== undefined || false;
         },
-        [showResultIconAnimation, processingIcon, processingText, processing],
+        [showResultIconAnimation, processingIcon, processingText, isProcessing],
     );
 
     // Determine if we should show result icons (success/error) after processing
@@ -138,7 +138,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
             // Reset states
             setProcessed(false);
             setProcessingError(false);
-            setProcessingState(true);
+            setIsProcessingState(true);
             setProcessingAnimationRunning(true);
 
             // Track the time when the processing started
@@ -168,7 +168,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
             }
 
             // Update states
-            setProcessingState(false);
+            setIsProcessingState(false);
             setProcessingError(hasError);
 
             // If result icon animation is enabled, show success/error icon sequence
@@ -238,7 +238,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
     // Effect to handle rotation animation (only when result icon animations are enabled)
     React.useEffect(
         function () {
-            if(processingState && resultIconAnimationEnabled) {
+            if(isProcessingState && resultIconAnimationEnabled) {
                 const targetRotation = processingIconRotation + animationTimings.rotationIncrement;
 
                 const animation = animate(rotationMotionValue, targetRotation, {
@@ -254,13 +254,13 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                 };
             }
         },
-        [processingState, processingIconRotation, rotationMotionValue, resultIconAnimationEnabled],
+        [isProcessingState, processingIconRotation, rotationMotionValue, resultIconAnimationEnabled],
     );
 
     // Effect to reset rotation when animation completes
     React.useEffect(
         function () {
-            if(!processingAnimationRunning && !processingState && processingIconRotation !== 0) {
+            if(!processingAnimationRunning && !isProcessingState && processingIconRotation !== 0) {
                 const resetTimeout = setTimeout(function () {
                     setProcessingIconRotation(0);
                     rotationMotionValue.set(0);
@@ -271,7 +271,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                 };
             }
         },
-        [processingAnimationRunning, processingState, processingIconRotation, rotationMotionValue],
+        [processingAnimationRunning, isProcessingState, processingIconRotation, rotationMotionValue],
     );
 
     // Listen to changes in the processing property allowing the component to be controlled by the parent
@@ -282,11 +282,11 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
             const tipResetTimeout = tipResetTimeoutReference.current;
 
             // Listen to changes in the processing property
-            if(processing !== undefined) {
+            if(isProcessing !== undefined) {
                 // If the processing state changed
-                if(processingState !== processing) {
+                if(isProcessingState !== isProcessing) {
                     // If processing started
-                    if(processing) {
+                    if(isProcessing) {
                         startProcessing();
                     }
                     // If processing ended
@@ -309,7 +309,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                 }
             };
         },
-        [processing, processingState, startProcessing, endProcessing, disabled],
+        [isProcessing, isProcessingState, startProcessing, endProcessing, disabled],
     );
 
     // Use the provided icons, or the default icons
@@ -377,7 +377,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                         exit="exit"
                         transition={iconAnimationTransition}
                     >
-                        {processingState ? (
+                        {isProcessingState ? (
                             resultIconAnimationEnabled ? (
                                 // Use controlled rotation for coordinated animations
                                 <motion.div style={{ rotate: rotationMotionValue }}>
@@ -420,7 +420,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
         ...domProperties,
         variant: variant,
         size: size,
-        disabled: disabledValue || processingState,
+        disabled: disabledValue || isProcessingState,
         loading: loading,
         tip: showProcessedTimeTip ? tipContent : tip,
         tipProperties:
@@ -430,7 +430,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                       open: true, // Force tooltip open during success/error display
                   }
                 : tipProperties, // Allow normal hover behavior otherwise
-        icon: processingState ? undefined : icon,
+        icon: isProcessingState ? undefined : icon,
         iconPosition: iconPosition,
         iconClassName: iconClassName,
         href: href,

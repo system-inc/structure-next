@@ -108,7 +108,7 @@ export function ContactPage(properties: ContactPageProperties) {
                                 />,
                             ]}
                             buttonProperties={{
-                                processing: supportTicketCreateRequest.isLoading,
+                                isProcessing: supportTicketCreateRequest.isLoading,
                                 icon: supportTicketCreateRequest.isLoading ? undefined : SendIcon,
                                 iconPosition: supportTicketCreateRequest.isLoading ? undefined : 'left',
                                 iconClassName: supportTicketCreateRequest.isLoading ? undefined : 'ml-1 mr-2.5',

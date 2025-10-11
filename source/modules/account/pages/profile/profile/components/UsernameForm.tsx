@@ -192,7 +192,7 @@ export function UsernameForm() {
                             <AnimatedButton
                                 variant="primary"
                                 onClick={handleConfirm}
-                                processing={accountProfileUpdateRequest.isLoading}
+                                isProcessing={accountProfileUpdateRequest.isLoading}
                             >
                                 Confirm
                             </AnimatedButton>

@@ -368,7 +368,7 @@ export function UsersPage() {
                             <AnimatedButton
                                 variant="destructive"
                                 onClick={handleDeleteConfirm}
-                                processing={accountDeletePrivilegedRequest.isLoading}
+                                isProcessing={accountDeletePrivilegedRequest.isLoading}
                             >
                                 Delete User
                             </AnimatedButton>

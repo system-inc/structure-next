@@ -365,7 +365,7 @@ export function UsersRolesPage() {
                             <AnimatedButton
                                 variant="destructive"
                                 onClick={handleRevokeConfirm}
-                                processing={accountAccessRoleAssignmentRevokePrivilegedRequest.isLoading}
+                                isProcessing={accountAccessRoleAssignmentRevokePrivilegedRequest.isLoading}
                             >
                                 Revoke Role
                             </AnimatedButton>
