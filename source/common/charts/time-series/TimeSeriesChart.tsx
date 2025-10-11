@@ -23,8 +23,10 @@ import {
     XAxis,
     YAxis,
     ReferenceArea,
+    Customized,
 } from 'recharts';
 import { TimeSeriesTip } from './TimeSeriesTip';
+import { ChartDimensionsCapture, ChartContentDimensions } from '../components/ChartDimensionsCapture';
 
 // Dependencies - Hooks
 import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
@@ -110,9 +112,11 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
     const showYAxis = properties.showYAxis !== false;
     const showTooltip = properties.showTooltip !== false;
 
-    // State to track container width for bar cursor calculation
-    const [containerWidth, setContainerWidth] = React.useState<number>(600);
-    const containerReference = React.useRef<HTMLDivElement>(null);
+    // State to track chart content area dimensions for bar cursor calculation
+    const [chartContentDimensions, setChartContentDimensions] = React.useState<ChartContentDimensions>({
+        width: 600,
+        height: chartHeight,
+    });
 
     // Previous tick value tracking for formatters
     const previousTickValueReference = React.useRef<string>('');
@@ -132,23 +136,6 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
         }
     }
     const exceedsLimit = exceedsMaximumDataPoints(dataPointCount, properties.maximumDataPoints);
-
-    // Effect to observe container size changes
-    React.useEffect(function () {
-        if(!containerReference.current) return;
-
-        const resizeObserver = new ResizeObserver((entries) => {
-            for(const entry of entries) {
-                setContainerWidth(entry.contentRect.width);
-            }
-        });
-
-        resizeObserver.observe(containerReference.current);
-
-        return function () {
-            resizeObserver.disconnect();
-        };
-    }, []);
 
     // Show warning if too many data points
     if(exceedsLimit) {
@@ -176,7 +163,6 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                 'select-none [&_.recharts-wrapper_:focus:not(:focus-visible)]:outline-none',
                 properties.className,
             )}
-            ref={containerReference}
         >
             <ResponsiveContainer width="100%" height={chartHeight}>
                 <ComposedChart
@@ -313,7 +299,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                         : 'var(--border-primary)',
                                 strokeWidth:
                                     properties.chartType === 'Bar'
-                                        ? (containerWidth - 90) / (properties.data.length || 1)
+                                        ? chartContentDimensions.width / (properties.data.length || 1)
                                         : 1,
                             }}
                             content={
@@ -357,8 +343,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     activeBar={{
                                         fill:
                                             themeSettings.themeClassName === 'light'
-                                                ? lightenColor(color, 0.15)
-                                                : lightenColor(color, 0.15),
+                                                ? lightenColor(color, 0.1)
+                                                : lightenColor(color, 0.1),
                                     }}
                                     {...properties.barProperties}
                                 >
@@ -489,6 +475,9 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                             fillOpacity={isDarkMode ? 0.1 : 0.2}
                         />
                     )}
+
+                    {/* Capture chart dimensions for accurate bar cursor width */}
+                    <Customized component={<ChartDimensionsCapture onDimensionsChange={setChartContentDimensions} />} />
                 </ComposedChart>
             </ResponsiveContainer>
         </div>
