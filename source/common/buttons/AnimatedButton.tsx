@@ -399,10 +399,13 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
         disabled: disabledValue || processingState,
         loading: loading,
         tip: showProcessedTimeTip ? tipContent : tip,
-        tipProperties: {
-            ...tipProperties,
-            open: processed && processingAnimationRunning,
-        },
+        tipProperties:
+            processed && processingAnimationRunning
+                ? {
+                      ...tipProperties,
+                      open: true, // Force tooltip open during success/error display
+                  }
+                : tipProperties, // Allow normal hover behavior otherwise
         icon: processingState ? undefined : icon,
         iconPosition: iconPosition,
         iconClassName: iconClassName,
