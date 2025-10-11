@@ -235,10 +235,10 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
         [showProcessedTimeTip, onClick, startProcessing, endProcessing, processingAnimationEnabled],
     );
 
-    // Effect to handle rotation animation
+    // Effect to handle rotation animation (only when result icon animations are enabled)
     React.useEffect(
         function () {
-            if(processingState) {
+            if(processingState && resultIconAnimationEnabled) {
                 const targetRotation = processingIconRotation + animationTimings.rotationIncrement;
 
                 const animation = animate(rotationMotionValue, targetRotation, {
@@ -254,7 +254,7 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                 };
             }
         },
-        [processingState, processingIconRotation, rotationMotionValue],
+        [processingState, processingIconRotation, rotationMotionValue, resultIconAnimationEnabled],
     );
 
     // Effect to reset rotation when animation completes
@@ -378,9 +378,15 @@ export const AnimatedButton = React.forwardRef<ButtonElementType, AnimatedButton
                         transition={iconAnimationTransition}
                     >
                         {processingState ? (
-                            <motion.div style={{ rotate: rotationMotionValue }}>
-                                <ProcessingIcon className="h-5 w-5" />
-                            </motion.div>
+                            resultIconAnimationEnabled ? (
+                                // Use controlled rotation for coordinated animations
+                                <motion.div style={{ rotate: rotationMotionValue }}>
+                                    <ProcessingIcon className="h-5 w-5" />
+                                </motion.div>
+                            ) : (
+                                // Use CSS animation for simple spinner (more performant)
+                                <ProcessingIcon className="h-5 w-5 animate-spin" />
+                            )
                         ) : (
                             <ProcessingIcon className="h-5 w-5" />
                         )}
