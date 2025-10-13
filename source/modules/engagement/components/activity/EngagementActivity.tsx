@@ -57,6 +57,8 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
     const [updatedVisitorIds, setUpdatedVisitorIds] = React.useState<Set<string>>(new Set());
     const containerReference = React.useRef<HTMLDivElement>(null);
     const [hasError, setHasError] = React.useState(false);
+    const [events, setEvents] = React.useState<EngagementEventInterface[]>([]);
+    const [deviceIds, setDeviceIds] = React.useState<string[]>([]);
 
     // Hooks - Query engagement events every 10 seconds (stop polling on error)
     const dataInteractionDatabaseTableRowsRequest = useDataInteractionDatabaseTableRowsRequest(
@@ -104,28 +106,25 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         [dataInteractionDatabaseTableRowsRequest.error],
     );
 
-    // Extract events from response
-    const events = React.useMemo(
+    // Extract events from response and compute device IDs
+    React.useEffect(
         function () {
-            return (dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows.items ||
-                []) as EngagementEventInterface[];
-        },
-        [dataInteractionDatabaseTableRowsRequest.data],
-    );
+            const extractedEvents = (dataInteractionDatabaseTableRowsRequest.data?.dataInteractionDatabaseTableRows
+                .items || []) as EngagementEventInterface[];
 
-    // Get unique device IDs from events
-    const deviceIds = React.useMemo(
-        function () {
-            const ids = events
+            setEvents(extractedEvents);
+
+            // Get unique device IDs from events
+            const ids = extractedEvents
                 .map(function (event) {
                     return event.deviceId;
                 })
                 .filter(function (id): id is string {
                     return !!id;
                 });
-            return Array.from(new Set(ids));
+            setDeviceIds(Array.from(new Set(ids)));
         },
-        [events],
+        [dataInteractionDatabaseTableRowsRequest.data],
     );
 
     // Fetch device data for all unique device IDs
@@ -250,27 +249,19 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
 
     // Sort visitors by most recent activity and filter out sessions older than 30 minutes
     // Re-runs every 10 seconds when polling updates to check for expired sessions
-    const sortedVisitors = React.useMemo(
-        function () {
-            const now = new Date();
-            const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
+    const now = new Date();
+    const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
 
-            const filtered = Array.from(visitorActivities.values()).filter(function (visitor) {
-                // Using createdAt (server timestamp) instead of loggedAt (client timestamp)
-                // to avoid issues with client clock skew
-                const lastActivity = parseUtcDateString(visitor.lastActivityTime);
-                return lastActivity >= thirtyMinutesAgo;
-            });
+    const filtered = Array.from(visitorActivities.values()).filter(function (visitor) {
+        // Using createdAt (server timestamp) instead of loggedAt (client timestamp)
+        // to avoid issues with client clock skew
+        const lastActivity = parseUtcDateString(visitor.lastActivityTime);
+        return lastActivity >= thirtyMinutesAgo;
+    });
 
-            const sorted = filtered.sort(function (a, b) {
-                return b.lastActivityTime.localeCompare(a.lastActivityTime);
-            });
-
-            return sorted;
-        },
-
-        [visitorActivities, dataInteractionDatabaseTableRowsRequest.data],
-    );
+    const sortedVisitors = filtered.sort(function (a, b) {
+        return b.lastActivityTime.localeCompare(a.lastActivityTime);
+    });
 
     // Determine content based on state
     let content;

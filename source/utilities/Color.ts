@@ -338,7 +338,7 @@ function rgbStringToRgbArray(rgbString: string): [number, number, number] {
     return rgbMatches.map(Number) as [number, number, number];
 }
 
-function rgbaStringToRgbaArray(rgbaString: string): [number, number, number, number] {
+export function rgbaStringToRgbaArray(rgbaString: string): [number, number, number, number] {
     const rgbaMatches = rgbaString.match(/\d+\.?\d*/g);
     if(!rgbaMatches || rgbaMatches.length < 4) {
         throw new Error('Invalid RGBA color string');

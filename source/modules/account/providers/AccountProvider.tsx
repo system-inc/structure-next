@@ -42,6 +42,7 @@ export function AccountProvider(properties: AccountProviderProperties) {
     const [signedIn, setSignedIn] = React.useState<boolean>(properties.signedIn); // Initialized using response header cookie
     // console.log('AccountProvider mounting, signedIn from props:', properties.signedIn);
     const [authenticationDialogOpen, setAuthenticationDialogOpen] = React.useState(false);
+    const [hasMounted, setHasMounted] = React.useState(false);
 
     // Hooks
     const router = useRouter();
@@ -59,28 +60,22 @@ export function AccountProvider(properties: AccountProviderProperties) {
 
     // Compute whether to enable the account query
     // This handles the edge case where cookies are cleared but localStorage persists
-    const shouldEnableAccountQuery = React.useMemo(
-        function () {
-            // If signed in via cookie, enable the query
-            if(signedIn) {
-                return true;
-            }
+    let shouldEnableAccountQuery = false;
 
-            // Only perform cache operations on the client side
-            if(typeof window !== 'undefined') {
-                // If not signed in but have cached account data, it's stale - clear it
-                const cachedAccount = networkService.getCache([accountCacheKey]);
-                if(!signedIn && cachedAccount) {
-                    // Wipe the cache
-                    networkService.clearCache();
-                    console.log('[AccountProvider] Cleared stale account cache - cookies indicate signed out');
-                }
-            }
-
-            return false;
-        },
-        [signedIn],
-    );
+    // If signed in via cookie, enable the query
+    if(signedIn) {
+        shouldEnableAccountQuery = true;
+    }
+    // Only perform cache operations on the client side
+    else if(typeof window !== 'undefined') {
+        // If not signed in but have cached account data, it's stale - clear it
+        const cachedAccount = networkService.getCache([accountCacheKey]);
+        if(cachedAccount) {
+            // Wipe the cache
+            networkService.clearCache();
+            console.log('[AccountProvider] Cleared stale account cache - cookies indicate signed out');
+        }
+    }
 
     // Queries
     const accountRequest = networkService.useGraphQlQuery(
@@ -151,59 +146,43 @@ export function AccountProvider(properties: AccountProviderProperties) {
     // console.log('accountQueryState', accountQueryState);
 
     // Create the account object from the GraphQL query data
-    const account = React.useMemo(
-        function () {
-            // If there is account data
-            if(accountRequest.data?.account) {
-                return new Account(accountRequest.data.account);
-            }
-            else {
-                return null;
-            }
-        },
-        [accountRequest.data?.account],
-    );
+    const account = accountRequest.data?.account ? new Account(accountRequest.data.account) : null;
 
     // Function to update the signed in state
-    const updateSignedIn = React.useCallback(function (value: boolean) {
-        // console.log('updateSignedIn', value);
-
+    function updateSignedIn(value: boolean) {
         // Update local storage so other tabs can know the account is signed in
         // Local storage - because it is shared across tabs
         localStorageService.set(accountSignedInKey, value);
 
         // Update the state
         setSignedIn(value);
-    }, []);
+    }
 
     // Function to sign out
-    const signOut = React.useCallback(
-        async function (redirectPath?: string) {
-            // Invoke the GraphQL mutation
-            try {
-                // Invoke the mutation
-                await accountSignOutRequest.execute();
-            }
-            catch(error) {
-                console.log('error', JSON.stringify(error));
-            }
+    async function signOut(redirectPath?: string) {
+        // Invoke the GraphQL mutation
+        try {
+            // Invoke the mutation
+            await accountSignOutRequest.execute();
+        }
+        catch(error) {
+            console.log('error', JSON.stringify(error));
+        }
 
-            // Clear all cache (memory + localStorage + sessionStorage)
-            networkService.clearCache();
+        // Clear all cache (memory + localStorage + sessionStorage)
+        networkService.clearCache();
 
-            // Update the signed in state
-            updateSignedIn(false);
+        // Update the signed in state
+        updateSignedIn(false);
 
-            // If a redirect path is provided
-            if(redirectPath) {
-                // Redirect to the path
-                router.push(redirectPath);
-            }
+        // If a redirect path is provided
+        if(redirectPath) {
+            // Redirect to the path
+            router.push(redirectPath);
+        }
 
-            return true;
-        },
-        [accountSignOutRequest, updateSignedIn, router],
-    );
+        return true;
+    }
 
     // Effect to reconcile localStorage with initial server-side state
     // This is crucial for environments where the API is on a different domain
@@ -216,7 +195,11 @@ export function AccountProvider(properties: AccountProviderProperties) {
     // 4. Account query runs → Verifies authentication with API
     React.useEffect(
         function () {
-            // Only run on mount
+            // Only run once on mount
+            if(hasMounted) {
+                return;
+            }
+
             const storedSignedIn = localStorageService.get<boolean>(accountSignedInKey);
 
             // If localStorage indicates we're signed in but server-side rendering
@@ -228,31 +211,35 @@ export function AccountProvider(properties: AccountProviderProperties) {
             }
             // Note: We don't handle the opposite case (stored false, state true)
             // because the server's cookie check is authoritative in production
-        },
 
-        [], // Empty dependency array - only run once on mount
+            setHasMounted(true);
+        },
+        [hasMounted, signedIn],
     );
 
     // Effect to listen for changes in local storage
-    React.useEffect(
-        function () {
-            function handleLocalStorageChange(event: StorageEvent) {
-                if(event.key === accountSignedInKey) {
-                    updateSignedIn(event.newValue == 'true' ? true : false);
-                }
+    React.useEffect(function () {
+        function handleLocalStorageChange(event: StorageEvent) {
+            if(event.key === accountSignedInKey) {
+                const newValue = event.newValue == 'true' ? true : false;
+
+                // Update local storage (redundant but keeps updateSignedIn logic consistent)
+                localStorageService.set(accountSignedInKey, newValue);
+
+                // Update the state
+                setSignedIn(newValue);
             }
+        }
 
-            // Add a listener for changes in local storage
-            window.addEventListener('storage', handleLocalStorageChange);
+        // Add a listener for changes in local storage
+        window.addEventListener('storage', handleLocalStorageChange);
 
-            // On unmount
-            return function () {
-                // Remove the listener for changes in local storage
-                window.removeEventListener('storage', handleLocalStorageChange);
-            };
-        },
-        [updateSignedIn],
-    );
+        // On unmount
+        return function () {
+            // Remove the listener for changes in local storage
+            window.removeEventListener('storage', handleLocalStorageChange);
+        };
+    }, []);
 
     // Render the component
     return (

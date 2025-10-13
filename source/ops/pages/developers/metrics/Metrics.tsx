@@ -61,7 +61,13 @@ export type DataSourceWithMetricsType = DataSourceType & {
 
 // Component - Metrics
 export function Metrics() {
-    // Use the TimeSeries state hook for state management
+    // State
+    const [hasMounted, setHasMounted] = React.useState(false);
+    const [chartLoading, setChartLoading] = React.useState(true);
+    const [dataSourcesWithMetrics, setDataSourcesWithMetrics] = React.useState<DataSourceWithMetricsType[]>([]);
+    const [chartActiveLabel, setChartActiveLabel] = React.useState<string | null>(null);
+
+    // Hook - Use the TimeSeries state hook for state management
     const timeSeriesState = useTimeSeriesState({
         defaultTimeRange: {
             startTime: addDays(endOfToday(), -27),
@@ -73,7 +79,7 @@ export function Metrics() {
         synchronizeWithUrl: true,
     });
 
-    // Data sources are stored using URL search parameters
+    // Hook - Data sources are stored using URL search parameters
     const [dataSources, setDataSources] = useUrlQueryState(
         'dataSources',
         parseAsArrayOf(
@@ -83,16 +89,198 @@ export function Metrics() {
         ).withDefault([]),
     );
 
-    // Data sources with metrics is stored using React state
-    const [dataSourcesWithMetrics, setDataSourcesWithMetrics] = React.useState<DataSourceWithMetricsType[]>([]);
+    // Hook - Use the zoom behavior hook for intelligent range selection
+    const zoomBehavior = useZoomBehavior({
+        currentTimeRange: timeSeriesState.timeRange,
+        currentTimeInterval: timeSeriesState.timeInterval,
+        onTimeRangeChange: timeSeriesState.setTimeRange,
+        onTimeIntervalChange: timeSeriesState.setTimeInterval,
+    });
 
-    // Chart loading state
-    const [chartLoading, setChartLoading] = React.useState(true);
+    // Hook - Use the zoom controls hook for button-driven zoom in/out
+    const zoomControls = useZoomControls({
+        currentTimeRange: timeSeriesState.timeRange,
+        currentTimeInterval: timeSeriesState.timeInterval,
+        onTimeRangeChange: timeSeriesState.setTimeRange,
+        onTimeIntervalChange: timeSeriesState.setTimeInterval,
+    });
 
-    // Automatically add one data source on initial page load
+    // Calculate the chart error message
+    let chartError: {
+        message: string;
+        type: 'error' | 'warning';
+    } | null = null;
+
+    // If there are no data sources, display a warning message
+    if(dataSources.length <= 0) {
+        chartError = {
+            message: 'No data to display. Add a data source.',
+            type: 'warning',
+        };
+    }
+    // By default show a loading state
+    else if(chartLoading) {
+        chartError = {
+            message: 'Loading...',
+            type: 'warning',
+        };
+    }
+    // If there are no data points, display a warning message
+    else if(dataSourcesWithMetrics.length <= 0) {
+        chartError = {
+            message: 'No data to display. Select a different date range, table, or column.',
+            type: 'warning',
+        };
+    }
+
+    // Transform database metrics to TimeSeries format
+    let chartData: TimeSeriesDataPoint[] = [];
+
+    if(dataSourcesWithMetrics.length > 0) {
+        // Reorder dataSourcesWithMetrics to match the order in dataSources
+        const orderedDataSourcesWithMetrics = dataSources
+            .map(function (dataSource) {
+                return dataSourcesWithMetrics.find(function (currentDataSource) {
+                    return currentDataSource.id === dataSource.id;
+                });
+            })
+            .filter(function (currentDataSource): currentDataSource is DataSourceWithMetricsType {
+                return currentDataSource !== undefined;
+            });
+
+        // Convert each data source to the format needed by mergeTimeSeriesData
+        const dataSeries = orderedDataSourcesWithMetrics.map(function (dataSource) {
+            const rawData = dataSource.metrics.data.map(function ([timeIntervalValue, total]) {
+                // Normalize hour and minute format: server returns "2025-10-01 20:00:00" but we need "2025-10-01T20:00:00"
+                let normalizedTimeIntervalValue = timeIntervalValue;
+                if(
+                    (timeSeriesState.timeInterval === TimeInterval.Hour ||
+                        timeSeriesState.timeInterval === TimeInterval.Minute) &&
+                    typeof timeIntervalValue === 'string'
+                ) {
+                    normalizedTimeIntervalValue = timeIntervalValue.replace(' ', 'T');
+                }
+
+                return {
+                    timeIntervalValue: normalizedTimeIntervalValue,
+                    total,
+                };
+            });
+
+            // Fill missing intervals with zeroes to ensure full range is shown
+            const startTime = timeSeriesState.timeRange.startTime || addDays(endOfToday(), -27);
+            const endTime = timeSeriesState.timeRange.endTime || endOfToday();
+            const filledData = fillMissingTimeIntervalValuesWithZeroes(
+                rawData,
+                startTime,
+                endTime,
+                timeSeriesState.timeInterval,
+            );
+
+            return {
+                key: dataSource.id,
+                data: filledData,
+            };
+        });
+
+        // Merge all data series into a single dataset
+        const mergedData = mergeTimeSeriesData(dataSeries);
+
+        // Reverse the data if sort order is Descending
+        if(timeSeriesState.sortOrder === 'Descending') {
+            chartData = [...mergedData].reverse();
+        }
+        else {
+            chartData = mergedData;
+        }
+    }
+
+    // Transform data sources to TimeSeries format
+    // Reorder dataSourcesWithMetrics to match the order in dataSources
+    const orderedDataSourcesWithMetrics = dataSources
+        .map(function (dataSource) {
+            return dataSourcesWithMetrics.find(function (currentDataSource) {
+                return currentDataSource.id === dataSource.id;
+            });
+        })
+        .filter(function (currentDataSource): currentDataSource is DataSourceWithMetricsType {
+            return currentDataSource !== undefined;
+        });
+
+    const timeSeriesDataSources = orderedDataSourcesWithMetrics.map(function (dataSource) {
+        return {
+            id: dataSource.id,
+            dataKey: dataSource.id,
+            name: `${dataSource.tableName} (${dataSource.databaseName})`,
+            color: dataSource.color,
+            yAxisAlignment: dataSource.yAxisAlignment,
+            lineStyle: dataSource.lineStyle,
+        };
+    });
+
+    // Create the export menu items using the custom hook
+    const metricsExportMenu = useMetricsExportMenu(
+        chartData,
+        dataSourcesWithMetrics,
+        timeSeriesState.timeInterval,
+        timeSeriesState.timeRange.startTime,
+        timeSeriesState.timeRange.endTime,
+    );
+
+    // Create the context menu items
+    const contextMenuItems: MenuItemProperties[] = [];
+
+    if(chartActiveLabel) {
+        const timeIntervalValueStartAndEndDate = calculateTimeIntervalValueStartAndEndDate(
+            chartActiveLabel,
+            timeSeriesState.timeInterval,
+        );
+
+        const dataSourceMenuItems = dataSources.map(function (dataSource) {
+            return {
+                id: dataSource.id,
+                content: 'View Records for ' + dataSource.tableName + ' (' + dataSource.databaseName + ')',
+                href:
+                    '/ops/developers/data?page=1&databaseName=' +
+                    dataSource.databaseName +
+                    '&tableName=' +
+                    dataSource.tableName +
+                    '&filters=' +
+                    encodeURIComponent(
+                        JSON.stringify({
+                            operator: 'And',
+                            conditions: [
+                                {
+                                    column: 'createdAt',
+                                    operator: ColumnFilterConditionOperator.GreaterThanOrEqual,
+                                    value: timeIntervalValueStartAndEndDate.startDate.toISOString(),
+                                },
+                                {
+                                    column: 'createdAt',
+                                    operator: ColumnFilterConditionOperator.LessThanOrEqual,
+                                    value: timeIntervalValueStartAndEndDate.endDate.toISOString(),
+                                },
+                            ],
+                        }),
+                    ),
+                target: '_blank',
+            };
+        });
+
+        if(dataSourceMenuItems.length) {
+            contextMenuItems.push(...dataSourceMenuItems);
+        }
+    }
+
+    // Effect to set mounted state after first render
+    React.useEffect(function () {
+        setHasMounted(true);
+    }, []);
+
+    // Effect to automatically add one data source on initial page load
     React.useEffect(
         function () {
-            if(dataSources.length === 0) {
+            if(hasMounted && dataSources.length === 0) {
                 setDataSources([
                     {
                         id: uniqueIdentifier(8),
@@ -106,222 +294,7 @@ export function Metrics() {
                 ]);
             }
         },
-        // Only run once on mount
-        [],
-    );
-
-    // Chart active label for context menu
-    const [chartActiveLabel, setChartActiveLabel] = React.useState<string | null>(null);
-
-    // Use the zoom behavior hook for intelligent range selection
-    const zoomBehavior = useZoomBehavior({
-        currentTimeRange: timeSeriesState.timeRange,
-        currentTimeInterval: timeSeriesState.timeInterval,
-        onTimeRangeChange: timeSeriesState.setTimeRange,
-        onTimeIntervalChange: timeSeriesState.setTimeInterval,
-    });
-
-    // Use the zoom controls hook for button-driven zoom in/out
-    const zoomControls = useZoomControls({
-        currentTimeRange: timeSeriesState.timeRange,
-        currentTimeInterval: timeSeriesState.timeInterval,
-        onTimeRangeChange: timeSeriesState.setTimeRange,
-        onTimeIntervalChange: timeSeriesState.setTimeInterval,
-    });
-
-    // Memoize the chart error message
-    const chartError = React.useMemo<{
-        message: string;
-        type: 'error' | 'warning';
-    } | null>(
-        function () {
-            // If there are no data sources, display a warning message
-            if(dataSources.length <= 0) {
-                return {
-                    message: 'No data to display. Add a data source.',
-                    type: 'warning',
-                };
-            }
-            // By default show a loading state
-            else if(chartLoading) {
-                return {
-                    message: 'Loading...',
-                    type: 'warning',
-                };
-            }
-            // If there are no data points, display a warning message
-            else if(dataSourcesWithMetrics.length <= 0) {
-                return {
-                    message: 'No data to display. Select a different date range, table, or column.',
-                    type: 'warning',
-                };
-            }
-
-            return null;
-        },
-        [dataSourcesWithMetrics.length, chartLoading, dataSources.length],
-    );
-
-    // Transform database metrics to TimeSeries format
-    const chartData: TimeSeriesDataPoint[] = React.useMemo(
-        function () {
-            if(dataSourcesWithMetrics.length === 0) {
-                return [];
-            }
-
-            // Reorder dataSourcesWithMetrics to match the order in dataSources
-            const orderedDataSourcesWithMetrics = dataSources
-                .map(function (dataSource) {
-                    return dataSourcesWithMetrics.find(function (ds) {
-                        return ds.id === dataSource.id;
-                    });
-                })
-                .filter(function (ds): ds is DataSourceWithMetricsType {
-                    return ds !== undefined;
-                });
-
-            // Convert each data source to the format needed by mergeTimeSeriesData
-            const dataSeries = orderedDataSourcesWithMetrics.map(function (dataSource) {
-                const rawData = dataSource.metrics.data.map(function ([timeIntervalValue, total]) {
-                    // Normalize hour and minute format: server returns "2025-10-01 20:00:00" but we need "2025-10-01T20:00:00"
-                    let normalizedTimeIntervalValue = timeIntervalValue;
-                    if(
-                        (timeSeriesState.timeInterval === TimeInterval.Hour ||
-                            timeSeriesState.timeInterval === TimeInterval.Minute) &&
-                        typeof timeIntervalValue === 'string'
-                    ) {
-                        normalizedTimeIntervalValue = timeIntervalValue.replace(' ', 'T');
-                    }
-
-                    return {
-                        timeIntervalValue: normalizedTimeIntervalValue,
-                        total,
-                    };
-                });
-
-                // Fill missing intervals with zeroes to ensure full range is shown
-                const startTime = timeSeriesState.timeRange.startTime || addDays(endOfToday(), -27);
-                const endTime = timeSeriesState.timeRange.endTime || endOfToday();
-                const filledData = fillMissingTimeIntervalValuesWithZeroes(
-                    rawData,
-                    startTime,
-                    endTime,
-                    timeSeriesState.timeInterval,
-                );
-
-                return {
-                    key: dataSource.id,
-                    data: filledData,
-                };
-            });
-
-            // Merge all data series into a single dataset
-            const mergedData = mergeTimeSeriesData(dataSeries);
-
-            // Reverse the data if sort order is Descending
-            if(timeSeriesState.sortOrder === 'Descending') {
-                return [...mergedData].reverse();
-            }
-
-            return mergedData;
-        },
-        [
-            dataSourcesWithMetrics,
-            dataSources,
-            timeSeriesState.timeRange.startTime,
-            timeSeriesState.timeRange.endTime,
-            timeSeriesState.timeInterval,
-            timeSeriesState.sortOrder,
-        ],
-    );
-
-    // Transform data sources to TimeSeries format
-    const timeSeriesDataSources = React.useMemo(
-        function () {
-            // Reorder dataSourcesWithMetrics to match the order in dataSources
-            const orderedDataSourcesWithMetrics = dataSources
-                .map(function (dataSource) {
-                    return dataSourcesWithMetrics.find(function (ds) {
-                        return ds.id === dataSource.id;
-                    });
-                })
-                .filter(function (ds): ds is DataSourceWithMetricsType {
-                    return ds !== undefined;
-                });
-
-            return orderedDataSourcesWithMetrics.map(function (dataSource) {
-                return {
-                    id: dataSource.id,
-                    dataKey: dataSource.id,
-                    name: `${dataSource.tableName} (${dataSource.databaseName})`,
-                    color: dataSource.color,
-                    yAxisAlignment: dataSource.yAxisAlignment,
-                    lineStyle: dataSource.lineStyle,
-                };
-            });
-        },
-        [dataSourcesWithMetrics, dataSources],
-    );
-
-    // Create the export menu items using the custom hook
-    const metricsExportMenu = useMetricsExportMenu(
-        chartData,
-        dataSourcesWithMetrics,
-        timeSeriesState.timeInterval,
-        timeSeriesState.timeRange.startTime,
-        timeSeriesState.timeRange.endTime,
-    );
-
-    // Create the context menu items
-    const contextMenuItems: MenuItemProperties[] = React.useMemo(
-        function () {
-            const items: MenuItemProperties[] = [];
-
-            if(chartActiveLabel) {
-                const timeIntervalValueStartAndEndDate = calculateTimeIntervalValueStartAndEndDate(
-                    chartActiveLabel,
-                    timeSeriesState.timeInterval,
-                );
-
-                const dataSourceMenuItems = dataSources.map(function (dataSource) {
-                    return {
-                        id: dataSource.id,
-                        content: 'View Records for ' + dataSource.tableName + ' (' + dataSource.databaseName + ')',
-                        href:
-                            '/ops/developers/data?page=1&databaseName=' +
-                            dataSource.databaseName +
-                            '&tableName=' +
-                            dataSource.tableName +
-                            '&filters=' +
-                            encodeURIComponent(
-                                JSON.stringify({
-                                    operator: 'And',
-                                    conditions: [
-                                        {
-                                            column: 'createdAt',
-                                            operator: ColumnFilterConditionOperator.GreaterThanOrEqual,
-                                            value: timeIntervalValueStartAndEndDate.startDate.toISOString(),
-                                        },
-                                        {
-                                            column: 'createdAt',
-                                            operator: ColumnFilterConditionOperator.LessThanOrEqual,
-                                            value: timeIntervalValueStartAndEndDate.endDate.toISOString(),
-                                        },
-                                    ],
-                                }),
-                            ),
-                        target: '_blank',
-                    };
-                });
-
-                if(dataSourceMenuItems.length) {
-                    items.push(...dataSourceMenuItems);
-                }
-            }
-
-            return items;
-        },
-        [chartActiveLabel, dataSources, timeSeriesState.timeInterval],
+        [hasMounted, dataSources.length, setDataSources],
     );
 
     // Render the component
@@ -370,7 +343,7 @@ export function Metrics() {
                     {/* Refresh Button */}
                     <RefreshButton
                         size={'formInputIcon'}
-                        onClick={async () => {
+                        onClick={async function () {
                             // Convert time range to ISO strings for metadata matching
                             const startTimeValue = timeSeriesState.timeRange.startTime
                                 ? typeof timeSeriesState.timeRange.startTime === 'string'

@@ -55,20 +55,17 @@ export function DataSources(properties: DataSourcesProperties) {
     );
 
     // Handle drag end - sync to URL after drag completes and animation settles
-    const handleDragEnd = React.useCallback(
-        function () {
-            if(pendingUrlSyncReference.current) {
-                // Delay URL sync to allow drop animation to complete
-                setTimeout(function () {
-                    if(pendingUrlSyncReference.current) {
-                        properties.setDataSources(pendingUrlSyncReference.current);
-                        pendingUrlSyncReference.current = null;
-                    }
-                }, 500);
-            }
-        },
-        [properties.setDataSources],
-    );
+    function handleDragEnd() {
+        if(pendingUrlSyncReference.current) {
+            // Delay URL sync to allow drop animation to complete
+            setTimeout(function () {
+                if(pendingUrlSyncReference.current) {
+                    properties.setDataSources(pendingUrlSyncReference.current);
+                    pendingUrlSyncReference.current = null;
+                }
+            }, 500);
+        }
+    }
 
     // Add a new data source
     const handleAddDataSource = async function () {
@@ -90,22 +87,30 @@ export function DataSources(properties: DataSourcesProperties) {
         ]);
     };
 
-    const handleRemoveDataSource = (id: string) => {
-        properties.setDataSources((oldConfigurationArray) => {
+    function handleRemoveDataSource(id: string) {
+        properties.setDataSources(function (oldConfigurationArray) {
             // Find the index of the current config
-            const configurationIndex = oldConfigurationArray?.findIndex((configuration) => configuration.id === id);
+            const configurationIndex = oldConfigurationArray?.findIndex(function (configuration) {
+                return configuration.id === id;
+            });
 
-            return oldConfigurationArray?.filter((configuration, id) => id !== configurationIndex);
+            return oldConfigurationArray?.filter(function (configuration, index) {
+                return index !== configurationIndex;
+            });
         });
 
         // Remove the data from the chartData array
-        properties.setDataSourcesWithMetrics((oldData) => {
+        properties.setDataSourcesWithMetrics(function (oldData) {
             // Find the index of the current config
-            const configIndex = oldData?.findIndex((configuration) => configuration.id === id);
+            const configIndex = oldData?.findIndex(function (configuration) {
+                return configuration.id === id;
+            });
 
-            return oldData?.filter((configuration, id) => id !== configIndex);
+            return oldData?.filter(function (configuration, index) {
+                return index !== configIndex;
+            });
         });
-    };
+    }
 
     // Render the component
     return (
@@ -144,7 +149,7 @@ export function DataSources(properties: DataSourcesProperties) {
                         <Reorder.Group
                             axis="y"
                             values={localDataSources}
-                            onReorder={(values) => {
+                            onReorder={function (values) {
                                 // Update local state immediately for smooth animation
                                 setLocalDataSources(values);
                                 // Store for URL sync after drag ends
@@ -154,7 +159,7 @@ export function DataSources(properties: DataSourcesProperties) {
                             style={{ position: 'relative' }}
                         >
                             <AnimatePresence mode="popLayout" initial={false} propagate>
-                                {localDataSources.map((dataSource, index) => {
+                                {localDataSources.map(function (dataSource, index) {
                                     return (
                                         <DataSource
                                             key={dataSource.id}

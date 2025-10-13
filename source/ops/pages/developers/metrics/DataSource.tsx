@@ -25,7 +25,7 @@ import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon
 
 // Dependencies - Utilities
 import { RgbColor, RgbColorPicker } from 'react-colorful';
-import { convertColorString, hexStringToRgb } from '@structure/source/utilities/Color';
+import { convertColorString, rgbaStringToRgbaArray } from '@structure/source/utilities/Color';
 import { addCommas } from '@structure/source/utilities/Number';
 import { calculateStatistics } from '@structure/source/common/charts/time-series/utilities/TimeSeriesStatistics';
 import { Reorder, useDragControls } from 'motion/react';
@@ -62,36 +62,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
         const dragControls = useDragControls();
 
         // Parse the current color from props (handles both hex and rgba formats)
-        const currentColor = React.useMemo(
-            function () {
-                const color = properties.settings.color;
-
-                // If it's a hex color, convert to RGB
-                if(color.startsWith('#')) {
-                    const rgbColor = hexStringToRgb(color);
-                    if(rgbColor && rgbColor.length >= 3) {
-                        return {
-                            r: Number(rgbColor[0]),
-                            g: Number(rgbColor[1]),
-                            b: Number(rgbColor[2]),
-                        };
-                    }
-                }
-
-                // If it's an rgba color, extract the RGB values
-                const matches = color.match(/\d+/g);
-                if(matches && matches.length >= 3) {
-                    return {
-                        r: Number(matches[0]),
-                        g: Number(matches[1]),
-                        b: Number(matches[2]),
-                    };
-                }
-
-                return { r: 0, g: 0, b: 0 };
-            },
-            [properties.settings.color],
-        );
+        const rgbaString = convertColorString(properties.settings.color, 'rgba');
+        const [r, g, b] = rgbaStringToRgbaArray(rgbaString);
+        const currentColor = { r, g, b };
 
         // Query the API for the available columns for the current table
         const dataInteractionDatabaseTableRequest = useDataInteractionDatabaseTableRequest(
@@ -104,14 +77,18 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
         if(dataInteractionDatabaseTableRequest.data?.dataInteractionDatabaseTable.columns) {
             availableColumns = dataInteractionDatabaseTableRequest.data?.dataInteractionDatabaseTable.columns
                 // Filter out columns that are not datetime
-                .filter((column) => column.type === 'datetime')
+                .filter(function (column) {
+                    return column.type === 'datetime';
+                })
                 // Map to column names
-                .map((column) => column.name);
+                .map(function (column) {
+                    return column.name;
+                });
         }
 
         // Set the default column to measure to the searchParams column or "createdAt" if that exists in the availableColumns. Otherwise, default to the first available column
         const columnToMeasure =
-            availableColumns?.find((value) => {
+            availableColumns?.find(function (value) {
                 const columnToFind = properties.settings.columnName ?? 'createdAt';
                 return value === columnToFind;
             }) ??
@@ -120,13 +97,13 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
 
         // Function to set the column to measure
         function setColumnToMeasureOnDataSources(newColumnName: string) {
-            properties.setDataSources((oldConfigurationArray) => {
+            properties.setDataSources(function (oldConfigurationArray) {
                 // Find the index of the current config
-                const configurationIndex = oldConfigurationArray?.findIndex(
-                    (configuration) => configuration.id === properties.settings.id,
-                );
+                const configurationIndex = oldConfigurationArray?.findIndex(function (configuration) {
+                    return configuration.id === properties.settings.id;
+                });
 
-                return oldConfigurationArray?.map((configuration, id) => {
+                return oldConfigurationArray?.map(function (configuration, id) {
                     if(id === configurationIndex) {
                         return {
                             ...configuration,
@@ -159,6 +136,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
         const propertiesSettingsId = properties.settings.id;
         const propertiesSettingsDatabaseName = properties.settings.databaseName;
         const propertiesSettingsTableName = properties.settings.tableName;
+        const propertiesSettingsColor = properties.settings.color;
+        const propertiesSettingsYAxisAlignment = properties.settings.yAxisAlignment;
+        const propertiesSettingsLineStyle = properties.settings.lineStyle;
         const propertiesSetLoading = properties.setLoading;
         const propertiesSetDataSourcesWithMetrics = properties.setDataSourcesWithMetrics;
 
@@ -174,12 +154,16 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                     // If there is no data, return
                     if(!data) return;
 
-                    propertiesSetDataSourcesWithMetrics((oldData) => {
+                    propertiesSetDataSourcesWithMetrics(function (oldData) {
                         if(!data.dataInteractionDatabaseTableMetrics)
-                            return oldData.filter((old) => old.id !== propertiesSettingsId);
+                            return oldData.filter(function (old) {
+                                return old.id !== propertiesSettingsId;
+                            });
 
                         // Find if the data already exists in the array
-                        const index = oldData.findIndex((old) => old.id === propertiesSettingsId);
+                        const index = oldData.findIndex(function (old) {
+                            return old.id === propertiesSettingsId;
+                        });
 
                         // If the data doesn't exist, add it to the array
                         if(index === -1) {
@@ -190,9 +174,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                     databaseName: propertiesSettingsDatabaseName,
                                     tableName: propertiesSettingsTableName,
                                     columnName: columnToMeasure,
-                                    color: properties.settings.color,
-                                    yAxisAlignment: properties.settings.yAxisAlignment,
-                                    lineStyle: properties.settings.lineStyle,
+                                    color: propertiesSettingsColor,
+                                    yAxisAlignment: propertiesSettingsYAxisAlignment,
+                                    lineStyle: propertiesSettingsLineStyle,
                                     metrics: data.dataInteractionDatabaseTableMetrics,
                                 },
                             ];
@@ -206,9 +190,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                     databaseName: propertiesSettingsDatabaseName,
                                     tableName: propertiesSettingsTableName,
                                     columnName: columnToMeasure,
-                                    color: properties.settings.color,
-                                    yAxisAlignment: properties.settings.yAxisAlignment,
-                                    lineStyle: properties.settings.lineStyle,
+                                    color: propertiesSettingsColor,
+                                    yAxisAlignment: propertiesSettingsYAxisAlignment,
+                                    lineStyle: propertiesSettingsLineStyle,
                                     metrics: data.dataInteractionDatabaseTableMetrics,
                                 },
                                 ...oldData.slice(index + 1),
@@ -217,17 +201,17 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                     });
                 }
             },
-
             [
                 dataInteractionDatabaseTableMetricsRequest.data,
                 columnToMeasure,
                 propertiesSettingsId,
                 propertiesSettingsDatabaseName,
                 propertiesSettingsTableName,
+                propertiesSettingsColor,
+                propertiesSettingsYAxisAlignment,
+                propertiesSettingsLineStyle,
                 propertiesSetLoading,
                 propertiesSetDataSourcesWithMetrics,
-                // Intentionally excluding visual properties (color, lineStyle, yAxisAlignment)
-                // to prevent re-fetching data when only visual properties change
             ],
         );
 
@@ -236,7 +220,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             function () {
                 if(dataInteractionDatabaseTableMetricsRequest.isError) {
                     propertiesSetDataSourcesWithMetrics(function (old) {
-                        return old.filter((old) => old.id !== propertiesSettingsId);
+                        return old.filter(function (old) {
+                            return old.id !== propertiesSettingsId;
+                        });
                     });
                 }
             },
@@ -253,11 +239,11 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             if(databaseName && tableName) {
                 properties.setDataSources(function (previousDataSources) {
                     // Find the index of the current data source
-                    const previousDataSourceIndex = previousDataSources?.findIndex(
-                        (currentDataSource) => currentDataSource.id === properties.settings.id,
-                    );
+                    const previousDataSourceIndex = previousDataSources?.findIndex(function (currentDataSource) {
+                        return currentDataSource.id === properties.settings.id;
+                    });
 
-                    return previousDataSources?.map((currentDataSource, currentDataSourceIndex) => {
+                    return previousDataSources?.map(function (currentDataSource, currentDataSourceIndex) {
                         if(currentDataSourceIndex === previousDataSourceIndex) {
                             return {
                                 ...currentDataSource,
@@ -291,13 +277,13 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             setLocalColor(color);
 
             // Update the color of the chart data (for immediate visual feedback)
-            properties.setDataSourcesWithMetrics((oldData) => {
+            properties.setDataSourcesWithMetrics(function (oldData) {
                 // Find the index of the current config
-                const configurationIndex = oldData?.findIndex(
-                    (configuration) => configuration.id === properties.settings.id,
-                );
+                const configurationIndex = oldData?.findIndex(function (configuration) {
+                    return configuration.id === properties.settings.id;
+                });
 
-                return oldData?.map((configuration, id) => {
+                return oldData?.map(function (configuration, id) {
                     if(id === configurationIndex) {
                         return {
                             ...configuration,
@@ -319,13 +305,13 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             const colorString = `rgba(${color.r}, ${color.g}, ${color.b}, 1)`;
 
             // Update the color of the query config (URL state)
-            properties.setDataSources((oldConfigurationArray) => {
+            properties.setDataSources(function (oldConfigurationArray) {
                 // Find the index of the current config
-                const configurationIndex = oldConfigurationArray?.findIndex(
-                    (configuration) => configuration.id === properties.settings.id,
-                );
+                const configurationIndex = oldConfigurationArray?.findIndex(function (configuration) {
+                    return configuration.id === properties.settings.id;
+                });
 
-                return oldConfigurationArray?.map((configuration, id) => {
+                return oldConfigurationArray?.map(function (configuration, id) {
                     if(id === configurationIndex) {
                         return {
                             ...configuration,
@@ -351,16 +337,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             if(!/^#([A-Fa-f0-9]{6}){1,2}$/.test(color)) return;
 
             // Convert the hex color to an rgba color
-            const rgbColor = hexStringToRgb(color);
-
-            // If the color is not a valid rgb color, return
-            if(!rgbColor) return;
-
-            const colorObj = {
-                r: Number(rgbColor[0]),
-                g: Number(rgbColor[1]),
-                b: Number(rgbColor[2]),
-            };
+            const rgbaString = convertColorString(color, 'rgba');
+            const [r, g, b] = rgbaStringToRgbaArray(rgbaString);
+            const colorObj = { r, g, b };
 
             // Update both visual and URL state (hex input is not draggable)
             handleColorChangeVisual(colorObj);
@@ -368,15 +347,15 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
         }
 
         // Function to handle changing the yAxis alignment
-        const handleYAxisChange = (yAxisAlignment: 'left' | 'right') => {
+        function handleYAxisChange(yAxisAlignment: 'left' | 'right') {
             // Update the yAxis of the chart data
-            properties.setDataSourcesWithMetrics((oldData) => {
+            properties.setDataSourcesWithMetrics(function (oldData) {
                 // Find the index of the current config
-                const configurationIndex = oldData?.findIndex(
-                    (configuration) => configuration.id === properties.settings.id,
-                );
+                const configurationIndex = oldData?.findIndex(function (configuration) {
+                    return configuration.id === properties.settings.id;
+                });
 
-                return oldData?.map((configuration, id) => {
+                return oldData?.map(function (configuration, id) {
                     if(id === configurationIndex) {
                         return {
                             ...configuration,
@@ -390,13 +369,13 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             });
 
             // Update the yAxis of the query config
-            properties.setDataSources((oldConfigurationArray) => {
+            properties.setDataSources(function (oldConfigurationArray) {
                 // Find the index of the current config
-                const configurationIndex = oldConfigurationArray?.findIndex(
-                    (configuration) => configuration.id === properties.settings.id,
-                );
+                const configurationIndex = oldConfigurationArray?.findIndex(function (configuration) {
+                    return configuration.id === properties.settings.id;
+                });
 
-                return oldConfigurationArray?.map((configuration, id) => {
+                return oldConfigurationArray?.map(function (configuration, id) {
                     if(id === configurationIndex) {
                         return {
                             ...configuration,
@@ -408,18 +387,18 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                     }
                 });
             });
-        };
+        }
 
         // Function to handle changing the lineStyle
         function handleLineStyleChange(lineStyle: 'solid' | 'dashed') {
             // Update the lineStyle of the chart data
-            properties.setDataSourcesWithMetrics((oldData) => {
+            properties.setDataSourcesWithMetrics(function (oldData) {
                 // Find the index of the current config
-                const configurationIndex = oldData?.findIndex(
-                    (configuration) => configuration.id === properties.settings.id,
-                );
+                const configurationIndex = oldData?.findIndex(function (configuration) {
+                    return configuration.id === properties.settings.id;
+                });
 
-                return oldData?.map((configuration, id) => {
+                return oldData?.map(function (configuration, id) {
                     if(id === configurationIndex) {
                         return {
                             ...configuration,
@@ -433,13 +412,13 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
             });
 
             // Update the lineStyle of the query configuration
-            properties.setDataSources((oldConfigurationArray) => {
+            properties.setDataSources(function (oldConfigurationArray) {
                 // Find the index of the current configuration
-                const configurationIndex = oldConfigurationArray?.findIndex(
-                    (configuration) => configuration.id === properties.settings.id,
-                );
+                const configurationIndex = oldConfigurationArray?.findIndex(function (configuration) {
+                    return configuration.id === properties.settings.id;
+                });
 
-                return oldConfigurationArray?.map((configuration, id) => {
+                return oldConfigurationArray?.map(function (configuration, id) {
                     if(id === configurationIndex) {
                         return {
                             ...configuration,
@@ -454,19 +433,14 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
         }
 
         // Calculate the statistics using the new utility
-        const statistics = React.useMemo(
-            function () {
-                const dataPoints =
-                    dataInteractionDatabaseTableMetricsRequest.data?.dataInteractionDatabaseTableMetrics?.data.map(
-                        function (d) {
-                            return d[1];
-                        },
-                    ) ?? [];
+        const dataPoints =
+            dataInteractionDatabaseTableMetricsRequest.data?.dataInteractionDatabaseTableMetrics?.data.map(
+                function (d) {
+                    return d[1];
+                },
+            ) ?? [];
 
-                return calculateStatistics(dataPoints);
-            },
-            [dataInteractionDatabaseTableMetricsRequest.data],
-        );
+        const statistics = calculateStatistics(dataPoints);
 
         // Render the component
         return (
@@ -512,7 +486,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                 <div className="relative flex w-full items-center justify-start space-x-2 py-1">
                     {/* Drag Icon */}
                     <div
-                        onPointerDown={(event) => {
+                        onPointerDown={function (event) {
                             event.preventDefault();
                             dragControls.start(event);
                         }}
@@ -533,21 +507,25 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                 content={
                                     <div
                                         className="w-min overflow-visible p-1"
-                                        onMouseDown={() => setIsDraggingColor(true)}
-                                        onMouseUp={() => {
+                                        onMouseDown={function () {
+                                            setIsDraggingColor(true);
+                                        }}
+                                        onMouseUp={function () {
                                             if(isDraggingColor) {
                                                 handleColorChangeCommit();
                                             }
                                             setIsDraggingColor(false);
                                         }}
-                                        onMouseLeave={() => {
+                                        onMouseLeave={function () {
                                             if(isDraggingColor) {
                                                 handleColorChangeCommit();
                                                 setIsDraggingColor(false);
                                             }
                                         }}
-                                        onTouchStart={() => setIsDraggingColor(true)}
-                                        onTouchEnd={() => {
+                                        onTouchStart={function () {
+                                            setIsDraggingColor(true);
+                                        }}
+                                        onTouchEnd={function () {
                                             if(isDraggingColor) {
                                                 handleColorChangeCommit();
                                             }
@@ -556,7 +534,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                     >
                                         <RgbColorPicker
                                             color={localColor || currentColor}
-                                            onChange={(color) => {
+                                            onChange={function (color) {
                                                 // Update the input value
                                                 const input = document.getElementById(
                                                     'color-' + properties.settings.id,
@@ -629,10 +607,12 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                         componentClassName="w-40"
                         placeholder="Column"
                         items={
-                            availableColumns?.map((column) => ({
-                                value: column,
-                                content: column,
-                            })) ?? []
+                            availableColumns?.map(function (column) {
+                                return {
+                                    value: column,
+                                    content: column,
+                                };
+                            }) ?? []
                         }
                         defaultValue={
                             // Check if the properties.settings.columnName exists in the available columns
@@ -642,7 +622,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                   availableColumns?.at(0)
                         }
                         disabled={dataInteractionDatabaseTableRequest.isLoading || !availableColumns}
-                        onChange={(value) => setColumnToMeasureOnDataSources(value as string)}
+                        onChange={function (value) {
+                            setColumnToMeasureOnDataSources(value as string);
+                        }}
                     />
 
                     {/* Y Axis Selector */}
@@ -661,7 +643,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                 content: 'Right',
                             },
                         ]}
-                        onChange={(value) => handleYAxisChange(value as 'left' | 'right')}
+                        onChange={function (value) {
+                            handleYAxisChange(value as 'left' | 'right');
+                        }}
                     />
 
                     {/* Line Style Selector */}
@@ -681,7 +665,9 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                 },
                             ]}
                             defaultValue={properties.settings.lineStyle}
-                            onChange={(value) => handleLineStyleChange(value as 'solid' | 'dashed')}
+                            onChange={function (value) {
+                                handleLineStyleChange(value as 'solid' | 'dashed');
+                            }}
                         />
                     )}
 

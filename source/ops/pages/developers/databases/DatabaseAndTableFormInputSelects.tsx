@@ -29,6 +29,8 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     const [selectedTableName, setSelectedTableName] = React.useState<string | undefined>(
         properties.tableNameFormInputSelectProperties?.defaultValue,
     );
+    const [databaseItems, setDatabaseItems] = React.useState<MenuItemProperties[]>([]);
+    const [tableItems, setTableItems] = React.useState<MenuItemProperties[]>([]);
 
     // Get the databases from the API
     const dataInteractionDatabasesRequest = useDataInteractionDatabasesRequest();
@@ -41,35 +43,31 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     );
 
     // Create database items from the databases query
-    const databaseItems = React.useMemo(
+    React.useEffect(
         function () {
             const items: MenuItemProperties[] = [];
-
             dataInteractionDatabasesRequest.data?.dataInteractionDatabases.items?.forEach(function (database) {
                 items.push({
                     value: database.databaseName,
                     content: database.databaseName,
                 });
             });
-
-            return items;
+            setDatabaseItems(items);
         },
         [dataInteractionDatabasesRequest.data],
     );
 
     // Create table items from the tables query
-    const tableItems = React.useMemo(
+    React.useEffect(
         function () {
             const items: MenuItemProperties[] = [];
-
             dataInteractionDatabaseTablesRequest.data?.dataInteractionDatabaseTables?.items?.forEach(function (table) {
                 items.push({
                     value: table.tableName,
                     content: table.tableName,
                 });
             });
-
-            return items;
+            setTableItems(items);
         },
         [dataInteractionDatabaseTablesRequest.data],
     );
@@ -88,11 +86,14 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     );
 
     // Set the selected table when tables load or database changes
+    const propertiesOnChange = properties.onChange;
     React.useEffect(
         function () {
             if(selectedDatabaseName && tableItems.length > 0) {
                 // Check if current selection is still valid
-                const currentTableStillExists = tableItems.some((item) => item.value === selectedTableName);
+                const currentTableStillExists = tableItems.some(function (item) {
+                    return item.value === selectedTableName;
+                });
 
                 // If no table selected or current selection is invalid, select first table
                 if(!selectedTableName || !currentTableStillExists) {
@@ -100,15 +101,14 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                     if(firstTable) {
                         setSelectedTableName(firstTable);
                         // Run the onChange callback
-                        if(properties.onChange) {
-                            properties.onChange(selectedDatabaseName, firstTable);
+                        if(propertiesOnChange) {
+                            propertiesOnChange(selectedDatabaseName, firstTable);
                         }
                     }
                 }
             }
         },
-
-        [selectedDatabaseName, tableItems],
+        [selectedDatabaseName, tableItems, selectedTableName, propertiesOnChange],
     );
 
     // Render the component
