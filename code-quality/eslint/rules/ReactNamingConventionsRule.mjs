@@ -86,7 +86,12 @@ const ReactNamingConventionsRule = {
                 return true;
             }
 
-            // Ends with the expected name (e.g., hoverSpring for useSpring)
+            // Starts with the expected name (e.g., watchEmail for useWatch)
+            if(varNameLower.startsWith(expectedLower)) {
+                return true;
+            }
+
+            // Ends with the expected name (e.g., emailWatch for useWatch)
             if(varNameLower.endsWith(expectedLower)) {
                 return true;
             }
