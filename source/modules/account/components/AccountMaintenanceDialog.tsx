@@ -32,6 +32,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
     const [checkingAuthentication, setCheckingAuthentication] = React.useState(false);
     const [hasCheckedAuthentication, setHasCheckedAuthentication] = React.useState(false);
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+    const [shouldProceed, setShouldProceed] = React.useState(true);
 
     // Check current authentication session - using query without cache for fresh data
     // We use cache: false to ensure we always get the latest auth status from the server
@@ -66,14 +67,15 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                 setCheckingAuthentication(false);
                 setIsAuthenticated(false);
                 setHasCheckedAuthentication(false);
+                setShouldProceed(true);
+            }
+            else {
+                // Set to true when opening
+                setShouldProceed(true);
             }
         },
         [properties.open],
     );
-
-    // Reference to track if we should proceed with auth callback
-    // This prevents race conditions when dialog is closed during authentication
-    const shouldProceedReference = React.useRef(true);
 
     // Extract the specific values we need for the effect
     // With cache: false, we still get refresh() since it's a query, not a mutation
@@ -87,9 +89,6 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
     // or if they can proceed directly (if they recently authenticated)
     React.useEffect(
         function () {
-            // Reset the flag when dialog state changes
-            shouldProceedReference.current = open;
-
             // Only check auth if dialog is open and we haven't checked yet
             if(open && !hasCheckedAuthentication && !checkingAuthentication) {
                 setCheckingAuthentication(true);
@@ -103,7 +102,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                     // Don't proceed if dialog was closed while checking
                     // This prevents race conditions where the user closes the dialog
                     // before the auth check completes
-                    if(!shouldProceedReference.current) {
+                    if(!shouldProceed) {
                         setCheckingAuthentication(false);
                         return;
                     }
@@ -119,7 +118,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                         // Small delay to show the success state for better UX
                         setTimeout(function () {
                             // Check again if we should still proceed
-                            if(shouldProceedReference.current) {
+                            if(shouldProceed) {
                                 onAuthenticated();
                                 setOpen(false);
                                 onOpenChange?.(false);
@@ -135,6 +134,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
             open,
             hasCheckedAuthentication,
             checkingAuthentication,
+            shouldProceed,
             authenticationData,
             refreshAuthentication,
             onAuthenticated,
@@ -146,7 +146,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
     function onOpenChangeIntercept(open: boolean) {
         // Mark that we should not proceed if closing
         if(!open) {
-            shouldProceedReference.current = false;
+            setShouldProceed(false);
         }
 
         // Optionally call the onOpenChange callback
@@ -179,7 +179,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
         // Show the authentication form only if not checking and not authenticated
         content = (
             <div className="p-6">
-                {shouldProceedReference.current ? (
+                {shouldProceed ? (
                     <AccountAuthenticatedSession
                         scopeType={AccountSessionScopeType.AccountMaintenance}
                         title="Verify Identity"

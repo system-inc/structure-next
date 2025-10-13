@@ -84,6 +84,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
 
     // State
     const [windowInnerWidth, setWindowInnerWidth] = React.useState<number>(0);
+    const [hasMounted, setHasMounted] = React.useState<boolean>(false);
 
     // References
     const containerDivReference = React.useRef<HTMLDivElement>(null);
@@ -279,9 +280,12 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             // Mark the navigation as not closing by window resize
             setSideNavigationLayoutNavigationIsClosingByWindowResize(false);
         },
-        // Just when the navigation open state or width changes
-
-        [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
+        [
+            sideNavigationLayoutNavigationOpen,
+            sideNavigationLayoutNavigationWidth,
+            containerOffsetSpring,
+            setSideNavigationLayoutNavigationIsClosingByWindowResize,
+        ],
     );
 
     // Effect to handle window resizes
@@ -331,9 +335,14 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
         ],
     );
 
-    // Effect to handle the initial size on mount
-    React.useEffect(
+    // Layout effect to handle the initial size on mount
+    React.useLayoutEffect(
         function () {
+            // Only run once on mount
+            if(hasMounted) {
+                return;
+            }
+
             // Read the width from session storage
             const sessionStorageWidth = sessionStorage.getItem(
                 getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
@@ -356,6 +365,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
             }
 
             const isDesktop = window.innerWidth >= desktopMinimumWidth;
+            const currentNavigationWidth = sideNavigationLayoutNavigationWidth;
 
             // If on mobile
             if(!isDesktop) {
@@ -363,7 +373,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationOpen(false);
 
                 // Animate the navigation to be offscreen
-                containerOffsetSpring.jump(-sideNavigationLayoutNavigationWidth);
+                containerOffsetSpring.jump(-currentNavigationWidth);
             }
             // If on desktop
             else {
@@ -372,11 +382,22 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 setSideNavigationLayoutNavigationOpen(shouldBeOpen);
 
                 // Animate the navigation to be the preferred state
-                containerOffsetSpring.set(shouldBeOpen === true ? 0 : -sideNavigationLayoutNavigationWidth);
+                containerOffsetSpring.set(shouldBeOpen === true ? 0 : -currentNavigationWidth);
             }
-        },
 
-        [],
+            // Mark as initialized
+            setHasMounted(true);
+        },
+        [
+            hasMounted,
+            properties.layoutIdentifier,
+            properties.alwaysShowNavigationOnDesktop,
+            setSideNavigationLayoutNavigationWidth,
+            setSideNavigationLayoutNavigationOpen,
+            sideNavigationLayoutNavigationWidth,
+            sideNavigationLayoutNavigationOpen,
+            containerOffsetSpring,
+        ],
     );
 
     // Effect to close navigation when the user presses the escape key on mobile

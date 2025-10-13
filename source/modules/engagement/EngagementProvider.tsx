@@ -42,12 +42,14 @@ export function EngagementProvider(properties: EngagementProviderProperties) {
     const previousViewIdentifierReference = React.useRef('');
     const previousViewTitleReference = React.useRef('');
     const loadDurationInMillisecondsReference = React.useRef(0);
-    const currentViewStartTimeReference = React.useRef(Date.now());
+    const currentViewStartTimeReference = React.useRef(0);
 
     // Initialize session start time once
     React.useEffect(function () {
         // Initialize the global session manager
         sessionManager.initializeSession();
+        // Initialize current view start time
+        currentViewStartTimeReference.current = Date.now();
         // console.log('🚀 Session initialized');
     }, []);
 

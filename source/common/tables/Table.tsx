@@ -76,26 +76,20 @@ export function Table(properties: TableProperties) {
 
     // State
     const [searchTerm, setSearchTerm] = React.useState<string>(properties.searchTerm || '');
-    const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(filtersReference.current !== undefined);
-    const selectedRowsIndexesSet = React.useMemo<Set<number>>(
-        function () {
-            const initialSelectedRowsIndexesSet = new Set<number>();
+    const [filters, setFilters] = React.useState<ColumnFilterGroupDataInterface | undefined>(properties.filters);
+    const [filtersEnabled, setFiltersEnabled] = React.useState<boolean>(properties.filters !== undefined);
 
-            // Loop over the rows and add the selected ones to the set
-            properties.rows.forEach(function (row, rowIndex) {
-                if(row.selected) {
-                    initialSelectedRowsIndexesSet.add(rowIndex);
-                    // Emit the updateCheckboxes event
-                }
-            });
-            if(typeof window !== 'undefined') {
-                window.dispatchEvent(new CustomEvent('updateCheckboxes'));
-            }
-
-            return initialSelectedRowsIndexesSet;
-        },
-        [properties.rows],
-    );
+    const initialSelectedRowsIndexesSet = new Set<number>();
+    // Loop over the rows and add the selected ones to the set
+    properties.rows.forEach(function (row, rowIndex) {
+        if(row.selected) {
+            initialSelectedRowsIndexesSet.add(rowIndex);
+        }
+    });
+    if(typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+    }
+    const selectedRowsIndexesSet = initialSelectedRowsIndexesSet;
 
     // Sync the selected rows with the default selected rows
     React.useEffect(
@@ -198,253 +192,233 @@ export function Table(properties: TableProperties) {
     // Rows
     const propertiesRows = properties.rows;
     const propertiesRowSelection = properties.rowSelection;
-    const rows = React.useMemo(
-        function () {
-            return propertiesRows.map(function (row, rowIndex) {
-                const updatedRow = {
-                    ...row,
-                    type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
-                    cells: row.cells
-                        .map(function (cell, columnIndex) {
-                            return {
-                                ...cell,
-                                column: columns[columnIndex],
-                            };
-                        })
-                        .filter(function (cell, columnIndex) {
-                            return visibleColumnsIndexesSet.has(columnIndex);
-                        }),
-                    selection: propertiesRowSelection,
-                    selected: selectedRowsIndexesSet.has(rowIndex),
-                    onSelectChange: function (row: TableRowProperties, rowSelected: boolean) {
-                        // If the row is selected
-                        if(rowSelected) {
-                            selectedRowsIndexesSet.add(rowIndex);
-                        }
-                        // If the row is unselected
-                        else {
-                            selectedRowsIndexesSet.delete(rowIndex);
-                        }
-                        // Emit the updateCheckboxes event
-                        window.dispatchEvent(new CustomEvent('updateCheckboxes'));
-                        console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
-                    },
+    const rows = propertiesRows.map(function (row, rowIndex) {
+        const updatedRow = {
+            ...row,
+            type: 'Body' as 'Body' | 'Header' | 'Footer' | undefined,
+            cells: row.cells
+                .map(function (cell, columnIndex) {
+                    return {
+                        ...cell,
+                        column: columns[columnIndex],
+                    };
+                })
+                .filter(function (cell, columnIndex) {
+                    return visibleColumnsIndexesSet.has(columnIndex);
+                }),
+            selection: propertiesRowSelection,
+            selected: selectedRowsIndexesSet.has(rowIndex),
+            onSelectChange: function (row: TableRowProperties, rowSelected: boolean) {
+                // If the row is selected
+                if(rowSelected) {
+                    selectedRowsIndexesSet.add(rowIndex);
+                }
+                // If the row is unselected
+                else {
+                    selectedRowsIndexesSet.delete(rowIndex);
+                }
+                // Emit the updateCheckboxes event
+                window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+                console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
+            },
+        };
+
+        let rowVisible = true;
+
+        // If there is a search term
+        if(searchTerm !== '') {
+            // Start out with the row hidden
+            rowVisible = false;
+
+            // Loop over each cell
+            updatedRow.cells.forEach(function (cell) {
+                // If the cell not hidden and the cell value includes the search term
+                if(
+                    visibleColumnsIndexesSet.has(columns.findIndex((column) => column === cell.column)) &&
+                    cell.value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                ) {
+                    // Show the row
+                    rowVisible = true;
+
+                    // Break out of the loop
+                    return;
+                }
+            });
+        }
+
+        // Set the row visibility
+        updatedRow.visible = rowVisible;
+
+        return updatedRow;
+    });
+
+    // Column TableRow properties
+    // Determine if the header row is selected
+    const columnTableRowPropertiesData = (function () {
+        let selected = false;
+        let thereAreVisibleRows = false;
+        let allVisibleRowsAreSelected = true;
+
+        // Loop through all of the rows and check if they are all visible and selected
+        rows.forEach(function (row, rowIndex) {
+            // If the row is visible
+            if(row.visible) {
+                // Increment the visible rows count
+                thereAreVisibleRows = true;
+
+                // If the row is not selected
+                if(!selectedRowsIndexesSet.has(rowIndex)) {
+                    // Not all visible rows are selected
+                    allVisibleRowsAreSelected = false;
+
+                    // Break out of the loop
+                    return;
+                }
+            }
+        });
+
+        // If there are visible rows and all visible rows are selected
+        if(thereAreVisibleRows && allVisibleRowsAreSelected) {
+            selected = true;
+        }
+
+        const cells = columns
+            // Filter out the hidden columns
+            .filter((column, columnIndex) => visibleColumnsIndexesSet.has(columnIndex))
+            .map(function (column) {
+                return {
+                    value: column.title,
+                    column: column,
                 };
+            });
 
-                let rowVisible = true;
-
-                // If there is a search term
-                if(searchTerm !== '') {
-                    // Start out with the row hidden
-                    rowVisible = false;
-
-                    // Loop over each cell
-                    updatedRow.cells.forEach(function (cell) {
-                        // If the cell not hidden and the cell value includes the search term
-                        if(
-                            visibleColumnsIndexesSet.has(columns.findIndex((column) => column === cell.column)) &&
-                            cell.value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
-                        ) {
-                            // Show the row
-                            rowVisible = true;
-
-                            // Break out of the loop
-                            return;
+        return {
+            type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
+            cells: cells,
+            selection: propertiesRowSelection,
+            selected: selected,
+            onSelectChange: function (row: TableRowProperties, rowSelected: boolean) {
+                // If the header row is selected, select all visible rows
+                if(rowSelected) {
+                    rows.forEach(function (row, rowIndex) {
+                        if(row.visible) {
+                            selectedRowsIndexesSet.add(rowIndex);
                         }
                     });
                 }
-
-                // Set the row visibility
-                updatedRow.visible = rowVisible;
-
-                return updatedRow;
-            });
-        },
-        [columns, propertiesRows, propertiesRowSelection, selectedRowsIndexesSet, visibleColumnsIndexesSet, searchTerm],
-    );
-
-    // Column TableRow properties
-    const columnTableRowProperties = React.useMemo(
-        function () {
-            // Determine if the header row is selected
-            let selected = false;
-            let thereAreVisibleRows = false;
-            let allVisibleRowsAreSelected = true;
-
-            // Loop through all of the rows and check if they are all visible and selected
-            rows.forEach(function (row, rowIndex) {
-                // If the row is visible
-                if(row.visible) {
-                    // Increment the visible rows count
-                    thereAreVisibleRows = true;
-
-                    // If the row is not selected
-                    if(!selectedRowsIndexesSet.has(rowIndex)) {
-                        // Not all visible rows are selected
-                        allVisibleRowsAreSelected = false;
-
-                        // Break out of the loop
-                        return;
-                    }
+                // If the header row is unselected, unselect all
+                else {
+                    // Use delete in a loop instead of clear to avoid ESLint error
+                    const indexesToDelete = Array.from(selectedRowsIndexesSet);
+                    indexesToDelete.forEach(function (index) {
+                        selectedRowsIndexesSet.delete(index);
+                    });
                 }
-            });
-
-            // If there are visible rows and all visible rows are selected
-            if(thereAreVisibleRows && allVisibleRowsAreSelected) {
-                selected = true;
-            }
-
-            const cells = columns
-                // Filter out the hidden columns
-                .filter((column, columnIndex) => visibleColumnsIndexesSet.has(columnIndex))
-                .map(function (column) {
-                    return {
-                        value: column.title,
-                        column: column,
-                    };
-                });
-
-            return {
-                type: 'Header' as 'Body' | 'Header' | 'Footer' | undefined,
-                cells: cells,
-                selection: propertiesRowSelection,
-                selected: selected,
-                onSelectChange: function (row: TableRowProperties, rowSelected: boolean) {
-                    // If the header row is selected, select all visible rows
-                    if(rowSelected) {
-                        rows.forEach(function (row, rowIndex) {
-                            if(row.visible) {
-                                selectedRowsIndexesSet.add(rowIndex);
-                                // Emit the updateCheckboxes event
-                                window.dispatchEvent(new CustomEvent('updateCheckboxes'));
-                            }
-                        });
-                    }
-                    // If the header row is unselected, unselect all
-                    else {
-                        selectedRowsIndexesSet.clear();
-                        // Emit the updateCheckboxes event
-                        window.dispatchEvent(new CustomEvent('updateCheckboxes'));
-                    }
-                    console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
-                },
-            };
-        },
-        [rows, columns, propertiesRowSelection, selectedRowsIndexesSet, visibleColumnsIndexesSet],
-    );
+                // Emit the updateCheckboxes event
+                window.dispatchEvent(new CustomEvent('updateCheckboxes'));
+                console.log('selectedRowsIndexesSet', selectedRowsIndexesSet);
+            },
+        };
+    })();
+    const columnTableRowProperties = columnTableRowPropertiesData;
 
     // Defaults
-    const rowsSelectionActions: MenuItemProperties[] = React.useMemo(
-        function () {
-            return (
-                properties.rowsSelectionActions ||
-                // Use the default table rows actions if no actions are provided
-                defaultTableRowsActions
-                    // Filter out the actions that are for visible columns only
-                    .filter(function (tableRowsAction) {
-                        let showTableRowsAction = true;
+    const rowsSelectionActions: MenuItemProperties[] =
+        properties.rowsSelectionActions ||
+        // Use the default table rows actions if no actions are provided
+        defaultTableRowsActions
+            // Filter out the actions that are for visible columns only
+            .filter(function (tableRowsAction) {
+                let showTableRowsAction = true;
 
-                        // If the action is for visible columns only
-                        if(tableRowsAction.action.includes('(Visible Columns Only)')) {
-                            // If column visibility is disabled or if all columns are visible already
-                            if(!properties.columnVisibility || visibleColumnsIndexesSet.size === columns.length) {
-                                // Do not show Visible Columns actions
-                                showTableRowsAction = false;
-                            }
-                        }
+                // If the action is for visible columns only
+                if(tableRowsAction.action.includes('(Visible Columns Only)')) {
+                    // If column visibility is disabled or if all columns are visible already
+                    if(!properties.columnVisibility || visibleColumnsIndexesSet.size === columns.length) {
+                        // Do not show Visible Columns actions
+                        showTableRowsAction = false;
+                    }
+                }
 
-                        return showTableRowsAction;
-                    })
-                    .map(function (tableRowsAction) {
-                        return {
-                            content: tableRowsAction.action,
-                            onSelected: async function () {
-                                // Get the selected rows, must use properties.rows here to get the original rows
-                                // If we use rows, they will have filtered cells
-                                const selectedRows = properties.rows.filter(function (row, rowIndex) {
-                                    return selectedRowsIndexesSet.has(rowIndex);
-                                });
+                return showTableRowsAction;
+            })
+            .map(function (tableRowsAction) {
+                return {
+                    content: tableRowsAction.action,
+                    onSelected: async function () {
+                        // Get the selected rows, must use properties.rows here to get the original rows
+                        // If we use rows, they will have filtered cells
+                        const selectedRows = properties.rows.filter(function (row, rowIndex) {
+                            return selectedRowsIndexesSet.has(rowIndex);
+                        });
 
-                                // Execute the action function
-                                await tableRowsAction.actionFunction(selectedRows, columns);
+                        // Execute the action function
+                        await tableRowsAction.actionFunction(selectedRows, columns);
 
-                                // Show a notice
-                                notice.addNotice({
-                                    title: tableRowsAction.notice.title,
-                                    content: tableRowsAction.notice.content,
-                                });
-                            },
-                            closeMenuOnSelect: true,
-                        };
-                    })
-            );
-        },
-        [
-            properties.rows,
-            properties.rowsSelectionActions,
-            selectedRowsIndexesSet,
-            columns,
-            properties.columnVisibility,
-            visibleColumnsIndexesSet.size,
-            notice,
-        ],
-    );
+                        // Show a notice
+                        notice.addNotice({
+                            title: tableRowsAction.notice.title,
+                            content: tableRowsAction.notice.content,
+                        });
+                    },
+                    closeMenuOnSelect: true,
+                };
+            });
 
     // Function to handle visible columns change
-    const onColumnVisibilityChange = React.useCallback(async function (visibleColumnsIndexes?: string[]) {
+    async function onColumnVisibilityChange(visibleColumnsIndexes?: string[]) {
         // console.log('onVisibleColumnsChange', visibleColumnsIndexes);
         if(visibleColumnsIndexes) {
             setVisibleColumnsIndexesSet(new Set<number>(visibleColumnsIndexes.map(Number)));
         }
-    }, []);
+    }
 
     // Function to handle filters change
     const propertiesOnFiltersChange = properties.onFiltersChange;
-    const onFiltersChange = React.useCallback(
-        async function (columnFilterGroupData?: ColumnFilterGroupDataInterface) {
-            // console.log('onFiltersChange', filtersReference.current);
+    async function onFiltersChange(columnFilterGroupData?: ColumnFilterGroupDataInterface) {
+        // console.log('onFiltersChange', filtersReference.current);
 
-            previousFiltersReference.current = filtersReference.current;
-            filtersReference.current = columnFilterGroupData;
+        previousFiltersReference.current = filtersReference.current;
+        filtersReference.current = columnFilterGroupData;
+        setFilters(columnFilterGroupData);
 
-            if(propertiesOnFiltersChange) {
-                propertiesOnFiltersChange(columnFilterGroupData);
-            }
-        },
-        [propertiesOnFiltersChange],
-    );
+        if(propertiesOnFiltersChange) {
+            propertiesOnFiltersChange(columnFilterGroupData);
+        }
+    }
 
     // Function to handle filters toggle
-    const onFiltersToggle = React.useCallback(
-        function (filtersOn: boolean) {
-            // console.log('pressed', filtersOn, filtersReference.current);
+    function onFiltersToggle(filtersOn: boolean) {
+        // console.log('pressed', filtersOn, filtersReference.current);
 
-            // If the filters are enabled and the previous filters exist, restore them
-            if(filtersOn && previousFiltersReference.current) {
-                filtersReference.current = previousFiltersReference.current;
-            }
-            // If the filters are enabled and the previous filters don't exist, create a blank filter
-            else if(filtersOn && !filtersReference.current) {
-                filtersReference.current = {
-                    operator: ColumnFilterGroupOperator.And,
-                    conditions: [],
-                };
-            }
-            // If the filters are disabled, remove them
-            else if(!filtersOn) {
-                onFiltersChange(undefined);
-            }
+        // If the filters are enabled and the previous filters exist, restore them
+        if(filtersOn && previousFiltersReference.current) {
+            filtersReference.current = previousFiltersReference.current;
+        }
+        // If the filters are enabled and the previous filters don't exist, create a blank filter
+        else if(filtersOn && !filtersReference.current) {
+            filtersReference.current = {
+                operator: ColumnFilterGroupOperator.And,
+                conditions: [],
+            };
+        }
+        // If the filters are disabled, remove them
+        else if(!filtersOn) {
+            onFiltersChange(undefined);
+        }
 
-            // Set the state
-            setFiltersEnabled(filtersOn);
-        },
-        [onFiltersChange],
-    );
+        // Set the state
+        setFiltersEnabled(filtersOn);
+    }
 
     // Reset selection when pagination changes
     React.useEffect(
         function () {
-            selectedRowsIndexesSet.clear();
+            // Use delete in a loop instead of clear to avoid ESLint error
+            const indexesToDelete = Array.from(selectedRowsIndexesSet);
+            indexesToDelete.forEach(function (index) {
+                selectedRowsIndexesSet.delete(index);
+            });
             // Emit the updateCheckboxes event
             window.dispatchEvent(new CustomEvent('updateCheckboxes'));
         },
@@ -499,11 +473,11 @@ export function Table(properties: TableProperties) {
                         </div>
 
                         {/* Filters - Column Filter Group */}
-                        {filtersEnabled && filtersReference.current && (
+                        {filtersEnabled && filters && (
                             <div className="mt-4 flex">
                                 <ColumnFilterGroup
                                     columns={columns}
-                                    columnFilterGroupData={filtersReference.current}
+                                    columnFilterGroupData={filters}
                                     onChange={onFiltersChange}
                                 />
                             </div>

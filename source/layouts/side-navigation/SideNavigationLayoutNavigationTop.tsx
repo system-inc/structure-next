@@ -97,9 +97,13 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
                 }
             }
         },
-        // Just when the navigation open state or width changes
-
-        [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
+        [
+            showHeaderBorder,
+            sideNavigationLayoutNavigationOpen,
+            sideNavigationLayoutNavigationWidth,
+            sideNavigationLayoutNavigationIsResizing,
+            topBarBottomBorderDivMarginLeftSpring,
+        ],
     );
 
     // Early return if no header wanted (after all hooks)

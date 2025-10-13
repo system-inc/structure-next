@@ -7,9 +7,26 @@ import {
     FieldValues,
     UseFormProps as UseFormProperties,
     UseFormReturn,
-    SubmitHandler as FormSubmitFunctionType,
+    SubmitHandler,
 } from 'react-hook-form';
-export { type FormSubmitFunctionType };
+
+// Dependencies - Main Components
+import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/common/forms/FormInput';
+import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/common/buttons/AnimatedButton';
+
+// Dependencies - Animations
+import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+
+// Dependencies - Utilities
+import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
+import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
+import { mergeClassNames } from '@structure/source/utilities/Style';
+
+// Type - FormSubmitFunctionType
+export type FormSubmitFunctionType<T extends FieldValues = FieldValues> = SubmitHandler<T>;
+
+// Type - StandardizedUseFormReturn
 type StandardizedUseFormReturn<T extends FieldValues> = {
     setInputValue: UseFormReturn<T>['setValue'];
     getInputValue: UseFormReturn<T>['getValues'];
@@ -20,6 +37,8 @@ type StandardizedUseFormReturn<T extends FieldValues> = {
     state: UseFormReturn<T>['formState'];
     submit: UseFormReturn<T>['handleSubmit'];
 };
+
+// Hook - useForm
 export function useForm<T extends FieldValues>(properties?: UseFormProperties<T>): StandardizedUseFormReturn<T> {
     const reactHookForm = reactHookFormUseForm<T>(properties);
 
@@ -34,19 +53,6 @@ export function useForm<T extends FieldValues>(properties?: UseFormProperties<T>
         submit: reactHookForm.handleSubmit,
     };
 }
-
-// Dependencies - Main Components
-import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/common/forms/FormInput';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/common/buttons/AnimatedButton';
-
-// Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
-
-// Dependencies - Utilities
-import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
-import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Interface - Form Values
 export interface FormValuesInterface {

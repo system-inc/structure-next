@@ -68,7 +68,7 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
     );
 
     // State
-    const [timeEmailSent] = React.useState<number>(Date.now());
+    const [timeEmailSent] = React.useState<Date>(new Date());
     const [timeAgoString, setTimeAgoString] = React.useState<string>('just now');
 
     // Effect to update the time ago every minute
@@ -77,7 +77,7 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
             // Function to update the time ago
             const updateTimeAgo = function () {
                 // Calculate the time ago in seconds and minutes
-                const timeAgoInSeconds = Math.floor((Date.now() - timeEmailSent) / 1000);
+                const timeAgoInSeconds = Math.floor((Date.now() - timeEmailSent.getTime()) / 1000);
                 const timeAgoInMinutes = Math.floor(timeAgoInSeconds / 60);
 
                 let timeAgoString = '';

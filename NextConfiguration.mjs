@@ -7,6 +7,10 @@ initializeOpenNextCloudflareForDevelopment();
 // Next Configuration
 /** @type {import('next').NextConfig} */
 export const NextConfiguration = {
+    // Enable React Compiler (experimental)
+    experimental: {
+        reactCompiler: true,
+    },
     // optimizeFonts: false, // Do not optimize fonts as we are on Cloudflare not Vercel
     images: {
         unoptimized: true, // Do not optimize images as we are on Cloudflare not Vercel

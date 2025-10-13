@@ -32,11 +32,78 @@ export function wrapForSlot(children: React.ReactElement, className?: string) {
 export function usePrevious<T>(value: T): T | undefined {
     // Create a reference to store the previous value
     const reference = React.useRef<T | undefined>(undefined);
+    const [previousValue, setPreviousValue] = React.useState<T | undefined>(undefined);
 
     // Store the current value in the reference
-    React.useEffect(function () {
-        reference.current = value;
-    });
+    React.useEffect(
+        function () {
+            setPreviousValue(reference.current);
+            reference.current = value;
+        },
+        [value],
+    );
 
-    return reference.current;
+    return previousValue;
+}
+
+// Hook to trigger re-renders at a specified interval
+// Set milliseconds to 0 or pass enabled=false to pause the interval
+export function useRenderInterval(milliseconds: number, enabled: boolean = true): number {
+    const [tick, setTick] = React.useState(0);
+
+    React.useEffect(
+        function () {
+            // Don't start interval if disabled or milliseconds is 0
+            if(!enabled || milliseconds === 0) {
+                return;
+            }
+
+            const intervalId = setInterval(function () {
+                setTick(function (previous) {
+                    return previous + 1;
+                });
+            }, milliseconds);
+
+            return function () {
+                clearInterval(intervalId);
+            };
+        },
+        [milliseconds, enabled],
+    );
+
+    return tick;
+}
+
+// Function to debounce a value
+export function useDebounce<T>(value: T, delay: number): T {
+    const [debouncedValue, setDebouncedValue] = React.useState<T>(value);
+
+    React.useEffect(
+        function () {
+            const handler = setTimeout(function () {
+                setDebouncedValue(value);
+            }, delay);
+            return function () {
+                return clearTimeout(handler);
+            };
+        },
+        [value, delay],
+    );
+
+    return debouncedValue;
+}
+
+export function usePreviousValue<T>(value: T): T | undefined {
+    const reference = React.useRef<T | undefined>(undefined);
+    const [previousValue, setPreviousValue] = React.useState<T | undefined>(undefined);
+
+    React.useEffect(
+        function () {
+            setPreviousValue(reference.current);
+            reference.current = value;
+        },
+        [value],
+    );
+
+    return previousValue;
 }

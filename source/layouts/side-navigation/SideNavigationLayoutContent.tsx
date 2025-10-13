@@ -108,9 +108,15 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
             // Set first mount to false
             firstMount.current = false;
         },
-        // Just when the navigation open state or width changes
-
-        [sideNavigationLayoutNavigationOpen, sideNavigationLayoutNavigationWidth],
+        [
+            layout,
+            sideNavigationLayoutNavigationOpen,
+            sideNavigationLayoutNavigationWidth,
+            sideNavigationLayoutNavigationIsResizing,
+            sideNavigationLayoutNavigationIsOpeningByDrag,
+            sideNavigationLayoutNavigationIsClosingByWindowResize,
+            contentDivPaddingLeftSpring,
+        ],
     );
 
     // Render the component

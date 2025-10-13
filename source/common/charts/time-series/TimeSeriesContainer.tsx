@@ -19,20 +19,20 @@ export interface TimeSeriesContainerProperties {
     errorMessage?: string;
 }
 export function TimeSeriesContainer(properties: TimeSeriesContainerProperties) {
-    // Track if component has mounted to prevent glow on initial load
-    const hasMountedReference = React.useRef(false);
+    // State
     const [hasData, setHasData] = React.useState(false);
+    const [hasMounted, setHasMounted] = React.useState(false);
 
     // Default messages
     const loadingMessage = properties.loadingMessage || 'Loading chart data...';
     const errorMessage = properties.errorMessage || 'Failed to load chart data';
 
-    // Update mounted state after first render
+    // Effect to update mounted state after first render
     React.useEffect(function () {
-        hasMountedReference.current = true;
+        setHasMounted(true);
     }, []);
 
-    // Track if we have data (not initial empty state)
+    // Effect to update hasData state when loading or error changes
     React.useEffect(
         function () {
             if(!properties.isLoading && !properties.error) {
@@ -75,7 +75,7 @@ export function TimeSeriesContainer(properties: TimeSeriesContainerProperties) {
                 'before:shadow-[inset_0_0_0_1px_rgba(168,85,247,0.6),inset_0_0_8px_rgba(168,85,247,0.4)]',
                 'before:transition-opacity before:duration-300 before:content-[""]',
                 'dark:before:shadow-[inset_0_0_0_1px_rgba(168,85,247,0.8),inset_0_0_8px_rgba(168,85,247,0.5)]',
-                properties.isLoading && hasMountedReference.current ? 'before:opacity-100' : 'before:opacity-0',
+                properties.isLoading && hasMounted ? 'before:opacity-100' : 'before:opacity-0',
                 properties.className,
             )}
         >

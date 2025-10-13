@@ -80,36 +80,41 @@ export function useTimeSeriesDataWithCache<TVariables extends Record<string, unk
     // Cache storage
     const cacheReference = React.useRef<CachedDataEntry | null>(null);
 
-    // Determine the time range
-    const startTime = currentTimeRange.startTime || new Date();
-    const endTime = currentTimeRange.endTime || new Date();
+    // Check if we can use cached data (use state to avoid ref access during render)
+    const [canUseCachedData, setCanUseCachedData] = React.useState(false);
+    const [expectedDataPoints, setExpectedDataPoints] = React.useState(0);
+    const [tooManyDataPoints, setTooManyDataPoints] = React.useState(false);
 
-    // Calculate expected data points
-    const expectedDataPoints = differenceInTimeIntervals(startTime, endTime, currentInterval) + 1;
-    const tooManyDataPoints = exceedsMaximumDataPoints(expectedDataPoints);
+    React.useEffect(
+        function () {
+            const startTime = currentTimeRange.startTime || new Date();
+            const endTime = currentTimeRange.endTime || new Date();
 
-    // Check if we can use cached data
-    const canUseCachedData = cachedDataCoversRange(cacheReference.current, startTime, endTime, currentInterval);
+            setCanUseCachedData(cachedDataCoversRange(cacheReference.current, startTime, endTime, currentInterval));
 
-    // Function to cache data
-    const cacheData = React.useCallback(
-        function (data: unknown, actualStartTime: Date, actualEndTime: Date, actualInterval: TimeInterval) {
-            if(enabled) {
-                cacheReference.current = {
-                    startTime: actualStartTime,
-                    endTime: actualEndTime,
-                    interval: actualInterval,
-                    data: data,
-                };
-            }
+            const dataPoints = differenceInTimeIntervals(startTime, endTime, currentInterval) + 1;
+            setExpectedDataPoints(dataPoints);
+            setTooManyDataPoints(exceedsMaximumDataPoints(dataPoints));
         },
-        [enabled],
+        [currentTimeRange.startTime, currentTimeRange.endTime, currentInterval],
     );
 
+    // Function to cache data
+    function cacheData(data: unknown, actualStartTime: Date, actualEndTime: Date, actualInterval: TimeInterval) {
+        if(enabled) {
+            cacheReference.current = {
+                startTime: actualStartTime,
+                endTime: actualEndTime,
+                interval: actualInterval,
+                data: data,
+            };
+        }
+    }
+
     // Function to get cached data
-    const getCachedData = React.useCallback(function () {
+    function getCachedData() {
         return cacheReference.current?.data || null;
-    }, []);
+    }
 
     return {
         fetchVariables: variables,

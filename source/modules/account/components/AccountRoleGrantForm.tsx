@@ -17,7 +17,7 @@ import { networkService, gql } from '@structure/source/services/network/NetworkS
 
 // Dependencies - Utilities
 import { isEmailAddress } from '@structure/source/utilities/validation/Validation';
-import { useDebounce } from '@structure/source/utilities/Hooks';
+import { useDebounce } from '@structure/source/utilities/React';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

@@ -83,16 +83,15 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     );
 
     // Effect to trigger onChange when the filterData changes
-
+    const propertiesOnChange = properties.onChange;
     React.useEffect(
         function () {
             // Call the properties onChange function
-            if(properties.onChange && columnFilterGroupData) {
-                properties.onChange(columnFilterGroupData);
+            if(propertiesOnChange && columnFilterGroupData) {
+                propertiesOnChange(columnFilterGroupData);
             }
         },
-
-        [columnFilterGroupData],
+        [columnFilterGroupData, propertiesOnChange],
     );
 
     // Operators
@@ -403,7 +402,9 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 variant="ghostDestructive"
                                 size="icon"
                                 icon={MinusCircledIcon}
-                                onClick={() => removeCondition(condition.id)}
+                                onClick={function () {
+                                    removeCondition(condition.id);
+                                }}
                                 tip={
                                     columnFilterGroupData.conditions.length === 1 ? (
                                         <p>At least one condition is required</p>
