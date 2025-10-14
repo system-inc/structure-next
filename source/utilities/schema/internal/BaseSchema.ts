@@ -1,5 +1,5 @@
 // Dependencies - Schema Types
-import { SchemaValidationResult, Validator } from '../SchemaTypes';
+import { Validator, SchemaValidationResult } from '../Schema';
 
 // Class - BaseSchema
 // Abstract base class for all schema types providing validation orchestration and common modifiers

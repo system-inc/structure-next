@@ -2,7 +2,7 @@
 import { BaseSchema } from './BaseSchema';
 
 // Dependencies - Validation Helpers
-import { isValidEmailAddress, isValidUsername } from '../utilities/ValidationHelpers';
+import { isValidEmailAddress, isValidUsername } from '../validators/StringValidators';
 
 // Dependencies - API (for GraphQL validation)
 import { networkService } from '@structure/source/services/network/NetworkService';

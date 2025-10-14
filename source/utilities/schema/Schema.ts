@@ -4,11 +4,60 @@ import { NumberSchema } from './internal/NumberSchema';
 import { BooleanSchema } from './internal/BooleanSchema';
 import { FileSchema } from './internal/FileSchema';
 import { ArraySchema } from './internal/ArraySchema';
-import { ObjectSchema } from './internal/ObjectSchema';
+import { ObjectSchema, type ObjectShape } from './internal/ObjectSchema';
 import { BaseSchema } from './internal/BaseSchema';
 
-// Dependencies - Types
-import { ObjectShape } from './SchemaTypes';
+// Type - Validator
+// A validator function that can be sync or async and returns validation results
+export type Validator = (
+    value: unknown,
+    path: string[],
+) => Promise<Partial<SchemaValidationResult>> | Partial<SchemaValidationResult>;
+
+// Interface - SchemaError
+// Validation error with path for nested schemas
+export interface SchemaError {
+    // Path to the field that failed validation, e.g., ['user', 'email'] for nested.user.email
+    path: string[];
+    // Unique identifier for the error type, e.g., 'invalidEmailAddress', 'tooShort'
+    identifier: string;
+    // Human-readable error message
+    message: string;
+    // Optional reference to the validation rule that produced this error
+    validationRule?: {
+        identifier: string;
+        parameters?: Record<string, unknown>;
+    };
+}
+
+// Interface - SchemaSuccess
+// Validation success (for progressive validation UX showing what passed)
+export interface SchemaSuccess {
+    // Path to the field that passed validation
+    path: string[];
+    // Unique identifier for the success type, e.g., 'validEmailAddress', 'longEnough'
+    identifier: string;
+    // Human-readable success message
+    message: string;
+    // Optional reference to the validation rule that produced this success
+    validationRule?: {
+        identifier: string;
+        parameters?: Record<string, unknown>;
+    };
+}
+
+// Interface - SchemaValidationResult
+// Complete validation result containing the validated value, validity status, and all errors/successes
+export interface SchemaValidationResult<T = unknown> {
+    // Whether the validation passed (true) or failed (false)
+    valid: boolean;
+    // The validated/parsed value
+    value: T;
+    // All validation errors (empty array if valid)
+    errors: SchemaError[];
+    // All validation successes (useful for progressive validation UX)
+    successes: SchemaSuccess[];
+}
 
 // Schema - Main Namespace Export
 // The primary API for defining validation schemas
@@ -49,8 +98,3 @@ export const schema = {
         return schemaInstance.nullable();
     },
 };
-
-// Re-export types for consumer usage
-export type { SchemaValidationResult, SchemaError, SchemaSuccess } from './SchemaTypes';
-export { BaseSchema } from './internal/BaseSchema';
-export { schemaResolver } from './SchemaResolver';

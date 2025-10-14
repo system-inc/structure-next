@@ -2,7 +2,11 @@
 import { BaseSchema } from './BaseSchema';
 
 // Dependencies - Schema Types
-import { ObjectShape, SchemaValidationResult } from '../SchemaTypes';
+import { SchemaValidationResult } from '../Schema';
+
+// Type - ObjectShape
+// Shape definition for object schemas - a record of field names to their schemas
+export type ObjectShape = Record<string, BaseSchema<unknown>>;
 
 // Class - ObjectSchema
 // Schema for validating objects with per-property validation

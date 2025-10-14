@@ -2,7 +2,7 @@
 import { BaseSchema } from './BaseSchema';
 
 // Dependencies - Schema Types
-import { SchemaValidationResult } from '../SchemaTypes';
+import { SchemaValidationResult } from '../Schema';
 
 // Class - ArraySchema
 // Schema for validating arrays with item-level validation

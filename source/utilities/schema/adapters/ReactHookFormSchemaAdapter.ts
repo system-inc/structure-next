@@ -2,11 +2,10 @@
 import type { FieldValues, ResolverResult } from 'react-hook-form';
 
 // Dependencies - Schema
-import { BaseSchema } from './internal/BaseSchema';
+import { BaseSchema } from '../internal/BaseSchema';
 
-// Function - schemaResolver
 // React Hook Form resolver that integrates with our schema validation system
-export function schemaResolver<T extends FieldValues>(schemaInstance: BaseSchema<T>) {
+export function reactHookFormSchemaAdapter<T extends FieldValues>(schemaInstance: BaseSchema<T>) {
     return async function resolve(values: T): Promise<ResolverResult<T>> {
         const result = await schemaInstance.validate(values);
 
