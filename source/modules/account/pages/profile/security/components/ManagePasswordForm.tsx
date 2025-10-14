@@ -14,7 +14,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - ManagePasswordForm
 export interface ManagePasswordFormProperties {

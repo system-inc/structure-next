@@ -1,6 +1,6 @@
 import React from 'react';
 import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { Slot } from '@radix-ui/react-slot';
 
 export const cardVariants = cva(

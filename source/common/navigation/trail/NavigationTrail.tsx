@@ -9,8 +9,8 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { NavigationTrailSeparatorPopoverMenu } from '@structure/source/common/navigation/trail/NavigationTrailSeparatorPopoverMenu';
 
 // Dependencies - Utilities
-import { slug, titleCase } from '@structure/source/utilities/String';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { slug, titleCase } from '@structure/source/utilities/type/String';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Assets
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';

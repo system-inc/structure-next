@@ -7,7 +7,7 @@ import React from 'react';
 import { motion, useAnimationControls } from 'motion/react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - LoadingAnimation
 export type LoadingAnimationProperties = {

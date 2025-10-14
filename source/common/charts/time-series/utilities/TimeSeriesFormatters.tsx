@@ -6,7 +6,7 @@ import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode
 
 // Dependencies - Utilities
 import { format } from 'date-fns';
-import { monthAbbreviation, timeOnly } from '@structure/source/utilities/Time';
+import { monthAbbreviation, timeOnly } from '@structure/source/utilities/time/Time';
 
 // Function to format a date value based on the interval
 export function formatDateByTimeInterval(date: Date, interval: TimeInterval): string {

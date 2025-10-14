@@ -21,7 +21,7 @@ import { OrderByDirection, ColumnFilterGroupInput } from '@structure/source/api/
 import { useDataInteractionDatabaseTableRowsRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabaseTableRowsRequest';
 
 // Dependencies - Utilities
-import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/String';
+import { titleCase, uppercaseFirstCharacter } from '@structure/source/utilities/type/String';
 
 // Component - DataInteractionTable
 export interface DataInteractionTableProperties extends Omit<TableProperties, 'columns' | 'rows' | 'pagination'> {

@@ -24,7 +24,7 @@ import {
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // GraphQL Operations
 gql(`

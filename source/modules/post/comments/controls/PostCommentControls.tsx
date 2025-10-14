@@ -15,7 +15,7 @@ import { PostCommentReportControl } from '@structure/source/modules/post/comment
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostCommentControls
 export interface PostCommentControlsProperties {

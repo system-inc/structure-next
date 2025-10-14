@@ -18,7 +18,7 @@ import {
 import { TipIcon } from '@structure/source/common/popovers/TipIcon';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - FormInputCheckbox
 export interface FormInputCheckboxProperties

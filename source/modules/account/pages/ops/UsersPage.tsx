@@ -23,7 +23,7 @@ import { OrderByDirection } from '@structure/source/api/graphql/GraphQlGenerated
 export const accountsPrivilegedCacheKey = 'accountsPrivileged';
 
 // Dependencies - Utilities
-import { dateIso8601, timeFromNow } from '@structure/source/utilities/Time';
+import { dateIso8601, timeFromNow } from '@structure/source/utilities/time/Time';
 
 // Function to convert a country code to a flag emoji
 function countryCodeToFlagEmoji(countryCode?: string | null): string {

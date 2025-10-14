@@ -26,7 +26,7 @@ import MenuIcon from '@structure/assets/icons/navigation/MenuIcon.svg';
 // import { useTheme } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationLayoutNavigationSideToggle
 export interface SideNavigationLayoutNavigationSideToggleProperties {

@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationLayoutContentBody
 export interface SideNavigationLayoutContentBodyProperties {

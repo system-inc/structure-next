@@ -5,7 +5,7 @@ import React from 'react';
 import { Tip } from '@structure/source/common/popovers/Tip';
 
 // Dependencies - Utilities
-import { timeFromNow } from '@structure/source/utilities/Time';
+import { timeFromNow } from '@structure/source/utilities/time/Time';
 
 // Component - TableCellContentDateTime
 export interface TableCellContentDateTimeProperties extends React.HTMLAttributes<HTMLElement> {

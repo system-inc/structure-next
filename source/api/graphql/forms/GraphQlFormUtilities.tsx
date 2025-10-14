@@ -21,8 +21,8 @@ import { FormInputMultipleSelect } from '@structure/source/common/forms/FormInpu
 import { GraphQlFormInput } from '@structure/source/api/graphql/forms/GraphQlFormInput';
 
 // Dependencies - Utilities
-import { getValueForKeyRecursively } from '@structure/source/utilities/Object';
-import { titleCase, slug } from '@structure/source/utilities/String';
+import { getValueForKeyRecursively } from '@structure/source/utilities/type/Object';
+import { titleCase, slug } from '@structure/source/utilities/type/String';
 
 // Create a union type of all the form input components we use
 export type FormInputComponentUnion =

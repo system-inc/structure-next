@@ -8,7 +8,7 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { AccountRole } from '@structure/source/modules/account/Account';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { useSetAtom } from 'jotai';
 import { opsNavigationOpenAtom } from '../OpsNavigationBar';
 

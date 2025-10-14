@@ -12,7 +12,7 @@ import { Account } from '@structure/source/modules/account/Account';
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - AccountMenu
 export interface AccountMenuProperties {

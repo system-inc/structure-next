@@ -7,7 +7,7 @@ import React from 'react';
 import { Link } from '@structure/source/common/navigation/Link';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostCommentControl
 export interface PostCommentControlProperties {

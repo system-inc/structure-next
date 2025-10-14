@@ -5,7 +5,7 @@ import React from 'react';
 import { TimeSeriesStatistics } from '../utilities/TimeSeriesStatistics';
 
 // Dependencies - Utilities
-import { addCommas } from '@structure/source/utilities/Number';
+import { addCommas } from '@structure/source/utilities/type/Number';
 
 // Component - TimeSeriesStatisticsDisplay
 export interface TimeSeriesStatisticsDisplayProperties {

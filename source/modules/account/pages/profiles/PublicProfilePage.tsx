@@ -15,7 +15,7 @@ import { AccountProfilePublicQuery } from '@structure/source/api/graphql/GraphQl
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
 
 // Dependencies - Utilities
-import { monthYear, timeFromNow } from '@structure/source/utilities/Time';
+import { monthYear, timeFromNow } from '@structure/source/utilities/time/Time';
 
 // Component - PublicProfilePage
 export interface PublicProfilePageProperties {

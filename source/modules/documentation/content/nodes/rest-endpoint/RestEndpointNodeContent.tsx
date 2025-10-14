@@ -33,8 +33,8 @@ import {
     getMethodColorClass,
     getStatusCodeColorClass,
 } from '@structure/source/modules/documentation/utilities/DocumentationUtilities';
-import { uppercaseFirstCharacter } from '@structure/source/utilities/String';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { uppercaseFirstCharacter } from '@structure/source/utilities/type/String';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - RestEndpointNodeContent
 export interface RestEndpointNodeContentProperties {

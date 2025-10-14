@@ -25,8 +25,8 @@ import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon
 
 // Dependencies - Utilities
 import { RgbColor, RgbColorPicker } from 'react-colorful';
-import { convertColorString, rgbaStringToRgbaArray } from '@structure/source/utilities/Color';
-import { addCommas } from '@structure/source/utilities/Number';
+import { convertColorString, rgbaStringToRgbaArray } from '@structure/source/utilities/style/Color';
+import { addCommas } from '@structure/source/utilities/type/Number';
 import { calculateStatistics } from '@structure/source/common/charts/time-series/utilities/TimeSeriesStatistics';
 import { Reorder, useDragControls } from 'motion/react';
 

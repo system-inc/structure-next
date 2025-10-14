@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ProjectSettings } from '@project/ProjectSettings';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { atom, useAtom } from 'jotai';
 
 // State

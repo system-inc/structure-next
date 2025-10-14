@@ -37,8 +37,8 @@ import {
     mergeTimeSeriesData,
     fillMissingTimeIntervalValuesWithZeroes,
 } from '@structure/source/common/charts/time-series/utilities/TimeSeriesProcessors';
-import { calculateTimeIntervalValueStartAndEndDate } from '@structure/source/utilities/ChartData';
-import { uniqueIdentifier } from '@structure/source/utilities/String';
+import { calculateTimeIntervalValueStartAndEndDate } from '@structure/source/utilities/chart/ChartData';
+import { uniqueIdentifier } from '@structure/source/utilities/type/String';
 
 // Types - Data Source
 export type DataSourceType = {

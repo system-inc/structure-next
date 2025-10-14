@@ -1,5 +1,5 @@
 // Dependencies - Utilities
-import { hexStringToRgbaString, getComplementaryHexColor } from '@structure/source/utilities/Color';
+import { hexStringToRgbaString, getComplementaryHexColor } from '@structure/source/utilities/style/Color';
 
 // Default color palette for time series charts
 export const timeSeriesColorPalette = [

@@ -13,7 +13,7 @@ import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // InputMultipleSelect - Variants
 export const InputMultipleSelectVariants = {

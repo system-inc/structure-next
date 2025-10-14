@@ -20,7 +20,7 @@ import { AnimatePresence, Reorder } from 'motion/react';
 
 // Dependencies - Utilities
 import { getTimeSeriesColor } from '@structure/source/common/charts/time-series/utilities/TimeSeriesColors';
-import { uniqueIdentifier } from '@structure/source/utilities/String';
+import { uniqueIdentifier } from '@structure/source/utilities/type/String';
 
 // Component - DataSources
 export interface DataSourcesProperties {

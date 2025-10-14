@@ -21,7 +21,7 @@ import { PlaceholderAnimation } from '@structure/source/common/animations/Placeh
 // Dependencies - Utilities
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Type - FormSubmitFunctionType
 export type FormSubmitFunctionType<T extends FieldValues = FieldValues> = SubmitHandler<T>;

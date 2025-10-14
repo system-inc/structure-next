@@ -12,7 +12,7 @@ import { ButtonProperties, Button } from '@structure/source/common/buttons/Butto
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // InputSelect - Variants
 export const InputSelectVariants = {

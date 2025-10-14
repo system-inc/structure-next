@@ -15,7 +15,7 @@ import {
 } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
 
 // Dependencies - Utilities
-import { uppercaseFirstCharacter, titleCase } from '@structure/source/utilities/String';
+import { uppercaseFirstCharacter, titleCase } from '@structure/source/utilities/type/String';
 
 // Component - RequestParametersTable
 export interface RequestParametersTableProperties {

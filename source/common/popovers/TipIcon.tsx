@@ -11,7 +11,7 @@ import { PopoverProperties, Popover } from '@structure/source/common/popovers/Po
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // TODO: add icon variants like information, question, warning, error icons
 // TODO: add size variants like xs, sm, base/default, lg, xl

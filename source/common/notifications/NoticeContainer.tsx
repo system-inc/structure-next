@@ -9,7 +9,7 @@ import { NoticeInterface, Notice } from '@structure/source/common/notifications/
 import { NoticesClearAllButton } from '@structure/source/common/notifications/NoticesClearAllButton';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Animations
 import { motion, AnimatePresence, type Variants } from 'motion/react';

@@ -19,9 +19,9 @@ import { ButtonProperties, Button } from '@structure/source/common/buttons/Butto
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { format, endOfDay, startOfToday, endOfToday, addMonths } from 'date-fns';
-import { camelCase } from '@structure/source/utilities/String';
+import { camelCase } from '@structure/source/utilities/type/String';
 
 // Interface - InputTimeRangeReference
 export interface InputTimeRangeReferenceInterface {

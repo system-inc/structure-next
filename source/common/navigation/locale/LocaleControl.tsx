@@ -11,7 +11,7 @@ import React from 'react';
 import CurrentLocationIcon from '@structure/assets/icons/navigation/CurrentLocationIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - LocaleControl
 export interface LocaleControlProperties {

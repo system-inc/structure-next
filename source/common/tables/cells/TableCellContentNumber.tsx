@@ -5,7 +5,7 @@ import React from 'react';
 import { CopyTip } from '@structure/source/common/popovers/CopyTip';
 
 // Dependencies - Utilities
-import { addCommas } from '@structure/source/utilities/Number';
+import { addCommas } from '@structure/source/utilities/type/Number';
 
 // Component - TableCellContentNumber
 export interface TableCellContentNumberProperties extends React.HTMLAttributes<HTMLElement> {

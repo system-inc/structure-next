@@ -8,7 +8,7 @@ import { InputReferenceInterface, InputProperties } from '@structure/source/comm
 // import { useTheme } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Classes - InputTextArea
 

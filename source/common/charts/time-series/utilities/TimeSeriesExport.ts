@@ -3,8 +3,8 @@ import { TimeSeriesDataPoint } from '@structure/source/common/charts/time-series
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { downloadFile } from '@structure/source/utilities/File';
-import { titleCase } from '@structure/source/utilities/String';
+import { downloadFile } from '@structure/source/utilities/file/File';
+import { titleCase } from '@structure/source/utilities/type/String';
 
 // Type for data source configuration
 export interface TimeSeriesExportDataSource {

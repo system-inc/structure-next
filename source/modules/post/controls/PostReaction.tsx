@@ -16,7 +16,7 @@ import { useAccount } from '@structure/source/modules/account/providers/AccountP
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostReaction
 export interface PostReactionProperties {

@@ -8,8 +8,8 @@ import * as RadixTooltip from '@radix-ui/react-tooltip';
 import { PopoverProperties, PopoverVariants } from '@structure/source/common/popovers/Popover';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { wrapForSlot } from '@structure/source/utilities/React';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { wrapForSlot } from '@structure/source/utilities/react/React';
 
 // Component - Tip
 export type TipProperties = PopoverProperties;

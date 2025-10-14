@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Utilities
-import { cropImage, resizeImage } from '@structure/source/utilities/images/ImageFile';
+import { cropImage, resizeImage } from '@structure/source/utilities/image/ImageFile';
 
 // Dependencies - Types
-import { CropArea, ResizeOptions } from '@structure/source/utilities/images/Image';
+import { CropArea, ResizeOptions } from '@structure/source/utilities/image/Image';
 
 // Interface - UseImageUploadOptions
 interface UseImageUploadOptions {

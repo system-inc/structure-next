@@ -16,7 +16,7 @@ import { networkService, gql } from '@structure/source/services/network/NetworkS
 import { PostVoteType } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostCommentVoteControl
 export interface PostCommentVoteControlProperties {

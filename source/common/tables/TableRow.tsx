@@ -7,7 +7,7 @@ import { TableHeaderCellProperties, TableHeaderCell } from '@structure/source/co
 import { TableRowInputCheckbox } from '@structure/source/common/tables/TableRowInputCheckbox';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - TableRow
 export interface TableRowProperties extends React.HTMLAttributes<HTMLTableRowElement> {

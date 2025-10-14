@@ -13,7 +13,7 @@ import { InputReferenceInterface, InputProperties } from '@structure/source/comm
 import SearchIcon from '@structure/assets/icons/navigation/SearchIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Classes - InputText
 

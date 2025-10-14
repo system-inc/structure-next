@@ -10,7 +10,7 @@ import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
 import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - Code
 export interface CodeProperties extends React.HTMLAttributes<HTMLDivElement> {

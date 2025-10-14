@@ -12,7 +12,7 @@ import { Dialog } from '@structure/source/common/dialogs/Dialog';
 import { useLocalStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
 // Dependencies - Utilities
-import { uppercaseFirstCharacter } from '@structure/source/utilities/String';
+import { uppercaseFirstCharacter } from '@structure/source/utilities/type/String';
 
 // Component - DocumentationSettingsDialog
 export interface DocumentationSettingsDialogProperties {

@@ -14,8 +14,8 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import { CheckCircleIcon, XCircleIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { addCommas } from '@structure/source/utilities/Number';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { addCommas } from '@structure/source/utilities/type/Number';
 
 // Animation configuration constants
 const animationTimings = {

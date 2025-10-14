@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 import type { LinkProps as NextLinkProperties } from 'next/link';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - Link
 export interface LinkProperties

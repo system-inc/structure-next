@@ -17,7 +17,7 @@ import { Tip } from '@structure/source/common/popovers/Tip';
 // import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostCommentReaction
 export interface PostCommentReactionProperties {

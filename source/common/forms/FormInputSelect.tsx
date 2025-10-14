@@ -13,7 +13,7 @@ import { ValidationResult, mergeValidationResults } from '@structure/source/util
 import { InputSelectProperties, InputSelect } from '@structure/source/common/forms/InputSelect';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - FormInputSelect
 export interface FormInputSelectProperties

@@ -8,7 +8,7 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - ProfileLink
 export interface ProfileLinkProperties {

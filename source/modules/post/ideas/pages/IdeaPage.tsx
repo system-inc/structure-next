@@ -16,7 +16,7 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 // import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - Utilities
-import { slug } from '@structure/source/utilities/String';
+import { slug } from '@structure/source/utilities/type/String';
 
 // Component - IdeaPage
 export interface IdeaPageProperties {

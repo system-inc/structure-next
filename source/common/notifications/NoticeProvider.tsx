@@ -8,7 +8,7 @@ import { NoticeContainer } from '@structure/source/common/notifications/NoticeCo
 import { NoticeInterface } from '@structure/source/common/notifications/Notice';
 
 // Dependencies - Utilities
-import { uniqueIdentifier } from '@structure/source/utilities/String';
+import { uniqueIdentifier } from '@structure/source/utilities/type/String';
 
 // Context - Notice
 interface NoticeContextInterface {

@@ -12,7 +12,7 @@ import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.s
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - CalendarEdgeNavigationCaption
 export function CalendarEdgeNavigationCaption(properties: MonthCaptionProperties) {

@@ -7,7 +7,7 @@ import { TableColumnProperties } from '@structure/source/common/tables/TableColu
 import { TableRowProperties } from '@structure/source/common/tables/TableRow';
 
 // Dependencies - Utilities
-import { titleCase } from '@structure/source/utilities/String';
+import { titleCase } from '@structure/source/utilities/type/String';
 
 // Component - Table
 export interface ObjectTableProperties extends Omit<TableProperties, 'columns' | 'rows'> {

@@ -15,7 +15,7 @@ import {
 import { useSpring, motion } from 'motion/react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationLayoutContentHeaderLeft
 export interface SideNavigationLayoutContentHeaderLeftProperties {

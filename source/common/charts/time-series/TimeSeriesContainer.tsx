@@ -7,7 +7,7 @@ import React from 'react';
 import { LoadingAnimation } from '@structure/source/common/animations/LoadingAnimation';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - TimeSeriesContainer
 export interface TimeSeriesContainerProperties {

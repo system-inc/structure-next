@@ -3,7 +3,7 @@
 import React from 'react';
 import * as RadixTabPrimitive from '@radix-ui/react-tabs';
 import { cva, type VariantProps as VariantProperties } from 'class-variance-authority';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { AnimatePresence, motion } from 'motion/react';
 
 export const tabsVariants = cva(

@@ -16,7 +16,7 @@ import { InputTextProperties, InputText } from '@structure/source/common/forms/I
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - FormInputText
 export interface FormInputTextProperties

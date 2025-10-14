@@ -13,7 +13,7 @@ import { ProfileLink } from '@structure/source/modules/post/ProfileLink';
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostComments
 export interface PostCommentsProperties {

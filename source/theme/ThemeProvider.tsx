@@ -13,7 +13,7 @@ import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/t
 import { themeKey, operatingSystemThemeKey, darkThemeMediaQueryString } from '@structure/source/theme/ThemeSettings';
 
 // Dependencies - Utilities
-import { Cookies } from '@structure/source/utilities/cookies/Cookies';
+import { Cookies } from '@structure/source/utilities/cookie/Cookies';
 
 // Function to set the theme class name on the DOM
 function setThemeClassName(themeClassName: ThemeClassName) {

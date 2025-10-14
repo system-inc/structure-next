@@ -33,7 +33,7 @@ import { localStorageService } from '@structure/source/services/local-storage/Lo
 import { useSpring, motion } from 'motion/react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationLayoutNavigationSide
 export interface SideNavigationLayoutNavigationSideProperties {

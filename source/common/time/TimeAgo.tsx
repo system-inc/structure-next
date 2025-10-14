@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { timeFromNow } from '@structure/source/utilities/Time';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { timeFromNow } from '@structure/source/utilities/time/Time';
 
 // Component - TimeAgo
 export interface TimeAgoProperties {

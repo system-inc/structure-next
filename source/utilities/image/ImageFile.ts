@@ -8,7 +8,7 @@ import {
     ImageDimensions,
     ImageTransforms,
     ExifOrientationTransforms,
-} from '@structure/source/utilities/images/Image';
+} from '@structure/source/utilities/image/Image';
 
 /**
  * Creates a preview URL for an image file

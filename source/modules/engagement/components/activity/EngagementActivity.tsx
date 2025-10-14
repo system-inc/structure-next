@@ -25,7 +25,7 @@ import { AnimatePresence } from 'motion/react';
 
 // Dependencies - Utilities
 import { formatLocation, getAttributionMessage, parseUtcDateString } from './utilities/EngagementActivityUtilities';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Constants
 const title = 'Sessions';

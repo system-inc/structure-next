@@ -6,7 +6,7 @@ import { Link } from '@structure/source/common/navigation/Link';
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
 // Dependencies - Utilities
-import { timeFromNow } from '@structure/source/utilities/Time';
+import { timeFromNow } from '@structure/source/utilities/time/Time';
 
 // Component - ActivityLink
 export type ActivityLinkProperties = {

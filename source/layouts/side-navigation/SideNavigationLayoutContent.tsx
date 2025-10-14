@@ -22,7 +22,7 @@ import { motion, useSpring } from 'motion/react';
 import { LineLoadingAnimation } from '@structure/source/common/animations/LineLoadingAnimation';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationLayoutContent
 export interface SideNavigationLayoutContentProperties {

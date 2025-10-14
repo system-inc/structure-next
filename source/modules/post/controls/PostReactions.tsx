@@ -8,7 +8,7 @@ import { PostReactionsType } from '@structure/source/modules/post/Post';
 import { PostReaction } from '@structure/source/modules/post/controls/PostReaction';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostReactions
 export interface PostReactionsProperties {

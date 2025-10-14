@@ -17,7 +17,7 @@ import {
 } from '@structure/source/common/forms/InputTimeRange';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - FormInputTimeRange
 export interface FormInputTimeRangeProperties

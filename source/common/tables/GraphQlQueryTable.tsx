@@ -42,8 +42,8 @@ interface GraphQlVariablesWithPagination extends Record<string, unknown> {
 }
 
 // Dependencies - Utilities
-import { flattenObject } from '@structure/source/utilities/Object';
-import { titleCase } from '@structure/source/utilities/String';
+import { flattenObject } from '@structure/source/utilities/type/Object';
+import { titleCase } from '@structure/source/utilities/type/String';
 
 // Component - GraphQlQueryTable
 export interface GraphQlQueryTableProperties<TResult = unknown, TVariables = Record<string, unknown>>

@@ -13,8 +13,8 @@ import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon
 import { ArrowSquareOutIcon } from '@phosphor-icons/react/ssr';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { isImageFile } from '@structure/source/utilities/File';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { isImageFile } from '@structure/source/utilities/file/File';
 
 // Component - MetadataContent
 export interface MetadataContentProperties {

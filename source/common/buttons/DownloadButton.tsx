@@ -11,8 +11,8 @@ import DownloadIcon from '@structure/assets/icons/interface/DownloadIcon.svg';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { downloadFile } from '@structure/source/utilities/File';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { downloadFile } from '@structure/source/utilities/file/File';
 
 // Interface - DownloadButtonInterface
 export interface DownloadButtonInterface extends Omit<ButtonProperties, 'type'> {

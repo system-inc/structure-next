@@ -12,7 +12,7 @@ import { useDataInteractionDatabasesRequest } from '@structure/source/modules/da
 import { useDataInteractionDatabaseTablesRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabaseTablesRequest';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - DatabaseAndTableFormInputSelects
 export interface DatabaseAndTableFormInputSelectsProperties {

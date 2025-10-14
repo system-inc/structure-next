@@ -9,10 +9,10 @@ import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
 
 // Dependencies - Utilities
-import { lightenColor, darkenColor } from '@structure/source/utilities/Color';
-import { addCommas } from '@structure/source/utilities/Number';
+import { lightenColor, darkenColor } from '@structure/source/utilities/style/Color';
+import { addCommas } from '@structure/source/utilities/type/Number';
 import { formatTipLabelByTimeInterval } from './utilities/TimeSeriesFormatters';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - TimeSeriesTip
 export interface TimeSeriesTipProperties {

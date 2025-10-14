@@ -19,7 +19,7 @@ import EditIcon from '@structure/assets/icons/content/EditIcon.svg';
 
 // Dependencies - Utilities
 // import { titleCase } from '@structure/source/utilities/String';
-import { timeFromNow } from '@structure/source/utilities/Time';
+import { timeFromNow } from '@structure/source/utilities/time/Time';
 
 // Component - SupportPostPage
 export interface SupportPostPageProperties {

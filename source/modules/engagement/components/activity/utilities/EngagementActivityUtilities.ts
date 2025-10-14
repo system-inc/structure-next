@@ -1,5 +1,5 @@
 // Utilities - EngagementEventsActivityUtilities
-import { timeFromNow } from '@structure/source/utilities/Time';
+import { timeFromNow } from '@structure/source/utilities/time/Time';
 import { differenceInSeconds } from 'date-fns';
 
 // Creates attribution message from entrance page, referrer, and UTM parameters

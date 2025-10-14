@@ -7,11 +7,11 @@ import React from 'react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 // Dependencies - Main Components
-import { Wrapper } from '@structure/source/utilities/Wrapper';
+import { Wrapper } from '@structure/source/utilities/react/Wrapper';
 
 // Dependencies - Foundation Providers
-import { CookiesProvider } from '@structure/source/utilities/cookies/CookiesProvider';
-import { Cookies } from '@structure/source/utilities/cookies/Cookies';
+import { CookiesProvider } from '@structure/source/utilities/cookie/CookiesProvider';
+import { Cookies } from '@structure/source/utilities/cookie/Cookies';
 import { NetworkServiceProvider } from '@structure/source/services/network/NetworkServiceProvider';
 
 // Dependencies - State Providers

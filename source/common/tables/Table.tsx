@@ -23,7 +23,7 @@ import FunnelIcon from '@structure/assets/icons/analytics/FunnelIcon.svg';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // import { uniqueIdentifier } from '@structure/source/utilities/String';
 
 // Component - Table

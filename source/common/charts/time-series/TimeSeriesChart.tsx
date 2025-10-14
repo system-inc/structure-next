@@ -38,15 +38,15 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { isSpecializedInterval } from './utilities/TimeIntervalUtilities';
 import { TimeRangeType } from '@structure/source/common/time/TimeRange';
-import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/Color';
-import { addCommas } from '@structure/source/utilities/Number';
+import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/style/Color';
+import { addCommas } from '@structure/source/utilities/type/Number';
 import { formatAxisTick, calculateTickInterval } from './utilities/TimeSeriesFormatters';
 import {
     getTopBarDataKey,
     exceedsMaximumDataPoints,
     differenceInTimeIntervals,
 } from './utilities/TimeSeriesProcessors';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { getTimeSeriesColor } from './utilities/TimeSeriesColors';
 
 // Type - TimeSeriesDataPoint

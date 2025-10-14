@@ -8,7 +8,7 @@ import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect'
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { titleCase } from '@structure/source/utilities/String';
+import { titleCase } from '@structure/source/utilities/type/String';
 
 // Component - TimeIntervalFormInputSelect
 export interface TimeIntervalFormInputSelectProperties {

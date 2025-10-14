@@ -22,7 +22,7 @@ import SendIcon from '@structure/assets/icons/communication/SendIcon.svg';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - ContactPage
 export interface ContactPageProperties {

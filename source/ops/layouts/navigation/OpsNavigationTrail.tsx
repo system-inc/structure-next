@@ -13,8 +13,8 @@ import {
 import { OpsNavigationLinks } from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { titleCase } from '@structure/source/utilities/String';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { titleCase } from '@structure/source/utilities/type/String';
 
 // Component - OpsNavigationTrail
 export function OpsNavigationTrail(properties: NavigationTrailProperties) {

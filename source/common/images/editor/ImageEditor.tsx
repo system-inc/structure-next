@@ -14,13 +14,13 @@ import {
 import 'react-advanced-cropper/dist/style.css';
 
 // Dependencies - Utilities
-import { CropArea, CropShape } from '@structure/source/utilities/images/Image';
+import { CropArea, CropShape } from '@structure/source/utilities/image/Image';
 import {
     createImagePreview,
     revokeImagePreview,
     cropImage,
     resizeImage,
-} from '@structure/source/utilities/images/ImageFile';
+} from '@structure/source/utilities/image/ImageFile';
 
 // Types used internally by the component
 interface ImageDimensions {

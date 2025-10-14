@@ -9,7 +9,7 @@ import { SideNavigationItemProperties } from '@structure/source/common/navigatio
 import { SideNavigationSectionProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Function to build path from node to root
 export function buildPathFromNode(node: DocumentationNodeWithParentProperties): string[] {

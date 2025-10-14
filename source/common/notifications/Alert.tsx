@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Assets
 import WarningIcon from '@structure/assets/icons/status/WarningIcon.svg';

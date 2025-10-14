@@ -45,7 +45,7 @@ import {
     calculateSessionDuration,
     formatTimeAgo,
 } from './utilities/EngagementActivityUtilities';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - EngagementActivityCard
 export interface EngagementActivityCardProperties {

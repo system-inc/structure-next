@@ -5,7 +5,7 @@ import React from 'react';
 import ChevronRightFilledIcon from '@structure/assets/icons/interface/ChevronRightFilledIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // const colors = {
 //     keys: {

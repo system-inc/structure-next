@@ -11,7 +11,7 @@ import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - CopyButton
 export interface CopyButtonProperties extends ButtonProperties {

@@ -26,7 +26,7 @@ import {
     addWeeks,
     addMonths,
 } from 'date-fns';
-import { convertIntervalValueToDate } from '@structure/source/utilities/ChartData';
+import { convertIntervalValueToDate } from '@structure/source/utilities/chart/ChartData';
 
 // Type - UseZoomBehaviorOptions
 export interface UseZoomBehaviorOptions {

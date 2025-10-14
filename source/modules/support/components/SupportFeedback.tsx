@@ -11,7 +11,7 @@ import { SupportFeedbackDialog } from '@structure/source/modules/support/compone
 // import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SupportFeedback
 export interface SupportFeedbackProperties {

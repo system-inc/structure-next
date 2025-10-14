@@ -8,7 +8,7 @@ import { Button } from '@structure/source/common/buttons/Button';
 import { DocumentationSettingsDialog } from '@structure/source/modules/documentation/settings/dialogs/DocumentationSettingsDialog';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - DocumentationSettings
 export interface DocumentationSettingsProperties {

@@ -6,7 +6,7 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { CopyTip } from '@structure/source/common/popovers/CopyTip';
 
 // Dependencies - Utilities
-import { truncateUniqueIdentifier } from '@structure/source/utilities/String';
+import { truncateUniqueIdentifier } from '@structure/source/utilities/type/String';
 
 // Component - TableCellContentId
 export interface TableCellContentIdProperties extends React.HTMLAttributes<HTMLElement> {

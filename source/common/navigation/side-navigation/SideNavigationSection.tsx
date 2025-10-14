@@ -14,7 +14,7 @@ import { cubicBezier, motion, Transition } from 'motion/react';
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationSection
 export interface SideNavigationSectionProperties {

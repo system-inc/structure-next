@@ -16,7 +16,7 @@ import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Dependencies - Utilities
-import { setValueAtDottedPathInObject } from '@structure/source/utilities/Object';
+import { setValueAtDottedPathInObject } from '@structure/source/utilities/type/Object';
 
 // Function to convert FormValues to GraphQL mutation variables
 export function convertFormValuesToGraphQlMutationVariables(formValues: FormValuesInterface): Record<string, unknown> {

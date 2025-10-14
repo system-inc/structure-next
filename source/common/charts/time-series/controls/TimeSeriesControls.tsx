@@ -16,7 +16,7 @@ import { SortOrderToggle, SortOrderType } from './SortOrderToggle';
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - TimeSeriesControls
 export interface TimeSeriesControlsProperties {

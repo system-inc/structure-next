@@ -16,7 +16,7 @@ import ArrowDownIcon from '@structure/assets/icons/interface/ArrowDownIcon.svg';
 import HideIcon from '@structure/assets/icons/security/HideIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - TableHeaderCell
 export interface TableHeaderCellProperties extends TableCellProperties {

@@ -10,7 +10,7 @@ import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 import MinusIcon from '@structure/assets/icons/interface/MinusIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // InputCheckbox - Variants
 export const InputCheckboxVariants = {

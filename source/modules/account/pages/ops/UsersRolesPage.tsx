@@ -32,7 +32,7 @@ import {
 export const accountAccessRoleAssignmentsPrivilegedCacheKey = 'accountAccessRoleAssignmentsPrivileged';
 
 // Dependencies - Utilities
-import { dateFull } from '@structure/source/utilities/Time';
+import { dateFull } from '@structure/source/utilities/time/Time';
 
 // Component - UsersRolesPage
 export function UsersRolesPage() {

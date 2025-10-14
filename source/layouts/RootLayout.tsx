@@ -7,7 +7,7 @@ import { cookies } from 'next/headers';
 
 // Dependencies - Main Components
 import { Providers } from '@structure/source/layouts/providers/Providers';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Theme
 import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/theme/ThemeTypes';

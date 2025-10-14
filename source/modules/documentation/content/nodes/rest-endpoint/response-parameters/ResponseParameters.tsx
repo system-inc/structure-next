@@ -8,7 +8,7 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { ResponseFieldProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Function to generate a table ID from field path
 function getTableId(path: string): string {

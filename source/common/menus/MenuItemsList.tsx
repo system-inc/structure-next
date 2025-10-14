@@ -5,7 +5,7 @@ import React from 'react';
 import { MenuItemProperties, MenuItem, MenuItemHandle } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - MenuItemsList
 export interface MenuItemsListProperties {

@@ -13,7 +13,7 @@ import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIco
 import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Types
 export type ButtonElementType = HTMLButtonElement | HTMLAnchorElement;

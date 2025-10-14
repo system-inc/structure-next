@@ -7,7 +7,7 @@ import { Link } from '@structure/source/common/navigation/Link';
 import { SideNavigationSectionProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationItem
 export interface SideNavigationItemProperties {

@@ -13,8 +13,8 @@ import { ButtonSizes } from '@structure/source/common/buttons/ButtonSizes';
 import { Alert } from '@structure/source/common/notifications/Alert';
 
 // Dependencies - Utilities
-import { isImageFile } from '@structure/source/utilities/images/ImageFile';
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { isImageFile } from '@structure/source/utilities/image/ImageFile';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - ImageSelector
 export interface ImageSelectorProperties {

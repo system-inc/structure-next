@@ -27,7 +27,7 @@ import { AccountAuthenticationQuery } from '@structure/source/api/graphql/GraphQ
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - Authentication
 export interface AuthenticationProperties {

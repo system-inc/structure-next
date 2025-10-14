@@ -10,7 +10,7 @@ import { ButtonProperties, Button } from '@structure/source/common/buttons/Butto
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { motion, PanInfo } from 'motion/react';
 
 const MotionButton = motion.create(Button);

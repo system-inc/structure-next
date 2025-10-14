@@ -6,7 +6,7 @@ import { useUrlPath } from '@structure/source/router/Navigation';
 import { Link } from '@structure/source/common/navigation/Link';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - SideNavigationLink
 export interface SideNavigationLinkProperties {

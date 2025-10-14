@@ -8,7 +8,7 @@ import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialo
 import { MenuProperties, Menu } from '@structure/source/common/menus/Menu';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - CommandDialog
 export interface DialogMenuProperties extends MenuProperties {

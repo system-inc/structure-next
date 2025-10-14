@@ -20,8 +20,8 @@ import {
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { uniqueIdentifier } from '@structure/source/utilities/String';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { uniqueIdentifier } from '@structure/source/utilities/type/String';
 
 // Interface - ColumnFilterConditionDataInterface
 export interface ColumnFilterConditionDataInterface {

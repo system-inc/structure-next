@@ -5,7 +5,7 @@ import React from 'react';
 import { JsonNode } from '@structure/source/common/code/json/JsonNode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - Json
 export interface JsonProperties {

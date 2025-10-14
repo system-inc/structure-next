@@ -14,7 +14,7 @@ import { PostComments } from '@structure/source/modules/post/comments/PostCommen
 import { PostVoteType, PostsQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Type - Reactions
 export type PostReactionsType = NonNullable<PostsQuery['posts']['items'][0]['reactions']>;

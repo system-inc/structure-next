@@ -17,8 +17,8 @@ import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon
 import ChevronRightDoubleIcon from '@structure/assets/icons/interface/ChevronRightDoubleIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { addCommas } from '@structure/source/utilities/Number';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { addCommas } from '@structure/source/utilities/type/Number';
 
 // Component - Pagination
 export interface PaginationProperties {

@@ -19,7 +19,7 @@ import { PostVoteType } from '@structure/source/api/graphql/GraphQlGeneratedCode
 import ArrowUpIcon from '@structure/assets/icons/interface/ArrowUpIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PostVoteControl
 export interface PostVoteControlProperties {

@@ -12,8 +12,8 @@ import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
-import { wrapForSlot } from '@structure/source/utilities/React';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { wrapForSlot } from '@structure/source/utilities/react/React';
 
 // Class Names - Dialog Overlay
 export const dialogOverlayClassName =

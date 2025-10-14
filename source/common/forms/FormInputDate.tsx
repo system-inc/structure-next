@@ -12,7 +12,7 @@ import { ValidationResult, mergeValidationResults } from '@structure/source/util
 import { InputDateReferenceInterface, InputDateProperties, InputDate } from '@structure/source/common/forms/InputDate';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - FormInputDate
 export interface FormInputDateProperties

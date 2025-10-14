@@ -19,7 +19,7 @@ import SunIcon from '@structure/assets/icons/nature/SunIcon.svg';
 import MoonIcon from '@structure/assets/icons/nature/MoonIcon.svg';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/Style';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - ThemeToggle
 export function ThemeToggle() {
