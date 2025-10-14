@@ -2359,35 +2359,19 @@ export type EngagementEventsCreateMutation = {
     engagementEventsCreate: { __typename?: 'OperationResult'; success: boolean };
 };
 
-export type PostDeleteMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-}>;
-
-export type PostDeleteMutation = { __typename?: 'Mutation'; postDelete: string };
-
 export type PostByIdentifierQueryVariables = Exact<{
     identifier: Scalars['String']['input'];
 }>;
 
 export type PostByIdentifierQuery = { __typename?: 'Query'; post: { __typename?: 'Post'; id: string } };
 
-export type PostTopicDeleteMutationVariables = Exact<{
-    id: Scalars['String']['input'];
+export type PostCreatePrivilegedMutationVariables = Exact<{
+    input: PostCreateInput;
 }>;
 
-export type PostTopicDeleteMutation = {
+export type PostCreatePrivilegedMutation = {
     __typename?: 'Mutation';
-    postTopicDelete: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostUpdateMutationVariables = Exact<{
-    id: Scalars['String']['input'];
-    input: PostUpdateInput;
-}>;
-
-export type PostUpdateMutation = {
-    __typename?: 'Mutation';
-    postUpdate: {
+    postCreatePrivileged: {
         __typename?: 'Post';
         id: string;
         status: PostStatus;
@@ -2403,82 +2387,33 @@ export type PostUpdateMutation = {
     };
 };
 
-export type PostReactionCreateMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-    content: Scalars['String']['input'];
+export type PostCreateMutationVariables = Exact<{
+    input: PostCreateInput;
 }>;
 
-export type PostReactionCreateMutation = {
+export type PostCreateMutation = {
     __typename?: 'Mutation';
-    postReactionCreate: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostReportCreateMutationVariables = Exact<{
-    input: PostReportInput;
-}>;
-
-export type PostReportCreateMutation = {
-    __typename?: 'Mutation';
-    postReportCreate: { __typename?: 'PostReport'; id: string };
-};
-
-export type PostVoteMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-    type: PostVoteType;
-}>;
-
-export type PostVoteMutation = {
-    __typename?: 'Mutation';
-    postVote: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostUnvoteMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-}>;
-
-export type PostUnvoteMutation = {
-    __typename?: 'Mutation';
-    postUnvote: { __typename?: 'OperationResult'; success: boolean };
-};
-
-export type PostReactionProfilesQueryVariables = Exact<{
-    postId: Scalars['String']['input'];
-    content: Scalars['String']['input'];
-    pagination: PaginationInput;
-}>;
-
-export type PostReactionProfilesQuery = {
-    __typename?: 'Query';
-    postReactionProfiles: {
-        __typename?: 'PagedPostReactionProfile';
-        items: Array<{
-            __typename?: 'PostReactionProfile';
-            username: string;
-            displayName?: string | null;
-            profileId: string;
-        }>;
-        pagination: {
-            __typename?: 'Pagination';
-            itemIndex: number;
-            itemIndexForPreviousPage?: number | null;
-            itemIndexForNextPage?: number | null;
-            itemsPerPage: number;
-            itemsTotal: number;
-            pagesTotal: number;
-            page: number;
-        };
+    postCreatePrivileged: {
+        __typename?: 'Post';
+        id: string;
+        status: PostStatus;
+        title: string;
+        contentType: RichContentFormat;
+        content?: string | null;
+        settings?: any | null;
+        upvoteCount: number;
+        downvoteCount: number;
+        metadata?: any | null;
+        updatedAt: any;
+        createdAt: any;
     };
 };
 
-export type PostReactionDeleteMutationVariables = Exact<{
-    postId: Scalars['String']['input'];
-    content: Scalars['String']['input'];
+export type PostDeleteMutationVariables = Exact<{
+    id: Scalars['String']['input'];
 }>;
 
-export type PostReactionDeleteMutation = {
-    __typename?: 'Mutation';
-    postReactionDelete: { __typename?: 'OperationResult'; success: boolean };
-};
+export type PostDeleteMutation = { __typename?: 'Mutation'; postDelete: string };
 
 export type PostQueryVariables = Exact<{
     id?: InputMaybe<Scalars['String']['input']>;
@@ -2519,6 +2454,48 @@ export type PostQuery = {
         } | null;
         reactions?: Array<{ __typename?: 'PostReaction'; content: string; count: number; reacted: boolean }> | null;
     };
+};
+
+export type PostUnvoteMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+}>;
+
+export type PostUnvoteMutation = {
+    __typename?: 'Mutation';
+    postUnvote: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostUpdateMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+    input: PostUpdateInput;
+}>;
+
+export type PostUpdateMutation = {
+    __typename?: 'Mutation';
+    postUpdate: {
+        __typename?: 'Post';
+        id: string;
+        status: PostStatus;
+        title: string;
+        contentType: RichContentFormat;
+        content?: string | null;
+        settings?: any | null;
+        upvoteCount: number;
+        downvoteCount: number;
+        metadata?: any | null;
+        updatedAt: any;
+        createdAt: any;
+    };
+};
+
+export type PostVoteMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+    type: PostVoteType;
+}>;
+
+export type PostVoteMutation = {
+    __typename?: 'Mutation';
+    postVote: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type PostsQueryVariables = Exact<{
@@ -2573,44 +2550,62 @@ export type PostsQuery = {
     };
 };
 
-export type PostCreateMutationVariables = Exact<{
-    input: PostCreateInput;
+export type PostReactionCreateMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+    content: Scalars['String']['input'];
 }>;
 
-export type PostCreateMutation = {
+export type PostReactionCreateMutation = {
     __typename?: 'Mutation';
-    postCreatePrivileged: {
-        __typename?: 'Post';
-        id: string;
-        status: PostStatus;
-        title: string;
-        contentType: RichContentFormat;
-        content?: string | null;
-        settings?: any | null;
-        upvoteCount: number;
-        downvoteCount: number;
-        metadata?: any | null;
-        updatedAt: any;
-        createdAt: any;
+    postReactionCreate: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostReactionDeleteMutationVariables = Exact<{
+    postId: Scalars['String']['input'];
+    content: Scalars['String']['input'];
+}>;
+
+export type PostReactionDeleteMutation = {
+    __typename?: 'Mutation';
+    postReactionDelete: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type PostReactionProfilesQueryVariables = Exact<{
+    postId: Scalars['String']['input'];
+    content: Scalars['String']['input'];
+    pagination: PaginationInput;
+}>;
+
+export type PostReactionProfilesQuery = {
+    __typename?: 'Query';
+    postReactionProfiles: {
+        __typename?: 'PagedPostReactionProfile';
+        items: Array<{
+            __typename?: 'PostReactionProfile';
+            username: string;
+            displayName?: string | null;
+            profileId: string;
+        }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForPreviousPage?: number | null;
+            itemIndexForNextPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            pagesTotal: number;
+            page: number;
+        };
     };
 };
 
-export type SupportTicketCreateMutationVariables = Exact<{
-    input: SupportTicketCreateInput;
+export type PostReportCreateMutationVariables = Exact<{
+    input: PostReportInput;
 }>;
 
-export type SupportTicketCreateMutation = {
+export type PostReportCreateMutation = {
     __typename?: 'Mutation';
-    supportTicketCreate: {
-        __typename?: 'SupportTicket';
-        id: string;
-        type: string;
-        status: SupportTicketStatus;
-        userEmailAddress: string;
-        title: string;
-        description?: string | null;
-        comments: Array<{ __typename?: 'SupportTicketComment'; content: string }>;
-    };
+    postReportCreate: { __typename?: 'PostReport'; id: string };
 };
 
 export type PostTopicCreateMutationVariables = Exact<{
@@ -2628,6 +2623,15 @@ export type PostTopicCreateMutation = {
         postCount: number;
         createdAt: any;
     };
+};
+
+export type PostTopicDeleteMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+}>;
+
+export type PostTopicDeleteMutation = {
+    __typename?: 'Mutation';
+    postTopicDelete: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type PostTopicUpdateMutationVariables = Exact<{
@@ -3305,11 +3309,6 @@ export const EngagementEventsCreateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<EngagementEventsCreateMutation, EngagementEventsCreateMutationVariables>;
-export const PostDeleteDocument = new TypedDocumentString(`
-    mutation PostDelete($id: String!) {
-  postDelete(id: $id)
-}
-    `) as unknown as TypedDocumentString<PostDeleteMutation, PostDeleteMutationVariables>;
 export const PostByIdentifierDocument = new TypedDocumentString(`
     query PostByIdentifier($identifier: String!) {
   post(identifier: $identifier) {
@@ -3317,16 +3316,9 @@ export const PostByIdentifierDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostByIdentifierQuery, PostByIdentifierQueryVariables>;
-export const PostTopicDeleteDocument = new TypedDocumentString(`
-    mutation PostTopicDelete($id: String!) {
-  postTopicDelete(id: $id) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
-export const PostUpdateDocument = new TypedDocumentString(`
-    mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
-  postUpdate(id: $id, input: $input) {
+export const PostCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation PostCreatePrivileged($input: PostCreateInput!) {
+  postCreatePrivileged(input: $input) {
     id
     status
     title
@@ -3340,66 +3332,29 @@ export const PostUpdateDocument = new TypedDocumentString(`
     createdAt
   }
 }
-    `) as unknown as TypedDocumentString<PostUpdateMutation, PostUpdateMutationVariables>;
-export const PostReactionCreateDocument = new TypedDocumentString(`
-    mutation PostReactionCreate($postId: String!, $content: String!) {
-  postReactionCreate(postId: $postId, content: $content) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<PostReactionCreateMutation, PostReactionCreateMutationVariables>;
-export const PostReportCreateDocument = new TypedDocumentString(`
-    mutation PostReportCreate($input: PostReportInput!) {
-  postReportCreate(input: $input) {
+    `) as unknown as TypedDocumentString<PostCreatePrivilegedMutation, PostCreatePrivilegedMutationVariables>;
+export const PostCreateDocument = new TypedDocumentString(`
+    mutation PostCreate($input: PostCreateInput!) {
+  postCreatePrivileged(input: $input) {
     id
+    status
+    title
+    contentType
+    content
+    settings
+    upvoteCount
+    downvoteCount
+    metadata
+    updatedAt
+    createdAt
   }
 }
-    `) as unknown as TypedDocumentString<PostReportCreateMutation, PostReportCreateMutationVariables>;
-export const PostVoteDocument = new TypedDocumentString(`
-    mutation PostVote($postId: String!, $type: PostVoteType!) {
-  postVote(postId: $postId, type: $type) {
-    success
-  }
+    `) as unknown as TypedDocumentString<PostCreateMutation, PostCreateMutationVariables>;
+export const PostDeleteDocument = new TypedDocumentString(`
+    mutation PostDelete($id: String!) {
+  postDelete(id: $id)
 }
-    `) as unknown as TypedDocumentString<PostVoteMutation, PostVoteMutationVariables>;
-export const PostUnvoteDocument = new TypedDocumentString(`
-    mutation PostUnvote($postId: String!) {
-  postUnvote(postId: $postId) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<PostUnvoteMutation, PostUnvoteMutationVariables>;
-export const PostReactionProfilesDocument = new TypedDocumentString(`
-    query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {
-  postReactionProfiles(
-    postId: $postId
-    content: $content
-    pagination: $pagination
-  ) {
-    items {
-      username
-      displayName
-      profileId
-    }
-    pagination {
-      itemIndex
-      itemIndexForPreviousPage
-      itemIndexForNextPage
-      itemsPerPage
-      itemsTotal
-      pagesTotal
-      page
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<PostReactionProfilesQuery, PostReactionProfilesQueryVariables>;
-export const PostReactionDeleteDocument = new TypedDocumentString(`
-    mutation PostReactionDelete($postId: String!, $content: String!) {
-  postReactionDelete(postId: $postId, content: $content) {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<PostReactionDeleteMutation, PostReactionDeleteMutationVariables>;
+    `) as unknown as TypedDocumentString<PostDeleteMutation, PostDeleteMutationVariables>;
 export const PostDocument = new TypedDocumentString(`
     query Post($id: String, $slug: String, $identifier: String) {
   post(id: $id, slug: $slug, identifier: $identifier) {
@@ -3436,6 +3391,37 @@ export const PostDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostQuery, PostQueryVariables>;
+export const PostUnvoteDocument = new TypedDocumentString(`
+    mutation PostUnvote($postId: String!) {
+  postUnvote(postId: $postId) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostUnvoteMutation, PostUnvoteMutationVariables>;
+export const PostUpdateDocument = new TypedDocumentString(`
+    mutation PostUpdate($id: String!, $input: PostUpdateInput!) {
+  postUpdate(id: $id, input: $input) {
+    id
+    status
+    title
+    contentType
+    content
+    settings
+    upvoteCount
+    downvoteCount
+    metadata
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<PostUpdateMutation, PostUpdateMutationVariables>;
+export const PostVoteDocument = new TypedDocumentString(`
+    mutation PostVote($postId: String!, $type: PostVoteType!) {
+  postVote(postId: $postId, type: $type) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostVoteMutation, PostVoteMutationVariables>;
 export const PostsDocument = new TypedDocumentString(`
     query Posts($pagination: PaginationInput!) {
   posts(pagination: $pagination) {
@@ -3483,38 +3469,51 @@ export const PostsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostsQuery, PostsQueryVariables>;
-export const PostCreateDocument = new TypedDocumentString(`
-    mutation PostCreate($input: PostCreateInput!) {
-  postCreatePrivileged(input: $input) {
-    id
-    status
-    title
-    contentType
-    content
-    settings
-    upvoteCount
-    downvoteCount
-    metadata
-    updatedAt
-    createdAt
+export const PostReactionCreateDocument = new TypedDocumentString(`
+    mutation PostReactionCreate($postId: String!, $content: String!) {
+  postReactionCreate(postId: $postId, content: $content) {
+    success
   }
 }
-    `) as unknown as TypedDocumentString<PostCreateMutation, PostCreateMutationVariables>;
-export const SupportTicketCreateDocument = new TypedDocumentString(`
-    mutation SupportTicketCreate($input: SupportTicketCreateInput!) {
-  supportTicketCreate(input: $input) {
-    id
-    type
-    status
-    userEmailAddress
-    title
-    description
-    comments {
-      content
+    `) as unknown as TypedDocumentString<PostReactionCreateMutation, PostReactionCreateMutationVariables>;
+export const PostReactionDeleteDocument = new TypedDocumentString(`
+    mutation PostReactionDelete($postId: String!, $content: String!) {
+  postReactionDelete(postId: $postId, content: $content) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostReactionDeleteMutation, PostReactionDeleteMutationVariables>;
+export const PostReactionProfilesDocument = new TypedDocumentString(`
+    query PostReactionProfiles($postId: String!, $content: String!, $pagination: PaginationInput!) {
+  postReactionProfiles(
+    postId: $postId
+    content: $content
+    pagination: $pagination
+  ) {
+    items {
+      username
+      displayName
+      profileId
+    }
+    pagination {
+      itemIndex
+      itemIndexForPreviousPage
+      itemIndexForNextPage
+      itemsPerPage
+      itemsTotal
+      pagesTotal
+      page
     }
   }
 }
-    `) as unknown as TypedDocumentString<SupportTicketCreateMutation, SupportTicketCreateMutationVariables>;
+    `) as unknown as TypedDocumentString<PostReactionProfilesQuery, PostReactionProfilesQueryVariables>;
+export const PostReportCreateDocument = new TypedDocumentString(`
+    mutation PostReportCreate($input: PostReportInput!) {
+  postReportCreate(input: $input) {
+    id
+  }
+}
+    `) as unknown as TypedDocumentString<PostReportCreateMutation, PostReportCreateMutationVariables>;
 export const PostTopicCreateDocument = new TypedDocumentString(`
     mutation PostTopicCreate($input: PostTopicCreateInput!) {
   postTopicCreate(input: $input) {
@@ -3527,6 +3526,13 @@ export const PostTopicCreateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostTopicCreateMutation, PostTopicCreateMutationVariables>;
+export const PostTopicDeleteDocument = new TypedDocumentString(`
+    mutation PostTopicDelete($id: String!) {
+  postTopicDelete(id: $id) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<PostTopicDeleteMutation, PostTopicDeleteMutationVariables>;
 export const PostTopicUpdateDocument = new TypedDocumentString(`
     mutation PostTopicUpdate($input: PostTopicUpdateInput!) {
   postTopicUpdate(input: $input) {
@@ -3762,36 +3768,12 @@ export namespace GraphQLInputTypes {
         ],
     };
 
-    export const SupportTicketCommentVisibility: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'SupportTicketCommentVisibility',
-        values: ['Public', 'Internal'],
-    };
-
-    export const SupportTicketCommentCreateInput: GraphQLInputObjectTypeMetadata = {
+    export const PostReportInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
-        type: 'SupportTicketCommentCreateInput',
+        type: 'PostReportInput',
         fields: [
             {
-                name: 'ticketIdentifier',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'content',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'contentType',
-                kind: 'enum',
-                type: GraphQLInputTypes.RichContentFormat,
-                required: false,
-            },
-            {
-                name: 'replyToCommentId',
+                name: 'postId',
                 kind: 'scalar',
                 type: 'String',
                 required: false,
@@ -3805,20 +3787,21 @@ export namespace GraphQLInputTypes {
                 ],
             },
             {
-                name: 'visibility',
-                kind: 'enum',
-                type: GraphQLInputTypes.SupportTicketCommentVisibility,
+                name: 'commentId',
+                kind: 'scalar',
+                type: 'String',
                 required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'isUuid',
+                    },
+                ],
             },
-        ],
-    };
-
-    export const SupportTicketCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'SupportTicketCreateInput',
-        fields: [
             {
-                name: 'title',
+                name: 'reason',
                 kind: 'scalar',
                 type: 'String',
                 required: true,
@@ -3830,45 +3813,134 @@ export namespace GraphQLInputTypes {
                 ],
             },
             {
+                name: 'note',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+        ],
+    };
+
+    export const PostVoteType: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'PostVoteType',
+        values: ['Upvote', 'Downvote'],
+    };
+
+    export const PostUpdateInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'PostUpdateInput',
+        fields: [
+            {
+                name: 'title',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [1024],
+                    },
+                ],
+            },
+            {
+                name: 'type',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'isIn',
+                        constraints: [['Principle', 'Idea', 'SupportArticle']],
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [24],
+                    },
+                ],
+            },
+            {
+                name: 'slug',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [160],
+                    },
+                ],
+            },
+            {
                 name: 'description',
                 kind: 'scalar',
                 type: 'String',
                 required: false,
             },
             {
-                name: 'type',
+                name: 'content',
                 kind: 'scalar',
                 type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [36],
-                    },
-                    {
-                        type: 'isIn',
-                        constraints: [['Contact', 'SupportArticleFeedback']],
-                    },
-                ],
+                required: false,
             },
             {
-                name: 'emailAddress',
+                name: 'contentType',
+                kind: 'enum',
+                type: GraphQLInputTypes.RichContentFormat,
+                required: false,
+            },
+            {
+                name: 'publishedAt',
                 kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
+                type: 'DateTimeISO',
+                required: false,
             },
             {
-                name: 'initialComment',
-                kind: 'object',
-                type: GraphQLInputTypes.SupportTicketCommentCreateInput,
+                name: 'allowComment',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'allowVote',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'allowDownvote',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'allowReaction',
+                kind: 'scalar',
+                type: 'Boolean',
+                required: false,
+            },
+            {
+                name: 'metadata',
+                kind: 'scalar',
+                type: 'JSON',
                 required: false,
             },
         ],
+    };
+
+    export const RichContentFormat: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'RichContentFormat',
+        values: ['Markdown', 'Html', 'PlainText'],
     };
 
     export const PostStatus: GraphQLInputEnumTypeMetadata = {
@@ -3973,181 +4045,6 @@ export namespace GraphQLInputTypes {
                         type: 'isArray',
                     },
                 ],
-            },
-            {
-                name: 'allowComment',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowVote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowDownvote',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'allowReaction',
-                kind: 'scalar',
-                type: 'Boolean',
-                required: false,
-            },
-            {
-                name: 'metadata',
-                kind: 'scalar',
-                type: 'JSON',
-                required: false,
-            },
-        ],
-    };
-
-    export const PostVoteType: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'PostVoteType',
-        values: ['Upvote', 'Downvote'],
-    };
-
-    export const PostReportInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostReportInput',
-        fields: [
-            {
-                name: 'postId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'commentId',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isUuid',
-                    },
-                ],
-            },
-            {
-                name: 'reason',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'maxLength',
-                        constraints: [256],
-                    },
-                ],
-            },
-            {
-                name: 'note',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-        ],
-    };
-
-    export const RichContentFormat: GraphQLInputEnumTypeMetadata = {
-        kind: 'enum',
-        type: 'RichContentFormat',
-        values: ['Markdown', 'Html', 'PlainText'],
-    };
-
-    export const PostUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'PostUpdateInput',
-        fields: [
-            {
-                name: 'title',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [1024],
-                    },
-                ],
-            },
-            {
-                name: 'type',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isIn',
-                        constraints: [['Principle', 'Idea', 'SupportArticle']],
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [24],
-                    },
-                ],
-            },
-            {
-                name: 'slug',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [160],
-                    },
-                ],
-            },
-            {
-                name: 'description',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'content',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-            },
-            {
-                name: 'contentType',
-                kind: 'enum',
-                type: GraphQLInputTypes.RichContentFormat,
-                required: false,
-            },
-            {
-                name: 'publishedAt',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
             },
             {
                 name: 'allowComment',
@@ -5652,20 +5549,6 @@ export const EngagementEventsCreateOperation: GraphQLOperationMetadata<typeof En
     ],
 };
 
-export const PostDeleteOperation: GraphQLOperationMetadata<typeof PostDeleteDocument> = {
-    operation: 'PostDelete',
-    operationType: 'mutation',
-    document: PostDeleteDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
 export const PostByIdentifierOperation: GraphQLOperationMetadata<typeof PostByIdentifierDocument> = {
     operation: 'PostByIdentifier',
     operationType: 'query',
@@ -5680,147 +5563,41 @@ export const PostByIdentifierOperation: GraphQLOperationMetadata<typeof PostById
     ],
 };
 
-export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopicDeleteDocument> = {
-    operation: 'PostTopicDelete',
+export const PostCreatePrivilegedOperation: GraphQLOperationMetadata<typeof PostCreatePrivilegedDocument> = {
+    operation: 'PostCreatePrivileged',
     operationType: 'mutation',
-    document: PostTopicDeleteDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const PostUpdateOperation: GraphQLOperationMetadata<typeof PostUpdateDocument> = {
-    operation: 'PostUpdate',
-    operationType: 'mutation',
-    document: PostUpdateDocument,
-    parameters: [
-        {
-            parameter: 'id',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PostUpdateInput,
-        },
-    ],
-};
-
-export const PostReactionCreateOperation: GraphQLOperationMetadata<typeof PostReactionCreateDocument> = {
-    operation: 'PostReactionCreate',
-    operationType: 'mutation',
-    document: PostReactionCreateDocument,
-    parameters: [
-        {
-            parameter: 'postId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'content',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const PostReportCreateOperation: GraphQLOperationMetadata<typeof PostReportCreateDocument> = {
-    operation: 'PostReportCreate',
-    operationType: 'mutation',
-    document: PostReportCreateDocument,
+    document: PostCreatePrivilegedDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PostReportInput,
+            type: GraphQLInputTypes.PostCreateInput,
         },
     ],
 };
 
-export const PostVoteOperation: GraphQLOperationMetadata<typeof PostVoteDocument> = {
-    operation: 'PostVote',
+export const PostCreateOperation: GraphQLOperationMetadata<typeof PostCreateDocument> = {
+    operation: 'PostCreate',
     operationType: 'mutation',
-    document: PostVoteDocument,
+    document: PostCreateDocument,
     parameters: [
         {
-            parameter: 'postId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'type',
-            required: true,
-            kind: 'enum',
-            type: GraphQLInputTypes.PostVoteType,
-        },
-    ],
-};
-
-export const PostUnvoteOperation: GraphQLOperationMetadata<typeof PostUnvoteDocument> = {
-    operation: 'PostUnvote',
-    operationType: 'mutation',
-    document: PostUnvoteDocument,
-    parameters: [
-        {
-            parameter: 'postId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
-
-export const PostReactionProfilesOperation: GraphQLOperationMetadata<typeof PostReactionProfilesDocument> = {
-    operation: 'PostReactionProfiles',
-    operationType: 'query',
-    document: PostReactionProfilesDocument,
-    parameters: [
-        {
-            parameter: 'postId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'content',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'pagination',
+            parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.PaginationInput,
+            type: GraphQLInputTypes.PostCreateInput,
         },
     ],
 };
 
-export const PostReactionDeleteOperation: GraphQLOperationMetadata<typeof PostReactionDeleteDocument> = {
-    operation: 'PostReactionDelete',
+export const PostDeleteOperation: GraphQLOperationMetadata<typeof PostDeleteDocument> = {
+    operation: 'PostDelete',
     operationType: 'mutation',
-    document: PostReactionDeleteDocument,
+    document: PostDeleteDocument,
     parameters: [
         {
-            parameter: 'postId',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-        {
-            parameter: 'content',
+            parameter: 'id',
             required: true,
             kind: 'scalar',
             type: 'String',
@@ -5854,6 +5631,60 @@ export const PostOperation: GraphQLOperationMetadata<typeof PostDocument> = {
     ],
 };
 
+export const PostUnvoteOperation: GraphQLOperationMetadata<typeof PostUnvoteDocument> = {
+    operation: 'PostUnvote',
+    operationType: 'mutation',
+    document: PostUnvoteDocument,
+    parameters: [
+        {
+            parameter: 'postId',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const PostUpdateOperation: GraphQLOperationMetadata<typeof PostUpdateDocument> = {
+    operation: 'PostUpdate',
+    operationType: 'mutation',
+    document: PostUpdateDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PostUpdateInput,
+        },
+    ],
+};
+
+export const PostVoteOperation: GraphQLOperationMetadata<typeof PostVoteDocument> = {
+    operation: 'PostVote',
+    operationType: 'mutation',
+    document: PostVoteDocument,
+    parameters: [
+        {
+            parameter: 'postId',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'type',
+            required: true,
+            kind: 'enum',
+            type: GraphQLInputTypes.PostVoteType,
+        },
+    ],
+};
+
 export const PostsOperation: GraphQLOperationMetadata<typeof PostsDocument> = {
     operation: 'Posts',
     operationType: 'query',
@@ -5868,30 +5699,82 @@ export const PostsOperation: GraphQLOperationMetadata<typeof PostsDocument> = {
     ],
 };
 
-export const PostCreateOperation: GraphQLOperationMetadata<typeof PostCreateDocument> = {
-    operation: 'PostCreate',
+export const PostReactionCreateOperation: GraphQLOperationMetadata<typeof PostReactionCreateDocument> = {
+    operation: 'PostReactionCreate',
     operationType: 'mutation',
-    document: PostCreateDocument,
+    document: PostReactionCreateDocument,
     parameters: [
         {
-            parameter: 'input',
+            parameter: 'postId',
             required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.PostCreateInput,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'content',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
         },
     ],
 };
 
-export const SupportTicketCreateOperation: GraphQLOperationMetadata<typeof SupportTicketCreateDocument> = {
-    operation: 'SupportTicketCreate',
+export const PostReactionDeleteOperation: GraphQLOperationMetadata<typeof PostReactionDeleteDocument> = {
+    operation: 'PostReactionDelete',
     operationType: 'mutation',
-    document: SupportTicketCreateDocument,
+    document: PostReactionDeleteDocument,
+    parameters: [
+        {
+            parameter: 'postId',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'content',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const PostReactionProfilesOperation: GraphQLOperationMetadata<typeof PostReactionProfilesDocument> = {
+    operation: 'PostReactionProfiles',
+    operationType: 'query',
+    document: PostReactionProfilesDocument,
+    parameters: [
+        {
+            parameter: 'postId',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'content',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const PostReportCreateOperation: GraphQLOperationMetadata<typeof PostReportCreateDocument> = {
+    operation: 'PostReportCreate',
+    operationType: 'mutation',
+    document: PostReportCreateDocument,
     parameters: [
         {
             parameter: 'input',
             required: true,
             kind: 'object',
-            type: GraphQLInputTypes.SupportTicketCreateInput,
+            type: GraphQLInputTypes.PostReportInput,
         },
     ],
 };
@@ -5906,6 +5789,20 @@ export const PostTopicCreateOperation: GraphQLOperationMetadata<typeof PostTopic
             required: true,
             kind: 'object',
             type: GraphQLInputTypes.PostTopicCreateInput,
+        },
+    ],
+};
+
+export const PostTopicDeleteOperation: GraphQLOperationMetadata<typeof PostTopicDeleteDocument> = {
+    operation: 'PostTopicDelete',
+    operationType: 'mutation',
+    document: PostTopicDeleteDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
         },
     ],
 };

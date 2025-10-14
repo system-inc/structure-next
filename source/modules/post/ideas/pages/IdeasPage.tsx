@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
-import { Posts } from '@structure/source/modules/post/Posts';
+import { Posts } from '@structure/source/modules/post/components/Posts';
 
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';

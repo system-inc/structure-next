@@ -8,29 +8,7 @@ import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQ
 import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
 
 // Dependencies - API
-import { gql } from '@structure/source/services/network/NetworkService';
-import { PostCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-
-// Dependencies - Assets
-
-// GraphQL Operations
-gql(`
-    mutation PostCreate($input: PostCreateInput!) {
-        postCreatePrivileged(input: $input) {
-            id
-            status
-            title
-            contentType
-            content
-            settings
-            upvoteCount
-            downvoteCount
-            metadata
-            updatedAt
-            createdAt
-        }
-    }
-`);
+import { PostCreatePrivilegedOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Component - IdeaSubmitPage
 export function IdeaSubmitPage() {
@@ -47,7 +25,7 @@ export function IdeaSubmitPage() {
 
             <GraphQlOperationForm
                 className="mt-6"
-                operation={PostCreateOperation}
+                operation={PostCreatePrivilegedOperation}
                 inputComponentsProperties={{
                     'input.description': {
                         className: 'hidden',
