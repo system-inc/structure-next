@@ -12,6 +12,13 @@ import { mergeClassNames } from '@structure/source/utilities/Style';
 // Class Names - Menu Item
 export const menuItemClassName = '';
 
+// Type - MenuItemHandle
+export interface MenuItemHandle {
+    focus: () => void;
+    scrollIntoView: (options?: ScrollIntoViewOptions) => void;
+    getBoundingClientRect: () => DOMRect | undefined;
+}
+
 // Component - MenuItem
 export interface MenuItemProperties extends Omit<ButtonProperties, 'content'> {
     value?: string; // Used for search and typeahead
@@ -22,7 +29,7 @@ export interface MenuItemProperties extends Omit<ButtonProperties, 'content'> {
     closeMenuOnSelected?: boolean; // Used anytime the Menu is closable (e.g., in a popover or context menu)
 }
 export const MenuItem = React.memo(
-    React.forwardRef<HTMLButtonElement, MenuItemProperties>(function (
+    React.forwardRef<MenuItemHandle, MenuItemProperties>(function MenuItem(
         {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             value,
@@ -40,11 +47,33 @@ export const MenuItem = React.memo(
         },
         reference,
     ) {
+        // References
+        const buttonReference = React.useRef<HTMLButtonElement | null>(null);
+
+        // Expose imperative handle for programmatic focus and scrolling
+        React.useImperativeHandle(
+            reference,
+            function () {
+                return {
+                    focus: function () {
+                        buttonReference.current?.focus();
+                    },
+                    scrollIntoView: function (options?: ScrollIntoViewOptions) {
+                        buttonReference.current?.scrollIntoView(options);
+                    },
+                    getBoundingClientRect: function () {
+                        return buttonReference.current?.getBoundingClientRect();
+                    },
+                };
+            },
+            [],
+        );
+
         // Render the component
         return (
             <Button
                 {...buttonProperties} // Spread remaining Button properties
-                ref={reference}
+                ref={buttonReference}
                 tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
                 variant="menuItem"
                 size="menuItem"
@@ -59,7 +88,16 @@ export const MenuItem = React.memo(
             </Button>
         );
     }),
+    function arePropertiesEqual(previousProperties, nextProperties) {
+        // Only re-render if these specific props change
+        // We ignore onClick and onMouseMove function references since they're recreated every render
+        return (
+            previousProperties.content === nextProperties.content &&
+            previousProperties.highlighted === nextProperties.highlighted &&
+            previousProperties.selected === nextProperties.selected &&
+            previousProperties.disabled === nextProperties.disabled &&
+            previousProperties.className === nextProperties.className &&
+            previousProperties.value === nextProperties.value
+        );
+    },
 );
-
-// Set displayName for debugging purposes
-MenuItem.displayName = 'MenuItem';

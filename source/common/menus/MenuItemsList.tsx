@@ -2,19 +2,17 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
-import { MenuItemMemoized } from '@structure/source/common/menus/MenuItemMemoized';
+import { MenuItemProperties, MenuItem, MenuItemHandle } from '@structure/source/common/menus/MenuItem';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/Style';
 
 // Component - MenuItemsList
-// This component is memoized to prevent re-rendering search and other elements when highlight changes
 export interface MenuItemsListProperties {
     itemsToRender: MenuItemProperties[];
     itemsToRenderHighlightIndex: number;
     itemsClassName?: string;
-    itemDomElementReferences: React.MutableRefObject<(HTMLButtonElement | null)[]>;
+    getItemReference: (index: number) => (handle: MenuItemHandle | null) => void;
     itemOnClickIntercept: (
         item: MenuItemProperties,
         itemRenderIndex: number,
@@ -26,25 +24,27 @@ export interface MenuItemsListProperties {
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => void;
 }
-export const MenuItemsList = React.memo(function (properties: MenuItemsListProperties) {
+export function MenuItemsList(properties: MenuItemsListProperties) {
     return (
         <div className={mergeClassNames('overflow-y-auto p-1', properties.itemsClassName)}>
             {properties.itemsToRender.map(function (itemToRender, itemToRenderIndex) {
                 return (
-                    <MenuItemMemoized
+                    <MenuItem
                         key={itemToRender.value ?? itemToRenderIndex}
-                        item={itemToRender}
-                        itemIndex={itemToRenderIndex}
+                        {...itemToRender}
+                        ref={properties.getItemReference(itemToRenderIndex)}
+                        tabIndex={-1}
+                        className={mergeClassNames('w-full', itemToRender.className)}
+                        onClick={function (event: React.MouseEvent<HTMLElement, MouseEvent>) {
+                            properties.itemOnClickIntercept(itemToRender, itemToRenderIndex, event);
+                        }}
+                        onMouseMove={function (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+                            properties.itemOnMouseMoveIntercept(itemToRender, itemToRenderIndex, event);
+                        }}
                         highlighted={itemToRenderIndex === properties.itemsToRenderHighlightIndex}
-                        itemDomElementReferences={properties.itemDomElementReferences}
-                        onClickIntercept={properties.itemOnClickIntercept}
-                        onMouseMoveIntercept={properties.itemOnMouseMoveIntercept}
                     />
                 );
             })}
         </div>
     );
-});
-
-// Set displayName for debugging purposes
-MenuItemsList.displayName = 'MenuItemsList';
+}
