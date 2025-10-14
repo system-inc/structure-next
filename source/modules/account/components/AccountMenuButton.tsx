@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 import { AccountMenu } from '@structure/source/modules/account/components/AccountMenu';
-import { Popover } from '@structure/source/common/popovers/Popover';
+import { Popover } from '@structure/source/components/popovers/Popover';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { DayPicker as ReactDayPicker } from 'react-day-picker';
-import { CalendarEdgeNavigationCaption } from '@structure/source/common/time/CalendarEdgeNavigationCaption';
+import { CalendarEdgeNavigationCaption } from '@structure/source/components/time/CalendarEdgeNavigationCaption';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

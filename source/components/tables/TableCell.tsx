@@ -5,21 +5,21 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
-import { TableColumnType, TableColumnProperties } from '@structure/source/common/tables/TableColumn';
-import { TableCellContentId } from '@structure/source/common/tables/cells/TableCellContentId';
-import { TableCellContentOption } from '@structure/source/common/tables/cells/TableCellContentOption';
-import { TableCellContentImageUrl } from '@structure/source/common/tables/cells/TableCellContentImageUrl';
-import { TableCellContentDateTime } from '@structure/source/common/tables/cells/TableCellContentDateTime';
-import { TableCellContentBoolean } from '@structure/source/common/tables/cells/TableCellContentBoolean';
-import { TableCellContentHtml } from '@structure/source/common/tables/cells/TableCellContentHtml';
-import { TableCellContentUrl } from '@structure/source/common/tables/cells/TableCellContentUrl';
-import { TableCellContentNumber } from '@structure/source/common/tables/cells/TableCellContentNumber';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
-import { DialogCloseControl } from '@structure/source/common/dialogs/DialogCloseControl';
-import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
-import { Button } from '@structure/source/common/buttons/Button';
-import { CopyButton } from '@structure/source/common/buttons/CopyButton';
+import { Link } from '@structure/source/components/navigation/Link';
+import { TableColumnType, TableColumnProperties } from '@structure/source/components/tables/TableColumn';
+import { TableCellContentId } from '@structure/source/components/tables/cells/TableCellContentId';
+import { TableCellContentOption } from '@structure/source/components/tables/cells/TableCellContentOption';
+import { TableCellContentImageUrl } from '@structure/source/components/tables/cells/TableCellContentImageUrl';
+import { TableCellContentDateTime } from '@structure/source/components/tables/cells/TableCellContentDateTime';
+import { TableCellContentBoolean } from '@structure/source/components/tables/cells/TableCellContentBoolean';
+import { TableCellContentHtml } from '@structure/source/components/tables/cells/TableCellContentHtml';
+import { TableCellContentUrl } from '@structure/source/components/tables/cells/TableCellContentUrl';
+import { TableCellContentNumber } from '@structure/source/components/tables/cells/TableCellContentNumber';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
+import { DialogCloseControl } from '@structure/source/components/dialogs/DialogCloseControl';
+import { ObjectTable } from '@structure/source/components/tables/ObjectTable';
+import { Button } from '@structure/source/components/buttons/Button';
+import { CopyButton } from '@structure/source/components/buttons/CopyButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

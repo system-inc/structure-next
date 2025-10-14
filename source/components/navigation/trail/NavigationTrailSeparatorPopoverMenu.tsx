@@ -3,8 +3,8 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { PopoverMenuProperties, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { NavigationTrailLinkInterface } from '@structure/source/common/navigation/trail/NavigationTrail';
+import { PopoverMenuProperties, PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
+import { NavigationTrailLinkInterface } from '@structure/source/components/navigation/trail/NavigationTrail';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';

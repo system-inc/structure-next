@@ -11,7 +11,7 @@ import { OpsNavigationLinkProperties, OpsNavigationLink } from './OpsNavigationL
 import ChevronRightIcon from '@structure/assets/icons/interface/ChevronRightIcon.svg';
 
 // Dependencies - Animation
-import { Collapse } from '@structure/source/common/interactions/Collapse';
+import { Collapse } from '@structure/source/components/interactions/Collapse';
 import { cubicBezier, motion, Transition } from 'motion/react';
 
 // Component - NavigationGroup

@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
 import {
     AuthenticationProperties,
     Authentication,

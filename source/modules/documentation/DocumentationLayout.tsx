@@ -8,7 +8,7 @@ import { DocumentationSpecificationProperties } from '@structure/source/modules/
 
 // Dependencies - Main Components
 import { SideNavigationLayout } from '@structure/source/layouts/side-navigation/SideNavigationLayout';
-import { SideNavigation } from '@structure/source/common/navigation/side-navigation/SideNavigation';
+import { SideNavigation } from '@structure/source/components/navigation/side-navigation/SideNavigation';
 import { DocumentationSettings } from '@structure/source/modules/documentation/settings/DocumentationSettings';
 
 // Dependencies - Utilities

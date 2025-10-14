@@ -5,7 +5,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { AlertProperties, Alert } from '@structure/source/common/notifications/Alert';
+import { AlertProperties, Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - Assets
 import CloudErrorIcon from '@structure/assets/icons/status/CloudErrorIcon.svg';

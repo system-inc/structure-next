@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { JsonNode } from '@structure/source/common/code/json/JsonNode';
+import { JsonNode } from '@structure/source/components/code/json/JsonNode';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

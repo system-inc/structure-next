@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Types
-import { TimeRangeType } from '@structure/source/common/time/TimeRange';
+import { TimeRangeType } from '@structure/source/components/time/TimeRange';
 
 // Dependencies - Main Components
-import { FormInputTimeRange } from '@structure/source/common/forms/FormInputTimeRange';
+import { FormInputTimeRange } from '@structure/source/components/forms/FormInputTimeRange';
 import { TimeIntervalFormInputSelect } from './TimeIntervalFormInputSelect';
 import { ChartTypeFormInputSelect, ChartType } from './ChartTypeFormInputSelect';
 import { SortOrderToggle, SortOrderType } from './SortOrderToggle';

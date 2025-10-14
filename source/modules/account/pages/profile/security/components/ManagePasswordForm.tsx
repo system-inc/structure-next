@@ -4,11 +4,11 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { Alert } from '@structure/source/common/notifications/Alert';
-import { Button } from '@structure/source/common/buttons/Button';
+import { Alert } from '@structure/source/components/notifications/Alert';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

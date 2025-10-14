@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { type MonthCaptionProps as MonthCaptionProperties, useDayPicker } from 'react-day-picker';
-import { ButtonVariants } from '@structure/source/common/buttons/ButtonVariants';
+import { ButtonVariants } from '@structure/source/components/buttons/ButtonVariants';
 
 // Dependencies - Assets
 import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.svg';

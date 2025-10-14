@@ -7,7 +7,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
 import { ContactListForm } from '@structure/source/modules/contact-list/ContactListForm';
 

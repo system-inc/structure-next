@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputText } from '@structure/source/common/forms/InputText';
-import { InputSelectItemProperties, InputSelect } from '@structure/source/common/forms/InputSelect';
-import { TableColumnType, TableColumnProperties } from '@structure/source/common/tables/TableColumn';
+import { InputText } from '@structure/source/components/forms/InputText';
+import { InputSelectItemProperties, InputSelect } from '@structure/source/components/forms/InputSelect';
+import { TableColumnType, TableColumnProperties } from '@structure/source/components/tables/TableColumn';
 
 // Dependencies - Assets
 // import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';

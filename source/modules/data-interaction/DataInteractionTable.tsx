@@ -4,13 +4,13 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableProperties, Table } from '@structure/source/common/tables/Table';
-import { TableColumnType, TableColumnProperties } from '@structure/source/common/tables/TableColumn';
-// import { TableRowInterface } from '@structure/source/common/tables/TableRow';
+import { TableProperties, Table } from '@structure/source/components/tables/Table';
+import { TableColumnType, TableColumnProperties } from '@structure/source/components/tables/TableColumn';
+// import { TableRowInterface } from '@structure/source/components/tables/TableRow';
 import { DatabaseAndTableFormInputSelects } from '@structure/source/ops/pages/developers/databases/DatabaseAndTableFormInputSelects';
-import { Button } from '@structure/source/common/buttons/Button';
-import { RefreshButton } from '@structure/source/common/buttons/RefreshButton';
-import { ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
+import { Button } from '@structure/source/components/buttons/Button';
+import { RefreshButton } from '@structure/source/components/buttons/RefreshButton';
+import { ColumnFilterGroupDataInterface } from '@structure/source/components/tables/ColumnFilterGroup';
 
 // Dependencies - Assets
 import BarGraphIcon from '@structure/assets/icons/analytics/BarGraphIcon.svg';

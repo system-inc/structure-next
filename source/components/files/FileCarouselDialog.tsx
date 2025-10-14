@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
 import { FileCarousel, FileCarouselProperties } from './FileCarousel';
 
 // Component - FileCarouselDialog

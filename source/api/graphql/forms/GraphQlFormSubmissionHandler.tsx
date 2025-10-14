@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Types
-import { FormValuesInterface, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
+import { FormValuesInterface, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
 
 // Dependencies - Main Components
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - API
 import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';

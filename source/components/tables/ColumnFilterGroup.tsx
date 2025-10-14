@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { InputText } from '@structure/source/common/forms/InputText';
-import { InputSelectItemProperties, InputSelect } from '@structure/source/common/forms/InputSelect';
-import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
+import { Button } from '@structure/source/components/buttons/Button';
+import { InputText } from '@structure/source/components/forms/InputText';
+import { InputSelectItemProperties, InputSelect } from '@structure/source/components/forms/InputSelect';
+import { TableColumnProperties } from '@structure/source/components/tables/TableColumn';
 
 // Dependencies - Assets
 import MinusCircledIcon from '@structure/assets/icons/interface/MinusCircledIcon.svg';

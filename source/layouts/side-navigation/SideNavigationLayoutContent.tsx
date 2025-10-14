@@ -19,7 +19,7 @@ import {
 
 // Dependencies - Animation
 import { motion, useSpring } from 'motion/react';
-import { LineLoadingAnimation } from '@structure/source/common/animations/LineLoadingAnimation';
+import { LineLoadingAnimation } from '@structure/source/components/animations/LineLoadingAnimation';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

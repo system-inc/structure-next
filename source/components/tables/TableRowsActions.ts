@@ -1,6 +1,6 @@
 // Dependencies - Main Components
-import { TableRowProperties } from '@structure/source/common/tables/TableRow';
-import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
+import { TableRowProperties } from '@structure/source/components/tables/TableRow';
+import { TableColumnProperties } from '@structure/source/components/tables/TableColumn';
 
 // Dependencies - Utilities
 import { downloadFile } from '@structure/source/utilities/file/File';

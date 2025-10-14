@@ -7,10 +7,10 @@ import {
     FormInputProperties,
     FormInput,
     useFormInputValue,
-} from '@structure/source/common/forms/FormInput';
+} from '@structure/source/components/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 // import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { InputTextAreaProperties, InputTextArea } from '@structure/source/common/forms/InputTextArea';
+import { InputTextAreaProperties, InputTextArea } from '@structure/source/components/forms/InputTextArea';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

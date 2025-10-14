@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Button } from '@structure/source/components/buttons/Button';
+import { Alert } from '@structure/source/components/notifications/Alert';
 import { ImageSelector } from '../selector/ImageSelector';
 import { ImageUploaderBase } from './ImageUploaderBase';
 

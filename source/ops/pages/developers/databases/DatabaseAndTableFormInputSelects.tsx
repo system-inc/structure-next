@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputSelectProperties, FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { FormInputSelectProperties, FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
 
 // Dependencies - Hooks
 import { useDataInteractionDatabasesRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabasesRequest';

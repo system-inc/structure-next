@@ -4,11 +4,11 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Form } from '@structure/source/common/forms/Form';
-import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
-import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
+import { Button } from '@structure/source/components/buttons/Button';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Form } from '@structure/source/components/forms/Form';
+import { FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
+import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
 // import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
 // Dependencies - API

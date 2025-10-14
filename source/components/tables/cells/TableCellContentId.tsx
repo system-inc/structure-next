@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
-import { CopyTip } from '@structure/source/common/popovers/CopyTip';
+import { Link } from '@structure/source/components/navigation/Link';
+import { CopyTip } from '@structure/source/components/popovers/CopyTip';
 
 // Dependencies - Utilities
 import { truncateUniqueIdentifier } from '@structure/source/utilities/type/String';

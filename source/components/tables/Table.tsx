@@ -2,20 +2,23 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
-import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
-import { TableRowProperties, TableRow } from '@structure/source/common/tables/TableRow';
-import { defaultTableRowsActions } from '@structure/source/common/tables/TableRowsActions';
-import { Button } from '@structure/source/common/buttons/Button';
-import { ToggleButton } from '@structure/source/common/buttons/ToggleButton';
-import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { InputText } from '@structure/source/common/forms/InputText';
-import { InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
-import { PaginationProperties, Pagination } from '@structure/source/common/navigation/pagination/Pagination';
-import { ColumnFilterGroup, ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
+import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
+import { TableColumnProperties } from '@structure/source/components/tables/TableColumn';
+import { TableRowProperties, TableRow } from '@structure/source/components/tables/TableRow';
+import { defaultTableRowsActions } from '@structure/source/components/tables/TableRowsActions';
+import { Button } from '@structure/source/components/buttons/Button';
+import { ToggleButton } from '@structure/source/components/buttons/ToggleButton';
+import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
+import { InputText } from '@structure/source/components/forms/InputText';
+import { InputMultipleSelect } from '@structure/source/components/forms/InputMultipleSelect';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
+import { PaginationProperties, Pagination } from '@structure/source/components/navigation/pagination/Pagination';
+import {
+    ColumnFilterGroup,
+    ColumnFilterGroupDataInterface,
+} from '@structure/source/components/tables/ColumnFilterGroup';
 import { ColumnFilterGroupOperator } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Dependencies - Assets
 import FilterIcon from '@structure/assets/icons/interface/FilterIcon.svg';

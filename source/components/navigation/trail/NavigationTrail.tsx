@@ -5,8 +5,8 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
-import { NavigationTrailSeparatorPopoverMenu } from '@structure/source/common/navigation/trail/NavigationTrailSeparatorPopoverMenu';
+import { Link } from '@structure/source/components/navigation/Link';
+import { NavigationTrailSeparatorPopoverMenu } from '@structure/source/components/navigation/trail/NavigationTrailSeparatorPopoverMenu';
 
 // Dependencies - Utilities
 import { slug, titleCase } from '@structure/source/utilities/type/String';

@@ -7,15 +7,15 @@ import {
     FormInputProperties,
     FormInput,
     useFormInputValue,
-} from '@structure/source/common/forms/FormInput';
+} from '@structure/source/components/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
 import {
     InputCheckboxState,
     InputCheckboxReferenceInterface,
     InputCheckboxProperties,
     InputCheckbox,
-} from '@structure/source/common/forms/InputCheckbox';
-import { TipIcon } from '@structure/source/common/popovers/TipIcon';
+} from '@structure/source/components/forms/InputCheckbox';
+import { TipIcon } from '@structure/source/components/popovers/TipIcon';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

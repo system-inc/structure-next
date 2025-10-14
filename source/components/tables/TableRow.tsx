@@ -2,9 +2,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableCellProperties, TableCell } from '@structure/source/common/tables/TableCell';
-import { TableHeaderCellProperties, TableHeaderCell } from '@structure/source/common/tables/TableHeaderCell';
-import { TableRowInputCheckbox } from '@structure/source/common/tables/TableRowInputCheckbox';
+import { TableCellProperties, TableCell } from '@structure/source/components/tables/TableCell';
+import { TableHeaderCellProperties, TableHeaderCell } from '@structure/source/components/tables/TableHeaderCell';
+import { TableRowInputCheckbox } from '@structure/source/components/tables/TableRowInputCheckbox';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

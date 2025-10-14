@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
+import { FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
 
 // Dependencies - Types
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';

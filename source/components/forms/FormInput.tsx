@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
-import { TipIconProperties, TipIcon } from '@structure/source/common/popovers/TipIcon';
+import { InputReferenceInterface, InputProperties } from '@structure/source/components/forms/Input';
+import { TipIconProperties, TipIcon } from '@structure/source/components/popovers/TipIcon';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';

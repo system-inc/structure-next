@@ -2,10 +2,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Tip } from '@structure/source/common/popovers/Tip';
+import { Tip } from '@structure/source/components/popovers/Tip';
 
 // Dependencies - Assets
-import WorldMapMercator from '@structure/source/common/maps/WorldMapMercator.svg';
+import WorldMapMercator from '@structure/source/components/maps/WorldMapMercator.svg';
 import CircleFilledIcon from '@structure/assets/icons/shapes/CircleFilledIcon.svg';
 
 // Component - SimpleSvgMap

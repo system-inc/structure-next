@@ -7,10 +7,10 @@ import React from 'react';
 import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { ButtonVariants } from '@structure/source/common/buttons/ButtonVariants';
-import { ButtonSizes } from '@structure/source/common/buttons/ButtonSizes';
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Button } from '@structure/source/components/buttons/Button';
+import { ButtonVariants } from '@structure/source/components/buttons/ButtonVariants';
+import { ButtonSizes } from '@structure/source/components/buttons/ButtonSizes';
+import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - Utilities
 import { isImageFile } from '@structure/source/utilities/image/ImageFile';

@@ -7,9 +7,13 @@ import {
     FormInputProperties,
     FormInput,
     useFormInputValue,
-} from '@structure/source/common/forms/FormInput';
+} from '@structure/source/components/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
-import { InputDateReferenceInterface, InputDateProperties, InputDate } from '@structure/source/common/forms/InputDate';
+import {
+    InputDateReferenceInterface,
+    InputDateProperties,
+    InputDate,
+} from '@structure/source/components/forms/InputDate';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

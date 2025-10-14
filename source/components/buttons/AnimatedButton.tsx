@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { type ButtonElementType, Button, ButtonProperties } from '@structure/source/common/buttons/Button';
+import { type ButtonElementType, Button, ButtonProperties } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Animation
 import { motion, animate, AnimatePresence, useMotionValue } from 'motion/react';

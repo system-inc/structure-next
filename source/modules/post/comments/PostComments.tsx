@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 // import { PostCommentControls } from '@structure/source/modules/post/comments/controls/PostCommentControls';
-import { TimeAgo } from '@structure/source/common/time/TimeAgo';
+import { TimeAgo } from '@structure/source/components/time/TimeAgo';
 import { ProfileLink } from '@structure/source/modules/post/ProfileLink';
 
 // Dependencies - Assets

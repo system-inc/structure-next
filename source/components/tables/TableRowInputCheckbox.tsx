@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableRowProperties } from '@structure/source/common/tables/TableRow';
-import { InputCheckboxState, InputCheckbox } from '@structure/source/common/forms/InputCheckbox';
+import { TableRowProperties } from '@structure/source/components/tables/TableRow';
+import { InputCheckboxState, InputCheckbox } from '@structure/source/components/forms/InputCheckbox';
 
 export function TableRowInputCheckbox(properties: TableRowProperties) {
     const checkboxReference = React.useRef<React.ElementRef<typeof InputCheckbox> | null>(null);

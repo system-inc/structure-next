@@ -8,8 +8,8 @@ import React from 'react';
 import Image from 'next/image';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
-import { Button } from '@structure/source/common/buttons/Button';
+import { Link } from '@structure/source/components/navigation/Link';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Shared State
 import { useAtom, useSetAtom } from 'jotai';

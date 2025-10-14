@@ -1,6 +1,6 @@
 // Dependencies - React and Next.js
 import React from 'react';
-import WorldMapMercator from '@structure/source/common/maps/WorldMapMercator.svg';
+import WorldMapMercator from '@structure/source/components/maps/WorldMapMercator.svg';
 
 // Component - PanAndZoomContainer
 export interface PanAndZoomContainerProperties {

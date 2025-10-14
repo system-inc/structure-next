@@ -9,8 +9,8 @@ import remarkCustomHeaderId from 'remark-custom-header-id';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { renderToString } from 'react-dom/server';
-import { Link } from '@structure/source/common/navigation/Link';
-import { CopyButton } from '@structure/source/common/buttons/CopyButton';
+import { Link } from '@structure/source/components/navigation/Link';
+import { CopyButton } from '@structure/source/components/buttons/CopyButton';
 
 // Dependencies - Styles
 // import '@project/app/_modules/chat/styles/night-owl.css';

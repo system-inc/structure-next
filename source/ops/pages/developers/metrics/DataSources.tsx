@@ -10,7 +10,7 @@ import { DataSource } from './DataSource';
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Supporting Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
@@ -19,7 +19,7 @@ import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import { AnimatePresence, Reorder } from 'motion/react';
 
 // Dependencies - Utilities
-import { getTimeSeriesColor } from '@structure/source/common/charts/time-series/utilities/TimeSeriesColors';
+import { getTimeSeriesColor } from '@structure/source/components/charts/time-series/utilities/TimeSeriesColors';
 import { uniqueIdentifier } from '@structure/source/utilities/type/String';
 
 // Component - DataSources

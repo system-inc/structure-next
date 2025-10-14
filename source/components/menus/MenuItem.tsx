@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
+import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

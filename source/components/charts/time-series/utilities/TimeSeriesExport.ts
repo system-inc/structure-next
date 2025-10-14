@@ -1,5 +1,5 @@
 // Dependencies - Types
-import { TimeSeriesDataPoint } from '@structure/source/common/charts/time-series/TimeSeriesChart';
+import { TimeSeriesDataPoint } from '@structure/source/components/charts/time-series/TimeSeriesChart';
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities

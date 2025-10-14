@@ -7,7 +7,7 @@ import React from 'react';
 import { ProfileImageSection } from '@structure/source/modules/account/pages/profile/profile/components/ProfileImageSection';
 import { ProfileInformationForm } from '@structure/source/modules/account/pages/profile/profile/components/ProfileInformationForm';
 import { UsernameForm } from '@structure/source/modules/account/pages/profile/profile/components/UsernameForm';
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

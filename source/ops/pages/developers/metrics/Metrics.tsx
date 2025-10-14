@@ -5,22 +5,22 @@ import React from 'react';
 import { useQueryState as useUrlQueryState, parseAsArrayOf, parseAsJson } from 'nuqs';
 
 // Dependencies - Main Components
-import { TimeSeriesChart, TimeSeriesDataPoint } from '@structure/source/common/charts/time-series/TimeSeriesChart';
-import { TimeSeriesContainer } from '@structure/source/common/charts/time-series/TimeSeriesContainer';
-import { TimeSeriesControls } from '@structure/source/common/charts/time-series/controls/TimeSeriesControls';
+import { TimeSeriesChart, TimeSeriesDataPoint } from '@structure/source/components/charts/time-series/TimeSeriesChart';
+import { TimeSeriesContainer } from '@structure/source/components/charts/time-series/TimeSeriesContainer';
+import { TimeSeriesControls } from '@structure/source/components/charts/time-series/controls/TimeSeriesControls';
 import { DataSources } from './DataSources';
 
 // Dependencies - Supporting Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { RefreshButton } from '@structure/source/common/buttons/RefreshButton';
-import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { ContextMenu } from '@structure/source/common/menus/ContextMenu';
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { Button } from '@structure/source/components/buttons/Button';
+import { RefreshButton } from '@structure/source/components/buttons/RefreshButton';
+import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
+import { ContextMenu } from '@structure/source/components/menus/ContextMenu';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
 
 // Dependencies - Hooks
-import { useTimeSeriesState } from '@structure/source/common/charts/time-series/hooks/useTimeSeriesState';
-import { useZoomBehavior } from '@structure/source/common/charts/time-series/hooks/useZoomBehavior';
-import { useZoomControls } from '@structure/source/common/charts/time-series/hooks/useZoomControls';
+import { useTimeSeriesState } from '@structure/source/components/charts/time-series/hooks/useTimeSeriesState';
+import { useZoomBehavior } from '@structure/source/components/charts/time-series/hooks/useZoomBehavior';
+import { useZoomControls } from '@structure/source/components/charts/time-series/hooks/useZoomControls';
 import { useMetricsExportMenu } from './hooks/useMetricsExportMenu';
 
 // Dependencies - API
@@ -36,7 +36,7 @@ import { addDays, endOfToday } from 'date-fns';
 import {
     mergeTimeSeriesData,
     fillMissingTimeIntervalValuesWithZeroes,
-} from '@structure/source/common/charts/time-series/utilities/TimeSeriesProcessors';
+} from '@structure/source/components/charts/time-series/utilities/TimeSeriesProcessors';
 import { calculateTimeIntervalValueStartAndEndDate } from '@structure/source/utilities/chart/ChartData';
 import { uniqueIdentifier } from '@structure/source/utilities/type/String';
 

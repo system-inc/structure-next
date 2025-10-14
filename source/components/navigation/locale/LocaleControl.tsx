@@ -5,7 +5,7 @@ import React from 'react';
 // import { usePathname } from 'next/navigation';
 
 // Dependencies - Main Components
-// import { Link } from '@structure/source/common/navigation/Link';
+// import { Link } from '@structure/source/components/navigation/Link';
 
 // Dependencies - Assets
 import CurrentLocationIcon from '@structure/assets/icons/navigation/CurrentLocationIcon.svg';

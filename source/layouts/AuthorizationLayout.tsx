@@ -4,13 +4,13 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ApiError } from '@structure/source/common/notifications/ApiError';
-// import NotConnected from '@structure/source/common/notifications/NotConnected';
-import { NotAuthorized } from '@structure/source/common/notifications/NotAuthorized';
-import { NotSignedIn } from '@structure/source/common/notifications/NotSignedIn';
+import { ApiError } from '@structure/source/components/notifications/ApiError';
+// import NotConnected from '@structure/source/components/notifications/NotConnected';
+import { NotAuthorized } from '@structure/source/components/notifications/NotAuthorized';
+import { NotSignedIn } from '@structure/source/components/notifications/NotSignedIn';
 
 // Dependencies - Animation
-import { LineLoadingAnimation } from '@structure/source/common/animations/LineLoadingAnimation';
+import { LineLoadingAnimation } from '@structure/source/components/animations/LineLoadingAnimation';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

@@ -11,7 +11,7 @@ import { Theme } from '@structure/source/theme/ThemeTypes';
 import { readOnlyThemeAtom, setThemeAtom } from '@structure/source/theme/ThemeProvider';
 
 // Dependencies - Main Components
-import { Tip } from '@structure/source/common/popovers/Tip';
+import { Tip } from '@structure/source/components/popovers/Tip';
 
 // Dependencies - Assets
 import DesktopIcon from '@structure/assets/icons/technology/DesktopIcon.svg';

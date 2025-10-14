@@ -4,7 +4,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { AccountMenuSignedIn } from '@structure/source/modules/account/components/AccountMenuSignedIn';
 import { AccountMenuSignedOut } from '@structure/source/modules/account/components/AccountMenuSignedOut';
-import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
 import { ThemeToggle } from '@structure/source/theme/ThemeToggle';
 
 // Dependencies - Accounts

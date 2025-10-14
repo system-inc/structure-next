@@ -3,7 +3,7 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

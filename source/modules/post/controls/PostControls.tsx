@@ -12,7 +12,7 @@ import { PostReactionControl } from '@structure/source/modules/post/controls/Pos
 import { PostShareControl } from '@structure/source/modules/post/controls/PostShareControl';
 import { PostReportControl } from '@structure/source/modules/post/controls/PostReportControl';
 import { ProfileLink } from '@structure/source/modules/post/ProfileLink';
-import { TimeAgo } from '@structure/source/common/time/TimeAgo';
+import { TimeAgo } from '@structure/source/components/time/TimeAgo';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

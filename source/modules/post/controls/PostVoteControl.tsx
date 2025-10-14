@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 import { PostProperties } from '@structure/source/modules/post/Post';
 import { PostControl } from '@structure/source/modules/post/controls/PostControl';
 

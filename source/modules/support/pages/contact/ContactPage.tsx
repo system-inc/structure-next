@@ -7,9 +7,9 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { Form } from '@structure/source/common/forms/Form';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
+import { Form } from '@structure/source/components/forms/Form';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
+import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

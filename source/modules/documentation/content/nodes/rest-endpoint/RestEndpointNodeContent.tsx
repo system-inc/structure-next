@@ -8,16 +8,16 @@ import {
 } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { Markdown } from '@structure/source/common/markdown/Markdown';
-import { Json } from '@structure/source/common/code/json/Json';
+import { Button } from '@structure/source/components/buttons/Button';
+import { Markdown } from '@structure/source/components/markdown/Markdown';
+import { Json } from '@structure/source/components/code/json/Json';
 import { RequestParametersTable } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParametersTable';
 import { ResponseParameters } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/response-parameters/ResponseParameters';
 import {
     RequestParameterSectionType,
     RequestParameterStateInterface,
 } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParameterRow';
-// import { ObjectTable } from '@structure/source/common/tables/ObjectTable';
+// import { ObjectTable } from '@structure/source/components/tables/ObjectTable';
 
 // Dependencies - API
 import { networkService } from '@structure/source/services/network/NetworkService';

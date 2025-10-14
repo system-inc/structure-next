@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Types
-import { TimeRangeType } from '@structure/source/common/time/TimeRange';
+import { TimeRangeType } from '@structure/source/components/time/TimeRange';
 
 // Type - TimeSeriesZoomState
 export interface TimeSeriesZoomState {

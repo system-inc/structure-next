@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputReferenceInterface } from '@structure/source/common/forms/FormInput';
-import { FormInputTextProperties, FormInputText } from '@structure/source/common/forms/FormInputText';
+import { FormInputReferenceInterface } from '@structure/source/components/forms/FormInput';
+import { FormInputTextProperties, FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Dependencies - Assets
 import EyeIcon from '@structure/assets/icons/security/EyeIcon.svg';

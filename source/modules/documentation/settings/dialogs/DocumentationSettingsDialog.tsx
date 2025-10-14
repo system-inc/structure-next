@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Form } from '@structure/source/common/forms/Form';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
+import { Form } from '@structure/source/components/forms/Form';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
 
 // Dependencies - Services
 import { useLocalStorageService } from '@structure/source/services/local-storage/LocalStorageService';

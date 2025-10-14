@@ -2,11 +2,11 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
-import { PopoverProperties } from '@structure/source/common/popovers/Popover';
-import { PopoverMenuProperties, PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
-import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
+import { InputReferenceInterface, InputProperties } from '@structure/source/components/forms/Input';
+import { PopoverProperties } from '@structure/source/components/popovers/Popover';
+import { PopoverMenuProperties, PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
+import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';

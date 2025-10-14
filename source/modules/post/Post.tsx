@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
 import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
 import { PostControls } from '@structure/source/modules/post/controls/PostControls';

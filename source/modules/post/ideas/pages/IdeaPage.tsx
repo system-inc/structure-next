@@ -5,7 +5,7 @@ import React from 'react';
 import { redirect } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-// import { Button } from '@structure/source/common/buttons/Button';
+// import { Button } from '@structure/source/components/buttons/Button';
 // import { Post } from '@structure/source/modules/post/Post';
 
 // Dependencies - API

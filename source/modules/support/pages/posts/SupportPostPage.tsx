@@ -4,12 +4,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
-import { NavigationTrail } from '@structure/source/common/navigation/trail/NavigationTrail';
+import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
 import { SupportFeedback } from '@structure/source/modules/support/components/SupportFeedback';
-import { Button } from '@structure/source/common/buttons/Button';
-import { Markdown } from '@structure/source/common/markdown/Markdown';
+import { Button } from '@structure/source/components/buttons/Button';
+import { Markdown } from '@structure/source/components/markdown/Markdown';
 
 // Dependencies - API
 // import { useQuery } from '@apollo/client';

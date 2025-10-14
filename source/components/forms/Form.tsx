@@ -11,12 +11,12 @@ import {
 } from 'react-hook-form';
 
 // Dependencies - Main Components
-import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/common/forms/FormInput';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/common/buttons/AnimatedButton';
+import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/components/forms/FormInput';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
+import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/components/buttons/AnimatedButton';
 
 // Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Dependencies - Utilities
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';

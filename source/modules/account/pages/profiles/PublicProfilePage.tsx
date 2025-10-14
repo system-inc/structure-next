@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 import { AuthorizationLayout } from '@structure/source/layouts/AuthorizationLayout';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 

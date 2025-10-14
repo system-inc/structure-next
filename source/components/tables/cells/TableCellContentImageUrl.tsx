@@ -3,8 +3,8 @@ import React from 'react';
 import Image from 'next/image';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
-import { TipIcon } from '@structure/source/common/popovers/TipIcon';
+import { Link } from '@structure/source/components/navigation/Link';
+import { TipIcon } from '@structure/source/components/popovers/TipIcon';
 
 // Dependencies - Assets
 import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';

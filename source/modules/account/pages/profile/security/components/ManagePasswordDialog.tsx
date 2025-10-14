@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
 import { ManagePasswordForm } from '@structure/source/modules/account/pages/profile/security/components/ManagePasswordForm';
 
 // Component - ManagePasswordDialog

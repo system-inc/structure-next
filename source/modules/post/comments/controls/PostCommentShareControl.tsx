@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
+import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
 import { PostControl } from '@structure/source/modules/post/controls/PostControl';
-import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
+import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
 
 // Dependencies - Assets
 import ShareIcon from '@structure/assets/icons/interface/ShareIcon.svg';

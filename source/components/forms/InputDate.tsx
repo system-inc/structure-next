@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputProperties } from '@structure/source/common/forms/Input';
-import { Calendar } from '@structure/source/common/time/Calendar';
-import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
-import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
+import { InputProperties } from '@structure/source/components/forms/Input';
+import { Calendar } from '@structure/source/components/time/Calendar';
+import { PopoverProperties, Popover } from '@structure/source/components/popovers/Popover';
+import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';

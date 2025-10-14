@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { AlertProperties, Alert } from '@structure/source/common/notifications/Alert';
+import { AlertProperties, Alert } from '@structure/source/components/notifications/Alert';
 import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
 
 // Component - NotAuthorized

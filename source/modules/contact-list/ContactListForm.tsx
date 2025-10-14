@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';

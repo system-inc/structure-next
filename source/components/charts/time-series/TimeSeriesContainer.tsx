@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Supporting Components
-import { LoadingAnimation } from '@structure/source/common/animations/LoadingAnimation';
+import { LoadingAnimation } from '@structure/source/components/animations/LoadingAnimation';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

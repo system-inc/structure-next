@@ -6,7 +6,7 @@ import { useQueryState as useUrlQueryState, parseAsStringEnum, parseAsJson } fro
 
 // Dependencies - Types
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { TimeRangeType } from '@structure/source/common/time/TimeRange';
+import { TimeRangeType } from '@structure/source/components/time/TimeRange';
 import { ChartType } from '../controls/ChartTypeFormInputSelect';
 import { SortOrderType } from '../controls/SortOrderToggle';
 

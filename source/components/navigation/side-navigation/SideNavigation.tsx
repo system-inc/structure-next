@@ -7,7 +7,7 @@ import React from 'react';
 import {
     SideNavigationSectionProperties,
     SideNavigationSection,
-} from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
+} from '@structure/source/components/navigation/side-navigation/SideNavigationSection';
 
 // Component - SideNavigation
 export interface SideNavigationProperties {

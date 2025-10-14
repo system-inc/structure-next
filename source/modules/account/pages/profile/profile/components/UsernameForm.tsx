@@ -4,12 +4,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
-import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Button } from '@structure/source/components/buttons/Button';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - Account
 import { useAccount, accountCacheKey } from '@structure/source/modules/account/providers/AccountProvider';
@@ -21,7 +21,7 @@ import { networkService, gql } from '@structure/source/services/network/NetworkS
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
 
 // Dependencies - Animations
-// import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+// import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Component - UsernameForm
 export function UsernameForm() {

@@ -5,8 +5,8 @@ import {
     DocumentationNodeWithParentProperties,
     SectionNodeProperties,
 } from '@structure/source/modules/documentation/types/DocumentationTypes';
-import { SideNavigationItemProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
-import { SideNavigationSectionProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
+import { SideNavigationItemProperties } from '@structure/source/components/navigation/side-navigation/SideNavigationItem';
+import { SideNavigationSectionProperties } from '@structure/source/components/navigation/side-navigation/SideNavigationSection';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

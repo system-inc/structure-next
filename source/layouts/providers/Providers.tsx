@@ -26,8 +26,8 @@ import { ThemeProvider } from '@structure/source/theme/ThemeProvider';
 import { EngagementProvider } from '@structure/source/modules/engagement/EngagementProvider';
 
 // Dependencies - Interaction Providers
-import { NoticeProvider } from '@structure/source/common/notifications/NoticeProvider';
-import { TipProvider } from '@structure/source/common/popovers/TipProvider';
+import { NoticeProvider } from '@structure/source/components/notifications/NoticeProvider';
+import { TipProvider } from '@structure/source/components/popovers/TipProvider';
 
 // Component - Providers
 export interface ProvidersProperties {

@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
-import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
+import { InputReferenceInterface, InputProperties } from '@structure/source/components/forms/Input';
+import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';

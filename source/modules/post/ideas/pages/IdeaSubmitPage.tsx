@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
-import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
+import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';

@@ -3,11 +3,11 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { SideNavigationItemProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationItem';
-import { SideNavigationLink } from '@structure/source/common/navigation/side-navigation/SideNavigationLink';
+import { SideNavigationItemProperties } from '@structure/source/components/navigation/side-navigation/SideNavigationItem';
+import { SideNavigationLink } from '@structure/source/components/navigation/side-navigation/SideNavigationLink';
 
 // Dependencies - Animation
-import { Collapse } from '@structure/source/common/interactions/Collapse';
+import { Collapse } from '@structure/source/components/interactions/Collapse';
 import { cubicBezier, motion, Transition } from 'motion/react';
 
 // Dependencies - Assets

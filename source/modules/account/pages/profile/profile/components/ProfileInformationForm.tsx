@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
-import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
+import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
+import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
 
 // Dependencies - API
 import { useAccount, accountCacheKey } from '@structure/source/modules/account/providers/AccountProvider';

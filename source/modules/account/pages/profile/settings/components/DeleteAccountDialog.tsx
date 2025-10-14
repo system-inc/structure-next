@@ -5,7 +5,7 @@ import React from 'react';
 import { useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
 import { DeleteAccountForm } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccountForm';
 
 // Component - DeleteAccountDialog

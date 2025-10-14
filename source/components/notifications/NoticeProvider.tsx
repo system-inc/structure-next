@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { NoticeContainer } from '@structure/source/common/notifications/NoticeContainer';
-import { NoticeInterface } from '@structure/source/common/notifications/Notice';
+import { NoticeContainer } from '@structure/source/components/notifications/NoticeContainer';
+import { NoticeInterface } from '@structure/source/components/notifications/Notice';
 
 // Dependencies - Utilities
 import { uniqueIdentifier } from '@structure/source/utilities/type/String';

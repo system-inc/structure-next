@@ -8,16 +8,16 @@ import {
     GraphQLInputTypeMetadata,
     GraphQLOperationParameterMetadata,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/common/forms/FormInput';
+import { FormInputReferenceInterface, FormInputProperties } from '@structure/source/components/forms/FormInput';
 import { FormInputsProperties } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 
 // Dependencies - Main Components
-import { FormInputTextProperties, FormInputText } from '@structure/source/common/forms/FormInputText';
-import { FormInputPassword } from '@structure/source/common/forms/FormInputPassword';
-import { FormInputTextAreaProperties, FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-import { FormInputCheckbox } from '@structure/source/common/forms/FormInputCheckbox';
-import { FormInputSelectProperties, FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
-import { FormInputMultipleSelect } from '@structure/source/common/forms/FormInputMultipleSelect';
+import { FormInputTextProperties, FormInputText } from '@structure/source/components/forms/FormInputText';
+import { FormInputPassword } from '@structure/source/components/forms/FormInputPassword';
+import { FormInputTextAreaProperties, FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
+import { FormInputCheckbox } from '@structure/source/components/forms/FormInputCheckbox';
+import { FormInputSelectProperties, FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
+import { FormInputMultipleSelect } from '@structure/source/components/forms/FormInputMultipleSelect';
 import { GraphQlFormInput } from '@structure/source/api/graphql/forms/GraphQlFormInput';
 
 // Dependencies - Utilities

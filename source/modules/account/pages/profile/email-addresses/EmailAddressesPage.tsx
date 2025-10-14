@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Animation
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

@@ -3,8 +3,8 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
-import { SideNavigationSectionProperties } from '@structure/source/common/navigation/side-navigation/SideNavigationSection';
+import { Link } from '@structure/source/components/navigation/Link';
+import { SideNavigationSectionProperties } from '@structure/source/components/navigation/side-navigation/SideNavigationSection';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

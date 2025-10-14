@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Supporting Components
-import { Button, ButtonProperties } from '@structure/source/common/buttons/Button';
+import { Button, ButtonProperties } from '@structure/source/components/buttons/Button';
 
 // Component - ToggleButton
 export interface ToggleButtonProperties extends ButtonProperties {

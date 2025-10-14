@@ -3,8 +3,8 @@ import React from 'react';
 import Image from 'next/image';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { Popover } from '@structure/source/common/popovers/Popover';
+import { Button } from '@structure/source/components/buttons/Button';
+import { Popover } from '@structure/source/components/popovers/Popover';
 
 // Dependencies - Assets
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';

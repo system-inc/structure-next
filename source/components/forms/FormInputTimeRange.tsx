@@ -7,14 +7,14 @@ import {
     FormInputProperties,
     FormInput,
     useFormInputValue,
-} from '@structure/source/common/forms/FormInput';
+} from '@structure/source/components/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
-import { TimeRangeType } from '@structure/source/common/time/TimeRange';
+import { TimeRangeType } from '@structure/source/components/time/TimeRange';
 import {
     InputTimeRangeReferenceInterface,
     InputTimeRangeProperties,
     InputTimeRange,
-} from '@structure/source/common/forms/InputTimeRange';
+} from '@structure/source/components/forms/InputTimeRange';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

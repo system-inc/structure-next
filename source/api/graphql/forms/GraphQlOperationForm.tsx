@@ -9,10 +9,10 @@ import {
     FormSubmitResponseInterface,
     FormProperties,
     Form,
-} from '@structure/source/common/forms/Form';
-import { FormInputReferenceInterface } from '@structure/source/common/forms/FormInput';
-import { Alert } from '@structure/source/common/notifications/Alert';
-import { Button } from '@structure/source/common/buttons/Button';
+} from '@structure/source/components/forms/Form';
+import { FormInputReferenceInterface } from '@structure/source/components/forms/FormInput';
+import { Alert } from '@structure/source/components/notifications/Alert';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

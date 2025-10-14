@@ -4,11 +4,11 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemProperties, MenuItemHandle } from '@structure/source/common/menus/MenuItem';
-import { MenuItemsList } from '@structure/source/common/menus/MenuItemsList';
-import { MenuSearch } from '@structure/source/common/menus/MenuSearch';
-import { InputReferenceInterface } from '@structure/source/common/forms/Input';
-// import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
+import { MenuItemProperties, MenuItemHandle } from '@structure/source/components/menus/MenuItem';
+import { MenuItemsList } from '@structure/source/components/menus/MenuItemsList';
+import { MenuSearch } from '@structure/source/components/menus/MenuSearch';
+import { InputReferenceInterface } from '@structure/source/components/forms/Input';
+// import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

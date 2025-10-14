@@ -7,12 +7,12 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Button } from '@structure/source/components/buttons/Button';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Alert } from '@structure/source/components/notifications/Alert';
 import { ProfileImage } from './ProfileImage';
-import { ImageSelector } from '@structure/source/common/images/selector/ImageSelector';
-import { ImageEditor } from '@structure/source/common/images/editor/ImageEditor';
+import { ImageSelector } from '@structure/source/components/images/selector/ImageSelector';
+import { ImageEditor } from '@structure/source/components/images/editor/ImageEditor';
 
 // Dependencies - Assets
 import EditIcon from '@structure/assets/icons/content/EditIcon.svg';

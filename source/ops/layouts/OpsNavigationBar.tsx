@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
 import { OpsNavigation } from './navigation/OpsNavigation';
 import { AnimatePresence, motion } from 'motion/react';

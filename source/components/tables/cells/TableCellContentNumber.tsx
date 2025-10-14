@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { CopyTip } from '@structure/source/common/popovers/CopyTip';
+import { CopyTip } from '@structure/source/components/popovers/CopyTip';
 
 // Dependencies - Utilities
 import { addCommas } from '@structure/source/utilities/type/Number';

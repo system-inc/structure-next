@@ -2,15 +2,15 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-// import { Link } from '@structure/source/common/navigation/Link';
+// import { Link } from '@structure/source/components/navigation/Link';
 
 // Dependencies - Main Components
 // import { PostVoteControl } from '@structure/source/modules/post/controls/PostVoteControl';
 // import { PostReactions } from '@structure/source/modules/post/controls/PostReactions';
 // import { PostControls } from '@structure/source/modules/post/controls/PostControls';
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
-import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';

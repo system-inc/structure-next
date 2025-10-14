@@ -10,7 +10,7 @@ import { ProfileImageUploader } from '@structure/source/modules/account/componen
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 
 // Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Component - ProfileImageSection
 export function ProfileImageSection() {

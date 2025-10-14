@@ -3,10 +3,10 @@ import React from 'react';
 import Link from 'next/link';
 
 // Dependencies - Main Components
-import { ButtonVariants } from '@structure/source/common/buttons/ButtonVariants';
-import { ButtonSizes } from '@structure/source/common/buttons/ButtonSizes';
-import { Tip } from '@structure/source/common/popovers/Tip';
-import { PopoverProperties } from '@structure/source/common/popovers/Popover';
+import { ButtonVariants } from '@structure/source/components/buttons/ButtonVariants';
+import { ButtonSizes } from '@structure/source/components/buttons/ButtonSizes';
+import { Tip } from '@structure/source/components/popovers/Tip';
+import { PopoverProperties } from '@structure/source/components/popovers/Popover';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

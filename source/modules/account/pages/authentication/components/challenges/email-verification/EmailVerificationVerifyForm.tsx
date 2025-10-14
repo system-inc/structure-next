@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { Form, FormSubmitResponseInterface } from '@structure/source/common/forms/Form';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { Button } from '@structure/source/components/buttons/Button';
+import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

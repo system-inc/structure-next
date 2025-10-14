@@ -5,7 +5,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 // Dependencies - Animation
-// import LoadingAnimation from '@structure/source/common/animations/LoadingAnimation';
+// import LoadingAnimation from '@structure/source/components/animations/LoadingAnimation';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {

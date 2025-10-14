@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Button } from '@structure/source/common/buttons/Button';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

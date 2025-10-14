@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface } from '@structure/source/common/forms/Input';
-import { InputText } from '@structure/source/common/forms/InputText';
+import { InputReferenceInterface } from '@structure/source/components/forms/Input';
+import { InputText } from '@structure/source/components/forms/InputText';
 
 // Component - MenuSearch
 export interface MenuSearchProperties {

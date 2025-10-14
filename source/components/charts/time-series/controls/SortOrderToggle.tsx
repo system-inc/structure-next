@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import { ArrowUpIcon, ArrowDownIcon } from '@phosphor-icons/react';

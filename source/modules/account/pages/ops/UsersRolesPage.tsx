@@ -4,12 +4,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
-import { Button } from '@structure/source/common/buttons/Button';
-import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Button } from '@structure/source/components/buttons/Button';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Alert } from '@structure/source/components/notifications/Alert';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 import { AccountRoleGrantForm } from '@structure/source/modules/account/components/AccountRoleGrantForm';
 import {
@@ -18,7 +18,7 @@ import {
 } from '@structure/source/modules/account/components/AccountAuthenticatedSession';
 
 // Dependencies - Animations
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
-import { NoticeInterface, Notice } from '@structure/source/common/notifications/Notice';
-import { NoticesClearAllButton } from '@structure/source/common/notifications/NoticesClearAllButton';
+import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
+import { NoticeInterface, Notice } from '@structure/source/components/notifications/Notice';
+import { NoticesClearAllButton } from '@structure/source/components/notifications/NoticesClearAllButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

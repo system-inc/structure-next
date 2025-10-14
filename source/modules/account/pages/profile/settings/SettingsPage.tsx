@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 import { DeleteAccountDialog } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccountDialog';
 import { AccountMaintenanceDialog } from '@structure/source/modules/account/components/AccountMaintenanceDialog';
 

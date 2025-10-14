@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemProperties, MenuItem, MenuItemHandle } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties, MenuItem, MenuItemHandle } from '@structure/source/components/menus/MenuItem';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

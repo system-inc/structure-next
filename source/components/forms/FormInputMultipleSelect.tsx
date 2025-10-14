@@ -2,15 +2,18 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
 import {
     FormInputReferenceInterface,
     FormInputProperties,
     FormInput,
     useFormInputValue,
-} from '@structure/source/common/forms/FormInput';
+} from '@structure/source/components/forms/FormInput';
 import { ValidationResult, mergeValidationResults } from '@structure/source/utilities/validation/Validation';
-import { InputMultipleSelectProperties, InputMultipleSelect } from '@structure/source/common/forms/InputMultipleSelect';
+import {
+    InputMultipleSelectProperties,
+    InputMultipleSelect,
+} from '@structure/source/components/forms/InputMultipleSelect';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

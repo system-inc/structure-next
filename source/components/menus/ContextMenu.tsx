@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixContextMenu from '@radix-ui/react-context-menu';
-import { MenuProperties, Menu } from '@structure/source/common/menus/Menu';
+import { MenuProperties, Menu } from '@structure/source/components/menus/Menu';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { InputReferenceInterface, InputProperties } from '@structure/source/common/forms/Input';
+import { InputReferenceInterface, InputProperties } from '@structure/source/components/forms/Input';
 
 // Dependencies - Styles
 // import { useTheme } from '@structure/source/theme/ThemeProvider';

@@ -3,7 +3,7 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 // Dependencies - Main Components
 import { EmailVerificationVerifyForm } from '@structure/source/modules/account/pages/authentication/components/challenges/email-verification/EmailVerificationVerifyForm';
 

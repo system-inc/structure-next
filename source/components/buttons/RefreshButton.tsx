@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Supporting Components
-import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/common/buttons/AnimatedButton';
+import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/components/buttons/AnimatedButton';
 
 // Dependencies - Assets
 import { ArrowClockwiseIcon } from '@phosphor-icons/react';

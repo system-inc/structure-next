@@ -5,7 +5,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Accounts
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';

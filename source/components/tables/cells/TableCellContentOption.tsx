@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-// import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
+// import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
 
 // Component - TableCellContentOption
 export interface TableCellContentOptionProperties extends React.HTMLAttributes<HTMLElement> {

@@ -4,12 +4,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
 import {
     AccountAuthenticatedSession,
     AccountSessionScopeType,
 } from '@structure/source/modules/account/components/AccountAuthenticatedSession';
-import { LoadingAnimation } from '@structure/source/common/animations/LoadingAnimation';
+import { LoadingAnimation } from '@structure/source/components/animations/LoadingAnimation';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

@@ -11,8 +11,8 @@ import { useWebSocketViaSharedWorker } from '@structure/source/api/web-sockets/p
 import { WebSocketConnectionState } from '@structure/source/api/web-sockets/shared-worker/types/WebSocketSharedWorkerTypes';
 
 // Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { Button } from '@structure/source/components/buttons/Button';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Component - WebSocketsPage
 export function WebSocketsPage() {

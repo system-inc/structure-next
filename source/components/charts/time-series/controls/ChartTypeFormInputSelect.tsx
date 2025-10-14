@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
+import { FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
 
 // Types
 export type ChartType = 'Bar' | 'Line' | 'Area';

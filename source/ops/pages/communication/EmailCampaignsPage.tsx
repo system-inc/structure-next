@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
-// import { GraphQlQueryTable } from '@structure/source/common/tables/GraphQlQueryTable';
+// import { GraphQlQueryTable } from '@structure/source/components/tables/GraphQlQueryTable';
 
 // Dependencies - API
 // import { EmailCampaignsDocument } from '@project/app/_api/graphql/GraphQlGeneratedCode';

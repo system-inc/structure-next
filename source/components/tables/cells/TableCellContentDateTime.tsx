@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Tip } from '@structure/source/common/popovers/Tip';
+import { Tip } from '@structure/source/components/popovers/Tip';
 
 // Dependencies - Utilities
 import { timeFromNow } from '@structure/source/utilities/time/Time';

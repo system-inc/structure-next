@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableProperties, Table } from '@structure/source/common/tables/Table';
-import { TableColumnProperties, inferTableColumnType } from '@structure/source/common/tables/TableColumn';
-import { TableRowProperties } from '@structure/source/common/tables/TableRow';
+import { TableProperties, Table } from '@structure/source/components/tables/Table';
+import { TableColumnProperties, inferTableColumnType } from '@structure/source/components/tables/TableColumn';
+import { TableRowProperties } from '@structure/source/components/tables/TableRow';
 
 // Dependencies - API
 import { networkService, AnyTypedDocumentString } from '@structure/source/services/network/NetworkService';

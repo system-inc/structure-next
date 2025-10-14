@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 
 // Component - TopProductLink
 export type TopProductLinkProperties = {

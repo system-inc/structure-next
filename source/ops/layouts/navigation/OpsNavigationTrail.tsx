@@ -9,7 +9,7 @@ import {
     NavigationTrailLinkInterface,
     NavigationTrailProperties,
     NavigationTrail,
-} from '@structure/source/common/navigation/trail/NavigationTrail';
+} from '@structure/source/components/navigation/trail/NavigationTrail';
 import { OpsNavigationLinks } from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
 
 // Dependencies - Utilities

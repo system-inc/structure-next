@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { LoadingAnimation } from '@structure/source/common/animations/LoadingAnimation';
+import { LoadingAnimation } from '@structure/source/components/animations/LoadingAnimation';
 
 // Component - InternalLoading
 export function InternalLoading() {

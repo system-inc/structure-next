@@ -7,7 +7,7 @@ import { useQueryState as useUrlQueryState, parseAsInteger, parseAsJson } from '
 // Dependencies - Main Components
 import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 import { DataInteractionTable } from '@structure/source/modules/data-interaction/DataInteractionTable';
-import { ColumnFilterGroupDataInterface } from '@structure/source/common/tables/ColumnFilterGroup';
+import { ColumnFilterGroupDataInterface } from '@structure/source/components/tables/ColumnFilterGroup';
 
 // Component - DatabasePage
 export function DevelopersDataPage() {

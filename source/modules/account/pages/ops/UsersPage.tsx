@@ -5,15 +5,15 @@ import React from 'react';
 import { useRouter, useUrlPath, useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { Link } from '@structure/source/common/navigation/Link';
+import { Link } from '@structure/source/components/navigation/Link';
 import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
-import { Pagination } from '@structure/source/common/navigation/pagination/Pagination';
-import { PlaceholderAnimation } from '@structure/source/common/animations/PlaceholderAnimation';
+import { Pagination } from '@structure/source/components/navigation/pagination/Pagination';
+import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Button } from '@structure/source/common/buttons/Button';
-import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
-import { Alert } from '@structure/source/common/notifications/Alert';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Button } from '@structure/source/components/buttons/Button';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

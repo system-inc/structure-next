@@ -11,7 +11,7 @@ import {
 
 // Dependencies - Main Components
 import { EngagementActivityCard } from './EngagementActivityCard';
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
+import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
 
 // Dependencies - Hooks
 import { useUserDevicesRequest } from '@structure/source/modules/engagement/hooks/useUserDevicesRequest';

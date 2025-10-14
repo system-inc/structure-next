@@ -5,7 +5,7 @@ import React from 'react';
 import { useUrlPath } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { Markdown } from '@structure/source/common/markdown/Markdown';
+import { Markdown } from '@structure/source/components/markdown/Markdown';
 import { RestEndpointNodeContent } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/RestEndpointNodeContent';
 
 // Dependencies - Types

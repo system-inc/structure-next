@@ -1,7 +1,7 @@
 // Dependencies - Main Components
 // TableRowInterface is commented out in function parameters but kept here for reference
 // when implementing the TODOs
-/* import { TableRowInterface } from '@structure/source/common/tables/TableRow'; */
+/* import { TableRowInterface } from '@structure/source/components/tables/TableRow'; */
 
 // Default Table Rows Actions
 export const defaultTableRowActions = [

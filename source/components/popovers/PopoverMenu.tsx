@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
-import { MenuProperties, Menu } from '@structure/source/common/menus/Menu';
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { PopoverProperties, Popover } from '@structure/source/components/popovers/Popover';
+import { MenuProperties, Menu } from '@structure/source/components/menus/Menu';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

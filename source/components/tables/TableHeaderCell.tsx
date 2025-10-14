@@ -2,11 +2,11 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TableColumnProperties } from '@structure/source/common/tables/TableColumn';
-import { TableCellProperties } from '@structure/source/common/tables/TableCell';
-import { PopoverMenu } from '@structure/source/common/popovers/PopoverMenu';
-import { TipIcon } from '@structure/source/common/popovers/TipIcon';
-import { Button } from '@structure/source/common/buttons/Button';
+import { TableColumnProperties } from '@structure/source/components/tables/TableColumn';
+import { TableCellProperties } from '@structure/source/components/tables/TableCell';
+import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
+import { TipIcon } from '@structure/source/components/popovers/TipIcon';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import InformationCircledFilledIcon from '@structure/assets/icons/status/InformationCircledFilledIcon.svg';

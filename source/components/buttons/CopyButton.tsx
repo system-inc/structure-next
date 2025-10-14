@@ -2,9 +2,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
-import { NoticeInterface } from '@structure/source/common/notifications/Notice';
-import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
+import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
+import { NoticeInterface } from '@structure/source/components/notifications/Notice';
+import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';

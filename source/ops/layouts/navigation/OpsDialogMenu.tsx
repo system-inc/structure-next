@@ -6,8 +6,8 @@ import React from 'react';
 // Dependencies - Main Components
 import { OpsNavigationLinkProperties } from './OpsNavigationLink';
 import { OpsNavigationLinks } from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
-import { DialogMenuProperties, DialogMenu } from '@structure/source/common/dialogs/DialogMenu';
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { DialogMenuProperties, DialogMenu } from '@structure/source/components/dialogs/DialogMenu';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
 
 // Dependencies - Assets
 

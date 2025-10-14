@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { MenuProperties, Menu } from '@structure/source/common/menus/Menu';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
+import { MenuProperties, Menu } from '@structure/source/components/menus/Menu';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

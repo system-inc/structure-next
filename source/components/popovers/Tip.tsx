@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixTooltip from '@radix-ui/react-tooltip';
-import { PopoverProperties, PopoverVariants } from '@structure/source/common/popovers/Popover';
+import { PopoverProperties, PopoverVariants } from '@structure/source/components/popovers/Popover';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

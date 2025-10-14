@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Tip } from '@structure/source/common/popovers/Tip';
+import { Tip } from '@structure/source/components/popovers/Tip';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

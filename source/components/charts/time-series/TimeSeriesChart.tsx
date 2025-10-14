@@ -37,7 +37,7 @@ import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings
 // Dependencies - Utilities
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 import { isSpecializedInterval } from './utilities/TimeIntervalUtilities';
-import { TimeRangeType } from '@structure/source/common/time/TimeRange';
+import { TimeRangeType } from '@structure/source/components/time/TimeRange';
 import { lightenColor, darkenColor, setTransparency } from '@structure/source/utilities/style/Color';
 import { addCommas } from '@structure/source/utilities/type/Number';
 import { formatAxisTick, calculateTickInterval } from './utilities/TimeSeriesFormatters';

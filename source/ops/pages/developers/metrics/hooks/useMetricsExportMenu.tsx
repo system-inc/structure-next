@@ -4,13 +4,13 @@
 import React from 'react';
 
 // Dependencies - Types
-import { TimeSeriesDataPoint } from '@structure/source/common/charts/time-series/TimeSeriesChart';
+import { TimeSeriesDataPoint } from '@structure/source/components/charts/time-series/TimeSeriesChart';
 import { DataSourceWithMetricsType } from '../Metrics';
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { MenuItemProperties } from '@structure/source/common/menus/MenuItem';
+import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
 
 // Dependencies - Hooks
-import { useNotice } from '@structure/source/common/notifications/NoticeProvider';
+import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
 
 // Dependencies - Utilities
 import {

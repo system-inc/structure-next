@@ -4,8 +4,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Table } from '@structure/source/common/tables/Table';
-import { TableRowProperties } from '@structure/source/common/tables/TableRow';
+import { Table } from '@structure/source/components/tables/Table';
+import { TableRowProperties } from '@structure/source/components/tables/TableRow';
 
 // Dependencies - Hooks
 import { useDataInteractionDatabaseTablesRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabaseTablesRequest';

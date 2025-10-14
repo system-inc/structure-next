@@ -2,9 +2,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TipProperties, Tip } from '@structure/source/common/popovers/Tip';
-import { NoticeInterface } from '@structure/source/common/notifications/Notice';
-import { CopyButton } from '@structure/source/common/buttons/CopyButton';
+import { TipProperties, Tip } from '@structure/source/components/popovers/Tip';
+import { NoticeInterface } from '@structure/source/components/notifications/Notice';
+import { CopyButton } from '@structure/source/components/buttons/CopyButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

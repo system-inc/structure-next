@@ -1,5 +1,5 @@
 // Dependencies - Types
-import { TimeSeriesDataPoint } from '@structure/source/common/charts/time-series/TimeSeriesChart';
+import { TimeSeriesDataPoint } from '@structure/source/components/charts/time-series/TimeSeriesChart';
 import { DataSourceWithMetricsType } from '../Metrics';
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
@@ -11,7 +11,7 @@ import {
     copyTimeSeriesAsCsvToClipboard,
     copyTimeSeriesAsJsonToClipboard,
     TimeSeriesExportDataSource,
-} from '@structure/source/common/charts/time-series/utilities/TimeSeriesExport';
+} from '@structure/source/components/charts/time-series/utilities/TimeSeriesExport';
 
 // Function to get formatted date range for filename
 function getDateRangeForFilename(startTime: Date | null, endTime: Date | null): string {

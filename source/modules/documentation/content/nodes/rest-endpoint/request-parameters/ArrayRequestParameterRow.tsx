@@ -7,7 +7,7 @@ import React from 'react';
 import { RequestParameterProperties } from '@structure/source/modules/documentation/types/DocumentationTypes';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 import {
     RequestParameterRow,
     RequestParameterSectionType,

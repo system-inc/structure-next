@@ -5,15 +5,15 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { DateRange as ReactDayPickerDateRange } from 'react-day-picker';
-import { InputProperties } from '@structure/source/common/forms/Input';
-import { Calendar } from '@structure/source/common/time/Calendar';
+import { InputProperties } from '@structure/source/components/forms/Input';
+import { Calendar } from '@structure/source/components/time/Calendar';
 import {
     TimeRangeType,
     getTimeRangePresets,
     getMatchingTimeRangePresetKey,
-} from '@structure/source/common/time/TimeRange';
-import { PopoverProperties, Popover } from '@structure/source/common/popovers/Popover';
-import { ButtonProperties, Button } from '@structure/source/common/buttons/Button';
+} from '@structure/source/components/time/TimeRange';
+import { PopoverProperties, Popover } from '@structure/source/components/popovers/Popover';
+import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';

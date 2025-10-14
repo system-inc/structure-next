@@ -4,12 +4,12 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { AnimatedButton } from '@structure/source/common/buttons/AnimatedButton';
-import { Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Alert } from '@structure/source/common/notifications/Alert';
-import { InputText } from '@structure/source/common/forms/InputText';
-import { InputSelect } from '@structure/source/common/forms/InputSelect';
+import { Button } from '@structure/source/components/buttons/Button';
+import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Alert } from '@structure/source/components/notifications/Alert';
+import { InputText } from '@structure/source/components/forms/InputText';
+import { InputSelect } from '@structure/source/components/forms/InputSelect';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 
 // Dependencies - API

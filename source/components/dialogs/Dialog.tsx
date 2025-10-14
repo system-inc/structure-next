@@ -5,8 +5,8 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { Button } from '@structure/source/common/buttons/Button';
-import { ScrollArea } from '@structure/source/common/interactions/ScrollArea';
+import { Button } from '@structure/source/components/buttons/Button';
+import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
 
 // Dependencies - Assets
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';

@@ -2,14 +2,14 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { InputText } from '@structure/source/common/forms/InputText';
-import { InputSelect } from '@structure/source/common/forms/InputSelect';
+import { Button } from '@structure/source/components/buttons/Button';
+import { InputText } from '@structure/source/components/forms/InputText';
+import { InputSelect } from '@structure/source/components/forms/InputSelect';
 import {
     InputCheckbox,
     InputCheckboxState,
     InputCheckboxReferenceInterface,
-} from '@structure/source/common/forms/InputCheckbox';
+} from '@structure/source/components/forms/InputCheckbox';
 import { ObjectRequestParameterRow } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/ObjectRequestParameterRow';
 import { ArrayRequestParameterRow } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/ArrayRequestParameterRow';
 

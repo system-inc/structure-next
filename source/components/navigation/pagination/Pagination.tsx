@@ -5,10 +5,10 @@ import React from 'react';
 import { useRouter, useUrlSearchParameters } from '@structure/source/router/Navigation';
 
 // Dependencies - Main Components
-import { Button } from '@structure/source/common/buttons/Button';
-import { InputReferenceInterface } from '@structure/source/common/forms/Input';
-import { InputText } from '@structure/source/common/forms/InputText';
-import { InputSelect } from '@structure/source/common/forms/InputSelect';
+import { Button } from '@structure/source/components/buttons/Button';
+import { InputReferenceInterface } from '@structure/source/components/forms/Input';
+import { InputText } from '@structure/source/components/forms/InputText';
+import { InputSelect } from '@structure/source/components/forms/InputSelect';
 
 // Dependencies - Assets
 import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.svg';

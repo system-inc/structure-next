@@ -6,11 +6,11 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
-import { DialogProperties, Dialog } from '@structure/source/common/dialogs/Dialog';
-import { Button } from '@structure/source/common/buttons/Button';
-import { FormInputSelect } from '@structure/source/common/forms/FormInputSelect';
-import { FormInputTextArea } from '@structure/source/common/forms/FormInputTextArea';
-import { FormInputText } from '@structure/source/common/forms/FormInputText';
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Button } from '@structure/source/components/buttons/Button';
+import { FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
+import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
+import { FormInputText } from '@structure/source/components/forms/FormInputText';
 
 // Dependencies - API
 // import { useApolloClient } from '@apollo/client';
