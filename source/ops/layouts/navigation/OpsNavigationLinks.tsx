@@ -197,11 +197,12 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
-    // Finances - Administrator only
+    // Finances - ProductManager role
     {
         title: 'Finances',
         href: '/ops/finances',
         icon: BankIcon,
+        accessibleRoles: [AccountRole.ProductManager],
         links: [
             {
                 title: 'Payout',
@@ -209,11 +210,12 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
-    // Analytics - Administrator only
+    // Analytics - Marketer role
     {
         title: 'Analytics',
         href: '/ops/analytics',
         icon: LineGraphIcon,
+        accessibleRoles: [AccountRole.Marketer],
         links: [
             {
                 title: 'Live',
