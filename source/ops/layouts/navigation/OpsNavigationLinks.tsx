@@ -207,6 +207,7 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             {
                 title: 'Payout',
                 href: '/ops/finances/payout',
+                accessibleRoles: [AccountRole.ProductManager],
             },
         ],
     },
@@ -220,10 +221,12 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             {
                 title: 'Live',
                 href: '/ops/analytics/live',
+                accessibleRoles: [AccountRole.Marketer],
             },
             {
                 title: 'Reports',
                 href: '/ops/analytics/reports',
+                accessibleRoles: [AccountRole.Marketer],
             },
         ],
     },
