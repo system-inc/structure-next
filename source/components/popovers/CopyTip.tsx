@@ -27,7 +27,6 @@ export function CopyTip(properties: CopyTipProperties) {
                             value={value}
                             noticeData={noticeData}
                             className={mergeClassNames('p-1.5', className)}
-                            iconClassName="h-3.5 w-3.5"
                         />
                     </div>
                     <div className="p-1.5 whitespace-nowrap">{value}</div>

@@ -31,7 +31,7 @@ export function SettingsPage() {
             <h1>Settings</h1>
 
             <div className="mt-10">
-                <Button variant="destructive" onClick={handleDeleteClick}>
+                <Button variant="Destructive" onClick={handleDeleteClick}>
                     Delete Account
                 </Button>
             </div>

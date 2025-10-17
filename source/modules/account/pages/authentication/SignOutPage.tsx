@@ -33,7 +33,7 @@ export function SignOutPage() {
                     <p className="mt-4 text-sm">Would you like to sign out?</p>
                     <div className="mt-8 flex flex-col space-y-4">
                         <Button
-                            variant="destructive"
+                            variant="Destructive"
                             onClick={function () {
                                 console.log('signing out..');
                                 account.signOut('/');

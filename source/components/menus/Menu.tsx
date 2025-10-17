@@ -16,6 +16,7 @@ import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { getStringFromReactNode } from '@structure/source/utilities/react/React';
 
 // Class Names - Menu
 export const menuClassName =
@@ -26,21 +27,25 @@ export const menuClassName =
     // Background and text
     `text-sm bg-opsis-background-primary text-opsis-content-primary`;
 
+// Type - MenuItemInterface
+// Menu-specific interface that extends MenuItemProperties
+export type MenuItemInterface = MenuItemProperties & {
+    value?: string; // Used for search and typeahead
+    onSelected?: (menuItem: MenuItemInterface, menuItemRenderIndex: number, event: React.SyntheticEvent) => void;
+    closeMenuOnSelected?: boolean; // Controls whether menu closes on selection (used in PopoverMenu)
+};
+
 // Component - Menu
 export interface MenuProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     title?: string | React.ReactNode;
-    items?: MenuItemProperties[];
+    items?: MenuItemInterface[];
     itemsClassName?: string;
     search?: boolean;
     highlightItemOnMount?: boolean; // Highlight the first item or first selected item on mount
-    onItemSelected?: (
-        item: MenuItemProperties,
-        itemRenderIndex?: number,
-        event?: React.MouseEvent<HTMLElement>,
-    ) => void;
+    onItemSelected?: (item: MenuItemInterface, itemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) => void;
 
     // Optional asynchronous loading of menu items
-    loadItems?: () => Promise<MenuItemProperties[]>;
+    loadItems?: () => Promise<MenuItemInterface[]>;
     loadingItems?: boolean;
     loadingItemsMessage?: React.ReactNode;
     loadingItemsError?: React.ReactNode;
@@ -70,11 +75,11 @@ export function Menu(properties: MenuProperties) {
     const highlightItemOnMount = properties.highlightItemOnMount ?? true;
 
     // State - Initialize items with value and find first selected index
-    const [items, setItems] = React.useState<MenuItemProperties[]>(function () {
+    const [items, setItems] = React.useState<MenuItemInterface[]>(function () {
         return (properties.items || []).map(function (item) {
-            // If value is undefined, set it to the content if the content is a string
-            if(item.value === undefined && typeof item.content === 'string') {
-                item.value = item.content;
+            // If value is undefined, extract it from children
+            if(item.value === undefined) {
+                item.value = getStringFromReactNode(item.children);
             }
 
             return item;
@@ -85,7 +90,7 @@ export function Menu(properties: MenuProperties) {
     const firstSelectedItemIndex = items.findIndex(function (item) {
         return item.selected;
     });
-    const [itemsToRender, setItemsToRender] = React.useState<MenuItemProperties[]>(items);
+    const [itemsToRender, setItemsToRender] = React.useState<MenuItemInterface[]>(items);
     const [itemsToRenderHighlightIndex, setItemsToRenderHighlightIndex] = React.useState(
         highlightItemOnMount ? (firstSelectedItemIndex !== -1 ? firstSelectedItemIndex : 0) : -1,
     );
@@ -122,7 +127,7 @@ export function Menu(properties: MenuProperties) {
 
     // Intercept the onClick events for items
     function itemOnClickIntercept(
-        item: MenuItemProperties,
+        item: MenuItemInterface,
         itemRenderIndex: number,
         event: React.MouseEvent<HTMLElement, MouseEvent>,
     ) {
@@ -148,7 +153,7 @@ export function Menu(properties: MenuProperties) {
 
     // Intercept the onMouseMove events for items
     function itemOnMouseMoveIntercept(
-        item: MenuItemProperties,
+        item: MenuItemInterface,
         itemIndex: number,
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) {
@@ -288,7 +293,7 @@ export function Menu(properties: MenuProperties) {
         const searchPattern = new RegExp(string, 'i');
 
         // Collect all of the indexes of the items that match the search
-        const foundMenuItems: MenuItemProperties[] = [];
+        const foundMenuItems: MenuItemInterface[] = [];
 
         // Loop through the items
         for(let i = 0; i < items.length; i++) {
@@ -299,15 +304,13 @@ export function Menu(properties: MenuProperties) {
                     foundMenuItems.push(foundItem);
                 }
             }
-            // Search the content (if it is a string)
+            // Search the children
             else {
-                if(typeof items[i]?.content === 'string') {
-                    const contentString = items[i]?.content as string;
-                    if(searchPattern.test(contentString)) {
-                        const foundItem = items[i];
-                        if(foundItem) {
-                            foundMenuItems.push(foundItem);
-                        }
+                const childrenString = getStringFromReactNode(items[i]?.children);
+                if(childrenString && searchPattern.test(childrenString)) {
+                    const foundItem = items[i];
+                    if(foundItem) {
+                        foundMenuItems.push(foundItem);
                     }
                 }
             }
@@ -354,7 +357,7 @@ export function Menu(properties: MenuProperties) {
                     setLoadingItems(true);
 
                     // Load the items
-                    let items: MenuItemProperties[] = [];
+                    let items: MenuItemInterface[] = [];
                     try {
                         items = await propertiesLoadItems();
 

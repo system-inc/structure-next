@@ -240,10 +240,9 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                     {properties.profileImageUrl && (
                         <div className="flex justify-center pt-4">
                             <Button
-                                variant="destructive"
+                                variant="Destructive"
                                 onClick={handleRemoveImage}
-                                disabled={uploading}
-                                loading={removeProfileImageMutation.isLoading}
+                                isLoading={uploading || removeProfileImageMutation.isLoading}
                             >
                                 Remove Current Profile Picture
                             </Button>

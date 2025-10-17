@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputText } from '@structure/source/components/forms/InputText';
-import { InputSelectItemProperties, InputSelect } from '@structure/source/components/forms/InputSelect';
+import { InputSelect, InputSelectItemProperties } from '@structure/source/components/forms/InputSelect';
 import { TableColumnType, TableColumnProperties } from '@structure/source/components/tables/TableColumn';
 
 // Dependencies - Assets
@@ -81,7 +81,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionPropertie
     for(const operatorKey in operators) {
         operatorsItems.push({
             value: operatorKey,
-            content: operators[operatorKey as keyof typeof operators].label,
+            children: operators[operatorKey as keyof typeof operators].label,
         });
     }
 
@@ -213,7 +213,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionPropertie
                 items={properties.columns.map(function (column) {
                     return {
                         value: column.identifier,
-                        content: getColumnContentUsingIdentifier(column.identifier),
+                        children: getColumnContentUsingIdentifier(column.identifier),
                     };
                 })}
                 placeholder="Column..."

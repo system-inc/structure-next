@@ -7,7 +7,7 @@ import React from 'react';
 import { OpsNavigationLinkProperties } from './OpsNavigationLink';
 import { OpsNavigationLinks } from '@structure/source/ops/layouts/navigation/OpsNavigationLinks';
 import { DialogMenuProperties, DialogMenu } from '@structure/source/components/dialogs/DialogMenu';
-import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
+import { MenuItemInterface } from '@structure/source/components/menus/Menu';
 
 // Dependencies - Assets
 
@@ -21,10 +21,10 @@ export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
     function getMenuItemsFromOpsNavigationLinks(
         internalNavigationLink: OpsNavigationLinkProperties[],
         prefix?: string,
-        icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>,
+        IconComponent?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>,
     ) {
         // A variable to store the menu items
-        let menuItems: MenuItemProperties[] = [];
+        let menuItems: MenuItemInterface[] = [];
 
         // Set the prefix string
         const prefixString = prefix ? prefix : '';
@@ -33,7 +33,7 @@ export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
         internalNavigationLink.forEach((link) => {
             // Use the icon from the link if it exists
             if(link.icon) {
-                icon = link.icon;
+                IconComponent = link.icon;
             }
 
             // Add the menu item
@@ -41,13 +41,14 @@ export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
                 content: prefixString + link.title,
                 value: prefixString + link.title,
                 href: link.href,
-                icon: icon,
-                iconPosition: 'left',
+                iconLeft: IconComponent ? <IconComponent /> : undefined,
             });
 
             // Add the menu items from the links recursively
             if(link.links) {
-                menuItems = menuItems.concat(getMenuItemsFromOpsNavigationLinks(link.links, link.title + ' • ', icon));
+                menuItems = menuItems.concat(
+                    getMenuItemsFromOpsNavigationLinks(link.links, link.title + ' • ', IconComponent),
+                );
             }
         });
 

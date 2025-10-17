@@ -106,7 +106,6 @@ export interface InputTextProperties extends Omit<InputProperties, 'onChange' | 
     variant?: keyof typeof InputTextVariants;
     size?: keyof typeof InputTextSizes;
     icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-    iconPosition?: 'left' | 'right';
 }
 export const InputText = React.forwardRef<InputReferenceInterface, InputTextProperties>(function (
     properties: InputTextProperties,
@@ -123,7 +122,6 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextProp
     const variant = properties.variant || 'default';
     const size = properties.size || 'default';
     const Icon = properties.icon || variant == 'search' || variant == 'menuSearch' ? SearchIcon : undefined;
-    const iconPosition = properties.iconPosition || 'left';
 
     // Function to expose methods to parent components
     React.useImperativeHandle(reference, function () {
@@ -195,7 +193,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextProp
     return (
         <div className={mergeClassNames('relative', properties.containerClassName)}>
             {Icon && (
-                <div className={`absolute inset-y-0 ${iconPosition}-0 flex items-center pl-3 text-neutral-2`}>
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-neutral-2">
                     <Icon className="h-4 w-4" />
                 </div>
             )}

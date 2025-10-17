@@ -253,8 +253,8 @@ export function UsersPage() {
                                             {account.profiles[0]?.username && `@${account.profiles[0].username}`}
                                         </div>
                                         <Button
-                                            variant="destructive"
-                                            size="sm"
+                                            variant="Destructive"
+                                            size="Small"
                                             className="mt-2"
                                             onClick={() => {
                                                 setSelectedUser({
@@ -298,8 +298,8 @@ export function UsersPage() {
                                         {timeFromNow(new Date(account.profiles[0]?.createdAt).getTime(), true)})
                                     </div>
                                     <Button
-                                        variant="destructive"
-                                        size="sm"
+                                        variant="Destructive"
+                                        size="Small"
                                         className="hidden md:block"
                                         onClick={() => {
                                             setSelectedUser({
@@ -366,7 +366,7 @@ export function UsersPage() {
                         <div className="flex justify-end space-x-2">
                             <Button onClick={handleDialogClose}>Cancel</Button>
                             <AnimatedButton
-                                variant="destructive"
+                                variant="Destructive"
                                 onClick={handleDeleteConfirm}
                                 isProcessing={accountDeletePrivilegedRequest.isLoading}
                             >

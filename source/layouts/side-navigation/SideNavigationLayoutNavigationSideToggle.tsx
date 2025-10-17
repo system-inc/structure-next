@@ -69,10 +69,9 @@ export function SideNavigationLayoutNavigationSideToggle(
 
             {/* Menu button */}
             <Button
-                variant="ghost"
-                size="icon"
+                variant="Ghost"
                 className="focus:border-0"
-                icon={MenuIcon}
+                icon={<MenuIcon />}
                 onClick={async function () {
                     // Toggle the navigation open state
                     setSideNavigationLayoutNavigationOpen(!sideNavigationLayoutNavigationOpen);

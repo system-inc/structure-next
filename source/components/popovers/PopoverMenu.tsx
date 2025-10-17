@@ -5,8 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { PopoverProperties, Popover } from '@structure/source/components/popovers/Popover';
-import { MenuProperties, Menu } from '@structure/source/components/menus/Menu';
-import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
+import { MenuProperties, Menu, MenuItemInterface } from '@structure/source/components/menus/Menu';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -14,82 +13,80 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Component - PopoverMenu
 export interface PopoverMenuProperties extends Omit<MenuProperties, 'items'> {
     children: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
-    items: MenuItemProperties[];
+    items: MenuItemInterface[];
     closeOnItemSelected?: boolean;
     popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
 }
-export function PopoverMenu(properties: PopoverMenuProperties) {
+export function PopoverMenu({
+    search,
+    onItemSelected,
+    closeOnItemSelected,
+    popoverProperties,
+    className,
+    children,
+    ...menuProperties
+}: PopoverMenuProperties) {
     // State
-    const [open, setOpen] = React.useState<boolean>(properties.popoverProperties?.open ?? false);
+    const [open, setOpen] = React.useState<boolean>(popoverProperties?.open ?? false);
 
     // Defaults
-    const popoverPropertiesSide = properties.popoverProperties?.side ?? 'bottom';
-    const popoverPropertiesAlign = properties.popoverProperties?.align ?? 'start';
+    const popoverPropertiesSide = popoverProperties?.side ?? 'bottom';
+    const popoverPropertiesAlign = popoverProperties?.align ?? 'start';
 
     // Function to focus on the search input on open
-    const propertiesSearch = properties.search;
-    const onOpenAutoFocus = React.useCallback(
-        function (event: Event) {
-            // console.log('PopoverMenu opened', event);
+    function onOpenAutoFocus(event: Event) {
+        // console.log('PopoverMenu opened', event);
 
-            // Get the popover element
-            const popoverElement = event.target as HTMLElement;
+        // Get the popover element
+        const popoverElement = event.target as HTMLElement;
 
-            // Get the input element
-            if(propertiesSearch) {
-                const inputElement = popoverElement.querySelector('input');
+        // Get the input element
+        if(search) {
+            const inputElement = popoverElement.querySelector('input');
 
-                // Focus on the input element after a short delay
-                setTimeout(function () {
-                    if(inputElement) {
-                        inputElement.focus();
-                    }
-                }, 25);
-            }
-
-            // Get the selected menu item
-            const selectedMenuItem = popoverElement.querySelector('[data-selected="true"]');
-            // console.log('selectedItem', selectedItem);
-
-            // Scroll the selected item into the center of the view
-            // This setTimeout is needed to allow the popover to open and the menu to render
+            // Focus on the input element after a short delay
             setTimeout(function () {
-                if(selectedMenuItem) {
-                    selectedMenuItem.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' });
-                }
-            }, 1);
-        },
-        [propertiesSearch],
-    );
+                inputElement?.focus();
+            }, 25);
+        }
+
+        // Get the selected menu item
+        const selectedMenuItem = popoverElement.querySelector('[data-selected="true"]');
+        // console.log('selectedItem', selectedItem);
+
+        // Scroll the selected item into the center of the view
+        // This setTimeout is needed to allow the popover to open and the menu to render
+        setTimeout(function () {
+            selectedMenuItem?.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' });
+        }, 1);
+    }
 
     // Function to handle when a menu item is selected
-    const propertiesOnItemSelected = properties.onItemSelected;
-    const propertiesCloseOnItemSelected = properties.closeOnItemSelected;
-    const onItemSelectedIntercept = React.useCallback(
-        function (menuItem: MenuItemProperties, menuItemRenderIndex?: number, event?: React.SyntheticEvent) {
-            // Call the onSelected callback
-            if(propertiesOnItemSelected) {
-                propertiesOnItemSelected(
-                    menuItem,
-                    menuItemRenderIndex,
-                    event as unknown as React.MouseEvent<HTMLElement, MouseEvent>,
-                );
-            }
+    function onItemSelectedIntercept(
+        menuItem: MenuItemInterface,
+        menuItemRenderIndex?: number,
+        event?: React.SyntheticEvent,
+    ) {
+        // Call the onSelected callback
+        onItemSelected?.(menuItem, menuItemRenderIndex, event as unknown as React.MouseEvent<HTMLElement, MouseEvent>);
 
-            // Close the popover if closePopoverOnSelect is true
-            if(propertiesCloseOnItemSelected || menuItem.closeMenuOnSelected) {
-                setOpen(false);
+        // Close the popover if closePopoverOnSelect is true
+        if(closeOnItemSelected || menuItem.closeMenuOnSelected) {
+            setOpen(false);
+            // Also call the parent's onOpenChange callback if provided (for controlled mode)
+            popoverProperties?.onOpenChange?.(false);
+        }
+    }
+
+    // Effect to synchronize local open state with property changes (for controlled mode)
+    React.useEffect(
+        function () {
+            if(popoverProperties?.open !== undefined) {
+                setOpen(popoverProperties.open);
             }
         },
-        [propertiesOnItemSelected, propertiesCloseOnItemSelected],
+        [popoverProperties?.open],
     );
-
-    // Get the menu properties to spread onto the Menu component
-    const { className, ...menuProperties } = properties;
-
-    // Get the popover properties to spread onto the Popover component
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { side, align, ...popoverProperties } = properties.popoverProperties ?? {};
 
     // Render the component
     return (
@@ -111,9 +108,9 @@ export function PopoverMenu(properties: PopoverMenuProperties) {
             side={popoverPropertiesSide}
             align={popoverPropertiesAlign}
             onOpenAutoFocus={onOpenAutoFocus}
-            className={mergeClassNames('border-none', popoverProperties.className)}
+            className={mergeClassNames('border-none', popoverProperties?.className)}
         >
-            {properties.children}
+            {children}
         </Popover>
     );
 }

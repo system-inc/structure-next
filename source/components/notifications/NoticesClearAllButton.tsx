@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -15,7 +15,8 @@ import { useNotice } from './NoticeProvider';
 const MotionButton = motion.create(Button);
 
 // Component - Notice
-export interface NoticesClearAllButtonProperties extends ButtonProperties {
+export interface NoticesClearAllButtonProperties {
+    className?: string;
     show?: boolean;
     xSpringFunction: (x: number, onRestFunction: () => void) => void;
 }
@@ -29,8 +30,8 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
             <MotionButton
                 layout
                 ref={reference}
+                variant="Primary"
                 className={mergeClassNames(
-                    'relative overflow-hidden rounded-full p-1 px-2',
                     !properties.show && 'pointer-events-none',
                     properties.className,
                 )}
@@ -46,12 +47,8 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
                     type: 'tween',
                 }}
                 onClick={() => notice.removeAllNotices()}
-                style={{
-                    height: 28,
-                    width: 75,
-                }}
             >
-                <div className={'absolute text-xs font-light'}>Clear All</div>
+                Clear All
             </MotionButton>
         );
     },

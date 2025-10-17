@@ -399,8 +399,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             <Button
                                 // Disabled if there is only one condition
                                 disabled={columnFilterGroupData.conditions.length === 1}
-                                variant="ghostDestructive"
-                                size="icon"
+                                variant="GhostDestructive"
                                 icon={MinusCircledIcon}
                                 onClick={function () {
                                     removeCondition(condition.id);
@@ -473,27 +472,20 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
             {/* Controls */}
             <div className="mt-4 flex space-x-2">
                 {/* Add Condition Button */}
-                <Button icon={PlusIcon} iconPosition="left" iconClassName="h-3 w-3" onClick={addNewCondition}>
+                <Button iconLeft={PlusIcon} onClick={addNewCondition}>
                     Add Condition
                 </Button>
 
                 {/* Add Filter Group Button */}
-                <Button
-                    variant="ghost"
-                    icon={PlusIcon}
-                    iconClassName="h-3 w-3"
-                    iconPosition="left"
-                    onClick={addNewFilterGroup}
-                >
+                <Button variant="Ghost" iconLeft={PlusIcon} onClick={addNewFilterGroup}>
                     Add Filter Group
                 </Button>
 
                 {/* Remove Button - Only show if not the root group (every child FilterGroup has an id) */}
                 {properties.columnFilterGroupData.id && (
                     <Button
-                        variant="ghostDestructive"
-                        icon={MinusCircledIcon}
-                        iconPosition="left"
+                        variant="GhostDestructive"
+                        iconLeft={MinusCircledIcon}
                         onClick={removeFilterGroupButtonOnClickIntercept}
                     >
                         Remove Group

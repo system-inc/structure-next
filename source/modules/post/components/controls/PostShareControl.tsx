@@ -30,9 +30,8 @@ export function PostShareControl(properties: PostShareControlProperties) {
         <PopoverMenu
             items={[
                 {
-                    icon: CopyIcon,
-                    iconPosition: 'left',
-                    content: 'Copy Link',
+                    iconLeft: CopyIcon,
+                    children: 'Copy Link',
                     closeMenuOnSelected: true,
                     onSelected: function () {
                         // Copy the link to the clipboard

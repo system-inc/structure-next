@@ -8,8 +8,7 @@ import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
-import { ButtonVariants } from '@structure/source/components/buttons/ButtonVariants';
-import { ButtonSizes } from '@structure/source/components/buttons/ButtonSizes';
+import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
 import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - Utilities
@@ -21,8 +20,8 @@ export interface ImageSelectorProperties {
     className?: string;
     children?: React.ReactNode;
     variant?: 'Button' | 'DropZone' | 'Simple';
-    buttonVariant?: keyof typeof ButtonVariants;
-    buttonSize?: keyof typeof ButtonSizes;
+    buttonVariant?: ButtonVariant;
+    buttonSize?: ButtonSize;
     accept?: string; // e.g., "image/*" or ".jpg,.png"
     maximumFileSizeInBytes?: number;
     allowMultipleFileSelection?: boolean;
@@ -175,10 +174,10 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     className="hidden"
                 />
                 <Button
-                    variant={properties.buttonVariant || 'primary'}
-                    size={properties.buttonSize || 'default'}
+                    variant={properties.buttonVariant || 'Primary'}
+                    size={properties.buttonSize || 'Small'}
                     onClick={handleClick}
-                    icon={properties.children ? undefined : ImageIcon}
+                    iconLeft={properties.children ? undefined : ImageIcon}
                 >
                     {properties.children || 'Select Image'}
                 </Button>

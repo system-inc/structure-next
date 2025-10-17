@@ -36,7 +36,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
                 <div className="mt-4">
                     <Button
                         className="w-24"
-                        variant={'light'}
+                        variant="Contrast"
                         onClick={async function () {
                             properties.reset();
                         }}

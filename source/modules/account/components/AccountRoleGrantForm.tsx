@@ -253,7 +253,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             )}
                             <Button
                                 className="w-full"
-                                variant="primary"
+                                variant="Primary"
                                 onClick={() => {
                                     setSelectedUsername(profile.username);
                                     setGrantDialogOpen(true);

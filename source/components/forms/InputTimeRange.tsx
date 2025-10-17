@@ -41,7 +41,7 @@ export interface InputTimeRangeProperties extends Omit<InputProperties, 'default
     onBlur?: (value: TimeRangeType | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
-    buttonProperties?: ButtonProperties;
+    buttonProperties?: Omit<ButtonProperties, 'icon' | 'iconLeft' | 'iconRight' | 'asChild' | 'href' | 'target'>;
 }
 export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface, InputTimeRangeProperties>(function (
     properties: InputTimeRangeProperties,
@@ -312,7 +312,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                         />
                         <div className="flex w-full justify-end p-3">
                             {/* Clear Button */}
-                            <Button variant="ghost" onClick={clear}>
+                            <Button variant="Ghost" onClick={clear}>
                                 Clear
                             </Button>
                         </div>
@@ -322,18 +322,17 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
         >
             <Button
                 ref={buttonReference}
-                {...properties.buttonProperties}
                 tabIndex={properties.tabIndex}
-                variant={'formInputSelect'}
-                size="formInputSelect"
+                variant={'FormInputSelect'}
+                size="FormInputSelect"
                 className={mergeClassNames(
                     'min-w-[246px]',
                     !value && 'text-muted-foreground',
                     properties.buttonProperties?.className,
                 )}
-                icon={CalendarIcon}
-                iconPosition="left"
+                iconLeft={CalendarIcon}
                 onBlur={onBlurIntercept}
+                {...properties.buttonProperties}
             >
                 {/* Display the selected date range or "Pick a date" if no date is selected */}
                 {isMounted && value?.startTime ? (

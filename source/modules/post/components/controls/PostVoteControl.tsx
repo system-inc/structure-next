@@ -129,9 +129,7 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
                     {/* Upvote */}
                     <Button
                         className="mt-2 mb-4 w-full pl-3"
-                        icon={voteType ? undefined : ArrowUpIcon}
-                        iconPosition={voteType ? undefined : 'left'}
-                        iconClassName={voteType ? '' : 'w-3 h-3'}
+                        iconLeft={voteType ? undefined : ArrowUpIcon}
                         onClick={handleVote}
                     >
                         {voteType ? 'Upvoted' : 'Upvote'}

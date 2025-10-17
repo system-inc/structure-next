@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
@@ -23,7 +23,6 @@ export interface NoticeInterface {
     title?: React.ReactNode;
     content?: React.ReactNode;
     closeButtonProperties?: React.ComponentPropsWithoutRef<typeof MotionButton>;
-    buttonProperties?: ButtonProperties;
     dismissTimeout?: number | boolean;
 }
 export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function (properties, reference) {
@@ -74,9 +73,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             <MotionButton
                 {...properties.closeButtonProperties}
                 tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
-                variant="unstyled"
-                size="unstyled"
-                className="absolute -top-2 -left-2 inline-flex items-center justify-center rounded-full border border-opsis-border-primary bg-opsis-background-primary p-1 whitespace-nowrap select-none hover:bg-opsis-background-secondary hover:text-opsis-content-primary focus-visible:ring-0 focus-visible:outline-none"
+                className="absolute -top-2 -left-2 inline-flex items-center justify-center rounded-full border border-opsis-border-primary bg-opsis-background-primary p-1 whitespace-nowrap select-none cursor-pointer hover:bg-opsis-background-secondary hover:text-opsis-content-primary focus-visible:ring-0 focus-visible:outline-none"
                 initial={{ opacity: 0 }}
                 animate={{
                     opacity: hovered ? 1 : 0,
@@ -100,12 +97,8 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
                 </div>
 
                 {/* Button */}
-                <Button
-                    {...properties.buttonProperties} // Spread DOM properties
-                    tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
-                    onClick={handleRemoval}
-                >
-                    {properties?.buttonProperties?.children ? properties.buttonProperties.children : 'Dismiss'}
+                <Button tabIndex={-1} variant="Primary" onClick={handleRemoval}>
+                    Dismiss
                 </Button>
             </div>
         </motion.div>

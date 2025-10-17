@@ -159,9 +159,8 @@ export function TableCell(properties: TableCellProperties) {
                                 <Button>Dismiss</Button>
                             </DialogCloseControl>
                             <CopyButton
-                                variant="ghost"
-                                size="default"
-                                iconPosition="left"
+                                variant="Ghost"
+                                size="Small"
                                 className="mr-3 pl-3"
                                 value={properties.value}
                             >

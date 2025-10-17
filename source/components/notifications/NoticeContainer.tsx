@@ -21,7 +21,7 @@ export interface NoticeContainerProperties extends Omit<React.HTMLAttributes<HTM
 export function NoticeContainer(properties: NoticeContainerProperties) {
     // Constants
     // const NOTICES_MARGIN_PX = 16;
-    const COLLAPSED_OFFSET_PX = 24;
+    const collapsedOffestInPixels = 24;
 
     // Hooks
     const notice = useNotice();
@@ -57,7 +57,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
         // Visible but collapsed state (default when not hovered)
         visible: (custom: { index: number }) => ({
             opacity: custom.index >= 3 ? 0 : 1,
-            height: custom.index === 0 ? 'auto' : COLLAPSED_OFFSET_PX,
+            height: custom.index === 0 ? 'auto' : collapsedOffestInPixels,
             scale: 1 - custom.index * 0.03,
             x: 0,
             transition: {
@@ -155,7 +155,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             {/* Clear All Button */}
             <div
                 className={mergeClassNames(
-                    'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pr-4 pb-0 md:pr-8',
+                    'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pr-4 pb-2 md:pr-8',
                 )}
             >
                 <NoticesClearAllButton
@@ -225,12 +225,6 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                                         }}
                                         {...noticeItem}
                                         closeButtonProperties={{
-                                            onClick: async function () {
-                                                handleRemoval(noticeItem.id);
-                                            },
-                                        }}
-                                        buttonProperties={{
-                                            content: 'Dismiss',
                                             onClick: async function () {
                                                 handleRemoval(noticeItem.id);
                                             },

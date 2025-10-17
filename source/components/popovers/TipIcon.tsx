@@ -19,7 +19,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Variants - TipIcon
 export const TipIconVariants = {
     // Default variant
-    default: `select-none rounded-extra-small p-[5px] hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
+    default: `cursor-pointer select-none rounded-extra-small p-[5px] hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
     // Unstyled variant
     unstyled: ``,
 };
@@ -27,7 +27,7 @@ export const TipIconVariants = {
 // Variants - TipIconContent
 export const TipIconContentVariants = {
     // Default variant
-    default: `max-w-xs rounded-extra-small px-4 py-3.5 text-sm shadow-04`,
+    default: `max-w-xs rounded-extra-small px-3 py-2 text-sm shadow-04`,
     // Unstyled variant
     unstyled: `border-none`,
 };

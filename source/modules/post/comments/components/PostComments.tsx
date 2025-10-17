@@ -24,7 +24,7 @@ export function PostComments(properties: PostCommentsProperties) {
     return (
         <div id="comments" className={mergeClassNames('text-sm', properties.className)}>
             <div>
-                <Button icon={PlusIcon} iconPosition="left" iconClassName="w-3 h-3 ml-1">
+                <Button iconLeft={PlusIcon} className="pl-3">
                     Add a Comment
                 </Button>
             </div>

@@ -73,7 +73,7 @@ const components: ComponentsProperties = {
         >
             {properties.children}
             <span className="text-sans absolute top-3 right-3">
-                <CopyButton className="" iconClassName="h-3.5 w-3.5" value={getInnerText(properties.children)} />
+                <CopyButton className="" value={getInnerText(properties.children)} />
             </span>
         </pre>
     ),

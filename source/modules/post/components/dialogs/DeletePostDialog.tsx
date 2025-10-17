@@ -83,8 +83,8 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
             }
             footer={
                 <Button
-                    variant="destructive"
-                    loading={postDeleteRequest.isLoading}
+                    variant="Destructive"
+                    isLoading={postDeleteRequest.isLoading}
                     onClick={function () {
                         deletePost();
                     }}

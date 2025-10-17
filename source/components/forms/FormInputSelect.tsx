@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
+import { MenuItemInterface } from '@structure/source/components/menus/Menu';
 import {
     FormInputReferenceInterface,
     FormInputProperties,
@@ -19,7 +19,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export interface FormInputSelectProperties
     extends Omit<InputSelectProperties, 'validate'>,
         Omit<FormInputProperties, 'component' | 'defaultValue' | 'onChange' | 'onBlur'> {
-    items: MenuItemProperties[];
+    items: MenuItemInterface[];
     sibling?: React.ReactNode;
 }
 export const FormInputSelect = React.forwardRef<FormInputReferenceInterface, FormInputSelectProperties>(function (

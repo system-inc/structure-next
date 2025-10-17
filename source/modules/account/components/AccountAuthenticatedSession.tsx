@@ -217,7 +217,7 @@ export function AccountAuthenticatedSession(properties: AccountAuthenticatedSess
                 <h2 className="text-base font-medium">{properties.title}</h2>
                 <p className="mt-4 text-sm">{properties.description}</p>
                 <Button
-                    loading={sessionCreateRequest.isLoading}
+                    isLoading={sessionCreateRequest.isLoading}
                     className="mt-6"
                     onClick={function () {
                         createAuthenticationSession();

@@ -158,7 +158,7 @@ export function RequestParameterRow(properties: RequestParameterRowProperties) {
                     items={properties.possibleValues.map(function (possibleValue: string | number) {
                         return {
                             value: String(possibleValue),
-                            content: possibleValue,
+                            children: possibleValue,
                         };
                     })}
                     allowNoSelection={true}

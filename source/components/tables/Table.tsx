@@ -465,7 +465,6 @@ export function Table(properties: TableProperties) {
                             {/* Filters Toggle */}
                             {properties.filter && (
                                 <ToggleButton
-                                    size="icon"
                                     icon={FunnelIcon}
                                     tip="Toggle filters"
                                     tipProperties={{ side: 'right' }}
@@ -502,8 +501,7 @@ export function Table(properties: TableProperties) {
                                         // Fade in and out when appearing and disappearing
                                         data-show={selectedRowsIndexesSet.size > 0}
                                         className="duration-75 data-[show=false]:hidden data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:flex data-[show=true]:animate-in data-[show=true]:fade-in"
-                                        icon={CheckCircledIcon}
-                                        iconPosition="left"
+                                        iconLeft={CheckCircledIcon}
                                     >
                                         {selectedRowsIndexesSet.size} of {rows.length} selected
                                     </Button>
@@ -527,9 +525,7 @@ export function Table(properties: TableProperties) {
                                         align: 'end',
                                     }}
                                     buttonProperties={{
-                                        variant: 'default',
-                                        size: 'icon',
-                                        children: <FilterIcon className="h-5 w-5" />,
+                                        icon: FilterIcon,
                                     }}
                                     onChange={onColumnVisibilityChange}
                                 />

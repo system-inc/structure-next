@@ -5,11 +5,12 @@ import React from 'react';
 import { InputReferenceInterface, InputProperties } from '@structure/source/components/forms/Input';
 import { PopoverProperties } from '@structure/source/components/popovers/Popover';
 import { PopoverMenuProperties, PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
-import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
-import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
+import { MenuItemInterface } from '@structure/source/components/menus/Menu';
+import { NonLinkButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
+import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -30,7 +31,8 @@ export const InputSelectSizes = {
 
 // Interface InputSelectItemInterface
 // We use property.defaultValue and value state to manage the selected items
-export type InputSelectItemProperties = Omit<MenuItemProperties, 'selected'>;
+// Exclude asChild/href link variants since select items are always buttons
+export type InputSelectItemProperties = Omit<MenuItemInterface, 'selected' | 'asChild' | 'href' | 'target'>;
 
 // Component - InputSelect
 export interface InputSelectProperties extends Omit<InputProperties, 'defaultValue' | 'onChange' | 'onBlur'> {
@@ -51,10 +53,13 @@ export interface InputSelectProperties extends Omit<InputProperties, 'defaultVal
 
     popoverMenuProperties?: PopoverMenuProperties;
     popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
-    buttonProperties?: ButtonProperties;
+    buttonProperties?: Omit<
+        NonLinkButtonProperties,
+        'variant' | 'size' | 'onBlur' | 'onKeyDown' | 'icon' | 'iconLeft' | 'iconRight'
+    >;
 
     // Optional asynchronous loading of menu items
-    loadItems?: () => Promise<MenuItemProperties[]>;
+    loadItems?: () => Promise<MenuItemInterface[]>;
     loadingItems?: boolean;
     loadingItemsMessage?: React.ReactNode;
     loadingItemsError?: React.ReactNode;
@@ -85,8 +90,8 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                 return item.value && item.value === value;
             });
 
-            if(selectedItem && selectedItem.content === undefined) {
-                selectedItem.content = selectedItem.value;
+            if(selectedItem && selectedItem.children === undefined) {
+                selectedItem.children = selectedItem.value;
             }
 
             return selectedItem;
@@ -170,7 +175,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
     const propertiesOnChange = properties.onChange;
     const propertiesAllowNoSelection = properties.allowNoSelection;
     const onChangeIntercept = React.useCallback(
-        function (menuItem: MenuItemProperties, menuItemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) {
+        function (menuItem: MenuItemInterface, menuItemRenderIndex?: number, event?: React.MouseEvent<HTMLElement>) {
             // console.log('InputSelect.tsx value changed:', menuItem.value);
             let newValue = menuItem.value;
 
@@ -218,9 +223,9 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
 
                 return {
                     ...item,
-                    content: item.content ?? item.value,
-                    icon: selected ? CheckIcon : undefined,
-                    iconPosition: 'left' as 'left' | 'right' | undefined,
+                    children: item.children ?? item.value,
+                    iconLeft: selected ? CheckIcon : undefined,
+                    className: mergeClassNames('gap-2', item.className),
                     highlighted: selected,
                     selected: selected,
                 };
@@ -253,9 +258,9 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
             <Button
                 ref={buttonReference}
                 className={mergeClassNames(properties.className)}
-                variant="formInputSelect"
-                size="formInputSelect"
-                loading={loadingItems}
+                variant="FormInputSelect"
+                size="FormInputSelect"
+                isLoading={loadingItems}
                 // disabled={properties.disabled || loadingItems}
                 tabIndex={properties.tabIndex}
                 onBlur={onBlurIntercept}
@@ -279,18 +284,20 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                 {
                     // If there is a selected item
                     selectedItem ? (
-                        typeof selectedItem!.content === 'string' ? (
-                            // If the content is a string, create a container for it
-                            <span className="truncate text-dark dark:text-light">{selectedItem.content}</span>
+                        typeof selectedItem.children === 'string' ? (
+                            // If children is a string, create a container for it
+                            <span className="truncate text-dark dark:text-light">{selectedItem.children}</span>
                         ) : (
-                            // If the content is not a string, use the content as the button content
-                            selectedItem.content
+                            // If children is not a string, use it as the button content
+                            selectedItem.children
                         )
                     ) : (
                         // No selected items, show the placeholder
                         <span className="truncate text-dark-6 dark:text-light-6">{placeholder}</span>
                     )
                 }
+                <div className="flex-grow" />
+                <ChevronDownIcon className="text-neutral+2 ml-4 h-4 w-4 dark:text-neutral-2" />
             </Button>
         </PopoverMenu>
     );

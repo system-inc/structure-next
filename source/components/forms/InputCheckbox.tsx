@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputReferenceInterface, InputProperties } from '@structure/source/components/forms/Input';
-import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
+import { NonLinkButtonProperties, Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
@@ -49,7 +49,7 @@ export interface InputCheckboxProperties extends Omit<InputProperties, 'defaultV
     variant?: keyof typeof InputCheckboxVariants;
     size?: keyof typeof InputCheckboxSizes;
 
-    buttonProperties?: ButtonProperties;
+    buttonProperties?: Omit<NonLinkButtonProperties, 'variant' | 'size' | 'onClick' | 'onBlur'>;
 }
 export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, InputCheckboxProperties>(function (
     properties: InputCheckboxProperties,
@@ -118,13 +118,20 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
     );
 
     // Render the component
+    const IconComponent =
+        value === InputCheckboxState.Checked
+            ? CheckIcon
+            : value === InputCheckboxState.Indeterminate
+              ? MinusIcon
+              : null;
+
     return (
         <Button
             ref={buttonReference}
             className={mergeClassNames('', properties.className)}
             type="button" // Set this so forms does not submit on click
-            variant="formInputCheckbox"
-            size="formInputCheckbox"
+            variant="FormInputCheckbox"
+            size="FormInputCheckbox"
             disabled={properties.disabled}
             tabIndex={properties.tabIndex ?? 1}
             data-state={
@@ -134,7 +141,7 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
                       ? 'indeterminate'
                       : 'unchecked'
             }
-            {...properties.buttonProperties}
+            icon={IconComponent}
             onBlur={onBlurIntercept}
             onClick={function (event) {
                 onChangeIntercept(
@@ -142,16 +149,7 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
                     event,
                 );
             }}
-        >
-            {value === InputCheckboxState.Checked ? (
-                // Checked
-                <CheckIcon className="h-3 w-3" />
-            ) : value === InputCheckboxState.Indeterminate ? (
-                // Indeterminate
-                <MinusIcon className="h-3 w-3" />
-            ) : // Unchecked
-            null}
-        </Button>
+        />
     );
 });
 

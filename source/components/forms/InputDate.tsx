@@ -19,8 +19,7 @@ import { format, startOfToday } from 'date-fns';
 // Interface - InputDateReference
 export interface InputDateReferenceInterface {
     getValue: () => Date | undefined;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setValue: (value?: Date, event?: any) => void;
+    setValue: (value?: Date, event?: unknown) => void;
     focus: () => void;
 }
 
@@ -35,7 +34,7 @@ export interface InputDateProperties extends Omit<InputProperties, 'defaultValue
     onBlur?: (value: Date | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
     popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
-    buttonProperties?: ButtonProperties;
+    buttonProperties?: Omit<ButtonProperties, 'icon' | 'iconLeft' | 'iconRight' | 'asChild' | 'href' | 'target'>;
 }
 export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDateProperties>(
     function (properties, reference) {
@@ -125,15 +124,14 @@ export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDate
                 }
             >
                 <Button
-                    variant="formInputSelect"
-                    size="formInputSelect"
+                    variant="FormInputSelect"
+                    size="FormInputSelect"
                     className={mergeClassNames(
                         'min-w-[246px]',
                         !value && 'text-muted-foreground',
                         properties.buttonProperties?.className,
                     )}
-                    icon={CalendarIcon}
-                    iconPosition="left"
+                    iconLeft={CalendarIcon}
                     onBlur={onBlurIntercept}
                     {...properties.buttonProperties}
                 >

@@ -179,8 +179,8 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
             {/* Request Another Code */}
             <div className="mt-8 flex justify-center">
                 <Button
-                    variant="ghost"
-                    loading={accountAuthenticationEmailVerificationSendRequest.isLoading}
+                    variant="Ghost"
+                    isLoading={accountAuthenticationEmailVerificationSendRequest.isLoading}
                     onClick={function () {
                         accountAuthenticationEmailVerificationSendRequest.execute();
                     }}

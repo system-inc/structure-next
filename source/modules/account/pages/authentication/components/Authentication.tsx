@@ -233,7 +233,7 @@ export function Authentication(properties: AuthenticationProperties) {
                 <p>You are signed in as {account.data.emailAddress}.</p>
                 <div className="mt-8 flex flex-col space-y-4">
                     <Button
-                        variant="destructive"
+                        variant="Destructive"
                         onClick={function () {
                             console.log('signing out..');
                             account.signOut('/');

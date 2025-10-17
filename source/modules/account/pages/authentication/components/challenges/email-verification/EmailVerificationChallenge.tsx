@@ -33,7 +33,7 @@ export function EmailVerificationChallenge(properties: EmailVerificationChalleng
             {/* Change Email Button */}
             {properties.onChangeEmail && (
                 <div className="mt-4 text-center">
-                    <Button variant="ghost" onClick={properties.onChangeEmail} className="w-full">
+                    <Button variant="Ghost" onClick={properties.onChangeEmail} className="w-full">
                         Use a different email
                     </Button>
                 </div>

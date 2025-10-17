@@ -311,10 +311,8 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
                 </div>
                 <div className="flex space-x-2">
                     <Button
-                        className="mt-[22px]"
-                        icon={PlusIcon}
-                        iconPosition="left"
-                        iconClassName="h-3 w-3"
+                        className="mt-[22px] pl-3"
+                        iconLeft={PlusIcon}
                         // onClick={addNewCondition}
                     >
                         Create
@@ -322,9 +320,7 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
 
                     <Button
                         className="mt-[22px]"
-                        size="icon"
                         icon={BarGraphIcon}
-                        iconClassName="h-[17px] w-[17px]"
                         tip="Metrics"
                         href={
                             `/ops/developers/metrics/?dataSources={"databaseName":"` +
@@ -343,7 +339,6 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
 
                     <RefreshButton
                         className="mt-[22px]"
-                        size={'formInputIcon'}
                         onClick={async () => {
                             dataInteractionDatabaseTableRowsRequest.refresh();
                         }}
@@ -384,7 +379,7 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
                         key={queryState.isLoading ? 'relationsLoading' : 'relationsLoaded'}
                         columns={relationsColumns}
                         rows={relationsRows}
-                        loading={queryState.isLoading}
+                        isLoading={queryState.isLoading}
                     />
                 </>
             )} */}

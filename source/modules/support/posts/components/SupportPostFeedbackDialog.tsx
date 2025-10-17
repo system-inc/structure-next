@@ -125,7 +125,7 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
             }
             footer={
                 <Button
-                // loading={chatConversationUpdateMutationState.loading}
+                // isLoading={chatConversationUpdateMutationState.loading}
                 // onClick={function () {
                 //     renameConversation();
                 // }}

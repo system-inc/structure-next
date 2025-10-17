@@ -348,7 +348,7 @@ export function StructurePage() {
                     columnVisibility={true}
                     // defaultVisibleColumnsIdentifiers={['column1']}
                     search={true}
-                    // loading={true}
+                    // isLoading={true}
                     sortable={true}
                     pagination={{
                         itemsTotal: 4,
@@ -589,13 +589,13 @@ export function StructurePage() {
                 /> */}
 
                 {/* <div className="mb-10 flex flex-col space-y-4">
-                    <Button variant="menuItem" size="menuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="left">
+                    <Button variant="MenuItem" size="MenuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="left">
                         Button 1
                     </Button>
-                    <Button variant="menuItem" size="menuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="right">
+                    <Button variant="MenuItem" size="MenuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="right">
                         Button 2
                     </Button>
-                    <Button variant="menuItem" size="menuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="right">
+                    <Button variant="MenuItem" size="MenuItem" className="border border-opsis-border-primary" icon={CheckIcon} iconPosition="right">
                         Button 3
                     </Button>
                 </div> */}

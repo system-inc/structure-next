@@ -336,7 +336,7 @@ export function WebSocketsPage() {
                     </Button>
                     <Button
                         onClick={handleDisconnect}
-                        variant="light"
+                        variant="Contrast"
                         disabled={
                             webSocketViaSharedWorker.webSocketConnectionInformation.state ===
                                 WebSocketConnectionState.Disconnected ||

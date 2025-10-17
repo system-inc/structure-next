@@ -42,8 +42,7 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
                         setOpen(false);
                     },
                     selected: selected,
-                    icon: selected ? CheckIcon : undefined,
-                    iconPosition: 'left',
+                    iconLeft: selected ? CheckIcon : undefined,
                 };
             })}
             search={true}

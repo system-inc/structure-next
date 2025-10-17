@@ -63,7 +63,7 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
 
             <div className="flex justify-end">
                 <Button
-                    variant="destructive"
+                    variant="Destructive"
                     onClick={function () {
                         setDeletePostTopicDialogOpen(true);
                     }}

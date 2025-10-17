@@ -18,9 +18,7 @@ export function IdeasPage() {
             <div className="float-end">
                 <Button
                     className="pl-3"
-                    icon={PlusIcon}
-                    iconPosition="left"
-                    iconClassName="w-3 h-3"
+                    iconLeft={PlusIcon}
                     href="/ideas/submit"
                 >
                     Submit an Idea

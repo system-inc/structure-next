@@ -426,7 +426,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Test Endpoint */}
             <div className="mt-6">
                 <div className="flex space-x-3">
-                    <Button loading={runningRequest} icon={PlayIcon} iconPosition="left" onClick={testEndpoint}>
+                    <Button isLoading={runningRequest} iconLeft={<PlayIcon />} onClick={testEndpoint}>
                         Run
                     </Button>
 

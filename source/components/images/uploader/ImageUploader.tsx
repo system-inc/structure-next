@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
+import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
 import { Alert } from '@structure/source/components/notifications/Alert';
 import { ImageSelector } from '../selector/ImageSelector';
 import { ImageUploaderBase } from './ImageUploaderBase';
@@ -13,8 +14,8 @@ import { ImageUploaderBase } from './ImageUploaderBase';
 export interface ImageUploaderProperties {
     className?: string;
     children?: React.ReactNode;
-    buttonVariant?: 'primary' | 'default' | 'destructive';
-    buttonSize?: 'default' | 'sm' | 'lg';
+    buttonVariant?: ButtonVariant;
+    buttonSize?: ButtonSize;
     uploadUrl: string;
     uploadHttpMethod?: 'POST' | 'PUT';
     uploadHeaders?: Record<string, string>;
@@ -76,8 +77,8 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                 accept={properties.accept}
                 allowMultipleFileSelection={properties.allowMultipleFileSelection}
                 variant={properties.variant || 'Button'}
-                buttonVariant={properties.buttonVariant || 'primary'}
-                buttonSize={properties.buttonSize || 'default'}
+                buttonVariant={properties.buttonVariant || 'Primary'}
+                buttonSize={properties.buttonSize || 'Small'}
             >
                 {properties.children}
             </ImageSelector>
@@ -104,7 +105,7 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                                 <div>
                                     <div className="flex items-center space-x-2">
                                         <Button
-                                            variant="primary"
+                                            variant="Primary"
                                             onClick={async function () {
                                                 try {
                                                     // Process and upload each file
@@ -121,7 +122,7 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                                                     // Error will be handled by the onUploadError callback
                                                 }
                                             }}
-                                            loading={childProperties.isUploading}
+                                            isLoading={childProperties.isUploading}
                                             disabled={childProperties.isUploading}
                                         >
                                             {childProperties.isUploading
@@ -130,7 +131,7 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                                         </Button>
 
                                         <Button
-                                            variant="default"
+                                            variant="Secondary"
                                             onClick={clearSelectedFiles}
                                             disabled={childProperties.isUploading}
                                         >

@@ -43,29 +43,25 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
                             {
                                 content: 'Ascending',
                                 value: 'Ascending',
-                                icon: ArrowUpIcon,
-                                iconPosition: 'left',
+                                iconLeft: <ArrowUpIcon />,
                                 closeMenuOnSelected: true,
                             },
                             {
                                 content: 'Descending',
                                 value: 'Descending',
-                                icon: ArrowDownIcon,
-                                iconPosition: 'left',
+                                iconLeft: <ArrowDownIcon />,
                                 closeMenuOnSelected: true,
                             },
                             {
                                 content: 'None',
                                 value: 'None',
-                                icon: ChevronsUpDownIcon,
-                                iconPosition: 'left',
+                                iconLeft: <ChevronsUpDownIcon />,
                                 closeMenuOnSelected: true,
                             },
                             {
                                 content: 'Hide',
                                 value: 'Hide',
-                                icon: HideIcon,
-                                iconPosition: 'left',
+                                iconLeft: <HideIcon />,
                                 closeMenuOnSelected: true,
                                 onSelected: function () {
                                     if(properties.onColumnVisibilityChange) {
@@ -80,17 +76,20 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
                         }}
                     >
                         <Button
-                            variant="tableHeaderCell"
-                            size="tableHeaderCell"
-                            icon={ChevronsUpDownIcon}
-                            iconPosition="right"
-                            iconClassName={mergeClassNames(
-                                // Move the icon position a little closer if there is a tip icon
-                                properties.column && (properties.column.description || properties.column.possibleValues)
-                                    ? 'ml-0.5'
-                                    : '',
-                                'h-3 w-3',
-                            )}
+                            variant="TableHeaderCell"
+                            size="TableHeaderCell"
+                            iconRight={
+                                <ChevronsUpDownIcon
+                                    className={mergeClassNames(
+                                        // Move the icon position a little closer if there is a tip icon
+                                        properties.column &&
+                                            (properties.column.description || properties.column.possibleValues)
+                                            ? 'ml-0.5'
+                                            : '',
+                                        'h-3 w-3',
+                                    )}
+                                />
+                            }
                         >
                             {properties.children || properties.value}
                             {properties.column &&

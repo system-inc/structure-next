@@ -2,24 +2,25 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { MenuItemProperties, MenuItem, MenuItemHandle } from '@structure/source/components/menus/MenuItem';
+import { MenuItem, MenuItemHandle } from '@structure/source/components/menus/MenuItem';
+import { MenuItemInterface } from '@structure/source/components/menus/Menu';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - MenuItemsList
 export interface MenuItemsListProperties {
-    itemsToRender: MenuItemProperties[];
+    itemsToRender: MenuItemInterface[];
     itemsToRenderHighlightIndex: number;
     itemsClassName?: string;
     getItemReference: (index: number) => (handle: MenuItemHandle | null) => void;
     itemOnClickIntercept: (
-        item: MenuItemProperties,
+        item: MenuItemInterface,
         itemRenderIndex: number,
         event: React.MouseEvent<HTMLElement, MouseEvent>,
     ) => void;
     itemOnMouseMoveIntercept: (
-        item: MenuItemProperties,
+        item: MenuItemInterface,
         itemIndex: number,
         event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => void;

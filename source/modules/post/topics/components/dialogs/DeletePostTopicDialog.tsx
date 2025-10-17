@@ -65,8 +65,8 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
             }
             footer={
                 <Button
-                    variant="destructive"
-                    loading={postTopicDeleteRequest.isLoading}
+                    variant="Destructive"
+                    isLoading={postTopicDeleteRequest.isLoading}
                     onClick={function () {
                         deletePostTopic();
                     }}

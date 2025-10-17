@@ -31,9 +31,8 @@ export function PostReportControl(properties: PostReportControlProperties) {
             <PopoverMenu
                 items={[
                     {
-                        icon: FlagIcon,
-                        iconPosition: 'left',
-                        content: 'Report',
+                        iconLeft: FlagIcon,
+                        children: 'Report',
                         onSelected: function () {
                             setReportDialogOpen(true);
                         },

@@ -78,9 +78,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                 <div className="float-end flex space-x-2">
                     <Button
                         className="pl-3"
-                        icon={EditIcon}
-                        iconPosition="left"
-                        iconClassName="w-3 h-3"
+                        iconLeft={EditIcon}
                         href={'/support/posts/' + properties.post.identifier + '/edit'}
                     >
                         Edit Post
@@ -112,7 +110,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
             <div className="flex justify-center">
                 <div>
                     <p className="mb-4">Need more help?</p>
-                    <Button size="lg" href="/contact">
+                    <Button size="Large" href="/contact">
                         Contact Us
                     </Button>
                 </div>

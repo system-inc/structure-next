@@ -190,7 +190,7 @@ export function UsernameForm() {
                         <div className="mt-6 flex justify-end space-x-2">
                             <Button onClick={handleDialogClose}>Cancel</Button>
                             <AnimatedButton
-                                variant="primary"
+                                variant="Primary"
                                 onClick={handleConfirm}
                                 isProcessing={accountProfileUpdateRequest.isLoading}
                             >

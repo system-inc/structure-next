@@ -610,7 +610,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                             availableColumns?.map(function (column) {
                                 return {
                                     value: column,
-                                    content: column,
+                                    children: column,
                                 };
                             }) ?? []
                         }
@@ -636,11 +636,11 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                         items={[
                             {
                                 value: 'left',
-                                content: 'Left',
+                                children: 'Left',
                             },
                             {
                                 value: 'right',
-                                content: 'Right',
+                                children: 'Right',
                             },
                         ]}
                         onChange={function (value) {
@@ -657,11 +657,11 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                             items={[
                                 {
                                     value: 'solid',
-                                    content: 'Solid',
+                                    children: 'Solid',
                                 },
                                 {
                                     value: 'dashed',
-                                    content: 'Dashed',
+                                    children: 'Dashed',
                                 },
                             ]}
                             defaultValue={properties.settings.lineStyle}
@@ -673,8 +673,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
 
                     <div className="flex items-center space-x-2 overflow-visible pr-2">
                         <Button
-                            variant="ghostDestructive"
-                            size="icon"
+                            variant="GhostDestructive"
                             className="relative left-0.5 aspect-square p-1"
                             icon={MinusCircledIcon}
                             onClick={handleDelete}

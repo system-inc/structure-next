@@ -200,7 +200,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                 <div className="flex justify-end space-x-2">
                     {properties.onCancel && (
                         <Button
-                            variant="default"
+                            variant="Secondary"
                             onClick={properties.onCancel}
                             disabled={loading || properties.loading}
                             aria-label="Cancel image editing"
@@ -209,9 +209,9 @@ export function ImageEditor(properties: ImageEditorProperties) {
                         </Button>
                     )}
                     <Button
-                        variant="primary"
+                        variant="Primary"
                         onClick={handleSave}
-                        loading={loading || properties.loading}
+                        isLoading={loading || properties.loading}
                         disabled={loading || properties.loading || !cropArea}
                         aria-label="Save edited image"
                     >

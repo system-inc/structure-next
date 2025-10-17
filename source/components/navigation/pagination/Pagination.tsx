@@ -225,87 +225,77 @@ export function Pagination(properties: PaginationProperties) {
                 )}
                 <div className="flex items-center space-x-2">
                     {/* First Page */}
-                    {firstAndLastPageControl && (
-                        <Button
-                            size="icon"
-                            icon={ChevronLeftDoubleIcon}
-                            disabled={properties.page === 1}
-                            href={
-                                useLinks && properties.page !== 1
-                                    ? constructHrefWithExistingUrlSearchParameters(1)
-                                    : undefined
-                            }
-                            onClick={
-                                useLinks
-                                    ? undefined
-                                    : async function () {
-                                          const newPage = 1;
-                                          await onChangeIntercept(itemsPerPage, newPage);
-                                      }
-                            }
-                        />
-                    )}
+                    {firstAndLastPageControl &&
+                        (useLinks && properties.page !== 1 ? (
+                            <Button
+                                icon={ChevronLeftDoubleIcon}
+                                disabled={properties.page === 1}
+                                href={constructHrefWithExistingUrlSearchParameters(1)}
+                            />
+                        ) : (
+                            <Button
+                                icon={ChevronLeftDoubleIcon}
+                                disabled={properties.page === 1}
+                                onClick={async function () {
+                                    const newPage = 1;
+                                    await onChangeIntercept(itemsPerPage, newPage);
+                                }}
+                            />
+                        ))}
 
                     {/* Previous Page */}
-                    <Button
-                        size="icon"
-                        icon={ChevronLeftIcon}
-                        disabled={properties.page <= 1}
-                        href={
-                            useLinks && properties.page > 1
-                                ? constructHrefWithExistingUrlSearchParameters(Number(properties.page) - 1)
-                                : undefined
-                        }
-                        onClick={
-                            useLinks
-                                ? undefined
-                                : async function () {
-                                      const newPage = properties.page - 1;
-                                      await onChangeIntercept(itemsPerPage, newPage);
-                                  }
-                        }
-                    />
-
-                    {/* Next Page */}
-                    <Button
-                        size="icon"
-                        icon={ChevronRightIcon}
-                        disabled={properties.page >= properties.pagesTotal}
-                        href={
-                            useLinks && properties.page < properties.pagesTotal
-                                ? constructHrefWithExistingUrlSearchParameters(Number(properties.page) + 1)
-                                : undefined
-                        }
-                        onClick={
-                            useLinks
-                                ? undefined
-                                : async function () {
-                                      const newPage = properties.page + 1;
-                                      await onChangeIntercept(itemsPerPage, newPage);
-                                  }
-                        }
-                    />
-
-                    {/* Last Page */}
-                    {firstAndLastPageControl && (
+                    {useLinks && properties.page > 1 ? (
                         <Button
-                            size="icon"
-                            icon={ChevronRightDoubleIcon}
-                            disabled={properties.page >= properties.pagesTotal}
-                            href={
-                                useLinks && properties.page < properties.pagesTotal
-                                    ? constructHrefWithExistingUrlSearchParameters(properties.pagesTotal)
-                                    : undefined
-                            }
-                            onClick={
-                                useLinks
-                                    ? undefined
-                                    : async function () {
-                                          await onChangeIntercept(itemsPerPage, properties.pagesTotal);
-                                      }
-                            }
+                            icon={ChevronLeftIcon}
+                            disabled={properties.page <= 1}
+                            href={constructHrefWithExistingUrlSearchParameters(Number(properties.page) - 1)}
+                        />
+                    ) : (
+                        <Button
+                            icon={ChevronLeftIcon}
+                            disabled={properties.page <= 1}
+                            onClick={async function () {
+                                const newPage = properties.page - 1;
+                                await onChangeIntercept(itemsPerPage, newPage);
+                            }}
                         />
                     )}
+
+                    {/* Next Page */}
+                    {useLinks && properties.page < properties.pagesTotal ? (
+                        <Button
+                            icon={ChevronRightIcon}
+                            disabled={properties.page >= properties.pagesTotal}
+                            href={constructHrefWithExistingUrlSearchParameters(Number(properties.page) + 1)}
+                        />
+                    ) : (
+                        <Button
+                            icon={ChevronRightIcon}
+                            disabled={properties.page >= properties.pagesTotal}
+                            onClick={async function () {
+                                const newPage = properties.page + 1;
+                                await onChangeIntercept(itemsPerPage, newPage);
+                            }}
+                        />
+                    )}
+
+                    {/* Last Page */}
+                    {firstAndLastPageControl &&
+                        (useLinks && properties.page < properties.pagesTotal ? (
+                            <Button
+                                icon={ChevronRightDoubleIcon}
+                                disabled={properties.page >= properties.pagesTotal}
+                                href={constructHrefWithExistingUrlSearchParameters(properties.pagesTotal)}
+                            />
+                        ) : (
+                            <Button
+                                icon={ChevronRightDoubleIcon}
+                                disabled={properties.page >= properties.pagesTotal}
+                                onClick={async function () {
+                                    await onChangeIntercept(itemsPerPage, properties.pagesTotal);
+                                }}
+                            />
+                        ))}
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { FormInputSelectProperties, FormInputSelect } from '@structure/source/components/forms/FormInputSelect';
-import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
+import { MenuItemInterface } from '@structure/source/components/menus/Menu';
 
 // Dependencies - Hooks
 import { useDataInteractionDatabasesRequest } from '@structure/source/modules/data-interaction/hooks/useDataInteractionDatabasesRequest';
@@ -29,8 +29,8 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     const [selectedTableName, setSelectedTableName] = React.useState<string | undefined>(
         properties.tableNameFormInputSelectProperties?.defaultValue,
     );
-    const [databaseItems, setDatabaseItems] = React.useState<MenuItemProperties[]>([]);
-    const [tableItems, setTableItems] = React.useState<MenuItemProperties[]>([]);
+    const [databaseItems, setDatabaseItems] = React.useState<MenuItemInterface[]>([]);
+    const [tableItems, setTableItems] = React.useState<MenuItemInterface[]>([]);
 
     // Get the databases from the API
     const dataInteractionDatabasesRequest = useDataInteractionDatabasesRequest();
@@ -45,7 +45,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     // Create database items from the databases query
     React.useEffect(
         function () {
-            const items: MenuItemProperties[] = [];
+            const items: MenuItemInterface[] = [];
             dataInteractionDatabasesRequest.data?.dataInteractionDatabases.items?.forEach(function (database) {
                 items.push({
                     value: database.databaseName,
@@ -60,7 +60,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
     // Create table items from the tables query
     React.useEffect(
         function () {
-            const items: MenuItemProperties[] = [];
+            const items: MenuItemInterface[] = [];
             dataInteractionDatabaseTablesRequest.data?.dataInteractionDatabaseTables?.items?.forEach(function (table) {
                 items.push({
                     value: table.tableName,

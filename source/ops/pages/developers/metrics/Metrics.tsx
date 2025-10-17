@@ -315,7 +315,6 @@ export function Metrics() {
                 >
                     {/* Zoom In Button */}
                     <Button
-                        size={'formInputIcon'}
                         className="group relative aspect-square px-2"
                         onClick={zoomControls.zoomIn}
                         tip="Zoom In"
@@ -325,7 +324,6 @@ export function Metrics() {
 
                     {/* Zoom Out Button */}
                     <Button
-                        size={'formInputIcon'}
                         className="group relative aspect-square px-2"
                         onClick={zoomControls.zoomOut}
                         tip="Zoom Out"
@@ -335,14 +333,13 @@ export function Metrics() {
 
                     {/* Export Icon */}
                     <PopoverMenu items={metricsExportMenu} closeOnItemSelected={true}>
-                        <Button size={'formInputIcon'} className="group relative aspect-square px-2" tip="Export">
+                        <Button className="group relative aspect-square px-2" tip="Export">
                             <ExportIcon size={20} />
                         </Button>
                     </PopoverMenu>
 
                     {/* Refresh Button */}
                     <RefreshButton
-                        size={'formInputIcon'}
                         onClick={async function () {
                             // Convert time range to ISO strings for metadata matching
                             const startTimeValue = timeSeriesState.timeRange.startTime
@@ -370,7 +367,6 @@ export function Metrics() {
                     {/* Reset Zoom Button (if zoomed) */}
                     {zoomBehavior.isZoomed && (
                         <Button
-                            size={'formInputIcon'}
                             className="group relative aspect-square px-2"
                             onClick={zoomBehavior.resetZoom}
                             tip="Reset Zoom"
