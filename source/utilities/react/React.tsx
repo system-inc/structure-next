@@ -28,24 +28,6 @@ export function wrapForSlot(children: React.ReactElement, className?: string) {
     );
 }
 
-// Function to get the previous value of a state variable
-export function usePrevious<T>(value: T): T | undefined {
-    // Create a reference to store the previous value
-    const reference = React.useRef<T | undefined>(undefined);
-    const [previousValue, setPreviousValue] = React.useState<T | undefined>(undefined);
-
-    // Store the current value in the reference
-    React.useEffect(
-        function () {
-            setPreviousValue(reference.current);
-            reference.current = value;
-        },
-        [value],
-    );
-
-    return previousValue;
-}
-
 // Hook to trigger re-renders at a specified interval
 // Set milliseconds to 0 or pass enabled=false to pause the interval
 export function useRenderInterval(milliseconds: number, enabled: boolean = true): number {
@@ -93,17 +75,57 @@ export function useDebounce<T>(value: T, delay: number): T {
     return debouncedValue;
 }
 
+// Hook to get the previous value of a variable
 export function usePreviousValue<T>(value: T): T | undefined {
-    const reference = React.useRef<T | undefined>(undefined);
-    const [previousValue, setPreviousValue] = React.useState<T | undefined>(undefined);
+    const [current, setCurrent] = React.useState<T>(value);
+    const [previous, setPrevious] = React.useState<T | undefined>(undefined);
 
-    React.useEffect(
-        function () {
-            setPreviousValue(reference.current);
-            reference.current = value;
-        },
-        [value],
-    );
+    if(value !== current) {
+        setPrevious(current);
+        setCurrent(value);
+    }
 
-    return previousValue;
+    return previous;
+}
+
+// Function to extract string content from React nodes recursively
+// Useful for searching or displaying text from complex React children
+// Returns undefined if no string content is found
+export function getStringFromReactNode(node: React.ReactNode): string | undefined {
+    // Handle null/undefined
+    if(node === null || node === undefined) {
+        return undefined;
+    }
+
+    // Handle strings
+    if(typeof node === 'string') {
+        return node || undefined;
+    }
+
+    // Handle numbers
+    if(typeof node === 'number') {
+        return String(node);
+    }
+
+    // Handle booleans
+    if(typeof node === 'boolean') {
+        return undefined;
+    }
+
+    // Handle arrays
+    if(Array.isArray(node)) {
+        const result = node.map(getStringFromReactNode).filter(Boolean).join('');
+        return result || undefined;
+    }
+
+    // Handle React elements - recursively extract text from children
+    if(React.isValidElement(node)) {
+        const nodeProperties = node.props as { children?: React.ReactNode };
+        if(nodeProperties.children) {
+            return getStringFromReactNode(nodeProperties.children);
+        }
+    }
+
+    // Default case
+    return undefined;
 }

@@ -1,5 +1,7 @@
 // Dependencies - Theme
 import { Theme } from '@structure/source/theme/ThemeTypes';
+import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
+import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Types
 interface ApiService {
@@ -66,6 +68,10 @@ export interface StructureSettingsInterface {
     };
     theme?: {
         defaultTheme: Theme;
+        components?: {
+            Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
+            // Future: Input, Card, etc.
+        };
     };
     assets: {
         host: string;

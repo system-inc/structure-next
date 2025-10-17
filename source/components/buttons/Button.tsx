@@ -11,9 +11,9 @@ import type { PopoverProperties } from '@structure/source/components/popovers/Po
 
 // Dependencies - Theme
 import { buttonTheme as structureButtonTheme } from '@structure/source/components/buttons/ButtonTheme';
-import type { ButtonBaseVariant, ButtonBaseSize } from '@structure/source/components/buttons/ButtonTheme';
+import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
-import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Assets
 import { SpinnerIcon } from '@phosphor-icons/react';
@@ -24,23 +24,31 @@ import { mergeClassNames, createVariantClassNames } from '@structure/source/util
 // Base Button Properties
 export interface BaseButtonProperties {
     className?: string;
-    variant?: ButtonBaseVariant;
-    size?: ButtonBaseSize;
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    iconSize?: ButtonSize; // Independent icon sizing (takes precedence over size-derived icon size)
     type?: 'button' | 'submit' | 'reset';
     disabled?: boolean;
     isLoading?: boolean;
     tip?: string | React.ReactNode;
     tipProperties?: Omit<PopoverProperties, 'children' | 'content'>;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void | Promise<void>;
-    children?: React.ReactNode;
 }
 
-// Mutually exclusive icon variants
-export type ButtonIconVariant =
-    | { icon: React.ReactNode; iconLeft?: never; iconRight?: never; children?: never } // Icon-only (no text)
-    | { iconLeft: React.ReactNode; icon?: never; iconRight?: never } // Left icon + text
-    | { iconRight: React.ReactNode; icon?: never; iconLeft?: never } // Right icon + text
-    | { icon?: never; iconLeft?: never; iconRight?: never }; // No icons
+// Type for icon props - can be either a component reference or pre-rendered JSX
+export type ButtonIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
+
+// Icon properties
+// Icons can be either:
+// - React.FunctionComponent: Auto-sized based on button size variant
+// - React.ReactNode: Pre-rendered JSX with full control over styling
+// Render order: iconLeft → icon → children → iconRight
+export interface ButtonIconProperties {
+    iconLeft?: ButtonIconType;
+    icon?: ButtonIconType;
+    iconRight?: ButtonIconType;
+    children?: React.ReactNode;
+}
 
 // Mutually exclusive link patterns
 export type ButtonLinkVariant =
@@ -48,31 +56,23 @@ export type ButtonLinkVariant =
     | { href: string; target?: string; asChild?: never } // Link with href and optional target
     | { asChild?: never; href?: never; target?: never }; // Regular button (no href or target)
 
-// Helper type to distributively apply Omit to each union member
-// This preserves discriminated union structure when creating wrapper components
-type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
-
-// Helper for wrapper components that need to preserve discriminated union type safety
-// Excludes link variants (asChild/href) and distributively omits specified keys
-// This maintains mutual exclusivity of icon/children variants at the call site
-export type ButtonWrapperProperties<OmitKeys extends keyof ButtonProperties> = DistributiveOmit<
-    Extract<ButtonProperties, { asChild?: never; href?: never }>, // Filter out link variants
-    OmitKeys // Omit the keys the wrapper controls
->;
+// Helper for wrapper components that are always buttons (never links or slots)
+export type NonLinkButtonProperties = Omit<ButtonProperties, 'asChild' | 'href' | 'target'>;
 
 // Component - Button
 export type ButtonProperties = BaseButtonProperties &
-    ButtonIconVariant &
+    ButtonIconProperties &
     ButtonLinkVariant &
     Omit<
         React.HTMLAttributes<HTMLElement>,
-        keyof BaseButtonProperties | keyof ButtonIconVariant | keyof ButtonLinkVariant
+        keyof BaseButtonProperties | keyof ButtonIconProperties | keyof ButtonLinkVariant
     >;
 export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function Button(
     {
         // Button-specific properties
         variant,
         size,
+        iconSize,
         icon,
         iconLeft,
         iconRight,
@@ -102,21 +102,34 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
     // Layouts can opt into using the project's Button styles, otherwise will default to structure styles
     const buttonTheme = mergeComponentTheme(structureButtonTheme, componentTheme?.Button);
 
+    // Get icon size className from theme based on iconSize (takes precedence) or size
+    const iconSizeClassName = iconSize
+        ? buttonTheme.iconSizes[iconSize]
+        : size
+          ? buttonTheme.iconSizes[size]
+          : buttonTheme.configuration.defaultVariant.size
+            ? buttonTheme.iconSizes[buttonTheme.configuration.defaultVariant.size]
+            : undefined;
+
     // Create button variant class names function using the merged theme
     const buttonVariantClassNames = createVariantClassNames(buttonTheme.configuration.baseClasses, {
         variants: {
             variant: buttonTheme.variants,
             size: buttonTheme.sizes,
         },
-        defaultVariants: buttonTheme.configuration.defaultVariant,
+        // Only apply default size when variant is provided
+        defaultVariants: variant ? buttonTheme.configuration.defaultVariant : {},
     });
+
+    // Check if this is an icon-only button (icon set but no children)
+    const isIconOnly = icon && !children;
 
     // Compute final className using the merged theme
     const computedClassName = buttonVariantClassNames({
         variant, // Primary, Secondary, Ghost, etc.
-        size, // Small, Medium, Large, etc.
+        size, // Small, Base, Large, etc.
         class: mergeClassNames(
-            icon && buttonTheme.configuration.iconOnlyClasses, // Square aspect ratio for icon-only
+            isIconOnly && buttonTheme.configuration.iconOnlyClasses, // Square aspect ratio for icon-only
             buttonTheme.configuration.focusClasses, // Always applied
             disabled && buttonTheme.configuration.disabledClasses, // Conditional
             className, // User overrides (last = highest priority)
@@ -131,27 +144,16 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
     };
 
     // Determine button content
-    let content: React.ReactNode;
-
-    // Icon-only button
-    if(icon) {
-        content = <span className="inline-flex">{icon}</span>;
-    }
-    // Icon + text button
-    else if(iconLeft || iconRight || isLoading) {
-        content = (
-            <>
-                {iconLeft && <span className="inline-flex">{iconLeft}</span>}
-                {children}
-                {isLoading && <SpinnerIcon className="h-4 w-4 animate-spin" />}
-                {!isLoading && iconRight && <span className="inline-flex">{iconRight}</span>}
-            </>
-        );
-    }
-    // Text-only button
-    else {
-        content = children;
-    }
+    // Render order: iconLeft → icon → children → iconRight (→ isLoading spinner)
+    const content = (
+        <>
+            {iconLeft && themeIcon(iconLeft, iconSizeClassName)}
+            {icon && themeIcon(icon, iconSizeClassName)}
+            {children}
+            {isLoading && <SpinnerIcon className={mergeClassNames(iconSizeClassName, 'animate-spin')} />}
+            {!isLoading && iconRight && themeIcon(iconRight, iconSizeClassName)}
+        </>
+    );
 
     // Render different component based on properties
     let component: React.ReactNode;

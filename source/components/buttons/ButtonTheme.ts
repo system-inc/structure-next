@@ -7,72 +7,106 @@
  * Projects can override/extend this theme via ProjectSettings.theme.components.Button
  */
 
-// Common button styles: flex container, interaction behavior, and focus styles
-const commonButton =
-    // Layout and container
-    `inline-flex items-center whitespace-nowrap select-none ` +
+// Layout styles for styled buttons (not applied to unstyled buttons)
+export const layoutButton =
+    // Flex layout with spacing between icons and text
+    `inline-flex items-center justify-center gap-2`;
+
+// Common button styles: interaction behavior and disabled states
+export const commonButton =
+    // Layout
+    `whitespace-nowrap select-none ` +
     // Cursor
     `cursor-pointer ` +
     // Disabled states (works for both button[disabled] and a[aria-disabled])
     `disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:cursor-not-allowed aria-disabled:opacity-75`;
 
-// Centered button styles: alignment, sizing, and shape
-const centeredButton =
-    // Layout and container
-    `justify-center rounded-small ` +
+// Centered button styles: sizing and shape
+export const centeredButton =
+    // Shape
+    `rounded-small ` +
     // Content
     `text-sm font-medium`;
 
-// Focus styles
-const focusStyle =
+// Focus styles for styled buttons
+export const focusButton =
     // Focus
     `focus-visible:outline-none focus-visible:ring-0`;
 
 // Hover styles: background and text color changes on hover
-const hoverStyle =
+export const hoverStyle =
     // Hover
     `hover:bg-dark-5 dark:hover:bg-dark-3 ` +
     // Disabled (works for both button[disabled] and a[aria-disabled])
     `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
     `aria-disabled:hover:bg-dark-2 dark:aria-disabled:hover:bg-dark-2`;
 
-// Types - Button Base Variants (available in structure library)
-export type ButtonBaseVariant =
-    | 'Primary'
-    | 'Secondary'
-    | 'Contrast'
-    | 'Ghost'
-    | 'Destructive'
-    | 'GhostDestructive'
-    | 'ToggleOn'
-    | 'ToggleOff'
-    | 'MenuItem'
-    | 'FormInputCheckbox'
-    | 'FormInputSelect'
-    | 'TableHeaderCell';
+// Button Variants Interface - Source of truth for all button variants
+// Structure defines its base variants here, and projects can augment to add custom variants
+// Example in project code:
+//   declare module '@structure/source/components/buttons/ButtonTheme' {
+//     interface ButtonVariants {
+//       PrimaryBlue: 'PrimaryBlue';
+//     }
+//   }
+export interface ButtonVariants {
+    Primary: 'Primary';
+    Secondary: 'Secondary';
+    Contrast: 'Contrast';
+    Ghost: 'Ghost';
+    Destructive: 'Destructive';
+    GhostDestructive: 'GhostDestructive';
+    ToggleOn: 'ToggleOn';
+    ToggleOff: 'ToggleOff';
+    MenuItem: 'MenuItem';
+    FormInputCheckbox: 'FormInputCheckbox';
+    FormInputSelect: 'FormInputSelect';
+    TableHeaderCell: 'TableHeaderCell';
+}
 
-// Types - Button Base Sizes (available in structure library)
-export type ButtonBaseSize =
-    | 'Small'
-    | 'Medium'
-    | 'Large'
-    | 'MenuItem'
-    | 'FormInputCheckbox'
-    | 'FormInputSelect'
-    | 'TableHeaderCell';
+// Type - Button Variant (derived from ButtonVariants interface)
+// Automatically includes both structure variants and any project-added variants
+export type ButtonVariant = keyof ButtonVariants;
+
+// Button Sizes Interface - Source of truth for all button sizes
+// Structure defines its base sizes here, and projects can augment to add custom sizes
+// Example in project code:
+//   declare module '@structure/source/components/buttons/ButtonTheme' {
+//     interface ButtonSizes {
+//       ExtraLarge: 'ExtraLarge';
+//     }
+//   }
+export interface ButtonSizes {
+    ExtraSmall: 'ExtraSmall';
+    Small: 'Small';
+    Base: 'Base';
+    Large: 'Large';
+    ExtraLarge: 'ExtraLarge';
+    MenuItem: 'MenuItem';
+    FormInputCheckbox: 'FormInputCheckbox';
+    FormInputSelect: 'FormInputSelect';
+    TableHeaderCell: 'TableHeaderCell';
+}
+
+// Type - Button Size (derived from ButtonSizes interface)
+// Automatically includes both structure sizes and any project-added sizes
+export type ButtonSize = keyof ButtonSizes;
 
 // Type - Button Theme Configuration
+// Structure must define all variants/sizes it declares in the interfaces above
+// Project extensions are optional (Partial)
 export interface ButtonThemeConfiguration {
-    variants: Record<ButtonBaseVariant, string>;
-    sizes: Record<ButtonBaseSize, string>;
+    variants: Partial<Record<ButtonVariant, string>>;
+    sizes: Partial<Record<ButtonSize, string>>;
+    iconSizes: Partial<Record<ButtonSize, string>>;
     configuration: {
         baseClasses: string;
         iconOnlyClasses: string;
         focusClasses: string;
         disabledClasses: string;
         defaultVariant: {
-            variant: ButtonBaseVariant;
-            size: ButtonBaseSize;
+            variant?: ButtonVariant;
+            size?: ButtonSize;
         };
     };
 }
@@ -83,18 +117,23 @@ export const buttonTheme: ButtonThemeConfiguration = {
     variants: {
         // General Purpose Variants
         Primary:
-            `${commonButton} ${focusStyle} ${centeredButton} ` +
-            // Light text on dark background
-            `text-light bg-theme-light-primary dark:bg-theme-dark-primary ` +
+            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
+            // Border and background
+            `border bg-light-1 border-light-3 text-dark-2 ` +
+            `dark:bg-dark-2 dark:border-dark-3 dark:text-light-2 ` +
             // Hover
-            `hover:bg-theme-light-primary-hover dark:hover:bg-theme-dark-primary-hover ` +
+            `hover:bg-light-2 hover:text-dark-1 ` +
+            `dark:hover:bg-dark-3 dark:hover:border-dark-4 dark:hover:text-light-1 ` +
             // Active (includes when used as open popover trigger)
-            `active:bg-theme-light-primary-active data-[state=open]:bg-theme-light-primary-active dark:active:bg-theme-dark-primary-active dark:data-[state=open]:bg-theme-dark-primary-active ` +
-            // Disabled
-            `disabled:opacity-100 disabled:bg-theme-light-primary-disabled disabled:dark:bg-theme-dark-primary-disabled`,
+            `active:bg-light-3 data-[state=open]:bg-light-3 active:text-dark data-[state=open]:text-dark ` +
+            `dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 dark:active:text-light dark:data-[state=open]:text-light ` +
+            // Focus
+            `focus:border-neutral+6 dark:focus:border-neutral-6 ` +
+            // Disabled hover
+            `disabled:hover:bg-light-1 dark:disabled:hover:bg-dark-1`,
 
         Secondary:
-            `${commonButton} ${focusStyle} ${centeredButton} ` +
+            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
             // Dark text on light background
             `border bg-light-1 dark:bg-light-2 text-dark dark:text-dark hover:bg-light dark:hover:bg-light ` +
             // Disabled states
@@ -103,7 +142,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `active:bg-light-2 data-[state=open]:bg-light-2 dark:active:bg-light-3 dark:data-[state=open]:bg-light-3`,
 
         Contrast:
-            `${commonButton} ${focusStyle} ${centeredButton} ${hoverStyle} ` +
+            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ${hoverStyle} ` +
             // Light text on dark background
             `text-white dark:text-light-2 bg-dark-2 dark:bg-dark-2 ` +
             // Active (includes when used as open popover trigger)
@@ -112,12 +151,12 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `border border-dark-2 dark:border-dark-2`,
 
         Ghost:
-            `${commonButton} ${focusStyle} ${centeredButton} ` +
+            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
             // Rounded and hover
             `rounded-medium hover:bg-accent border border-transparent hover:text-accent-foreground`,
 
         Destructive:
-            `${commonButton} ${focusStyle} ${centeredButton} ` +
+            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
             // Border
             `border ` +
             // Light
@@ -143,7 +182,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized UI Variants
         GhostDestructive:
-            `${commonButton} ${focusStyle} ${centeredButton} ` +
+            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
             // Rounded and hover
             `rounded-medium hover:bg-accent hover:text-accent-foreground ` +
             // Color, hover, and active states
@@ -168,7 +207,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Active states
             `data-[highlighted=true]:active:bg-light-3 data-[highlighted=true]:dark:active:bg-dark-4 ` +
             // Disabled states
-            `disabled:opacity-50`,
+            `disabled:opacity-50 ` +
+            // Padding based on selected state (for checkmark icon spacing)
+            `data-[selected=true]:pl-2 pl-8 ` +
+            // Icon animation when selected (applies to first direct SVG child only - the iconLeft checkmark)
+            `[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:fade-in [&[data-selected=true]>svg:first-child]:duration-200`,
 
         FormInputCheckbox:
             `${commonButton} ` +
@@ -191,6 +234,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         FormInputSelect:
             `${commonButton} ` +
+            // Layout (no justify-center because flex-grow handles spacing)
+            `inline-flex items-center ` +
             // Text
             `text-sm ` +
             // Border
@@ -215,35 +260,54 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Sizes
     sizes: {
         // General Purpose Sizes
+        ExtraSmall: 'h-7 rounded-medium px-2 text-xs',
         Small: 'h-8 rounded-medium px-3 text-xs',
-        Medium: 'h-9 px-4 py-2',
+        Base: 'h-9 px-4 py-2',
         Large: 'h-10 rounded-medium px-8',
+        ExtraLarge: 'h-11 rounded-medium px-10',
 
         // Specialized Sizes
-        MenuItem: 'pt-1.5 pr-3 pb-1.5 pl-3',
+        MenuItem: 'pt-1.5 pr-3 pb-1.5',
         FormInputCheckbox: 'h-4 w-4',
         FormInputSelect: 'px-4 h-9',
         TableHeaderCell: 'h-8',
     },
 
+    // Icon Sizes (corresponding to button sizes)
+    iconSizes: {
+        // General Purpose Sizes
+        ExtraSmall: 'h-2 w-2',
+        Small: 'h-3 w-3',
+        Base: 'h-4 w-4',
+        Large: 'h-5 w-5',
+        ExtraLarge: 'h-6 w-6',
+
+        // Specialized Sizes
+        MenuItem: 'h-4 w-4',
+        FormInputCheckbox: 'h-3 w-3',
+        FormInputSelect: 'h-4 w-4',
+        TableHeaderCell: 'h-3 w-3',
+    },
+
     // Configuration
     configuration: {
-        // Always applied to every button
-        baseClasses: 'inline-flex items-center justify-center gap-2 font-medium transition-colors',
+        // Base classes (empty = unstyled by default, variants include their own base styles)
+        baseClasses: '',
 
-        // Only applied when icon prop is provided (makes button square)
-        iconOnlyClasses: 'aspect-square',
+        // Only applied when icon prop is provided (empty = no automatic styling)
+        iconOnlyClasses: '',
 
-        // Focus ring for keyboard navigation
-        focusClasses: 'focus-visible:outline-none focus-visible:ring-0',
+        // Focus ring for keyboard navigation (empty = variants handle their own focus)
+        focusClasses: '',
 
-        // Disabled state styling
-        disabledClasses: 'disabled:opacity-75 disabled:cursor-not-allowed',
+        // Disabled state styling (empty = variants handle their own disabled states)
+        disabledClasses: '',
 
-        // Default props when not specified
+        // Default properties when not specified
+        // No variant = completely unstyled
+        // Has variant but no size = Base size applied automatically
         defaultVariant: {
-            variant: 'Primary',
-            size: 'Medium',
+            size: 'Base',
         },
     },
 };
