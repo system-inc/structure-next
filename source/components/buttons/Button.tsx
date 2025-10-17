@@ -124,6 +124,12 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
     // Check if this is an icon-only button (icon set but no children)
     const isIconOnly = icon && !children;
 
+    // Auto-disable when isLoading unless explicitly overridden
+    // disabled={false} isLoading={true} → NOT disabled (explicit override)
+    // disabled={undefined} isLoading={true} → disabled (auto-disable)
+    // disabled={true} → disabled (explicit disable)
+    const isDisabled = disabled ?? isLoading;
+
     // Compute final className using the merged theme
     const computedClassName = buttonVariantClassNames({
         variant, // Primary, Secondary, Ghost, etc.
@@ -131,7 +137,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
         class: mergeClassNames(
             isIconOnly && buttonTheme.configuration.iconOnlyClasses, // Square aspect ratio for icon-only
             buttonTheme.configuration.focusClasses, // Always applied
-            disabled && buttonTheme.configuration.disabledClasses, // Conditional
+            isDisabled && buttonTheme.configuration.disabledClasses, // Conditional
             className, // User overrides (last = highest priority)
         ),
     });
@@ -140,7 +146,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
     const commonProperties = {
         ...domProperties,
         className: computedClassName,
-        onClick: disabled ? (event: React.MouseEvent<HTMLElement>) => event.preventDefault() : onClick,
+        onClick: isDisabled ? (event: React.MouseEvent<HTMLElement>) => event.preventDefault() : onClick,
     };
 
     // Determine button content
@@ -173,7 +179,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
                 ref={reference as React.Ref<HTMLAnchorElement>}
                 href={href}
                 target={target}
-                aria-disabled={disabled ? 'true' : undefined}
+                aria-disabled={isDisabled ? 'true' : undefined}
                 {...commonProperties}
             >
                 {content}
@@ -186,7 +192,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
             <button
                 ref={reference as React.Ref<HTMLButtonElement>}
                 type={type}
-                disabled={disabled}
+                disabled={isDisabled}
                 {...commonProperties}
             >
                 {content}
