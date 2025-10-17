@@ -4,28 +4,33 @@
 import React from 'react';
 
 // Dependencies - Supporting Components
-import { Button, ButtonProperties } from '@structure/source/components/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
+import type { NonLinkButtonProperties } from '@structure/source/components/buttons/Button';
 
 // Component - ToggleButton
-export interface ToggleButtonProperties extends ButtonProperties {
+export type ToggleButtonProperties = Omit<NonLinkButtonProperties, 'variant'> & {
     pressed?: boolean;
     onPressedChange?: (pressed: boolean, event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-}
-export function ToggleButton({ pressed, onPressedChange, ...buttonProperties }: ToggleButtonProperties) {
+};
+export function ToggleButton({ pressed, onPressedChange, onClick, ...buttonProperties }: ToggleButtonProperties) {
     // State
     const [pressedState, setPressedState] = React.useState<boolean>(pressed ? true : false);
 
+    // Function to handle click events
+    function onClickIntercept(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+        // Flip the pressed state
+        const nextState = !pressedState;
+        setPressedState(nextState);
+
+        // Invoke callback if provided
+        onPressedChange?.(nextState, event);
+
+        // Call the original onClick handler if provided
+        onClick?.(event);
+    }
+
     // Render the component
     return (
-        <Button
-            {...buttonProperties}
-            variant={pressedState ? 'toggleOn' : 'toggleOff'}
-            onClick={function (event) {
-                setPressedState(!pressedState);
-                if(onPressedChange) {
-                    onPressedChange(!pressedState, event);
-                }
-            }}
-        />
+        <Button variant={pressedState ? 'ToggleOn' : 'ToggleOff'} {...buttonProperties} onClick={onClickIntercept} />
     );
 }

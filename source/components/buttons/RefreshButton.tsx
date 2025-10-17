@@ -10,17 +10,26 @@ import { AnimatedButton, AnimatedButtonProperties } from '@structure/source/comp
 import { ArrowClockwiseIcon } from '@phosphor-icons/react';
 
 // Component - RefreshButton
-export type RefreshButtonProperties = AnimatedButtonProperties;
-export function RefreshButton(properties: RefreshButtonProperties) {
+export type RefreshButtonProperties = Omit<
+    AnimatedButtonProperties,
+    | 'icon'
+    | 'iconLeft'
+    | 'iconRight'
+    | 'children'
+    | 'processingIcon'
+    | 'showResultIconAnimation'
+    | 'showProcessedTimeTip'
+>;
+export function RefreshButton({ tip, ...animatedButtonProperties }: RefreshButtonProperties) {
     // Render the component
     return (
         <AnimatedButton
-            size="icon"
-            tip="Refresh"
+            icon={ArrowClockwiseIcon}
             processingIcon={ArrowClockwiseIcon}
             showResultIconAnimation={true}
             showProcessedTimeTip={true}
-            {...properties}
+            tip={tip || 'Refresh'}
+            {...animatedButtonProperties}
         />
     );
 }

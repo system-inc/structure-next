@@ -4,7 +4,8 @@ import React from 'react';
 // Dependencies - Main Components
 import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
 import { NoticeInterface } from '@structure/source/components/notifications/Notice';
-import { ButtonProperties, Button } from '@structure/source/components/buttons/Button';
+import { Button } from '@structure/source/components/buttons/Button';
+import type { NonLinkButtonProperties } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Assets
 import CopyIcon from '@structure/assets/icons/interface/CopyIcon.svg';
@@ -14,12 +15,11 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - CopyButton
-export interface CopyButtonProperties extends ButtonProperties {
-    className?: string;
+export type CopyButtonProperties = Omit<NonLinkButtonProperties, 'onClick'> & {
     value: string;
     noticeData?: Omit<NoticeInterface, 'id'>;
-}
-export function CopyButton({ className, value, noticeData, ...buttonProperties }: CopyButtonProperties) {
+};
+export function CopyButton({ value, noticeData, className, ...buttonProperties }: CopyButtonProperties) {
     // Hooks
     const notice = useNotice();
 
@@ -27,43 +27,41 @@ export function CopyButton({ className, value, noticeData, ...buttonProperties }
     const [valueCopiedToClipboard, setValueCopiedToClipboard] = React.useState(false);
 
     // Function to copy the value to the clipboard
-    const onCopyValueToClipboard = React.useCallback(
-        function () {
-            // Copy the value to the clipboard
-            navigator.clipboard.writeText(value);
+    const onClick = function () {
+        // Copy the value to the clipboard
+        navigator.clipboard.writeText(value);
 
-            // Update the state
-            setValueCopiedToClipboard(true);
+        // Update the state
+        setValueCopiedToClipboard(true);
 
-            // Show a notice
-            if(noticeData) {
-                notice.addNotice(noticeData);
-            }
+        // Show a notice
+        if(noticeData) {
+            notice.addNotice(noticeData);
+        }
 
-            // Reset the state after a delay
-            setTimeout(function () {
-                setValueCopiedToClipboard(false);
-            }, 1000);
-        },
-        [value, noticeData, notice],
-    );
+        // Reset the state after a delay
+        setTimeout(function () {
+            setValueCopiedToClipboard(false);
+        }, 1000);
+    };
 
     // Render the component
+    const IconComponent = valueCopiedToClipboard ? CheckCircledIcon : CopyIcon;
+
     return (
         <Button
-            variant="unstyled"
-            size="unstyled"
-            onClick={onCopyValueToClipboard}
-            icon={valueCopiedToClipboard ? CheckCircledIcon : CopyIcon}
-            iconClassName={valueCopiedToClipboard ? 'h-4 w-4' : 'h-4 w-4'}
+            icon={IconComponent}
+            iconSize="Small"
             {...buttonProperties}
+            onClick={onClick}
             className={mergeClassNames(
-                'cursor-pointer',
-                !valueCopiedToClipboard ? 'dark:text-neutral+6 text-neutral hover:text-dark dark:hover:text-light' : '',
+                'cursor-pointer rounded-extra-small p-[4px]',
+                'hover:bg-light-2 active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6',
+                valueCopiedToClipboard && 'bg-light-2 dark:bg-dark-4',
+                !valueCopiedToClipboard && 'dark:text-neutral+6 text-neutral hover:text-dark dark:hover:text-light',
+                valueCopiedToClipboard &&
+                    'text-emerald-500 hover:text-emerald-500 dark:text-emerald-500 dark:hover:text-emerald-500',
                 className,
-                valueCopiedToClipboard
-                    ? 'text-emerald-500 hover:text-emerald-500 dark:text-emerald-500 dark:hover:text-emerald-500'
-                    : '',
             )}
         />
     );

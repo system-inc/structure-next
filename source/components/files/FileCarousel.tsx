@@ -112,7 +112,6 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     {properties.files.length > 1 && (
                         <Button
                             onClick={nextFile}
-                            variant="unstyled"
                             className="absolute top-1/2 right-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-dark-3"
                         >
                             <ChevronRightIcon className="h-6 w-6" />
@@ -122,19 +121,17 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     {/* Previous Button */}
                     {properties.files.length > 1 && (
                         <Button
-                            variant="unstyled"
                             className="absolute top-1/2 left-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border-light-3 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-dark-3"
-                            icon={ChevronLeftIcon}
-                            iconClassName="h-6 w-6"
                             onClick={previousFile}
-                        />
+                        >
+                            <ChevronLeftIcon className="h-6 w-6" />
+                        </Button>
                     )}
 
                     {/* Top Right Controls */}
                     <div className="absolute top-0 right-0 m-2 flex gap-2">
                         {/* Open in New Tab Button */}
                         <Button
-                            variant="unstyled"
                             className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30"
                             onClick={() => {
                                 window.open(currentFile.url, '_blank');
@@ -151,10 +148,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                                 side="top"
                                 align="end"
                             >
-                                <Button
-                                    variant="unstyled"
-                                    className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30"
-                                >
+                                <Button className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30">
                                     <InformationCircledIcon className="h-5 w-5 text-light dark:text-dark" />
                                 </Button>
                             </Popover>

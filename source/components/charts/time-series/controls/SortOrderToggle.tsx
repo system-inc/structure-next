@@ -32,11 +32,10 @@ export function SortOrderToggle(properties: SortOrderToggleProperties) {
     // Render the component
     return (
         <Button
-            variant="ghost"
-            size="default"
+            variant="Ghost"
             onClick={handleToggle}
             className={properties.className}
-            icon={properties.value === 'Ascending' ? ArrowUpIcon : ArrowDownIcon}
+            iconLeft={properties.value === 'Ascending' ? ArrowUpIcon : ArrowDownIcon}
         >
             {properties.value === 'Ascending' ? 'Ascending' : 'Descending'}
         </Button>
