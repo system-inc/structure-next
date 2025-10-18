@@ -15,7 +15,7 @@ export interface ComponentThemeConfiguration<
     TConfiguration extends Record<string, unknown> = Record<string, unknown>,
 > {
     variants: TVariants;
-    sizes: TSizes;
+    sizes?: TSizes; // Optional, not all components use sizes
     configuration: TConfiguration;
 }
 
@@ -81,10 +81,13 @@ export function mergeComponentTheme<T extends ComponentThemeConfiguration>(
         },
 
         // Hard override: Sizes completely replace (no className merging)
-        sizes: {
-            ...structureTheme.sizes,
-            ...projectTheme.sizes,
-        },
+        // Only merge if sizes exist on structure theme
+        ...(structureTheme.sizes && {
+            sizes: {
+                ...structureTheme.sizes,
+                ...projectTheme.sizes,
+            },
+        }),
 
         // Shallow merge: Configuration properties selectively override
         // Allows project to change just disabledClasses without redefining all config

@@ -9,11 +9,12 @@ This document outlines our plan to build a hybrid form system that combines the 
 ## What We're Building
 
 A new `enhanced/` folder containing:
-- `EnhancedForm` - Wraps react-hook-form's form orchestration
-- `EnhancedFormInput` - Progressive validation UI wrapper
-- `EnhancedFormInputText` - Text input with validation state visibility
-- `useEnhancedForm` - Custom hook wrapping react-hook-form's useForm
-- `FormSuccessesContext` - React Context for validation successes
+
+-   `EnhancedForm` - Wraps react-hook-form's form orchestration
+-   `EnhancedFormInput` - Progressive validation UI wrapper
+-   `EnhancedFormInputText` - Text input with validation state visibility
+-   `useEnhancedForm` - Custom hook wrapping react-hook-form's useForm
+-   `FormSuccessesContext` - React Context for validation successes
 
 The old Form system remains untouched for legacy code. No breaking changes.
 
@@ -35,9 +36,10 @@ Our original Form system, built during early React exploration, contains several
 ```
 
 **User sees**:
-- ✓ Contains an uppercase letter (green)
-- ✓ Contains a number (green)
-- ✗ Must contain at least one special character (red)
+
+-   ✓ Contains an uppercase letter (green)
+-   ✓ Contains a number (green)
+-   ✗ Must contain at least one special character (red)
 
 **Why it matters**: Users understand what they've accomplished and what remains. Traditional forms only show errors, creating a "whack-a-mole" experience.
 
@@ -46,12 +48,14 @@ Our original Form system, built during early React exploration, contains several
 **What it does**: Shows visual feedback during async validation
 
 ```tsx
-{properties.validating && (
-    <div className="flex items-center space-x-1 text-xs text-gray-500">
-        <UpdateIcon className="animate-spin" />
-        <span>Validating...</span>
-    </div>
-)}
+{
+    properties.validating && (
+        <div className="flex items-center space-x-1 text-xs text-gray-500">
+            <UpdateIcon className="animate-spin" />
+            <span>Validating...</span>
+        </div>
+    );
+}
 ```
 
 **Why it matters**: Users know when the system is checking their input (e.g., username availability). Without this, there's anxiety about whether the check is happening.
@@ -95,9 +99,7 @@ if(this.graphQlValidationCache.has(cacheKey)) {
 
 ```typescript
 // From Form.tsx
-const firstErrorInput = formInputs.find(input =>
-    input.validationResult?.valid === false
-);
+const firstErrorInput = formInputs.find((input) => input.validationResult?.valid === false);
 if(firstErrorInput?.reference) {
     firstErrorInput.reference.focus();
 }
@@ -114,7 +116,7 @@ if(firstErrorInput?.reference) {
 ```tsx
 // react-hook-form approach
 const { register } = useForm();
-<input {...register('email')} /> // No setState on every keystroke
+<input {...register('email')} />; // No setState on every keystroke
 ```
 
 **Our old Form**: Uses setState for validation results → re-renders entire form
@@ -140,10 +142,10 @@ form.register('invalid'); // ✗ TypeScript error
 
 **Rich ecosystem**: Devtools, integrations, community solutions
 
-- React DevTools integration
-- Field arrays for dynamic forms
-- Integration with UI libraries
-- Thousands of solved edge cases
+-   React DevTools integration
+-   Field arrays for dynamic forms
+-   Integration with UI libraries
+-   Thousands of solved edge cases
 
 **Our old Form**: ~1,500 lines of custom code we maintain
 
@@ -174,34 +176,39 @@ libraries/structure/source/common/forms/
 ### Component Responsibilities
 
 #### EnhancedForm.tsx
-- Wraps react-hook-form's form context provider
-- Manages FormSuccessesContext for validation successes
-- Handles form submission and error auto-focus
-- Renders children with form state
+
+-   Wraps react-hook-form's form context provider
+-   Manages FormSuccessesContext for validation successes
+-   Handles form submission and error auto-focus
+-   Renders children with form state
 
 #### EnhancedFormInput.tsx
-- Base wrapper for all input types
-- Renders progressive validation UI (errors + successes)
-- Shows validation state (validating spinner)
-- Manages validation result display logic
+
+-   Base wrapper for all input types
+-   Renders progressive validation UI (errors + successes)
+-   Shows validation state (validating spinner)
+-   Manages validation result display logic
 
 #### EnhancedFormInputText.tsx
-- Text input field with all wrapper features
-- Integrates with schema validation system
-- Supports async GraphQL validation
-- Handles validation state visibility
+
+-   Text input field with all wrapper features
+-   Integrates with schema validation system
+-   Supports async GraphQL validation
+-   Handles validation state visibility
 
 #### useEnhancedForm.ts
-- Wraps react-hook-form's useForm hook
-- Adds validation successes tracking
-- Configures schema resolver integration
-- Provides enhanced form API
+
+-   Wraps react-hook-form's useForm hook
+-   Adds validation successes tracking
+-   Configures schema resolver integration
+-   Provides enhanced form API
 
 #### FormSuccessesContext.tsx
-- React Context for validation successes
-- Necessary because react-hook-form only tracks errors
-- Stores field-level success messages
-- Enables progressive validation UX
+
+-   React Context for validation successes
+-   Necessary because react-hook-form only tracks errors
+-   Stores field-level success messages
+-   Enables progressive validation UX
 
 ## UsernameForm: Before and After
 
@@ -399,23 +406,25 @@ import { networkService, gql } from '@structure/source/services/network/NetworkS
 import { schema } from '@structure/source/utilities/schema/Schema';
 
 // Schema - Username Form Validation
-const usernameFormSchema = (currentUsername: string) => schema.object({
-    username: schema.string()
-        .username(currentUsername)
-        .graphQlValidate(
-            gql(`
+const usernameFormSchema = (currentUsername: string) =>
+    schema.object({
+        username: schema
+            .string()
+            .username(currentUsername)
+            .graphQlValidate(
+                gql(`
                 query AccountProfileUsernameValidate($username: String!) {
                     accountProfileUsernameValidate(username: $username)
                 }
             `),
-            function (value) {
-                return { username: value };
-            },
-            function (value) {
-                return value === currentUsername; // Skip if unchanged
-            },
-        ),
-});
+                function (value) {
+                    return { username: value };
+                },
+                function (value) {
+                    return value === currentUsername; // Skip if unchanged
+                },
+            ),
+    });
 type UsernameFormType = typeof usernameFormSchema.infer;
 
 export function UsernameForm() {
@@ -495,11 +504,7 @@ export function UsernameForm() {
                     showValidationSuccessResults={true}
                 />
 
-                <Button
-                    type="submit"
-                    disabled={!hasChanges || account.isLoading}
-                    className="mt-4"
-                >
+                <Button type="submit" disabled={!hasChanges || account.isLoading} className="mt-4">
                     Change Username
                 </Button>
             </form>
@@ -514,8 +519,8 @@ export function UsernameForm() {
                     ) : (
                         <>
                             <p>
-                                Are you sure you want to change your username from{' '}
-                                <b>&quot;{currentUsername}&quot;</b> to <b>&quot;{watchUsername}&quot;</b>?
+                                Are you sure you want to change your username from <b>&quot;{currentUsername}&quot;</b>{' '}
+                                to <b>&quot;{watchUsername}&quot;</b>?
                             </p>
                             {accountProfileUpdateRequest.error && (
                                 <Alert
@@ -552,36 +557,41 @@ export function UsernameForm() {
 ### Key Differences
 
 **Before (Old System)**:
-- 84 lines of component code
-- Manual state management for username tracking
-- `formInputs` array prop pattern
-- Imperative validation via ValidationSchema class
-- Complex ref management
-- No type inference on form data
+
+-   84 lines of component code
+-   Manual state management for username tracking
+-   `formInputs` array prop pattern
+-   Imperative validation via ValidationSchema class
+-   Complex ref management
+-   No type inference on form data
 
 **After (Hybrid System)**:
-- 78 lines (6 fewer)
-- react-hook-form handles state
-- Declarative schema validation
-- Full TypeScript inference
-- Cleaner field registration
-- Same UX: progressive validation, async GraphQL validation, validation state visibility
+
+-   78 lines (6 fewer)
+-   react-hook-form handles state
+-   Declarative schema validation
+-   Full TypeScript inference
+-   Cleaner field registration
+-   Same UX: progressive validation, async GraphQL validation, validation state visibility
 
 **What's Preserved**:
-- ✓ Progressive validation UI (errors + successes)
-- ✓ Validation state visibility (spinner during async)
-- ✓ GraphQL async validation with skip function
-- ✓ Auto-focus first error on submit
+
+-   ✓ Progressive validation UI (errors + successes)
+-   ✓ Validation state visibility (spinner during async)
+-   ✓ GraphQL async validation with skip function
+-   ✓ Auto-focus first error on submit
 
 **What's Improved**:
-- ✓ Type safety (field names, validation, submit)
-- ✓ Performance (uncontrolled inputs)
-- ✓ Developer experience (cleaner code)
-- ✓ Ecosystem (devtools, integrations)
+
+-   ✓ Type safety (field names, validation, submit)
+-   ✓ Performance (uncontrolled inputs)
+-   ✓ Developer experience (cleaner code)
+-   ✓ Ecosystem (devtools, integrations)
 
 ## Migration Strategy
 
 ### Phase 1: Build Enhanced Components
+
 1. Create `enhanced/` folder structure
 2. Implement `FormSuccessesContext` for validation successes
 3. Build `useEnhancedForm` hook wrapping react-hook-form
@@ -589,6 +599,7 @@ export function UsernameForm() {
 5. Implement `EnhancedFormInputText` with async validation
 
 ### Phase 2: Test with Simple Form
+
 1. Pick a simple form (email collection)
 2. Migrate to hybrid system
 3. Verify all UX features work
@@ -596,12 +607,14 @@ export function UsernameForm() {
 5. Validate TypeScript inference
 
 ### Phase 3: Migrate Complex Forms
+
 1. UsernameForm (async GraphQL validation)
 2. PasswordForm (progressive validation UI)
 3. ContactForm (multiple fields, conditional logic)
 4. Support ticket forms (file attachments)
 
 ### Phase 4: Documentation and Cleanup
+
 1. Document enhanced components
 2. Create migration guide
 3. Update examples
@@ -695,78 +708,91 @@ const enhancedHandleSubmit = form.handleSubmit(
         if(firstErrorField) {
             form.setFocus(firstErrorField);
         }
-    }
+    },
 );
 ```
 
 ## Why This Approach
 
 ### Alternative 1: Keep Old Form System
+
 **Pros**: No work, we built it, we know it
 **Cons**: No type safety, performance issues, ~1,500 lines to maintain, no ecosystem
 
 ### Alternative 2: Switch to react-hook-form Directly
+
 **Pros**: Battle-tested, performant, ecosystem
 **Cons**: Lose progressive validation UX, lose validation state visibility, lose our innovations
 
 ### Alternative 3: Rebuild react-hook-form from Scratch
+
 **Pros**: Full control, perfect integration with schema system
 **Cons**: Months of work, reinventing solved problems, ongoing maintenance burden
 
 ### Our Choice: Hybrid System (Alternative 4)
+
 **Pros**:
-- Preserve our UX innovations
-- Gain react-hook-form performance and ecosystem
-- Minimal code to maintain (just wrappers)
-- Type safety and inference
-- Battle-tested core with custom UX layer
+
+-   Preserve our UX innovations
+-   Gain react-hook-form performance and ecosystem
+-   Minimal code to maintain (just wrappers)
+-   Type safety and inference
+-   Battle-tested core with custom UX layer
 
 **Cons**:
-- Small wrapper maintenance (acceptable)
-- Two form systems temporarily (old for legacy, new for future)
+
+-   Small wrapper maintenance (acceptable)
+-   Two form systems temporarily (old for legacy, new for future)
 
 ## Benefits Summary
 
 ### For Users
-- **Progressive validation UX** - See what's accomplished, what remains
-- **Validation state visibility** - Know when system is checking
-- **Async validation** - Discover conflicts immediately
-- **Better performance** - Faster forms, minimal re-renders
+
+-   **Progressive validation UX** - See what's accomplished, what remains
+-   **Validation state visibility** - Know when system is checking
+-   **Async validation** - Discover conflicts immediately
+-   **Better performance** - Faster forms, minimal re-renders
 
 ### For Developers
-- **Type safety** - Field names, validation, submit all typed
-- **Better DX** - Cleaner code, less boilerplate
-- **Ecosystem** - Devtools, integrations, community solutions
-- **Confidence** - Battle-tested library handling edge cases
+
+-   **Type safety** - Field names, validation, submit all typed
+-   **Better DX** - Cleaner code, less boilerplate
+-   **Ecosystem** - Devtools, integrations, community solutions
+-   **Confidence** - Battle-tested library handling edge cases
 
 ### For Codebase
-- **Less maintenance** - Delegate heavy lifting to react-hook-form
-- **Better patterns** - Declarative schema validation
-- **Future-proof** - Modern tooling, active ecosystem
-- **Migration path** - Old forms work, migrate when convenient
+
+-   **Less maintenance** - Delegate heavy lifting to react-hook-form
+-   **Better patterns** - Declarative schema validation
+-   **Future-proof** - Modern tooling, active ecosystem
+-   **Migration path** - Old forms work, migrate when convenient
 
 ## Implementation Timeline
 
 **Phase 1 (Build Enhanced Components)**: 1-2 days
-- FormSuccessesContext
-- useEnhancedForm
-- EnhancedFormInput
-- EnhancedFormInputText
+
+-   FormSuccessesContext
+-   useEnhancedForm
+-   EnhancedFormInput
+-   EnhancedFormInputText
 
 **Phase 2 (Test with Simple Form)**: 0.5 days
-- Migrate EmailCollectionForm
-- Verify all features work
+
+-   Migrate EmailCollectionForm
+-   Verify all features work
 
 **Phase 3 (Migrate Complex Forms)**: 2-3 days
-- UsernameForm
-- PasswordForm
-- ContactForm
-- Support ticket forms
+
+-   UsernameForm
+-   PasswordForm
+-   ContactForm
+-   Support ticket forms
 
 **Phase 4 (Documentation)**: 0.5 days
-- Component documentation
-- Migration guide
-- Examples
+
+-   Component documentation
+-   Migration guide
+-   Examples
 
 **Total**: 4-6 days of focused work
 
@@ -777,6 +803,7 @@ This hybrid approach represents the crystalline structure we're after: preservin
 The result: forms that feel special (progressive validation, validation state visibility, async GraphQL validation) while being built on solid foundations (react-hook-form's performance, type safety, and ecosystem).
 
 **Next Steps**:
+
 1. Build Phase 1 components when ready
 2. Test with simple form to validate approach
 3. Migrate complex forms to prove it scales

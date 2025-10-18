@@ -38,8 +38,8 @@ export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
 
             // Add the menu item
             menuItems.push({
-                content: prefixString + link.title,
                 value: prefixString + link.title,
+                children: prefixString + link.title,
                 href: link.href,
                 iconLeft: IconComponent ? <IconComponent /> : undefined,
             });

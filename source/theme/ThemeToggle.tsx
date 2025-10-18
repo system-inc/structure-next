@@ -40,20 +40,24 @@ export function ThemeToggle() {
             currentTheme === Theme.Light ? 'Light' : currentTheme === Theme.Dark ? 'Dark' : 'System';
 
         return (
-            <Tip sideOffset={8} content={<div className="px-2 py-1 text-xs">{currentThemeText} Theme</div>}>
-                <button
-                    className={mergeClassNames(
-                        'cursor-pointer rounded-full hover:text-dark dark:hover:text-light',
-                        theme === currentTheme && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light',
-                    )}
-                    tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
-                    onClick={function () {
-                        handleChangeTheme(currentTheme);
-                    }}
-                >
-                    <IconComponent className="m-1.5 h-3.5 w-3.5" />
-                </button>
-            </Tip>
+            <Tip
+                sideOffset={8}
+                trigger={
+                    <button
+                        className={mergeClassNames(
+                            'cursor-pointer rounded-full hover:text-dark dark:hover:text-light',
+                            theme === currentTheme && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light',
+                        )}
+                        tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
+                        onClick={function () {
+                            handleChangeTheme(currentTheme);
+                        }}
+                    >
+                        <IconComponent className="m-1.5 h-3.5 w-3.5" />
+                    </button>
+                }
+                content={<div className="px-2 py-1 text-xs">{currentThemeText} Theme</div>}
+            />
         );
     }
 

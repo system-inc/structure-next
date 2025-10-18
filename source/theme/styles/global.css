@@ -2,7 +2,7 @@
 @import 'tailwindcss';
 
 /* Point to the Tailwind configuration file (required in v4) */
-@config "../../../../../tailwind.config.mts";
+@config '../../../../../tailwind.config.mts';
 
 /* Import CSS variables */
 @import './variables.css';

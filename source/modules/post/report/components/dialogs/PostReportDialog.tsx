@@ -162,8 +162,8 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
                                                     understand the issue.
                                                 </div>
                                             }
-                                            labelTipIconProperties={{
-                                                contentClassName: 'z-50',
+                                            labelTipButtonProperties={{
+                                                tipClassName: 'z-50',
                                             }}
                                             rows={4}
                                         />,

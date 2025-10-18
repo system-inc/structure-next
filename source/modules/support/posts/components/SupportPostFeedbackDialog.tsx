@@ -103,13 +103,13 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
                         id="rating"
                         label="What went wrong?"
                         items={[
-                            { value: 'missingInformation', content: 'Missing information' },
-                            { value: 'incorrect', content: 'Incorrect or misleading content' },
-                            { value: 'outdated', content: 'Outdated content' },
-                            { value: 'unclear', content: 'Unclear or confusing content' },
-                            { value: 'error', content: 'Technical error or issue' },
-                            { value: 'spam', content: 'Spam, irrelevant, or inappropriate content' },
-                            { value: 'other', content: 'Other' },
+                            { value: 'missingInformation', children: 'Missing information' },
+                            { value: 'incorrect', children: 'Incorrect or misleading content' },
+                            { value: 'outdated', children: 'Outdated content' },
+                            { value: 'unclear', children: 'Unclear or confusing content' },
+                            { value: 'error', children: 'Technical error or issue' },
+                            { value: 'spam', children: 'Spam, irrelevant, or inappropriate content' },
+                            { value: 'other', children: 'Other' },
                         ]}
                     />
 

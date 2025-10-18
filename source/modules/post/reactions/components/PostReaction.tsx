@@ -125,33 +125,34 @@ export function PostReaction(properties: PostReactionProperties) {
             onOpenChange={function (open) {
                 setTipOpen(open);
             }}
-        >
-            <div
-                className={mergeClassNames(
-                    // Layout
-                    'flex cursor-pointer items-center space-x-1.5 rounded-lg border px-2.5 select-none',
-                    // Light
-                    'border-light-3',
-                    // Dark
-                    'dark:border-dark-3',
-                    // Hover - Light
-                    'hover:border-light-4',
-                    // Hover - Dark
-                    'dark:hover:border-dark-4 dark:hover:bg-dark-2',
-                    // Active - Light
-                    'active:border-light-6',
-                    // Active - Dark
-                    'dark:active:border-dark-5 dark:active:bg-dark-3',
-                    properties.reacted
-                        ? 'border-purple-400 hover:border-purple-500 active:border-purple-600 dark:border-purple-500 dark:hover:border-purple-500 dark:active:border-purple-600'
-                        : '',
-                    properties.className,
-                )}
-                onClick={handleReaction}
-            >
-                <div className="text-lg">{properties.content}</div>
-                <div className="">{properties.count}</div>
-            </div>
-        </Tip>
+            trigger={
+                <div
+                    className={mergeClassNames(
+                        // Layout
+                        'flex cursor-pointer items-center space-x-1.5 rounded-lg border px-2.5 select-none',
+                        // Light
+                        'border-light-3',
+                        // Dark
+                        'dark:border-dark-3',
+                        // Hover - Light
+                        'hover:border-light-4',
+                        // Hover - Dark
+                        'dark:hover:border-dark-4 dark:hover:bg-dark-2',
+                        // Active - Light
+                        'active:border-light-6',
+                        // Active - Dark
+                        'dark:active:border-dark-5 dark:active:bg-dark-3',
+                        properties.reacted
+                            ? 'border-purple-400 hover:border-purple-500 active:border-purple-600 dark:border-purple-500 dark:hover:border-purple-500 dark:active:border-purple-600'
+                            : '',
+                        properties.className,
+                    )}
+                    onClick={handleReaction}
+                >
+                    <div className="text-lg">{properties.content}</div>
+                    <div className="">{properties.count}</div>
+                </div>
+            }
+        />
     );
 }

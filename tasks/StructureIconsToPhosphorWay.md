@@ -32,11 +32,11 @@ Create a unified `@icon` import system that wraps Phosphor Icons (SSR), supports
 
 ```typescript
 interface IconProps {
-    alt?: string;           // Accessibility
-    color?: string;         // currentColor default
+    alt?: string; // Accessibility
+    color?: string; // currentColor default
     size?: string | number; // Flexible units (px, em, rem, %, etc.)
     weight?: 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone';
-    mirrored?: boolean;     // RTL support
+    mirrored?: boolean; // RTL support
     className?: string;
     // ... extends all SVG element props
 }
@@ -443,16 +443,12 @@ export function MyCustomIcon(properties: IconProperties) {
 
 ```typescript
 // Auto-generated types
-export type IconName =
-  | 'ArrowUp'
-  | 'Chart'
-  | 'User'
-  | 'Archive'
-  // ... all available icons
+export type IconName = 'ArrowUp' | 'Chart' | 'User' | 'Archive';
+// ... all available icons
 
 // Usage
 import type { IconName } from '@icon';
-const iconName: IconName = 'Chart';  // Type-safe
+const iconName: IconName = 'Chart'; // Type-safe
 ```
 
 ### Migration Strategy

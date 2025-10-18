@@ -27,6 +27,11 @@ export function PostCommentShareControl(properties: PostCommentShareControlPrope
     // Render the component
     return (
         <PopoverMenu
+            trigger={
+                <PostControl className="">
+                    <ShareIcon className="h-4 w-4" />
+                </PostControl>
+            }
             items={[
                 {
                     iconLeft: CopyIcon,
@@ -43,10 +48,6 @@ export function PostCommentShareControl(properties: PostCommentShareControlPrope
                     },
                 },
             ]}
-        >
-            <PostControl className="">
-                <ShareIcon className="h-4 w-4" />
-            </PostControl>
-        </PopoverMenu>
+        />
     );
 }

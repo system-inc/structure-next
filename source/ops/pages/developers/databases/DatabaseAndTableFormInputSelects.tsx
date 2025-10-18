@@ -49,7 +49,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
             dataInteractionDatabasesRequest.data?.dataInteractionDatabases.items?.forEach(function (database) {
                 items.push({
                     value: database.databaseName,
-                    content: database.databaseName,
+                    children: database.databaseName,
                 });
             });
             setDatabaseItems(items);
@@ -64,7 +64,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
             dataInteractionDatabaseTablesRequest.data?.dataInteractionDatabaseTables?.items?.forEach(function (table) {
                 items.push({
                     value: table.tableName,
-                    content: table.tableName,
+                    children: table.tableName,
                 });
             });
             setTableItems(items);

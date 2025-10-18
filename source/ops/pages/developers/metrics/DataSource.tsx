@@ -570,14 +570,15 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                         </div>
                                     </div>
                                 }
-                            >
-                                <div
-                                    className="h-6 w-6 flex-shrink-0 cursor-pointer rounded-medium"
-                                    style={{
-                                        backgroundColor: properties.settings.color,
-                                    }}
-                                ></div>
-                            </Popover>
+                                trigger={
+                                    <div
+                                        className="h-6 w-6 flex-shrink-0 cursor-pointer rounded-medium"
+                                        style={{
+                                            backgroundColor: properties.settings.color,
+                                        }}
+                                    ></div>
+                                }
+                            />
                         </div>
                     </div>
 
@@ -688,13 +689,14 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                     className="p-2"
                                 />
                             }
-                        >
-                            <p className="relative cursor-default text-end text-dark/30 italic dark:text-light-4/50">
-                                {dataInteractionDatabaseTableMetricsRequest.isLoading
-                                    ? '...'
-                                    : addCommas(statistics.sum)}
-                            </p>
-                        </Tip>
+                            trigger={
+                                <p className="relative cursor-default text-end text-dark/30 italic dark:text-light-4/50">
+                                    {dataInteractionDatabaseTableMetricsRequest.isLoading
+                                        ? '...'
+                                        : addCommas(statistics.sum)}
+                                </p>
+                            }
+                        />
                     </div>
                 </div>
             </Reorder.Item>

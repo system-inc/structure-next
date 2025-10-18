@@ -324,11 +324,15 @@ export function Metrics() {
                     </Button>
 
                     {/* Export Icon */}
-                    <PopoverMenu items={metricsExportMenu} closeOnItemSelected={true}>
-                        <Button className="group relative aspect-square px-2" tip="Export">
-                            <ExportIcon size={20} />
-                        </Button>
-                    </PopoverMenu>
+                    <PopoverMenu
+                        trigger={
+                            <Button className="group relative aspect-square px-2" tip="Export">
+                                <ExportIcon size={20} />
+                            </Button>
+                        }
+                        items={metricsExportMenu}
+                        closeOnItemSelected={true}
+                    />
 
                     {/* Refresh Button */}
                     <RefreshButton
