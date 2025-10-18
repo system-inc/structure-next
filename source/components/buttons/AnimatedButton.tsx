@@ -24,7 +24,7 @@ import { addCommas } from '@structure/source/utilities/type/Number';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Animation configuration constants
-const animationTimings = {
+export const animationTimings = {
     iconTransitionDuration: 0.2, // 200ms for scale/fade in/out
     iconTransitionEase: [0.165, 0.84, 0.44, 1] as const, // easeOutQuart
     rotationDuration: 0.35, // 350ms per 180° rotation
@@ -36,7 +36,7 @@ const animationTimings = {
 } as const;
 
 // Animation variants (defined outside component for performance)
-const iconAnimationVariants = {
+export const iconAnimationVariants = {
     initial: { opacity: 0, scale: 0.5 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.5 },

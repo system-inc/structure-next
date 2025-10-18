@@ -161,8 +161,10 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `${buttonCommonClassNames} ` +
             // Compact icon-only button styling
             `rounded-extra-small p-[4px] ` +
+            // Text color
+            `text-foreground-secondary ` +
             // Hover and active states
-            `hover:bg-light-2 active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 ` +
+            `hover:bg-light-2 hover:text-foreground-primary active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 ` +
             // Popover open states (for TipButton)
             `data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 ` +
             `data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
