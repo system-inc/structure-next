@@ -16,35 +16,39 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { downloadFile } from '@structure/source/utilities/file/File';
 
 // Interface - DownloadButtonInterface
-export interface DownloadButtonInterface extends Omit<NonLinkButtonProperties, 'type'> {
+export interface DownloadButtonInterface extends NonLinkButtonProperties {
     fileName?: string;
     fileExtension?: string;
-    notice?: Omit<NoticeInterface, 'id'>;
+    noticeData?: Omit<NoticeInterface, 'id'>;
 }
 
 // Interface - DownloadDataButtonInterface
 export interface DownloadDataButtonInterface extends DownloadButtonInterface {
-    type: 'data';
+    downloadSource: 'Data';
     data: string | Blob | File;
 }
 
 // Interface - DownloadUrlButtonInterface
 export interface DownloadUrlButtonInterface extends DownloadButtonInterface {
-    type: 'url';
+    downloadSource: 'Url';
     url: string;
 }
 
 // Component - DownloadButton
 export type DownloadButtonProperties = DownloadDataButtonInterface | DownloadUrlButtonInterface;
-export function DownloadButton(properties: DownloadButtonProperties) {
+export function DownloadButton({
+    fileName,
+    fileExtension,
+    noticeData,
+    className,
+    downloadSource,
+    ...buttonProperties
+}: DownloadButtonProperties) {
     // Hooks
     const notice = useNotice();
 
     // State
     const [downloadStarted, setDownloadStarted] = React.useState(false);
-
-    // Destructure button properties
-    const { fileName, fileExtension, notice: noticeData, className, type, ...buttonProperties } = properties;
 
     // Function to initiate the download
     const onDownload = function () {
@@ -52,17 +56,17 @@ export function DownloadButton(properties: DownloadButtonProperties) {
         const builtFileName = `${fileName || 'download'}${fileExtension ? `.${fileExtension}` : '.txt'}`;
 
         // Use the downloadFile utility
-        if(type === 'data') {
+        if(downloadSource === 'Data') {
             downloadFile({
                 fileName: builtFileName,
-                content: (properties as DownloadDataButtonInterface).data,
+                content: (buttonProperties as DownloadDataButtonInterface).data,
                 contentType: 'application/octet-stream',
             });
         }
-        else if(type === 'url') {
+        else if(downloadSource === 'Url') {
             downloadFile({
                 fileName: builtFileName,
-                url: (properties as DownloadUrlButtonInterface).url,
+                url: (buttonProperties as DownloadUrlButtonInterface).url,
             });
         }
 
