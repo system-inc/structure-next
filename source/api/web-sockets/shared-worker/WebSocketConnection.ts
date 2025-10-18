@@ -81,10 +81,10 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         this.isReconnecting = false;
 
         // Clear any existing connection timeout
-        if(this.connectionTimeout) {
+        if(this.connectionTimeout !== null) {
             clearTimeout(this.connectionTimeout);
-            this.connectionTimeout = null;
         }
+        this.connectionTimeout = null;
 
         // Update state to connecting
         this.updateState(WebSocketConnectionState.Connecting);
@@ -123,7 +123,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
 
                 // Close the socket only if it exists and is still in CONNECTING state
                 // This prevents race conditions where the socket connects successfully just as the timeout fires
-                if(this.socket && this.socket.readyState === WebSocket.CONNECTING) {
+                if(this.socket?.readyState === WebSocket.CONNECTING) {
                     console.log(
                         '[WebSocketConnection] Closing socket that is still in CONNECTING state due to timeout',
                     );
@@ -144,7 +144,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
                     this.socket = null;
                 }
                 // Socket is already connected, don't close it, just clear the error and return without further action
-                else if(this.socket && this.socket.readyState === WebSocket.OPEN) {
+                else if(this.socket?.readyState === WebSocket.OPEN) {
                     console.log(
                         '[WebSocketConnection] Socket connected successfully despite timeout - keeping connection',
                     );
@@ -177,10 +177,10 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
             };
 
             // Clear connection timeout if there was an immediate error
-            if(this.connectionTimeout) {
+            if(this.connectionTimeout !== null) {
                 clearTimeout(this.connectionTimeout);
-                this.connectionTimeout = null;
             }
+            this.connectionTimeout = null;
 
             this.updateState(WebSocketConnectionState.Failed);
             this.reconnect();
@@ -199,20 +199,20 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         this.isReconnecting = false;
 
         // Clear any reconnection timeout and timestamp
-        if(this.reconnectTimeout) {
+        if(this.reconnectTimeout !== null) {
             clearTimeout(this.reconnectTimeout);
-            this.reconnectTimeout = null;
         }
+        this.reconnectTimeout = null;
         this.nextReconnectAt = null;
 
         // Stop ping interval
         this.stopPingInterval();
 
         // Clear any connection timeout
-        if(this.connectionTimeout) {
+        if(this.connectionTimeout !== null) {
             clearTimeout(this.connectionTimeout);
-            this.connectionTimeout = null;
         }
+        this.connectionTimeout = null;
 
         // Close the socket if it exists
         if(this.socket) {
@@ -315,10 +315,10 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         console.log('[WebSocketConnection] Connected to', this.url);
 
         // Clear any connection timeout since we're now connected
-        if(this.connectionTimeout) {
+        if(this.connectionTimeout !== null) {
             clearTimeout(this.connectionTimeout);
-            this.connectionTimeout = null;
         }
+        this.connectionTimeout = null;
 
         // Reset reconnection attempts and clear next reconnect timestamp
         this.reconnectAttempts = 0;
@@ -407,9 +407,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         }
 
         // Notify message handler
-        if(this.onMessage) {
-            this.onMessage(data);
-        }
+        this.onMessage?.(data);
 
         // Broadcast the updated state with new statistics to all clients
         this.updateState(this.state);
@@ -560,7 +558,7 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         // Start a new interval to send pings
         this.pingInterval = setInterval(() => {
             // Only send ping if socket is connected
-            if(this.socket && this.socket.readyState === WebSocket.OPEN) {
+            if(this.socket?.readyState === WebSocket.OPEN) {
                 this.sendPing();
             }
         }, WebSocketPingIntervalInMilliseconds);
@@ -572,11 +570,11 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
 
     // Function for stopping ping interval
     stopPingInterval() {
-        if(this.pingInterval) {
+        if(this.pingInterval !== null) {
             clearInterval(this.pingInterval);
-            this.pingInterval = null;
-            console.log('[WebSocketConnection] Stopped ping interval');
         }
+        this.pingInterval = null;
+        console.log('[WebSocketConnection] Stopped ping interval');
     }
 
     // Function to send a ping message
@@ -609,8 +607,6 @@ export class WebSocketConnection implements WebSocketConnectionInformationInterf
         this.state = connectionState;
 
         // Notify state change handler with complete state object
-        if(this.onStateChange) {
-            this.onStateChange(this.getWebSocketConnectionInformation());
-        }
+        this.onStateChange?.(this.getWebSocketConnectionInformation());
     }
 }

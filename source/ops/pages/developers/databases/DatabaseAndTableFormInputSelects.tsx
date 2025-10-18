@@ -101,9 +101,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                     if(firstTable) {
                         setSelectedTableName(firstTable);
                         // Run the onChange callback
-                        if(propertiesOnChange) {
-                            propertiesOnChange(selectedDatabaseName, firstTable);
-                        }
+                        propertiesOnChange?.(selectedDatabaseName, firstTable);
                     }
                 }
             }
@@ -128,9 +126,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                     // console.log('Setting selected database to ', value, event);
                     setSelectedDatabaseName(value);
                     setSelectedTableName(undefined); // Clear table selection when database changes
-                    if(properties.onChange) {
-                        properties.onChange(value, undefined);
-                    }
+                    properties.onChange?.(value, undefined);
                 }}
                 {...properties.databaseNameFormInputSelectProperties}
                 className={mergeClassNames(
@@ -151,9 +147,7 @@ export function DatabaseAndTableFormInputSelects(properties: DatabaseAndTableFor
                 onChange={function (value) {
                     // console.log('Setting selected table to ', value, event);
                     setSelectedTableName(value);
-                    if(properties.onChange) {
-                        properties.onChange(selectedDatabaseName, value);
-                    }
+                    properties.onChange?.(selectedDatabaseName, value);
                 }}
                 {...properties.tableNameFormInputSelectProperties}
                 className={mergeClassNames(

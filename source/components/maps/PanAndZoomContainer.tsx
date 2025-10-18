@@ -43,14 +43,10 @@ export function PanAndZoomContainer(properties: PanAndZoomContainerProperties) {
             };
 
             const container = containerReference.current;
-            if(container) {
-                container.addEventListener('wheel', handleWheel);
-            }
+            container?.addEventListener('wheel', handleWheel);
 
             return () => {
-                if(container) {
-                    container.removeEventListener('wheel', handleWheel);
-                }
+                container?.removeEventListener('wheel', handleWheel);
             };
         },
         [scale, translateX, translateY, properties.width, properties.height],

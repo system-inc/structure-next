@@ -23,12 +23,10 @@ const ReactNoArrowFunctionsAsHookParametersRule = {
 
                     // Check if it's React.forwardRef or any React hook
                     if(
-                        object.type === 'Identifier' &&
                         object.name === 'React' &&
-                        property.type === 'Identifier' &&
                         (property.name === 'forwardRef' ||
                             // Catch any React hook (methods starting with 'use')
-                            property.name.startsWith('use'))
+                            property.name?.startsWith('use'))
                     ) {
                         // Check if the first argument is an arrow function
                         if(node.arguments.length > 0 && node.arguments[0].type === 'ArrowFunctionExpression') {
@@ -41,11 +39,7 @@ const ReactNoArrowFunctionsAsHookParametersRule = {
                 }
 
                 // Check for addEventListener with arrow function
-                if(
-                    node.callee.type === 'MemberExpression' &&
-                    node.callee.property.type === 'Identifier' &&
-                    node.callee.property.name === 'addEventListener'
-                ) {
+                if(node.callee.type === 'MemberExpression' && node.callee.property?.name === 'addEventListener') {
                     // Check if the second argument is an arrow function
                     if(node.arguments.length > 1 && node.arguments[1].type === 'ArrowFunctionExpression') {
                         context.report({

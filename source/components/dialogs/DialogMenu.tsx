@@ -55,9 +55,7 @@ export function DialogMenu(properties: DialogMenuProperties) {
 
         // Focus on the input element after a short delay
         setTimeout(() => {
-            if(inputElement) {
-                inputElement.focus();
-            }
+            inputElement?.focus();
         }, 25);
     }, []);
 

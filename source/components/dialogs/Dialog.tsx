@@ -141,9 +141,7 @@ export function Dialog(properties: DialogProperties) {
     // Function to handle the open state change
     function onOpenChange() {
         // Call the onOpenChange callback
-        if(properties.onOpenChange) {
-            properties.onOpenChange(!open);
-        }
+        properties.onOpenChange?.(!open);
 
         // Update the state
         setOpen(!open);

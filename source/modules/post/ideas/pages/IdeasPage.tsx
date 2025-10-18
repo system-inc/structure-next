@@ -16,11 +16,7 @@ export function IdeasPage() {
     return (
         <div className="container items-center justify-center pt-12 pb-32">
             <div className="float-end">
-                <Button
-                    className="pl-3"
-                    iconLeft={PlusIcon}
-                    href="/ideas/submit"
-                >
+                <Button className="pl-3" iconLeft={PlusIcon} href="/ideas/submit">
                     Submit an Idea
                 </Button>
             </div>

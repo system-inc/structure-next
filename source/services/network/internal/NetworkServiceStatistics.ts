@@ -152,7 +152,7 @@ export class NetworkStatistics {
                 for(let i = 0; i < window.localStorage.length; i++) {
                     // eslint-disable-next-line structure/local-storage-service-rule
                     const key = window.localStorage.key(i);
-                    if(key && key.startsWith(keyPrefix)) {
+                    if(key?.startsWith(keyPrefix)) {
                         // eslint-disable-next-line structure/local-storage-service-rule
                         const data = window.localStorage.getItem(key);
                         if(data) {
@@ -165,7 +165,7 @@ export class NetworkStatistics {
             else if(storage === 'SessionStorage') {
                 for(let i = 0; i < window.sessionStorage.length; i++) {
                     const key = window.sessionStorage.key(i);
-                    if(key && key.startsWith(keyPrefix)) {
+                    if(key?.startsWith(keyPrefix)) {
                         const data = window.sessionStorage.getItem(key);
                         if(data) {
                             persistedCacheSizeInBytes += new Blob([data]).size;

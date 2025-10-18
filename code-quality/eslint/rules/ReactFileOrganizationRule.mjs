@@ -73,13 +73,9 @@ const ReactFileOrganizationRule = {
                 // Check for React hooks (useState, useEffect, etc.)
                 if(
                     currentNode.type === 'CallExpression' &&
-                    currentNode.callee &&
-                    currentNode.callee.type === 'MemberExpression' &&
-                    currentNode.callee.object &&
-                    currentNode.callee.object.name === 'React' &&
-                    currentNode.callee.property &&
-                    currentNode.callee.property.name &&
-                    currentNode.callee.property.name.startsWith('use')
+                    currentNode.callee?.type === 'MemberExpression' &&
+                    currentNode.callee.object?.name === 'React' &&
+                    currentNode.callee.property?.name?.startsWith('use')
                 ) {
                     hasReactHooks = true;
                     return;
@@ -88,10 +84,8 @@ const ReactFileOrganizationRule = {
                 // Check for direct hook calls (if not prefixed with React.)
                 if(
                     currentNode.type === 'CallExpression' &&
-                    currentNode.callee &&
-                    currentNode.callee.type === 'Identifier' &&
-                    currentNode.callee.name &&
-                    currentNode.callee.name.startsWith('use') &&
+                    currentNode.callee?.type === 'Identifier' &&
+                    currentNode.callee.name?.startsWith('use') &&
                     /^use[A-Z]/.test(currentNode.callee.name)
                 ) {
                     hasReactHooks = true;

@@ -115,10 +115,10 @@ class EngagementService {
     // Process and send the event queue
     private async processBatch(): Promise<void> {
         // Clear the timeout
-        if(this.batchTimeout) {
+        if(this.batchTimeout !== null) {
             clearTimeout(this.batchTimeout);
-            this.batchTimeout = null;
         }
+        this.batchTimeout = null;
 
         // If already processing or queue is empty, do nothing
         if(this.isProcessing || this.eventQueue.length === 0) {
@@ -163,10 +163,10 @@ class EngagementService {
         // Immediately process any queued events
         if(this.eventQueue.length > 0) {
             // Cancel any pending timeout
-            if(this.batchTimeout) {
+            if(this.batchTimeout !== null) {
                 clearTimeout(this.batchTimeout);
-                this.batchTimeout = null;
             }
+            this.batchTimeout = null;
 
             // Process synchronously for page unload
             // Note: This might not complete on page unload, but we try our best

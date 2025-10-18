@@ -44,9 +44,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
 
         // Function to click the button
         const click = React.useCallback(function () {
-            if(inputCheckboxReference.current && inputCheckboxReference.current.click) {
-                inputCheckboxReference.current.click();
-            }
+            inputCheckboxReference.current?.click?.();
         }, []);
 
         // Function to validate the component

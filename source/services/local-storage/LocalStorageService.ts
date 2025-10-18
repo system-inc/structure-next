@@ -232,7 +232,7 @@ class LocalStorageService {
             for(let i = 0; i < window.localStorage.length; i++) {
                 const key = window.localStorage.key(i);
                 // Check if key exists and starts with our project prefix
-                if(key && key.startsWith(this.prefix)) {
+                if(key?.startsWith(this.prefix)) {
                     // Add to removal list
                     keysToRemove.push(key);
                 }
@@ -271,7 +271,7 @@ class LocalStorageService {
                 // Get key at current index
                 const key = window.localStorage.key(i);
                 // Check if key exists and belongs to our project
-                if(key && key.startsWith(this.prefix)) {
+                if(key?.startsWith(this.prefix)) {
                     // Strip the prefix and add to results
                     keys.push(key.substring(prefixLength));
                 }
@@ -318,12 +318,10 @@ class LocalStorageService {
         // This allows caller to stop listening when needed
         return () => {
             const subscribers = this.subscribers.get(key);
-            if(subscribers) {
-                subscribers.delete(callback);
-                // Clean up empty sets to prevent memory leaks
-                if(subscribers.size === 0) {
-                    this.subscribers.delete(key);
-                }
+            subscribers?.delete(callback);
+            // Clean up empty sets to prevent memory leaks
+            if(subscribers?.size === 0) {
+                this.subscribers.delete(key);
             }
         };
     }
@@ -377,16 +375,14 @@ class LocalStorageService {
 
                 // Notify subscribers for this specific key
                 const keySubscribers = this.subscribers.get(data.key);
-                if(keySubscribers) {
-                    keySubscribers.forEach((callback) => {
-                        try {
-                            callback(data.value ?? null, data.action);
-                        }
-                        catch(callbackError) {
-                            console.error(`Error in storage change callback for key "${data.key}":`, callbackError);
-                        }
-                    });
-                }
+                keySubscribers?.forEach((callback) => {
+                    try {
+                        callback(data.value ?? null, data.action);
+                    }
+                    catch(callbackError) {
+                        console.error(`Error in storage change callback for key "${data.key}":`, callbackError);
+                    }
+                });
 
                 // Notify wildcard subscribers for any change
                 if(data.key === '*' || this.wildcardSubscribers.size > 0) {

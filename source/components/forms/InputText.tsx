@@ -139,9 +139,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextProp
                 }
             },
             focus: function () {
-                if(inputReference.current) {
-                    inputReference.current.focus(); // Call the focus method on the input's DOM element
-                }
+                inputReference.current?.focus(); // Call the focus method on the input's DOM element
             },
         };
     });

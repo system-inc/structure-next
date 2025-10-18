@@ -14,35 +14,39 @@ function getBaseButtonVariantsAndSizes() {
 
     try {
         // Find ButtonTheme.ts in structure library
-        const buttonThemePath = path.join(process.cwd(), 'libraries/structure/source/components/buttons/ButtonTheme.ts');
+        const buttonThemePath = path.join(
+            process.cwd(),
+            'libraries/structure/source/components/buttons/ButtonTheme.ts',
+        );
         const content = fs.readFileSync(buttonThemePath, 'utf8');
 
         // Extract ButtonVariants interface keys using regex
         const variantsMatch = content.match(/export interface ButtonVariants\s*\{([^}]+)\}/s);
-        if(variantsMatch) {
+        if(variantsMatch?.[1]) {
             const variantsBody = variantsMatch[1];
             baseButtonVariants = variantsBody
                 .split('\n')
-                .map(line => line.trim())
-                .filter(line => line && !line.startsWith('//'))
-                .map(line => line.split(':')[0].trim())
-                .filter(key => key && /^[A-Z]/.test(key)); // Only capitalize keys
+                .map((line) => line.trim())
+                .filter((line) => line && !line.startsWith('//'))
+                .map((line) => line.split(':')[0].trim())
+                .filter((key) => key && /^[A-Z]/.test(key)); // Only capitalize keys
         }
 
         // Extract ButtonSizes interface keys using regex
         const sizesMatch = content.match(/export interface ButtonSizes\s*\{([^}]+)\}/s);
-        if(sizesMatch) {
+        if(sizesMatch?.[1]) {
             const sizesBody = sizesMatch[1];
             baseButtonSizes = sizesBody
                 .split('\n')
-                .map(line => line.trim())
-                .filter(line => line && !line.startsWith('//'))
-                .map(line => line.split(':')[0].trim())
-                .filter(key => key && /^[A-Z]/.test(key)); // Only capitalize keys
+                .map((line) => line.trim())
+                .filter((line) => line && !line.startsWith('//'))
+                .map((line) => line.split(':')[0].trim())
+                .filter((key) => key && /^[A-Z]/.test(key)); // Only capitalize keys
         }
 
         return { baseButtonVariants, baseButtonSizes };
-    } catch(error) {
+    }
+    catch(error) {
         // If we can't read the file, return empty arrays to avoid breaking lint
         console.warn('Could not read ButtonTheme.ts for variant validation:', error.message);
         baseButtonVariants = [];
@@ -64,8 +68,10 @@ const NoStructureProjectImportsRule = {
         },
         messages: {
             forbiddenImport: "Importing from '@project' is not allowed within 'libraries/structure'.",
-            forbiddenButtonVariant: "Button variant '{{variant}}' is project-specific and not allowed in structure code. Use base variants only: {{baseVariants}}",
-            forbiddenButtonSize: "Button size '{{size}}' is project-specific and not allowed in structure code. Use base sizes only: {{baseSizes}}",
+            forbiddenButtonVariant:
+                "Button variant '{{variant}}' is project-specific and not allowed in structure code. Use base variants only: {{baseVariants}}",
+            forbiddenButtonSize:
+                "Button size '{{size}}' is project-specific and not allowed in structure code. Use base sizes only: {{baseSizes}}",
         },
     },
     create(context) {
@@ -153,7 +159,7 @@ const NoStructureProjectImportsRule = {
                 if(componentName !== 'Button' && componentName !== 'AnimatedButton') return;
 
                 // Check for variant prop on Button/AnimatedButton components
-                if(node.name.name === 'variant' && node.value && node.value.type === 'Literal') {
+                if(node.name.name === 'variant' && node.value?.type === 'Literal') {
                     const variantValue = node.value.value;
                     if(typeof variantValue === 'string' && !baseButtonVariants.includes(variantValue)) {
                         context.report({
@@ -168,7 +174,7 @@ const NoStructureProjectImportsRule = {
                 }
 
                 // Check for size prop on Button/AnimatedButton components
-                if(node.name.name === 'size' && node.value && node.value.type === 'Literal') {
+                if(node.name.name === 'size' && node.value?.type === 'Literal') {
                     const sizeValue = node.value.value;
                     if(typeof sizeValue === 'string' && !baseButtonSizes.includes(sizeValue)) {
                         context.report({

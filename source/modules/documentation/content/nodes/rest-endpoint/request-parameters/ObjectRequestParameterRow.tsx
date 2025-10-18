@@ -39,9 +39,7 @@ export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowP
         properties.onStateChange(section, fullPath, state);
 
         // Notify parent about child state change
-        if(properties.onChildStateChange) {
-            properties.onChildStateChange(fieldPath, state.enabled);
-        }
+        properties.onChildStateChange?.(fieldPath, state.enabled);
     }
 
     // Render the component

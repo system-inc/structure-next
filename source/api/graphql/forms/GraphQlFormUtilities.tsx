@@ -331,11 +331,8 @@ export function setupTitleSlugRelationship(
             // Get the form input reference
             const slugFormInput = formInputsReferencesMap.get(slugId);
 
-            // If the slug form input exists
-            if(slugFormInput) {
-                // Set the slug value
-                slugFormInput.setValue(slugValue);
-            }
+            // If the slug form input exists, set the slug value
+            slugFormInput?.setValue(slugValue);
         };
     }
 }

@@ -42,16 +42,11 @@ const ReactExportRule = {
             VariableDeclarator(node) {
                 // Check for patterns like: const MyComponent = React.forwardRef(...
                 if(
-                    node.id &&
-                    node.id.type === 'Identifier' &&
-                    node.init &&
-                    node.init.type === 'CallExpression' &&
-                    node.init.callee &&
-                    node.init.callee.type === 'MemberExpression' &&
-                    node.init.callee.object &&
-                    node.init.callee.object.name === 'React' &&
-                    node.init.callee.property &&
-                    node.init.callee.property.name === 'forwardRef'
+                    node.id?.type === 'Identifier' &&
+                    node.init?.type === 'CallExpression' &&
+                    node.init.callee?.type === 'MemberExpression' &&
+                    node.init.callee.object?.name === 'React' &&
+                    node.init.callee.property?.name === 'forwardRef'
                 ) {
                     // If the variable name starts with an uppercase letter, it's likely a component
                     if(/^[A-Z]/.test(node.id.name)) {
@@ -63,7 +58,7 @@ const ReactExportRule = {
                         }
 
                         // Check if this is already a named export via 'export const X = React.forwardRef(...)'
-                        if(node.parent && node.parent.parent && node.parent.parent.type === 'ExportNamedDeclaration') {
+                        if(node.parent?.parent?.type === 'ExportNamedDeclaration') {
                             hasNamedExport = true;
                         }
                     }
@@ -72,7 +67,7 @@ const ReactExportRule = {
 
             // Check for function components defined as function declarations
             FunctionDeclaration(node) {
-                const functionName = node.id && node.id.name;
+                const functionName = node.id?.name;
 
                 // Skip functions without names
                 if(!functionName) {
@@ -92,9 +87,9 @@ const ReactExportRule = {
                 let isReactComponent = false;
 
                 // Look at the function body
-                if(node.body && node.body.type === 'BlockStatement') {
+                if(node.body?.type === 'BlockStatement') {
                     // Check function parameters for props/properties pattern
-                    if(node.params && node.params.length > 0) {
+                    if(node.params?.length > 0) {
                         const firstParam = node.params[0];
                         if(
                             firstParam.type === 'Identifier' &&
@@ -208,10 +203,10 @@ const ReactExportRule = {
 
                 // Get the name of what's being exported
                 let exportedName = '';
-                if(node.declaration && node.declaration.type === 'Identifier') {
+                if(node.declaration?.type === 'Identifier') {
                     exportedName = node.declaration.name;
                 }
-                else if(node.declaration && node.declaration.type === 'FunctionDeclaration' && node.declaration.id) {
+                else if(node.declaration?.type === 'FunctionDeclaration' && node.declaration.id) {
                     exportedName = node.declaration.id.name;
 
                     // If this is a page.tsx file and we're exporting "function Page()", record it
@@ -329,14 +324,14 @@ const ReactExportRule = {
                                 }
 
                                 // Look for variable declarations (like const Button = React.forwardRef(...))
-                                if(node.type === 'VariableDeclarator' && node.id && node.id.name === componentName) {
+                                if(node.type === 'VariableDeclarator' && node.id?.name === componentName) {
                                     // Find the parent VariableDeclaration
                                     let parent = node.parent;
                                     while(parent && parent.type !== 'VariableDeclaration') {
                                         parent = parent.parent;
                                     }
-                                    if(parent) {
-                                        functionNode = parent;
+                                    functionNode = parent;
+                                    if(functionNode) {
                                         return;
                                     }
                                 }

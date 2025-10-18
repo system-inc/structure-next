@@ -44,9 +44,7 @@ export const FormInputTextArea = React.forwardRef<FormInputReferenceInterface, F
 
     // Function to focus on the component
     const focus = React.useCallback(function () {
-        if(inputTextAreaReference.current) {
-            inputTextAreaReference.current.focus();
-        }
+        inputTextAreaReference.current?.focus();
     }, []);
 
     // Function to validate the component

@@ -314,20 +314,12 @@ export function Metrics() {
                     onSortOrderChange={timeSeriesState.setSortOrder}
                 >
                     {/* Zoom In Button */}
-                    <Button
-                        className="group relative aspect-square px-2"
-                        onClick={zoomControls.zoomIn}
-                        tip="Zoom In"
-                    >
+                    <Button className="group relative aspect-square px-2" onClick={zoomControls.zoomIn} tip="Zoom In">
                         <PlusIcon size={20} />
                     </Button>
 
                     {/* Zoom Out Button */}
-                    <Button
-                        className="group relative aspect-square px-2"
-                        onClick={zoomControls.zoomOut}
-                        tip="Zoom Out"
-                    >
+                    <Button className="group relative aspect-square px-2" onClick={zoomControls.zoomOut} tip="Zoom Out">
                         <MinusIcon size={20} />
                     </Button>
 

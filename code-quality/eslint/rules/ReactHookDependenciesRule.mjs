@@ -75,14 +75,12 @@ const ReactHookDependenciesRule = {
                                     // Check if this function is likely a component
                                     let functionName = null;
 
-                                    if(componentNode.id && componentNode.id.name) {
+                                    if(componentNode.id?.name) {
                                         functionName = componentNode.id.name;
                                     }
                                     else if(
-                                        componentNode.parent &&
-                                        componentNode.parent.type === 'VariableDeclarator' &&
-                                        componentNode.parent.id &&
-                                        componentNode.parent.id.name
+                                        componentNode.parent?.type === 'VariableDeclarator' &&
+                                        componentNode.parent.id?.name
                                     ) {
                                         functionName = componentNode.parent.id.name;
                                     }

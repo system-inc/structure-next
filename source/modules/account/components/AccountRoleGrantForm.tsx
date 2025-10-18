@@ -149,9 +149,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             if(result?.accountAccessRoleAssignmentCreatePrivileged) {
                 setGrantSuccess({ username: selectedUsername, role: selectedRoleType });
                 setGrantDialogOpen(false);
-                if(properties.onRoleGranted) {
-                    properties.onRoleGranted();
-                }
+                properties.onRoleGranted?.();
 
                 // Reset success message after 5 seconds
                 setTimeout(() => setGrantSuccess(null), 5000);

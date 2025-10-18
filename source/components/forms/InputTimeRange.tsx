@@ -146,12 +146,10 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
     const scrollToActiveTimeRangePresetLink = React.useCallback(
         function () {
             const activeTimeRangePresetLink = document.getElementById(camelCase(activeTimeRangePresetKey));
-            if(activeTimeRangePresetLink) {
-                activeTimeRangePresetLink.scrollIntoView({
-                    behavior: 'instant',
-                    block: 'center',
-                });
-            }
+            activeTimeRangePresetLink?.scrollIntoView({
+                behavior: 'instant',
+                block: 'center',
+            });
         },
         [activeTimeRangePresetKey],
     );

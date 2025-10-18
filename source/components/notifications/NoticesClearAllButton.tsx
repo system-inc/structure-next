@@ -31,10 +31,7 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
                 layout
                 ref={reference}
                 variant="Primary"
-                className={mergeClassNames(
-                    !properties.show && 'pointer-events-none',
-                    properties.className,
-                )}
+                className={mergeClassNames(!properties.show && 'pointer-events-none', properties.className)}
                 initial={{
                     opacity: 0,
                 }}

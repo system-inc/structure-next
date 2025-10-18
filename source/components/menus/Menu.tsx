@@ -137,14 +137,10 @@ export function Menu(properties: MenuProperties) {
         setItemsToRenderHighlightIndex(itemRenderIndex);
 
         // Call the onSelected handler for the menu item
-        if(item.onSelected !== undefined) {
-            item.onSelected(item, itemRenderIndex, event);
-        }
+        item.onSelected?.(item, itemRenderIndex, event);
 
         // Call the onItemSelect handler for the menu
-        if(properties.onItemSelected !== undefined) {
-            properties.onItemSelected(item, itemRenderIndex, event);
-        }
+        properties.onItemSelected?.(item, itemRenderIndex, event);
     }
 
     // Track the currently highlighted item reference and index for mouse hover
@@ -184,9 +180,7 @@ export function Menu(properties: MenuProperties) {
         currentMouseHighlightedItemIndexReference.current = itemIndex;
 
         // Call the onMouseMove handler for the menu item
-        if(item.onMouseMove !== undefined) {
-            item.onMouseMove(event);
-        }
+        item.onMouseMove?.(event);
     }
 
     // Handle keyboard events for highlight navigation

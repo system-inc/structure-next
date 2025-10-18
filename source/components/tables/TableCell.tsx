@@ -158,12 +158,7 @@ export function TableCell(properties: TableCellProperties) {
                             <DialogCloseControl>
                                 <Button>Dismiss</Button>
                             </DialogCloseControl>
-                            <CopyButton
-                                variant="Ghost"
-                                size="Small"
-                                className="mr-3 pl-3"
-                                value={properties.value}
-                            >
+                            <CopyButton variant="Ghost" size="Small" className="mr-3 pl-3" value={properties.value}>
                                 Copy
                             </CopyButton>
                         </div>

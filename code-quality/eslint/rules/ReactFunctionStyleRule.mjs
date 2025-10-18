@@ -22,14 +22,10 @@ const ReactFunctionStyleRule = {
 
             // Skip if it's a React.forwardRef assignment
             if(
-                declaration.init &&
-                declaration.init.type === 'CallExpression' &&
-                declaration.init.callee &&
-                declaration.init.callee.type === 'MemberExpression' &&
-                declaration.init.callee.object &&
-                declaration.init.callee.object.name === 'React' &&
-                declaration.init.callee.property &&
-                declaration.init.callee.property.name === 'forwardRef'
+                declaration.init?.type === 'CallExpression' &&
+                declaration.init.callee?.type === 'MemberExpression' &&
+                declaration.init.callee.object?.name === 'React' &&
+                declaration.init.callee.property?.name === 'forwardRef'
             ) {
                 return;
             }

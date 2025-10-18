@@ -78,9 +78,7 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowPro
         properties.onStateChange(section, fullPath, state);
 
         // Notify parent about child state change
-        if(properties.onChildStateChange) {
-            properties.onChildStateChange(`${index}.${fieldPath}`, state.enabled);
-        }
+        properties.onChildStateChange?.(`${index}.${fieldPath}`, state.enabled);
     }
 
     // Render the component

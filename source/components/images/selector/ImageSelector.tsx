@@ -37,9 +37,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
 
     // Handle click to trigger file input
     function handleClick() {
-        if(fileInputReference.current) {
-            fileInputReference.current.click();
-        }
+        fileInputReference.current?.click();
     }
 
     // Handle file selection from input

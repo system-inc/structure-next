@@ -62,12 +62,7 @@ export async function getPublicIpAddressFromHeaders() {
         // If there are multiple IPs in x-forwarded-for, take the first one
         if(forwardedFor.includes(',')) {
             const firstIp = forwardedFor.split(',')[0];
-            if(firstIp) {
-                publicIpAddress = firstIp.trim();
-            }
-            else {
-                publicIpAddress = forwardedFor;
-            }
+            publicIpAddress = firstIp ? firstIp.trim() : forwardedFor;
         }
         else {
             publicIpAddress = forwardedFor;

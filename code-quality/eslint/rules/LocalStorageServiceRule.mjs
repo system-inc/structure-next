@@ -44,10 +44,8 @@ const NoDirectLocalStorageRule = {
                 // Check for window.localStorage.method() calls
                 else if(
                     node.object.type === 'MemberExpression' &&
-                    node.object.object.type === 'Identifier' &&
-                    node.object.object.name === 'window' &&
-                    node.object.property.type === 'Identifier' &&
-                    node.object.property.name === 'localStorage'
+                    node.object.object?.name === 'window' &&
+                    node.object.property?.name === 'localStorage'
                 ) {
                     context.report({
                         node: node.object,

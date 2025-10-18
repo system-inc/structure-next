@@ -72,9 +72,7 @@ export function Popover(properties: PopoverProperties) {
     // Function to handle on open change
     function onOpenChange() {
         // Call the onOpenChange callback
-        if(properties.onOpenChange) {
-            properties.onOpenChange(!open);
-        }
+        properties.onOpenChange?.(!open);
 
         // Update the state
         setOpen(!open);

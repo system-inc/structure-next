@@ -79,11 +79,10 @@ const ReactNoDestructuringReactRule = {
             // Check for type references without React prefix
             TSTypeReference(node) {
                 // Only check simple identifiers
-                if(node.typeName.type !== 'Identifier') {
+                const typeName = node.typeName?.name;
+                if(!typeName) {
                     return;
                 }
-
-                const typeName = node.typeName.name;
 
                 // If this is one of the tracked destructured items and it doesn't start with 'use', report it
                 if(importedReactItems.has(typeName) && !typeName.startsWith('use')) {

@@ -293,7 +293,7 @@ function validateParameterDestructuring(param, functionNode) {
     }
 
     // Check if the spread is actually used in the function body
-    if(functionNode && !checkIfSpreadIsUsed(functionNode, restElementName)) {
+    if(!checkIfSpreadIsUsed(functionNode, restElementName)) {
         return {
             isValid: false,
             message: `Spread variable '${restElementName}' is not used. Remove destructuring and use direct property access instead.`,
@@ -308,7 +308,7 @@ function validateParameterDestructuring(param, functionNode) {
 
 // Check if the spread variable is actually used
 function checkIfSpreadIsUsed(functionNode, spreadName) {
-    if(!functionNode || !functionNode.body) {
+    if(!functionNode?.body) {
         return false;
     }
 
@@ -417,7 +417,7 @@ function isInsideCustomHook(node) {
 function checkIfUsedInHookDependency(node, variableName) {
     const functionNode = findContainingFunction(node);
 
-    if(!functionNode || !functionNode.body) {
+    if(!functionNode?.body) {
         return false;
     }
 
@@ -431,14 +431,11 @@ function checkIfUsedInHookDependency(node, variableName) {
         if(currentNode.type === 'CallExpression' && currentNode.callee) {
             const isReactHook =
                 (currentNode.callee.type === 'MemberExpression' &&
-                    currentNode.callee.object &&
-                    currentNode.callee.object.name === 'React' &&
-                    currentNode.callee.property &&
-                    currentNode.callee.property.name &&
-                    currentNode.callee.property.name.startsWith('use')) ||
+                    currentNode.callee.object?.name === 'React' &&
+                    currentNode.callee.property?.name?.startsWith('use')) ||
                 (currentNode.callee.type === 'Identifier' && currentNode.callee.name.startsWith('use'));
 
-            if(isReactHook && currentNode.arguments && currentNode.arguments.length >= 2) {
+            if(isReactHook && currentNode.arguments?.length >= 2) {
                 const depArray = currentNode.arguments[1];
 
                 // Check if the dependency array contains our variable

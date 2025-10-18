@@ -64,9 +64,7 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
                                 iconLeft: <HideIcon />,
                                 closeMenuOnSelected: true,
                                 onSelected: function () {
-                                    if(properties.onColumnVisibilityChange) {
-                                        properties.onColumnVisibilityChange(false, properties.column);
-                                    }
+                                    properties.onColumnVisibilityChange?.(false, properties.column);
                                 },
                             },
                         ]}

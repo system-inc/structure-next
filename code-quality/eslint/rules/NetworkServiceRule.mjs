@@ -93,7 +93,7 @@ export default {
 
                     if(variable && variable.defs.length > 0) {
                         const def = variable.defs[0];
-                        if(def.node && def.node.type === 'VariableDeclarator' && def.node.init) {
+                        if(def.node?.type === 'VariableDeclarator' && def.node.init) {
                             return isStringLiteral(def.node.init, visited);
                         }
                     }
@@ -233,11 +233,7 @@ export default {
                     if(networkCallArguments.length >= 2 && networkCallArguments[1]) {
                         // If second arg is not undefined/null literal and not named 'options', assume it's variables
                         const secondArg = networkCallArguments[1];
-                        if(
-                            secondArg.type === 'Identifier' &&
-                            secondArg.name &&
-                            secondArg.name.toLowerCase().includes('option')
-                        ) {
+                        if(secondArg.type === 'Identifier' && secondArg.name?.toLowerCase().includes('option')) {
                             // Second arg looks like options, so no variables
                             optionsArgumentIndex = 1;
                             expectedPosition = 'second';
@@ -275,8 +271,7 @@ export default {
                     // Check if last parameter name includes 'option'
                     if(lastParameter.type === 'Identifier') {
                         optionsParameterName = lastParameter.name;
-                        hasOptionsParameter =
-                            optionsParameterName && optionsParameterName.toLowerCase().includes('option');
+                        hasOptionsParameter = optionsParameterName?.toLowerCase().includes('option');
                     }
                     else if(
                         lastParameter.type === 'AssignmentPattern' &&
@@ -284,8 +279,7 @@ export default {
                         lastParameter.left.type === 'Identifier'
                     ) {
                         optionsParameterName = lastParameter.left.name;
-                        hasOptionsParameter =
-                            optionsParameterName && optionsParameterName.toLowerCase().includes('option');
+                        hasOptionsParameter = optionsParameterName?.toLowerCase().includes('option');
                     }
 
                     // Check if it has the correct type annotation
@@ -325,8 +319,8 @@ export default {
                             hasOptionsArgument = true;
                         }
                         // Check if it's an object expression that spreads the options
-                        else if(optionArg.type === 'ObjectExpression' && optionArg.properties) {
-                            hasOptionsArgument = optionArg.properties.some(
+                        else if(optionArg.type === 'ObjectExpression') {
+                            hasOptionsArgument = optionArg.properties?.some(
                                 (prop) =>
                                     prop.type === 'SpreadElement' &&
                                     prop.argument &&
@@ -412,11 +406,9 @@ export default {
                 // Check for window.fetch
                 if(
                     node.callee.type === 'MemberExpression' &&
-                    node.callee.object &&
-                    node.callee.object.type === 'Identifier' &&
+                    node.callee.object?.type === 'Identifier' &&
                     node.callee.object.name === 'window' &&
-                    node.callee.property &&
-                    node.callee.property.type === 'Identifier' &&
+                    node.callee.property?.type === 'Identifier' &&
                     node.callee.property.name === 'fetch'
                 ) {
                     const filename = getFilename();
@@ -433,11 +425,9 @@ export default {
                 // Check for globalThis.fetch
                 if(
                     node.callee.type === 'MemberExpression' &&
-                    node.callee.object &&
-                    node.callee.object.type === 'Identifier' &&
+                    node.callee.object?.type === 'Identifier' &&
                     node.callee.object.name === 'globalThis' &&
-                    node.callee.property &&
-                    node.callee.property.type === 'Identifier' &&
+                    node.callee.property?.type === 'Identifier' &&
                     node.callee.property.name === 'fetch'
                 ) {
                     const filename = getFilename();
@@ -485,7 +475,7 @@ export default {
                     // Check if it's an array with string literals
                     if(firstArg.type === 'ArrayExpression') {
                         firstArg.elements.forEach((element) => {
-                            if(element && element.type === 'Literal' && typeof element.value === 'string') {
+                            if(element?.type === 'Literal' && typeof element.value === 'string') {
                                 context.report({
                                     node: element,
                                     messageId: 'noArrayWithStringLiteralInvalidateCache',
@@ -493,7 +483,7 @@ export default {
                             }
 
                             // Also check for template literals in arrays
-                            if(element && element.type === 'TemplateLiteral') {
+                            if(element?.type === 'TemplateLiteral') {
                                 context.report({
                                     node: element,
                                     messageId: 'noTemplateLiteralInvalidateCache',
@@ -687,10 +677,10 @@ export default {
             // Check exported variable declarations that might be hooks
             ExportNamedDeclaration(node) {
                 if(!hasNetworkServiceImport) return;
-                if(!node.declaration || node.declaration.type !== 'VariableDeclaration') return;
+                if(node.declaration?.type !== 'VariableDeclaration') return;
 
                 for(const declarator of node.declaration.declarations) {
-                    if(!declarator.id || !declarator.id.name || !declarator.id.name.startsWith('use')) continue;
+                    if(!declarator.id?.name?.startsWith('use')) continue;
 
                     const functionName = declarator.id.name;
 
@@ -742,10 +732,10 @@ export default {
                 if(networkServiceHooks.size === 0) return;
 
                 const filename = getFilename();
-                const basename = filename.split('/').pop().split('\\').pop();
+                const basename = filename.split('/').pop()?.split('\\').pop();
 
                 // Skip if not a TypeScript file
-                if(!basename.endsWith('.ts') && !basename.endsWith('.tsx')) return;
+                if(!basename?.endsWith('.ts') && !basename?.endsWith('.tsx')) return;
 
                 // Extract filename without extension
                 const nameWithoutExt = basename.replace(/\.(ts|tsx)$/, '');
