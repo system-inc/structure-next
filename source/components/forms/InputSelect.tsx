@@ -52,7 +52,7 @@ export interface InputSelectProperties extends Omit<InputProperties, 'defaultVal
     search?: boolean;
 
     popoverMenuProperties?: PopoverMenuProperties;
-    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    popoverProperties?: Omit<PopoverProperties, 'trigger' | 'children' | 'content'>;
     buttonProperties?: Omit<
         NonLinkButtonProperties,
         'variant' | 'size' | 'onBlur' | 'onKeyDown' | 'icon' | 'iconLeft' | 'iconRight'
@@ -254,52 +254,53 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                 open: open,
                 onOpenChange: setOpen,
             }}
-        >
-            <Button
-                ref={buttonReference}
-                className={mergeClassNames(properties.className)}
-                variant="FormInputSelect"
-                size="FormInputSelect"
-                isLoading={loadingItems}
-                // disabled={properties.disabled || loadingItems}
-                tabIndex={properties.tabIndex}
-                onBlur={onBlurIntercept}
-                onKeyDown={function (event) {
-                    // console.log('InputSelect.tsx onKeyDown', event.code);
+            trigger={
+                <Button
+                    ref={buttonReference}
+                    className={mergeClassNames(properties.className)}
+                    variant="FormInputSelect"
+                    size="FormInputSelect"
+                    isLoading={loadingItems}
+                    // disabled={properties.disabled || loadingItems}
+                    tabIndex={properties.tabIndex}
+                    onBlur={onBlurIntercept}
+                    onKeyDown={function (event) {
+                        // console.log('InputSelect.tsx onKeyDown', event.code);
 
-                    // Open the popover when the user presses the arrow keys, spacebar, or enter
-                    // We need this duplicated logic (the same logic exists in the Popover class)
-                    // in order to prevent the Popover from staying open when the it is opened using
-                    // the keyboard
-                    if(
-                        open == false &&
-                        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
-                    ) {
-                        event.preventDefault();
-                        setOpen(true);
-                    }
-                }}
-                {...properties.buttonProperties}
-            >
-                {
-                    // If there is a selected item
-                    selectedItem ? (
-                        typeof selectedItem.children === 'string' ? (
-                            // If children is a string, create a container for it
-                            <span className="truncate text-dark dark:text-light">{selectedItem.children}</span>
+                        // Open the popover when the user presses the arrow keys, spacebar, or enter
+                        // We need this duplicated logic (the same logic exists in the Popover class)
+                        // in order to prevent the Popover from staying open when the it is opened using
+                        // the keyboard
+                        if(
+                            open == false &&
+                            ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
+                        ) {
+                            event.preventDefault();
+                            setOpen(true);
+                        }
+                    }}
+                    {...properties.buttonProperties}
+                >
+                    {
+                        // If there is a selected item
+                        selectedItem ? (
+                            typeof selectedItem.children === 'string' ? (
+                                // If children is a string, create a container for it
+                                <span className="truncate text-dark dark:text-light">{selectedItem.children}</span>
+                            ) : (
+                                // If children is not a string, use it as the button content
+                                selectedItem.children
+                            )
                         ) : (
-                            // If children is not a string, use it as the button content
-                            selectedItem.children
+                            // No selected items, show the placeholder
+                            <span className="truncate text-dark-6 dark:text-light-6">{placeholder}</span>
                         )
-                    ) : (
-                        // No selected items, show the placeholder
-                        <span className="truncate text-dark-6 dark:text-light-6">{placeholder}</span>
-                    )
-                }
-                <div className="flex-grow" />
-                <ChevronDownIcon className="text-neutral+2 ml-4 h-4 w-4 dark:text-neutral-2" />
-            </Button>
-        </PopoverMenu>
+                    }
+                    <div className="flex-grow" />
+                    <ChevronDownIcon className="text-neutral+2 ml-4 h-4 w-4 dark:text-neutral-2" />
+                </Button>
+            }
+        />
     );
 });
 

@@ -11,8 +11,8 @@ import CheckIcon from '@structure/assets/icons/status/CheckIcon.svg';
 
 // Component - NavigationTrailSeparatorPopoverMenu
 export interface NavigationTrailSeparatorPopoverMenuProperties
-    extends Omit<PopoverMenuProperties, 'items' | 'children'> {
-    separator: React.ReactNode;
+    extends Omit<PopoverMenuProperties, 'items' | 'trigger'> {
+    trigger: React.ReactNode;
     links: NavigationTrailLinkInterface[];
 }
 export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailSeparatorPopoverMenuProperties) {
@@ -53,14 +53,14 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
                     setOpen(open);
                 },
             }}
-        >
-            {/* Separator */}
-            <div
-                tabIndex={1}
-                className="mx-1 h-4 w-4 cursor-pointer rounded-extra-small select-none hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4"
-            >
-                {properties.separator}
-            </div>
-        </PopoverMenu>
+            trigger={
+                <div
+                    tabIndex={1}
+                    className="mx-1 h-4 w-4 cursor-pointer rounded-extra-small select-none hover:bg-light-2 active:bg-light-4 data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 dark:hover:bg-dark-4 dark:active:bg-dark-6 data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4"
+                >
+                    {properties.trigger}
+                </div>
+            }
+        />
     );
 }

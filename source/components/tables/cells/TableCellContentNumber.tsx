@@ -24,8 +24,7 @@ export function TableCellContentNumber(properties: TableCellContentNumberPropert
                 ),
             }}
             value={properties.value}
-        >
-            <span>{addCommas(properties.value)}</span>
-        </CopyTip>
+            trigger={<span>{addCommas(properties.value)}</span>}
+        />
     );
 }

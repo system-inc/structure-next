@@ -58,7 +58,7 @@ export interface InputMultipleSelectProperties extends Omit<InputProperties, 'de
     search?: boolean;
 
     popoverMenuProperties?: PopoverMenuProperties;
-    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    popoverProperties?: Omit<PopoverProperties, 'trigger' | 'children' | 'content'>;
     buttonProperties?: Omit<NonLinkButtonProperties, 'variant' | 'size' | 'onBlur' | 'onKeyDown'>;
 
     // Optional asynchronous loading of menu items
@@ -269,58 +269,59 @@ export const InputMultipleSelect = React.forwardRef<
                 open: open,
                 onOpenChange: setOpen,
             }}
-        >
-            <Button
-                ref={buttonReference}
-                className={mergeClassNames(properties.className)}
-                variant="FormInputSelect"
-                size="FormInputSelect"
-                isLoading={loadingItems}
-                tabIndex={properties.tabIndex}
-                onBlur={onBlurIntercept}
-                onKeyDown={function (event: React.KeyboardEvent<HTMLButtonElement>) {
-                    // Open the popover when the user presses the arrow keys, spacebar, or enter
-                    if(
-                        open == false &&
-                        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
-                    ) {
-                        event.preventDefault();
-                        setOpen(true);
-                    }
-                }}
-                {...properties.buttonProperties}
-            >
-                {properties.buttonProperties?.children ? (
-                    // If the button has a children property set, use that instead of the selected items or placeholder
-                    properties.buttonProperties?.children
-                ) : // Otherwise, if there are selected items, show them
-                selectedItems && selectedItems?.length > 0 ? (
-                    <div className="flex space-x-1">
-                        {
-                            // Multiple selections enabled, map over them
-                            selectedItems.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="flex rounded-small px-2 py-1.5 text-xs text-dark-6 dark:bg-dark-4 dark:text-light-6"
-                                >
-                                    {item.children}
-                                    <CloseIcon
-                                        className="ml-1 h-4 w-4 rounded-full bg-light-6 text-dark-4"
-                                        onClick={function (event: Event) {
-                                            event.stopPropagation();
-                                            onChangeIntercept(item, index, event);
-                                        }}
-                                    />
-                                </div>
-                            ))
+            trigger={
+                <Button
+                    ref={buttonReference}
+                    className={mergeClassNames(properties.className)}
+                    variant="FormInputSelect"
+                    size="FormInputSelect"
+                    isLoading={loadingItems}
+                    tabIndex={properties.tabIndex}
+                    onBlur={onBlurIntercept}
+                    onKeyDown={function (event: React.KeyboardEvent<HTMLButtonElement>) {
+                        // Open the popover when the user presses the arrow keys, spacebar, or enter
+                        if(
+                            open == false &&
+                            ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
+                        ) {
+                            event.preventDefault();
+                            setOpen(true);
                         }
-                    </div>
-                ) : (
-                    // If the button has no children property, and there are no selected items, show the placeholder
-                    <span className="truncate text-dark-6 dark:text-light-6">{placeholder}</span>
-                )}
-            </Button>
-        </PopoverMenu>
+                    }}
+                    {...properties.buttonProperties}
+                >
+                    {properties.buttonProperties?.children ? (
+                        // If the button has a children property set, use that instead of the selected items or placeholder
+                        properties.buttonProperties?.children
+                    ) : // Otherwise, if there are selected items, show them
+                    selectedItems && selectedItems?.length > 0 ? (
+                        <div className="flex space-x-1">
+                            {
+                                // Multiple selections enabled, map over them
+                                selectedItems.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex rounded-small px-2 py-1.5 text-xs text-dark-6 dark:bg-dark-4 dark:text-light-6"
+                                    >
+                                        {item.children}
+                                        <CloseIcon
+                                            className="ml-1 h-4 w-4 rounded-full bg-light-6 text-dark-4"
+                                            onClick={function (event: Event) {
+                                                event.stopPropagation();
+                                                onChangeIntercept(item, index, event);
+                                            }}
+                                        />
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    ) : (
+                        // If the button has no children property, and there are no selected items, show the placeholder
+                        <span className="truncate text-dark-6 dark:text-light-6">{placeholder}</span>
+                    )}
+                </Button>
+            }
+        />
     );
 });
 

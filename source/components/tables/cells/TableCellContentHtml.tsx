@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { TipIcon } from '@structure/source/components/popovers/TipIcon';
+import { TipButton } from '@structure/source/components/buttons/TipButton';
 
 // Dependencies - Assets
 import WebIcon from '@structure/assets/icons/content/WebIcon.svg';
@@ -15,23 +15,26 @@ export function TableCellContentHtml(properties: TableCellContentHtmlProperties)
     // Render the component
     return (
         <div className="flex items-center">
-            <TipIcon
+            <TipButton
                 icon={WebIcon}
-                iconClassName="h-4 w-4"
                 openOnPress={true}
-                contentVariant="unstyled"
-                content={
-                    <div className="relative h-96 w-96">
-                        {/* IFRAME */}
-                        <iframe
-                            className="absolute inset-0 h-full w-full bg-light"
-                            srcDoc={properties.value}
-                            sandbox="" // Full restrictions
-                        />
-                    </div>
+                tipClassName="border-none"
+                tip={
+                    (
+                        <div className="relative h-96 w-96">
+                            {/* IFRAME */}
+                            <iframe
+                                className="absolute inset-0 h-full w-full bg-light"
+                                srcDoc={properties.value}
+                                sandbox="" // Full restrictions
+                            />
+                        </div>
+                    ) as React.ReactNode
                 }
-                align="start"
-                side="left"
+                popoverProperties={{
+                    align: 'start',
+                    side: 'left',
+                }}
             />
             <div className="ml-1">{properties.value}</div>
         </div>

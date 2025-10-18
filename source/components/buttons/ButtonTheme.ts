@@ -8,12 +8,12 @@
  */
 
 // Layout styles for styled buttons (not applied to unstyled buttons)
-export const layoutButton =
+export const buttonLayoutClassNames =
     // Flex layout with spacing between icons and text
     `inline-flex items-center justify-center gap-2`;
 
 // Common button styles: interaction behavior and disabled states
-export const commonButton =
+export const buttonCommonClassNames =
     // Layout
     `whitespace-nowrap select-none ` +
     // Cursor
@@ -22,19 +22,19 @@ export const commonButton =
     `disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:cursor-not-allowed aria-disabled:opacity-75`;
 
 // Centered button styles: sizing and shape
-export const centeredButton =
+export const buttonCenteredClassNames =
     // Shape
     `rounded-small ` +
     // Content
     `text-sm font-medium`;
 
 // Focus styles for styled buttons
-export const focusButton =
+export const buttonFocusClassNames =
     // Focus
     `focus-visible:outline-none focus-visible:ring-0`;
 
 // Hover styles: background and text color changes on hover
-export const hoverStyle =
+export const buttonHoverClassNames =
     // Hover
     `hover:bg-dark-5 dark:hover:bg-dark-3 ` +
     // Disabled (works for both button[disabled] and a[aria-disabled])
@@ -54,6 +54,7 @@ export interface ButtonVariants {
     Secondary: 'Secondary';
     Contrast: 'Contrast';
     Ghost: 'Ghost';
+    GhostIcon: 'GhostIcon';
     Destructive: 'Destructive';
     GhostDestructive: 'GhostDestructive';
     ToggleOn: 'ToggleOn';
@@ -82,6 +83,7 @@ export interface ButtonSizes {
     Base: 'Base';
     Large: 'Large';
     ExtraLarge: 'ExtraLarge';
+    GhostIcon: 'GhostIcon';
     MenuItem: 'MenuItem';
     FormInputCheckbox: 'FormInputCheckbox';
     FormInputSelect: 'FormInputSelect';
@@ -117,7 +119,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
     variants: {
         // General Purpose Variants
         Primary:
-            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
+            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Border and background
             `border bg-light-1 border-light-3 text-dark-2 ` +
             `dark:bg-dark-2 dark:border-dark-3 dark:text-light-2 ` +
@@ -133,7 +135,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `disabled:hover:bg-light-1 dark:disabled:hover:bg-dark-1`,
 
         Secondary:
-            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
+            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Dark text on light background
             `border bg-light-1 dark:bg-light-2 text-dark dark:text-dark hover:bg-light dark:hover:bg-light ` +
             // Disabled states
@@ -142,7 +144,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `active:bg-light-2 data-[state=open]:bg-light-2 dark:active:bg-light-3 dark:data-[state=open]:bg-light-3`,
 
         Contrast:
-            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ${hoverStyle} ` +
+            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ${buttonHoverClassNames} ` +
             // Light text on dark background
             `text-white dark:text-light-2 bg-dark-2 dark:bg-dark-2 ` +
             // Active (includes when used as open popover trigger)
@@ -151,12 +153,22 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `border border-dark-2 dark:border-dark-2`,
 
         Ghost:
-            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
+            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Rounded and hover
             `rounded-medium hover:bg-accent border border-transparent hover:text-accent-foreground`,
 
+        GhostIcon:
+            `${buttonCommonClassNames} ` +
+            // Compact icon-only button styling
+            `rounded-extra-small p-[4px] ` +
+            // Hover and active states
+            `hover:bg-light-2 active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 ` +
+            // Popover open states (for TipButton)
+            `data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 ` +
+            `data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
+
         Destructive:
-            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
+            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Border
             `border ` +
             // Light
@@ -182,19 +194,19 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized UI Variants
         GhostDestructive:
-            `${layoutButton} ${commonButton} ${centeredButton} ${focusButton} ` +
+            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Rounded and hover
             `rounded-medium hover:bg-accent hover:text-accent-foreground ` +
             // Color, hover, and active states
             `text-neutral+6 hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
 
         ToggleOn:
-            `${commonButton} ${centeredButton} ` +
+            `${buttonCommonClassNames} ${buttonCenteredClassNames} ` +
             // Toggled on
             `rounded-medium border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
 
         ToggleOff:
-            `${commonButton} ${centeredButton} ` +
+            `${buttonCommonClassNames} ${buttonCenteredClassNames} ` +
             // Toggled off
             `rounded-medium border border-light-6 dark:border-dark-4`,
 
@@ -214,7 +226,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:fade-in [&[data-selected=true]>svg:first-child]:duration-200`,
 
         FormInputCheckbox:
-            `${commonButton} ` +
+            `${buttonCommonClassNames} ` +
             // Layout and sizing
             `flex items-center justify-center content-center ` +
             // Border
@@ -233,7 +245,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `focus-visible:outline-none ring-offset-background focus-visible:ring-offset-2 focus-visible:ring focus-visible:ring-1 ring-light`,
 
         FormInputSelect:
-            `${commonButton} ` +
+            `${buttonCommonClassNames} ` +
             // Layout (no justify-center because flex-grow handles spacing)
             `inline-flex items-center ` +
             // Text
@@ -252,7 +264,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`,
 
         TableHeaderCell:
-            `${commonButton} ` +
+            `${buttonCommonClassNames} ` +
             // Text
             `text-xs font-normal text-neutral-2 dark:text-neutral+5 hover:-text-dark dark:hover:text-light`,
     },
@@ -265,6 +277,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         Base: 'h-9 px-4 py-2',
         Large: 'h-10 rounded-medium px-8',
         ExtraLarge: 'h-11 rounded-medium px-10',
+        GhostIcon: '', // No size classes - padding handled by variant
 
         // Specialized Sizes
         MenuItem: 'pt-1.5 pr-3 pb-1.5',
@@ -281,6 +294,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         Base: 'h-4 w-4',
         Large: 'h-5 w-5',
         ExtraLarge: 'h-6 w-6',
+        GhostIcon: 'h-3 w-3', // Small icon for ghost icon buttons
 
         // Specialized Sizes
         MenuItem: 'h-4 w-4',

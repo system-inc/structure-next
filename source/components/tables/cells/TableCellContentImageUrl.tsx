@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { TipIcon } from '@structure/source/components/popovers/TipIcon';
+import { TipButton } from '@structure/source/components/buttons/TipButton';
 
 // Dependencies - Assets
 import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';
@@ -25,44 +25,47 @@ export function TableCellContentImageUrl(properties: TableCellContentImageUrlPro
     // Render the component
     return (
         <div className="flex items-center">
-            <TipIcon
+            <TipButton
                 icon={ImageIcon}
-                iconClassName="h-4 w-4"
                 openOnPress={true}
-                contentVariant="unstyled"
-                content={
-                    <div className="relative min-h-[80px] w-96">
-                        {!imageLoaded && !imageFailedToLoad && (
-                            <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-opsis-border-primary">
-                                <BrokenCircleIcon className="h-8 w-8 animate-spin" />
-                            </div>
-                        )}
-                        {imageFailedToLoad ? (
-                            <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-red-500">
-                                <ErrorIcon className="mr-1.5 h-5 w-5 text-red-500" />
-                                <p>Image failed to load.</p>
-                            </div>
-                        ) : (
-                            <Image
-                                className="rounded-medium border border-opsis-border-primary"
-                                src={properties.url}
-                                alt="Image"
-                                // layout="responsive"
-                                width={384}
-                                height={384}
-                                sizes="(max-width: 768px) 100vw, 100vw"
-                                onLoad={function () {
-                                    setImageLoaded(true);
-                                }}
-                                onError={function () {
-                                    setImageFailedToLoad(true);
-                                }}
-                            />
-                        )}
-                    </div>
+                tipClassName="border-none"
+                popoverProperties={{
+                    align: 'start',
+                    side: 'left',
+                }}
+                tip={
+                    (
+                        <div className="relative min-h-[80px] w-96">
+                            {!imageLoaded && !imageFailedToLoad && (
+                                <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-opsis-border-primary">
+                                    <BrokenCircleIcon className="h-8 w-8 animate-spin" />
+                                </div>
+                            )}
+                            {imageFailedToLoad ? (
+                                <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-red-500">
+                                    <ErrorIcon className="mr-1.5 h-5 w-5 text-red-500" />
+                                    <p>Image failed to load.</p>
+                                </div>
+                            ) : (
+                                <Image
+                                    className="rounded-medium border border-opsis-border-primary"
+                                    src={properties.url}
+                                    alt="Image"
+                                    // layout="responsive"
+                                    width={384}
+                                    height={384}
+                                    sizes="(max-width: 768px) 100vw, 100vw"
+                                    onLoad={function () {
+                                        setImageLoaded(true);
+                                    }}
+                                    onError={function () {
+                                        setImageFailedToLoad(true);
+                                    }}
+                                />
+                            )}
+                        </div>
+                    ) as React.ReactNode
                 }
-                align="start"
-                side="left"
             />
             <Link
                 href={properties.url}

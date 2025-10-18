@@ -5,7 +5,12 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixTooltip from '@radix-ui/react-tooltip';
-import { PopoverProperties, PopoverVariants } from '@structure/source/components/popovers/Popover';
+import type { PopoverProperties } from '@structure/source/components/popovers/Popover';
+
+// Dependencies - Theme
+import { popoverTheme as structurePopoverTheme } from '@structure/source/components/popovers/PopoverTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -14,6 +19,12 @@ import { wrapForSlot } from '@structure/source/utilities/react/React';
 // Component - Tip
 export type TipProperties = PopoverProperties;
 export function Tip(properties: TipProperties) {
+    // Get component theme from context
+    const componentTheme = useComponentTheme();
+
+    // Merge the structure theme with project theme (if set by the layout provider)
+    const popoverTheme = mergeComponentTheme(structurePopoverTheme, componentTheme?.Popover);
+
     // Extract properties
     const externalOpen = properties.open;
     const externalSetOpen = properties.onOpenChange;
@@ -63,7 +74,7 @@ export function Tip(properties: TipProperties) {
                 }}
             >
                 {/* Wrap SVGs in a span so they can be interacted with */}
-                {properties.children && wrapForSlot(properties.children)}
+                {wrapForSlot(properties.trigger)}
             </RadixTooltip.Trigger>
             <RadixTooltip.Portal container={properties.portalContainer}>
                 <RadixTooltip.Content
@@ -74,15 +85,16 @@ export function Tip(properties: TipProperties) {
                     collisionPadding={collisionPadding}
                     collisionBoundary={properties.collisionBoundary}
                     className={mergeClassNames(
+                        popoverTheme.configuration.baseClasses,
+                        properties.variant ? popoverTheme.variants[properties.variant] : '',
                         // State instant-open is specific to Tip
                         'data-[state=instant-open]:animate-in data-[state=instant-open]:fade-in-0 data-[state=instant-open]:zoom-in-95',
                         // State delayed-open is specific to Tip
                         'data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
-                        PopoverVariants.default,
                         // This was previously set to z-50 but the tips were showing through the dialog overlay
                         // This is now set to 40 to ensure the tooltip is below the dialog overlay
                         'z-40',
-                        properties.className,
+                        properties.contentClassName,
                     )}
                     // Use Radix variables to style the popover content size
                     style={{

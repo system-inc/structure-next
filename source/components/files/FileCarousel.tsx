@@ -133,13 +133,12 @@ export function FileCarousel(properties: FileCarouselProperties) {
                         {/* Open in New Tab Button */}
                         <Button
                             className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30"
-                            onClick={() => {
+                            icon={<ArrowSquareOutIcon className="h-5 w-5 text-light dark:text-dark" weight="bold" />}
+                            onClick={function () {
                                 window.open(currentFile.url, '_blank');
                             }}
                             aria-label="Open in new tab"
-                        >
-                            <ArrowSquareOutIcon className="h-5 w-5 text-light dark:text-dark" weight="bold" />
-                        </Button>
+                        />
 
                         {/* Metadata Popover */}
                         {currentFile.metadata && (
@@ -147,11 +146,13 @@ export function FileCarousel(properties: FileCarouselProperties) {
                                 content={<MetadataContent metadata={currentFile.metadata} />}
                                 side="top"
                                 align="end"
-                            >
-                                <Button className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30">
-                                    <InformationCircledIcon className="h-5 w-5 text-light dark:text-dark" />
-                                </Button>
-                            </Popover>
+                                trigger={
+                                    <Button
+                                        className="rounded-lg bg-dark/20 p-2 backdrop-blur transition-colors hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30"
+                                        icon={<InformationCircledIcon className="h-5 w-5 text-light dark:text-dark" />}
+                                    />
+                                }
+                            />
                         )}
                     </div>
                 </div>

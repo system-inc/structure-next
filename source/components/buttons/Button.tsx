@@ -30,8 +30,8 @@ export interface BaseButtonProperties {
     type?: 'button' | 'submit' | 'reset';
     disabled?: boolean;
     isLoading?: boolean;
-    tip?: string | React.ReactNode;
-    tipProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    tip?: React.ReactNode;
+    tipProperties?: Omit<PopoverProperties, 'trigger' | 'content'>;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void | Promise<void>;
 }
 
@@ -200,16 +200,13 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
         );
     }
 
-    // Wrap with Tip if provided
+    // Return a Tip if provided
     if(tip) {
-        return (
-            <Tip {...tipProperties} content={tip}>
-                {component}
-            </Tip>
-        );
+        return <Tip {...tipProperties} trigger={component} content={tip} />;
     }
-
-    return component;
+    else {
+        return component;
+    }
 });
 
 // Set display name for debugging

@@ -73,7 +73,11 @@ export function TableCellContentDateTime(properties: TableCellContentDateTimePro
     // Render the component
     return date !== null ? (
         <Tip
-            className="p-1.5"
+            contentClassName="p-1.5"
+            trigger={
+                // Format the date like: 2024-07-05 1:30 AM
+                <span>{formattedDateInLocalTime}</span>
+            }
             content={
                 <div className="flex flex-col space-y-1 text-xs">
                     <div>{properties.value}</div>
@@ -90,10 +94,7 @@ export function TableCellContentDateTime(properties: TableCellContentDateTimePro
                     <div>{timeFromNow(date.getTime())}</div>
                 </div>
             }
-        >
-            {/* Format the date like: 2024-07-05 1:30 AM */}
-            <span>{formattedDateInLocalTime}</span>
-        </Tip>
+        />
     ) : (
         properties.value
     );

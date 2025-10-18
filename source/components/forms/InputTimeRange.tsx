@@ -40,7 +40,7 @@ export interface InputTimeRangeProperties extends Omit<InputProperties, 'default
     onChange?: (value: TimeRangeType | undefined) => void;
     onBlur?: (value: TimeRangeType | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
-    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    popoverProperties?: Omit<PopoverProperties, 'trigger' | 'children' | 'content'>;
     buttonProperties?: Omit<ButtonProperties, 'icon' | 'iconLeft' | 'iconRight' | 'asChild' | 'href' | 'target'>;
 }
 export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface, InputTimeRangeProperties>(function (
@@ -317,35 +317,36 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     </div>
                 </div>
             }
-        >
-            <Button
-                ref={buttonReference}
-                tabIndex={properties.tabIndex}
-                variant={'FormInputSelect'}
-                size="FormInputSelect"
-                className={mergeClassNames(
-                    'min-w-[246px]',
-                    !value && 'text-muted-foreground',
-                    properties.buttonProperties?.className,
-                )}
-                iconLeft={CalendarIcon}
-                onBlur={onBlurIntercept}
-                {...properties.buttonProperties}
-            >
-                {/* Display the selected date range or "Pick a date" if no date is selected */}
-                {isMounted && value?.startTime ? (
-                    value.endTime ? (
-                        <>
-                            {format(value.startTime, 'LLL d, y')} - {format(value.endTime, 'LLL d, y')}
-                        </>
+            trigger={
+                <Button
+                    ref={buttonReference}
+                    tabIndex={properties.tabIndex}
+                    variant={'FormInputSelect'}
+                    size="FormInputSelect"
+                    className={mergeClassNames(
+                        'min-w-[246px]',
+                        !value && 'text-muted-foreground',
+                        properties.buttonProperties?.className,
+                    )}
+                    iconLeft={CalendarIcon}
+                    onBlur={onBlurIntercept}
+                    {...properties.buttonProperties}
+                >
+                    {/* Display the selected date range or "Pick a date" if no date is selected */}
+                    {isMounted && value?.startTime ? (
+                        value.endTime ? (
+                            <>
+                                {format(value.startTime, 'LLL d, y')} - {format(value.endTime, 'LLL d, y')}
+                            </>
+                        ) : (
+                            format(value.startTime, 'LLL d, y')
+                        )
                     ) : (
-                        format(value.startTime, 'LLL d, y')
-                    )
-                ) : (
-                    <span>{placeholder}</span>
-                )}
-            </Button>
-        </Popover>
+                        <span>{placeholder}</span>
+                    )}
+                </Button>
+            }
+        />
     );
 });
 

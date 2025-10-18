@@ -41,117 +41,118 @@ export function PostCommentReactionControl(properties: PostCommentReactionContro
     // Render the component
     return (
         <PopoverMenu
+            trigger={
+                <PostControl className="">
+                    <ReactionIcon className="h-4 w-4" />
+                </PostControl>
+            }
             itemsClassName="grid grid-cols-6 gap-1 text-2xl"
             onItemSelected={function (item) {
-                if(item.content) {
-                    handleReaction(item.content.toString());
+                if(item.value) {
+                    handleReaction(item.value.toString());
                 }
             }}
             closeOnItemSelected={true}
             items={[
                 // Positive
                 {
-                    content: '😍',
+                    value: '😍',
                 },
                 {
-                    content: '🎉',
+                    value: '🎉',
                 },
                 {
-                    content: '💯',
+                    value: '💯',
                 },
                 {
-                    content: '🚀',
+                    value: '🚀',
                 },
                 {
-                    content: '❤️‍🔥',
+                    value: '❤️‍🔥',
                 },
                 {
-                    content: '👍',
+                    value: '👍',
                 },
                 // Negative
                 {
-                    content: '😢',
+                    value: '😢',
                 },
                 {
-                    content: '😡',
+                    value: '😡',
                 },
                 {
-                    content: '💔',
+                    value: '💔',
                 },
                 {
-                    content: '👿',
+                    value: '👿',
                 },
                 {
-                    content: '😠',
+                    value: '😠',
                 },
                 {
-                    content: '👎',
+                    value: '👎',
                 },
                 // Neutral
                 {
-                    content: '😐',
+                    value: '😐',
                 },
                 {
-                    content: '🤔',
+                    value: '🤔',
                 },
                 {
-                    content: '😑',
+                    value: '😑',
                 },
                 {
-                    content: '🤷',
+                    value: '🤷',
                 },
                 {
-                    content: '🤨',
+                    value: '🤨',
                 },
                 {
-                    content: '😕',
+                    value: '😕',
                 },
                 // Funny
                 {
-                    content: '😂',
+                    value: '😂',
                 },
                 {
-                    content: '😆',
+                    value: '😆',
                 },
                 {
-                    content: '🤣',
+                    value: '🤣',
                 },
                 {
-                    content: '😜',
+                    value: '😜',
                 },
                 {
-                    content: '🤪',
+                    value: '🤪',
                 },
                 {
-                    content: '😝',
+                    value: '😝',
                 },
                 // Miscellaneous
                 {
-                    content: '🔥',
+                    value: '🔥',
                 },
                 {
-                    content: '🎯',
+                    value: '🎯',
                 },
                 {
-                    content: '🎊',
+                    value: '🎊',
                 },
                 {
-                    content: '😈',
+                    value: '😈',
                 },
                 {
-                    content: '🥑',
+                    value: '🥑',
                 },
                 {
-                    content: '🍑',
+                    value: '🍑',
                 },
             ]}
             popoverProperties={{
                 side: 'top',
             }}
-        >
-            <PostControl className="">
-                <ReactionIcon className="h-4 w-4" />
-            </PostControl>
-        </PopoverMenu>
+        />
     );
 }

@@ -128,7 +128,7 @@ export function Pagination(properties: PaginationProperties) {
                             },
                             {
                                 value: '1000',
-                                content: '1,000',
+                                children: '1,000',
                             },
                         ]}
                         defaultValue={itemsPerPage.toString()}

@@ -89,7 +89,7 @@ export function NavigationTrail(properties: NavigationTrailProperties) {
                         {index > 0 ? (
                             navigationTrailLink.links && navigationTrailLink.links.length > 0 ? (
                                 <NavigationTrailSeparatorPopoverMenu
-                                    separator={separator}
+                                    trigger={separator}
                                     links={getLinks(navigationTrailLink.links)}
                                 />
                             ) : (

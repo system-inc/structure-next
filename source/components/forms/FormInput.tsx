@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { InputReferenceInterface, InputProperties } from '@structure/source/components/forms/Input';
-import { TipIconProperties, TipIcon } from '@structure/source/components/popovers/TipIcon';
+import { TipButtonProperties, TipButton } from '@structure/source/components/buttons/TipButton';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
@@ -69,7 +69,7 @@ export interface FormInputProperties extends InputProperties {
     labelContainerClassName?: string;
     labelClassName?: string;
     labelTip?: React.ReactNode;
-    labelTipIconProperties?: Omit<TipIconProperties, 'content'>;
+    labelTipButtonProperties?: TipButtonProperties;
     description?: React.ReactNode;
     descriptionClassName?: string;
 
@@ -132,11 +132,14 @@ export function FormInput(properties: FormInputProperties) {
                     </label>
                     {/* Label Tip */}
                     {properties.label && properties.labelTip && (
-                        <TipIcon
+                        <TipButton
                             openOnPress
-                            {...properties.labelTipIconProperties}
-                            className={mergeClassNames('ml-1 max-w-xs', properties.labelTipIconProperties?.className)}
-                            content={properties.labelTip}
+                            {...properties.labelTipButtonProperties}
+                            className={mergeClassNames(
+                                'ml-0.5 max-w-xs p-[2px]',
+                                properties.labelTipButtonProperties?.className,
+                            )}
+                            tip={properties.labelTip}
                         />
                     )}
                 </div>

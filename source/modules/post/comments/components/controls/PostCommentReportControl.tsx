@@ -29,6 +29,11 @@ export function PostCommentReportControl(properties: PostCommentReportControlPro
     return (
         <>
             <PopoverMenu
+                trigger={
+                    <PostControl className="">
+                        <EllipsesIcon className="h-4 w-4" />
+                    </PostControl>
+                }
                 items={[
                     {
                         iconLeft: FlagIcon,
@@ -38,11 +43,7 @@ export function PostCommentReportControl(properties: PostCommentReportControlPro
                         },
                     },
                 ]}
-            >
-                <PostControl className="">
-                    <EllipsesIcon className="h-4 w-4" />
-                </PostControl>
-            </PopoverMenu>
+            />
 
             <PostReportDialog
                 open={reportDialogOpen}

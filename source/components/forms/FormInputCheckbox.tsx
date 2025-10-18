@@ -15,7 +15,7 @@ import {
     InputCheckboxProperties,
     InputCheckbox,
 } from '@structure/source/components/forms/InputCheckbox';
-import { TipIcon } from '@structure/source/components/popovers/TipIcon';
+import { TipButton } from '@structure/source/components/buttons/TipButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -182,7 +182,7 @@ export const FormInputCheckbox = React.forwardRef<InputCheckboxReferenceInterfac
                         </label>
                         {/* Label Tip - Rendered here as a special case for checkboxes instead of in FormInput */}
                         {properties.label && properties.labelTip && (
-                            <TipIcon content={properties.labelTip} className="ml-1 max-w-xs" openOnPress />
+                            <TipButton tip={properties.labelTip} className="ml-1 max-w-xs" openOnPress />
                         )}
                         {properties.sibling}
                     </div>

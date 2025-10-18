@@ -73,18 +73,19 @@ export function SimpleSvgMap(properties: SimpleSvgMapProperties) {
                                 {point.latitude}, {point.longitude}, {point.title}
                             </div>
                         }
-                    >
-                        <div
-                            className="absolute h-4 w-4 cursor-pointer text-blue opacity-75"
-                            style={{
-                                left: `${x}%`,
-                                top: `${y}%`,
-                                transform: 'translate(-50%, -50%)',
-                            }}
-                        >
-                            <CircleFilledIcon className="h-4 w-4" />
-                        </div>
-                    </Tip>
+                        trigger={
+                            <div
+                                className="absolute h-4 w-4 cursor-pointer text-blue opacity-75"
+                                style={{
+                                    left: `${x}%`,
+                                    top: `${y}%`,
+                                    transform: 'translate(-50%, -50%)',
+                                }}
+                            >
+                                <CircleFilledIcon className="h-4 w-4" />
+                            </div>
+                        }
+                    />
                 );
             })}
         </div>

@@ -51,12 +51,11 @@ export function CopyButton({ value, noticeData, className, ...buttonProperties }
     return (
         <Button
             icon={IconComponent}
-            iconSize="Small"
             {...buttonProperties}
             onClick={onClick}
+            variant="GhostIcon"
+            size="GhostIcon"
             className={mergeClassNames(
-                'cursor-pointer rounded-extra-small p-[4px]',
-                'hover:bg-light-2 active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6',
                 valueCopiedToClipboard && 'bg-light-2 dark:bg-dark-4',
                 !valueCopiedToClipboard && 'dark:text-neutral+6 text-neutral hover:text-dark dark:hover:text-light',
                 valueCopiedToClipboard &&

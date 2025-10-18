@@ -33,7 +33,7 @@ export interface InputDateProperties extends Omit<InputProperties, 'defaultValue
     onChange?: (value: Date | undefined) => void;
     onBlur?: (value: Date | undefined, event: React.FocusEvent<HTMLButtonElement>) => void;
 
-    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    popoverProperties?: Omit<PopoverProperties, 'trigger' | 'children' | 'content'>;
     buttonProperties?: Omit<ButtonProperties, 'icon' | 'iconLeft' | 'iconRight' | 'asChild' | 'href' | 'target'>;
 }
 export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDateProperties>(
@@ -122,22 +122,23 @@ export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDate
                         />
                     </div>
                 }
-            >
-                <Button
-                    variant="FormInputSelect"
-                    size="FormInputSelect"
-                    className={mergeClassNames(
-                        'min-w-[246px]',
-                        !value && 'text-muted-foreground',
-                        properties.buttonProperties?.className,
-                    )}
-                    iconLeft={CalendarIcon}
-                    onBlur={onBlurIntercept}
-                    {...properties.buttonProperties}
-                >
-                    {value ? format(value, 'MMMM d, y') : <span>{placeholder}</span>}
-                </Button>
-            </Popover>
+                trigger={
+                    <Button
+                        variant="FormInputSelect"
+                        size="FormInputSelect"
+                        className={mergeClassNames(
+                            'min-w-[246px]',
+                            !value && 'text-muted-foreground',
+                            properties.buttonProperties?.className,
+                        )}
+                        iconLeft={CalendarIcon}
+                        onBlur={onBlurIntercept}
+                        {...properties.buttonProperties}
+                    >
+                        {value ? format(value, 'MMMM d, y') : <span>{placeholder}</span>}
+                    </Button>
+                }
+            />
         );
     },
 );

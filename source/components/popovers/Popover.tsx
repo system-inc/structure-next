@@ -10,28 +10,19 @@ import * as RadixPopover from '@radix-ui/react-popover';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { wrapForSlot } from '@structure/source/utilities/react/React';
 
-// Variants - Popover
-export const PopoverVariants = {
-    // Default variant
-    default:
-        // Focus
-        `outline-none ` +
-        // Background and text
-        `bg-opsis-background-primary text-opsis-content-primary ` +
-        // Border
-        `rounded-small border border-light-4 dark:border-dark-4 ` +
-        // Base width and height
-        `w-full`,
-    // Unstyled variant
-    unstyled: ``,
-};
+// Dependencies - Theme
+import { popoverTheme as structurePopoverTheme } from '@structure/source/components/popovers/PopoverTheme';
+import type { PopoverVariant } from '@structure/source/components/popovers/PopoverTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Component - Popover
 export interface PopoverProperties {
-    children?: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
-    variant?: keyof typeof PopoverVariants;
-    content: React.ReactNode;
-    className?: string;
+    children?: never; // Do not use children, use trigger property instead
+    variant?: PopoverVariant;
+    trigger: React.ReactElement; // The element that opens the popover
+    content: React.ReactNode; // What appears in the popover
+    contentClassName?: string; // Styles the popover content box
     side?: 'top' | 'bottom' | 'left' | 'right';
     sideOffset?: number;
     align?: 'start' | 'center' | 'end';
@@ -48,8 +39,14 @@ export interface PopoverProperties {
     tabIndex?: number;
 }
 export function Popover(properties: PopoverProperties) {
+    // Get component theme from context
+    const componentTheme = useComponentTheme();
+
+    // Merge the structure theme with project theme (if set by the layout provider)
+    const popoverTheme = mergeComponentTheme(structurePopoverTheme, componentTheme?.Popover);
+
     // Defaults
-    const variant = properties.variant || 'default';
+    const variant = properties.variant ?? popoverTheme.configuration?.defaultVariant?.variant;
 
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
@@ -89,7 +86,8 @@ export function Popover(properties: PopoverProperties) {
         onOpenAutoFocus: properties.onOpenAutoFocus,
         tabIndex: properties.tabIndex ?? 1,
         className: mergeClassNames(
-            PopoverVariants[variant],
+            popoverTheme.configuration.baseClasses,
+            variant ? popoverTheme.variants[variant] : '',
             // State open is specific to Popover
             'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
             // Side bottom is specific to Popover
@@ -99,7 +97,7 @@ export function Popover(properties: PopoverProperties) {
             // This was previously set to z-50 but the tips were showing through the dialog overlay
             // This is now set to 40 to ensure the tooltip is below the dialog overlay
             'z-40',
-            properties.className,
+            properties.contentClassName,
         ),
         style: {
             maxWidth: 'var(--radix-popover-content-available-width)',
@@ -116,27 +114,25 @@ export function Popover(properties: PopoverProperties) {
     return (
         <RadixPopover.Root open={open} onOpenChange={onOpenChange} modal={properties.modal}>
             {/* Trigger */}
-            {properties.children && (
-                <RadixPopover.Trigger
-                    tabIndex={properties.tabIndex ?? 1}
-                    onKeyDown={function (event) {
-                        // console.log('Popover.tsx onKeyDown', event.code);
+            <RadixPopover.Trigger
+                tabIndex={properties.tabIndex ?? 1}
+                onKeyDown={function (event) {
+                    // console.log('Popover.tsx onKeyDown', event.code);
 
-                        // Open the popover when the user presses the arrow keys, spacebar, or enter
-                        if(
-                            open == false &&
-                            ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
-                        ) {
-                            event.preventDefault();
-                            setOpen(true);
-                        }
-                    }}
-                    asChild
-                >
-                    {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
-                    {wrapForSlot(properties.children, open ? 'group data-state-open' : 'group')}
-                </RadixPopover.Trigger>
-            )}
+                    // Open the popover when the user presses the arrow keys, spacebar, or enter
+                    if(
+                        open == false &&
+                        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
+                    ) {
+                        event.preventDefault();
+                        setOpen(true);
+                    }
+                }}
+                asChild
+            >
+                {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
+                {wrapForSlot(properties.trigger, open ? 'group data-state-open' : 'group')}
+            </RadixPopover.Trigger>
             {/* Portal is optional - use it to render above other content, but disable for Dialogs to prevent z-index issues */}
             {properties.portalContainer ? (
                 <RadixPopover.Portal container={properties.portalContainer}>{contentElement}</RadixPopover.Portal>

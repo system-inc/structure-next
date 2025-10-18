@@ -126,8 +126,8 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
                         label="Email Verification Code"
                         labelTip="The email may take a few minutes to arrive. Be sure to check your spam folder if the email is not in
                     your inbox."
-                        labelTipIconProperties={{
-                            contentClassName: 'w-64 text-sm px-3 py-2.5',
+                        labelTipButtonProperties={{
+                            tipClassName: 'w-64 text-sm px-3 py-2.5',
                         }}
                         placeholder="Code"
                         description={'Enter the code sent to ' + properties.emailAddress + '.'}

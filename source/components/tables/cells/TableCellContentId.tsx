@@ -30,21 +30,22 @@ export function TableCellContentId(properties: TableCellContentIdProperties) {
                 ),
             }}
             value={properties.value}
-        >
-            {properties.url ? (
-                // If there is a URL, render a Link
-                <Link
-                    href={properties.url}
-                    className="hover:underline"
-                    target={properties.openUrlInNewTab ? '_blank' : undefined}
-                    prefetch={false}
-                >
-                    {content}
-                </Link>
-            ) : (
-                // If there is no URL, just render the content
-                <span>{content}</span>
-            )}
-        </CopyTip>
+            trigger={
+                properties.url ? (
+                    // If there is a URL, render a Link
+                    <Link
+                        href={properties.url}
+                        className="hover:underline"
+                        target={properties.openUrlInNewTab ? '_blank' : undefined}
+                        prefetch={false}
+                    >
+                        {content}
+                    </Link>
+                ) : (
+                    // If there is no URL, just render the content
+                    <span>{content}</span>
+                )
+            }
+        />
     );
 }

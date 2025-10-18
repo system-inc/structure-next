@@ -12,10 +12,10 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - PopoverMenu
 export interface PopoverMenuProperties extends Omit<MenuProperties, 'items'> {
-    children: React.ReactElement; // Must be a ReactElement (e.g., div or span), not a ReactNode
+    trigger: PopoverProperties['trigger'];
     items: MenuItemInterface[];
     closeOnItemSelected?: boolean;
-    popoverProperties?: Omit<PopoverProperties, 'children' | 'content'>;
+    popoverProperties?: Omit<PopoverProperties, 'trigger' | 'content'>;
 }
 export function PopoverMenu({
     search,
@@ -23,7 +23,7 @@ export function PopoverMenu({
     closeOnItemSelected,
     popoverProperties,
     className,
-    children,
+    trigger,
     ...menuProperties
 }: PopoverMenuProperties) {
     // State
@@ -92,6 +92,7 @@ export function PopoverMenu({
     return (
         <Popover
             {...popoverProperties}
+            trigger={trigger}
             open={open}
             onOpenChange={setOpen}
             content={
@@ -108,9 +109,7 @@ export function PopoverMenu({
             side={popoverPropertiesSide}
             align={popoverPropertiesAlign}
             onOpenAutoFocus={onOpenAutoFocus}
-            className={mergeClassNames('border-none', popoverProperties?.className)}
-        >
-            {children}
-        </Popover>
+            contentClassName={mergeClassNames('border-none', popoverProperties?.contentClassName)}
+        />
     );
 }

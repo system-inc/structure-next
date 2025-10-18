@@ -48,10 +48,11 @@ export function AccountMenuButton() {
             onOpenChange={setOpen}
             content={<AccountMenu account={account.data} className="py-3 outline-none" />}
             align="end"
-        >
-            <div className="h-8 w-8 cursor-pointer">
-                <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
-            </div>
-        </Popover>
+            trigger={
+                <div className="h-8 w-8 cursor-pointer">
+                    <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />
+                </div>
+            }
+        />
     );
 }

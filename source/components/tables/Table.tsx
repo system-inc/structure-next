@@ -11,7 +11,7 @@ import { ToggleButton } from '@structure/source/components/buttons/ToggleButton'
 import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
 import { InputText } from '@structure/source/components/forms/InputText';
 import { InputMultipleSelect } from '@structure/source/components/forms/InputMultipleSelect';
-import { MenuItemProperties } from '@structure/source/components/menus/MenuItem';
+import { MenuItemInterface } from '@structure/source/components/menus/Menu';
 import { PaginationProperties, Pagination } from '@structure/source/components/navigation/pagination/Pagination';
 import {
     ColumnFilterGroup,
@@ -42,8 +42,8 @@ export interface TableProperties extends React.HTMLAttributes<HTMLTableElement> 
 
     // Row selection
     rowSelection?: boolean;
-    rowSelectionActions?: MenuItemProperties[];
-    rowsSelectionActions?: MenuItemProperties[];
+    rowSelectionActions?: MenuItemInterface[];
+    rowsSelectionActions?: MenuItemInterface[];
 
     // Search
     search?: boolean;
@@ -326,7 +326,7 @@ export function Table(properties: TableProperties) {
     const columnTableRowProperties = columnTableRowPropertiesData;
 
     // Defaults
-    const rowsSelectionActions: MenuItemProperties[] =
+    const rowsSelectionActions: MenuItemInterface[] =
         properties.rowsSelectionActions ||
         // Use the default table rows actions if no actions are provided
         defaultTableRowsActions
@@ -347,7 +347,7 @@ export function Table(properties: TableProperties) {
             })
             .map(function (tableRowsAction) {
                 return {
-                    content: tableRowsAction.action,
+                    children: tableRowsAction.action,
                     onSelected: async function () {
                         // Get the selected rows, must use properties.rows here to get the original rows
                         // If we use rows, they will have filtered cells
@@ -492,20 +492,21 @@ export function Table(properties: TableProperties) {
                             {/* Rows Selection Actions */}
                             {properties.rowSelection && (
                                 <PopoverMenu
+                                    trigger={
+                                        <Button
+                                            // Fade in and out when appearing and disappearing
+                                            data-show={selectedRowsIndexesSet.size > 0}
+                                            className="duration-75 data-[show=false]:hidden data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:flex data-[show=true]:animate-in data-[show=true]:fade-in"
+                                            iconLeft={CheckCircledIcon}
+                                        >
+                                            {selectedRowsIndexesSet.size} of {rows.length} selected
+                                        </Button>
+                                    }
                                     items={rowsSelectionActions}
                                     popoverProperties={{
                                         align: 'end',
                                     }}
-                                >
-                                    <Button
-                                        // Fade in and out when appearing and disappearing
-                                        data-show={selectedRowsIndexesSet.size > 0}
-                                        className="duration-75 data-[show=false]:hidden data-[show=false]:animate-out data-[show=false]:fade-out data-[show=true]:flex data-[show=true]:animate-in data-[show=true]:fade-in"
-                                        iconLeft={CheckCircledIcon}
-                                    >
-                                        {selectedRowsIndexesSet.size} of {rows.length} selected
-                                    </Button>
-                                </PopoverMenu>
+                                />
                             )}
 
                             {/* Column Visibility */}

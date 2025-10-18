@@ -138,7 +138,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     for(const operatorKey in operators) {
         operatorsItems.push({
             value: operatorKey,
-            content: operators[operatorKey as keyof typeof operators].label,
+            children: operators[operatorKey as keyof typeof operators].label,
         });
     }
 
@@ -303,8 +303,8 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 <InputSelect
                                     className="w-24"
                                     items={[
-                                        { value: ColumnFilterGroupOperator.And, content: 'and' },
-                                        { value: ColumnFilterGroupOperator.Or, content: 'or' },
+                                        { value: ColumnFilterGroupOperator.And, children: 'and' },
+                                        { value: ColumnFilterGroupOperator.Or, children: 'or' },
                                     ]}
                                     defaultValue={columnFilterGroupData.operator}
                                     onChange={function (value) {
@@ -424,8 +424,8 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                         <InputSelect
                             className="w-24"
                             items={[
-                                { value: ColumnFilterGroupOperator.And, content: 'and' },
-                                { value: ColumnFilterGroupOperator.Or, content: 'or' },
+                                { value: ColumnFilterGroupOperator.And, children: 'and' },
+                                { value: ColumnFilterGroupOperator.Or, children: 'or' },
                             ]}
                             defaultValue={columnFilterGroupData.operator}
                             onChange={function (value) {
