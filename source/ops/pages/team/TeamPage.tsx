@@ -35,6 +35,7 @@ export function TeamPage() {
             </Button>
 
             <Dialog
+                trigger={<Button>Launch Dialog</Button>}
                 header="How are you doing?"
                 content="I'm doing great!"
                 footer={
@@ -42,9 +43,7 @@ export function TeamPage() {
                         <Button>Dismiss</Button>
                     </DialogCloseControl>
                 }
-            >
-                <Button>Launch Dialog</Button>
-            </Dialog>
+            />
 
             <p>Kirk Ouimet</p>
             <p>John-Paul Andersen</p>

@@ -48,6 +48,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
                 {properties.account && (
                     <div className="mr-4 justify-end">
                         <AnimatedButton
+                            variant="Primary"
                             tabIndex={1}
                             className="w-[92px]"
                             onClick={async function () {

@@ -72,7 +72,7 @@ export function DialogMenu(properties: DialogMenuProperties) {
     // Render the component
     return (
         <Dialog
-            variant="unstyledTopFixed"
+            variant="UnstyledTopFixed"
             content={menu}
             open={open}
             onOpenChange={setOpen}

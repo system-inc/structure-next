@@ -150,6 +150,7 @@ export function TableCell(properties: TableCellProperties) {
             // Use dialogs for long content
             content = (
                 <Dialog
+                    trigger={<div className="w-full truncate">{properties.value}</div>}
                     className={mergeClassNames('w-full text-sm md:max-w-4xl md:min-w-lg', longContent ? '' : '')}
                     header={properties.column?.title}
                     content={value}
@@ -163,9 +164,7 @@ export function TableCell(properties: TableCellProperties) {
                             </CopyButton>
                         </div>
                     }
-                >
-                    <div className="w-full truncate">{properties.value}</div>
-                </Dialog>
+                />
             );
         }
     }

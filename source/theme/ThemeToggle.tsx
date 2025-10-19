@@ -41,6 +41,7 @@ export function ThemeToggle() {
 
         return (
             <Tip
+                variant="Primary"
                 sideOffset={8}
                 trigger={
                     <button

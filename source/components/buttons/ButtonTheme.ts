@@ -256,8 +256,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `rounded-small border border-light-6 dark:border-dark-3 ` +
             // Light text on dark background
             `bg-opsis-background-primary text-opsis-content-primary ` +
-            // Hover
-            `hover:bg-light-2 dark:hover:bg-dark-1 ` +
             // Active (includes when used as open popover trigger)
             `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
             // Disabled

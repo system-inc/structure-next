@@ -129,3 +129,50 @@ export function getStringFromReactNode(node: React.ReactNode): string | undefine
     // Default case
     return undefined;
 }
+
+// Hook to detect mobile viewport (max-width: 768px)
+// Initializes with correct value to avoid layout shift
+export function useIsMobile(): boolean {
+    const [isMobile, setIsMobile] = React.useState(function () {
+        // Initialize on mount with correct value
+        return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    });
+
+    // Effect to update on viewport size changes
+    React.useEffect(function () {
+        // Set initial value
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        setIsMobile(mediaQuery.matches);
+
+        // Function to handle media query changes
+        function handleChange(event: MediaQueryListEvent) {
+            setIsMobile(event.matches);
+        }
+
+        // Add the event listener
+        mediaQuery.addEventListener('change', handleChange);
+
+        // On unmount, remove the event listener
+        return function () {
+            mediaQuery.removeEventListener('change', handleChange);
+        };
+    }, []);
+
+    return isMobile;
+}
+
+// Helper to focus first focusable element within a container
+// Useful for dialog/drawer focus management
+export function focusFirstFocusableElement(selector: string): void {
+    // Find the container element
+    const container = document.querySelector(selector);
+    if(!container) return;
+
+    // Find the first focusable element within the container
+    const focusable = container.querySelector<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+
+    // Focus the element if found
+    focusable?.focus();
+}

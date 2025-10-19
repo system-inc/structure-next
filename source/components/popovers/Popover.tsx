@@ -100,10 +100,14 @@ export function Popover(properties: PopoverProperties) {
             properties.contentClassName,
         ),
         style: {
-            maxWidth: 'var(--radix-popover-content-available-width)',
+            // For Tip variant, we let CSS classes control max-width instead of inline styles
+            // For other variants (like Primary), use Radix variables
+            ...(variant !== 'Tip' && {
+                maxWidth: 'var(--radix-popover-content-available-width)',
+                minWidth: 'var(--radix-popper-anchor-width)',
+                minHeight: 'var(--radix-popper-anchor-height)',
+            }),
             maxHeight: 'var(--radix-popover-content-available-height)',
-            minWidth: 'var(--radix-popper-anchor-width)',
-            minHeight: 'var(--radix-popper-anchor-height)',
         },
     };
 

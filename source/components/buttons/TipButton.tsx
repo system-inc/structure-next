@@ -12,9 +12,6 @@ import type { NonLinkButtonProperties } from '@structure/source/components/butto
 // Dependencies - Assets
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
 
-// Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-
 // Component - TipButton
 export interface TipButtonProperties extends Omit<NonLinkButtonProperties, 'children'> {
     tipClassName?: string;
@@ -37,32 +34,23 @@ export function TipButton({
     // Shared trigger element
     const button = <Button variant={variantValue} size={sizeValue} icon={Icon} {...buttonProperties} />;
 
-    // Shared content className
-    const tipClassNameValue = mergeClassNames('max-w-xs rounded-extra-small px-3 py-2 text-sm shadow-04', tipClassName);
-
     // Render the component
     // If open on press, use a Popover
     if(openOnPressValue) {
         return (
             <Popover
-                variant="Primary"
+                variant="Tip"
                 {...popoverProperties}
                 trigger={button}
                 content={tip}
-                contentClassName={tipClassNameValue}
+                contentClassName={tipClassName}
             />
         );
     }
     // Otherwise, return a Tip
     else {
         return (
-            <Tip
-                variant="Primary"
-                {...popoverProperties}
-                trigger={button}
-                content={tip}
-                contentClassName={tipClassNameValue}
-            />
+            <Tip variant="Tip" {...popoverProperties} trigger={button} content={tip} contentClassName={tipClassName} />
         );
     }
 }

@@ -5,108 +5,30 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
+import { Drawer as VaulDrawer } from 'vaul';
 import { Button } from '@structure/source/components/buttons/Button';
 import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
 
+// Dependencies - Theme
+import { dialogTheme as structureDialogTheme } from './DialogTheme';
+import type { DialogVariant } from './DialogTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+
 // Dependencies - Assets
-import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
+import { XIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-import { wrapForSlot } from '@structure/source/utilities/react/React';
-
-// Class Names - Dialog Overlay
-export const dialogOverlayClassName =
-    // Position and z-index
-    'fixed inset-0 z-50 ' +
-    // Background and backdrop
-    'bg-background/60 ' +
-    // Animation states
-    'data-[state=open]:animate-in data-[state=open]:fade-in-0 ' +
-    // Fade animation
-    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0';
-
-// Class Names - Dialog Close Button
-export const dialogCloseClassName =
-    // Position
-    'absolute right-4 top-4 ' +
-    // Border
-    'rounded-extra-small  ' +
-    // Hover and focus states
-    'cursor-pointer transition-opacity opacity-70 hover:opacity-100 ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ' +
-    // Disabled state
-    'disabled:pointer-events-none ' +
-    // State-specific styles
-    'data-[state=open]:bg-accent data-[state=open]:text-muted-foreground';
-
-// Class Names - Dialog Header
-export const dialogHeaderClassName =
-    // Flex layout with vertical spacing
-    'flex flex-col space-y-1.5 ' +
-    // Text alignment
-    'text-left';
-
-// Class Names - Dialog Footer
-export const dialogFooterClassName =
-    // Flex layout with spacing
-    'flex flex-row justify-end space-x-2';
-
-// Class Names - Dialog Content - Positioned Centered
-export const dialogContentPositionCenteredClassName =
-    // Position, outline, and z-index
-    'outline-none fixed left-[50%] top-[50%] z-50 ' +
-    // Flex layout and alignment
-    'w-full max-w-[90vw] md:max-w-lg max-h-[95vh] ' +
-    // Animation states
-    'duration-200 ' +
-    // Open animation
-    'data-[state=open]:animate-in-centered data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] ' +
-    // Close animation
-    'data-[state=closed]:animate-out-centered data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]';
-
-// Class Names - Dialog Content - Positioned Top Fixed
-export const dialogContentPositionTopFixedClassName =
-    // Position, outline, and z-index
-    'outline-none fixed left-[50%] top-[10%] z-50 ' +
-    // Grid layout and alignment
-    'grid w-full max-w-lg translate-x-[-50%] translate-y-[0%] gap-4' +
-    // Animation states
-    'duration-200 ' +
-    // Open animation
-    'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-left-1/2 ' +
-    // Close animation
-    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-left-1/2';
-
-// Variants - Dialog
-export const DialogVariants = {
-    // Default variant
-    default:
-        `${dialogContentPositionCenteredClassName} ` +
-        // Border, background, and shadow
-        `flex flex-col border border-opsis-border-primary bg-background p-6 shadow-lg rounded-lg w-full gap-4`,
-    // Unstyled centered variant
-    unstyled:
-        `${dialogContentPositionCenteredClassName} ` +
-        // Unstyled
-        ``,
-    // Unstyled top fixed variant
-    unstyledTopFixed:
-        `${dialogContentPositionTopFixedClassName} ` +
-        // Unstyled
-        ``,
-    // Full screen with margin
-    fullScreenWithMargin:
-        `${dialogContentPositionCenteredClassName} ` +
-        `flex flex-col border border-opsis-border-primary bg-background p-6 shadow-lg rounded-lg w-full gap-4 ` +
-        `h-full max-h-[calc(100vh-8rem)] w-full max-w-[calc(100vw-8rem)] md:max-h-[calc(100vh-8rem)] md:max-w-[calc(100vw-8rem)] `,
-};
+import { wrapForSlot, useIsMobile, focusFirstFocusableElement } from '@structure/source/utilities/react/React';
 
 // Component - Dialog
 export interface DialogProperties {
-    variant?: keyof typeof DialogVariants;
-    children?: React.ReactElement; // The trigger
-    overlayClassName?: string; // The class names for the overlay
     className?: string; // The class names for the dialog
+    overlayClassName?: string; // The class names for the overlay
+    children?: never; // Do not use children, use trigger property instead
+    trigger?: React.ReactElement; // The element that opens the dialog
+    variant?: DialogVariant;
     closeControl?: React.ReactNode | boolean; // The close button
     header?: React.ReactNode; // The header
     headerClassName?: string; // The class names for the header
@@ -117,26 +39,32 @@ export interface DialogProperties {
     footer?: React.ReactNode; // The footer
     footerClassName?: string; // The class names for the footer
     footerCloseButton?: React.ReactNode | boolean; // The close button for the footer
+    modal?: boolean; // Whether the dialog is a modal
     open?: boolean; // Whether the dialog is open
     onOpenChange?: (open: boolean) => void; // The callback for when the open state changes
     onOpenAutoFocus?: (event: Event) => void; // The callback for when the dialog opens
-    modal?: boolean; // Whether the dialog is a modal
 }
 export function Dialog(properties: DialogProperties) {
+    // Get component theme from context
+    const componentTheme = useComponentTheme();
+
+    // Merge the structure theme with project theme
+    const dialogTheme = mergeComponentTheme(structureDialogTheme, componentTheme?.Dialog);
+
+    // Get variant
+    const variant = properties.variant ?? dialogTheme.configuration?.defaultVariant?.variant ?? 'Default';
+
+    // Detect mobile viewport
+    const isMobile = useIsMobile();
+
+    // Generate unique ID for accessibility
+    const dialogId = React.useId();
+
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
 
     // Defaults
-    const variant = properties.variant || 'default';
     const accessibilityDescription = properties.accessibilityDescription || '';
-
-    // On mount, set the open state
-    React.useEffect(
-        function () {
-            setOpen(properties.open ?? false);
-        },
-        [properties.open],
-    ); // Listen for changes to the open property
 
     // Function to handle the open state change
     function onOpenChange() {
@@ -147,115 +75,202 @@ export function Dialog(properties: DialogProperties) {
         setOpen(!open);
     }
 
+    // On mount, set the open state
+    React.useEffect(
+        function () {
+            setOpen(properties.open ?? false);
+        },
+        [properties.open],
+    );
+
+    // Polymorphic components that adapt to mobile/desktop
+    const DialogClose = isMobile ? VaulDrawer.Close : RadixDialog.Close;
+    const DialogTitle = isMobile ? VaulDrawer.Title : RadixDialog.Title;
+    const DialogDescription = isMobile ? VaulDrawer.Description : RadixDialog.Description;
+
+    // Shared close button rendering
+    function renderCloseButton(additionalClassName?: string) {
+        if(properties.closeControl === undefined || properties.closeControl !== false) {
+            return (
+                <DialogClose asChild>
+                    {properties.closeControl !== true && properties.closeControl !== undefined ? (
+                        properties.closeControl
+                    ) : (
+                        <Button
+                            variant="GhostIcon"
+                            size="GhostIcon"
+                            icon={XIcon}
+                            className={mergeClassNames(dialogTheme.configuration.closeClasses, additionalClassName)}
+                            aria-label="Close"
+                        />
+                    )}
+                </DialogClose>
+            );
+        }
+        return null;
+    }
+
+    // Shared header rendering
+    function renderHeader(additionalClassName?: string) {
+        if(!properties.header) {
+            return null;
+        }
+
+        return (
+            <div
+                className={mergeClassNames(
+                    dialogTheme.configuration.headerClasses,
+                    properties.headerClassName,
+                    additionalClassName,
+                )}
+            >
+                {typeof properties.header === 'string' ? (
+                    <DialogTitle asChild>
+                        <div className="font-medium">{properties.header}</div>
+                    </DialogTitle>
+                ) : (
+                    <DialogTitle asChild>{properties.header}</DialogTitle>
+                )}
+            </div>
+        );
+    }
+
+    // Shared accessibility elements
+    function renderAccessibility() {
+        return (
+            <>
+                {properties.accessibilityTitle && (
+                    <DialogTitle className="hidden" aria-describedby={properties.accessibilityTitle}></DialogTitle>
+                )}
+                <DialogDescription className="hidden" aria-describedby={accessibilityDescription}></DialogDescription>
+            </>
+        );
+    }
+
+    // Shared content rendering
+    function renderContent(mobileClassName?: string) {
+        if(!properties.content) {
+            return null;
+        }
+
+        if(isMobile) {
+            return <div className={mobileClassName}>{properties.content}</div>;
+        }
+
+        return (
+            <ScrollArea
+                className={mergeClassNames('max-h-[75vh]', properties.contentScrollAreaClassName)}
+                horizontalScrollbar={true}
+            >
+                {properties.content}
+            </ScrollArea>
+        );
+    }
+
+    // Shared footer rendering
+    function renderFooter(additionalClassName?: string) {
+        if(!properties.footer && !properties.footerCloseButton) {
+            return null;
+        }
+
+        return (
+            <div
+                className={mergeClassNames(
+                    dialogTheme.configuration.footerClasses,
+                    properties.footerClassName,
+                    additionalClassName,
+                )}
+            >
+                {properties.footer}
+
+                {properties.footerCloseButton !== undefined && properties.footerCloseButton !== false && (
+                    <DialogClose asChild>
+                        {properties.footerCloseButton !== true && properties.footerCloseButton !== undefined ? (
+                            properties.footerCloseButton
+                        ) : (
+                            <Button variant="Primary">Dismiss</Button>
+                        )}
+                    </DialogClose>
+                )}
+            </div>
+        );
+    }
+
     // Render the component
     return (
-        <RadixDialog.Root open={open} onOpenChange={onOpenChange} modal={properties.modal}>
-            {/* Trigger */}
-            {properties.children && (
-                <RadixDialog.Trigger asChild>
-                    {/* If the child is an SVG, wrap it in a span so it can be interacted with */}
-                    {wrapForSlot(properties.children, open ? 'data-state-open' : '')}
-                </RadixDialog.Trigger>
+        <>
+            {isMobile ? (
+                // Mobile: Vaul Drawer (bottom sheet)
+                <VaulDrawer.Root open={open} onOpenChange={onOpenChange} shouldScaleBackground modal>
+                    {properties.trigger && <VaulDrawer.Trigger asChild>{properties.trigger}</VaulDrawer.Trigger>}
+                    <VaulDrawer.Portal>
+                        <VaulDrawer.Overlay
+                            className={mergeClassNames(
+                                dialogTheme.configuration.overlayClasses,
+                                properties.overlayClassName,
+                            )}
+                        />
+                        <VaulDrawer.Content
+                            className={mergeClassNames(
+                                'fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border-opsis-border-primary bg-background',
+                                properties.className,
+                            )}
+                            onOpenAutoFocus={function (event) {
+                                if(properties.onOpenAutoFocus) {
+                                    properties.onOpenAutoFocus(event);
+                                }
+                                else {
+                                    event.preventDefault();
+                                    focusFirstFocusableElement(`[data-drawer-id="${dialogId}"]`);
+                                }
+                            }}
+                            data-drawer-id={dialogId}
+                        >
+                            {renderCloseButton('absolute top-6 right-6 z-10')}
+                            {renderHeader('flex-shrink-0 px-6 pt-6 pb-4')}
+                            {renderAccessibility()}
+                            {renderContent('flex-grow overflow-y-auto px-6')}
+                            {renderFooter('flex-shrink-0 px-6 pt-4 pb-6')}
+                        </VaulDrawer.Content>
+                    </VaulDrawer.Portal>
+                </VaulDrawer.Root>
+            ) : (
+                // Desktop: Radix Dialog (centered modal)
+                <RadixDialog.Root open={open} onOpenChange={onOpenChange} modal={properties.modal}>
+                    {properties.trigger && (
+                        <RadixDialog.Trigger asChild>
+                            {wrapForSlot(properties.trigger, open ? 'data-state-open' : '')}
+                        </RadixDialog.Trigger>
+                    )}
+                    <RadixDialog.Portal>
+                        <RadixDialog.Overlay
+                            className={mergeClassNames(
+                                dialogTheme.configuration.overlayClasses,
+                                properties.overlayClassName,
+                            )}
+                        />
+                        <RadixDialog.Content
+                            className={mergeClassNames(dialogTheme.variants[variant], properties.className)}
+                            onOpenAutoFocus={(event) => {
+                                if(properties.onOpenAutoFocus) {
+                                    properties.onOpenAutoFocus(event);
+                                }
+                                else {
+                                    event.preventDefault();
+                                    focusFirstFocusableElement(`[data-dialog-id="${dialogId}"]`);
+                                }
+                            }}
+                            data-dialog-id={dialogId}
+                        >
+                            {renderCloseButton()}
+                            {renderHeader()}
+                            {renderAccessibility()}
+                            {renderContent()}
+                            {renderFooter()}
+                        </RadixDialog.Content>
+                    </RadixDialog.Portal>
+                </RadixDialog.Root>
             )}
-            <RadixDialog.Portal>
-                <RadixDialog.Overlay className={mergeClassNames(dialogOverlayClassName, properties.overlayClassName)} />
-                <RadixDialog.Content
-                    onOpenAutoFocus={properties.onOpenAutoFocus}
-                    className={mergeClassNames(DialogVariants[variant], properties.className)}
-                >
-                    {/* Close */}
-                    {(properties.closeControl === undefined || properties.closeControl !== false) && (
-                        // If the closeControl property is not a boolean, use it directly
-                        // If the closeControl property is true or undefined, render a default close button
-                        // If the closeControl property is false, don't render anything
-                        <RadixDialog.Close asChild>
-                            {properties.closeControl !== true && properties.closeControl !== undefined ? (
-                                properties.closeControl
-                            ) : (
-                                <div className={mergeClassNames(dialogCloseClassName)} aria-label="Close">
-                                    <CloseIcon className="h-4 w-4" />
-                                </div>
-                            )}
-                        </RadixDialog.Close>
-                    )}
-
-                    {/* Header */}
-                    {properties.header && (
-                        <div
-                            className={mergeClassNames(
-                                dialogHeaderClassName,
-                                properties.headerClassName,
-                                // 'border border-red-500',
-                            )}
-                        >
-                            {
-                                // If the header is a string, render it with a default style
-                                typeof properties.header === 'string' ? (
-                                    <RadixDialog.Title asChild>
-                                        <div className="font-medium">{properties.header}</div>
-                                    </RadixDialog.Title>
-                                ) : (
-                                    // Otherwise, render the header as a child
-                                    <RadixDialog.Title asChild>{properties.header}</RadixDialog.Title>
-                                )
-                            }
-                        </div>
-                    )}
-
-                    {/* Accessibility Title */}
-                    {properties.accessibilityTitle && (
-                        <RadixDialog.Title
-                            className="hidden"
-                            aria-describedby={properties.accessibilityTitle}
-                        ></RadixDialog.Title>
-                    )}
-
-                    {/* Accessibility Description */}
-                    <RadixDialog.Description
-                        className="hidden"
-                        aria-describedby={accessibilityDescription}
-                    ></RadixDialog.Description>
-
-                    {/* Content */}
-                    {/* We wrap the content in a scroll area to standardize all scrollbars in dialogs */}
-                    {properties.content && (
-                        <ScrollArea
-                            className={mergeClassNames('max-h-[75vh]', properties.contentScrollAreaClassName)}
-                            horizontalScrollbar={true}
-                        >
-                            {properties.content}
-                        </ScrollArea>
-                    )}
-
-                    {/* Footer */}
-                    {(properties.footer || properties.footerCloseButton) && (
-                        <div
-                            className={mergeClassNames(
-                                dialogFooterClassName,
-                                properties.footerClassName,
-                                // 'border border-red-500',
-                            )}
-                        >
-                            {properties.footer}
-
-                            {/* Close Button */}
-                            {properties.footerCloseButton !== undefined && properties.footerCloseButton !== false && (
-                                // If the footerCloseButton property is not a boolean, use it directly
-                                // If the footerCloseButton property is true render a default close button <Button>Dismiss</Button>
-                                // If the footerCloseButton property is false, don't render anything
-                                <RadixDialog.Close asChild>
-                                    {properties.footerCloseButton !== true &&
-                                    properties.footerCloseButton !== undefined ? (
-                                        properties.footerCloseButton
-                                    ) : (
-                                        <Button>Dismiss</Button>
-                                    )}
-                                </RadixDialog.Close>
-                            )}
-                        </div>
-                    )}
-                </RadixDialog.Content>
-            </RadixDialog.Portal>
-        </RadixDialog.Root>
+        </>
     );
 }

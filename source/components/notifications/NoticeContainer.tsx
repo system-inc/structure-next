@@ -155,7 +155,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             {/* Clear All Button */}
             <div
                 className={mergeClassNames(
-                    'pointer-events-auto relative top-7 z-50 flex w-full justify-end p-1 pr-4 pb-2 md:pr-8',
+                    'pointer-events-auto relative z-50 flex w-full justify-end pt-6 pr-4 md:pr-8',
                 )}
             >
                 <NoticesClearAllButton
@@ -177,26 +177,16 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                 />
             </div>
 
-            {/* Border fade */}
             <div
-                className={mergeClassNames(
-                    'pointer-events-none relative top-7 z-40 h-7 w-full',
-                    // TODO: This doesn't look great on top of content, draws the shadow on top of the content
-                    // 'bg-gradient-to-b from-light to-transparent dark:from-dark dark:to-transparent',
-                    (!hovered || noticesState.length === 0) && 'hidden',
-                )}
-            />
-
-            <div
-                className="pointer-events-auto relative z-0 flex flex-col-reverse overflow-x-hidden overflow-y-auto border-red-500 pb-4"
+                className="pointer-events-auto relative z-0 flex h-auto max-h-[50vh] flex-col-reverse overflow-x-hidden overflow-y-auto pt-2 pb-2"
+                style={{
+                    maskImage: 'linear-gradient(to bottom, transparent 0%, black 8px, black 100%)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8px, black 100%)',
+                }}
                 // Handle mouse enter when it enters notices
                 onMouseEnter={handleMouseEnter}
                 onFocus={handleMouseEnter}
                 onBlur={handleMouseLeave}
-                style={{
-                    maxHeight: '50vh',
-                    paddingTop: 16,
-                }}
             >
                 {/* Notices */}
                 <AnimatePresence mode="sync" initial={false} propagate>
@@ -213,10 +203,10 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                                 animate={hovered ? 'expanded' : 'visible'}
                                 exit={'exit'}
                                 layout="position"
-                                className={'relative w-full flex-shrink-0 pt-0 pr-4 pl-4 md:pr-8'}
+                                className={'relative w-full flex-shrink-0 pr-4 pl-4 md:pr-8'}
                                 style={{ zIndex: noticesState.length - index }}
                             >
-                                <div className="pt-4">
+                                <div className="pt-2 pb-2">
                                     <Notice
                                         ref={function (reference) {
                                             if(reference) {

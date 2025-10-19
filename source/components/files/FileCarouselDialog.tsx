@@ -14,7 +14,7 @@ export interface FileCarouselDialogProperties extends FileCarouselProperties {
 export function FileCarouselDialog(properties: FileCarouselDialogProperties) {
     return (
         <Dialog
-            variant="fullScreenWithMargin"
+            variant="FullScreenWithMargin"
             accessibilityTitle="File Carousel"
             open={properties.open}
             onOpenChange={properties.onOpenChange}

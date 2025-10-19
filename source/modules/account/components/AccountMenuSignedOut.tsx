@@ -23,6 +23,7 @@ export function AccountMenuSignedOut() {
             </div>
             <div className="px-4 pt-4">
                 <Button
+                    variant="Primary"
                     className="w-full"
                     onClick={function () {
                         account.setAuthenticationDialogOpen(true);

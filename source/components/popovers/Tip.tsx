@@ -97,8 +97,8 @@ export function Tip(properties: TipProperties) {
                         properties.contentClassName,
                     )}
                     // Use Radix variables to style the popover content size
+                    // Note: For Tip variant, we let CSS classes control max-width instead of inline styles
                     style={{
-                        maxWidth: 'var(--radix-tooltip-content-available-width)',
                         maxHeight: 'var(--radix-tooltip-content-available-height)',
                     }}
                 >

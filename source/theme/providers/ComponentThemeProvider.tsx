@@ -6,12 +6,14 @@ import React from 'react';
 // Dependencies - Theme
 import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
+import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Type - Component Theme Context Value
 interface ComponentThemeContextValue {
     Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
+    Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
     // Future component themes:
     // Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
     // Table?: DeepPartialComponentTheme<TableThemeConfiguration>;

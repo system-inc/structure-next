@@ -136,7 +136,7 @@ export function FormInput(properties: FormInputProperties) {
                             openOnPress
                             {...properties.labelTipButtonProperties}
                             className={mergeClassNames(
-                                'ml-0.5 max-w-xs p-[2px]',
+                                'ml-0.5 p-[2px]',
                                 properties.labelTipButtonProperties?.className,
                             )}
                             tip={properties.labelTip}

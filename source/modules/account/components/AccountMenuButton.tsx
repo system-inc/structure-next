@@ -44,6 +44,7 @@ export function AccountMenuButton() {
     // Render the component
     return (
         <Popover
+            variant="Primary"
             open={open}
             onOpenChange={setOpen}
             content={<AccountMenu account={account.data} className="py-3 outline-none" />}

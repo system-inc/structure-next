@@ -28,6 +28,7 @@ export const basePopoverClassNames =
 //   }
 export interface PopoverVariants {
     Primary: 'Primary';
+    Tip: 'Tip';
 }
 
 // Type - Popover Variant (derived from PopoverVariants interface)
@@ -50,8 +51,14 @@ export interface PopoverThemeConfiguration {
 // Popover Theme - Structure Default
 export const popoverTheme: PopoverThemeConfiguration = {
     variants: {
-        // Primary variant - Border with background, suitable for general content
+        // Primary variant - Border with background, suitable for general content (popovers, dropdowns)
         Primary: `${basePopoverClassNames} ` + `border border-light-4 dark:border-dark-4`,
+        // Tip variant - Compact tooltips without full width
+        Tip:
+            `outline-none ` +
+            `bg-opsis-background-primary text-opsis-content-primary ` +
+            `max-w-56 rounded-small px-3 py-2 text-sm shadow-04 ` +
+            `border border-light-4 dark:border-dark-4`,
     },
     configuration: {
         baseClasses: '',
