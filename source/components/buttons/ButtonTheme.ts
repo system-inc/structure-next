@@ -253,15 +253,15 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Text
             `text-sm ` +
             // Border
-            `rounded-small border border-light-6 dark:border-dark-3 ` +
+            `rounded-small border border-light-6 dark:border-dark-4 ` +
             // Light text on dark background
             `bg-opsis-background-primary text-opsis-content-primary ` +
             // Active (includes when used as open popover trigger)
             `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
             // Disabled
             `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
-            // Focus
-            `focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`,
+            // Focus (only when not open, since background already indicates open state)
+            `focus:not([data-state=open]):border-neutral dark:focus:not([data-state=open]):border-light focus-visible:outline-none focus-visible:ring-0`,
 
         TableHeaderCell:
             `${buttonCommonClassNames} ` +
