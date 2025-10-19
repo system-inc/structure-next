@@ -400,6 +400,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 // Disabled if there is only one condition
                                 disabled={columnFilterGroupData.conditions.length === 1}
                                 variant="GhostDestructive"
+                                size="Icon"
                                 icon={MinusCircledIcon}
                                 onClick={function () {
                                     removeCondition(condition.id);
@@ -472,12 +473,12 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
             {/* Controls */}
             <div className="mt-4 flex space-x-2">
                 {/* Add Condition Button */}
-                <Button iconLeft={PlusIcon} onClick={addNewCondition}>
+                <Button variant="Primary" iconLeft={PlusIcon} onClick={addNewCondition}>
                     Add Condition
                 </Button>
 
                 {/* Add Filter Group Button */}
-                <Button variant="Ghost" iconLeft={PlusIcon} onClick={addNewFilterGroup}>
+                <Button variant="Primary" iconLeft={PlusIcon} onClick={addNewFilterGroup}>
                     Add Filter Group
                 </Button>
 

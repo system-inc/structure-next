@@ -198,7 +198,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
 
     // Return a Tip if provided
     if(tip) {
-        return <Tip {...tipProperties} trigger={component} content={tip} />;
+        return <Tip variant="Tip" {...tipProperties} trigger={component} content={tip} />;
     }
     else {
         return component;

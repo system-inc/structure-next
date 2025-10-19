@@ -304,7 +304,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Icon Button Sizes
         IconExtraSmall: 'h-3 w-3',
         IconSmall: 'h-4 w-4',
-        Icon: 'h-5 w-5',
+        Icon: 'h-4.5 w-4.5',
         IconLarge: 'h-6 w-6',
         IconExtraLarge: 'h-7 w-7',
 
