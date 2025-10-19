@@ -229,6 +229,7 @@ export function Pagination(properties: PaginationProperties) {
                         (useLinks && properties.page !== 1 ? (
                             <Button
                                 variant="Primary"
+                                size="Icon"
                                 icon={ChevronLeftDoubleIcon}
                                 disabled={properties.page === 1}
                                 href={constructHrefWithExistingUrlSearchParameters(1)}
@@ -236,6 +237,7 @@ export function Pagination(properties: PaginationProperties) {
                         ) : (
                             <Button
                                 variant="Primary"
+                                size="Icon"
                                 icon={ChevronLeftDoubleIcon}
                                 disabled={properties.page === 1}
                                 onClick={async function () {
@@ -249,6 +251,7 @@ export function Pagination(properties: PaginationProperties) {
                     {useLinks && properties.page > 1 ? (
                         <Button
                             variant="Primary"
+                            size="Icon"
                             icon={ChevronLeftIcon}
                             disabled={properties.page <= 1}
                             href={constructHrefWithExistingUrlSearchParameters(Number(properties.page) - 1)}
@@ -256,6 +259,7 @@ export function Pagination(properties: PaginationProperties) {
                     ) : (
                         <Button
                             variant="Primary"
+                            size="Icon"
                             icon={ChevronLeftIcon}
                             disabled={properties.page <= 1}
                             onClick={async function () {
@@ -269,6 +273,7 @@ export function Pagination(properties: PaginationProperties) {
                     {useLinks && properties.page < properties.pagesTotal ? (
                         <Button
                             variant="Primary"
+                            size="Icon"
                             icon={ChevronRightIcon}
                             disabled={properties.page >= properties.pagesTotal}
                             href={constructHrefWithExistingUrlSearchParameters(Number(properties.page) + 1)}
@@ -276,6 +281,7 @@ export function Pagination(properties: PaginationProperties) {
                     ) : (
                         <Button
                             variant="Primary"
+                            size="Icon"
                             icon={ChevronRightIcon}
                             disabled={properties.page >= properties.pagesTotal}
                             onClick={async function () {
@@ -290,6 +296,7 @@ export function Pagination(properties: PaginationProperties) {
                         (useLinks && properties.page < properties.pagesTotal ? (
                             <Button
                                 variant="Primary"
+                                size="Icon"
                                 icon={ChevronRightDoubleIcon}
                                 disabled={properties.page >= properties.pagesTotal}
                                 href={constructHrefWithExistingUrlSearchParameters(properties.pagesTotal)}
@@ -297,6 +304,7 @@ export function Pagination(properties: PaginationProperties) {
                         ) : (
                             <Button
                                 variant="Primary"
+                                size="Icon"
                                 icon={ChevronRightDoubleIcon}
                                 disabled={properties.page >= properties.pagesTotal}
                                 onClick={async function () {
