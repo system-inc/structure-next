@@ -228,12 +228,14 @@ export function Pagination(properties: PaginationProperties) {
                     {firstAndLastPageControl &&
                         (useLinks && properties.page !== 1 ? (
                             <Button
+                                variant="Primary"
                                 icon={ChevronLeftDoubleIcon}
                                 disabled={properties.page === 1}
                                 href={constructHrefWithExistingUrlSearchParameters(1)}
                             />
                         ) : (
                             <Button
+                                variant="Primary"
                                 icon={ChevronLeftDoubleIcon}
                                 disabled={properties.page === 1}
                                 onClick={async function () {
@@ -246,12 +248,14 @@ export function Pagination(properties: PaginationProperties) {
                     {/* Previous Page */}
                     {useLinks && properties.page > 1 ? (
                         <Button
+                            variant="Primary"
                             icon={ChevronLeftIcon}
                             disabled={properties.page <= 1}
                             href={constructHrefWithExistingUrlSearchParameters(Number(properties.page) - 1)}
                         />
                     ) : (
                         <Button
+                            variant="Primary"
                             icon={ChevronLeftIcon}
                             disabled={properties.page <= 1}
                             onClick={async function () {
@@ -264,12 +268,14 @@ export function Pagination(properties: PaginationProperties) {
                     {/* Next Page */}
                     {useLinks && properties.page < properties.pagesTotal ? (
                         <Button
+                            variant="Primary"
                             icon={ChevronRightIcon}
                             disabled={properties.page >= properties.pagesTotal}
                             href={constructHrefWithExistingUrlSearchParameters(Number(properties.page) + 1)}
                         />
                     ) : (
                         <Button
+                            variant="Primary"
                             icon={ChevronRightIcon}
                             disabled={properties.page >= properties.pagesTotal}
                             onClick={async function () {
@@ -283,12 +289,14 @@ export function Pagination(properties: PaginationProperties) {
                     {firstAndLastPageControl &&
                         (useLinks && properties.page < properties.pagesTotal ? (
                             <Button
+                                variant="Primary"
                                 icon={ChevronRightDoubleIcon}
                                 disabled={properties.page >= properties.pagesTotal}
                                 href={constructHrefWithExistingUrlSearchParameters(properties.pagesTotal)}
                             />
                         ) : (
                             <Button
+                                variant="Primary"
                                 icon={ChevronRightDoubleIcon}
                                 disabled={properties.page >= properties.pagesTotal}
                                 onClick={async function () {

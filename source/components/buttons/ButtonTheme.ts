@@ -308,8 +308,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Base classes (empty = unstyled by default, variants include their own base styles)
         baseClasses: '',
 
-        // Only applied when icon prop is provided (empty = no automatic styling)
-        iconOnlyClasses: '',
+        // Only applied when icon property is provided
+        iconOnlyClasses: 'aspect-square px-0 py-0',
 
         // Focus ring for keyboard navigation (empty = variants handle their own focus)
         focusClasses: '',

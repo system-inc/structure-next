@@ -131,16 +131,16 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
     const isDisabled = disabled ?? isLoading;
 
     // Compute final className using the merged theme
-    const computedClassName = buttonVariantClassNames({
-        variant, // Primary, Secondary, Ghost, etc.
-        size, // Small, Base, Large, etc.
-        class: mergeClassNames(
-            isIconOnly && buttonTheme.configuration.iconOnlyClasses, // Square aspect ratio for icon-only
-            buttonTheme.configuration.focusClasses, // Always applied
-            isDisabled && buttonTheme.configuration.disabledClasses, // Conditional
-            className, // User overrides (last = highest priority)
-        ),
-    });
+    const computedClassName = mergeClassNames(
+        buttonVariantClassNames({
+            variant, // Primary, Secondary, Ghost, etc.
+            size, // Small, Base, Large, etc.
+        }),
+        isIconOnly && buttonTheme.configuration.iconOnlyClasses, // Square aspect ratio for icon-only
+        buttonTheme.configuration.focusClasses, // Always applied
+        isDisabled && buttonTheme.configuration.disabledClasses, // Conditional
+        className, // User overrides (last = highest priority)
+    );
 
     // Common properties for all variants
     const commonProperties = {
