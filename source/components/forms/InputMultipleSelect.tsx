@@ -59,7 +59,7 @@ export interface InputMultipleSelectProperties extends Omit<InputProperties, 'de
 
     popoverMenuProperties?: PopoverMenuProperties;
     popoverProperties?: Omit<PopoverProperties, 'trigger' | 'children' | 'content'>;
-    buttonProperties?: Omit<NonLinkButtonProperties, 'variant' | 'size' | 'onBlur' | 'onKeyDown'>;
+    buttonProperties?: Omit<NonLinkButtonProperties, 'onBlur' | 'onKeyDown'>;
 
     // Optional asynchronous loading of menu items
     loadItems?: () => Promise<MenuItemInterface[]>;
@@ -143,14 +143,6 @@ export const InputMultipleSelect = React.forwardRef<
         [loadMenuItems],
     );
 
-    // Update the items when the default items change
-    React.useEffect(
-        function () {
-            setValue(properties.defaultValue);
-        },
-        [properties.defaultValue],
-    );
-
     // Function to expose methods to parent components
     React.useImperativeHandle(reference, function () {
         return {
@@ -176,53 +168,47 @@ export const InputMultipleSelect = React.forwardRef<
             menuItemRenderIndex?: number,
             event?: React.MouseEvent | React.KeyboardEvent | unknown,
         ) {
-            // console.log('InputMultipleSelect.tsx value changed:', menuItem.value);
-
             let newValue: string[] = [];
 
-            // If the value is not undefined
-            if(menuItem.value !== undefined) {
-                // If the item is already selected
-                if(value?.includes(menuItem.value)) {
-                    // Remove the item from from the value
-                    newValue = value?.filter((item) => item !== menuItem.value);
-                }
-                // Otherwise, if the item is not already selected
-                else {
-                    // Calculate the new value preserving the order of the items for the value
-                    propertiesItems?.forEach(function (item) {
-                        if(item.value) {
-                            // If the item is the selected item, add it to the new value
-                            if(item.value === menuItem.value) {
-                                newValue.push(item.value);
+            // Use functional setState to get the current value
+            setValue(function (currentValue) {
+                // If the value is not undefined
+                if(menuItem.value !== undefined) {
+                    // If the item is already selected
+                    if(currentValue?.includes(menuItem.value)) {
+                        // Remove the item from from the value
+                        newValue = currentValue?.filter((item) => item !== menuItem.value);
+                    }
+                    // Otherwise, if the item is not already selected
+                    else {
+                        // Calculate the new value preserving the order of the items for the value
+                        propertiesItems?.forEach(function (item) {
+                            if(item.value) {
+                                // If the item is the selected item, add it to the new value
+                                if(item.value === menuItem.value) {
+                                    newValue.push(item.value);
+                                }
+                                // If the item is not the selected item, but is already in the value, add it to the new value
+                                else if(currentValue?.includes(item.value)) {
+                                    newValue.push(item.value);
+                                }
                             }
-                            // If the item is not the selected item, but is already in the value, add it to the new value
-                            else if(value?.includes(item.value)) {
-                                newValue.push(item.value);
-                            }
-                        }
-                    });
+                        });
+                    }
                 }
 
-                // Set the new value
-                setValue(newValue);
-            }
+                return newValue;
+            });
 
-            // Call the onChange callback if it exists
-            if(propertiesOnChange) {
-                propertiesOnChange(newValue, event);
-            }
+            // Call the onChange callback if it exists (outside of setState)
+            propertiesOnChange?.(newValue, event);
 
             // Close the popover
             if(closeOnItemSelected) {
-                // console.log('Closing popover');
                 setOpen(false);
             }
-            else {
-                // console.log('Not closing popover');
-            }
         },
-        [value, propertiesItems, propertiesOnChange, closeOnItemSelected],
+        [propertiesItems, propertiesOnChange, closeOnItemSelected],
     );
 
     // Function to handle blur events
@@ -290,7 +276,7 @@ export const InputMultipleSelect = React.forwardRef<
                     }}
                     {...properties.buttonProperties}
                 >
-                    {properties.buttonProperties?.children ? (
+                    {properties.buttonProperties?.children !== undefined ? (
                         // If the button has a children property set, use that instead of the selected items or placeholder
                         properties.buttonProperties?.children
                     ) : // Otherwise, if there are selected items, show them

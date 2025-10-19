@@ -370,7 +370,6 @@ export function Table(properties: TableProperties) {
 
     // Function to handle visible columns change
     async function onColumnVisibilityChange(visibleColumnsIndexes?: string[]) {
-        // console.log('onVisibleColumnsChange', visibleColumnsIndexes);
         if(visibleColumnsIndexes) {
             setVisibleColumnsIndexesSet(new Set<number>(visibleColumnsIndexes.map(Number)));
         }
@@ -397,13 +396,16 @@ export function Table(properties: TableProperties) {
         // If the filters are enabled and the previous filters exist, restore them
         if(filtersOn && previousFiltersReference.current) {
             filtersReference.current = previousFiltersReference.current;
+            setFilters(previousFiltersReference.current);
         }
         // If the filters are enabled and the previous filters don't exist, create a blank filter
         else if(filtersOn && !filtersReference.current) {
-            filtersReference.current = {
+            const newFilters = {
                 operator: ColumnFilterGroupOperator.And,
                 conditions: [],
             };
+            filtersReference.current = newFilters;
+            setFilters(newFilters);
         }
         // If the filters are disabled, remove them
         else if(!filtersOn) {
@@ -466,6 +468,7 @@ export function Table(properties: TableProperties) {
                             {properties.filter && (
                                 <ToggleButton
                                     icon={FunnelIcon}
+                                    size="Icon"
                                     tip="Toggle filters"
                                     tipProperties={{ side: 'right' }}
                                     pressed={filtersEnabled}
@@ -488,7 +491,7 @@ export function Table(properties: TableProperties) {
 
                     {/* Table Controls */}
                     {(properties.columnVisibility || properties.rowSelection) && (
-                        <div className="flex items-end justify-end space-x-2">
+                        <div className="flex items-end justify-end gap-2">
                             {/* Rows Selection Actions */}
                             {properties.rowSelection && (
                                 <PopoverMenu
@@ -517,16 +520,20 @@ export function Table(properties: TableProperties) {
                                     items={columns.map(function (column, columnIndex) {
                                         return {
                                             value: columnIndex.toString(),
-                                            content: column.title,
+                                            children: column.title,
                                         };
                                     })}
                                     defaultValue={Array.from(visibleColumnsIndexesSet).map(String)}
                                     search={true}
+                                    closeOnItemSelected={false}
                                     popoverProperties={{
                                         align: 'end',
                                     }}
                                     buttonProperties={{
                                         icon: FilterIcon,
+                                        variant: 'Primary',
+                                        size: 'Icon',
+                                        children: '', // Don't show selected items in button
                                     }}
                                     onChange={onColumnVisibilityChange}
                                 />
