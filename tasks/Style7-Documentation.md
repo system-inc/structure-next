@@ -5,18 +5,21 @@
 **Risk:** None (documentation only)
 
 ## Overview
+
 Create comprehensive documentation for the color system architecture and style organization to prevent future confusion and regressions.
 
 ## Tasks
 
 ### 1. Create Color System Documentation
-- **File:** Create `/libraries/structure/docs/ColorSystem.md`
-- **Content:**
 
-```markdown
+-   **File:** Create `/libraries/structure/docs/ColorSystem.md`
+-   **Content:**
+
+````markdown
 # Structure Color System Architecture
 
 ## Overview
+
 The Structure library uses a two-layer color system: foundational scales for the library, and semantic tokens for projects.
 
 ## Structure Layer: 0-1000 Scales
@@ -25,15 +28,18 @@ The Structure library uses a two-layer color system: foundational scales for the
 **Usage:** Structure library components only
 
 ### Scales (21 steps each, every 50):
-- **black-0 to black-1000**: #505050 → #000000 (lightest to darkest)
-- **gray-0 to gray-1000**: #a7a7a7 → #585858 (light gray to dark gray)
-- **white-0 to white-1000**: #afafaf → #ffffff (darkest to lightest)
+
+-   **black-0 to black-1000**: #505050 → #000000 (lightest to darkest)
+-   **gray-0 to gray-1000**: #a7a7a7 → #585858 (light gray to dark gray)
+-   **white-0 to white-1000**: #afafaf → #ffffff (darkest to lightest)
 
 ### Examples:
+
 ```tsx
 // Structure components use numeric scales
 <button className="bg-white-900 border-black-300">
 ```
+````
 
 ## Project Layer: Opsis Semantic Tokens
 
@@ -41,13 +47,15 @@ The Structure library uses a two-layer color system: foundational scales for the
 **Usage:** Project-specific components
 
 ### Categories:
-- `opsis-content-*`: Text colors (primary, secondary, tertiary, etc.)
-- `opsis-background-*`: Background colors
-- `opsis-action-*`: Interactive element colors
-- `opsis-border-*`: Border colors
-- `opsis-link-*`: Link colors
+
+-   `opsis-content-*`: Text colors (primary, secondary, tertiary, etc.)
+-   `opsis-background-*`: Background colors
+-   `opsis-action-*`: Interactive element colors
+-   `opsis-border-*`: Border colors
+-   `opsis-link-*`: Link colors
 
 ### Examples:
+
 ```tsx
 // Project components use semantic tokens
 <div className="bg-opsis-background-primary text-opsis-content-primary">
@@ -55,30 +63,32 @@ The Structure library uses a two-layer color system: foundational scales for the
 
 ## When to Use Which System
 
-| Context | Use | Example |
-|---------|-----|---------|
+| Context                     | Use           | Example                         |
+| --------------------------- | ------------- | ------------------------------- |
 | Structure library component | 0-1000 scales | `bg-white-850 border-black-400` |
-| Project-specific component | Opsis tokens | `bg-opsis-background-primary` |
-| Quick prototype (structure) | 0-1000 scales | `text-black-700` |
-| Production (project) | Opsis tokens | `text-opsis-content-secondary` |
+| Project-specific component  | Opsis tokens  | `bg-opsis-background-primary`   |
+| Quick prototype (structure) | 0-1000 scales | `text-black-700`                |
+| Production (project)        | Opsis tokens  | `text-opsis-content-secondary`  |
 
 ## Migration from Old System
 
 ### Old → New Mapping:
-- `light-1` → `white-950`
-- `light-2` → `white-850`
-- `dark-2` → `black-700`
-- `dark-3` → `black-600`
-- `neutral` → `gray-500`
+
+-   `light-1` → `white-950`
+-   `light-2` → `white-850`
+-   `dark-2` → `black-700`
+-   `dark-3` → `black-600`
+-   `neutral` → `gray-500`
 
 **Status:** Old system removed as of [Date]
 
 ## Color Variables Location
 
-- **0-1000 scales**: `/libraries/structure/source/theme/styles/variables.css`
-- **Opsis tokens**: `/app/_theme/styles/theme.css`
-- **Tailwind config**: Maps variables to utility classes
-```
+-   **0-1000 scales**: `/libraries/structure/source/theme/styles/variables.css`
+-   **Opsis tokens**: `/app/_theme/styles/theme.css`
+-   **Tailwind config**: Maps variables to utility classes
+
+````
 
 ### 2. Add Color System Usage Comments
 
@@ -93,9 +103,10 @@ The Structure library uses a two-layer color system: foundational scales for the
  * For project-specific code, use Opsis semantic tokens instead.
  * See: /libraries/structure/docs/ColorSystem.md
  */
-```
+````
 
 #### In `/app/_theme/styles/theme.css`:
+
 ```css
 /**
  * Project Color System - Opsis Semantic Tokens
@@ -111,6 +122,7 @@ The Structure library uses a two-layer color system: foundational scales for the
 ### 3. Document !important Usage
 
 #### In `/libraries/structure/source/theme/styles/global.css`:
+
 ```css
 /*
  * React Day Picker Border Radius Override
@@ -125,22 +137,24 @@ The Structure library uses a two-layer color system: foundational scales for the
 ```
 
 ### 4. Create Style Organization Guide
-- **File:** Create `/libraries/structure/docs/StyleOrganization.md`
-- **Content:**
+
+-   **File:** Create `/libraries/structure/docs/StyleOrganization.md`
+-   **Content:**
 
 ```markdown
 # Style Organization Guide
 
 ## File Structure
-
 ```
-/app/_theme/styles/
-  └── theme.css           # Project-specific styles (Opsis tokens, custom styles)
+
+/app/\_theme/styles/
+└── theme.css # Project-specific styles (Opsis tokens, custom styles)
 
 /libraries/structure/source/theme/styles/
-  ├── variables.css       # Foundation color scales (0-1000 system)
-  ├── animations.css      # All CSS animations and keyframes
-  └── global.css          # Global utility classes and third-party overrides
+├── variables.css # Foundation color scales (0-1000 system)
+├── animations.css # All CSS animations and keyframes
+└── global.css # Global utility classes and third-party overrides
+
 ```
 
 ## What Goes Where
@@ -194,6 +208,7 @@ The Structure library uses a two-layer color system: foundational scales for the
 ### 5. Add Inline Documentation for Complex Sections
 
 Update theme.css with section markers:
+
 ```css
 /* ============================================
    OPSIS SEMANTIC TOKENS - Project Design System
@@ -211,14 +226,16 @@ Update theme.css with section markers:
 ```
 
 ## Testing
-- [ ] Documentation is clear and accurate
-- [ ] Examples in docs actually work
-- [ ] Links to docs are correct
-- [ ] All style files have header comments
+
+-   [ ] Documentation is clear and accurate
+-   [ ] Examples in docs actually work
+-   [ ] Links to docs are correct
+-   [ ] All style files have header comments
 
 ## Success Criteria
-- ✅ ColorSystem.md created with comprehensive guide
-- ✅ StyleOrganization.md created with file structure docs
-- ✅ All style files have explanatory headers
-- ✅ !important usage is documented
-- ✅ Future developers can understand the system
+
+-   ✅ ColorSystem.md created with comprehensive guide
+-   ✅ StyleOrganization.md created with file structure docs
+-   ✅ All style files have explanatory headers
+-   ✅ !important usage is documented
+-   ✅ Future developers can understand the system

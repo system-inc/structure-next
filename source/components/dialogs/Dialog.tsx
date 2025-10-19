@@ -97,8 +97,8 @@ export function Dialog(properties: DialogProperties) {
                         properties.closeControl
                     ) : (
                         <Button
-                            variant="GhostIcon"
-                            size="GhostIcon"
+                            variant="Ghost"
+                            size="IconSmall"
                             icon={XIcon}
                             className={mergeClassNames(dialogTheme.configuration.closeClasses, additionalClassName)}
                             aria-label="Close"
@@ -226,7 +226,7 @@ export function Dialog(properties: DialogProperties) {
                             }}
                             data-drawer-id={dialogId}
                         >
-                            {renderCloseButton('absolute top-6 right-6 z-10')}
+                            {renderCloseButton('absolute top-4 right-4 z-10')}
                             {renderHeader('flex-shrink-0 px-6 pt-6 pb-4')}
                             {renderAccessibility()}
                             {renderContent('flex-grow overflow-y-auto px-6')}

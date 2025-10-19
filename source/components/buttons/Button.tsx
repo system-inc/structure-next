@@ -121,9 +121,6 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
         defaultVariants: variant ? buttonTheme.configuration.defaultVariant : {},
     });
 
-    // Check if this is an icon-only button (icon set but no children)
-    const isIconOnly = icon && !children;
-
     // Auto-disable when isLoading unless explicitly overridden
     // disabled={false} isLoading={true} → NOT disabled (explicit override)
     // disabled={undefined} isLoading={true} → disabled (auto-disable)
@@ -136,7 +133,6 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
             variant, // Primary, Secondary, Ghost, etc.
             size, // Small, Base, Large, etc.
         }),
-        isIconOnly && buttonTheme.configuration.iconOnlyClasses, // Square aspect ratio for icon-only
         buttonTheme.configuration.focusClasses, // Always applied
         isDisabled && buttonTheme.configuration.disabledClasses, // Conditional
         className, // User overrides (last = highest priority)

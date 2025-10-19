@@ -5,16 +5,18 @@
 **Risk:** High (564 occurrences to migrate)
 
 ## Overview
+
 Migrate from old color system (light-1 through light-6, dark-1 through dark-6, neutral) to **new semantic token system** built on top of the 0-1000 scales. This creates a clean, themeable, semantic foundation for structure library that all future projects can use.
 
 ## 🚨 IMPORTANT: Token Naming Discussion Required
 
 **Before starting migration, we need to finalize semantic token names.** These names will be used across all future projects and structure library components, so they must be:
-- Clear and intuitive
-- Consistent with industry standards
-- Future-proof
-- Easy to remember and type
-- Semantically meaningful
+
+-   Clear and intuitive
+-   Consistent with industry standards
+-   Future-proof
+-   Easy to remember and type
+-   Semantically meaningful
 
 **This is a design decision, not just a technical migration.** Schedule dedicated time to debate and finalize naming conventions before proceeding.
 
@@ -48,68 +50,79 @@ Migrate from old color system (light-1 through light-6, dark-1 through dark-6, n
 ### Key Principles
 
 **1. No prefix = Default semantic tokens**
-- Most code uses unprefixed tokens: `bg-background-primary`
-- These "come for free" with structure library
-- Themeable via light/dark mode automatically
+
+-   Most code uses unprefixed tokens: `bg-background-primary`
+-   These "come for free" with structure library
+-   Themeable via light/dark mode automatically
 
 **2. Opsis prefix = Project customization**
-- Only use when you need project-specific branded colors
-- Clear signal: "this is custom, not default"
-- Example: `bg-opsis-background-hero` for custom hero section
+
+-   Only use when you need project-specific branded colors
+-   Clear signal: "this is custom, not default"
+-   Example: `bg-opsis-background-hero` for custom hero section
 
 **3. 0-1000 scales = Implementation detail**
-- Rarely used directly in components
-- Used to define semantic tokens
-- Provides granular foundation
+
+-   Rarely used directly in components
+-   Used to define semantic tokens
+-   Provides granular foundation
 
 ## Background
 
 ### What We're Removing (Old System)
-- `light-1` to `light-6` - Opaque light grays
-- `dark-1` to `dark-6` - Opaque dark grays
-- `neutral-6` to `neutral+6` - Opaque middle grays
-- **564 occurrences** across structure library (225 light, 239 dark, 100 neutral)
+
+-   `light-1` to `light-6` - Opaque light grays
+-   `dark-1` to `dark-6` - Opaque dark grays
+-   `neutral-6` to `neutral+6` - Opaque middle grays
+-   **564 occurrences** across structure library (225 light, 239 dark, 100 neutral)
 
 ### What We're Keeping (Foundation - 0-1000 Scales)
 
 The new system has **5 core scales** (0-1000, every 50) plus blue accents:
 
 #### Transparent Scales (Alpha Channel)
+
 1. **light-0 to light-1000** - Transparent whites (rgba)
-   - `light-0` = fully transparent white (0% opacity)
-   - `light-500` = 50% transparent white (for overlays, glass effects)
-   - `light-1000` = solid white (#ffffff)
-   - **Use for:** Overlays, glass morphism, subtle highlights
+
+    - `light-0` = fully transparent white (0% opacity)
+    - `light-500` = 50% transparent white (for overlays, glass effects)
+    - `light-1000` = solid white (#ffffff)
+    - **Use for:** Overlays, glass morphism, subtle highlights
 
 2. **dark-0 to dark-1000** - Transparent blacks (rgba)
-   - `dark-0` = fully transparent black (0% opacity)
-   - `dark-500` = 50% transparent black (for shadows, overlays)
-   - `dark-1000` = solid black (links to black-1000)
-   - **Use for:** Shadows, overlays, darkening effects
+    - `dark-0` = fully transparent black (0% opacity)
+    - `dark-500` = 50% transparent black (for shadows, overlays)
+    - `dark-1000` = solid black (links to black-1000)
+    - **Use for:** Shadows, overlays, darkening effects
 
 #### Opaque Scales (Solid Colors)
+
 3. **black-0 to black-1000** - Opaque grays to pure black
-   - `black-0` = #505050 (medium gray)
-   - `black-500` = #282828 (dark gray)
-   - `black-1000` = #000000 (pure black)
-   - **Use for:** Dark backgrounds, dark text, dark UI elements
+
+    - `black-0` = #505050 (medium gray)
+    - `black-500` = #282828 (dark gray)
+    - `black-1000` = #000000 (pure black)
+    - **Use for:** Dark backgrounds, dark text, dark UI elements
 
 4. **white-0 to white-1000** - Opaque grays to pure white
-   - `white-0` = #afafaf (medium gray)
-   - `white-500` = #d7d7d7 (light gray)
-   - `white-1000` = #ffffff (pure white)
-   - **Use for:** Light backgrounds, light UI elements
+
+    - `white-0` = #afafaf (medium gray)
+    - `white-500` = #d7d7d7 (light gray)
+    - `white-1000` = #ffffff (pure white)
+    - **Use for:** Light backgrounds, light UI elements
 
 5. **gray-0 to gray-1000** - Opaque middle grays
-   - `gray-0` = #a7a7a7 (lighter gray)
-   - `gray-500` = #808080 (middle gray)
-   - `gray-1000` = #585858 (darker gray)
-   - **Use for:** Neutral elements, disabled states, subtle borders
+    - `gray-0` = #a7a7a7 (lighter gray)
+    - `gray-500` = #808080 (middle gray)
+    - `gray-1000` = #585858 (darker gray)
+    - **Use for:** Neutral elements, disabled states, subtle borders
 
 #### What About Accent Colors (blue, etc.)?
+
 **Accent colors belong in the PROJECT layer, not structure.** Structure library should remain achromatic (grays only) and framework-agnostic. Projects define their own accent colors using the opsis prefix.
 
 Example:
+
 ```css
 /* ❌ Don't put in structure */
 --accent-primary: var(--blue-600);
@@ -130,6 +143,7 @@ Example:
 **This section requires deep discussion before implementation.** These names will be used across all future projects and will be very difficult to change later.
 
 ### Design Goals for Token Names
+
 1. **Intuitive** - Developers should guess the right token 80% of the time
 2. **Unambiguous** - Clear what each token is for (no confusion)
 3. **Scalable** - Easy to add new tokens without breaking the pattern
@@ -140,74 +154,89 @@ Example:
 ### Key Questions to Answer
 
 #### 1. Background Naming Pattern
+
 What do we call different background layers?
 
 **Option A: Numerical (primary/secondary/tertiary)**
+
 ```css
 --background-primary    /* Main background */
 --background-secondary  /* Elevated panels */
 --background-tertiary   /* Even more elevated */
 ```
+
 ✅ Clear hierarchy
 ❌ What comes after tertiary? Quaternary feels awkward
 
 **Option B: Elevation-based (base/raised/elevated/floating)**
+
 ```css
 --background-base      /* Main background */
 --background-raised    /* Cards, panels */
 --background-elevated  /* Modals, popovers */
 --background-floating  /* Tooltips, highest layer */
 ```
+
 ✅ Visually descriptive
 ✅ Scales naturally
 ❌ Longer names
 
 **Option C: Z-index inspired (surface-0/surface-1/surface-2)**
+
 ```css
 --surface-0  /* Main background */
 --surface-1  /* Elevated */
 --surface-2  /* More elevated */
 --surface-3  /* Highest */
 ```
+
 ✅ Scalable infinitely
 ✅ Short
 ❌ "Surface" is Material Design terminology (might not feel right)
 ❌ Numbers less semantic
 
 **Option D: Canvas/Layer metaphor (canvas/layer/overlay/float)**
+
 ```css
 --background-canvas   /* Main background */
 --background-layer    /* Cards, panels */
 --background-overlay  /* Modals, dialogs */
 --background-float    /* Tooltips, dropdowns */
 ```
+
 ✅ Strong visual metaphor
 ❌ "Canvas" might imply drawing surface
 
 #### 2. Content/Text Naming Pattern
+
 What do we call different text colors?
 
 **Option A: Emphasis-based (primary/secondary/tertiary/muted)**
+
 ```css
 --content-primary    /* Main text */
 --content-secondary  /* Less important */
 --content-tertiary   /* Even less important */
 --content-muted      /* Least important */
 ```
+
 ✅ Common pattern (similar to Tailwind foreground)
 ❌ "Content" vs "text" vs "foreground"?
 
 **Option B: Descriptive opacity (strong/medium/subtle/faint)**
+
 ```css
 --text-strong   /* High contrast */
 --text-medium   /* Medium contrast */
 --text-subtle   /* Low contrast */
 --text-faint    /* Very low contrast */
 ```
+
 ✅ Describes visual weight
 ❌ Implies opacity when it might be different colors
 
 **Option C: Semantic purpose (body/heading/label/caption/disabled)**
+
 ```css
 --text-heading   /* For h1-h6 */
 --text-body      /* Paragraph text */
@@ -215,14 +244,17 @@ What do we call different text colors?
 --text-caption   /* Small text */
 --text-disabled  /* Disabled state */
 ```
+
 ✅ Purpose-driven
 ❌ Mixes hierarchy with state (disabled)
 ❌ What if you want heading color on non-heading?
 
 #### 3. Border Naming Pattern
+
 How do we differentiate border strengths/purposes?
 
 **Option A: Emphasis (primary/secondary/subtle)**
+
 ```css
 --border-primary   /* Standard borders */
 --border-secondary /* Lighter borders */
@@ -230,6 +262,7 @@ How do we differentiate border strengths/purposes?
 ```
 
 **Option B: Weight-based (strong/medium/light/faint)**
+
 ```css
 --border-strong  /* High contrast */
 --border-medium  /* Medium contrast */
@@ -238,6 +271,7 @@ How do we differentiate border strengths/purposes?
 ```
 
 **Option C: Purpose-based (default/divider/focus/emphasis)**
+
 ```css
 --border-default  /* Standard border */
 --border-divider  /* For separating sections */
@@ -246,19 +280,23 @@ How do we differentiate border strengths/purposes?
 ```
 
 #### 4. Interactive State Naming
+
 How do we name hover/active/disabled states?
 
 **Option A: State as modifier (background-interactive-hover)**
+
 ```css
 --background-interactive-default
 --background-interactive-hover
 --background-interactive-active
 --background-interactive-disabled
 ```
+
 ✅ Grouped by category
 ❌ Very long names
 
 **Option B: Element with state (button-background-hover)**
+
 ```css
 --button-background-default
 --button-background-hover
@@ -266,23 +304,28 @@ How do we name hover/active/disabled states?
 --input-background-default
 --input-background-hover
 ```
+
 ✅ Component-specific
 ❌ Less reusable, very long
 
 **Option C: Separate tokens (hover/active)**
+
 ```css
 --background-hover   /* Any hoverable background */
 --background-active  /* Any active background */
 --border-hover       /* Any hoverable border */
 --border-focus       /* Any focused border */
 ```
+
 ✅ Short, reusable
 ❌ Less specific, might not fit all use cases
 
 #### 5. Inverse/Contrast Naming
+
 How do we handle light-on-dark or dark-on-light scenarios?
 
 **Option A: "inverse" suffix**
+
 ```css
 --background-primary
 --background-inverse   /* Opposite of primary */
@@ -291,6 +334,7 @@ How do we handle light-on-dark or dark-on-light scenarios?
 ```
 
 **Option B: "contrast" suffix**
+
 ```css
 --background-primary
 --background-contrast
@@ -299,6 +343,7 @@ How do we handle light-on-dark or dark-on-light scenarios?
 ```
 
 **Option C: "on-X" pattern (Material Design style)**
+
 ```css
 --background-primary
 --on-primary           /* Text/icons on primary background */
@@ -307,9 +352,11 @@ How do we handle light-on-dark or dark-on-light scenarios?
 ```
 
 #### 6. Overlay/Transparency Naming
+
 How do we name transparent overlays?
 
 **Option A: "overlay" with strength**
+
 ```css
 --overlay-light    /* 10-20% opacity */
 --overlay-medium   /* 40-60% opacity */
@@ -317,6 +364,7 @@ How do we name transparent overlays?
 ```
 
 **Option B: "scrim" (Material Design term)**
+
 ```css
 --scrim-light
 --scrim-medium
@@ -324,6 +372,7 @@ How do we name transparent overlays?
 ```
 
 **Option C: "backdrop" with opacity**
+
 ```css
 --backdrop-10   /* 10% opacity */
 --backdrop-50   /* 50% opacity */
@@ -333,6 +382,7 @@ How do we name transparent overlays?
 ### Example Token Set Proposals
 
 **Proposal 1: Primary/Secondary Pattern**
+
 ```css
 /* Backgrounds */
 --background-primary
@@ -364,6 +414,7 @@ How do we name transparent overlays?
 ```
 
 **Proposal 2: Elevation/Emphasis Pattern**
+
 ```css
 /* Backgrounds */
 --background-base
@@ -397,6 +448,7 @@ How do we name transparent overlays?
 ```
 
 **Proposal 3: Hybrid Descriptive**
+
 ```css
 /* Backgrounds (elevation metaphor) */
 --background-canvas
@@ -434,6 +486,7 @@ How do we name transparent overlays?
 ### Decision Criteria
 
 When debating, consider:
+
 1. **How often will this be typed?** (favor shorter for frequently-used tokens)
 2. **Is the meaning immediately clear?** (favor descriptive for ambiguous cases)
 3. **Does it scale?** (can we add --background-quaternary or should we redesign?)
@@ -452,6 +505,7 @@ When debating, consider:
 ## Color Migration Mapping
 
 ### Light Colors → White Scale
+
 ```
 light (#FFFFFF)   → white-1000
 light-1 (#F6F6F6) → white-950
@@ -463,6 +517,7 @@ light-6 (#CCCCCC) → white-350
 ```
 
 ### Dark Colors → Black Scale
+
 ```
 dark (#111111)    → black-900
 dark-1 (#191919)  → black-800
@@ -474,6 +529,7 @@ dark-6 (#444444)  → black-300
 ```
 
 ### Neutral Colors → Gray Scale
+
 ```
 neutral-6 (#4C4C4C) → gray-950
 neutral-5 (#565656) → gray-900
@@ -493,23 +549,28 @@ neutral+6 (#C4C4C4) → gray-50
 ## Migration Strategy
 
 ### Phase 4A: Component-by-Component Migration
+
 Migrate one component category at a time:
+
 1. **Buttons** (ButtonTheme.ts, CopyButton, DownloadButton) - ~50 occurrences
 2. **Forms** (InputText, InputSelect, InputTextArea, etc.) - ~80 occurrences
 3. **Tables** (Table, TableRow, TableHeaderCell) - ~60 occurrences
 4. **Other components** (remaining ~370 occurrences)
 
 ### Phase 4B: Test After Each Category
-- [ ] Run full test suite
-- [ ] Visual regression testing
-- [ ] Check light and dark modes
-- [ ] Verify no broken styles
+
+-   [ ] Run full test suite
+-   [ ] Visual regression testing
+-   [ ] Check light and dark modes
+-   [ ] Verify no broken styles
 
 ### Phase 4C: Remove Old Color Definitions
-- Remove from `/app/tailwind.config.mts` (lines 174-232)
-- Remove from `/libraries/structure/source/theme/styles/variables.css` if present
+
+-   Remove from `/app/tailwind.config.mts` (lines 174-232)
+-   Remove from `/libraries/structure/source/theme/styles/variables.css` if present
 
 ## Files Most Affected (Top 20)
+
 ```
 ButtonTheme.ts
 TableHeaderCell.tsx
@@ -534,24 +595,27 @@ ButtonVariants.ts
 ```
 
 ## Testing Checklist
-- [ ] All buttons render correctly
-- [ ] All form inputs styled properly
-- [ ] Tables display correctly
-- [ ] Dark mode works
-- [ ] Light mode works
-- [ ] No console errors
-- [ ] No TypeScript errors
-- [ ] Build succeeds
+
+-   [ ] All buttons render correctly
+-   [ ] All form inputs styled properly
+-   [ ] Tables display correctly
+-   [ ] Dark mode works
+-   [ ] Light mode works
+-   [ ] No console errors
+-   [ ] No TypeScript errors
+-   [ ] Build succeeds
 
 ## Success Criteria
-- ✅ Zero occurrences of old color classes in codebase
-- ✅ All components using 0-1000 scale
-- ✅ Old color definitions removed from configs
-- ✅ Visual parity maintained
-- ✅ All tests passing
+
+-   ✅ Zero occurrences of old color classes in codebase
+-   ✅ All components using 0-1000 scale
+-   ✅ Old color definitions removed from configs
+-   ✅ Visual parity maintained
+-   ✅ All tests passing
 
 ## Notes
-- This is the LARGEST phase - may take multiple work sessions
-- Can pause between component categories
-- Keep old definitions until ALL migration complete
-- Consider pair programming or code review for each category
+
+-   This is the LARGEST phase - may take multiple work sessions
+-   Can pause between component categories
+-   Keep old definitions until ALL migration complete
+-   Consider pair programming or code review for each category

@@ -135,10 +135,7 @@ export function FormInput(properties: FormInputProperties) {
                         <TipButton
                             openOnPress
                             {...properties.labelTipButtonProperties}
-                            className={mergeClassNames(
-                                'ml-0.5 p-[2px]',
-                                properties.labelTipButtonProperties?.className,
-                            )}
+                            className={mergeClassNames('ml-0.5', properties.labelTipButtonProperties?.className)}
                             tip={properties.labelTip}
                         />
                     )}

@@ -26,8 +26,8 @@ export function TipButton({
     ...buttonProperties
 }: TipButtonProperties) {
     // Defaults
-    const variantValue = buttonProperties.variant ?? 'GhostIcon';
-    const sizeValue = buttonProperties.size ?? 'GhostIcon';
+    const variantValue = buttonProperties.variant ?? 'Ghost';
+    const sizeValue = buttonProperties.size ?? 'IconExtraSmall';
     const Icon = buttonProperties.icon ?? InformationCircledIcon;
     const openOnPressValue = openOnPress ?? false;
 

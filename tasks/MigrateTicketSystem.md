@@ -98,12 +98,14 @@ app/(ops-layout)/ops/support/
 ### Phase 1: Analysis and Planning
 
 1. **Audit each component** to identify:
+
     - Project-specific dependencies (API hooks, GraphQL queries, business logic)
     - Generic UI logic that belongs in Structure
     - Hardcoded values that should become props
     - Color/theme dependencies that need variants
 
 2. **Identify shared types and interfaces**:
+
     - Ticket data structures
     - Customer data structures
     - Comment/attachment structures
@@ -114,6 +116,7 @@ app/(ops-layout)/ops/support/
 ### Phase 2: Create Structure Foundation
 
 1. **Create type definitions** in Structure:
+
     ```typescript
     // libraries/structure/source/modules/support/types/
     // - TicketTypes.ts
@@ -122,6 +125,7 @@ app/(ops-layout)/ops/support/
     ```
 
 2. **Create base components** (most generic first):
+
     - BorderContainer (if generic enough, otherwise keep in project)
     - TicketInformation
     - Customer/Ticket side panel components
@@ -138,6 +142,7 @@ app/(ops-layout)/ops/support/
 For each component group:
 
 1. **Create Structure version**:
+
     ```typescript
     // Remove project-specific imports
     // Accept data and callbacks as props
@@ -146,6 +151,7 @@ For each component group:
     ```
 
 2. **Create project wrapper** (if needed):
+
     ```typescript
     // Handle API calls
     // Manage state
@@ -169,6 +175,7 @@ For each component group:
 ### Phase 4: Migrate Layouts
 
 1. **SupportLayout.tsx**:
+
     - Move to Structure
     - Accept navigation items as props
     - Remove project-specific navigation logic
@@ -180,6 +187,7 @@ For each component group:
 ### Phase 5: Create Project Integration
 
 1. **Create support page** in project:
+
     ```typescript
     // app/(ops-layout)/ops/support/page.tsx
     import { SupportLayout } from '@structure/source/modules/support/layouts/SupportLayout';
@@ -207,12 +215,14 @@ For each component group:
 ### Phase 6: Handle Styling and Theming
 
 1. **Identify color dependencies**:
+
     - Border colors
     - Status indicator colors
     - Priority colors
     - Any opsis-specific colors
 
 2. **Create theme variants** if needed:
+
     - Add to project's component themes
     - Follow ButtonTheme pattern
 
@@ -263,12 +273,7 @@ function TicketStatusSelector() {
 
 // ✅ After - Controlled by parent
 function TicketStatusSelector(properties: TicketStatusSelectorProperties) {
-    return (
-        <Select
-            value={properties.status}
-            onChange={properties.onStatusChange}
-        />
-    );
+    return <Select value={properties.status} onChange={properties.onStatusChange} />;
 }
 ```
 

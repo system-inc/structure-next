@@ -39,7 +39,7 @@ export function CopyButton({ value, noticeData, className, ...buttonProperties }
     const buttonTheme = mergeComponentTheme(structureButtonTheme, componentTheme?.Button);
 
     // Get icon size className from theme based on button size or iconSize property
-    const effectiveSize = buttonProperties.iconSize || buttonProperties.size || 'GhostIcon';
+    const effectiveSize = buttonProperties.iconSize || buttonProperties.size || 'Icon';
     const iconSizeClassName = buttonTheme.iconSizes[effectiveSize];
 
     // State
@@ -104,10 +104,10 @@ export function CopyButton({ value, noticeData, className, ...buttonProperties }
     return (
         <Button
             icon={animatedIcon}
+            variant="Ghost"
+            size="Icon"
             {...buttonProperties}
             onClick={onClick}
-            variant="GhostIcon"
-            size="GhostIcon"
             className={mergeClassNames(
                 valueCopiedToClipboard && 'bg-light-2 dark:bg-dark-4',
                 valueCopiedToClipboard && 'hover:text-emerald-500 dark:hover:text-emerald-500',

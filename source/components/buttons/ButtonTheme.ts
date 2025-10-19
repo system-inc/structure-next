@@ -41,6 +41,9 @@ export const buttonHoverClassNames =
     `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
     `aria-disabled:hover:bg-dark-2 dark:aria-disabled:hover:bg-dark-2`;
 
+// Icon button layout: square aspect ratio for icon-only buttons
+export const buttonIconLayoutClassNames = `aspect-square`;
+
 // Button Variants Interface - Source of truth for all button variants
 // Structure defines its base variants here, and projects can augment to add custom variants
 // Example in project code:
@@ -54,7 +57,6 @@ export interface ButtonVariants {
     Secondary: 'Secondary';
     Contrast: 'Contrast';
     Ghost: 'Ghost';
-    GhostIcon: 'GhostIcon';
     Destructive: 'Destructive';
     GhostDestructive: 'GhostDestructive';
     ToggleOn: 'ToggleOn';
@@ -83,7 +85,11 @@ export interface ButtonSizes {
     Base: 'Base';
     Large: 'Large';
     ExtraLarge: 'ExtraLarge';
-    GhostIcon: 'GhostIcon';
+    IconExtraSmall: 'IconExtraSmall';
+    IconSmall: 'IconSmall';
+    Icon: 'Icon';
+    IconLarge: 'IconLarge';
+    IconExtraLarge: 'IconExtraLarge';
     MenuItem: 'MenuItem';
     FormInputCheckbox: 'FormInputCheckbox';
     FormInputSelect: 'FormInputSelect';
@@ -103,7 +109,6 @@ export interface ButtonThemeConfiguration {
     iconSizes: Partial<Record<ButtonSize, string>>;
     configuration: {
         baseClasses: string;
-        iconOnlyClasses: string;
         focusClasses: string;
         disabledClasses: string;
         defaultVariant: {
@@ -153,14 +158,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `border border-dark-2 dark:border-dark-2`,
 
         Ghost:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
-            // Rounded and hover
-            `rounded-medium hover:bg-accent border border-transparent hover:text-accent-foreground`,
-
-        GhostIcon:
             `${buttonCommonClassNames} ` +
-            // Compact icon-only button styling
-            `rounded-extra-small p-[4px] ` +
+            // Rounded
+            `rounded-extra-small ` +
             // Text color
             `text-foreground-secondary ` +
             // Hover and active states
@@ -277,7 +277,13 @@ export const buttonTheme: ButtonThemeConfiguration = {
         Base: 'h-9 px-4 py-2',
         Large: 'h-10 rounded-medium px-8',
         ExtraLarge: 'h-11 rounded-medium px-10',
-        GhostIcon: '', // No size classes - padding handled by variant
+
+        // Icon Button Sizes
+        IconExtraSmall: `${buttonIconLayoutClassNames} p-1`,
+        IconSmall: `${buttonIconLayoutClassNames} p-1.5`,
+        Icon: `${buttonIconLayoutClassNames} p-2`,
+        IconLarge: `${buttonIconLayoutClassNames} p-2.5`,
+        IconExtraLarge: `${buttonIconLayoutClassNames} p-3`,
 
         // Specialized Sizes
         MenuItem: 'pt-1.5 pr-3 pb-1.5',
@@ -294,7 +300,13 @@ export const buttonTheme: ButtonThemeConfiguration = {
         Base: 'h-4 w-4',
         Large: 'h-5 w-5',
         ExtraLarge: 'h-6 w-6',
-        GhostIcon: 'h-3 w-3', // Small icon for ghost icon buttons
+
+        // Icon Button Sizes
+        IconExtraSmall: 'h-3 w-3',
+        IconSmall: 'h-4 w-4',
+        Icon: 'h-5 w-5',
+        IconLarge: 'h-6 w-6',
+        IconExtraLarge: 'h-7 w-7',
 
         // Specialized Sizes
         MenuItem: 'h-4 w-4',
@@ -307,9 +319,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
     configuration: {
         // Base classes (empty = unstyled by default, variants include their own base styles)
         baseClasses: '',
-
-        // Only applied when icon property is provided
-        iconOnlyClasses: 'aspect-square px-0 py-0',
 
         // Focus ring for keyboard navigation (empty = variants handle their own focus)
         focusClasses: '',
