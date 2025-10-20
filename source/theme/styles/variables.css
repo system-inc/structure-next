@@ -1,4 +1,4 @@
-/* Global and Light Theme Variables */
+/* Global and Light Appearance Variables */
 :root {
     /* Constants */
     --phi: 1.618rem;
@@ -246,7 +246,7 @@
     --effects-shadow-strong: var(--dark-150);
 }
 
-/* Dark Theme Variables */
+/* Dark Appearance Variables */
 .dark :not(:where(.light *, .light)) {
     /* Backgrounds (Dark Theme) */
     --background-primary: var(--black-700);
