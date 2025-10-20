@@ -4,6 +4,7 @@ import { ProjectSettings } from './../../../../ProjectSettings';
 
 // Dependencies - Theme
 import type { Config as TailwindConfigurationInterface } from 'tailwindcss';
+import tailwindPlugin from 'tailwindcss/plugin';
 
 // Tailwind Configuration - Base configuration to be extended by projects
 export const TailwindConfiguration = {
@@ -218,5 +219,57 @@ export const TailwindConfiguration = {
     },
 
     // Base plugins that would be used across projects
-    plugins: [],
+    plugins: [
+        // Base typography plugin
+        tailwindPlugin(function (plugin) {
+            plugin.addBase({
+                // Typography settings for heading elements
+                h1: {
+                    fontSize: '24px',
+                    fontWeight: plugin.theme('fontWeight.medium'),
+                    lineHeight: '1',
+                },
+                h2: {
+                    fontSize: '20px',
+                    fontWeight: plugin.theme('fontWeight.medium'),
+                    lineHeight: '1',
+                },
+                h3: {
+                    fontSize: '16px',
+                    fontWeight: plugin.theme('fontWeight.medium'),
+                    lineHeight: '1.25',
+                },
+                h4: {
+                    fontSize: '14px',
+                    fontWeight: plugin.theme('fontWeight.medium'),
+                    lineHeight: '1.25',
+                },
+                h5: {
+                    fontSize: '12px',
+                    fontWeight: plugin.theme('fontWeight.medium'),
+                    lineHeight: '1.25',
+                },
+                h6: {
+                    fontSize: '10px',
+                    fontWeight: plugin.theme('fontWeight.medium'),
+                    lineHeight: '1.25',
+                },
+
+                // Global element styles
+                body: {
+                    // Enables OpenType font features for improved typography
+                    // 'rlig' 1: Required ligatures (letterform combinations)
+                    // 'calt' 1: Contextual alternates (context-dependent glyph variants)
+                    // Improves readability and aesthetics of text
+                    // Common in design systems for refined typography appearance
+                    fontFeatureSettings: '"rlig" 1, "calt" 1',
+                },
+                strong: {
+                    // Use medium weight (500) for strong text instead of browser default bold (700)
+                    // Provides more refined emphasis while maintaining readability
+                    fontWeight: plugin.theme('fontWeight.medium'),
+                },
+            });
+        }),
+    ],
 } satisfies TailwindConfigurationInterface;
