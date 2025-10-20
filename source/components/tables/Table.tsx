@@ -53,6 +53,7 @@ export interface TableProperties extends React.HTMLAttributes<HTMLTableElement> 
     filter?: boolean;
     filters?: ColumnFilterGroupDataInterface;
     onFiltersChange?: (columnFilterGroupData?: ColumnFilterGroupDataInterface) => void;
+    filterMode?: 'Flat' | 'Grouped'; // Default: 'Grouped'
 
     // Column visibility
     columnVisibility?: boolean;
@@ -484,6 +485,7 @@ export function Table(properties: TableProperties) {
                                     columns={columns}
                                     columnFilterGroupData={filters}
                                     onChange={onFiltersChange}
+                                    filterMode={properties.filterMode}
                                 />
                             </div>
                         )}

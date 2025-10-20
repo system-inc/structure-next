@@ -17,6 +17,8 @@ import PlusIcon from '@structure/assets/icons/interface/PlusIcon.svg';
 import {
     ColumnFilterGroupOperator,
     ColumnFilterConditionOperator,
+    ColumnFilterGroupInput,
+    ColumnFilterInput,
 } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
@@ -40,6 +42,118 @@ export interface ColumnFilterGroupDataInterface {
     filters?: ColumnFilterGroupDataInterface[];
 }
 
+// Utility - Convert ColumnFilterGroupDataInterface to ColumnFilterGroupInput
+// Strips 'id' fields that are used for React keys but not needed by the API
+// Filters out conditions with empty/undefined values
+export function convertFiltersToGroupedInput(
+    filters?: ColumnFilterGroupDataInterface,
+): ColumnFilterGroupInput | undefined {
+    if(!filters) return undefined;
+
+    // Filter out conditions with empty values
+    const validConditions = filters.conditions
+        .filter(function (condition) {
+            // For IsNull and IsNotNull operators, value is not required
+            if(
+                condition.operator === ColumnFilterConditionOperator.IsNull ||
+                condition.operator === ColumnFilterConditionOperator.IsNotNull
+            ) {
+                return true;
+            }
+            // For other operators, require a non-empty value
+            return condition.value !== undefined && condition.value !== null && condition.value !== '';
+        })
+        .map(function (condition) {
+            return {
+                column: condition.column,
+                operator: condition.operator,
+                value: condition.value,
+                caseSensitive: condition.caseSensitive,
+            };
+        });
+
+    const validNestedFilters = filters.filters
+        ?.map(function (nestedFilter) {
+            return convertFiltersToGroupedInput(nestedFilter);
+        })
+        .filter(function (filter): filter is ColumnFilterGroupInput {
+            return filter !== undefined;
+        });
+
+    // Only return if there are valid conditions or nested filters
+    if(validConditions.length === 0 && (!validNestedFilters || validNestedFilters.length === 0)) {
+        return undefined;
+    }
+
+    return {
+        operator: filters.operator,
+        conditions: validConditions,
+        filters: validNestedFilters,
+    };
+}
+
+// Utility - Convert ColumnFilterGroupDataInterface to flat ColumnFilterInput array
+// Flattens all nested groups into a single array (loses OR logic, all become AND)
+// Filters out conditions with empty/undefined values
+export function convertFiltersToFlatInput(filters?: ColumnFilterGroupDataInterface): ColumnFilterInput[] | undefined {
+    if(!filters) return undefined;
+
+    const flatConditions: ColumnFilterInput[] = [];
+
+    function flatten(group: ColumnFilterGroupDataInterface) {
+        // Only include conditions that have a value (not empty, null, or undefined)
+        const validConditions = group.conditions
+            .filter(function (condition) {
+                // For IsNull and IsNotNull operators, value is not required
+                if(
+                    condition.operator === ColumnFilterConditionOperator.IsNull ||
+                    condition.operator === ColumnFilterConditionOperator.IsNotNull
+                ) {
+                    return true;
+                }
+                // For other operators, require a non-empty value
+                return condition.value !== undefined && condition.value !== null && condition.value !== '';
+            })
+            .map(function (condition) {
+                return {
+                    column: condition.column,
+                    operator: condition.operator,
+                    value: condition.value,
+                    caseSensitive: condition.caseSensitive,
+                };
+            });
+
+        flatConditions.push(...validConditions);
+
+        group.filters?.forEach(function (nestedGroup) {
+            flatten(nestedGroup);
+        });
+    }
+
+    flatten(filters);
+    return flatConditions.length > 0 ? flatConditions : undefined;
+}
+
+// Utility - Add IDs to filter structure coming from API/URL
+export function addFilterIds(filters: ColumnFilterGroupInput): ColumnFilterGroupDataInterface {
+    return {
+        id: uniqueIdentifier(6),
+        operator: filters.operator || ColumnFilterGroupOperator.And,
+        conditions: (filters.conditions || []).map(function (condition) {
+            return {
+                id: uniqueIdentifier(6),
+                column: condition.column,
+                operator: condition.operator,
+                value: condition.value,
+                caseSensitive: condition.caseSensitive ?? undefined,
+            };
+        }),
+        filters: (filters.filters || []).map(function (nestedFilter) {
+            return addFilterIds(nestedFilter);
+        }),
+    };
+}
+
 // Component - ColumnFilterGroup
 export interface ColumnFilterGroupProperties {
     className?: string;
@@ -47,6 +161,9 @@ export interface ColumnFilterGroupProperties {
     columnFilterGroupData: ColumnFilterGroupDataInterface;
     onChange: (columnFilterGroupData: ColumnFilterGroupDataInterface) => void;
     onRemove?: () => void;
+    filterMode?: 'Flat' | 'Grouped'; // Default: 'Grouped'
+    synchronizeWithUrl?: boolean; // Default: false
+    urlParameterName?: string; // Default: 'filters'
 }
 export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     // State
@@ -57,7 +174,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                   ...properties.columnFilterGroupData,
                   conditions: [
                       {
-                          id: uniqueIdentifier(),
+                          id: uniqueIdentifier(6),
                           column: properties.columns[0]?.identifier ?? '',
                           operator: ColumnFilterConditionOperator.Equal,
                           value: '',
@@ -70,13 +187,13 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                   conditions: properties.columnFilterGroupData.conditions.map((condition) => {
                       return {
                           ...condition,
-                          id: condition.id ?? uniqueIdentifier(),
+                          id: condition.id ?? uniqueIdentifier(6),
                       };
                   }),
                   filters: properties.columnFilterGroupData.filters?.map((filter) => {
                       return {
                           ...filter,
-                          id: filter.id ?? uniqueIdentifier(),
+                          id: filter.id ?? uniqueIdentifier(6),
                       };
                   }),
               },
@@ -146,12 +263,12 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     function addNewFilterGroup() {
         // Create a new filter group
         const newFilterGroup: ColumnFilterGroupDataInterface = {
-            id: uniqueIdentifier(),
+            id: uniqueIdentifier(6),
             operator: ColumnFilterGroupOperator.And,
             conditions: [
                 // Enforce at least one condition
                 {
-                    id: uniqueIdentifier(),
+                    id: uniqueIdentifier(6),
                     column: properties.columns[0]?.identifier ?? '',
                     operator: ColumnFilterConditionOperator.Equal,
                     value: '',
@@ -179,7 +296,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     function addNewCondition() {
         // Create a new condition
         const newCondition: ColumnFilterConditionDataInterface = {
-            id: uniqueIdentifier(),
+            id: uniqueIdentifier(6),
             column: properties.columns[0]?.identifier ?? '',
             operator: ColumnFilterConditionOperator.Equal,
             value: '',
@@ -416,59 +533,61 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                 })}
             </div>
 
-            {/* Nested Filters */}
-            {columnFilterGroupData.filters?.map((filter, filterIndex) => (
-                <div key={filter.id} className="mt-4 flex items-start space-x-2">
-                    {/* Operator Indicator */}
-                    {columnFilterGroupData.conditions.length === 1 && filterIndex === 0 ? (
-                        // Second condition
-                        <InputSelect
-                            className="w-24"
-                            items={[
-                                { value: ColumnFilterGroupOperator.And, children: 'and' },
-                                { value: ColumnFilterGroupOperator.Or, children: 'or' },
-                            ]}
-                            defaultValue={columnFilterGroupData.operator}
-                            onChange={function (value) {
-                                setColumnFilterGroupData(function (previousColumnFilterGroupData) {
+            {/* Nested Filters - Only show in Grouped mode */}
+            {properties.filterMode !== 'Flat' &&
+                columnFilterGroupData.filters?.map((filter, filterIndex) => (
+                    <div key={filter.id} className="mt-4 flex items-start space-x-2">
+                        {/* Operator Indicator */}
+                        {columnFilterGroupData.conditions.length === 1 && filterIndex === 0 ? (
+                            // Second condition
+                            <InputSelect
+                                className="w-24"
+                                items={[
+                                    { value: ColumnFilterGroupOperator.And, children: 'and' },
+                                    { value: ColumnFilterGroupOperator.Or, children: 'or' },
+                                ]}
+                                defaultValue={columnFilterGroupData.operator}
+                                onChange={function (value) {
+                                    setColumnFilterGroupData(function (previousColumnFilterGroupData) {
+                                        return {
+                                            ...previousColumnFilterGroupData,
+                                            operator: value as ColumnFilterGroupOperator,
+                                        };
+                                    });
+                                }}
+                            />
+                        ) : (
+                            <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
+                                {columnFilterGroupData.operator.toLowerCase()}
+                            </p>
+                        )}
+
+                        {/* Nested Filter Group */}
+                        <ColumnFilterGroup
+                            className="flex flex-grow"
+                            columns={properties.columns}
+                            columnFilterGroupData={filter}
+                            filterMode={properties.filterMode}
+                            onChange={function (updatedColumnFilterGroup) {
+                                setColumnFilterGroupData((previousColumnFilterGroupData) => {
+                                    const updatedFilters = previousColumnFilterGroupData.filters?.map(
+                                        (previousColumnFilterGroupDataFilter) =>
+                                            previousColumnFilterGroupDataFilter.id === updatedColumnFilterGroup.id
+                                                ? updatedColumnFilterGroup
+                                                : previousColumnFilterGroupDataFilter,
+                                    );
                                     return {
                                         ...previousColumnFilterGroupData,
-                                        operator: value as ColumnFilterGroupOperator,
+                                        filters: updatedFilters,
                                     };
                                 });
                             }}
+                            onRemove={function () {
+                                removeFilterGroup(filter.id ?? '');
+                            }}
                         />
-                    ) : (
-                        <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
-                            {columnFilterGroupData.operator.toLowerCase()}
-                        </p>
-                    )}
-
-                    {/* Nested Filter Group */}
-                    <ColumnFilterGroup
-                        className="flex flex-grow"
-                        columns={properties.columns}
-                        columnFilterGroupData={filter}
-                        onChange={function (updatedColumnFilterGroup) {
-                            setColumnFilterGroupData((previousColumnFilterGroupData) => {
-                                const updatedFilters = previousColumnFilterGroupData.filters?.map(
-                                    (previousColumnFilterGroupDataFilter) =>
-                                        previousColumnFilterGroupDataFilter.id === updatedColumnFilterGroup.id
-                                            ? updatedColumnFilterGroup
-                                            : previousColumnFilterGroupDataFilter,
-                                );
-                                return {
-                                    ...previousColumnFilterGroupData,
-                                    filters: updatedFilters,
-                                };
-                            });
-                        }}
-                        onRemove={function () {
-                            removeFilterGroup(filter.id ?? '');
-                        }}
-                    />
-                </div>
-            ))}
+                    </div>
+                ))}
 
             {/* Controls */}
             <div className="mt-4 flex space-x-2">
@@ -477,10 +596,12 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                     Add Condition
                 </Button>
 
-                {/* Add Filter Group Button */}
-                <Button variant="Primary" iconLeft={PlusIcon} onClick={addNewFilterGroup}>
-                    Add Filter Group
-                </Button>
+                {/* Add Filter Group Button - Only show in Grouped mode */}
+                {properties.filterMode !== 'Flat' && (
+                    <Button variant="Primary" iconLeft={PlusIcon} onClick={addNewFilterGroup}>
+                        Add Filter Group
+                    </Button>
+                )}
 
                 {/* Remove Button - Only show if not the root group (every child FilterGroup has an id) */}
                 {properties.columnFilterGroupData.id && (

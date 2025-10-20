@@ -76,7 +76,7 @@ export function DataSources(properties: DataSourcesProperties) {
         properties.setDataSources([
             ...properties.settings.dataSources,
             {
-                id: uniqueIdentifier(8),
+                id: uniqueIdentifier(6),
                 databaseName: '',
                 tableName: '',
                 columnName: '',

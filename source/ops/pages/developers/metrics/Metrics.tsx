@@ -283,7 +283,7 @@ export function Metrics() {
             if(hasMounted && dataSources.length === 0) {
                 setDataSources([
                     {
-                        id: uniqueIdentifier(8),
+                        id: uniqueIdentifier(6),
                         databaseName: '',
                         tableName: '',
                         columnName: '',
