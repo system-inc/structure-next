@@ -116,7 +116,7 @@ export function Form(properties: FormProperties) {
                 ...properties.buttonProperties,
                 type: 'submit',
                 disabled: submitting || properties.buttonProperties?.disabled,
-                processing: submitting,
+                isProcessing: submitting,
             };
         },
         [properties.buttonProperties, submitting],
