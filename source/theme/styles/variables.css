@@ -6,6 +6,14 @@
     /* Fonts */
     --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
+    /* Heading Font Sizes */
+    --font-size-h1: 24px;
+    --font-size-h2: 20px;
+    --font-size-h3: 16px;
+    --font-size-h4: 14px;
+    --font-size-h5: 12px;
+    --font-size-h6: 10px;
+
     /* Light Scale (Transparent Whites, Opacity 0 to 1) */
     --color-light-0: rgba(255 255 255 / 0);
     --color-light-10: rgba(255 255 255 / 0.01);
