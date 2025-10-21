@@ -33,6 +33,7 @@ import { useReferenceAreaSelection } from './hooks/useReferenceAreaSelection';
 
 // Dependencies - Styles
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
+import { Theme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
 
 // Dependencies - Utilities
 import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode';
@@ -95,7 +96,7 @@ export interface TimeSeriesChartProperties {
 export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
     // Hooks
     const themeSettings = useThemeSettings();
-    const isDarkMode = themeSettings.themeClassName === 'dark';
+    const isDarkMode = themeSettings.themeClassName === ThemeClassName[Theme.Dark];
 
     // Check if current interval is specialized (disable zoom/selection for these)
     const isSpecialized = properties.timeInterval ? isSpecializedInterval(properties.timeInterval) : false;
@@ -342,7 +343,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     stackId={isStackedBar ? 'stack' : undefined}
                                     activeBar={{
                                         fill:
-                                            themeSettings.themeClassName === 'light'
+                                            themeSettings.themeClassName === ThemeClassName[Theme.Light]
                                                 ? lightenColor(color, 0.1)
                                                 : lightenColor(color, 0.1),
                                     }}
@@ -418,7 +419,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                     strokeWidth={2}
                                     strokeDasharray={strokeDasharray}
                                     fill={setTransparency(
-                                        themeSettings.themeClassName == 'light'
+                                        themeSettings.themeClassName == ThemeClassName[Theme.Light]
                                             ? lightenColor(color, 0.2)
                                             : darkenColor(color, 0.2),
                                         0.75,
