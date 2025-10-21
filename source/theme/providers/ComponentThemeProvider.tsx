@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Theme
 import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
+import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
@@ -12,6 +13,7 @@ import type { DeepPartialComponentTheme } from '@structure/source/theme/utilitie
 // Type - Component Theme Context Value
 interface ComponentThemeContextValue {
     Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
+    Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
     // Future component themes:

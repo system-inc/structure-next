@@ -30,6 +30,16 @@ const ReactImportRule = {
                         },
                     });
                 }
+                else if(importSource === 'next/link') {
+                    context.report({
+                        node,
+                        messageId: 'forbiddenLinkImport',
+                        fix(fixer) {
+                            // Provide an auto-fix that replaces 'next/link' with '@structure/source/components/navigation/Link'
+                            return fixer.replaceText(node.source, "'@structure/source/components/navigation/Link'");
+                        },
+                    });
+                }
                 else if(importSource === 'framer-motion') {
                     context.report({
                         node,

@@ -70,7 +70,7 @@ export function ResponseParameters(properties: ResponseParametersProperties) {
                 <td className="px-4 py-3">
                     <span className="font-mono" style={{ marginLeft: `${level * 16}px` }}>
                         {hasNestedTable ? (
-                            <Link href={`#${getTableId(currentPath)}`} className="link--blue">
+                            <Link href={`#${getTableId(currentPath)}`} variant="A">
                                 {field.name}
                             </Link>
                         ) : (

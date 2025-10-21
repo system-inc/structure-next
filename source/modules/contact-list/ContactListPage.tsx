@@ -27,7 +27,7 @@ export function ContactListPage() {
                 return (
                     <span key={index}>
                         {index > 0 && ' • '}
-                        <Link href={platform.url} target="_blank" className="link--blue underline">
+                        <Link href={platform.url} target="_blank" variant="A" className="underline">
                             {platform.title}
                         </Link>
                     </span>
@@ -65,7 +65,7 @@ export function ContactListPage() {
                         {/* Footer */}
                         <p className="mt-6 text-sm font-light">
                             &copy;{currentYear}{' '}
-                            <Link href={ProjectSettings.url} target="_blank" className="link--blue underline">
+                            <Link href={ProjectSettings.url} target="_blank" variant="A" className="underline">
                                 {ProjectSettings.ownerDisplayName}
                             </Link>
                             {' • '}

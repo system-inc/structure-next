@@ -57,47 +57,47 @@
 
 /* Content */
 
-/* Content A - Primary text color for body content */
+/* Content A - Primary content color for body content */
 @utility content--a {
     color: light-dark(var(--color-black-700), var(--color-white-700));
 }
 
-/* Content B - Secondary text color for less prominent content */
+/* Content B - Secondary content color for less prominent content */
 @utility content--b {
     color: light-dark(var(--color-gray-800), var(--color-gray-50));
 }
 
-/* Content C - Tertiary text color for muted content */
+/* Content C - Tertiary content color for muted content */
 @utility content--c {
     color: light-dark(var(--color-gray-600), var(--color-gray-400));
 }
 
-/* Content Disabled - Disabled state text color */
+/* Content Disabled - Disabled state content color */
 @utility content--disabled {
     color: var(--color-gray-300);
 }
 
-/* Content Placeholder - Placeholder text color for inputs */
+/* Content Placeholder - Placeholder content color for inputs */
 @utility content--placeholder {
     color: var(--color-gray-500);
 }
 
-/* Content Positive - Success/positive state text color */
+/* Content Positive - Success/positive state content color */
 @utility content--positive {
     color: light-dark(var(--color-green-600), var(--color-green-500));
 }
 
-/* Content Warning - Warning/caution state text color */
+/* Content Warning - Warning/caution state content color */
 @utility content--warning {
     color: light-dark(var(--color-orange-600), var(--color-orange-500));
 }
 
-/* Content Negative - Error/negative state text color */
+/* Content Negative - Error/negative state content color */
 @utility content--negative {
     color: light-dark(var(--color-red-600), var(--color-red-500));
 }
 
-/* Content Informative - Informative/neutral state text color */
+/* Content Informative - Informative/neutral state content color */
 @utility content--informative {
     color: light-dark(var(--color-blue-600), var(--color-blue-500));
 }
@@ -147,42 +147,6 @@
 /* Border Informative - Informative/neutral state border */
 @utility border--informative {
     border-color: light-dark(var(--color-blue-600), var(--color-blue-500));
-}
-
-/* Link A - Primary link with high contrast and hover/active states */
-@utility link--a {
-    color: light-dark(var(--color-black-800), var(--color-white-1000));
-    &:hover {
-        color: light-dark(var(--color-black-100), var(--color-white-400));
-    }
-    &:active {
-        color: light-dark(var(--color-black-700), var(--color-white-900));
-    }
-    &.disabled {
-        color: var(--color-gray-300);
-    }
-}
-
-/* Link B - Secondary link with medium contrast */
-@utility link--b {
-    color: light-dark(var(--color-gray-800), var(--color-gray-200));
-    &:hover {
-        color: light-dark(var(--color-gray-550), var(--color-gray-50));
-    }
-    &:active {
-        color: light-dark(var(--color-gray-900), var(--color-gray-300));
-    }
-}
-
-/* Link C - Tertiary link with low contrast for subtle navigation */
-@utility link--c {
-    color: light-dark(var(--color-gray-600), var(--color-gray-400));
-    &:hover {
-        color: light-dark(var(--color-gray-400), var(--color-gray-300));
-    }
-    &:active {
-        color: light-dark(var(--color-gray-800), var(--color-gray-500));
-    }
 }
 
 /* Prose - Typography styles for rich text content with proper spacing */

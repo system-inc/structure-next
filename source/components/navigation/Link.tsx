@@ -5,8 +5,14 @@ import React from 'react';
 import NextLink from 'next/link';
 import type { LinkProps as NextLinkProperties } from 'next/link';
 
+// Dependencies - Theme
+import { linkTheme as structureLinkTheme } from '@structure/source/components/navigation/LinkTheme';
+import type { LinkVariant } from '@structure/source/components/navigation/LinkTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - Link
 export interface LinkProperties
@@ -14,34 +20,42 @@ export interface LinkProperties
         Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkProperties> {
     className?: string;
     children?: React.ReactNode;
-    variant?: 'A' | 'B' | 'C' | 'Unstyled';
+    variant?: LinkVariant;
 }
-export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function (properties, reference) {
-    // Determine base classes based on variant
-    const baseClasses = React.useMemo(
-        function () {
-            switch(properties.variant) {
-                case 'Unstyled':
-                    return '';
-                case 'B':
-                    return 'link--b';
-                case 'C':
-                    return 'link--c';
-                case 'A':
-                default:
-                    return 'link--a';
-            }
-        },
-        [properties.variant],
-    );
+export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function (
+    { variant, className, children, ...nextLinkProperties },
+    reference,
+) {
+    // Get component theme from context
+    const componentTheme = useComponentTheme();
 
-    // Merge user classes with our base classes, giving precedence to user classes
-    const className = mergeClassNames(baseClasses, properties.className);
+    // Merge the structure theme with project theme (if set by the layout provider)
+    const linkTheme = mergeComponentTheme(structureLinkTheme, componentTheme?.Link);
+
+    // Create link variant class names function using the merged theme
+    const linkVariantClassNames = createVariantClassNames(linkTheme.configuration.baseClasses, {
+        variants: {
+            variant: linkTheme.variants,
+        },
+        defaultVariants: linkTheme.configuration.defaultVariant
+            ? {
+                  variant: linkTheme.configuration.defaultVariant,
+              }
+            : {},
+    });
+
+    // Get variant classes (unstyled if no variant specified)
+    const variantClasses = linkVariantClassNames({
+        variant: variant,
+    });
+
+    // Merge variant classes with user className, giving precedence to user classes
+    const mergedClassName = mergeClassNames(variantClasses, className);
 
     // Render the component
     return (
-        <NextLink {...properties} className={className} ref={reference}>
-            {properties.children}
+        <NextLink {...nextLinkProperties} ref={reference} className={mergedClassName}>
+            {children}
         </NextLink>
     );
 });

@@ -1,6 +1,7 @@
 // Dependencies - Theme
 import { Theme } from '@structure/source/theme/ThemeTypes';
 import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
+import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Types
@@ -70,6 +71,7 @@ export interface StructureSettingsInterface {
         defaultTheme: Theme;
         components?: {
             Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
+            Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
             // Future: Input, Card, etc.
         };
     };
