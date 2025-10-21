@@ -4,6 +4,8 @@
 **Status:** Proposal
 **Author:** Claude & Kirk
 
+!!! Note - delete prose tailwind utility out of utilities.css?
+
 ---
 
 ## Overview
