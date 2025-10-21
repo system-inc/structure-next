@@ -7,29 +7,6 @@ import ChevronRightFilledIcon from '@structure/assets/icons/interface/ChevronRig
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
-// const colors = {
-//     keys: {
-//         light: '#3B82F6',
-//         dark: '#93C5FD',
-//     },
-//     keysCollapsed: {
-//         light: '#1E293B',
-//         dark: '#94A3B8',
-//     },
-//     numbers: {
-//         light: '#0891B2',
-//         dark: '#22D3EE',
-//     },
-//     objects: {
-//         light: '#0891B2',
-//         dark: '#22D3EE',
-//     },
-//     strings: {
-//         light: '#D97706',
-//         dark: '#FCD34D',
-//     },
-// };
-
 // Component - JsonNode
 export interface JsonNodeProperties {
     data: unknown;
@@ -54,30 +31,32 @@ export function JsonNode(properties: JsonNodeProperties) {
     // };
 
     // Toggles expansion state
-    const toggleExpand = () => setIsExpanded(!isExpanded);
+    const toggleExpand = function () {
+        setIsExpanded(!isExpanded);
+    };
 
     // Renders different value types with appropriate styling
     function renderPrimitiveValue(value: unknown) {
         switch(typeof value) {
             case 'string':
                 return (
-                    <span className={mergeClassNames('text-[#D97706] dark:text-[#FCD34D]')}>&quot;{value}&quot;</span>
+                    <span className={mergeClassNames('text-amber-600 dark:text-amber-300')}>&quot;{value}&quot;</span>
                 );
             case 'number':
-                return <span className={mergeClassNames('text-[#0891B2] dark:text-[#22D3EE]')}>{value}</span>;
+                return <span className={mergeClassNames('text-cyan-600 dark:text-cyan-400')}>{value}</span>;
             case 'boolean':
                 return (
-                    <span className={mergeClassNames('text-[#0891B2] italic dark:text-[#22D3EE]')}>
+                    <span className={mergeClassNames('text-cyan-600 italic dark:text-cyan-400')}>
                         {value.toString()}
                     </span>
                 );
             case 'object':
                 if(value === null)
-                    return <span className={mergeClassNames('text-[#0891B2] italic dark:text-[#22D3EE]')}>null</span>;
+                    return <span className={mergeClassNames('text-cyan-600 italic dark:text-cyan-400')}>null</span>;
                 // Objects/arrays handled separately
                 return null;
             default:
-                return <span className={mergeClassNames('text-[#0891B2] dark:text-[#22D3EE]')}>{String(value)}</span>;
+                return <span className={mergeClassNames('text-cyan-600 dark:text-cyan-400')}>{String(value)}</span>;
         }
     }
 
@@ -109,7 +88,7 @@ export function JsonNode(properties: JsonNodeProperties) {
             }
             return (
                 <React.Fragment key={key}>
-                    <span className="text-[#1E293B] dark:text-[#94A3B8]">{key}:</span> {renderPreviewValue(value)}
+                    <span className="text-gray-800 dark:text-gray-400">{key}:</span> {renderPreviewValue(value)}
                     {index < previewEntries.length - 1 ? ', ' : ''}
                 </React.Fragment>
             );
@@ -133,12 +112,8 @@ export function JsonNode(properties: JsonNodeProperties) {
     function renderPreviewValue(value: unknown) {
         if(typeof value === 'object' && value !== null) {
             if(Array.isArray(value))
-                return (
-                    <span className="json-preview text-[#1E293B] italic dark:text-[#94A3B8]">
-                        Array({value.length})
-                    </span>
-                );
-            return <span className="json-preview text-[#1E293B] italic dark:text-[#94A3B8]">Object</span>;
+                return <span className="text-gray-800 italic dark:text-gray-400">Array({value.length})</span>;
+            return <span className="text-gray-800 italic dark:text-gray-400">Object</span>;
         }
         return renderPrimitiveValue(value);
     }
@@ -199,7 +174,7 @@ export function JsonNode(properties: JsonNodeProperties) {
     // Line classes for hover and click
     const lineClasses =
         'json-line hover:background--c dark:hover:bg-dark-2 cursor-pointer flex items-start items-center';
-    const keyClasses = 'json-key text-[#3B82F6] dark:text-[#93C5FD]';
+    const keyClasses = 'json-key text-blue-500 dark:text-blue-300';
     const toggleAreaClasses = 'items-center transform transition-transform mr-0.5';
     const placeholderToggleWidth = 6; // Same width as the toggle
 
@@ -226,7 +201,7 @@ export function JsonNode(properties: JsonNodeProperties) {
                 {isObject ? (
                     isExpanded ? (
                         // Expanded
-                        <span className="text-[#1E293B] dark:text-[#94A3B8]">
+                        <span className="text-gray-800 dark:text-gray-400">
                             {isArray ? 'Array(' + (properties.data as unknown[]).length + ')' : ''}
                         </span>
                     ) : (

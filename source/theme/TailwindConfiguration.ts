@@ -19,33 +19,25 @@
  *
  * Architecture:
  *
- * 1. Foundation Layer (0-1000 Scales) - Granular color values
- *    Location: ./styles/variables.css
+ * 1. Theme Variables Layer (0-1000 Scales) - Primitive building blocks
+ *    Location: ./styles/variables.css (@theme block)
  *    - light-0 to light-1000 (transparent whites)
  *    - dark-0 to dark-1000 (transparent blacks)
  *    - black-0 to black-1000 (opaque grays to pure black)
  *    - white-0 to white-1000 (opaque grays to pure white)
  *    - gray-0 to gray-1000 (opaque middle grays)
- *    Use: Rarely used directly, these are the building blocks for semantic tokens.
- *    Can be accessed as CSS variable (var(--color-gray-500)) or Tailwind utility
+ *    Use: These auto-generate Tailwind utilities (bg-*, text-*, border-*, etc.)
+ *    Can be accessed as CSS variable (var(--color-gray-500)) or utility class
  *    (bg-gray-500, text-gray-500, border-gray-500, etc.)
  *
- * 2. Semantic Token Layer (Letter-Based) - Design decisions
- *    Location: ./styles/variables.css
- *    - --background--a, b, c, etc. (hierarchy: page, page accent, dialogs, tips, etc.)
- *    - --content--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
- *    - --border--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
- *    - --link--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
- *    - Semantic tokens: --content--positive, --content--negative, --content--disabled, etc.
- *    Use: These are the CSS variables you reference when creating utilities.
- *
- * 3. Utility Class Layer - What developers use
+ * 2. Custom Utility Layer - Semantic design utilities
  *    Location: ./styles/utilities.css
- *    - background--a { background-color: var(--background--a); }
- *    - content--a { color: var(--content--a); }
- *    - border--a { border-color: var(--border--a); }
- *    - link--a { color: var(--link--a); (include :hover and :active states) }
- *    Use: These are the classes you use in components.
+ *    - background--a, b, c, etc. (hierarchy: page, page accent, dialogs, tips, etc.)
+ *    - content--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
+ *    - border--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
+ *    - link--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
+ *    - Semantic utilities: content--positive, content--negative, content--disabled, etc.
+ *    Use: These are defined with inline light-dark() in utilities.css, no CSS variables needed.
  *
  * Usage in Components:
  *
@@ -71,38 +63,41 @@
  * </div>
  * ```
  *
- * Adding New Tokens (Structure Layer):
+ * Adding New Utilities (Structure Layer):
  *
- * 1. Define CSS variable in variables.css:
- *    --background--x: light-dark(var(--color-white-500), var(--color-black-500));
- *
- * 2. Create utility class in utilities.css:
- *    @utility background--x { background-color: var(--background--x); }
+ * Simply add to utilities.css with inline light-dark():
+ *    @utility background--x {
+ *        background-color: light-dark(var(--color-white-500), var(--color-black-500));
+ *    }
  *
  * That's it! Tailwind automatically generates hover:background--x, md:background--x, etc.
+ * No CSS variables needed - everything is defined in one place.
  *
  * Project-specific Extensions:
  *
- * Projects can add their own tokens in /app/_theme/styles/:
+ * Projects can add their own utilities in /app/_theme/styles/:
  *
- * 1. variables.css - Define project-specific CSS variables
- *    Example: --link--blue, --link--blue-hover
+ * 1. variables.css - Define project-specific Theme Variables (in @theme block)
+ *    Example: --color-brand-500: #ff6b6b;
  *
  * 2. utilities.css - Create project-specific utility classes
- *    Example: @utility link--blue { color: var(--link--blue); }
+ *    Example: @utility link--blue {
+ *        color: light-dark(var(--color-blue-600), var(--color-blue-600));
+ *        &:hover { color: light-dark(var(--color-blue-500), var(--color-blue-500)); }
+ *    }
  *
  * 3. animations.css - Add project-specific animations
  *    Example: @keyframes borderGlow { ... }
  *
- * Projects automatically inherit all Structure tokens via CSS @import in theme.css
+ * Projects automatically inherit all Structure utilities via CSS @import in theme.css
  *
  * Why use .css Files Instead of the Tailwind Configuration?
  *
  * We define utilities in CSS using @utility rather than Tailwind configuration files because:
  * ✅ Handles complex states (link hover/active) in one class
- * ✅ Single source of truth (just CSS variables + utilities)
- * ✅ Less duplication (no need to map colors in both CSS and configuration)
- * ✅ More explicit (you see exactly what utilities exist)
+ * ✅ Single source of truth (utilities.css has both definition and values)
+ * ✅ Less duplication (no separate CSS variables file for single-use values)
+ * ✅ More explicit (you see exactly what utilities exist and their values)
  * ✅ All Tailwind modifiers still work (hover:, md:, etc.)
  *
  * Light and Dark Mode:

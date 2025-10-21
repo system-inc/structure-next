@@ -1,4 +1,21 @@
-/* Foundation Tokens */
+/* Theme Variables
+ *
+ * Defined in @theme block so Tailwind auto-generates utility classes.
+ *
+ * Spacing/Sizing (--phi): Generates w-*, h-*, p-*, m-*, gap-*, etc. utilities
+ *   Example: --phi → gap-phi, p-phi, w-phi
+ *
+ * Fonts (--font-*): Generates font-* utilities
+ *   Example: --font-sans → font-sans
+ *
+ * Colors (--color-*): Generates bg-*, text-*, border-*, etc. utilities
+ *   Example: --color-blue-500 → bg-blue-500, text-blue-500, border-blue-500
+ *
+ * These are the primitive building blocks. Use them directly as utility classes
+ * in components, or reference them as CSS variables.
+ *   Example utility: className="bg-blue-500 text-white-900"
+ *   Example variable: var(--color-white-1000)
+ */
 @theme {
     /* Constants */
     --phi: 1.618rem;
@@ -136,60 +153,4 @@
     --color-white-900: #f7f7f7;
     --color-white-950: #fbfbfb;
     --color-white-1000: #ffffff;
-}
-
-/* Variant Tokens */
-:root {
-    /* --- Backgrounds --- */
-    --background--a: light-dark(var(--color-white-1000), var(--color-black-700));
-    --background--b: light-dark(var(--color-white-900), var(--color-black-500));
-    --background--c: light-dark(var(--color-white-1000), var(--color-black-600));
-    --background--d: light-dark(var(--color-white-800), var(--color-black-400));
-    --background--e: light-dark(var(--color-white-950), var(--color-black-650));
-    --background--f: light-dark(var(--color-white-1000), var(--color-black-500));
-    --background--backdrop: light-dark(var(--color-dark-400), var(--color-dark-600));
-    --background--positive: light-dark(var(--color-green-600), var(--color-green-400));
-    --background--warning: light-dark(var(--color-orange-600), var(--color-orange-400));
-    --background--negative: light-dark(var(--color-red-600), var(--color-red-400));
-    --background--informative: light-dark(var(--color-blue-600), var(--color-blue-400));
-
-    /* --- Content --- */
-    --content--a: light-dark(var(--color-black-700), var(--color-white-700));
-    --content--b: light-dark(var(--color-gray-800), var(--color-gray-50));
-    --content--c: light-dark(var(--color-gray-600), var(--color-gray-400));
-    --content--disabled: var(--color-gray-300);
-    --content--placeholder: var(--color-gray-500);
-    --content--positive: light-dark(var(--color-green-600), var(--color-green-500));
-    --content--warning: light-dark(var(--color-orange-600), var(--color-orange-500));
-    --content--negative: light-dark(var(--color-red-600), var(--color-red-500));
-    --content--informative: light-dark(var(--color-blue-600), var(--color-blue-500));
-
-    /* --- Borders --- */
-    --border--a: light-dark(var(--color-white-700), var(--color-black-300));
-    --border--b: light-dark(var(--color-white-850), var(--color-black-500));
-    --border--c: light-dark(var(--color-white-500), var(--color-black-100));
-    --border--d: light-dark(var(--color-white-600), var(--color-black-450));
-    --border--focus: light-dark(var(--color-blue-600), var(--color-blue-400));
-    --border--positive: light-dark(var(--color-green-600), var(--color-green-500));
-    --border--warning: light-dark(var(--color-orange-600), var(--color-orange-500));
-    --border--negative: light-dark(var(--color-red-600), var(--color-red-500));
-    --border--informative: light-dark(var(--color-blue-600), var(--color-blue-500));
-
-    /* --- Links --- */
-
-    /* Link - A (Primary) */
-    --link--a: light-dark(var(--color-black-800), var(--color-white-1000));
-    --link--a-hover: light-dark(var(--color-black-100), var(--color-white-400));
-    --link--a-pressed: light-dark(var(--color-black-700), var(--color-white-900));
-    --link--a-disabled: var(--color-gray-300);
-
-    /* Link - B (Secondary) */
-    --link--b: light-dark(var(--color-gray-800), var(--color-gray-200));
-    --link--b-hover: light-dark(var(--color-gray-550), var(--color-gray-50));
-    --link--b-pressed: light-dark(var(--color-gray-900), var(--color-gray-300));
-
-    /* Link - C */
-    --link--c: light-dark(var(--color-gray-600), var(--color-gray-400));
-    --link--c-hover: light-dark(var(--color-gray-400), var(--color-gray-300));
-    --link--c-pressed: light-dark(var(--color-gray-800), var(--color-gray-500));
 }

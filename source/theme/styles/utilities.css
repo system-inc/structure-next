@@ -1,133 +1,191 @@
 /* Backgrounds */
+
+/* Background A - Primary page background */
 @utility background--a {
-    background-color: var(--background--a);
+    background-color: light-dark(var(--color-white-1000), var(--color-black-700));
 }
+
+/* Background B - Secondary background, slightly darker/lighter than primary */
 @utility background--b {
-    background-color: var(--background--b);
+    background-color: light-dark(var(--color-white-900), var(--color-black-500));
 }
+
+/* Background C - Tertiary background for cards and elevated surfaces */
 @utility background--c {
-    background-color: var(--background--c);
+    background-color: light-dark(var(--color-white-1000), var(--color-black-600));
 }
+
+/* Background D - Quaternary background for subtle accents */
 @utility background--d {
-    background-color: var(--background--d);
+    background-color: light-dark(var(--color-white-800), var(--color-black-400));
 }
+
+/* Background E - Quinary background for hover states */
 @utility background--e {
-    background-color: var(--background--e);
+    background-color: light-dark(var(--color-white-950), var(--color-black-650));
 }
+
+/* Background F - Senary background for alternate surfaces */
 @utility background--f {
-    background-color: var(--background--f);
+    background-color: light-dark(var(--color-white-1000), var(--color-black-500));
 }
+
+/* Background Backdrop - Overlay for modals and dialogs */
 @utility background--backdrop {
-    background-color: var(--background--backdrop);
+    background-color: light-dark(var(--color-dark-400), var(--color-dark-600));
 }
+
+/* Background Positive - Success/positive state background */
 @utility background--positive {
-    background-color: var(--background--positive);
+    background-color: light-dark(var(--color-green-600), var(--color-green-400));
 }
+
+/* Background Warning - Warning/caution state background */
 @utility background--warning {
-    background-color: var(--background--warning);
+    background-color: light-dark(var(--color-orange-600), var(--color-orange-400));
 }
+
+/* Background Negative - Error/negative state background */
 @utility background--negative {
-    background-color: var(--background--negative);
+    background-color: light-dark(var(--color-red-600), var(--color-red-400));
 }
+
+/* Background Informative - Informative/neutral state background */
 @utility background--informative {
-    background-color: var(--background--informative);
+    background-color: light-dark(var(--color-blue-600), var(--color-blue-400));
 }
 
 /* Content */
+
+/* Content A - Primary text color for body content */
 @utility content--a {
-    color: var(--content--a);
+    color: light-dark(var(--color-black-700), var(--color-white-700));
 }
+
+/* Content B - Secondary text color for less prominent content */
 @utility content--b {
-    color: var(--content--b);
+    color: light-dark(var(--color-gray-800), var(--color-gray-50));
 }
+
+/* Content C - Tertiary text color for muted content */
 @utility content--c {
-    color: var(--content--c);
+    color: light-dark(var(--color-gray-600), var(--color-gray-400));
 }
+
+/* Content Disabled - Disabled state text color */
 @utility content--disabled {
-    color: var(--content--disabled);
+    color: var(--color-gray-300);
 }
+
+/* Content Placeholder - Placeholder text color for inputs */
 @utility content--placeholder {
-    color: var(--content--placeholder);
+    color: var(--color-gray-500);
 }
+
+/* Content Positive - Success/positive state text color */
 @utility content--positive {
-    color: var(--content--positive);
+    color: light-dark(var(--color-green-600), var(--color-green-500));
 }
+
+/* Content Warning - Warning/caution state text color */
 @utility content--warning {
-    color: var(--content--warning);
+    color: light-dark(var(--color-orange-600), var(--color-orange-500));
 }
+
+/* Content Negative - Error/negative state text color */
 @utility content--negative {
-    color: var(--content--negative);
+    color: light-dark(var(--color-red-600), var(--color-red-500));
 }
+
+/* Content Informative - Informative/neutral state text color */
 @utility content--informative {
-    color: var(--content--informative);
+    color: light-dark(var(--color-blue-600), var(--color-blue-500));
 }
 
 /* Borders */
+
+/* Border A - Primary border for cards and containers */
 @utility border--a {
-    border-color: var(--border--a);
-}
-@utility border--b {
-    border-color: var(--border--b);
-}
-@utility border--c {
-    border-color: var(--border--c);
-}
-@utility border--d {
-    border-color: var(--border--d);
-}
-@utility border--focus {
-    border-color: var(--border--focus);
-}
-@utility border--positive {
-    border-color: var(--border--positive);
-}
-@utility border--warning {
-    border-color: var(--border--warning);
-}
-@utility border--negative {
-    border-color: var(--border--negative);
-}
-@utility border--informative {
-    border-color: var(--border--informative);
+    border-color: light-dark(var(--color-white-700), var(--color-black-300));
 }
 
-/* Link - A */
+/* Border B - Secondary border for subtle dividers */
+@utility border--b {
+    border-color: light-dark(var(--color-white-850), var(--color-black-500));
+}
+
+/* Border C - Tertiary border for very subtle separations */
+@utility border--c {
+    border-color: light-dark(var(--color-white-500), var(--color-black-100));
+}
+
+/* Border D - Quaternary border for alternate surfaces */
+@utility border--d {
+    border-color: light-dark(var(--color-white-600), var(--color-black-450));
+}
+
+/* Border Focus - Focus state border for form inputs */
+@utility border--focus {
+    border-color: light-dark(var(--color-blue-600), var(--color-blue-400));
+}
+
+/* Border Positive - Success/positive state border */
+@utility border--positive {
+    border-color: light-dark(var(--color-green-600), var(--color-green-500));
+}
+
+/* Border Warning - Warning/caution state border */
+@utility border--warning {
+    border-color: light-dark(var(--color-orange-600), var(--color-orange-500));
+}
+
+/* Border Negative - Error/negative state border */
+@utility border--negative {
+    border-color: light-dark(var(--color-red-600), var(--color-red-500));
+}
+
+/* Border Informative - Informative/neutral state border */
+@utility border--informative {
+    border-color: light-dark(var(--color-blue-600), var(--color-blue-500));
+}
+
+/* Link A - Primary link with high contrast and hover/active states */
 @utility link--a {
-    color: var(--link--a);
+    color: light-dark(var(--color-black-800), var(--color-white-1000));
     &:hover {
-        color: var(--link--a-hover);
+        color: light-dark(var(--color-black-100), var(--color-white-400));
     }
     &:active {
-        color: var(--link--a-pressed);
+        color: light-dark(var(--color-black-700), var(--color-white-900));
     }
     &.disabled {
-        color: var(--link--a-disabled);
+        color: var(--color-gray-300);
     }
 }
 
-/* Link - B */
+/* Link B - Secondary link with medium contrast */
 @utility link--b {
-    color: var(--link--b);
+    color: light-dark(var(--color-gray-800), var(--color-gray-200));
     &:hover {
-        color: var(--link--b-hover);
+        color: light-dark(var(--color-gray-550), var(--color-gray-50));
     }
     &:active {
-        color: var(--link--b-pressed);
+        color: light-dark(var(--color-gray-900), var(--color-gray-300));
     }
 }
 
-/* Link - C */
+/* Link C - Tertiary link with low contrast for subtle navigation */
 @utility link--c {
-    color: var(--link--c);
+    color: light-dark(var(--color-gray-600), var(--color-gray-400));
     &:hover {
-        color: var(--link--c-hover);
+        color: light-dark(var(--color-gray-400), var(--color-gray-300));
     }
     &:active {
-        color: var(--link--c-pressed);
+        color: light-dark(var(--color-gray-800), var(--color-gray-500));
     }
 }
 
-/* Prose - Typography */
+/* Prose - Typography styles for rich text content with proper spacing */
 @utility prose {
     & p {
         margin-top: 1rem;
@@ -171,7 +229,7 @@
     }
 }
 
-/* Scrollbar - Hide */
+/* Scrollbar Hide - Hides scrollbars while maintaining scroll functionality */
 @utility scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
