@@ -31,15 +31,15 @@ export function Calendar(properties: CalendarProperties) {
                 week: 'flex w-full mt-2',
                 cell: 'relative h-8 w-8 p-0 text-center text-sm focus-within:relative focus-within:z-20',
                 day: 'h-full w-full p-0 cursor-pointer',
-                day_button: 'h-8 w-8 cursor-pointer font-normal hover:bg-opsis-background-secondary hover:rounded-md',
+                day_button: 'h-8 w-8 cursor-pointer font-normal hover:background--b hover:rounded-md',
                 range_start:
-                    'bg-opsis-background-secondary rounded-l-md [&_button]:!bg-opsis-action-primary [&_button]:!text-opsis-action-general-light [&_button]:rounded-l-md [&_button]:rounded-r-none [&_button]:hover:!bg-opsis-action-primary [&_button]:hover:rounded-l-md [&_button]:hover:rounded-r-none [&.rdp-range_end]:!rounded-md',
+                    'background--b rounded-l-md [&_button]:!bg-opsis-action-primary [&_button]:!text-opsis-action-general-light [&_button]:rounded-l-md [&_button]:rounded-r-none [&_button]:hover:!bg-opsis-action-primary [&_button]:hover:rounded-l-md [&_button]:hover:rounded-r-none [&.rdp-range_end]:!rounded-md',
                 range_end:
-                    'bg-opsis-background-secondary rounded-r-md [&_button]:!bg-opsis-action-primary [&_button]:!text-opsis-action-general-light [&_button]:rounded-r-md [&_button]:rounded-l-none [&_button]:hover:!bg-opsis-action-primary [&_button]:hover:rounded-r-md [&_button]:hover:rounded-l-none [&.rdp-range_start]:!rounded-md',
+                    'background--b rounded-r-md [&_button]:!bg-opsis-action-primary [&_button]:!text-opsis-action-general-light [&_button]:rounded-r-md [&_button]:rounded-l-none [&_button]:hover:!bg-opsis-action-primary [&_button]:hover:rounded-r-md [&_button]:hover:rounded-l-none [&.rdp-range_start]:!rounded-md',
                 range_middle:
-                    'bg-opsis-background-secondary [&_button]:!bg-opsis-background-secondary [&_button]:!foreground--a [&_button]:!rounded-none [&_button]:hover:!bg-opsis-background-secondary',
+                    'background--b [&_button]:!background--b [&_button]:!foreground--a [&_button]:!rounded-none [&_button]:hover:!background--b',
                 selected: '',
-                today: '[&_button]:bg-opsis-background-secondary [&_button]:foreground--a [&_button]:rounded-md',
+                today: '[&_button]:background--b [&_button]:foreground--a [&_button]:rounded-md',
                 outside: 'text-opsis-content-placeholder opacity-50',
                 disabled: 'text-opsis-content-placeholder opacity-50',
                 hidden: 'invisible',

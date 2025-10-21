@@ -44,7 +44,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                         <div
                             key={index}
                             className={
-                                'bg-opsis-background-secondary mb-2 flex h-14 items-center justify-between rounded-md px-5 py-3 last:mb-0'
+                                'mb-2 flex h-14 items-center justify-between rounded-md background--b px-5 py-3 last:mb-0'
                             }
                         >
                             <FileTypeIcon className="mr-4 size-5" />

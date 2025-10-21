@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'motion/react';
 export const tabsVariants = cva(
     [
         // Wrapper defaults
-        'rounded-full transition-colors bg-opsis-background-secondary p-0.5 flex items-center gap-1 z-0',
+        'rounded-full transition-colors background--b p-0.5 flex items-center gap-1 z-0',
     ],
     {
         variants: {

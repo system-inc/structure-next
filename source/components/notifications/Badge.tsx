@@ -46,7 +46,7 @@ export const badgeVariants = cva(
             {
                 type: 'filled',
                 variant: 'muted',
-                className: 'bg-opsis-background-secondary',
+                className: 'background--b',
             },
             {
                 type: 'outline',
