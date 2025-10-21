@@ -10,8 +10,8 @@ import { Providers } from '@structure/source/layouts/providers/Providers';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Theme
-import { Theme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
-import { themeKey } from '@structure/source/theme/ThemeSettings';
+import { Theme, ThemeClassName, OperatingSystemTheme } from '@structure/source/theme/ThemeTypes';
+import { themeKey, operatingSystemThemeKey } from '@structure/source/theme/ThemeSettings';
 
 // Dependencies - Theme - Styles
 import '@structure/source/theme/styles/global.css';
@@ -86,7 +86,15 @@ export async function RootLayout(properties: RootLayoutProperties) {
     const theme = (cookieStore.get(themeKey)?.value ?? ProjectSettings.theme?.defaultTheme) as Theme;
 
     // Map the theme to its corresponding scheme-* utility class
-    const schemeClass = ThemeClassName[theme] ?? ThemeClassName[Theme.OperatingSystem];
+    // For OperatingSystem theme, use the actual OS preference from cookie
+    let schemeClass: string;
+    if(theme === Theme.OperatingSystem) {
+        const osTheme = cookieStore.get(operatingSystemThemeKey)?.value as OperatingSystemTheme | undefined;
+        schemeClass = osTheme === OperatingSystemTheme.Dark ? 'scheme-dark' : 'scheme-light';
+    }
+    else {
+        schemeClass = ThemeClassName[theme] ?? 'scheme-light';
+    }
 
     // Render the component
     return (

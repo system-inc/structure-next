@@ -81,9 +81,8 @@
  *    Example: --color-brand-500: #ff6b6b;
  *
  * 2. utilities.css - Create project-specific utility classes
- *    Example: @utility link--blue {
- *        color: light-dark(var(--color-blue-600), var(--color-blue-600));
- *        &:hover { color: light-dark(var(--color-blue-500), var(--color-blue-500)); }
+ *    Example: @utility background--positive {
+ *        background-color: light-dark(var(--color-green-600), var(--color-green-400));
  *    }
  *
  * 3. animations.css - Add project-specific animations
@@ -162,6 +161,9 @@ import type { Config as TailwindConfigurationInterface } from 'tailwindcss';
 export const TailwindConfiguration = {
     // Content paths for Tailwind to scan for class names
     content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './libraries/**/*.{js,ts,jsx,tsx,mdx}'],
+
+    // Dark mode strategy, use class selector instead of media query (so dark: works)
+    darkMode: ['selector', '.scheme-dark'],
 
     theme: {
         // For the "container" className, center and add horizontal padding

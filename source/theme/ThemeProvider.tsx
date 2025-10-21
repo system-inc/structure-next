@@ -42,9 +42,18 @@ export const readOnlyThemeAtom = atom(function (get) {
 // Shared State - setThemeAtom
 export const setThemeAtom = atom(null, function (get, set, theme: Theme) {
     if(typeof window !== 'undefined') {
-        // Get the scheme class for the selected theme
-        const schemeClass = ThemeClassName[theme];
-        setThemeClassName(schemeClass);
+        // If OperatingSystem theme is selected, use actual OS preference
+        if(theme === Theme.OperatingSystem) {
+            const operatingSystemDarkThemeQuery = window.matchMedia(darkThemeMediaQueryString);
+            const isDark = operatingSystemDarkThemeQuery.matches;
+            const schemeClass = isDark ? 'scheme-dark' : 'scheme-light';
+            setThemeClassName(schemeClass);
+        }
+        else {
+            // For Light or Dark, use the direct mapping
+            const schemeClass = ThemeClassName[theme];
+            setThemeClassName(schemeClass);
+        }
     }
 
     // Set the theme
@@ -67,10 +76,12 @@ operatingSystemThemeAtom.onMount = function (setOperatingSystemThemeAtom) {
         // Update the operatingSystemThemeAtom
         setOperatingSystemThemeAtom(operatingSystemTheme);
 
-        // If the theme is OperatingSystem, ensure scheme-light-dark is set
-        // The CSS light-dark() function will automatically respect the OS preference
+        // If the theme is OperatingSystem, set scheme-dark or scheme-light based on OS preference
+        // This allows both light-dark() CSS function AND Tailwind's dark: classes to work
         if(globalStore.get(readOnlyThemeAtom) === Theme.OperatingSystem) {
-            setThemeClassName(ThemeClassName[Theme.OperatingSystem]);
+            const osBasedSchemeClass =
+                operatingSystemTheme === OperatingSystemTheme.Dark ? 'scheme-dark' : 'scheme-light';
+            setThemeClassName(osBasedSchemeClass);
         }
     }
 
