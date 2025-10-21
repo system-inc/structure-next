@@ -175,7 +175,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
             <a
                 id={camelCase(properties.text)}
                 className={mergeClassNames(
-                    'cursor-pointer rounded-md p-1.5 text-xs foreground--b hover:background--b',
+                    'cursor-pointer rounded-md p-1.5 text-xs content--b hover:background--b',
                     properties.isActive && 'background--b',
                 )}
                 onClick={properties.onClick}
@@ -320,7 +320,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     size="FormInputSelect"
                     className={mergeClassNames(
                         'min-w-[246px]',
-                        !value && 'text-muted-foreground',
+                        !value && 'content--b',
                         properties.buttonProperties?.className,
                     )}
                     iconLeft={CalendarIcon}

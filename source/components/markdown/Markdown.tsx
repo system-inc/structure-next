@@ -58,19 +58,16 @@ const components: ComponentsProperties = {
         <Link href={properties.href ?? ''} className="underline" {...properties} />
     ),
     pre: (properties) => (
-        <pre
-            className="bg-light-2 dark:border-dark-4 dark:bg-dark relative mb-6 rounded-md border border--d p-5 text-sm"
-            {...properties}
-        >
+        <pre className="relative mb-6 rounded-md border border--d background--c p-5 text-sm" {...properties}>
             {properties.children}
-            <span className="text-sans absolute top-3 right-3">
+            <span className="absolute top-3 right-3 font-sans">
                 <CopyButton className="" value={getInnerText(properties.children)} />
             </span>
         </pre>
     ),
     code: (properties) => (
         <code
-            className="bg-light-2 dark:border-dark-4 dark:bg-dark mb-6 rounded border border--d px-1 py-px font-mono text-sm whitespace-pre-wrap"
+            className="mb-6 rounded border border--d background--c px-1 py-px font-mono text-sm whitespace-pre-wrap"
             {...properties}
         />
     ),
@@ -79,14 +76,12 @@ const components: ComponentsProperties = {
     li: (properties) => (
         <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
-    blockquote: (properties) => (
-        <blockquote className="dark:border-neutral-4 border-l-2 border--d pl-4" {...properties} />
-    ),
+    blockquote: (properties) => <blockquote className="border-l-2 border--d pl-4" {...properties} />,
     hr: (properties) => <hr className="my-10 border--d" {...properties} />,
     table: (properties) => (
         <table className="relative mt-6 mb-6 w-full overflow-auto rounded border border--a" {...properties} />
     ),
-    thead: (properties) => <thead className="bg-light-2 dark:bg-dark border-b" {...properties} />,
+    thead: (properties) => <thead className="border-b background--b" {...properties} />,
     tbody: (properties) => <tbody className="" {...properties} />,
     tr: (properties) => <tr className="border-b border--d last:border-b-0" {...properties} />,
     th: (properties) => (

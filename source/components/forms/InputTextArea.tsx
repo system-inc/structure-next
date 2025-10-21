@@ -15,7 +15,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Common input text area styles
 export const commonClassNames =
     // Text
-    `text-dark dark:text-light ` +
+    `content--a ` +
     // Placeholder
     `placeholder:opacity-70 dark:placeholder:opacity-70 ` +
     // Placeholder (disabled)
@@ -31,7 +31,7 @@ export const backgroundClassNames =
 // Border styles
 export const borderStyleClassNames =
     // Border
-    `rounded-small border border--d dark:border-dark-4 ` +
+    `rounded-sm border border--d dark:border-dark-4 ` +
     // Focus
     `focus:border-neutral dark:focus:border-neutral-3`;
 

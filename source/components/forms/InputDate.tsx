@@ -128,7 +128,7 @@ export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDate
                         size="FormInputSelect"
                         className={mergeClassNames(
                             'min-w-[246px]',
-                            !value && 'text-muted-foreground',
+                            !value && 'content--b',
                             properties.buttonProperties?.className,
                         )}
                         iconLeft={CalendarIcon}

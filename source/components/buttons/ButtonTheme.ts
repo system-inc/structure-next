@@ -24,7 +24,7 @@ export const buttonCommonClassNames =
 // Centered button styles: sizing and shape
 export const buttonCenteredClassNames =
     // Shape
-    `rounded-small ` +
+    `rounded-sm ` +
     // Content
     `text-sm font-medium`;
 
@@ -132,9 +132,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
         A:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Background uses foreground color (inversion), text uses background color
-            `bg-[var(--foreground--a)] text-[var(--background--a)] ` +
+            `bg-[var(--content--a)] text-[var(--background--a)] ` +
             // Border matches background
-            `border border-[var(--foreground--a)] ` +
+            `border border-[var(--content--a)] rounded ` +
             // Hover - slightly lighter/darker
             `hover:bg-black-600 dark:hover:bg-white-600 ` +
             // Active (includes when used as open popover trigger)
@@ -152,7 +152,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         B:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Follows theme direction
-            `background--b foreground--a ` +
+            `background--b content--a ` +
             // Border
             `border border--b ` +
             // Hover
@@ -173,9 +173,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Rounded
             `rounded-xs ` +
             // Text color
-            `foreground--b ` +
+            `content--b ` +
             // Hover and active states
-            `hover:bg-light-2 hover:foreground--a active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 ` +
+            `hover:bg-light-2 hover:content--a active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 ` +
             // Popover open states (for TipButton)
             `data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 ` +
             `data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
@@ -188,7 +188,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Border
             `border ` +
             // Light
-            `bg-light-1 border--d text-red-500 ` +
+            `background--c border--d text-red-500 ` +
             // Dark
             `dark:bg-dark-2 dark:border-dark-4 dark:text-red-500 ` +
             // Light - Hover
@@ -204,7 +204,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Dark - Focus
             `dark:focus:border-red-500 ` +
             // Light - Disabled
-            `disabled:hover:bg-light-1 disabled:hover:border--d ` +
+            `disabled:hover:background--c disabled:hover:border--d ` +
             // Dark - Disabled
             `dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3`,
 
@@ -218,7 +218,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Rounded and hover
             `rounded-md hover:bg-accent hover:text-accent-foreground ` +
             // Color, hover, and active states
-            `foreground--c hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
+            `content--c hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
 
         ToggleOn:
             `${buttonCommonClassNames} ${buttonCenteredClassNames} ` +
@@ -250,9 +250,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Layout and sizing
             `flex items-center justify-center content-center ` +
             // Border
-            `rounded-small border border--d dark:border-light ` +
+            `rounded-sm border border--d dark:border-light ` +
             // Text and background
-            `background--a foreground--a ` +
+            `background--a content--a ` +
             // Hover
             `hover:bg-light-2 dark:hover:bg-dark-3 ` +
             // Active (includes when used as open popover trigger)
@@ -271,9 +271,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Text
             `text-sm ` +
             // Border
-            `rounded-small border border--d dark:border-dark-4 ` +
+            `rounded-sm border border--d dark:border-dark-4 ` +
             // Light text on dark background
-            `background--a foreground--a ` +
+            `background--a content--a ` +
             // Active (includes when used as open popover trigger)
             `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
             // Disabled
@@ -284,7 +284,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         TableHeaderCell:
             `${buttonCommonClassNames} ` +
             // Text
-            `text-xs font-normal foreground--c hover:-text-dark dark:hover:text-light`,
+            `text-xs font-normal content--c hover:-text-dark dark:hover:text-light`,
     },
 
     // Sizes

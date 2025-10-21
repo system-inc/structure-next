@@ -89,9 +89,7 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowPro
                 <div>
                     <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">Array Items</span>
-                        <span className="bg-light-2 dark:bg-dark-3 inline-block rounded-md px-1.5 py-0.5 text-xs">
-                            {properties.type}
-                        </span>
+                        <span className="inline-block rounded-md px-1.5 py-0.5 text-xs">{properties.type}</span>
                     </div>
                     <p className="mt-1 text-xs text-gray-500">{properties.description}</p>
                 </div>

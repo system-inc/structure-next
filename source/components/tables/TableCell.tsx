@@ -170,7 +170,7 @@ export function TableCell(properties: TableCellProperties) {
     }
     // If there is no content, render null
     else if(!content) {
-        content = <i className="foreground--c">-</i>;
+        content = <i className="content--c">-</i>;
     }
 
     // Render the component

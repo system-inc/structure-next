@@ -449,7 +449,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     layout === 'Fixed' ? 'fixed z-20' : 'relative',
                     'flex h-full flex-col',
                     // For Flex layout, prevent flexbox from shrinking the navigation
-                    layout === 'Flex' ? 'flex-shrink-0' : '',
+                    layout === 'Flex' ? 'shrink-0' : '',
                     // Hide overflow when closed for both layouts
                     !sideNavigationLayoutNavigationOpen ? 'overflow-hidden' : '',
                     // If there is no header or the window is less than the desktop minimum width and the side navigation is not closing by window resize

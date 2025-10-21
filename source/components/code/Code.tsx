@@ -99,12 +99,12 @@ export function Code({
                 className,
             )}
         >
-            <div className="bg-dark-6 dark:bg-dark-3 absolute top-0 right-0 w-min rounded-bl px-1.5 py-0.5 text-xs">
-                <p className="text-muted-foreground">{language.toUpperCase()}</p>
+            <div className="absolute top-0 right-0 w-min rounded-bl px-1.5 py-0.5 text-xs">
+                <p className="content--b">{language.toUpperCase()}</p>
             </div>
             <div ref={scrollContainerReference} className="relative h-max overflow-auto">
                 <div
-                    className="text-light selection:bg-light/20 dark:selection:bg-light/10 inset-0 z-10 w-min"
+                    className="inset-0 z-10 w-min"
                     style={{
                         pointerEvents: edit ? 'none' : 'auto',
                         position: edit ? 'absolute' : 'static',

@@ -203,7 +203,7 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                                 animate={hovered ? 'expanded' : 'visible'}
                                 exit={'exit'}
                                 layout="position"
-                                className={'relative w-full flex-shrink-0 pr-4 pl-4 md:pr-8'}
+                                className={'relative w-full shrink-0 pr-4 pl-4 md:pr-8'}
                                 style={{ zIndex: noticesState.length - index }}
                             >
                                 <div className="pt-2 pb-2">

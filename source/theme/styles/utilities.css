@@ -33,33 +33,33 @@
     background-color: var(--background--informative);
 }
 
-/* Foregrounds */
-@utility foreground--a {
-    color: var(--foreground--a);
+/* Content */
+@utility content--a {
+    color: var(--content--a);
 }
-@utility foreground--b {
-    color: var(--foreground--b);
+@utility content--b {
+    color: var(--content--b);
 }
-@utility foreground--c {
-    color: var(--foreground--c);
+@utility content--c {
+    color: var(--content--c);
 }
-@utility foreground--disabled {
-    color: var(--foreground--disabled);
+@utility content--disabled {
+    color: var(--content--disabled);
 }
-@utility foreground--placeholder {
-    color: var(--foreground--placeholder);
+@utility content--placeholder {
+    color: var(--content--placeholder);
 }
-@utility foreground--positive {
-    color: var(--foreground--positive);
+@utility content--positive {
+    color: var(--content--positive);
 }
-@utility foreground--warning {
-    color: var(--foreground--warning);
+@utility content--warning {
+    color: var(--content--warning);
 }
-@utility foreground--negative {
-    color: var(--foreground--negative);
+@utility content--negative {
+    color: var(--content--negative);
 }
-@utility foreground--informative {
-    color: var(--foreground--informative);
+@utility content--informative {
+    color: var(--content--informative);
 }
 
 /* Borders */
@@ -124,6 +124,50 @@
     }
     &:active {
         color: var(--link--c-pressed);
+    }
+}
+
+/* Prose - Typography */
+@utility prose {
+    & p {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    & p:first-child {
+        margin-top: 0;
+    }
+    & p:last-child {
+        margin-bottom: 0;
+    }
+
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    & ul,
+    & ol {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+    }
+
+    & li {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    & hr {
+        margin-top: 1.75rem;
+        margin-bottom: 1.75rem;
+        border-color: var(--border--a);
+        border-top-width: 1px;
+        border-bottom-width: 0;
     }
 }
 

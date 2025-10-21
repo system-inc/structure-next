@@ -227,10 +227,10 @@ export function Dialog(properties: DialogProperties) {
                             data-drawer-id={dialogId}
                         >
                             {renderCloseButton('absolute top-4 right-4 z-10')}
-                            {renderHeader('flex-shrink-0 px-6 pt-6 pb-4')}
+                            {renderHeader('shrink-0 px-6 pt-6 pb-4')}
                             {renderAccessibility()}
                             {renderContent('grow overflow-y-auto px-6')}
-                            {renderFooter('flex-shrink-0 px-6 pt-4 pb-6')}
+                            {renderFooter('shrink-0 px-6 pt-4 pb-6')}
                         </VaulDrawer.Content>
                     </VaulDrawer.Portal>
                 </VaulDrawer.Root>

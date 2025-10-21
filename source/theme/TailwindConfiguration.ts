@@ -10,7 +10,7 @@
  * - Clarity: Letters = hierarchy, Words = meaning
  *
  * Double-Dash Naming Convention:
- * We use double-dash (--) in our utility class names (background--a, border--b, foreground--c)
+ * We use double-dash (--) in our utility class names (background--a, border--b, content--c)
  * to avoid conflicts with Tailwind's built-in utilities:
  * - border-b (Tailwind) = border-bottom
  * - border--b (Ours) = border variant B
@@ -33,16 +33,16 @@
  * 2. Semantic Token Layer (Letter-Based) - Design decisions
  *    Location: ./styles/variables.css
  *    - --background--a, b, c, etc. (hierarchy: page, page accent, dialogs, tips, etc.)
- *    - --foreground--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
+ *    - --content--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
  *    - --border--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
  *    - --link--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
- *    - Semantic tokens: --foreground--positive, --foreground--negative, --foreground--disabled, etc.
+ *    - Semantic tokens: --content--positive, --content--negative, --content--disabled, etc.
  *    Use: These are the CSS variables you reference when creating utilities.
  *
  * 3. Utility Class Layer - What developers use
  *    Location: ./styles/utilities.css
  *    - background--a { background-color: var(--background--a); }
- *    - foreground--a { color: var(--foreground--a); }
+ *    - content--a { color: var(--content--a); }
  *    - border--a { border-color: var(--border--a); }
  *    - link--a { color: var(--link--a); (include :hover and :active states) }
  *    Use: These are the classes you use in components.
@@ -51,7 +51,7 @@
  *
  * ```tsx
  * // Letter-based hierarchy with double-dash
- * <div className="background--a foreground--a border border--a">
+ * <div className="background--a content--a border border--a">
  *   <Link className="link--a">Click me</Link>
  * </div>
  *
@@ -61,9 +61,9 @@
  * </div>
  *
  * // Semantic states
- * <input className="border--focus foreground--placeholder" />
- * <span className="foreground--positive">Success!</span>
- * <span className="foreground--negative">Error!</span>
+ * <input className="border--focus content--placeholder" />
+ * <span className="content--positive">Success!</span>
+ * <span className="content--negative">Error!</span>
  *
  * // Mixing Tailwind and custom utilities
  * <div className="flex items-center p-4 background--c border border--a">
@@ -129,7 +129,7 @@
  * Apply `scheme-light` to any container along with background/foreground tokens:
  *
  * ```tsx
- * <div className="scheme-light background--a foreground--a p-6 rounded-lg">
+ * <div className="scheme-light background--a content--a p-6 rounded-lg">
  *   This stays light even when page is in dark mode
  * </div>
  * ```
@@ -140,7 +140,7 @@
  * Dark Islands (force dark in light mode):
  *
  * ```tsx
- * <div className="scheme-dark background--a foreground--a p-6 rounded-lg">
+ * <div className="scheme-dark background--a content--a p-6 rounded-lg">
  *   This stays dark even when page is in light mode
  * </div>
  * ```

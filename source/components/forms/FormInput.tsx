@@ -151,7 +151,7 @@ export function FormInput(properties: FormInputProperties) {
                 properties.validationResult.errors.length > 0 &&
                 properties.validationResult.errors.map((validationError, validationErrorIndex) => (
                     <div key={validationErrorIndex} className="mt-1.5 flex items-center space-x-1 text-xs text-red-500">
-                        <ErrorIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationError.message}</span>
+                        <ErrorIcon className="h-4 w-4 shrink-0" /> <span>{validationError.message}</span>
                     </div>
                 ))}
 
@@ -165,16 +165,16 @@ export function FormInput(properties: FormInputProperties) {
                         key={validationSuccessIndex}
                         className="mt-1.5 flex items-center space-x-1 text-xs text-green-600 dark:text-green-500"
                     >
-                        <CheckCircledIcon className="h-4 w-4 flex-shrink-0" /> <span>{validationSuccess.message}</span>
+                        <CheckCircledIcon className="h-4 w-4 shrink-0" /> <span>{validationSuccess.message}</span>
                     </div>
                 ))}
 
             {/* Description */}
             {properties.description && (
                 <div
-                    // className="text-ss text-muted-foreground"
+                    // className="text-ss content--b"
                     className={mergeClassNames(
-                        'text-muted-foreground',
+                        'content--b',
                         properties.descriptionClassName,
                         size === 'default' ? 'text-ss' : size === 'large' ? 'text-sm' : 'text-ss',
                     )}
@@ -184,7 +184,7 @@ export function FormInput(properties: FormInputProperties) {
             )}
 
             {/* Validating */}
-            {validating && <p className="text-xs foreground--c">Validating...</p>}
+            {validating && <p className="text-xs content--c">Validating...</p>}
         </div>
     );
 }

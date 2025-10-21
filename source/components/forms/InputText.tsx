@@ -20,7 +20,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Common input styles
 export const commonInputText =
     // Text
-    `text-dark dark:text-light ` +
+    `content--a ` +
     // Placeholder
     `placeholder:opacity-70 dark:placeholder:opacity-70 ` +
     // Placeholder (disabled)
@@ -36,7 +36,7 @@ export const backgroundStyle =
 // Border styles
 export const borderStyle =
     // Border
-    `rounded-small border border--d dark:border-dark-4 ` +
+    `rounded-sm border border--d dark:border-dark-4 ` +
     // Focus
     `focus:border-neutral dark:focus:border-neutral-3`;
 
@@ -191,7 +191,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextProp
     return (
         <div className={mergeClassNames('relative', properties.containerClassName)}>
             {Icon && (
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 foreground--c">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 content--c">
                     <Icon className="h-4 w-4" />
                 </div>
             )}

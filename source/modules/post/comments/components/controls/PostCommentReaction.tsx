@@ -134,7 +134,7 @@ export function PostCommentReaction(properties: PostCommentReactionProperties) {
                         // Dark
                         'dark:bg-dark-1 dark:text-light-2',
                         // Hover - Light
-                        'hover:bg-light-1 hover:text-dark-1 hover:border--d',
+                        'hover:text-dark-1 hover:border--d hover:background--c',
                         // Hover - Dark
                         'dark:hover:border-dark-4 dark:hover:bg-dark-2 dark:hover:text-light',
                         // Active - Light

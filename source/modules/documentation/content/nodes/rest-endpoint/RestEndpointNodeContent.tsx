@@ -379,7 +379,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
 
             {/* Documentation */}
             {endpoint.documentation && (
-                <div className="overview mb-4">
+                <div className="mb-4">
                     <Markdown>{endpoint.documentation}</Markdown>
                 </div>
             )}
@@ -476,7 +476,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                     <h3 className="mb-4 text-lg font-medium">Example Responses</h3>
                     {endpoint.exampleResponses.map(function (exampleResponse) {
                         return (
-                            <div key={exampleResponse.statusCode} className="response mb-4">
+                            <div key={exampleResponse.statusCode} className="mb-4">
                                 {/* Title */}
                                 <div className="mb-2 flex items-center">
                                     <span

@@ -49,7 +49,7 @@ export function OpsNavigationBar() {
             <div className="relative z-30 h-12 w-full">
                 {/* Top Left */}
                 <div className="absolute left-[10px] z-30 flex h-12 items-center">
-                    <div className={mergeClassNames('mr-4 flex flex-shrink-0 items-center space-x-2')}>
+                    <div className={mergeClassNames('mr-4 flex shrink-0 items-center space-x-2')}>
                         {/* Logo */}
                         <Link href="/">
                             <Image
@@ -72,7 +72,7 @@ export function OpsNavigationBar() {
 
                         {/* Menu button */}
                         <Dialog.Trigger asChild>
-                            <Button className="rounded-small h-auto !bg-transparent py-[6px]">
+                            <Button className="h-auto rounded-sm !bg-transparent py-[6px]">
                                 <svg
                                     width="16"
                                     height="16"
@@ -87,7 +87,7 @@ export function OpsNavigationBar() {
                                     />
                                 </svg>
                                 Ops
-                                {/* <span className="ml-2 inline-flex items-center gap-1 rounded-small border background--c px-2 text-opsis-content-placeholder">
+                                {/* <span className="ml-2 inline-flex items-center gap-1 rounded-sm border background--c px-2 text-opsis-content-placeholder">
                                     CMD+K
                                 </span> */}
                             </Button>

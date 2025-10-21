@@ -490,7 +490,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                             event.preventDefault();
                             dragControls.start(event);
                         }}
-                        className={`hover:bg-dark-4/10 hover:dark:bg-light-4/10 relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab active:cursor-grabbing`}
+                        className={`relative flex aspect-square h-6 w-6 touch-none items-center justify-center rounded p-1 opacity-50 hover:cursor-grab active:cursor-grabbing`}
                     >
                         <DragIcon className="h-full w-full rotate-90" />
                     </div>
@@ -552,9 +552,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                         />
                                         {/* Input for a HEX color */}
                                         <div className="relative mt-1 flex items-center">
-                                            <span className="text-gray/50 dark:text-gray-secondary/50 absolute left-3">
-                                                #
-                                            </span>
+                                            <span className="absolute left-3">#</span>
                                             <InputText
                                                 id={'color-' + properties.settings.id}
                                                 defaultValue={convertColorString(
@@ -572,7 +570,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                 }
                                 trigger={
                                     <div
-                                        className="h-6 w-6 flex-shrink-0 cursor-pointer rounded-md"
+                                        className="h-6 w-6 shrink-0 cursor-pointer rounded-md"
                                         style={{
                                             backgroundColor: properties.settings.color,
                                         }}
@@ -690,7 +688,7 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                                 />
                             }
                             trigger={
-                                <p className="text-dark/30 dark:text-light-4/50 relative cursor-default text-end italic">
+                                <p className="relative cursor-default text-end italic">
                                     {dataInteractionDatabaseTableMetricsRequest.isLoading
                                         ? '...'
                                         : addCommas(statistics.sum)}

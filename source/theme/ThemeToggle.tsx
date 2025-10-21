@@ -46,8 +46,8 @@ export function ThemeToggle() {
                 trigger={
                     <button
                         className={mergeClassNames(
-                            'cursor-pointer rounded-full foreground--c transition-colors hover:foreground--a',
-                            theme === currentTheme && 'background--d foreground--a',
+                            'cursor-pointer rounded-full content--c transition-colors hover:content--a',
+                            theme === currentTheme && 'background--d content--a',
                         )}
                         tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
                         onClick={function () {
@@ -64,7 +64,7 @@ export function ThemeToggle() {
 
     // Render the component
     return (
-        <div className="flex w-min items-center justify-center space-x-0.5 rounded-xl border border--a p-1 foreground--c transition-colors">
+        <div className="flex w-min items-center justify-center space-x-0.5 rounded-xl border border--a p-1 content--c transition-colors">
             {themeModeButton(Theme.OperatingSystem)}
             {themeModeButton(Theme.Light)}
             {themeModeButton(Theme.Dark)}

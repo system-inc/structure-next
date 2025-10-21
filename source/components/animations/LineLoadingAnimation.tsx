@@ -59,9 +59,9 @@ export function LineLoadingAnimation() {
     // Render the component
     return (
         <div className="relative flex h-0.5 w-full items-center justify-center">
-            <div ref={domElementReference} className="bg-light-4/10 dark:bg-light/10 h-full w-full overflow-hidden">
+            <div ref={domElementReference} className="h-full w-full overflow-hidden">
                 <motion.div
-                    className="from-blue/50 to-blue h-full bg-gradient-to-r"
+                    className="h-full bg-linear-to-r from-blue-500/50 to-blue-500"
                     initial={{ width: 0 }}
                     animate={animationControls}
                 />

@@ -146,10 +146,10 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                 style={{ height: chartHeight }}
             >
                 <div className="text-center">
-                    <p className="text-sm font-medium foreground--c">
+                    <p className="text-sm font-medium content--c">
                         Too many data points ({addCommas(dataPointCount)}).
                     </p>
-                    <p className="text-sm font-medium foreground--c">Adjust your time range or interval.</p>
+                    <p className="text-sm font-medium content--c">Adjust your time range or interval.</p>
                 </div>
             </div>
         );

@@ -109,7 +109,7 @@ export function EmailVerificationVerifyForm(properties: EmailVerificationVerifyF
     // Render the component
     return (
         <div>
-            <div className="foreground--c">
+            <div className="content--c">
                 <p>
                     We sent a code to {properties.emailAddress} {timeAgoString}.
                 </p>

@@ -19,10 +19,8 @@ export function ActivityLink(properties: ActivityLinkProperties) {
     return (
         <Link href={properties.href} className="group flex transition-all">
             <div>
-                <p className="text-sm font-light">{properties.title}</p>
-                <p className="text-dark-4/50 dark:text-light-4/50 text-xs font-light">
-                    {timeFromNow(properties.timeAgo)}
-                </p>
+                <p className="text-sm">{properties.title}</p>
+                <p className="text-xs">{timeFromNow(properties.timeAgo)}</p>
             </div>
             <div className="flex items-center justify-start opacity-0 transition-opacity group-hover:opacity-100">
                 <ChevronRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

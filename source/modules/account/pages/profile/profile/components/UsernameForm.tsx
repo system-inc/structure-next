@@ -111,7 +111,7 @@ export function UsernameForm() {
 
     // Render the component
     return (
-        <div className="dark:border-dark-4 rounded-lg border border--d p-6">
+        <div className="rounded-lg border border--d p-6">
             <h2 className="text-xl font-medium">Change Username</h2>
 
             <Form

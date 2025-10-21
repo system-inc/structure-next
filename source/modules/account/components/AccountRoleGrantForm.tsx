@@ -23,10 +23,10 @@ import { useDebounce } from '@structure/source/utilities/react/React';
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Role Information Map
-const ROLE_INFORMATION = {
-    ADMIN: 'Full access to all features and user management.',
-    MODERATOR: 'Can moderate content and manage basic user actions.',
-    USER: 'Standard user access to basic features.',
+const RoleInformation = {
+    Administrator: 'Full access to all features and user management.',
+    Moderator: 'Can moderate content and manage basic user actions.',
+    User: 'Standard user access to basic features.',
     // Add more roles as needed
 };
 
@@ -187,7 +187,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
 
             {/* Loading State */}
             {isSearching && (
-                <div className="flex items-center space-x-2 foreground--c">
+                <div className="flex items-center space-x-2 content--c">
                     <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     <span>Searching...</span>
                 </div>
@@ -209,10 +209,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             {/* User Preview and Role Selection */}
             {accountPrivilegedRequest.data?.accountPrivileged?.profiles.map(function (profile) {
                 return (
-                    <div
-                        key={profile.username}
-                        className="dark:border-dark-4 space-y-4 rounded-lg border border--d p-4"
-                    >
+                    <div key={profile.username} className="space-y-4 rounded-lg border border--d p-4">
                         {/* User Preview */}
                         <div className="flex items-center space-x-3">
                             <div className="h-10 w-10">
@@ -224,7 +221,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             </div>
                             <div>
                                 <div className="font-medium">{profile.displayName || '-'}</div>
-                                <div className="text-sm foreground--c">@{profile.username}</div>
+                                <div className="text-sm content--c">@{profile.username}</div>
                             </div>
                         </div>
 
@@ -245,8 +242,8 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                                 onChange={(value) => setSelectedRoleType(value || '')}
                             />
                             {selectedRoleType && (
-                                <p className="text-sm foreground--c">
-                                    {ROLE_INFORMATION[selectedRoleType as keyof typeof ROLE_INFORMATION]}
+                                <p className="text-sm content--c">
+                                    {RoleInformation[selectedRoleType as keyof typeof RoleInformation]}
                                 </p>
                             )}
                             <Button

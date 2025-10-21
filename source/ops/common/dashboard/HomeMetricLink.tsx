@@ -14,10 +14,7 @@ export type HomeMetricLinkProperties = {
 export function HomeMetricLink(properties: HomeMetricLinkProperties) {
     // Render the component
     return (
-        <Link
-            href={properties.href}
-            className="hover:bg-light-4/30 dark:hover:bg-light-4/5 flex items-center justify-between p-4 text-sm font-light"
-        >
+        <Link href={properties.href} className="flex items-center justify-between p-4 text-sm font-light">
             <div>
                 {properties.number !== undefined && (
                     <>

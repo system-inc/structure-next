@@ -277,7 +277,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                     className="flex h-64 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-700"
                     aria-live="polite"
                 >
-                    <p className="foreground--c">Loading image...</p>
+                    <p className="content--c">Loading image...</p>
                 </div>
             )}
         </div>

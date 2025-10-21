@@ -29,7 +29,7 @@ export const TabsContext = React.createContext<
 >({ tabGroupId: '', currentValue: undefined });
 
 export const Tabs = React.forwardRef<
-    React.ElementRef<typeof RadixTabPrimitive.Root>,
+    React.ComponentRef<typeof RadixTabPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Root> & VariantProperties<typeof tabsVariants>
 >(function ({ className, size, activationMode: activationModeProperty, ...radixTabRootProperties }, reference) {
     const activationMode = activationModeProperty || 'manual';
@@ -54,11 +54,11 @@ Tabs.displayName = RadixTabPrimitive.Root.displayName;
 export const tabItemVariants = cva(
     [
         // Default
-        'foreground--b rounded-full transition-colors relative group cursor-pointer',
+        'content--b rounded-full transition-colors relative group cursor-pointer',
         // Hover
-        'hover:foreground--a',
+        'hover:content--a',
         // Active
-        'data-[state=active]:text-opsis-action-general-dark',
+        'data-[state=active]:content--a',
     ],
     {
         variants: {

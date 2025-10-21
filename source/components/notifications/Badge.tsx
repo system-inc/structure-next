@@ -7,11 +7,11 @@ export const badgeVariants = cva(
     {
         variants: {
             variant: {
-                success: ['foreground--positive'],
-                danger: ['foreground--negative'],
-                warning: ['foreground--warning'],
-                info: ['foreground--informative'],
-                muted: ['foreground--b'],
+                success: ['content--positive'],
+                danger: ['content--negative'],
+                warning: ['content--warning'],
+                info: ['content--informative'],
+                muted: ['content--b'],
             },
             type: {
                 filled: '',
@@ -26,22 +26,22 @@ export const badgeVariants = cva(
             {
                 type: 'filled',
                 variant: 'success',
-                className: 'bg-opsis-background-subtle-positive',
+                className: 'background--positive',
             },
             {
                 type: 'filled',
                 variant: 'danger',
-                className: 'bg-opsis-background-subtle-negative',
+                className: 'background--negative',
             },
             {
                 type: 'filled',
                 variant: 'warning',
-                className: 'bg-opsis-background-subtle-warning',
+                className: 'background--warning',
             },
             {
                 type: 'filled',
                 variant: 'info',
-                className: 'bg-opsis-background-subtle-informative',
+                className: 'background--informative',
             },
             {
                 type: 'filled',
@@ -51,22 +51,22 @@ export const badgeVariants = cva(
             {
                 type: 'outline',
                 variant: 'success',
-                className: 'border border-opsis-border-subtle-positive',
+                className: 'border border--positive',
             },
             {
                 type: 'outline',
                 variant: 'danger',
-                className: 'border border-opsis-border-subtle-negative',
+                className: 'border border--negative',
             },
             {
                 type: 'outline',
                 variant: 'warning',
-                className: 'border border-opsis-border-subtle-warning',
+                className: 'border border--warning',
             },
             {
                 type: 'outline',
                 variant: 'info',
-                className: 'border border-opsis-border-subtle-informative',
+                className: 'border border--informative',
             },
             {
                 type: 'outline',

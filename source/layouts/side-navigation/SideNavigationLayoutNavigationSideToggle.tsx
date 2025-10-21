@@ -46,7 +46,7 @@ export function SideNavigationLayoutNavigationSideToggle(
 
     // Render the component
     return (
-        <div className={mergeClassNames('mr-4 flex flex-shrink-0 items-center space-x-2', properties.className)}>
+        <div className={mergeClassNames('mr-4 flex shrink-0 items-center space-x-2', properties.className)}>
             {/* Logo */}
             <Link href="/">
                 <Image

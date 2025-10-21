@@ -23,9 +23,9 @@ export const menuClassName =
     // Layout and sizing
     `flex flex-col focus-visible:outline-none ` +
     // Border
-    `rounded-small border border--d ` +
+    `rounded-sm border border--d ` +
     // Background and text
-    `text-sm background--a foreground--a`;
+    `text-sm background--a content--a`;
 
 // Type - MenuItemInterface
 // Menu-specific interface that extends MenuItemProperties

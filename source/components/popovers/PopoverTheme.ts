@@ -12,9 +12,9 @@ export const basePopoverClassNames =
     // Focus
     `outline-none ` +
     // Background and text
-    `background--a foreground--a ` +
+    `background--a content--a ` +
     // Border radius
-    `rounded-small ` +
+    `rounded-sm ` +
     // Base width
     `w-full`;
 
@@ -56,8 +56,8 @@ export const popoverTheme: PopoverThemeConfiguration = {
         // Tip variant - Compact tooltips without full width
         Tip:
             `outline-none ` +
-            `background--a foreground--a ` +
-            `max-w-56 rounded-small px-3 py-2 text-sm shadow-04 ` +
+            `background--a content--a ` +
+            `max-w-56 rounded px-3 py-2 text-sm shadow-04 ` +
             `border border--d`,
     },
     configuration: {

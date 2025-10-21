@@ -52,7 +52,7 @@ export function TableRow(properties: TableRowProperties) {
     return (
         <tr
             className={mergeClassNames(
-                'hover:bg-light-1 dark:border-dark-4 dark:hover:bg-dark-1 h-10 border-b border--d text-sm last:border-b-0',
+                'dark:border-dark-4 dark:hover:bg-dark-1 h-10 border-b border--d text-sm last:border-b-0 hover:background--c',
                 properties.className,
             )}
             onClick={properties.selection ? onClickIntercept : undefined}

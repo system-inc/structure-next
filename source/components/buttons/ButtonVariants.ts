@@ -10,7 +10,7 @@ const commonButton =
 // Centered button styles: alignment, sizing, and shape
 const centeredButton =
     // Layout and container
-    `justify-center rounded-small ` +
+    `justify-center rounded-sm ` +
     // Content
     `text-sm font-medium`;
 
@@ -35,7 +35,7 @@ export const ButtonVariants = {
         // Border
         `border ` +
         // Light
-        `bg-light-1 border--d text-dark-2 ` +
+        `background--c border--d text-dark-2 ` +
         // Dark
         `dark:bg-dark-2 dark:text-light-2 ` +
         // Light - Hover
@@ -51,7 +51,7 @@ export const ButtonVariants = {
         // Dark - Focus
         `dark:focus:border-neutral-6 ` +
         // Light - Disabled
-        `disabled:hover:bg-light-1 ` +
+        `disabled:hover:background--c ` +
         // Dark - Disabled
         `dark:disabled:hover:bg-dark-1`,
     // Unstyled variant: no styles
@@ -71,9 +71,9 @@ export const ButtonVariants = {
     light:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Dark text on light background
-        `border bg-light-1 dark:bg-light-2 text-dark dark:text-dark hover:bg-light dark:hover:bg-light ` +
+        `border background--c dark:bg-light-2 text-dark dark:text-dark hover:bg-light dark:hover:bg-light ` +
         // Disabled states
-        `disabled:hover:bg-light-1 dark:disabled:hover:bg-light-2 ` +
+        `disabled:hover:background--c dark:disabled:hover:bg-light-2 ` +
         // Active states (includes when used as open popover trigger)
         `active:bg-light-2 data-[state=open]:bg-light-2 dark:active:bg-light-3 dark:data-[state=open]:bg-light-3`,
     // Contrast variant: constrasted background
@@ -95,14 +95,14 @@ export const ButtonVariants = {
         // Rounded and hover
         `rounded-md hover:bg-accent hover:text-accent-foreground ` +
         // Color, hover, and active states
-        `foreground--c hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
+        `content--c hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
     // Destructive variant: styles for negative actions like delete or remove
     destructive:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Border
         `border ` +
         // Light
-        `bg-light-1 border--d text-red-500 ` +
+        `background--c border--d text-red-500 ` +
         // Dark
         `dark:bg-dark-2 dark:border-dark-4 dark:text-red-500 ` +
         // Light - Hover
@@ -118,7 +118,7 @@ export const ButtonVariants = {
         // Dark - Focus
         `dark:focus:border-red-500 ` +
         // Light - Disabled
-        `disabled:hover:bg-light-1 disabled:hover:border--d ` +
+        `disabled:hover:background--c disabled:hover:border--d ` +
         // Dark - Disabled
         `dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3`,
     // Toggle on
@@ -147,9 +147,9 @@ export const ButtonVariants = {
         // Layout and sizing
         `flex items-center justify-center content-center ` +
         // Border
-        `rounded-small border border--d dark:border-light ` +
+        `rounded-sm border border--d dark:border-light ` +
         // Text and background
-        `background--a foreground--a ` +
+        `background--a content--a ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-3 ` +
         // Active (includes when used as open popover trigger)
@@ -170,9 +170,9 @@ export const ButtonVariants = {
         // Layout and sizing
         ` ` +
         // Border
-        `rounded-small border border--d ` +
+        `rounded-sm border border--d ` +
         // Light text on dark background
-        `background--a foreground--a ` +
+        `background--a content--a ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-1 ` +
         // Active (includes when used as open popover trigger)
@@ -184,9 +184,9 @@ export const ButtonVariants = {
     tableHeaderCell:
         `${commonButton} ` +
         // Text
-        `text-xs font-normal foreground--c hover:-text-dark dark:hover:text-light ` +
+        `text-xs font-normal content--c hover:-text-dark dark:hover:text-light ` +
         // Text and background
-        // `hover:bg-light-1 dark:hover:bg-dark-3 disabled:hover:bg-light ` +
+        // `hover:background--c dark:hover:bg-dark-3 disabled:hover:bg-light ` +
         // Disabled and active states
         // `dark:disabled:hover:bg-dark active:bg-light-2 dark:active:bg-dark-2`,
         ``,

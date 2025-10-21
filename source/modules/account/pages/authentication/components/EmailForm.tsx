@@ -53,7 +53,7 @@ export function EmailForm(properties: EmailFormProperties) {
         <div>
             <h1 className="mb-2 text-xl">{ProjectSettings.title}</h1>
 
-            <div className="neutral">
+            <div className="content--b">
                 {properties.children && properties.children}
 
                 <p className="">Enter your email address to sign in or create an account.</p>
@@ -116,13 +116,13 @@ export function EmailForm(properties: EmailFormProperties) {
             />
 
             {/* Disclaimer */}
-            <p className="mt-6 text-sm leading-normal foreground--c">
+            <p className="mt-6 text-sm leading-normal content--c">
                 By continuing, you agree to the{' '}
-                <Link className="primary" href="/legal/terms-of-service" target="_blank" prefetch={false}>
+                <Link href="/legal/terms-of-service" target="_blank" prefetch={false}>
                     terms of service
                 </Link>{' '}
                 and{' '}
-                <Link className="primary" href="/legal/privacy-policy" target="_blank" prefetch={false}>
+                <Link href="/legal/privacy-policy" target="_blank" prefetch={false}>
                     privacy policy
                 </Link>
                 .

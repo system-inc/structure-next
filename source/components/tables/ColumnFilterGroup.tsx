@@ -412,7 +412,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
-                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md text-sm foreground--c">
+                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md text-sm content--c">
                                     Where
                                 </p>
                             ) : conditionIndex === 1 ? (
@@ -435,7 +435,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm">
+                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm content--b">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -557,7 +557,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 }}
                             />
                         ) : (
-                            <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm">
+                            <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm content--b">
                                 {columnFilterGroupData.operator.toLowerCase()}
                             </p>
                         )}

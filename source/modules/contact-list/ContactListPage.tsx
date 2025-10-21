@@ -27,7 +27,7 @@ export function ContactListPage() {
                 return (
                     <span key={index}>
                         {index > 0 && ' • '}
-                        <Link href={platform.url} target="_blank" className="text-blue underline">
+                        <Link href={platform.url} target="_blank" className="link--blue underline">
                             {platform.title}
                         </Link>
                     </span>
@@ -39,12 +39,12 @@ export function ContactListPage() {
     // Render the component
     return (
         <>
-            <div className="dark:bg-dark dark:text-light-2 flex h-screen items-center md:h-screen md:items-stretch">
+            <div className="flex h-screen items-center md:h-screen md:items-stretch">
                 {/* Show the account menu button */}
                 <div className="absolute top-4 right-4 z-20">{<AccountMenuButton />}</div>
 
                 {/* Primary div, shows up on left side of screen on medium displays */}
-                <div className="scrollbar-hide md:border-r-light-4 dark:border-dark-4 grow items-center justify-center md:flex md:overflow-auto md:border-r dark:border-r">
+                <div className="scrollbar-hide grow items-center justify-center md:flex md:overflow-auto md:border-r dark:border-r">
                     <div className="max-w-[680px] p-8 md:max-h-screen">
                         {/* Show the logo on small screens */}
                         <div
@@ -65,7 +65,7 @@ export function ContactListPage() {
                         {/* Footer */}
                         <p className="mt-6 text-sm font-light">
                             &copy;{currentYear}{' '}
-                            <Link href={ProjectSettings.url} target="_blank" className="text-blue underline">
+                            <Link href={ProjectSettings.url} target="_blank" className="link--blue underline">
                                 {ProjectSettings.ownerDisplayName}
                             </Link>
                             {' • '}
@@ -78,7 +78,7 @@ export function ContactListPage() {
                     <div>
                         {/* Div to contain logo */}
                         <div
-                            className="bg-light dark:bg-dark"
+                            className="content--a"
                             style={{
                                 marginLeft: '-' + ProjectSettings.assets.logo.height / 2 + 'px',
                                 paddingTop: ProjectSettings.assets.logo.height + 'px',

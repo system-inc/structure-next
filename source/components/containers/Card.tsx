@@ -13,13 +13,13 @@ export const cardVariants = cva(
             interactive: {
                 true: [
                     // Hover state
-                    'hover:shadow-03',
-                    'dark:hover:border-opsis-action-secondary-pressed',
+                    'hover:shadow',
+                    // 'dark:hover:border-opsis-action-secondary-pressed',
 
                     // Active state
-                    'active:shadow-03',
-                    'active:border-opsis-action-secondary-pressed',
-                    'dark:active:border-opsis-action-secondary-hover',
+                    'active:shadow',
+                    // 'active:border-opsis-action-secondary-pressed',
+                    // 'dark:active:border-opsis-action-secondary-hover',
                 ],
             },
         },

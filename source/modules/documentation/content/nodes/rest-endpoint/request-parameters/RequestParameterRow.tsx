@@ -215,9 +215,7 @@ export function RequestParameterRow(properties: RequestParameterRowProperties) {
                 {/* Type */}
                 <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                        <span className="bg-light-2 dark:bg-dark-3 inline-block rounded-md px-1.5 py-0.5 text-sm">
-                            {properties.type}
-                        </span>
+                        <span className="inline-block rounded-md px-1.5 py-0.5 text-sm">{properties.type}</span>
                     </div>
                 </td>
 

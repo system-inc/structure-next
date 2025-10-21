@@ -112,7 +112,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     {properties.files.length > 1 && (
                         <Button
                             onClick={nextFile}
-                            className="dark:focus:border-dark-3 absolute top-1/2 right-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border--d focus-visible:ring-0 focus-visible:outline-none"
+                            className="absolute top-1/2 right-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border--d focus-visible:ring-0 focus-visible:outline-none"
                         >
                             <ChevronRightIcon className="h-6 w-6" />
                         </Button>
@@ -121,7 +121,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     {/* Previous Button */}
                     {properties.files.length > 1 && (
                         <Button
-                            className="dark:focus:border-dark-3 absolute top-1/2 left-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border--d focus-visible:ring-0 focus-visible:outline-none"
+                            className="absolute top-1/2 left-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border--d focus-visible:ring-0 focus-visible:outline-none"
                             onClick={previousFile}
                         >
                             <ChevronLeftIcon className="h-6 w-6" />
@@ -132,8 +132,8 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     <div className="absolute top-0 right-0 m-2 flex gap-2">
                         {/* Open in New Tab Button */}
                         <Button
-                            className="bg-dark/20 hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30 rounded-lg p-2 backdrop-blur transition-colors"
-                            icon={<ArrowSquareOutIcon className="text-light dark:text-dark h-5 w-5" weight="bold" />}
+                            className="rounded-lg p-2 backdrop-blur transition-colors"
+                            icon={<ArrowSquareOutIcon className="h-5 w-5 content--a" weight="bold" />}
                             onClick={function () {
                                 window.open(currentFile.url, '_blank');
                             }}
@@ -148,8 +148,8 @@ export function FileCarousel(properties: FileCarouselProperties) {
                                 align="end"
                                 trigger={
                                     <Button
-                                        className="bg-dark/20 hover:bg-dark/30 dark:bg-light/20 dark:hover:bg-light/30 rounded-lg p-2 backdrop-blur transition-colors"
-                                        icon={<InformationCircledIcon className="text-light dark:text-dark h-5 w-5" />}
+                                        className="rounded-lg p-2 backdrop-blur transition-colors"
+                                        icon={<InformationCircledIcon className="h-5 w-5 content--a" />}
                                     />
                                 }
                             />

@@ -218,7 +218,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                 onDrop={handleDrop}
             >
                 <div className="flex flex-col items-center justify-center text-center">
-                    <ImageIcon className="mb-2 h-10 w-10 foreground--c" />
+                    <ImageIcon className="mb-2 h-10 w-10 content--c" />
                     <p className="mt-1 text-sm font-medium">
                         {dragActive ? 'Drop files here.' : 'Drag and drop an image here or click to browse.'}
                     </p>

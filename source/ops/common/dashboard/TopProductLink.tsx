@@ -16,14 +16,11 @@ export type TopProductLinkProperties = {
 export function TopProductLink(properties: TopProductLinkProperties) {
     // Render the component
     return (
-        <Link
-            href={properties.href}
-            className="hover:bg-light-4/30 dark:hover:bg-light-4/5 flex items-center justify-between p-4 font-light"
-        >
+        <Link href={properties.href} className="flex items-center justify-between p-4 font-light">
             {/* Image and identifier info */}
             <div className="flex items-center">
                 {!properties.image ? (
-                    <div className="bg-light-4 aspect-square w-16 animate-pulse rounded" />
+                    <div className="aspect-square w-16 animate-pulse rounded" />
                 ) : (
                     <Image src={properties.image} alt={properties.productName} width={32} height={32} className="" />
                 )}

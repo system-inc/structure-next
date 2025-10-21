@@ -20,7 +20,7 @@ export function OpsLayout(properties: OpsLayoutProperties) {
     return (
         <div className="flex h-screen flex-col overflow-hidden dark:bg-[#161616]">
             {/* Navigation - Fixed at top */}
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
                 <OpsNavigationBar />
             </div>
 

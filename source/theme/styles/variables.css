@@ -6,14 +6,6 @@
     /* Fonts */
     --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-    /* Heading Font Sizes */
-    --font-size-h1: 24px;
-    --font-size-h2: 20px;
-    --font-size-h3: 16px;
-    --font-size-h4: 14px;
-    --font-size-h5: 12px;
-    --font-size-h6: 10px;
-
     /* Light Scale (Transparent Whites, Opacity 0 to 1) */
     --color-light-0: rgba(255 255 255 / 0);
     --color-light-10: rgba(255 255 255 / 0.01);
@@ -161,16 +153,16 @@
     --background--negative: light-dark(var(--color-red-600), var(--color-red-400));
     --background--informative: light-dark(var(--color-blue-600), var(--color-blue-400));
 
-    /* --- Foregrounds --- */
-    --foreground--a: light-dark(var(--color-black-700), var(--color-white-700));
-    --foreground--b: light-dark(var(--color-gray-800), var(--color-gray-50));
-    --foreground--c: light-dark(var(--color-gray-600), var(--color-gray-400));
-    --foreground--disabled: var(--color-gray-300);
-    --foreground--placeholder: var(--color-gray-500);
-    --foreground--positive: light-dark(var(--color-green-600), var(--color-green-500));
-    --foreground--warning: light-dark(var(--color-orange-600), var(--color-orange-500));
-    --foreground--negative: light-dark(var(--color-red-600), var(--color-red-500));
-    --foreground--informative: light-dark(var(--color-blue-600), var(--color-blue-500));
+    /* --- Content --- */
+    --content--a: light-dark(var(--color-black-700), var(--color-white-700));
+    --content--b: light-dark(var(--color-gray-800), var(--color-gray-50));
+    --content--c: light-dark(var(--color-gray-600), var(--color-gray-400));
+    --content--disabled: var(--color-gray-300);
+    --content--placeholder: var(--color-gray-500);
+    --content--positive: light-dark(var(--color-green-600), var(--color-green-500));
+    --content--warning: light-dark(var(--color-orange-600), var(--color-orange-500));
+    --content--negative: light-dark(var(--color-red-600), var(--color-red-500));
+    --content--informative: light-dark(var(--color-blue-600), var(--color-blue-500));
 
     /* --- Borders --- */
     --border--a: light-dark(var(--color-white-700), var(--color-black-300));

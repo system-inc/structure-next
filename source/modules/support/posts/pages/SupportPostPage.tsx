@@ -95,7 +95,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                     </Link>
                 </div>
 
-                <p className="neutral mb-8 text-sm">Updated {updatedTimeAgoString}</p>
+                <p className="mb-8 text-sm content--b">Updated {updatedTimeAgoString}</p>
 
                 {/* Post Content in Markdown */}
                 {properties.post.content && <Markdown className="mb-4 max-w-2xl">{properties.post.content}</Markdown>}

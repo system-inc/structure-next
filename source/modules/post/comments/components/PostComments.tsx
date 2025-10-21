@@ -35,7 +35,7 @@ export function PostComments(properties: PostCommentsProperties) {
                 <div className="flex items-center space-x-1.5">
                     <ProfileLink username={'anonymous'} displayName={'Anonymous'} />
                     <div>&bull;</div>
-                    <div className="foreground--c">
+                    <div className="content--c">
                         <TimeAgo startTimeInMilliseconds={new Date().getTime()} />
                     </div>
                 </div>
