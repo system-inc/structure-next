@@ -33,33 +33,24 @@ interface ComponentsProperties {
 const components: ComponentsProperties = {
     h1: (properties) => (
         <h1
-            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mb-6 text-3xl font-medium before:block first:before:hidden"
+            className="mb-6 text-3xl font-medium before:-mt-16 before:block before:h-16 first:before:hidden"
             {...properties}
         />
     ),
     h2: (properties) => (
-        <h2
-            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mt-6 mb-6 text-2xl font-medium before:block"
-            {...properties}
-        />
+        <h2 className="mt-6 mb-6 text-2xl font-medium before:-mt-16 before:block before:h-16" {...properties} />
     ),
     h3: (properties) => (
-        <h3
-            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mt-6 mb-6 text-xl font-medium before:block"
-            {...properties}
-        />
+        <h3 className="mt-6 mb-6 text-xl font-medium before:-mt-16 before:block before:h-16" {...properties} />
     ),
     h4: (properties) => (
         <h4
-            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mt-6 mb-6 text-[18px] leading-[26px] font-medium before:block"
+            className="mt-6 mb-6 text-[18px] leading-[26px] font-medium before:-mt-16 before:block before:h-16"
             {...properties}
         />
     ),
     h5: (properties) => (
-        <h5
-            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 text-[16px] leading-[28px] font-medium before:block"
-            {...properties}
-        />
+        <h5 className="text-[16px] leading-[28px] font-medium before:-mt-16 before:block before:h-16" {...properties} />
     ),
     p: (properties) => <p className="mt-6 text-[16px] leading-[28px] first:mt-0" {...properties} />,
     strong: (properties) => <strong className="font-medium" {...properties} />,
