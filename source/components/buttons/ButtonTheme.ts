@@ -124,12 +124,28 @@ export const buttonTheme: ButtonThemeConfiguration = {
     variants: {
         // General Purpose Variants
 
-        // Variant A - Primary action button (inverted for high contrast)
+        // Variant A - Primary button
+        // Light mode: Light background, dark text
+        // Dark mode: Dark background, light text
+        A:
+            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
+            // Follows theme direction
+            `background--b content--a ` +
+            // Border
+            `border border--b ` +
+            // Hover
+            `hover:background--c ` +
+            // Active (includes when used as open popover trigger)
+            `active:background--d data-[state=open]:background--d ` +
+            // Focus
+            `focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-gray-500 ` +
+            // Disabled
+            `disabled:opacity-50 disabled:cursor-not-allowed`,
+
+        // Variant B - Secondary button (inverted for high contrast)
         // Light mode: Dark background (#181818), light text (#ffffff)
         // Dark mode: Light background (#e7e7e7), dark text (#181818)
-        // Use for: Primary actions, call-to-action buttons (e.g., Submit, Sign Up)
-        // Equivalent to old bg-opsis-action-primary
-        A:
+        B:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Background uses foreground color (inversion), text uses background color
             `bg-[var(--content--a)] text-[var(--background--a)] ` +
@@ -142,25 +158,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `data-[state=open]:bg-black-500 dark:data-[state=open]:bg-white-500 ` +
             // Focus
             `focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-blue-500 ` +
-            // Disabled
-            `disabled:opacity-50 disabled:cursor-not-allowed`,
-
-        // Variant B - Standard button (adapts to theme)
-        // Light mode: Light background, dark text
-        // Dark mode: Dark background, light text
-        // Use for: Secondary actions, default buttons
-        B:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
-            // Follows theme direction
-            `background--b content--a ` +
-            // Border
-            `border border--b ` +
-            // Hover
-            `hover:background--c ` +
-            // Active (includes when used as open popover trigger)
-            `active:background--d data-[state=open]:background--d ` +
-            // Focus
-            `focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-gray-500 ` +
             // Disabled
             `disabled:opacity-50 disabled:cursor-not-allowed`,
 
