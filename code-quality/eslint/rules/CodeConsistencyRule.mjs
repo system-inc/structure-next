@@ -14,12 +14,13 @@ export default {
             noUnderscoreUtils: 'Folder name "_utils" is not allowed. Use "_utilities" instead.',
             noUtils: 'Folder name "utils" is not allowed. Use "utilities" instead.',
             useSimpleComment: 'Use single-line comment instead of JSDoc for single-line descriptions.',
+            noAnchorElement: "Using <a> elements is not allowed. Use the Link component from '@structure/source/components/navigation/Link' instead.",
         },
         schema: [],
     },
     create(context) {
-        // Helper function to get the filename safely
-        function getFilename() {
+        // Helper function to get the fileName safely
+        function getFileName() {
             return context.filename || context.getFilename() || context.getPhysicalFilename() || '';
         }
 
@@ -52,13 +53,34 @@ export default {
             return cleanLines[0] || '';
         }
 
+        // Check if this is the Link component implementation file
+        const fileName = getFileName();
+        const isLinkComponent = fileName.includes('/components/navigation/Link.tsx') ||
+            fileName.includes('/components/navigation/Link.jsx');
+
         return {
+            // Check for <a> elements in JSX
+            JSXOpeningElement(node) {
+                // Skip if this is the Link component implementation
+                if(isLinkComponent) {
+                    return;
+                }
+
+                // Check if the element is an <a> tag
+                if(node.name && node.name.type === 'JSXIdentifier' && node.name.name === 'a') {
+                    context.report({
+                        node,
+                        messageId: 'noAnchorElement',
+                    });
+                }
+            },
+
             // Check at program start for folder naming
             Program(node) {
-                const filename = getFilename();
+                const fileName = getFileName();
 
                 // Check for _utils folder
-                if(filename.includes('/_utils/') || filename.includes('\\_utils\\')) {
+                if(fileName.includes('/_utils/') || fileName.includes('\\_utils\\')) {
                     // Report on the first line of the file
                     const firstToken = context.getSourceCode().getFirstToken(node);
                     context.report({
@@ -68,7 +90,7 @@ export default {
                 }
 
                 // Check for utils folder (without underscore)
-                if(filename.includes('/utils/') || filename.includes('\\utils\\')) {
+                if(fileName.includes('/utils/') || fileName.includes('\\utils\\')) {
                     // Report on the first line of the file
                     const firstToken = context.getSourceCode().getFirstToken(node);
                     context.report({

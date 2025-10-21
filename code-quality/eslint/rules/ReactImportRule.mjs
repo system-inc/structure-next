@@ -1,16 +1,18 @@
-// ESLint rule to disallow imports from 'next/navigation' and 'framer-motion'
+// ESLint rule to disallow imports from 'next/navigation', 'next/link', and 'framer-motion'
 const ReactImportRule = {
     meta: {
         type: 'problem',
         docs: {
             description:
-                "Disallow imports from 'next/navigation' and 'framer-motion' and require their replacements instead.",
+                "Disallow imports from 'next/navigation', 'next/link', and 'framer-motion' and require their replacements instead.",
             category: 'Possible Errors',
             recommended: false,
         },
         messages: {
             forbiddenNavigationImport:
                 "Importing from 'next/navigation' is not allowed. Use '@structure/source/router/Navigation' instead for framework-independent navigation.",
+            forbiddenLinkImport:
+                "Importing from 'next/link' is not allowed. Use '@structure/source/components/navigation/Link' instead for framework-independent links.",
             forbiddenMotionImport: "Importing from 'framer-motion' is not allowed. Use 'motion/react' instead.",
         },
         fixable: 'code',
