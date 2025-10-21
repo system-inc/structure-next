@@ -192,18 +192,18 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                     ? 'dark:bg-dark-1 border-green-500 bg-white dark:border-green-500'
                     : isExpanded
                       ? 'dark:bg-dark-1 border--a bg-white dark:border--a'
-                      : 'border-light-4 hover:border--a/50 dark:border-dark-4 dark:bg-dark-1 dark:hover:border--a/50 bg-white active:border--a dark:active:border--a',
+                      : 'hover:border--a/50 dark:border-dark-4 dark:bg-dark-1 dark:hover:border--a/50 border--d bg-white active:border--a dark:active:border--a',
             )}
         >
             {/* Top row: Location with browser, platform, and device type icons */}
             <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="min-w-0 truncate text-sm font-medium text-neutral-600 dark:text-neutral-300">
+                <span className="min-w-0 truncate text-sm font-medium foreground--c">
                     {properties.visitorActivity.location}
                 </span>
                 <div className="flex shrink-0 items-center gap-1.5">
-                    <BrowserIcon className="h-3.5 w-3.5 text-neutral-500 dark:text-neutral-400" />
-                    {PlatformIcon && <PlatformIcon className="h-3.5 w-3.5 text-neutral-500 dark:text-neutral-400" />}
-                    {DeviceTypeIcon && <DeviceTypeIcon className="h-4 w-4 text-neutral-600 dark:text-neutral-300" />}
+                    <BrowserIcon className="h-3.5 w-3.5 foreground--c" />
+                    {PlatformIcon && <PlatformIcon className="h-3.5 w-3.5 foreground--c" />}
+                    {DeviceTypeIcon && <DeviceTypeIcon className="h-4 w-4 foreground--c" />}
                 </div>
             </div>
 
@@ -212,7 +212,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                 <div className="min-w-0 flex-1 truncate font-mono text-xs text-blue-600 dark:text-blue-400">
                     {currentPath}
                 </div>
-                <div className="shrink-0 text-xs text-neutral-400 dark:text-neutral-500">
+                <div className="shrink-0 text-xs foreground--c">
                     {properties.visitorActivity.pageCount}{' '}
                     {properties.visitorActivity.pageCount === 1 ? 'event' : 'events'}
                 </div>
@@ -238,7 +238,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
 
                                         return (
                                             <div key={event.id} className="flex items-center gap-2 py-0.5 text-xs">
-                                                <span className="text-neutral-400 dark:text-neutral-500">→</span>
+                                                <span className="foreground--c">→</span>
                                                 <span
                                                     className={
                                                         isAddToCart
@@ -248,9 +248,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                                 >
                                                     {isAddToCart ? `🛒 ${path}` : path}
                                                 </span>
-                                                <span className="shrink-0 text-neutral-400 dark:text-neutral-500">
-                                                    {eventTime}
-                                                </span>
+                                                <span className="shrink-0 foreground--c">{eventTime}</span>
                                             </div>
                                         );
                                     })}
@@ -262,8 +260,8 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
             </AnimatePresence>
 
             {/* Bottom row: Referrer source + Attribution/Path on left, Session duration on right */}
-            <div className="flex items-center justify-between gap-2 text-xs text-neutral-400 dark:text-neutral-500">
-                <div className="flex items-center gap-1.5 truncate text-neutral-500 dark:text-neutral-400">
+            <div className="flex items-center justify-between gap-2 text-xs foreground--c">
+                <div className="flex items-center gap-1.5 truncate foreground--c">
                     {ReferrerIcon ? (
                         <ReferrerIcon className="h-3.5 w-3.5 shrink-0" />
                     ) : referrerName ? (
@@ -278,7 +276,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                         <span className="truncate font-mono">{entrancePage}</span>
                     ) : null}
                 </div>
-                <span className="shrink-0 text-neutral-500 dark:text-neutral-400">{sessionDuration}</span>
+                <span className="shrink-0 foreground--c">{sessionDuration}</span>
             </div>
         </motion.div>
     );

@@ -48,7 +48,7 @@ export function TimeSeriesContainer(properties: TimeSeriesContainerProperties) {
             <div className={mergeClassNames('flex h-[400px] items-center justify-center', properties.className)}>
                 <div className="flex flex-col items-center gap-4">
                     <LoadingAnimation />
-                    <p className="text-sm text-neutral-500">{loadingMessage}</p>
+                    <p className="text-sm foreground--c">{loadingMessage}</p>
                 </div>
             </div>
         );
@@ -60,7 +60,7 @@ export function TimeSeriesContainer(properties: TimeSeriesContainerProperties) {
             <div className={mergeClassNames('flex h-[400px] items-center justify-center', properties.className)}>
                 <div className="flex flex-col items-center gap-2">
                     <p className="text-sm font-medium text-red-600">{errorMessage}</p>
-                    <p className="text-xs text-neutral-500">{properties.error.message}</p>
+                    <p className="text-xs foreground--c">{properties.error.message}</p>
                 </div>
             </div>
         );

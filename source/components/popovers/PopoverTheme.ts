@@ -52,13 +52,13 @@ export interface PopoverThemeConfiguration {
 export const popoverTheme: PopoverThemeConfiguration = {
     variants: {
         // Primary variant - Border with background, suitable for general content (popovers, dropdowns)
-        A: `${basePopoverClassNames} ` + `border border-light-4 dark:border-dark-4`,
+        A: `${basePopoverClassNames} ` + `border border--d`,
         // Tip variant - Compact tooltips without full width
         Tip:
             `outline-none ` +
             `background--a foreground--a ` +
             `max-w-56 rounded-small px-3 py-2 text-sm shadow-04 ` +
-            `border border-light-4 dark:border-dark-4`,
+            `border border--d`,
     },
     configuration: {
         baseClasses: '',

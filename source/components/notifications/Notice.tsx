@@ -86,14 +86,14 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
                     bounce: 0.1,
                 }}
             >
-                <CloseIcon className="text-neutral h-4 w-4" />
+                <CloseIcon className="h-4 w-4 foreground--c" />
             </MotionButton>
 
             <div className="flex w-full items-center justify-between">
                 {/* Title and Content */}
                 <div className="items-center space-y-1 pr-4">
                     {properties.title && <div className="text-sm font-medium">{properties.title}</div>}
-                    {properties.content && <div className="text-neutral text-sm">{properties.content}</div>}
+                    {properties.content && <div className="text-sm foreground--c">{properties.content}</div>}
                 </div>
 
                 {/* Button */}

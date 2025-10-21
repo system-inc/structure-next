@@ -35,9 +35,9 @@ export const ButtonVariants = {
         // Border
         `border ` +
         // Light
-        `bg-light-1 border-light-3 text-dark-2 ` +
+        `bg-light-1 border--d text-dark-2 ` +
         // Dark
-        `dark:bg-dark-2 dark:border-dark-3 dark:text-light-2 ` +
+        `dark:bg-dark-2 dark:text-light-2 ` +
         // Light - Hover
         `hover:bg-light-2 hover:text-dark-1 ` +
         // Dark - Hover
@@ -95,14 +95,14 @@ export const ButtonVariants = {
         // Rounded and hover
         `rounded-md hover:bg-accent hover:text-accent-foreground ` +
         // Color, hover, and active states
-        `text-neutral+6 hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
+        `foreground--c hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
     // Destructive variant: styles for negative actions like delete or remove
     destructive:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Border
         `border ` +
         // Light
-        `bg-light-1 border-light-3 text-red-500 ` +
+        `bg-light-1 border--d text-red-500 ` +
         // Dark
         `dark:bg-dark-2 dark:border-dark-4 dark:text-red-500 ` +
         // Light - Hover
@@ -118,7 +118,7 @@ export const ButtonVariants = {
         // Dark - Focus
         `dark:focus:border-red-500 ` +
         // Light - Disabled
-        `disabled:hover:bg-light-1 disabled:hover:border-light-3 ` +
+        `disabled:hover:bg-light-1 disabled:hover:border--d ` +
         // Dark - Disabled
         `dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3`,
     // Toggle on
@@ -130,7 +130,7 @@ export const ButtonVariants = {
     toggleOff:
         `${commonButton} ${centeredButton} ` +
         // Toggled off
-        `rounded-md border border-light-6 dark:border-dark-4`,
+        `rounded-md border border--d dark:border-dark-4`,
     // Menu Item variant: styles for menu items
     menuItem:
         `relative flex items-center justify-start font-normal cursor-default rounded-extra-small ` +
@@ -147,7 +147,7 @@ export const ButtonVariants = {
         // Layout and sizing
         `flex items-center justify-center content-center ` +
         // Border
-        `rounded-small border border-light-6 dark:border-light ` +
+        `rounded-small border border--d dark:border-light ` +
         // Text and background
         `background--a foreground--a ` +
         // Hover
@@ -170,7 +170,7 @@ export const ButtonVariants = {
         // Layout and sizing
         ` ` +
         // Border
-        `rounded-small border border-light-6 dark:border-dark-3 ` +
+        `rounded-small border border--d ` +
         // Light text on dark background
         `background--a foreground--a ` +
         // Hover
@@ -184,7 +184,7 @@ export const ButtonVariants = {
     tableHeaderCell:
         `${commonButton} ` +
         // Text
-        `text-xs font-normal text-neutral-2 dark:text-neutral+5 hover:-text-dark dark:hover:text-light ` +
+        `text-xs font-normal foreground--c hover:-text-dark dark:hover:text-light ` +
         // Text and background
         // `hover:bg-light-1 dark:hover:bg-dark-3 disabled:hover:bg-light ` +
         // Disabled and active states

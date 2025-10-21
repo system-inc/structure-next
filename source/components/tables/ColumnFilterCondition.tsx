@@ -199,7 +199,7 @@ export function ColumnFilterCondition(properties: ColumnFilterConditionPropertie
 
         return (
             <>
-                <ColumnIcon className="text-neutral mr-2 h-4 w-4" /> {column?.title}
+                <ColumnIcon className="mr-2 h-4 w-4 foreground--c" /> {column?.title}
             </>
         );
     }

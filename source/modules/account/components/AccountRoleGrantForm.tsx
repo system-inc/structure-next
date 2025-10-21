@@ -187,7 +187,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
 
             {/* Loading State */}
             {isSearching && (
-                <div className="text-neutral flex items-center space-x-2">
+                <div className="flex items-center space-x-2 foreground--c">
                     <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     <span>Searching...</span>
                 </div>
@@ -211,7 +211,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 return (
                     <div
                         key={profile.username}
-                        className="border-light-6 dark:border-dark-4 space-y-4 rounded-lg border p-4"
+                        className="dark:border-dark-4 space-y-4 rounded-lg border border--d p-4"
                     >
                         {/* User Preview */}
                         <div className="flex items-center space-x-3">
@@ -224,7 +224,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             </div>
                             <div>
                                 <div className="font-medium">{profile.displayName || '-'}</div>
-                                <div className="text-neutral text-sm">@{profile.username}</div>
+                                <div className="text-sm foreground--c">@{profile.username}</div>
                             </div>
                         </div>
 
@@ -245,7 +245,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                                 onChange={(value) => setSelectedRoleType(value || '')}
                             />
                             {selectedRoleType && (
-                                <p className="text-neutral text-sm">
+                                <p className="text-sm foreground--c">
                                     {ROLE_INFORMATION[selectedRoleType as keyof typeof ROLE_INFORMATION]}
                                 </p>
                             )}

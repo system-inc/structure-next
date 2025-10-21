@@ -412,7 +412,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
-                                <p className="text-neutral flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md text-sm">
+                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md text-sm foreground--c">
                                     Where
                                 </p>
                             ) : conditionIndex === 1 ? (

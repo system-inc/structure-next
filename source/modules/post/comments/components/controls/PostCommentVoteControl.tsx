@@ -105,7 +105,7 @@ export function PostCommentVoteControl(properties: PostCommentVoteControlPropert
                     {/* Votes */}
                     <div
                         className={mergeClassNames(
-                            'border-light-4 bg-light-1 dark:border-dark-3 dark:bg-dark-1 w-full rounded-md border p-4 text-center',
+                            'bg-light-1 dark:bg-dark-1 w-full rounded-md border border--d p-4 text-center',
                             voteType ? 'border-purple-500 dark:border-purple-500' : '',
                         )}
                     >

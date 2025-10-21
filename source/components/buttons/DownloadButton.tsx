@@ -92,7 +92,7 @@ export function DownloadButton({
             className={mergeClassNames(
                 downloadStarted
                     ? 'text-emerald-500 hover:text-emerald-500'
-                    : 'dark:text-neutral+6 text-neutral hover:text-dark dark:hover:text-light',
+                    : 'hover:text-dark dark:hover:text-light foreground--c',
                 className,
             )}
             icon={IconComponent}

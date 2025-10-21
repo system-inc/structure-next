@@ -68,7 +68,7 @@ const components: ComponentsProperties = {
     ),
     pre: (properties) => (
         <pre
-            className="border-light-4 bg-light-2 dark:border-dark-4 dark:bg-dark relative mb-6 rounded-md border p-5 text-sm"
+            className="bg-light-2 dark:border-dark-4 dark:bg-dark relative mb-6 rounded-md border border--d p-5 text-sm"
             {...properties}
         >
             {properties.children}
@@ -79,7 +79,7 @@ const components: ComponentsProperties = {
     ),
     code: (properties) => (
         <code
-            className="border-light-4 bg-light-2 dark:border-dark-4 dark:bg-dark mb-6 rounded border px-1 py-px font-mono text-sm whitespace-pre-wrap"
+            className="bg-light-2 dark:border-dark-4 dark:bg-dark mb-6 rounded border border--d px-1 py-px font-mono text-sm whitespace-pre-wrap"
             {...properties}
         />
     ),
@@ -89,24 +89,24 @@ const components: ComponentsProperties = {
         <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
     blockquote: (properties) => (
-        <blockquote className="border-light-6 dark:border-neutral-4 border-l-2 pl-4" {...properties} />
+        <blockquote className="dark:border-neutral-4 border-l-2 border--d pl-4" {...properties} />
     ),
-    hr: (properties) => <hr className="border-light-4 dark:border-dark-4 my-10" {...properties} />,
+    hr: (properties) => <hr className="my-10 border--d" {...properties} />,
     table: (properties) => (
         <table className="relative mt-6 mb-6 w-full overflow-auto rounded border border--a" {...properties} />
     ),
     thead: (properties) => <thead className="bg-light-2 dark:bg-dark border-b" {...properties} />,
     tbody: (properties) => <tbody className="" {...properties} />,
-    tr: (properties) => <tr className="border-light-4 dark:border-dark-4 border-b last:border-b-0" {...properties} />,
+    tr: (properties) => <tr className="border-b border--d last:border-b-0" {...properties} />,
     th: (properties) => (
         <th
-            className="border-light-4 dark:border-dark-4 border-r px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0"
+            className="border-r border--d px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0"
             {...properties}
         />
     ),
     td: (properties) => (
         <td
-            className="border-light-4 dark:border-dark-4 border-r px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0"
+            className="border-r border--d px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0"
             {...properties}
         />
     ),

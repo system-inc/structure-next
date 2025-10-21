@@ -59,7 +59,7 @@ export function SimpleSvgMap(properties: SimpleSvgMapProperties) {
     // Render the component
     return (
         <div className="relative h-0 w-full" style={{ paddingBottom: `${aspectRatio}%` }}>
-            <WorldMapMercator className="text-neutral+3 dark:text-neutral-6 absolute top-0 left-0 h-full w-full" />
+            <WorldMapMercator className="absolute top-0 left-0 h-full w-full foreground--c" />
             {properties.points.map(function (point, index) {
                 // Adjusted and clamped Mercator Projection
                 const { x, y } = getCoordinates(point.latitude, point.longitude);
@@ -75,7 +75,7 @@ export function SimpleSvgMap(properties: SimpleSvgMapProperties) {
                         }
                         trigger={
                             <div
-                                className="text-blue absolute h-4 w-4 cursor-pointer opacity-75"
+                                className="absolute h-4 w-4 cursor-pointer text-blue-500 opacity-75"
                                 style={{
                                     left: `${x}%`,
                                     top: `${y}%`,

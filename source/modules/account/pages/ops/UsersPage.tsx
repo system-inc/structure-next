@@ -205,9 +205,9 @@ export function UsersPage() {
                                 </div>
 
                                 {/* Desktop: Column Info Placeholders */}
-                                <PlaceholderAnimation className="md/block hidden h-5 w-40" />
-                                <PlaceholderAnimation className="md/block hidden h-5 w-40" />
-                                <PlaceholderAnimation className="md/block hidden h-5 w-40" />
+                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
+                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
+                                <PlaceholderAnimation className="hidden h-5 w-40 md:block" />
                             </div>
                         ))}
                     </div>

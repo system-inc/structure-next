@@ -184,7 +184,7 @@ export function FormInput(properties: FormInputProperties) {
             )}
 
             {/* Validating */}
-            {validating && <p className="text-neutral text-xs">Validating...</p>}
+            {validating && <p className="text-xs foreground--c">Validating...</p>}
         </div>
     );
 }

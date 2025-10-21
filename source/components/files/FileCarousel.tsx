@@ -112,7 +112,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     {properties.files.length > 1 && (
                         <Button
                             onClick={nextFile}
-                            className="focus:border-light-3 dark:focus:border-dark-3 absolute top-1/2 right-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus-visible:ring-0 focus-visible:outline-none"
+                            className="dark:focus:border-dark-3 absolute top-1/2 right-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border--d focus-visible:ring-0 focus-visible:outline-none"
                         >
                             <ChevronRightIcon className="h-6 w-6" />
                         </Button>
@@ -121,7 +121,7 @@ export function FileCarousel(properties: FileCarouselProperties) {
                     {/* Previous Button */}
                     {properties.files.length > 1 && (
                         <Button
-                            className="focus:border-light-3 dark:focus:border-dark-3 absolute top-1/2 left-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus-visible:ring-0 focus-visible:outline-none"
+                            className="dark:focus:border-dark-3 absolute top-1/2 left-0 flex h-auto -translate-y-1/2 transform items-center justify-center rounded border border-transparent px-2 py-2 focus:border--d focus-visible:ring-0 focus-visible:outline-none"
                             onClick={previousFile}
                         >
                             <ChevronLeftIcon className="h-6 w-6" />

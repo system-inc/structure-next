@@ -116,7 +116,7 @@ export function EmailForm(properties: EmailFormProperties) {
             />
 
             {/* Disclaimer */}
-            <p className="text-neutral+3 mt-6 text-sm leading-normal">
+            <p className="mt-6 text-sm leading-normal foreground--c">
                 By continuing, you agree to the{' '}
                 <Link className="primary" href="/legal/terms-of-service" target="_blank" prefetch={false}>
                     terms of service

@@ -131,15 +131,15 @@ export function PostReaction(properties: PostReactionProperties) {
                         // Layout
                         'flex cursor-pointer items-center space-x-1.5 rounded-lg border px-2.5 select-none',
                         // Light
-                        'border-light-3',
+                        'border--d',
                         // Dark
                         'dark:border-dark-3',
                         // Hover - Light
-                        'hover:border-light-4',
+                        'hover:border--d',
                         // Hover - Dark
                         'dark:hover:border-dark-4 dark:hover:bg-dark-2',
                         // Active - Light
-                        'active:border-light-6',
+                        'active:border--d',
                         // Active - Dark
                         'dark:active:border-dark-5 dark:active:bg-dark-3',
                         properties.reacted

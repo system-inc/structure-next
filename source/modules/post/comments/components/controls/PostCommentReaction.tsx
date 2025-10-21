@@ -130,11 +130,11 @@ export function PostCommentReaction(properties: PostCommentReactionProperties) {
                         // Layout
                         'flex cursor-pointer items-center space-x-1.5 rounded-lg border px-2.5 select-none',
                         // Light
-                        'border-light-3 text-dark',
+                        'text-dark border--d',
                         // Dark
-                        'dark:border-dark-3 dark:bg-dark-1 dark:text-light-2',
+                        'dark:bg-dark-1 dark:text-light-2',
                         // Hover - Light
-                        'hover:border-light-4 hover:bg-light-1 hover:text-dark-1',
+                        'hover:bg-light-1 hover:text-dark-1 hover:border--d',
                         // Hover - Dark
                         'dark:hover:border-dark-4 dark:hover:bg-dark-2 dark:hover:text-light',
                         // Active - Light

@@ -45,7 +45,7 @@ export function AccountPasswordForm(properties: AccountPasswordFormProperties) {
     // Render the component
     return (
         <div>
-            <div className="text-neutral-33 dark:text-neutral+3">
+            <div className="foreground--c">
                 <p>
                     Enter the password for {properties.emailAddress}.{' '}
                     {/* <Link className="primary" href="/account/authentication/forgot-password">

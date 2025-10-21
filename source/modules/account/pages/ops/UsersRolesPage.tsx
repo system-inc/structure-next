@@ -229,7 +229,7 @@ export function UsersRolesPage() {
                                 ),
                             ).map(([type, roles]) => (
                                 <div key={type} className="space-y-4">
-                                    <h3 className="text-base font-medium text-neutral-500">
+                                    <h3 className="text-base font-medium foreground--c">
                                         {type} ({roles.length})
                                     </h3>
                                     <div className="divide-neutral/10 divide-y">
@@ -257,11 +257,11 @@ export function UsersRolesPage() {
                                                     >
                                                         {role.profile?.displayName || role.profile?.username}
                                                     </Link>
-                                                    <div className="text-sm text-neutral-500">
+                                                    <div className="text-sm foreground--c">
                                                         @{role.profile?.username}
                                                     </div>
-                                                    <div className="text-sm text-neutral-500">{role.emailAddress}</div>
-                                                    <div className="text-sm text-neutral-500">
+                                                    <div className="text-sm foreground--c">{role.emailAddress}</div>
+                                                    <div className="text-sm foreground--c">
                                                         Added {dateFull(new Date(role.createdAt))}
                                                         {role.expiresAt && (
                                                             <div>Expires {dateFull(new Date(role.expiresAt))}</div>
@@ -293,13 +293,13 @@ export function UsersRolesPage() {
                                                     >
                                                         {role.profile?.displayName || role.profile?.username}
                                                     </Link>
-                                                    <div className="text-sm text-neutral-500">
+                                                    <div className="text-sm foreground--c">
                                                         @{role.profile?.username}
                                                     </div>
-                                                    <div className="text-sm text-neutral-500">{role.emailAddress}</div>
+                                                    <div className="text-sm foreground--c">{role.emailAddress}</div>
                                                 </div>
 
-                                                <div className="hidden text-sm text-neutral-500 md:block">
+                                                <div className="hidden text-sm foreground--c md:block">
                                                     Added {dateFull(new Date(role.createdAt))}
                                                     {role.expiresAt && (
                                                         <div>Expires {dateFull(new Date(role.expiresAt))}</div>
