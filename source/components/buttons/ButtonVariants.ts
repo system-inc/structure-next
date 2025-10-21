@@ -149,7 +149,7 @@ export const ButtonVariants = {
         // Border
         `rounded-small border border-light-6 dark:border-light ` +
         // Text and background
-        `bg-opsis-background-primary foreground--a ` +
+        `background--a foreground--a ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-3 ` +
         // Active (includes when used as open popover trigger)
@@ -172,7 +172,7 @@ export const ButtonVariants = {
         // Border
         `rounded-small border border-light-6 dark:border-dark-3 ` +
         // Light text on dark background
-        `bg-opsis-background-primary foreground--a ` +
+        `background--a foreground--a ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-1 ` +
         // Active (includes when used as open popover trigger)

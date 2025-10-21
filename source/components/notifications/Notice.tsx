@@ -53,7 +53,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             dragSnapToOrigin
             onDragEnd={handleDrag}
             className={mergeClassNames(
-                'bg-opsis-background-primary relative box-border flex h-auto touch-none items-center rounded-md border border--a p-7',
+                'relative box-border flex h-auto touch-none items-center rounded-md border border--a background--a p-7',
                 properties.className,
             )}
             onMouseEnter={function () {
@@ -73,7 +73,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             <MotionButton
                 {...properties.closeButtonProperties}
                 tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
-                className="bg-opsis-background-primary hover:bg-opsis-background-secondary absolute -top-2 -left-2 inline-flex cursor-pointer items-center justify-center rounded-full border border--a p-1 whitespace-nowrap select-none hover:foreground--a focus-visible:ring-0 focus-visible:outline-none"
+                className="hover:bg-opsis-background-secondary absolute -top-2 -left-2 inline-flex cursor-pointer items-center justify-center rounded-full border border--a background--a p-1 whitespace-nowrap select-none hover:foreground--a focus-visible:ring-0 focus-visible:outline-none"
                 initial={{ opacity: 0 }}
                 animate={{
                     opacity: hovered ? 1 : 0,

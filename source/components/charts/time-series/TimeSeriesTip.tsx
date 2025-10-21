@@ -56,7 +56,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
 
         // Render the component
         return (
-            <div className="rounded-extra-small bg-opsis-background-primary border border--a">
+            <div className="rounded-extra-small border border--a background--a">
                 <div className="border-b border--a p-2 text-xs foreground--b">
                     {properties.timeInterval
                         ? formatTipLabelByTimeInterval(dataPoint.label, properties.timeInterval)

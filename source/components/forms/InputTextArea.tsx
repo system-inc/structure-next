@@ -26,7 +26,7 @@ export const commonClassNames =
 // Background styles
 export const backgroundClassNames =
     // Background
-    `bg-opsis-background-primary`;
+    `background--a`;
 
 // Border styles
 export const borderStyleClassNames =

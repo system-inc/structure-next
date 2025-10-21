@@ -54,6 +54,9 @@
 @utility border--c {
     border-color: var(--border--c);
 }
+@utility border--d {
+    border-color: var(--border--d);
+}
 @utility border--focus {
     border-color: var(--border--focus);
 }

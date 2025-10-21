@@ -25,7 +25,7 @@ export const menuClassName =
     // Border
     `rounded-small border border-light-4 dark:border-dark-4 ` +
     // Background and text
-    `text-sm bg-opsis-background-primary foreground--a`;
+    `text-sm background--a foreground--a`;
 
 // Type - MenuItemInterface
 // Menu-specific interface that extends MenuItemProperties
