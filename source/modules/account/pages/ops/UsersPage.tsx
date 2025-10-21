@@ -185,10 +185,10 @@ export function UsersPage() {
             <h1 className="mb-6">Users</h1>
 
             {/* Content */}
-            <div className="divide-neutral/10 divide-y">
+            <div className="divide-y divide-gray-500/10">
                 {/* Loading and Error States */}
                 {accountsPrivilegedRequest.isLoading && (
-                    <div className="divide-neutral/10 divide-y">
+                    <div className="divide-y divide-gray-500/10">
                         {[...Array(itemsPerPage)].map((_, index) => (
                             <div
                                 key={index}

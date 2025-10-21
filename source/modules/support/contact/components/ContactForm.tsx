@@ -168,6 +168,7 @@ export function ContactForm() {
                         }}
                     />
                     <Button
+                        variant="A"
                         type="submit"
                         iconRight={
                             supportTicketCreateRequest.isLoading ? <SpinnerIcon className="animate-spin" /> : undefined
