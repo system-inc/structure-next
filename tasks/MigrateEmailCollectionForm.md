@@ -15,7 +15,7 @@ During the Button consolidation to the new Structure Button component, we discov
 
 ```tsx
 <Button
-    className="relative inline-flex aspect-square h-10 w-10 shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full bg-opsis-action-primary text-sm font-medium whitespace-nowrap text-opsis-action-general-light transition-colors hover:bg-opsis-action-primary-hover focus:transition focus-visible:ring-1 focus-visible:ring-blue focus-visible:ring-offset-1 focus-visible:outline-none active:bg-opsis-action-primary-pressed disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-opsis-action-general-disabled disabled:text-opsis-content-disabled data-[state=open]:bg-opsis-action-primary-pressed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+    className="relative inline-flex aspect-square h-10 w-10 shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full bg-opsis-action-primary text-sm font-medium whitespace-nowrap text-opsis-action-general-light transition-colors hover:bg-opsis-action-primary-hover focus:transition focus-visible:ring-1 focus-visible:ring-blue focus-visible:ring-offset-1 focus-visible:outline-none active:bg-opsis-action-primary-pressed disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-opsis-action-general-disabled disabled:foreground--disabled data-[state=open]:bg-opsis-action-primary-pressed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
     type="submit"
     disabled={contactListEntryCreateRequest.isLoading}
 >
@@ -54,7 +54,7 @@ export const buttonTheme: DeepPartialComponentTheme<ButtonThemeConfiguration> = 
             // Focus
             `focus-visible:ring-blue focus:transition focus-visible:ring-1 focus-visible:ring-offset-1 ` +
             // Disabled
-            `disabled:bg-opsis-action-general-disabled disabled:text-opsis-content-disabled`,
+            `disabled:bg-opsis-action-general-disabled disabled:foreground--disabled`,
     },
 };
 ```

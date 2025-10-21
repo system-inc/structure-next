@@ -91,13 +91,13 @@ Potential replacements based on naming proposals:
 Ghost:
     `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
     // Rounded and hover
-    `rounded-medium hover:bg-accent border border-transparent hover:text-accent-foreground`,
+    `rounded-md hover:bg-accent border border-transparent hover:text-accent-foreground`,
 
 // After:
 Ghost:
     `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
     // Rounded and hover
-    `rounded-medium hover:bg-[HOVER-TOKEN] border border-transparent hover:text-[HOVER-TEXT-TOKEN]`,
+    `rounded-md hover:bg-[HOVER-TOKEN] border border-transparent hover:text-[HOVER-TEXT-TOKEN]`,
 ```
 
 **Line 199-204 (GhostDestructive variant):**
@@ -107,7 +107,7 @@ Ghost:
 GhostDestructive:
     `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
     // Rounded and hover
-    `rounded-medium hover:bg-accent hover:text-accent-foreground ` +
+    `rounded-md hover:bg-accent hover:text-accent-foreground ` +
     // Color, hover, and active states
     `text-neutral+6 hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
 
@@ -115,7 +115,7 @@ GhostDestructive:
 GhostDestructive:
     `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
     // Rounded and hover
-    `rounded-medium hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN] ` +
+    `rounded-md hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN] ` +
     // Color, hover, and active states
     `text-[TEXT-SECONDARY-TOKEN] hover:bg-red-500/10 hover:text-red-500 dark:text-[TEXT-SUBTLE-TOKEN] dark:hover:text-red-500 active:border-0`,
 ```

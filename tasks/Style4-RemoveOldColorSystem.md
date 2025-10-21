@@ -51,7 +51,7 @@ Migrate from old color system (light-1 through light-6, dark-1 through dark-6, n
 
 **1. No prefix = Default semantic tokens**
 
--   Most code uses unprefixed tokens: `bg-background-primary`
+-   Most code uses unprefixed tokens: `background--a`
 -   These "come for free" with structure library
 -   Themeable via light/dark mode automatically
 
@@ -619,3 +619,44 @@ ButtonVariants.ts
 -   Can pause between component categories
 -   Keep old definitions until ALL migration complete
 -   Consider pair programming or code review for each category
+
+Need to visit each instance of these below and see if we can apply a new token system bg-a/b/c/etc. and text-a/b/c/etc
+
+// OLD COLORS -- Try not to use these (will be phased out)
+white: '#FFFFFF',
+light: '#FFFFFF',
+'light-1': '#F6F6F6',
+'light-2': '#EEEEEE',
+'light-3': '#E5E5E5',
+'light-4': '#DDDDDD',
+'light-5': '#D4D4D4',
+'light-6': '#CCCCCC',
+
+                black: '#000000',
+                'dark+6': '#000000',
+                'dark+5': '#090909',
+                'dark+4': '#0B0B0B',
+                'dark+3': '#0D0D0D',
+                'dark+2': '#0F0F0F',
+                'dark+1': '#101010',
+                dark: '#111111',
+                'dark-1': '#191919',
+                'dark-2': '#222222',
+                'dark-3': '#2A2A2A',
+                'dark-4': '#333333',
+                'dark-5': '#3B3B3B',
+                'dark-6': '#444444',
+
+                'neutral-6': '#4C4C4C',
+                'neutral-5': '#565656',
+                'neutral-4': '#606060',
+                'neutral-3': '#6A6A6A',
+                'neutral-2': '#747474',
+                'neutral-1': '#7E7E7E',
+                neutral: '#888888',
+                'neutral+1': '#929292',
+                'neutral+2': '#9C9C9C',
+                'neutral+3': '#A6A6A6',
+                'neutral+4': '#B0B0B0',
+                'neutral+5': '#BABAAB',
+                'neutral+6': '#C4C4C4',

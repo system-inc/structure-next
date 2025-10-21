@@ -369,7 +369,7 @@ Accept className props for all major sections:
 ```tsx
 <div
     className={mergeClassNames(
-        'border-t border-neutral-3 bg-neutral-1', // Defaults
+        'border-neutral-3 bg-neutral-1 border-t', // Defaults
         properties.toolbarClassName,
     )}
 />

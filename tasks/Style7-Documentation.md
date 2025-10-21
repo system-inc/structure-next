@@ -58,7 +58,7 @@ The Structure library uses a two-layer color system: foundational scales for the
 
 ```tsx
 // Project components use semantic tokens
-<div className="bg-opsis-background-primary text-opsis-content-primary">
+<div className="bg-opsis-background-primary foreground--a">
 ```
 
 ## When to Use Which System
@@ -68,7 +68,7 @@ The Structure library uses a two-layer color system: foundational scales for the
 | Structure library component | 0-1000 scales | `bg-white-850 border-black-400` |
 | Project-specific component  | Opsis tokens  | `bg-opsis-background-primary`   |
 | Quick prototype (structure) | 0-1000 scales | `text-black-700`                |
-| Production (project)        | Opsis tokens  | `text-opsis-content-secondary`  |
+| Production (project)        | Opsis tokens  | `foreground--b`                 |
 
 ## Migration from Old System
 

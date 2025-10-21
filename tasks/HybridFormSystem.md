@@ -299,7 +299,7 @@ export function UsernameForm() {
     }
 
     return (
-        <div className="rounded-lg border border-light-6 p-6 dark:border-dark-4">
+        <div className="border-light-6 dark:border-dark-4 rounded-lg border p-6">
             <h2 className="text-xl font-medium">Change Username</h2>
 
             <Form
@@ -493,7 +493,7 @@ export function UsernameForm() {
     }
 
     return (
-        <div className="rounded-lg border border-light-6 p-6 dark:border-dark-4">
+        <div className="border-light-6 dark:border-dark-4 rounded-lg border p-6">
             <h2 className="text-xl font-medium">Change Username</h2>
 
             <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6">
