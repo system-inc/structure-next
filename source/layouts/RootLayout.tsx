@@ -10,11 +10,10 @@ import { Providers } from '@structure/source/layouts/providers/Providers';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Theme
-import { Theme, OperatingSystemTheme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
-import { themeKey, operatingSystemThemeKey } from '@structure/source/theme/ThemeSettings';
+import { Theme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
+import { themeKey } from '@structure/source/theme/ThemeSettings';
 
 // Dependencies - Theme - Styles
-import '@structure/source/theme/styles/variables.css';
 import '@structure/source/theme/styles/global.css';
 import '@project/app/_theme/styles/theme.css';
 
@@ -84,51 +83,17 @@ export async function RootLayout(properties: RootLayoutProperties) {
     // console.log('RootLayout: accountSignedIn', accountSignedIn, 'sessionId:', cookieStore.get('sessionId')?.value);
 
     // Read the theme from the cookies, falling back to the project's default theme
-    // console.log('cookieStore.get(themeKey)?.value', cookieStore.get(themeKey)?.value);
-    const theme = cookieStore.get(themeKey)?.value ?? ProjectSettings.theme?.defaultTheme;
-    // console.log('RootLayout: theme from cookies or default', theme);
+    const theme = (cookieStore.get(themeKey)?.value ?? ProjectSettings.theme?.defaultTheme) as Theme;
 
-    // Determine the theme class name
-    let themeClassName = undefined;
-
-    // If the theme is Light
-    if(theme === Theme.Light) {
-        themeClassName = ThemeClassName.Light;
-        // console.log('RootLayout: theme is Light, themeClassName', themeClassName);
-    }
-    // If the theme is Dark
-    else if(theme === Theme.Dark) {
-        themeClassName = ThemeClassName.Dark;
-        // console.log('RootLayout: theme is Dark, themeClassName', themeClassName);
-    }
-    // If the theme is OperatingSystem
-    else if(theme === Theme.OperatingSystem) {
-        // Get the operating system theme from the cookies
-        const operatingSystemTheme = cookieStore.get(operatingSystemThemeKey)?.value;
-
-        // If the operating system theme is Light
-        if(operatingSystemTheme === OperatingSystemTheme.Light) {
-            themeClassName = ThemeClassName.Light;
-        }
-        // If the operating system theme is Dark
-        else if(operatingSystemTheme === OperatingSystemTheme.Dark) {
-            themeClassName = ThemeClassName.Dark;
-        }
-        // console.log(
-        //     'RootLayout: theme is OperatingSystem',
-        //     'operatingSystemTheme',
-        //     operatingSystemTheme,
-        //     'themeClassName',
-        //     themeClassName,
-        // );
-    }
+    // Map the theme to its corresponding scheme-* utility class
+    const schemeClass = ThemeClassName[theme] ?? ThemeClassName[Theme.OperatingSystem];
 
     // Render the component
     return (
-        <html lang="en" className={mergeClassNames(properties.htmlClassName, themeClassName)}>
+        <html lang="en" className={mergeClassNames(properties.htmlClassName, schemeClass)}>
             <body
                 className={mergeClassNames(
-                    'bg-background font-sans text-foreground transition-colors',
+                    'background--a font-sans foreground--a transition-colors',
                     properties.bodyClassName,
                 )}
             >

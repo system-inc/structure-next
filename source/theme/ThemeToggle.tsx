@@ -41,13 +41,13 @@ export function ThemeToggle() {
 
         return (
             <Tip
-                variant="Primary"
+                variant="A"
                 sideOffset={8}
                 trigger={
                     <button
                         className={mergeClassNames(
-                            'cursor-pointer rounded-full hover:text-dark dark:hover:text-light',
-                            theme === currentTheme && 'bg-light-3 text-dark dark:bg-dark-4 dark:text-light',
+                            'cursor-pointer rounded-full foreground--c transition-colors hover:foreground--a',
+                            theme === currentTheme && 'background--d foreground--a',
                         )}
                         tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
                         onClick={function () {
@@ -64,7 +64,7 @@ export function ThemeToggle() {
 
     // Render the component
     return (
-        <div className="transition-color flex w-min items-center justify-center space-x-0.5 rounded-extra-large border border-dark-4/50 p-1 text-dark-4/50 dark:border-dark-4 dark:text-light-6">
+        <div className="flex w-min items-center justify-center space-x-0.5 rounded-xl border border--a p-1 foreground--c transition-colors">
             {themeModeButton(Theme.OperatingSystem)}
             {themeModeButton(Theme.Light)}
             {themeModeButton(Theme.Dark)}

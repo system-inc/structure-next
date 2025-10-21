@@ -2,6 +2,7 @@
 import EsLintPluginReact from 'eslint-plugin-react';
 import EsLintPluginReactHooks from 'eslint-plugin-react-hooks';
 import EsLintPluginNext from '@next/eslint-plugin-next';
+import EsLintPluginBetterTailwindCss from 'eslint-plugin-better-tailwindcss';
 
 // Dependencies - Structure ESLint Rules
 import CodeConsistencyRule from './rules/CodeConsistencyRule.mjs';
@@ -83,6 +84,11 @@ export const structureTypeScriptConfiguration = {
             sourceType: 'module',
         },
     },
+    settings: {
+        'better-tailwindcss': {
+            entryPoint: './libraries/structure/source/theme/styles/global.css',
+        },
+    },
     rules: {
         // TypeScript tweaks
         '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
@@ -111,6 +117,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
     react: EsLintPluginReact,
     'react-hooks': EsLintPluginReactHooks,
     '@next/next': EsLintPluginNext,
+    'better-tailwindcss': EsLintPluginBetterTailwindCss,
     structure: {
         rules: {
             'code-consistency-rule': CodeConsistencyRule,
@@ -130,6 +137,13 @@ export const structureJavaScriptAndTypeScriptPlugins = {
     },
 };
 
+// ESLint JavaScript and TypeScript settings
+export const structureJavaScriptAndTypeScriptSettings = {
+    'better-tailwindcss': {
+        entryPoint: './libraries/structure/source/theme/styles/global.css',
+    },
+};
+
 // ESLint JavaScript and TypeScript rules
 export const structureJavaScriptAndTypeScriptRules = {
     // React
@@ -139,6 +153,10 @@ export const structureJavaScriptAndTypeScriptRules = {
     // Next.js
     ...EsLintPluginNext.configs.recommended.rules,
     ...EsLintPluginNext.configs['core-web-vitals'].rules,
+
+    // Tailwind - Recommended rules except line wrapping
+    ...EsLintPluginBetterTailwindCss.configs.recommended.rules,
+    'better-tailwindcss/enforce-consistent-line-wrapping': 'off', // Disable line wrapping enforcement
 
     // Structure
     'no-empty': ['error', { allowEmptyCatch: true }],

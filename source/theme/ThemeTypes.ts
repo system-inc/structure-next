@@ -11,8 +11,9 @@ export enum OperatingSystemTheme {
     Dark = Theme.Dark,
 }
 
-// ThemeClassName - The class names for the themes
-export enum ThemeClassName {
-    Light = 'light',
-    Dark = 'dark',
-}
+// ThemeClassName - Map themes to Tailwind v4 scheme-* utility classes
+export const ThemeClassName = {
+    [Theme.Light]: 'scheme-light',
+    [Theme.Dark]: 'scheme-dark',
+    [Theme.OperatingSystem]: 'scheme-light-dark',
+} as const;

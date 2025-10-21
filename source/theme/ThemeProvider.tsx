@@ -16,19 +16,12 @@ import { themeKey, operatingSystemThemeKey, darkThemeMediaQueryString } from '@s
 import { Cookies } from '@structure/source/utilities/cookie/Cookies';
 
 // Function to set the theme class name on the DOM
-function setThemeClassName(themeClassName: ThemeClassName) {
-    // console.log('setThemeClassName', themeClassName);
+function setThemeClassName(themeClassName: string) {
+    // Remove all scheme-* classes
+    document.documentElement.classList.remove('scheme-light', 'scheme-dark', 'scheme-light-dark');
 
-    // Light
-    if(themeClassName === ThemeClassName.Light) {
-        document.documentElement.classList.add(ThemeClassName.Light);
-        document.documentElement.classList.remove(ThemeClassName.Dark);
-    }
-    // Dark
-    else if(themeClassName === ThemeClassName.Dark) {
-        document.documentElement.classList.add(ThemeClassName.Dark);
-        document.documentElement.classList.remove(ThemeClassName.Light);
-    }
+    // Add the new scheme class
+    document.documentElement.classList.add(themeClassName);
 }
 
 // Shared State - Theme (Synchronized with Local Storage)
@@ -49,21 +42,9 @@ export const readOnlyThemeAtom = atom(function (get) {
 // Shared State - setThemeAtom
 export const setThemeAtom = atom(null, function (get, set, theme: Theme) {
     if(typeof window !== 'undefined') {
-        // Light
-        if(theme === Theme.Light) {
-            setThemeClassName(ThemeClassName.Light);
-        }
-        // Dark
-        else if(theme === Theme.Dark) {
-            setThemeClassName(ThemeClassName.Dark);
-        }
-        // Operating System
-        else if(theme === Theme.OperatingSystem) {
-            const operatingSystemTheme = get(readOnlyOperatingSystemThemeAtom);
-            setThemeClassName(
-                operatingSystemTheme === OperatingSystemTheme.Light ? ThemeClassName.Light : ThemeClassName.Dark,
-            );
-        }
+        // Get the scheme class for the selected theme
+        const schemeClass = ThemeClassName[theme];
+        setThemeClassName(schemeClass);
     }
 
     // Set the theme
@@ -78,28 +59,18 @@ operatingSystemThemeAtom.onMount = function (setOperatingSystemThemeAtom) {
 
     // Function to handle the operating system theme change
     function handleOperatingSystemThemeChange() {
-        // console.log('handleOperatingSystemThemeChange');
-
         // Get the operating system theme using the media query
         const operatingSystemTheme = operatingSystemDarkThemeQuery.matches
             ? OperatingSystemTheme.Dark
             : OperatingSystemTheme.Light;
-        // console.log('operatingSystemTheme', operatingSystemTheme);
 
         // Update the operatingSystemThemeAtom
         setOperatingSystemThemeAtom(operatingSystemTheme);
 
-        // If the theme is OperatingSystem, we need to update the theme class name
-        // console.log('globalStore.get(readOnlyThemeAtom)', globalStore.get(readOnlyThemeAtom));
+        // If the theme is OperatingSystem, ensure scheme-light-dark is set
+        // The CSS light-dark() function will automatically respect the OS preference
         if(globalStore.get(readOnlyThemeAtom) === Theme.OperatingSystem) {
-            // If the operating system theme is light
-            if(operatingSystemTheme === OperatingSystemTheme.Light) {
-                setThemeClassName(ThemeClassName.Light);
-            }
-            // If the operating system theme is dark
-            else if(operatingSystemTheme === OperatingSystemTheme.Dark) {
-                setThemeClassName(ThemeClassName.Dark);
-            }
+            setThemeClassName(ThemeClassName[Theme.OperatingSystem]);
         }
     }
 

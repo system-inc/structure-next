@@ -1,8 +1,8 @@
-/* Tailwind CSS v4 Import */
-@import 'tailwindcss';
-
 /* Point to the Tailwind configuration file (required in v4) */
 @config '../../../../../tailwind.config.mts';
+
+/* Tailwind CSS v4 Import */
+@import 'tailwindcss';
 
 /* Import CSS variables */
 @import './variables.css';
@@ -10,73 +10,59 @@
 /* Import tw-animate-css (Tailwind v4 compatible animations) */
 @import 'tw-animate-css';
 
+/* Import utilities */
+@import './utilities.css';
+
 /* Import animations */
 @import './animations.css';
 
-/* Custom link utilities */
-@layer utilities {
-    .link-primary {
-        color: var(--link-primary-default);
+@layer base {
+    body {
+        /* Enables OpenType font features for improved typography */
+        /* 'rlig' 1: Required ligatures (letterform combinations) */
+        /* 'calt' 1: Contextual alternates (context-dependent glyph variants) */
+        /* Improves readability and aesthetics of text */
+        /* Common in design systems for refined typography appearance */
+        font-feature-settings:
+            'rlig' 1,
+            'calt' 1;
     }
 
-    .link-primary:hover {
-        color: var(--link-primary-hover);
+    strong {
+        /* Use medium weight (500) for strong text instead of browser default bold (700) */
+        font-weight: 500;
     }
 
-    .link-primary:active {
-        color: var(--link-primary-pressed);
+    /* Heading Typography - Consistent sizing and weight across all heading levels */
+    h1 {
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 1;
     }
-
-    .link-secondary {
-        color: var(--link-secondary-default);
+    h2 {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1;
     }
-
-    .link-secondary:hover {
-        color: var(--link-secondary-hover);
+    h3 {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1;
     }
-
-    .link-secondary:active {
-        color: var(--link-secondary-pressed);
+    h4 {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1;
     }
-
-    .link-muted {
-        color: var(--link-muted-default);
+    h5 {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1;
     }
-
-    .link-muted:hover {
-        color: var(--link-muted-hover);
-    }
-
-    .link-muted:active {
-        color: var(--link-muted-pressed);
-    }
-
-    .link-contrast {
-        color: var(--link-primary-contrast-default);
-    }
-
-    .link-contrast:hover {
-        color: var(--link-primary-contrast-hover);
-    }
-
-    .link-contrast:active {
-        color: var(--link-primary-contrast-pressed);
-    }
-
-    .link-contrast.disabled {
-        color: var(--link-primary-contrast-disabled);
-    }
-
-    .link-blue {
-        color: var(--link-blue-default);
-    }
-
-    .link-blue:hover {
-        color: var(--link-blue-hover);
-    }
-
-    .link-blue:active {
-        color: var(--link-blue-pressed);
+    h6 {
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 1;
     }
 }
 

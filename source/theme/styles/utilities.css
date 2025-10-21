@@ -1,0 +1,112 @@
+/* Backgrounds */
+@utility background--a {
+    background-color: var(--background--a);
+}
+@utility background--b {
+    background-color: var(--background--b);
+}
+@utility background--c {
+    background-color: var(--background--c);
+}
+@utility background--d {
+    background-color: var(--background--d);
+}
+@utility background--e {
+    background-color: var(--background--e);
+}
+@utility background--f {
+    background-color: var(--background--f);
+}
+@utility background--backdrop {
+    background-color: var(--background--backdrop);
+}
+
+/* Foregrounds */
+@utility foreground--a {
+    color: var(--foreground--a);
+}
+@utility foreground--b {
+    color: var(--foreground--b);
+}
+@utility foreground--c {
+    color: var(--foreground--c);
+}
+@utility foreground--disabled {
+    color: var(--foreground--disabled);
+}
+@utility foreground--placeholder {
+    color: var(--foreground--placeholder);
+}
+@utility foreground--positive {
+    color: var(--foreground--positive);
+}
+@utility foreground--negative {
+    color: var(--foreground--negative);
+}
+
+/* Borders */
+@utility border--a {
+    border-color: var(--border--a);
+}
+@utility border--b {
+    border-color: var(--border--b);
+}
+@utility border--c {
+    border-color: var(--border--c);
+}
+@utility border--focus {
+    border-color: var(--border--focus);
+}
+@utility border--contrast {
+    border-color: var(--border--contrast);
+}
+
+/* Link - A */
+@utility link--a {
+    color: var(--link--a);
+    &:hover {
+        color: var(--link--a-hover);
+    }
+    &:active {
+        color: var(--link--a-pressed);
+    }
+    &.disabled {
+        color: var(--link--a-disabled);
+    }
+}
+
+/* Link - B */
+@utility link--b {
+    color: var(--link--b);
+    &:hover {
+        color: var(--link--b-hover);
+    }
+    &:active {
+        color: var(--link--b-pressed);
+    }
+}
+
+/* Link - C */
+@utility link--c {
+    color: var(--link--c);
+    &:hover {
+        color: var(--link--c-hover);
+    }
+    &:active {
+        color: var(--link--c-pressed);
+    }
+}
+
+/* Link - Contrast */
+@utility link--contrast {
+    color: var(--link--contrast);
+    &:hover {
+        color: var(--link--contrast-hover);
+    }
+    &:active {
+        color: var(--link--contrast-pressed);
+    }
+    &.disabled {
+        color: var(--link--contrast-disabled);
+    }
+}

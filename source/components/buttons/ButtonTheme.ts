@@ -49,12 +49,12 @@ export const buttonIconLayoutClassNames = `aspect-square`;
 // Example in project code:
 //   declare module '@structure/source/components/buttons/ButtonTheme' {
 //     interface ButtonVariants {
-//       PrimaryBlue: 'PrimaryBlue';
+//       Blue: 'Blue';
 //     }
 //   }
 export interface ButtonVariants {
-    Primary: 'Primary';
-    Secondary: 'Secondary';
+    A: 'A';
+    B: 'B';
     Contrast: 'Contrast';
     Ghost: 'Ghost';
     Destructive: 'Destructive';
@@ -123,7 +123,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Variants
     variants: {
         // General Purpose Variants
-        Primary:
+        A:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Border and background
             `border bg-light-1 border-light-3 text-dark-2 ` +
@@ -139,7 +139,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Disabled hover
             `disabled:hover:bg-light-1 dark:disabled:hover:bg-dark-1`,
 
-        Secondary:
+        B:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Dark text on light background
             `border bg-light-1 dark:bg-light-2 text-dark dark:text-dark hover:bg-light dark:hover:bg-light ` +
@@ -198,19 +198,19 @@ export const buttonTheme: ButtonThemeConfiguration = {
         GhostDestructive:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Rounded and hover
-            `rounded-medium hover:bg-accent hover:text-accent-foreground ` +
+            `rounded-md hover:bg-accent hover:text-accent-foreground ` +
             // Color, hover, and active states
             `text-neutral+6 hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
 
         ToggleOn:
             `${buttonCommonClassNames} ${buttonCenteredClassNames} ` +
             // Toggled on
-            `rounded-medium border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
+            `rounded-md border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
 
         ToggleOff:
             `${buttonCommonClassNames} ${buttonCenteredClassNames} ` +
             // Toggled off
-            `rounded-medium border border-light-6 dark:border-dark-4`,
+            `rounded-md border border-light-6 dark:border-dark-4`,
 
         MenuItem:
             `relative flex items-center justify-start font-normal cursor-default rounded-extra-small ` +
@@ -234,7 +234,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Border
             `rounded-small border border-light-6 dark:border-light ` +
             // Text and background
-            `bg-opsis-background-primary text-opsis-content-primary ` +
+            `bg-opsis-background-primary foreground--a ` +
             // Hover
             `hover:bg-light-2 dark:hover:bg-dark-3 ` +
             // Active (includes when used as open popover trigger)
@@ -255,7 +255,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Border
             `rounded-small border border-light-6 dark:border-dark-4 ` +
             // Light text on dark background
-            `bg-opsis-background-primary text-opsis-content-primary ` +
+            `bg-opsis-background-primary foreground--a ` +
             // Active (includes when used as open popover trigger)
             `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
             // Disabled
@@ -272,11 +272,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Sizes
     sizes: {
         // General Purpose Sizes
-        ExtraSmall: 'h-7 rounded-medium px-2 text-xs',
-        Small: 'h-8 rounded-medium px-3 text-xs',
+        ExtraSmall: 'h-7 rounded-md px-2 text-xs',
+        Small: 'h-8 rounded-md px-3 text-xs',
         Base: 'h-9 px-4 py-2',
-        Large: 'h-10 rounded-medium px-8',
-        ExtraLarge: 'h-11 rounded-medium px-10',
+        Large: 'h-10 rounded-md px-8',
+        ExtraLarge: 'h-11 rounded-md px-10',
 
         // Icon Button Sizes
         IconExtraSmall: `${buttonIconLayoutClassNames} p-1`,

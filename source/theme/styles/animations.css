@@ -1,52 +1,133 @@
-/* Animate in centered */
-@keyframes enter-centered {
-    from {
-        opacity: var(--tw-enter-opacity, 1);
-        transform: translate3d(var(--tw-enter-translate-x, -50%), var(--tw-enter-translate-y, -50%), 0)
-            scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
-            rotate(var(--tw-enter-rotate, 0));
-        filter: blur(var(--tw-enter-blur, 0));
+/* Animations - Using @theme for tree-shaking and theme integration */
+@theme {
+    /* Transition Timing Functions - Custom easing curves */
+    /* Exponential easing for smooth, natural feeling animations */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Softer exponential easing for more subtle transitions */
+    --ease-soft-out-expo: cubic-bezier(0.25, 0, 0, 1);
+
+    /* Centered Modal Animations - Used for modals/dialogs that appear centered on screen */
+    /* Animates opacity and transform with customizable enter/exit states via CSS variables */
+    @keyframes enter-centered {
+        from {
+            opacity: var(--tw-enter-opacity, 1);
+            transform: translate3d(var(--tw-enter-translate-x, -50%), var(--tw-enter-translate-y, -50%), 0)
+                scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
+                rotate(var(--tw-enter-rotate, 0));
+            filter: blur(var(--tw-enter-blur, 0));
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1) rotate(0);
+            filter: blur(0);
+        }
+    }
+    @keyframes exit-centered {
+        from {
+            opacity: 1;
+            transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1) rotate(0);
+            filter: blur(0);
+        }
+        to {
+            opacity: var(--tw-exit-opacity, 1);
+            transform: translate3d(var(--tw-exit-translate-x, -50%), var(--tw-exit-translate-y, -50%), 0)
+                scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1))
+                rotate(var(--tw-exit-rotate, 0));
+            filter: blur(var(--tw-exit-blur, 0));
+        }
     }
 
-    to {
-        opacity: 1;
-        transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1) rotate(0);
-        filter: blur(0);
+    /* Accordion Animations - Smooth height transitions for expandable/collapsible content */
+    /* Used with Radix UI Accordion component which provides --radix-accordion-content-height */
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    @keyframes accordion-down {
+        from {
+            height: 0;
+        }
+        to {
+            height: var(--radix-accordion-content-height);
+        }
+    }
+
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+    @keyframes accordion-up {
+        from {
+            height: var(--radix-accordion-content-height);
+        }
+        to {
+            height: 0;
+        }
+    }
+
+    /* Blink Animation - Continuous pulsing opacity effect for attention-grabbing elements */
+    /* Creates a "breathing" effect with smooth fade in/out cycles */
+    /* Use cases: Loading indicators, notifications, status badges */
+    --animate-blink: blink 1.3s ease-in-out infinite;
+    @keyframes blink {
+        0% {
+            opacity: 1;
+        }
+        20%,
+        50% {
+            opacity: 0;
+        }
+        70%,
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Blink Once - Single pulse animation for one-time attention grab */
+    /* Use cases: New message indicator, flash notification, success confirmation */
+    --animate-blink-once: blink-once 500ms linear;
+    @keyframes blink-once {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.25;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Shimmer Animation - Horizontal sweep effect for loading skeletons */
+    /* Creates a subtle light sweep across placeholder content */
+    /* Use cases: Skeleton loaders, loading cards, placeholder states */
+    --animate-shimmer: shimmer 5s infinite;
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-50%);
+        }
+        100% {
+            transform: translateX(75%);
+        }
     }
 }
 
-/* Animate out centered */
-@keyframes exit-centered {
-    from {
-        opacity: 1;
-        transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1) rotate(0);
-        filter: blur(0);
-    }
-
-    to {
-        opacity: var(--tw-exit-opacity, 1);
-        transform: translate3d(var(--tw-exit-translate-x, -50%), var(--tw-exit-translate-y, -50%), 0)
-            scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1))
-            rotate(var(--tw-exit-rotate, 0));
-        filter: blur(var(--tw-exit-blur, 0));
-    }
+/* Transition Timing Function Utilities */
+@utility ease-out-expo {
+    transition-timing-function: var(--ease-out-expo);
+}
+@utility ease-soft-out-expo {
+    transition-timing-function: var(--ease-soft-out-expo);
 }
 
-/* Utilities */
+/* Centered Modal Utilities - Custom animations for modals with data-state attributes */
+/* Note: These need @layer utilities since they use complex selectors with data-state */
 @layer utilities {
-    /* Base centering */
     .animate-in-centered,
     .animate-out-centered {
         transform: translate(-50%, -50%);
     }
 
-    /* Open to animate in */
     .data-\[state\=open\]\:animate-in-centered[data-state='open'],
     [data-state='open'].animate-in-centered {
         animation: enter-centered 200ms ease-out both;
     }
 
-    /* Closed to animate out */
     .data-\[state\=closed\]\:animate-out-centered[data-state='closed'],
     [data-state='closed'].animate-out-centered {
         animation: exit-centered 200ms ease-in both;

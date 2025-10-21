@@ -89,11 +89,11 @@ export const ButtonVariants = {
     ghost:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Rounded and hover
-        `rounded-medium hover:bg-accent border border-transparent hover:text-accent-foreground`,
+        `rounded-md hover:bg-accent border border-transparent hover:text-accent-foreground`,
     ghostDestructive:
         `${commonButton} ${focusStyle} ${centeredButton} ` +
         // Rounded and hover
-        `rounded-medium hover:bg-accent hover:text-accent-foreground ` +
+        `rounded-md hover:bg-accent hover:text-accent-foreground ` +
         // Color, hover, and active states
         `text-neutral+6 hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
     // Destructive variant: styles for negative actions like delete or remove
@@ -125,12 +125,12 @@ export const ButtonVariants = {
     toggleOn:
         `${commonButton} ${centeredButton} ` +
         // Toggled on
-        `rounded-medium border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
+        `rounded-md border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
     // Toggle off
     toggleOff:
         `${commonButton} ${centeredButton} ` +
         // Toggled off
-        `rounded-medium border border-light-6 dark:border-dark-4`,
+        `rounded-md border border-light-6 dark:border-dark-4`,
     // Menu Item variant: styles for menu items
     menuItem:
         `relative flex items-center justify-start font-normal cursor-default rounded-extra-small ` +
@@ -149,7 +149,7 @@ export const ButtonVariants = {
         // Border
         `rounded-small border border-light-6 dark:border-light ` +
         // Text and background
-        `bg-opsis-background-primary text-opsis-content-primary ` +
+        `bg-opsis-background-primary foreground--a ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-3 ` +
         // Active (includes when used as open popover trigger)
@@ -172,7 +172,7 @@ export const ButtonVariants = {
         // Border
         `rounded-small border border-light-6 dark:border-dark-3 ` +
         // Light text on dark background
-        `bg-opsis-background-primary text-opsis-content-primary ` +
+        `bg-opsis-background-primary foreground--a ` +
         // Hover
         `hover:bg-light-2 dark:hover:bg-dark-1 ` +
         // Active (includes when used as open popover trigger)
