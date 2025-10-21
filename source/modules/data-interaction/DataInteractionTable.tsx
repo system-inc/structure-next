@@ -276,7 +276,7 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
     return (
         <>
             <div className="flex">
-                <div className="flex flex-grow space-x-2">
+                <div className="flex grow space-x-2">
                     <DatabaseAndTableFormInputSelects
                         className="mb-4"
                         databaseNameFormInputSelectProperties={{

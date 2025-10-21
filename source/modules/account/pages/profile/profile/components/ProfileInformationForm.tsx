@@ -100,7 +100,7 @@ export function ProfileInformationForm() {
                     <FormInputText
                         key="givenName"
                         id="givenName"
-                        className="flex-grow"
+                        className="grow"
                         label="First Name"
                         labelTip="This is also known as your given name."
                         defaultValue={account.data?.profile?.givenName}
@@ -108,7 +108,7 @@ export function ProfileInformationForm() {
                     <FormInputText
                         key="familyName"
                         id="familyName"
-                        className="flex-grow"
+                        className="grow"
                         label="Last Name"
                         labelTip="This is also known as your family name."
                         defaultValue={account.data?.profile?.familyName}

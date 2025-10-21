@@ -212,7 +212,7 @@ export function Dialog(properties: DialogProperties) {
                         />
                         <VaulDrawer.Content
                             className={mergeClassNames(
-                                'bg-background fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border--a',
+                                'background--afixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border--a',
                                 properties.className,
                             )}
                             onOpenAutoFocus={function (event) {
@@ -229,7 +229,7 @@ export function Dialog(properties: DialogProperties) {
                             {renderCloseButton('absolute top-4 right-4 z-10')}
                             {renderHeader('flex-shrink-0 px-6 pt-6 pb-4')}
                             {renderAccessibility()}
-                            {renderContent('flex-grow overflow-y-auto px-6')}
+                            {renderContent('grow overflow-y-auto px-6')}
                             {renderFooter('flex-shrink-0 px-6 pt-4 pb-6')}
                         </VaulDrawer.Content>
                     </VaulDrawer.Portal>

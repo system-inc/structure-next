@@ -564,7 +564,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
 
                         {/* Nested Filter Group */}
                         <ColumnFilterGroup
-                            className="flex flex-grow"
+                            className="flex grow"
                             columns={properties.columns}
                             columnFilterGroupData={filter}
                             filterMode={properties.filterMode}

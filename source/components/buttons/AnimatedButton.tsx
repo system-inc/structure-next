@@ -415,7 +415,7 @@ export const AnimatedButton = React.forwardRef<HTMLElement, AnimatedButtonProper
                     // If text is provided, the icon will be to the right of the text
                     <div className="flex w-full items-center justify-between">
                         <div className={mergeClassNames('invisible', iconSizeClassName)} />
-                        <span className="flex-grow px-4 text-center">{processingText}</span>
+                        <span className="grow px-4 text-center">{processingText}</span>
                         <div className={mergeClassNames('relative', iconSizeClassName)}>{displayIcon}</div>
                     </div>
                 ) : (

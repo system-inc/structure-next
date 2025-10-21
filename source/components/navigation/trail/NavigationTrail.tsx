@@ -101,7 +101,7 @@ export function NavigationTrail(properties: NavigationTrailProperties) {
                             <Link
                                 tabIndex={1}
                                 href={navigationTrailLink.href}
-                                className={index === lastTitleIndex ? 'link-primary' : 'link-secondary'}
+                                className={index === lastTitleIndex ? 'link--a' : 'link--b'}
                             >
                                 {navigationTrailLink.title}
                             </Link>

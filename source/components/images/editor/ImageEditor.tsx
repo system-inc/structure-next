@@ -237,7 +237,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                     {/* Main editing area with cropper and previews */}
                     <div className="mb-4 flex flex-col gap-4">
                         {/* Cropper - takes most of the space */}
-                        <div className="flex-grow">
+                        <div className="grow">
                             <Cropper
                                 ref={cropperReference}
                                 src={previewUrl}

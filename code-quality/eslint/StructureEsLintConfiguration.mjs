@@ -84,11 +84,6 @@ export const structureTypeScriptConfiguration = {
             sourceType: 'module',
         },
     },
-    settings: {
-        'better-tailwindcss': {
-            entryPoint: './libraries/structure/source/theme/styles/global.css',
-        },
-    },
     rules: {
         // TypeScript tweaks
         '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
@@ -140,7 +135,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
 // ESLint JavaScript and TypeScript settings
 export const structureJavaScriptAndTypeScriptSettings = {
     'better-tailwindcss': {
-        entryPoint: './libraries/structure/source/theme/styles/global.css',
+        entryPoint: './app/_theme/styles/theme.css',
     },
 };
 

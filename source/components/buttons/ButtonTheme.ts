@@ -266,7 +266,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         FormInputSelect:
             `${buttonCommonClassNames} ` +
-            // Layout (no justify-center because flex-grow handles spacing)
+            // Layout (no justify-center because grow handles spacing)
             `inline-flex items-center ` +
             // Text
             `text-sm ` +

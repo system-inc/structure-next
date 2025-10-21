@@ -14,7 +14,7 @@ export interface LinkProperties
         Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof NextLinkProperties> {
     className?: string;
     children?: React.ReactNode;
-    variant?: 'Primary' | 'Secondary' | 'Muted' | 'Unstyled';
+    variant?: 'A' | 'B' | 'C' | 'Unstyled';
 }
 export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function (properties, reference) {
     // Determine base classes based on variant
@@ -23,13 +23,13 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function
             switch(properties.variant) {
                 case 'Unstyled':
                     return '';
-                case 'Secondary':
-                    return 'link-secondary';
-                case 'Muted':
-                    return 'link-muted';
-                case 'Primary':
+                case 'B':
+                    return 'link--b';
+                case 'C':
+                    return 'link--c';
+                case 'A':
                 default:
-                    return 'link-primary';
+                    return 'link--a';
             }
         },
         [properties.variant],

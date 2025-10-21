@@ -296,7 +296,7 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                             <span className="text-dark-6 dark:text-light-6 truncate">{placeholder}</span>
                         )
                     }
-                    <div className="flex-grow" />
+                    <div className="grow" />
                     <ChevronDownIcon className="ml-4 h-4 w-4 foreground--c" />
                 </Button>
             }

@@ -6,7 +6,7 @@ import { Slot } from '@radix-ui/react-slot';
 export const cardVariants = cva(
     [
         // Base styles
-        'p-8 rounded-2xl border border--a bg-opsis-background-tetriary flex flex-col items-start justify-start gap-6 transition-all shadow-02',
+        'p-8 rounded-2xl border border--a background--c flex flex-col items-start justify-start gap-6 transition-all shadow-02',
     ],
     {
         variants: {

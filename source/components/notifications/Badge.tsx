@@ -9,8 +9,8 @@ export const badgeVariants = cva(
             variant: {
                 success: ['foreground--positive'],
                 danger: ['foreground--negative'],
-                warning: ['text-opsis-content-warning'],
-                info: ['text-opsis-content-informative'],
+                warning: ['foreground--warning'],
+                info: ['foreground--informative'],
                 muted: ['foreground--b'],
             },
             type: {

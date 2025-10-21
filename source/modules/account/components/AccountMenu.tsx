@@ -40,7 +40,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
 
             <div className="flex h-12 items-center pt-1">
                 {/* Theme Toggle */}
-                <div className="ml-4 flex-grow">
+                <div className="ml-4 grow">
                     <ThemeToggle />
                 </div>
 

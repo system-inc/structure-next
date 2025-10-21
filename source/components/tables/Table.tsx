@@ -448,7 +448,7 @@ export function Table(properties: TableProperties) {
             {/* Only render this section if options are enabled */}
             {properties.search || properties.filter || properties.columnVisibility || properties.rowSelection ? (
                 <div className="mb-4 flex">
-                    <div className="flex flex-grow flex-col">
+                    <div className="flex grow flex-col">
                         <div className="flex space-x-2">
                             {/* Search */}
                             {properties.search && (
