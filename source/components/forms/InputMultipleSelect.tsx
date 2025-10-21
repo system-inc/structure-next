@@ -287,11 +287,11 @@ export const InputMultipleSelect = React.forwardRef<
                                 selectedItems.map((item, index) => (
                                     <div
                                         key={index}
-                                        className="flex rounded-small px-2 py-1.5 text-xs text-dark-6 dark:bg-dark-4 dark:text-light-6"
+                                        className="rounded-small text-dark-6 dark:bg-dark-4 dark:text-light-6 flex px-2 py-1.5 text-xs"
                                     >
                                         {item.children}
                                         <CloseIcon
-                                            className="ml-1 h-4 w-4 rounded-full bg-light-6 text-dark-4"
+                                            className="bg-light-6 text-dark-4 ml-1 h-4 w-4 rounded-full"
                                             onClick={function (event: Event) {
                                                 event.stopPropagation();
                                                 onChangeIntercept(item, index, event);
@@ -303,7 +303,7 @@ export const InputMultipleSelect = React.forwardRef<
                         </div>
                     ) : (
                         // If the button has no children property, and there are no selected items, show the placeholder
-                        <span className="truncate text-dark-6 dark:text-light-6">{placeholder}</span>
+                        <span className="text-dark-6 dark:text-light-6 truncate">{placeholder}</span>
                     )}
                 </Button>
             }

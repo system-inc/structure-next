@@ -367,7 +367,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 {/* HTTP Method */}
                 <span
                     className={mergeClassNames(
-                        'method rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
+                        'method text-light rounded-md border px-1 py-0.5 font-mono text-xs',
                         getMethodColorClass(endpoint.method),
                     )}
                 >
@@ -387,7 +387,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Request Parameters */}
             {endpoint.requestParameters && (
                 <div className="">
-                    <hr className="mt-6 mb-4 border-opsis-border-primary" />
+                    <hr className="mt-6 mb-4 border--a" />
                     <h3 className="mb-2 text-lg font-medium">Request Parameters</h3>
                     <RequestParametersTable
                         requestParameters={endpoint.requestParameters}
@@ -396,14 +396,14 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 </div>
             )}
 
-            <hr className="mt-6 mb-6 border-opsis-border-primary" />
+            <hr className="mt-6 mb-6 border--a" />
 
             {/* Request Url with Parameters */}
             <div className="mb-4 flex items-center">
                 {/* HTTP Method */}
                 <span
                     className={mergeClassNames(
-                        'method rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
+                        'method text-light rounded-md border px-1 py-0.5 font-mono text-xs',
                         getMethodColorClass(endpoint.method),
                     )}
                 >
@@ -446,11 +446,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 </div>
                 {runningRequest && <p className="mt-4">Running request...</p>}
                 {testOutputResponseBody && !runningRequest && (
-                    <div className="mt-4 rounded-medium border border-opsis-border-primary p-4 text-sm">
+                    <div className="mt-4 rounded-md border border--a p-4 text-sm">
                         <div className="">
                             <span
                                 className={mergeClassNames(
-                                    'method rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
+                                    'method text-light rounded-md border px-1 py-0.5 font-mono text-xs',
                                     getStatusCodeColorClass(testOutputResponseHttpStatusCode),
                                 )}
                             >
@@ -459,15 +459,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                         </div>
                         <div className="mt-4">
                             <h4 className="mb-2 text-sm">Response Headers</h4>
-                            <pre className="rounded-medium border border-opsis-border-primary p-4">
-                                {testOutputResponseHttpHeaders}
-                            </pre>
+                            <pre className="rounded-md border border--a p-4">{testOutputResponseHttpHeaders}</pre>
                         </div>
                         <div className="mt-4">
                             <h4 className="mb-2 text-sm">Response Body</h4>
-                            <pre className="rounded-medium border border-opsis-border-primary p-4">
-                                {testOutputResponseBody}
-                            </pre>
+                            <pre className="rounded-md border border--a p-4">{testOutputResponseBody}</pre>
                         </div>
                     </div>
                 )}
@@ -476,7 +472,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Example Responses */}
             {endpoint.exampleResponses && (
                 <div className="">
-                    <hr className="my-12 border-opsis-border-primary" />
+                    <hr className="my-12 border--a" />
                     <h3 className="mb-4 text-lg font-medium">Example Responses</h3>
                     {endpoint.exampleResponses.map(function (exampleResponse) {
                         return (
@@ -485,7 +481,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                                 <div className="mb-2 flex items-center">
                                     <span
                                         className={mergeClassNames(
-                                            'rounded-medium border px-1 py-0.5 font-mono text-xs text-light',
+                                            'text-light rounded-md border px-1 py-0.5 font-mono text-xs',
                                             getStatusCodeColorClass(exampleResponse.statusCode),
                                         )}
                                     >
@@ -498,7 +494,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                                 {/* Body JSON */}
                                 {exampleResponse.body && (
                                     <Json
-                                        className="rounded-medium border border-opsis-border-primary p-2 text-xs"
+                                        className="rounded-md border border--a p-2 text-xs"
                                         data={responseFieldsToExampleJson(exampleResponse.body)}
                                     />
                                 )}

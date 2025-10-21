@@ -59,7 +59,7 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
                 }}
             />
 
-            <hr className="my-16 border-opsis-border-primary" />
+            <hr className="my-16 border--a" />
 
             <div className="flex justify-end">
                 <Button

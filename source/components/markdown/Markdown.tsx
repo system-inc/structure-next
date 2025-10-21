@@ -33,31 +33,31 @@ interface ComponentsProperties {
 const components: ComponentsProperties = {
     h1: (properties) => (
         <h1
-            className="mb-6 text-3xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5 first:before:hidden"
+            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mb-6 text-3xl font-medium before:block first:before:hidden"
             {...properties}
         />
     ),
     h2: (properties) => (
         <h2
-            className="mt-6 mb-6 text-2xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mt-6 mb-6 text-2xl font-medium before:block"
             {...properties}
         />
     ),
     h3: (properties) => (
         <h3
-            className="mt-6 mb-6 text-xl font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mt-6 mb-6 text-xl font-medium before:block"
             {...properties}
         />
     ),
     h4: (properties) => (
         <h4
-            className="mt-6 mb-6 text-[18px] leading-[26px] font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 mt-6 mb-6 text-[18px] leading-[26px] font-medium before:block"
             {...properties}
         />
     ),
     h5: (properties) => (
         <h5
-            className="text-[16px] leading-[28px] font-medium before:-mt-phi-base-2.5 before:block before:h-phi-base-2.5"
+            className="before:-mt-phi-base-2.5 before:h-phi-base-2.5 text-[16px] leading-[28px] font-medium before:block"
             {...properties}
         />
     ),
@@ -68,7 +68,7 @@ const components: ComponentsProperties = {
     ),
     pre: (properties) => (
         <pre
-            className="relative mb-6 rounded-medium border border-light-4 bg-light-2 p-5 text-sm dark:border-dark-4 dark:bg-dark"
+            className="border-light-4 bg-light-2 dark:border-dark-4 dark:bg-dark relative mb-6 rounded-md border p-5 text-sm"
             {...properties}
         >
             {properties.children}
@@ -79,7 +79,7 @@ const components: ComponentsProperties = {
     ),
     code: (properties) => (
         <code
-            className="mb-6 rounded border border-light-4 bg-light-2 px-1 py-px font-mono text-sm whitespace-pre-wrap dark:border-dark-4 dark:bg-dark"
+            className="border-light-4 bg-light-2 dark:border-dark-4 dark:bg-dark mb-6 rounded border px-1 py-px font-mono text-sm whitespace-pre-wrap"
             {...properties}
         />
     ),
@@ -89,27 +89,24 @@ const components: ComponentsProperties = {
         <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
     blockquote: (properties) => (
-        <blockquote className="border-l-2 border-light-6 pl-4 dark:border-neutral-4" {...properties} />
+        <blockquote className="border-light-6 dark:border-neutral-4 border-l-2 pl-4" {...properties} />
     ),
-    hr: (properties) => <hr className="my-10 border-light-4 dark:border-dark-4" {...properties} />,
+    hr: (properties) => <hr className="border-light-4 dark:border-dark-4 my-10" {...properties} />,
     table: (properties) => (
-        <table
-            className="relative mt-6 mb-6 w-full overflow-auto rounded border border-opsis-border-primary"
-            {...properties}
-        />
+        <table className="relative mt-6 mb-6 w-full overflow-auto rounded border border--a" {...properties} />
     ),
-    thead: (properties) => <thead className="border-b bg-light-2 dark:bg-dark" {...properties} />,
+    thead: (properties) => <thead className="bg-light-2 dark:bg-dark border-b" {...properties} />,
     tbody: (properties) => <tbody className="" {...properties} />,
-    tr: (properties) => <tr className="border-b border-light-4 last:border-b-0 dark:border-dark-4" {...properties} />,
+    tr: (properties) => <tr className="border-light-4 dark:border-dark-4 border-b last:border-b-0" {...properties} />,
     th: (properties) => (
         <th
-            className="border-r border-light-4 px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0 dark:border-dark-4"
+            className="border-light-4 dark:border-dark-4 border-r px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0"
             {...properties}
         />
     ),
     td: (properties) => (
         <td
-            className="border-r border-light-4 px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0 dark:border-dark-4"
+            className="border-light-4 dark:border-dark-4 border-r px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0"
             {...properties}
         />
     ),

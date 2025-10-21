@@ -90,7 +90,7 @@ export function ProfileInformationForm() {
 
     // Render the component
     return (
-        <div className="rounded-lg border border-light-6 p-6 dark:border-dark-4">
+        <div className="border-light-6 dark:border-dark-4 rounded-lg border p-6">
             <h2 className="text-xl font-medium">Profile Information</h2>
 
             <Form

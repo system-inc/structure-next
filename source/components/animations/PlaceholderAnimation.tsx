@@ -15,11 +15,11 @@ export function PlaceholderAnimation(properties: PlaceholderAnimationProperties)
     return (
         <div
             className={mergeClassNames(
-                'relative overflow-hidden rounded-small bg-light-3 dark:bg-dark-2',
+                'rounded-small bg-light-3 dark:bg-dark-2 relative overflow-hidden',
                 properties.className,
             )}
         >
-            <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-light-4 to-transparent dark:via-dark-3"></div>
+            <div className="via-light-4 dark:via-dark-3 absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent to-transparent"></div>
         </div>
     );
 }

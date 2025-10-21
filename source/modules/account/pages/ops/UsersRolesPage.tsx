@@ -196,7 +196,7 @@ export function UsersRolesPage() {
 
                     {/* Loading State */}
                     {accountAccessRoleAssignmentsPrivilegedRequest.isLoading && (
-                        <div className="divide-y divide-neutral/10">
+                        <div className="divide-neutral/10 divide-y">
                             {[...Array(5)].map((_, index) => (
                                 <div
                                     key={index}
@@ -232,7 +232,7 @@ export function UsersRolesPage() {
                                     <h3 className="text-base font-medium text-neutral-500">
                                         {type} ({roles.length})
                                     </h3>
-                                    <div className="divide-y divide-neutral/10">
+                                    <div className="divide-neutral/10 divide-y">
                                         {roles.map((role) => (
                                             <div
                                                 key={role.id}

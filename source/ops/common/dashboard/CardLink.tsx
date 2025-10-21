@@ -16,13 +16,13 @@ export function CardLink(properties: CardLinkProperties) {
     return (
         <Link
             href={properties.href}
-            className="flex-grow rounded-lg border border-light-4 p-5 transition-all hover:-translate-y-0.5 hover:shadow dark:border-dark-4 dark:shadow-dark-4/30"
+            className="border-light-4 dark:border-dark-4 dark:shadow-dark-4/30 flex-grow rounded-lg border p-5 transition-all hover:-translate-y-0.5 hover:shadow"
         >
             <div className="flex items-center justify-between">
                 <h2 className="mb-1 text-base font-normal">{properties.title}</h2>
                 <p className="text-base font-normal">{properties.value}</p>
             </div>
-            <p className="text-xs font-light text-dark-4/75 dark:text-light-4/50">{properties.date}</p>
+            <p className="text-dark-4/75 dark:text-light-4/50 text-xs font-light">{properties.date}</p>
         </Link>
     );
 }

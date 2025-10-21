@@ -101,11 +101,11 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                 {properties.post.content && <Markdown className="mb-4 max-w-2xl">{properties.post.content}</Markdown>}
             </div>
 
-            <hr className="my-16 border-opsis-border-primary" />
+            <hr className="my-16 border--a" />
 
             <SupportPostFeedback className="flex justify-center text-center" />
 
-            <hr className="my-16 border-opsis-border-primary" />
+            <hr className="my-16 border--a" />
 
             <div className="flex justify-center">
                 <div>

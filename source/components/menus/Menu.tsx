@@ -25,7 +25,7 @@ export const menuClassName =
     // Border
     `rounded-small border border-light-4 dark:border-dark-4 ` +
     // Background and text
-    `text-sm bg-opsis-background-primary text-opsis-content-primary`;
+    `text-sm bg-opsis-background-primary foreground--a`;
 
 // Type - MenuItemInterface
 // Menu-specific interface that extends MenuItemProperties
@@ -399,9 +399,7 @@ export function Menu(properties: MenuProperties) {
         >
             {/* Menu Title */}
             {properties.title && (
-                <div className="border-b border-opsis-border-primary px-3 py-2.5 text-sm font-medium">
-                    {properties.title}
-                </div>
+                <div className="border-b border--a px-3 py-2.5 text-sm font-medium">{properties.title}</div>
             )}
 
             {/* Menu Items */}

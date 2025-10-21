@@ -38,7 +38,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
     return (
         <div className="w-full">
             {/* Email and role */}
-            <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
+            <div className="border-b-light-4 dark:border-b-dark-4 border-b px-4 pb-2">
                 <Link
                     tabIndex={1}
                     className="font-medium whitespace-nowrap hover:cursor-pointer"
@@ -48,13 +48,13 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                 </Link>
                 {/* If the account is an administrator */}
                 {properties.account.isAdministator() && (
-                    <p className="text-xs text-dark-4 dark:text-white/50">Administrator</p>
+                    <p className="text-dark-4 text-xs dark:text-white/50">Administrator</p>
                 )}
             </div>
 
             <div className="pt-4">
                 <Link
-                    className="flex px-4 py-1 whitespace-nowrap hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
+                    className="hover:bg-light-2 dark:hover:bg-dark-3 flex px-4 py-1 whitespace-nowrap hover:cursor-pointer"
                     href="/account/profile"
                 >
                     Profile
@@ -63,7 +63,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                 {/* If the account is an administrator */}
                 {properties.account.isAdministator() && (
                     <Link
-                        className="flex px-4 py-1 whitespace-nowrap hover:cursor-pointer hover:bg-light-2 dark:hover:bg-dark-3"
+                        className="hover:bg-light-2 dark:hover:bg-dark-3 flex px-4 py-1 whitespace-nowrap hover:cursor-pointer"
                         href="/ops"
                     >
                         Ops

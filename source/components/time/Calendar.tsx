@@ -27,7 +27,7 @@ export function Calendar(properties: CalendarProperties) {
                 month: 'space-y-4',
                 table: 'w-full border-collapse space-y-1',
                 weekdays: 'flex',
-                weekday: 'text-muted-foreground rounded-medium w-8 font-normal text-[0.8rem]',
+                weekday: 'text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]',
                 week: 'flex w-full mt-2',
                 cell: 'relative h-8 w-8 p-0 text-center text-sm focus-within:relative focus-within:z-20',
                 day: 'h-full w-full p-0 cursor-pointer',
@@ -37,9 +37,9 @@ export function Calendar(properties: CalendarProperties) {
                 range_end:
                     'bg-opsis-background-secondary rounded-r-md [&_button]:!bg-opsis-action-primary [&_button]:!text-opsis-action-general-light [&_button]:rounded-r-md [&_button]:rounded-l-none [&_button]:hover:!bg-opsis-action-primary [&_button]:hover:rounded-r-md [&_button]:hover:rounded-l-none [&.rdp-range_start]:!rounded-md',
                 range_middle:
-                    'bg-opsis-background-secondary [&_button]:!bg-opsis-background-secondary [&_button]:!text-opsis-content-primary [&_button]:!rounded-none [&_button]:hover:!bg-opsis-background-secondary',
+                    'bg-opsis-background-secondary [&_button]:!bg-opsis-background-secondary [&_button]:!foreground--a [&_button]:!rounded-none [&_button]:hover:!bg-opsis-background-secondary',
                 selected: '',
-                today: '[&_button]:bg-opsis-background-secondary [&_button]:text-opsis-content-primary [&_button]:rounded-md',
+                today: '[&_button]:bg-opsis-background-secondary [&_button]:foreground--a [&_button]:rounded-md',
                 outside: 'text-opsis-content-placeholder opacity-50',
                 disabled: 'text-opsis-content-placeholder opacity-50',
                 hidden: 'invisible',

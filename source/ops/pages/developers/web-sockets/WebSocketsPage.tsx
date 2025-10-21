@@ -139,7 +139,7 @@ export function WebSocketsPage() {
                 <p>{webSocketViaSharedWorker.sharedWorkerClientIdAssignedFromServer}</p>
             </div>
 
-            <div className="mb-8 rounded-md border border-opsis-border-primary p-4">
+            <div className="mb-8 rounded-md border border--a p-4">
                 <h2 className="mb-4 text-xl font-bold">WebSocket Connection</h2>
 
                 <div className="mb-4 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -349,7 +349,7 @@ export function WebSocketsPage() {
                 </div>
             </div>
 
-            <div className="mb-8 rounded-md border border-opsis-border-primary p-4">
+            <div className="mb-8 rounded-md border border--a p-4">
                 <h2 className="mb-4 text-xl font-bold">Send Message</h2>
 
                 <div className="mb-4 flex flex-col">
@@ -381,7 +381,7 @@ export function WebSocketsPage() {
                     </Button>
                 </div>
 
-                <div className="overflow-hidden rounded-md border border-opsis-border-primary">
+                <div className="overflow-hidden rounded-md border border--a">
                     <table className="w-full">
                         <thead className="bg-gray-100 dark:bg-gray-800">
                             <tr>

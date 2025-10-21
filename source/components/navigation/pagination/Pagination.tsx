@@ -228,7 +228,7 @@ export function Pagination(properties: PaginationProperties) {
                     {firstAndLastPageControl &&
                         (useLinks && properties.page !== 1 ? (
                             <Button
-                                variant="Primary"
+                                variant="A"
                                 size="Icon"
                                 icon={ChevronLeftDoubleIcon}
                                 disabled={properties.page === 1}
@@ -236,7 +236,7 @@ export function Pagination(properties: PaginationProperties) {
                             />
                         ) : (
                             <Button
-                                variant="Primary"
+                                variant="A"
                                 size="Icon"
                                 icon={ChevronLeftDoubleIcon}
                                 disabled={properties.page === 1}
@@ -250,7 +250,7 @@ export function Pagination(properties: PaginationProperties) {
                     {/* Previous Page */}
                     {useLinks && properties.page > 1 ? (
                         <Button
-                            variant="Primary"
+                            variant="A"
                             size="Icon"
                             icon={ChevronLeftIcon}
                             disabled={properties.page <= 1}
@@ -258,7 +258,7 @@ export function Pagination(properties: PaginationProperties) {
                         />
                     ) : (
                         <Button
-                            variant="Primary"
+                            variant="A"
                             size="Icon"
                             icon={ChevronLeftIcon}
                             disabled={properties.page <= 1}
@@ -272,7 +272,7 @@ export function Pagination(properties: PaginationProperties) {
                     {/* Next Page */}
                     {useLinks && properties.page < properties.pagesTotal ? (
                         <Button
-                            variant="Primary"
+                            variant="A"
                             size="Icon"
                             icon={ChevronRightIcon}
                             disabled={properties.page >= properties.pagesTotal}
@@ -280,7 +280,7 @@ export function Pagination(properties: PaginationProperties) {
                         />
                     ) : (
                         <Button
-                            variant="Primary"
+                            variant="A"
                             size="Icon"
                             icon={ChevronRightIcon}
                             disabled={properties.page >= properties.pagesTotal}
@@ -295,7 +295,7 @@ export function Pagination(properties: PaginationProperties) {
                     {firstAndLastPageControl &&
                         (useLinks && properties.page < properties.pagesTotal ? (
                             <Button
-                                variant="Primary"
+                                variant="A"
                                 size="Icon"
                                 icon={ChevronRightDoubleIcon}
                                 disabled={properties.page >= properties.pagesTotal}
@@ -303,7 +303,7 @@ export function Pagination(properties: PaginationProperties) {
                             />
                         ) : (
                             <Button
-                                variant="Primary"
+                                variant="A"
                                 size="Icon"
                                 icon={ChevronRightDoubleIcon}
                                 disabled={properties.page >= properties.pagesTotal}

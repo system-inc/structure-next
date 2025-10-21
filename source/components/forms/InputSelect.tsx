@@ -286,18 +286,18 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                         selectedItem ? (
                             typeof selectedItem.children === 'string' ? (
                                 // If children is a string, create a container for it
-                                <span className="truncate text-dark dark:text-light">{selectedItem.children}</span>
+                                <span className="text-dark dark:text-light truncate">{selectedItem.children}</span>
                             ) : (
                                 // If children is not a string, use it as the button content
                                 selectedItem.children
                             )
                         ) : (
                             // No selected items, show the placeholder
-                            <span className="truncate text-dark-6 dark:text-light-6">{placeholder}</span>
+                            <span className="text-dark-6 dark:text-light-6 truncate">{placeholder}</span>
                         )
                     }
                     <div className="flex-grow" />
-                    <ChevronDownIcon className="text-neutral+2 ml-4 h-4 w-4 dark:text-neutral-2" />
+                    <ChevronDownIcon className="text-neutral+2 dark:text-neutral-2 ml-4 h-4 w-4" />
                 </Button>
             }
         />

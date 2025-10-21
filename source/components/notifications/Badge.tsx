@@ -11,7 +11,7 @@ export const badgeVariants = cva(
                 danger: ['text-opsis-content-negative'],
                 warning: ['text-opsis-content-warning'],
                 info: ['text-opsis-content-informative'],
-                muted: ['text-opsis-content-secondary'],
+                muted: ['foreground--b'],
             },
             type: {
                 filled: '',
@@ -71,7 +71,7 @@ export const badgeVariants = cva(
             {
                 type: 'outline',
                 variant: 'muted',
-                className: 'border border-opsis-border-primary',
+                className: 'border border--a',
             },
         ],
         defaultVariants: {

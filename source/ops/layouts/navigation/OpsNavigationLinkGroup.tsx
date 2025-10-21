@@ -48,7 +48,7 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
                 />
                 <div className="absolute inset-y-0 right-2 flex items-center">
                     <button
-                        className="relative flex aspect-square w-6 cursor-pointer items-center justify-center rounded text-dark hover:bg-dark/10 dark:text-white dark:hover:bg-light/10"
+                        className="text-dark hover:bg-dark/10 dark:hover:bg-light/10 relative flex aspect-square w-6 cursor-pointer items-center justify-center rounded dark:text-white"
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         <motion.span
@@ -64,7 +64,7 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
             </div>
 
             <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={transition}>
-                <div className="ml-3 space-y-0.5 border-l border-l-light-4 pt-0.5 pb-0.5 pl-4 dark:border-l-dark-4">
+                <div className="border-l-light-4 dark:border-l-dark-4 ml-3 space-y-0.5 border-l pt-0.5 pb-0.5 pl-4">
                     {properties.links?.map((internalNavigationLink) => {
                         return (
                             <li key={internalNavigationLink.title}>

@@ -187,7 +187,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
 
             {/* Loading State */}
             {isSearching && (
-                <div className="flex items-center space-x-2 text-neutral">
+                <div className="text-neutral flex items-center space-x-2">
                     <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     <span>Searching...</span>
                 </div>
@@ -211,7 +211,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 return (
                     <div
                         key={profile.username}
-                        className="space-y-4 rounded-lg border border-light-6 p-4 dark:border-dark-4"
+                        className="border-light-6 dark:border-dark-4 space-y-4 rounded-lg border p-4"
                     >
                         {/* User Preview */}
                         <div className="flex items-center space-x-3">
@@ -224,7 +224,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             </div>
                             <div>
                                 <div className="font-medium">{profile.displayName || '-'}</div>
-                                <div className="text-sm text-neutral">@{profile.username}</div>
+                                <div className="text-neutral text-sm">@{profile.username}</div>
                             </div>
                         </div>
 
@@ -245,14 +245,14 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                                 onChange={(value) => setSelectedRoleType(value || '')}
                             />
                             {selectedRoleType && (
-                                <p className="text-sm text-neutral">
+                                <p className="text-neutral text-sm">
                                     {ROLE_INFORMATION[selectedRoleType as keyof typeof ROLE_INFORMATION]}
                                 </p>
                             )}
                             <Button
                                 className="w-full"
-                                variant="Primary"
-                                onClick={() => {
+                                variant="A"
+                                onClick={function () {
                                     setSelectedUsername(profile.username);
                                     setGrantDialogOpen(true);
                                 }}

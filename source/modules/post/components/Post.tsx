@@ -173,7 +173,7 @@ export function Post(properties: PostProperties) {
             {/* Post */}
             <div
                 className={mergeClassNames(
-                    'flex flex-col border-b border-light-3 py-6 md:flex-row md:space-x-5 dark:border-dark-3',
+                    'border-light-3 dark:border-dark-3 flex flex-col border-b py-6 md:flex-row md:space-x-5',
                     properties.className,
                 )}
             >

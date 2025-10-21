@@ -27,10 +27,10 @@ export function SideNavigationLink(properties: SideNavigationLinkProperties) {
         <Link
             href={properties.href || '#'}
             className={mergeClassNames(
-                'group flex items-center gap-x-2 rounded-medium px-2 py-1 text-[13px] leading-6 hover:bg-light-2 dark:hover:bg-dark-3 dark:active:bg-dark-3',
+                'group hover:bg-light-2 dark:hover:bg-dark-3 dark:active:bg-dark-3 flex items-center gap-x-2 rounded-md px-2 py-1 text-[13px] leading-6',
                 isActive
                     ? 'bg-light-1 text-dark dark:bg-dark-2 dark:text-light'
-                    : 'text-dark hover:text-dark dark:bg-transparent dark:text-light-4',
+                    : 'text-dark hover:text-dark dark:text-light-4 dark:bg-transparent',
             )}
         >
             {properties.icon && (

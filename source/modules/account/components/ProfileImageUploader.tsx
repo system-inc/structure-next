@@ -287,11 +287,11 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
                 <ProfileImage
                     profileImageUrl={properties.profileImageUrl || undefined}
                     alternateText={properties.alternateText}
-                    className="h-full w-full border border-light-6 dark:border-dark-4"
+                    className="border-light-6 dark:border-dark-4 h-full w-full border"
                 />
 
                 {/* Edit icon overlay in bottom right corner */}
-                <div className="absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full border border-light-6 bg-light dark:border-dark-4 dark:bg-dark-2">
+                <div className="border-light-6 bg-light dark:border-dark-4 dark:bg-dark-2 absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full border">
                     <EditIcon className="h-3.5 w-3.5" />
                 </div>
             </div>

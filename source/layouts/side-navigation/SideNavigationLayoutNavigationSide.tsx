@@ -458,7 +458,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                         (windowInnerWidth < desktopMinimumWidth &&
                             !sideNavigationLayoutNavigationIsClosingByWindowResize)) &&
                         sideNavigationLayoutNavigationOpen // Only show border when open
-                        ? 'border-r border-r-light-4 dark:border-r-dark-4'
+                        ? 'border-r-light-4 dark:border-r-dark-4 border-r'
                         : '',
                     properties.className,
                 )}
@@ -485,7 +485,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                         // If there is a header and the window is at least the desktop minimum width
                         // add a border to the right (but only when open)
                         showHeader && windowInnerWidth >= desktopMinimumWidth && sideNavigationLayoutNavigationOpen
-                            ? 'border-r border-r-light-4 dark:border-r-dark-4'
+                            ? 'border-r-light-4 dark:border-r-dark-4 border-r'
                             : '',
                     )}
                 >
@@ -496,7 +496,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 <div
                     ref={containerResizeHandleDivReference}
                     className={mergeClassNames(
-                        'absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none bg-transparent duration-500 select-none hover:bg-blue active:bg-purple-500',
+                        'hover:bg-blue absolute right-[-1px] h-full w-1 cursor-ew-resize touch-none bg-transparent duration-500 select-none active:bg-purple-500',
                         // If there is a header, offset the handle by the height of the header (h-14 = 56px)
                         showHeader && windowInnerWidth >= desktopMinimumWidth ? 'top-14' : '',
                         // Always allow pointer events for drag-to-open functionality

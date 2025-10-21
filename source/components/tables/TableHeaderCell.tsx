@@ -32,7 +32,7 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
     return (
         <th
             className={mergeClassNames(
-                'dark:text-neutral+5 max-w-xs truncate p-2 px-2 py-1 text-left text-xs font-normal text-neutral-2',
+                'dark:text-neutral+5 text-neutral-2 max-w-xs truncate p-2 px-2 py-1 text-left text-xs font-normal',
                 properties.className,
             )}
         >
@@ -96,7 +96,7 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
                                                                                         'bg-[' +
                                                                                             possibleValue.hexColor +
                                                                                             ']',
-                                                                                        'inline-flex rounded-medium border px-2.5 py-1 text-xs font-medium',
+                                                                                        'inline-flex rounded-md border px-2.5 py-1 text-xs font-medium',
                                                                                     )}
                                                                                 >
                                                                                     {possibleValue.title ||

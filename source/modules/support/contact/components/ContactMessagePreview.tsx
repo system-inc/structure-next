@@ -20,18 +20,18 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
     // Render the component
     return (
         <div className="mx-auto mt-12">
-            <div className="mx-auto flex size-8 items-center justify-center rounded-full bg-[#16A34A] text-opsis-action-primary-contrast">
+            <div className="text-opsis-action-primary-contrast mx-auto flex size-8 items-center justify-center rounded-full bg-[#16A34A]">
                 <CheckIcon className="size-5" />
             </div>
 
             <h2 className="mt-6 text-center text-2xl font-medium">Message delivered.</h2>
-            <p className="mt-4 text-center text-balance text-opsis-content-secondary">
+            <p className="mt-4 text-center text-balance foreground--b">
                 Your message has been received. We will get back to you as soon as possible.
             </p>
 
             <FormField label="Your Message" className="mt-10">
-                <div className="mb-4 flex flex-col items-stretch rounded-medium border border-opsis-border-primary px-6 py-8 transition-colors">
-                    <div className="border-b border-opsis-border-primary pb-6 text-sm font-medium text-opsis-content-secondary transition-colors">
+                <div className="mb-4 flex flex-col items-stretch rounded-md border border--a px-6 py-8 transition-colors">
+                    <div className="border-b border--a pb-6 text-sm font-medium foreground--b transition-colors">
                         <p>From: {properties.emailAddress}</p>
                         <p className="mt-2">Subject: {properties.title}</p>
                     </div>
@@ -44,17 +44,17 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                         <div
                             key={index}
                             className={
-                                'mb-2 flex h-14 items-center justify-between rounded-medium bg-opsis-background-secondary px-5 py-3 last:mb-0'
+                                'bg-opsis-background-secondary mb-2 flex h-14 items-center justify-between rounded-md px-5 py-3 last:mb-0'
                             }
                         >
                             <FileTypeIcon className="mr-4 size-5" />
 
                             <div className="min-w-0 flex-1">
-                                <p className="truncate text-sm font-medium text-opsis-content-primary">{file.name}</p>
+                                <p className="truncate text-sm font-medium foreground--a">{file.name}</p>
                             </div>
 
                             <div className="flex items-center gap-4 pl-2">
-                                <p className="text-sm text-opsis-content-secondary">{formatFileSize(file.size)}</p>
+                                <p className="text-sm foreground--b">{formatFileSize(file.size)}</p>
                             </div>
                         </div>
                     );

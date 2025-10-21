@@ -54,9 +54,9 @@ Tabs.displayName = RadixTabPrimitive.Root.displayName;
 export const tabItemVariants = cva(
     [
         // Default
-        'text-opsis-content-secondary rounded-full transition-colors relative group cursor-pointer',
+        'foreground--b rounded-full transition-colors relative group cursor-pointer',
         // Hover
-        'hover:text-opsis-content-primary',
+        'hover:foreground--a',
         // Active
         'data-[state=active]:text-opsis-action-general-dark',
     ],
@@ -111,7 +111,7 @@ export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitiv
                             layoutId={`tab-${tabsContext.tabGroupId}`}
                             className={mergeClassNames(
                                 'absolute inset-0 h-full w-full border border-transparent',
-                                'z-0 group-data-[state=active]:border-opsis-border-primary group-data-[state=active]:bg-opsis-background-primary',
+                                'group-data-[state=active]:bg-opsis-background-primary z-0 group-data-[state=active]:border--a',
                             )}
                             style={{
                                 borderRadius: '99px',

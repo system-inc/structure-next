@@ -37,18 +37,18 @@ export function TableCellContentImageUrl(properties: TableCellContentImageUrlPro
                     (
                         <div className="relative min-h-[80px] w-96">
                             {!imageLoaded && !imageFailedToLoad && (
-                                <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-opsis-border-primary">
+                                <div className="absolute inset-0 flex items-center justify-center rounded-md border border--a">
                                     <BrokenCircleIcon className="h-8 w-8 animate-spin" />
                                 </div>
                             )}
                             {imageFailedToLoad ? (
-                                <div className="absolute inset-0 flex items-center justify-center rounded-medium border border-red-500">
+                                <div className="absolute inset-0 flex items-center justify-center rounded-md border border-red-500">
                                     <ErrorIcon className="mr-1.5 h-5 w-5 text-red-500" />
                                     <p>Image failed to load.</p>
                                 </div>
                             ) : (
                                 <Image
-                                    className="rounded-medium border border-opsis-border-primary"
+                                    className="rounded-md border border--a"
                                     src={properties.url}
                                     alt="Image"
                                     // layout="responsive"

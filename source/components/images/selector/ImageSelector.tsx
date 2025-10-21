@@ -148,7 +148,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     accept={properties.accept || 'image/*'}
                     multiple={properties.allowMultipleFileSelection}
                     onChange={handleFileChange}
-                    className="w-full cursor-pointer rounded-medium border border-neutral-200 bg-transparent p-2 text-sm dark:border-neutral-700"
+                    className="w-full cursor-pointer rounded-md border border-neutral-200 bg-transparent p-2 text-sm dark:border-neutral-700"
                 />
                 {error && (
                     <Alert variant="error" className="mt-2">
@@ -172,7 +172,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     className="hidden"
                 />
                 <Button
-                    variant={properties.buttonVariant || 'Primary'}
+                    variant={properties.buttonVariant || 'A'}
                     size={properties.buttonSize || 'Small'}
                     onClick={handleClick}
                     iconLeft={properties.children ? undefined : ImageIcon}

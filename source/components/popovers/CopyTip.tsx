@@ -23,7 +23,7 @@ export function CopyTip({ trigger, noticeData, value, copyButtonClassName, ...ti
             trigger={trigger}
             content={
                 <div className="flex text-xs transition-all">
-                    <div className="flex items-center border-r border-opsis-border-primary">
+                    <div className="flex items-center border-r border--a">
                         <CopyButton
                             value={value}
                             noticeData={noticeData}

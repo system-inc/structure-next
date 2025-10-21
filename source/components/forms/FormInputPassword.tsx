@@ -36,9 +36,9 @@ export const FormInputPassword = React.forwardRef(function (
                         onClick={() => setShowPassword(!showPassword)}
                     >
                         {showPassword ? (
-                            <EyeCancelIcon className="h-[20px] w-[20px] text-dark dark:text-light" />
+                            <EyeCancelIcon className="text-dark dark:text-light h-[20px] w-[20px]" />
                         ) : (
-                            <EyeIcon className="h-[20px] w-[20px] text-dark dark:text-light" />
+                            <EyeIcon className="text-dark dark:text-light h-[20px] w-[20px]" />
                         )}
                     </button>
                 }

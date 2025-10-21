@@ -36,7 +36,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
             {properties.account ? <AccountMenuSignedIn account={properties.account} /> : <AccountMenuSignedOut />}
 
             {/* Divider */}
-            <div className="mt-4 mb-1 border-b border-b-light-4 dark:border-b-dark-4" />
+            <div className="border-b-light-4 dark:border-b-dark-4 mt-4 mb-1 border-b" />
 
             <div className="flex h-12 items-center pt-1">
                 {/* Theme Toggle */}
@@ -48,7 +48,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
                 {properties.account && (
                     <div className="mr-4 justify-end">
                         <AnimatedButton
-                            variant="Primary"
+                            variant="A"
                             tabIndex={1}
                             className="w-[92px]"
                             onClick={async function () {

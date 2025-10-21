@@ -400,7 +400,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     return (
         <div
             className={mergeClassNames(
-                'mr-4 inline-flex flex-col rounded-medium border border-opsis-border-primary p-4',
+                'mr-4 inline-flex flex-col rounded-md border border--a p-4',
                 properties.className,
             )}
         >
@@ -412,7 +412,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
-                                <p className="flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium text-sm text-neutral">
+                                <p className="text-neutral flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md text-sm">
                                     Where
                                 </p>
                             ) : conditionIndex === 1 ? (
@@ -435,7 +435,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
+                                <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -557,7 +557,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 }}
                             />
                         ) : (
-                            <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-medium px-4 text-sm">
+                            <p className="text-muted-foreground flex h-9 min-w-[96px] flex-shrink-0 content-center items-center justify-center rounded-md px-4 text-sm">
                                 {columnFilterGroupData.operator.toLowerCase()}
                             </p>
                         )}
@@ -592,13 +592,13 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
             {/* Controls */}
             <div className="mt-4 flex space-x-2">
                 {/* Add Condition Button */}
-                <Button variant="Primary" iconLeft={PlusIcon} onClick={addNewCondition}>
+                <Button variant="A" iconLeft={PlusIcon} onClick={addNewCondition}>
                     Add Condition
                 </Button>
 
                 {/* Add Filter Group Button - Only show in Grouped mode */}
                 {properties.filterMode !== 'Flat' && (
-                    <Button variant="Primary" iconLeft={PlusIcon} onClick={addNewFilterGroup}>
+                    <Button variant="A" iconLeft={PlusIcon} onClick={addNewFilterGroup}>
                         Add Filter Group
                     </Button>
                 )}

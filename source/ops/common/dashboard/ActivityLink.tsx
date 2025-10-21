@@ -20,7 +20,7 @@ export function ActivityLink(properties: ActivityLinkProperties) {
         <Link href={properties.href} className="group flex transition-all">
             <div>
                 <p className="text-sm font-light">{properties.title}</p>
-                <p className="text-xs font-light text-dark-4/50 dark:text-light-4/50">
+                <p className="text-dark-4/50 dark:text-light-4/50 text-xs font-light">
                     {timeFromNow(properties.timeAgo)}
                 </p>
             </div>

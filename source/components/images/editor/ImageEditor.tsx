@@ -200,7 +200,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                 <div className="flex justify-end space-x-2">
                     {properties.onCancel && (
                         <Button
-                            variant="Secondary"
+                            variant="B"
                             onClick={properties.onCancel}
                             disabled={loading || properties.loading}
                             aria-label="Cancel image editing"
@@ -209,7 +209,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                         </Button>
                     )}
                     <Button
-                        variant="Primary"
+                        variant="A"
                         onClick={handleSave}
                         isLoading={loading || properties.loading}
                         disabled={loading || properties.loading || !cropArea}
@@ -248,10 +248,9 @@ export function ImageEditor(properties: ImageEditorProperties) {
                                               maximum: properties.cropAspectRatio,
                                           }
                                         : undefined,
-                                    overlayClassName:
-                                        properties.cropShape === 'Round' ? 'rounded-full' : 'rounded-medium',
+                                    overlayClassName: properties.cropShape === 'Round' ? 'rounded-full' : 'rounded-md',
                                 }}
-                                className="rounded-medium border border-neutral-200 dark:border-neutral-700"
+                                className="rounded-md border border-neutral-200 dark:border-neutral-700"
                                 onUpdate={function (cropper) {
                                     // Update the preview
                                     previewReference.current?.update(cropper);
@@ -275,7 +274,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                 </>
             ) : (
                 <div
-                    className="flex h-64 items-center justify-center rounded-medium border border-neutral-200 dark:border-neutral-700"
+                    className="flex h-64 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-700"
                     aria-live="polite"
                 >
                     <p className="text-neutral-500">Loading image...</p>

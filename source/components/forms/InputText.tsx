@@ -72,7 +72,7 @@ export const InputTextVariants = {
         // Layout and sizing
         `w-full pl-9 pr-4 py-3 ` +
         // Border
-        `border-b border-opsis-border-primary ` +
+        `border-b border--a ` +
         // Background
         `bg-transparent`,
 };
@@ -191,7 +191,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextProp
     return (
         <div className={mergeClassNames('relative', properties.containerClassName)}>
             {Icon && (
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-neutral-2">
+                <div className="text-neutral-2 absolute inset-y-0 left-0 flex items-center pl-3">
                     <Icon className="h-4 w-4" />
                 </div>
             )}

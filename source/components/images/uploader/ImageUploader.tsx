@@ -77,7 +77,7 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                 accept={properties.accept}
                 allowMultipleFileSelection={properties.allowMultipleFileSelection}
                 variant={properties.variant || 'Button'}
-                buttonVariant={properties.buttonVariant || 'Primary'}
+                buttonVariant={properties.buttonVariant || 'A'}
                 buttonSize={properties.buttonSize || 'Small'}
             >
                 {properties.children}
@@ -105,7 +105,7 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                                 <div>
                                     <div className="flex items-center space-x-2">
                                         <Button
-                                            variant="Primary"
+                                            variant="A"
                                             onClick={async function () {
                                                 try {
                                                     // Process and upload each file
@@ -131,7 +131,7 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                                         </Button>
 
                                         <Button
-                                            variant="Secondary"
+                                            variant="B"
                                             onClick={clearSelectedFiles}
                                             disabled={childProperties.isUploading}
                                         >

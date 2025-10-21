@@ -72,7 +72,7 @@ export function OpsNavigationBar() {
 
                         {/* Menu button */}
                         <Dialog.Trigger asChild>
-                            <Button className="h-auto rounded-small !bg-transparent py-[6px]">
+                            <Button className="rounded-small h-auto !bg-transparent py-[6px]">
                                 <svg
                                     width="16"
                                     height="16"
@@ -124,7 +124,7 @@ export function OpsNavigationBar() {
                                     }}
                                     className="fixed top-10 bottom-0 left-0 p-2"
                                 >
-                                    <div className="h-full w-56 overflow-y-auto rounded-lg border border-opsis-border-primary bg-opsis-background-tetriary">
+                                    <div className="bg-opsis-background-tetriary h-full w-56 overflow-y-auto rounded-lg border border--a">
                                         <OpsNavigation />
                                     </div>
                                 </motion.div>

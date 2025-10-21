@@ -188,7 +188,7 @@ export function Dialog(properties: DialogProperties) {
                         {properties.footerCloseButton !== true && properties.footerCloseButton !== undefined ? (
                             properties.footerCloseButton
                         ) : (
-                            <Button variant="Primary">Dismiss</Button>
+                            <Button variant="A">Dismiss</Button>
                         )}
                     </DialogClose>
                 )}
@@ -212,7 +212,7 @@ export function Dialog(properties: DialogProperties) {
                         />
                         <VaulDrawer.Content
                             className={mergeClassNames(
-                                'fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border-opsis-border-primary bg-background',
+                                'bg-background fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border--a',
                                 properties.className,
                             )}
                             onOpenAutoFocus={function (event) {

@@ -111,7 +111,7 @@ export function UsernameForm() {
 
     // Render the component
     return (
-        <div className="rounded-lg border border-light-6 p-6 dark:border-dark-4">
+        <div className="border-light-6 dark:border-dark-4 rounded-lg border p-6">
             <h2 className="text-xl font-medium">Change Username</h2>
 
             <Form
@@ -190,7 +190,7 @@ export function UsernameForm() {
                         <div className="mt-6 flex justify-end space-x-2">
                             <Button onClick={handleDialogClose}>Cancel</Button>
                             <AnimatedButton
-                                variant="Primary"
+                                variant="A"
                                 onClick={handleConfirm}
                                 isProcessing={accountProfileUpdateRequest.isLoading}
                             >

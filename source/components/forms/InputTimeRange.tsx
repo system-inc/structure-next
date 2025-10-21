@@ -175,7 +175,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
             <a
                 id={camelCase(properties.text)}
                 className={mergeClassNames(
-                    'cursor-pointer rounded-medium p-1.5 text-xs text-opsis-content-secondary hover:bg-opsis-background-secondary',
+                    'hover:bg-opsis-background-secondary cursor-pointer rounded-md p-1.5 text-xs foreground--b',
                     properties.isActive && 'bg-opsis-background-secondary',
                 )}
                 onClick={properties.onClick}
@@ -231,7 +231,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     {showTimeRangePresets && (
                         <div className="flex w-48 flex-col">
                             {/* Summary Header */}
-                            <div className="border-b border-opsis-border-primary p-2 text-xs">
+                            <div className="border-b border--a p-2 text-xs">
                                 {/* Current Selection */}
                                 <p className="font-semibold">{activeTimeRangePresetKey}</p>
                                 {/* Date Display */}
@@ -273,12 +273,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                             </div>
                         </div>
                     )}
-                    <div
-                        className={mergeClassNames(
-                            'flex flex-col',
-                            showTimeRangePresets && 'border-l border-opsis-border-primary',
-                        )}
-                    >
+                    <div className={mergeClassNames('flex flex-col', showTimeRangePresets && 'border-l border--a')}>
                         <Calendar
                             mode="range"
                             showOutsideDays={false}

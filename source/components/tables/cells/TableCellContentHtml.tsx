@@ -24,7 +24,7 @@ export function TableCellContentHtml(properties: TableCellContentHtmlProperties)
                         <div className="relative h-96 w-96">
                             {/* IFRAME */}
                             <iframe
-                                className="absolute inset-0 h-full w-full bg-light"
+                                className="bg-light absolute inset-0 h-full w-full"
                                 srcDoc={properties.value}
                                 sandbox="" // Full restrictions
                             />

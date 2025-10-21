@@ -115,14 +115,14 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
     return (
         <>
             {/* Top Bar Background */}
-            <div className="pointer-events-none fixed z-30 h-14 w-full bg-light dark:bg-dark-1" />
+            <div className="bg-light dark:bg-dark-1 pointer-events-none fixed z-30 h-14 w-full" />
 
             {/* Top Bar Bottom Border */}
             {showHeaderBorder && (
                 <motion.div
                     ref={topBarBottomBorderDivReference}
                     style={{ marginLeft: topBarBottomBorderDivMarginLeftSpring }}
-                    className="pointer-events-none fixed z-30 h-14 w-full border-b border-b-light-4 dark:border-b-dark-4"
+                    className="border-b-light-4 dark:border-b-dark-4 pointer-events-none fixed z-30 h-14 w-full border-b"
                 />
             )}
 

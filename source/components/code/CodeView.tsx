@@ -81,16 +81,16 @@ export function CodeEditor({
         <div
             {...divProperties}
             className={mergeClassNames(
-                'relative h-max overflow-clip rounded border border-light/10 bg-dark-3 p-1.5 font-mono tracking-wide transition-all focus-within:ring focus-within:outline dark:bg-dark',
+                'border-light/10 bg-dark-3 dark:bg-dark relative h-max overflow-clip rounded border p-1.5 font-mono tracking-wide transition-all focus-within:ring focus-within:outline',
                 className,
             )}
         >
-            <div className="absolute top-0 right-0 w-min rounded-bl bg-dark-6 px-1.5 py-0.5 text-xs dark:bg-dark-3">
+            <div className="bg-dark-6 dark:bg-dark-3 absolute top-0 right-0 w-min rounded-bl px-1.5 py-0.5 text-xs">
                 <p className="text-muted-foreground">{language.toUpperCase()}</p>
             </div>
             <div ref={scrollContainerReference} className="relative h-max overflow-auto">
                 <div
-                    className="inset-0 z-10 w-min text-light selection:bg-light/20 dark:selection:bg-light/10"
+                    className="text-light selection:bg-light/20 dark:selection:bg-light/10 inset-0 z-10 w-min"
                     style={{
                         pointerEvents: edit ? 'none' : 'auto',
                         position: edit ? 'absolute' : 'static',

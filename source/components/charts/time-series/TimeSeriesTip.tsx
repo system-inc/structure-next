@@ -7,6 +7,7 @@ import { TimeInterval } from '@structure/source/api/graphql/GraphQlGeneratedCode
 
 // Dependencies - Styles
 import { useThemeSettings } from '@structure/source/theme/hooks/useThemeSettings';
+import { Theme, ThemeClassName } from '@structure/source/theme/ThemeTypes';
 
 // Dependencies - Utilities
 import { lightenColor, darkenColor } from '@structure/source/utilities/style/Color';
@@ -55,8 +56,8 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
 
         // Render the component
         return (
-            <div className="rounded-extra-small border border-opsis-border-primary bg-opsis-background-primary">
-                <div className="border-b border-opsis-border-primary p-2 text-xs text-opsis-content-secondary">
+            <div className="rounded-extra-small bg-opsis-background-primary border border--a">
+                <div className="border-b border--a p-2 text-xs foreground--b">
                     {properties.timeInterval
                         ? formatTipLabelByTimeInterval(dataPoint.label, properties.timeInterval)
                         : dataPoint.label}
@@ -68,7 +69,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                 key={index}
                                 className={mergeClassNames(
                                     'text-xs',
-                                    index !== sortedPayload.length - 1 && 'border-b border-opsis-border-primary',
+                                    index !== sortedPayload.length - 1 && 'border-b border--a',
                                 )}
                             >
                                 <td className="p-2 text-center text-xs">
@@ -87,18 +88,18 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                         })()}
                                     </b>
                                 </td>
-                                <td className="border-l border-opsis-border-primary p-2 pr-4">
+                                <td className="border-l border--a p-2 pr-4">
                                     <div className="flex items-center gap-2">
                                         <div
                                             style={{
                                                 borderColor: entry.color,
                                                 borderStyle: 'solid',
                                                 backgroundColor:
-                                                    themeSettings.themeClassName === 'light'
+                                                    themeSettings.themeClassName === ThemeClassName[Theme.Light]
                                                         ? lightenColor(entry.color || '', 0.2)
                                                         : darkenColor(entry.color || '', 0.2),
                                             }}
-                                            className="h-4 w-4 rounded-extra-small border border-opsis-border-primary"
+                                            className="rounded-extra-small h-4 w-4 border border--a"
                                         />
                                         <span>{entry.name}</span>
                                     </div>

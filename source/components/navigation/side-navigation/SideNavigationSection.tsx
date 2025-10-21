@@ -48,7 +48,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                 ) : properties.children ? (
                     <div
                         className={mergeClassNames(
-                            'mb-0.5 flex cursor-pointer items-center justify-between rounded py-1 pr-1 pl-2 text-[13px] select-none hover:bg-light-2 dark:text-light dark:hover:bg-dark-3',
+                            'hover:bg-light-2 dark:text-light dark:hover:bg-dark-3 mb-0.5 flex cursor-pointer items-center justify-between rounded py-1 pr-1 pl-2 text-[13px] select-none',
                             isActive ? 'bg-light-1 dark:bg-dark-2' : '',
                         )}
                         onClick={() => setIsOpen(!isOpen)}
@@ -62,7 +62,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                             {properties.title}
                         </div>
                         <button
-                            className="relative flex aspect-square w-6 items-center justify-center rounded text-dark hover:bg-dark/10 dark:text-white dark:hover:bg-light/10"
+                            className="text-dark hover:bg-dark/10 dark:hover:bg-light/10 relative flex aspect-square w-6 items-center justify-center rounded dark:text-white"
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <motion.span
@@ -85,7 +85,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                 <Collapse isOpen={isOpen || properties.isHeader === true} animationConfiguration={transition}>
                     <div
                         className={`space-y-0.5 ${
-                            properties.isHeader ? '' : 'ml-3 border-l border-l-light-4 pl-4 dark:border-l-dark-4'
+                            properties.isHeader ? '' : 'border-l-light-4 dark:border-l-dark-4 ml-3 border-l pl-4'
                         }`}
                     >
                         {properties.children.map(function (child, childIndex) {

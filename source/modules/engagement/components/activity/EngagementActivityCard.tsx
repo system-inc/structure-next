@@ -189,10 +189,10 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
             className={mergeClassNames(
                 'cursor-pointer rounded-lg border p-3 shadow-sm transition-colors',
                 hasAddedToCart
-                    ? 'border-green-500 bg-white dark:border-green-500 dark:bg-dark-1'
+                    ? 'dark:bg-dark-1 border-green-500 bg-white dark:border-green-500'
                     : isExpanded
-                      ? 'border-opsis-border-primary bg-white dark:border-opsis-border-primary dark:bg-dark-1'
-                      : 'border-light-4 bg-white hover:border-opsis-border-primary/50 active:border-opsis-border-primary dark:border-dark-4 dark:bg-dark-1 dark:hover:border-opsis-border-primary/50 dark:active:border-opsis-border-primary',
+                      ? 'dark:bg-dark-1 border--a bg-white dark:border--a'
+                      : 'border-light-4 hover:border--a/50 dark:border-dark-4 dark:bg-dark-1 dark:hover:border--a/50 bg-white active:border--a dark:active:border--a',
             )}
         >
             {/* Top row: Location with browser, platform, and device type icons */}

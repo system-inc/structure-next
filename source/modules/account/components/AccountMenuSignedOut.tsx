@@ -18,12 +18,12 @@ export function AccountMenuSignedOut() {
     // Render the component
     return (
         <div className="w-full">
-            <div className="border-b border-b-light-4 px-4 pb-2 dark:border-b-dark-4">
+            <div className="border-b-light-4 dark:border-b-dark-4 border-b px-4 pb-2">
                 <p className="font-medium whitespace-nowrap">Welcome to {ProjectSettings.title}</p>
             </div>
             <div className="px-4 pt-4">
                 <Button
-                    variant="Primary"
+                    variant="A"
                     className="w-full"
                     onClick={function () {
                         account.setAuthenticationDialogOpen(true);

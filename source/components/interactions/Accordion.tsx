@@ -54,7 +54,7 @@ export function Accordion(properties: AccordionProperties) {
                     <RadixAccordion.Item
                         key={index}
                         value={item.identifier}
-                        className="border-b border-light-3 dark:border-dark-3"
+                        className="border-light-3 dark:border-dark-3 border-b"
                     >
                         {/* Trigger */}
                         <RadixAccordion.Trigger

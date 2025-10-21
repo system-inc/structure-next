@@ -18,7 +18,7 @@ export function TimeSeriesStatisticsDisplay(properties: TimeSeriesStatisticsDisp
     if(properties.isLoading) {
         return (
             <div className={properties.className}>
-                <p className="text-sm text-dark/60 dark:text-light-4/60">Loading statistics...</p>
+                <p className="text-dark/60 dark:text-light-4/60 text-sm">Loading statistics...</p>
             </div>
         );
     }
