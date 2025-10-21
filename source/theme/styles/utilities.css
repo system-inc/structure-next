@@ -20,6 +20,18 @@
 @utility background--backdrop {
     background-color: var(--background--backdrop);
 }
+@utility background--positive {
+    background-color: var(--background--positive);
+}
+@utility background--warning {
+    background-color: var(--background--warning);
+}
+@utility background--negative {
+    background-color: var(--background--negative);
+}
+@utility background--informative {
+    background-color: var(--background--informative);
+}
 
 /* Foregrounds */
 @utility foreground--a {
@@ -40,8 +52,14 @@
 @utility foreground--positive {
     color: var(--foreground--positive);
 }
+@utility foreground--warning {
+    color: var(--foreground--warning);
+}
 @utility foreground--negative {
     color: var(--foreground--negative);
+}
+@utility foreground--informative {
+    color: var(--foreground--informative);
 }
 
 /* Borders */
@@ -60,8 +78,17 @@
 @utility border--focus {
     border-color: var(--border--focus);
 }
-@utility border--contrast {
-    border-color: var(--border--contrast);
+@utility border--positive {
+    border-color: var(--border--positive);
+}
+@utility border--warning {
+    border-color: var(--border--warning);
+}
+@utility border--negative {
+    border-color: var(--border--negative);
+}
+@utility border--informative {
+    border-color: var(--border--informative);
 }
 
 /* Link - A */
@@ -97,19 +124,5 @@
     }
     &:active {
         color: var(--link--c-pressed);
-    }
-}
-
-/* Link - Contrast */
-@utility link--contrast {
-    color: var(--link--contrast);
-    &:hover {
-        color: var(--link--contrast-hover);
-    }
-    &:active {
-        color: var(--link--contrast-pressed);
-    }
-    &.disabled {
-        color: var(--link--contrast-disabled);
     }
 }

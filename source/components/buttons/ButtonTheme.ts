@@ -123,44 +123,55 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Variants
     variants: {
         // General Purpose Variants
+
+        // Variant A - Primary action button (inverted for high contrast)
+        // Light mode: Dark background (#181818), light text (#ffffff)
+        // Dark mode: Light background (#e7e7e7), dark text (#181818)
+        // Use for: Primary actions, call-to-action buttons (e.g., Submit, Sign Up)
+        // Equivalent to old bg-opsis-action-primary
         A:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
-            // Border and background
-            `border bg-light-1 border--d text-dark-2 ` +
-            `dark:bg-dark-2 dark:text-light-2 ` +
-            // Hover
-            `hover:bg-light-2 hover:text-dark-1 ` +
-            `dark:hover:bg-dark-3 dark:hover:border-dark-4 dark:hover:text-light-1 ` +
+            // Background uses foreground color (inversion), text uses background color
+            `bg-[var(--foreground--a)] text-[var(--background--a)] ` +
+            // Border matches background
+            `border border-[var(--foreground--a)] ` +
+            // Hover - slightly lighter/darker
+            `hover:bg-black-600 dark:hover:bg-white-600 ` +
             // Active (includes when used as open popover trigger)
-            `active:bg-light-3 data-[state=open]:bg-light-3 active:text-dark data-[state=open]:text-dark ` +
-            `dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 dark:active:text-light dark:data-[state=open]:text-light ` +
+            `active:bg-black-500 dark:active:bg-white-500 ` +
+            `data-[state=open]:bg-black-500 dark:data-[state=open]:bg-white-500 ` +
             // Focus
-            `focus:border-neutral+6 dark:focus:border-neutral-6 ` +
-            // Disabled hover
-            `disabled:hover:bg-light-1 dark:disabled:hover:bg-dark-1`,
+            `focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-blue-500 ` +
+            // Disabled
+            `disabled:opacity-50 disabled:cursor-not-allowed`,
 
+        // Variant B - Standard button (adapts to theme)
+        // Light mode: Light background, dark text
+        // Dark mode: Dark background, light text
+        // Use for: Secondary actions, default buttons
         B:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
-            // Dark text on light background
-            `border bg-light-1 dark:bg-light-2 text-dark dark:text-dark hover:bg-light dark:hover:bg-light ` +
-            // Disabled states
-            `disabled:hover:bg-light-1 dark:disabled:hover:bg-light-2 ` +
-            // Active states (includes when used as open popover trigger)
-            `active:bg-light-2 data-[state=open]:bg-light-2 dark:active:bg-light-3 dark:data-[state=open]:bg-light-3`,
-
-        Contrast:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ${buttonHoverClassNames} ` +
-            // Light text on dark background
-            `text-white dark:text-light-2 bg-dark-2 dark:bg-dark-2 ` +
+            // Follows theme direction
+            `background--b foreground--a ` +
+            // Border
+            `border border--b ` +
+            // Hover
+            `hover:background--c ` +
             // Active (includes when used as open popover trigger)
-            `active:bg-dark-3 data-[state=open]:bg-dark-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
-            // Border matches background
-            `border border-dark-2 dark:border-dark-2`,
+            `active:background--d data-[state=open]:background--d ` +
+            // Focus
+            `focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-gray-500 ` +
+            // Disabled
+            `disabled:opacity-50 disabled:cursor-not-allowed`,
 
+        // Variant Ghost - Minimal button with no background
+        // Light mode: Secondary text color, light background on hover
+        // Dark mode: Secondary text color, dark background on hover
+        // Use for: Tertiary actions, icon buttons, less prominent interactions
         Ghost:
             `${buttonCommonClassNames} ` +
             // Rounded
-            `rounded-extra-small ` +
+            `rounded-xs ` +
             // Text color
             `foreground--b ` +
             // Hover and active states
@@ -169,6 +180,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 ` +
             `data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
 
+        // Variant Destructive - Dangerous action button
+        // Both modes: Subtle background with red text and red border on hover/focus
+        // Use for: Delete, remove, or other destructive actions
         Destructive:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Border
@@ -195,6 +209,10 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3`,
 
         // Specialized UI Variants
+
+        // Variant GhostDestructive - Minimal destructive action
+        // Both modes: Tertiary text, red background on hover
+        // Use for: Less prominent destructive actions
         GhostDestructive:
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             // Rounded and hover
@@ -213,7 +231,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `rounded-md border border--d dark:border-dark-4`,
 
         MenuItem:
-            `relative flex items-center justify-start font-normal cursor-default rounded-extra-small ` +
+            `relative flex items-center justify-start font-normal cursor-default rounded-xs ` +
             // Focus states
             `focus-border-none focus-visible:outline-none ` +
             // Highlighted states

@@ -133,7 +133,7 @@ export const ButtonVariants = {
         `rounded-md border border--d dark:border-dark-4`,
     // Menu Item variant: styles for menu items
     menuItem:
-        `relative flex items-center justify-start font-normal cursor-default rounded-extra-small ` +
+        `relative flex items-center justify-start font-normal cursor-default rounded-xs ` +
         // Focus states
         `focus-border-none focus-visible:outline-none ` +
         // Highlighted states
