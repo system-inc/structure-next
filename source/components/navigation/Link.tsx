@@ -2,7 +2,10 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
+// This is the only place these imports are valid
+// eslint-disable-next-line structure/react-import-rule
 import NextLink from 'next/link';
+// eslint-disable-next-line structure/react-import-rule
 import type { LinkProps as NextLinkProperties } from 'next/link';
 
 // Dependencies - Theme

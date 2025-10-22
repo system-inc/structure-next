@@ -27,7 +27,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
     return (
         <div
             className={mergeClassNames(
-                'relative w-(--radix-popover-content-available-width) overflow-hidden md:w-full md:min-w-[24rem]',
+                'relative w-(--radix-popover-content-available-width) overflow-hidden py-3 md:w-full md:min-w-[24rem]',
                 properties.className,
             )}
             tabIndex={1}
@@ -36,7 +36,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
             {properties.account ? <AccountMenuSignedIn account={properties.account} /> : <AccountMenuSignedOut />}
 
             {/* Divider */}
-            <div className="mt-4 mb-1 border-b border--b" />
+            <div className="mb-1 border-b border--a" />
 
             <div className="flex h-12 items-center pt-1">
                 {/* Theme Toggle */}
@@ -48,7 +48,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
                 {properties.account && (
                     <div className="mr-4 justify-end">
                         <AnimatedButton
-                            variant="A"
+                            variant="Outline"
                             tabIndex={1}
                             className="w-[92px]"
                             onClick={async function () {

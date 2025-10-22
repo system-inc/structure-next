@@ -172,7 +172,8 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
         onClick: () => void;
     }) {
         return (
-            <a
+            <button
+                type="button"
                 id={camelCase(properties.text)}
                 className={mergeClassNames(
                     'cursor-pointer rounded-md p-1.5 text-xs content--b hover:background--b',
@@ -181,7 +182,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                 onClick={properties.onClick}
             >
                 {properties.text}
-            </a>
+            </button>
         );
     }, []);
 

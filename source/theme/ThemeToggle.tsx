@@ -64,7 +64,7 @@ export function ThemeToggle() {
 
     // Render the component
     return (
-        <div className="flex w-min items-center justify-center space-x-0.5 rounded-xl border border--a p-1 content--c transition-colors">
+        <div className="flex w-min items-center justify-center space-x-0.5 rounded-full border border--a p-1 content--c transition-colors">
             {themeModeButton(Theme.OperatingSystem)}
             {themeModeButton(Theme.Light)}
             {themeModeButton(Theme.Dark)}

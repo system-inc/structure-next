@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/components/navigation/Link';
 import { Button } from '@structure/source/components/buttons/Button';
 import { Popover } from '@structure/source/components/popovers/Popover';
 
@@ -102,9 +103,9 @@ export function FileCarousel(properties: FileCarouselProperties) {
                         {isImageFile(currentFile.url) ? (
                             <Image src={currentFile.url} alt="File" className="object-contain" fill={true} />
                         ) : (
-                            <a href={currentFile.url} target="_blank" rel="noopener noreferrer">
+                            <Link href={currentFile.url} target="_blank" rel="noopener noreferrer" variant="A">
                                 Download
-                            </a>
+                            </Link>
                         )}
                     </div>
 

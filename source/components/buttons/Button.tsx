@@ -2,9 +2,9 @@
 
 // Dependencies - React and Next.js
 import React from 'react';
-import Link from 'next/link';
 
 // Dependencies - Main Components
+import { Link } from '@structure/source/components/navigation/Link';
 import { Slot } from '@radix-ui/react-slot';
 import { Tip } from '@structure/source/components/popovers/Tip';
 import type { PopoverProperties } from '@structure/source/components/popovers/Popover';

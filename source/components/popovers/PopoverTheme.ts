@@ -11,10 +11,8 @@
 export const basePopoverClassNames =
     // Focus
     `outline-none ` +
-    // Background and text
-    `background--a content--a ` +
     // Border radius
-    `rounded-sm ` +
+    `border rounded-lg ` +
     // Base width
     `w-full`;
 
@@ -28,6 +26,7 @@ export const basePopoverClassNames =
 //   }
 export interface PopoverVariants {
     A: 'A';
+    B: 'B';
     Tip: 'Tip';
 }
 
@@ -52,12 +51,13 @@ export interface PopoverThemeConfiguration {
 export const popoverTheme: PopoverThemeConfiguration = {
     variants: {
         // Primary variant - Border with background, suitable for general content (popovers, dropdowns)
-        A: `${basePopoverClassNames} ` + `border border--d`,
+        A: `${basePopoverClassNames} ` + `border--a background--a content--a`,
+        B: `${basePopoverClassNames} ` + `border--b background--a content--a`,
         // Tip variant - Compact tooltips without full width
         Tip:
             `outline-none ` +
             `background--a content--a ` +
-            `max-w-56 rounded px-3 py-2 text-sm shadow-04 ` +
+            `max-w-56 rounded px-3 py-2 text-sm shadow ` +
             `border border--d`,
     },
     configuration: {

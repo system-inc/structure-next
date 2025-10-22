@@ -47,7 +47,7 @@ export function AccountMenuButton() {
             variant="A"
             open={open}
             onOpenChange={setOpen}
-            content={<AccountMenu account={account.data} className="py-3 outline-none" />}
+            content={<AccountMenu account={account.data} />}
             align="end"
             trigger={
                 <div className="h-8 w-8 cursor-pointer">

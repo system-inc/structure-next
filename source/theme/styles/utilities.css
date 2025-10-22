@@ -2,17 +2,18 @@
 
 /* Background A - Primary page background */
 @utility background--a {
+    /* Don't change, these are locked in */
     background-color: light-dark(var(--color-white-1000), var(--color-black-700));
 }
 
 /* Background B - Secondary background, slightly darker/lighter than primary */
 @utility background--b {
-    background-color: light-dark(var(--color-white-900), var(--color-black-500));
+    background-color: light-dark(var(--color-white-950), var(--color-black-650));
 }
 
 /* Background C - Tertiary background for cards and elevated surfaces */
 @utility background--c {
-    background-color: light-dark(var(--color-white-1000), var(--color-black-600));
+    background-color: light-dark(var(--color-white-900), var(--color-black-600));
 }
 
 /* Background D - Quaternary background for subtle accents */
@@ -59,12 +60,14 @@
 
 /* Content A - Primary content color for body content */
 @utility content--a {
-    color: light-dark(var(--color-black-700), var(--color-white-700));
+    /* Don't change, these are locked in */
+    color: light-dark(var(--color-black-350), var(--color-white-650));
 }
 
 /* Content B - Secondary content color for less prominent content */
 @utility content--b {
-    color: light-dark(var(--color-gray-800), var(--color-gray-50));
+    /* Don't change, these are locked in */
+    color: light-dark(var(--color-black-150), var(--color-white-0));
 }
 
 /* Content C - Tertiary content color for muted content */
@@ -106,12 +109,13 @@
 
 /* Border A - Primary border for cards and containers */
 @utility border--a {
-    border-color: light-dark(var(--color-white-700), var(--color-black-300));
+    /* Don't change, these are locked in */
+    border-color: light-dark(var(--color-white-600), var(--color-black-350));
 }
 
-/* Border B - Secondary border for subtle dividers */
+/* Border B - Secondary border slightly stronger emphasis */
 @utility border--b {
-    border-color: light-dark(var(--color-white-850), var(--color-black-500));
+    border-color: light-dark(var(--color-white-300), var(--color-black-150));
 }
 
 /* Border C - Tertiary border for very subtle separations */

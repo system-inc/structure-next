@@ -38,32 +38,22 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
     return (
         <div className="w-full">
             {/* Email and role */}
-            <div className="border-b border--b px-4 pb-2">
-                <Link
-                    tabIndex={1}
-                    className="font-medium whitespace-nowrap hover:cursor-pointer"
-                    href="/account/profile"
-                >
+            <div className="border-b border--a px-4 pb-2">
+                <Link variant="A" tabIndex={1} className="font-medium" href="/account/profile">
                     {displayName}
                 </Link>
                 {/* If the account is an administrator */}
-                {properties.account.isAdministator() && <p className="text-xs content--b">Administrator</p>}
+                {properties.account.isAdministator() && <p className="mb-1.5 text-xs content--b">Administrator</p>}
             </div>
 
-            <div className="pt-4">
-                <Link
-                    className="flex px-4 py-1 whitespace-nowrap hover:cursor-pointer hover:background--b"
-                    href="/account/profile"
-                >
+            <div className="flex flex-col py-3">
+                <Link className="flex items-center px-4 py-1.5 hover:background--c" href="/account/profile">
                     Profile
                 </Link>
 
                 {/* If the account is an administrator */}
                 {properties.account.isAdministator() && (
-                    <Link
-                        className="flex px-4 py-1 whitespace-nowrap hover:cursor-pointer hover:background--b"
-                        href="/ops"
-                    >
+                    <Link className="flex items-center px-4 py-1.5 hover:background--c" href="/ops">
                         Ops
                     </Link>
                 )}
