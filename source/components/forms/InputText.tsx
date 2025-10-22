@@ -30,19 +30,17 @@ export const commonInputTextClassNames = mergeClassNames(
 );
 
 // Background styles
-export const backgroundStyleClassNames = mergeClassNames('background--0');
+export const backgroundStyleClassNames = 'background--2 inset-shadow-xs dark:background--3';
 
 // Border styles
-export const borderStyleClassNames = mergeClassNames('rounded-lg border border--3');
+export const borderStyleClassNames = 'rounded-lg border border--1';
 
 // Focus styles: background and text color changes on hover
-export const focusStyleClassNames = mergeClassNames(
-    // Focus
-    'focus:border--3 focus-visible:ring-0 focus-visible:outline-none',
-);
+export const focusStyleClassNames =
+    'focus:border-blue-400 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-blue-500';
 
 // Autofill styles
-export const autofillStyleClassNames = mergeClassNames('autofill:bg-transparent dark:autofill:bg-transparent');
+export const autofillStyleClassNames = 'autofill:bg-transparent dark:autofill:bg-transparent';
 
 // InputText - Variants
 export const InputTextVariants = {

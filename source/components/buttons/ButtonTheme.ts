@@ -317,23 +317,28 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'ring-offset-background ring-light focus-visible:ring focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:outline-none',
         ),
 
-        // TODO: Needs review
         FormInputSelect: mergeClassNames(
             buttonCommonClassNames,
             // Layout (no justify-center because grow handles spacing)
             'inline-flex items-center',
             // Text
-            'text-sm',
-            // Border
-            'dark:border-dark-4 rounded-lg border border--3',
+            'text-sm content--0',
             // Light text on dark background
-            'background--0 content--0',
-            // Active (includes when used as open popover trigger)
-            'active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4',
+            'background--2 dark:background--3',
+            // Border
+            'rounded-lg border border--1',
+            // Hover
+            'hover:border--2 hover:background--3 hover:content---1 hover:dark:background--4',
+            // Active - Light and Dark (includes when used as open popover trigger)
+            'active:border-content--6 data-[state=open]:border-content--6',
+            // Active - Light (includes when used as open popover trigger)
+            'active:background--4 data-[state=open]:background--4',
+            // Active - Dark (includes when used as open popover trigger)
+            'dark:active:background--5 dark:data-[state=open]:background--5',
             // Disabled
-            'disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2',
+            'disabled:hover:background--5',
             // Focus (only when not open, since background already indicates open state)
-            'focus:not([data-state=open]):border-neutral dark:focus:not([data-state=open]):border-light focus-visible:ring-0 focus-visible:outline-none',
+            // 'focus:not([data-state=open]):border-neutral dark:focus:not([data-state=open]):border-light focus-visible:ring-0 focus-visible:outline-none',
         ),
 
         // TODO: Needs review
