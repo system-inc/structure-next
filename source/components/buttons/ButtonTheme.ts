@@ -205,13 +205,12 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Rounded
             'rounded-lg',
             // Content
-            'content--1',
+            'content--3',
             // Hover
-            'hover:background--3 hover:content--0',
+            'hover:background--6 hover:content--1',
             // Active and Popover open states (for TipButton)
-            'active:background--4 active:content--0',
-            'data-[state=delayed-open]:background--4 data-[state=instant-open]:background--4 data-[state=open]:background--4',
-            'data-[state=delayed-open]:content--0 data-[state=instant-open]:content--0 data-[state=open]:content--0',
+            'active:background--8 data-[state=delayed-open]:background--8 data-[state=instant-open]:background--8 data-[state=open]:background--8',
+            'active:content---1 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',
         ),
 
         // Variant Destructive - Dangerous action button

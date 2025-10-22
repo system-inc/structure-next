@@ -6,12 +6,27 @@ import { cva } from 'class-variance-authority';
 // Type for class property (matching CVA's ClassProp)
 type ClassProperty = { class?: ClassValue; className?: never } | { class?: never; className?: ClassValue };
 
-// Configure tailwind-merge to handle our custom border--0 utility
-// Without this, tailwind-merge treats 'border' and 'border--0' as conflicting
+// Configure tailwind-merge to handle our custom border--# utility
+// Without this, tailwind-merge treats 'border' and 'border--#' as conflicting
 const twMerge = extendTailwindMerge({
     extend: {
         classGroups: {
-            'border-custom': ['border--0'],
+            'border-custom': [
+                'border--0',
+                'border--1',
+                'border--2',
+                'border--3',
+                'border--4',
+                'border--5',
+                'border--6',
+                'border--7',
+                'border--8',
+                'border--9',
+                'border--10',
+                'border---1',
+                'border---2',
+                'border---3',
+            ],
         } as Record<string, string[]>, // Type assertion for custom class group names
     },
 });

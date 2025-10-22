@@ -59,10 +59,9 @@ export const popoverTheme: PopoverThemeConfiguration = {
         B: mergeClassNames(basePopoverClassNames, 'border--1 background--0 content--0'),
         // Tip variant - Compact tooltips without full width
         Tip: mergeClassNames(
-            'outline-none',
+            'max-w-56 px-3 py-2 text-sm',
+            'rounded-xl border border--3 shadow-lg outline-none',
             'background--0 content--0',
-            'max-w-56 rounded px-3 py-2 text-sm shadow',
-            'border border--3',
         ),
     },
     configuration: {

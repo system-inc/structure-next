@@ -12,6 +12,9 @@ import type { NonLinkButtonProperties } from '@structure/source/components/butto
 // Dependencies - Assets
 import InformationCircledIcon from '@structure/assets/icons/status/InformationCircledIcon.svg';
 
+// Depdendencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+
 // Component - TipButton
 export interface TipButtonProperties extends Omit<NonLinkButtonProperties, 'children'> {
     tipClassName?: string;
@@ -19,6 +22,7 @@ export interface TipButtonProperties extends Omit<NonLinkButtonProperties, 'chil
     popoverProperties?: Omit<PopoverProperties, 'trigger' | 'content' | 'contentClassName'>;
 }
 export function TipButton({
+    className,
     tip,
     tipClassName,
     openOnPress,
@@ -32,7 +36,16 @@ export function TipButton({
     const openOnPressValue = openOnPress ?? false;
 
     // Shared trigger element
-    const button = <Button variant={variantValue} size={sizeValue} icon={Icon} {...buttonProperties} />;
+    const button = (
+        <Button
+            variant={variantValue}
+            size={sizeValue}
+            icon={Icon}
+            // The button stays above the shadow of the popover when open
+            className={mergeClassNames('data-[state=open]:z-50', className)}
+            {...buttonProperties}
+        />
+    );
 
     // Render the component
     // If open on press, use a Popover
