@@ -136,6 +136,11 @@ export const structureJavaScriptAndTypeScriptPlugins = {
 export const structureJavaScriptAndTypeScriptSettings = {
     'better-tailwindcss': {
         entryPoint: './app/_theme/styles/theme.css',
+        attributes: ['class', 'className'],
+        callees: ['mergeClassNames'],
+        variables: [
+            '.*ClassNames$',
+        ],
     },
 };
 
