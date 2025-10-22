@@ -19,13 +19,14 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 import { getStringFromReactNode } from '@structure/source/utilities/react/React';
 
 // Class Names - Menu
-export const menuClassName =
+export const menuClassName = mergeClassNames(
     // Layout and sizing
-    `flex flex-col focus-visible:outline-none ` +
+    'flex flex-col focus-visible:outline-none',
     // Border
-    `rounded-sm border border--d ` +
+    'rounded-sm border border--d',
     // Background and text
-    `text-sm background--a content--a`;
+    'background--a text-sm content--a',
+);
 
 // Type - MenuItemInterface
 // Menu-specific interface that extends MenuItemProperties

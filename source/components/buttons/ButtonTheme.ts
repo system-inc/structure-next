@@ -7,38 +7,44 @@
  * Projects can override/extend this theme via ProjectSettings.theme.components.Button
  */
 
+// Dependencies - Utilities
+import { mergeClassNames } from './../../utilities/style/ClassName';
+
 // Layout styles for styled buttons (not applied to unstyled buttons)
 export const buttonLayoutClassNames =
     // Flex layout with spacing between icons and text
     `inline-flex items-center justify-center gap-2`;
 
 // Common button styles: interaction behavior and disabled states
-export const buttonCommonClassNames =
+export const buttonCommonClassNames = mergeClassNames(
     // Layout
-    `whitespace-nowrap select-none ` +
+    'whitespace-nowrap select-none',
     // Cursor
-    `cursor-pointer ` +
+    'cursor-pointer',
     // Animation
-    `transition-colors ease-out ` +
+    'transition-colors ease-out',
     // Disabled states (works for both button[disabled] and a[aria-disabled])
-    `disabled:cursor-not-allowed disabled:opacity-75 ` +
-    `aria-disabled:cursor-not-allowed aria-disabled:opacity-75`;
+    'disabled:cursor-not-allowed disabled:opacity-75',
+    'aria-disabled:cursor-not-allowed aria-disabled:opacity-75',
+);
 
 // Centered button styles: sizing and shape
-export const buttonCenteredClassNames =
+export const buttonCenteredClassNames = mergeClassNames(
     // Shape
-    `rounded-lg ` +
+    'rounded-lg',
     // Content
-    `text-sm font-medium`;
+    'text-sm font-medium',
+);
 
 // Focus styles for styled buttons
-export const buttonFocusClassNames =
+export const buttonFocusClassNames = mergeClassNames(
     // Focus
-    `focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 ` +
+    'focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-none',
     // Ring offset colors (matches background--a for gap effect)
-    `focus-visible:ring-offset-white-1000 dark:focus-visible:ring-offset-black-700 ` +
+    'focus-visible:ring-offset-white-1000 dark:focus-visible:ring-offset-black-700',
     // Light and dark mode focus ring colors
-    `focus-visible:ring-black-350 dark:focus-visible:ring-white-650`;
+    'focus-visible:ring-black-350 dark:focus-visible:ring-white-650',
+);
 
 // Icon button layout: square aspect ratio for icon-only buttons
 export const buttonIconLayoutClassNames = `aspect-square`;
@@ -124,95 +130,112 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // General Purpose Variants
 
         // Variant A - Primary button
-        A:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
-            `border ` +
+        A: mergeClassNames(
+            buttonLayoutClassNames,
+            buttonCommonClassNames,
+            buttonCenteredClassNames,
+            buttonFocusClassNames,
+            'border',
             // Light mode - Background, border, and text
-            `bg-white-850 border-white-550 text-black-800 ` +
-            `hover:bg-white-750 hover:border-white-450 hover:text-black-850 ` +
-            `active:bg-white-650 active:border-white-350 active:text-black-900 ` +
-            `data-[state=open]:bg-white-650 data-[state=open]:border-white-350 data-[state=open]:text-black-900 ` +
+            'border-white-550 bg-white-850 text-black-800',
+            'hover:border-white-450 hover:bg-white-750 hover:text-black-850',
+            'active:border-white-350 active:bg-white-650 active:text-black-900',
+            'data-[state=open]:border-white-350 data-[state=open]:bg-white-650 data-[state=open]:text-black-900',
             // Dark mode - Background, border, and text
-            `dark:bg-black-600 dark:border-black-300 dark:text-white-800 ` +
-            `dark:hover:bg-black-550 dark:hover:border-black-250 dark:hover:text-white-850 ` +
-            `dark:active:bg-black-500 dark:active:border-black-200 dark:active:text-white-900 ` +
-            `dark:data-[state=open]:bg-black-500 dark:data-[state=open]:border-black-200 dark:data-[state=open]:text-white-900`,
+            'dark:border-black-300 dark:bg-black-600 dark:text-white-800',
+            'dark:hover:border-black-250 dark:hover:bg-black-550 dark:hover:text-white-850',
+            'dark:active:border-black-200 dark:active:bg-black-500 dark:active:text-white-900',
+            'dark:data-[state=open]:border-black-200 dark:data-[state=open]:bg-black-500 dark:data-[state=open]:text-white-900',
+        ),
 
         // Variant Outline - Uses a simple border to define button shape
-        Outline:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
-            `border ` +
+        Outline: mergeClassNames(
+            buttonLayoutClassNames,
+            buttonCommonClassNames,
+            buttonCenteredClassNames,
+            buttonFocusClassNames,
+            'border',
             // Light mode - Background, border, and text (using dark colors)
-            `border-white-700 text-black-700 ` +
-            `hover:border-white-300 hover:text-black-900 ` +
-            `active:border-gray-50 active:text-black-1000 ` +
-            `data-[state=open]:border-gray-50 data-[state=open]:text-black-1000 ` +
+            'border-white-700 text-black-700',
+            'hover:border-white-300 hover:text-black-900',
+            'active:border-gray-50 active:text-black-1000',
+            'data-[state=open]:border-gray-50 data-[state=open]:text-black-1000',
             // Dark mode - Background, border, and text (using light colors)
-            `dark:border-black-350 dark:text-white-700 ` +
-            `dark:hover:border-black-0 dark:hover:text-white-850 ` +
-            `dark:active:border-gray-500 dark:active:text-white-1000 ` +
-            `dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000`,
+            'dark:border-black-350 dark:text-white-700',
+            'dark:hover:border-black-0 dark:hover:text-white-850',
+            'dark:active:border-gray-500 dark:active:text-white-1000',
+            'dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000',
+        ),
 
         // Variant Contrast - Contrasts background--a using content--a as background colors
-        Contrast:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
-            `border ` +
+        Contrast: mergeClassNames(
+            buttonLayoutClassNames,
+            buttonCommonClassNames,
+            buttonCenteredClassNames,
+            buttonFocusClassNames,
+            'border',
             // Light mode - Background, border, and text (using dark colors)
-            `bg-black-350 border-black-350 text-white-800 ` +
-            `hover:bg-black-550 hover:border-black-650 hover:text-white-850 ` +
-            `active:bg-black-500 active:border-black-500 active:text-white-900 ` +
-            `data-[state=open]:bg-black-500 data-[state=open]:border-black-300 data-[state=open]:text-white-900 ` +
+            'border-black-350 bg-black-350 text-white-800',
+            'hover:border-black-650 hover:bg-black-550 hover:text-white-850',
+            'active:border-black-500 active:bg-black-500 active:text-white-900',
+            'data-[state=open]:border-black-300 data-[state=open]:bg-black-500 data-[state=open]:text-white-900',
             // Dark mode - Background, border, and text (using light colors)
-            `dark:bg-white-650 dark:border-white-650 dark:text-black-350 ` +
-            `dark:hover:bg-white-850 dark:hover:border-white-850 dark:hover:text-black-550 ` +
-            `dark:active:bg-white-1000 dark:active:border-white-1000 dark:active:text-black-700 ` +
-            `dark:data-[state=open]:bg-white-1000 dark:data-[state=open]:border-white-1000 dark:data-[state=open]:text-black-700`,
+            'dark:border-white-650 dark:bg-white-650 dark:text-black-350',
+            'dark:hover:border-white-850 dark:hover:bg-white-850 dark:hover:text-black-550',
+            'dark:active:border-white-1000 dark:active:bg-white-1000 dark:active:text-black-700',
+            'dark:data-[state=open]:border-white-1000 dark:data-[state=open]:bg-white-1000 dark:data-[state=open]:text-black-700',
+        ),
 
         // Variant Ghost - Minimal button with no background
         // Light mode: Secondary text color, light background on hover
         // Dark mode: Secondary text color, dark background on hover
         // Use for: Tertiary actions, icon buttons, less prominent interactions
         // TODO: Needs review
-        Ghost:
-            `${buttonCommonClassNames} ` +
+        Ghost: mergeClassNames(
+            buttonCommonClassNames,
             // Rounded
-            `rounded-xs ` +
+            'rounded-xs',
             // Text color
-            `content--b ` +
+            'content--b',
             // Hover and active states
-            `hover:bg-light-2 hover:content--a active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 ` +
+            'hover:bg-light-2 active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 hover:content--a',
             // Popover open states (for TipButton)
-            `data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2 ` +
-            `data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4`,
+            'data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2',
+            'data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4',
+        ),
 
         // Variant Destructive - Dangerous action button
         // Both modes: Subtle background with red text and red border on hover/focus
         // Use for: Delete, remove, or other destructive actions
         // TODO: Needs review
-        Destructive:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
+        Destructive: mergeClassNames(
+            buttonLayoutClassNames,
+            buttonCommonClassNames,
+            buttonCenteredClassNames,
+            buttonFocusClassNames,
             // Border
-            `border ` +
+            'border',
             // Light
-            `background--c border--d text-red-500 ` +
+            'border--d background--c text-red-500',
             // Dark
-            `dark:bg-dark-2 dark:border-dark-4 dark:text-red-500 ` +
+            'dark:bg-dark-2 dark:border-dark-4 dark:text-red-500',
             // Light - Hover
-            `hover:border-red-500 ` +
+            'hover:border-red-500',
             // Dark - Hover
-            `dark:hover:border-red-500 ` +
+            'dark:hover:border-red-500',
             // Light - Active (includes when used as open popover trigger)
-            `active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500 ` +
+            'active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500',
             // Dark - Active (includes when used as open popover trigger)
-            `dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500 ` +
+            'dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500',
             // Light - Focus
-            `focus:border-red-500  ` +
+            'focus:border-red-500',
             // Dark - Focus
-            `dark:focus:border-red-500 ` +
+            'dark:focus:border-red-500',
             // Light - Disabled
-            `disabled:hover:background--c disabled:hover:border--d ` +
+            'disabled:hover:border--d disabled:hover:background--c',
             // Dark - Disabled
-            `dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3`,
+            'dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3',
+        ),
 
         // Specialized UI Variants
 
@@ -220,84 +243,96 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Both modes: Tertiary text, red background on hover
         // Use for: Less prominent destructive actions
         // TODO: Needs review
-        GhostDestructive:
-            `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
+        GhostDestructive: mergeClassNames(
+            buttonLayoutClassNames,
+            buttonCommonClassNames,
+            buttonCenteredClassNames,
+            buttonFocusClassNames,
             // Rounded and hover
-            `rounded-md hover:bg-accent hover:text-accent-foreground ` +
+            'hover:bg-accent hover:text-accent-foreground rounded-md',
             // Color, hover, and active states
-            `content--c hover:bg-red-500/10 hover:text-red-500 dark:text-light-4 dark:hover:text-red-500 active:border-0`,
+            'dark:text-light-4 content--c hover:bg-red-500/10 hover:text-red-500 active:border-0 dark:hover:text-red-500',
+        ),
 
         // TODO: Needs review
-        ToggleOn:
-            `${buttonCommonClassNames} ${buttonCenteredClassNames} ` +
+        ToggleOn: mergeClassNames(
+            buttonCommonClassNames,
+            buttonCenteredClassNames,
             // Toggled on
-            `rounded-md border border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2`,
+            'border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2 rounded-md border',
+        ),
 
         // TODO: Needs review
-        ToggleOff:
-            `${buttonCommonClassNames} ${buttonCenteredClassNames} ` +
+        ToggleOff: mergeClassNames(
+            buttonCommonClassNames,
+            buttonCenteredClassNames,
             // Toggled off
-            `rounded-md border border--d dark:border-dark-4`,
+            'dark:border-dark-4 rounded-md border border--d',
+        ),
 
         // TODO: Needs review
-        MenuItem:
-            `relative flex items-center justify-start font-normal cursor-default rounded-xs ` +
+        MenuItem: mergeClassNames(
+            'relative flex cursor-default items-center justify-start rounded-xs font-normal',
             // Focus states
-            `focus-border-none focus-visible:outline-none ` +
+            'focus-border-none focus-visible:outline-none',
             // Highlighted states
-            `data-[highlighted=true]:bg-light-2 data-[highlighted=true]:dark:bg-dark-3 ` +
+            'data-[highlighted=true]:bg-light-2 data-[highlighted=true]:dark:bg-dark-3',
             // Active states
-            `data-[highlighted=true]:active:bg-light-3 data-[highlighted=true]:dark:active:bg-dark-4 ` +
+            'data-[highlighted=true]:active:bg-light-3 data-[highlighted=true]:dark:active:bg-dark-4',
             // Disabled states
-            `disabled:opacity-50 ` +
+            'disabled:opacity-50',
             // Padding based on selected state (for checkmark icon spacing)
-            `data-[selected=true]:pl-2 pl-8 ` +
+            'pl-8 data-[selected=true]:pl-2',
             // Icon animation when selected (applies to first direct SVG child only - the iconLeft checkmark)
-            `[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:fade-in [&[data-selected=true]>svg:first-child]:duration-200`,
+            '[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:duration-200 [&[data-selected=true]>svg:first-child]:fade-in',
+        ),
 
         // TODO: Needs review
-        FormInputCheckbox:
-            `${buttonCommonClassNames} ` +
+        FormInputCheckbox: mergeClassNames(
+            buttonCommonClassNames,
             // Layout and sizing
-            `flex items-center justify-center content-center ` +
+            'flex content-center items-center justify-center',
             // Border
-            `rounded-sm border border--d dark:border-light ` +
+            'dark:border-light rounded-sm border border--d',
             // Text and background
-            `background--a content--a ` +
+            'background--a content--a',
             // Hover
-            `hover:bg-light-2 dark:hover:bg-dark-3 ` +
+            'hover:bg-light-2 dark:hover:bg-dark-3',
             // Active (includes when used as open popover trigger)
-            `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-light dark:data-[state=open]:bg-light ` +
+            'active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-light dark:data-[state=open]:bg-light',
             // Checked
-            `dark:data-[state=checked]:bg-light dark:data-[state=checked]:text-dark ` +
+            'dark:data-[state=checked]:bg-light dark:data-[state=checked]:text-dark',
             // Indeterminate
-            `dark:data-[state=indeterminate]:bg-light dark:data-[state=indeterminate]:text-dark ` +
+            'dark:data-[state=indeterminate]:bg-light dark:data-[state=indeterminate]:text-dark',
             // Focus
-            `focus-visible:outline-none ring-offset-background focus-visible:ring-offset-2 focus-visible:ring focus-visible:ring-1 ring-light`,
+            'ring-offset-background ring-light focus-visible:ring focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:outline-none',
+        ),
 
         // TODO: Needs review
-        FormInputSelect:
-            `${buttonCommonClassNames} ` +
+        FormInputSelect: mergeClassNames(
+            buttonCommonClassNames,
             // Layout (no justify-center because grow handles spacing)
-            `inline-flex items-center ` +
+            'inline-flex items-center',
             // Text
-            `text-sm ` +
+            'text-sm',
             // Border
-            `rounded-lg border border--d dark:border-dark-4 ` +
+            'dark:border-dark-4 rounded-lg border border--d',
             // Light text on dark background
-            `background--a content--a ` +
+            'background--a content--a',
             // Active (includes when used as open popover trigger)
-            `active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4 ` +
+            'active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4',
             // Disabled
-            `disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2 ` +
+            'disabled:hover:bg-dark-2 dark:disabled:hover:bg-dark-2',
             // Focus (only when not open, since background already indicates open state)
-            `focus:not([data-state=open]):border-neutral dark:focus:not([data-state=open]):border-light focus-visible:outline-none focus-visible:ring-0`,
+            'focus:not([data-state=open]):border-neutral dark:focus:not([data-state=open]):border-light focus-visible:ring-0 focus-visible:outline-none',
+        ),
 
         // TODO: Needs review
-        TableHeaderCell:
-            `${buttonCommonClassNames} ` +
+        TableHeaderCell: mergeClassNames(
+            buttonCommonClassNames,
             // Text
-            `text-xs font-normal content--c hover:-text-dark dark:hover:text-light`,
+            'hover:-text-dark dark:hover:text-light text-xs font-normal content--c',
+        ),
     },
 
     // Sizes
@@ -310,11 +345,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ExtraLarge: 'h-11 rounded-md px-10',
 
         // Icon Button Sizes
-        IconExtraSmall: `${buttonIconLayoutClassNames} p-1`,
-        IconSmall: `${buttonIconLayoutClassNames} p-1.5`,
-        Icon: `${buttonIconLayoutClassNames} p-2`,
-        IconLarge: `${buttonIconLayoutClassNames} p-2.5`,
-        IconExtraLarge: `${buttonIconLayoutClassNames} p-3`,
+        IconExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'p-1'),
+        IconSmall: mergeClassNames(buttonIconLayoutClassNames, 'p-1.5'),
+        Icon: mergeClassNames(buttonIconLayoutClassNames, 'p-2'),
+        IconLarge: mergeClassNames(buttonIconLayoutClassNames, 'p-2.5'),
+        IconExtraLarge: mergeClassNames(buttonIconLayoutClassNames, 'p-3'),
 
         // Specialized Sizes
         MenuItem: 'pt-1.5 pr-3 pb-1.5',

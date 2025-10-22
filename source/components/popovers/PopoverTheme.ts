@@ -7,14 +7,18 @@
  * Projects can override/extend this theme via ProjectSettings.theme.components.Popover
  */
 
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+
 // Base styles shared across all variants
-export const basePopoverClassNames =
+export const basePopoverClassNames = mergeClassNames(
     // Focus
-    `outline-none ` +
+    'outline-none',
     // Border radius
-    `border rounded-lg ` +
+    'rounded-lg border',
     // Base width
-    `w-full`;
+    'w-full',
+);
 
 // Popover Variants Interface - Source of truth for all popover variants
 // Structure defines its base variants here, and projects can augment to add custom variants
@@ -51,14 +55,15 @@ export interface PopoverThemeConfiguration {
 export const popoverTheme: PopoverThemeConfiguration = {
     variants: {
         // Primary variant - Border with background, suitable for general content (popovers, dropdowns)
-        A: `${basePopoverClassNames} ` + `border--a background--a content--a`,
-        B: `${basePopoverClassNames} ` + `border--b background--a content--a`,
+        A: mergeClassNames(basePopoverClassNames, 'border--a background--a content--a'),
+        B: mergeClassNames(basePopoverClassNames, 'border--b background--a content--a'),
         // Tip variant - Compact tooltips without full width
-        Tip:
-            `outline-none ` +
-            `background--a content--a ` +
-            `max-w-56 rounded px-3 py-2 text-sm shadow ` +
-            `border border--d`,
+        Tip: mergeClassNames(
+            'outline-none',
+            'background--a content--a',
+            'max-w-56 rounded px-3 py-2 text-sm shadow',
+            'border border--d',
+        ),
     },
     configuration: {
         baseClasses: '',
