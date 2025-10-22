@@ -167,7 +167,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000',
         ),
 
-        // Variant Contrast - Contrasts background--a using content--a as background colors
+        // Variant Contrast - Contrasts `background--a` using `content--a` as background colors
         Contrast: mergeClassNames(
             buttonLayoutClassNames,
             buttonCommonClassNames,
@@ -186,22 +186,19 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'dark:data-[state=open]:border-white-1000 dark:data-[state=open]:bg-white-1000 dark:data-[state=open]:text-black-700',
         ),
 
-        // Variant Ghost - Minimal button with no background
-        // Light mode: Secondary text color, light background on hover
-        // Dark mode: Secondary text color, dark background on hover
-        // Use for: Tertiary actions, icon buttons, less prominent interactions
-        // TODO: Needs review
+        // Variant Ghost - Minimal button with no background until hover
         Ghost: mergeClassNames(
             buttonCommonClassNames,
             // Rounded
-            'rounded-xs',
-            // Text color
+            'rounded-lg',
+            // Content
             'content--b',
-            // Hover and active states
-            'hover:bg-light-2 active:bg-light-4 dark:hover:bg-dark-4 dark:active:bg-dark-6 hover:content--a',
-            // Popover open states (for TipButton)
-            'data-[state=delayed-open]:bg-light-2 data-[state=instant-open]:bg-light-2 data-[state=open]:bg-light-2',
-            'data-[state=delayed-open]:dark:bg-dark-4 data-[state=instant-open]:dark:bg-dark-4 data-[state=open]:dark:bg-dark-4',
+            // Hover
+            'hover:background--d hover:content--a',
+            // Active and Popover open states (for TipButton)
+            'active:background--e active:content--a',
+            'data-[state=delayed-open]:background--e data-[state=instant-open]:background--e data-[state=open]:background--e',
+            'data-[state=delayed-open]:content--a data-[state=instant-open]:content--a data-[state=open]:content--a',
         ),
 
         // Variant Destructive - Dangerous action button
@@ -345,7 +342,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ExtraLarge: 'h-11 rounded-md px-10',
 
         // Icon Button Sizes
-        IconExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'p-1'),
+        IconExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'rounded-sm p-1'),
         IconSmall: mergeClassNames(buttonIconLayoutClassNames, 'p-1.5'),
         Icon: mergeClassNames(buttonIconLayoutClassNames, 'p-2'),
         IconLarge: mergeClassNames(buttonIconLayoutClassNames, 'p-2.5'),
