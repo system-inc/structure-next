@@ -25,11 +25,11 @@
 
     /* Light Scale (Transparent Whites, Opacity 0 to 1) */
     --color-light-0: rgba(255 255 255 / 0);
-    --color-light-10: rgba(255 255 255 / 0.01);
-    --color-light-20: rgba(255 255 255 / 0.02);
+    /* --color-light-10: rgba(255 255 255 / 0.01); */
+    /* --color-light-20: rgba(255 255 255 / 0.02); */
     --color-light-25: rgba(255 255 255 / 0.025);
-    --color-light-30: rgba(255 255 255 / 0.03);
-    --color-light-40: rgba(255 255 255 / 0.04);
+    /* --color-light-30: rgba(255 255 255 / 0.03); */
+    /* --color-light-40: rgba(255 255 255 / 0.04); */
     --color-light-50: rgba(255 255 255 / 0.05);
     --color-light-100: rgba(255 255 255 / 0.1);
     --color-light-150: rgba(255 255 255 / 0.15);
@@ -49,20 +49,20 @@
     --color-light-850: rgba(255 255 255 / 0.85);
     --color-light-900: rgba(255 255 255 / 0.9);
     --color-light-950: rgba(255 255 255 / 0.95);
-    --color-light-960: rgba(255 255 255 / 0.96);
-    --color-light-970: rgba(255 255 255 / 0.97);
+    /* --color-light-960: rgba(255 255 255 / 0.96); */
+    /* --color-light-970: rgba(255 255 255 / 0.97); */
     --color-light-975: rgba(255 255 255 / 0.975);
-    --color-light-980: rgba(255 255 255 / 0.98);
-    --color-light-990: rgba(255 255 255 / 0.99);
+    /* --color-light-980: rgba(255 255 255 / 0.98); */
+    /* --color-light-990: rgba(255 255 255 / 0.99); */
     --color-light-1000: #ffffff;
 
     /* Dark Scale (Transparent Blacks, Opacity 0 to 1) */
     --color-dark-0: rgba(0 0 0 / 0);
-    --color-dark-10: rgba(0 0 0 / 0.01);
-    --color-dark-20: rgba(0 0 0 / 0.02);
+    /* --color-dark-10: rgba(0 0 0 / 0.01); */
+    /* --color-dark-20: rgba(0 0 0 / 0.02); */
     --color-dark-25: rgba(0 0 0 / 0.025);
-    --color-dark-30: rgba(0 0 0 / 0.03);
-    --color-dark-40: rgba(0 0 0 / 0.04);
+    /* --color-dark-30: rgba(0 0 0 / 0.03); */
+    /* --color-dark-40: rgba(0 0 0 / 0.04); */
     --color-dark-50: rgba(0 0 0 / 0.05);
     --color-dark-100: rgba(0 0 0 / 0.1);
     --color-dark-150: rgba(0 0 0 / 0.15);
@@ -82,139 +82,139 @@
     --color-dark-850: rgba(0 0 0 / 0.85);
     --color-dark-900: rgba(0 0 0 / 0.9);
     --color-dark-950: rgba(0 0 0 / 0.95);
-    --color-dark-960: rgba(0 0 0 / 0.96);
-    --color-dark-970: rgba(0 0 0 / 0.97);
+    /* --color-dark-960: rgba(0 0 0 / 0.96); */
+    /* --color-dark-970: rgba(0 0 0 / 0.97); */
     --color-dark-975: rgba(0 0 0 / 0.975);
-    --color-dark-980: rgba(0 0 0 / 0.98);
-    --color-dark-990: rgba(0 0 0 / 0.99);
+    /* --color-dark-980: rgba(0 0 0 / 0.98); */
+    /* --color-dark-990: rgba(0 0 0 / 0.99); */
     --color-dark-1000: #000000;
 
     /* Black Scale (Lightest to Darkest) */
-    --color-black-0: #505050;
-    --color-black-25: #4e4e4e;
-    --color-black-50: #4c4c4c;
-    --color-black-75: #4a4a4a;
-    --color-black-100: #484848;
-    --color-black-125: #464646;
-    --color-black-150: #444444;
-    --color-black-175: #424242;
-    --color-black-200: #404040;
-    --color-black-225: #3e3e3e;
-    --color-black-250: #3c3c3c;
-    --color-black-275: #3a3a3a;
-    --color-black-300: #383838;
-    --color-black-325: #363636;
-    --color-black-350: #343434;
-    --color-black-375: #323232;
-    --color-black-400: #303030;
-    --color-black-425: #2e2e2e;
-    --color-black-450: #2c2c2c;
-    --color-black-475: #2a2a2a;
-    --color-black-500: #282828;
-    --color-black-525: #262626;
-    --color-black-550: #242424;
-    --color-black-575: #222222;
-    --color-black-600: #202020;
-    --color-black-625: #1e1e1e;
-    --color-black-650: #1c1c1c;
-    --color-black-675: #1a1a1a;
-    --color-black-700: #181818;
-    --color-black-725: #161616;
-    --color-black-750: #141414;
-    --color-black-775: #121212;
-    --color-black-800: #101010;
-    --color-black-825: #0e0e0e;
-    --color-black-850: #0c0c0c;
-    --color-black-875: #0a0a0a;
-    --color-black-900: #080808;
-    --color-black-925: #060606;
-    --color-black-950: #040404;
-    --color-black-975: #020202;
-    --color-black-1000: #000000;
+    --color-black-0: #505050; /* Step 0 */
+    /* --color-black-25: #4e4e4e; Step 25 */
+    --color-black-50: #4c4c4c; /* Step 50 */
+    /* --color-black-75: #4a4a4a; Step 75 */
+    --color-black-100: #484848; /* Step 100 */
+    /* --color-black-125: #464646; Step 125 */
+    --color-black-150: #444444; /* Step 150 */
+    /* --color-black-175: #424242; Step 175 */
+    --color-black-200: #404040; /* Step 200 */
+    /* --color-black-225: #3e3e3e; Step 225 */
+    --color-black-250: #3c3c3c; /* Step 250 */
+    /* --color-black-275: #3a3a3a; Step 275 */
+    --color-black-300: #383838; /* Step 300 */
+    /* --color-black-325: #363636; Step 325 */
+    --color-black-350: #343434; /* Step 350 */
+    /* --color-black-375: #323232; Step 375 */
+    --color-black-400: #303030; /* Step 400 */
+    /* --color-black-425: #2e2e2e; Step 425 */
+    --color-black-450: #2c2c2c; /* Step 450 */
+    /* --color-black-475: #2a2a2a; Step 475 */
+    --color-black-500: #282828; /* Step 500 */
+    /* --color-black-525: #262626; Step 525 */
+    --color-black-550: #242424; /* Step 550 */
+    /* --color-black-575: #222222; Step 575 */
+    --color-black-600: #202020; /* Step 600 */
+    /* --color-black-625: #1e1e1e; Step 625 */
+    --color-black-650: #1c1c1c; /* Step 650 */
+    /* --color-black-675: #1a1a1a; Step 675 */
+    --color-black-700: #181818; /* Step 700 */
+    /* --color-black-725: #161616; Step 725 */
+    --color-black-750: #141414; /* Step 750 */
+    /* --color-black-775: #121212; Step 775 */
+    --color-black-800: #101010; /* Step 800 */
+    /* --color-black-825: #0e0e0e; Step 825 */
+    --color-black-850: #0c0c0c; /* Step 850 */
+    /* --color-black-875: #0a0a0a; Step 875 */
+    --color-black-900: #080808; /* Step 900 */
+    /* --color-black-925: #060606; Step 925 */
+    --color-black-950: #040404; /* Step 950 */
+    /* --color-black-975: #020202; Step 975 */
+    --color-black-1000: #000000; /* Step 1000 */
 
     /* Gray Scale (Lightest to Darkest) */
-    --color-gray-0: #a7a7a7;
-    --color-gray-25: #a5a5a5;
-    --color-gray-50: #a3a3a3;
-    --color-gray-75: #a1a1a1;
-    --color-gray-100: #9f9f9f;
-    --color-gray-125: #9d9d9d;
-    --color-gray-150: #9b9b9b;
-    --color-gray-175: #999999;
-    --color-gray-200: #979797;
-    --color-gray-225: #959595;
-    --color-gray-250: #939393;
-    --color-gray-275: #919191;
-    --color-gray-300: #8f8f8f;
-    --color-gray-325: #8d8d8d;
-    --color-gray-350: #8b8b8b;
-    --color-gray-375: #898989;
-    --color-gray-400: #878787;
-    --color-gray-425: #858585;
-    --color-gray-450: #838383;
-    --color-gray-475: #828282;
-    --color-gray-500: #808080;
-    --color-gray-525: #7e7e7e;
-    --color-gray-550: #7c7c7c;
-    --color-gray-575: #7a7a7a;
-    --color-gray-600: #787878;
-    --color-gray-625: #767676;
-    --color-gray-650: #747474;
-    --color-gray-675: #727272;
-    --color-gray-700: #707070;
-    --color-gray-725: #6e6e6e;
-    --color-gray-750: #6c6c6c;
-    --color-gray-775: #6a6a6a;
-    --color-gray-800: #686868;
-    --color-gray-825: #666666;
-    --color-gray-850: #646464;
-    --color-gray-875: #626262;
-    --color-gray-900: #606060;
-    --color-gray-925: #5e5e5e;
-    --color-gray-950: #5c5c5c;
-    --color-gray-975: #5a5a5a;
-    --color-gray-1000: #585858;
+    --color-gray-0: #a7a7a7; /* Step 0 */
+    /* --color-gray-25: #a5a5a5; Step 25 */
+    --color-gray-50: #a3a3a3; /* Step 50 */
+    /* --color-gray-75: #a1a1a1; Step 75 */
+    --color-gray-100: #9f9f9f; /* Step 100 */
+    /* --color-gray-125: #9d9d9d; Step 125 */
+    --color-gray-150: #9b9b9b; /* Step 150 */
+    /* --color-gray-175: #999999; Step 175 */
+    --color-gray-200: #979797; /* Step 200 */
+    /* --color-gray-225: #959595; Step 225 */
+    --color-gray-250: #939393; /* Step 250 */
+    /* --color-gray-275: #919191; Step 275 */
+    --color-gray-300: #8f8f8f; /* Step 300 */
+    /* --color-gray-325: #8d8d8d; Step 325 */
+    --color-gray-350: #8b8b8b; /* Step 350 */
+    /* --color-gray-375: #898989; Step 375 */
+    --color-gray-400: #878787; /* Step 400 */
+    /* --color-gray-425: #858585; Step 425 */
+    --color-gray-450: #838383; /* Step 450 */
+    /* --color-gray-475: #828282; Step 475 */
+    --color-gray-500: #808080; /* Step 500 */
+    /* --color-gray-525: #7e7e7e; Step 525 */
+    --color-gray-550: #7c7c7c; /* Step 550 */
+    /* --color-gray-575: #7a7a7a; Step 575 */
+    --color-gray-600: #787878; /* Step 600 */
+    /* --color-gray-625: #767676; Step 625 */
+    --color-gray-650: #747474; /* Step 650 */
+    /* --color-gray-675: #727272; Step 675 */
+    --color-gray-700: #707070; /* Step 700 */
+    /* --color-gray-725: #6e6e6e; Step 725 */
+    --color-gray-750: #6c6c6c; /* Step 750 */
+    /* --color-gray-775: #6a6a6a; Step 775 */
+    --color-gray-800: #686868; /* Step 800 */
+    /* --color-gray-825: #666666; Step 825 */
+    --color-gray-850: #646464; /* Step 850 */
+    /* --color-gray-875: #626262; Step 875 */
+    --color-gray-900: #606060; /* Step 900 */
+    /* --color-gray-925: #5e5e5e; Step 925 */
+    --color-gray-950: #5c5c5c; /* Step 950 */
+    /* --color-gray-975: #5a5a5a; Step 975 */
+    --color-gray-1000: #585858; /* Step 1000 */
 
     /* White Scale (Darkest to Lightest) */
-    --color-white-0: #afafaf;
-    --color-white-25: #b1b1b1;
-    --color-white-50: #b3b3b3;
-    --color-white-75: #b5b5b5;
-    --color-white-100: #b7b7b7;
-    --color-white-125: #b9b9b9;
-    --color-white-150: #bbbbbb;
-    --color-white-175: #bdbdbd;
-    --color-white-200: #bfbfbf;
-    --color-white-225: #c1c1c1;
-    --color-white-250: #c3c3c3;
-    --color-white-275: #c5c5c5;
-    --color-white-300: #c7c7c7;
-    --color-white-325: #c9c9c9;
-    --color-white-350: #cbcbcb;
-    --color-white-375: #cdcdcd;
-    --color-white-400: #cfcfcf;
-    --color-white-425: #d1d1d1;
-    --color-white-450: #d3d3d3;
-    --color-white-475: #d5d5d5;
-    --color-white-500: #d7d7d7;
-    --color-white-525: #d9d9d9;
-    --color-white-550: #dbdbdb;
-    --color-white-575: #dddddd;
-    --color-white-600: #dfdfdf;
-    --color-white-625: #e1e1e1;
-    --color-white-650: #e3e3e3;
-    --color-white-675: #e5e5e5;
-    --color-white-700: #e7e7e7;
-    --color-white-725: #e9e9e9;
-    --color-white-750: #ebebeb;
-    --color-white-775: #ededed;
-    --color-white-800: #efefef;
-    --color-white-825: #f1f1f1;
-    --color-white-850: #f3f3f3;
-    --color-white-875: #f5f5f5;
-    --color-white-900: #f7f7f7;
-    --color-white-925: #f9f9f9;
-    --color-white-950: #fbfbfb;
-    --color-white-975: #fdfdfd;
-    --color-white-1000: #ffffff;
+    --color-white-0: #afafaf; /* Step 0 */
+    /* --color-white-25: #b1b1b1; Step 25 */
+    --color-white-50: #b3b3b3; /* Step 50 */
+    /* --color-white-75: #b5b5b5; Step 75 */
+    --color-white-100: #b7b7b7; /* Step 100 */
+    /* --color-white-125: #b9b9b9; Step 125 */
+    --color-white-150: #bbbbbb; /* Step 150 */
+    /* --color-white-175: #bdbdbd; Step 175 */
+    --color-white-200: #bfbfbf; /* Step 200 */
+    /* --color-white-225: #c1c1c1; Step 225 */
+    --color-white-250: #c3c3c3; /* Step 250 */
+    /* --color-white-275: #c5c5c5; Step 275 */
+    --color-white-300: #c7c7c7; /* Step 300 */
+    /* --color-white-325: #c9c9c9; Step 325 */
+    --color-white-350: #cbcbcb; /* Step 350 */
+    /* --color-white-375: #cdcdcd; Step 375 */
+    --color-white-400: #cfcfcf; /* Step 400 */
+    /* --color-white-425: #d1d1d1; Step 425 */
+    --color-white-450: #d3d3d3; /* Step 450 */
+    /* --color-white-475: #d5d5d5; Step 475 */
+    --color-white-500: #d7d7d7; /* Step 500 */
+    /* --color-white-525: #d9d9d9; Step 525 */
+    --color-white-550: #dbdbdb; /* Step 550 */
+    /* --color-white-575: #dddddd; Step 575 */
+    --color-white-600: #dfdfdf; /* Step 600 */
+    /* --color-white-625: #e1e1e1; Step 625 */
+    --color-white-650: #e3e3e3; /* Step 650 */
+    /* --color-white-675: #e5e5e5; Step 675 */
+    --color-white-700: #e7e7e7; /* Step 700 */
+    /* --color-white-725: #e9e9e9; Step 725 */
+    --color-white-750: #ebebeb; /* Step 750 */
+    /* --color-white-775: #ededed; Step 775 */
+    --color-white-800: #efefef; /* Step 800 */
+    /* --color-white-825: #f1f1f1; Step 825 */
+    --color-white-850: #f3f3f3; /* Step 850 */
+    /* --color-white-875: #f5f5f5; Step 875 */
+    --color-white-900: #f7f7f7; /* Step 900 */
+    /* --color-white-925: #f9f9f9; Step 925 */
+    --color-white-950: #fbfbfb; /* Step 950 */
+    /* --color-white-975: #fdfdfd; Step 975 */
+    --color-white-1000: #ffffff; /* Step 1000 */
 }

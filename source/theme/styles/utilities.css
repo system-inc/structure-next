@@ -8,32 +8,67 @@
 
 /* Background B - Secondary background, slightly darker (light mode) and brighter (dark mode) than primary */
 @utility background--b {
-    /* Close, but these can be adjusted further (just don't change too much) */
     background-color: light-dark(var(--color-white-950), var(--color-black-650));
 }
 
 /* Background C - Tertiary background, slightly darker (light mode) and brighter (dark mode) than secondary */
 @utility background--c {
-    /* Close, but these can be adjusted further (just don't change too much) */
     background-color: light-dark(var(--color-white-900), var(--color-black-600));
 }
 
 /* Background D - Quaternary background, slightly darker (light mode) and brighter (dark mode) than tertiary */
 @utility background--d {
-    /* Close, but these can be adjusted further (just don't change too much) */
-    background-color: light-dark(var(--color-white-800), var(--color-black-400));
+    background-color: light-dark(var(--color-white-850), var(--color-black-550));
 }
 
 /* Background E - Quinary background, slightly darker (light mode) and brighter (dark mode) than quaternary */
 @utility background--e {
-    /* Close, but these can be adjusted further (just don't change too much) */
-    background-color: light-dark(var(--color-white-700), var(--color-black-200));
+    background-color: light-dark(var(--color-white-800), var(--color-black-500));
 }
 
 /* Background F - Senary background, slightly darker (light mode) and brighter (dark mode) than quinary */
 @utility background--f {
-    /* Close, but these can be adjusted further (just don't change too much) */
-    background-color: light-dark(var(--color-white-600), var(--color-black-0));
+    background-color: light-dark(var(--color-white-750), var(--color-black-450));
+}
+
+/* Background G - Septenary background */
+@utility background--g {
+    background-color: light-dark(var(--color-white-700), var(--color-black-400));
+}
+
+/* Background H - Octonary background */
+@utility background--h {
+    background-color: light-dark(var(--color-white-650), var(--color-black-350));
+}
+
+/* Background I - Nonary background */
+@utility background--i {
+    background-color: light-dark(var(--color-white-600), var(--color-black-300));
+}
+
+/* Background J - Denary background */
+@utility background--j {
+    background-color: light-dark(var(--color-white-550), var(--color-black-250));
+}
+
+/* Background K */
+@utility background--k {
+    background-color: light-dark(var(--color-white-500), var(--color-black-200));
+}
+
+/* Background Z - Working backwards, lighter (light mode) and darker (dark mode) */
+@utility background--z {
+    background-color: light-dark(var(--color-white-1000), var(--color-black-750));
+}
+
+/* Background Y - Working backwards, lighter (light mode) and darker (dark mode) */
+@utility background--y {
+    background-color: light-dark(var(--color-white-1000), var(--color-black-800));
+}
+
+/* Background X - Working backwards, lighter (light mode) and darker (dark mode) */
+@utility background--x {
+    background-color: light-dark(var(--color-white-1000), var(--color-black-850));
 }
 
 /* Background Backdrop - Overlay for modals and dialogs */
@@ -63,28 +98,76 @@
 
 /* Content */
 
-/* Content A - Primary content color for body content */
+/* Content Z - Highest emphasis content color */
+@utility content--z {
+    color: light-dark(var(--color-black-1000), var(--color-white-1000));
+}
+
+/* Content A - Primary content color (Light Step 31, Dark Step 4) */
 @utility content--a {
-    /* Don't change, these are locked in */
+    color: light-dark(var(--color-black-800), var(--color-white-700));
+}
+
+/* ORIGINAL content--a - COMMENTED OUT
+@utility content--a {
     color: light-dark(var(--color-black-350), var(--color-white-700));
 }
+*/
 
-/* Content B - Secondary content color for less prominent content */
+/* Content B - Secondary content color (Light Step 28, Dark Step 7) - 3 steps down */
 @utility content--b {
-    /* Don't change, these are locked in */
+    color: light-dark(var(--color-black-500), var(--color-white-400));
+}
+
+/* ORIGINAL content--b - COMMENTED OUT
+@utility content--b {
     color: light-dark(var(--color-black-150), var(--color-white-0));
 }
+*/
 
-/* Content C - Tertiary content color for even less prominent content */
+/* Content C - Tertiary content color (Light Step 25, Dark Step 10) - 3 steps down */
 @utility content--c {
-    /* Close, but these can be adjusted further (just don't change too much) */
-    color: light-dark(var(--color-gray-1000), var(--color-gray-200));
+    color: light-dark(var(--color-black-200), var(--color-white-100));
 }
 
-/* Content D - Quaternary content color for event less prominent content */
+/* Content D - Quaternary content color (Light Step 22, Dark Step 13) - 3 steps down */
 @utility content--d {
-    /* Close, but these can be adjusted further (just don't change too much) */
-    color: light-dark(var(--color-gray-600), var(--color-gray-400));
+    color: light-dark(var(--color-gray-1000), var(--color-gray-100));
+}
+
+/* Content E - Quinary content color (Light Step 19, Dark Step 16) - 3 steps down */
+@utility content--e {
+    color: light-dark(var(--color-gray-700), var(--color-gray-400));
+}
+
+/* Content F - Senary content color (Light Step 16, Dark Step 19) - 3 steps down */
+@utility content--f {
+    color: light-dark(var(--color-gray-400), var(--color-gray-700));
+}
+
+/* Content G - Septenary content color (Light Step 13, Dark Step 22) - 3 steps down */
+@utility content--g {
+    color: light-dark(var(--color-gray-100), var(--color-gray-1000));
+}
+
+/* Content H - Octonary content color (Light Step 10, Dark Step 25) - 3 steps down */
+@utility content--h {
+    color: light-dark(var(--color-white-100), var(--color-black-200));
+}
+
+/* Content I - Nonary content color (Light Step 7, Dark Step 28) - 3 steps down */
+@utility content--i {
+    color: light-dark(var(--color-white-400), var(--color-black-500));
+}
+
+/* Content J - Denary content color (Light Step 4, Dark Step 31) - 3 steps down */
+@utility content--j {
+    color: light-dark(var(--color-white-700), var(--color-black-800));
+}
+
+/* Content K - Undenary content color (Light Step 1, Dark Step 33) - 3 steps down - lands at pure white/black! */
+@utility content--k {
+    color: light-dark(var(--color-white-1000), var(--color-black-1000));
 }
 
 /* Content Disabled - Disabled state content color */
@@ -127,17 +210,67 @@
 
 /* Border B - Secondary border slightly stronger emphasis */
 @utility border--b {
-    border-color: light-dark(var(--color-white-300), var(--color-black-150));
+    border-color: light-dark(var(--color-white-550), var(--color-black-300));
 }
 
 /* Border C - Tertiary border for very subtle separations */
 @utility border--c {
-    border-color: light-dark(var(--color-white-500), var(--color-black-100));
+    border-color: light-dark(var(--color-white-500), var(--color-black-250));
 }
 
 /* Border D - Quaternary border for alternate surfaces */
 @utility border--d {
-    border-color: light-dark(var(--color-white-600), var(--color-black-450));
+    border-color: light-dark(var(--color-white-450), var(--color-black-200));
+}
+
+/* Border E - Quinary border */
+@utility border--e {
+    border-color: light-dark(var(--color-white-400), var(--color-black-150));
+}
+
+/* Border F - Senary border */
+@utility border--f {
+    border-color: light-dark(var(--color-white-350), var(--color-black-100));
+}
+
+/* Border G - Septenary border */
+@utility border--g {
+    border-color: light-dark(var(--color-white-300), var(--color-black-50));
+}
+
+/* Border H - Octonary border */
+@utility border--h {
+    border-color: light-dark(var(--color-white-250), var(--color-black-0));
+}
+
+/* Border I - Nonary border */
+@utility border--i {
+    border-color: light-dark(var(--color-white-200), var(--color-gray-1000));
+}
+
+/* Border J - Denary border */
+@utility border--j {
+    border-color: light-dark(var(--color-white-150), var(--color-gray-950));
+}
+
+/* Border K */
+@utility border--k {
+    border-color: light-dark(var(--color-white-100), var(--color-gray-900));
+}
+
+/* Border Z - Working backwards, lighter (light mode) and darker (dark mode) */
+@utility border--z {
+    border-color: light-dark(var(--color-white-650), var(--color-black-400));
+}
+
+/* Border Y - Working backwards, lighter (light mode) and darker (dark mode) */
+@utility border--y {
+    border-color: light-dark(var(--color-white-700), var(--color-black-450));
+}
+
+/* Border X - Working backwards, lighter (light mode) and darker (dark mode) */
+@utility border--x {
+    border-color: light-dark(var(--color-white-750), var(--color-black-500));
 }
 
 /* Border Focus - Focus state border for form inputs */
