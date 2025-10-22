@@ -181,7 +181,7 @@ export const TailwindConfiguration = {
                 DEFAULT: '1.5rem', // Tailwind just applies this padding horizontally
             },
         },
-        // Utility classes are defined in global.css using @layer utilities
+        // Utility classes are defined in utilities.css using @utility directive
         // Animations and keyframes are defined in animations.css
         // Use CSS files to define utilities, not the Tailwind configuration file
         extend: {

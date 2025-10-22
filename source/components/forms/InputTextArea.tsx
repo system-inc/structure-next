@@ -21,7 +21,7 @@ export const commonClassNames = mergeClassNames(
     // Placeholder (disabled)
     'disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20',
     // Disabled
-    'disabled:text-opacity-20 disabled:dark:text-opacity-20 disabled:cursor-not-allowed',
+    'disabled:text-opacity-20 disabled:cursor-not-allowed disabled:dark:text-opacity-20',
 );
 
 // Background styles
@@ -40,7 +40,7 @@ export const borderStyleClassNames = mergeClassNames(
 // Focus styles: background and text color changes on hover
 export const focusStyleClassNames =
     // Focus
-    `focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`;
+    `focus:border-neutral dark:focus:border-light focus-visible:ring-0 focus-visible:outline-none`;
 
 // Autofill styles
 export const autofillStyleClassNames = `autofill:bg-transparent dark:autofill:bg-transparent`;

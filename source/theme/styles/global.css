@@ -1,3 +1,14 @@
+/* Structure Global Styles
+ *
+ * IMPORTANT: Do not import this file directly in layouts or components.
+ * Instead, import the project-level theme.css file which includes this via @import.
+ *
+ * Correct import chain:
+ *   RootLayout.tsx → @project/app/_theme/styles/theme.css → global.css (this file)
+ *
+ * This ensures a single import path and prevents duplicate CSS in the compiled output.
+ */
+
 /* Point to the Tailwind configuration file (required in v4) */
 @config '../../../../../tailwind.config.mts';
 

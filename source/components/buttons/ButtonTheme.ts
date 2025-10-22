@@ -221,9 +221,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Dark - Hover
             'dark:hover:border-red-500',
             // Light - Active (includes when used as open popover trigger)
-            'active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500',
+            'active:bg-light-3 active:border-red-500 data-[state=open]:bg-light-3 data-[state=open]:border-red-500',
             // Dark - Active (includes when used as open popover trigger)
-            'dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500',
+            'dark:active:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:bg-dark-3 dark:data-[state=open]:border-red-500',
             // Light - Focus
             'focus:border-red-500',
             // Dark - Focus
@@ -256,7 +256,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonClassNames,
             buttonCenteredClassNames,
             // Toggled on
-            'border-neutral+6 dark:border-dark-6 bg-light-2 dark:bg-dark-2 rounded-md border',
+            'border-neutral+6 bg-light-2 rounded-md border dark:border-dark-6 dark:bg-dark-2',
         ),
 
         // TODO: Needs review
@@ -328,7 +328,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         TableHeaderCell: mergeClassNames(
             buttonCommonClassNames,
             // Text
-            'hover:-text-dark dark:hover:text-light text-xs font-normal content--2',
+            'hover:-text-dark text-xs font-normal content--2 dark:hover:text-light',
         ),
     },
 

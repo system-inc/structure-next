@@ -39,7 +39,7 @@ export function Alert(properties: AlertProperties) {
     const size = properties.size || 'default';
 
     // Variant icon wrapper class names
-    let variantIconContainerClassNames = 'ml-1 mr-3';
+    let variantIconContainerClassNames = 'mr-3 ml-1';
     if(size === 'large') {
         variantIconContainerClassNames = 'ml-1 mr-5';
     }
@@ -66,7 +66,7 @@ export function Alert(properties: AlertProperties) {
     }
 
     // Variant text wrapper class names
-    let variantTextContainerClassNames = 'pt-[1px] pb-0.5 pr-3';
+    let variantTextContainerClassNames = 'pt-[1px] pr-3 pb-0.5';
     if(size === 'large') {
         variantTextContainerClassNames = 'pb-1.5 pr-3';
     }

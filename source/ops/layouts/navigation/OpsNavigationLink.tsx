@@ -35,7 +35,7 @@ export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
         <Link
             href={properties.href}
             className={mergeClassNames(
-                'group hover:bg-light-3 dark:text-light-4 dark:hover:bg-dark-3 dark:active:bg-dark-3 flex items-center gap-x-2 rounded-md px-1.5 py-1 text-[13px] leading-6',
+                'group flex items-center gap-x-2 rounded-md px-1.5 py-1 text-[13px] leading-6 hover:bg-light-3 dark:text-light-4 dark:hover:bg-dark-3 dark:active:bg-dark-3',
                 properties.active
                     ? // If the live is active
                       'bg-light-2 text-dark dark:bg-dark-2 dark:text-light-4'

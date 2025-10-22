@@ -34,6 +34,8 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
         }
     }
 
+    const menuLinkClassNames = 'flex items-center px-4 py-1.5 hover:background--2 active:background--3';
+
     // Render the component
     return (
         <div className="w-full">
@@ -47,13 +49,13 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
             </div>
 
             <div className="flex flex-col py-3 text-[15px]">
-                <Link className="flex items-center px-4 py-1.5 hover:background--2" href="/account/profile">
+                <Link variant="B" className={menuLinkClassNames} href="/account/profile">
                     Profile
                 </Link>
 
                 {/* If the account is an administrator */}
                 {properties.account.isAdministator() && (
-                    <Link className="flex items-center px-4 py-1.5 hover:background--2" href="/ops">
+                    <Link variant="B" className={menuLinkClassNames} href="/ops">
                         Ops
                     </Link>
                 )}

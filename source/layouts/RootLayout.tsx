@@ -14,7 +14,6 @@ import { Theme, ThemeClassName, OperatingSystemTheme } from '@structure/source/t
 import { themeKey, operatingSystemThemeKey } from '@structure/source/theme/ThemeSettings';
 
 // Dependencies - Theme - Styles
-import '@structure/source/theme/styles/global.css';
 import '@project/app/_theme/styles/theme.css';
 
 // Next.js Metadata
@@ -109,7 +108,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
                 {/* Fixes any z-index issues with Popovers, etc. */}
                 <main
                     className={mergeClassNames(
-                        'relative isolate z-0 h-[100dvh] overflow-x-clip overflow-y-auto',
+                        'relative isolate z-0 h-dvh overflow-x-clip overflow-y-auto',
                         properties.mainClassName,
                     )}
                 >

@@ -7,6 +7,14 @@
  * Projects can override/extend this theme via ProjectSettings.theme.components.Link
  */
 
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+
+// Focus styles for styled buttons
+export const baseLinkClassNames = mergeClassNames(
+    // Animation
+    'transition-colors ease-out',
+);
+
 // Link Variants Interface - Source of truth for all link variants
 // Structure defines its base variants here, and projects can augment to add custom variants
 // Example in project code:
@@ -47,13 +55,22 @@ export const linkTheme: LinkThemeConfiguration = {
         // Style-based Variants
 
         // A - Primary links in header and footer navigation
-        A: 'text-black-700 hover:text-black-0 active:text-black-1000 dark:text-white-800 dark:hover:text-white-0 dark:active:text-white-1000 transition-colors ease-out',
+        // Base content, mute slightly on hover, emphasize on active
+        A: mergeClassNames(
+            baseLinkClassNames,
+            'hover:content--3 active:content---1 dark:hover:content--2 dark:active:content---1',
+        ),
+        // 'text-black-700 hover:text-black-0 active:text-black-1000 dark:text-white-800 dark:hover:text-white-0 dark:active:text-white-1000',
 
-        // B - Alternate link for for content in light mode
-        B: 'text-black-0 hover:text-gray-900 active:text-black-300 dark:text-white-800 dark:hover:text-white-0 dark:active:text-white-1000 transition-colors ease-out',
+        // B - Great for icon links
+        // Slightly muted base content, emphasize on hover, emphasize even more on active
+        B: mergeClassNames(
+            baseLinkClassNames,
+            'content--3 hover:content--2 active:content---1 dark:content--1 dark:hover:content--0 dark:active:content---1',
+        ),
 
         // C - ???
-        C: 'text-gray-600 hover:text-gray-500 active:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300 dark:active:text-gray-500 transition-colors',
+        C: mergeClassNames('text-purple-500'),
 
         // Semantic Variants
 
