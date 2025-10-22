@@ -200,7 +200,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
                 <div className="flex justify-end space-x-2">
                     {properties.onCancel && (
                         <Button
-                            variant="B"
+                            variant="A"
                             onClick={properties.onCancel}
                             disabled={loading || properties.loading}
                             aria-label="Cancel image editing"

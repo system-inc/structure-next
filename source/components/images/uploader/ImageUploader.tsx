@@ -131,7 +131,7 @@ export function ImageUploader(properties: ImageUploaderProperties) {
                                         </Button>
 
                                         <Button
-                                            variant="B"
+                                            variant="A"
                                             onClick={clearSelectedFiles}
                                             disabled={childProperties.isUploading}
                                         >

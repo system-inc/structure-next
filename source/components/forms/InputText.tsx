@@ -18,63 +18,79 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Classes - InputText
 
 // Common input styles
-export const commonInputText =
+export const commonInputTextClassNames = mergeClassNames(
     // Text
-    `content--a ` +
+    'content--a',
     // Placeholder
-    `placeholder:opacity-70 dark:placeholder:opacity-70 ` +
+    'placeholder:opacity-70 dark:placeholder:opacity-70',
     // Placeholder (disabled)
-    `disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20 ` +
+    'disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20',
     // Disabled
-    `disabled:cursor-not-allowed disabled:text-opacity-20 disabled:dark:text-opacity-20`;
+    'disabled:text-opacity-20 disabled:dark:text-opacity-20 disabled:cursor-not-allowed',
+);
 
 // Background styles
-export const backgroundStyle =
+export const backgroundStyleClassNames = mergeClassNames(
     // Background
-    `background--a`;
+    'background--a',
+);
 
 // Border styles
-export const borderStyle =
+export const borderStyleClassNames = mergeClassNames(
     // Border
-    `rounded-sm border border--d dark:border-dark-4 ` +
+    'rounded-lg border border--d',
     // Focus
-    `focus:border-neutral dark:focus:border-neutral-3`;
+    'focus:border-neutral dark:focus:border-neutral-3',
+);
 
 // Focus styles: background and text color changes on hover
-export const focusStyle =
+export const focusStyleClassNames = mergeClassNames(
     // Focus
-    `focus:border-neutral dark:focus:border-light focus-visible:outline-none focus-visible:ring-0`;
+    'focus:border-neutral dark:focus:border-light focus-visible:ring-0 focus-visible:outline-none',
+);
 
 // Autofill styles
-export const autofillStyle = `autofill:bg-transparent dark:autofill:bg-transparent`;
+export const autofillStyleClassNames = mergeClassNames('autofill:bg-transparent dark:autofill:bg-transparent');
 
 // InputText - Variants
 export const InputTextVariants = {
     // Default variant: standard dark background and text color
-    default:
-        `${commonInputText} ${backgroundStyle} ${borderStyle} ${focusStyle} ${autofillStyle} ` +
+    default: mergeClassNames(
+        commonInputTextClassNames,
+        backgroundStyleClassNames,
+        borderStyleClassNames,
+        focusStyleClassNames,
+        autofillStyleClassNames,
         // Layout and sizing
-        `px-3 h-9`,
-    search:
-        `${commonInputText} ${backgroundStyle} ${borderStyle} ${focusStyle} ${autofillStyle} ` +
+        'h-9 px-3',
+    ),
+    search: mergeClassNames(
+        commonInputTextClassNames,
+        backgroundStyleClassNames,
+        borderStyleClassNames,
+        focusStyleClassNames,
+        autofillStyleClassNames,
         // Focus
-        `focus-visible:outline-none focus-visible:ring-0 ` +
+        'focus-visible:ring-0 focus-visible:outline-none',
         // Layout and sizing
-        `pl-9 pr-4 h-9 ` +
+        'h-9 pr-4 pl-9',
         // Border
-        `border ` +
+        'border',
         // Background
-        `bg-transparent`,
-    menuSearch:
-        `${commonInputText} ${autofillStyle} ` +
+        'bg-transparent',
+    ),
+    menuSearch: mergeClassNames(
+        commonInputTextClassNames,
+        autofillStyleClassNames,
         // Focus
-        `focus-visible:outline-none focus-visible:ring-0 ` +
+        'focus-visible:ring-0 focus-visible:outline-none',
         // Layout and sizing
-        `w-full pl-9 pr-4 py-3 ` +
+        'w-full py-3 pr-4 pl-9',
         // Border
-        `border-b border--a ` +
+        'border-b border--a',
         // Background
-        `bg-transparent`,
+        'bg-transparent',
+    ),
 };
 
 // InputText - Sizes

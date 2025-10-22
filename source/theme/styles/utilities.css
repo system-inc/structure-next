@@ -6,29 +6,34 @@
     background-color: light-dark(var(--color-white-1000), var(--color-black-700));
 }
 
-/* Background B - Secondary background, slightly darker/lighter than primary */
+/* Background B - Secondary background, slightly darker (light mode) and brighter (dark mode) than primary */
 @utility background--b {
+    /* Close, but these can be adjusted further (just don't change too much) */
     background-color: light-dark(var(--color-white-950), var(--color-black-650));
 }
 
-/* Background C - Tertiary background for cards and elevated surfaces */
+/* Background C - Tertiary background, slightly darker (light mode) and brighter (dark mode) than secondary */
 @utility background--c {
+    /* Close, but these can be adjusted further (just don't change too much) */
     background-color: light-dark(var(--color-white-900), var(--color-black-600));
 }
 
-/* Background D - Quaternary background for subtle accents */
+/* Background D - Quaternary background, slightly darker (light mode) and brighter (dark mode) than tertiary */
 @utility background--d {
+    /* Close, but these can be adjusted further (just don't change too much) */
     background-color: light-dark(var(--color-white-800), var(--color-black-400));
 }
 
-/* Background E - Quinary background for hover states */
+/* Background E - Quinary background, slightly darker (light mode) and brighter (dark mode) than quaternary */
 @utility background--e {
-    background-color: light-dark(var(--color-white-950), var(--color-black-650));
+    /* Close, but these can be adjusted further (just don't change too much) */
+    background-color: light-dark(var(--color-white-700), var(--color-black-200));
 }
 
-/* Background F - Senary background for alternate surfaces */
+/* Background F - Senary background, slightly darker (light mode) and brighter (dark mode) than quinary */
 @utility background--f {
-    background-color: light-dark(var(--color-white-1000), var(--color-black-500));
+    /* Close, but these can be adjusted further (just don't change too much) */
+    background-color: light-dark(var(--color-white-600), var(--color-black-0));
 }
 
 /* Background Backdrop - Overlay for modals and dialogs */
@@ -61,7 +66,7 @@
 /* Content A - Primary content color for body content */
 @utility content--a {
     /* Don't change, these are locked in */
-    color: light-dark(var(--color-black-350), var(--color-white-650));
+    color: light-dark(var(--color-black-350), var(--color-white-700));
 }
 
 /* Content B - Secondary content color for less prominent content */
@@ -70,8 +75,15 @@
     color: light-dark(var(--color-black-150), var(--color-white-0));
 }
 
-/* Content C - Tertiary content color for muted content */
+/* Content C - Tertiary content color for even less prominent content */
 @utility content--c {
+    /* Close, but these can be adjusted further (just don't change too much) */
+    color: light-dark(var(--color-gray-1000), var(--color-gray-200));
+}
+
+/* Content D - Quaternary content color for event less prominent content */
+@utility content--d {
+    /* Close, but these can be adjusted further (just don't change too much) */
     color: light-dark(var(--color-gray-600), var(--color-gray-400));
 }
 

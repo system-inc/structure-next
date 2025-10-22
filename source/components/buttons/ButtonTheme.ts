@@ -143,12 +143,12 @@ export const buttonTheme: ButtonThemeConfiguration = {
             `${buttonLayoutClassNames} ${buttonCommonClassNames} ${buttonCenteredClassNames} ${buttonFocusClassNames} ` +
             `border ` +
             // Light mode - Background, border, and text (using dark colors)
-            `border-white-650 text-black-700 ` +
+            `border-white-700 text-black-700 ` +
             `hover:border-white-300 hover:text-black-900 ` +
             `active:border-gray-50 active:text-black-1000 ` +
             `data-[state=open]:border-gray-50 data-[state=open]:text-black-1000 ` +
             // Dark mode - Background, border, and text (using light colors)
-            `dark:border-black-350 dark:text-white-650 ` +
+            `dark:border-black-350 dark:text-white-700 ` +
             `dark:hover:border-black-0 dark:hover:text-white-850 ` +
             `dark:active:border-gray-500 dark:active:text-white-1000 ` +
             `dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000`,
@@ -283,7 +283,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Text
             `text-sm ` +
             // Border
-            `rounded-sm border border--d dark:border-dark-4 ` +
+            `rounded-lg border border--d dark:border-dark-4 ` +
             // Light text on dark background
             `background--a content--a ` +
             // Active (includes when used as open popover trigger)

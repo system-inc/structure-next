@@ -46,7 +46,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                 {properties.account.isAdministator() && <p className="mb-1.5 text-xs content--b">Administrator</p>}
             </div>
 
-            <div className="flex flex-col py-3">
+            <div className="flex flex-col py-3 text-[15px]">
                 <Link className="flex items-center px-4 py-1.5 hover:background--c" href="/account/profile">
                     Profile
                 </Link>
