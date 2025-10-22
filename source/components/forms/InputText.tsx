@@ -19,34 +19,26 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Common input styles
 export const commonInputTextClassNames = mergeClassNames(
-    // Text
+    // Content
     'content--a',
     // Placeholder
-    'placeholder:opacity-70 dark:placeholder:opacity-70',
+    'placeholder:opacity-70',
     // Placeholder (disabled)
-    'disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20',
+    'disabled:placeholder:opacity-20',
     // Disabled
-    'disabled:text-opacity-20 disabled:dark:text-opacity-20 disabled:cursor-not-allowed',
+    'disabled:cursor-not-allowed disabled:opacity-20',
 );
 
 // Background styles
-export const backgroundStyleClassNames = mergeClassNames(
-    // Background
-    'background--a',
-);
+export const backgroundStyleClassNames = mergeClassNames('background--a');
 
 // Border styles
-export const borderStyleClassNames = mergeClassNames(
-    // Border
-    'rounded-lg border border--d',
-    // Focus
-    'focus:border-neutral dark:focus:border-neutral-3',
-);
+export const borderStyleClassNames = mergeClassNames('rounded-lg border border--d');
 
 // Focus styles: background and text color changes on hover
 export const focusStyleClassNames = mergeClassNames(
     // Focus
-    'focus:border-neutral dark:focus:border-light focus-visible:ring-0 focus-visible:outline-none',
+    'focus:border--d focus-visible:ring-0 focus-visible:outline-none',
 );
 
 // Autofill styles
