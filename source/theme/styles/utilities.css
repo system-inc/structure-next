@@ -1,73 +1,60 @@
 /* Backgrounds */
 
-/* Background A - Primary page background */
-@utility background--a {
+/* Background 0 - Base/primary page background (locked in, never change) */
+@utility background--0 {
     /* Don't change, these are locked in */
     background-color: light-dark(var(--color-white-1000), var(--color-black-700));
 }
-
-/* Background B - Secondary background, slightly darker (light mode) and brighter (dark mode) than primary */
-@utility background--b {
+/* Background 1 - 50-step progression from base */
+@utility background--1 {
     background-color: light-dark(var(--color-white-950), var(--color-black-650));
 }
-
-/* Background C - Tertiary background, slightly darker (light mode) and brighter (dark mode) than secondary */
-@utility background--c {
+/* Background 2 - 50-step progression */
+@utility background--2 {
     background-color: light-dark(var(--color-white-900), var(--color-black-600));
 }
-
-/* Background D - Quaternary background, slightly darker (light mode) and brighter (dark mode) than tertiary */
-@utility background--d {
+/* Background 3 - 50-step progression */
+@utility background--3 {
     background-color: light-dark(var(--color-white-850), var(--color-black-550));
 }
-
-/* Background E - Quinary background, slightly darker (light mode) and brighter (dark mode) than quaternary */
-@utility background--e {
+/* Background 4 - 50-step progression */
+@utility background--4 {
     background-color: light-dark(var(--color-white-800), var(--color-black-500));
 }
-
-/* Background F - Senary background, slightly darker (light mode) and brighter (dark mode) than quinary */
-@utility background--f {
+/* Background 5 - 50-step progression */
+@utility background--5 {
     background-color: light-dark(var(--color-white-750), var(--color-black-450));
 }
-
-/* Background G - Septenary background */
-@utility background--g {
+/* Background 6 - 50-step progression */
+@utility background--6 {
     background-color: light-dark(var(--color-white-700), var(--color-black-400));
 }
-
-/* Background H - Octonary background */
-@utility background--h {
+/* Background 7 - 50-step progression */
+@utility background--7 {
     background-color: light-dark(var(--color-white-650), var(--color-black-350));
 }
-
-/* Background I - Nonary background */
-@utility background--i {
+/* Background 8 - 50-step progression */
+@utility background--8 {
     background-color: light-dark(var(--color-white-600), var(--color-black-300));
 }
-
-/* Background J - Denary background */
-@utility background--j {
+/* Background 9 - 50-step progression */
+@utility background--9 {
     background-color: light-dark(var(--color-white-550), var(--color-black-250));
 }
-
-/* Background K */
-@utility background--k {
+/* Background 10 - Maximum emphasis, 50-step progression */
+@utility background--10 {
     background-color: light-dark(var(--color-white-500), var(--color-black-200));
 }
-
-/* Background Z - Working backwards, lighter (light mode) and darker (dark mode) */
-@utility background--z {
+/* Background ---1 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
+@utility background---1 {
     background-color: light-dark(var(--color-white-1000), var(--color-black-750));
 }
-
-/* Background Y - Working backwards, lighter (light mode) and darker (dark mode) */
-@utility background--y {
+/* Background ---2 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
+@utility background---2 {
     background-color: light-dark(var(--color-white-1000), var(--color-black-800));
 }
-
-/* Background X - Working backwards, lighter (light mode) and darker (dark mode) */
-@utility background--x {
+/* Background ---3 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
+@utility background---3 {
     background-color: light-dark(var(--color-white-1000), var(--color-black-850));
 }
 
@@ -75,22 +62,18 @@
 @utility background--backdrop {
     background-color: light-dark(var(--color-dark-400), var(--color-dark-600));
 }
-
 /* Background Positive - Success/positive state background */
 @utility background--positive {
     background-color: light-dark(var(--color-green-600), var(--color-green-400));
 }
-
 /* Background Warning - Warning/caution state background */
 @utility background--warning {
     background-color: light-dark(var(--color-orange-600), var(--color-orange-400));
 }
-
 /* Background Negative - Error/negative state background */
 @utility background--negative {
     background-color: light-dark(var(--color-red-600), var(--color-red-400));
 }
-
 /* Background Informative - Informative/neutral state background */
 @utility background--informative {
     background-color: light-dark(var(--color-blue-600), var(--color-blue-400));
@@ -98,76 +81,61 @@
 
 /* Content */
 
-/* Content Z - Highest emphasis content color */
-@utility content--z {
-    color: light-dark(var(--color-black-1000), var(--color-white-1000));
-}
-
-/* Content A - Primary content color (Light Step 31, Dark Step 4) */
-@utility content--a {
+/* Content 0 - Primary/base content color (locked in, never change) */
+@utility content--0 {
     color: light-dark(var(--color-black-800), var(--color-white-700));
 }
-
-/* ORIGINAL content--a - COMMENTED OUT
-@utility content--a {
-    color: light-dark(var(--color-black-350), var(--color-white-700));
-}
-*/
-
-/* Content B - Secondary content color (Light Step 28, Dark Step 7) - 3 steps down */
-@utility content--b {
+/* Content 1 - Secondary content color, 3-step progression */
+@utility content--1 {
     color: light-dark(var(--color-black-500), var(--color-white-400));
 }
-
-/* ORIGINAL content--b - COMMENTED OUT
-@utility content--b {
-    color: light-dark(var(--color-black-150), var(--color-white-0));
-}
-*/
-
-/* Content C - Tertiary content color (Light Step 25, Dark Step 10) - 3 steps down */
-@utility content--c {
+/* Content 2 - Tertiary content color, 3-step progression */
+@utility content--2 {
     color: light-dark(var(--color-black-200), var(--color-white-100));
 }
-
-/* Content D - Quaternary content color (Light Step 22, Dark Step 13) - 3 steps down */
-@utility content--d {
+/* Content 3 - 3-step progression */
+@utility content--3 {
     color: light-dark(var(--color-gray-1000), var(--color-gray-100));
 }
-
-/* Content E - Quinary content color (Light Step 19, Dark Step 16) - 3 steps down */
-@utility content--e {
+/* Content 4 - 3-step progression */
+@utility content--4 {
     color: light-dark(var(--color-gray-700), var(--color-gray-400));
 }
-
-/* Content F - Senary content color (Light Step 16, Dark Step 19) - 3 steps down */
-@utility content--f {
+/* Content 5 - 3-step progression */
+@utility content--5 {
     color: light-dark(var(--color-gray-400), var(--color-gray-700));
 }
-
-/* Content G - Septenary content color (Light Step 13, Dark Step 22) - 3 steps down */
-@utility content--g {
+/* Content 6 - 3-step progression */
+@utility content--6 {
     color: light-dark(var(--color-gray-100), var(--color-gray-1000));
 }
-
-/* Content H - Octonary content color (Light Step 10, Dark Step 25) - 3 steps down */
-@utility content--h {
+/* Content 7 - 3-step progression */
+@utility content--7 {
     color: light-dark(var(--color-white-100), var(--color-black-200));
 }
-
-/* Content I - Nonary content color (Light Step 7, Dark Step 28) - 3 steps down */
-@utility content--i {
+/* Content 8 - 3-step progression */
+@utility content--8 {
     color: light-dark(var(--color-white-400), var(--color-black-500));
 }
-
-/* Content J - Denary content color (Light Step 4, Dark Step 31) - 3 steps down */
-@utility content--j {
+/* Content 9 - 3-step progression */
+@utility content--9 {
     color: light-dark(var(--color-white-700), var(--color-black-800));
 }
-
-/* Content K - Undenary content color (Light Step 1, Dark Step 33) - 3 steps down - lands at pure white/black! */
-@utility content--k {
+/* Content 10 - Lowest emphasis, 3-step progression */
+@utility content--10 {
     color: light-dark(var(--color-white-1000), var(--color-black-1000));
+}
+/* Content ---1 - Reverse direction: higher emphasis than base */
+@utility content---1 {
+    color: light-dark(var(--color-black-900), var(--color-white-900));
+}
+/* Content ---2 - Reverse direction: higher emphasis than base */
+@utility content---2 {
+    color: light-dark(var(--color-black-950), var(--color-white-950));
+}
+/* Content ---3 - Reverse direction: higher emphasis than base */
+@utility content---3 {
+    color: light-dark(var(--color-black-1000), var(--color-white-1000));
 }
 
 /* Content Disabled - Disabled state content color */
@@ -202,74 +170,60 @@
 
 /* Borders */
 
-/* Border A - Primary border for cards and containers */
-@utility border--a {
-    /* Don't change, these are locked in */
+/* Border 0 - Primary border */
+@utility border--0 {
     border-color: light-dark(var(--color-white-600), var(--color-black-350));
 }
-
-/* Border B - Secondary border slightly stronger emphasis */
-@utility border--b {
+/* Border 1 - 50-step progression from base */
+@utility border--1 {
     border-color: light-dark(var(--color-white-550), var(--color-black-300));
 }
-
-/* Border C - Tertiary border for very subtle separations */
-@utility border--c {
+/* Border 2 - 50-step progression */
+@utility border--2 {
     border-color: light-dark(var(--color-white-500), var(--color-black-250));
 }
-
-/* Border D - Quaternary border for alternate surfaces */
-@utility border--d {
+/* Border 3 - 50-step progression */
+@utility border--3 {
     border-color: light-dark(var(--color-white-450), var(--color-black-200));
 }
-
-/* Border E - Quinary border */
-@utility border--e {
+/* Border 4 - 50-step progression */
+@utility border--4 {
     border-color: light-dark(var(--color-white-400), var(--color-black-150));
 }
-
-/* Border F - Senary border */
-@utility border--f {
+/* Border 5 - 50-step progression */
+@utility border--5 {
     border-color: light-dark(var(--color-white-350), var(--color-black-100));
 }
-
-/* Border G - Septenary border */
-@utility border--g {
+/* Border 6 - 50-step progression */
+@utility border--6 {
     border-color: light-dark(var(--color-white-300), var(--color-black-50));
 }
-
-/* Border H - Octonary border */
-@utility border--h {
+/* Border 7 - 50-step progression */
+@utility border--7 {
     border-color: light-dark(var(--color-white-250), var(--color-black-0));
 }
-
-/* Border I - Nonary border */
-@utility border--i {
+/* Border 8 - 50-step progression */
+@utility border--8 {
     border-color: light-dark(var(--color-white-200), var(--color-gray-1000));
 }
-
-/* Border J - Denary border */
-@utility border--j {
+/* Border 9 - 50-step progression */
+@utility border--9 {
     border-color: light-dark(var(--color-white-150), var(--color-gray-950));
 }
-
-/* Border K */
-@utility border--k {
+/* Border 10 - Most subtle, 50-step progression */
+@utility border--10 {
     border-color: light-dark(var(--color-white-100), var(--color-gray-900));
 }
-
-/* Border Z - Working backwards, lighter (light mode) and darker (dark mode) */
-@utility border--z {
+/* Border ---1 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
+@utility border---1 {
     border-color: light-dark(var(--color-white-650), var(--color-black-400));
 }
-
-/* Border Y - Working backwards, lighter (light mode) and darker (dark mode) */
-@utility border--y {
+/* Border ---2 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
+@utility border---2 {
     border-color: light-dark(var(--color-white-700), var(--color-black-450));
 }
-
-/* Border X - Working backwards, lighter (light mode) and darker (dark mode) */
-@utility border--x {
+/* Border ---3 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
+@utility border---3 {
     border-color: light-dark(var(--color-white-750), var(--color-black-500));
 }
 
@@ -277,22 +231,18 @@
 @utility border--focus {
     border-color: light-dark(var(--color-blue-600), var(--color-blue-400));
 }
-
 /* Border Positive - Success/positive state border */
 @utility border--positive {
     border-color: light-dark(var(--color-green-600), var(--color-green-500));
 }
-
 /* Border Warning - Warning/caution state border */
 @utility border--warning {
     border-color: light-dark(var(--color-orange-600), var(--color-orange-500));
 }
-
 /* Border Negative - Error/negative state border */
 @utility border--negative {
     border-color: light-dark(var(--color-red-600), var(--color-red-500));
 }
-
 /* Border Informative - Informative/neutral state border */
 @utility border--informative {
     border-color: light-dark(var(--color-blue-600), var(--color-blue-500));
@@ -336,7 +286,7 @@
     & hr {
         margin-top: 1.75rem;
         margin-bottom: 1.75rem;
-        border-color: var(--border--a);
+        border-color: var(--border--0);
         border-top-width: 1px;
         border-bottom-width: 0;
     }

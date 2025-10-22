@@ -2,18 +2,18 @@
  * Structure Theme System
  *
  * Philosophy:
- * This theme system uses a letter-based hierarchy (A/B/C/D/etc.) for visual levels and
+ * This theme system uses a numeric hierarchy (--0-10) for visual levels and
  * semantic words (positive/negative/disabled) for meaningful states. This approach provides:
- * - Scalability: Can extend without inventing Latin words
- * - Brevity: Short class names (background--a vs bg-opsis-background-primary)
- * - Consistency: Same pattern across backgrounds, foregrounds, borders, links
- * - Clarity: Letters = hierarchy, Words = meaning
+ * - Intuitive scaling: --0 is base, --10 is maximum, ---1/---2/---3 extend beyond base
+ * - Brevity: Short class names (background--5 vs bg-opsis-background-primary)
+ * - Consistency: Same pattern across backgrounds, borders, and content
+ * - Mental model: "How far from base?" with numbers everyone understands
  *
  * Double-Dash Naming Convention:
- * We use double-dash (--) in our utility class names (background--a, border--b, content--c)
+ * We use double-dash (--) in our utility class names (background--0, border--5, content--3)
  * to avoid conflicts with Tailwind's built-in utilities:
- * - border-b (Tailwind) = border-bottom
- * - border--b (Ours) = border variant B
+ * - border-1 (Tailwind) = 1px border width
+ * - border--1 (Ours) = border variant 1
  * The double-dash also signals "this is a custom design token" and follows BEM-style conventions
  * where -- indicates a variant/modifier. It provides clear visual distinction when scanning code.
  *
@@ -32,25 +32,33 @@
  *
  * 2. Custom Utility Layer - Semantic design utilities
  *    Location: ./styles/utilities.css
- *    - background--a, b, c, etc. (hierarchy: page, page accent, dialogs, tips, etc.)
- *    - content--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
- *    - border--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
- *    - link--a, b, c, etc. (hierarchy: primary, secondary, tertiary, etc.)
+ *    - background--0 through background--10 (0=base, 10=maximum, 50-step progression)
+ *    - background---1, ---2, ---3 (extend beyond base in reverse direction)
+ *    - content--0 through content--10 (0=primary, 10=lowest emphasis)
+ *    - content---1, ---2, ---3 (extend beyond primary in reverse)
+ *    - border--0 through border--10 (0=primary, 10=most subtle)
+ *    - border---1, ---2, ---3 (extend beyond primary in reverse)
  *    - Semantic utilities: content--positive, content--negative, content--disabled, etc.
  *    Use: These are defined with inline light-dark() in utilities.css, no CSS variables needed.
  *
  * Usage in Components:
  *
  * ```tsx
- * // Letter-based hierarchy with double-dash
- * <div className="background--a content--a border border--a">
- *   <Link className="link--a">Click me</Link>
+ * // Numeric hierarchy with double-dash
+ * <div className="background--0 content--0 border border--0">
+ *   Primary background, primary content, primary border
  * </div>
  *
  * // With Tailwind modifiers
- * <div className="background--a hover:background--b focus:background--c">
- *   Theme colors with hover and focus states
+ * <div className="background--0 hover:background--1 focus:background--2">
+ *   Theme colors with hover and focus states (0 → 1 → 2)
  * </div>
+ *
+ * // Using the full range (--0-10 + reverse ---1/---2/---3)
+ * <div className="background---1">Lighter/darker than base</div>
+ * <div className="background--0">Base background</div>
+ * <div className="background--5">Medium emphasis</div>
+ * <div className="background--10">Maximum emphasis</div>
  *
  * // Semantic states
  * <input className="border--focus content--placeholder" />
@@ -58,19 +66,31 @@
  * <span className="content--negative">Error!</span>
  *
  * // Mixing Tailwind and custom utilities
- * <div className="flex items-center p-4 background--c border border--a">
- *   Tailwind (flex, items-center, p-4, border) + Custom (background--c, border--a)
+ * <div className="flex items-center p-4 background--2 border border--0">
+ *   Tailwind (flex, items-center, p-4, border) + Custom (background--2, border--0)
  * </div>
  * ```
+ *
+ * Design System Scale:
+ *
+ * The numeric scale (--0-10) provides 11 options with intuitive progression:
+ * - --0: Base/primary
+ * - --1-3: Slight progression from base
+ * - --4-7: Medium range
+ * - --8-10: Maximum range
+ * - ---1, ---2, ---3: Reverse direction (lighter in light mode, darker in dark mode (for backgrounds))
+ *
+ * Total: 14 utilities per category (background, border, content)
+ * Plus semantic utilities (positive, negative, warning, informative, disabled, etc.)
  *
  * Adding New Utilities (Structure Layer):
  *
  * Simply add to utilities.css with inline light-dark():
- *    @utility background--x {
+ *    @utility background--new {
  *        background-color: light-dark(var(--color-white-500), var(--color-black-500));
  *    }
  *
- * That's it! Tailwind automatically generates hover:background--x, md:background--x, etc.
+ * That's it! Tailwind automatically generates hover:background--new, md:background--new, etc.
  * No CSS variables needed - everything is defined in one place.
  *
  * Project-specific Extensions:
@@ -105,7 +125,7 @@
  *
  * How It Works:
  * 1. Semantic tokens use `light-dark(lightValue, darkValue)` in variables.css
- *    Example: --background--a: light-dark(var(--color-white-1000), var(--color-black-700));
+ *    Example: --background--0: light-dark(var(--color-white-1000), var(--color-black-700));
  *
  * 2. The `scheme-*` classes on <html> control which value is used:
  *    - scheme-light: Forces light mode (uses first value in light-dark())
@@ -114,30 +134,18 @@
  *
  * 3. Users toggle theme via ThemeToggle component, which updates the <html> class
  *
- * Browser Support:
- * - Modern browsers (2024+): Full support for light-dark() and color-scheme
- * - Older browsers: Gracefully degrade to light mode (fallback values in variables.css)
- *
  * Light Islands (Components that stay light regardless of page theme):
  *
  * Apply `scheme-light` to any container along with background/foreground tokens:
  *
  * ```tsx
- * <div className="scheme-light background--a content--a p-6 rounded-lg">
+ * <div className="scheme-light background--0 content--0 p-6 rounded-lg">
  *   This stays light even when page is in dark mode
  * </div>
  * ```
  *
  * The `scheme-light` class overrides the parent's color-scheme, making all `light-dark()`
  * functions within that container use the light value. Works with any nesting depth.
- *
- * Dark Islands (force dark in light mode):
- *
- * ```tsx
- * <div className="scheme-dark background--a content--a p-6 rounded-lg">
- *   This stays dark even when page is in light mode
- * </div>
- * ```
  *
  * Tailwind Configuration File Usage:
  *
