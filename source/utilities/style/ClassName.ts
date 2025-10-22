@@ -1,10 +1,20 @@
 // Dependencies - Utilities
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
 import { clsx, ClassValue } from 'clsx';
 import { cva } from 'class-variance-authority';
 
 // Type for class property (matching CVA's ClassProp)
 type ClassProperty = { class?: ClassValue; className?: never } | { class?: never; className?: ClassValue };
+
+// Configure tailwind-merge to handle our custom border--0 utility
+// Without this, tailwind-merge treats 'border' and 'border--0' as conflicting
+const twMerge = extendTailwindMerge({
+    extend: {
+        classGroups: {
+            'border-custom': ['border--0'],
+        } as Record<string, string[]>, // Type assertion for custom class group names
+    },
+});
 
 /**
  * Merges multiple class names into a single string. Later parameters override earlier ones.
@@ -13,6 +23,8 @@ type ClassProperty = { class?: ClassValue; className?: never } | { class?: never
  * ignoring falsey values.
  *
  * `twMerge` is used to merge class names according to TailwindCSS conventions.
+ * We extend twMerge with custom class groups for our double-dash utilities (border--0, etc.)
+ * so they don't conflict with Tailwind's built-in utilities (border, bg, text).
  *
  * This function is particularly useful in a React component where class names might
  * be conditionally applied based on component state or properties.
