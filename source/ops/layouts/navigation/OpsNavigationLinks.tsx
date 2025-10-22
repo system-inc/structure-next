@@ -284,6 +284,10 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
                 href: '/ops/developers/object-storage',
             },
             {
+                title: 'Design',
+                href: '/ops/developers/design',
+            },
+            {
                 title: 'Logs',
                 href: '/ops/developers/logs',
             },

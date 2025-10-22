@@ -148,24 +148,37 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'dark:data-[state=open]:border-black-200 dark:data-[state=open]:bg-black-500 dark:data-[state=open]:text-white-900',
         ),
 
-        // Variant Outline - Uses a simple border to define button shape
         Outline: mergeClassNames(
             buttonLayoutClassNames,
             buttonCommonClassNames,
             buttonCenteredClassNames,
             buttonFocusClassNames,
-            'border',
-            // Light mode - Background, border, and text (using dark colors)
-            'border-white-700 text-black-700',
-            'hover:border-white-300 hover:text-black-900',
-            'active:border-gray-50 active:text-black-1000',
-            'data-[state=open]:border-gray-50 data-[state=open]:text-black-1000',
-            // Dark mode - Background, border, and text (using light colors)
-            'dark:border-black-350 dark:text-white-700',
-            'dark:hover:border-black-0 dark:hover:text-white-850',
-            'dark:active:border-gray-500 dark:active:text-white-1000',
-            'dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000',
+            'border border--0 content--0',
+            // Hover - Emphasize border and content
+            'hover:border--6 hover:content---1',
+            // Active and open - Further emphasize border and content
+            'active:border-content--5 active:content---3',
+            'data-[state=open]:border-content--5 data-[state=open]:content---3',
         ),
+
+        // Variant Outline - Uses a simple border to define button shape
+        // Outline: mergeClassNames(
+        //     buttonLayoutClassNames,
+        //     buttonCommonClassNames,
+        //     buttonCenteredClassNames,
+        //     buttonFocusClassNames,
+        //     'border',
+        //     // Light mode - Background, border, and text (using dark colors)
+        //     'border-white-700 text-black-700',
+        //     'hover:border-white-300 hover:text-black-900',
+        //     'active:border-gray-50 active:text-black-1000',
+        //     'data-[state=open]:border-gray-50 data-[state=open]:text-black-1000',
+        //     // Dark mode - Background, border, and text (using light colors)
+        //     'dark:border-black-350 dark:text-white-700',
+        //     'dark:hover:border-black-0 dark:hover:text-white-850',
+        //     'dark:active:border-gray-500 dark:active:text-white-1000',
+        //     'dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000',
+        // ),
 
         // Variant Contrast - Contrasts `background--0` using `content--0` as background colors
         Contrast: mergeClassNames(
@@ -221,9 +234,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Dark - Hover
             'dark:hover:border-red-500',
             // Light - Active (includes when used as open popover trigger)
-            'active:bg-light-3 active:border-red-500 data-[state=open]:bg-light-3 data-[state=open]:border-red-500',
+            'active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500',
             // Dark - Active (includes when used as open popover trigger)
-            'dark:active:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:bg-dark-3 dark:data-[state=open]:border-red-500',
+            'dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500',
             // Light - Focus
             'focus:border-red-500',
             // Dark - Focus
@@ -256,7 +269,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonClassNames,
             buttonCenteredClassNames,
             // Toggled on
-            'border-neutral+6 bg-light-2 rounded-md border dark:border-dark-6 dark:bg-dark-2',
+            'border-neutral+6 bg-light-2 dark:border-dark-6 dark:bg-dark-2 rounded-md border',
         ),
 
         // TODO: Needs review
@@ -328,7 +341,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         TableHeaderCell: mergeClassNames(
             buttonCommonClassNames,
             // Text
-            'hover:-text-dark text-xs font-normal content--2 dark:hover:text-light',
+            'hover:-text-dark dark:hover:text-light text-xs font-normal content--2',
         ),
     },
 

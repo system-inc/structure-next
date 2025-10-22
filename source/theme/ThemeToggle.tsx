@@ -46,8 +46,8 @@ export function ThemeToggle() {
                 trigger={
                     <button
                         className={mergeClassNames(
-                            'cursor-pointer rounded-full transition-colors ease-out hover:content--0',
-                            theme === currentTheme ? 'background--3 content--0' : 'content--2',
+                            'cursor-pointer rounded-full transition-colors ease-out hover:content---1',
+                            theme === currentTheme ? 'background--6 content--0' : 'content--2',
                         )}
                         tabIndex={1} // Leave tab index as 1, tabs will happen in the order of the buttons
                         onClick={function () {

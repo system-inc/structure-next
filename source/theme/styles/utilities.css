@@ -81,61 +81,130 @@
 
 /* Content */
 
-/* Content 0 - Primary/base content color (locked in, never change) */
+/* Content 0 - Primary */
 @utility content--0 {
     color: light-dark(var(--color-black-800), var(--color-white-700));
 }
-/* Content 1 - Secondary content color, 3-step progression */
+/* Border Content 0 - Border matching content--0 color */
+@utility border-content--0 {
+    border-color: light-dark(var(--color-black-800), var(--color-white-700));
+}
+
+/* Content 1 - Secondary */
 @utility content--1 {
     color: light-dark(var(--color-black-500), var(--color-white-400));
 }
-/* Content 2 - Tertiary content color, 3-step progression */
+/* Border Content 1 - Border matching content--1 color */
+@utility border-content--1 {
+    border-color: light-dark(var(--color-black-500), var(--color-white-400));
+}
+
+/* Content 2 - Tertiary */
 @utility content--2 {
     color: light-dark(var(--color-black-200), var(--color-white-100));
 }
-/* Content 3 - 3-step progression */
+/* Border Content 2 - Border matching content--2 color */
+@utility border-content--2 {
+    border-color: light-dark(var(--color-black-200), var(--color-white-100));
+}
+
+/* Content 3 */
 @utility content--3 {
     color: light-dark(var(--color-gray-1000), var(--color-gray-100));
 }
-/* Content 4 - 3-step progression */
+/* Border Content 3 - Border matching content--3 color */
+@utility border-content--3 {
+    border-color: light-dark(var(--color-gray-1000), var(--color-gray-100));
+}
+
+/* Content 4 */
 @utility content--4 {
     color: light-dark(var(--color-gray-700), var(--color-gray-400));
 }
-/* Content 5 - 3-step progression */
+/* Border Content 4 - Border matching content--4 color */
+@utility border-content--4 {
+    border-color: light-dark(var(--color-gray-700), var(--color-gray-400));
+}
+
+/* Content 5 */
 @utility content--5 {
     color: light-dark(var(--color-gray-400), var(--color-gray-700));
 }
-/* Content 6 - 3-step progression */
+/* Border Content 5 - Border matching content--5 color */
+@utility border-content--5 {
+    border-color: light-dark(var(--color-gray-400), var(--color-gray-700));
+}
+
+/* Content 6 */
 @utility content--6 {
     color: light-dark(var(--color-gray-100), var(--color-gray-1000));
 }
-/* Content 7 - 3-step progression */
+/* Border Content 6 - Border matching content--6 color */
+@utility border-content--6 {
+    border-color: light-dark(var(--color-gray-100), var(--color-gray-1000));
+}
+
+/* Content 7 */
 @utility content--7 {
     color: light-dark(var(--color-white-100), var(--color-black-200));
 }
-/* Content 8 - 3-step progression */
+/* Border Content 7 - Border matching content--7 color */
+@utility border-content--7 {
+    border-color: light-dark(var(--color-white-100), var(--color-black-200));
+}
+
+/* Content 8 */
 @utility content--8 {
     color: light-dark(var(--color-white-400), var(--color-black-500));
 }
-/* Content 9 - 3-step progression */
+/* Border Content 8 - Border matching content--8 color */
+@utility border-content--8 {
+    border-color: light-dark(var(--color-white-400), var(--color-black-500));
+}
+
+/* Content 9 */
 @utility content--9 {
     color: light-dark(var(--color-white-700), var(--color-black-800));
 }
-/* Content 10 - Lowest emphasis, 3-step progression */
+/* Border Content 9 - Border matching content--9 color */
+@utility border-content--9 {
+    border-color: light-dark(var(--color-white-700), var(--color-black-800));
+}
+
+/* Content 10 - Lowest emphasis */
 @utility content--10 {
     color: light-dark(var(--color-white-1000), var(--color-black-1000));
 }
+/* Border Content 10 - Border matching content--10 color */
+@utility border-content--10 {
+    border-color: light-dark(var(--color-white-1000), var(--color-black-1000));
+}
+
 /* Content ---1 - Reverse direction: higher emphasis than base */
 @utility content---1 {
     color: light-dark(var(--color-black-900), var(--color-white-900));
 }
+/* Border Content ---1 - Border matching content---1 color */
+@utility border-content---1 {
+    border-color: light-dark(var(--color-black-900), var(--color-white-900));
+}
+
 /* Content ---2 - Reverse direction: higher emphasis than base */
 @utility content---2 {
     color: light-dark(var(--color-black-950), var(--color-white-950));
 }
+/* Border Content ---2 - Border matching content---2 color */
+@utility border-content---2 {
+    border-color: light-dark(var(--color-black-950), var(--color-white-950));
+}
+
 /* Content ---3 - Reverse direction: higher emphasis than base */
 @utility content---3 {
     color: light-dark(var(--color-black-1000), var(--color-white-1000));
+}
+/* Border Content ---3 - Border matching content---3 color */
+@utility border-content---3 {
+    border-color: light-dark(var(--color-black-1000), var(--color-white-1000));
 }
 
 /* Content Disabled - Disabled state content color */
