@@ -6,17 +6,17 @@ import { cva, type VariantProps as VariantProperties } from 'class-variance-auth
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 export const toggleVariants = cva(
-    'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-muted hover:content--b focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    'hover:bg-muted focus-visible:ring-ring data-[state=on]:bg-accent data-[state=on]:text-accent-foreground inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:content--1 focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
     {
         variants: {
             variant: {
-                default: 'border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground',
+                default: 'border-input hover:bg-accent hover:text-accent-foreground border bg-transparent shadow-sm',
                 ghost: 'bg-transparent',
             },
             size: {
-                default: 'h-9 px-2 min-w-9',
-                sm: 'h-8 px-1.5 min-w-8',
-                lg: 'h-10 px-2.5 min-w-10',
+                default: 'h-9 min-w-9 px-2',
+                sm: 'h-8 min-w-8 px-1.5',
+                lg: 'h-10 min-w-10 px-2.5',
             },
         },
         defaultVariants: {

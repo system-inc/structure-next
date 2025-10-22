@@ -212,7 +212,7 @@ export function Dialog(properties: DialogProperties) {
                         />
                         <VaulDrawer.Content
                             className={mergeClassNames(
-                                'background--afixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border--a',
+                                'fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border--0 background--0',
                                 properties.className,
                             )}
                             onOpenAutoFocus={function (event) {

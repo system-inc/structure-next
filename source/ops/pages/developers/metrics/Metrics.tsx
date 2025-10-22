@@ -398,7 +398,7 @@ export function Metrics() {
             </TimeSeriesContainer>
 
             {/* A line to separate the options from the graph */}
-            <div className="mt-1 mb-4 border-t border--d md:mt-6 md:mb-6"></div>
+            <div className="mt-1 mb-4 border-t border--3 md:mt-6 md:mb-6"></div>
 
             {/* DataSources */}
             <DataSources

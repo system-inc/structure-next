@@ -87,7 +87,7 @@ export function OpsNavigationBar() {
                                     />
                                 </svg>
                                 Ops
-                                {/* <span className="ml-2 inline-flex items-center gap-1 rounded-sm border background--c px-2 text-opsis-content-placeholder">
+                                {/* <span className="ml-2 inline-flex items-center gap-1 rounded-sm border background--2 px-2 text-opsis-content-placeholder">
                                     CMD+K
                                 </span> */}
                             </Button>
@@ -124,7 +124,7 @@ export function OpsNavigationBar() {
                                     }}
                                     className="fixed top-10 bottom-0 left-0 p-2"
                                 >
-                                    <div className="h-full w-56 overflow-y-auto rounded-lg border border--a background--c">
+                                    <div className="h-full w-56 overflow-y-auto rounded-lg border border--0 background--2">
                                         <OpsNavigation />
                                     </div>
                                 </motion.div>

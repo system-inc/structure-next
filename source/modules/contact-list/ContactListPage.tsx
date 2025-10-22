@@ -78,7 +78,7 @@ export function ContactListPage() {
                     <div>
                         {/* Div to contain logo */}
                         <div
-                            className="content--a"
+                            className="content--0"
                             style={{
                                 marginLeft: '-' + ProjectSettings.assets.logo.height / 2 + 'px',
                                 paddingTop: ProjectSettings.assets.logo.height + 'px',

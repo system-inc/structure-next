@@ -387,7 +387,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Request Parameters */}
             {endpoint.requestParameters && (
                 <div className="">
-                    <hr className="mt-6 mb-4 border--a" />
+                    <hr className="mt-6 mb-4 border--0" />
                     <h3 className="mb-2 text-lg font-medium">Request Parameters</h3>
                     <RequestParametersTable
                         requestParameters={endpoint.requestParameters}
@@ -396,7 +396,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 </div>
             )}
 
-            <hr className="mt-6 mb-6 border--a" />
+            <hr className="mt-6 mb-6 border--0" />
 
             {/* Request Url with Parameters */}
             <div className="mb-4 flex items-center">
@@ -446,7 +446,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 </div>
                 {runningRequest && <p className="mt-4">Running request...</p>}
                 {testOutputResponseBody && !runningRequest && (
-                    <div className="mt-4 rounded-md border border--a p-4 text-sm">
+                    <div className="mt-4 rounded-md border border--0 p-4 text-sm">
                         <div className="">
                             <span
                                 className={mergeClassNames(
@@ -459,11 +459,11 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                         </div>
                         <div className="mt-4">
                             <h4 className="mb-2 text-sm">Response Headers</h4>
-                            <pre className="rounded-md border border--a p-4">{testOutputResponseHttpHeaders}</pre>
+                            <pre className="rounded-md border border--0 p-4">{testOutputResponseHttpHeaders}</pre>
                         </div>
                         <div className="mt-4">
                             <h4 className="mb-2 text-sm">Response Body</h4>
-                            <pre className="rounded-md border border--a p-4">{testOutputResponseBody}</pre>
+                            <pre className="rounded-md border border--0 p-4">{testOutputResponseBody}</pre>
                         </div>
                     </div>
                 )}
@@ -472,7 +472,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Example Responses */}
             {endpoint.exampleResponses && (
                 <div className="">
-                    <hr className="my-12 border--a" />
+                    <hr className="my-12 border--0" />
                     <h3 className="mb-4 text-lg font-medium">Example Responses</h3>
                     {endpoint.exampleResponses.map(function (exampleResponse) {
                         return (
@@ -494,7 +494,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                                 {/* Body JSON */}
                                 {exampleResponse.body && (
                                     <Json
-                                        className="rounded-md border border--a p-2 text-xs"
+                                        className="rounded-md border border--0 p-2 text-xs"
                                         data={responseFieldsToExampleJson(exampleResponse.body)}
                                     />
                                 )}

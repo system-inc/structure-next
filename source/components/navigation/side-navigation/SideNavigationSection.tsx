@@ -49,7 +49,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                     <div
                         className={mergeClassNames(
                             'hover:bg-light-2 dark:text-light dark:hover:bg-dark-3 mb-0.5 flex cursor-pointer items-center justify-between rounded py-1 pr-1 pl-2 text-[13px] select-none',
-                            isActive ? 'dark:bg-dark-2 background--c' : '',
+                            isActive ? 'dark:bg-dark-2 background--2' : '',
                         )}
                         onClick={() => setIsOpen(!isOpen)}
                     >
@@ -62,7 +62,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                             {properties.title}
                         </div>
                         <button
-                            className="relative flex aspect-square w-6 items-center justify-center rounded content--a"
+                            className="relative flex aspect-square w-6 items-center justify-center rounded content--0"
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <motion.span
@@ -83,7 +83,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
             {/* Children */}
             {properties.children && (
                 <Collapse isOpen={isOpen || properties.isHeader === true} animationConfiguration={transition}>
-                    <div className={`space-y-0.5 ${properties.isHeader ? '' : 'ml-3 border-l border--a pl-4'}`}>
+                    <div className={`space-y-0.5 ${properties.isHeader ? '' : 'ml-3 border-l border--0 pl-4'}`}>
                         {properties.children.map(function (child, childIndex) {
                             return (
                                 <div key={childIndex}>

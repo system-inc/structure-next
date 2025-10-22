@@ -187,7 +187,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
 
             {/* Loading State */}
             {isSearching && (
-                <div className="flex items-center space-x-2 content--c">
+                <div className="flex items-center space-x-2 content--2">
                     <BrokenCircleIcon className="h-4 w-4 animate-spin" />
                     <span>Searching...</span>
                 </div>
@@ -209,7 +209,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             {/* User Preview and Role Selection */}
             {accountPrivilegedRequest.data?.accountPrivileged?.profiles.map(function (profile) {
                 return (
-                    <div key={profile.username} className="space-y-4 rounded-lg border border--d p-4">
+                    <div key={profile.username} className="space-y-4 rounded-lg border border--3 p-4">
                         {/* User Preview */}
                         <div className="flex items-center space-x-3">
                             <div className="h-10 w-10">
@@ -221,7 +221,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             </div>
                             <div>
                                 <div className="font-medium">{profile.displayName || '-'}</div>
-                                <div className="text-sm content--c">@{profile.username}</div>
+                                <div className="text-sm content--2">@{profile.username}</div>
                             </div>
                         </div>
 
@@ -242,7 +242,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                                 onChange={(value) => setSelectedRoleType(value || '')}
                             />
                             {selectedRoleType && (
-                                <p className="text-sm content--c">
+                                <p className="text-sm content--2">
                                     {RoleInformation[selectedRoleType as keyof typeof RoleInformation]}
                                 </p>
                             )}

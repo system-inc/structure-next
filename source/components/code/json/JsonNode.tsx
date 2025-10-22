@@ -173,7 +173,7 @@ export function JsonNode(properties: JsonNodeProperties) {
 
     // Line classes for hover and click
     const lineClasses =
-        'json-line hover:background--c dark:hover:bg-dark-2 cursor-pointer flex items-start items-center';
+        'json-line hover:background--2 dark:hover:bg-dark-2 cursor-pointer flex items-start items-center';
     const keyClasses = 'json-key text-blue-500 dark:text-blue-300';
     const toggleAreaClasses = 'items-center transform transition-transform mr-0.5';
     const placeholderToggleWidth = 6; // Same width as the toggle

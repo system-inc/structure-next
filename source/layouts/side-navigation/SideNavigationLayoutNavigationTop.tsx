@@ -122,7 +122,7 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
                 <motion.div
                     ref={topBarBottomBorderDivReference}
                     style={{ marginLeft: topBarBottomBorderDivMarginLeftSpring }}
-                    className="pointer-events-none fixed z-30 h-14 w-full border-b border--a"
+                    className="pointer-events-none fixed z-30 h-14 w-full border-b border--0"
                 />
             )}
 

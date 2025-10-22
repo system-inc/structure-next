@@ -36,7 +36,7 @@ export function ProfileImage(properties: ProfileImageProperties) {
         <div
             className={mergeClassNames(
                 properties.className,
-                !properties.profileImageUrl && 'border border--a', // If no profile image is available, show a border
+                !properties.profileImageUrl && 'border border--0', // If no profile image is available, show a border
                 'relative flex h-full w-full items-center justify-center rounded-full',
             )}
             style={{

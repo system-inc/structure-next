@@ -44,7 +44,7 @@ export function ObjectRequestParameterRow(properties: ObjectRequestParameterRowP
 
     // Render the component
     return (
-        <div className="w-full overflow-hidden rounded-md border border--a">
+        <div className="w-full overflow-hidden rounded-md border border--0">
             {/* Object properties table */}
             <table className="min-w-full border-collapse">
                 <thead>

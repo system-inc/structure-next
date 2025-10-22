@@ -86,7 +86,7 @@ export function CodeEditor({
             )}
         >
             <div className="absolute top-0 right-0 w-min rounded-bl px-1.5 py-0.5 text-xs">
-                <p className="content--b">{language.toUpperCase()}</p>
+                <p className="content--1">{language.toUpperCase()}</p>
             </div>
             <div ref={scrollContainerReference} className="relative h-max overflow-auto">
                 <div

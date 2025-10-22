@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'motion/react';
 export const tabsVariants = cva(
     [
         // Wrapper defaults
-        'rounded-full transition-colors background--b p-0.5 flex items-center gap-1 z-0',
+        'z-0 flex items-center gap-1 rounded-full background--1 p-0.5 transition-colors',
     ],
     {
         variants: {
@@ -54,17 +54,17 @@ Tabs.displayName = RadixTabPrimitive.Root.displayName;
 export const tabItemVariants = cva(
     [
         // Default
-        'content--b rounded-full transition-colors relative group cursor-pointer',
+        'group relative cursor-pointer rounded-full content--1 transition-colors',
         // Hover
-        'hover:content--a',
+        'hover:content--0',
         // Active
-        'data-[state=active]:content--a',
+        'data-[state=active]:content--0',
     ],
     {
         variants: {
             size: {
-                large: ['px-6 py-3 text-sm font-medium inline-flex gap-3', '[&_svg]:size-4'],
-                'extra-small': ['px-6 py-1.5 inline-flex gap-2 text-sm', '[&_svg]:size-4'],
+                large: ['inline-flex gap-3 px-6 py-3 text-sm font-medium', '[&_svg]:size-4'],
+                'extra-small': ['inline-flex gap-2 px-6 py-1.5 text-sm', '[&_svg]:size-4'],
             },
             icon: {
                 true: null,
@@ -111,7 +111,7 @@ export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitiv
                             layoutId={`tab-${tabsContext.tabGroupId}`}
                             className={mergeClassNames(
                                 'absolute inset-0 h-full w-full border border-transparent',
-                                'z-0 group-data-[state=active]:border--a group-data-[state=active]:background--a',
+                                'z-0 group-data-[state=active]:border--0 group-data-[state=active]:background--0',
                             )}
                             style={{
                                 borderRadius: '99px',

@@ -286,18 +286,18 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                         selectedItem ? (
                             typeof selectedItem.children === 'string' ? (
                                 // If children is a string, create a container for it
-                                <span className="truncate content--a">{selectedItem.children}</span>
+                                <span className="truncate content--0">{selectedItem.children}</span>
                             ) : (
                                 // If children is not a string, use it as the button content
                                 selectedItem.children
                             )
                         ) : (
                             // No selected items, show the placeholder
-                            <span className="truncate content--a">{placeholder}</span>
+                            <span className="truncate content--0">{placeholder}</span>
                         )
                     }
                     <div className="grow" />
-                    <ChevronDownIcon className="ml-4 h-4 w-4 content--c" />
+                    <ChevronDownIcon className="ml-4 h-4 w-4 content--2" />
                 </Button>
             }
         />

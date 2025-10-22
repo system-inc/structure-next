@@ -66,7 +66,7 @@ export function ResponseParameters(properties: ResponseParametersProperties) {
         const hasNestedTable = complexTables.has(currentPath);
 
         return (
-            <tr key={currentPath} className="border border--a">
+            <tr key={currentPath} className="border border--0">
                 <td className="px-4 py-3">
                     <span className="font-mono" style={{ marginLeft: `${level * 16}px` }}>
                         {hasNestedTable ? (
@@ -99,7 +99,7 @@ export function ResponseParameters(properties: ResponseParametersProperties) {
     // Function to render a table
     function renderTable(fields: ResponseFieldProperties[], tablePath = ''): React.ReactNode {
         return (
-            <div className="overflow-hidden rounded-md border border--a">
+            <div className="overflow-hidden rounded-md border border--0">
                 <table className="min-w-full border-collapse">
                     <thead>
                         <tr className="border-b">

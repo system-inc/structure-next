@@ -55,14 +55,14 @@ export interface PopoverThemeConfiguration {
 export const popoverTheme: PopoverThemeConfiguration = {
     variants: {
         // Primary variant - Border with background, suitable for general content (popovers, dropdowns)
-        A: mergeClassNames(basePopoverClassNames, 'border--a background--a content--a'),
-        B: mergeClassNames(basePopoverClassNames, 'border--b background--a content--a'),
+        A: mergeClassNames(basePopoverClassNames, 'border--0 background--0 content--0'),
+        B: mergeClassNames(basePopoverClassNames, 'border--1 background--0 content--0'),
         // Tip variant - Compact tooltips without full width
         Tip: mergeClassNames(
             'outline-none',
-            'background--a content--a',
+            'background--0 content--0',
             'max-w-56 rounded px-3 py-2 text-sm shadow',
-            'border border--d',
+            'border border--3',
         ),
     },
     configuration: {

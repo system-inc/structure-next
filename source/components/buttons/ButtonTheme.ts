@@ -40,7 +40,7 @@ export const buttonCenteredClassNames = mergeClassNames(
 export const buttonFocusClassNames = mergeClassNames(
     // Focus
     'focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-none',
-    // Ring offset colors (matches background--a for gap effect)
+    // Ring offset colors (matches background--0 for gap effect)
     'focus-visible:ring-offset-white-1000 dark:focus-visible:ring-offset-black-700',
     // Light and dark mode focus ring colors
     'focus-visible:ring-black-350 dark:focus-visible:ring-white-650',
@@ -167,7 +167,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000',
         ),
 
-        // Variant Contrast - Contrasts `background--a` using `content--a` as background colors
+        // Variant Contrast - Contrasts `background--0` using `content--0` as background colors
         Contrast: mergeClassNames(
             buttonLayoutClassNames,
             buttonCommonClassNames,
@@ -192,13 +192,13 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Rounded
             'rounded-lg',
             // Content
-            'content--b',
+            'content--1',
             // Hover
-            'hover:background--d hover:content--a',
+            'hover:background--3 hover:content--0',
             // Active and Popover open states (for TipButton)
-            'active:background--e active:content--a',
-            'data-[state=delayed-open]:background--e data-[state=instant-open]:background--e data-[state=open]:background--e',
-            'data-[state=delayed-open]:content--a data-[state=instant-open]:content--a data-[state=open]:content--a',
+            'active:background--4 active:content--0',
+            'data-[state=delayed-open]:background--4 data-[state=instant-open]:background--4 data-[state=open]:background--4',
+            'data-[state=delayed-open]:content--0 data-[state=instant-open]:content--0 data-[state=open]:content--0',
         ),
 
         // Variant Destructive - Dangerous action button
@@ -213,7 +213,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Border
             'border',
             // Light
-            'border--d background--c text-red-500',
+            'border--3 background--2 text-red-500',
             // Dark
             'dark:bg-dark-2 dark:border-dark-4 dark:text-red-500',
             // Light - Hover
@@ -229,7 +229,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Dark - Focus
             'dark:focus:border-red-500',
             // Light - Disabled
-            'disabled:hover:border--d disabled:hover:background--c',
+            'disabled:hover:border--3 disabled:hover:background--2',
             // Dark - Disabled
             'dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3',
         ),
@@ -248,7 +248,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Rounded and hover
             'hover:bg-accent hover:text-accent-foreground rounded-md',
             // Color, hover, and active states
-            'dark:text-light-4 content--c hover:bg-red-500/10 hover:text-red-500 active:border-0 dark:hover:text-red-500',
+            'dark:text-light-4 content--2 hover:bg-red-500/10 hover:text-red-500 active:border-0 dark:hover:text-red-500',
         ),
 
         // TODO: Needs review
@@ -264,7 +264,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonClassNames,
             buttonCenteredClassNames,
             // Toggled off
-            'dark:border-dark-4 rounded-md border border--d',
+            'dark:border-dark-4 rounded-md border border--3',
         ),
 
         // TODO: Needs review
@@ -290,9 +290,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Layout and sizing
             'flex content-center items-center justify-center',
             // Border
-            'dark:border-light rounded-sm border border--d',
+            'dark:border-light rounded-sm border border--3',
             // Text and background
-            'background--a content--a',
+            'background--0 content--0',
             // Hover
             'hover:bg-light-2 dark:hover:bg-dark-3',
             // Active (includes when used as open popover trigger)
@@ -313,9 +313,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Text
             'text-sm',
             // Border
-            'dark:border-dark-4 rounded-lg border border--d',
+            'dark:border-dark-4 rounded-lg border border--3',
             // Light text on dark background
-            'background--a content--a',
+            'background--0 content--0',
             // Active (includes when used as open popover trigger)
             'active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4',
             // Disabled
@@ -328,7 +328,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         TableHeaderCell: mergeClassNames(
             buttonCommonClassNames,
             // Text
-            'hover:-text-dark dark:hover:text-light text-xs font-normal content--c',
+            'hover:-text-dark dark:hover:text-light text-xs font-normal content--2',
         ),
     },
 

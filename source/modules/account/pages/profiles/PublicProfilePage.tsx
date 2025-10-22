@@ -40,7 +40,7 @@ export function PublicProfilePage(properties: PublicProfilePageProperties) {
                 <Link className="mb-2" href={'/profiles/' + properties.profilePublic?.username}>
                     @{properties.profilePublic?.username}
                 </Link>
-                <p className="mt-2 flex items-center justify-center space-x-1.5 text-sm content--b">
+                <p className="mt-2 flex items-center justify-center space-x-1.5 text-sm content--1">
                     <CalendarIcon className="h-4 w-4" />
                     <span>
                         Joined {monthYear(new Date(properties.profilePublic?.createdAt))} (

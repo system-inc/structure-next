@@ -3,7 +3,7 @@ import { cva, VariantProps as VariantProperties } from 'class-variance-authority
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 export const badgeVariants = cva(
-    ['rounded-full py-1 gap-2 inline-flex items-center justify-center transition-colors'],
+    ['inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors'],
     {
         variants: {
             variant: {
@@ -11,15 +11,15 @@ export const badgeVariants = cva(
                 danger: ['content--negative'],
                 warning: ['content--warning'],
                 info: ['content--informative'],
-                muted: ['content--b'],
+                muted: ['content--1'],
             },
             type: {
                 filled: '',
                 outline: '',
             },
             size: {
-                medium: ['text-xs font-medium px-2', '[&_svg]:size-3.5'],
-                large: ['text-sm font-medium px-3', '[&_svg]:size-4'],
+                medium: ['px-2 text-xs font-medium', '[&_svg]:size-3.5'],
+                large: ['px-3 text-sm font-medium', '[&_svg]:size-4'],
             },
         },
         compoundVariants: [
@@ -46,7 +46,7 @@ export const badgeVariants = cva(
             {
                 type: 'filled',
                 variant: 'muted',
-                className: 'background--b',
+                className: 'background--1',
             },
             {
                 type: 'outline',
@@ -71,7 +71,7 @@ export const badgeVariants = cva(
             {
                 type: 'outline',
                 variant: 'muted',
-                className: 'border border--a',
+                className: 'border border--0',
             },
         ],
         defaultVariants: {

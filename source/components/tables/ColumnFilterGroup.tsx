@@ -400,7 +400,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
     return (
         <div
             className={mergeClassNames(
-                'mr-4 inline-flex flex-col rounded-md border border--a p-4',
+                'mr-4 inline-flex flex-col rounded-md border border--0 p-4',
                 properties.className,
             )}
         >
@@ -412,7 +412,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             {/* Operator */}
                             {conditionIndex === 0 ? (
                                 // First condition
-                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md text-sm content--c">
+                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md text-sm content--2">
                                     Where
                                 </p>
                             ) : conditionIndex === 1 ? (
@@ -435,7 +435,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 />
                             ) : (
                                 // Other conditions
-                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm content--b">
+                                <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm content--1">
                                     {columnFilterGroupData.operator.toLowerCase()}
                                 </p>
                             )}
@@ -557,7 +557,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                                 }}
                             />
                         ) : (
-                            <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm content--b">
+                            <p className="flex h-9 min-w-[96px] shrink-0 content-center items-center justify-center rounded-md px-4 text-sm content--1">
                                 {columnFilterGroupData.operator.toLowerCase()}
                             </p>
                         )}

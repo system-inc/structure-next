@@ -167,7 +167,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                     <LoadingAnimation className="h-12 w-12" />
                 </div>
                 <h2 className="mb-2 text-lg font-semibold">Verifying Identity</h2>
-                <p className="text-sm content--b">
+                <p className="text-sm content--1">
                     {isAuthenticated
                         ? 'Identity verified. Processing your request...'
                         : 'Checking authentication status...'}
@@ -193,7 +193,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
                                 <LoadingAnimation className="h-12 w-12" />
                             </div>
                             <h2 className="mb-2 text-lg font-semibold">Authentication Successful</h2>
-                            <p className="text-sm content--b">Processing your request...</p>
+                            <p className="text-sm content--1">Processing your request...</p>
                         </div>
                     </AccountAuthenticatedSession>
                 ) : (

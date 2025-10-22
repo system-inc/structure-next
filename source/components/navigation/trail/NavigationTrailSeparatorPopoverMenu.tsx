@@ -56,7 +56,7 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
             trigger={
                 <div
                     tabIndex={1}
-                    className="mx-1 h-4 w-4 cursor-pointer rounded-xs select-none data-[state=delayed-open]:background--b data-[state=instant-open]:background--b data-[state=open]:background--b"
+                    className="mx-1 h-4 w-4 cursor-pointer rounded-xs select-none data-[state=delayed-open]:background--1 data-[state=instant-open]:background--1 data-[state=open]:background--1"
                 >
                     {properties.trigger}
                 </div>

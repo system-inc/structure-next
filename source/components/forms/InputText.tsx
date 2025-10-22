@@ -20,7 +20,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Common input styles
 export const commonInputTextClassNames = mergeClassNames(
     // Content
-    'content--a',
+    'content--0',
     // Placeholder
     'placeholder:opacity-70',
     // Placeholder (disabled)
@@ -30,15 +30,15 @@ export const commonInputTextClassNames = mergeClassNames(
 );
 
 // Background styles
-export const backgroundStyleClassNames = mergeClassNames('background--a');
+export const backgroundStyleClassNames = mergeClassNames('background--0');
 
 // Border styles
-export const borderStyleClassNames = mergeClassNames('rounded-lg border border--d');
+export const borderStyleClassNames = mergeClassNames('rounded-lg border border--3');
 
 // Focus styles: background and text color changes on hover
 export const focusStyleClassNames = mergeClassNames(
     // Focus
-    'focus:border--d focus-visible:ring-0 focus-visible:outline-none',
+    'focus:border--3 focus-visible:ring-0 focus-visible:outline-none',
 );
 
 // Autofill styles
@@ -79,7 +79,7 @@ export const InputTextVariants = {
         // Layout and sizing
         'w-full py-3 pr-4 pl-9',
         // Border
-        'border-b border--a',
+        'border-b border--0',
         // Background
         'bg-transparent',
     ),
@@ -199,7 +199,7 @@ export const InputText = React.forwardRef<InputReferenceInterface, InputTextProp
     return (
         <div className={mergeClassNames('relative', properties.containerClassName)}>
             {Icon && (
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 content--c">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 content--2">
                     <Icon className="h-4 w-4" />
                 </div>
             )}

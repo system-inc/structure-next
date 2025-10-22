@@ -23,9 +23,9 @@ export const menuClassName = mergeClassNames(
     // Layout and sizing
     'flex flex-col focus-visible:outline-none',
     // Border
-    'rounded-sm border border--d',
+    'rounded-sm border border--3',
     // Background and text
-    'background--a text-sm content--a',
+    'background--0 text-sm content--0',
 );
 
 // Type - MenuItemInterface
@@ -400,7 +400,7 @@ export function Menu(properties: MenuProperties) {
         >
             {/* Menu Title */}
             {properties.title && (
-                <div className="border-b border--a px-3 py-2.5 text-sm font-medium">{properties.title}</div>
+                <div className="border-b border--0 px-3 py-2.5 text-sm font-medium">{properties.title}</div>
             )}
 
             {/* Menu Items */}

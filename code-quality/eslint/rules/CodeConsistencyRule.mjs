@@ -14,7 +14,8 @@ export default {
             noUnderscoreUtils: 'Folder name "_utils" is not allowed. Use "_utilities" instead.',
             noUtils: 'Folder name "utils" is not allowed. Use "utilities" instead.',
             useSimpleComment: 'Use single-line comment instead of JSDoc for single-line descriptions.',
-            noAnchorElement: "Using <a> elements is not allowed. Use the Link component from '@structure/source/components/navigation/Link' instead.",
+            noAnchorElement:
+                "Using <a> elements is not allowed. Use the Link component from '@structure/source/components/navigation/Link' instead.",
         },
         schema: [],
     },
@@ -55,7 +56,8 @@ export default {
 
         // Check if this is the Link component implementation file
         const fileName = getFileName();
-        const isLinkComponent = fileName.includes('/components/navigation/Link.tsx') ||
+        const isLinkComponent =
+            fileName.includes('/components/navigation/Link.tsx') ||
             fileName.includes('/components/navigation/Link.jsx');
 
         return {

@@ -72,11 +72,11 @@ neutral: '#888888',
 
 | Old Class                        | Old Light Mode                                          | Old Dark Mode                                           | New Class             | New Light Mode                 | New Dark Mode                 | Status          |
 | -------------------------------- | ------------------------------------------------------- | ------------------------------------------------------- | --------------------- | ------------------------------ | ----------------------------- | --------------- |
-| `bg-opsis-background-primary`    | `#ffffff` (--background-primary → --global-white-1000)  | `#181818` (--background-primary → --global-black-700)   | `background--a`       | `#ffffff` (--color-white-1000) | `#181818` (--color-black-700) | ✅ EXACT        |
-| `bg-opsis-background-secondary`  | `#f7f7f7` (--background-secondary → --global-white-900) | `#282828` (--background-secondary → --global-black-500) | `background--b`       | `#f7f7f7` (--color-white-900)  | `#282828` (--color-black-500) | ✅ EXACT        |
-| `bg-opsis-background-tertiary`   | `#ffffff` (--background-tetriary → --global-white-1000) | `#202020` (--background-tetriary → --global-black-600)  | `background--c`       | `#ffffff` (--color-white-1000) | `#202020` (--color-black-600) | ✅ EXACT        |
-| `bg-background-tertiary`         | Various (shadcn)                                        | Various (shadcn)                                        | `background--c`       | `#ffffff` (--color-white-1000) | `#202020` (--color-black-600) | Map to tertiary |
-| `hover:bg-background-quaternary` | Various (shadcn)                                        | Various (shadcn)                                        | `hover:background--d` | `#efefef` (--color-white-800)  | `#303030` (--color-black-400) | Approximate     |
+| `bg-opsis-background-primary`    | `#ffffff` (--background-primary → --global-white-1000)  | `#181818` (--background-primary → --global-black-700)   | `background--0`       | `#ffffff` (--color-white-1000) | `#181818` (--color-black-700) | ✅ EXACT        |
+| `bg-opsis-background-secondary`  | `#f7f7f7` (--background-secondary → --global-white-900) | `#282828` (--background-secondary → --global-black-500) | `background--1`       | `#f7f7f7` (--color-white-900)  | `#282828` (--color-black-500) | ✅ EXACT        |
+| `bg-opsis-background-tertiary`   | `#ffffff` (--background-tetriary → --global-white-1000) | `#202020` (--background-tetriary → --global-black-600)  | `background--2`       | `#ffffff` (--color-white-1000) | `#202020` (--color-black-600) | ✅ EXACT        |
+| `bg-background-tertiary`         | Various (shadcn)                                        | Various (shadcn)                                        | `background--2`       | `#ffffff` (--color-white-1000) | `#202020` (--color-black-600) | Map to tertiary |
+| `hover:bg-background-quaternary` | Various (shadcn)                                        | Various (shadcn)                                        | `hover:background--3` | `#efefef` (--color-white-800)  | `#303030` (--color-black-400) | Approximate     |
 
 ---
 
@@ -86,18 +86,18 @@ neutral: '#888888',
 
 | Old Semantic Class | Old Light Mode | Old Dark Mode | New Class          | New Light Mode                | New Dark Mode                 | Status   |
 | ------------------ | -------------- | ------------- | ------------------ | ----------------------------- | ----------------------------- | -------- |
-| `border-primary`   | `#e7e7e7`      | `#383838`     | `border--a`        | `#e7e7e7` (--color-white-700) | `#383838` (--color-black-300) | ✅ EXACT |
-| `border-secondary` | `#f3f3f3`      | `#282828`     | `border--b`        | `#f3f3f3` (--color-white-850) | `#282828` (--color-black-500) | ✅ EXACT |
-| `border-tetriary`  | `#d7d7d7`      | `#484848`     | `border--c`        | `#d7d7d7` (--color-white-500) | `#484848` (--color-black-100) | ✅ EXACT |
+| `border-primary`   | `#e7e7e7`      | `#383838`     | `border--0`        | `#e7e7e7` (--color-white-700) | `#383838` (--color-black-300) | ✅ EXACT |
+| `border-secondary` | `#f3f3f3`      | `#282828`     | `border--1`        | `#f3f3f3` (--color-white-850) | `#282828` (--color-black-500) | ✅ EXACT |
+| `border-tetriary`  | `#d7d7d7`      | `#484848`     | `border--2`        | `#d7d7d7` (--color-white-500) | `#484848` (--color-black-100) | ✅ EXACT |
 | `border-contrast`  | `#afafaf`      | `#afafaf`     | `border--contrast` | `#afafaf` (--color-white-0)   | `#afafaf` (--color-white-0)   | ✅ EXACT |
 
 ### Old Border Pairs → New Semantic Mapping
 
 | Old Class Pattern                   | Old Light | Old Dark  | New Class   | New Light | New Dark  | Match Quality                |
 | ----------------------------------- | --------- | --------- | ----------- | --------- | --------- | ---------------------------- |
-| `border-light-3 dark:border-dark-3` | `#e5e5e5` | `#2a2a2a` | `border--d` | `#dfdfdf` | `#2c2c2c` | Close (~2-8 units off)       |
-| `border-light-4 dark:border-dark-4` | `#dddddd` | `#333333` | `border--d` | `#dfdfdf` | `#2c2c2c` | Approximate (~2-7 units off) |
-| `border-light-6 dark:border-dark-3` | `#cccccc` | `#2a2a2a` | `border--c` | `#d7d7d7` | `#484848` | Use prominent border instead |
+| `border-light-3 dark:border-dark-3` | `#e5e5e5` | `#2a2a2a` | `border--3` | `#dfdfdf` | `#2c2c2c` | Close (~2-8 units off)       |
+| `border-light-4 dark:border-dark-4` | `#dddddd` | `#333333` | `border--3` | `#dfdfdf` | `#2c2c2c` | Approximate (~2-7 units off) |
+| `border-light-6 dark:border-dark-3` | `#cccccc` | `#2a2a2a` | `border--2` | `#d7d7d7` | `#484848` | Use prominent border instead |
 
 ---
 
@@ -143,25 +143,25 @@ After adjusting Structure's theme variables to match Phi's exact hex values:
 -   `foreground--a` (#181818 → #e7e7e7) - Primary text
 -   `foreground--b` (#686868 → #a3a3a3) - Secondary text
 -   `foreground--c` (#787878 → #878787) - Tertiary text
--   `background--a` (#ffffff → #181818) - Primary background
--   `background--b` (#f7f7f7 → #282828) - Secondary background
--   `background--c` (#ffffff → #202020) - Tertiary background
--   `border--a` (#e7e7e7 → #383838) - Standard border
--   `border--b` (#f3f3f3 → #282828) - Subtle border
--   `border--c` (#d7d7d7 → #484848) - Prominent border
+-   `background--0` (#ffffff → #181818) - Primary background
+-   `background--1` (#f7f7f7 → #282828) - Secondary background
+-   `background--2` (#ffffff → #202020) - Tertiary background
+-   `border--0` (#e7e7e7 → #383838) - Standard border
+-   `border--1` (#f3f3f3 → #282828) - Subtle border
+-   `border--2` (#d7d7d7 → #484848) - Prominent border
 
 **🆕 New Addition:**
 
--   `border--d` (#dfdfdf → #2c2c2c) - Moderate border (for old light/dark pairs)
+-   `border--3` (#dfdfdf → #2c2c2c) - Moderate border (for old light/dark pairs)
 
 ---
 
 ## Border Hierarchy (Lightest to Strongest)
 
-1. **border--b** - Subtle (Light `#f3f3f3`, Dark `#282828`) - Barely visible, nested elements
-2. **border--d** - Moderate (Light `#dfdfdf`, Dark `#2c2c2c`) - Medium visibility [NEW]
-3. **border--a** - Standard (Light `#e7e7e7`, Dark `#383838`) - Clear, typical borders
-4. **border--c** - Prominent (Light `#d7d7d7`, Dark `#484848`) - Strong, noticeable
+1. **border--1** - Subtle (Light `#f3f3f3`, Dark `#282828`) - Barely visible, nested elements
+2. **border--3** - Moderate (Light `#dfdfdf`, Dark `#2c2c2c`) - Medium visibility [NEW]
+3. **border--0** - Standard (Light `#e7e7e7`, Dark `#383838`) - Clear, typical borders
+4. **border--2** - Prominent (Light `#d7d7d7`, Dark `#484848`) - Strong, noticeable
 
 ---
 
@@ -179,7 +179,7 @@ These are **exact hex value matches** and can be done with IDE find & replace:
 4. `text-foreground` → `foreground--a` ✅ EXACT
 5. `text-content` → `foreground--a` ✅ EXACT
 
-**Backgrounds:** 6. `bg-opsis-background-primary` → `background--a` ✅ EXACT 7. `bg-opsis-background-secondary` → `background--b` ✅ EXACT 8. `bg-opsis-background-tertiary` → `background--c` ✅ EXACT
+**Backgrounds:** 6. `bg-opsis-background-primary` → `background--0` ✅ EXACT 7. `bg-opsis-background-secondary` → `background--1` ✅ EXACT 8. `bg-opsis-background-tertiary` → `background--2` ✅ EXACT
 
 **Semantic States:** 9. `placeholder:text-opsis-content-placeholder` → `placeholder:foreground--placeholder` ✅ EXACT
 
@@ -189,9 +189,9 @@ These are close but not pixel-perfect - acceptable drift:
 
 **Borders (old light/dark pairs):**
 
-1. `border-light-3 dark:border-dark-3` → `border--d` (~2-8 hex units difference)
-2. `border-light-4 dark:border-dark-4` → `border--d` (~2-7 hex units difference)
-3. `border-light-6 dark:border-dark-3` → `border--c` (use prominent instead)
+1. `border-light-3 dark:border-dark-3` → `border--3` (~2-8 hex units difference)
+2. `border-light-4 dark:border-dark-4` → `border--3` (~2-7 hex units difference)
+3. `border-light-6 dark:border-dark-3` → `border--2` (use prominent instead)
 
 ### Requires Context (Manual Review)
 

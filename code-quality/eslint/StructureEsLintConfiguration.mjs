@@ -138,9 +138,7 @@ export const structureJavaScriptAndTypeScriptSettings = {
         entryPoint: './app/_theme/styles/theme.css',
         attributes: ['class', 'className'],
         callees: ['mergeClassNames'],
-        variables: [
-            '.*ClassNames$',
-        ],
+        variables: ['.*ClassNames$'],
     },
 };
 

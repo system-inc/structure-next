@@ -139,12 +139,12 @@ If used, apply same changes as ButtonTheme.ts.
 ```typescript
 // Before:
 const toggleVariants = cva(
-    'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    'hover:bg-muted hover:text-muted-foreground focus-visible:ring-ring data-[state=on]:bg-accent data-[state=on]:text-accent-foreground inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
     {
         variants: {
             variant: {
-                default: 'border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground',
-                outline: 'border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground',
+                default: 'border-input hover:bg-accent hover:text-accent-foreground border bg-transparent shadow-sm',
+                outline: 'border-input hover:bg-accent hover:text-accent-foreground border bg-transparent shadow-sm',
             },
         },
     },
@@ -152,14 +152,14 @@ const toggleVariants = cva(
 
 // After:
 const toggleVariants = cva(
-    'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-[ACTIVE-TOKEN] data-[state=on]:text-[ACTIVE-TEXT-TOKEN] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN] focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-[ACTIVE-TOKEN] data-[state=on]:text-[ACTIVE-TEXT-TOKEN] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
     {
         variants: {
             variant: {
                 default:
-                    'border border-input bg-transparent shadow-sm hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN]',
+                    'border-input border bg-transparent shadow-sm hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN]',
                 outline:
-                    'border border-input bg-transparent shadow-sm hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN]',
+                    'border-input border bg-transparent shadow-sm hover:bg-[HOVER-TOKEN] hover:text-[HOVER-TEXT-TOKEN]',
             },
         },
     },

@@ -269,7 +269,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         content = (
             <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
-                <div className="text-sm content--c">Loading sessions...</div>
+                <div className="text-sm content--2">Loading sessions...</div>
             </>
         );
     }
@@ -281,7 +281,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                 <div className="text-sm text-red-500">
                     <div className="font-medium">Error:</div>
                     <div className="mt-1">{errorMessage}</div>
-                    <div className="mt-2 text-xs content--c">Database: {properties.databaseName}</div>
+                    <div className="mt-2 text-xs content--2">Database: {properties.databaseName}</div>
                 </div>
             </>
         );
@@ -290,7 +290,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         content = (
             <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
-                <div className="text-sm content--c">No active sessions</div>
+                <div className="text-sm content--2">No active sessions</div>
             </>
         );
     }

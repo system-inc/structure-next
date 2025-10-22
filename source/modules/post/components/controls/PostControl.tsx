@@ -29,15 +29,15 @@ export function PostControl(properties: PostControlProperties) {
                 // Border
                 'rounded-lg border border-transparent',
                 // Hover - Light
-                'hover:border--d',
+                'hover:border--3',
                 // Hover - Dark
                 'dark:hover:border-dark-3 dark:hover:bg-dark-2',
                 // Active - Light
-                'active:border--d',
+                'active:border--3',
                 // Active - Dark
                 'dark:active:border-dark-5 dark:active:bg-dark-3',
                 // Popover Expanded - Light
-                'group-aria-expanded:border--d',
+                'group-aria-expanded:border--3',
                 // Popover Expanded - Dark
                 'dark:group-aria-expanded:border-dark-5 dark:group-aria-expanded:bg-dark-3',
                 properties.className,

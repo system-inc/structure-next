@@ -16,7 +16,7 @@ export function CardLink(properties: CardLinkProperties) {
     return (
         <Link
             href={properties.href}
-            className="grow rounded-lg border border--d p-5 transition-all hover:-translate-y-0.5 hover:shadow"
+            className="grow rounded-lg border border--3 p-5 transition-all hover:-translate-y-0.5 hover:shadow"
         >
             <div className="flex items-center justify-between">
                 <h2 className="mb-1 text-base font-normal">{properties.title}</h2>

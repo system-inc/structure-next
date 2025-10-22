@@ -115,7 +115,7 @@ export const dialogTheme: DialogThemeConfiguration = {
         Default: mergeClassNames(
             dialogContentPositionCenteredClassNames,
             // Border, background, and shadow
-            'background--ap-6 flex w-full flex-col gap-4 rounded-lg border border--a shadow-lg',
+            'flex w-full flex-col gap-4 rounded-lg border border--0 background--0 p-6 shadow-lg',
         ),
 
         // Unstyled centered variant
@@ -127,7 +127,7 @@ export const dialogTheme: DialogThemeConfiguration = {
         // Full screen with margin
         FullScreenWithMargin: mergeClassNames(
             dialogContentPositionCenteredClassNames,
-            'background--ap-6 flex w-full flex-col gap-4 rounded-lg border border--a shadow-lg',
+            'flex w-full flex-col gap-4 rounded-lg border border--0 background--0 p-6 shadow-lg',
             'h-full max-h-[calc(100vh-8rem)] w-full max-w-[calc(100vw-8rem)] md:max-h-[calc(100vh-8rem)] md:max-w-[calc(100vw-8rem)]',
         ),
     },

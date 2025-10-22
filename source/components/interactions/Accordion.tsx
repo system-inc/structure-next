@@ -51,7 +51,7 @@ export function Accordion(properties: AccordionProperties) {
         <RadixAccordion.Root type={type}>
             {items.map((item, index) => {
                 return (
-                    <RadixAccordion.Item key={index} value={item.identifier} className="border-b border--d">
+                    <RadixAccordion.Item key={index} value={item.identifier} className="border-b border--3">
                         {/* Trigger */}
                         <RadixAccordion.Trigger
                             className={mergeClassNames(

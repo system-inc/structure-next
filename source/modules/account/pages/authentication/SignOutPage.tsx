@@ -27,7 +27,7 @@ export function SignOutPage() {
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
-            <div className="rounded-md border border--a p-8">
+            <div className="rounded-md border border--0 p-8">
                 <div className="flex w-80 flex-col">
                     <p className="font-medium">Sign Out</p>
                     <p className="mt-4 text-sm">Would you like to sign out?</p>

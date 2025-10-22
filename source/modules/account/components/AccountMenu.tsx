@@ -36,7 +36,7 @@ export function AccountMenu(properties: AccountMenuProperties) {
             {properties.account ? <AccountMenuSignedIn account={properties.account} /> : <AccountMenuSignedOut />}
 
             {/* Divider */}
-            <div className="mb-1 border-b border--a" />
+            <div className="mb-1 border-b border--0" />
 
             <div className="flex h-12 items-center pt-1">
                 {/* Theme Toggle */}

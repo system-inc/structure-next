@@ -27,7 +27,7 @@ export function OpsLayout(properties: OpsLayoutProperties) {
             {/* Main Content - Wrapper with padding */}
             <div className="flex min-h-0 flex-1 px-2 pt-0 pb-2">
                 {/* Content Container - Rounded border box */}
-                <div className="flex-1 overflow-auto rounded-lg border border--a background--a">
+                <div className="flex-1 overflow-auto rounded-lg border border--0 background--0">
                     {properties.children}
                 </div>
             </div>

@@ -53,7 +53,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             dragSnapToOrigin
             onDragEnd={handleDrag}
             className={mergeClassNames(
-                'relative box-border flex h-auto touch-none items-center rounded-md border border--a background--a p-7',
+                'relative box-border flex h-auto touch-none items-center rounded-md border border--0 background--0 p-7',
                 properties.className,
             )}
             onMouseEnter={function () {
@@ -73,7 +73,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             <MotionButton
                 {...properties.closeButtonProperties}
                 tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
-                className="absolute -top-2 -left-2 inline-flex cursor-pointer items-center justify-center rounded-full border border--a background--a p-1 whitespace-nowrap select-none hover:background--b hover:content--a focus-visible:ring-0 focus-visible:outline-none"
+                className="absolute -top-2 -left-2 inline-flex cursor-pointer items-center justify-center rounded-full border border--0 background--0 p-1 whitespace-nowrap select-none hover:background--1 hover:content--0 focus-visible:ring-0 focus-visible:outline-none"
                 initial={{ opacity: 0 }}
                 animate={{
                     opacity: hovered ? 1 : 0,
@@ -86,14 +86,14 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
                     bounce: 0.1,
                 }}
             >
-                <CloseIcon className="h-4 w-4 content--c" />
+                <CloseIcon className="h-4 w-4 content--2" />
             </MotionButton>
 
             <div className="flex w-full items-center justify-between">
                 {/* Title and Content */}
                 <div className="items-center space-y-1 pr-4">
                     {properties.title && <div className="text-sm font-medium">{properties.title}</div>}
-                    {properties.content && <div className="text-sm content--c">{properties.content}</div>}
+                    {properties.content && <div className="text-sm content--2">{properties.content}</div>}
                 </div>
 
                 {/* Button */}

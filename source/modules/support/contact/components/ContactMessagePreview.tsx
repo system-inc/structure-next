@@ -25,13 +25,13 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
             </div>
 
             <h2 className="mt-6 text-center text-2xl font-medium">Message delivered.</h2>
-            <p className="mt-4 text-center text-balance content--b">
+            <p className="mt-4 text-center text-balance content--1">
                 Your message has been received. We will get back to you as soon as possible.
             </p>
 
             <FormField label="Your Message" className="mt-10">
-                <div className="mb-4 flex flex-col items-stretch rounded-md border border--a px-6 py-8 transition-colors">
-                    <div className="border-b border--a pb-6 text-sm font-medium content--b transition-colors">
+                <div className="mb-4 flex flex-col items-stretch rounded-md border border--0 px-6 py-8 transition-colors">
+                    <div className="border-b border--0 pb-6 text-sm font-medium content--1 transition-colors">
                         <p>From: {properties.emailAddress}</p>
                         <p className="mt-2">Subject: {properties.title}</p>
                     </div>
@@ -44,17 +44,17 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                         <div
                             key={index}
                             className={
-                                'mb-2 flex h-14 items-center justify-between rounded-md background--b px-5 py-3 last:mb-0'
+                                'mb-2 flex h-14 items-center justify-between rounded-md background--1 px-5 py-3 last:mb-0'
                             }
                         >
                             <FileTypeIcon className="mr-4 size-5" />
 
                             <div className="min-w-0 flex-1">
-                                <p className="truncate text-sm font-medium content--a">{file.name}</p>
+                                <p className="truncate text-sm font-medium content--0">{file.name}</p>
                             </div>
 
                             <div className="flex items-center gap-4 pl-2">
-                                <p className="text-sm content--b">{formatFileSize(file.size)}</p>
+                                <p className="text-sm content--1">{formatFileSize(file.size)}</p>
                             </div>
                         </div>
                     );

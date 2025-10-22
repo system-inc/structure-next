@@ -92,7 +92,7 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
                     children: 'Save Changes',
                 }}
             />
-            <hr className="my-16 border--a" />
+            <hr className="my-16 border--0" />
             <div className="flex justify-end">
                 <Button
                     variant="Destructive"

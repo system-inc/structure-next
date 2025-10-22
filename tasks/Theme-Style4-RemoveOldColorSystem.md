@@ -51,7 +51,7 @@ Migrate from old color system (light-1 through light-6, dark-1 through dark-6, n
 
 **1. No prefix = Default semantic tokens**
 
--   Most code uses unprefixed tokens: `background--a`
+-   Most code uses unprefixed tokens: `background--0`
 -   These "come for free" with structure library
 -   Themeable via light/dark mode automatically
 

@@ -58,7 +58,7 @@ const components: ComponentsProperties = {
         <Link href={properties.href ?? ''} className="underline" {...properties} />
     ),
     pre: (properties) => (
-        <pre className="relative mb-6 rounded-md border border--d background--c p-5 text-sm" {...properties}>
+        <pre className="relative mb-6 rounded-md border border--3 background--2 p-5 text-sm" {...properties}>
             {properties.children}
             <span className="absolute top-3 right-3 font-sans">
                 <CopyButton className="" value={getInnerText(properties.children)} />
@@ -67,7 +67,7 @@ const components: ComponentsProperties = {
     ),
     code: (properties) => (
         <code
-            className="mb-6 rounded border border--d background--c px-1 py-px font-mono text-sm whitespace-pre-wrap"
+            className="mb-6 rounded border border--3 background--2 px-1 py-px font-mono text-sm whitespace-pre-wrap"
             {...properties}
         />
     ),
@@ -76,23 +76,23 @@ const components: ComponentsProperties = {
     li: (properties) => (
         <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
-    blockquote: (properties) => <blockquote className="border-l-2 border--d pl-4" {...properties} />,
-    hr: (properties) => <hr className="my-10 border--d" {...properties} />,
+    blockquote: (properties) => <blockquote className="border-l-2 border--3 pl-4" {...properties} />,
+    hr: (properties) => <hr className="my-10 border--3" {...properties} />,
     table: (properties) => (
-        <table className="relative mt-6 mb-6 w-full overflow-auto rounded border border--a" {...properties} />
+        <table className="relative mt-6 mb-6 w-full overflow-auto rounded border border--0" {...properties} />
     ),
-    thead: (properties) => <thead className="border-b background--b" {...properties} />,
+    thead: (properties) => <thead className="border-b background--1" {...properties} />,
     tbody: (properties) => <tbody className="" {...properties} />,
-    tr: (properties) => <tr className="border-b border--d last:border-b-0" {...properties} />,
+    tr: (properties) => <tr className="border-b border--3 last:border-b-0" {...properties} />,
     th: (properties) => (
         <th
-            className="border-r border--d px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0"
+            className="border-r border--3 px-4 py-2 text-[16px] leading-[28px] font-medium last:border-r-0"
             {...properties}
         />
     ),
     td: (properties) => (
         <td
-            className="border-r border--d px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0"
+            className="border-r border--3 px-4 py-2 text-[16px] leading-[28px] font-light last:border-r-0"
             {...properties}
         />
     ),

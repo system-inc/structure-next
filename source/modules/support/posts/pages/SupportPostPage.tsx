@@ -95,17 +95,17 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                     </Link>
                 </div>
 
-                <p className="mb-8 text-sm content--b">Updated {updatedTimeAgoString}</p>
+                <p className="mb-8 text-sm content--1">Updated {updatedTimeAgoString}</p>
 
                 {/* Post Content in Markdown */}
                 {properties.post.content && <Markdown className="mb-4 max-w-2xl">{properties.post.content}</Markdown>}
             </div>
 
-            <hr className="my-16 border--a" />
+            <hr className="my-16 border--0" />
 
             <SupportPostFeedback className="flex justify-center text-center" />
 
-            <hr className="my-16 border--a" />
+            <hr className="my-16 border--0" />
 
             <div className="flex justify-center">
                 <div>

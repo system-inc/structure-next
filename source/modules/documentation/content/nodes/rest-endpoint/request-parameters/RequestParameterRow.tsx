@@ -184,7 +184,7 @@ export function RequestParameterRow(properties: RequestParameterRowProperties) {
     // Render the component
     return (
         <>
-            <tr className="border border--a" onClick={handleRowClick}>
+            <tr className="border border--0" onClick={handleRowClick}>
                 <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                         {/* Checkbox to enable or disable the parameter */}

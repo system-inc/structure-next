@@ -83,7 +83,7 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowPro
 
     // Render the component
     return (
-        <div className="w-full overflow-hidden rounded-md border border--a">
+        <div className="w-full overflow-hidden rounded-md border border--0">
             {/* Header with description and add button */}
             <div className="flex items-center justify-between border-b px-4 py-3">
                 <div>

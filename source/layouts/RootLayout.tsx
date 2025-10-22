@@ -101,7 +101,7 @@ export async function RootLayout(properties: RootLayoutProperties) {
         <html lang="en" className={mergeClassNames(properties.htmlClassName, schemeClass)}>
             <body
                 className={mergeClassNames(
-                    'background--a font-sans content--a transition-colors',
+                    'background--0 font-sans content--0 transition-colors',
                     properties.bodyClassName,
                 )}
             >

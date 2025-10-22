@@ -548,7 +548,7 @@ export function Table(properties: TableProperties) {
             {/* Table Container */}
             <div
                 className={mergeClassNames(
-                    'dark:border-dark-4 overflow-scroll rounded-md border border--d',
+                    'dark:border-dark-4 overflow-scroll rounded-md border border--3',
                     properties.containerClassName,
                 )}
             >
@@ -568,7 +568,7 @@ export function Table(properties: TableProperties) {
                     <table className={mergeClassNames('w-full', properties.className)}>
                         {/* Column Header Row */}
                         {columns && columns.length > 0 && (
-                            <thead className="border-b border--d">
+                            <thead className="border-b border--3">
                                 <TableRow
                                     rowsLength={rows.length}
                                     selectedRowsIndexesSet={selectedRowsIndexesSet}
@@ -583,7 +583,7 @@ export function Table(properties: TableProperties) {
                             <tbody>
                                 {Array.from({ length: 5 }).map(function (row, rowIndex) {
                                     return (
-                                        <tr key={rowIndex} className="border-b border--d">
+                                        <tr key={rowIndex} className="border-b border--3">
                                             {properties.rowSelection && (
                                                 <td className="w-4 p-2">
                                                     <PlaceholderAnimation className="h-4 w-4" />

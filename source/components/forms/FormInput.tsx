@@ -172,9 +172,9 @@ export function FormInput(properties: FormInputProperties) {
             {/* Description */}
             {properties.description && (
                 <div
-                    // className="text-ss content--b"
+                    // className="text-ss content--1"
                     className={mergeClassNames(
-                        'content--b',
+                        'content--1',
                         properties.descriptionClassName,
                         size === 'default' ? 'text-ss' : size === 'large' ? 'text-sm' : 'text-ss',
                     )}
@@ -184,7 +184,7 @@ export function FormInput(properties: FormInputProperties) {
             )}
 
             {/* Validating */}
-            {validating && <p className="text-xs content--c">Validating...</p>}
+            {validating && <p className="text-xs content--2">Validating...</p>}
         </div>
     );
 }

@@ -198,7 +198,7 @@ export function Prose(properties: ProseProperties) {
     & hr {
         margin-top: var(--prose-hr-spacing);
         margin-bottom: var(--prose-hr-spacing);
-        border-color: var(--border--a);
+        border-color: var(--border--0);
         border-top-width: 1px;
         border-bottom-width: 0;
     }
@@ -308,7 +308,7 @@ export function Prose(properties: ProseProperties) {
     /* Code */
     & code {
         font-size: 0.875em;
-        background-color: var(--background--d);
+        background-color: var(--background--3);
         padding: 0.2em 0.4em;
         border-radius: 0.25rem;
     }
@@ -316,7 +316,7 @@ export function Prose(properties: ProseProperties) {
     & pre {
         margin-top: var(--prose-spacing);
         margin-bottom: var(--prose-spacing);
-        background-color: var(--background--d);
+        background-color: var(--background--3);
         padding: 1em;
         border-radius: 0.5rem;
         overflow-x: auto;
@@ -332,7 +332,7 @@ export function Prose(properties: ProseProperties) {
         margin-top: var(--prose-spacing);
         margin-bottom: var(--prose-spacing);
         padding-left: 1em;
-        border-left: 4px solid var(--border--a);
+        border-left: 4px solid var(--border--0);
         color: var(--foreground--b);
     }
 
@@ -417,7 +417,7 @@ import { Prose } from '@structure/source/common/prose/Prose';
 </Prose>
 
 // Combine with other utilities
-<Prose size="base" className="bg-background--c p-8 rounded-lg">
+<Prose size="base" className="bg-background--2 p-8 rounded-lg">
     Content in a card
 </Prose>
 ```
@@ -589,7 +589,7 @@ variant: {
 Already built-in via semantic tokens:
 
 -   `var(--foreground--a)` automatically adapts
--   `var(--border--a)` changes with theme
+-   `var(--border--0)` changes with theme
 -   `var(--link--a)` switches appropriately
 
 ### Responsive Sizes

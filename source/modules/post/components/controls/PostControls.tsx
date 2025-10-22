@@ -137,7 +137,7 @@ export function PostControls(properties: PostControlsProperties) {
                 <div>&bull;</div>
 
                 {/* Time Ago */}
-                <div className="content--c dark:content--c">
+                <div className="content--2 dark:content--2">
                     <TimeAgo
                         startTimeInMilliseconds={new Date(properties.createdAt).getTime()}
                         abbreviatedOnlyAtMobileSize={true}

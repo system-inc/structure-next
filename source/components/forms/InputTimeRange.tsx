@@ -176,8 +176,8 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                 type="button"
                 id={camelCase(properties.text)}
                 className={mergeClassNames(
-                    'cursor-pointer rounded-md p-1.5 text-xs content--b hover:background--b',
-                    properties.isActive && 'background--b',
+                    'cursor-pointer rounded-md p-1.5 text-xs content--1 hover:background--1',
+                    properties.isActive && 'background--1',
                 )}
                 onClick={properties.onClick}
             >
@@ -232,7 +232,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     {showTimeRangePresets && (
                         <div className="flex w-48 flex-col">
                             {/* Summary Header */}
-                            <div className="border-b border--a p-2 text-xs">
+                            <div className="border-b border--0 p-2 text-xs">
                                 {/* Current Selection */}
                                 <p className="font-semibold">{activeTimeRangePresetKey}</p>
                                 {/* Date Display */}
@@ -274,7 +274,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                             </div>
                         </div>
                     )}
-                    <div className={mergeClassNames('flex flex-col', showTimeRangePresets && 'border-l border--a')}>
+                    <div className={mergeClassNames('flex flex-col', showTimeRangePresets && 'border-l border--0')}>
                         <Calendar
                             mode="range"
                             showOutsideDays={false}
@@ -321,7 +321,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     size="FormInputSelect"
                     className={mergeClassNames(
                         'min-w-[246px]',
-                        !value && 'content--b',
+                        !value && 'content--1',
                         properties.buttonProperties?.className,
                     )}
                     iconLeft={CalendarIcon}

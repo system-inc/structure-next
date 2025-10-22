@@ -32,7 +32,7 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
     return (
         <th
             className={mergeClassNames(
-                'max-w-xs truncate p-2 px-2 py-1 text-left text-xs font-normal content--c',
+                'max-w-xs truncate p-2 px-2 py-1 text-left text-xs font-normal content--2',
                 properties.className,
             )}
         >
