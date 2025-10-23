@@ -30,7 +30,6 @@ export function AccountMenu(properties: AccountMenuProperties) {
                 'relative w-(--radix-popover-content-available-width) overflow-hidden py-3 md:w-full md:min-w-[24rem]',
                 properties.className,
             )}
-            tabIndex={1}
         >
             {/* If signed in */}
             {properties.account ? <AccountMenuSignedIn account={properties.account} /> : <AccountMenuSignedOut />}
@@ -49,7 +48,6 @@ export function AccountMenu(properties: AccountMenuProperties) {
                     <div className="mr-4 justify-end">
                         <AnimatedButton
                             variant="Outline"
-                            tabIndex={1}
                             className="w-[92px]"
                             onClick={async function () {
                                 await account.signOut();

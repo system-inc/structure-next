@@ -84,7 +84,6 @@ export function Popover(properties: PopoverProperties) {
         collisionPadding: collisionPadding,
         collisionBoundary: properties.collisionBoundary,
         onOpenAutoFocus: properties.onOpenAutoFocus,
-        tabIndex: properties.tabIndex ?? 1,
         className: mergeClassNames(
             popoverTheme.configuration.baseClasses,
             variant ? popoverTheme.variants[variant] : '',
@@ -119,7 +118,7 @@ export function Popover(properties: PopoverProperties) {
         <RadixPopover.Root open={open} onOpenChange={onOpenChange} modal={properties.modal}>
             {/* Trigger */}
             <RadixPopover.Trigger
-                tabIndex={properties.tabIndex ?? 1}
+                tabIndex={properties.tabIndex}
                 onKeyDown={function (event) {
                     // console.log('Popover.tsx onKeyDown', event.code);
 

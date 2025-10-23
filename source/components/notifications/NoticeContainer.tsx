@@ -142,7 +142,6 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
     // Render the component
     return (
         <div
-            tabIndex={0} // Make the menu focusable
             className={mergeClassNames(
                 'pointer-events-none fixed right-0 bottom-0 z-50 md:w-[420px]',
                 hovered && 'pt-16',
@@ -150,7 +149,6 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             )}
             // Handle mouse leave when it leaves the whole container
             onMouseLeave={handleMouseLeave}
-            onFocus={handleMouseEnter}
         >
             {/* Clear All Button */}
             <div

@@ -12,7 +12,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Base styles shared across all variants
 export const basePopoverClassNames = mergeClassNames(
-    // Focus
+    // Focus - Remove outline from popover container (focus should be on interactive elements inside)
     'outline-none',
     // Border radius
     'rounded-lg border',

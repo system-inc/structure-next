@@ -41,7 +41,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
         <div className="w-full">
             {/* Email and role */}
             <div className="border-b border--0 px-4 pb-2">
-                <Link variant="A" tabIndex={1} className="font-medium" href="/account/profile">
+                <Link variant="A" className="font-medium" href="/account/profile">
                     {displayName}
                 </Link>
                 {/* If the account is an administrator */}

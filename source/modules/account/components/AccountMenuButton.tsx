@@ -49,6 +49,14 @@ export function AccountMenuButton() {
             onOpenChange={setOpen}
             content={<AccountMenu account={account.data} />}
             align="end"
+            // Modal mode traps focus inside the popover for proper keyboard navigation
+            // Users can tab through all menu items and press Escape to close
+            modal={true}
+            // Prevent auto-focus on first element when opening to avoid aggressive visual focus
+            // Focus trap still works, but doesn't immediately highlight the first element
+            onOpenAutoFocus={function (event) {
+                event.preventDefault();
+            }}
             trigger={
                 <div className="h-8 w-8 cursor-pointer">
                     <ProfileImage profileImageUrl={profileImageUrl} alternateText={profileImageAlternateText} />

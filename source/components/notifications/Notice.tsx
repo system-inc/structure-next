@@ -72,7 +72,6 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
             {/* Close Button */}
             <MotionButton
                 {...properties.closeButtonProperties}
-                tabIndex={-1} // Make sure it's -1 to allow programmatic focusing
                 className="absolute -top-2 -left-2 inline-flex cursor-pointer items-center justify-center rounded-full border border--0 background--0 p-1 whitespace-nowrap select-none hover:background--1 hover:content--0 focus-visible:ring-0 focus-visible:outline-none"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -97,7 +96,7 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
                 </div>
 
                 {/* Button */}
-                <Button tabIndex={-1} variant="A" onClick={handleRemoval}>
+                <Button variant="A" onClick={handleRemoval}>
                     Dismiss
                 </Button>
             </div>

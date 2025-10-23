@@ -527,7 +527,8 @@ export function Form(properties: FormProperties) {
 
             {/* Button */}
             <AnimatedButton
-                tabIndex={1}
+                variant="Contrast"
+                // tabIndex={1}
                 {...buttonProperties}
                 type="submit"
                 disabled={properties.loading || submitting || !submittable || buttonProperties?.disabled}
