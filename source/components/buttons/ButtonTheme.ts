@@ -129,7 +129,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
     variants: {
         // General Purpose Variants
 
-        // Variant A - Primary button
+        // Variant A - Primary button with custom styling
+        // Use for: Main call-to-action buttons, primary actions
         A: mergeClassNames(
             buttonLayoutClassNames,
             buttonCommonClassNames,
@@ -148,6 +149,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'dark:data-[state=open]:border-black-200 dark:data-[state=open]:bg-black-500 dark:data-[state=open]:text-white-900',
         ),
 
+        // Variant Outline - Button with visible border and no fill
+        // Use for: Secondary actions, alternative options
         Outline: mergeClassNames(
             buttonLayoutClassNames,
             buttonCommonClassNames,
@@ -161,26 +164,25 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'data-[state=open]:border-content--5 data-[state=open]:content---3',
         ),
 
-        // Variant Contrast - Contrasts `background--0` using `content--0` as background colors
+        // Variant Contrast - High contrast button using inverted content colors
+        // Use for: Important CTAs that need maximum visibility against background--0
         Contrast: mergeClassNames(
             buttonLayoutClassNames,
             buttonCommonClassNames,
             buttonCenteredClassNames,
             buttonFocusClassNames,
             'border',
-            // Light mode - Background, border, and text (using dark colors)
-            'border-black-350 bg-black-350 text-white-800',
-            'hover:border-black-650 hover:bg-black-550 hover:text-white-850',
-            'active:border-black-500 active:bg-black-500 active:text-white-900',
-            'data-[state=open]:border-black-300 data-[state=open]:bg-black-500 data-[state=open]:text-white-900',
-            // Dark mode - Background, border, and text (using light colors)
-            'dark:border-white-650 dark:bg-white-650 dark:text-black-350',
-            'dark:hover:border-white-850 dark:hover:bg-white-850 dark:hover:text-black-550',
-            'dark:active:border-white-1000 dark:active:bg-white-1000 dark:active:text-black-700',
-            'dark:data-[state=open]:border-white-1000 dark:data-[state=open]:bg-white-1000 dark:data-[state=open]:text-black-700',
+            // Base: Use content color as background for true contrast
+            'border-content--0 background-content--0 content--10',
+            // Hover: Emphasize with darker/lighter content colors
+            'hover:border-content---1 hover:background-content---1 hover:content--9',
+            // Active: Maximum emphasis
+            'active:border-content---2 active:background-content---2 active:content--8',
+            'data-[state=open]:border-content---2 data-[state=open]:background-content---2 data-[state=open]:content--8',
         ),
 
         // Variant Ghost - Minimal button with no background until hover
+        // Use for: Tertiary actions, icon buttons, toolbar buttons, less prominent actions
         Ghost: mergeClassNames(
             buttonCommonClassNames,
             // Rounded
@@ -194,72 +196,70 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'active:content---1 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',
         ),
 
-        // Variant Destructive - Dangerous action button
-        // Both modes: Subtle background with red text and red border on hover/focus
-        // Use for: Delete, remove, or other destructive actions
-        // TODO: Needs review
+        // Variant Destructive - Dangerous/destructive action button
+        // Use for: Delete, remove, or other irreversible destructive actions
         Destructive: mergeClassNames(
             buttonLayoutClassNames,
             buttonCommonClassNames,
             buttonCenteredClassNames,
             buttonFocusClassNames,
-            // Border
             'border',
-            // Light
-            'border--3 background--2 text-red-500',
-            // Dark
-            // 'dark:bg-dark-2 dark:border-dark-4 dark:text-red-500',
-            // Light - Hover
-            'hover:border-red-500',
-            // Dark - Hover
-            'dark:hover:border-red-500',
-            // Light - Active (includes when used as open popover trigger)
-            // 'active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500',
-            // Dark - Active (includes when used as open popover trigger)
-            // 'dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500',
-            // Light - Focus
-            'focus:border-red-500',
-            // Dark - Focus
-            'dark:focus:border-red-500',
-            // Light - Disabled
+            // Base: Subtle background with semantic negative content
+            'border--3 background--2 content--negative',
+            // Hover: Emphasize border with negative color
+            'hover:border--negative hover:background--3',
+            // Active: Stronger emphasis (includes when used as open popover trigger)
+            'active:border--negative active:background--4',
+            'data-[state=open]:border--negative data-[state=open]:background--4',
+            // Focus: Use negative border
+            'focus:border--negative',
+            // Disabled: Revert to base appearance
             'disabled:hover:border--3 disabled:hover:background--2',
-            // Dark - Disabled
-            // 'dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3',
         ),
 
         // Specialized UI Variants
 
-        // Variant GhostDestructive - Minimal destructive action
-        // Both modes: Tertiary text, red background on hover
-        // Use for: Less prominent destructive actions
-        // TODO: Needs review
+        // Variant GhostDestructive - Minimal destructive action button
+        // Use for: Less prominent destructive actions (e.g., remove from list, clear)
         GhostDestructive: mergeClassNames(
-            buttonLayoutClassNames,
             buttonCommonClassNames,
-            buttonCenteredClassNames,
-            buttonFocusClassNames,
-            // Rounded and hover
-            // 'hover:bg-accent hover:text-accent-foreground rounded-md',
-            // Color, hover, and active states
-            // 'dark:text-light-4 content--2 hover:bg-red-500/10 hover:text-red-500 active:border-0 dark:hover:text-red-500',
+            // Rounded
+            'rounded-lg',
+            // Content
+            'content--3',
+            // Hover
+            'hover:background--negative/5 hover:content--3',
+            // Active and Popover open states (for TipButton)
+            'active:background--8 data-[state=delayed-open]:background--8 data-[state=instant-open]:background--8 data-[state=open]:background--8',
+            'active:content---1 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',
         ),
 
-        // TODO: Needs review
+        // Variant ToggleOn - Button in toggled/active state
+        // Use for: Toggle buttons, filter chips, or selectable options that are currently ON
         ToggleOn: mergeClassNames(
             buttonCommonClassNames,
             buttonCenteredClassNames,
-            // Toggled on
-            // 'border-neutral+6 bg-light-2 dark:border-dark-6 dark:bg-dark-2 rounded-md border',
+            'rounded-md border',
+            // Toggled on: More prominent appearance to show active state
+            'border--2 background--3 content--0',
+            // Hover: Slightly more emphasis
+            'hover:border--3 hover:background--4',
         ),
 
-        // TODO: Needs review
+        // Variant ToggleOff - Button in untoggled/inactive state
+        // Use for: Toggle buttons, filter chips, or selectable options that are currently OFF
         ToggleOff: mergeClassNames(
             buttonCommonClassNames,
             buttonCenteredClassNames,
-            // Toggled off
-            // 'dark:border-dark-4 rounded-md border border--3',
+            'rounded-md border',
+            // Toggled off: Subtle appearance to show inactive state
+            'border--3 background--0 content--2',
+            // Hover: Slight emphasis to show interactivity
+            'hover:border--2 hover:background--2 hover:content--1',
         ),
 
+        // Variant MenuItem - Menu item button styling
+        // Use for: Items within dropdown menus, context menus, select options
         MenuItem: mergeClassNames(
             // Layout
             'relative flex cursor-default items-center justify-start',
@@ -279,27 +279,25 @@ export const buttonTheme: ButtonThemeConfiguration = {
             '[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:duration-200 [&[data-selected=true]>svg:first-child]:fade-in',
         ),
 
-        // TODO: Needs review
+        // Variant FormInputCheckbox - Checkbox button in forms
+        // Use for: Checkbox inputs with custom styling
         FormInputCheckbox: mergeClassNames(
             buttonCommonClassNames,
-            // Layout and sizing
-            'flex content-center items-center justify-center',
-            // Border
-            // 'dark:border-light rounded-sm border border--3',
-            // Text and background
-            'background--0 content--0',
-            // Hover
-            // 'hover:bg-light-2 dark:hover:bg-dark-3',
-            // Active (includes when used as open popover trigger)
-            // 'active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-light dark:data-[state=open]:bg-light',
-            // Checked
-            // 'dark:data-[state=checked]:bg-light dark:data-[state=checked]:text-dark',
-            // Indeterminate
-            // 'dark:data-[state=indeterminate]:bg-light dark:data-[state=indeterminate]:text-dark',
-            // Focus
-            // 'ring-offset-background ring-light focus-visible:ring focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:outline-none',
+            buttonFocusClassNames,
+            'flex items-center justify-center',
+            'rounded-sm border',
+            // Base: Subtle background with border
+            'border--3 background--0 content--0',
+            // Hover: Slight emphasis
+            'hover:border--2 hover:background--2',
+            // Checked state: Inverted colors (content color becomes background)
+            'data-[state=checked]:border-content--0 data-[state=checked]:background-content--0 data-[state=checked]:content--10',
+            // Indeterminate state: Same styling as checked
+            'data-[state=indeterminate]:border-content--0 data-[state=indeterminate]:background-content--0 data-[state=indeterminate]:content--10',
         ),
 
+        // Variant FormInputSelect - Select input button styling
+        // Use for: Custom select/dropdown triggers in forms
         FormInputSelect: mergeClassNames(
             buttonCommonClassNames,
             // Layout (no justify-center because grow handles spacing)
@@ -320,15 +318,19 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'dark:active:background--5 dark:data-[state=open]:background--5',
             // Disabled
             'disabled:hover:background--5',
-            // Focus (only when not open, since background already indicates open state)
-            // 'focus:not([data-state=open]):border-neutral dark:focus:not([data-state=open]):border-light focus-visible:ring-0 focus-visible:outline-none',
         ),
 
-        // TODO: Needs review
+        // Variant TableHeaderCell - Sortable table header cell button
+        // Use for: Clickable/sortable table headers
         TableHeaderCell: mergeClassNames(
             buttonCommonClassNames,
-            // Text
-            // 'hover:-text-dark dark:hover:text-light text-xs font-normal content--2',
+            'text-xs font-normal',
+            // Base: Muted content
+            'content--2',
+            // Hover: Emphasize to show interactivity
+            'hover:content--0',
+            // Active: Strongest emphasis (for sorted column)
+            'active:content---1',
         ),
     },
 
