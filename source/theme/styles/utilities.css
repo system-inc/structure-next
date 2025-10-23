@@ -1,61 +1,63 @@
 /* Backgrounds */
 
-/* Background 0 - Base/primary page background (locked in, never change) */
+/* Background color variables */
+:root {
+    --color-background--0: light-dark(var(--color-white-1000), var(--color-black-700));
+    --color-background--1: light-dark(var(--color-white-950), var(--color-black-650));
+    --color-background--2: light-dark(var(--color-white-900), var(--color-black-600));
+    --color-background--3: light-dark(var(--color-white-850), var(--color-black-550));
+    --color-background--4: light-dark(var(--color-white-800), var(--color-black-500));
+    --color-background--5: light-dark(var(--color-white-750), var(--color-black-450));
+    --color-background--6: light-dark(var(--color-white-700), var(--color-black-400));
+    --color-background--7: light-dark(var(--color-white-650), var(--color-black-350));
+    --color-background--8: light-dark(var(--color-white-600), var(--color-black-300));
+    --color-background--9: light-dark(var(--color-white-550), var(--color-black-250));
+    --color-background--10: light-dark(var(--color-white-500), var(--color-black-200));
+    --color-background---1: light-dark(var(--color-white-1000), var(--color-black-750));
+    --color-background---2: light-dark(var(--color-white-1000), var(--color-black-800));
+    --color-background---3: light-dark(var(--color-white-1000), var(--color-black-850));
+}
 @utility background--0 {
-    /* Don't change, these are locked in */
-    background-color: light-dark(var(--color-white-1000), var(--color-black-700));
+    background-color: var(--color-background--0);
 }
-/* Background 1 - 50-step progression from base */
 @utility background--1 {
-    background-color: light-dark(var(--color-white-950), var(--color-black-650));
+    background-color: var(--color-background--1);
 }
-/* Background 2 - 50-step progression */
 @utility background--2 {
-    background-color: light-dark(var(--color-white-900), var(--color-black-600));
+    background-color: var(--color-background--2);
 }
-/* Background 3 - 50-step progression */
 @utility background--3 {
-    background-color: light-dark(var(--color-white-850), var(--color-black-550));
+    background-color: var(--color-background--3);
 }
-/* Background 4 - 50-step progression */
 @utility background--4 {
-    background-color: light-dark(var(--color-white-800), var(--color-black-500));
+    background-color: var(--color-background--4);
 }
-/* Background 5 - 50-step progression */
 @utility background--5 {
-    background-color: light-dark(var(--color-white-750), var(--color-black-450));
+    background-color: var(--color-background--5);
 }
-/* Background 6 - 50-step progression */
 @utility background--6 {
-    background-color: light-dark(var(--color-white-700), var(--color-black-400));
+    background-color: var(--color-background--6);
 }
-/* Background 7 - 50-step progression */
 @utility background--7 {
-    background-color: light-dark(var(--color-white-650), var(--color-black-350));
+    background-color: var(--color-background--7);
 }
-/* Background 8 - 50-step progression */
 @utility background--8 {
-    background-color: light-dark(var(--color-white-600), var(--color-black-300));
+    background-color: var(--color-background--8);
 }
-/* Background 9 - 50-step progression */
 @utility background--9 {
-    background-color: light-dark(var(--color-white-550), var(--color-black-250));
+    background-color: var(--color-background--9);
 }
-/* Background 10 - Maximum emphasis, 50-step progression */
 @utility background--10 {
-    background-color: light-dark(var(--color-white-500), var(--color-black-200));
+    background-color: var(--color-background--10);
 }
-/* Background ---1 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
 @utility background---1 {
-    background-color: light-dark(var(--color-white-1000), var(--color-black-750));
+    background-color: var(--color-background---1);
 }
-/* Background ---2 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
 @utility background---2 {
-    background-color: light-dark(var(--color-white-1000), var(--color-black-800));
+    background-color: var(--color-background---2);
 }
-/* Background ---3 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
 @utility background---3 {
-    background-color: light-dark(var(--color-white-1000), var(--color-black-850));
+    background-color: var(--color-background---3);
 }
 
 /* Background Backdrop - Overlay for modals and dialogs */
@@ -81,130 +83,148 @@
 
 /* Content */
 
-/* Content 0 - Primary */
+/* Content color variables */
+:root {
+    --color-content--0: light-dark(var(--color-black-800), var(--color-white-700));
+    --color-content--1: light-dark(var(--color-black-500), var(--color-white-400));
+    --color-content--2: light-dark(var(--color-black-200), var(--color-white-100));
+    --color-content--3: light-dark(var(--color-gray-1000), var(--color-gray-100));
+    --color-content--4: light-dark(var(--color-gray-700), var(--color-gray-400));
+    --color-content--5: light-dark(var(--color-gray-400), var(--color-gray-700));
+    --color-content--6: light-dark(var(--color-gray-100), var(--color-gray-1000));
+    --color-content--7: light-dark(var(--color-white-100), var(--color-black-200));
+    --color-content--8: light-dark(var(--color-white-400), var(--color-black-500));
+    --color-content--9: light-dark(var(--color-white-700), var(--color-black-800));
+    --color-content--10: light-dark(var(--color-white-1000), var(--color-black-1000));
+    --color-content---1: light-dark(var(--color-black-900), var(--color-white-900));
+    --color-content---2: light-dark(var(--color-black-950), var(--color-white-950));
+    --color-content---3: light-dark(var(--color-black-1000), var(--color-white-1000));
+}
 @utility content--0 {
-    color: light-dark(var(--color-black-800), var(--color-white-700));
+    color: var(--color-content--0);
 }
-/* Border Content 0 - Border matching content--0 color */
-@utility border-content--0 {
-    border-color: light-dark(var(--color-black-800), var(--color-white-700));
-}
-
-/* Content 1 - Secondary */
 @utility content--1 {
-    color: light-dark(var(--color-black-500), var(--color-white-400));
+    color: var(--color-content--1);
 }
-/* Border Content 1 - Border matching content--1 color */
-@utility border-content--1 {
-    border-color: light-dark(var(--color-black-500), var(--color-white-400));
-}
-
-/* Content 2 - Tertiary */
 @utility content--2 {
-    color: light-dark(var(--color-black-200), var(--color-white-100));
+    color: var(--color-content--2);
 }
-/* Border Content 2 - Border matching content--2 color */
-@utility border-content--2 {
-    border-color: light-dark(var(--color-black-200), var(--color-white-100));
-}
-
-/* Content 3 */
 @utility content--3 {
-    color: light-dark(var(--color-gray-1000), var(--color-gray-100));
+    color: var(--color-content--3);
 }
-/* Border Content 3 - Border matching content--3 color */
-@utility border-content--3 {
-    border-color: light-dark(var(--color-gray-1000), var(--color-gray-100));
-}
-
-/* Content 4 */
 @utility content--4 {
-    color: light-dark(var(--color-gray-700), var(--color-gray-400));
+    color: var(--color-content--4);
 }
-/* Border Content 4 - Border matching content--4 color */
-@utility border-content--4 {
-    border-color: light-dark(var(--color-gray-700), var(--color-gray-400));
-}
-
-/* Content 5 */
 @utility content--5 {
-    color: light-dark(var(--color-gray-400), var(--color-gray-700));
+    color: var(--color-content--5);
 }
-/* Border Content 5 - Border matching content--5 color */
-@utility border-content--5 {
-    border-color: light-dark(var(--color-gray-400), var(--color-gray-700));
-}
-
-/* Content 6 */
 @utility content--6 {
-    color: light-dark(var(--color-gray-100), var(--color-gray-1000));
+    color: var(--color-content--6);
 }
-/* Border Content 6 - Border matching content--6 color */
-@utility border-content--6 {
-    border-color: light-dark(var(--color-gray-100), var(--color-gray-1000));
-}
-
-/* Content 7 */
 @utility content--7 {
-    color: light-dark(var(--color-white-100), var(--color-black-200));
+    color: var(--color-content--7);
 }
-/* Border Content 7 - Border matching content--7 color */
-@utility border-content--7 {
-    border-color: light-dark(var(--color-white-100), var(--color-black-200));
-}
-
-/* Content 8 */
 @utility content--8 {
-    color: light-dark(var(--color-white-400), var(--color-black-500));
+    color: var(--color-content--8);
 }
-/* Border Content 8 - Border matching content--8 color */
-@utility border-content--8 {
-    border-color: light-dark(var(--color-white-400), var(--color-black-500));
-}
-
-/* Content 9 */
 @utility content--9 {
-    color: light-dark(var(--color-white-700), var(--color-black-800));
+    color: var(--color-content--9);
 }
-/* Border Content 9 - Border matching content--9 color */
-@utility border-content--9 {
-    border-color: light-dark(var(--color-white-700), var(--color-black-800));
-}
-
-/* Content 10 - Lowest emphasis */
 @utility content--10 {
-    color: light-dark(var(--color-white-1000), var(--color-black-1000));
+    color: var(--color-content--10);
 }
-/* Border Content 10 - Border matching content--10 color */
-@utility border-content--10 {
-    border-color: light-dark(var(--color-white-1000), var(--color-black-1000));
-}
-
-/* Content ---1 - Reverse direction: higher emphasis than base */
 @utility content---1 {
-    color: light-dark(var(--color-black-900), var(--color-white-900));
+    color: var(--color-content---1);
 }
-/* Border Content ---1 - Border matching content---1 color */
-@utility border-content---1 {
-    border-color: light-dark(var(--color-black-900), var(--color-white-900));
-}
-
-/* Content ---2 - Reverse direction: higher emphasis than base */
 @utility content---2 {
-    color: light-dark(var(--color-black-950), var(--color-white-950));
+    color: var(--color-content---2);
 }
-/* Border Content ---2 - Border matching content---2 color */
-@utility border-content---2 {
-    border-color: light-dark(var(--color-black-950), var(--color-white-950));
-}
-
-/* Content ---3 - Reverse direction: higher emphasis than base */
 @utility content---3 {
-    color: light-dark(var(--color-black-1000), var(--color-white-1000));
+    color: var(--color-content---3);
 }
-/* Border Content ---3 - Border matching content---3 color */
+@utility border-content--0 {
+    border-color: var(--color-content--0);
+}
+@utility border-content--1 {
+    border-color: var(--color-content--1);
+}
+@utility border-content--2 {
+    border-color: var(--color-content--2);
+}
+@utility border-content--3 {
+    border-color: var(--color-content--3);
+}
+@utility border-content--4 {
+    border-color: var(--color-content--4);
+}
+@utility border-content--5 {
+    border-color: var(--color-content--5);
+}
+@utility border-content--6 {
+    border-color: var(--color-content--6);
+}
+@utility border-content--7 {
+    border-color: var(--color-content--7);
+}
+@utility border-content--8 {
+    border-color: var(--color-content--8);
+}
+@utility border-content--9 {
+    border-color: var(--color-content--9);
+}
+@utility border-content--10 {
+    border-color: var(--color-content--10);
+}
+@utility border-content---1 {
+    border-color: var(--color-content---1);
+}
+@utility border-content---2 {
+    border-color: var(--color-content---2);
+}
 @utility border-content---3 {
-    border-color: light-dark(var(--color-black-1000), var(--color-white-1000));
+    border-color: var(--color-content---3);
+}
+@utility background-content--0 {
+    background-color: var(--color-content--0);
+}
+@utility background-content--1 {
+    background-color: var(--color-content--1);
+}
+@utility background-content--2 {
+    background-color: var(--color-content--2);
+}
+@utility background-content--3 {
+    background-color: var(--color-content--3);
+}
+@utility background-content--4 {
+    background-color: var(--color-content--4);
+}
+@utility background-content--5 {
+    background-color: var(--color-content--5);
+}
+@utility background-content--6 {
+    background-color: var(--color-content--6);
+}
+@utility background-content--7 {
+    background-color: var(--color-content--7);
+}
+@utility background-content--8 {
+    background-color: var(--color-content--8);
+}
+@utility background-content--9 {
+    background-color: var(--color-content--9);
+}
+@utility background-content--10 {
+    background-color: var(--color-content--10);
+}
+@utility background-content---1 {
+    background-color: var(--color-content---1);
+}
+@utility background-content---2 {
+    background-color: var(--color-content---2);
+}
+@utility background-content---3 {
+    background-color: var(--color-content---3);
 }
 
 /* Content Disabled - Disabled state content color */
@@ -239,61 +259,64 @@
 
 /* Borders */
 
-/* Border 0 - Primary border */
+/* Border color variables */
+:root {
+    --color-border--0: light-dark(var(--color-white-600), var(--color-black-350));
+    --color-border--1: light-dark(var(--color-white-550), var(--color-black-300));
+    --color-border--2: light-dark(var(--color-white-500), var(--color-black-250));
+    --color-border--3: light-dark(var(--color-white-450), var(--color-black-200));
+    --color-border--4: light-dark(var(--color-white-400), var(--color-black-150));
+    --color-border--5: light-dark(var(--color-white-350), var(--color-black-100));
+    --color-border--6: light-dark(var(--color-white-300), var(--color-black-50));
+    --color-border--7: light-dark(var(--color-white-250), var(--color-black-0));
+    --color-border--8: light-dark(var(--color-white-200), var(--color-gray-1000));
+    --color-border--9: light-dark(var(--color-white-150), var(--color-gray-950));
+    --color-border--10: light-dark(var(--color-white-100), var(--color-gray-900));
+    --color-border---1: light-dark(var(--color-white-650), var(--color-black-400));
+    --color-border---2: light-dark(var(--color-white-700), var(--color-black-450));
+    --color-border---3: light-dark(var(--color-white-750), var(--color-black-500));
+}
 @utility border--0 {
-    border-color: light-dark(var(--color-white-600), var(--color-black-350));
+    border-color: var(--color-border--0);
 }
-/* Border 1 - 50-step progression from base */
 @utility border--1 {
-    border-color: light-dark(var(--color-white-550), var(--color-black-300));
+    border-color: var(--color-border--1);
 }
-/* Border 2 - 50-step progression */
 @utility border--2 {
-    border-color: light-dark(var(--color-white-500), var(--color-black-250));
+    border-color: var(--color-border--2);
 }
-/* Border 3 - 50-step progression */
 @utility border--3 {
-    border-color: light-dark(var(--color-white-450), var(--color-black-200));
+    border-color: var(--color-border--3);
 }
-/* Border 4 - 50-step progression */
 @utility border--4 {
-    border-color: light-dark(var(--color-white-400), var(--color-black-150));
+    border-color: var(--color-border--4);
 }
-/* Border 5 - 50-step progression */
 @utility border--5 {
-    border-color: light-dark(var(--color-white-350), var(--color-black-100));
+    border-color: var(--color-border--5);
 }
-/* Border 6 - 50-step progression */
 @utility border--6 {
-    border-color: light-dark(var(--color-white-300), var(--color-black-50));
+    border-color: var(--color-border--6);
 }
-/* Border 7 - 50-step progression */
 @utility border--7 {
-    border-color: light-dark(var(--color-white-250), var(--color-black-0));
+    border-color: var(--color-border--7);
 }
-/* Border 8 - 50-step progression */
 @utility border--8 {
-    border-color: light-dark(var(--color-white-200), var(--color-gray-1000));
+    border-color: var(--color-border--8);
 }
-/* Border 9 - 50-step progression */
 @utility border--9 {
-    border-color: light-dark(var(--color-white-150), var(--color-gray-950));
+    border-color: var(--color-border--9);
 }
-/* Border 10 - Most subtle, 50-step progression */
 @utility border--10 {
-    border-color: light-dark(var(--color-white-100), var(--color-gray-900));
+    border-color: var(--color-border--10);
 }
-/* Border ---1 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
 @utility border---1 {
-    border-color: light-dark(var(--color-white-650), var(--color-black-400));
+    border-color: var(--color-border---1);
 }
-/* Border ---2 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
 @utility border---2 {
-    border-color: light-dark(var(--color-white-700), var(--color-black-450));
+    border-color: var(--color-border---2);
 }
-/* Border ---3 - Reverse direction: lighter (light mode) and darker (dark mode) than base */
 @utility border---3 {
-    border-color: light-dark(var(--color-white-750), var(--color-black-500));
+    border-color: var(--color-border---3);
 }
 
 /* Border Focus - Focus state border for form inputs */

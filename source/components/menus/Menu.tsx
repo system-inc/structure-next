@@ -23,9 +23,11 @@ export const menuClassName = mergeClassNames(
     // Layout and sizing
     'flex flex-col focus-visible:outline-none',
     // Border
-    'rounded-sm border border--3',
-    // Background and text
-    'background--0 text-sm content--0',
+    'rounded-lg border border--5',
+    // Background
+    'background--0 dark:background--1',
+    // Content
+    'text-sm content--0',
 );
 
 // Type - MenuItemInterface

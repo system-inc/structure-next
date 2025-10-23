@@ -36,7 +36,8 @@ export function MenuItemsList(properties: MenuItemsListProperties) {
                         ref={properties.getItemReference(itemToRenderIndex)}
                         tabIndex={-1}
                         className={mergeClassNames('w-full', itemToRender.className)}
-                        onClick={function (event: React.MouseEvent<HTMLElement, MouseEvent>) {
+                        // Allow users to click to drop on one item, and then move mouse and mouse up to select
+                        onMouseUp={function (event: React.MouseEvent<HTMLElement, MouseEvent>) {
                             properties.itemOnClickIntercept(itemToRender, itemToRenderIndex, event);
                         }}
                         onMouseMove={function (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {

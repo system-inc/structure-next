@@ -227,15 +227,15 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Light
             'border--3 background--2 text-red-500',
             // Dark
-            'dark:bg-dark-2 dark:border-dark-4 dark:text-red-500',
+            // 'dark:bg-dark-2 dark:border-dark-4 dark:text-red-500',
             // Light - Hover
             'hover:border-red-500',
             // Dark - Hover
             'dark:hover:border-red-500',
             // Light - Active (includes when used as open popover trigger)
-            'active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500',
+            // 'active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500',
             // Dark - Active (includes when used as open popover trigger)
-            'dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500',
+            // 'dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500',
             // Light - Focus
             'focus:border-red-500',
             // Dark - Focus
@@ -243,7 +243,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Light - Disabled
             'disabled:hover:border--3 disabled:hover:background--2',
             // Dark - Disabled
-            'dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3',
+            // 'dark:disabled:hover:bg-dark-1 dark:disabled:hover:border-dark-3',
         ),
 
         // Specialized UI Variants
@@ -258,9 +258,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCenteredClassNames,
             buttonFocusClassNames,
             // Rounded and hover
-            'hover:bg-accent hover:text-accent-foreground rounded-md',
+            // 'hover:bg-accent hover:text-accent-foreground rounded-md',
             // Color, hover, and active states
-            'dark:text-light-4 content--2 hover:bg-red-500/10 hover:text-red-500 active:border-0 dark:hover:text-red-500',
+            // 'dark:text-light-4 content--2 hover:bg-red-500/10 hover:text-red-500 active:border-0 dark:hover:text-red-500',
         ),
 
         // TODO: Needs review
@@ -268,7 +268,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonClassNames,
             buttonCenteredClassNames,
             // Toggled on
-            'border-neutral+6 bg-light-2 dark:border-dark-6 dark:bg-dark-2 rounded-md border',
+            // 'border-neutral+6 bg-light-2 dark:border-dark-6 dark:bg-dark-2 rounded-md border',
         ),
 
         // TODO: Needs review
@@ -276,22 +276,24 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonClassNames,
             buttonCenteredClassNames,
             // Toggled off
-            'dark:border-dark-4 rounded-md border border--3',
+            // 'dark:border-dark-4 rounded-md border border--3',
         ),
 
-        // TODO: Needs review
         MenuItem: mergeClassNames(
-            'relative flex cursor-default items-center justify-start rounded-xs font-normal',
-            // Focus states
-            'focus-border-none focus-visible:outline-none',
-            // Highlighted states
-            'data-[highlighted=true]:bg-light-2 data-[highlighted=true]:dark:bg-dark-3',
-            // Active states
-            'data-[highlighted=true]:active:bg-light-3 data-[highlighted=true]:dark:active:bg-dark-4',
-            // Disabled states
-            'disabled:opacity-50',
+            // Layout
+            'relative flex cursor-default items-center justify-start',
             // Padding based on selected state (for checkmark icon spacing)
             'pl-8 data-[selected=true]:pl-2',
+            // Border
+            'rounded',
+            // Border - Focus states
+            'focus:border-none focus-visible:outline-none',
+            // Highlighted states
+            'data-[highlighted=true]:background--3 dark:data-[highlighted=true]:background--4',
+            // Active states
+            'data-[highlighted=true]:active:background--4 dark:data-[highlighted=true]:active:background--5',
+            // Disabled states
+            'disabled:opacity-50',
             // Icon animation when selected (applies to first direct SVG child only - the iconLeft checkmark)
             '[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:duration-200 [&[data-selected=true]>svg:first-child]:fade-in',
         ),
@@ -302,19 +304,19 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Layout and sizing
             'flex content-center items-center justify-center',
             // Border
-            'dark:border-light rounded-sm border border--3',
+            // 'dark:border-light rounded-sm border border--3',
             // Text and background
             'background--0 content--0',
             // Hover
-            'hover:bg-light-2 dark:hover:bg-dark-3',
+            // 'hover:bg-light-2 dark:hover:bg-dark-3',
             // Active (includes when used as open popover trigger)
-            'active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-light dark:data-[state=open]:bg-light',
+            // 'active:bg-light-3 data-[state=open]:bg-light-3 dark:active:bg-light dark:data-[state=open]:bg-light',
             // Checked
-            'dark:data-[state=checked]:bg-light dark:data-[state=checked]:text-dark',
+            // 'dark:data-[state=checked]:bg-light dark:data-[state=checked]:text-dark',
             // Indeterminate
-            'dark:data-[state=indeterminate]:bg-light dark:data-[state=indeterminate]:text-dark',
+            // 'dark:data-[state=indeterminate]:bg-light dark:data-[state=indeterminate]:text-dark',
             // Focus
-            'ring-offset-background ring-light focus-visible:ring focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:outline-none',
+            // 'ring-offset-background ring-light focus-visible:ring focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:outline-none',
         ),
 
         FormInputSelect: mergeClassNames(
@@ -345,7 +347,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         TableHeaderCell: mergeClassNames(
             buttonCommonClassNames,
             // Text
-            'hover:-text-dark dark:hover:text-light text-xs font-normal content--2',
+            // 'hover:-text-dark dark:hover:text-light text-xs font-normal content--2',
         ),
     },
 
