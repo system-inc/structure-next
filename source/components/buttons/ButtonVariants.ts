@@ -78,7 +78,7 @@ export const ButtonVariants = {
         // Active (includes when used as open popover trigger)
         `active:bg-theme-light-primary-active data-[state=open]:bg-theme-light-primary-active dark:active:bg-theme-dark-primary-active dark:data-[state=open]:bg-theme-dark-primary-active`,
         // Disabled
-        `disabled:bg-theme-light-primary-disabled disabled:opacity-100 disabled:dark:bg-theme-dark-primary-disabled`,
+        `disabled:bg-theme-light-primary-disabled disabled:dark:bg-theme-dark-primary-disabled disabled:opacity-100`,
     ),
     // Light variant: light background and border with hover and active states
     light: mergeClassNames(
@@ -86,7 +86,7 @@ export const ButtonVariants = {
         focusStyle,
         centeredButton,
         // Dark text on light background
-        `dark:bg-light-2 dark:text-dark text-dark border background--2 hover:bg-light dark:hover:bg-light`,
+        `dark:bg-light-2 dark:text-dark text-dark hover:bg-light dark:hover:bg-light border background--2`,
         // Disabled states
         `dark:disabled:hover:bg-light-2 disabled:hover:background--2`,
         // Active states (includes when used as open popover trigger)
@@ -103,7 +103,7 @@ export const ButtonVariants = {
         // Active (includes when used as open popover trigger)
         `active:bg-dark-3 data-[state=open]:bg-dark-3 dark:active:bg-dark-4 dark:data-[state=open]:bg-dark-4`,
         // Border matches background
-        `border-dark-2 border dark:border-dark-2`,
+        `border-dark-2 dark:border-dark-2 border`,
     ),
     // Ghost variant: transparent with accent color on hover
     ghost: mergeClassNames(
@@ -138,9 +138,9 @@ export const ButtonVariants = {
         // Dark - Hover
         `dark:hover:border-red-500`,
         // Light - Active (includes when used as open popover trigger)
-        `active:bg-light-3 active:border-red-500 data-[state=open]:bg-light-3 data-[state=open]:border-red-500`,
+        `active:bg-light-3 data-[state=open]:bg-light-3 active:border-red-500 data-[state=open]:border-red-500`,
         // Dark - Active (includes when used as open popover trigger)
-        `dark:active:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:bg-dark-3 dark:data-[state=open]:border-red-500`,
+        `dark:active:bg-dark-3 dark:data-[state=open]:bg-dark-3 dark:active:border-red-500 dark:data-[state=open]:border-red-500`,
         // Light - Focus
         `focus:border-red-500`,
         // Dark - Focus
@@ -155,7 +155,7 @@ export const ButtonVariants = {
         commonButton,
         centeredButton,
         // Toggled on
-        `border-neutral+6 bg-light-2 rounded-md border dark:border-dark-6 dark:bg-dark-2`,
+        `border-neutral+6 bg-light-2 dark:border-dark-6 dark:bg-dark-2 rounded-md border`,
     ),
     // Toggle off
     toggleOff: mergeClassNames(
@@ -220,7 +220,7 @@ export const ButtonVariants = {
     tableHeaderCell: mergeClassNames(
         commonButton,
         // Text
-        `hover:-text-dark text-xs font-normal content--2 dark:hover:text-light`,
+        `hover:-text-dark dark:hover:text-light text-xs font-normal content--2`,
         // Text and background
         // `hover:background--2 dark:hover:bg-dark-3 disabled:hover:bg-light ` +
         // Disabled and active states

@@ -21,7 +21,7 @@ export const commonClassNames = mergeClassNames(
     // Placeholder (disabled)
     'disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20',
     // Disabled
-    'disabled:text-opacity-20 disabled:cursor-not-allowed disabled:dark:text-opacity-20',
+    'disabled:text-opacity-20 disabled:dark:text-opacity-20 disabled:cursor-not-allowed',
 );
 
 // Background styles
