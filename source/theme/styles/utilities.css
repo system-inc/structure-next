@@ -1,343 +1,66 @@
-/* Backgrounds */
+/* Background utilities with 0-10 scale + opacity modifier support */
+@utility background--* {
+    /* No slash modifier -> solid background */
+    background-color: --value(--color-background- *, [color]);
 
-/* Background color variables */
-:root {
-    --color-background--0: light-dark(var(--color-white-1000), var(--color-black-700));
-    --color-background--1: light-dark(var(--color-white-950), var(--color-black-650));
-    --color-background--2: light-dark(var(--color-white-900), var(--color-black-600));
-    --color-background--3: light-dark(var(--color-white-850), var(--color-black-550));
-    --color-background--4: light-dark(var(--color-white-800), var(--color-black-500));
-    --color-background--5: light-dark(var(--color-white-750), var(--color-black-450));
-    --color-background--6: light-dark(var(--color-white-700), var(--color-black-400));
-    --color-background--7: light-dark(var(--color-white-650), var(--color-black-350));
-    --color-background--8: light-dark(var(--color-white-600), var(--color-black-300));
-    --color-background--9: light-dark(var(--color-white-550), var(--color-black-250));
-    --color-background--10: light-dark(var(--color-white-500), var(--color-black-200));
-    --color-background---1: light-dark(var(--color-white-1000), var(--color-black-750));
-    --color-background---2: light-dark(var(--color-white-1000), var(--color-black-800));
-    --color-background---3: light-dark(var(--color-white-1000), var(--color-black-850));
-}
-@utility background--0 {
-    background-color: var(--color-background--0);
-}
-@utility background--1 {
-    background-color: var(--color-background--1);
-}
-@utility background--2 {
-    background-color: var(--color-background--2);
-}
-@utility background--3 {
-    background-color: var(--color-background--3);
-}
-@utility background--4 {
-    background-color: var(--color-background--4);
-}
-@utility background--5 {
-    background-color: var(--color-background--5);
-}
-@utility background--6 {
-    background-color: var(--color-background--6);
-}
-@utility background--7 {
-    background-color: var(--color-background--7);
-}
-@utility background--8 {
-    background-color: var(--color-background--8);
-}
-@utility background--9 {
-    background-color: var(--color-background--9);
-}
-@utility background--10 {
-    background-color: var(--color-background--10);
-}
-@utility background---1 {
-    background-color: var(--color-background---1);
-}
-@utility background---2 {
-    background-color: var(--color-background---2);
-}
-@utility background---3 {
-    background-color: var(--color-background---3);
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    background-color: --alpha(--value(--color-background- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    background-color: --alpha(--value(--color-background- *, [color]) / --modifier([percentage]));
 }
 
-/* Background Backdrop - Overlay for modals and dialogs */
-@utility background--backdrop {
-    background-color: light-dark(var(--color-dark-400), var(--color-dark-600));
-}
-/* Background Positive - Success/positive state background */
-@utility background--positive {
-    background-color: light-dark(var(--color-green-600), var(--color-green-400));
-}
-/* Background Warning - Warning/caution state background */
-@utility background--warning {
-    background-color: light-dark(var(--color-orange-600), var(--color-orange-400));
-}
-/* Background Negative - Error/negative state background */
-@utility background--negative {
-    background-color: light-dark(var(--color-red-600), var(--color-red-400));
-}
-/* Background Informative - Informative/neutral state background */
-@utility background--informative {
-    background-color: light-dark(var(--color-blue-600), var(--color-blue-400));
+/* Background content utilities - uses content colors for backgrounds */
+@utility background-content--* {
+    /* No slash modifier -> solid background */
+    background-color: --value(--color-content- *, [color]);
+
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    background-color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    background-color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
-/* Content */
+/* Text/Content utilities with 0-10 scale + opacity modifier support */
+@utility content--* {
+    /* No slash modifier -> solid color */
+    color: --value(--color-content- *, [color]);
 
-/* Content color variables */
-:root {
-    --color-content--0: light-dark(var(--color-black-800), var(--color-white-700));
-    --color-content--1: light-dark(var(--color-black-500), var(--color-white-400));
-    --color-content--2: light-dark(var(--color-black-200), var(--color-white-100));
-    --color-content--3: light-dark(var(--color-gray-1000), var(--color-gray-100));
-    --color-content--4: light-dark(var(--color-gray-700), var(--color-gray-400));
-    --color-content--5: light-dark(var(--color-gray-400), var(--color-gray-700));
-    --color-content--6: light-dark(var(--color-gray-100), var(--color-gray-1000));
-    --color-content--7: light-dark(var(--color-white-100), var(--color-black-200));
-    --color-content--8: light-dark(var(--color-white-400), var(--color-black-500));
-    --color-content--9: light-dark(var(--color-white-700), var(--color-black-800));
-    --color-content--10: light-dark(var(--color-white-1000), var(--color-black-1000));
-    --color-content---1: light-dark(var(--color-black-900), var(--color-white-900));
-    --color-content---2: light-dark(var(--color-black-950), var(--color-white-950));
-    --color-content---3: light-dark(var(--color-black-1000), var(--color-white-1000));
-}
-@utility content--0 {
-    color: var(--color-content--0);
-}
-@utility content--1 {
-    color: var(--color-content--1);
-}
-@utility content--2 {
-    color: var(--color-content--2);
-}
-@utility content--3 {
-    color: var(--color-content--3);
-}
-@utility content--4 {
-    color: var(--color-content--4);
-}
-@utility content--5 {
-    color: var(--color-content--5);
-}
-@utility content--6 {
-    color: var(--color-content--6);
-}
-@utility content--7 {
-    color: var(--color-content--7);
-}
-@utility content--8 {
-    color: var(--color-content--8);
-}
-@utility content--9 {
-    color: var(--color-content--9);
-}
-@utility content--10 {
-    color: var(--color-content--10);
-}
-@utility content---1 {
-    color: var(--color-content---1);
-}
-@utility content---2 {
-    color: var(--color-content---2);
-}
-@utility content---3 {
-    color: var(--color-content---3);
-}
-@utility border-content--0 {
-    border-color: var(--color-content--0);
-}
-@utility border-content--1 {
-    border-color: var(--color-content--1);
-}
-@utility border-content--2 {
-    border-color: var(--color-content--2);
-}
-@utility border-content--3 {
-    border-color: var(--color-content--3);
-}
-@utility border-content--4 {
-    border-color: var(--color-content--4);
-}
-@utility border-content--5 {
-    border-color: var(--color-content--5);
-}
-@utility border-content--6 {
-    border-color: var(--color-content--6);
-}
-@utility border-content--7 {
-    border-color: var(--color-content--7);
-}
-@utility border-content--8 {
-    border-color: var(--color-content--8);
-}
-@utility border-content--9 {
-    border-color: var(--color-content--9);
-}
-@utility border-content--10 {
-    border-color: var(--color-content--10);
-}
-@utility border-content---1 {
-    border-color: var(--color-content---1);
-}
-@utility border-content---2 {
-    border-color: var(--color-content---2);
-}
-@utility border-content---3 {
-    border-color: var(--color-content---3);
-}
-@utility background-content--0 {
-    background-color: var(--color-content--0);
-}
-@utility background-content--1 {
-    background-color: var(--color-content--1);
-}
-@utility background-content--2 {
-    background-color: var(--color-content--2);
-}
-@utility background-content--3 {
-    background-color: var(--color-content--3);
-}
-@utility background-content--4 {
-    background-color: var(--color-content--4);
-}
-@utility background-content--5 {
-    background-color: var(--color-content--5);
-}
-@utility background-content--6 {
-    background-color: var(--color-content--6);
-}
-@utility background-content--7 {
-    background-color: var(--color-content--7);
-}
-@utility background-content--8 {
-    background-color: var(--color-content--8);
-}
-@utility background-content--9 {
-    background-color: var(--color-content--9);
-}
-@utility background-content--10 {
-    background-color: var(--color-content--10);
-}
-@utility background-content---1 {
-    background-color: var(--color-content---1);
-}
-@utility background-content---2 {
-    background-color: var(--color-content---2);
-}
-@utility background-content---3 {
-    background-color: var(--color-content---3);
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
-/* Content Disabled - Disabled state content color */
-@utility content--disabled {
-    color: var(--color-gray-300);
+/* Border utilities with 0-10 scale + opacity modifier support */
+@utility border--* {
+    /* No slash modifier -> solid border */
+    border-color: --value(--color-border- *, [color]);
+
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    border-color: --alpha(--value(--color-border- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    border-color: --alpha(--value(--color-border- *, [color]) / --modifier([percentage]));
 }
 
-/* Content Placeholder - Placeholder content color for inputs */
-@utility content--placeholder {
-    color: var(--color-gray-500);
-}
+/* Border content utilities - uses content colors for borders */
+@utility border-content--* {
+    /* No slash modifier -> solid border */
+    border-color: --value(--color-content- *, [color]);
 
-/* Content Positive - Success/positive state content color */
-@utility content--positive {
-    color: light-dark(var(--color-green-600), var(--color-green-500));
-}
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    border-color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
 
-/* Content Warning - Warning/caution state content color */
-@utility content--warning {
-    color: light-dark(var(--color-orange-600), var(--color-orange-500));
-}
-
-/* Content Negative - Error/negative state content color */
-@utility content--negative {
-    color: light-dark(var(--color-red-600), var(--color-red-500));
-}
-
-/* Content Informative - Informative/neutral state content color */
-@utility content--informative {
-    color: light-dark(var(--color-blue-600), var(--color-blue-500));
-}
-
-/* Borders */
-
-/* Border color variables */
-:root {
-    --color-border--0: light-dark(var(--color-white-600), var(--color-black-350));
-    --color-border--1: light-dark(var(--color-white-550), var(--color-black-300));
-    --color-border--2: light-dark(var(--color-white-500), var(--color-black-250));
-    --color-border--3: light-dark(var(--color-white-450), var(--color-black-200));
-    --color-border--4: light-dark(var(--color-white-400), var(--color-black-150));
-    --color-border--5: light-dark(var(--color-white-350), var(--color-black-100));
-    --color-border--6: light-dark(var(--color-white-300), var(--color-black-50));
-    --color-border--7: light-dark(var(--color-white-250), var(--color-black-0));
-    --color-border--8: light-dark(var(--color-white-200), var(--color-gray-1000));
-    --color-border--9: light-dark(var(--color-white-150), var(--color-gray-950));
-    --color-border--10: light-dark(var(--color-white-100), var(--color-gray-900));
-    --color-border---1: light-dark(var(--color-white-650), var(--color-black-400));
-    --color-border---2: light-dark(var(--color-white-700), var(--color-black-450));
-    --color-border---3: light-dark(var(--color-white-750), var(--color-black-500));
-}
-@utility border--0 {
-    border-color: var(--color-border--0);
-}
-@utility border--1 {
-    border-color: var(--color-border--1);
-}
-@utility border--2 {
-    border-color: var(--color-border--2);
-}
-@utility border--3 {
-    border-color: var(--color-border--3);
-}
-@utility border--4 {
-    border-color: var(--color-border--4);
-}
-@utility border--5 {
-    border-color: var(--color-border--5);
-}
-@utility border--6 {
-    border-color: var(--color-border--6);
-}
-@utility border--7 {
-    border-color: var(--color-border--7);
-}
-@utility border--8 {
-    border-color: var(--color-border--8);
-}
-@utility border--9 {
-    border-color: var(--color-border--9);
-}
-@utility border--10 {
-    border-color: var(--color-border--10);
-}
-@utility border---1 {
-    border-color: var(--color-border---1);
-}
-@utility border---2 {
-    border-color: var(--color-border---2);
-}
-@utility border---3 {
-    border-color: var(--color-border---3);
-}
-
-/* Border Focus - Focus state border for form inputs */
-@utility border--focus {
-    border-color: light-dark(var(--color-blue-600), var(--color-blue-400));
-}
-/* Border Positive - Success/positive state border */
-@utility border--positive {
-    border-color: light-dark(var(--color-green-600), var(--color-green-500));
-}
-/* Border Warning - Warning/caution state border */
-@utility border--warning {
-    border-color: light-dark(var(--color-orange-600), var(--color-orange-500));
-}
-/* Border Negative - Error/negative state border */
-@utility border--negative {
-    border-color: light-dark(var(--color-red-600), var(--color-red-500));
-}
-/* Border Informative - Informative/neutral state border */
-@utility border--informative {
-    border-color: light-dark(var(--color-blue-600), var(--color-blue-500));
+    /* Optional: allow true percentages like /12.5% */
+    border-color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
 /* Prose - Typography styles for rich text content with proper spacing */

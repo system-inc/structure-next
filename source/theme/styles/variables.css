@@ -217,4 +217,74 @@
     --color-white-950: #fbfbfb; /* Step 950 */
     /* --color-white-975: #fdfdfd; Step 975 */
     --color-white-1000: #ffffff; /* Step 1000 */
+
+    /* Backgrounds - Gradient */
+    --color-background-0: light-dark(var(--color-white-1000), var(--color-black-700));
+    --color-background-1: light-dark(var(--color-white-950), var(--color-black-650));
+    --color-background-2: light-dark(var(--color-white-900), var(--color-black-600));
+    --color-background-3: light-dark(var(--color-white-850), var(--color-black-550));
+    --color-background-4: light-dark(var(--color-white-800), var(--color-black-500));
+    --color-background-5: light-dark(var(--color-white-750), var(--color-black-450));
+    --color-background-6: light-dark(var(--color-white-700), var(--color-black-400));
+    --color-background-7: light-dark(var(--color-white-650), var(--color-black-350));
+    --color-background-8: light-dark(var(--color-white-600), var(--color-black-300));
+    --color-background-9: light-dark(var(--color-white-550), var(--color-black-250));
+    --color-background-10: light-dark(var(--color-white-500), var(--color-black-200));
+    --color-background--1: light-dark(var(--color-white-1000), var(--color-black-750));
+    --color-background--2: light-dark(var(--color-white-1000), var(--color-black-800));
+    --color-background--3: light-dark(var(--color-white-1000), var(--color-black-850));
+
+    /* Backgrounds - Semantic */
+    --color-background-positive: light-dark(var(--color-green-600), var(--color-green-400));
+    --color-background-warning: light-dark(var(--color-orange-600), var(--color-orange-400));
+    --color-background-negative: light-dark(var(--color-red-600), var(--color-red-400));
+    --color-background-informative: light-dark(var(--color-blue-600), var(--color-blue-400));
+    --color-background-backdrop: light-dark(var(--color-dark-400), var(--color-dark-600));
+
+    /* Content - Gradient */
+    --color-content-0: light-dark(var(--color-black-800), var(--color-white-700));
+    --color-content-1: light-dark(var(--color-black-500), var(--color-white-400));
+    --color-content-2: light-dark(var(--color-black-200), var(--color-white-100));
+    --color-content-3: light-dark(var(--color-gray-1000), var(--color-gray-100));
+    --color-content-4: light-dark(var(--color-gray-700), var(--color-gray-400));
+    --color-content-5: light-dark(var(--color-gray-400), var(--color-gray-700));
+    --color-content-6: light-dark(var(--color-gray-100), var(--color-gray-1000));
+    --color-content-7: light-dark(var(--color-white-100), var(--color-black-200));
+    --color-content-8: light-dark(var(--color-white-400), var(--color-black-500));
+    --color-content-9: light-dark(var(--color-white-700), var(--color-black-800));
+    --color-content-10: light-dark(var(--color-white-1000), var(--color-black-1000));
+    --color-content--1: light-dark(var(--color-black-900), var(--color-white-900));
+    --color-content--2: light-dark(var(--color-black-950), var(--color-white-950));
+    --color-content--3: light-dark(var(--color-black-1000), var(--color-white-1000));
+
+    /* Content - Semantic */
+    --color-content-positive: light-dark(var(--color-green-600), var(--color-green-500));
+    --color-content-warning: light-dark(var(--color-orange-600), var(--color-orange-500));
+    --color-content-negative: light-dark(var(--color-red-600), var(--color-red-500));
+    --color-content-informative: light-dark(var(--color-blue-600), var(--color-blue-500));
+    --color-content-disabled: var(--color-gray-400);
+    --color-content-placeholder: var(--color-gray-600);
+
+    /* Borders - Gradient */
+    --color-border-0: light-dark(var(--color-white-600), var(--color-black-350));
+    --color-border-1: light-dark(var(--color-white-550), var(--color-black-300));
+    --color-border-2: light-dark(var(--color-white-500), var(--color-black-250));
+    --color-border-3: light-dark(var(--color-white-450), var(--color-black-200));
+    --color-border-4: light-dark(var(--color-white-400), var(--color-black-150));
+    --color-border-5: light-dark(var(--color-white-350), var(--color-black-100));
+    --color-border-6: light-dark(var(--color-white-300), var(--color-black-50));
+    --color-border-7: light-dark(var(--color-white-250), var(--color-black-0));
+    --color-border-8: light-dark(var(--color-white-200), var(--color-gray-1000));
+    --color-border-9: light-dark(var(--color-white-150), var(--color-gray-950));
+    --color-border-10: light-dark(var(--color-white-100), var(--color-gray-900));
+    --color-border--1: light-dark(var(--color-white-650), var(--color-black-400));
+    --color-border--2: light-dark(var(--color-white-700), var(--color-black-450));
+    --color-border--3: light-dark(var(--color-white-750), var(--color-black-500));
+
+    /* Borders - Semantic */
+    --color-border-positive: light-dark(var(--color-green-600), var(--color-green-500));
+    --color-border-warning: light-dark(var(--color-orange-600), var(--color-orange-500));
+    --color-border-negative: light-dark(var(--color-red-600), var(--color-red-500));
+    --color-border-informative: light-dark(var(--color-blue-600), var(--color-blue-500));
+    --color-border-focus: light-dark(var(--color-blue-600), var(--color-blue-400));
 }
