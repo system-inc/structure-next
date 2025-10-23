@@ -21,7 +21,7 @@ export function AccountMenuSignedOut() {
             <div className="border-b border--1 px-4 pb-2">
                 <p className="font-medium whitespace-nowrap">Welcome to {ProjectSettings.title}</p>
             </div>
-            <div className="px-4 pt-4">
+            <div className="p-4">
                 <Button
                     variant="A"
                     className="w-full"

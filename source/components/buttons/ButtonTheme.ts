@@ -161,25 +161,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'data-[state=open]:border-content--5 data-[state=open]:content---3',
         ),
 
-        // Variant Outline - Uses a simple border to define button shape
-        // Outline: mergeClassNames(
-        //     buttonLayoutClassNames,
-        //     buttonCommonClassNames,
-        //     buttonCenteredClassNames,
-        //     buttonFocusClassNames,
-        //     'border',
-        //     // Light mode - Background, border, and text (using dark colors)
-        //     'border-white-700 text-black-700',
-        //     'hover:border-white-300 hover:text-black-900',
-        //     'active:border-gray-50 active:text-black-1000',
-        //     'data-[state=open]:border-gray-50 data-[state=open]:text-black-1000',
-        //     // Dark mode - Background, border, and text (using light colors)
-        //     'dark:border-black-350 dark:text-white-700',
-        //     'dark:hover:border-black-0 dark:hover:text-white-850',
-        //     'dark:active:border-gray-500 dark:active:text-white-1000',
-        //     'dark:data-[state=open]:border-gray-500 dark:data-[state=open]:text-white-1000',
-        // ),
-
         // Variant Contrast - Contrasts `background--0` using `content--0` as background colors
         Contrast: mergeClassNames(
             buttonLayoutClassNames,

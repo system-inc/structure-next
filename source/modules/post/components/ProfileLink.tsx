@@ -31,7 +31,7 @@ export function ProfileLink(properties: ProfileLinkProperties) {
     return (
         <Link
             className={mergeClassNames(
-                'group hover:text-dark-6 active:content--0-3 dark:hover:text-light-2 dark:active:text-light flex items-center space-x-2 content--2',
+                'group flex items-center space-x-2 content--2 hover:content--1 active:content--0',
                 properties.className,
             )}
             href={`/profiles/${properties.username}`}
