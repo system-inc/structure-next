@@ -5,7 +5,9 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { type MonthCaptionProps as MonthCaptionProperties, useDayPicker } from 'react-day-picker';
-import { ButtonVariants } from '@structure/source/components/buttons/ButtonVariants';
+
+// Dependencies - Theme
+import { buttonTheme } from '@structure/source/components/buttons/ButtonTheme';
 
 // Dependencies - Assets
 import ChevronLeftIcon from '@structure/assets/icons/interface/ChevronLeftIcon.svg';
@@ -34,7 +36,7 @@ export function CalendarEdgeNavigationCaption(properties: MonthCaptionProperties
                 <button
                     type="button"
                     className={mergeClassNames(
-                        ButtonVariants['default'],
+                        buttonTheme.variants.A,
                         'absolute left-1 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
                     )}
                     aria-label={dayPicker.labels?.labelPrevious?.(dayPicker.previousMonth)}
@@ -60,7 +62,7 @@ export function CalendarEdgeNavigationCaption(properties: MonthCaptionProperties
                 <button
                     type="button"
                     className={mergeClassNames(
-                        ButtonVariants['default'],
+                        buttonTheme.variants.A,
                         'absolute right-1 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
                     )}
                     aria-label={dayPicker.labels?.labelNext?.(dayPicker.nextMonth)}

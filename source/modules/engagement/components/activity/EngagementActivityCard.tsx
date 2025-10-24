@@ -192,7 +192,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                     ? 'dark:bg-dark-1 border-green-500 bg-white dark:border-green-500'
                     : isExpanded
                       ? 'dark:bg-dark-1 border--0 bg-white dark:border--0'
-                      : 'hover:border--0/50 dark:border-dark-4 dark:bg-dark-1 dark:hover:border--0/50 border--3 bg-white active:border--0 dark:active:border--0',
+                      : 'dark:border-dark-4 dark:bg-dark-1 border--3 bg-white hover:border--0/50 active:border--0 dark:hover:border--0/50 dark:active:border--0',
             )}
         >
             {/* Top row: Location with browser, platform, and device type icons */}
