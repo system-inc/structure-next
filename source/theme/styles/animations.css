@@ -8,33 +8,24 @@
     --ease-soft-out-expo: cubic-bezier(0.25, 0, 0, 1);
 
     /* Centered Modal Animations - Used for modals/dialogs that appear centered on screen */
-    /* Animates opacity and transform with customizable enter/exit states via CSS variables */
     @keyframes enter-centered {
         from {
-            opacity: var(--tw-enter-opacity, 1);
-            transform: translate3d(var(--tw-enter-translate-x, -50%), var(--tw-enter-translate-y, -50%), 0)
-                scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
-                rotate(var(--tw-enter-rotate, 0));
-            filter: blur(var(--tw-enter-blur, 0));
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.95);
         }
         to {
             opacity: 1;
-            transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1) rotate(0);
-            filter: blur(0);
+            transform: translate(-50%, -50%) scale(1);
         }
     }
     @keyframes exit-centered {
         from {
             opacity: 1;
-            transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1) rotate(0);
-            filter: blur(0);
+            transform: translate(-50%, -50%) scale(1);
         }
         to {
-            opacity: var(--tw-exit-opacity, 1);
-            transform: translate3d(var(--tw-exit-translate-x, -50%), var(--tw-exit-translate-y, -50%), 0)
-                scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1))
-                rotate(var(--tw-exit-rotate, 0));
-            filter: blur(var(--tw-exit-blur, 0));
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.95);
         }
     }
 
@@ -115,21 +106,12 @@
     transition-timing-function: var(--ease-soft-out-expo);
 }
 
-/* Centered Modal Utilities - Custom animations for modals with data-state attributes */
-/* Note: These need @layer utilities since they use complex selectors with data-state */
-@layer utilities {
-    .animate-in-centered,
-    .animate-out-centered {
-        transform: translate(-50%, -50%);
-    }
-
-    .data-\[state\=open\]\:animate-in-centered[data-state='open'],
-    [data-state='open'].animate-in-centered {
-        animation: enter-centered 200ms ease-out both;
-    }
-
-    .data-\[state\=closed\]\:animate-out-centered[data-state='closed'],
-    [data-state='closed'].animate-out-centered {
-        animation: exit-centered 200ms ease-in both;
-    }
+/* Animate a dialog centered */
+@utility animate-in-centered {
+    transform: translate(-50%, -50%);
+    animation: enter-centered 200ms ease-out both;
+}
+@utility animate-out-centered {
+    transform: translate(-50%, -50%);
+    animation: exit-centered 200ms ease-in both;
 }

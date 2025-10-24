@@ -15,7 +15,7 @@ export const baseDialogOverlayClassNames = mergeClassNames(
     // Position and z-index
     'fixed inset-0 z-50',
     // Background and backdrop
-    'bg-background/60',
+    'background--backdrop',
     // Animation states
     'data-[state=open]:animate-in data-[state=open]:fade-in-0',
     // Fade animation
