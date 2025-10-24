@@ -199,12 +199,7 @@ export function Post(properties: PostProperties) {
                         {properties.nodeBeforeTitle}
 
                         {/* Title and Topics */}
-                        <span
-                            className={mergeClassNames(
-                                'content--2',
-                                properties.titleAndTopicsContainerClassName,
-                            )}
-                        >
+                        <span className={mergeClassNames('content--2', properties.titleAndTopicsContainerClassName)}>
                             {/* Title */}
                             <Link
                                 href={properties.urlPath}

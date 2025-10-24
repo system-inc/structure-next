@@ -44,7 +44,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
         // Sort payload if requested
         const sortedPayload = [...payload];
         if(properties.sortByValue) {
-            sortedPayload.sort((a, b) => {
+            sortedPayload.sort(function (a, b) {
                 if(properties.sortByValue === 'Descending') {
                     return b.value - a.value;
                 }
@@ -74,7 +74,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                             >
                                 <td className="p-2 text-center text-xs">
                                     <b>
-                                        {(() => {
+                                        {(function () {
                                             // Find matching data source for formatting
                                             const dataSource = properties.dataSources?.find(
                                                 (currentDataSource) =>

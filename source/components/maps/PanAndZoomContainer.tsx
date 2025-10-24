@@ -19,7 +19,7 @@ export function PanAndZoomContainer(properties: PanAndZoomContainerProperties) {
     const [dragStartTranslateY, setDragStartTranslateY] = React.useState(0);
     React.useEffect(
         function () {
-            const handleWheel = (event: WheelEvent) => {
+            const handleWheel = function (event: WheelEvent) {
                 event.preventDefault();
                 const delta = event.deltaY > 0 ? 0.9 : 1.1;
                 const newScale = scale * delta;
@@ -45,14 +45,14 @@ export function PanAndZoomContainer(properties: PanAndZoomContainerProperties) {
             const container = containerReference.current;
             container?.addEventListener('wheel', handleWheel);
 
-            return () => {
+            return function () {
                 container?.removeEventListener('wheel', handleWheel);
             };
         },
         [scale, translateX, translateY, properties.width, properties.height],
     );
 
-    const handleMouseDown = (event: React.MouseEvent) => {
+    const handleMouseDown = function (event: React.MouseEvent) {
         setIsDragging(true);
         setDragStartX(event.clientX);
         setDragStartY(event.clientY);
@@ -60,7 +60,7 @@ export function PanAndZoomContainer(properties: PanAndZoomContainerProperties) {
         setDragStartTranslateY(translateY);
     };
 
-    const handleMouseMove = (event: React.MouseEvent) => {
+    const handleMouseMove = function (event: React.MouseEvent) {
         if(isDragging) {
             const deltaX = event.clientX - dragStartX;
             const deltaY = event.clientY - dragStartY;
@@ -69,11 +69,11 @@ export function PanAndZoomContainer(properties: PanAndZoomContainerProperties) {
         }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = function () {
         setIsDragging(false);
     };
 
-    const handleDoubleClick = (event: React.MouseEvent) => {
+    const handleDoubleClick = function (event: React.MouseEvent) {
         const { offsetX, offsetY } = event.nativeEvent;
         const rect = containerReference.current?.getBoundingClientRect();
         const clickX = offsetX + (rect?.left ?? 0); // Adjusted to relative position

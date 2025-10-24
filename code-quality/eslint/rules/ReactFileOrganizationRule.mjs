@@ -152,7 +152,7 @@ const ReactFileOrganizationRule = {
             const mediumComponents = []; // Components between maxHelperLines and maxComponentLines
             const smallComponents = []; // Components <= maxHelperLines (10)
 
-            components.forEach((component) => {
+            components.forEach(function (component) {
                 const lineCount = countCodeLines(component.node);
                 component.lineCount = lineCount;
 
@@ -179,7 +179,7 @@ const ReactFileOrganizationRule = {
                     const violatingComponents = allNonSmallComponents.slice(1);
 
                     // Report violations for additional components
-                    violatingComponents.forEach((component) => {
+                    violatingComponents.forEach(function (component) {
                         context.report({
                             node: component.node,
                             message: `File contains a component with ${primaryComponent.lineCount} lines. When any component exceeds ${maxComponentLines} lines, the file should contain only one primary component. Consider moving this ${component.lineCount}-line component to its own file.`,
@@ -189,7 +189,7 @@ const ReactFileOrganizationRule = {
 
                 // Also check if we have too many small components when there's a large component
                 if(hasLargeComponents && smallComponents.length > 3) {
-                    smallComponents.slice(3).forEach((component) => {
+                    smallComponents.slice(3).forEach(function (component) {
                         context.report({
                             node: component.node,
                             message: `Too many helper components in a file with a large primary component. Consider moving some helpers to separate files or combining them.`,
@@ -216,7 +216,7 @@ const ReactFileOrganizationRule = {
                 if(node.declaration && node.declaration.type === 'VariableDeclaration') {
                     const declarations = node.declaration.declarations || [];
 
-                    declarations.forEach((declaration) => {
+                    declarations.forEach(function (declaration) {
                         const identifierName = declaration.id && declaration.id.name;
                         if(identifierName && /^[A-Z]/.test(identifierName)) {
                             if(

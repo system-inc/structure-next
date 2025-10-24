@@ -108,7 +108,7 @@ export function GraphQlQueryTable<TResult = unknown, TVariables = Record<string,
     const hasVariables = !!(properties.variables && Object.keys(properties.variables).length > 0);
 
     // Build variables with pagination
-    const buildVariablesWithPagination = () => {
+    const buildVariablesWithPagination = function () {
         const baseVariables = properties.variables || {};
         const baseWithPagination = baseVariables as Record<string, unknown> & Partial<GraphQlVariablesWithPagination>;
 
@@ -150,7 +150,7 @@ export function GraphQlQueryTable<TResult = unknown, TVariables = Record<string,
 
     // First, loop through the data and see if there is a property that has an items property
     // If there is, then we will use that items property for our table, otherwise, we use nothing
-    const data = Object.keys(queryState.data || {}).flatMap((key) => {
+    const data = Object.keys(queryState.data || {}).flatMap(function (key) {
         const dataValue = (queryState.data as Record<string, GraphQlTableData>)[key];
         return dataValue?.items?.map((item: GraphQlTableItem) => flattenObject({ ...item })) ?? [];
     });

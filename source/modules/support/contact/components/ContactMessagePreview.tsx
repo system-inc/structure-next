@@ -38,7 +38,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                     <p className="pt-6 whitespace-pre-wrap">{properties.content}</p>
                 </div>
 
-                {properties.attachmentFiles.map((file, index) => {
+                {properties.attachmentFiles.map(function (file, index) {
                     const FileTypeIcon = getFileTypeIconFromType(file.type);
                     return (
                         <div

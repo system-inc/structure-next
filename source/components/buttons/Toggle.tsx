@@ -2,7 +2,11 @@
 
 import React from 'react';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
-import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
+import {
+    mergeClassNames,
+    createVariantClassNames,
+    VariantProperties,
+} from '@structure/source/utilities/style/ClassName';
 
 export const toggleVariants = createVariantClassNames(
     'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:background--2 hover:content--1 focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=on]:background--3 data-[state=on]:content--0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',

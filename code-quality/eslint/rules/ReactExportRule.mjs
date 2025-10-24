@@ -155,7 +155,7 @@ const ReactExportRule = {
                         node.declaration.declarations.length > 0
                     ) {
                         // Check each variable declared
-                        node.declaration.declarations.forEach((declaration) => {
+                        node.declaration.declarations.forEach(function (declaration) {
                             if(declaration.id && declaration.id.type === 'Identifier') {
                                 const name = declaration.id.name;
                                 if(implementedComponents.has(name) || name === componentName) {

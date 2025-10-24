@@ -60,7 +60,7 @@ const ReactHookDependenciesRule = {
                     }
 
                     // Check each dependency
-                    dependenciesArgument.elements.forEach((element) => {
+                    dependenciesArgument.elements.forEach(function (element) {
                         if(element && element.type === 'Identifier' && element.name === 'properties') {
                             // Check if we're in a component (function starting with capital letter)
                             let isInComponent = false;

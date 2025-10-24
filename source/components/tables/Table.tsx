@@ -177,7 +177,7 @@ export function Table(properties: TableProperties) {
     // Update the columns when the properties change
     React.useEffect(
         function () {
-            setColumns((previousColumns) => {
+            setColumns(function (previousColumns) {
                 if(properties.loading || properties.error) {
                     return previousColumns;
                 }

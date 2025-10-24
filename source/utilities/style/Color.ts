@@ -433,7 +433,7 @@ export function hslToHexString(hue: number, saturation: number, lightness: numbe
         red = green = blue = lightness; // achromatic
     }
     else {
-        const hueToRgb = (p: number, q: number, t: number) => {
+        const hueToRgb = function (p: number, q: number, t: number) {
             if(t < 0) t += 1;
             if(t > 1) t -= 1;
             if(t < 1 / 6) return p + (q - p) * 6 * t;
@@ -450,7 +450,7 @@ export function hslToHexString(hue: number, saturation: number, lightness: numbe
         blue = hueToRgb(pValue, qValue, hue - 1 / 3);
     }
 
-    const toHex = (colorValue: number) => {
+    const toHex = function (colorValue: number) {
         const hexValue = Math.round(colorValue * 255).toString(16);
         return hexValue.length === 1 ? '0' + hexValue : hexValue;
     };
@@ -465,7 +465,7 @@ export function hslToRgb(hue: number, saturation: number, lightness: number): [n
         red = green = blue = lightness; // achromatic
     }
     else {
-        const hueToRgb = (p: number, q: number, t: number) => {
+        const hueToRgb = function (p: number, q: number, t: number) {
             if(t < 0) t += 1;
             if(t > 1) t -= 1;
             if(t < 1 / 6) return p + (q - p) * 6 * t;
@@ -492,7 +492,7 @@ export function hslaToRgbaString(hue: number, saturation: number, lightness: num
         red = green = blue = lightness; // achromatic
     }
     else {
-        const hueToRgb = (p: number, q: number, t: number) => {
+        const hueToRgb = function (p: number, q: number, t: number) {
             if(t < 0) t += 1;
             if(t > 1) t -= 1;
             if(t < 1 / 6) return p + (q - p) * 6 * t;

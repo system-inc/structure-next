@@ -272,7 +272,7 @@ export function Dialog(properties: DialogProperties) {
                                 }),
                                 properties.className,
                             )}
-                            onOpenAutoFocus={(event) => {
+                            onOpenAutoFocus={function (event) {
                                 if(properties.onOpenAutoFocus) {
                                     properties.onOpenAutoFocus(event);
                                 }

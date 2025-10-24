@@ -1,6 +1,6 @@
 // Function to create a sleep delay that can be awaited
 export function pause(timeToSleepInMilliseconds: number): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise(function (resolve) {
         setTimeout(resolve, timeToSleepInMilliseconds);
     });
 }
@@ -15,9 +15,9 @@ export function createDelayedUntilIdleFunction(
     let timeout: NodeJS.Timeout;
 
     // Return the debounced function
-    return (...executedFunctionArguments: any[]) => {
+    return function (...executedFunctionArguments: any[]) {
         // The function to invoke when the time has elapsed
-        const functionToInvokeWhenTimeHasElapsed = () => {
+        const functionToInvokeWhenTimeHasElapsed = function () {
             // Clear the existing timeout
             clearTimeout(timeout);
 
@@ -37,8 +37,8 @@ export function createDelayedFunction(
     timeToWaitInMilliseconds: number,
 ): (...functionToInvokeArguments: any[]) => void {
     // Return the delayed function
-    return (...executedFunctionArguments: any[]) => {
-        setTimeout(() => {
+    return function (...executedFunctionArguments: any[]) {
+        setTimeout(function () {
             functionToInvoke(...executedFunctionArguments);
         }, timeToWaitInMilliseconds);
     };
@@ -52,11 +52,11 @@ export function createdThrottledFunction(
     let throttled: boolean;
 
     // Return the throttled function
-    return (...executedFunctionArguments: any[]) => {
+    return function (...executedFunctionArguments: any[]) {
         if(!throttled) {
             functionToInvoke(...executedFunctionArguments);
             throttled = true;
-            setTimeout(() => {
+            setTimeout(function () {
                 throttled = false;
             }, limit);
         }

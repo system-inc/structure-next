@@ -313,7 +313,7 @@ export function formatAxisTick(
         const date = new Date(year, month - 1, dayStr); // month is 0-indexed
         const day = date.getDate();
         const previousDate = previousTickValue
-            ? (() => {
+            ? (function () {
                   const prevParts = previousTickValue.split('-');
                   const prevYear = parseInt(prevParts[0] || '2025', 10);
                   const prevMonth = parseInt(prevParts[1] || '1', 10);

@@ -1,5 +1,9 @@
 import React from 'react';
-import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
+import {
+    mergeClassNames,
+    createVariantClassNames,
+    VariantProperties,
+} from '@structure/source/utilities/style/ClassName';
 import { Slot } from '@radix-ui/react-slot';
 
 export const cardVariants = createVariantClassNames(

@@ -2,7 +2,11 @@
 
 import React from 'react';
 import * as RadixTabPrimitive from '@radix-ui/react-tabs';
-import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
+import {
+    mergeClassNames,
+    createVariantClassNames,
+    VariantProperties,
+} from '@structure/source/utilities/style/ClassName';
 import { AnimatePresence, motion } from 'motion/react';
 
 export const tabsVariants = createVariantClassNames(

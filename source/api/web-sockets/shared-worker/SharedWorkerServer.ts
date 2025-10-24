@@ -200,7 +200,7 @@ export class SharedWorkerServer {
     // Function to create client list message
     createClientConnectionsMessage(): ClientConnectionsMessageInterface {
         // Create array of client data using our ClientConnectionData class
-        const clientConnections = Array.from(this.clientConnections.values()).map((connection) => {
+        const clientConnections = Array.from(this.clientConnections.values()).map(function (connection) {
             return {
                 id: connection.id,
                 firstConnectedAt: connection.firstConnectedAt,

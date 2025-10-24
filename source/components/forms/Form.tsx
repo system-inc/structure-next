@@ -477,7 +477,7 @@ export function Form(properties: FormProperties) {
                 // Clone the form input and pass in the necessary properties
                 const formInputClone = React.cloneElement(formInput, {
                     // eslint-disable-next-line structure/react-naming-conventions-rule
-                    ref: (reference: FormInputReferenceInterface | null) => {
+                    ref: function (reference: FormInputReferenceInterface | null) {
                         // console.log('[Form.tsx] Setting ref for', formInput.props.id, 'reference:', reference);
                         if(reference) {
                             attachFormInputReference(formInput.props.id, reference);
@@ -486,10 +486,10 @@ export function Form(properties: FormProperties) {
                     tabIndex: 1,
                     // Intercept the onChange events to handle form input validation
                     // We use any here because the onChange event type is different for each form input type
-                    onChange: (formInputValue: unknown, event?: Event) => {
+                    onChange: function (formInputValue: unknown, event?: Event) {
                         onFormInputChangeIntercept(formInputValue, formInput, event);
                     },
-                    onBlur: (formInputValue: unknown) => {
+                    onBlur: function (formInputValue: unknown) {
                         // If the form input is FormInputText, we validate on blur
                         if(formInput.type === FormInputText) {
                             validateFormInput(formInputValue, formInput);

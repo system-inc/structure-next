@@ -339,7 +339,7 @@ export function DataInteractionTable(properties: DataInteractionTableProperties)
 
                     <RefreshButton
                         className="mt-[22px]"
-                        onClick={async () => {
+                        onClick={async function () {
                             dataInteractionDatabaseTableRowsRequest.refresh();
                         }}
                     />

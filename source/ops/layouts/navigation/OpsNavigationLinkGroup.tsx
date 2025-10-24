@@ -67,7 +67,7 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
 
             <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={transition}>
                 <div className="ml-3 space-y-0.5 border-l pt-0.5 pb-0.5 pl-4">
-                    {properties.links?.map((internalNavigationLink) => {
+                    {properties.links?.map(function (internalNavigationLink) {
                         return (
                             <li key={internalNavigationLink.title}>
                                 <OpsNavigationLink

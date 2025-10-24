@@ -151,7 +151,7 @@ export function ContactForm() {
                                     label="Attachments"
                                     optional
                                     error={joinedErrors?.join('\n')}
-                                    onFilesChange={(newFiles: File[]) => {
+                                    onFilesChange={function (newFiles: File[]) {
                                         field.onChange(newFiles);
                                     }}
                                     accept={[

@@ -165,7 +165,7 @@ export default {
             const calls = [];
             const visited = new Set();
 
-            const traverse = (node) => {
+            const traverse = function (node) {
                 if(!node || typeof node !== 'object') return;
 
                 const nodeKey = `${node.type}-${node.start}-${node.end}`;
@@ -350,7 +350,7 @@ export default {
             let usesNetworkService = false;
             const visited = new Set();
 
-            const traverse = (node) => {
+            const traverse = function (node) {
                 if(!node || typeof node !== 'object') return;
 
                 // Create a unique key for this node
@@ -474,7 +474,7 @@ export default {
 
                     // Check if it's an array with string literals
                     if(firstArg.type === 'ArrayExpression') {
-                        firstArg.elements.forEach((element) => {
+                        firstArg.elements.forEach(function (element) {
                             if(element?.type === 'Literal' && typeof element.value === 'string') {
                                 context.report({
                                     node: element,

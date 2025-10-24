@@ -83,6 +83,30 @@ const ArrowFunctionStyleRule = {
                 beforeArrow = beforeArrow.substring(6).trim();
             }
 
+            // Extract TypeScript generic type parameters if present
+            // Example: <T>(params) or <T, U>(params)
+            let generics = '';
+            if(beforeArrow.startsWith('<')) {
+                // Find the matching closing >
+                let depth = 0;
+                let endIndex = -1;
+                for(let i = 0; i < beforeArrow.length; i++) {
+                    if(beforeArrow[i] === '<') depth++;
+                    if(beforeArrow[i] === '>') {
+                        depth--;
+                        if(depth === 0) {
+                            endIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if(endIndex !== -1) {
+                    generics = beforeArrow.substring(0, endIndex + 1);
+                    beforeArrow = beforeArrow.substring(endIndex + 1).trim();
+                }
+            }
+
             // Ensure parameters are wrapped in parentheses
             if(!beforeArrow.startsWith('(')) {
                 // Single parameter without parens - wrap it
@@ -99,7 +123,7 @@ const ArrowFunctionStyleRule = {
                 replacementBody = `{ return ${bodyText}; }`;
             }
 
-            const replacementText = `${asyncKeyword}function${beforeArrow} ${replacementBody}`;
+            const replacementText = `${asyncKeyword}function${generics}${beforeArrow} ${replacementBody}`;
 
             return fixer.replaceText(node, replacementText);
         }

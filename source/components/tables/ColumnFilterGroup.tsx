@@ -184,13 +184,13 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
             : // Otherwise, just use the data, but ensure all conditions have a unique ID
               {
                   ...properties.columnFilterGroupData,
-                  conditions: properties.columnFilterGroupData.conditions.map((condition) => {
+                  conditions: properties.columnFilterGroupData.conditions.map(function (condition) {
                       return {
                           ...condition,
                           id: condition.id ?? uniqueIdentifier(6),
                       };
                   }),
-                  filters: properties.columnFilterGroupData.filters?.map((filter) => {
+                  filters: properties.columnFilterGroupData.filters?.map(function (filter) {
                       return {
                           ...filter,
                           id: filter.id ?? uniqueIdentifier(6),
@@ -356,7 +356,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                         content: possibleValue.title,
                     }))}
                     defaultValue={condition.value}
-                    onChange={(value) => {
+                    onChange={function (value) {
                         setColumnFilterGroupData((previousColumnFilterGroupData) => ({
                             ...previousColumnFilterGroupData,
                             conditions: previousColumnFilterGroupData.conditions.map((oldCondition) =>
@@ -375,8 +375,8 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                     className="w-64"
                     placeholder="Value..."
                     defaultValue={condition.value}
-                    onChange={(value) => {
-                        setColumnFilterGroupData((previousColumnFilterGroupData) => {
+                    onChange={function (value) {
+                        setColumnFilterGroupData(function (previousColumnFilterGroupData) {
                             const updatedCondition = { ...condition, value };
 
                             return {
@@ -569,7 +569,7 @@ export function ColumnFilterGroup(properties: ColumnFilterGroupProperties) {
                             columnFilterGroupData={filter}
                             filterMode={properties.filterMode}
                             onChange={function (updatedColumnFilterGroup) {
-                                setColumnFilterGroupData((previousColumnFilterGroupData) => {
+                                setColumnFilterGroupData(function (previousColumnFilterGroupData) {
                                     const updatedFilters = previousColumnFilterGroupData.filters?.map(
                                         (previousColumnFilterGroupDataFilter) =>
                                             previousColumnFilterGroupDataFilter.id === updatedColumnFilterGroup.id

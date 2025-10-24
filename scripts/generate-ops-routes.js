@@ -10,7 +10,7 @@ import path from 'path';
 function getAllOpsRoutes(dir, routeList = []) {
     const filesAndDirs = fs.readdirSync(dir);
 
-    filesAndDirs.forEach((item) => {
+    filesAndDirs.forEach(function (item) {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
 
@@ -38,7 +38,7 @@ function getAllOpsRoutes(dir, routeList = []) {
 const routes = getAllOpsRoutes('../libraries/structure/app/ops');
 // console.log(routes);
 
-routes.forEach((route) => {
+routes.forEach(function (route) {
     // We need to replace
     // "../libraries/structure/app/ops/analytics/live"
     // to

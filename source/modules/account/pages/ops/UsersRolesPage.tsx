@@ -146,26 +146,23 @@ export function UsersRolesPage() {
     function groupAssignmentsByType(
         accessRoleAssignments: AccountAccessRoleAssignmentsPrivilegedQuery['accountAccessRoleAssignmentsPrivileged']['items'],
     ) {
-        return accessRoleAssignments.reduce(
-            (
-                groups: {
-                    [
-                        key: string
-                    ]: AccountAccessRoleAssignmentsPrivilegedQuery['accountAccessRoleAssignmentsPrivileged']['items'];
-                },
-                accessRoleAssignment,
-            ) => {
-                const type = accessRoleAssignment.accessRole?.type;
-                if(type) {
-                    if(!groups[type]) {
-                        groups[type] = [];
-                    }
-                    groups[type].push(accessRoleAssignment);
-                }
-                return groups;
+        return accessRoleAssignments.reduce(function (
+            groups: {
+                [
+                    key: string
+                ]: AccountAccessRoleAssignmentsPrivilegedQuery['accountAccessRoleAssignmentsPrivileged']['items'];
             },
-            {},
-        );
+            accessRoleAssignment,
+        ) {
+            const type = accessRoleAssignment.accessRole?.type;
+            if(type) {
+                if(!groups[type]) {
+                    groups[type] = [];
+                }
+                groups[type].push(accessRoleAssignment);
+            }
+            return groups;
+        }, {});
     }
 
     // Render
@@ -269,7 +266,7 @@ export function UsersRolesPage() {
                                                         variant="Destructive"
                                                         size="Small"
                                                         className="mt-2"
-                                                        onClick={() => {
+                                                        onClick={function () {
                                                             setSelectedRole({
                                                                 id: role.id,
                                                                 type: role.accessRole?.type || '',
@@ -306,7 +303,7 @@ export function UsersRolesPage() {
                                                     variant="Destructive"
                                                     size="Small"
                                                     className="hidden md:block"
-                                                    onClick={() => {
+                                                    onClick={function () {
                                                         setSelectedRole({
                                                             id: role.id,
                                                             type: role.accessRole?.type || '',

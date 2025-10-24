@@ -293,7 +293,7 @@ export class NetworkService {
     private isInternalApiUrl(input: RequestInfo | URL): boolean {
         if(!ProjectSettings.apis?.base?.host) return false;
 
-        const getHostname = (url: string | URL | Request): string => {
+        const getHostname = function (url: string | URL | Request): string {
             try {
                 if(typeof url === 'string') return new URL(url).hostname;
                 if(url instanceof URL) return url.hostname;

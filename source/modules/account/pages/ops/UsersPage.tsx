@@ -256,7 +256,7 @@ export function UsersPage() {
                                             variant="Destructive"
                                             size="Small"
                                             className="mt-2"
-                                            onClick={() => {
+                                            onClick={function () {
                                                 setSelectedUser({
                                                     emailAddress: account.emailAddress,
                                                     username: account.profiles[0]?.username || '',
@@ -301,7 +301,7 @@ export function UsersPage() {
                                         variant="Destructive"
                                         size="Small"
                                         className="hidden md:block"
-                                        onClick={() => {
+                                        onClick={function () {
                                             setSelectedUser({
                                                 emailAddress: account.emailAddress,
                                                 username: account.profiles[0]?.username || '',

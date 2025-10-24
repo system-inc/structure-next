@@ -43,7 +43,7 @@ export function ArrayRequestParameterRow(properties: ArrayRequestParameterRowPro
 
         // Clear state for removed item
         if(properties.fields) {
-            (properties.fields as RequestParameterProperties[]).forEach((field) => {
+            (properties.fields as RequestParameterProperties[]).forEach(function (field) {
                 const path = `${properties.name}[${index}].${field.name}`;
                 properties.onStateChange(properties.section, path, {
                     enabled: false,

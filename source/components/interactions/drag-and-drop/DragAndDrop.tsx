@@ -10,7 +10,7 @@ import { DragAndDropContext, DragAndDropContextInterface } from './useDragAndDro
 // Function to calculate the bounds of the drop containers
 export function calculateBoundsFromDropContainers(dropContainers: DropContainer[]) {
     {
-        return dropContainers?.map((container) => {
+        return dropContainers?.map(function (container) {
             let bounds: DropBounds = {
                 left: 0,
                 top: 0,
@@ -88,7 +88,7 @@ export function DragAndDrop(properties: DragAndDropProperties) {
                 setDropBounds(calculateBoundsFromDropContainers(dropContainers));
             });
 
-            return () => {
+            return function () {
                 window.removeEventListener('resize', function () {
                     setDropBounds(calculateBoundsFromDropContainers(dropContainers));
                 });

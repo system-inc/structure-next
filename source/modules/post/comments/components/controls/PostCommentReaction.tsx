@@ -135,9 +135,7 @@ export function PostCommentReaction(properties: PostCommentReactionProperties) {
                         'hover:border--4 hover:background--2 hover:content--1',
                         // Active
                         'active:border--5 active:background--3 active:content--2',
-                        properties.reacted
-                            ? 'border-purple-400 hover:border-purple-500 active:border-purple-600'
-                            : '',
+                        properties.reacted ? 'border-purple-400 hover:border-purple-500 active:border-purple-600' : '',
                         properties.className,
                     )}
                     onClick={handleReaction}

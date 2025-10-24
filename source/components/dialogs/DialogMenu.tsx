@@ -26,7 +26,7 @@ export function DialogMenu(properties: DialogMenuProperties) {
     React.useEffect(
         function () {
             // Listen for the keyboard shortcut
-            const down = (event: KeyboardEvent) => {
+            const down = function (event: KeyboardEvent) {
                 // If the user presses CMD+key or CTRL+key, toggle the dialog
                 if(event.key === keyboardShortcutKey && (event.metaKey || event.ctrlKey)) {
                     event.preventDefault();
@@ -54,7 +54,7 @@ export function DialogMenu(properties: DialogMenuProperties) {
         const inputElement = dialogElement.querySelector('input');
 
         // Focus on the input element after a short delay
-        setTimeout(() => {
+        setTimeout(function () {
             inputElement?.focus();
         }, 25);
     }, []);

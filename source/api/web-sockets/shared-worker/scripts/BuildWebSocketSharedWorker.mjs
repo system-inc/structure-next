@@ -67,7 +67,7 @@ async function buildWebSocketSharedWorker() {
                 {
                     name: 'resolve-structure-imports',
                     setup(build) {
-                        build.onResolve({ filter: /^@structure\// }, (args) => {
+                        build.onResolve({ filter: /^@structure\// }, function (args) {
                             // console.log(`Resolving import: ${args.path}`);
                             const importPath = args.path.replace('@structure/', '');
                             // Handle paths like '@structure/source/api/...' by resolving to the full path
@@ -111,7 +111,7 @@ async function buildWebSocketSharedWorker() {
 }
 
 // Run the build process
-buildWebSocketSharedWorker().catch((error) => {
+buildWebSocketSharedWorker().catch(function (error) {
     console.error('Unhandled error:', error);
     process.exit(1);
 });

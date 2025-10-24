@@ -199,7 +199,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     <TimeRangeLink
                         key={timeRangePresetKey}
                         text={timeRangePresetKey}
-                        onClick={() => {
+                        onClick={function () {
                             // Call the handler function for the preset
                             handleCalendarSelection({
                                 from: timeRangePreset.startTime,
@@ -242,7 +242,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                         <>
                                             {value?.startTime && (
                                                 <button
-                                                    onClick={() => {
+                                                    onClick={function () {
                                                         if(value?.startTime && value?.endTime) {
                                                             setStartCalendarMonth(value.startTime ?? new Date());
                                                         }
@@ -253,7 +253,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                             )}
                                             <span className="px-1">-</span>
                                             <button
-                                                onClick={() => {
+                                                onClick={function () {
                                                     if(value?.startTime && value?.endTime) {
                                                         setStartCalendarMonth(
                                                             addMonths(value.endTime ?? new Date(), -1),

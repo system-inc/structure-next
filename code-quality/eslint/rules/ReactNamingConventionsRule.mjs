@@ -813,7 +813,7 @@ const ReactNamingConventionsRule = {
 
             // Check hook results after all invocations have been counted
             'Program:exit'() {
-                hookResultsToCheck.forEach(({ node, varName, hookName }) => {
+                hookResultsToCheck.forEach(function ({ node, varName, hookName }) {
                     const hookCount = hookInvocations.get(hookName) || 0;
 
                     // Only apply the rule if the hook is called once

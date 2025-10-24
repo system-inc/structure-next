@@ -77,7 +77,7 @@ export function JsonNode(properties: JsonNodeProperties) {
         }
 
         const previewEntries = entries.slice(0, maximumPreviewItems);
-        const previewContent = previewEntries.map(([key, value], index) => {
+        const previewContent = previewEntries.map(function ([key, value], index) {
             if(isArray) {
                 return (
                     <React.Fragment key={index}>

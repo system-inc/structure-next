@@ -76,7 +76,7 @@ export function RequestParameterRow(properties: RequestParameterRowProperties) {
 
     // Function to handle child state changes
     function handleChildStateChange(childName: string, isEnabled: boolean) {
-        setChildStates((prevStates) => {
+        setChildStates(function (prevStates) {
             const newStates = new Map(prevStates);
             newStates.set(childName, isEnabled);
             return newStates;

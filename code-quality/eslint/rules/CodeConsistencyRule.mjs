@@ -107,7 +107,7 @@ export default {
                 const sourceCode = context.getSourceCode();
                 const allComments = sourceCode.getAllComments();
 
-                allComments.forEach((comment) => {
+                allComments.forEach(function (comment) {
                     // Check if it's a single-line JSDoc that should be a regular comment
                     if(isSingleLineJsDoc(comment)) {
                         const description = extractDescription(comment);

@@ -69,7 +69,7 @@ export function fillMissingIntervalValuesWithZeroes(
 
     // Merge original data with the complete list, filling in zeroes where needed
     const dataMap = new Map(data);
-    const filledData: [string, number][] = completeList.map((timeIntervalValue) => {
+    const filledData: [string, number][] = completeList.map(function (timeIntervalValue) {
         return [timeIntervalValue, dataMap.get(timeIntervalValue) ?? 0];
     });
 
@@ -78,17 +78,17 @@ export function fillMissingIntervalValuesWithZeroes(
 }
 
 // Determine the start and end interval values
-const determineStartAndEndIntervalValues = (data: [string, number][]): [string, string] => {
+const determineStartAndEndIntervalValues = function (data: [string, number][]): [string, string] {
     // Sort the data to get minimum and maximum values
     const sortedData = [...data].sort((a, b) => a[0].localeCompare(b[0]));
     return [sortedData[0]?.[0] ?? '', sortedData[sortedData.length - 1]?.[0] ?? ''];
 };
 
-const generateCompleteIntervalList = (
+const generateCompleteIntervalList = function (
     startTimeIntervalValue: string,
     endTimeIntervalValue: string,
     timeInterval: TimeInterval,
-): string[] => {
+): string[] {
     // console.log(`Generating complete list from ${startIntervalValue} to ${endIntervalValue} with interval ${interval}`);
     const completeList: string[] = [];
 

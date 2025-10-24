@@ -84,7 +84,7 @@ export const gql = new Proxy(
         // Handle direct function calls (template tag usage)
         apply(target, thisArgument, argumentsList) {
             // Helper to check if result is a valid TypedDocumentString
-            const isValidDocument = (result: unknown): boolean => {
+            const isValidDocument = function (result: unknown): boolean {
                 // Check if it's an instance of either TypedDocumentString class
                 return result instanceof AppTypedDocumentString || result instanceof StructureTypedDocumentString;
             };

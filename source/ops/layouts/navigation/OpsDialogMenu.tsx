@@ -30,7 +30,7 @@ export function OpsDialogMenu(properties: OpsDialogMenuProperties) {
         const prefixString = prefix ? prefix : '';
 
         // Loop through the internal navigation links
-        internalNavigationLink.forEach((link) => {
+        internalNavigationLink.forEach(function (link) {
             // Use the icon from the link if it exists
             if(link.icon) {
                 IconComponent = link.icon;

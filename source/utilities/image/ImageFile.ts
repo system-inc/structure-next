@@ -75,7 +75,7 @@ export async function getExifOrientation(file: File): Promise<number> {
     }
 
     // Read only the EXIF header
-    return new Promise((resolve) => {
+    return new Promise(function (resolve) {
         const reader = new FileReader();
 
         reader.onload = function () {
@@ -435,7 +435,7 @@ async function adaptiveQualityBlob(
     // For PNG, quality doesn't apply
     if(mimeType === 'image/png') {
         return new Promise(function (resolve) {
-            canvas.toBlob((blob) => {
+            canvas.toBlob(function (blob) {
                 resolve(blob!);
             }, mimeType);
         });

@@ -92,7 +92,7 @@ const ReactFunctionStyleRule = {
                     const declarations = node.declaration.declarations || [];
 
                     // Check each declaration in the export statement
-                    declarations.forEach((declaration) => {
+                    declarations.forEach(function (declaration) {
                         checkComponentDeclaration(declaration, true);
                     });
                 }
@@ -105,7 +105,7 @@ const ReactFunctionStyleRule = {
                 }
 
                 const declarations = node.declarations || [];
-                declarations.forEach((declaration) => {
+                declarations.forEach(function (declaration) {
                     checkComponentDeclaration(declaration, false);
                 });
             },

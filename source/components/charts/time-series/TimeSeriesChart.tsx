@@ -314,7 +314,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                     )}
 
                     {/* Data Series - must be direct children of ComposedChart for Recharts to work */}
-                    {properties.dataSources.map((dataSource, index) => {
+                    {properties.dataSources.map(function (dataSource, index) {
                         const color = dataSource.color || getTimeSeriesColor(index);
                         const yAxisId = dataSource.yAxisAlignment || 'left';
                         const strokeDasharray =

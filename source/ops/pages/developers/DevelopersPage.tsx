@@ -28,14 +28,14 @@ const [state, setState] = React.useState<string>('');`);
                     id="language"
                     placeholder="Language"
                     defaultValue={language}
-                    onChange={(val) => {
+                    onChange={function (val) {
                         if(val) setLanguage(val);
                     }}
                 />
                 <div className="flex items-center space-x-2">
                     <InputCheckbox
                         defaultValue={editing ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
-                        onChange={(val) => {
+                        onChange={function (val) {
                             if(val === InputCheckboxState.Checked) {
                                 setEditing(true);
                             }
@@ -49,7 +49,7 @@ const [state, setState] = React.useState<string>('');`);
                 <div className="flex items-center space-x-2">
                     <InputCheckbox
                         defaultValue={showLineNumbers ? InputCheckboxState.Checked : InputCheckboxState.Unchecked}
-                        onChange={(val) => {
+                        onChange={function (val) {
                             if(val === InputCheckboxState.Checked) {
                                 setShowLineNumbers(true);
                             }

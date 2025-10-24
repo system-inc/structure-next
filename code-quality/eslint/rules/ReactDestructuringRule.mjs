@@ -484,7 +484,7 @@ function fixPropertyAssignment(node, context, fixer, sourceVariable, propertyNam
     fixes.push(fixer.remove(node.parent));
 
     // Replace all references with direct property access
-    variable.references.forEach((ref) => {
+    variable.references.forEach(function (ref) {
         if(ref.identifier !== node.id) {
             fixes.push(fixer.replaceText(ref.identifier, `${sourceVariable}.${propertyName}`));
         }

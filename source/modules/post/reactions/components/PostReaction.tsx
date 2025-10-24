@@ -136,9 +136,7 @@ export function PostReaction(properties: PostReactionProperties) {
                         'hover:border--4 hover:background--2',
                         // Active
                         'active:border--5 active:background--3',
-                        properties.reacted
-                            ? 'border-purple-400 hover:border-purple-500 active:border-purple-600'
-                            : '',
+                        properties.reacted ? 'border-purple-400 hover:border-purple-500 active:border-purple-600' : '',
                         properties.className,
                     )}
                     onClick={handleReaction}

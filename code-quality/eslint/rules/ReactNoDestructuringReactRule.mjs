@@ -32,7 +32,7 @@ const ReactNoDestructuringReactRule = {
                 const namedImports = node.specifiers.filter((spec) => spec.type === 'ImportSpecifier');
 
                 // Track and report any React items that were imported with destructuring
-                namedImports.forEach((specifier) => {
+                namedImports.forEach(function (specifier) {
                     const importedName = specifier.imported.name;
                     const localName = specifier.local.name;
 

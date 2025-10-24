@@ -49,7 +49,7 @@ export function Accordion(properties: AccordionProperties) {
     // Render the component
     return (
         <RadixAccordion.Root type={type}>
-            {items.map((item, index) => {
+            {items.map(function (item, index) {
                 return (
                     <RadixAccordion.Item key={index} value={item.identifier} className="border-b border--3">
                         {/* Trigger */}

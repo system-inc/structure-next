@@ -1,5 +1,9 @@
 import React from 'react';
-import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
+import {
+    mergeClassNames,
+    createVariantClassNames,
+    VariantProperties,
+} from '@structure/source/utilities/style/ClassName';
 
 export const badgeVariants = createVariantClassNames(
     'inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors',

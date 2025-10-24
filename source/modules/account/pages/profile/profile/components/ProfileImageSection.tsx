@@ -31,7 +31,7 @@ export function ProfileImageSection() {
                     className="h-32 w-32"
                     profileImageUrl={profileImageUrl}
                     alternateText={profileImageAlternateText}
-                    onImageChange={() => {
+                    onImageChange={function () {
                         // The account provider will handle refreshing the account data
                     }}
                 />

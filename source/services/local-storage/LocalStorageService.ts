@@ -375,7 +375,7 @@ class LocalStorageService {
 
                 // Notify subscribers for this specific key
                 const keySubscribers = this.subscribers.get(data.key);
-                keySubscribers?.forEach((callback) => {
+                keySubscribers?.forEach(function (callback) {
                     try {
                         callback(data.value ?? null, data.action);
                     }
@@ -386,7 +386,7 @@ class LocalStorageService {
 
                 // Notify wildcard subscribers for any change
                 if(data.key === '*' || this.wildcardSubscribers.size > 0) {
-                    this.wildcardSubscribers.forEach((callback) => {
+                    this.wildcardSubscribers.forEach(function (callback) {
                         try {
                             callback(data.value ?? null, data.action);
                         }

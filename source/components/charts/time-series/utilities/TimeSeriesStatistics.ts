@@ -56,14 +56,14 @@ export function calculateStatistics(dataPoints: number[]): TimeSeriesStatistics 
 
     // Initialize a Map to count occurrences
     const frequencyMap = new Map<number, number>();
-    sortedData.forEach((number) => {
+    sortedData.forEach(function (number) {
         const count = frequencyMap.get(number) || 0;
         frequencyMap.set(number, count + 1);
     });
 
     // Find the mode
     let maxFrequency = 0;
-    frequencyMap.forEach((count, number) => {
+    frequencyMap.forEach(function (count, number) {
         if(count > maxFrequency) {
             maxFrequency = count;
             mode = number;
@@ -98,7 +98,7 @@ export function calculateStatistics(dataPoints: number[]): TimeSeriesStatistics 
     }
 
     // Function to calculate a specific percentile
-    const getPercentile = (sortedData: number[], p: number): number => {
+    const getPercentile = function (sortedData: number[], p: number): number {
         if(sortedData.length === 0) return 0;
 
         const position = (sortedData.length - 1) * p;
@@ -117,7 +117,7 @@ export function calculateStatistics(dataPoints: number[]): TimeSeriesStatistics 
 
     // Calculate specific percentiles (e.g., 25th, 50th, 75th, 95th)
     const percentiles = new Map<number, number>();
-    [0.05, 0.25, 0.5, 0.75, 0.95].forEach((percentage) => {
+    [0.05, 0.25, 0.5, 0.75, 0.95].forEach(function (percentage) {
         percentiles.set(percentage * 100, getPercentile(sortedData, percentage));
     });
 

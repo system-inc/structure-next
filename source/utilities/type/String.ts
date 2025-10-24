@@ -5,8 +5,8 @@ export function titleCase(input: string): string {
     const wordsToUppercase = ['id', 'api', 'url', 'ip'];
 
     // Helper function to perform the title casing, ignoring specific words.
-    const toTitleCase = (string: string): string => {
-        return string.replace(/\w\S*/g, (word) => {
+    const toTitleCase = function (string: string): string {
+        return string.replace(/\w\S*/g, function (word) {
             const lowerWord = word.toLowerCase();
             if(wordsToLowercase.includes(lowerWord)) {
                 return lowerWord;
