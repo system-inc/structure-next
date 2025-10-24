@@ -10,14 +10,10 @@
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
-// Base styles shared across all variants
+// Base styles shared across all popovers
 export const basePopoverClassNames = mergeClassNames(
     // Focus - Remove outline from popover container (focus should be on interactive elements inside)
     'outline-none',
-    // Border radius
-    'rounded-lg border',
-    // Base width
-    'w-full',
 );
 
 // Popover Variants Interface - Source of truth for all popover variants
@@ -38,36 +34,71 @@ export interface PopoverVariants {
 // Automatically includes both structure variants and any project-added variants
 export type PopoverVariant = keyof PopoverVariants;
 
+// Popover Sizes Interface - Source of truth for all popover sizes
+// Structure defines its base sizes here, and projects can augment to add custom sizes
+// Example in project code:
+//   declare module '@structure/source/components/popovers/PopoverTheme' {
+//     interface PopoverSizes {
+//       TipLarge: 'TipLarge';
+//     }
+//   }
+export interface PopoverSizes {
+    Base: 'Base';
+    Tip: 'Tip';
+}
+
+// Type - Popover Size (derived from PopoverSizes interface)
+// Automatically includes both structure sizes and any project-added sizes
+export type PopoverSize = keyof PopoverSizes;
+
 // Type - Popover Theme Configuration
-// Structure must define all variants it declares in the interface above
+// Structure must define all variants/sizes it declares in the interfaces above
 // Project extensions are optional (Partial)
 export interface PopoverThemeConfiguration {
     variants: Partial<Record<PopoverVariant, string>>;
+    sizes: Partial<Record<PopoverSize, string>>;
     configuration: {
         baseClasses: string;
         defaultVariant?: {
             variant?: PopoverVariant;
+            size?: PopoverSize;
         };
     };
 }
 
 // Popover Theme - Structure Default
 export const popoverTheme: PopoverThemeConfiguration = {
+    // Variants control visual styling (colors, borders, shadows)
     variants: {
-        // Primary variant - Border with background, suitable for general content (popovers, dropdowns)
-        A: mergeClassNames(basePopoverClassNames, 'border--0 background--0 content--0'),
-        B: mergeClassNames(basePopoverClassNames, 'border--1 background--0 content--0'),
-        // Tip variant - Compact tooltips without full width
-        Tip: mergeClassNames(
-            'max-w-56 px-3 py-2 text-sm',
-            'rounded-xl border border--3 shadow-lg outline-none',
-            'background--0 content--0',
-        ),
+        // Variant A - Primary popover with subtle border
+        // Use for: Dropdowns, menus, general popover content
+        A: mergeClassNames(basePopoverClassNames, 'border border--0 background--0 content--0'),
+
+        // Variant B - Secondary popover with more prominent border
+        // Use for: Alternative popover styling
+        B: mergeClassNames(basePopoverClassNames, 'border border--1 background--0 content--0'),
+
+        // Variant Tip - Compact tooltip styling with shadow
+        // Use for: Tooltips, help text, brief explanatory content
+        Tip: mergeClassNames(basePopoverClassNames, 'border border--3 background--0 content--0 shadow-lg'),
     },
+
+    // Sizes control dimensions (padding, width, text size, border radius)
+    sizes: {
+        // Base size - Full-width popovers for dropdowns and menus
+        // Matches trigger width via Radix variables
+        Base: 'rounded-lg',
+
+        // Tip size - Compact tooltips with constrained width
+        // Fixed max-width for brief content
+        Tip: 'max-w-56 px-3 py-2 text-sm rounded-xl',
+    },
+
     configuration: {
         baseClasses: '',
         defaultVariant: {
-            // No default variant - must opt in
+            variant: 'A',
+            size: 'Base',
         },
     },
 };

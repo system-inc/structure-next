@@ -7,12 +7,12 @@ import React from 'react';
 import * as RadixPopover from '@radix-ui/react-popover';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
 import { wrapForSlot } from '@structure/source/utilities/react/React';
 
 // Dependencies - Theme
 import { popoverTheme as structurePopoverTheme } from '@structure/source/components/popovers/PopoverTheme';
-import type { PopoverVariant } from '@structure/source/components/popovers/PopoverTheme';
+import type { PopoverVariant, PopoverSize } from '@structure/source/components/popovers/PopoverTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
 import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
@@ -20,6 +20,7 @@ import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtil
 export interface PopoverProperties {
     children?: never; // Do not use children, use trigger property instead
     variant?: PopoverVariant;
+    size?: PopoverSize;
     trigger: React.ReactElement; // The element that opens the popover
     content: React.ReactNode; // What appears in the popover
     contentClassName?: string; // Styles the popover content box
@@ -45,8 +46,21 @@ export function Popover(properties: PopoverProperties) {
     // Merge the structure theme with project theme (if set by the layout provider)
     const popoverTheme = mergeComponentTheme(structurePopoverTheme, componentTheme?.Popover);
 
-    // Defaults
+    // Determine variant and size with smart defaults
+    // If variant is "Tip" and no size specified, default to "Tip" size
+    // Otherwise use configuration defaults
     const variant = properties.variant ?? popoverTheme.configuration?.defaultVariant?.variant;
+    const size =
+        properties.size ?? (variant === 'Tip' ? 'Tip' : popoverTheme.configuration?.defaultVariant?.size ?? 'Base');
+
+    // Create popover variant class names function using the merged theme
+    const popoverVariantClassNames = createVariantClassNames(popoverTheme.configuration.baseClasses, {
+        variants: {
+            variant: popoverTheme.variants,
+            size: popoverTheme.sizes,
+        },
+        defaultVariants: popoverTheme.configuration.defaultVariant,
+    });
 
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
@@ -85,8 +99,10 @@ export function Popover(properties: PopoverProperties) {
         collisionBoundary: properties.collisionBoundary,
         onOpenAutoFocus: properties.onOpenAutoFocus,
         className: mergeClassNames(
-            popoverTheme.configuration.baseClasses,
-            variant ? popoverTheme.variants[variant] : '',
+            popoverVariantClassNames({
+                variant: variant,
+                size: size,
+            }),
             // State open is specific to Popover
             'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
             // Side bottom is specific to Popover
@@ -99,9 +115,9 @@ export function Popover(properties: PopoverProperties) {
             properties.contentClassName,
         ),
         style: {
-            // For Tip variant, we let CSS classes control max-width instead of inline styles
-            // For other variants (like Primary), use Radix variables
-            ...(variant !== 'Tip' && {
+            // For Tip size, we let CSS classes control max-width instead of inline styles
+            // For Base size (full-width popovers), use Radix variables to match trigger dimensions
+            ...(size !== 'Tip' && {
                 maxWidth: 'var(--radix-popover-content-available-width)',
                 minWidth: 'var(--radix-popper-anchor-width)',
                 minHeight: 'var(--radix-popper-anchor-height)',

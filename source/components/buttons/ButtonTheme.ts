@@ -346,7 +346,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         Large: 'h-10 rounded-md px-8',
         ExtraLarge: 'h-11 rounded-md px-10',
 
-        // Icon Button Sizes
+        // Icon-only Button Sizes (square buttons with no text, only an icon)
         IconExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'rounded-sm p-1'),
         IconSmall: mergeClassNames(buttonIconLayoutClassNames, 'p-1.5'),
         Icon: mergeClassNames(buttonIconLayoutClassNames, 'p-2'),
@@ -360,16 +360,17 @@ export const buttonTheme: ButtonThemeConfiguration = {
         TableHeaderCell: 'h-8',
     },
 
-    // Icon Sizes (corresponding to button sizes)
+    // Icon dimensions for each button size
+    // Maps button sizes to their corresponding icon dimensions (applied via themeIcon utility)
     iconSizes: {
-        // General Purpose Sizes
+        // Icon dimensions for text buttons (buttons with text + icon)
         ExtraSmall: 'h-2 w-2',
         Small: 'h-3 w-3',
         Base: 'h-4 w-4',
         Large: 'h-5 w-5',
         ExtraLarge: 'h-6 w-6',
 
-        // Icon Button Sizes
+        // Icon dimensions for icon-only buttons (no text, just an icon)
         IconExtraSmall: 'h-3 w-3',
         IconSmall: 'h-4 w-4',
         Icon: 'h-4.5 w-4.5',
