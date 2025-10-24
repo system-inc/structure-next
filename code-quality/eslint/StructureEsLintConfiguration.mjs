@@ -16,7 +16,7 @@ import ReactFunctionStyleRule from './rules/ReactFunctionStyleRule.mjs';
 import ReactHookDependenciesRule from './rules/ReactHookDependenciesRule.mjs';
 import ReactImportRule from './rules/ReactImportRule.mjs';
 import ReactNamingConventionsRule from './rules/ReactNamingConventionsRule.mjs';
-import ReactNoArrowFunctionsAsHookParametersRule from './rules/ReactNoArrowFunctionsAsHookParametersRule.mjs';
+import ArrowFunctionStyleRule from './rules/ArrowFunctionStyleRule.mjs';
 import ReactNoDestructuringReactRule from './rules/ReactNoDestructuringReactRule.mjs';
 
 // ESLint Ignore patterns
@@ -115,6 +115,7 @@ export const structureJavaScriptAndTypeScriptPlugins = {
     'better-tailwindcss': EsLintPluginBetterTailwindCss,
     structure: {
         rules: {
+            'arrow-function-style-rule': ArrowFunctionStyleRule,
             'code-consistency-rule': CodeConsistencyRule,
             'local-storage-service-rule': LocalStorageServiceRule,
             'network-service-rule': NetworkServiceRule,
@@ -126,7 +127,6 @@ export const structureJavaScriptAndTypeScriptPlugins = {
             'react-hook-dependencies-rule': ReactHookDependenciesRule,
             'react-import-rule': ReactImportRule,
             'react-naming-conventions-rule': ReactNamingConventionsRule,
-            'react-no-arrow-functions-as-hook-parameters-rule': ReactNoArrowFunctionsAsHookParametersRule,
             'react-no-destructuring-react-rule': ReactNoDestructuringReactRule,
         },
     },
@@ -137,7 +137,7 @@ export const structureJavaScriptAndTypeScriptSettings = {
     'better-tailwindcss': {
         entryPoint: './app/_theme/styles/theme.css',
         attributes: ['class', 'className'],
-        callees: ['mergeClassNames'],
+        callees: ['mergeClassNames', 'createVariantClassNames'],
         variables: ['.*ClassNames$'],
     },
 };
@@ -158,6 +158,7 @@ export const structureJavaScriptAndTypeScriptRules = {
 
     // Structure
     'no-empty': ['error', { allowEmptyCatch: true }],
+    'structure/arrow-function-style-rule': 'error',
     'structure/code-consistency-rule': 'error',
     'structure/local-storage-service-rule': 'error',
     'structure/network-service-rule': 'error',
@@ -169,7 +170,6 @@ export const structureJavaScriptAndTypeScriptRules = {
     'structure/react-hook-dependencies-rule': 'error',
     'structure/react-import-rule': 'error',
     'structure/react-naming-conventions-rule': 'error',
-    'structure/react-no-arrow-functions-as-hook-parameters-rule': 'error',
     'structure/react-no-destructuring-react-rule': 'error',
 };
 
