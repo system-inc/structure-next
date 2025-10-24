@@ -1,3 +1,29 @@
+/* Border utilities with 0-10 scale + opacity modifier support */
+@utility border--* {
+    /* No slash modifier -> solid border */
+    border-color: --value(--color-border- *, [color]);
+
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    border-color: --alpha(--value(--color-border- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    border-color: --alpha(--value(--color-border- *, [color]) / --modifier([percentage]));
+}
+
+/* Border content utilities - uses content colors for borders */
+@utility border-content--* {
+    /* No slash modifier -> solid border */
+    border-color: --value(--color-content- *, [color]);
+
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    border-color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    border-color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
+}
+
 /* Background utilities with 0-10 scale + opacity modifier support */
 @utility background--* {
     /* No slash modifier -> solid background */
@@ -35,32 +61,6 @@
 
     /* Optional: allow true percentages like /12.5% */
     color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
-}
-
-/* Border utilities with 0-10 scale + opacity modifier support */
-@utility border--* {
-    /* No slash modifier -> solid border */
-    border-color: --value(--color-border- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    border-color: --alpha(--value(--color-border- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    border-color: --alpha(--value(--color-border- *, [color]) / --modifier([percentage]));
-}
-
-/* Border content utilities - uses content colors for borders */
-@utility border-content--* {
-    /* No slash modifier -> solid border */
-    border-color: --value(--color-content- *, [color]);
-
-    /* Slash modifier like /50 -> treat as percentage */
-    --alpha: calc(--modifier(integer) * 1%);
-    border-color: --alpha(--value(--color-content- *, [color]) / var(--alpha, 100%));
-
-    /* Optional: allow true percentages like /12.5% */
-    border-color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
 /* Prose - Typography styles for rich text content with proper spacing */
