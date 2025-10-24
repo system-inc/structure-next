@@ -1,13 +1,10 @@
 import React from 'react';
-import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
 import { Slot } from '@radix-ui/react-slot';
 
-export const cardVariants = cva(
-    [
-        // Base styles
-        'shadow-02 flex flex-col items-start justify-start gap-6 rounded-2xl border border--0 background--2 p-8 transition-all',
-    ],
+export const cardVariants = createVariantClassNames(
+    // Base styles
+    'flex flex-col items-start justify-start gap-6 rounded-2xl border border--0 background--2 p-8 shadow-lg transition-all',
     {
         variants: {
             interactive: {

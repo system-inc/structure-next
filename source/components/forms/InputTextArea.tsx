@@ -21,7 +21,7 @@ export const commonClassNames = mergeClassNames(
     // Placeholder (disabled)
     'disabled:placeholder:opacity-20 disabled:dark:placeholder:opacity-20',
     // Disabled
-    'disabled:text-opacity-20 disabled:dark:text-opacity-20 disabled:cursor-not-allowed',
+    'disabled:cursor-not-allowed disabled:opacity-50',
 );
 
 // Background styles
@@ -32,9 +32,7 @@ export const backgroundClassNames =
 // Border styles
 export const borderStyleClassNames = mergeClassNames(
     // Border
-    'dark:border-dark-4 rounded-sm border border--3',
-    // Focus
-    'focus:border-neutral dark:focus:border-neutral-3',
+    'rounded-sm border border--3',
 );
 
 // Focus styles: border color changes on focus, disable outline to prevent double border

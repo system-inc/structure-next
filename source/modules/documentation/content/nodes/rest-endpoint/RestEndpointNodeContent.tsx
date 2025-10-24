@@ -367,7 +367,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 {/* HTTP Method */}
                 <span
                     className={mergeClassNames(
-                        'method text-light rounded-md border px-1 py-0.5 font-mono text-xs',
+                        'rounded-md border px-1 py-0.5 font-mono text-xs content--0',
                         getMethodColorClass(endpoint.method),
                     )}
                 >
@@ -403,7 +403,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 {/* HTTP Method */}
                 <span
                     className={mergeClassNames(
-                        'method text-light rounded-md border px-1 py-0.5 font-mono text-xs',
+                        'rounded-md border px-1 py-0.5 font-mono text-xs content--0',
                         getMethodColorClass(endpoint.method),
                     )}
                 >
@@ -450,7 +450,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                         <div className="">
                             <span
                                 className={mergeClassNames(
-                                    'method text-light rounded-md border px-1 py-0.5 font-mono text-xs',
+                                    'rounded-md border px-1 py-0.5 font-mono text-xs content--0',
                                     getStatusCodeColorClass(testOutputResponseHttpStatusCode),
                                 )}
                             >
@@ -481,7 +481,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                                 <div className="mb-2 flex items-center">
                                     <span
                                         className={mergeClassNames(
-                                            'text-light rounded-md border px-1 py-0.5 font-mono text-xs',
+                                            'rounded-md border px-1 py-0.5 font-mono text-xs content--0',
                                             getStatusCodeColorClass(exampleResponse.statusCode),
                                         )}
                                     >

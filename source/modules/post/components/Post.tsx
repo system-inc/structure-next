@@ -201,7 +201,7 @@ export function Post(properties: PostProperties) {
                         {/* Title and Topics */}
                         <span
                             className={mergeClassNames(
-                                'text-dark-3 dark:text-light',
+                                'content--2',
                                 properties.titleAndTopicsContainerClassName,
                             )}
                         >

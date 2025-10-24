@@ -87,14 +87,6 @@
     }
 }
 
-/* Class to allow full width and height for the ScrollArea component */
-/* Fix for RadixScrollArea */
-.scroll-area-viewport > :first-child {
-    height: 100%;
-    width: 100%;
-    table-layout: fixed;
-}
-
 /* Form inputs autofilled by the browser are styled in undesirable ways */
 /* This hack delays the style transitions */
 /* It requires that we set a key={theme} on React components */

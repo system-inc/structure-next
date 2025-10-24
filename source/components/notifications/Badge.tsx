@@ -1,9 +1,8 @@
 import React from 'react';
-import { cva, VariantProps as VariantProperties } from 'class-variance-authority';
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
 
-export const badgeVariants = cva(
-    ['inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors'],
+export const badgeVariants = createVariantClassNames(
+    'inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors',
     {
         variants: {
             variant: {

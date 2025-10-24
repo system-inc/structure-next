@@ -548,7 +548,7 @@ export function Table(properties: TableProperties) {
             {/* Table Container */}
             <div
                 className={mergeClassNames(
-                    'dark:border-dark-4 overflow-scroll rounded-md border border--3',
+                    'overflow-scroll rounded-md border border--3',
                     properties.containerClassName,
                 )}
             >

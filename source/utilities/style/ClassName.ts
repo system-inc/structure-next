@@ -98,15 +98,15 @@ export function createVariantClassNames<T extends Record<string, Record<string, 
     base?: ClassValue,
     configuration?: {
         variants?: T;
-        defaultVariants?: Partial<Record<keyof T, string>>;
-        compoundVariants?: Array<Partial<Record<keyof T, string>> & ClassProperty>;
+        defaultVariants?: Partial<Record<keyof T, string | boolean>>;
+        compoundVariants?: Array<Partial<Record<keyof T, string | boolean>> & ClassProperty>;
     },
 ) {
     // Create the CVA function - use type assertion to match CVA's expected signature
     const cvaFunction = cva(base, configuration as Parameters<typeof cva>[1]);
 
     // Return a wrapper that validates in development
-    return function (properties?: Partial<Record<keyof T, string>> & ClassProperty) {
+    return function (properties?: Partial<Record<keyof T, string | boolean>> & ClassProperty) {
         // Development-only validation
         if(process.env.NODE_ENV === 'development' && properties && configuration?.variants) {
             for(const [variantKey, variantValue] of Object.entries(properties)) {

@@ -122,7 +122,7 @@ export function FormInput(properties: FormInputProperties) {
                 >
                     <label
                         className={mergeClassNames(
-                            'pointer:cursor leading-none font-medium whitespace-nowrap select-none',
+                            'cursor-pointer leading-none font-medium whitespace-nowrap select-none',
                             properties.labelClassName,
                         )}
                         onClick={properties.focus instanceof Function ? properties.focus : undefined}

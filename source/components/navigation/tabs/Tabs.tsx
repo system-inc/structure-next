@@ -2,15 +2,12 @@
 
 import React from 'react';
 import * as RadixTabPrimitive from '@radix-ui/react-tabs';
-import { cva, type VariantProps as VariantProperties } from 'class-variance-authority';
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
 import { AnimatePresence, motion } from 'motion/react';
 
-export const tabsVariants = cva(
-    [
-        // Wrapper defaults
-        'z-0 flex items-center gap-1 rounded-full background--1 p-0.5 transition-colors',
-    ],
+export const tabsVariants = createVariantClassNames(
+    // Wrapper defaults
+    'z-0 flex items-center gap-1 rounded-full background--1 p-0.5 transition-colors',
     {
         variants: {
             size: {
@@ -51,15 +48,15 @@ export const Tabs = React.forwardRef<
 Tabs.displayName = RadixTabPrimitive.Root.displayName;
 
 // TAB ITEM
-export const tabItemVariants = cva(
-    [
+export const tabItemVariants = createVariantClassNames(
+    mergeClassNames(
         // Default
         'group relative cursor-pointer rounded-full content--1 transition-colors',
         // Hover
         'hover:content--0',
         // Active
         'data-[state=active]:content--0',
-    ],
+    ),
     {
         variants: {
             size: {

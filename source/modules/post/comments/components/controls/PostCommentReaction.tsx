@@ -129,20 +129,14 @@ export function PostCommentReaction(properties: PostCommentReactionProperties) {
                     className={mergeClassNames(
                         // Layout
                         'flex cursor-pointer items-center space-x-1.5 rounded-lg border px-2.5 select-none',
-                        // Light
-                        'text-dark border--3',
-                        // Dark
-                        'dark:bg-dark-1 dark:text-light-2',
-                        // Hover - Light
-                        'hover:text-dark-1 hover:border--3 hover:background--2',
-                        // Hover - Dark
-                        'dark:hover:border-dark-4 dark:hover:bg-dark-2 dark:hover:text-light',
-                        // Active - Light
-                        'active:border-light-5 active:bg-light-2 active:text-dark-2',
-                        // Active - Dark
-                        'dark:active:border-dark-5 dark:active:bg-dark-3',
+                        // Base
+                        'border--3 background--1 content--0',
+                        // Hover
+                        'hover:border--4 hover:background--2 hover:content--1',
+                        // Active
+                        'active:border--5 active:background--3 active:content--2',
                         properties.reacted
-                            ? 'border-purple-400 hover:border-purple-400 dark:border-purple-800 dark:hover:border-purple-800'
+                            ? 'border-purple-400 hover:border-purple-500 active:border-purple-600'
                             : '',
                         properties.className,
                     )}

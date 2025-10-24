@@ -107,6 +107,15 @@
     }
 }
 
+/* Scroll Area Viewport - Full width/height for RadixScrollArea fix */
+@utility scroll-area-viewport {
+    & > :first-child {
+        height: 100%;
+        width: 100%;
+        table-layout: fixed;
+    }
+}
+
 /* Scrollbar Hide - Hides scrollbars while maintaining scroll functionality */
 @utility scrollbar-hide {
     -ms-overflow-style: none;

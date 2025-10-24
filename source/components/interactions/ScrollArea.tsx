@@ -14,9 +14,9 @@ export const scrollAreaContainerClassName = 'h-full overflow-hidden';
 export const scrollAreaClassName = 'h-full w-full rounded-[inherit]';
 export const scrollAreaScrollbarClassName = mergeClassNames(
     // Layout
-    'flex touch-none px-[4px] py-[2px] select-none',
+    'flex touch-none px-1 py-0.5 select-none',
     // Hover - Only show the scrollbar on hover when the thumb is visible
-    'data-[state=visible]:hover:bg-neutral+6/30 data-[state=visible]:dark:hover:bg-dark-4/30',
+    'data-[state=visible]:hover:background--2/30',
     // Group
     'group',
     // Animation - Animate the hover colors
@@ -28,9 +28,9 @@ export const scrollAreaHorizontalScrollbarClassName =
     'h-[14px] flex-col data-[state=hidden]:pointer-events-none data-[state=visible]:pointer-events-auto';
 export const scrollAreaThumbClassName = mergeClassNames(
     // Layout
-    'relative flex-1 rounded before:absolute before:top-1/2 before:left-1/2 before:h-full before:min-h-[44px] before:w-full before:min-w-[44px] before:translate-x-[50%] before:translate-y-[50%]',
+    'relative flex-1 rounded before:absolute before:top-1/2 before:left-1/2 before:h-full before:min-h-11 before:w-full before:min-w-11 before:translate-x-[50%] before:translate-y-[50%]',
     // Colors
-    'bg-dark/60 hover:bg-dark/75 dark:bg-neutral-6/60 hover:dark:bg-neutral-6/75',
+    'background--4/60 hover:background--4/75',
     // Animation
     'transition-opacity duration-300 ease-out',
     // Animate in when the group is visible

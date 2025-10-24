@@ -95,7 +95,7 @@ export function Code({
         <div
             {...divProperties}
             className={mergeClassNames(
-                'border-light/10 bg-dark-3 dark:bg-dark relative h-max overflow-clip rounded border p-1.5 font-mono tracking-wide transition-all focus-within:ring focus-within:outline',
+                'relative h-max overflow-clip rounded border border--3 background--3 p-1.5 font-mono tracking-wide transition-all focus-within:ring focus-within:outline',
                 className,
             )}
         >

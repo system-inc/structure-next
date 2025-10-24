@@ -48,7 +48,7 @@ export function SideNavigationSection(properties: SideNavigationSectionPropertie
                 ) : properties.children ? (
                     <div
                         className={mergeClassNames(
-                            'hover:bg-light-2 dark:text-light dark:hover:bg-dark-3 mb-0.5 flex cursor-pointer items-center justify-between rounded py-1 pr-1 pl-2 text-[13px] select-none',
+                            'mb-0.5 flex cursor-pointer items-center justify-between rounded py-1 pr-1 pl-2 text-[13px] content--0 select-none hover:background--2',
                             isActive ? 'dark:bg-dark-2 background--2' : '',
                         )}
                         onClick={() => setIsOpen(!isOpen)}

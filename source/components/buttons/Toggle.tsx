@@ -2,15 +2,14 @@
 
 import React from 'react';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
-import { cva, type VariantProps as VariantProperties } from 'class-variance-authority';
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames, VariantProperties } from '@structure/source/utilities/style/ClassName';
 
-export const toggleVariants = cva(
-    'hover:bg-muted focus-visible:ring-ring data-[state=on]:bg-accent data-[state=on]:text-accent-foreground inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:content--1 focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+export const toggleVariants = createVariantClassNames(
+    'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:background--2 hover:content--1 focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=on]:background--3 data-[state=on]:content--0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
     {
         variants: {
             variant: {
-                default: 'border-input hover:bg-accent hover:text-accent-foreground border bg-transparent shadow-sm',
+                default: 'border--3 hover:background--3 hover:content--0 border bg-transparent shadow-sm',
                 ghost: 'bg-transparent',
             },
             size: {

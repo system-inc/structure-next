@@ -204,7 +204,7 @@ export function getSideNavigationSectionsFromDocumentationSpecification(
                 <span className="flex items-center space-x-1.5">
                     <span
                         className={mergeClassNames(
-                            'text-light rounded-md border px-1 py-[1px] font-mono text-[10px] leading-4',
+                            'rounded-md border px-1 py-[1px] font-mono text-[10px] leading-4 content--0',
                             getMethodColorClass(documentationNode.endpoint.method),
                         )}
                     >

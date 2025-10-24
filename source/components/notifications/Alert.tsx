@@ -50,13 +50,13 @@ export function Alert(properties: AlertProperties) {
         variantIconClassNames = 'h-6 w-6';
     }
     if(variant === 'success') {
-        variantIconClassNames = mergeClassNames('dark:text-light text-[#2dcc2a]', variantIconClassNames);
+        variantIconClassNames = mergeClassNames('content--positive', variantIconClassNames);
     }
     else if(variant === 'error') {
-        variantIconClassNames = mergeClassNames('dark:text-light text-[#cc2d2a]', variantIconClassNames);
+        variantIconClassNames = mergeClassNames('content--negative', variantIconClassNames);
     }
     else if(variant === 'warning') {
-        variantIconClassNames = mergeClassNames('dark:text-light text-[#e6b800]', variantIconClassNames);
+        variantIconClassNames = mergeClassNames('content--warning', variantIconClassNames);
     }
 
     // Variant title class names
