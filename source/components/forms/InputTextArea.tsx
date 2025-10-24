@@ -37,10 +37,8 @@ export const borderStyleClassNames = mergeClassNames(
     'focus:border-neutral dark:focus:border-neutral-3',
 );
 
-// Focus styles: background and text color changes on hover
-export const focusStyleClassNames =
-    // Focus
-    `focus:border-neutral dark:focus:border-light focus-visible:ring-0 focus-visible:outline-none`;
+// Focus styles: border color changes on focus, disable outline to prevent double border
+export const focusStyleClassNames = 'focus:border--focus focus-visible:outline-none';
 
 // Autofill styles
 export const autofillStyleClassNames = `autofill:bg-transparent dark:autofill:bg-transparent`;
@@ -63,8 +61,6 @@ export const InputTextAreaVariants = {
         borderStyleClassNames,
         focusStyleClassNames,
         autofillStyleClassNames,
-        // Focus
-        'focus-visible:ring-0 focus-visible:outline-none',
         // Layout and sizing
         'py-2 pr-4 pl-9',
         // Border
@@ -75,8 +71,6 @@ export const InputTextAreaVariants = {
     menuSearch: mergeClassNames(
         commonClassNames,
         autofillStyleClassNames,
-        // Focus
-        'focus-visible:ring-0 focus-visible:outline-none',
         // Layout and sizing
         'w-full py-3 pr-4 pl-9',
         // Border

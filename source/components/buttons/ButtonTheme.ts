@@ -37,14 +37,15 @@ export const buttonCenteredClassNames = mergeClassNames(
 );
 
 // Focus styles for styled buttons
+// Override global outline with ring-offset pattern for 1px gap effect
 export const buttonFocusClassNames = mergeClassNames(
-    // Focus
-    'focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-none',
-    // Ring offset colors (matches background--0 for gap effect)
-    'focus-visible:ring-offset-white-1000 dark:focus-visible:ring-offset-black-700',
-    // Focus ring color
-    'focus-visible:ring-border-focus',
-    // 'focus:border-blue-400 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-blue-500'
+    // Remove global outline
+    'focus-visible:outline-none',
+    // Ring pattern: 1px gap + 1px border
+    'focus-visible:ring-1 focus-visible:ring-border-focus',
+    'focus-visible:ring-offset-1',
+    // Ring offset color (matches background--0 for gap effect)
+    'focus-visible:ring-offset-background-0',
 );
 
 // Icon button layout: square aspect ratio for icon-only buttons
@@ -68,8 +69,8 @@ export interface ButtonVariants {
     ToggleOn: 'ToggleOn';
     ToggleOff: 'ToggleOff';
     MenuItem: 'MenuItem';
-    FormInputCheckbox: 'FormInputCheckbox';
-    FormInputSelect: 'FormInputSelect';
+    InputCheckbox: 'InputCheckbox';
+    InputSelect: 'InputSelect';
     TableHeaderCell: 'TableHeaderCell';
 }
 
@@ -97,8 +98,8 @@ export interface ButtonSizes {
     IconLarge: 'IconLarge';
     IconExtraLarge: 'IconExtraLarge';
     MenuItem: 'MenuItem';
-    FormInputCheckbox: 'FormInputCheckbox';
-    FormInputSelect: 'FormInputSelect';
+    InputCheckbox: 'InputCheckbox';
+    InputSelect: 'InputSelect';
     TableHeaderCell: 'TableHeaderCell';
 }
 
@@ -280,9 +281,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
             '[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:duration-200 [&[data-selected=true]>svg:first-child]:fade-in',
         ),
 
-        // Variant FormInputCheckbox - Checkbox button in forms
+        // Variant InputCheckbox - Checkbox button in forms
         // Use for: Checkbox inputs with custom styling
-        FormInputCheckbox: mergeClassNames(
+        InputCheckbox: mergeClassNames(
             buttonCommonClassNames,
             buttonFocusClassNames,
             'flex items-center justify-center',
@@ -297,10 +298,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'data-[state=indeterminate]:border-content--0 data-[state=indeterminate]:background-content--0 data-[state=indeterminate]:content--10',
         ),
 
-        // Variant FormInputSelect - Select input button styling
+        // Variant InputSelect - Select input button styling
         // Use for: Custom select/dropdown triggers in forms
-        FormInputSelect: mergeClassNames(
+        InputSelect: mergeClassNames(
             buttonCommonClassNames,
+            buttonFocusClassNames,
             // Layout (no justify-center because grow handles spacing)
             'inline-flex items-center',
             // Text
@@ -317,8 +319,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'active:background--4 data-[state=open]:background--4',
             // Active - Dark (includes when used as open popover trigger)
             'dark:active:background--5 dark:data-[state=open]:background--5',
-            // Focus
-            'focus:border--focus focus-visible:ring-0 focus-visible:outline-none',
             // Disabled
             'disabled:hover:background--5',
         ),
@@ -355,8 +355,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized Sizes
         MenuItem: 'pt-1.5 pr-3 pb-1.5',
-        FormInputCheckbox: 'h-4 w-4',
-        FormInputSelect: 'px-4 h-9',
+        InputCheckbox: 'h-4 w-4',
+        InputSelect: 'px-4 h-9',
         TableHeaderCell: 'h-8',
     },
 
@@ -379,8 +379,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized Sizes
         MenuItem: 'h-4 w-4',
-        FormInputCheckbox: 'h-3 w-3',
-        FormInputSelect: 'h-4 w-4',
+        InputCheckbox: 'h-3 w-3',
+        InputSelect: 'h-4 w-4',
         TableHeaderCell: 'h-3 w-3',
     },
 

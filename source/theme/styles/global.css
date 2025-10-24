@@ -74,6 +74,17 @@
         font-size: 16px;
         font-weight: 300;
     }
+
+    /* Global Focus Styles - Remove browser defaults and apply consistent themed focus */
+    /* This ensures all focusable elements use our design system's focus color */
+    /* Components with explicit focus classes will override these base styles */
+    *:focus {
+        outline: none;
+    }
+    *:focus-visible {
+        outline: 1px solid var(--color-border-focus);
+        outline-offset: 0;
+    }
 }
 
 /* Class to allow full width and height for the ScrollArea component */
