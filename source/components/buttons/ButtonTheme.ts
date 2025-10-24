@@ -43,7 +43,8 @@ export const buttonFocusClassNames = mergeClassNames(
     // Ring offset colors (matches background--0 for gap effect)
     'focus-visible:ring-offset-white-1000 dark:focus-visible:ring-offset-black-700',
     // Light and dark mode focus ring colors
-    'focus-visible:ring-black-350 dark:focus-visible:ring-white-650',
+    'focus-visible:ring-blue-400 dark:focus-visible:ring-blue-500',
+    // 'focus:border-blue-400 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-blue-500'
 );
 
 // Icon button layout: square aspect ratio for icon-only buttons
@@ -316,6 +317,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'active:background--4 data-[state=open]:background--4',
             // Active - Dark (includes when used as open popover trigger)
             'dark:active:background--5 dark:data-[state=open]:background--5',
+            // Focus
+            'focus:border-blue-400 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-blue-500',
             // Disabled
             'disabled:hover:background--5',
         ),
