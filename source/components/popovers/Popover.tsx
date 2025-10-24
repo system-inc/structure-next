@@ -81,12 +81,12 @@ export function Popover(properties: PopoverProperties) {
     const collisionPadding = properties.collisionPadding ?? 12;
 
     // Function to handle on open change
-    function onOpenChange() {
-        // Call the onOpenChange callback
-        properties.onOpenChange?.(!open);
+    function onOpenChange(openState: boolean) {
+        // Call the onOpenChange callback with the new state
+        properties.onOpenChange?.(openState);
 
-        // Update the state
-        setOpen(!open);
+        // Update the state with the value from Radix
+        setOpen(openState);
     }
 
     // Shared content properties
