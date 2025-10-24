@@ -11,7 +11,7 @@ import { ScrollArea } from '@structure/source/components/interactions/ScrollArea
 
 // Dependencies - Theme
 import { dialogTheme as structureDialogTheme } from './DialogTheme';
-import type { DialogVariant } from './DialogTheme';
+import type { DialogVariant, DialogPosition, DialogSize } from './DialogTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
 import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
@@ -19,7 +19,7 @@ import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtil
 import { XIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
 import { wrapForSlot, useIsMobile, focusFirstFocusableElement } from '@structure/source/utilities/react/React';
 
 // Component - Dialog
@@ -29,6 +29,8 @@ export interface DialogProperties {
     children?: never; // Do not use children, use trigger property instead
     trigger?: React.ReactElement; // The element that opens the dialog
     variant?: DialogVariant;
+    position?: DialogPosition;
+    size?: DialogSize;
     closeControl?: React.ReactNode | boolean; // The close button
     header?: React.ReactNode; // The header
     headerClassName?: string; // The class names for the header
@@ -51,8 +53,20 @@ export function Dialog(properties: DialogProperties) {
     // Merge the structure theme with project theme
     const dialogTheme = mergeComponentTheme(structureDialogTheme, componentTheme?.Dialog);
 
-    // Get variant
-    const variant = properties.variant ?? dialogTheme.configuration?.defaultVariant?.variant ?? 'Default';
+    // Determine variant, position, and size with defaults from configuration
+    const variant = properties.variant ?? dialogTheme.configuration?.defaultVariant?.variant;
+    const position = properties.position ?? dialogTheme.configuration?.defaultVariant?.position ?? 'Centered';
+    const size = properties.size ?? dialogTheme.configuration?.defaultVariant?.size ?? 'Base';
+
+    // Create dialog variant class names function using the merged theme
+    const dialogVariantClassNames = createVariantClassNames(dialogTheme.configuration.baseClasses, {
+        variants: {
+            variant: dialogTheme.variants,
+            position: dialogTheme.positions,
+            size: dialogTheme.sizes,
+        },
+        defaultVariants: dialogTheme.configuration.defaultVariant,
+    });
 
     // Detect mobile viewport
     const isMobile = useIsMobile();
@@ -250,7 +264,14 @@ export function Dialog(properties: DialogProperties) {
                             )}
                         />
                         <RadixDialog.Content
-                            className={mergeClassNames(dialogTheme.variants[variant], properties.className)}
+                            className={mergeClassNames(
+                                dialogVariantClassNames({
+                                    variant: variant,
+                                    position: position,
+                                    size: size,
+                                }),
+                                properties.className,
+                            )}
                             onOpenAutoFocus={(event) => {
                                 if(properties.onOpenAutoFocus) {
                                     properties.onOpenAutoFocus(event);

@@ -80,21 +80,54 @@ export const dialogContentPositionTopFixedClassNames = mergeClassNames(
 //     }
 //   }
 export interface DialogVariants {
-    Default: 'Default';
-    Unstyled: 'Unstyled';
-    UnstyledTopFixed: 'UnstyledTopFixed';
-    FullScreenWithMargin: 'FullScreenWithMargin';
+    A: 'A';
 }
 
 // Type - Dialog Variant (derived from DialogVariants interface)
 // Automatically includes both structure variants and any project-added variants
 export type DialogVariant = keyof DialogVariants;
 
+// Dialog Positions Interface - Source of truth for all dialog positions
+// Structure defines its base positions here, and projects can augment to add custom positions
+// Example in project code:
+//   declare module '@structure/source/components/dialogs/DialogTheme' {
+//     interface DialogPositions {
+//       BottomSheet: 'BottomSheet';
+//     }
+//   }
+export interface DialogPositions {
+    Centered: 'Centered';
+    TopFixed: 'TopFixed';
+}
+
+// Type - Dialog Position (derived from DialogPositions interface)
+// Automatically includes both structure positions and any project-added positions
+export type DialogPosition = keyof DialogPositions;
+
+// Dialog Sizes Interface - Source of truth for all dialog sizes
+// Structure defines its base sizes here, and projects can augment to add custom sizes
+// Example in project code:
+//   declare module '@structure/source/components/dialogs/DialogTheme' {
+//     interface DialogSizes {
+//       Large: 'Large';
+//     }
+//   }
+export interface DialogSizes {
+    Base: 'Base';
+    FullScreen: 'FullScreen';
+}
+
+// Type - Dialog Size (derived from DialogSizes interface)
+// Automatically includes both structure sizes and any project-added sizes
+export type DialogSize = keyof DialogSizes;
+
 // Type - Dialog Theme Configuration
-// Structure must define all variants it declares in the interface above
+// Structure must define all variants/positions/sizes it declares in the interfaces above
 // Project extensions are optional (Partial)
 export interface DialogThemeConfiguration {
     variants: Partial<Record<DialogVariant, string>>;
+    positions: Partial<Record<DialogPosition, string>>;
+    sizes: Partial<Record<DialogSize, string>>;
     configuration: {
         baseClasses: string;
         overlayClasses: string;
@@ -103,38 +136,47 @@ export interface DialogThemeConfiguration {
         footerClasses: string;
         defaultVariant?: {
             variant?: DialogVariant;
+            position?: DialogPosition;
+            size?: DialogSize;
         };
     };
 }
 
 // Dialog Theme - Structure Default
 export const dialogTheme: DialogThemeConfiguration = {
-    // Variants
+    // Variants control visual styling (border, background, padding, shadow)
     variants: {
-        // Default variant - Centered modal with border and shadow
-        Default: mergeClassNames(
-            dialogContentPositionCenteredClassNames,
-            // Border, background, and shadow
-            'flex w-full flex-col gap-4 rounded-lg border border--0 background--0 p-6 shadow-lg',
-        ),
+        // Variant A - Styled modal with border and shadow
+        // Use for: Standard dialogs, modals, forms
+        A: 'flex w-full flex-col gap-4 rounded-lg border border--0 background--0 p-6 shadow-lg',
+    },
 
-        // Unstyled centered variant
-        Unstyled: dialogContentPositionCenteredClassNames,
+    // Positions control where the dialog appears on screen
+    positions: {
+        // Centered position - Dialog centered in viewport
+        // Use for: Standard modals, forms, confirmations
+        Centered: dialogContentPositionCenteredClassNames,
 
-        // Unstyled top fixed variant
-        UnstyledTopFixed: dialogContentPositionTopFixedClassNames,
+        // Top fixed position - Dialog fixed near top of viewport
+        // Use for: Notifications, search bars, quick actions
+        TopFixed: dialogContentPositionTopFixedClassNames,
+    },
 
-        // Full screen with margin
-        FullScreenWithMargin: mergeClassNames(
-            dialogContentPositionCenteredClassNames,
-            'flex w-full flex-col gap-4 rounded-lg border border--0 background--0 p-6 shadow-lg',
+    // Sizes control dialog dimensions
+    sizes: {
+        // Base size - Standard modal width
+        // Max width: lg (32rem), max height: 95vh
+        Base: 'max-h-[95vh] w-full max-w-[90vw] md:max-w-lg',
+
+        // Full screen size - Nearly full viewport with margin
+        // Uses calc() to leave breathing room around edges
+        FullScreen:
             'h-full max-h-[calc(100vh-8rem)] w-full max-w-[calc(100vw-8rem)] md:max-h-[calc(100vh-8rem)] md:max-w-[calc(100vw-8rem)]',
-        ),
     },
 
     // Configuration
     configuration: {
-        // Base classes (empty = variants handle their own base styles)
+        // Base classes (empty = unstyled by default, positions/sizes/variants add their own styles)
         baseClasses: '',
 
         // Overlay classes
@@ -149,9 +191,11 @@ export const dialogTheme: DialogThemeConfiguration = {
         // Footer classes
         footerClasses: baseDialogFooterClassNames,
 
-        // Default variant
+        // Default properties when not specified
         defaultVariant: {
-            variant: 'Default',
+            // No default variant = unstyled
+            position: 'Centered',
+            size: 'Base',
         },
     },
 };
