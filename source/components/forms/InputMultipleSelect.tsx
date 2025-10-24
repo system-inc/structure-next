@@ -259,8 +259,8 @@ export const InputMultipleSelect = React.forwardRef<
                 <Button
                     ref={buttonReference}
                     className={mergeClassNames(properties.className)}
-                    variant="FormInputSelect"
-                    size="FormInputSelect"
+                    variant="InputSelect"
+                    size="InputSelect"
                     isLoading={loadingItems}
                     tabIndex={properties.tabIndex}
                     onBlur={onBlurIntercept}

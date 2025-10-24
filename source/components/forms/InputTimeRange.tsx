@@ -317,8 +317,8 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                 <Button
                     ref={buttonReference}
                     tabIndex={properties.tabIndex}
-                    variant={'FormInputSelect'}
-                    size="FormInputSelect"
+                    variant={'InputSelect'}
+                    size="InputSelect"
                     className={mergeClassNames(
                         'min-w-[246px]',
                         !value && 'content--1',

@@ -258,8 +258,8 @@ export const InputSelect = React.forwardRef<InputReferenceInterface, InputSelect
                 <Button
                     ref={buttonReference}
                     className={mergeClassNames(properties.className)}
-                    variant="FormInputSelect"
-                    size="FormInputSelect"
+                    variant="InputSelect"
+                    size="InputSelect"
                     isLoading={loadingItems}
                     // disabled={properties.disabled || loadingItems}
                     tabIndex={properties.tabIndex}
