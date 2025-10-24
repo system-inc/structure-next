@@ -37,6 +37,7 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
     // Render the component
     return (
         <Dialog
+            variant="A"
             className="p-6"
             accessibilityTitle="Delete Account"
             content={

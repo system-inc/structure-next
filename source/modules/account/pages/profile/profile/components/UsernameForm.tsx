@@ -160,6 +160,7 @@ export function UsernameForm() {
 
             {/* Confirmation Dialog */}
             <Dialog
+                variant="A"
                 open={isDialogOpen}
                 onOpenChange={handleDialogClose}
                 header={usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}

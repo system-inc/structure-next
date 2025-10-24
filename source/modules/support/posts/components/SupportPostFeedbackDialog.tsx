@@ -77,6 +77,7 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
     // Render the component
     return (
         <Dialog
+            variant="A"
             header="Help Us Improve"
             content={
                 <div className="">

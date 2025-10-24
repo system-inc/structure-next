@@ -35,6 +35,7 @@ export function TeamPage() {
             </Button>
 
             <Dialog
+                variant="A"
                 trigger={<Button>Launch Dialog</Button>}
                 header="How are you doing?"
                 content="I'm doing great!"

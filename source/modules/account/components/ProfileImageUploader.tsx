@@ -298,6 +298,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
 
             {/* Upload dialog */}
             <Dialog
+                variant="A"
                 open={dialogOpen}
                 onOpenChange={handleDialogClose}
                 header={dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}

@@ -36,6 +36,7 @@ export function AuthenticationDialog(properties: AuthenticationDialogProperties)
     // Render the component
     return (
         <Dialog
+            variant="A"
             className="p-12"
             accessibilityTitle="Authenticate"
             content={<Authentication className="" variant="Dialog" scope={properties.scope} />}

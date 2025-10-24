@@ -75,6 +75,7 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
     // Render the component
     return (
         <Dialog
+            variant="A"
             header={'Delete Post'}
             content={
                 <div>

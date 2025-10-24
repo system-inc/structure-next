@@ -55,6 +55,7 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
     // Render the component
     return (
         <Dialog
+            variant="A"
             className="p-6"
             accessibilityTitle={properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
             content={

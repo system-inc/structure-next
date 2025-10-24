@@ -337,6 +337,7 @@ export function UsersPage() {
 
             {/* Delete User Dialog */}
             <Dialog
+                variant="A"
                 open={deleteDialogOpen}
                 onOpenChange={handleDialogClose}
                 header={deleteSuccess ? 'User Deleted' : 'Confirm User Deletion'}

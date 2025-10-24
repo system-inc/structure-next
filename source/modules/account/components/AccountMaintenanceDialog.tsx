@@ -206,6 +206,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
 
     return (
         <Dialog
+            variant="A"
             className="max-w-md"
             accessibilityTitle="Verify Identity"
             content={content}

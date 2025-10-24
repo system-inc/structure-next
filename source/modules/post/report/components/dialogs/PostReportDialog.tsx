@@ -69,6 +69,7 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
     // Render the component
     return (
         <Dialog
+            variant="A"
             header={
                 <div className="flex items-center space-x-3">
                     <FlagIcon className="h-5 w-5" />

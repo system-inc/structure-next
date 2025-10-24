@@ -49,6 +49,7 @@ export function DocumentationSettingsDialog(properties: DocumentationSettingsDia
     // Render the component
     return (
         <Dialog
+            variant="A"
             open={properties.isOpen}
             onOpenChange={properties.onClose}
             header="Set API Key"

@@ -264,6 +264,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
 
             {/* Grant Role Dialog */}
             <Dialog
+                variant="A"
                 open={grantDialogOpen}
                 onOpenChange={setGrantDialogOpen}
                 header="Confirm Role Grant"

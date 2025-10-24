@@ -330,6 +330,7 @@ export function UsersRolesPage() {
 
             {/* Revoke Role Dialog */}
             <Dialog
+                variant="A"
                 open={revokeDialogOpen}
                 onOpenChange={handleDialogClose}
                 header={revokeSuccess ? 'Role Revoked' : 'Confirm Role Revocation'}
