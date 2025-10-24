@@ -1,104 +1,10 @@
-/* Animations - Using @theme for tree-shaking and theme integration */
+/* Transition Timing Utilities */
 @theme {
-    /* Transition Timing Functions - Custom easing curves */
     /* Exponential easing for smooth, natural feeling animations */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
     /* Softer exponential easing for more subtle transitions */
     --ease-soft-out-expo: cubic-bezier(0.25, 0, 0, 1);
-
-    /* Centered Modal Animations - Used for modals/dialogs that appear centered on screen */
-    @keyframes enter-centered {
-        from {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-    }
-    @keyframes exit-centered {
-        from {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-        to {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.95);
-        }
-    }
-
-    /* Accordion Animations - Smooth height transitions for expandable/collapsible content */
-    /* Used with Radix UI Accordion component which provides --radix-accordion-content-height */
-    --animate-accordion-down: accordion-down 0.2s ease-out;
-    @keyframes accordion-down {
-        from {
-            height: 0;
-        }
-        to {
-            height: var(--radix-accordion-content-height);
-        }
-    }
-
-    --animate-accordion-up: accordion-up 0.2s ease-out;
-    @keyframes accordion-up {
-        from {
-            height: var(--radix-accordion-content-height);
-        }
-        to {
-            height: 0;
-        }
-    }
-
-    /* Blink Animation - Continuous pulsing opacity effect for attention-grabbing elements */
-    /* Creates a "breathing" effect with smooth fade in/out cycles */
-    /* Use cases: Loading indicators, notifications, status badges */
-    --animate-blink: blink 1.3s ease-in-out infinite;
-    @keyframes blink {
-        0% {
-            opacity: 1;
-        }
-        20%,
-        50% {
-            opacity: 0;
-        }
-        70%,
-        100% {
-            opacity: 1;
-        }
-    }
-
-    /* Blink Once - Single pulse animation for one-time attention grab */
-    /* Use cases: New message indicator, flash notification, success confirmation */
-    --animate-blink-once: blink-once 500ms linear;
-    @keyframes blink-once {
-        0% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.25;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-
-    /* Shimmer Animation - Horizontal sweep effect for loading skeletons */
-    /* Creates a subtle light sweep across placeholder content */
-    /* Use cases: Skeleton loaders, loading cards, placeholder states */
-    --animate-shimmer: shimmer 5s infinite;
-    @keyframes shimmer {
-        0% {
-            transform: translateX(-50%);
-        }
-        100% {
-            transform: translateX(75%);
-        }
-    }
 }
-
-/* Transition Timing Function Utilities */
 @utility ease-out-expo {
     transition-timing-function: var(--ease-out-expo);
 }
@@ -106,12 +12,113 @@
     transition-timing-function: var(--ease-soft-out-expo);
 }
 
-/* Animate a dialog centered */
+/* Centered Modal Animations - Used for modals/dialogs that appear centered on screen */
+@keyframes enter-centered {
+    from {
+        opacity: 0;
+        scale: 0.95;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+@keyframes exit-centered {
+    from {
+        opacity: 1;
+        scale: 1;
+    }
+    to {
+        opacity: 0;
+        scale: 0.95;
+    }
+}
 @utility animate-in-centered {
-    transform: translate(-50%, -50%);
+    translate: -50% -50%;
     animation: enter-centered 200ms ease-out both;
 }
 @utility animate-out-centered {
-    transform: translate(-50%, -50%);
+    translate: -50% -50%;
     animation: exit-centered 200ms ease-in both;
+}
+
+/* Accordion - Used with Radix UI Accordion component which provides --radix-accordion-content-height */
+@theme {
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+@keyframes accordion-down {
+    from {
+        height: 0;
+    }
+    to {
+        height: var(--radix-accordion-content-height);
+    }
+}
+@keyframes accordion-up {
+    from {
+        height: var(--radix-accordion-content-height);
+    }
+    to {
+        height: 0;
+    }
+}
+
+/* Blink Animations - Continuous pulsing opacity effect for attention-grabbing elements */
+/* Creates a "breathing" effect with smooth fade in/out cycles */
+/* Use cases: Loading indicators, notifications, status badges */
+@theme {
+    --animate-blink: blink 1.3s ease-in-out infinite;
+
+    /* Blink Once - Single pulse animation for one-time attention grab */
+    /* Use cases: New message indicator, flash notification, success confirmation */
+    --animate-blink-once: blink-once 500ms linear;
+}
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    20%,
+    50% {
+        opacity: 0;
+    }
+    70%,
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes blink-once {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.25;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@utility animate-blink {
+    animation: var(--animate-blink);
+}
+@utility animate-blink-once {
+    animation: var(--animate-blink-once);
+}
+@utility animate-shimmer {
+    animation: var(--animate-shimmer);
+}
+
+/* Shimmer Animation - Horizontal sweep effect for loading skeletons */
+/* Creates a subtle light sweep across placeholder content */
+/* Use cases: Skeleton loaders, loading cards, placeholder states */
+@theme {
+    --animate-shimmer: shimmer 5s infinite;
+}
+@keyframes shimmer {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(75%);
+    }
 }
