@@ -13,7 +13,7 @@ export type PlaceholderAnimationProperties = {
 export function PlaceholderAnimation(properties: PlaceholderAnimationProperties) {
     // Render the component
     return (
-        <div className={mergeClassNames('relative overflow-hidden rounded-sm', properties.className)}>
+        <div className={mergeClassNames('relative overflow-hidden rounded-sm background--1', properties.className)}>
             <div className="absolute inset-0 animate-shimmer from-transparent to-transparent"></div>
         </div>
     );

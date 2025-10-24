@@ -24,7 +24,7 @@ export const menuClassName = mergeClassNames(
     'flex flex-col focus-visible:outline-none',
     // Border
     'rounded-lg border border--5',
-    // Background
+    // Background - keep the background bit lighter in light mode and bit darker in dark mode
     'background--0 dark:background--1',
     // Content
     'text-sm content--0',
