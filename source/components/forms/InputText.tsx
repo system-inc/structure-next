@@ -37,7 +37,7 @@ export const borderStyleClassNames = 'rounded-lg border border--1';
 
 // Focus styles: background and text color changes on hover
 export const focusStyleClassNames =
-    'focus:border-blue-400 focus-visible:ring-0 focus-visible:outline-none dark:focus:border-blue-500';
+    'focus:border--focus focus-visible:ring-0 focus-visible:outline-none';
 
 // Autofill styles
 export const autofillStyleClassNames = 'autofill:bg-transparent dark:autofill:bg-transparent';
