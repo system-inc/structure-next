@@ -99,24 +99,132 @@ export function downloadFile(options: DownloadFileOptions): void {
     }
 }
 
-// Function to format file size in bytes to human-readable format
-export function formatFileSize(bytes: number): string {
+// Function - bytesToScaledUnits
+// Converts bytes to scaled units with appropriate metric prefixes
+export function bytesToScaledUnits(
+    bytes: number,
+    options?: {
+        decimals?: number; // Number of decimal places (default: 2)
+        system?: 'Binary' | 'Decimal'; // Binary (1024) or Decimal (1000) (default: 'Binary')
+        unitStyle?: 'Short' | 'Long' | 'Narrow'; // Short (KB), Long (kilobytes), Narrow (KB no space) (default: 'Short')
+        maximumUnit?: 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB'; // Maximum unit to use (default: 'TB')
+        minimumUnit?: 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB'; // Minimum unit to use (default: 'B')
+        trimZeros?: boolean; // Remove trailing zeros (default: true)
+        forceUnit?: 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB'; // Force specific unit regardless of size
+        roundingMode?: 'Floor' | 'Ceil' | 'Round'; // How to round decimal values (default: 'Round')
+    },
+): string {
+    // Type definitions
+    type UnitName = 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB';
+
+    // Extract options with defaults
+    const decimals = options?.decimals ?? 2;
+    const system = options?.system ?? 'Binary';
+    const unitStyle = options?.unitStyle ?? 'Short';
+    const maximumUnit = options?.maximumUnit ?? 'TB';
+    const minimumUnit = options?.minimumUnit ?? 'B';
+    const trimZeros = options?.trimZeros ?? true;
+    const forceUnit = options?.forceUnit;
+    const roundingMode = options?.roundingMode ?? 'Round';
+
+    // Helper - applyRounding
+    function applyRounding(value: number, decimals: number, mode: 'Floor' | 'Ceil' | 'Round'): number {
+        const multiplier = Math.pow(10, decimals);
+
+        switch(mode) {
+            case 'Floor':
+                return Math.floor(value * multiplier) / multiplier;
+            case 'Ceil':
+                return Math.ceil(value * multiplier) / multiplier;
+            case 'Round':
+            default:
+                return Math.round(value * multiplier) / multiplier;
+        }
+    }
+
+    // Helper - formatOutput
+    function formatOutput(
+        value: number,
+        unit: UnitName,
+        style: 'Short' | 'Long' | 'Narrow',
+        decimals: number,
+        trimZeros: boolean,
+    ): string {
+        // Format the value with specified decimal places
+        let formattedValue = value.toFixed(decimals);
+
+        // Trim trailing zeros if requested
+        if(trimZeros) {
+            formattedValue = parseFloat(formattedValue).toString();
+        }
+
+        // Map short units to long form
+        const unitMap: Record<UnitName, string> = {
+            B: 'bytes',
+            KB: 'kilobytes',
+            MB: 'megabytes',
+            GB: 'gigabytes',
+            TB: 'terabytes',
+            PB: 'petabytes',
+        };
+
+        // Determine unit string based on style
+        let unitString: string;
+        switch(style) {
+            case 'Long':
+                unitString = unitMap[unit];
+                break;
+            case 'Narrow':
+                return formattedValue + unit;
+            case 'Short':
+            default:
+                unitString = unit;
+                break;
+        }
+
+        // Add space for Short and Long styles
+        return formattedValue + ' ' + unitString;
+    }
+
     // Handle zero bytes case
-    if(bytes === 0) return '0 B';
+    if(bytes === 0) {
+        const zeroUnit = forceUnit || minimumUnit;
+        return formatOutput(0, zeroUnit, unitStyle, decimals, trimZeros);
+    }
 
-    // Base for binary calculations (1024 bytes = 1 KB)
-    const base = 1024;
+    // Define base (1024 for binary, 1000 for decimal)
+    const base = system === 'Binary' ? 1024 : 1000;
 
-    // Array of unit suffixes in ascending order
-    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    // Define unit array
+    const units: UnitName[] = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
+    // Get unit boundaries
+    const minimumUnitIndex = units.indexOf(minimumUnit);
+    const maximumUnitIndex = units.indexOf(maximumUnit);
+
+    // If forcing a specific unit
+    if(forceUnit) {
+        const forcedUnitIndex = units.indexOf(forceUnit);
+        const value = bytes / Math.pow(base, forcedUnitIndex);
+        const roundedValue = applyRounding(value, decimals, roundingMode);
+        return formatOutput(roundedValue, forceUnit, unitStyle, decimals, trimZeros);
+    }
 
     // Calculate which unit to use based on the size
-    // Math.log gives us the power, Math.floor rounds down to the nearest integer
-    const unitIndex = Math.floor(Math.log(bytes) / Math.log(base));
+    let unitIndex = Math.floor(Math.log(bytes) / Math.log(base));
 
-    // Convert bytes to the appropriate unit and format to 2 decimal places
+    // Clamp to minimum and maximum unit boundaries
+    unitIndex = Math.max(minimumUnitIndex, Math.min(maximumUnitIndex, unitIndex));
+
+    // Ensure unitIndex is within array bounds
+    unitIndex = Math.max(0, Math.min(units.length - 1, unitIndex));
+
+    // Convert bytes to the appropriate unit
     const value = bytes / Math.pow(base, unitIndex);
-    const formattedValue = parseFloat(value.toFixed(2));
+    const roundedValue = applyRounding(value, decimals, roundingMode);
 
-    return formattedValue + ' ' + units[unitIndex];
+    // Get the unit name (guaranteed to be defined after clamping)
+    const unit = units[unitIndex]!;
+
+    return formatOutput(roundedValue, unit, unitStyle, decimals, trimZeros);
 }
