@@ -22,6 +22,10 @@ export class ArraySchema<TItem> extends BaseSchema<TItem[], TItem[]> {
         return 'array';
     }
 
+    getTypeDefault(): TItem[] {
+        return [];
+    }
+
     // Override validate to handle per-item validation
     async validate(value: unknown, path: string[] = []): Promise<SchemaValidationResult<TItem[]>> {
         const result: SchemaValidationResult<TItem[]> = {

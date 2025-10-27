@@ -9,7 +9,7 @@ import { InputFileContext } from './InputFileContext';
 // Component - InputFileDrop
 export type InputFileDropProperties = {
     children: React.ReactNode;
-    files: File[];
+    files?: File[];
     onFilesChange?: (files: File[]) => void;
     maxFiles?: number;
     accept?: string[];
@@ -19,7 +19,7 @@ export type InputFileDropProperties = {
 export function InputFileDrop(properties: InputFileDropProperties) {
     const maxFiles = properties.maxFiles ?? Infinity;
 
-    const [internalFiles, internalSetFiles] = React.useState<File[]>(properties.files);
+    const [internalFiles, internalSetFiles] = React.useState<File[]>(properties.files || []);
     const [files, onFilesChange] = [
         properties.files ?? internalFiles,
         properties.onFilesChange ?? internalSetFiles,

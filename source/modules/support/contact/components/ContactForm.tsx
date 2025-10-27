@@ -31,11 +31,11 @@ import { iconForFileType, bytesToScaledUnits } from '@structure/source/utilities
 
 // Component - ContactForm
 export function ContactForm() {
-    // References
-    const scrollTargetReference = React.useRef<HTMLDivElement>(null);
-
     // State
     const [dragging, setDragging] = React.useState(false);
+
+    // References
+    const scrollTargetReference = React.useRef<HTMLDivElement>(null);
 
     // Testing
     const [isSuccess, setIsSuccess] = React.useState(false);
@@ -45,19 +45,8 @@ export function ContactForm() {
     const account = useAccount();
     const urlSearchParameters = useUrlSearchParameters();
     const supportTicketCreateRequest = useSupportTicketCreateRequest();
-    const form = useForm({
-        defaultValues: {
-            // Form variables
-            emailAddress: '',
-            title: '',
-            content: '',
-            attachmentFiles: [],
-
-            // Static variables with default values
-            contentType: 'Markdown' as const,
-            type: 'Contact' as const,
-            description: '',
-        } as SupportTicketCreateRequestInputType,
+    const form = useForm<SupportTicketCreateRequestInputType>({
+        schema: supportTicketCreateRequestInputSchema,
         onSubmit: async function (submitProperties) {
             console.log('Submitting contact form with values:', submitProperties.value);
             try {
@@ -124,10 +113,7 @@ export function ContactForm() {
                     </motion.div>
                 ) : (
                     // Contact Form
-                    <form.Form
-                        schema={supportTicketCreateRequestInputSchema}
-                        className="mt-12 flex flex-col items-stretch gap-4"
-                    >
+                    <form.Form className="mt-12 flex flex-col items-stretch gap-4">
                         {/* Field - Email Address */}
                         <form.Field name="emailAddress">
                             <form.Label label="Your Email Address" showSuccessesWhen="Always">

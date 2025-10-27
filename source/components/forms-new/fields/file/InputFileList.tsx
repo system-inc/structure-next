@@ -17,7 +17,7 @@ export type InputFileListProperties = {
 export function InputFileList(properties: InputFileListProperties) {
     const inputFileContext = useInputFileContext();
 
-    if(inputFileContext.files.length === 0) {
+    if(!inputFileContext.files || inputFileContext.files.length === 0) {
         return null;
     }
 

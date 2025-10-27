@@ -100,4 +100,19 @@ export class ObjectSchema<T extends ObjectShape> extends BaseSchema<
 
         return result;
     }
+
+    // Method - getDefaults
+    // Returns an object with default values for all fields in the schema
+    getDefaults(): Partial<{ [K in keyof T]: T[K] extends BaseSchema<unknown, infer O> ? O : never }> {
+        const defaults: Record<string, unknown> = {};
+
+        for(const [key, fieldSchema] of Object.entries(this.shape)) {
+            const defaultValue = fieldSchema.getDefault();
+            if(defaultValue !== undefined) {
+                defaults[key] = defaultValue;
+            }
+        }
+
+        return defaults as Partial<{ [K in keyof T]: T[K] extends BaseSchema<unknown, infer O> ? O : never }>;
+    }
 }

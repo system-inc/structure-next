@@ -16,12 +16,12 @@ import { useFieldId } from '../../providers/FormIdProvider';
 export type FormInputTextProperties = Omit<React.ComponentProps<typeof InputText>, 'value' | 'onChange' | 'onBlur'>;
 
 export function FormInputText(properties: FormInputTextProperties) {
-    const fieldContext = useFieldContext<string>();
+    const fieldContext = useFieldContext<string | number>();
     const fieldId = useFieldId(fieldContext.name);
 
     // Subscribe to value reactively
     const value = useStore(fieldContext.store, function (state) {
-        return state.value as string;
+        return state.value as string | number;
     });
 
     // Subscribe to errors for aria-invalid
@@ -37,7 +37,16 @@ export function FormInputText(properties: FormInputTextProperties) {
             value={value}
             aria-invalid={errors && errors.length > 0 ? true : undefined}
             onChange={function (event: React.ChangeEvent<HTMLInputElement>) {
-                fieldContext.handleChange(event.target.value);
+                // Convert to number if type="number"
+                const inputValue = event.target.value;
+                if(properties.type === 'number') {
+                    // Empty string becomes NaN when converted, keep as empty string or convert to 0
+                    const numberValue = inputValue === '' ? 0 : Number(inputValue);
+                    fieldContext.handleChange(numberValue);
+                }
+                else {
+                    fieldContext.handleChange(inputValue);
+                }
             }}
             onBlur={function () {
                 fieldContext.handleBlur();

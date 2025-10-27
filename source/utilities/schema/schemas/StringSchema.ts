@@ -23,6 +23,10 @@ export class StringSchema extends BaseSchema<string, string> {
         return 'string';
     }
 
+    getTypeDefault(): string {
+        return '';
+    }
+
     // Validator - minimumLength
     // Ensures string has at least the specified number of characters
     minimumLength(length: number): this {

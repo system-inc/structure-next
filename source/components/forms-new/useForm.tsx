@@ -114,21 +114,68 @@ export function useForm<
         TOnDynamicAsync,
         TOnServer,
         TSubmitMeta
-    >,
+    > & {
+        schema: ObjectSchema<ObjectShape>; // Required!
+    },
 ) {
+    // Extract schema from options (now required)
+    const schema = options.schema;
+
+    // Merge schema defaults with user-provided defaultValues
+    const mergedOptions = React.useMemo(
+        function () {
+            // Get defaults from schema
+            const schemaDefaults = schema.getDefaults();
+
+            // Validate that number/boolean fields have defaults (required for controlled inputs)
+            // React controlled inputs cannot switch between undefined and a value - they must
+            // start with a value. Strings and arrays auto-default to '' and [], but numbers
+            // and booleans need explicit defaults because 0/false are meaningful values that
+            // differ semantically from "not set yet". This enforces the developer makes a
+            // conscious choice about what "empty" means for these fields.
+            for(const [fieldName, fieldSchema] of Object.entries(schema.shape)) {
+                const typeName = fieldSchema.getTypeName();
+                const hasDefault = fieldSchema.getDefault() !== undefined;
+                const userProvidedDefault = options.defaultValues?.[fieldName as keyof TFormData] !== undefined;
+
+                // Number and boolean fields MUST have a default (either in schema or user-provided)
+                if((typeName === 'number' || typeName === 'boolean') && !hasDefault && !userProvidedDefault) {
+                    throw new Error(
+                        `Form field "${fieldName}" is type "${typeName}" but has no default value. ` +
+                            `Controlled inputs require a default. Add .default() to the schema field.\n` +
+                            `Example: ${fieldName}: schema.${typeName}().default(${
+                                typeName === 'number' ? '0' : 'false'
+                            })`,
+                    );
+                }
+            }
+
+            // Merge: user defaults override schema defaults
+            const mergedDefaultValues = {
+                ...schemaDefaults,
+                ...options.defaultValues,
+            } as TFormData;
+
+            return {
+                ...options,
+                defaultValues: mergedDefaultValues,
+            };
+        },
+        [schema, options],
+    );
+
     // This is the fully-typed TanStack form instance with Field, Subscribe, AppForm, etc.
-    const appForm = useAppForm(options);
+    const appForm = useAppForm(mergedOptions);
 
     // 1) form.Form — HTML <form> wrapper bound to this form instance and context
     type FormProperties = React.FormHTMLAttributes<HTMLFormElement> & {
         children?: React.ReactNode;
-        schema?: ObjectSchema<ObjectShape>;
     };
 
     const formReference = React.useRef<HTMLFormElement | null>(null);
 
     const Form: React.FC<FormProperties> = React.useCallback(
-        function FormComponent({ onSubmit, className, schema, children, ...formProperties }) {
+        function FormComponent({ onSubmit, className, children, ...formProperties }) {
             async function handleSubmitWithFocus(event: React.FormEvent<HTMLFormElement>) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -173,7 +220,7 @@ export function useForm<
                 </FormIdProvider>
             );
         },
-        [appForm],
+        [appForm, schema],
     );
 
     // 2) form.bindField(field) — typed binding for React controlled inputs
@@ -209,7 +256,7 @@ export function useForm<
         const schema = formSchemaContext.schema;
 
         // Generate auto-validator if schema exists for this field
-        const autoValidators = React.useMemo(
+        const validatorsFromSchema = React.useMemo(
             function () {
                 if(!schema || !fieldProperties.name) return undefined;
 
@@ -233,8 +280,8 @@ export function useForm<
         // Merge auto-validators with user-provided validators
         const mergedValidators = React.useMemo(
             function () {
-                if(!autoValidators) return fieldProperties.validators;
-                if(!fieldProperties.validators) return autoValidators;
+                if(!validatorsFromSchema) return fieldProperties.validators;
+                if(!fieldProperties.validators) return validatorsFromSchema;
 
                 // Merge: run schema validator first, then custom validator
                 const customValidator = fieldProperties.validators.onChangeAsync;
@@ -247,7 +294,7 @@ export function useForm<
                         signal: AbortSignal;
                     }) {
                         // Run schema validation first
-                        const schemaError = await autoValidators.onChangeAsync?.(field);
+                        const schemaError = await validatorsFromSchema.onChangeAsync?.(field);
                         if(schemaError) return schemaError;
 
                         // Then run custom validation if provided (only if it's a function)
@@ -257,7 +304,7 @@ export function useForm<
                     },
                 };
             },
-            [autoValidators, fieldProperties.validators],
+            [validatorsFromSchema, fieldProperties.validators],
         );
 
         return (

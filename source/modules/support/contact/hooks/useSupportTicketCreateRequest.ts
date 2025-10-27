@@ -13,9 +13,10 @@ export const supportTicketCreateRequestInputSchema = schema.object({
     description: schema.string().notEmpty().optional(),
     emailAddress: schema.string().emailAddress(),
     content: schema.string().notEmpty(),
-    type: schema.string().is('Contact'),
-    contentType: schema.string().in(['PlainText', 'Html', 'Markdown']),
+    type: schema.string().is('Contact').default('Contact'),
+    contentType: schema.string().in(['PlainText', 'Html', 'Markdown']).default('Markdown'),
     attachmentFiles: schema.array(
+        // Auto-defaults to []
         schema
             .file()
             .mimeType(['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/json'])
@@ -35,7 +36,7 @@ async function handleSupportTicketCreateSubmit(input: SupportTicketCreateRequest
     const { attachmentFiles, ...dataProperties } = input;
     for(const [key, value] of Object.entries(dataProperties)) {
         if(value !== undefined) {
-            formData.append(key, value);
+            formData.append(key, String(value));
         }
     }
 
