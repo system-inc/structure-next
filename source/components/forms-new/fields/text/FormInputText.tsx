@@ -20,12 +20,12 @@ export function FormInputText(properties: FormInputTextProperties) {
     const fieldId = useFieldId(fieldContext.name);
 
     // Subscribe to value reactively
-    const value = useStore(fieldContext.store, function (state) {
+    const storeValue = useStore(fieldContext.store, function (state) {
         return state.value as string | number;
     });
 
     // Subscribe to errors for aria-invalid
-    const errors = useStore(fieldContext.store, function (state) {
+    const storeErrors = useStore(fieldContext.store, function (state) {
         return state.meta.errors;
     });
 
@@ -34,8 +34,8 @@ export function FormInputText(properties: FormInputTextProperties) {
             {...properties}
             id={properties.id ?? fieldId}
             name={properties.name ?? fieldContext.name}
-            value={value}
-            aria-invalid={errors && errors.length > 0 ? true : undefined}
+            value={storeValue}
+            aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
             onChange={function (event: React.ChangeEvent<HTMLInputElement>) {
                 // Convert to number if type="number"
                 const inputValue = event.target.value;

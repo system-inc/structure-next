@@ -28,9 +28,7 @@ import type { FileFieldMetadata } from './providers/FileFieldMetadataProvider';
 import { FormLabel as FormAwareLabel } from './fields/FormLabel';
 import { FormInputText } from './fields/text/FormInputText';
 import { FormInputTextArea } from './fields/text/FormInputTextArea';
-import { InputFile } from './fields/file/InputFile';
-import { InputFileDrop } from './fields/file/InputFileDrop';
-import { InputFileList } from './fields/file/InputFileList';
+import { FormInputFile } from './fields/file/FormInputFile';
 
 // Dependencies - Utilities
 import type { SchemaSuccess } from '@structure/source/utilities/schema/Schema';
@@ -367,9 +365,7 @@ export function useForm<
         Label: FormAwareLabel,
         InputText: FormInputText,
         InputTextArea: FormInputTextArea,
-        InputFile: InputFile,
-        InputFileDrop: InputFileDrop,
-        InputFileList: InputFileList,
+        InputFile: FormInputFile,
     });
 }
 

@@ -5,39 +5,35 @@ import React from 'react';
 
 // Dependencies - Context
 import { InputFileContext } from './InputFileContext';
-import { useFileFieldMetadata } from '../../providers/FileFieldMetadataProvider';
 
 // Component - InputFileDrop
 export type InputFileDropProperties = {
-    children: React.ReactNode;
     files?: File[];
     onFilesChange?: (files: File[]) => void;
     maxFiles?: number;
     accept?: string[];
     isDragging?: boolean;
     onDragChange?: (isDragging: boolean) => void;
+    children: React.ReactNode;
 };
 export function InputFileDrop(properties: InputFileDropProperties) {
+    // Defaults
     const maxFiles = properties.maxFiles ?? Infinity;
+    const accept = properties.accept;
 
-    // Get file field metadata from context (if provided by form schema)
-    const fileFieldMetadata = useFileFieldMetadata();
-
-    // Use explicit accept prop if provided, otherwise use schema metadata
-    const accept = properties.accept ?? fileFieldMetadata?.mimeTypes;
-
+    // State
     const [internalFiles, internalSetFiles] = React.useState<File[]>(properties.files || []);
     const [files, onFilesChange] = [
         properties.files ?? internalFiles,
         properties.onFilesChange ?? internalSetFiles,
     ] as const;
-
     const [dragging, setDragging] = React.useState(properties.isDragging ?? false);
     const [isDragging, onDragChange] = [
         properties.isDragging ?? dragging,
         properties.onDragChange ?? setDragging,
     ] as const;
 
+    // Function to add files
     const addFiles = React.useCallback(
         function (newFiles: File[]) {
             let filteredFiles = newFiles;
@@ -67,6 +63,7 @@ export function InputFileDrop(properties: InputFileDropProperties) {
         [maxFiles, accept, files, onFilesChange],
     );
 
+    // Function to remove a file by index
     const removeFile = React.useCallback(
         function (index: number) {
             const currentFiles = [...files];
@@ -76,6 +73,7 @@ export function InputFileDrop(properties: InputFileDropProperties) {
         [files, onFilesChange],
     );
 
+    // Render the component
     return (
         <InputFileContext.Provider value={{ files, addFiles, removeFile, isDragging, onDragChange, accept }}>
             {properties.children}

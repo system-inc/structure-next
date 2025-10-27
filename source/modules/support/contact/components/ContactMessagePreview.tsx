@@ -30,7 +30,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
             <div className="mt-10 flex w-full flex-col gap-2">
                 <label className="text-sm font-medium">Your Message</label>
 
-                <div className="mb-4 flex flex-col items-stretch rounded-md border border--0 px-6 py-8 transition-colors">
+                <div className="mb-2 flex flex-col items-stretch rounded-md border border--0 px-6 py-8 transition-colors">
                     <div className="border-b border--0 pb-6 text-sm font-medium content--1 transition-colors">
                         <p>From: {properties.emailAddress}</p>
                         <p className="mt-2">Subject: {properties.title}</p>
@@ -38,27 +38,27 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                     <p className="pt-6 whitespace-pre-wrap">{properties.content}</p>
                 </div>
 
-                {properties.attachmentFiles.map(function (file, index) {
-                    const FileTypeIcon = iconForFileType(file.type);
-                    return (
-                        <div
-                            key={index}
-                            className={
-                                'mb-2 flex h-14 items-center justify-between rounded-md background--1 px-5 py-3 last:mb-0'
-                            }
-                        >
-                            <FileTypeIcon className="mr-4 size-5" />
+                <div className="flex flex-col items-stretch gap-2">
+                    {properties.attachmentFiles.map(function (file, index) {
+                        const FileTypeIcon = iconForFileType(file.type);
+                        return (
+                            <div
+                                key={index}
+                                className="flex h-11 items-center justify-between rounded-md background--1 px-4 py-2"
+                            >
+                                <FileTypeIcon className="mr-4 size-5" />
 
-                            <div className="min-w-0 flex-1">
-                                <p className="truncate text-sm font-medium content--0">{file.name}</p>
-                            </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="truncate text-sm font-medium content--0">{file.name}</p>
+                                </div>
 
-                            <div className="flex items-center gap-4 pl-2">
-                                <p className="text-sm content--1">{bytesToScaledUnits(file.size)}</p>
+                                <div className="flex items-center gap-3 pl-2">
+                                    <p className="text-sm content--1">{bytesToScaledUnits(file.size)}</p>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );
