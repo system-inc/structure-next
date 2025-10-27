@@ -7,11 +7,11 @@ export const commonInputTextClassNames = mergeClassNames(
     // Content
     'content--0',
     // Placeholder
-    'placeholder:opacity-70',
+    'placeholder:opacity-50',
     // Placeholder (disabled)
     'disabled:placeholder:opacity-20',
     // Disabled
-    'disabled:cursor-not-allowed disabled:opacity-20',
+    'disabled:cursor-not-allowed disabled:opacity-80',
 );
 
 // Background styles (from existing InputText.tsx)
@@ -107,9 +107,9 @@ export const inputTextTheme: InputTextThemeConfiguration = {
 
     // Sizes (matches existing InputText sizes)
     sizes: {
-        Small: 'h-8 px-3 text-sm',
-        Base: 'h-9 px-3 text-sm w-full',
-        Large: 'h-10 px-3 text-base',
+        Small: mergeClassNames('h-8 w-full px-3 text-sm'),
+        Base: mergeClassNames('h-9 w-full px-3 text-sm'),
+        Large: mergeClassNames('w-full px-3 py-2.5 text-[15px]'),
     },
 
     // Configuration

@@ -43,26 +43,32 @@ export const InputText = React.forwardRef<HTMLInputElement, InputTextProperties>
     let finalPlaceholder = placeholder;
     let finalAutoComplete = autoComplete;
     let finalSpellCheck = spellCheck;
+    let finalAutoCapitalize = inputProperties.autoCapitalize;
 
     if(finalType === 'email') {
         finalPlaceholder = placeholder ?? 'email@domain.com';
         finalAutoComplete = autoComplete ?? 'email';
         finalSpellCheck = spellCheck ?? false;
+        finalAutoCapitalize = inputProperties.autoCapitalize ?? 'none';
     }
     else if(finalType === 'password') {
         finalAutoComplete = autoComplete ?? 'current-password';
         finalSpellCheck = spellCheck ?? false;
+        finalAutoCapitalize = inputProperties.autoCapitalize ?? 'none';
     }
     else if(finalType === 'tel') {
         finalAutoComplete = autoComplete ?? 'tel';
         finalSpellCheck = spellCheck ?? false;
+        finalAutoCapitalize = inputProperties.autoCapitalize ?? 'none';
     }
     else if(finalType === 'url') {
         finalAutoComplete = autoComplete ?? 'url';
         finalSpellCheck = spellCheck ?? false;
+        finalAutoCapitalize = inputProperties.autoCapitalize ?? 'none';
     }
     else if(finalType === 'search') {
         finalSpellCheck = spellCheck ?? true;
+        finalAutoCapitalize = inputProperties.autoCapitalize ?? 'none';
     }
     else if(finalType === 'text') {
         finalSpellCheck = spellCheck ?? true;
@@ -76,6 +82,7 @@ export const InputText = React.forwardRef<HTMLInputElement, InputTextProperties>
             type={finalType}
             placeholder={finalPlaceholder}
             autoComplete={finalAutoComplete}
+            autoCapitalize={finalAutoCapitalize}
             spellCheck={finalSpellCheck}
             {...inputProperties}
         />
