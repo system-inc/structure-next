@@ -7,23 +7,29 @@ import { SchemaValidationResult } from '../Schema';
 // Class - ArraySchema
 // Schema for validating arrays with item-level validation
 export class ArraySchema<TItem> extends BaseSchema<TItem[], TItem[]> {
-    constructor(private itemSchema: BaseSchema<TItem>) {
+    constructor(private itemSchemaValue: BaseSchema<TItem>) {
         super();
     }
 
     parse(value: unknown): TItem[] {
         if(!Array.isArray(value)) {
-            throw new Error('Not an array');
+            throw new Error('Not an array.');
         }
         return value as TItem[];
     }
 
-    getTypeName(): string {
+    get typeName(): string {
         return 'array';
     }
 
-    getTypeDefault(): TItem[] {
+    get typeDefault(): TItem[] {
         return [];
+    }
+
+    // Getter - itemSchema
+    // Returns the schema used for validating array items
+    get itemSchema(): BaseSchema<TItem> {
+        return this.itemSchemaValue;
     }
 
     // Override validate to handle per-item validation
@@ -59,7 +65,7 @@ export class ArraySchema<TItem> extends BaseSchema<TItem[], TItem[]> {
         // Validate each item in the array
         for(let index = 0; index < arrayValue.length; index++) {
             const item = arrayValue[index];
-            const itemResult = await this.itemSchema.validate(item, [...path, String(index)]);
+            const itemResult = await this.itemSchemaValue.validate(item, [...path, String(index)]);
 
             if(!itemResult.valid) {
                 result.valid = false;

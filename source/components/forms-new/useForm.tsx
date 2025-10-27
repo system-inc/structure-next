@@ -21,6 +21,8 @@ import { FormIdProvider } from './providers/FormIdProvider';
 
 // Dependencies - Schema Provider
 import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
+import { FileFieldMetadataProvider } from './providers/FileFieldMetadataProvider';
+import type { FileFieldMetadata } from './providers/FileFieldMetadataProvider';
 
 // Dependencies - Form-Aware Components
 import { FormLabel as FormAwareLabel } from './fields/FormLabel';
@@ -34,6 +36,8 @@ import { InputFileList } from './fields/file/InputFileList';
 import type { SchemaSuccess } from '@structure/source/utilities/schema/Schema';
 import type { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
 import type { BaseSchema } from '@structure/source/utilities/schema/schemas/BaseSchema';
+import { ArraySchema } from '@structure/source/utilities/schema/schemas/ArraySchema';
+import { FileSchema } from '@structure/source/utilities/schema/schemas/FileSchema';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 /**
@@ -135,7 +139,7 @@ export function useForm<
             // differ semantically from "not set yet". This enforces the developer makes a
             // conscious choice about what "empty" means for these fields.
             for(const [fieldName, fieldSchema] of Object.entries(schema.shape)) {
-                const typeName = fieldSchema.getTypeName();
+                const typeName = fieldSchema.typeName;
                 const hasDefault = fieldSchema.getDefault() !== undefined;
                 const userProvidedDefault = options.defaultValues?.[fieldName as keyof TFormData] !== undefined;
 
@@ -256,6 +260,30 @@ export function useForm<
         const formSchemaContext = useFormSchema();
         const schema = formSchemaContext.schema;
 
+        // Extract file field metadata if this is a file array field
+        const fileFieldMetadata = React.useMemo(
+            function (): FileFieldMetadata | undefined {
+                if(!schema || !fieldProperties.name) return undefined;
+
+                const fieldSchema = schema.shape[fieldProperties.name as string];
+                if(!fieldSchema) return undefined;
+
+                // Check if this is an array of files
+                if(fieldSchema instanceof ArraySchema) {
+                    if(fieldSchema.itemSchema instanceof FileSchema) {
+                        return {
+                            mimeTypes: fieldSchema.itemSchema.allowedMimeTypes,
+                            maximumSizeInBytes: fieldSchema.itemSchema.allowedMaximumSizeInBytes,
+                            minimumSizeInBytes: fieldSchema.itemSchema.allowedMinimumSizeInBytes,
+                        };
+                    }
+                }
+
+                return undefined;
+            },
+            [schema, fieldProperties.name],
+        );
+
         // Generate auto-validator if schema exists for this field
         const validatorsFromSchema = React.useMemo(
             function () {
@@ -311,14 +339,21 @@ export function useForm<
         return (
             <OriginalField {...fieldProperties} validators={mergedValidators}>
                 {function (field: AnyFieldApi) {
-                    // Provide field context so useFieldContext() works in wrappers
-                    return (
-                        <fieldContext.Provider value={field}>
-                            {typeof fieldProperties.children === 'function'
-                                ? (fieldProperties.children as (field: AnyFieldApi) => React.ReactNode)(field)
-                                : fieldProperties.children}
-                        </fieldContext.Provider>
+                    // Prepare content with field context
+                    const content =
+                        typeof fieldProperties.children === 'function'
+                            ? (fieldProperties.children as (field: AnyFieldApi) => React.ReactNode)(field)
+                            : fieldProperties.children;
+
+                    // Wrap with FileFieldMetadataProvider if file metadata exists
+                    const contentWithMetadata = fileFieldMetadata ? (
+                        <FileFieldMetadataProvider metadata={fileFieldMetadata}>{content}</FileFieldMetadataProvider>
+                    ) : (
+                        content
                     );
+
+                    // Provide field context so useFieldContext() works in wrappers
+                    return <fieldContext.Provider value={field}>{contentWithMetadata}</fieldContext.Provider>;
                 }}
             </OriginalField>
         );

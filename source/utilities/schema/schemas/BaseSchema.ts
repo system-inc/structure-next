@@ -11,13 +11,16 @@ export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
 
     // Abstract methods that each schema type must implement
     abstract parse(value: unknown): TOutput;
-    abstract getTypeName(): string;
+    abstract get typeName(): string;
 
-    // Optional method - only string and array implement this to provide automatic defaults
+    // Optional getter - only string and array implement this to provide automatic defaults
     // String → '' and Array → [] because "empty" and "undefined" mean the same thing semantically
     // Number/Boolean do NOT auto-default because 0/false are meaningful values distinct from "not set"
     // This forces developers to explicitly choose defaults for number/boolean fields in forms
-    getTypeDefault?(): TOutput;
+    // Default implementation returns undefined; string and array schemas override this
+    get typeDefault(): TOutput | undefined {
+        return undefined;
+    }
 
     // Validate - Main validation orchestration
     async validate(value: unknown, path: string[] = []): Promise<SchemaValidationResult<TOutput>> {
@@ -57,7 +60,7 @@ export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
             result.errors.push({
                 path,
                 identifier: 'invalidType',
-                message: `Expected ${this.getTypeName()}, received ${typeof value}`,
+                message: `Expected ${this.typeName}, received ${typeof value}`,
             });
             return result;
         }
@@ -110,7 +113,7 @@ export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
         if(this.defaultValue !== undefined) {
             return this.defaultValue;
         }
-        return this.getTypeDefault?.();
+        return this.typeDefault;
     }
 
     // Type inference helper - used for TypeScript type inference

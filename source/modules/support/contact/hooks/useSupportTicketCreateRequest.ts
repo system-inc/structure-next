@@ -19,7 +19,7 @@ export const supportTicketCreateRequestInputSchema = schema.object({
         schema
             .file()
             .mimeType(['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/json'])
-            .maximumSize(1024 * 1024 * 5), // 5 MB
+            .maximumSizeInBytes(1024 * 1024 * 5), // 5 MB
     ),
 });
 

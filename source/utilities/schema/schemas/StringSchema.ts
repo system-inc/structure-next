@@ -19,11 +19,11 @@ export class StringSchema extends BaseSchema<string, string> {
         return value;
     }
 
-    getTypeName(): string {
+    get typeName(): string {
         return 'string';
     }
 
-    getTypeDefault(): string {
+    get typeDefault(): string {
         return '';
     }
 

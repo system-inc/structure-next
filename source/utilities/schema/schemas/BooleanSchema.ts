@@ -11,7 +11,7 @@ export class BooleanSchema extends BaseSchema<boolean, boolean> {
         return value;
     }
 
-    getTypeName(): string {
+    get typeName(): string {
         return 'boolean';
     }
 

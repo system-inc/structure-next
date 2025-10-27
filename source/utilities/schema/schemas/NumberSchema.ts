@@ -11,7 +11,7 @@ export class NumberSchema extends BaseSchema<number, number> {
         return value;
     }
 
-    getTypeName(): string {
+    get typeName(): string {
         return 'number';
     }
 

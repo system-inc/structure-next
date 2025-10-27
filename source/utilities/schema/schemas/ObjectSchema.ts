@@ -25,7 +25,7 @@ export class ObjectSchema<T extends ObjectShape> extends BaseSchema<
         return value as { [K in keyof T]: T[K] extends BaseSchema<unknown, infer O> ? O : never };
     }
 
-    getTypeName(): string {
+    get typeName(): string {
         return 'object';
     }
 

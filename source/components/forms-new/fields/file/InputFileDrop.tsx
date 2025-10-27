@@ -5,6 +5,7 @@ import React from 'react';
 
 // Dependencies - Context
 import { InputFileContext } from './InputFileContext';
+import { useFileFieldMetadata } from '../../providers/FileFieldMetadataProvider';
 
 // Component - InputFileDrop
 export type InputFileDropProperties = {
@@ -18,6 +19,12 @@ export type InputFileDropProperties = {
 };
 export function InputFileDrop(properties: InputFileDropProperties) {
     const maxFiles = properties.maxFiles ?? Infinity;
+
+    // Get file field metadata from context (if provided by form schema)
+    const fileFieldMetadata = useFileFieldMetadata();
+
+    // Use explicit accept prop if provided, otherwise use schema metadata
+    const accept = properties.accept ?? fileFieldMetadata?.mimeTypes;
 
     const [internalFiles, internalSetFiles] = React.useState<File[]>(properties.files || []);
     const [files, onFilesChange] = [
@@ -36,10 +43,10 @@ export function InputFileDrop(properties: InputFileDropProperties) {
             let filteredFiles = newFiles;
 
             // Filter by accepted file types if specified
-            if(properties.accept && properties.accept.length > 0) {
+            if(accept && accept.length > 0) {
                 filteredFiles = newFiles.filter(
                     (file) =>
-                        properties.accept?.some(
+                        accept?.some(
                             (type) =>
                                 file.type === type ||
                                 (type.endsWith('/*') && file.type.startsWith(type.replace('/*', '/'))),
@@ -57,7 +64,7 @@ export function InputFileDrop(properties: InputFileDropProperties) {
             const result = [...updatedFiles, ...filesToAdd];
             onFilesChange(result);
         },
-        [maxFiles, properties.accept, files, onFilesChange],
+        [maxFiles, accept, files, onFilesChange],
     );
 
     const removeFile = React.useCallback(
@@ -70,9 +77,7 @@ export function InputFileDrop(properties: InputFileDropProperties) {
     );
 
     return (
-        <InputFileContext.Provider
-            value={{ files, addFiles, removeFile, isDragging, onDragChange, accept: properties.accept }}
-        >
+        <InputFileContext.Provider value={{ files, addFiles, removeFile, isDragging, onDragChange, accept }}>
             {properties.children}
         </InputFileContext.Provider>
     );
