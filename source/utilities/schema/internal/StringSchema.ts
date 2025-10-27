@@ -384,7 +384,7 @@ export class StringSchema extends BaseSchema<string, string> {
                         {
                             path,
                             identifier: 'empty',
-                            message: message || 'Cannot be empty.',
+                            message: message || 'Is empty.',
                         },
                     ],
                     successes: [],
@@ -397,7 +397,7 @@ export class StringSchema extends BaseSchema<string, string> {
                     {
                         path,
                         identifier: 'notEmpty',
-                        message: 'Has a value.',
+                        message: 'Not empty.',
                     },
                 ],
             };

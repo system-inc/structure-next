@@ -277,9 +277,9 @@ export function RichTextEditorWrapper(properties: RichTextEditorWrapperPropertie
             getFileIcon={getFileTypeIconFromType}
             theme={{
                 colors: {
-                    background: 'var(--opsis-background-primary)',
-                    border: 'var(--opsis-border-primary)',
-                    borderFocus: 'var(--opsis-border-focus)',
+                    background: 'var(--background--0)',
+                    border: 'var(--border--0)',
+                    borderFocus: 'var(--border--focus)',
                 },
             }}
         />
@@ -349,7 +349,7 @@ Instead of hardcoded `opsis-*` classes, use CSS variables:
 
 ```tsx
 // In ToolbarPlugin
-<div className="border-t bg-[var(--editor-toolbar-background)] border-[var(--editor-toolbar-border)]">
+<div className="border-t bg-(--editor-toolbar-background) border-(--editor-toolbar-border)">
 ```
 
 Project defines variables:

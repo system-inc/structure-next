@@ -37,7 +37,7 @@ export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
             result.errors.push({
                 path,
                 identifier: 'required',
-                message: 'This field is required.',
+                message: 'Required.',
             });
             return result;
         }

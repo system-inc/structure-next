@@ -2,9 +2,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { FormField } from '@project/app/_components/form/FormField';
-import { getFileTypeIconFromType } from '@project/app/_components/form/FileDropField';
-import { formatFileSize } from '@project/app/_components/form/FileDrop';
+import { FormLabel } from '@structure/source/components/forms-new/fields/FormLabel';
+
+// Dependencies - Utilities
+import { iconForFileType, formatFileSize } from '@structure/source/utilities/file/File';
 
 // Dependencies - Assets
 import { CheckIcon } from '@phosphor-icons/react';
@@ -29,7 +30,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                 Your message has been received. We will get back to you as soon as possible.
             </p>
 
-            <FormField label="Your Message" className="mt-10">
+            <FormLabel label="Your Message" className="mt-10">
                 <div className="mb-4 flex flex-col items-stretch rounded-md border border--0 px-6 py-8 transition-colors">
                     <div className="border-b border--0 pb-6 text-sm font-medium content--1 transition-colors">
                         <p>From: {properties.emailAddress}</p>
@@ -39,7 +40,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                 </div>
 
                 {properties.attachmentFiles.map(function (file, index) {
-                    const FileTypeIcon = getFileTypeIconFromType(file.type);
+                    const FileTypeIcon = iconForFileType(file.type);
                     return (
                         <div
                             key={index}
@@ -59,7 +60,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                         </div>
                     );
                 })}
-            </FormField>
+            </FormLabel>
         </div>
     );
 }

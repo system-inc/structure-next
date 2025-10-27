@@ -14,7 +14,7 @@ export class ObjectSchema<T extends ObjectShape> extends BaseSchema<
     { [K in keyof T]: T[K] extends BaseSchema<unknown, infer O> ? O : never },
     { [K in keyof T]: T[K] extends BaseSchema<unknown, infer O> ? O : never }
 > {
-    constructor(private shape: T) {
+    constructor(public shape: T) {
         super();
     }
 

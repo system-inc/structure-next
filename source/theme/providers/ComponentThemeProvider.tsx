@@ -8,6 +8,8 @@ import type { ButtonThemeConfiguration } from '@structure/source/components/butt
 import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
+import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
+import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextAreaTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Type - Component Theme Context Value
@@ -16,6 +18,8 @@ interface ComponentThemeContextValue {
     Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
+    InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
+    InputTextArea?: DeepPartialComponentTheme<InputTextAreaThemeConfiguration>;
     // Future component themes:
     // Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
     // Table?: DeepPartialComponentTheme<TableThemeConfiguration>;
