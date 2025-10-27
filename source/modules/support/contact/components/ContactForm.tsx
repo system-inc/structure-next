@@ -115,33 +115,24 @@ export function ContactForm() {
                     <form.Form className="mt-12 flex flex-col items-stretch gap-4">
                         {/* Field - Email Address */}
                         <form.Field name="emailAddress">
-                            <form.Label label="Your Email Address" showSuccessesWhen="Always">
-                                <form.InputText
-                                    placeholder="email@domain.com"
-                                    autoComplete="email"
-                                    spellCheck={false}
-                                />
+                            <form.Label label="Your Email Address">
+                                <form.InputText type="email" />
                             </form.Label>
                         </form.Field>
 
                         {/* Field - Title */}
                         <form.Field name="title">
-                            <form.Label label="Subject" showSuccessesWhen="Always">
-                                <form.InputText
-                                    placeholder="Briefly describe your message"
-                                    type="text"
-                                    spellCheck={true}
-                                />
+                            <form.Label label="Subject">
+                                <form.InputText placeholder="Briefly describe your message" />
                             </form.Label>
                         </form.Field>
 
                         {/* Field - Content */}
                         <form.Field name="content">
-                            <form.Label label="Message" showSuccessesWhen="Always">
+                            <form.Label label="Message">
                                 <form.InputTextArea
                                     placeholder="Please include any details that will help us assist you"
                                     rows={8}
-                                    spellCheck={true}
                                 />
                             </form.Label>
                         </form.Field>

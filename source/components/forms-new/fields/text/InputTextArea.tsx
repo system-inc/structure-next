@@ -29,7 +29,7 @@ function setBothReferences<T>(outerReference: React.ForwardedRef<T>, node: T) {
 }
 
 export const InputTextArea = React.forwardRef<HTMLTextAreaElement, InputTextAreaProperties>(function InputTextArea(
-    { className, variant, size, resize, ...textAreaProperties },
+    { className, variant, size, resize, spellCheck, ...textAreaProperties },
     reference,
 ) {
     // Local ref so we can bind listeners without querying the DOM
@@ -45,6 +45,7 @@ export const InputTextArea = React.forwardRef<HTMLTextAreaElement, InputTextArea
     const finalVariant = variant ?? theme.configuration.defaultVariant?.variant;
     const finalSize = size ?? theme.configuration.defaultVariant?.size;
     const finalResize = resize ?? theme.configuration.defaultVariant?.resize;
+    const finalSpellCheck = spellCheck ?? true;
 
     // Build className from theme
     const themeClassName = mergeClassNames(
@@ -84,6 +85,7 @@ export const InputTextArea = React.forwardRef<HTMLTextAreaElement, InputTextArea
                 setBothReferences(reference, node);
             }}
             className={themeClassName}
+            spellCheck={finalSpellCheck}
             {...textAreaProperties}
         />
     );

@@ -31,12 +31,10 @@ import { InputFileDrop } from './fields/file/InputFileDrop';
 import { InputFileList } from './fields/file/InputFileList';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-
-// Dependencies - Schema Types
 import type { SchemaSuccess } from '@structure/source/utilities/schema/Schema';
 import type { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
 import type { BaseSchema } from '@structure/source/utilities/schema/schemas/BaseSchema';
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 /**
  * Interface - SuccessMeta

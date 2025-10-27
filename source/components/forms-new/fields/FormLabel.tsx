@@ -17,10 +17,10 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - FormLabel
 export interface FormLabelProperties<T extends HTMLElement> extends React.HTMLAttributes<T> {
-    label: string;
+    label: React.ReactNode;
     optional?: boolean;
     caption?: string;
-    showSuccessesWhen?: 'Always' | 'Blur' | 'NonEmpty' | 'BlurOrNonEmpty';
+    showSuccesses?: 'Always' | 'NonEmpty' | 'OnBlur' | 'OnBlurOrNonEmpty';
     children?: React.ReactNode;
 }
 export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties<T>) {
@@ -52,28 +52,27 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
     const validErrors = storeErrors?.filter((error): error is string => error !== undefined);
 
     // Determine if we should show successes based on timing prop
-    const showTiming = properties.showSuccessesWhen ?? 'BlurOrNonEmpty';
+    const showTiming = properties.showSuccesses ?? 'BlurOrNonEmpty';
     const shouldShowSuccesses =
         showTiming === 'Always'
             ? true
-            : showTiming === 'Blur'
+            : showTiming === 'OnBlur'
               ? storeTouched
               : showTiming === 'NonEmpty'
                 ? typeof storeValue === 'string'
                     ? storeValue.length > 0
                     : !!storeValue
-                : showTiming === 'BlurOrNonEmpty'
+                : showTiming === 'OnBlurOrNonEmpty'
                   ? storeTouched || (typeof storeValue === 'string' ? storeValue.length > 0 : !!storeValue)
                   : false;
 
+    // Render the component
     return (
         <div className={mergeClassNames('flex w-full flex-col gap-2', properties.className)}>
             {/* Label */}
             <Label htmlFor={fieldId} className="inline-flex items-center justify-start gap-1 text-sm font-medium">
                 {properties.label}{' '}
-                {properties.optional && (
-                    <span className="text-xs font-normal content--2 transition-colors">(Optional)</span>
-                )}
+                {properties.optional && <span className="font-normal content--2 transition-colors">(Optional)</span>}
             </Label>
 
             {/* Form Element */}

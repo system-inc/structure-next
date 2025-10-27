@@ -18,7 +18,7 @@ export interface InputTextProperties extends Omit<React.ComponentPropsWithoutRef
     size?: InputTextSize;
 }
 export const InputText = React.forwardRef<HTMLInputElement, InputTextProperties>(function (
-    { className, variant, size, ...inputProperties },
+    { className, variant, size, type, placeholder, autoComplete, spellCheck, ...inputProperties },
     reference,
 ) {
     // Get component theme from context
@@ -38,8 +38,48 @@ export const InputText = React.forwardRef<HTMLInputElement, InputTextProperties>
         className,
     );
 
+    // Apply intelligent defaults based on type
+    const finalType = type ?? 'text';
+    let finalPlaceholder = placeholder;
+    let finalAutoComplete = autoComplete;
+    let finalSpellCheck = spellCheck;
+
+    if(finalType === 'email') {
+        finalPlaceholder = placeholder ?? 'email@domain.com';
+        finalAutoComplete = autoComplete ?? 'email';
+        finalSpellCheck = spellCheck ?? false;
+    }
+    else if(finalType === 'password') {
+        finalAutoComplete = autoComplete ?? 'current-password';
+        finalSpellCheck = spellCheck ?? false;
+    }
+    else if(finalType === 'tel') {
+        finalAutoComplete = autoComplete ?? 'tel';
+        finalSpellCheck = spellCheck ?? false;
+    }
+    else if(finalType === 'url') {
+        finalAutoComplete = autoComplete ?? 'url';
+        finalSpellCheck = spellCheck ?? false;
+    }
+    else if(finalType === 'search') {
+        finalSpellCheck = spellCheck ?? true;
+    }
+    else if(finalType === 'text') {
+        finalSpellCheck = spellCheck ?? true;
+    }
+
     // Render the component
-    return <input ref={reference} className={themeClassName} {...inputProperties} />;
+    return (
+        <input
+            ref={reference}
+            className={themeClassName}
+            type={finalType}
+            placeholder={finalPlaceholder}
+            autoComplete={finalAutoComplete}
+            spellCheck={finalSpellCheck}
+            {...inputProperties}
+        />
+    );
 });
 
 // Set the display name for the component
