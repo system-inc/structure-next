@@ -248,22 +248,29 @@ export function useForm<
     // Save reference to original Field before we override it
     const OriginalField = appForm.Field;
 
-    // Extend Field properties to allow React.ReactNode as children (in addition to function)
-    type ExtendedFieldProperties = Omit<OriginalFieldProperties, 'children'> & {
+    // Extend Field properties to support both 'identifier' (public API) and 'name' (TanStack internal)
+    type ExtendedFieldProperties = Omit<OriginalFieldProperties, 'children' | 'name'> & {
+        identifier: OriginalFieldProperties['name']; // REQUIRED - Public API must use identifier
+        name?: OriginalFieldProperties['name']; // Optional - TanStack internal usage only
         children?: React.ReactNode | OriginalFieldProperties['children'];
     };
 
-    function Field(fieldProperties: ExtendedFieldProperties) {
-        // Get schema from context
+    function Field({ identifier, name, children, ...restFieldProperties }: ExtendedFieldProperties) {
+        // Support both 'identifier' (public API) and 'name' (TanStack internal calls)
+
+        // Use identifier if provided (user-facing), otherwise use name (TanStack internal)
+        const fieldName = identifier ?? name;
+
+        // Get schema from context (must be called before any early returns)
         const formSchemaContext = useFormSchema();
         const schema = formSchemaContext.schema;
 
         // Extract file field metadata if this is a file array field
         const fileFieldMetadata = React.useMemo(
             function (): FileFieldMetadata | undefined {
-                if(!schema || !fieldProperties.name) return undefined;
+                if(!schema || !fieldName) return undefined;
 
-                const fieldSchema = schema.shape[fieldProperties.name as string];
+                const fieldSchema = schema.shape[fieldName as string];
                 if(!fieldSchema) return undefined;
 
                 // Check if this is an array of files
@@ -279,15 +286,15 @@ export function useForm<
 
                 return undefined;
             },
-            [schema, fieldProperties.name],
+            [schema, fieldName],
         );
 
         // Generate auto-validator if schema exists for this field
         const validatorsFromSchema = React.useMemo(
             function () {
-                if(!schema || !fieldProperties.name) return undefined;
+                if(!schema || !fieldName) return undefined;
 
-                const fieldSchema = schema.shape[fieldProperties.name as string];
+                const fieldSchema = schema.shape[fieldName as string];
                 if(!fieldSchema) return undefined;
 
                 return {
@@ -301,20 +308,20 @@ export function useForm<
                     },
                 };
             },
-            [schema, fieldProperties.name],
+            [schema, fieldName],
         );
 
         // Merge auto-validators with user-provided validators
         const mergedValidators = React.useMemo(
             function () {
-                if(!validatorsFromSchema) return fieldProperties.validators;
-                if(!fieldProperties.validators) return validatorsFromSchema;
+                if(!validatorsFromSchema) return restFieldProperties.validators;
+                if(!restFieldProperties.validators) return validatorsFromSchema;
 
                 // Merge: run schema validator first, then custom validator
-                const customValidator = fieldProperties.validators.onChangeAsync;
+                const customValidator = restFieldProperties.validators.onChangeAsync;
 
                 return {
-                    ...fieldProperties.validators,
+                    ...restFieldProperties.validators,
                     onChangeAsync: async function (field: {
                         value: unknown;
                         fieldApi: AnyFieldApi;
@@ -331,17 +338,23 @@ export function useForm<
                     },
                 };
             },
-            [validatorsFromSchema, fieldProperties.validators],
+            [validatorsFromSchema, restFieldProperties.validators],
         );
 
+        // Guard against missing field name (after all hooks)
+        if(!fieldName) {
+            console.error('Field component received neither identifier nor name.');
+            return null;
+        }
+
         return (
-            <OriginalField {...fieldProperties} validators={mergedValidators}>
+            <OriginalField {...restFieldProperties} name={fieldName} validators={mergedValidators}>
                 {function (field: AnyFieldApi) {
                     // Prepare content with field context
                     const content =
-                        typeof fieldProperties.children === 'function'
-                            ? (fieldProperties.children as (field: AnyFieldApi) => React.ReactNode)(field)
-                            : fieldProperties.children;
+                        typeof children === 'function'
+                            ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
+                            : children;
 
                     // Wrap with FileFieldMetadataProvider if file metadata exists
                     const contentWithMetadata = fileFieldMetadata ? (

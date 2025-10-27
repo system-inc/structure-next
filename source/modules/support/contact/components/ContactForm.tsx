@@ -99,21 +99,21 @@ export function ContactForm() {
                     // Contact Form
                     <form.Form className="mt-12 flex flex-col items-stretch gap-4">
                         {/* Field - Email Address */}
-                        <form.Field name="emailAddress">
+                        <form.Field identifier="emailAddress">
                             <form.Label label="Your Email Address">
                                 <form.InputText type="email" />
                             </form.Label>
                         </form.Field>
 
                         {/* Field - Title */}
-                        <form.Field name="title">
+                        <form.Field identifier="title">
                             <form.Label label="Subject">
                                 <form.InputText placeholder="Briefly describe your message" />
                             </form.Label>
                         </form.Field>
 
                         {/* Field - Content */}
-                        <form.Field name="content">
+                        <form.Field identifier="content">
                             <form.Label label="Message">
                                 <form.InputTextArea
                                     placeholder="Please include any details that will help us assist you"
@@ -123,7 +123,7 @@ export function ContactForm() {
                         </form.Field>
 
                         {/* Field - Attachment Files */}
-                        <form.Field name="attachmentFiles">
+                        <form.Field identifier="attachmentFiles">
                             <form.Label label="Attachments" optional={true}>
                                 <form.InputFile multiple />
                             </form.Label>
