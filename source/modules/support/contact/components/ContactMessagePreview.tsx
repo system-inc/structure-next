@@ -1,11 +1,8 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - Main Components
-import { FormLabel } from '@structure/source/components/forms-new/fields/FormLabel';
-
 // Dependencies - Utilities
-import { iconForFileType, formatFileSize } from '@structure/source/utilities/file/File';
+import { iconForFileType, bytesToScaledUnits } from '@structure/source/utilities/file/File';
 
 // Dependencies - Assets
 import { CheckIcon } from '@phosphor-icons/react';
@@ -30,7 +27,9 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                 Your message has been received. We will get back to you as soon as possible.
             </p>
 
-            <FormLabel label="Your Message" className="mt-10">
+            <div className="mt-10 flex w-full flex-col gap-2">
+                <label className="text-sm font-medium">Your Message</label>
+
                 <div className="mb-4 flex flex-col items-stretch rounded-md border border--0 px-6 py-8 transition-colors">
                     <div className="border-b border--0 pb-6 text-sm font-medium content--1 transition-colors">
                         <p>From: {properties.emailAddress}</p>
@@ -55,12 +54,12 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                             </div>
 
                             <div className="flex items-center gap-4 pl-2">
-                                <p className="text-sm content--1">{formatFileSize(file.size)}</p>
+                                <p className="text-sm content--1">{bytesToScaledUnits(file.size)}</p>
                             </div>
                         </div>
                     );
                 })}
-            </FormLabel>
+            </div>
         </div>
     );
 }
