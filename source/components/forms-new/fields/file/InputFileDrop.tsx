@@ -51,6 +51,15 @@ export function InputFileDrop(properties: InputFileDropProperties) {
             }
 
             const currentFiles = files;
+
+            // Filter out duplicates (same name and size)
+            filteredFiles = filteredFiles.filter(
+                (newFile) =>
+                    !currentFiles.some(
+                        (existingFile) => existingFile.name === newFile.name && existingFile.size === newFile.size,
+                    ),
+            );
+
             const updatedFiles = [...currentFiles];
 
             // Only add files up to maxFiles limit
