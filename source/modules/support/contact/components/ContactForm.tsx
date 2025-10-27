@@ -29,10 +29,6 @@ export function ContactForm() {
     // References
     const scrollTargetReference = React.useRef<HTMLDivElement>(null);
 
-    // Testing
-    const [isSuccess, setIsSuccess] = React.useState(false);
-    const [isProcessing, setIsProcessing] = React.useState(false);
-
     // Hooks
     const account = useAccount();
     const urlSearchParameters = useUrlSearchParameters();
@@ -40,12 +36,9 @@ export function ContactForm() {
     const form = useForm({
         schema: supportTicketCreateRequestInputSchema,
         onSubmit: async function (formState) {
-            console.log('Submitting contact form with values:', formState.value);
+            // console.log('Submitting contact form with values:', formState.value);
             try {
-                setIsProcessing(true);
-                await new Promise((resolve) => setTimeout(resolve, 2500));
-                setIsSuccess(true);
-                // await supportTicketCreateRequest.execute(submitProperties.value);
+                await supportTicketCreateRequest.execute(formState.value);
             }
             catch(error) {
                 console.error(error);
@@ -73,24 +66,23 @@ export function ContactForm() {
     // Effect to scroll to top when success state changes
     React.useEffect(
         function () {
-            if(isSuccess || supportTicketCreateRequest.isSuccess) {
-                // Scroll to the top of the page
+            if(supportTicketCreateRequest.isSuccess) {
                 scrollTargetReference.current?.scrollIntoView({
                     behavior: 'smooth',
                 });
             }
         },
-        [isSuccess, supportTicketCreateRequest.isSuccess],
+        [supportTicketCreateRequest.isSuccess],
     );
 
     // Render the component
     return (
         <>
-            {/* Scroll target for smooth scrolling to top */}
+            {/* Scroll target for smooth scrolling to top, need to do in main layout */}
             <div ref={scrollTargetReference} className="absolute top-[-1000px] opacity-0" />
             <div className="relative mx-auto max-w-2xl">
                 {/* Form Submitted Successfully */}
-                {isSuccess || supportTicketCreateRequest.isSuccess ? (
+                {supportTicketCreateRequest.isSuccess ? (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -142,7 +134,7 @@ export function ContactForm() {
                             variant="A"
                             type="submit"
                             iconRight={PaperPlaneRightIcon}
-                            isProcessing={isProcessing || supportTicketCreateRequest.isLoading}
+                            isProcessing={supportTicketCreateRequest.isLoading}
                             processingIcon={SpinnerIcon}
                             animateIconPosition="iconRight"
                         >
