@@ -19,6 +19,9 @@ export type { FormState, FieldOptions, FieldState, ValidationError } from '@tans
 // Dependencies - ID Utilities
 import { FormIdProvider } from './providers/FormIdProvider';
 
+// Dependencies - Schema Provider
+import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
+
 // Dependencies - Form-Aware Components
 import { FormLabel as FormAwareLabel } from './fields/FormLabel';
 import { FormInputText } from './fields/text/FormInputText';
@@ -32,6 +35,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Schema Types
 import type { SchemaSuccess } from '@structure/source/utilities/schema/Schema';
+import type { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
 
 /**
  * Interface - SuccessMeta
@@ -46,7 +50,7 @@ interface SuccessMeta {
  * Reactive selector to extract successes from field store
  */
 export function selectSuccesses(state: { meta: unknown }): SchemaSuccess[] {
-    return ((state.meta as SuccessMeta)?.successes) ?? [];
+    return (state.meta as SuccessMeta)?.successes ?? [];
 }
 
 /**
@@ -118,12 +122,13 @@ export function useForm<
     // 1) form.Form — HTML <form> wrapper bound to this form instance and context
     type FormProperties = React.FormHTMLAttributes<HTMLFormElement> & {
         children?: React.ReactNode;
+        schema?: ObjectSchema<ObjectShape>;
     };
 
     const formReference = React.useRef<HTMLFormElement | null>(null);
 
     const Form: React.FC<FormProperties> = React.useCallback(
-        function FormComponent({ onSubmit, className, children, ...formProperties }) {
+        function FormComponent({ onSubmit, className, schema, children, ...formProperties }) {
             async function handleSubmitWithFocus(event: React.FormEvent<HTMLFormElement>) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -153,16 +158,18 @@ export function useForm<
 
             return (
                 <FormIdProvider>
-                    <appForm.AppForm>
-                        <form
-                            {...formProperties}
-                            ref={formReference}
-                            className={mergeClassNames(className)}
-                            onSubmit={handleSubmitWithFocus}
-                        >
-                            {children}
-                        </form>
-                    </appForm.AppForm>
+                    <FormSchemaProvider schema={schema}>
+                        <appForm.AppForm>
+                            <form
+                                {...formProperties}
+                                ref={formReference}
+                                className={mergeClassNames(className)}
+                                onSubmit={handleSubmitWithFocus}
+                            >
+                                {children}
+                            </form>
+                        </appForm.AppForm>
+                    </FormSchemaProvider>
                 </FormIdProvider>
             );
         },
@@ -197,8 +204,64 @@ export function useForm<
     };
 
     function Field(fieldProperties: ExtendedFieldProperties) {
+        // Get schema from context
+        const formSchemaContext = useFormSchema();
+        const schema = formSchemaContext.schema;
+
+        // Generate auto-validator if schema exists for this field
+        const autoValidators = React.useMemo(
+            function () {
+                if(!schema || !fieldProperties.name) return undefined;
+
+                const fieldSchema = schema.shape[fieldProperties.name as string];
+                if(!fieldSchema) return undefined;
+
+                return {
+                    onChangeAsync: async function (field: { value: unknown; fieldApi: AnyFieldApi }) {
+                        const result = await fieldSchema.validate(field.value);
+
+                        // Auto-populate successes
+                        setFieldSuccesses(field.fieldApi, result.successes);
+
+                        return result.valid ? undefined : result.errors?.[0]?.message;
+                    },
+                };
+            },
+            [schema, fieldProperties.name],
+        );
+
+        // Merge auto-validators with user-provided validators
+        const mergedValidators = React.useMemo(
+            function () {
+                if(!autoValidators) return fieldProperties.validators;
+                if(!fieldProperties.validators) return autoValidators;
+
+                // Merge: run schema validator first, then custom validator
+                const customValidator = fieldProperties.validators.onChangeAsync;
+
+                return {
+                    ...fieldProperties.validators,
+                    onChangeAsync: async function (field: {
+                        value: unknown;
+                        fieldApi: AnyFieldApi;
+                        signal: AbortSignal;
+                    }) {
+                        // Run schema validation first
+                        const schemaError = await autoValidators.onChangeAsync?.(field);
+                        if(schemaError) return schemaError;
+
+                        // Then run custom validation if provided (only if it's a function)
+                        if(typeof customValidator === 'function') {
+                            return await customValidator(field as never);
+                        }
+                    },
+                };
+            },
+            [autoValidators, fieldProperties.validators],
+        );
+
         return (
-            <OriginalField {...fieldProperties}>
+            <OriginalField {...fieldProperties} validators={mergedValidators}>
                 {function (field: AnyFieldApi) {
                     // Provide field context so useFieldContext() works in wrappers
                     return (

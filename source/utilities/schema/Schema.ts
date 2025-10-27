@@ -1,11 +1,11 @@
 // Dependencies - Schema Implementations
-import { StringSchema } from './internal/StringSchema';
-import { NumberSchema } from './internal/NumberSchema';
-import { BooleanSchema } from './internal/BooleanSchema';
-import { FileSchema } from './internal/FileSchema';
-import { ArraySchema } from './internal/ArraySchema';
-import { ObjectSchema, type ObjectShape } from './internal/ObjectSchema';
-import { BaseSchema } from './internal/BaseSchema';
+import { StringSchema } from './schemas/StringSchema';
+import { NumberSchema } from './schemas/NumberSchema';
+import { BooleanSchema } from './schemas/BooleanSchema';
+import { FileSchema } from './schemas/FileSchema';
+import { ArraySchema } from './schemas/ArraySchema';
+import { ObjectSchema, type ObjectShape } from './schemas/ObjectSchema';
+import { BaseSchema } from './schemas/BaseSchema';
 
 // Type - Validator
 // A validator function that can be sync or async and returns validation results

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Hooks
 import { useUrlSearchParameters } from '@structure/source/router/Navigation';
-import { useForm, setFieldSuccesses } from '@structure/source/components/forms-new/useForm';
+import { useForm } from '@structure/source/components/forms-new/useForm';
 
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
@@ -91,64 +91,26 @@ export function ContactForm() {
                 />
             ) : (
                 // Contact Form
-                <form.Form className="mt-12 flex flex-col items-stretch gap-4">
+                <form.Form
+                    schema={supportTicketCreateRequestInputSchema}
+                    className="mt-12 flex flex-col items-stretch gap-4"
+                >
                     {/* Field - Email Address */}
-                    <form.Field
-                        name="emailAddress"
-                        validators={{
-                            onChangeAsync: async function (field) {
-                                const validation =
-                                    await supportTicketCreateRequestInputSchema.shape.emailAddress.validate(
-                                        field.value,
-                                    );
-
-                                // Write successes to field meta
-                                setFieldSuccesses(field.fieldApi, validation.successes);
-
-                                return validation.valid ? undefined : validation.errors?.[0]?.message;
-                            },
-                        }}
-                    >
+                    <form.Field identifier="emailAddress">
                         <form.Label label="Your Email Address" showSuccessesWhen="Always">
                             <form.InputText placeholder="email@domain.com" autoComplete="email" spellCheck={false} />
                         </form.Label>
                     </form.Field>
 
                     {/* Field - Title */}
-                    <form.Field
-                        name="title"
-                        validators={{
-                            onChangeAsync: async function (fieldProperties) {
-                                const titleSchema = supportTicketCreateRequestInputSchema.shape.title;
-                                const result = await titleSchema.validate(fieldProperties.value);
-
-                                // Write successes to field meta
-                                setFieldSuccesses(fieldProperties.fieldApi, result.successes);
-
-                                return result.valid ? undefined : result.errors?.[0]?.message;
-                            },
-                        }}
-                    >
+                    <form.Field identifier="title">
                         <form.Label label="Subject" showSuccessesWhen="Always">
                             <form.InputText placeholder="Briefly describe your message" type="text" spellCheck={true} />
                         </form.Label>
                     </form.Field>
 
                     {/* Field - Content */}
-                    <form.Field
-                        name="content"
-                        validators={{
-                            onChangeAsync: async function (fieldProperties) {
-                                const contentSchema = supportTicketCreateRequestInputSchema.shape.content;
-                                const result = await contentSchema.validate(fieldProperties.value);
-
-                                // Write successes to field meta
-                                setFieldSuccesses(fieldProperties.fieldApi, result.successes);
-
-                                return result.valid ? undefined : result.errors?.[0]?.message;
-                            },
-                        }}
-                    >
+                    <form.Field identifier="content">
                         <form.Label label="Message" showSuccessesWhen="Always">
                             <form.InputTextArea
                                 placeholder="Please include any details that will help us assist you"
@@ -159,7 +121,7 @@ export function ContactForm() {
                     </form.Field>
 
                     {/* Field - Attachment Files */}
-                    <form.Field name="attachmentFiles">
+                    <form.Field identifier="attachmentFiles">
                         {function (field) {
                             return (
                                 <form.Label label="Attachments" optional>

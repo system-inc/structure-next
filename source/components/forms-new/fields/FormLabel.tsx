@@ -97,22 +97,20 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
                 )}
 
                 {/* Successes (only show if no errors and interaction criteria met) */}
-                {shouldShowSuccesses &&
-                    (!validErrors || validErrors.length === 0) &&
-                    storeSuccesses.length > 0 && (
-                        <div className="flex flex-col gap-1">
-                            {storeSuccesses.map(function (success, index) {
-                                return (
-                                    <p
-                                        key={`success-${success.identifier}-${index}`}
-                                        className="whitespace-pre-line text-green-600 dark:text-green-400"
-                                    >
-                                        ✓ {success.message}
-                                    </p>
-                                );
-                            })}
-                        </div>
-                    )}
+                {shouldShowSuccesses && (!validErrors || validErrors.length === 0) && storeSuccesses.length > 0 && (
+                    <div className="flex flex-col gap-1">
+                        {storeSuccesses.map(function (success, index) {
+                            return (
+                                <p
+                                    key={`success-${success.identifier}-${index}`}
+                                    className="whitespace-pre-line text-green-600 dark:text-green-400"
+                                >
+                                    ✓ {success.message}
+                                </p>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );
