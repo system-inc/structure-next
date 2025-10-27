@@ -11,6 +11,7 @@ import KeyIcon from '@structure/assets/icons/security/KeyIcon.svg';
 
 // Component - NotAuthorized
 export type NotAuthorizedProperties = {
+    message?: string;
     alertProperties?: AlertProperties;
 };
 export function NotAuthorized(properties: NotAuthorizedProperties) {
@@ -24,10 +25,14 @@ export function NotAuthorized(properties: NotAuthorizedProperties) {
                 title="Not Authorized"
                 {...properties.alertProperties}
             >
-                <div className="space-y-2">
-                    <p>Your account does not have the required role to access this page.</p>
-                    <p>Please contact an administrator if you believe this is an error.</p>
-                </div>
+                {properties.message ? (
+                    <p>{properties.message}</p>
+                ) : (
+                    <div className="space-y-2">
+                        <p>Your account does not have the required role to access this page.</p>
+                        <p>Please contact an administrator if you believe this is an error.</p>
+                    </div>
+                )}
             </Alert>
         </div>
     );

@@ -13,6 +13,11 @@ import { accountSignedInKey, Account } from '@structure/source/modules/account/A
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
 import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
+import {
+    isAuthenticationError,
+    isSessionInvalidError,
+    isAccountInvalidError,
+} from '@structure/source/api/errors/ErrorUtilities';
 
 // Dependencies - Services
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
@@ -137,7 +142,19 @@ export function AccountProvider(properties: AccountProviderProperties) {
     React.useEffect(
         function () {
             if(accountRequest.error) {
-                // If there is an error, the account is not signed in
+                // Check if this is an authentication-related error
+                if(isAuthenticationError(accountRequest.error)) {
+                    // Clear cache for authentication errors
+                    if(isSessionInvalidError(accountRequest.error)) {
+                        console.log('[AccountProvider] Session invalid, clearing cache');
+                        networkService.clearCache();
+                    }
+                    else if(isAccountInvalidError(accountRequest.error)) {
+                        console.log('[AccountProvider] Account invalid, clearing cache');
+                        networkService.clearCache();
+                    }
+                }
+                // Update the signed in state
                 setSignedIn(false);
             }
         },
