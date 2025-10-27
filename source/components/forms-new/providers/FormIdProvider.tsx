@@ -18,9 +18,9 @@ export function useFormId() {
  * Generates a deterministic field ID from formId + fieldName
  * No context needed - just computation
  */
-export function useFieldId(fieldName: string | number | symbol) {
+export function useFieldId(fieldIdentifier: string | number | symbol) {
     const formId = useFormId();
-    return `${formId ?? 'form'}-${String(fieldName)}`;
+    return `${formId ?? 'form'}-${String(fieldIdentifier)}`;
 }
 
 /**
@@ -28,7 +28,7 @@ export function useFieldId(fieldName: string | number | symbol) {
  * Provides a unique ID for a form and its children
  */
 export function FormIdProvider(properties: { id?: string; children: React.ReactNode }) {
-    const auto = React.useId();
-    const id = properties.id ?? auto;
+    const reactId = React.useId();
+    const id = properties.id ?? reactId;
     return <FormIdContext.Provider value={id}>{properties.children}</FormIdContext.Provider>;
 }
