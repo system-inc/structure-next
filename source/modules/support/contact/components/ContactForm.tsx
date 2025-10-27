@@ -11,7 +11,6 @@ import { useForm } from '@structure/source/components/forms-new/useForm';
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 import {
     supportTicketCreateRequestInputSchema,
-    SupportTicketCreateRequestInputType,
     useSupportTicketCreateRequest,
 } from '@structure/source/modules/support/contact/hooks/useSupportTicketCreateRequest';
 
@@ -24,7 +23,7 @@ import { ContactMessagePreview } from './ContactMessagePreview';
 import { motion } from 'motion/react';
 
 // Dependencies - Assets
-import { PlusIcon, TrashSimpleIcon, PaperPlaneRightIcon } from '@phosphor-icons/react';
+import { PlusIcon, TrashSimpleIcon, PaperPlaneRightIcon, SpinnerIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { iconForFileType, bytesToScaledUnits } from '@structure/source/utilities/file/File';
@@ -45,10 +44,10 @@ export function ContactForm() {
     const account = useAccount();
     const urlSearchParameters = useUrlSearchParameters();
     const supportTicketCreateRequest = useSupportTicketCreateRequest();
-    const form = useForm<SupportTicketCreateRequestInputType>({
+    const form = useForm({
         schema: supportTicketCreateRequestInputSchema,
-        onSubmit: async function (submitProperties) {
-            console.log('Submitting contact form with values:', submitProperties.value);
+        onSubmit: async function (formState) {
+            console.log('Submitting contact form with values:', formState.value);
             try {
                 setIsProcessing(true);
                 await new Promise((resolve) => setTimeout(resolve, 2500));
@@ -253,10 +252,10 @@ export function ContactForm() {
                         <AnimatedButton
                             variant="A"
                             type="submit"
-                            isProcessing={isProcessing || supportTicketCreateRequest.isLoading}
-                            processingIcon={PaperPlaneRightIcon}
-                            animateIconPosition="iconRight"
                             iconRight={PaperPlaneRightIcon}
+                            isProcessing={isProcessing || supportTicketCreateRequest.isLoading}
+                            processingIcon={SpinnerIcon}
+                            animateIconPosition="iconRight"
                         >
                             Send Message
                         </AnimatedButton>

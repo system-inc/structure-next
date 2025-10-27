@@ -36,6 +36,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Dependencies - Schema Types
 import type { SchemaSuccess } from '@structure/source/utilities/schema/Schema';
 import type { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
+import type { BaseSchema } from '@structure/source/utilities/schema/schemas/BaseSchema';
 
 /**
  * Interface - SuccessMeta
@@ -84,11 +85,13 @@ const { useAppForm } = createFormHook({
  *   - form.Form: a typed HTML <form> wrapper that provides TanStack context
  *   - form.bindField(field): typed helper for controlled inputs { value, onChange, onBlur }
  *
- * We forward the entire generic surface to preserve inference for defaultValues,
- * validators, and submit meta.
+ * TFormData is automatically inferred from the schema - no need to specify the type parameter.
  */
 export function useForm<
-    TFormData,
+    TSchema extends ObjectSchema<ObjectShape>,
+    TFormData = TSchema extends ObjectSchema<infer S>
+        ? { [K in keyof S]: S[K] extends BaseSchema<unknown, infer O> ? O : never }
+        : never,
     TOnMount extends undefined | FormValidateOrFn<TFormData> = undefined,
     TOnChange extends undefined | FormValidateOrFn<TFormData> = undefined,
     TOnChangeAsync extends undefined | FormAsyncValidateOrFn<TFormData> = undefined,
@@ -115,7 +118,7 @@ export function useForm<
         TOnServer,
         TSubmitMeta
     > & {
-        schema: ObjectSchema<ObjectShape>; // Required!
+        schema: TSchema; // Required and used for type inference!
     },
 ) {
     // Extract schema from options (now required)
