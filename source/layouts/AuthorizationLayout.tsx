@@ -16,6 +16,13 @@ import { LineLoadingAnimation } from '@structure/source/components/animations/Li
 import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
 import { AccountRole } from '@structure/source/modules/account/Account';
 
+// Dependencies - Error Handling
+import {
+    isPermissionDeniedError,
+    isInsufficientEntitlementsError,
+    isQuotaExceededError,
+} from '@structure/source/api/errors/ErrorUtilities';
+
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutProperties {
     children: React.ReactNode;
@@ -47,6 +54,18 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     }
     // Error loading account
     else if(account.error) {
+        // Handle specific error types with custom client-side UI messages
+        if(isPermissionDeniedError(account.error)) {
+            return <NotAuthorized message="You do not have permission to access this resource." />;
+        }
+        else if(isInsufficientEntitlementsError(account.error)) {
+            return <NotAuthorized message="Please upgrade your account to access this feature." />;
+        }
+        else if(isQuotaExceededError(account.error)) {
+            return <NotAuthorized message="You have exceeded your quota limit. Please upgrade or try again later." />;
+        }
+
+        // For other errors, show generic API error
         return <ApiError error={account.error} />;
     }
     // If accessibleRoles are defined, check if the user has any of those roles
