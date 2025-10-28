@@ -57,7 +57,7 @@ export function FormInputText(properties: FormInputTextProperties) {
 
     // Function to handle blur events
     function handleBlur() {
-        // Commit value to store before validation if commit strategy is 'onBlur'
+        // Commit value to store without validation if commit strategy is 'onBlur'
         if(commitStrategy === 'onBlur' || isNumberInput) {
             const element = inputReference.current;
             if(element) {
@@ -65,16 +65,16 @@ export function FormInputText(properties: FormInputTextProperties) {
                 if(isNumberInput) {
                     const rawValue = element.value;
                     const numberValue = rawValue === '' ? 0 : Number(rawValue);
-                    fieldContext.handleChange(numberValue);
+                    fieldContext.setValue(numberValue, { dontValidate: true });
                 }
                 // Otherwise, just use the string value
                 else {
-                    fieldContext.handleChange(element.value);
+                    fieldContext.setValue(element.value, { dontValidate: true });
                 }
             }
         }
 
-        // Trigger validation
+        // Trigger validation (only one validation cycle, no flash)
         fieldContext.handleBlur();
     }
 
@@ -84,7 +84,7 @@ export function FormInputText(properties: FormInputTextProperties) {
         if(event.key === 'Enter' && commitStrategy === 'onBlur' && !isNumberInput) {
             const element = inputReference.current;
             if(element) {
-                fieldContext.handleChange(element.value);
+                fieldContext.setValue(element.value, { dontValidate: true });
             }
         }
     }

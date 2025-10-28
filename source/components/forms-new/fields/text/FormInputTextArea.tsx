@@ -49,15 +49,15 @@ export function FormInputTextArea(properties: FormInputTextAreaProperties) {
 
     // Function to handle blur events
     function handleBlur() {
-        // Commit value to store before validation if commit strategy is 'onBlur'
+        // Commit value to store without validation if commit strategy is 'onBlur'
         if(commitStrategy === 'onBlur') {
             const element = textareaReference.current;
             if(element) {
-                fieldContext.handleChange(element.value);
+                fieldContext.setValue(element.value, { dontValidate: true });
             }
         }
 
-        // Trigger validation
+        // Trigger validation (only one validation cycle, no flash)
         fieldContext.handleBlur();
     }
 
@@ -68,7 +68,7 @@ export function FormInputTextArea(properties: FormInputTextAreaProperties) {
         if(event.key === 'Enter' && (event.ctrlKey || event.metaKey) && commitStrategy === 'onBlur') {
             const element = textareaReference.current;
             if(element) {
-                fieldContext.handleChange(element.value);
+                fieldContext.setValue(element.value, { dontValidate: true });
             }
         }
     }

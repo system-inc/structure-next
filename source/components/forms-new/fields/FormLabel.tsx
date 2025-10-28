@@ -24,54 +24,39 @@ export interface FormLabelProperties<T extends HTMLElement> extends React.HTMLAt
     children?: React.ReactNode;
 }
 export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties<T>) {
-    // Get field context and subscribe to errors reactively
-    const fieldContext = useFieldContext<unknown>();
-
-    // Get field ID for htmlFor
-    const fieldId = useFieldId(fieldContext.name);
-
-    // Subscribe to errors reactively from field store
-    const storeErrors = useStore(fieldContext.store, function (state) {
-        return state.meta.errors;
-    });
-
-    // Subscribe to touched state for interaction detection
-    const storeTouched = useStore(fieldContext.store, function (state) {
-        return state.meta.isTouched;
-    });
-
-    // Subscribe to successes reactively from field store
-    const storeSuccesses = useStore(fieldContext.store, selectSuccesses);
-
-    // Determine if we need to subscribe to value based on showSuccesses timing
+    // Defaults
     const showTiming = properties.showSuccesses ?? 'BlurOrNonEmpty';
     const needsValueSubscription = showTiming === 'NonEmpty' || showTiming === 'OnBlurOrNonEmpty';
 
-    // Only subscribe to value if needed for success display logic
-    const storeValue = useStore(fieldContext.store, function (state) {
-        // Only subscribe if the timing requires checking value
-        if(needsValueSubscription) {
-            return state.value;
-        }
-        // Return undefined to avoid subscription when not needed
-        return undefined;
+    // Hooks
+    const fieldContext = useFieldContext<unknown>();
+    const fieldId = useFieldId(fieldContext.name);
+    const fieldStore = useStore(fieldContext.store, function (state) {
+        return {
+            errors: state.meta.errors,
+            isValidating: state.meta.isValidating,
+            isTouched: state.meta.isTouched,
+            successes: selectSuccesses(state),
+            value: needsValueSubscription ? state.value : undefined,
+        };
     });
 
     // Filter out undefined errors
-    const validErrors = storeErrors?.filter((error): error is string => error !== undefined);
+    const validErrors = fieldStore.errors?.filter((error): error is string => error !== undefined);
 
     // Determine if we should show successes based on timing prop
     const shouldShowSuccesses =
         showTiming === 'Always'
             ? true
             : showTiming === 'OnBlur'
-              ? storeTouched
+              ? fieldStore.isTouched
               : showTiming === 'NonEmpty'
-                ? typeof storeValue === 'string'
-                    ? storeValue.length > 0
-                    : !!storeValue
+                ? typeof fieldStore.value === 'string'
+                    ? fieldStore.value.length > 0
+                    : !!fieldStore.value
                 : showTiming === 'OnBlurOrNonEmpty'
-                  ? storeTouched || (typeof storeValue === 'string' ? storeValue.length > 0 : !!storeValue)
+                  ? fieldStore.isTouched ||
+                    (typeof fieldStore.value === 'string' ? fieldStore.value.length > 0 : !!fieldStore.value)
                   : false;
 
     // Render the component
@@ -104,20 +89,22 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
                 )}
 
                 {/* Successes (only show if no errors and interaction criteria met) */}
-                {shouldShowSuccesses && (!validErrors || validErrors.length === 0) && storeSuccesses.length > 0 && (
-                    <div className="flex flex-col gap-1">
-                        {storeSuccesses.map(function (success, index) {
-                            return (
-                                <p
-                                    key={`success-${success.identifier}-${index}`}
-                                    className="whitespace-pre-line text-green-600 dark:text-green-400"
-                                >
-                                    ✓ {success.message}
-                                </p>
-                            );
-                        })}
-                    </div>
-                )}
+                {shouldShowSuccesses &&
+                    (!validErrors || validErrors.length === 0) &&
+                    fieldStore.successes.length > 0 && (
+                        <div className="flex flex-col gap-1">
+                            {fieldStore.successes.map(function (success, index) {
+                                return (
+                                    <p
+                                        key={`success-${success.identifier}-${index}`}
+                                        className="whitespace-pre-line text-green-600 dark:text-green-400"
+                                    >
+                                        ✓ {success.message}
+                                    </p>
+                                );
+                            })}
+                        </div>
+                    )}
             </div>
         </div>
     );
