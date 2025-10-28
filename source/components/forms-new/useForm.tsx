@@ -21,8 +21,6 @@ import { FormIdProvider } from './providers/FormIdProvider';
 
 // Dependencies - Schema Provider
 import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
-import { FileFieldMetadataProvider } from './providers/FileFieldMetadataProvider';
-import type { FileFieldMetadata } from './providers/FileFieldMetadataProvider';
 
 // Dependencies - Form-Aware Components
 import { FormLabel as FormAwareLabel } from './fields/FormLabel';
@@ -34,8 +32,6 @@ import { FormInputFile } from './fields/file/FormInputFile';
 import type { SchemaSuccess } from '@structure/source/utilities/schema/Schema';
 import type { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
 import type { BaseSchema } from '@structure/source/utilities/schema/schemas/BaseSchema';
-import { ArraySchema } from '@structure/source/utilities/schema/schemas/ArraySchema';
-import { FileSchema } from '@structure/source/utilities/schema/schemas/FileSchema';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 /**
@@ -253,9 +249,10 @@ export function useForm<
         identifier: OriginalFieldProperties['name']; // REQUIRED - Public API must use identifier
         name?: OriginalFieldProperties['name']; // Optional - TanStack internal usage only
         children?: React.ReactNode | OriginalFieldProperties['children'];
+        validateSchema?: 'onChange' | 'onBlur' | 'Both' | 'None'; // When to run schema validation (default: 'onBlur')
     };
 
-    function Field({ identifier, name, children, ...restFieldProperties }: ExtendedFieldProperties) {
+    function Field({ identifier, name, children, validateSchema, ...restFieldProperties }: ExtendedFieldProperties) {
         // Support both 'identifier' (public API) and 'name' (TanStack internal calls)
 
         // Use identifier if provided (user-facing), otherwise use name (TanStack internal)
@@ -265,50 +262,48 @@ export function useForm<
         const formSchemaContext = useFormSchema();
         const schema = formSchemaContext.schema;
 
-        // Extract file field metadata if this is a file array field
-        const fileFieldMetadata = React.useMemo(
-            function (): FileFieldMetadata | undefined {
-                if(!schema || !fieldName) return undefined;
-
-                const fieldSchema = schema.shape[fieldName as string];
-                if(!fieldSchema) return undefined;
-
-                // Check if this is an array of files
-                if(fieldSchema instanceof ArraySchema) {
-                    if(fieldSchema.itemSchema instanceof FileSchema) {
-                        return {
-                            mimeTypes: fieldSchema.itemSchema.allowedMimeTypes,
-                            maximumSizeInBytes: fieldSchema.itemSchema.allowedMaximumSizeInBytes,
-                            minimumSizeInBytes: fieldSchema.itemSchema.allowedMinimumSizeInBytes,
-                        };
-                    }
-                }
-
-                return undefined;
-            },
-            [schema, fieldName],
-        );
+        // Get validation timing (default: 'onBlur')
+        const validationTiming = validateSchema ?? 'onBlur';
 
         // Generate auto-validator if schema exists for this field
         const validatorsFromSchema = React.useMemo(
             function () {
-                if(!schema || !fieldName) return undefined;
+                if(!schema || !fieldName || validationTiming === 'None') return undefined;
 
                 const fieldSchema = schema.shape[fieldName as string];
                 if(!fieldSchema) return undefined;
 
-                return {
-                    onChangeAsync: async function (field: { value: unknown; fieldApi: AnyFieldApi }) {
-                        const result = await fieldSchema.validate(field.value);
+                // Create the schema validation function
+                const schemaValidationFunction = async function (field: { value: unknown; fieldApi: AnyFieldApi }) {
+                    const result = await fieldSchema.validate(field.value);
 
-                        // Auto-populate successes
-                        setFieldSuccesses(field.fieldApi, result.successes);
+                    // Auto-populate successes
+                    setFieldSuccesses(field.fieldApi, result.successes);
 
-                        return result.valid ? undefined : result.errors?.[0]?.message;
-                    },
+                    return result.valid ? undefined : result.errors?.[0]?.message;
                 };
+
+                // Return validators based on validateSchema prop
+                if(validationTiming === 'onChange') {
+                    return {
+                        onChangeAsync: schemaValidationFunction,
+                    };
+                }
+                else if(validationTiming === 'onBlur') {
+                    return {
+                        onBlurAsync: schemaValidationFunction,
+                    };
+                }
+                else if(validationTiming === 'Both') {
+                    return {
+                        onChangeAsync: schemaValidationFunction,
+                        onBlurAsync: schemaValidationFunction,
+                    };
+                }
+
+                return undefined;
             },
-            [schema, fieldName],
+            [schema, fieldName, validationTiming],
         );
 
         // Merge auto-validators with user-provided validators
@@ -318,22 +313,39 @@ export function useForm<
                 if(!restFieldProperties.validators) return validatorsFromSchema;
 
                 // Merge: run schema validator first, then custom validator
-                const customValidator = restFieldProperties.validators.onChangeAsync;
+                const customValidatorOnChangeAsync = restFieldProperties.validators.onChangeAsync;
+                const customValidatorOnBlurAsync = restFieldProperties.validators.onBlurAsync;
 
                 return {
                     ...restFieldProperties.validators,
+                    // Merge schema onChange validator with custom onChange validator
                     onChangeAsync: async function (field: {
                         value: unknown;
                         fieldApi: AnyFieldApi;
                         signal: AbortSignal;
                     }) {
-                        // Run schema validation first
+                        // Run schema validation first (if exists)
                         const schemaError = await validatorsFromSchema.onChangeAsync?.(field);
                         if(schemaError) return schemaError;
 
                         // Then run custom validation if provided (only if it's a function)
-                        if(typeof customValidator === 'function') {
-                            return await customValidator(field as never);
+                        if(typeof customValidatorOnChangeAsync === 'function') {
+                            return await customValidatorOnChangeAsync(field as never);
+                        }
+                    },
+                    // Merge schema onBlur validator with custom blur validator
+                    onBlurAsync: async function (field: {
+                        value: unknown;
+                        fieldApi: AnyFieldApi;
+                        signal: AbortSignal;
+                    }) {
+                        // Run schema validation first (if exists)
+                        const schemaError = await validatorsFromSchema.onBlurAsync?.(field);
+                        if(schemaError) return schemaError;
+
+                        // Then run custom validation if provided (only if it's a function)
+                        if(typeof customValidatorOnBlurAsync === 'function') {
+                            return await customValidatorOnBlurAsync(field as never);
                         }
                     },
                 };
@@ -347,24 +359,18 @@ export function useForm<
             return null;
         }
 
+        // OriginalField expects a render function that receives the field API
+        // We need to provide fieldContext so useFieldContext() works in children
         return (
             <OriginalField {...restFieldProperties} name={fieldName} validators={mergedValidators}>
                 {function (field: AnyFieldApi) {
-                    // Prepare content with field context
+                    // Provide field context so useFieldContext() works in wrappers
                     const content =
                         typeof children === 'function'
                             ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
                             : children;
 
-                    // Wrap with FileFieldMetadataProvider if file metadata exists
-                    const contentWithMetadata = fileFieldMetadata ? (
-                        <FileFieldMetadataProvider metadata={fileFieldMetadata}>{content}</FileFieldMetadataProvider>
-                    ) : (
-                        content
-                    );
-
-                    // Provide field context so useFieldContext() works in wrappers
-                    return <fieldContext.Provider value={field}>{contentWithMetadata}</fieldContext.Provider>;
+                    return <fieldContext.Provider value={field}>{content}</fieldContext.Provider>;
                 }}
             </OriginalField>
         );

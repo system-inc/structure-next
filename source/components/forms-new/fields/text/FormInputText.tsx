@@ -3,54 +3,107 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - Form Context
+// Dependencies - Hooks
 import { useFieldContext, useStore } from '../../useForm';
-
-// Dependencies - Pure Components
-import { InputText } from './InputText';
-
-// Dependencies - ID Utilities
 import { useFieldId } from '../../providers/FormIdProvider';
 
-// Component - FormInputText
-export type FormInputTextProperties = Omit<React.ComponentProps<typeof InputText>, 'value' | 'onChange' | 'onBlur'>;
+// Dependencies - Main Components
+import { InputText } from './InputText';
+import { FormUncontrolledInputSynchronizer } from '../FormUncontrolledInputSynchronizer';
 
+// Component - FormInputText
+export type FormInputTextProperties = Omit<
+    React.ComponentProps<typeof InputText>,
+    'value' | 'defaultValue' | 'onChange' | 'onInput' | 'onBlur' | 'onKeyDown'
+> & {
+    commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onBlur')
+};
 export function FormInputText(properties: FormInputTextProperties) {
+    // Hooks
     const fieldContext = useFieldContext<string | number>();
     const fieldId = useFieldId(fieldContext.name);
-
-    // Subscribe to value reactively
-    const storeValue = useStore(fieldContext.store, function (state) {
-        return state.value as string | number;
-    });
-
     // Subscribe to errors for aria-invalid
     const storeErrors = useStore(fieldContext.store, function (state) {
         return state.meta.errors;
     });
 
-    return (
-        <InputText
-            {...properties}
-            id={properties.id ?? fieldId}
-            name={properties.name ?? fieldContext.name}
-            value={storeValue}
-            aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
-            onChange={function (event: React.ChangeEvent<HTMLInputElement>) {
-                // Convert to number if type="number"
-                const inputValue = event.target.value;
-                if(properties.type === 'number') {
-                    // Empty string becomes NaN when converted, keep as empty string or convert to 0
-                    const numberValue = inputValue === '' ? 0 : Number(inputValue);
+    // References
+    const inputReference = React.useRef<HTMLInputElement>(null);
+
+    // State - Get initial value once for defaultValue (uncontrolled)
+    const [defaultValue] = React.useState(function () {
+        return fieldContext.state.value == null ? '' : String(fieldContext.state.value);
+    });
+
+    // Defaults
+    const commitStrategy = properties.commit ?? 'onBlur';
+
+    // Check if this is a number input
+    const isNumberInput = properties.type === 'number';
+
+    // Function to handle input changes while typing
+    function handleInput(event: React.FormEvent<HTMLInputElement>) {
+        // For number inputs, always commit on blur to avoid empty string vs 0 issues
+        if(isNumberInput) {
+            return;
+        }
+
+        // For text inputs, only update store if commit strategy is 'onChange'
+        if(commitStrategy === 'onChange') {
+            const inputValue = event.currentTarget.value;
+            fieldContext.handleChange(inputValue);
+        }
+    }
+
+    // Function to handle blur events
+    function handleBlur() {
+        // Commit value to store before validation if commit strategy is 'onBlur'
+        if(commitStrategy === 'onBlur' || isNumberInput) {
+            const element = inputReference.current;
+            if(element) {
+                // If number input, convert to a number
+                if(isNumberInput) {
+                    const rawValue = element.value;
+                    const numberValue = rawValue === '' ? 0 : Number(rawValue);
                     fieldContext.handleChange(numberValue);
                 }
+                // Otherwise, just use the string value
                 else {
-                    fieldContext.handleChange(inputValue);
+                    fieldContext.handleChange(element.value);
                 }
-            }}
-            onBlur={function () {
-                fieldContext.handleBlur();
-            }}
-        />
+            }
+        }
+
+        // Trigger validation
+        fieldContext.handleBlur();
+    }
+
+    // Function to handle key down events
+    function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+        // If Enter key is pressed and commit strategy is 'onBlur', commit value before form submission
+        if(event.key === 'Enter' && commitStrategy === 'onBlur' && !isNumberInput) {
+            const element = inputReference.current;
+            if(element) {
+                fieldContext.handleChange(element.value);
+            }
+        }
+    }
+
+    // Render the component
+    return (
+        <>
+            <InputText
+                {...properties}
+                ref={inputReference}
+                id={properties.id ?? fieldId}
+                name={properties.name ?? fieldContext.name}
+                defaultValue={defaultValue}
+                aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
+                onInput={handleInput}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
+            />
+            <FormUncontrolledInputSynchronizer inputReference={inputReference} fieldStore={fieldContext.store} />
+        </>
     );
 }

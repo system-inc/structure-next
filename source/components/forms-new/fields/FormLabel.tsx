@@ -35,11 +35,6 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
         return state.meta.errors;
     });
 
-    // Subscribe to value for interaction detection
-    const storeValue = useStore(fieldContext.store, function (state) {
-        return state.value;
-    });
-
     // Subscribe to touched state for interaction detection
     const storeTouched = useStore(fieldContext.store, function (state) {
         return state.meta.isTouched;
@@ -48,11 +43,24 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
     // Subscribe to successes reactively from field store
     const storeSuccesses = useStore(fieldContext.store, selectSuccesses);
 
+    // Determine if we need to subscribe to value based on showSuccesses timing
+    const showTiming = properties.showSuccesses ?? 'BlurOrNonEmpty';
+    const needsValueSubscription = showTiming === 'NonEmpty' || showTiming === 'OnBlurOrNonEmpty';
+
+    // Only subscribe to value if needed for success display logic
+    const storeValue = useStore(fieldContext.store, function (state) {
+        // Only subscribe if the timing requires checking value
+        if(needsValueSubscription) {
+            return state.value;
+        }
+        // Return undefined to avoid subscription when not needed
+        return undefined;
+    });
+
     // Filter out undefined errors
     const validErrors = storeErrors?.filter((error): error is string => error !== undefined);
 
     // Determine if we should show successes based on timing prop
-    const showTiming = properties.showSuccesses ?? 'BlurOrNonEmpty';
     const shouldShowSuccesses =
         showTiming === 'Always'
             ? true

@@ -84,6 +84,7 @@ export const InputText = React.forwardRef<HTMLInputElement, InputTextProperties>
             autoComplete={finalAutoComplete}
             autoCapitalize={finalAutoCapitalize}
             spellCheck={finalSpellCheck}
+            formNoValidate={true} // Disable native HTML5 validation, prefer our own
             {...inputProperties}
         />
     );

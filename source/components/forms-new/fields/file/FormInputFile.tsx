@@ -5,10 +5,14 @@ import React from 'react';
 
 // Dependencies - Hooks
 import { useFieldContext, useStore } from '../../useForm';
-import { useFileFieldMetadata } from '../../providers/FileFieldMetadataProvider';
+import { useFormSchema } from '../../providers/FormSchemaProvider';
 
 // Dependencies - Main Components
 import { InputFile, type DropZoneRenderProperties, type FileListItemRenderProperties } from './InputFile';
+
+// Dependencies - Schema
+import { ArraySchema } from '@structure/source/utilities/schema/schemas/ArraySchema';
+import { FileSchema } from '@structure/source/utilities/schema/schemas/FileSchema';
 
 // Component - FormInputFile
 export interface FormInputFileProperties {
@@ -21,8 +25,33 @@ export function FormInputFile(properties: FormInputFileProperties) {
     // Get field state and handlers from form context
     const fieldContext = useFieldContext<File[]>();
 
-    // Get file field metadata from schema (MIME types, size limits)
-    const fileFieldMetadata = useFileFieldMetadata();
+    // Get schema from context
+    const formSchemaContext = useFormSchema();
+    const schema = formSchemaContext.schema;
+
+    // Extract file field metadata directly from schema
+    const fileFieldMetadata = React.useMemo(
+        function () {
+            if(!schema || !fieldContext.name) return undefined;
+
+            const fieldSchema = schema.shape[fieldContext.name as string];
+            if(!fieldSchema) return undefined;
+
+            // Check if this is an array of files
+            if(fieldSchema instanceof ArraySchema) {
+                if(fieldSchema.itemSchema instanceof FileSchema) {
+                    return {
+                        mimeTypes: fieldSchema.itemSchema.allowedMimeTypes,
+                        maximumSizeInBytes: fieldSchema.itemSchema.allowedMaximumSizeInBytes,
+                        minimumSizeInBytes: fieldSchema.itemSchema.allowedMinimumSizeInBytes,
+                    };
+                }
+            }
+
+            return undefined;
+        },
+        [schema, fieldContext.name],
+    );
 
     // Subscribe to value reactively
     const storeValue = useStore(fieldContext.store, function (state) {

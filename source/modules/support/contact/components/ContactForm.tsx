@@ -125,7 +125,7 @@ export function ContactForm() {
                         {/* Field - Attachment Files */}
                         <form.Field identifier="attachmentFiles">
                             <form.Label label="Attachments" optional={true}>
-                                <form.InputFile multiple />
+                                <form.InputFile multiple={true} />
                             </form.Label>
                         </form.Field>
 
