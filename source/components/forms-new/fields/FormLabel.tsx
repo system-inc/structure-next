@@ -3,18 +3,16 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Hooks
+import { useFieldContext, useStore, selectSuccesses } from '../useForm';
+import { useFieldId } from '../providers/FormIdProvider';
+
 // Dependencies - Main Components
 import { Label } from '@radix-ui/react-label';
 
-// Dependencies - Form Context
-import { useFieldContext, useStore, selectSuccesses } from '../useForm';
-import type { ValidationResult } from '@structure/source/utilities/schema/Schema';
-
-// Dependencies - ID Utilities
-import { useFieldId } from '../providers/FormIdProvider';
-
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import type { ValidationResult } from '@structure/source/utilities/schema/Schema';
 
 // Component - FormLabel
 export interface FormLabelProperties<T extends HTMLElement> extends React.HTMLAttributes<T> {
@@ -27,20 +25,6 @@ export interface FormLabelProperties<T extends HTMLElement> extends React.HTMLAt
 export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties<T>) {
     // Defaults
     const showTiming = properties.showSuccesses ?? 'BlurOrNonEmpty';
-    const needsValueSubscription = showTiming === 'NonEmpty' || showTiming === 'OnBlurOrNonEmpty';
-
-    // Hooks
-    const fieldContext = useFieldContext<unknown>();
-    const fieldId = useFieldId(fieldContext.name);
-    const fieldStore = useStore(fieldContext.store, function (state) {
-        return {
-            errors: state.meta.errors,
-            isValidating: state.meta.isValidating,
-            isTouched: state.meta.isTouched,
-            successes: selectSuccesses(state),
-            value: needsValueSubscription ? state.value : undefined,
-        };
-    });
 
     // State - Store displayed errors and successes (preserved during validation)
     const [displayState, setDisplayState] = React.useState<{
@@ -51,20 +35,45 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
         successes: [],
     });
 
+    // Hooks
+    const fieldContext = useFieldContext();
+    const fieldId = useFieldId(fieldContext.name);
+
+    // Subscribe to individual meta properties (only what we need for rendering logic)
+    const storeIsValidating = useStore(fieldContext.store, function (state) {
+        return state.meta.isValidating;
+    });
+    const storeIsTouched = useStore(fieldContext.store, function (state) {
+        return state.meta.isTouched;
+    });
+    const storeValue = useStore(fieldContext.store, function (state) {
+        return state.value;
+    });
+
     // Effects - Update displayed state only when validation completes
     React.useEffect(
         function () {
-            if(!fieldStore.isValidating) {
-                // Validation complete - safe to update displayed errors and successes
-                setDisplayState({
-                    errors: fieldStore.errors ?? [],
-                    successes: fieldStore.successes ?? [],
+            if(!storeIsValidating) {
+                // Validation complete - read latest errors/successes from store
+                const currentState = fieldContext.store.state;
+                const newErrors = currentState.meta.errors ?? [];
+                const newSuccesses = selectSuccesses(currentState) ?? [];
+
+                // Only update if errors or successes actually changed (avoid unnecessary re-render)
+                setDisplayState(function (previousDisplayState) {
+                    if(previousDisplayState.errors === newErrors && previousDisplayState.successes === newSuccesses) {
+                        return previousDisplayState; // No change - prevent re-render
+                    }
+                    return {
+                        errors: newErrors,
+                        successes: newSuccesses,
+                    };
                 });
             }
             // During validation - keep showing previous errors and successes (no update)
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [fieldStore.isValidating], // Only re-run when validation state changes (intentionally omit errors/successes)
+        [storeIsValidating], // Only re-run when validation state changes (intentionally omit errors/successes)
     );
 
     // Filter out undefined errors
@@ -78,14 +87,13 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
         showTiming === 'Always'
             ? true
             : showTiming === 'OnBlur'
-              ? fieldStore.isTouched
+              ? storeIsTouched
               : showTiming === 'NonEmpty'
-                ? typeof fieldStore.value === 'string'
-                    ? fieldStore.value.length > 0
-                    : !!fieldStore.value
+                ? typeof storeValue === 'string'
+                    ? storeValue.length > 0
+                    : !!storeValue
                 : showTiming === 'OnBlurOrNonEmpty'
-                  ? fieldStore.isTouched ||
-                    (typeof fieldStore.value === 'string' ? fieldStore.value.length > 0 : !!fieldStore.value)
+                  ? storeIsTouched || (typeof storeValue === 'string' ? storeValue.length > 0 : !!storeValue)
                   : false;
 
     // Only show successes if there are no errors and we have successes to show
