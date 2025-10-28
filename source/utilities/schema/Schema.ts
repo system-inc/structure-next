@@ -14,32 +14,16 @@ export type Validator = (
     path: string[],
 ) => Promise<Partial<SchemaValidationResult>> | Partial<SchemaValidationResult>;
 
-// Interface - SchemaError
-// Validation error with path for nested schemas
-export interface SchemaError {
-    // Path to the field that failed validation, e.g., ['user', 'email'] for nested.user.email
+// Interface - ValidationResult
+// Validation result with path for nested schemas (used for both errors and successes)
+export interface ValidationResult {
+    // Path to the field, e.g., ['user', 'email'] for nested.user.email
     path: string[];
-    // Unique identifier for the error type, e.g., 'invalidEmailAddress', 'tooShort'
+    // Unique identifier for the result type, e.g., 'invalidEmailAddress', 'tooShort', 'validEmailAddress'
     identifier: string;
-    // Human-readable error message
+    // Human-readable message
     message: string;
-    // Optional reference to the validation rule that produced this error
-    validationRule?: {
-        identifier: string;
-        parameters?: Record<string, unknown>;
-    };
-}
-
-// Interface - SchemaSuccess
-// Validation success (for progressive validation UX showing what passed)
-export interface SchemaSuccess {
-    // Path to the field that passed validation
-    path: string[];
-    // Unique identifier for the success type, e.g., 'validEmailAddress', 'longEnough'
-    identifier: string;
-    // Human-readable success message
-    message: string;
-    // Optional reference to the validation rule that produced this success
+    // Optional reference to the validation rule that produced this result
     validationRule?: {
         identifier: string;
         parameters?: Record<string, unknown>;
@@ -54,9 +38,9 @@ export interface SchemaValidationResult<T = unknown> {
     // The validated/parsed value
     value: T;
     // All validation errors (empty array if valid)
-    errors: SchemaError[];
+    errors: ValidationResult[];
     // All validation successes (useful for progressive validation UX)
-    successes: SchemaSuccess[];
+    successes: ValidationResult[];
 }
 
 // Schema - Main Namespace Export

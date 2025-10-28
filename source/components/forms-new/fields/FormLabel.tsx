@@ -8,6 +8,7 @@ import { Label } from '@radix-ui/react-label';
 
 // Dependencies - Form Context
 import { useFieldContext, useStore, selectSuccesses } from '../useForm';
+import type { ValidationResult } from '@structure/source/utilities/schema/Schema';
 
 // Dependencies - ID Utilities
 import { useFieldId } from '../providers/FormIdProvider';
@@ -41,11 +42,39 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
         };
     });
 
+    // State - Store displayed errors and successes (preserved during validation)
+    const [displayState, setDisplayState] = React.useState<{
+        errors: Array<string | undefined>;
+        successes: ValidationResult[];
+    }>({
+        errors: [],
+        successes: [],
+    });
+
+    // Effects - Update displayed state only when validation completes
+    React.useEffect(
+        function () {
+            if(!fieldStore.isValidating) {
+                // Validation complete - safe to update displayed errors and successes
+                setDisplayState({
+                    errors: fieldStore.errors ?? [],
+                    successes: fieldStore.successes ?? [],
+                });
+            }
+            // During validation - keep showing previous errors and successes (no update)
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [fieldStore.isValidating], // Only re-run when validation state changes (intentionally omit errors/successes)
+    );
+
     // Filter out undefined errors
-    const validErrors = fieldStore.errors?.filter((error): error is string => error !== undefined);
+    const validErrors = displayState.errors?.filter((error): error is string => error !== undefined);
+
+    // Determine if we have errors to show
+    const hasErrors = validErrors && validErrors.length > 0;
 
     // Determine if we should show successes based on timing prop
-    const shouldShowSuccesses =
+    let shouldShowSuccesses =
         showTiming === 'Always'
             ? true
             : showTiming === 'OnBlur'
@@ -58,6 +87,9 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
                   ? fieldStore.isTouched ||
                     (typeof fieldStore.value === 'string' ? fieldStore.value.length > 0 : !!fieldStore.value)
                   : false;
+
+    // Only show successes if there are no errors and we have successes to show
+    shouldShowSuccesses = shouldShowSuccesses && !hasErrors && displayState.successes.length > 0;
 
     // Render the component
     return (
@@ -76,7 +108,7 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
                 {properties.caption && <p>{properties.caption}</p>}
 
                 {/* Errors */}
-                {validErrors && validErrors.length > 0 && (
+                {hasErrors && (
                     <div className="flex flex-col gap-1">
                         {validErrors.map(function (error, index) {
                             return (
@@ -89,22 +121,20 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
                 )}
 
                 {/* Successes (only show if no errors and interaction criteria met) */}
-                {shouldShowSuccesses &&
-                    (!validErrors || validErrors.length === 0) &&
-                    fieldStore.successes.length > 0 && (
-                        <div className="flex flex-col gap-1">
-                            {fieldStore.successes.map(function (success, index) {
-                                return (
-                                    <p
-                                        key={`success-${success.identifier}-${index}`}
-                                        className="whitespace-pre-line text-green-600 dark:text-green-400"
-                                    >
-                                        ✓ {success.message}
-                                    </p>
-                                );
-                            })}
-                        </div>
-                    )}
+                {shouldShowSuccesses && (
+                    <div className="flex flex-col gap-1">
+                        {displayState.successes.map(function (success, index) {
+                            return (
+                                <p
+                                    key={`success-${success.identifier}-${index}`}
+                                    className="whitespace-pre-line text-green-600 dark:text-green-400"
+                                >
+                                    ✓ {success.message}
+                                </p>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );

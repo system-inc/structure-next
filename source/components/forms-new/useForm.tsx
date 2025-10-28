@@ -29,7 +29,7 @@ import { FormInputTextArea } from './fields/text/FormInputTextArea';
 import { FormInputFile } from './fields/file/FormInputFile';
 
 // Dependencies - Utilities
-import type { SchemaSuccess } from '@structure/source/utilities/schema/Schema';
+import type { ValidationResult } from '@structure/source/utilities/schema/Schema';
 import type { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
 import type { BaseSchema } from '@structure/source/utilities/schema/schemas/BaseSchema';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -39,14 +39,14 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
  * Extends TanStack Form's field.meta to include success messages
  */
 interface SuccessMeta {
-    successes?: SchemaSuccess[];
+    successes?: ValidationResult[];
 }
 
 /**
  * Function - selectSuccesses
  * Reactive selector to extract successes from field store
  */
-export function selectSuccesses(state: { meta: unknown }): SchemaSuccess[] {
+export function selectSuccesses(state: { meta: unknown }): ValidationResult[] {
     return (state.meta as SuccessMeta)?.successes ?? [];
 }
 
@@ -54,7 +54,7 @@ export function selectSuccesses(state: { meta: unknown }): SchemaSuccess[] {
  * Function - setFieldSuccesses
  * Updates field meta with new success messages (immutable update)
  */
-export function setFieldSuccesses(field: AnyFieldApi, successes: SchemaSuccess[]): void {
+export function setFieldSuccesses(field: AnyFieldApi, successes: ValidationResult[]): void {
     field.setMeta(function (previousMeta) {
         return { ...previousMeta, successes } as typeof previousMeta;
     });
