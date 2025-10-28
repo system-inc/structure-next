@@ -11,6 +11,9 @@ import { useFieldId } from '../../providers/FormIdProvider';
 import { InputText } from './InputText';
 import { FormUncontrolledInputSynchronizer } from '../FormUncontrolledInputSynchronizer';
 
+// Dependencies - Utilities
+import { pause } from '@structure/source/utilities/type/Function';
+
 // Component - FormInputText
 export type FormInputTextProperties = Omit<
     React.ComponentProps<typeof InputText>,
@@ -79,12 +82,45 @@ export function FormInputText(properties: FormInputTextProperties) {
     }
 
     // Function to handle key down events
-    function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-        // If Enter key is pressed and commit strategy is 'onBlur', commit value before form submission
+    async function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+        // If Enter key is pressed and commit strategy is 'onBlur', validate and navigate
         if(event.key === 'Enter' && commitStrategy === 'onBlur' && !isNumberInput) {
+            event.preventDefault(); // Prevent default form submission
             const element = inputReference.current;
             if(element) {
+                // Commit value and validate
                 fieldContext.setValue(element.value, { dontValidate: true });
+                await fieldContext.handleBlur(); // Wait for validation to complete
+
+                // Wait a tick for the store to update with validation results
+                await pause(0);
+
+                // Check if field is valid (read fresh state from store)
+                const currentState = fieldContext.store.state;
+                const isFieldValid = !currentState.meta.errors || currentState.meta.errors.length === 0;
+
+                if(!isFieldValid) {
+                    // Field invalid - stay here, error is already shown
+                    return;
+                }
+
+                // Field is valid - find next focusable element or submit button
+                const form = element.closest('form');
+                if(form) {
+                    // Get all focusable form elements (inputs, textareas, buttons)
+                    const formElements = Array.from(
+                        form.querySelectorAll<HTMLElement>(
+                            'input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), button[type="submit"]:not([disabled])',
+                        ),
+                    );
+                    const currentIndex = formElements.indexOf(element);
+                    const nextElement = formElements[currentIndex + 1];
+
+                    // Focus the next element if it exists
+                    if(nextElement) {
+                        nextElement.focus();
+                    }
+                }
             }
         }
     }
