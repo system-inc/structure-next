@@ -44,7 +44,7 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
 
     // State - Store displayed errors and successes (preserved during validation)
     const [displayState, setDisplayState] = React.useState<{
-        errors: Array<string | undefined>;
+        errors: ValidationResult[];
         successes: ValidationResult[];
     }>({
         errors: [],
@@ -68,7 +68,7 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
     );
 
     // Filter out undefined errors
-    const validErrors = displayState.errors?.filter((error): error is string => error !== undefined);
+    const validErrors = displayState.errors?.filter((error): error is ValidationResult => error !== undefined);
 
     // Determine if we have errors to show
     const hasErrors = validErrors && validErrors.length > 0;
@@ -112,8 +112,11 @@ export function FormLabel<T extends HTMLElement>(properties: FormLabelProperties
                     <div className="flex flex-col gap-1">
                         {validErrors.map(function (error, index) {
                             return (
-                                <p key={index} className="whitespace-pre-line text-red-500">
-                                    {error}
+                                <p
+                                    key={`error-${error.identifier}-${index}`}
+                                    className="whitespace-pre-line text-red-500"
+                                >
+                                    {error.message}
                                 </p>
                             );
                         })}

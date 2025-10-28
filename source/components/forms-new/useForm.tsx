@@ -280,7 +280,7 @@ export function useForm<
                     // Auto-populate successes
                     setFieldSuccesses(field.fieldApi, result.successes);
 
-                    return result.valid ? undefined : result.errors?.[0]?.message;
+                    return result.valid ? undefined : result.errors?.[0];
                 };
 
                 // Return validators based on validateSchema prop
