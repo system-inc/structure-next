@@ -176,3 +176,72 @@ export function focusFirstFocusableElement(selector: string): void {
     // Focus the element if found
     focusable?.focus();
 }
+
+// Function to focus the next focusable form element after the current element
+// Uses label elements to determine field order, making it work with custom form components
+// Falls back to direct element navigation for unlabeled elements (like submit buttons)
+// Returns true if next element was found and focused, false otherwise
+export function focusNextFormElementByLabel(currentElement: HTMLElement): boolean {
+    const form = currentElement.closest('form');
+    if(!form) return false;
+
+    // Find all labels with 'for' attribute in the form (in DOM order)
+    const labels = Array.from(form.querySelectorAll<HTMLLabelElement>('label[for]'));
+
+    // Find the label that points to the current element
+    const currentLabel = labels.find(function (label) {
+        return label.htmlFor === currentElement.id;
+    });
+
+    if(!currentLabel) {
+        // Fallback: current element isn't labeled (e.g., submit button)
+        return focusNextFormElement(currentElement, form);
+    }
+
+    // Get the index of current label and find next label
+    const currentIndex = labels.indexOf(currentLabel);
+    const nextLabel = labels[currentIndex + 1];
+
+    if(nextLabel) {
+        // Find the element this label points to
+        const nextElement = document.getElementById(nextLabel.htmlFor);
+        if(nextElement && nextElement instanceof HTMLElement) {
+            nextElement.focus();
+            nextElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            return true;
+        }
+    }
+
+    // No next label found - try to find submit button
+    const submitButton = form.querySelector<HTMLElement>('button[type="submit"]:not([disabled])');
+    if(submitButton) {
+        submitButton.focus();
+        submitButton.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        return true;
+    }
+
+    return false;
+}
+
+// Function to focus the next focusable form element after the current element
+function focusNextFormElement(currentElement: HTMLElement, form: HTMLFormElement): boolean {
+    const formElements = Array.from(
+        form.querySelectorAll<HTMLElement>(
+            'input:not([type="hidden"]):not([disabled]), ' +
+                'textarea:not([disabled]), ' +
+                'select:not([disabled]), ' +
+                'button[type="submit"]:not([disabled])',
+        ),
+    );
+
+    const currentIndex = formElements.indexOf(currentElement);
+    const nextElement = formElements[currentIndex + 1];
+
+    if(nextElement) {
+        nextElement.focus();
+        nextElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        return true;
+    }
+
+    return false;
+}

@@ -13,6 +13,7 @@ import { FormUncontrolledInputSynchronizer } from '../FormUncontrolledInputSynch
 
 // Dependencies - Utilities
 import { pause } from '@structure/source/utilities/type/Function';
+import { focusNextFormElementByLabel } from '@structure/source/utilities/react/React';
 
 // Component - FormInputText
 export type FormInputTextProperties = Omit<
@@ -104,23 +105,8 @@ export function FormInputText(properties: FormInputTextProperties) {
                     return;
                 }
 
-                // Field is valid - find next focusable element or submit button
-                const form = element.closest('form');
-                if(form) {
-                    // Get all focusable form elements (inputs, textareas, buttons)
-                    const formElements = Array.from(
-                        form.querySelectorAll<HTMLElement>(
-                            'input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), button[type="submit"]:not([disabled])',
-                        ),
-                    );
-                    const currentIndex = formElements.indexOf(element);
-                    const nextElement = formElements[currentIndex + 1];
-
-                    // Focus the next element if it exists
-                    if(nextElement) {
-                        nextElement.focus();
-                    }
-                }
+                // Field is valid - move to next field or submit button
+                focusNextFormElementByLabel(element);
             }
         }
     }
