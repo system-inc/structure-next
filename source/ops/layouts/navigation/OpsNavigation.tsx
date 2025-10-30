@@ -13,7 +13,7 @@ import {
 import { OpsNavigationLinkGroup } from '@structure/source/ops/layouts/navigation/OpsNavigationLinkGroup';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Component - OpsNavigation
 export function OpsNavigation() {
@@ -32,7 +32,7 @@ export function OpsNavigation() {
                 }
 
                 // Administrator has access to everything
-                if(account.data.isAdministator()) {
+                if(account.data.isAdministrator()) {
                     return true;
                 }
 

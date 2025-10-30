@@ -13,7 +13,7 @@ import { NotSignedIn } from '@structure/source/components/notifications/NotSigne
 import { LineLoadingAnimation } from '@structure/source/components/animations/LineLoadingAnimation';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { AccountRole } from '@structure/source/modules/account/Account';
 
 // Component - AuthorizationLayout
@@ -33,36 +33,37 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     // Hooks
     const account = useAccount();
 
-    // Loading account or rendering on server
-    if(!account.signedIn && account.isLoading) {
-        return <LineLoadingAnimation />;
+    // Error loading account
+    if(account.error) {
+        return <ApiError error={account.error} />;
     }
-    // Not signed in
+    // Not signed in and no cached data available
     else if(!account.signedIn && !account.data) {
+        // Still loading initial account data
+        if(account.isLoading) {
+            return <LineLoadingAnimation />;
+        }
+        // Not signed in and not loading - show sign in prompt
         return (
             <React.Suspense fallback={null}>
                 <NotSignedIn />
             </React.Suspense>
         );
     }
-    // Error loading account
-    else if(account.error) {
-        return <ApiError error={account.error} />;
-    }
     // If accessibleRoles are defined, check if the user has any of those roles
     else if(accessibleRoles.length > 0) {
-        // Account info is still loading, wait
-        if(account.isLoading) {
-            return <LineLoadingAnimation />;
-        }
-
         // Account info insufficient to authorize
         if(!account.data) {
+            // Still loading account data
+            if(account.isLoading) {
+                return <LineLoadingAnimation />;
+            }
+            // Not loading and no data - not authorized
             return <NotAuthorized />;
         }
 
         // Check if the account has any of the accessible roles
-        if(!account.data.isAdministator() && !account.data.hasAnyRole(accessibleRoles)) {
+        if(!account.data.isAdministrator() && !account.data.hasAnyRole(accessibleRoles)) {
             return <NotAuthorized />;
         }
     }

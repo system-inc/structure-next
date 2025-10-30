@@ -165,3 +165,20 @@ export function parseGraphQlErrors(response: GraphQlResponseInterface): GraphQlE
 export function hasGraphQlErrors(response: GraphQlResponseInterface): boolean {
     return !!(response.errors || response.error || !response.data);
 }
+
+// Function to extract error code from a GraphQL error
+export function getGraphQlErrorCode(error: unknown): string | undefined {
+    if(!error) return undefined;
+
+    let graphQlError: GraphQlErrorInterface | undefined;
+
+    if(error instanceof GraphQlError && error.graphQlErrors?.[0]) {
+        graphQlError = error.graphQlErrors[0];
+    }
+    else if(error && typeof error === 'object' && ('errors' in error || 'error' in error || 'data' in error)) {
+        const response = error as GraphQlResponseInterface;
+        graphQlError = response.errors?.[0] || response.error;
+    }
+
+    return graphQlError?.extensions?.code;
+}

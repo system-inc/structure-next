@@ -16,12 +16,12 @@ import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
-import { GraphQlError, GraphQlDocument } from '@structure/source/api/graphql/GraphQlUtilities';
+import { GraphQlError, GraphQlDocument } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
-import { generateFormInputs } from '@structure/source/api/graphql/forms/GraphQlFormUtilities';
-import { extractGraphQlFormInputMetadataArrayFromGraphQlParameterMetadataArray } from '@structure/source/api/graphql/forms/GraphQlFormUtilities';
+import { generateFormInputs } from '@structure/source/api/graphql/forms/utilities/GraphQlFormUtilities';
+import { extractGraphQlFormInputMetadataArrayFromGraphQlParameterMetadataArray } from '@structure/source/api/graphql/forms/utilities/GraphQlFormUtilities';
 import {
     GraphQlFormSubmissionHandler,
     convertFormValuesToGraphQlMutationVariables,

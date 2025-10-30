@@ -9,7 +9,7 @@ import { EmailVerificationChallenge } from '@structure/source/modules/account/pa
 import { AccountPasswordChallenge } from '@structure/source/modules/account/pages/authentication/components/challenges/account-password/AccountPasswordChallenge';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';

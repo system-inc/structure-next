@@ -20,7 +20,7 @@ import {
     hasGraphQlErrors,
     parseGraphQlErrors,
     isDeviceIdRequiredError,
-} from '@structure/source/api/graphql/GraphQlUtilities';
+} from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 
 // Dependencies - Internal
 import { NetworkStatistics, NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';

@@ -10,7 +10,7 @@ import { TableRowProperties } from '@structure/source/components/tables/TableRow
 
 // Dependencies - API
 import { networkService, AnyTypedDocumentString } from '@structure/source/services/network/NetworkService';
-import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
+import { GraphQlError } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 
 // Helper types for GraphQL table data
 interface GraphQlTableItem {

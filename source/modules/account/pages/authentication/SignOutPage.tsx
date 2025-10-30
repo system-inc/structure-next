@@ -9,7 +9,7 @@ import { useRouter } from '@structure/source/router/Navigation';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Accounts
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Metadata
 export async function generateMetadata(): Promise<Metadata> {

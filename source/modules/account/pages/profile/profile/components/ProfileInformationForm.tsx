@@ -9,8 +9,8 @@ import { FormInputText } from '@structure/source/components/forms/FormInputText'
 import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
 
 // Dependencies - API
-import { useAccount, accountCacheKey } from '@structure/source/modules/account/providers/AccountProvider';
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
+import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/hooks/useAccountProfileUpdateRequest';
 
 // Interface - ProfileFormValues
 interface ProfileFormValues {
@@ -25,24 +25,7 @@ export function ProfileInformationForm() {
     // Hooks
     const notice = useNotice();
     const account = useAccount();
-    const accountProfileUpdateRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
-                accountProfileUpdate(input: $input) {
-                    username
-                    displayName
-                    givenName
-                    familyName
-                    images {
-                        url
-                        variant
-                    }
-                    updatedAt
-                    createdAt
-                }
-            }
-        `),
-    );
+    const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
 
     // Function to format phone number
     // function formatPhoneNumber(phoneNumber: string | null | undefined): string | undefined {
@@ -72,8 +55,8 @@ export function ProfileInformationForm() {
                     content: 'Your profile information has been updated successfully.',
                 });
 
-                // Invalidate account cache to refresh the profile data
-                networkService.invalidateCache([accountCacheKey]);
+                // Update account atom with fresh profile data
+                account.setData({ profile: result.accountProfileUpdate });
             }
 
             return {
@@ -94,7 +77,7 @@ export function ProfileInformationForm() {
             <h2 className="text-xl font-medium">Profile Information</h2>
 
             <Form
-                loading={account.isLoading}
+                loading={!account.data && account.isLoading}
                 className="mt-6"
                 formInputs={[
                     <FormInputText

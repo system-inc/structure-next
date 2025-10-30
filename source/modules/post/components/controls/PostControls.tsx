@@ -15,7 +15,7 @@ import { ProfileLink } from '@structure/source/modules/post/components/ProfileLi
 import { TimeAgo } from '@structure/source/components/time/TimeAgo';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Assets
 import CommentIcon from '@structure/assets/icons/communication/CommentIcon.svg';

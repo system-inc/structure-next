@@ -8,7 +8,7 @@ import React from 'react';
 import { SupportPostFeedbackDialog } from '@structure/source/modules/support/posts/components/SupportPostFeedbackDialog';
 
 // Dependencies - Account
-// import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+// import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

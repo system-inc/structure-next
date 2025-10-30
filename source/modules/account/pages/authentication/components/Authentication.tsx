@@ -17,7 +17,7 @@ import { AccountPasswordChallenge } from '@structure/source/modules/account/page
 // import { Duration } from '@structure/source/components/time/Duration';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
@@ -188,7 +188,7 @@ export function Authentication(properties: AuthenticationProperties) {
             // If the account is signed in
             if(account.data) {
                 // Close the authentication dialog
-                account.setAuthenticationDialogOpen(false);
+                account.setAuthenticationDialogSettings({ open: false });
 
                 // If a redirect URL is provided, redirect to that URL
                 if(redirectUrl) {

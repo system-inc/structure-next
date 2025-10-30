@@ -12,10 +12,11 @@ import { Dialog } from '@structure/source/components/dialogs/Dialog';
 import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - Account
-import { useAccount, accountCacheKey } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
+import { useAccountProfileUpdateRequest } from '@structure/source/modules/account/hooks/useAccountProfileUpdateRequest';
 
 // Dependencies - API
-import { networkService, gql } from '@structure/source/services/network/NetworkService';
+import { AccountProfileUsernameValidateDocument } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
@@ -27,24 +28,7 @@ import { ValidationSchema } from '@structure/source/utilities/validation/Validat
 export function UsernameForm() {
     // Hooks - API
     const account = useAccount();
-    const accountProfileUpdateRequest = networkService.useGraphQlMutation(
-        gql(`
-            mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
-                accountProfileUpdate(input: $input) {
-                    username
-                    displayName
-                    givenName
-                    familyName
-                    images {
-                        url
-                        variant
-                    }
-                    updatedAt
-                    createdAt
-                }
-            }
-        `),
-    );
+    const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
 
     // State
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
@@ -84,8 +68,8 @@ export function UsernameForm() {
                 setNewUsername(newUsername); // Synchronize newUsername with activeUsername
                 setUsernameUpdateSuccess(true);
 
-                // Invalidate account cache to refresh the profile data
-                networkService.invalidateCache([accountCacheKey]);
+                // Update account atom with fresh profile data
+                account.setData({ profile: result.accountProfileUpdate });
             }
         } catch {
             // Error is handled by the mutation's error state
@@ -115,7 +99,7 @@ export function UsernameForm() {
             <h2 className="text-xl font-medium">Change Username</h2>
 
             <Form
-                loading={account.isLoading}
+                loading={!account.data && account.isLoading}
                 className="mt-6"
                 formInputs={[
                     <FormInputText
@@ -126,11 +110,7 @@ export function UsernameForm() {
                         validateOnChange={true}
                         validateOnBlur={true}
                         validationSchema={new ValidationSchema().username(activeUsername).graphQlQuery(
-                            gql(`
-                                query AccountProfileUsernameValidate($username: String!) {
-                                    accountProfileUsernameValidate(username: $username)
-                                }
-                            `),
+                            AccountProfileUsernameValidateDocument,
                             function (value) {
                                 return {
                                     username: value,

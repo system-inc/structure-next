@@ -10,7 +10,7 @@ import { FormValuesInterface, FormSubmitResponseInterface } from '@structure/sou
 import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - API
-import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
+import { GraphQlError } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Types
 import { FormInputReferenceInterface } from '@structure/source/components/forms/FormInput';
-import { FormInputComponentAndProperties } from '@structure/source/api/graphql/forms/GraphQlFormUtilities';
+import { FormInputComponentAndProperties } from '@structure/source/api/graphql/forms/utilities/GraphQlFormUtilities';
 
 // Component - GraphQlFormInput
 // Registers a form input component instance in a shared reference map allowing other

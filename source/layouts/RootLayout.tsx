@@ -62,7 +62,7 @@ export interface RootLayoutProperties extends React.HTMLProps<HTMLHtmlElement> {
     bodyClassName?: string;
     mainClassName?: string;
     providersComponent?: React.ComponentType<{
-        accountSignedIn: boolean;
+        sessionIdHttpOnlyCookieExists: boolean;
         children: React.ReactNode;
     }>;
     children: React.ReactNode;
@@ -76,11 +76,12 @@ export async function RootLayout(properties: RootLayoutProperties) {
     // console.log('cookieStore', cookieStore);
 
     // Determine if the account is signed in based on if the sessionId HTTP-only cookie is set
-    // We use this to prevent unnecessary client-side calls to the server to check if the account is signed in
-    const accountSignedIn = cookieStore.get('sessionId')?.value ? true : false;
+    // We use this to tell the client whether to do a background account fetch
+    const sessionIdHttpOnlyCookieExists = cookieStore.get('sessionId')?.value ? true : false;
     // This will log to terminal, not the browser console, as it is server-side
-    // console.log('RootLayout: accountSignedIn', accountSignedIn, 'sessionId:', cookieStore.get('sessionId')?.value);
+    // console.log('RootLayout: sessionIdHttpOnlyCookieExists', sessionIdHttpOnlyCookieExists, 'sessionId:', cookieStore.get('sessionId')?.value);
 
+    // TODO: Refactor all of this theme stuff to "appearance"
     // Read the theme from the cookies, falling back to the project's default theme
     const theme = (cookieStore.get(themeKey)?.value ?? ProjectSettings.theme?.defaultTheme) as Theme;
 
@@ -112,8 +113,10 @@ export async function RootLayout(properties: RootLayoutProperties) {
                         properties.mainClassName,
                     )}
                 >
-                    {/* Providers use React's Context API to make values accessible to all components within their subtree */}
-                    <ProvidersComponent accountSignedIn={accountSignedIn}>{properties.children}</ProvidersComponent>
+                    {/* Providers - React's Context API makes values accessible to all components within their subtree */}
+                    <ProvidersComponent sessionIdHttpOnlyCookieExists={sessionIdHttpOnlyCookieExists}>
+                        {properties.children}
+                    </ProvidersComponent>
                 </main>
             </body>
         </html>

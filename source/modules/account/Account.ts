@@ -4,14 +4,10 @@ import { AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode
 // Dependencies - Account
 import { AccountRole } from './AccountRole';
 
-// Account variables shared across the application
-export const accountSignedInKey = 'AccountSignedIn';
-
 // Re-export AccountRole for convenience
 export { AccountRole };
 
 // Class - Account
-
 export class Account {
     // Account email address
     emailAddress: AccountQuery['account']['emailAddress'] | null | undefined;
@@ -26,17 +22,17 @@ export class Account {
 
     /**
      * Creates a new Account instance
-     * @param accountCurrentQueryData Data from the account GraphQL query
+     * @param accountQueryData Data from the account GraphQL query
      * @throws Error if account data is invalid
      */
-    constructor(accountCurrentQueryData: AccountQuery['account']) {
-        if(!accountCurrentQueryData) throw new Error('Invalid account data from GraphQL query.');
+    constructor(accountQueryData: AccountQuery['account']) {
+        if(!accountQueryData) throw new Error('Invalid account data from GraphQL query.');
 
-        this.createdAt = new Date(accountCurrentQueryData.createdAt);
-        this.emailAddress = accountCurrentQueryData.emailAddress;
-        this.profile = accountCurrentQueryData.profile;
-        this.accessRoles = accountCurrentQueryData.accessRoles;
-        this.entitlements = accountCurrentQueryData.entitlements;
+        this.emailAddress = accountQueryData.emailAddress;
+        this.profile = accountQueryData.profile;
+        this.accessRoles = accountQueryData.accessRoles;
+        this.entitlements = accountQueryData.entitlements;
+        this.createdAt = new Date(accountQueryData.createdAt);
     }
 
     /**
@@ -87,7 +83,7 @@ export class Account {
      * Checks if the account has Administrator role
      * @returns True if the account is an administrator
      */
-    isAdministator() {
+    isAdministrator() {
         return this.hasRole(AccountRole.Administrator);
     }
 

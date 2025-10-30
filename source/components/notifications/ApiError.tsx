@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { AlertProperties, Alert } from '@structure/source/components/notifications/Alert';
-import { GraphQlError } from '@structure/source/api/graphql/GraphQlUtilities';
+import { GraphQlError } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 
 // Component - NotAuthorized
 export interface ApiErrorProperties {

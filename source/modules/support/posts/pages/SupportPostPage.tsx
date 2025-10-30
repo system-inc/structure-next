@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { NavigationTrail } from '@structure/source/components/navigation/trail/NavigationTrail';
 import { SupportPostFeedback } from '@structure/source/modules/support/posts/components/SupportPostFeedback';
 import { Button } from '@structure/source/components/buttons/Button';
@@ -74,7 +74,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
     // Render the component
     return (
         <div className="container pt-8 pb-32">
-            {account.data?.isAdministator() && (
+            {account.data?.isAdministrator() && (
                 <div className="float-end flex space-x-2">
                     <Button
                         className="pl-3"

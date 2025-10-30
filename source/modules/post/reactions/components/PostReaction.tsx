@@ -12,7 +12,7 @@ import { usePostReactionDeleteRequest } from '@structure/source/modules/post/rea
 import { usePostReactionProfilesRequest } from '@structure/source/modules/post/reactions/hooks/usePostReactionProfilesRequest';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
@@ -81,7 +81,7 @@ export function PostReaction(properties: PostReactionProperties) {
         // If the user is not signed in
         else {
             // Show the sign in dialog
-            account.setAuthenticationDialogOpen(true);
+            account.setAuthenticationDialogSettings({ open: true });
         }
     }
 

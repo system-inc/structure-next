@@ -3,21 +3,18 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
-// Dependencies - URL State
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
-
-// Dependencies - Main Components
-import { Wrapper } from '@structure/source/utilities/react/Wrapper';
+// Dependencies - Hooks
+import { sessionIdHttpOnlyCookieExistsAtom } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Foundation Providers
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { CookiesProvider } from '@structure/source/utilities/cookie/CookiesProvider';
 import { Cookies } from '@structure/source/utilities/cookie/Cookies';
 import { NetworkServiceProvider } from '@structure/source/services/network/NetworkServiceProvider';
 
 // Dependencies - State Providers
 import { WebSocketViaSharedWorkerProvider } from '@structure/source/api/web-sockets/providers/WebSocketViaSharedWorkerProvider';
-import { AccountProvider } from '@structure/source/modules/account/providers/AccountProvider';
-import { SharedStateProvider } from '@structure/source/utilities/shared-state/SharedStateProvider';
+import { SharedStateProvider, globalStore } from '@structure/source/utilities/shared-state/SharedStateProvider';
 
 // Dependencies - Experience Providers
 import { ThemeProvider } from '@structure/source/theme/ThemeProvider';
@@ -29,70 +26,44 @@ import { EngagementProvider } from '@structure/source/modules/engagement/Engagem
 import { NoticeProvider } from '@structure/source/components/notifications/NoticeProvider';
 import { TipProvider } from '@structure/source/components/popovers/TipProvider';
 
+// Dependencies - Main Components
+import { AuthenticationDialog } from '@structure/source/modules/account/pages/authentication/components/dialogs/AuthenticationDialog';
+
 // Component - Providers
 export interface ProvidersProperties {
-    accountSignedIn: boolean;
-    foundationProviders?: React.ComponentType<{
-        children: React.ReactNode;
-    }>;
-    stateProviders?: React.ComponentType<{
-        children: React.ReactNode;
-    }>;
-    themeProviders?: React.ComponentType<{
-        children: React.ReactNode;
-    }>;
-    featureProviders?: React.ComponentType<{
-        children: React.ReactNode;
-    }>;
-    interactionProviders?: React.ComponentType<{
-        children: React.ReactNode;
-    }>;
+    sessionIdHttpOnlyCookieExists: boolean;
     children: React.ReactNode;
 }
 export function Providers(properties: ProvidersProperties) {
-    const FoundationProviders = properties.foundationProviders || Wrapper;
-    const StateProviders = properties.stateProviders || Wrapper;
-    const ThemeProviders = properties.themeProviders || Wrapper;
-    const FeatureProviders = properties.featureProviders || Wrapper;
-    const InteractionProviders = properties.interactionProviders || Wrapper;
+    // Set global state atom for sessionId HTTP-only cookie existence
+    // If the sessionId cookie exists, the user is signed in
+    // This is used to determine if the client should request account data from the server
+    globalStore.set(sessionIdHttpOnlyCookieExistsAtom, properties.sessionIdHttpOnlyCookieExists);
 
     // Render the component
     return (
-        // Foundation Providers
-        <NuqsAdapter>
-            <FoundationProviders>
+        <>
+            {/* Providers */}
+            <NuqsAdapter>
                 <NetworkServiceProvider>
                     <CookiesProvider cookies={Cookies}>
-                        {/* State Providers */}
-                        <StateProviders>
-                            <WebSocketViaSharedWorkerProvider>
-                                <SharedStateProvider>
-                                    <AccountProvider signedIn={properties.accountSignedIn}>
-                                        {/* Theme Providers */}
-                                        <ThemeProviders>
-                                            <ThemeProvider>
-                                                {/* Feature Providers */}
-                                                <FeatureProviders>
-                                                    <EngagementProvider>
-                                                        {/* Interaction Providers */}
-                                                        <InteractionProviders>
-                                                            <NoticeProvider>
-                                                                <TipProvider delayDuration={100}>
-                                                                    {properties.children}
-                                                                </TipProvider>
-                                                            </NoticeProvider>
-                                                        </InteractionProviders>
-                                                    </EngagementProvider>
-                                                </FeatureProviders>
-                                            </ThemeProvider>
-                                        </ThemeProviders>
-                                    </AccountProvider>
-                                </SharedStateProvider>
-                            </WebSocketViaSharedWorkerProvider>
-                        </StateProviders>
+                        <WebSocketViaSharedWorkerProvider>
+                            <SharedStateProvider>
+                                <ThemeProvider>
+                                    <EngagementProvider>
+                                        <NoticeProvider>
+                                            <TipProvider delayDuration={100}>{properties.children}</TipProvider>
+                                        </NoticeProvider>
+                                    </EngagementProvider>
+                                </ThemeProvider>
+                            </SharedStateProvider>
+                        </WebSocketViaSharedWorkerProvider>
                     </CookiesProvider>
                 </NetworkServiceProvider>
-            </FoundationProviders>
-        </NuqsAdapter>
+            </NuqsAdapter>
+
+            {/* Authentication dialog is outside of the Providers tree */}
+            <AuthenticationDialog />
+        </>
     );
 }

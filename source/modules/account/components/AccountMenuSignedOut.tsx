@@ -8,7 +8,7 @@ import React from 'react';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Accounts
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Component - AccountMenu
 export function AccountMenuSignedOut() {
@@ -26,7 +26,7 @@ export function AccountMenuSignedOut() {
                     variant="A"
                     className="w-full"
                     onClick={function () {
-                        account.setAuthenticationDialogOpen(true);
+                        account.setAuthenticationDialogSettings({ open: true });
                     }}
                 >
                     Sign In or Create Account

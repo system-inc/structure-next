@@ -45,7 +45,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                     {displayName}
                 </Link>
                 {/* If the account is an administrator */}
-                {properties.account.isAdministator() && <p className="mb-1.5 text-xs content--1">Administrator</p>}
+                {properties.account.isAdministrator() && <p className="mb-1.5 text-xs content--1">Administrator</p>}
             </div>
 
             <div className="flex flex-col py-3 text-[15px]">
@@ -54,7 +54,7 @@ export function AccountMenuSignedIn(properties: AccountMenuSignedInProperties) {
                 </Link>
 
                 {/* If the account is an administrator */}
-                {properties.account.isAdministator() && (
+                {properties.account.isAdministrator() && (
                     <Link variant="B" className={menuLinkClassNames} href="/ops">
                         Ops
                     </Link>

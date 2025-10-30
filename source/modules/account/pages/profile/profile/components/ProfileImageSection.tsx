@@ -7,7 +7,7 @@ import React from 'react';
 import { ProfileImageUploader } from '@structure/source/modules/account/components/ProfileImageUploader';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Animations
 import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
@@ -24,9 +24,7 @@ export function ProfileImageSection() {
     // Render the component
     return (
         <div className="mr-6">
-            {account.isLoading ? (
-                <PlaceholderAnimation className="h-32 w-32" />
-            ) : (
+            {account.data ? (
                 <ProfileImageUploader
                     className="h-32 w-32"
                     profileImageUrl={profileImageUrl}
@@ -35,6 +33,8 @@ export function ProfileImageSection() {
                         // The account provider will handle refreshing the account data
                     }}
                 />
+            ) : (
+                <PlaceholderAnimation className="h-32 w-32" />
             )}
         </div>
     );

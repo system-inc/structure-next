@@ -9,7 +9,7 @@ import { PostProperties } from '@structure/source/modules/post/components/Post';
 import { PostControl } from '@structure/source/modules/post/components/controls/PostControl';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - API
 import { PostVoteType } from '@structure/source/api/graphql/GraphQlGeneratedCode';
@@ -78,7 +78,7 @@ export function PostVoteControl(properties: PostVoteControlProperties) {
         // If the user is not signed in
         else {
             // Show the sign in dialog
-            account.setAuthenticationDialogOpen(true);
+            account.setAuthenticationDialogSettings({ open: true });
         }
     }
 

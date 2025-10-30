@@ -9,7 +9,7 @@ import { AccountMenu } from '@structure/source/modules/account/components/Accoun
 import { Popover } from '@structure/source/components/popovers/Popover';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Icons
 import { useUrlPath } from '@structure/source/router/Navigation';

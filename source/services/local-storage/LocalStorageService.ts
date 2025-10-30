@@ -327,7 +327,7 @@ class LocalStorageService {
     }
 
     // Function to get the prefixed key
-    private getPrefixedKey(key: string): string {
+    getPrefixedKey(key: string): string {
         // Concatenate project prefix with key for namespacing
         return `${this.prefix}${key}`;
     }

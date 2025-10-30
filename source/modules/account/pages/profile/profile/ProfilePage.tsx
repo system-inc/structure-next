@@ -10,7 +10,7 @@ import { UsernameForm } from '@structure/source/modules/account/pages/profile/pr
 import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Component - ProfilePage
 export function ProfilePage() {
@@ -28,35 +28,31 @@ export function ProfilePage() {
 
                 <div className="mt-4 md:mt-0">
                     {/* Display Name */}
-                    {account.isLoading ? (
-                        <PlaceholderAnimation className="h-8 w-48" />
+                    {account.data?.profileDisplayName ? (
+                        <h2 className="text-2xl font-semibold">{account.data.profileDisplayName}</h2>
                     ) : (
-                        account.data?.profileDisplayName && (
-                            <h2 className="text-2xl font-semibold">{account.data.profileDisplayName}</h2>
-                        )
+                        account.isLoading && <PlaceholderAnimation className="h-8 w-48" />
                     )}
 
                     {/* Username */}
-                    {account.isLoading ? (
-                        <PlaceholderAnimation className="mt-2 h-4 w-32" />
+                    {account.data?.profile?.username ? (
+                        <p className="mt-1 mb-2 text-sm content--1">@{account.data.profile.username}</p>
                     ) : (
-                        account.data?.profile?.username && (
-                            <p className="mt-1 mb-2 text-sm content--1">@{account.data.profile.username}</p>
-                        )
+                        account.isLoading && <PlaceholderAnimation className="mt-2 h-4 w-32" />
                     )}
 
                     {/* Joined Date */}
-                    {account.isLoading ? (
-                        <PlaceholderAnimation className="mt-2 h-4 w-40" />
-                    ) : (
+                    {account.data?.createdAt ? (
                         <p className="text-sm">
                             Joined{' '}
-                            {account.data?.createdAt.toLocaleDateString('en-US', {
+                            {account.data.createdAt.toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
                             })}
                         </p>
+                    ) : (
+                        account.isLoading && <PlaceholderAnimation className="mt-2 h-4 w-40" />
                     )}
                 </div>
             </div>

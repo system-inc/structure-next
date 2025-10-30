@@ -11,7 +11,7 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
 import { ContactListEntryCreateOperation } from '@structure/source/api/graphql/GraphQlGeneratedCode';
-import { isUniqueConstraintError } from '@structure/source/api/graphql/GraphQlUtilities';
+import { isUniqueConstraintError } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 
 // GraphQL Operations
 gql(`

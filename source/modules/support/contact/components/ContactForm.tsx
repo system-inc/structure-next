@@ -8,7 +8,7 @@ import { useUrlSearchParameters } from '@structure/source/router/Navigation';
 import { useForm } from '@structure/source/components/forms-new/useForm';
 
 // Dependencies - API
-import { useAccount } from '@structure/source/modules/account/providers/AccountProvider';
+import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import {
     supportTicketCreateRequestInputSchema,
     useSupportTicketCreateRequest,
@@ -60,7 +60,7 @@ export function ContactForm() {
                 form.setFieldValue('title', subject);
             }
         },
-        [urlSearchParameters, form, account.data],
+        [urlSearchParameters, form, account.data?.emailAddress],
     );
 
     // Effect to scroll to top when success state changes

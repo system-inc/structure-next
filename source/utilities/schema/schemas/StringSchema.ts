@@ -6,7 +6,7 @@ import { isValidEmailAddress, isValidUsername } from '../validators/StringValida
 
 // Dependencies - API (for GraphQL validation)
 import { networkService } from '@structure/source/services/network/NetworkService';
-import { GraphQlDocument } from '@structure/source/api/graphql/GraphQlUtilities';
+import { GraphQlDocument } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
 import { UniqueFieldValidationResult } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Class - StringSchema
