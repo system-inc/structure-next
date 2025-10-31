@@ -88,6 +88,21 @@ export function usePreviousValue<T>(value: T): T | undefined {
     return previous;
 }
 
+// Hook to always access the latest value of a variable without adding it to effect dependencies
+// Useful for accessing current props/state in stable callbacks without recreating them
+export function useLatestPropertyValue<T>(value: T): React.RefObject<T> {
+    const reference = React.useRef<T>(value);
+
+    React.useEffect(
+        function () {
+            reference.current = value;
+        },
+        [value],
+    );
+
+    return reference;
+}
+
 // Function to extract string content from React nodes recursively
 // Useful for searching or displaying text from complex React children
 // Returns undefined if no string content is found

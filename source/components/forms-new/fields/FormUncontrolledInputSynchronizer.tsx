@@ -35,6 +35,9 @@ export function setUncontrolledValue(element: HTMLInputElement | HTMLTextAreaEle
  * By isolating the subscription in this child component, the parent input component
  * does not re-render when the user types. Only this invisible component re-renders.
  *
+ * Smart Synchronization:
+ * - Only syncs when DOM value differs from store value
+ *
  * Architecture:
  * - Parent creates reference and writes to store (via handleChange)
  * - Parent does NOT subscribe to store (no re-render on typing)
@@ -73,7 +76,17 @@ export function FormUncontrolledInputSynchronizer(properties: FormUncontrolledIn
     React.useEffect(
         function () {
             const element = properties.inputReference.current;
+
+            // If no element, nothing to do
             if(!element) {
+                return;
+            }
+
+            // Determine the next value from the store (convert null/undefined to empty string)
+            const nextStoreValue = storeValue == null ? '' : String(storeValue);
+
+            // Only sync if the DOM value is different from the store value
+            if(element.value === nextStoreValue) {
                 return;
             }
 

@@ -182,3 +182,17 @@ export function getGraphQlErrorCode(error: unknown): string | undefined {
 
     return graphQlError?.extensions?.code;
 }
+
+// Function to safely convert unknown errors to GraphQlError
+export function toGraphQlError(error: unknown): GraphQlError {
+    // If already a GraphQlError, return as-is
+    if(error instanceof GraphQlError) {
+        return error;
+    }
+
+    // Convert Error or unknown to GraphQlError
+    const message = error instanceof Error ? error.message : String(error);
+    const networkError = error instanceof Error ? error : undefined;
+
+    return new GraphQlError(message, { networkError });
+}

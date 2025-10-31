@@ -12,10 +12,7 @@ import { InputTextArea } from './InputTextArea';
 import { FormUncontrolledInputSynchronizer } from '../FormUncontrolledInputSynchronizer';
 
 // Component - FormInputTextArea
-export type FormInputTextAreaProperties = Omit<
-    React.ComponentProps<typeof InputTextArea>,
-    'value' | 'defaultValue' | 'onChange' | 'onInput' | 'onBlur' | 'onKeyDown'
-> & {
+export type FormInputTextAreaProperties = Omit<React.ComponentProps<typeof InputTextArea>, 'value' | 'defaultValue'> & {
     commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onBlur')
 };
 export function FormInputTextArea(properties: FormInputTextAreaProperties) {
@@ -28,7 +25,7 @@ export function FormInputTextArea(properties: FormInputTextAreaProperties) {
     });
 
     // References
-    const textareaReference = React.useRef<HTMLTextAreaElement>(null);
+    const inputReference = React.useRef<HTMLTextAreaElement>(null);
 
     // State - Get initial value once for defaultValue (uncontrolled)
     const [defaultValue] = React.useState(function () {
@@ -39,19 +36,43 @@ export function FormInputTextArea(properties: FormInputTextAreaProperties) {
     const commitStrategy = properties.commit ?? 'onBlur';
 
     // Function to handle input changes while typing
-    function handleInput(event: React.FormEvent<HTMLTextAreaElement>) {
+    function onInputIntercept(event: React.FormEvent<HTMLTextAreaElement>) {
         // Only update store if commit strategy is 'onChange'
         if(commitStrategy === 'onChange') {
             const inputValue = event.currentTarget.value;
             fieldContext.handleChange(inputValue);
         }
+
+        // Call properties.onInput if it exists
+        properties.onInput?.(event);
+    }
+
+    // Function to handle key down events
+    function onKeyDownIntercept(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+        // If Enter key is pressed with Ctrl/Cmd and commit strategy is 'onBlur', commit value
+        // Note: In textareas, Enter creates new lines, so we only commit on Ctrl+Enter or Cmd+Enter
+        if(event.key === 'Enter' && (event.ctrlKey || event.metaKey) && commitStrategy === 'onBlur') {
+            const element = inputReference.current;
+            if(element) {
+                fieldContext.setValue(element.value, { dontValidate: true });
+            }
+        }
+
+        // Call properties.onKeyDown if it exists
+        properties.onKeyDown?.(event);
+    }
+
+    // Function to handle focus events
+    function onFocusIntercept(event: React.FocusEvent<HTMLTextAreaElement>) {
+        // Call properties.onFocus if it exists
+        properties.onFocus?.(event);
     }
 
     // Function to handle blur events
-    function handleBlur() {
+    function onBlurIntercept(event: React.FocusEvent<HTMLTextAreaElement>) {
         // Commit value to store without validation if commit strategy is 'onBlur'
         if(commitStrategy === 'onBlur') {
-            const element = textareaReference.current;
+            const element = inputReference.current;
             if(element) {
                 fieldContext.setValue(element.value, { dontValidate: true });
             }
@@ -59,18 +80,9 @@ export function FormInputTextArea(properties: FormInputTextAreaProperties) {
 
         // Trigger validation (only one validation cycle, no flash)
         fieldContext.handleBlur();
-    }
 
-    // Function to handle key down events
-    function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-        // If Enter key is pressed with Ctrl/Cmd and commit strategy is 'onBlur', commit value
-        // Note: In textareas, Enter creates new lines, so we only commit on Ctrl+Enter or Cmd+Enter
-        if(event.key === 'Enter' && (event.ctrlKey || event.metaKey) && commitStrategy === 'onBlur') {
-            const element = textareaReference.current;
-            if(element) {
-                fieldContext.setValue(element.value, { dontValidate: true });
-            }
-        }
+        // Call properties.onBlur if it exists
+        properties.onBlur?.(event);
     }
 
     // Render the component
@@ -78,16 +90,17 @@ export function FormInputTextArea(properties: FormInputTextAreaProperties) {
         <>
             <InputTextArea
                 {...properties}
-                ref={textareaReference}
+                ref={inputReference}
                 id={properties.id ?? fieldId}
                 name={properties.name ?? fieldContext.name}
                 defaultValue={defaultValue}
                 aria-invalid={storeErrors && storeErrors.length > 0 ? true : undefined}
-                onInput={handleInput}
-                onBlur={handleBlur}
-                onKeyDown={handleKeyDown}
+                onFocus={onFocusIntercept}
+                onInput={onInputIntercept}
+                onBlur={onBlurIntercept}
+                onKeyDown={onKeyDownIntercept}
             />
-            <FormUncontrolledInputSynchronizer inputReference={textareaReference} fieldStore={fieldContext.store} />
+            <FormUncontrolledInputSynchronizer inputReference={inputReference} fieldStore={fieldContext.store} />
         </>
     );
 }
