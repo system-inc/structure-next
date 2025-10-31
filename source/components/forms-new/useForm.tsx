@@ -62,9 +62,7 @@ const { useAppForm } = createFormHook({
 /**
  * Hook - useForm
  * Our public hook that mirrors TanStack's useForm generics and options
- * and returns the standard TanStack form API, extended with:
- *   - form.Form: a typed HTML <form> wrapper that provides TanStack context
- *   - form.bindField(field): typed helper for controlled inputs { value, onChange, onBlur }
+ * and returns the standard TanStack form API extended with additional components.
  *
  * TFormData is automatically inferred from the schema - no need to specify the type parameter.
  */
@@ -112,17 +110,19 @@ export function useForm<
     // differ semantically from "not set yet". This enforces the developer makes a
     // conscious choice about what "empty" means for these fields.
     if(process.env.NODE_ENV !== 'production') {
-        for(const [fieldName, fieldSchema] of Object.entries(schema.shape)) {
+        for(const [fieldIdentifier, fieldSchema] of Object.entries(schema.shape)) {
             const typeName = fieldSchema.typeName;
             const hasDefault = fieldSchema.getDefault() !== undefined;
-            const userProvidedDefault = options.defaultValues?.[fieldName as keyof TFormData] !== undefined;
+            const userProvidedDefault = options.defaultValues?.[fieldIdentifier as keyof TFormData] !== undefined;
 
             // Number and boolean fields MUST have a default (either in schema or user-provided)
             if((typeName === 'number' || typeName === 'boolean') && !hasDefault && !userProvidedDefault) {
                 throw new Error(
-                    `Form field "${fieldName}" is type "${typeName}" but has no default value. ` +
+                    `Form field "${fieldIdentifier}" is type "${typeName}" but has no default value. ` +
                         `Controlled inputs require a default. Add .default() to the schema field.\n` +
-                        `Example: ${fieldName}: schema.${typeName}().default(${typeName === 'number' ? '0' : 'false'})`,
+                        `Example: ${fieldIdentifier}: schema.${typeName}().default(${
+                            typeName === 'number' ? '0' : 'false'
+                        })`,
                 );
             }
         }
@@ -259,7 +259,7 @@ export function useForm<
             const validationTiming = validateSchema ?? 'onBlur';
 
             // Generate auto-validator if schema exists for this field
-            // Memoize based on schema, fieldName, and validationTiming to avoid rebuilding on every render
+            // Memoize based on schema, fieldIdentifier, and validationTiming to avoid rebuilding on every render
             const validatorsFromSchema = React.useMemo(
                 function () {
                     if(!schema || !fieldIdentifier || validationTiming === 'None') return undefined;
