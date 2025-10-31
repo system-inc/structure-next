@@ -33,6 +33,7 @@ export interface DropZoneRenderProperties {
 // Component - InputFileContent
 // Internal component that uses InputFileContext
 function InputFileContent(properties: {
+    id: string;
     multiple?: boolean;
     className?: string;
     renderDropZone?: (properties: DropZoneRenderProperties) => React.ReactNode;
@@ -140,6 +141,7 @@ function InputFileContent(properties: {
                 onClick={handleClick}
             >
                 <input
+                    id={properties.id}
                     type="file"
                     ref={inputReference}
                     className="sr-only"
@@ -157,6 +159,7 @@ function InputFileContent(properties: {
 // Component - InputFile
 // Complete file upload component with drop zone and file list
 export interface InputFileProperties {
+    id: string;
     files?: File[];
     onFilesChange?: (files: File[]) => void;
     accept?: string[];
@@ -169,6 +172,7 @@ export function InputFile(properties: InputFileProperties) {
     return (
         <InputFileDrop files={properties.files} onFilesChange={properties.onFilesChange} accept={properties.accept}>
             <InputFileContent
+                id={properties.id}
                 multiple={properties.multiple}
                 className={properties.className}
                 renderDropZone={properties.renderDropZone}

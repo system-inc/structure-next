@@ -6,11 +6,12 @@ import React from 'react';
 // Dependencies - Hooks
 import { useFieldContext, useStore } from '../../useForm';
 import { useFormSchema } from '../../providers/FormSchemaProvider';
+import { useFieldId } from '../../providers/FormIdProvider';
 
 // Dependencies - Main Components
 import { InputFile, type DropZoneRenderProperties, type FileListItemRenderProperties } from './InputFile';
 
-// Dependencies - Schema
+// Dependencies - Utilities
 import { ArraySchema } from '@structure/source/utilities/schema/schemas/ArraySchema';
 import { FileSchema } from '@structure/source/utilities/schema/schemas/FileSchema';
 
@@ -24,6 +25,7 @@ export interface FormInputFileProperties {
 export function FormInputFile(properties: FormInputFileProperties) {
     // Get field state and handlers from form context
     const fieldContext = useFieldContext<File[]>();
+    const fieldId = useFieldId(fieldContext.name);
 
     // Get schema from context
     const formSchemaContext = useFormSchema();
@@ -61,6 +63,7 @@ export function FormInputFile(properties: FormInputFileProperties) {
     // Pass everything to InputFile
     return (
         <InputFile
+            id={fieldId}
             files={storeValue}
             onFilesChange={function (newFiles) {
                 fieldContext.handleChange(newFiles);
