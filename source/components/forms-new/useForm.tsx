@@ -152,6 +152,16 @@ export function useForm<
     type AppFormType = typeof appForm;
 
     const formReference = React.useRef<HTMLFormElement | null>(null);
+    const requestAnimationFrameIdReference = React.useRef<number | null>(null);
+
+    // Cleanup requestAnimationFrame on unmount
+    React.useEffect(function () {
+        return function () {
+            if(requestAnimationFrameIdReference.current !== null) {
+                cancelAnimationFrame(requestAnimationFrameIdReference.current);
+            }
+        };
+    }, []);
 
     // Component - form.Form
     // HTML <form> wrapper bound to this form instance and context
@@ -170,8 +180,8 @@ export function useForm<
                 // After state settles, if invalid, focus/scroll the first invalid control
                 if(!appForm.store.state.isValid && formReference.current) {
                     // Wait a frame so DOM reflects the latest error state
-                    requestAnimationFrame(function () {
-                        const firstInvalid = formReference.current!.querySelector<HTMLElement>('[aria-invalid="true"]');
+                    requestAnimationFrameIdReference.current = requestAnimationFrame(function () {
+                        const firstInvalid = formReference.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
                         if(firstInvalid) {
                             // Focus the invalid field
                             const element = firstInvalid as HTMLElement & { focus: () => void };
@@ -179,6 +189,7 @@ export function useForm<
                             // Scroll into view smoothly
                             element.scrollIntoView({ block: 'center', behavior: 'smooth' });
                         }
+                        requestAnimationFrameIdReference.current = null;
                     });
                 }
 
@@ -213,20 +224,15 @@ export function useForm<
     // Capture the original TanStack Field once and never update it
     // CRITICAL: Do NOT let this reference get overwritten with our wrapper, or we get infinite recursion
     // This MUST be stable - if it changes, our Field wrapper will call itself (recursion)
-    // Intentionally omitting appForm.Field from dependencies to ensure we capture it exactly once
-    const OriginalField = React.useMemo(
-        function () {
-            return appForm.Field;
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [], // Empty dependencies, just capture once
-    );
+    // Use a reference to capture exactly once
+    const OriginalFieldReference = React.useRef(appForm.Field);
+    const OriginalField = OriginalFieldReference.current;
 
     // Extend Field properties to support both 'identifier' (public API) and 'name' (TanStack internal)
     type FieldName = Extract<keyof TFormData, string>;
     type ExtendedFieldProperties = Omit<OriginalFieldProperties, 'children' | 'name'> & {
         identifier: FieldName; // REQUIRED - Public API must use identifier (type-safe field names)
-        name?: OriginalFieldProperties['name']; // Optional - TanStack internal usage only
+        name?: FieldName; // Optional - TanStack internal usage only (type-safe)
         children?: React.ReactNode | OriginalFieldProperties['children'];
         validateSchema?: 'onChange' | 'onBlur' | 'Both' | 'None'; // When to run schema validation (default: 'onBlur')
     };
@@ -238,7 +244,7 @@ export function useForm<
             name,
             children,
             validateSchema,
-            ...restFieldProperties
+            ...fieldProperties
         }: ExtendedFieldProperties) {
             // Support both 'identifier' (public API) and 'name' (TanStack internal calls)
 
@@ -295,18 +301,23 @@ export function useForm<
             );
 
             // Merge auto-validators with user-provided validators
-            let mergedValidators = restFieldProperties.validators;
-            if(validatorsFromSchema) {
-                if(!restFieldProperties.validators) {
-                    mergedValidators = validatorsFromSchema;
-                }
-                else {
-                    // Merge: run schema validator first, then custom validator
-                    const customValidatorOnChangeAsync = restFieldProperties.validators.onChangeAsync;
-                    const customValidatorOnBlurAsync = restFieldProperties.validators.onBlurAsync;
+            // Memoize to avoid recreating validator objects on every render
+            const mergedValidators = React.useMemo(
+                function () {
+                    if(!validatorsFromSchema) {
+                        return fieldProperties.validators;
+                    }
 
-                    mergedValidators = {
-                        ...restFieldProperties.validators,
+                    if(!fieldProperties.validators) {
+                        return validatorsFromSchema;
+                    }
+
+                    // Merge: run schema validator first, then custom validator
+                    const customValidatorOnChangeAsync = fieldProperties.validators.onChangeAsync;
+                    const customValidatorOnBlurAsync = fieldProperties.validators.onBlurAsync;
+
+                    return {
+                        ...fieldProperties.validators,
                         // Merge schema onChange validator with custom onChange validator
                         onChangeAsync: async function (field: {
                             value: unknown;
@@ -338,22 +349,24 @@ export function useForm<
                             }
                         },
                     };
-                }
-            }
+                },
+                [validatorsFromSchema, fieldProperties.validators],
+            );
 
             // Stabilize the render-prop function so TanStack's OriginalField doesn't see it as "new content"
             // and remount the entire field subtree on every parent re-render.
-            // We use useLatest to access the current children without adding it to dependencies.
+            // We use useLatestPropertyValue to access the current children without adding it to dependencies.
             const childrenLatestPropertyValue = useLatestPropertyValue(children);
 
             // CRITICAL: renderFieldChildren MUST be stable (useCallback with empty dependencies)
             // If this function identity changes, TanStack Form sees it as "new content" and remounts the field subtree
+            // Read from reference.current inside the function to avoid adding a reference to dependencies
             const renderFieldChildren = React.useCallback(
                 function (field: AnyFieldApi) {
                     // Access latest children from reference (avoids dependency on recreated JSX objects)
                     const currentChildren = childrenLatestPropertyValue.current;
 
-                    // Support both function children (render-prop) and React node children (composition)
+                    // Support both function children (render-property) and React node children (composition)
                     const content =
                         typeof currentChildren === 'function'
                             ? (currentChildren as (field: AnyFieldApi) => React.ReactNode)(field)
@@ -361,7 +374,8 @@ export function useForm<
 
                     return <fieldContext.Provider value={field}>{content}</fieldContext.Provider>;
                 },
-                [childrenLatestPropertyValue],
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                [], // Empty dependencies - read from ref.current inside function to keep identity stable
             );
 
             // Guard against missing field name (after all hooks)
@@ -373,7 +387,7 @@ export function useForm<
             // OriginalField expects a render function that receives the field API
             // We pass a stable render-prop (renderFieldChildren) to prevent field subtree remounts
             return (
-                <OriginalField {...restFieldProperties} name={fieldIdentifier} validators={mergedValidators}>
+                <OriginalField {...fieldProperties} name={fieldIdentifier} validators={mergedValidators}>
                     {renderFieldChildren}
                 </OriginalField>
             );
@@ -395,6 +409,10 @@ export function useForm<
                 InputFile: FormInputFile,
             } as Record<PropertyKey, unknown>;
 
+            // Cache bound functions to prevent identity churn on every property access
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+            const functionCache = new Map<PropertyKey, Function>();
+
             // Create Proxy that intercepts property access
             const proxy = new Proxy(appForm, {
                 get(target, property, receiver) {
@@ -404,8 +422,16 @@ export function useForm<
                     }
                     // Otherwise, fall through to the original appForm (preserves getters like .state)
                     const value = Reflect.get(target, property, receiver);
-                    // Bind functions to preserve 'this' context for TanStack methods that might need it
-                    return typeof value === 'function' ? value.bind(target) : value;
+
+                    // For functions, return cached bound version to preserve identity
+                    if(typeof value === 'function') {
+                        if(!functionCache.has(property)) {
+                            functionCache.set(property, value.bind(target));
+                        }
+                        return functionCache.get(property);
+                    }
+
+                    return value;
                 },
             });
 

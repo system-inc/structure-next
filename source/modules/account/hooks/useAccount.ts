@@ -214,6 +214,8 @@ accountAtom.onMount = function (setAtom) {
 
         accountRequestInProgress = true;
 
+        // await new Promise((resolve) => setTimeout(resolve, 2500));
+
         // Mark the atom as loading
         setAtom(function (previousAccountState: AccountStateInterface) {
             return { ...previousAccountState, isLoading: true };
