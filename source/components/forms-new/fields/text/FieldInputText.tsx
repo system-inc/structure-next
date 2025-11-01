@@ -15,11 +15,11 @@ import { FormUncontrolledInputSynchronizer } from '../FormUncontrolledInputSynch
 import { pause } from '@structure/source/utilities/type/Function';
 import { focusNextFormElementByLabel } from '@structure/source/utilities/react/React';
 
-// Component - FormInputText
-export type FormInputTextProperties = Omit<React.ComponentProps<typeof InputText>, 'value' | 'defaultValue'> & {
+// Component - FieldInputText
+export type FieldInputTextProperties = Omit<React.ComponentProps<typeof InputText>, 'value' | 'defaultValue'> & {
     commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onBlur')
 };
-export function FormInputText(properties: FormInputTextProperties) {
+export function FieldInputText(properties: FieldInputTextProperties) {
     // Hooks
     const fieldContext = useFieldContext<string | number>();
     const fieldId = useFieldId(fieldContext.name);

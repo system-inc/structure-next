@@ -100,33 +100,29 @@ export function ContactForm() {
                     <form.Form className="mt-12 flex flex-col items-stretch gap-4">
                         {/* Field - Email Address */}
                         <form.Field identifier="emailAddress">
-                            <form.Label label="Your Email Address">
-                                <form.InputText type="email" />
-                            </form.Label>
+                            <form.FieldLabel>Your Email Address</form.FieldLabel>
+                            <form.FieldInputText type="email" />
                         </form.Field>
 
                         {/* Field - Title */}
                         <form.Field identifier="title">
-                            <form.Label label="Subject">
-                                <form.InputText placeholder="Briefly describe your message" />
-                            </form.Label>
+                            <form.FieldLabel>Subject</form.FieldLabel>
+                            <form.FieldInputText placeholder="Briefly describe your message" />
                         </form.Field>
 
                         {/* Field - Content */}
                         <form.Field identifier="content">
-                            <form.Label label="Message">
-                                <form.InputTextArea
-                                    placeholder="Please include any details that will help us assist you"
-                                    rows={8}
-                                />
-                            </form.Label>
+                            <form.FieldLabel>Message</form.FieldLabel>
+                            <form.FieldInputTextArea
+                                placeholder="Please include any details that will help us assist you"
+                                rows={8}
+                            />
                         </form.Field>
 
                         {/* Field - Attachment Files */}
                         <form.Field identifier="attachmentFiles">
-                            <form.Label label="Attachments" optional={true}>
-                                <form.InputFile multiple={true} />
-                            </form.Label>
+                            <form.FieldLabel>Attachments</form.FieldLabel>
+                            <form.FieldInputFile multiple={true} />
                         </form.Field>
 
                         {/* Submit Button */}

@@ -12,7 +12,7 @@ export interface ContactMessagePreviewProperties {
     title: string;
     content: string;
     emailAddress: string;
-    attachmentFiles: File[];
+    attachmentFiles?: File[];
 }
 export function ContactMessagePreview(properties: ContactMessagePreviewProperties) {
     // Render the component
@@ -39,7 +39,7 @@ export function ContactMessagePreview(properties: ContactMessagePreviewPropertie
                 </div>
 
                 <div className="flex flex-col items-stretch gap-2">
-                    {properties.attachmentFiles.map(function (file, index) {
+                    {properties.attachmentFiles?.map(function (file, index) {
                         const FileTypeIcon = iconForFileType(file.type);
                         return (
                             <div

@@ -16,10 +16,11 @@ import {
 // Dependencies - Form-Aware Components
 import { FormIdProvider } from './providers/FormIdProvider';
 import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
-import { FormLabel } from './fields/FormLabel';
-import { FormInputText } from './fields/text/FormInputText';
-import { FormInputTextArea } from './fields/text/FormInputTextArea';
-import { FormInputFile } from './fields/file/FormInputFile';
+import { FieldLabel } from './fields/FieldLabel';
+import { FieldMessage } from './fields/FieldMessage';
+import { FieldInputText } from './fields/text/FieldInputText';
+import { FieldInputTextArea } from './fields/text/FieldInputTextArea';
+import { FieldInputFile } from './fields/file/FieldInputFile';
 
 // Dependencies - Utilities
 import type { ValidationResult } from '@structure/source/utilities/schema/Schema';
@@ -235,6 +236,9 @@ export function useForm<
         name?: FieldName; // Optional - TanStack internal usage only (type-safe)
         children?: React.ReactNode | OriginalFieldProperties['children'];
         validateSchema?: 'onChange' | 'onBlur' | 'Both' | 'None'; // When to run schema validation (default: 'onBlur')
+        showMessage?: boolean; // Auto-render FieldMessage below children (default: true)
+        messageProperties?: React.ComponentProps<typeof FieldMessage>; // Props to pass to auto-rendered FieldMessage
+        className?: string; // CSS classes for the Field wrapper div
     };
 
     // Component - form.Field
@@ -244,6 +248,9 @@ export function useForm<
             name,
             children,
             validateSchema,
+            showMessage = true,
+            messageProperties,
+            className,
             ...fieldProperties
         }: ExtendedFieldProperties) {
             // Support both 'identifier' (public API) and 'name' (TanStack internal calls)
@@ -357,14 +364,20 @@ export function useForm<
             // and remount the entire field subtree on every parent re-render.
             // We use useLatestPropertyValue to access the current children without adding it to dependencies.
             const childrenLatestPropertyValue = useLatestPropertyValue(children);
+            const showMessageLatestPropertyValue = useLatestPropertyValue(showMessage);
+            const messagePropertiesLatestPropertyValue = useLatestPropertyValue(messageProperties);
+            const classNameLatestPropertyValue = useLatestPropertyValue(className);
 
             // CRITICAL: renderFieldChildren MUST be stable (useCallback with empty dependencies)
             // If this function identity changes, TanStack Form sees it as "new content" and remounts the field subtree
             // Read from reference.current inside the function to avoid adding a reference to dependencies
             const renderFieldChildren = React.useCallback(
                 function (field: AnyFieldApi) {
-                    // Access latest children from reference (avoids dependency on recreated JSX objects)
+                    // Access latest values from references (avoids dependency on recreated JSX objects)
                     const currentChildren = childrenLatestPropertyValue.current;
+                    const currentShowMessage = showMessageLatestPropertyValue.current;
+                    const currentMessageProperties = messagePropertiesLatestPropertyValue.current;
+                    const currentClassName = classNameLatestPropertyValue.current;
 
                     // Support both function children (render-property) and React node children (composition)
                     const content =
@@ -372,7 +385,14 @@ export function useForm<
                             ? (currentChildren as (field: AnyFieldApi) => React.ReactNode)(field)
                             : currentChildren;
 
-                    return <fieldContext.Provider value={field}>{content}</fieldContext.Provider>;
+                    return (
+                        <fieldContext.Provider value={field}>
+                            <div className={mergeClassNames('flex flex-col gap-2', currentClassName)}>
+                                {content}
+                                {currentShowMessage && <FieldMessage {...currentMessageProperties} />}
+                            </div>
+                        </fieldContext.Provider>
+                    );
                 },
                 // eslint-disable-next-line react-hooks/exhaustive-deps
                 [], // Empty dependencies - read from ref.current inside function to keep identity stable
@@ -403,10 +423,11 @@ export function useForm<
             const overrides = {
                 Form,
                 Field, // Our wrapped version (exposed on returned object, not on appForm)
-                Label: FormLabel,
-                InputText: FormInputText,
-                InputTextArea: FormInputTextArea,
-                InputFile: FormInputFile,
+                FieldLabel: FieldLabel,
+                FieldMessage: FieldMessage,
+                FieldInputText: FieldInputText,
+                FieldInputTextArea: FieldInputTextArea,
+                FieldInputFile: FieldInputFile,
             } as Record<PropertyKey, unknown>;
 
             // Cache bound functions to prevent identity churn on every property access
@@ -439,10 +460,11 @@ export function useForm<
             return proxy as typeof appForm & {
                 Form: typeof Form;
                 Field: typeof Field;
-                Label: typeof FormLabel;
-                InputText: typeof FormInputText;
-                InputTextArea: typeof FormInputTextArea;
-                InputFile: typeof FormInputFile;
+                FieldLabel: typeof FieldLabel;
+                FieldMessage: typeof FieldMessage;
+                FieldInputText: typeof FieldInputText;
+                FieldInputTextArea: typeof FieldInputTextArea;
+                FieldInputFile: typeof FieldInputFile;
             };
         },
         [appForm, Form, Field],
@@ -450,31 +472,3 @@ export function useForm<
 
     return extendedForm;
 }
-
-/**
- * Example: Using setFieldSuccesses in validators
- *
- * import { setFieldSuccesses } from '@structure/source/components/forms-new/useForm'
- * import { schema } from '@structure/source/utilities/schema/Schema'
- *
- * const emailSchema = schema.string().emailAddress().minimumLength(5)
- *
- * <form.Field
- *     name="email"
- *     validators={{
- *         onChangeAsync: async function(props) {
- *             const result = await emailSchema.validate(props.value)
- *
- *             // Write successes to field meta (reactive)
- *             setFieldSuccesses(props.fieldApi, result.successes)
- *
- *             // Return error message or undefined (standard TanStack pattern)
- *             return result.valid ? undefined : result.errors?.[0]?.message
- *         }
- *     }}
- * >
- *     <form.Label label="Email Address" showSuccessesWhen="BlurOrNonEmpty">
- *         <form.InputText />
- *     </form.Label>
- * </form.Field>
- */

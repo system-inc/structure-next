@@ -44,7 +44,7 @@ export class ObjectSchema<T extends ObjectShape> extends BaseSchema<
         };
 
         // Handle optional fields
-        if(this.isOptionalField && (value === undefined || value === null)) {
+        if(this.isOptionalValue && (value === undefined || value === null)) {
             return result;
         }
 

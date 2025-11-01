@@ -4,8 +4,8 @@ import { Validator, SchemaValidationResult } from '../Schema';
 // Class - BaseSchema
 // Abstract base class for all schema types providing validation orchestration and common modifiers
 export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
-    protected isOptionalField = false;
-    protected isNullableField = false;
+    protected isOptionalValue = false;
+    protected isNullableValue = false;
     protected validators: Validator[] = [];
     protected defaultValue?: TOutput;
 
@@ -32,17 +32,17 @@ export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
         };
 
         // Handle optional fields - allow undefined/null
-        if(this.isOptionalField && (value === undefined || value === null)) {
+        if(this.isOptionalValue && (value === undefined || value === null)) {
             return result;
         }
 
         // Handle nullable fields - allow null
-        if(this.isNullableField && value === null) {
+        if(this.isNullableValue && value === null) {
             return result;
         }
 
         // Required validation - if not optional and value is undefined/null/empty, fail
-        if(!this.isOptionalField && (value === undefined || value === null || value === '')) {
+        if(!this.isOptionalValue && (value === undefined || value === null || value === '')) {
             result.valid = false;
             result.errors.push({
                 path,
@@ -88,14 +88,19 @@ export abstract class BaseSchema<TInput = unknown, TOutput = TInput> {
     // Modifier - optional
     // Makes this field optional (can be undefined)
     optional(): BaseSchema<TInput | undefined, TOutput | undefined> {
-        this.isOptionalField = true;
+        this.isOptionalValue = true;
         return this as BaseSchema<TInput | undefined, TOutput | undefined>;
+    }
+
+    // Public getter - isOptional
+    get isOptional(): boolean {
+        return this.isOptionalValue;
     }
 
     // Modifier - nullable
     // Makes this field nullable (can be null)
     nullable(): BaseSchema<TInput | null, TOutput | null> {
-        this.isNullableField = true;
+        this.isNullableValue = true;
         return this as BaseSchema<TInput | null, TOutput | null>;
     }
 

@@ -11,11 +11,14 @@ import { useFieldId } from '../../providers/FormIdProvider';
 import { InputTextArea } from './InputTextArea';
 import { FormUncontrolledInputSynchronizer } from '../FormUncontrolledInputSynchronizer';
 
-// Component - FormInputTextArea
-export type FormInputTextAreaProperties = Omit<React.ComponentProps<typeof InputTextArea>, 'value' | 'defaultValue'> & {
+// Component - FieldInputTextArea
+export type FieldInputTextAreaProperties = Omit<
+    React.ComponentProps<typeof InputTextArea>,
+    'value' | 'defaultValue'
+> & {
     commit?: 'onChange' | 'onBlur'; // When to update form store (default: 'onBlur')
 };
-export function FormInputTextArea(properties: FormInputTextAreaProperties) {
+export function FieldInputTextArea(properties: FieldInputTextAreaProperties) {
     // Hooks
     const fieldContext = useFieldContext<string>();
     const fieldId = useFieldId(fieldContext.name);

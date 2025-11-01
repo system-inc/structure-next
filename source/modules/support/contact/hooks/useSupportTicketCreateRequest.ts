@@ -15,12 +15,14 @@ export const supportTicketCreateRequestInputSchema = schema.object({
     content: schema.string().notEmpty(),
     type: schema.string().is('Contact').default('Contact'),
     contentType: schema.string().in(['PlainText', 'Html', 'Markdown']).default('Markdown'),
-    attachmentFiles: schema.array(
-        schema
-            .file()
-            .mimeType(['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/json'])
-            .maximumSizeInBytes(1024 * 1024 * 5), // 5 MB
-    ),
+    attachmentFiles: schema
+        .array(
+            schema
+                .file()
+                .mimeType(['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/json'])
+                .maximumSizeInBytes(1024 * 1024 * 5), // 5 MB
+        )
+        .optional(),
 });
 
 // Hook - useSupportTicketCreateRequest
@@ -41,7 +43,7 @@ export function useSupportTicketCreateRequest() {
             }
 
             // Append attachment files to the form data
-            attachmentFiles.forEach(function (file) {
+            attachmentFiles?.forEach(function (file) {
                 formData.append('attachmentFiles', file);
             });
 

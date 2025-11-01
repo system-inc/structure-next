@@ -15,14 +15,14 @@ import { InputFile, type DropZoneRenderProperties, type FileListItemRenderProper
 import { ArraySchema } from '@structure/source/utilities/schema/schemas/ArraySchema';
 import { FileSchema } from '@structure/source/utilities/schema/schemas/FileSchema';
 
-// Component - FormInputFile
-export interface FormInputFileProperties {
+// Component - FieldInputFile
+export interface FieldInputFileProperties {
     className?: string;
     multiple?: boolean;
     renderDropZone?: (properties: DropZoneRenderProperties) => React.ReactNode;
     renderFileListItem?: (properties: FileListItemRenderProperties) => React.ReactNode;
 }
-export function FormInputFile(properties: FormInputFileProperties) {
+export function FieldInputFile(properties: FieldInputFileProperties) {
     // Get field state and handlers from form context
     const fieldContext = useFieldContext<File[]>();
     const fieldId = useFieldId(fieldContext.name);

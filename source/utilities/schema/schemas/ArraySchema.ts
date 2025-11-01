@@ -42,7 +42,21 @@ export class ArraySchema<TItem> extends BaseSchema<TItem[], TItem[]> {
         };
 
         // Handle optional fields
-        if(this.isOptionalField && (value === undefined || value === null)) {
+        if(this.isOptionalValue && (value === undefined || value === null)) {
+            return result;
+        }
+
+        // Required validation - treat empty array like undefined/null/empty string
+        if(
+            !this.isOptionalValue &&
+            (value === undefined || value === null || (Array.isArray(value) && value.length === 0))
+        ) {
+            result.valid = false;
+            result.errors.push({
+                path,
+                identifier: 'required',
+                message: 'Required.',
+            });
             return result;
         }
 
