@@ -206,12 +206,8 @@ export function useForm<
     // Typed Field override that injects FieldIdProvider and supports both child modes
     type OriginalFieldProperties = Parameters<AppFormType['Field']>[0];
 
-    // Capture the original TanStack Field once and never update it
-    // CRITICAL: Do NOT let this reference get overwritten with our wrapper, or we get infinite recursion
-    // This MUST be stable - if it changes, our Field wrapper will call itself (recursion)
-    // Use a reference to capture exactly once
-    const OriginalFieldReference = React.useRef(appForm.Field);
-    const OriginalField = OriginalFieldReference.current;
+    // Capture the original TanStack Field
+    const OriginalField = appForm.Field;
 
     // Extend Field properties to support both 'identifier' (public API) and 'name' (TanStack internal)
     // Component - form.Field
