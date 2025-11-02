@@ -21,6 +21,10 @@ const ReactExportRule = {
         // Track actual component implementations we find
         const implementedComponents = new Set();
 
+        // Track components that are defined inside other functions (like hooks)
+        // These don't need exports since they're internal helper components
+        const nestedComponents = new Set();
+
         // Determine if this is a page.tsx file that requires default export
         const filename = context.getFilename();
         const isPageFile = filename.endsWith('/page.tsx') || filename.endsWith('/page.jsx');
@@ -83,6 +87,22 @@ const ReactExportRule = {
                     return;
                 }
 
+                // Check if this function is nested inside another function
+                // Walk up the parent chain to see if we're inside a function body
+                let isNested = false;
+                let parent = node.parent;
+                while(parent) {
+                    if(
+                        parent.type === 'FunctionDeclaration' ||
+                        parent.type === 'FunctionExpression' ||
+                        parent.type === 'ArrowFunctionExpression'
+                    ) {
+                        isNested = true;
+                        break;
+                    }
+                    parent = parent.parent;
+                }
+
                 // Check if this is a React component by looking at the return value or JSX usage
                 let isReactComponent = false;
 
@@ -125,8 +145,13 @@ const ReactExportRule = {
                 if(isReactComponent || isNextJsPageFunction) {
                     implementedComponents.add(functionName);
 
-                    // Set as the main component if we don't have one yet
-                    if(!componentName) {
+                    // If it's nested inside another function, mark it as such
+                    if(isNested) {
+                        nestedComponents.add(functionName);
+                    }
+
+                    // Set as the main component if we don't have one yet (and it's not nested)
+                    if(!componentName && !isNested) {
                         componentName = functionName;
                     }
 
@@ -299,7 +324,14 @@ const ReactExportRule = {
                 }
 
                 // For regular component files (not Next.js special files), check that a named export exists
-                if(!hasNamedExport && componentName && !isPageFile && !isSpecialNextJsFile) {
+                // UNLESS the component is nested inside another function (like a hook)
+                if(
+                    !hasNamedExport &&
+                    componentName &&
+                    !isPageFile &&
+                    !isSpecialNextJsFile &&
+                    !nestedComponents.has(componentName)
+                ) {
                     // Named export is required for regular components
                     context.report({
                         node: node,
