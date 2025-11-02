@@ -128,17 +128,11 @@ export function useForm<
         }
     }
 
-    // Freeze defaultValues once (stabilize identity to prevent TanStack Form reinitialization)
-    const defaultValuesReference = React.useRef<TFormData | null>(null);
-    if(!defaultValuesReference.current) {
-        const schemaDefaults = schema.getDefaults();
-        defaultValuesReference.current = { ...schemaDefaults, ...(options.defaultValues ?? {}) } as TFormData;
-    }
-
-    // Merge options with stable defaultValues
+    // Merge schema defaults with user-provided defaults
+    const schemaDefaults = schema.getDefaults();
     const mergedOptions = {
         ...options,
-        defaultValues: defaultValuesReference.current!,
+        defaultValues: { ...schemaDefaults, ...(options.defaultValues ?? {}) } as TFormData,
     };
 
     // This is the fully-typed TanStack form instance with Field, Subscribe, AppForm, etc.
@@ -220,6 +214,7 @@ export function useForm<
     const OriginalField = OriginalFieldReference.current;
 
     // Extend Field properties to support both 'identifier' (public API) and 'name' (TanStack internal)
+    // Component - form.Field
     type FieldName = Extract<keyof TFormData, string>;
     type ExtendedFieldProperties = Omit<OriginalFieldProperties, 'children' | 'name'> & {
         identifier: FieldName; // REQUIRED - Public API must use identifier (type-safe field names)
@@ -230,8 +225,6 @@ export function useForm<
         messageProperties?: React.ComponentProps<typeof FieldMessage>; // Props to pass to auto-rendered FieldMessage
         className?: string; // CSS classes for the Field wrapper div
     };
-
-    // Component - form.Field
     function Field({
         identifier,
         name,
@@ -368,7 +361,6 @@ export function useForm<
         }
 
         // OriginalField expects a render function that receives the field API
-        // We pass a stable render-prop (renderFieldChildren) to prevent field subtree remounts
         return (
             <OriginalField {...fieldProperties} name={fieldIdentifier} validators={mergedValidators}>
                 {renderFieldChildren}
@@ -380,6 +372,7 @@ export function useForm<
     // CRITICAL: Do NOT mutate appForm - use Proxy to override specific properties
     // This preserves getters/accessors like .state while adding our extensions
     // The useMemo keeps the functionCache Map alive across renders (critical for stable method identity)
+    // If we do not useMemo here, everytime a component with a form inside renders it will wipe everything
     const extendedForm = React.useMemo(
         function () {
             const overrides = {
