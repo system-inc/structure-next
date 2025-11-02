@@ -255,14 +255,18 @@ export function useForm<
         const validationTiming = validateSchema ?? 'onBlur';
 
         // Generate auto-validator if schema exists for this field
-        // Memoize based on schema, fieldIdentifier, and validationTiming to avoid rebuilding on every render
-        const validatorsFromSchema = React.useMemo(
-            function () {
-                if(!schema || !fieldIdentifier || validationTiming === 'None') return undefined;
+        let validatorsFromSchema;
 
-                const fieldSchema = schema.shape[fieldIdentifier as string];
-                if(!fieldSchema) return undefined;
+        if(!schema || !fieldIdentifier || validationTiming === 'None') {
+            validatorsFromSchema = undefined;
+        }
+        else {
+            const fieldSchema = schema.shape[fieldIdentifier];
 
+            if(!fieldSchema) {
+                validatorsFromSchema = undefined;
+            }
+            else {
                 // Create the schema validation function
                 const schemaValidationFunction = async function (field: { value: unknown; fieldApi: AnyFieldApi }) {
                     const result = await fieldSchema.validate(field.value);
@@ -275,26 +279,26 @@ export function useForm<
 
                 // Return validators based on validateSchema prop
                 if(validationTiming === 'onChange') {
-                    return {
+                    validatorsFromSchema = {
                         onChangeAsync: schemaValidationFunction,
                     };
                 }
                 else if(validationTiming === 'onBlur') {
-                    return {
+                    validatorsFromSchema = {
                         onBlurAsync: schemaValidationFunction,
                     };
                 }
                 else if(validationTiming === 'Both') {
-                    return {
+                    validatorsFromSchema = {
                         onChangeAsync: schemaValidationFunction,
                         onBlurAsync: schemaValidationFunction,
                     };
                 }
-
-                return undefined;
-            },
-            [schema, fieldIdentifier, validationTiming],
-        );
+                else {
+                    validatorsFromSchema = undefined;
+                }
+            }
+        }
 
         // Merge auto-validators with user-provided validators
         let mergedValidators;
@@ -338,27 +342,24 @@ export function useForm<
         }
 
         // Render the field children
-        const renderFieldChildren = React.useCallback(
-            function (field: AnyFieldApi) {
-                // Support both function children (render-property) and React node children (composition)
-                // FieldInput components are protected by TanStack's field-level store subscriptions,
-                // so they only re-render when their specific field state changes.
-                const content =
-                    typeof children === 'function'
-                        ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
-                        : children;
+        // FieldInput components are protected by TanStack's field-level store subscriptions,
+        // so they only re-render when their specific field state changes.
+        function renderFieldChildren(field: AnyFieldApi) {
+            // Support both function children (render-property) and React node children (composition)
+            const content =
+                typeof children === 'function'
+                    ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
+                    : children;
 
-                return (
-                    <fieldContext.Provider value={field}>
-                        <div className={mergeClassNames('flex flex-col gap-2', className)}>
-                            {content}
-                            {showMessage && <FieldMessage {...messageProperties} />}
-                        </div>
-                    </fieldContext.Provider>
-                );
-            },
-            [children, showMessage, messageProperties, className],
-        );
+            return (
+                <fieldContext.Provider value={field}>
+                    <div className={mergeClassNames('flex flex-col gap-2', className)}>
+                        {content}
+                        {showMessage && <FieldMessage {...messageProperties} />}
+                    </div>
+                </fieldContext.Provider>
+            );
+        }
 
         // Guard against missing field name (after all hooks)
         if(!fieldIdentifier) {
