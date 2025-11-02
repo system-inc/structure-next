@@ -277,7 +277,7 @@ export const AnimatedButton = React.forwardRef<HTMLElement, AnimatedButtonProper
             const processingAnimationTimeout = processingAnimationTimeoutReference.current;
             const tipResetTimeout = tipResetTimeoutReference.current;
 
-            // Listen to changes in the processing property
+            // Listen to changes in the isProcessing property
             if(isProcessing !== undefined) {
                 // If the processing state changed
                 if(isProcessingState !== isProcessing) {

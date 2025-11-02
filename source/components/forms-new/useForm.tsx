@@ -136,16 +136,10 @@ export function useForm<
     }
 
     // Merge options with stable defaultValues
-    // CRITICAL: Only defaultValues identity matters for preventing TanStack Form reinitialization
-    const mergedOptions = React.useMemo(
-        function () {
-            return {
-                ...options,
-                defaultValues: defaultValuesReference.current!,
-            };
-        },
-        [options],
-    );
+    const mergedOptions = {
+        ...options,
+        defaultValues: defaultValuesReference.current!,
+    };
 
     // This is the fully-typed TanStack form instance with Field, Subscribe, AppForm, etc.
     const appForm = useAppForm(mergedOptions);
@@ -168,55 +162,52 @@ export function useForm<
     type FormProperties = React.FormHTMLAttributes<HTMLFormElement> & {
         children?: React.ReactNode;
     };
-    const Form: React.FC<FormProperties> = React.useCallback(
-        function ({ onSubmit, className, children, ...formProperties }: FormProperties) {
-            async function handleSubmitWithFocus(event: React.FormEvent<HTMLFormElement>) {
-                event.preventDefault();
-                event.stopPropagation();
+    function Form({ onSubmit, className, children, ...formProperties }: FormProperties) {
+        async function handleSubmitWithFocus(event: React.FormEvent<HTMLFormElement>) {
+            event.preventDefault();
+            event.stopPropagation();
 
-                // Run TanStack form submit; it will trigger validation
-                await appForm.handleSubmit();
+            // Run TanStack form submit; it will trigger validation
+            await appForm.handleSubmit();
 
-                // After state settles, if invalid, focus/scroll the first invalid control
-                if(!appForm.store.state.isValid && formReference.current) {
-                    // Wait a frame so DOM reflects the latest error state
-                    requestAnimationFrameIdReference.current = requestAnimationFrame(function () {
-                        const firstInvalid = formReference.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
-                        if(firstInvalid) {
-                            // Focus the invalid field
-                            const element = firstInvalid as HTMLElement & { focus: () => void };
-                            element.focus?.();
-                            // Scroll into view smoothly
-                            element.scrollIntoView({ block: 'center', behavior: 'smooth' });
-                        }
-                        requestAnimationFrameIdReference.current = null;
-                    });
-                }
-
-                // Allow optional user onSubmit after our work
-                onSubmit?.(event);
+            // After state settles, if invalid, focus/scroll the first invalid control
+            if(!appForm.store.state.isValid && formReference.current) {
+                // Wait a frame so DOM reflects the latest error state
+                requestAnimationFrameIdReference.current = requestAnimationFrame(function () {
+                    const firstInvalid = formReference.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+                    if(firstInvalid) {
+                        // Focus the invalid field
+                        const element = firstInvalid as HTMLElement & { focus: () => void };
+                        element.focus?.();
+                        // Scroll into view smoothly
+                        element.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                    }
+                    requestAnimationFrameIdReference.current = null;
+                });
             }
 
-            // Render the component
-            return (
-                <FormIdProvider>
-                    <FormSchemaProvider schema={schema}>
-                        <appForm.AppForm>
-                            <form
-                                {...formProperties}
-                                ref={formReference}
-                                className={mergeClassNames(className)}
-                                onSubmit={handleSubmitWithFocus}
-                            >
-                                {children}
-                            </form>
-                        </appForm.AppForm>
-                    </FormSchemaProvider>
-                </FormIdProvider>
-            );
-        },
-        [appForm, schema],
-    );
+            // Allow optional user onSubmit after our work
+            onSubmit?.(event);
+        }
+
+        // Render the component
+        return (
+            <FormIdProvider>
+                <FormSchemaProvider schema={schema}>
+                    <appForm.AppForm>
+                        <form
+                            {...formProperties}
+                            ref={formReference}
+                            className={mergeClassNames(className)}
+                            onSubmit={handleSubmitWithFocus}
+                        >
+                            {children}
+                        </form>
+                    </appForm.AppForm>
+                </FormSchemaProvider>
+            </FormIdProvider>
+        );
+    }
 
     // Typed Field override that injects FieldIdProvider and supports both child modes
     type OriginalFieldProperties = Parameters<AppFormType['Field']>[0];
@@ -241,167 +232,153 @@ export function useForm<
     };
 
     // Component - form.Field
-    const Field = React.useCallback(
-        function FieldComponent({
-            identifier,
-            name,
-            children,
-            validateSchema,
-            showMessage = true,
-            messageProperties,
-            className,
-            ...fieldProperties
-        }: ExtendedFieldProperties) {
-            // Support both 'identifier' (public API) and 'name' (TanStack internal calls)
+    function Field({
+        identifier,
+        name,
+        children,
+        validateSchema,
+        showMessage = true,
+        messageProperties,
+        className,
+        ...fieldProperties
+    }: ExtendedFieldProperties) {
+        // Support both 'identifier' (public API) and 'name' (TanStack internal calls)
 
-            // Use identifier if provided (user-facing), otherwise use name (TanStack internal)
-            const fieldIdentifier = identifier ?? name;
+        // Use identifier if provided (user-facing), otherwise use name (TanStack internal)
+        const fieldIdentifier = identifier ?? name;
 
-            // Get schema from context (must be called before any early returns)
-            const formSchemaContext = useFormSchema();
-            const schema = formSchemaContext.schema;
+        // Get schema from context (must be called before any early returns)
+        const formSchemaContext = useFormSchema();
+        const schema = formSchemaContext.schema;
 
-            // Get validation timing (default: 'onBlur')
-            const validationTiming = validateSchema ?? 'onBlur';
+        // Get validation timing (default: 'onBlur')
+        const validationTiming = validateSchema ?? 'onBlur';
 
-            // Generate auto-validator if schema exists for this field
-            // Memoize based on schema, fieldIdentifier, and validationTiming to avoid rebuilding on every render
-            const validatorsFromSchema = React.useMemo(
-                function () {
-                    if(!schema || !fieldIdentifier || validationTiming === 'None') return undefined;
+        // Generate auto-validator if schema exists for this field
+        // Memoize based on schema, fieldIdentifier, and validationTiming to avoid rebuilding on every render
+        const validatorsFromSchema = React.useMemo(
+            function () {
+                if(!schema || !fieldIdentifier || validationTiming === 'None') return undefined;
 
-                    const fieldSchema = schema.shape[fieldIdentifier as string];
-                    if(!fieldSchema) return undefined;
+                const fieldSchema = schema.shape[fieldIdentifier as string];
+                if(!fieldSchema) return undefined;
 
-                    // Create the schema validation function
-                    const schemaValidationFunction = async function (field: { value: unknown; fieldApi: AnyFieldApi }) {
-                        const result = await fieldSchema.validate(field.value);
+                // Create the schema validation function
+                const schemaValidationFunction = async function (field: { value: unknown; fieldApi: AnyFieldApi }) {
+                    const result = await fieldSchema.validate(field.value);
 
-                        // Auto-populate successes
-                        setFieldSuccesses(field.fieldApi, result.successes);
+                    // Auto-populate successes
+                    setFieldSuccesses(field.fieldApi, result.successes);
 
-                        return result.valid ? undefined : result.errors?.[0];
-                    };
+                    return result.valid ? undefined : result.errors?.[0];
+                };
 
-                    // Return validators based on validateSchema prop
-                    if(validationTiming === 'onChange') {
-                        return {
-                            onChangeAsync: schemaValidationFunction,
-                        };
-                    }
-                    else if(validationTiming === 'onBlur') {
-                        return {
-                            onBlurAsync: schemaValidationFunction,
-                        };
-                    }
-                    else if(validationTiming === 'Both') {
-                        return {
-                            onChangeAsync: schemaValidationFunction,
-                            onBlurAsync: schemaValidationFunction,
-                        };
-                    }
-
-                    return undefined;
-                },
-                [schema, fieldIdentifier, validationTiming],
-            );
-
-            // Merge auto-validators with user-provided validators
-            // Memoize to avoid recreating validator objects on every render
-            const mergedValidators = React.useMemo(
-                function () {
-                    if(!validatorsFromSchema) {
-                        return fieldProperties.validators;
-                    }
-
-                    if(!fieldProperties.validators) {
-                        return validatorsFromSchema;
-                    }
-
-                    // Merge: run schema validator first, then custom validator
-                    const customValidatorOnChangeAsync = fieldProperties.validators.onChangeAsync;
-                    const customValidatorOnBlurAsync = fieldProperties.validators.onBlurAsync;
-
+                // Return validators based on validateSchema prop
+                if(validationTiming === 'onChange') {
                     return {
-                        ...fieldProperties.validators,
-                        // Merge schema onChange validator with custom onChange validator
-                        onChangeAsync: async function (field: {
-                            value: unknown;
-                            fieldApi: AnyFieldApi;
-                            signal: AbortSignal;
-                        }) {
-                            // Run schema validation first (if exists)
-                            const schemaError = await validatorsFromSchema.onChangeAsync?.(field);
-                            if(schemaError) return schemaError;
-
-                            // Then run custom validation if provided (only if it's a function)
-                            if(typeof customValidatorOnChangeAsync === 'function') {
-                                return await customValidatorOnChangeAsync(field as never);
-                            }
-                        },
-                        // Merge schema onBlur validator with custom blur validator
-                        onBlurAsync: async function (field: {
-                            value: unknown;
-                            fieldApi: AnyFieldApi;
-                            signal: AbortSignal;
-                        }) {
-                            // Run schema validation first (if exists)
-                            const schemaError = await validatorsFromSchema.onBlurAsync?.(field);
-                            if(schemaError) return schemaError;
-
-                            // Then run custom validation if provided (only if it's a function)
-                            if(typeof customValidatorOnBlurAsync === 'function') {
-                                return await customValidatorOnBlurAsync(field as never);
-                            }
-                        },
+                        onChangeAsync: schemaValidationFunction,
                     };
+                }
+                else if(validationTiming === 'onBlur') {
+                    return {
+                        onBlurAsync: schemaValidationFunction,
+                    };
+                }
+                else if(validationTiming === 'Both') {
+                    return {
+                        onChangeAsync: schemaValidationFunction,
+                        onBlurAsync: schemaValidationFunction,
+                    };
+                }
+
+                return undefined;
+            },
+            [schema, fieldIdentifier, validationTiming],
+        );
+
+        // Merge auto-validators with user-provided validators
+        let mergedValidators;
+
+        if(!validatorsFromSchema) {
+            mergedValidators = fieldProperties.validators;
+        }
+        else if(!fieldProperties.validators) {
+            mergedValidators = validatorsFromSchema;
+        }
+        else {
+            // Merge: run schema validator first, then custom validator
+            const customValidatorOnChangeAsync = fieldProperties.validators.onChangeAsync;
+            const customValidatorOnBlurAsync = fieldProperties.validators.onBlurAsync;
+
+            mergedValidators = {
+                ...fieldProperties.validators,
+                // Merge schema onChange validator with custom onChange validator
+                onChangeAsync: async function (field: { value: unknown; fieldApi: AnyFieldApi; signal: AbortSignal }) {
+                    // Run schema validation first (if exists)
+                    const schemaError = await validatorsFromSchema.onChangeAsync?.(field);
+                    if(schemaError) return schemaError;
+
+                    // Then run custom validation if provided (only if it's a function)
+                    if(typeof customValidatorOnChangeAsync === 'function') {
+                        return await customValidatorOnChangeAsync(field as never);
+                    }
                 },
-                [validatorsFromSchema, fieldProperties.validators],
-            );
+                // Merge schema onBlur validator with custom blur validator
+                onBlurAsync: async function (field: { value: unknown; fieldApi: AnyFieldApi; signal: AbortSignal }) {
+                    // Run schema validation first (if exists)
+                    const schemaError = await validatorsFromSchema.onBlurAsync?.(field);
+                    if(schemaError) return schemaError;
 
-            // Render the field children
-            const renderFieldChildren = React.useCallback(
-                function (field: AnyFieldApi) {
-                    // Support both function children (render-property) and React node children (composition)
-                    // FieldInput components are protected by TanStack's field-level store subscriptions,
-                    // so they only re-render when their specific field state changes.
-                    const content =
-                        typeof children === 'function'
-                            ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
-                            : children;
-
-                    return (
-                        <fieldContext.Provider value={field}>
-                            <div className={mergeClassNames('flex flex-col gap-2', className)}>
-                                {content}
-                                {showMessage && <FieldMessage {...messageProperties} />}
-                            </div>
-                        </fieldContext.Provider>
-                    );
+                    // Then run custom validation if provided (only if it's a function)
+                    if(typeof customValidatorOnBlurAsync === 'function') {
+                        return await customValidatorOnBlurAsync(field as never);
+                    }
                 },
-                [children, showMessage, messageProperties, className],
-            );
+            };
+        }
 
-            // Guard against missing field name (after all hooks)
-            if(!fieldIdentifier) {
-                console.error('Field component did not receive an identifier.');
-                return null;
-            }
+        // Render the field children
+        const renderFieldChildren = React.useCallback(
+            function (field: AnyFieldApi) {
+                // Support both function children (render-property) and React node children (composition)
+                // FieldInput components are protected by TanStack's field-level store subscriptions,
+                // so they only re-render when their specific field state changes.
+                const content =
+                    typeof children === 'function'
+                        ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
+                        : children;
 
-            // OriginalField expects a render function that receives the field API
-            // We pass a stable render-prop (renderFieldChildren) to prevent field subtree remounts
-            return (
-                <OriginalField {...fieldProperties} name={fieldIdentifier} validators={mergedValidators}>
-                    {renderFieldChildren}
-                </OriginalField>
-            );
-        },
-        [OriginalField],
-    );
+                return (
+                    <fieldContext.Provider value={field}>
+                        <div className={mergeClassNames('flex flex-col gap-2', className)}>
+                            {content}
+                            {showMessage && <FieldMessage {...messageProperties} />}
+                        </div>
+                    </fieldContext.Provider>
+                );
+            },
+            [children, showMessage, messageProperties, className],
+        );
+
+        // Guard against missing field name (after all hooks)
+        if(!fieldIdentifier) {
+            console.error('Field component did not receive an identifier.');
+            return null;
+        }
+
+        // OriginalField expects a render function that receives the field API
+        // We pass a stable render-prop (renderFieldChildren) to prevent field subtree remounts
+        return (
+            <OriginalField {...fieldProperties} name={fieldIdentifier} validators={mergedValidators}>
+                {renderFieldChildren}
+            </OriginalField>
+        );
+    }
 
     // Preserve the full TanStack API and add our extensions
     // CRITICAL: Do NOT mutate appForm - use Proxy to override specific properties
     // This preserves getters/accessors like .state while adding our extensions
+    // The useMemo keeps the functionCache Map alive across renders (critical for stable method identity)
     const extendedForm = React.useMemo(
         function () {
             const overrides = {
@@ -451,7 +428,8 @@ export function useForm<
                 FieldInputFile: typeof FieldInputFile;
             };
         },
-        [appForm, Form, Field],
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [appForm], // Only depend on appForm - Form/Field are defined in this hook and captured in closure
     );
 
     return extendedForm;
