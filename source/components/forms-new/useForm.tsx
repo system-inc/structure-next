@@ -27,7 +27,6 @@ import type { ValidationResult } from '@structure/source/utilities/schema/Schema
 import type { ObjectSchema, ObjectShape } from '@structure/source/utilities/schema/schemas/ObjectSchema';
 import type { BaseSchema } from '@structure/source/utilities/schema/schemas/BaseSchema';
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-import { useLatestPropertyValue } from '@structure/source/utilities/react/React';
 
 // Re-export TanStack Form types and hooks
 export { useField, useStore, type FormApi, type FieldApi } from '@tanstack/react-form';
@@ -360,42 +359,27 @@ export function useForm<
                 [validatorsFromSchema, fieldProperties.validators],
             );
 
-            // Stabilize the render-prop function so TanStack's OriginalField doesn't see it as "new content"
-            // and remount the entire field subtree on every parent re-render.
-            // We use useLatestPropertyValue to access the current children without adding it to dependencies.
-            const childrenLatestPropertyValue = useLatestPropertyValue(children);
-            const showMessageLatestPropertyValue = useLatestPropertyValue(showMessage);
-            const messagePropertiesLatestPropertyValue = useLatestPropertyValue(messageProperties);
-            const classNameLatestPropertyValue = useLatestPropertyValue(className);
-
-            // CRITICAL: renderFieldChildren MUST be stable (useCallback with empty dependencies)
-            // If this function identity changes, TanStack Form sees it as "new content" and remounts the field subtree
-            // Read from reference.current inside the function to avoid adding a reference to dependencies
+            // Render the field children
             const renderFieldChildren = React.useCallback(
                 function (field: AnyFieldApi) {
-                    // Access latest values from references (avoids dependency on recreated JSX objects)
-                    const currentChildren = childrenLatestPropertyValue.current;
-                    const currentShowMessage = showMessageLatestPropertyValue.current;
-                    const currentMessageProperties = messagePropertiesLatestPropertyValue.current;
-                    const currentClassName = classNameLatestPropertyValue.current;
-
                     // Support both function children (render-property) and React node children (composition)
+                    // FieldInput components are protected by TanStack's field-level store subscriptions,
+                    // so they only re-render when their specific field state changes.
                     const content =
-                        typeof currentChildren === 'function'
-                            ? (currentChildren as (field: AnyFieldApi) => React.ReactNode)(field)
-                            : currentChildren;
+                        typeof children === 'function'
+                            ? (children as (field: AnyFieldApi) => React.ReactNode)(field)
+                            : children;
 
                     return (
                         <fieldContext.Provider value={field}>
-                            <div className={mergeClassNames('flex flex-col gap-2', currentClassName)}>
+                            <div className={mergeClassNames('flex flex-col gap-2', className)}>
                                 {content}
-                                {currentShowMessage && <FieldMessage {...currentMessageProperties} />}
+                                {showMessage && <FieldMessage {...messageProperties} />}
                             </div>
                         </fieldContext.Provider>
                     );
                 },
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                [], // Empty dependencies - read from ref.current inside function to keep identity stable
+                [children, showMessage, messageProperties, className],
             );
 
             // Guard against missing field name (after all hooks)
