@@ -7,6 +7,7 @@ import React from 'react';
 import {
     createFormHook,
     createFormHookContexts,
+    useStore,
     type FormOptions,
     type AnyFieldApi,
     type FormValidateOrFn,
@@ -379,6 +380,10 @@ export function useForm<
                 FieldInputText: FieldInputText,
                 FieldInputTextArea: FieldInputTextArea,
                 FieldInputFile: FieldInputFile,
+                // Add useStore convenience wrapper - allows form.useStore(selector) instead of useStore(form.store, selector)
+                useStore: function <TSelected>(selector: (state: typeof appForm.store.state) => TSelected): TSelected {
+                    return useStore(appForm.store, selector);
+                },
             } as Record<PropertyKey, unknown>;
 
             // Cache bound functions to prevent identity churn on every property access
@@ -416,6 +421,7 @@ export function useForm<
                 FieldInputText: typeof FieldInputText;
                 FieldInputTextArea: typeof FieldInputTextArea;
                 FieldInputFile: typeof FieldInputFile;
+                useStore: <TSelected>(selector: (state: typeof appForm.store.state) => TSelected) => TSelected;
             };
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

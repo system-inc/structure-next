@@ -227,14 +227,8 @@ export function focusNextFormElementByLabel(currentElement: HTMLElement): boolea
         }
     }
 
-    // No next label found - try to find submit button
-    const submitButton = form.querySelector<HTMLElement>('button[type="submit"]:not([disabled])');
-    if(submitButton) {
-        submitButton.focus();
-        submitButton.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        return true;
-    }
-
+    // No next field found - return false to indicate this is the last field
+    // The caller can decide whether to submit the form or focus the submit button
     return false;
 }
 

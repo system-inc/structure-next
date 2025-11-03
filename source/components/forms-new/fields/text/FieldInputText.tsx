@@ -82,8 +82,12 @@ export function FieldInputText(properties: FieldInputTextProperties) {
                     return;
                 }
 
-                // Field is valid - move to next field or submit button
-                focusNextFormElementByLabel(element);
+                // Field is valid - move to next field or submit form
+                const hasNextField = focusNextFormElementByLabel(element);
+                if(!hasNextField) {
+                    // This is the last field - submit the form
+                    element.form?.requestSubmit();
+                }
             }
         }
 
