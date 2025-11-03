@@ -2206,7 +2206,18 @@ export type ContactListEntryCreateMutationVariables = Exact<{
 
 export type ContactListEntryCreateMutation = {
     __typename?: 'Mutation';
-    contactListEntryCreate: { __typename?: 'ContactListEntry'; id: string; emailAddress: string };
+    contactListEntryCreate: { __typename?: 'ContactListEntry'; id: string };
+};
+
+export type ContactListEntryUnsubscribeMutationVariables = Exact<{
+    contactListIdentifier: Scalars['String']['input'];
+    emailAddress: Scalars['String']['input'];
+    reason?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type ContactListEntryUnsubscribeMutation = {
+    __typename?: 'Mutation';
+    contactListEntryUnsubscribe: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type DataInteractionDatabaseTableMetricsQueryVariables = Exact<{
@@ -3173,10 +3184,23 @@ export const ContactListEntryCreateDocument = new TypedDocumentString(`
     mutation ContactListEntryCreate($data: ContactListEntryInput!) {
   contactListEntryCreate(data: $data) {
     id
-    emailAddress
   }
 }
     `) as unknown as TypedDocumentString<ContactListEntryCreateMutation, ContactListEntryCreateMutationVariables>;
+export const ContactListEntryUnsubscribeDocument = new TypedDocumentString(`
+    mutation ContactListEntryUnsubscribe($contactListIdentifier: String!, $emailAddress: String!, $reason: String) {
+  contactListEntryUnsubscribe(
+    contactListIdentifier: $contactListIdentifier
+    emailAddress: $emailAddress
+    reason: $reason
+  ) {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<
+    ContactListEntryUnsubscribeMutation,
+    ContactListEntryUnsubscribeMutationVariables
+>;
 export const DataInteractionDatabaseTableMetricsDocument = new TypedDocumentString(`
     query DataInteractionDatabaseTableMetrics($input: DataInteractionDatabaseTableMetricsQueryInput!) {
   dataInteractionDatabaseTableMetrics(input: $input) {
@@ -5423,6 +5447,34 @@ export const ContactListEntryCreateOperation: GraphQLOperationMetadata<typeof Co
             required: true,
             kind: 'object',
             type: GraphQLInputTypes.ContactListEntryInput,
+        },
+    ],
+};
+
+export const ContactListEntryUnsubscribeOperation: GraphQLOperationMetadata<
+    typeof ContactListEntryUnsubscribeDocument
+> = {
+    operation: 'ContactListEntryUnsubscribe',
+    operationType: 'mutation',
+    document: ContactListEntryUnsubscribeDocument,
+    parameters: [
+        {
+            parameter: 'contactListIdentifier',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'emailAddress',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'reason',
+            required: false,
+            kind: 'scalar',
+            type: 'String',
         },
     ],
 };

@@ -16,7 +16,7 @@ import { Account } from '@structure/source/modules/account/Account';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
-import { AccountDocument, type AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
+import { type AccountQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Services
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
@@ -223,7 +223,31 @@ accountAtom.onMount = function (setAtom) {
 
         // Perform the GraphQL request
         try {
-            const accountRequest = await networkService.graphQlRequest(AccountDocument);
+            const accountRequest = await networkService.graphQlRequest(
+                gql(`
+                    query Account {
+                        account {
+                            emailAddress
+                            profile {
+                                id
+                                username
+                                displayName
+                                givenName
+                                familyName
+                                images {
+                                    url
+                                    variant
+                                }
+                                updatedAt
+                                createdAt
+                            }
+                            accessRoles
+                            entitlements
+                            createdAt
+                        }
+                    }
+                `),
+            );
 
             // If signed in
             if(accountRequest.account) {
