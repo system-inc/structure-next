@@ -19,9 +19,6 @@ import { FormIdProvider } from './providers/FormIdProvider';
 import { FormSchemaProvider, useFormSchema } from './providers/FormSchemaProvider';
 import { FieldLabel } from './fields/FieldLabel';
 import { FieldMessage } from './fields/FieldMessage';
-import { FieldInputText } from './fields/text/FieldInputText';
-import { FieldInputTextArea } from './fields/text/FieldInputTextArea';
-import { FieldInputFile } from './fields/file/FieldInputFile';
 
 // Dependencies - Utilities
 import type { ValidationResult } from '@structure/source/utilities/schema/Schema';
@@ -377,9 +374,6 @@ export function useForm<
                 Field, // Our wrapped version (exposed on returned object, not on appForm)
                 FieldLabel: FieldLabel,
                 FieldMessage: FieldMessage,
-                FieldInputText: FieldInputText,
-                FieldInputTextArea: FieldInputTextArea,
-                FieldInputFile: FieldInputFile,
                 // Add useStore convenience wrapper - allows form.useStore(selector) instead of useStore(form.store, selector)
                 useStore: function <TSelected>(selector: (state: typeof appForm.store.state) => TSelected): TSelected {
                     return useStore(appForm.store, selector);
@@ -418,9 +412,6 @@ export function useForm<
                 Field: typeof Field;
                 FieldLabel: typeof FieldLabel;
                 FieldMessage: typeof FieldMessage;
-                FieldInputText: typeof FieldInputText;
-                FieldInputTextArea: typeof FieldInputTextArea;
-                FieldInputFile: typeof FieldInputFile;
                 useStore: <TSelected>(selector: (state: typeof appForm.store.state) => TSelected) => TSelected;
             };
         },

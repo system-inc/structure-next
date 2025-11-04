@@ -15,6 +15,9 @@ import {
 } from '@structure/source/modules/support/contact/hooks/useSupportTicketCreateRequest';
 
 // Dependencies - Main Components
+import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
+import { FieldInputTextArea } from '@structure/source/components/forms-new/fields/text/FieldInputTextArea';
+import { FieldInputFile } from '@structure/source/components/forms-new/fields/file/FieldInputFile';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
 import { ContactMessagePreview } from './ContactMessagePreview';
 
@@ -101,19 +104,19 @@ export function ContactForm() {
                         {/* Field - Email Address */}
                         <form.Field identifier="emailAddress">
                             <form.FieldLabel>Your Email Address</form.FieldLabel>
-                            <form.FieldInputText type="email" />
+                            <FieldInputText type="email" />
                         </form.Field>
 
                         {/* Field - Title */}
                         <form.Field identifier="title">
                             <form.FieldLabel>Subject</form.FieldLabel>
-                            <form.FieldInputText placeholder="Briefly describe your message" />
+                            <FieldInputText placeholder="Briefly describe your message" />
                         </form.Field>
 
                         {/* Field - Content */}
                         <form.Field identifier="content">
                             <form.FieldLabel>Message</form.FieldLabel>
-                            <form.FieldInputTextArea
+                            <FieldInputTextArea
                                 placeholder="Please include any details that will help us assist you"
                                 rows={8}
                             />
@@ -122,7 +125,7 @@ export function ContactForm() {
                         {/* Field - Attachment Files */}
                         <form.Field identifier="attachmentFiles">
                             <form.FieldLabel>Attachments</form.FieldLabel>
-                            <form.FieldInputFile multiple={true} />
+                            <FieldInputFile multiple={true} />
                         </form.Field>
 
                         {/* Submit Button */}

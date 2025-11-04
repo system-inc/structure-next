@@ -13,6 +13,7 @@ import {
 } from '../../hooks/useContactListEntryCreateRequest';
 
 // Dependencies - Main Components
+import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
 
 // Dependencies - Animation
@@ -119,7 +120,7 @@ export function FooterContactListEntryForm({
             >
                 <form.FieldLabel>{label}</form.FieldLabel>
                 <div className="flex items-center gap-2">
-                    <form.FieldInputText
+                    <FieldInputText
                         size="Large"
                         type="email"
                         disabled={contactListEntryCreateRequest.isLoading}
