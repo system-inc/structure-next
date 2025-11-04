@@ -217,6 +217,18 @@
                         "type": "String",
                         "required": false,
                         "name": "timeZone"
+                    },
+                    {
+                        "kind": "object",
+                        "type": "ColumnFilterGroupInput",
+                        "required": false,
+                        "name": "filters"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "distinctColumnName"
                     }
                 ]
             },

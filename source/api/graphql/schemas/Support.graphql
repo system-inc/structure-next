@@ -33,7 +33,7 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-type ImageObject {
+type GqlMediaObject {
     type: MediaObjectType!
     url: String!
     variant: String
@@ -43,12 +43,6 @@ type ImageObject {
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSON
-
-type MediaObject {
-    type: MediaObjectType!
-    url: String!
-    variant: String
-}
 
 enum MediaObjectType {
     File
@@ -104,7 +98,7 @@ type PaginationSupportTicketResult {
 type PublicProfile {
     createdAt: DateTimeISO
     displayName: String
-    images: [ImageObject!]
+    images: [GqlMediaObject!]
     username: String!
 }
 
@@ -129,7 +123,7 @@ type SupportTicket {
     answeredAt: DateTimeISO
     assignedToProfile: PublicProfile
     assignedToProfileId: String
-    attachments: [MediaObject!]
+    attachments: [GqlMediaObject!]
     comments: [SupportTicketComment!]!
     createdAt: DateTimeISO!
     description: String
@@ -144,7 +138,7 @@ type SupportTicket {
 }
 
 type SupportTicketComment {
-    attachments: [MediaObject!]
+    attachments: [GqlMediaObject!]
     content: String!
     contentType: RichContentFormat!
     createdAt: DateTimeISO!

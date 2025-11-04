@@ -326,6 +326,36 @@
                                 "constraints": [256]
                             }
                         ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "firstName",
+                        "validation": [
+                            {
+                                "type": "isOptional"
+                            },
+                            {
+                                "type": "maxLength",
+                                "constraints": [256]
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "lastName",
+                        "validation": [
+                            {
+                                "type": "isOptional"
+                            },
+                            {
+                                "type": "maxLength",
+                                "constraints": [256]
+                            }
+                        ]
                     }
                 ]
             },

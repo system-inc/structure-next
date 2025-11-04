@@ -33,7 +33,7 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTimeISO
 
-type ImageObject {
+type GqlMediaObject {
     type: MediaObjectType!
     url: String!
     variant: String
@@ -336,7 +336,7 @@ enum PostVoteType {
 type PublicProfile {
     createdAt: DateTimeISO
     displayName: String
-    images: [ImageObject!]
+    images: [GqlMediaObject!]
     username: String!
 }
 

@@ -185,6 +185,7 @@ export type AccountRegistrationCompleteInput = {
     givenName?: InputMaybe<Scalars['String']['input']>;
     password?: InputMaybe<Scalars['String']['input']>;
     phoneNumber?: InputMaybe<Scalars['String']['input']>;
+    socialMediaProfiles?: InputMaybe<Array<SocialMediaProfileInput>>;
     username?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -344,9 +345,11 @@ export type ContactListEntry = {
     countryCode?: Maybe<Scalars['String']['output']>;
     createdAt: Scalars['DateTimeISO']['output'];
     emailAddress: Scalars['String']['output'];
+    firstName?: Maybe<Scalars['String']['output']>;
     id: Scalars['String']['output'];
     ipAddress?: Maybe<Scalars['String']['output']>;
     lastContactedAt?: Maybe<Scalars['DateTimeISO']['output']>;
+    lastName?: Maybe<Scalars['String']['output']>;
     name?: Maybe<Scalars['String']['output']>;
     profileId?: Maybe<Scalars['String']['output']>;
     updatedAt: Scalars['DateTimeISO']['output'];
@@ -363,6 +366,8 @@ export type ContactListEntryCreatePrivilegedInput = {
 export type ContactListEntryInput = {
     contactListIdentifier: Scalars['String']['input'];
     emailAddress: Scalars['String']['input'];
+    firstName?: InputMaybe<Scalars['String']['input']>;
+    lastName?: InputMaybe<Scalars['String']['input']>;
     name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -407,7 +412,9 @@ export type DataInteractionDatabaseRelationInput = {
 export type DataInteractionDatabaseTableMetricsQueryInput = {
     columnName: Scalars['String']['input'];
     databaseName: Scalars['String']['input'];
+    distinctColumnName?: InputMaybe<Scalars['String']['input']>;
     endTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
+    filters?: InputMaybe<ColumnFilterGroupInput>;
     startTime?: InputMaybe<Scalars['DateTimeISO']['input']>;
     tableName: Scalars['String']['input'];
     timeInterval: TimeInterval;
@@ -605,15 +612,8 @@ export type EntitlementUpdateInput = {
     id: Scalars['String']['input'];
 };
 
-export type ImageObject = {
-    __typename?: 'ImageObject';
-    type: MediaObjectType;
-    url: Scalars['String']['output'];
-    variant?: Maybe<Scalars['String']['output']>;
-};
-
-export type MediaObject = {
-    __typename?: 'MediaObject';
+export type GqlMediaObject = {
+    __typename?: 'GqlMediaObject';
     type: MediaObjectType;
     url: Scalars['String']['output'];
     variant?: Maybe<Scalars['String']['output']>;
@@ -1300,10 +1300,11 @@ export type Profile = {
     givenName?: Maybe<Scalars['String']['output']>;
     id: Scalars['String']['output'];
     /** Profile asset URL */
-    images?: Maybe<Array<ImageObject>>;
+    images?: Maybe<Array<GqlMediaObject>>;
     locale?: Maybe<Scalars['String']['output']>;
     middleName?: Maybe<Scalars['String']['output']>;
     preferredName?: Maybe<Scalars['String']['output']>;
+    socialMediaProfiles?: Maybe<Array<SocialMediaProfile>>;
     timezone?: Maybe<Scalars['String']['output']>;
     updatedAt: Scalars['DateTimeISO']['output'];
     username: Scalars['String']['output'];
@@ -1352,7 +1353,7 @@ export type PublicProfile = {
     __typename?: 'PublicProfile';
     createdAt?: Maybe<Scalars['DateTimeISO']['output']>;
     displayName?: Maybe<Scalars['String']['output']>;
-    images?: Maybe<Array<ImageObject>>;
+    images?: Maybe<Array<GqlMediaObject>>;
     username: Scalars['String']['output'];
 };
 
@@ -1390,7 +1391,6 @@ export type Query = {
     dataInteractionDatabaseTableRows: DatabaseTableMetadataWithRows;
     dataInteractionDatabaseTables: DatabaseTablesResult;
     dataInteractionDatabases: PagedDatabasesResult;
-    deviceId: OperationResult;
     engagementEvents: Array<EngagementEvent>;
     engagementOverview: EngagementOverview;
     post: Post;
@@ -1580,13 +1580,26 @@ export enum RichContentFormat {
     PlainText = 'PlainText',
 }
 
+export type SocialMediaProfile = {
+    __typename?: 'SocialMediaProfile';
+    handlerUrl: Scalars['String']['output'];
+    platform: Scalars['String']['output'];
+    username?: Maybe<Scalars['String']['output']>;
+};
+
+export type SocialMediaProfileInput = {
+    handlerUrl: Scalars['String']['input'];
+    platform: Scalars['String']['input'];
+    username?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type SupportTicket = {
     __typename?: 'SupportTicket';
     answered: Scalars['Boolean']['output'];
     answeredAt?: Maybe<Scalars['DateTimeISO']['output']>;
     assignedToProfile?: Maybe<PublicProfile>;
     assignedToProfileId?: Maybe<Scalars['String']['output']>;
-    attachments?: Maybe<Array<MediaObject>>;
+    attachments?: Maybe<Array<GqlMediaObject>>;
     comments: Array<SupportTicketComment>;
     createdAt: Scalars['DateTimeISO']['output'];
     description?: Maybe<Scalars['String']['output']>;
@@ -1602,7 +1615,7 @@ export type SupportTicket = {
 
 export type SupportTicketComment = {
     __typename?: 'SupportTicketComment';
-    attachments?: Maybe<Array<MediaObject>>;
+    attachments?: Maybe<Array<GqlMediaObject>>;
     content: Scalars['String']['output'];
     contentType: RichContentFormat;
     createdAt: Scalars['DateTimeISO']['output'];
@@ -1766,7 +1779,7 @@ export type AccountPrivilegedQuery = {
             __typename?: 'Profile';
             username: string;
             displayName?: string | null;
-            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
         }>;
     } | null;
 };
@@ -1790,7 +1803,7 @@ export type AccountAccessRoleAssignmentCreatePrivilegedMutation = {
             username: string;
             displayName?: string | null;
             createdAt: any;
-            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
         };
     };
 };
@@ -1801,7 +1814,7 @@ export type AccountProfileImageRemoveMutation = {
     __typename?: 'Mutation';
     accountProfileImageRemove: {
         __typename?: 'Profile';
-        images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
     };
 };
 
@@ -2026,7 +2039,7 @@ export type AccountsPrivilegedQuery = {
                 countryCode?: string | null;
                 updatedAt: any;
                 createdAt: any;
-                images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+                images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
             }>;
         }>;
         pagination: {
@@ -2074,7 +2087,7 @@ export type AccountAccessRoleAssignmentsPrivilegedQuery = {
                 username: string;
                 displayName?: string | null;
                 createdAt: any;
-                images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+                images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
             };
         }>;
         pagination: {
@@ -2113,7 +2126,7 @@ export type AccountProfileUpdateMutation = {
         familyName?: string | null;
         updatedAt: any;
         createdAt: any;
-        images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
     };
 };
 
@@ -2162,7 +2175,7 @@ export type AccountProfilePublicQuery = {
         username: string;
         displayName?: string | null;
         createdAt?: any | null;
-        images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
     } | null;
 };
 
@@ -2192,7 +2205,7 @@ export type AccountQuery = {
             familyName?: string | null;
             updatedAt: any;
             createdAt: any;
-            images?: Array<{ __typename?: 'ImageObject'; url: string; variant?: string | null }> | null;
+            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
         };
     };
 };
@@ -2509,7 +2522,7 @@ export type PostQuery = {
             displayName?: string | null;
             username: string;
             images?: Array<{
-                __typename?: 'ImageObject';
+                __typename?: 'GqlMediaObject';
                 url: string;
                 type: MediaObjectType;
                 variant?: string | null;
@@ -2560,7 +2573,7 @@ export type PostsQuery = {
                 displayName?: string | null;
                 username: string;
                 images?: Array<{
-                    __typename?: 'ImageObject';
+                    __typename?: 'GqlMediaObject';
                     url: string;
                     type: MediaObjectType;
                     variant?: string | null;
@@ -4542,6 +4555,18 @@ export namespace GraphQLInputTypes {
                 type: 'String',
                 required: false,
             },
+            {
+                name: 'filters',
+                kind: 'object',
+                type: GraphQLInputTypes.ColumnFilterGroupInput,
+                required: false,
+            },
+            {
+                name: 'distinctColumnName',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
         ],
     };
 
@@ -4574,6 +4599,36 @@ export namespace GraphQLInputTypes {
             },
             {
                 name: 'name',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [256],
+                    },
+                ],
+            },
+            {
+                name: 'firstName',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [256],
+                    },
+                ],
+            },
+            {
+                name: 'lastName',
                 kind: 'scalar',
                 type: 'String',
                 required: false,
@@ -5049,6 +5104,31 @@ export namespace GraphQLInputTypes {
         ],
     };
 
+    export const SocialMediaProfileInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'SocialMediaProfileInput',
+        fields: [
+            {
+                name: 'platform',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'handlerUrl',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'username',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+            },
+        ],
+    };
+
     export const AccountRegistrationCompleteInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
         type: 'AccountRegistrationCompleteInput',
@@ -5126,6 +5206,17 @@ export namespace GraphQLInputTypes {
                     {
                         type: 'IsPhoneNumberLite',
                         constraints: [{}],
+                    },
+                ],
+            },
+            {
+                name: 'socialMediaProfiles',
+                kind: 'object',
+                type: GraphQLInputTypes.SocialMediaProfileInput,
+                required: true,
+                validation: [
+                    {
+                        type: 'isOptional',
                     },
                 ],
             },
