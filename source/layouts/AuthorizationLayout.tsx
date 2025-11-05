@@ -9,12 +9,15 @@ import { ApiError } from '@structure/source/components/notifications/ApiError';
 import { NotAuthorized } from '@structure/source/components/notifications/NotAuthorized';
 import { NotSignedIn } from '@structure/source/components/notifications/NotSignedIn';
 
-// Dependencies - Animation
-import { LineLoadingAnimation } from '@structure/source/components/animations/LineLoadingAnimation';
-
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 import { AccountRole } from '@structure/source/modules/account/Account';
+
+// Dependencies - API
+import { BaseError } from '@structure/source/api/errors/BaseError';
+
+// Dependencies - Animation
+import { LineLoadingAnimation } from '@structure/source/components/animations/LineLoadingAnimation';
 
 // Component - AuthorizationLayout
 export interface AuthorizationLayoutProperties {
@@ -33,12 +36,8 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
     // Hooks
     const account = useAccount();
 
-    // Error loading account
-    if(account.error) {
-        return <ApiError error={account.error} />;
-    }
     // Not signed in and no cached data available
-    else if(!account.signedIn && !account.data) {
+    if(!account.signedIn && !account.data) {
         // Still loading initial account data
         if(account.isLoading) {
             return <LineLoadingAnimation />;
@@ -67,6 +66,13 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
             return <NotAuthorized />;
         }
     }
+    // Check for authentication errors first - these should show sign-in UI, not error UI
+    // are expected for unauthenticated users and should trigger the sign-in flow
+    else if(account.error && !BaseError.isAuthenticationError(account.error)) {
+        // Other API errors (network, server, etc.) should show error screen
+        return <ApiError error={account.error} />;
+    }
+
     // Render the component
     return properties.children;
 }
