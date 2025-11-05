@@ -139,6 +139,11 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
         [notice],
     );
 
+    // Don't render anything if there are no notices
+    if(noticesState.length === 0) {
+        return null;
+    }
+
     // Render the component
     return (
         <div
