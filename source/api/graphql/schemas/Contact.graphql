@@ -55,9 +55,11 @@ type ContactListEntry {
     countryCode: String
     createdAt: DateTimeISO!
     emailAddress: String!
+    firstName: String
     id: String!
     ipAddress: String
     lastContactedAt: DateTimeISO
+    lastName: String
     name: String
     profileId: String
     updatedAt: DateTimeISO!
@@ -74,6 +76,8 @@ input ContactListEntryCreatePrivilegedInput {
 input ContactListEntryInput {
     contactListIdentifier: String!
     emailAddress: String!
+    firstName: String
+    lastName: String
     name: String
 }
 

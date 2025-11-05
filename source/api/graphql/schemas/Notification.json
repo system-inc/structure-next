@@ -1,11 +1,6 @@
 {
     "types": {
         "input": {
-            "Int": {
-                "kind": "scalar",
-                "type": "Int",
-                "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1."
-            },
             "String": {
                 "kind": "scalar",
                 "type": "String",
@@ -21,239 +16,239 @@
                 "type": "Boolean",
                 "description": "The `Boolean` scalar type represents `true` or `false`."
             },
-            "PaginationInput": {
-                "kind": "object",
-                "type": "PaginationInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "Int",
-                        "required": true,
-                        "name": "itemsPerPage"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Int",
-                        "required": false,
-                        "name": "itemIndex"
-                    },
-                    {
-                        "kind": "object",
-                        "type": "ColumnFilterInput",
-                        "required": true,
-                        "name": "filters"
-                    },
-                    {
-                        "kind": "object",
-                        "type": "OrderByInput",
-                        "required": true,
-                        "name": "orderBy"
-                    }
-                ]
-            },
-            "ColumnFilterInput": {
-                "kind": "object",
-                "type": "ColumnFilterInput",
-                "fields": [
-                    {
-                        "kind": "enum",
-                        "type": "ColumnFilterConditionOperator",
-                        "required": true,
-                        "name": "operator"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "Boolean",
-                        "required": false,
-                        "name": "caseSensitive"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "column"
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "JSON",
-                        "required": true,
-                        "name": "value"
-                    }
-                ]
-            },
-            "ColumnFilterConditionOperator": {
-                "kind": "enum",
-                "type": "ColumnFilterConditionOperator",
-                "description": "The operator of a field filter",
-                "values": [
-                    "Equal",
-                    "NotEqual",
-                    "GreaterThan",
-                    "GreaterThanOrEqual",
-                    "LessThan",
-                    "LessThanOrEqual",
-                    "Like",
-                    "NotLike",
-                    "In",
-                    "NotIn",
-                    "IsNull",
-                    "IsNotNull"
-                ]
-            },
             "JSON": {
                 "kind": "scalar",
                 "type": "JSON",
                 "description": "The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
             },
-            "OrderByInput": {
-                "kind": "object",
-                "type": "OrderByInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "key"
-                    },
-                    {
-                        "kind": "enum",
-                        "type": "OrderByDirection",
-                        "required": false,
-                        "name": "direction"
-                    }
-                ]
-            },
-            "OrderByDirection": {
+            "SystemNotificationDestination": {
                 "kind": "enum",
-                "type": "OrderByDirection",
-                "description": "The order direction of a query",
-                "values": ["Ascending", "Descending"]
+                "type": "SystemNotificationDestination",
+                "description": "An enum of system provided notification destinations. These do not require any configuration by the user.",
+                "values": ["PrimaryAccountEmail"]
             },
-            "ContactListCreationInput": {
+            "NotificationBindingInput": {
                 "kind": "object",
-                "type": "ContactListCreationInput",
+                "type": "NotificationBindingInput",
                 "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "identifier",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [16]
-                            }
-                        ]
-                    },
                     {
                         "kind": "scalar",
                         "type": "String",
                         "required": true,
-                        "name": "title",
-                        "validation": [
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "description",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [512]
-                            }
-                        ]
-                    }
-                ]
-            },
-            "ContactListUpdateInput": {
-                "kind": "object",
-                "type": "ContactListUpdateInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
                         "name": "id",
                         "validation": [
                             {
-                                "type": "isOptional"
-                            },
-                            {
                                 "type": "isUuid"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "identifier",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [16]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "title",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "description",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [512]
                             }
                         ]
                     }
                 ]
             },
-            "ContactListEntryCreatePrivilegedInput": {
+            "NotificationBindingListInput": {
                 "kind": "object",
-                "type": "ContactListEntryCreatePrivilegedInput",
+                "type": "NotificationBindingListInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "bindingType",
+                        "validation": [
+                            {
+                                "type": "isOptional"
+                            },
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "bindingId",
+                        "validation": [
+                            {
+                                "type": "isOptional"
+                            },
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "NotificationDestinationInput": {
+                "kind": "object",
+                "type": "NotificationDestinationInput",
                 "fields": [
                     {
                         "kind": "scalar",
                         "type": "String",
                         "required": true,
-                        "name": "contactListId",
+                        "name": "id",
                         "validation": [
                             {
                                 "type": "isUuid"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "NotificationDestinationListInput": {
+                "kind": "object",
+                "type": "NotificationDestinationListInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "channelType",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "Boolean",
+                        "required": false,
+                        "name": "isEnabled",
+                        "validation": [
+                            {
+                                "type": "isBoolean"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "NotificationBindingCreateInput": {
+                "kind": "object",
+                "type": "NotificationBindingCreateInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "bindingType",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "bindingId",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "destinationId",
+                        "validation": [
+                            {
+                                "type": "isUuid"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "name",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "enum",
+                        "type": "SystemNotificationDestination",
+                        "required": false,
+                        "name": "systemDestinationType",
+                        "validation": [
+                            {
+                                "type": "isEnum",
+                                "constraints": [
+                                    {
+                                        "PrimaryAccountEmail": "PrimaryAccountEmail"
+                                    },
+                                    ["PrimaryAccountEmail"]
+                                ]
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "NotificationDestinationEmailCreateInput": {
+                "kind": "object",
+                "type": "NotificationDestinationEmailCreateInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "name",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "Boolean",
+                        "required": true,
+                        "name": "isEnabled",
+                        "validation": [
+                            {
+                                "type": "isBoolean"
                             }
                         ]
                     },
@@ -265,42 +260,24 @@
                         "validation": [
                             {
                                 "type": "isEmail"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "name",
-                        "validation": [
-                            {
-                                "type": "isOptional"
                             },
                             {
-                                "type": "maxLength",
-                                "constraints": [256]
+                                "type": "isString"
                             }
                         ]
                     }
                 ]
             },
-            "ContactListEntryInput": {
+            "EmailVerificationStatus": {
+                "kind": "enum",
+                "type": "EmailVerificationStatus",
+                "description": "The verification status of an email address.",
+                "values": ["Pending", "Verified", "Failed"]
+            },
+            "NotificationDestinationEmailVerificationSendInput": {
                 "kind": "object",
-                "type": "ContactListEntryInput",
+                "type": "NotificationDestinationEmailVerificationSendInput",
                 "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "contactListIdentifier",
-                        "validation": [
-                            {
-                                "type": "maxLength",
-                                "constraints": [16]
-                            }
-                        ]
-                    },
                     {
                         "kind": "scalar",
                         "type": "String",
@@ -309,51 +286,78 @@
                         "validation": [
                             {
                                 "type": "isEmail"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "NotificationDestinationEmailVerificationCompleteInput": {
+                "kind": "object",
+                "type": "NotificationDestinationEmailVerificationCompleteInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "destinationId",
+                        "validation": [
+                            {
+                                "type": "isUuid"
                             }
                         ]
                     },
                     {
                         "kind": "scalar",
                         "type": "String",
-                        "required": false,
-                        "name": "name",
+                        "required": true,
+                        "name": "code",
                         "validation": [
                             {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
+                                "type": "isNotEmpty"
                             }
                         ]
+                    }
+                ]
+            },
+            "NotificationDestinationEmailUpdateInput": {
+                "kind": "object",
+                "type": "NotificationDestinationEmailUpdateInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "id"
                     },
                     {
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "firstName",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
+                        "name": "name"
                     },
                     {
                         "kind": "scalar",
-                        "type": "String",
+                        "type": "Boolean",
                         "required": false,
-                        "name": "lastName",
+                        "name": "isEnabled"
+                    }
+                ]
+            },
+            "NotificationDestinationDeleteInput": {
+                "kind": "object",
+                "type": "NotificationDestinationDeleteInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "id",
                         "validation": [
                             {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
+                                "type": "isUuid"
                             }
                         ]
                     }

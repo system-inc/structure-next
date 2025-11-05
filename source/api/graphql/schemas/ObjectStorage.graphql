@@ -1,0 +1,130 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"""
+The operator of a field filter
+"""
+enum ColumnFilterConditionOperator {
+    Equal
+    GreaterThan
+    GreaterThanOrEqual
+    In
+    IsNotNull
+    IsNull
+    LessThan
+    LessThanOrEqual
+    Like
+    NotEqual
+    NotIn
+    NotLike
+}
+
+input ColumnFilterInput {
+    caseSensitive: Boolean
+    column: String!
+    operator: ColumnFilterConditionOperator!
+    value: JSON!
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+type GqlAssetMetadata {
+    altText: String
+    createdAt: DateTimeISO!
+    fileHash: String
+    name: String
+    path: String
+    tags: [String!]
+    updatedAt: DateTimeISO!
+}
+
+type GqlAssetVariant {
+    extension: String!
+    name: String!
+    size: Float
+    uploadedAt: DateTimeISO
+    url: String
+}
+
+type GqlBulkOperationResult {
+    failedAssetIds: [String!]!
+    failureCount: Float!
+    message: String
+    successCount: Float!
+}
+
+type GqlManagedAsset {
+    groupPath: String!
+    id: String!
+    metadata: GqlAssetMetadata!
+    variants: [GqlAssetVariant!]!
+}
+
+type GqlPagedManagedAssets {
+    items: [GqlManagedAsset!]!
+    pagination: Pagination!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Mutation {
+    assetManagementBulkDelete(assetIds: [String!]!, purge: Boolean): GqlBulkOperationResult!
+    assetManagementChangePath(assetId: String!, newPath: String!): GqlManagedAsset!
+    assetManagementRemove(assetId: String!): OperationResult!
+    assetManagementRemoveVariant(assetId: String!, variantName: String!): OperationResult!
+    assetManagementUpdateMetadata(input: UpdateAssetMetadataInput!): GqlManagedAsset!
+}
+
+type OperationResult {
+    success: Boolean!
+}
+
+"""
+The order direction of a query
+"""
+enum OrderByDirection {
+    Ascending
+    Descending
+}
+
+input OrderByInput {
+    direction: OrderByDirection
+    key: String!
+}
+
+type Pagination {
+    itemIndex: Int!
+    itemIndexForNextPage: Int
+    itemIndexForPreviousPage: Int
+    itemsPerPage: Int!
+    itemsTotal: Int!
+    page: Int!
+    pagesTotal: Int!
+}
+
+input PaginationInput {
+    filters: [ColumnFilterInput!]
+    itemIndex: Int
+    itemsPerPage: Int!
+    orderBy: [OrderByInput!]
+}
+
+type Query {
+    assetManagementGet(assetId: String!): GqlManagedAsset!
+    assetManagementList(pagination: PaginationInput!): GqlPagedManagedAssets!
+}
+
+input UpdateAssetMetadataInput {
+    altText: String
+    assetId: String!
+    name: String
+    tags: [String!]
+}

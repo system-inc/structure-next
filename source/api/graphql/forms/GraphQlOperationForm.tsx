@@ -16,7 +16,8 @@ import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
-import { GraphQlError, GraphQlDocument } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
+import { GraphQlDocument } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
+import { BaseError } from '@structure/source/api/errors/BaseError';
 import { GraphQLOperationMetadata } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Utilities
@@ -46,7 +47,7 @@ export interface GraphQlOperationFormProperties extends Omit<FormProperties, 'fo
     onSubmit?: (
         formValues: FormValuesInterface,
         mutationResponseData: unknown,
-        mutationResponseError: GraphQlError | null,
+        mutationResponseError: BaseError | null,
     ) => void | Promise<void>;
     showPreviewGraphQlMutationButton?: boolean;
 }

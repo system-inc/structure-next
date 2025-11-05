@@ -52,7 +52,10 @@ export function Providers(properties: ProvidersProperties) {
                                 <ThemeProvider>
                                     <EngagementProvider>
                                         <NoticeProvider>
-                                            <TipProvider delayDuration={100}>{properties.children}</TipProvider>
+                                            <TipProvider delayDuration={100}>
+                                                {properties.children}
+                                                <AuthenticationDialog />
+                                            </TipProvider>
                                         </NoticeProvider>
                                     </EngagementProvider>
                                 </ThemeProvider>
@@ -61,9 +64,6 @@ export function Providers(properties: ProvidersProperties) {
                     </CookiesProvider>
                 </NetworkServiceProvider>
             </NuqsAdapter>
-
-            {/* Authentication dialog is outside of the Providers tree */}
-            <AuthenticationDialog />
         </>
     );
 }

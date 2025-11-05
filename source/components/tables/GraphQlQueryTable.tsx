@@ -10,7 +10,7 @@ import { TableRowProperties } from '@structure/source/components/tables/TableRow
 
 // Dependencies - API
 import { networkService, AnyTypedDocumentString } from '@structure/source/services/network/NetworkService';
-import { GraphQlError } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
+import { BaseError } from '@structure/source/api/errors/BaseError';
 
 // Helper types for GraphQL table data
 interface GraphQlTableItem {
@@ -281,7 +281,7 @@ export function GraphQlQueryTable<TResult = unknown, TVariables = Record<string,
                 // filters={properties.filters}
                 pagination={pagination}
                 loading={queryState.isLoading || (!queryState.error && !queryState.data)}
-                error={queryState.error as GraphQlError}
+                error={queryState.error as BaseError | undefined}
             />
         </>
     );

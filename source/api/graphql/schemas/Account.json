@@ -740,9 +740,44 @@
                     },
                     {
                         "kind": "object",
+                        "type": "SocialMediaProfileInput",
+                        "required": true,
+                        "name": "socialMediaProfiles",
+                        "validation": [
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "object",
                         "type": "AccountEncryptionConfiguration",
                         "required": false,
                         "name": "encryptionConfiguration"
+                    }
+                ]
+            },
+            "SocialMediaProfileInput": {
+                "kind": "object",
+                "type": "SocialMediaProfileInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "platform"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "handlerUrl"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "username"
                     }
                 ]
             },

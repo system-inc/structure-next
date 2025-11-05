@@ -15,12 +15,8 @@ import {
 import { experimental_createQueryPersister } from '@tanstack/query-persist-client-core';
 
 // Dependencies - API
-import {
-    GraphQlResponseInterface,
-    hasGraphQlErrors,
-    parseGraphQlErrors,
-    isDeviceIdRequiredError,
-} from '@structure/source/api/graphql/utilities/GraphQlUtilities';
+import { GraphQlResponseInterface, hasGraphQlErrors } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
+import { BaseError } from '@structure/source/api/errors/BaseError';
 
 // Dependencies - Internal
 import { NetworkStatistics, NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';
@@ -223,27 +219,9 @@ export class NetworkService {
                     staleTime: 5 * 60 * 1000, // 5 minutes
                     gcTime: 10 * 60 * 1000, // 10 minutes
                     retry: function (failureCount, error) {
-                        // Don't retry on 4xx HTTP errors (client errors like 401, 403, 404)
-                        if(error instanceof Error && 'status' in error) {
-                            const status = (error as Error & { status: number }).status;
-                            if(status >= 400 && status < 500) {
-                                return false;
-                            }
-                        }
-
-                        // Don't retry on GraphQL errors with 4xx status codes
-                        if(error instanceof Error && 'graphQlErrors' in error) {
-                            const graphQlErrors = (
-                                error as Error & { graphQlErrors: Array<{ extensions?: { status?: number } }> }
-                            ).graphQlErrors;
-                            if(
-                                graphQlErrors?.some(function (graphQlError) {
-                                    const status = graphQlError.extensions?.status;
-                                    return status !== undefined && status >= 400 && status < 500;
-                                })
-                            ) {
-                                return false;
-                            }
+                        // Don't retry on 4xx errors (client errors like 401, 403, 404)
+                        if(error instanceof BaseError && error.statusCode >= 400 && error.statusCode < 500) {
+                            return false;
                         }
 
                         // For other errors, use default retry logic (respects maximumRetries)
@@ -314,12 +292,6 @@ export class NetworkService {
 
         const inputHostname = getHostname(input);
         return inputHostname === apiHost || inputHostname.endsWith('.' + apiBaseDomain);
-    }
-
-    // Helper to augment error with additional properties
-    private augmentError<T extends Error>(error: T, properties: Record<string, unknown>): T {
-        Object.assign(error, properties);
-        return error;
     }
 
     // Helper to track and execute async operations
@@ -455,36 +427,41 @@ export class NetworkService {
 
         // Check for network errors
         if(!response.ok) {
-            throw this.augmentError(new Error(`Network request failed with status ${response.status}`), {
-                status: response.status,
-            });
+            throw await BaseError.fromResponse(response);
         }
 
         // Check for GraphQL errors
         if(hasGraphQlErrors(graphQlResponse)) {
-            const errorMessage = parseGraphQlErrors(graphQlResponse)?.message || 'GraphQL request failed';
-            const error = new Error(errorMessage);
+            const firstError = graphQlResponse.errors?.[0] || graphQlResponse.error;
 
-            // Attach the full error details for better debugging
-            const augmentedError = this.augmentError(error, {
-                graphQlErrors: graphQlResponse.errors || (graphQlResponse.error ? [graphQlResponse.error] : []),
-                graphQlResponse,
-            });
+            if(firstError) {
+                const baseError = BaseError.fromGraphQlError(firstError, graphQlResponse);
 
-            // Check if device ID error and not already retrying
-            if(isDeviceIdRequiredError(augmentedError) && !isRetry) {
-                console.warn('[NetworkService] GraphQL error: Device ID required. Attempting automatic recovery...');
+                // Check if device ID error and not already retrying
+                if(BaseError.isDeviceIdRequired(baseError) && !isRetry) {
+                    console.warn('[NetworkService] Device ID required. Attempting automatic recovery...');
 
-                // Force a fresh device ID check (safe for concurrent calls)
-                await this.deviceIdManager.ensure({ skipCache: true });
+                    // Force a fresh device ID check (safe for concurrent calls)
+                    await this.deviceIdManager.ensure({ skipCache: true });
 
-                console.log('[NetworkService] Device ID refreshed, retrying GraphQL request');
+                    console.log('[NetworkService] Device ID refreshed, retrying GraphQL request');
 
-                // Retry the request once - if this fails, let it throw
-                return this.graphQlRequest(query, variables, options, true);
+                    // Retry the request once - if this fails, let it throw
+                    return this.graphQlRequest(query, variables, options, true);
+                }
+
+                throw baseError;
             }
 
-            throw augmentedError;
+            // Fallback if no error details
+            throw new BaseError(
+                {
+                    name: 'GraphQlError',
+                    statusCode: 500,
+                    message: 'GraphQL request failed.',
+                },
+                graphQlResponse,
+            );
         }
 
         return graphQlResponse.data as TResult;

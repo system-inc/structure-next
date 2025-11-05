@@ -5,6 +5,7 @@ import { useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Types
 import { type AuthenticationDialogSettings } from '@structure/source/modules/account/pages/authentication/components/dialogs/AuthenticationDialog';
+import { BaseError } from '@structure/source/api/errors/BaseError';
 
 // Dependencies - Shared State
 import { atom, useAtomValue, useSetAtom } from 'jotai';
@@ -22,8 +23,6 @@ import { type AccountQuery } from '@structure/source/api/graphql/GraphQlGenerate
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
 // Dependencies - Utilities
-import { GraphQlError, toGraphQlError } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
-import { isGraphQlAuthenticationError } from '@structure/source/modules/account/utilities/AccountUtilities';
 import { isEqual } from '@structure/source/utilities/type/Object';
 
 // Constant - Account Local Storage Key
@@ -36,13 +35,14 @@ export const sessionIdHttpOnlyCookieExistsAtom = atom<boolean>(false);
 export interface AccountStateInterface {
     isLoading: boolean;
     data: Account | null;
-    error: GraphQlError | null;
+    error: BaseError | null;
     signedIn: boolean;
     authenticationDialogSettings: AuthenticationDialogSettings;
 }
 
 // Type - AccountInterface
 export interface AccountInterface extends AccountStateInterface {
+    request: () => Promise<void>;
     setSignedIn: (value: boolean) => void;
     setData: (accountData: Partial<AccountQuery['account']>) => void;
     signOut: (redirectPath?: string) => Promise<boolean>;
@@ -196,170 +196,163 @@ export const accountAtom = atomWithStorage<AccountStateInterface>(
 // Without this guard, onMount would be called twice and trigger duplicate GraphQL requests
 let accountRequestInProgress = false;
 
-// Function to run when the the accountAtom mounts
-accountAtom.onMount = function (setAtom) {
-    let mounted = true;
+// Function to request account data from GraphQL
+// This is called both from onMount and from the request() method exposed via useAccount
+async function requestAccountData(
+    setAtom: (update: (previousAccountState: AccountStateInterface) => AccountStateInterface) => void,
+): Promise<void> {
+    // Check global guard to prevent duplicate requests
+    if(accountRequestInProgress) {
+        return;
+    }
 
-    // Function to fetch account data from GraphQL
-    async function requestAccount() {
-        if(!mounted) {
-            return;
-        }
+    accountRequestInProgress = true;
 
-        // Check global guard to prevent duplicate requests from React dev mode double-mounting
-        if(accountRequestInProgress) {
-            // console.log('[AccountAtom] Request already in progress (React dev mode remount), skipping duplicate');
-            return;
-        }
+    // Mark the atom as loading
+    setAtom(function (previousAccountState: AccountStateInterface) {
+        return { ...previousAccountState, isLoading: true };
+    });
 
-        accountRequestInProgress = true;
-
-        // await new Promise((resolve) => setTimeout(resolve, 2500));
-
-        // Mark the atom as loading
-        setAtom(function (previousAccountState: AccountStateInterface) {
-            return { ...previousAccountState, isLoading: true };
-        });
-
-        // Perform the GraphQL request
-        try {
-            const accountRequest = await networkService.graphQlRequest(
-                gql(`
-                    query Account {
-                        account {
-                            emailAddress
-                            profile {
-                                id
-                                username
-                                displayName
-                                givenName
-                                familyName
-                                images {
-                                    url
-                                    variant
-                                }
-                                updatedAt
-                                createdAt
+    // Perform the GraphQL request
+    try {
+        const accountRequest = await networkService.graphQlRequest(
+            gql(`
+                query Account {
+                    account {
+                        emailAddress
+                        profile {
+                            id
+                            username
+                            displayName
+                            givenName
+                            familyName
+                            images {
+                                url
+                                variant
                             }
-                            accessRoles
-                            entitlements
+                            updatedAt
                             createdAt
                         }
+                        accessRoles
+                        entitlements
+                        createdAt
                     }
-                `),
-            );
-
-            // If signed in
-            if(accountRequest.account) {
-                // Create a new Account instance
-                const newAccountInstance = new Account(accountRequest.account);
-                // console.log('[AccountAtom] Account loaded:', newAccountInstance.emailAddress);
-
-                // Get current account data to compare
-                const currentAccountInstance = globalStore.get(accountAtom).data;
-
-                // Only update the atom if the account data actually changed
-                // This prevents unnecessary re-renders when the GraphQL data is identical to cached data
-                const accountDataChanged = !isEqual(currentAccountInstance, newAccountInstance);
-
-                if(accountDataChanged) {
-                    // Update the atom state
-                    setAtom(function (previousAccountState: AccountStateInterface) {
-                        return {
-                            ...previousAccountState,
-                            data: newAccountInstance,
-                            isLoading: false,
-                            error: null,
-                            signedIn: true,
-                            authenticationDialogSettings: {
-                                ...previousAccountState.authenticationDialogSettings,
-                                open: false, // Close dialog on successful sign in
-                            },
-                        };
-                    });
                 }
-                else {
-                    // Just update isLoading to false without changing the account data reference
-                    setAtom(function (previousAccountState: AccountStateInterface) {
-                        return {
-                            ...previousAccountState,
-                            isLoading: false,
-                            error: null,
-                        };
-                    });
-                }
-            }
-            // If no account returned, the user is signed out
-            else {
-                // console.log('[AccountAtom] No account returned - user signed out');
+            `),
+        );
+
+        // If signed in
+        if(accountRequest.account) {
+            // Create a new Account instance
+            const newAccountInstance = new Account(accountRequest.account);
+            // console.log('[requestAccountData] Account loaded:', newAccountInstance.emailAddress);
+
+            // Get current account data to compare
+            const currentAccountInstance = globalStore.get(accountAtom).data;
+
+            // Only update the atom if the account data actually changed
+            // This prevents unnecessary re-renders when the GraphQL data is identical to cached data
+            const accountDataChanged = !isEqual(currentAccountInstance, newAccountInstance);
+
+            if(accountDataChanged) {
+                // console.log('[requestAccountData] Updating atom with new account data, signedIn: true');
 
                 // Update the atom state
                 setAtom(function (previousAccountState: AccountStateInterface) {
                     return {
                         ...previousAccountState,
-                        data: null,
+                        data: newAccountInstance,
                         isLoading: false,
                         error: null,
-                        signedIn: false,
-                    };
-                });
-            }
-        }
-        catch(error) {
-            console.error('[AccountAtom] Failed to fetch account:', error);
-
-            // Check if this is an authentication error (session/account invalid)
-            // vs. a network error (can't reach server)
-            if(isGraphQlAuthenticationError(error)) {
-                console.log('[AccountAtom] Authentication error detected - clearing cache and signing out');
-                // Authentication error means definitively not signed in
-                // Clear all account data and cache
-                setAtom(function (previousAccountState: AccountStateInterface) {
-                    return {
-                        data: null,
-                        isLoading: false,
-                        error: toGraphQlError(error),
-                        signedIn: false,
-                        authenticationDialogSettings: previousAccountState.authenticationDialogSettings,
+                        signedIn: true,
+                        authenticationDialogSettings: {
+                            ...previousAccountState.authenticationDialogSettings,
+                            open: false, // Close dialog on successful sign in
+                        },
                     };
                 });
             }
             else {
-                // console.log('[AccountAtom] Network error detected - preserving cached account data');
-                // Network error - preserve cached account data but show error
-                // User might still be signed in, just can't reach server
+                // Just update isLoading to false without changing the account data reference
                 setAtom(function (previousAccountState: AccountStateInterface) {
                     return {
                         ...previousAccountState,
                         isLoading: false,
-                        error: toGraphQlError(error),
-                        // Don't change signedIn state - preserve what we had cached
+                        error: null,
                     };
                 });
             }
-        } finally {
-            // Reset global guard to allow future requests
-            accountRequestInProgress = false;
+        }
+        // If no account returned, the user is signed out
+        else {
+            console.log('[requestAccountData] No account returned - user signed out');
+
+            // Update the atom state
+            setAtom(function (previousAccountState: AccountStateInterface) {
+                return {
+                    ...previousAccountState,
+                    data: null,
+                    isLoading: false,
+                    error: null,
+                    signedIn: false,
+                };
+            });
         }
     }
+    catch(error) {
+        console.error('[requestAccountData] Failed to fetch account:', error);
 
+        // Check if this is an authentication error (session/account invalid)
+        // vs. a network error (can't reach server)
+        if(BaseError.isAuthenticationError(error)) {
+            console.log('[AccountAtom] Authentication error detected - clearing cache and signing out');
+            // Authentication error means definitively not signed in
+            // Clear all account data and cache
+            setAtom(function (previousAccountState: AccountStateInterface) {
+                return {
+                    data: null,
+                    isLoading: false,
+                    error: BaseError.fromUnknownError(error),
+                    signedIn: false,
+                    authenticationDialogSettings: previousAccountState.authenticationDialogSettings,
+                };
+            });
+        }
+        else {
+            // console.log('[AccountAtom] Network error detected - preserving cached account data');
+            // Network error - preserve cached account data but show error
+            // User might still be signed in, just can't reach server
+            setAtom(function (previousAccountState: AccountStateInterface) {
+                return {
+                    ...previousAccountState,
+                    isLoading: false,
+                    error: BaseError.fromUnknownError(error),
+                    // Don't change signedIn state - preserve what we had cached
+                };
+            });
+        }
+    } finally {
+        // Reset global guard to allow future requests
+        accountRequestInProgress = false;
+    }
+}
+
+// Function to run when the the accountAtom mounts
+accountAtom.onMount = function (setAtom) {
     // Determine if we should request fresh account data based on session ID cookie
     const sessionIdExists = globalStore.get(sessionIdHttpOnlyCookieExistsAtom);
     const currentState = globalStore.get(accountAtom);
+
+    // If sessionId cookie exists, always request fresh account data
     if(sessionIdExists) {
-        // console.log('[AccountAtom] Fetching fresh account data in background (session ID exists)');
-        requestAccount();
+        requestAccountData(setAtom);
     }
     // If there is no sessionId cookie but we have cached account data
     else if(currentState.data) {
+        console.log('[AccountAtom.onMount] No session ID but have cached data, clearing it');
         // Clear cached account data
         setAtom(createDefaultAccountState());
     }
-
-    // Cleanup
-    return function () {
-        mounted = false;
-    };
 };
 
 // Hook - useAccount
@@ -370,6 +363,17 @@ export function useAccount(): AccountInterface {
     // Shared State
     const accountAtomValue = useAtomValue(accountAtom);
     const setAccountAtom = useSetAtom(accountAtom);
+
+    // Function to request fresh account data from the server
+    async function request() {
+        const sessionIdExists = globalStore.get(sessionIdHttpOnlyCookieExistsAtom);
+        if(!sessionIdExists) {
+            console.warn('[useAccount] Cannot request account - no session ID exists');
+            return;
+        }
+
+        await requestAccountData(setAccountAtom);
+    }
 
     // Function to update the signed in state
     function setSignedIn(value: boolean) {
@@ -444,7 +448,7 @@ export function useAccount(): AccountInterface {
 
     // Function to set authentication dialog settings
     function setAuthenticationDialogSettings(settings: Partial<AuthenticationDialogSettings>) {
-        console.log('[useAccount] setAuthenticationDialogSettings:', settings);
+        // console.log('[useAccount] setAuthenticationDialogSettings:', settings);
 
         setAccountAtom(function (previousAccountState: AccountStateInterface) {
             return {
@@ -460,6 +464,7 @@ export function useAccount(): AccountInterface {
     // Return the AccountState
     return {
         ...accountAtomValue,
+        request,
         setSignedIn,
         setData,
         signOut,

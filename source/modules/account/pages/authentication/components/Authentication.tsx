@@ -17,7 +17,10 @@ import { AccountPasswordChallenge } from '@structure/source/modules/account/page
 // import { Duration } from '@structure/source/components/time/Duration';
 
 // Dependencies - Account
-import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
+import { useAccount, sessionIdHttpOnlyCookieExistsAtom } from '@structure/source/modules/account/hooks/useAccount';
+
+// Dependencies - Shared State
+import { globalStore } from '@structure/source/utilities/shared-state/SharedStateProvider';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
@@ -90,6 +93,24 @@ export function Authentication(properties: AuthenticationProperties) {
         `),
     );
 
+    // Shared function to complete authentication after sign-in or registration
+    const completeAuthentication = React.useCallback(
+        async function () {
+            // Update sessionId cookie exists atom
+            globalStore.set(sessionIdHttpOnlyCookieExistsAtom, true);
+
+            // Clear the network service cache to force fresh data
+            networkService.clearCache();
+
+            // Request fresh account data from the server
+            await account.request();
+
+            // Set the authentication session success
+            setAuthenticationSessionSuccess(true);
+        },
+        [account],
+    );
+
     // Effect to run on mount
     React.useEffect(function () {
         const urlParameters = new URLSearchParams(window.location.search);
@@ -121,21 +142,16 @@ export function Authentication(properties: AuthenticationProperties) {
                     !accountAuthenticationRegistrationCompleteRequest.isError &&
                     !accountAuthenticationRegistrationCompleteRequest.isLoading
                 ) {
-                    console.log('AccountRegistrationComplete');
+                    // console.log('AccountRegistrationComplete');
 
                     // Run the accountRegistrationComplete mutation
                     accountAuthenticationRegistrationCompleteRequest
                         .execute({
                             input: {},
                         })
-                        .then(function (data) {
+                        .then(async function (data) {
                             console.log('accountAuthenticationRegistrationCompleteMutation', data);
-
-                            // Set the authentication session success
-                            setAuthenticationSessionSuccess(true);
-
-                            // Set the account signed in
-                            account.setSignedIn(true);
+                            await completeAuthentication();
                         })
                         .catch(function (error) {
                             console.error('Registration complete error:', error);
@@ -148,19 +164,14 @@ export function Authentication(properties: AuthenticationProperties) {
                     !accountAuthenticationSignInCompleteRequest.isError &&
                     !accountAuthenticationSignInCompleteRequest.isLoading
                 ) {
-                    console.log('AccountSignInComplete');
+                    // console.log('AccountSignInComplete');
 
                     // Run the accountSignInComplete mutation
                     accountAuthenticationSignInCompleteRequest
                         .execute()
-                        .then(function (data) {
+                        .then(async function (data) {
                             console.log('accountAuthenticationSignInCompleteMutation', data);
-
-                            // Set the authentication session success
-                            setAuthenticationSessionSuccess(true);
-
-                            // Set the account signed in
-                            account.setSignedIn(true);
+                            await completeAuthentication();
                         })
                         .catch(function (error) {
                             console.error('Sign in complete error:', error);
@@ -179,6 +190,7 @@ export function Authentication(properties: AuthenticationProperties) {
             accountAuthenticationRegistrationCompleteRequest,
             accountAuthenticationSignInCompleteRequest,
             account,
+            completeAuthentication,
         ],
     );
 
@@ -187,9 +199,6 @@ export function Authentication(properties: AuthenticationProperties) {
         function () {
             // If the account is signed in
             if(account.data) {
-                // Close the authentication dialog
-                account.setAuthenticationDialogSettings({ open: false });
-
                 // If a redirect URL is provided, redirect to that URL
                 if(redirectUrl) {
                     console.log('redirecting to', redirectUrl);
@@ -197,6 +206,9 @@ export function Authentication(properties: AuthenticationProperties) {
                 }
                 // If no redirect URL is provided
                 else {
+                    // Close the authentication dialog
+                    account.setAuthenticationDialogSettings({ open: false });
+
                     // Invalidate cached queries
                     networkService.clearCache();
                 }

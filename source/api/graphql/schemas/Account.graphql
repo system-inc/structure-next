@@ -167,6 +167,7 @@ input AccountRegistrationCompleteInput {
     givenName: String
     password: String
     phoneNumber: String
+    socialMediaProfiles: [SocialMediaProfileInput!]
     username: String
 }
 
@@ -339,7 +340,7 @@ input EntitlementUpdateInput {
     id: String!
 }
 
-type ImageObject {
+type GqlMediaObject {
     type: MediaObjectType!
     url: String!
     variant: String
@@ -479,10 +480,11 @@ type Profile {
     """
     Profile asset URL
     """
-    images: [ImageObject!]
+    images: [GqlMediaObject!]
     locale: String
     middleName: String
     preferredName: String
+    socialMediaProfiles: [SocialMediaProfile!]
     timezone: String
     updatedAt: DateTimeISO!
     username: String!
@@ -531,7 +533,7 @@ enum ProfileEntitlementStatus {
 type PublicProfile {
     createdAt: DateTimeISO
     displayName: String
-    images: [ImageObject!]
+    images: [GqlMediaObject!]
     username: String!
 }
 
@@ -577,6 +579,18 @@ type Query {
     accountProfileUsernameValidate(username: String!): UniqueFieldValidationResult!
     accountSessions: [AccountSession!]!
     accountsPrivileged(pagination: PaginationInput!): PagedAccounts!
+}
+
+type SocialMediaProfile {
+    handlerUrl: String!
+    platform: String!
+    username: String
+}
+
+input SocialMediaProfileInput {
+    handlerUrl: String!
+    platform: String!
+    username: String
 }
 
 enum UniqueFieldValidationResult {

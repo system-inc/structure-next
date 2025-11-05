@@ -10,7 +10,7 @@ import { FormValuesInterface, FormSubmitResponseInterface } from '@structure/sou
 import { Alert } from '@structure/source/components/notifications/Alert';
 
 // Dependencies - API
-import { GraphQlError } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
+import { BaseError } from '@structure/source/api/errors/BaseError';
 
 // Dependencies - Assets
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
@@ -67,7 +67,7 @@ export interface GraphQlFormSubmissionHandlerProperties<
     onSubmit?: (
         formValues: FormValuesInterface,
         mutationResponseData: TGraphQlMutationResponseData | null,
-        mutationResponseError: GraphQlError | null,
+        mutationResponseError: BaseError | null,
     ) => void | Promise<void>;
 }
 export async function GraphQlFormSubmissionHandler<
@@ -80,7 +80,7 @@ export async function GraphQlFormSubmissionHandler<
 
     // Variables to store the mutation response data and error
     let mutationResponseData: TGraphQlMutationResponseData | null = null;
-    let mutationResponseError: GraphQlError | null = null;
+    let mutationResponseError: BaseError | null = null;
 
     // Convert form values to mutation variables
     const mutationVariables = convertFormValuesToGraphQlMutationVariables(
@@ -98,15 +98,23 @@ export async function GraphQlFormSubmissionHandler<
         mutationResponseData = mutationResponse.data || null;
     }
     catch(error) {
-        // Convert the error to a GraphQlError
-        if(error instanceof GraphQlError) {
+        // Convert the error to a BaseError
+        if(error instanceof BaseError) {
             mutationResponseError = error;
         }
         else if(error instanceof Error) {
-            mutationResponseError = new GraphQlError(error.message);
+            mutationResponseError = new BaseError({
+                name: error.name || 'Error',
+                message: error.message,
+                statusCode: 500,
+            });
         }
         else {
-            mutationResponseError = new GraphQlError('An unknown error occurred');
+            mutationResponseError = new BaseError({
+                name: 'UnknownError',
+                message: 'An unknown error occurred',
+                statusCode: 500,
+            });
         }
     }
 

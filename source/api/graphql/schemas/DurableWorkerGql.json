@@ -1,25 +1,103 @@
 {
     "types": {
         "input": {
-            "Int": {
-                "kind": "scalar",
-                "type": "Int",
-                "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1."
-            },
             "String": {
                 "kind": "scalar",
                 "type": "String",
                 "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text."
+            },
+            "JSON": {
+                "kind": "scalar",
+                "type": "JSON",
+                "description": "The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
+            },
+            "Float": {
+                "kind": "scalar",
+                "type": "Float",
+                "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point)."
+            },
+            "GqlDurableWorkerInput": {
+                "kind": "object",
+                "type": "GqlDurableWorkerInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "namespace",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "durableObjectId",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "durableObjectName",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "Boolean": {
+                "kind": "scalar",
+                "type": "Boolean",
+                "description": "The `Boolean` scalar type represents `true` or `false`."
+            },
+            "Int": {
+                "kind": "scalar",
+                "type": "Int",
+                "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1."
             },
             "DateTimeISO": {
                 "kind": "scalar",
                 "type": "DateTimeISO",
                 "description": "A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format."
             },
-            "Boolean": {
+            "DurableWorkerTaskState": {
+                "kind": "enum",
+                "type": "DurableWorkerTaskState",
+                "description": "The state of the durable worker task execution.",
+                "values": ["NotStarted", "Running", "Success", "Failed", "Retry", "Canceled"]
+            },
+            "JSONObject": {
                 "kind": "scalar",
-                "type": "Boolean",
-                "description": "The `Boolean` scalar type represents `true` or `false`."
+                "type": "JSONObject",
+                "description": "The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
             },
             "PaginationInput": {
                 "kind": "object",
@@ -100,11 +178,6 @@
                     "IsNotNull"
                 ]
             },
-            "JSON": {
-                "kind": "scalar",
-                "type": "JSON",
-                "description": "The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
-            },
             "OrderByInput": {
                 "kind": "object",
                 "type": "OrderByInput",
@@ -129,34 +202,24 @@
                 "description": "The order direction of a query",
                 "values": ["Ascending", "Descending"]
             },
-            "ContactListCreationInput": {
+            "GqlDurableWorkerTaskHistoryInput": {
                 "kind": "object",
-                "type": "ContactListCreationInput",
+                "type": "GqlDurableWorkerTaskHistoryInput",
                 "fields": [
                     {
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "identifier",
+                        "name": "namespace",
                         "validation": [
                             {
-                                "type": "isOptional"
+                                "type": "isNotEmpty"
                             },
                             {
-                                "type": "maxLength",
-                                "constraints": [16]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "title",
-                        "validation": [
+                                "type": "isString"
+                            },
                             {
-                                "type": "maxLength",
-                                "constraints": [256]
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -164,34 +227,73 @@
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "description",
+                        "name": "durableObjectId",
                         "validation": [
                             {
-                                "type": "isOptional"
+                                "type": "isNotEmpty"
                             },
                             {
-                                "type": "maxLength",
-                                "constraints": [512]
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "durableObjectName",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "taskId",
+                        "validation": [
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     }
                 ]
             },
-            "ContactListUpdateInput": {
+            "GqlDurableWorkerReasonInput": {
                 "kind": "object",
-                "type": "ContactListUpdateInput",
+                "type": "GqlDurableWorkerReasonInput",
                 "fields": [
                     {
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "id",
+                        "name": "namespace",
                         "validation": [
                             {
-                                "type": "isOptional"
+                                "type": "isNotEmpty"
                             },
                             {
-                                "type": "isUuid"
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -199,14 +301,16 @@
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "identifier",
+                        "name": "durableObjectId",
                         "validation": [
                             {
-                                "type": "isOptional"
+                                "type": "isNotEmpty"
                             },
                             {
-                                "type": "maxLength",
-                                "constraints": [16]
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -214,14 +318,16 @@
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "title",
+                        "name": "durableObjectName",
                         "validation": [
                             {
-                                "type": "isOptional"
+                                "type": "isNotEmpty"
                             },
                             {
-                                "type": "maxLength",
-                                "constraints": [256]
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
                             }
                         ]
                     },
@@ -229,131 +335,16 @@
                         "kind": "scalar",
                         "type": "String",
                         "required": false,
-                        "name": "description",
+                        "name": "reason",
                         "validation": [
                             {
-                                "type": "isOptional"
+                                "type": "isNotEmpty"
                             },
                             {
-                                "type": "maxLength",
-                                "constraints": [512]
-                            }
-                        ]
-                    }
-                ]
-            },
-            "ContactListEntryCreatePrivilegedInput": {
-                "kind": "object",
-                "type": "ContactListEntryCreatePrivilegedInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "contactListId",
-                        "validation": [
-                            {
-                                "type": "isUuid"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "emailAddress",
-                        "validation": [
-                            {
-                                "type": "isEmail"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "name",
-                        "validation": [
-                            {
-                                "type": "isOptional"
+                                "type": "isString"
                             },
                             {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
-                    }
-                ]
-            },
-            "ContactListEntryInput": {
-                "kind": "object",
-                "type": "ContactListEntryInput",
-                "fields": [
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "contactListIdentifier",
-                        "validation": [
-                            {
-                                "type": "maxLength",
-                                "constraints": [16]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": true,
-                        "name": "emailAddress",
-                        "validation": [
-                            {
-                                "type": "isEmail"
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "name",
-                        "validation": [
-                            {
                                 "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "firstName",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
-                            }
-                        ]
-                    },
-                    {
-                        "kind": "scalar",
-                        "type": "String",
-                        "required": false,
-                        "name": "lastName",
-                        "validation": [
-                            {
-                                "type": "isOptional"
-                            },
-                            {
-                                "type": "maxLength",
-                                "constraints": [256]
                             }
                         ]
                     }
