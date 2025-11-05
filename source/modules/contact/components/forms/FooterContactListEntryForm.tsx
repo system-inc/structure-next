@@ -7,6 +7,7 @@ import React from 'react';
 import { useForm } from '@structure/source/components/forms-new/useForm';
 
 // Dependencies - API
+import { BaseError } from '@structure/source/api/errors/BaseError';
 import {
     contactListEntryCreateRequestInputSchema,
     useContactListEntryCreateRequest,
@@ -66,7 +67,7 @@ export function FooterContactListEntryForm({
                 setShowError(false);
             }
             catch(error: unknown) {
-                if(error instanceof Error && error.message === 'Email address already exists in this contact list.') {
+                if(BaseError.isAlreadyExistsError(error)) {
                     // Success - already signed up
                     form.reset();
                     setSubmittedEmailAddress(emailAddress);

@@ -36,6 +36,9 @@ export const ERROR_CODE_INVALID_TYPE = 'INVALID_TYPE';
 // The quota for the operation has been exceeded.
 export const ERROR_CODE_QUOTA_EXCEEDED = 'QUOTA_EXCEEDED';
 
+// The resource already exists (e.g., duplicate entry).
+export const ERROR_CODE_ALREADY_EXISTS = 'ALREADY_EXISTS';
+
 // Framework error codes type
 export type BaseErrorCode =
     | typeof ERROR_CODE_DEVICE_ID_REQUIRED
@@ -48,7 +51,8 @@ export type BaseErrorCode =
     | typeof ERROR_CODE_RATE_LIMIT_EXCEEDED
     | typeof ERROR_CODE_VALIDATION_ERROR
     | typeof ERROR_CODE_INVALID_TYPE
-    | typeof ERROR_CODE_QUOTA_EXCEEDED;
+    | typeof ERROR_CODE_QUOTA_EXCEEDED
+    | typeof ERROR_CODE_ALREADY_EXISTS;
 
 // Interface - BaseErrorData
 // A JSON-serializable representation of a Base error returned from the API
@@ -304,6 +308,11 @@ export class BaseError extends Error {
     static isUniqueConstraintError(error: unknown): boolean {
         const validationErrors = BaseError.getValidationErrors(error);
         return !!validationErrors?.[0]?.constraints?.isUnique;
+    }
+
+    // Static method: Check if error is an "already exists" error
+    static isAlreadyExistsError(error: unknown): error is BaseError {
+        return error instanceof BaseError && error.errorCode === ERROR_CODE_ALREADY_EXISTS;
     }
 
     // Static method: Convert unknown error to BaseError
