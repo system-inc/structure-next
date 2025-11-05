@@ -11,7 +11,7 @@ import { AnimatePresence, motion } from 'motion/react';
 
 export const tabsVariants = createVariantClassNames(
     // Wrapper defaults
-    'z-0 flex items-center gap-1 rounded-full background--1 p-0.5 transition-colors',
+    'z-0 flex items-center gap-1 rounded-full background--2 p-0.5 transition-colors',
     {
         variants: {
             size: {
@@ -55,7 +55,7 @@ Tabs.displayName = RadixTabPrimitive.Root.displayName;
 export const tabItemVariants = createVariantClassNames(
     mergeClassNames(
         // Default
-        'group relative cursor-pointer rounded-full content--1 transition-colors',
+        'group relative cursor-pointer rounded-full content--2 transition-colors',
         // Hover
         'hover:content--0',
         // Active
@@ -112,7 +112,7 @@ export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitiv
                             layoutId={`tab-${tabsContext.tabGroupId}`}
                             className={mergeClassNames(
                                 'absolute inset-0 h-full w-full border border-transparent',
-                                'z-0 group-data-[state=active]:border--0 group-data-[state=active]:background--0',
+                                'z-0 group-data-[state=active]:border--1 group-data-[state=active]:background--0',
                             )}
                             style={{
                                 borderRadius: '99px',

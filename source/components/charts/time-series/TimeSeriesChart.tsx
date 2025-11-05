@@ -200,8 +200,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                             <XAxis
                                 xAxisId="0"
                                 dataKey="label"
-                                stroke="var(--border-primary)"
-                                tick={{ fill: 'var(--foreground-secondary)' }}
+                                stroke="var(--color-border-0)"
+                                tick={{ fill: 'var(--color-content-4)' }}
                                 interval={tickInterval}
                                 tickFormatter={function (value: string | number | undefined, index: number) {
                                     const stringValue = String(value || '');
@@ -223,8 +223,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                                 dataKey="label"
                                 axisLine={false}
                                 tickLine={false}
-                                stroke="var(--border-primary)"
-                                tick={{ fill: 'var(--foreground-tertiary)' }}
+                                stroke="var(--color-border-0)"
+                                tick={{ fill: 'var(--color-content-4)' }}
                                 interval={tickInterval}
                                 tickFormatter={function (value: string | number | undefined, index: number) {
                                     const stringValue = String(value || '');
@@ -251,8 +251,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                             <YAxis
                                 yAxisId="left"
                                 orientation="left"
-                                stroke="var(--border-primary)"
-                                tick={{ fill: 'var(--foreground-secondary)' }}
+                                stroke="var(--color-border-0)"
+                                tick={{ fill: 'var(--color-content-4)' }}
                                 tickFormatter={function (value) {
                                     // Find the first data source using left axis
                                     const leftDataSource = properties.dataSources.find(
@@ -270,8 +270,8 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                             <YAxis
                                 yAxisId="right"
                                 orientation="right"
-                                stroke="var(--border-primary)"
-                                tick={{ fill: 'var(--foreground-secondary)' }}
+                                stroke="var(--color-border-0)"
+                                tick={{ fill: 'var(--color-content-4)' }}
                                 tickFormatter={function (value) {
                                     // Find the first data source using right axis
                                     const rightDataSource = properties.dataSources.find(
@@ -290,12 +290,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                     {showTooltip && (
                         <RechartsTooltip
                             cursor={{
-                                stroke:
-                                    properties.chartType === 'Bar'
-                                        ? isDarkMode
-                                            ? 'var(--light-30)'
-                                            : 'var(--dark-50)'
-                                        : 'var(--border-primary)',
+                                stroke: 'var(--color-border-0)',
                                 strokeWidth:
                                     properties.chartType === 'Bar'
                                         ? chartContentDimensions.width / (properties.data.length || 1)

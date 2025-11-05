@@ -8,7 +8,7 @@ import { Slot } from '@radix-ui/react-slot';
 
 export const cardVariants = createVariantClassNames(
     // Base styles
-    'flex flex-col items-start justify-start gap-6 rounded-2xl border border--0 background--2 p-8 shadow-lg transition-all',
+    'flex flex-col items-start justify-start gap-6 rounded-2xl border border--2 background--2 p-8 shadow-lg transition-all',
     {
         variants: {
             interactive: {

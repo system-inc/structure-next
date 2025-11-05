@@ -56,8 +56,8 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
 
         // Render the component
         return (
-            <div className="rounded-xs border border--0 background--0">
-                <div className="border-b border--0 p-2 text-xs content--1">
+            <div className="rounded-md border border--1 background--0">
+                <div className="border-b border--1 p-2 text-xs content--3">
                     {properties.timeInterval
                         ? formatTipLabelByTimeInterval(dataPoint.label, properties.timeInterval)
                         : dataPoint.label}
@@ -69,7 +69,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                 key={index}
                                 className={mergeClassNames(
                                     'text-xs',
-                                    index !== sortedPayload.length - 1 && 'border-b border--0',
+                                    index !== sortedPayload.length - 1 && 'border-b border--1',
                                 )}
                             >
                                 <td className="p-2 text-center text-xs">
@@ -88,7 +88,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                         })()}
                                     </b>
                                 </td>
-                                <td className="border-l border--0 p-2 pr-4">
+                                <td className="border-l border--1 p-2 pr-4">
                                     <div className="flex items-center gap-2">
                                         <div
                                             style={{
@@ -99,7 +99,7 @@ export function TimeSeriesTip(properties: TimeSeriesTipProperties) {
                                                         ? lightenColor(entry.color || '', 0.2)
                                                         : darkenColor(entry.color || '', 0.2),
                                             }}
-                                            className="h-4 w-4 rounded-xs border border--0"
+                                            className="h-4 w-4 rounded-xs border border--1"
                                         />
                                         <span>{entry.name}</span>
                                     </div>
