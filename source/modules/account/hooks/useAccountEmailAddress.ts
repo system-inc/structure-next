@@ -3,7 +3,7 @@
 // Dependencies - Shared State
 import { useAtomValue } from 'jotai';
 import { selectAtom } from 'jotai/utils';
-import { accountAtom } from './useAccount';
+import { accountAtom, type AccountStateInterface } from './useAccount';
 
 /**
  * Hook - useAccountEmailAddress
@@ -21,7 +21,7 @@ export function useAccountEmailAddress(): string {
     // Create a derived atom that only extracts the email address
     const emailAddressAtom = selectAtom(
         accountAtom,
-        function (state) {
+        function (state: AccountStateInterface) {
             return state.data?.emailAddress ?? '';
         },
         function (previous, next) {

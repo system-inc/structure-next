@@ -1,6 +1,10 @@
 // Dependencies - Project
 import { ProjectSettings } from '@project/ProjectSettings';
 
+// Dependencies - Types
+import { GraphQlResponseInterface, hasGraphQlErrors } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
+import { BaseError } from '@structure/source/api/errors/BaseError';
+
 // Dependencies - TanStack Query
 import {
     useQuery as tanStackReactQueryUseQuery,
@@ -14,14 +18,13 @@ import {
 } from '@tanstack/react-query';
 import { experimental_createQueryPersister } from '@tanstack/query-persist-client-core';
 
-// Dependencies - API
-import { GraphQlResponseInterface, hasGraphQlErrors } from '@structure/source/api/graphql/utilities/GraphQlUtilities';
-import { BaseError } from '@structure/source/api/errors/BaseError';
-
 // Dependencies - Internal
 import { NetworkStatistics, NetworkRequestStatisticsInterface } from './internal/NetworkServiceStatistics';
 import { AppOrStructureTypedDocumentString } from './internal/NetworkServiceGraphQl';
 import { NetworkServiceDeviceId } from './internal/NetworkServiceDeviceId';
+
+// Dependencies - Account
+import { signOut } from '@structure/source/modules/account/shared-state/AccountAtom';
 
 // Constants
 export const networkServiceCacheKey = `${ProjectSettings.identifier}NetworkServiceCache`;
@@ -442,12 +445,23 @@ export class NetworkService {
                     console.warn('[NetworkService] Device ID required. Attempting automatic recovery...');
 
                     // Force a fresh device ID check (safe for concurrent calls)
-                    await this.deviceIdManager.ensure({ refresh: true });
+                    await this.deviceIdManager.ensure(true);
 
                     console.log('[NetworkService] Device ID refreshed, retrying GraphQL request');
 
                     // Retry the request once - if this fails, let it throw
                     return this.graphQlRequest(query, variables, options, true);
+                }
+
+                // Check if this is an authentication error
+                if(BaseError.isAuthenticationError(baseError)) {
+                    // Only handle on client side (not during SSR)
+                    if(!this.isServerSide()) {
+                        console.log('[NetworkService] Authentication error detected - signing out user');
+                        // Sign out without notifying server (we already know auth failed)
+                        // This clears the account atom and all caches
+                        signOut(false);
+                    }
                 }
 
                 throw baseError;

@@ -2246,37 +2246,6 @@ export type AccountProfileImageRemoveMutation = {
     };
 };
 
-export type AccountQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountQuery = {
-    __typename?: 'Query';
-    account: {
-        __typename?: 'Account';
-        emailAddress: string;
-        accessRoles: Array<string>;
-        entitlements: Array<string>;
-        createdAt: any;
-        profile: {
-            __typename?: 'Profile';
-            id: string;
-            username: string;
-            displayName?: string | null;
-            givenName?: string | null;
-            familyName?: string | null;
-            updatedAt: any;
-            createdAt: any;
-            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
-        };
-    };
-};
-
-export type AccountSignOutMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountSignOutMutation = {
-    __typename?: 'Mutation';
-    accountSignOut: { __typename?: 'OperationResult'; success: boolean };
-};
-
 export type AccountEmailsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AccountEmailsQuery = {
@@ -2637,6 +2606,37 @@ export type AccountProfilePublicQuery = {
         createdAt?: any | null;
         images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
     } | null;
+};
+
+export type AccountQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountQuery = {
+    __typename?: 'Query';
+    account: {
+        __typename?: 'Account';
+        emailAddress: string;
+        accessRoles: Array<string>;
+        entitlements: Array<string>;
+        createdAt: any;
+        profile: {
+            __typename?: 'Profile';
+            id: string;
+            username: string;
+            displayName?: string | null;
+            givenName?: string | null;
+            familyName?: string | null;
+            updatedAt: any;
+            createdAt: any;
+            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
+        };
+    };
+};
+
+export type AccountSignOutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountSignOutMutation = {
+    __typename?: 'Mutation';
+    accountSignOut: { __typename?: 'OperationResult'; success: boolean };
 };
 
 export type ContactListEntryCreateMutationVariables = Exact<{
@@ -3267,36 +3267,6 @@ export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
-export const AccountDocument = new TypedDocumentString(`
-    query Account {
-  account {
-    emailAddress
-    profile {
-      id
-      username
-      displayName
-      givenName
-      familyName
-      images {
-        url
-        variant
-      }
-      updatedAt
-      createdAt
-    }
-    accessRoles
-    entitlements
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
-export const AccountSignOutDocument = new TypedDocumentString(`
-    mutation AccountSignOut {
-  accountSignOut {
-    success
-  }
-}
-    `) as unknown as TypedDocumentString<AccountSignOutMutation, AccountSignOutMutationVariables>;
 export const AccountEmailsDocument = new TypedDocumentString(`
     query AccountEmails {
   accountEmailAddresses {
@@ -3619,6 +3589,36 @@ export const AccountProfilePublicDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountProfilePublicQuery, AccountProfilePublicQueryVariables>;
+export const AccountDocument = new TypedDocumentString(`
+    query Account {
+  account {
+    emailAddress
+    profile {
+      id
+      username
+      displayName
+      givenName
+      familyName
+      images {
+        url
+        variant
+      }
+      updatedAt
+      createdAt
+    }
+    accessRoles
+    entitlements
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountQuery, AccountQueryVariables>;
+export const AccountSignOutDocument = new TypedDocumentString(`
+    mutation AccountSignOut {
+  accountSignOut {
+    success
+  }
+}
+    `) as unknown as TypedDocumentString<AccountSignOutMutation, AccountSignOutMutationVariables>;
 export const ContactListEntryCreateDocument = new TypedDocumentString(`
     mutation ContactListEntryCreate($data: ContactListEntryInput!) {
   contactListEntryCreate(data: $data) {

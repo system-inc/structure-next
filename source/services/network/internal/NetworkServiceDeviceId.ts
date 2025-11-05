@@ -30,7 +30,7 @@ export class NetworkServiceDeviceId {
     }
 
     // Function to ensure a device ID is valid before making requests
-    async ensure(options?: { refresh?: boolean }): Promise<void> {
+    async ensure(refresh: boolean = false): Promise<void> {
         // Skip deviceId check if server side
         if(this.isServerSide) {
             return;
@@ -41,13 +41,13 @@ export class NetworkServiceDeviceId {
             return this.deviceIdPromise;
         }
 
-        // If already checked this session and not skipping cache, skip
-        if(this.deviceIdChecked && !options?.refresh) {
+        // If already checked this session and not refreshing, skip
+        if(this.deviceIdChecked && !refresh) {
             return;
         }
 
         // Start the check
-        this.deviceIdPromise = this.checkAndRequestDeviceId(options?.refresh);
+        this.deviceIdPromise = this.checkAndRequestDeviceId(refresh);
 
         try {
             await this.deviceIdPromise;
