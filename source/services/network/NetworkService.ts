@@ -442,7 +442,7 @@ export class NetworkService {
                     console.warn('[NetworkService] Device ID required. Attempting automatic recovery...');
 
                     // Force a fresh device ID check (safe for concurrent calls)
-                    await this.deviceIdManager.ensure({ skipCache: true });
+                    await this.deviceIdManager.ensure({ refresh: true });
 
                     console.log('[NetworkService] Device ID refreshed, retrying GraphQL request');
 

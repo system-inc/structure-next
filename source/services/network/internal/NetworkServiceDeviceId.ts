@@ -5,8 +5,7 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
 
 // Constants
-const deviceIdUpdatedAtLocalStorageKey = 'DeviceIdUpdatedAt';
-const sixMonthsInMilliseconds = 6 * 30 * 24 * 60 * 60 * 1000;
+const deviceIdRequestedLocalStorageKey = 'DeviceIdRequested';
 
 // Retry configuration - Gmail-style infinite retry with backoff
 const deviceIdRequestRetryConfiguration = {
@@ -30,13 +29,10 @@ export class NetworkServiceDeviceId {
         this.isServerSide = isServerSide;
     }
 
-    /**
-     * Ensures device ID is valid before making requests.
-     * All requests will queue until device ID is obtained.
-     */
-    async ensure(options?: { skipCache?: boolean }): Promise<void> {
-        // Skip deviceId check if accounts module is disabled or on server side
-        if(!ProjectSettings.modules?.accounts || this.isServerSide) {
+    // Function to ensure a device ID is valid before making requests
+    async ensure(options?: { refresh?: boolean }): Promise<void> {
+        // Skip deviceId check if server side
+        if(this.isServerSide) {
             return;
         }
 
@@ -46,12 +42,12 @@ export class NetworkServiceDeviceId {
         }
 
         // If already checked this session and not skipping cache, skip
-        if(this.deviceIdChecked && !options?.skipCache) {
+        if(this.deviceIdChecked && !options?.refresh) {
             return;
         }
 
         // Start the check
-        this.deviceIdPromise = this.checkAndRequestDeviceId(options?.skipCache);
+        this.deviceIdPromise = this.checkAndRequestDeviceId(options?.refresh);
 
         try {
             await this.deviceIdPromise;
@@ -61,30 +57,20 @@ export class NetworkServiceDeviceId {
         }
     }
 
-    // Function to reset device ID state, forcing a re-check on next request
-    reset(): void {
-        this.deviceIdChecked = false;
-        this.deviceIdPromise = null;
+    // Function to check if device ID has been requested
+    private hasRequestedDeviceId(): boolean {
+        return localStorageService.get<boolean>(deviceIdRequestedLocalStorageKey) === true;
     }
 
-    // Function to get the last updated timestamp from localStorage
-    private getLastUpdated(): number | null {
-        return localStorageService.get<number>(deviceIdUpdatedAtLocalStorageKey);
+    // Function to mark that device ID has been requested
+    private markDeviceIdRequestedInLocalStorage(): void {
+        localStorageService.set<boolean>(deviceIdRequestedLocalStorageKey, true);
     }
 
-    // Function to set the last updated timestamp in localStorage
-    private setLastUpdated(timestamp: number): void {
-        localStorageService.set<number>(deviceIdUpdatedAtLocalStorageKey, timestamp);
-    }
-
-    // Function to check if device ID is valid and request a new one if needed
-    private async checkAndRequestDeviceId(skipCache: boolean = false): Promise<void> {
-        const lastUpdated = this.getLastUpdated();
-        const sixMonthsAgo = Date.now() - sixMonthsInMilliseconds;
-
-        // Skip timestamp check if skipping cache
-        if(!skipCache && lastUpdated && lastUpdated > sixMonthsAgo) {
-            // Valid deviceId exists
+    // Function to check if device ID has been requested and request one if needed
+    private async checkAndRequestDeviceId(refresh: boolean = false): Promise<void> {
+        // Skip check if already requested (unless skipping cache)
+        if(!refresh && this.hasRequestedDeviceId()) {
             return;
         }
 
@@ -95,19 +81,35 @@ export class NetworkServiceDeviceId {
 
         // Fetch deviceId with exponential backoff and retries
         return this.retryWithExponentialBackoff(async () => {
-            // Device ID fetch is a special case that needs to use raw fetch
-            // to avoid circular dependency (NetworkService -> DeviceId -> NetworkService)
-            // eslint-disable-next-line structure/network-service-rule
-            const response = await fetch(deviceIdUrl, {
-                method: 'GET',
-                credentials: 'include',
-            });
+            // Use navigator.locks if available to prevent concurrent fetches from many tabs
+            // This will serialize deviceId requests across tabs
+            const response = await (typeof navigator !== 'undefined' && navigator.locks
+                ? navigator.locks.request(deviceIdUrl, function () {
+                      // console.log('[NetworkServiceDeviceId] Acquired lock for deviceId fetch:', deviceIdUrl);
 
-            if(!response.ok) {
+                      // Device ID fetch is a special case that needs to use raw fetch
+                      // to avoid circular dependency (NetworkService -> DeviceId -> NetworkService)
+                      // eslint-disable-next-line structure/network-service-rule
+                      return fetch(deviceIdUrl, {
+                          method: 'GET',
+                          credentials: 'include',
+                      });
+                  })
+                : // eslint-disable-next-line structure/network-service-rule
+                  fetch(deviceIdUrl, {
+                      method: 'GET',
+                      credentials: 'include',
+                  }));
+
+            // If the request succeeded
+            if(response.ok) {
+                // Mark device ID as requested in local storage
+                this.markDeviceIdRequestedInLocalStorage();
+            }
+            // If the request to get a deviceId failed
+            else {
                 throw new Error(`DeviceId fetch failed with status: ${response.status}`);
             }
-
-            this.setLastUpdated(Date.now());
         });
     }
 
@@ -119,32 +121,10 @@ export class NetworkServiceDeviceId {
 
     // Function to get the status of the device ID
     getStatus(): {
-        isValid: boolean;
-        lastUpdated: Date | null;
-        expiresAt: Date | null;
-        daysUntilExpiration: number | null;
+        hasBeenRequested: boolean;
     } {
-        const lastUpdated = this.getLastUpdated();
-
-        if(!lastUpdated) {
-            return {
-                isValid: false,
-                lastUpdated: null,
-                expiresAt: null,
-                daysUntilExpiration: null,
-            };
-        }
-
-        const lastUpdatedDate = new Date(lastUpdated);
-        const expiresAt = new Date(lastUpdated + sixMonthsInMilliseconds);
-        const now = Date.now();
-        const daysUntilExpiration = Math.floor((expiresAt.getTime() - now) / (1000 * 60 * 60 * 24));
-
         return {
-            isValid: now < expiresAt.getTime(),
-            lastUpdated: lastUpdatedDate,
-            expiresAt,
-            daysUntilExpiration: daysUntilExpiration > 0 ? daysUntilExpiration : 0,
+            hasBeenRequested: this.hasRequestedDeviceId(),
         };
     }
 
