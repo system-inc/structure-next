@@ -139,11 +139,6 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
         [notice],
     );
 
-    // Don't render anything if there are no notices
-    if(noticesState.length === 0) {
-        return null;
-    }
-
     // Render the component
     return (
         <div
@@ -158,7 +153,8 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             {/* Clear All Button */}
             <div
                 className={mergeClassNames(
-                    'pointer-events-auto relative z-50 flex w-full justify-end pt-6 pr-4 md:pr-8',
+                    'relative z-50 flex w-full justify-end pt-6 pr-4 md:pr-8',
+                    noticesState.length === 0 ? 'pointer-events-none' : 'pointer-events-auto',
                 )}
             >
                 <NoticesClearAllButton
@@ -181,7 +177,10 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             </div>
 
             <div
-                className="pointer-events-auto relative z-0 flex h-auto max-h-[50vh] flex-col-reverse overflow-x-hidden overflow-y-auto pt-2 pb-2"
+                className={mergeClassNames(
+                    'relative z-0 flex h-auto max-h-[50vh] flex-col-reverse overflow-x-hidden overflow-y-auto pt-2 pb-2',
+                    noticesState.length === 0 ? 'pointer-events-none' : 'pointer-events-auto',
+                )}
                 style={{
                     maskImage: 'linear-gradient(to bottom, transparent 0%, black 8px, black 100%)',
                     WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8px, black 100%)',
