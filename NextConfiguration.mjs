@@ -7,13 +7,35 @@ initializeOpenNextCloudflareForDevelopment();
 // Next Configuration
 /** @type {import('next').NextConfig} */
 export const NextConfiguration = {
-    // Enable React Compiler (experimental)
-    experimental: {
-        reactCompiler: true,
-    },
+    // Enable React Compiler
+    reactCompiler: true,
     // optimizeFonts: false, // Do not optimize fonts as we are on Cloudflare not Vercel
     images: {
         unoptimized: true, // Do not optimize images as we are on Cloudflare not Vercel
+    },
+    // Turbopack configuration (for when we migrate from webpack)
+    turbopack: {
+        rules: {
+            // Convert SVG files to React components using SVGR
+            '*.svg': {
+                loaders: ['@svgr/webpack'],
+                as: '*.js',
+            },
+            // Import markdown files as strings
+            '*.md': {
+                loaders: ['raw-loader'],
+                as: '*.js',
+            },
+            // Import code files as strings (used for WebSocket shared worker)
+            '*.code.js': {
+                loaders: ['raw-loader'],
+                as: '*.js',
+            },
+            '*.code.ts': {
+                loaders: ['raw-loader'],
+                as: '*.js',
+            },
+        },
     },
     webpack(configuration) {
         // Configures webpack to handle SVG files with SVGR. SVGR optimizes and transforms SVG files
