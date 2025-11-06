@@ -7,6 +7,8 @@ initializeOpenNextCloudflareForDevelopment();
 // Next Configuration
 /** @type {import('next').NextConfig} */
 export const NextConfiguration = {
+    // Use the standalone output target for deployment on Cloudflare Workers
+    output: 'standalone',
     // Enable React Compiler
     reactCompiler: true,
     // optimizeFonts: false, // Do not optimize fonts as we are on Cloudflare not Vercel
