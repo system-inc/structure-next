@@ -31,40 +31,12 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
         href: '/ops',
         icon: HomeIcon,
     },
-    // Team - Administrator only
+    // Support - Support role
     {
-        title: 'Team',
-        href: '/ops/team',
-        icon: TeamIcon,
-        links: [
-            {
-                title: 'Employees',
-                href: '/ops/team/employees',
-            },
-            {
-                title: 'Investors',
-                href: '/ops/team/investors',
-            },
-        ],
-    },
-    // Communication - Marketer role
-    {
-        title: 'Communication',
-        href: '/ops/communication',
-        icon: MailIcon,
-        accessibleRoles: [AccountRole.Marketer],
-        links: [
-            {
-                title: 'Email Campaigns',
-                href: '/ops/communication/email-campaigns',
-                accessibleRoles: [AccountRole.Marketer],
-            },
-            {
-                title: 'Email Lists',
-                href: '/ops/communication/email-lists',
-                accessibleRoles: [AccountRole.Marketer],
-            },
-        ],
+        title: 'Support',
+        href: '/ops/support',
+        icon: SupportIcon,
+        accessibleRoles: [AccountRole.Support],
     },
     // Orders - OrderViewer role
     {
@@ -91,6 +63,70 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
+    // Marketing - Marketer and SocialMediaManager roles
+    {
+        title: 'Marketing',
+        href: '/ops/marketing',
+        icon: NewsIcon,
+        accessibleRoles: [AccountRole.Marketer, AccountRole.SocialMediaManager],
+        links: [
+            {
+                title: 'Campaigns',
+                href: '/ops/marketing/campaigns',
+                accessibleRoles: [AccountRole.Marketer],
+            },
+            {
+                title: 'Automations',
+                href: '/ops/marketing/automations',
+                accessibleRoles: [AccountRole.Marketer],
+            },
+            {
+                title: 'Social Media',
+                href: '/ops/marketing/social-media',
+                accessibleRoles: [AccountRole.SocialMediaManager],
+            },
+        ],
+    },
+    // Users - Administrator only
+    {
+        title: 'Users',
+        href: '/ops/users',
+        icon: UsersIcon,
+        links: [
+            {
+                title: 'Roles',
+                href: '/ops/users/roles',
+            },
+            {
+                title: 'Segments',
+                href: '/ops/users/segments',
+            },
+            {
+                title: 'Contact Lists',
+                href: '/ops/users/contact-lists',
+            },
+        ],
+    },
+    // Communication - Marketer role
+    {
+        title: 'Communication',
+        href: '/ops/communication',
+        icon: MailIcon,
+        accessibleRoles: [AccountRole.Marketer],
+        links: [
+            {
+                title: 'Email Campaigns',
+                href: '/ops/communication/email-campaigns',
+                accessibleRoles: [AccountRole.Marketer],
+            },
+            {
+                title: 'Email Lists',
+                href: '/ops/communication/email-lists',
+                accessibleRoles: [AccountRole.Marketer],
+            },
+        ],
+    },
+
     // Fulfillment - FulfillmentManager role
     {
         title: 'Fulfillment',
@@ -111,6 +147,20 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             {
                 title: 'Ship Orders',
                 href: '/ops/fulfillment/ship-orders',
+                accessibleRoles: [AccountRole.FulfillmentManager],
+            },
+        ],
+    },
+    // Inventory - FulfillmentManager role
+    {
+        title: 'Inventory',
+        href: '/ops/inventory',
+        icon: ShippingBoxIcon,
+        accessibleRoles: [AccountRole.FulfillmentManager],
+        links: [
+            {
+                title: 'Transfers',
+                href: '/ops/inventory/transfers',
                 accessibleRoles: [AccountRole.FulfillmentManager],
             },
         ],
@@ -143,47 +193,6 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
                 accessibleRoles: [AccountRole.ProductManager],
             },
         ],
-    },
-    // Inventory - FulfillmentManager role
-    {
-        title: 'Inventory',
-        href: '/ops/inventory',
-        icon: ShippingBoxIcon,
-        accessibleRoles: [AccountRole.FulfillmentManager],
-        links: [
-            {
-                title: 'Transfers',
-                href: '/ops/inventory/transfers',
-                accessibleRoles: [AccountRole.FulfillmentManager],
-            },
-        ],
-    },
-    // Users - Administrator only
-    {
-        title: 'Users',
-        href: '/ops/users',
-        icon: UsersIcon,
-        links: [
-            {
-                title: 'Roles',
-                href: '/ops/users/roles',
-            },
-            {
-                title: 'Segments',
-                href: '/ops/users/segments',
-            },
-            {
-                title: 'Contact Lists',
-                href: '/ops/users/contact-lists',
-            },
-        ],
-    },
-    // Support - Support role
-    {
-        title: 'Support',
-        href: '/ops/support',
-        icon: SupportIcon,
-        accessibleRoles: [AccountRole.Support],
     },
     // Content - Administrator only
     {
@@ -225,30 +234,6 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             },
         ],
     },
-    // Marketing - Marketer and SocialMediaManager roles
-    {
-        title: 'Marketing',
-        href: '/ops/marketing',
-        icon: NewsIcon,
-        accessibleRoles: [AccountRole.Marketer, AccountRole.SocialMediaManager],
-        links: [
-            {
-                title: 'Campaigns',
-                href: '/ops/marketing/campaigns',
-                accessibleRoles: [AccountRole.Marketer],
-            },
-            {
-                title: 'Automations',
-                href: '/ops/marketing/automations',
-                accessibleRoles: [AccountRole.Marketer],
-            },
-            {
-                title: 'Social Media',
-                href: '/ops/marketing/social-media',
-                accessibleRoles: [AccountRole.SocialMediaManager],
-            },
-        ],
-    },
     // Discounts - Administrator only
     {
         title: 'Discounts',
@@ -258,6 +243,22 @@ export const OpsNavigationLinks: OpsNavigationLinkProperties[] = [
             {
                 title: 'Vouchers',
                 href: '/ops/discounts/vouchers',
+            },
+        ],
+    },
+    // Team - Administrator only
+    {
+        title: 'Team',
+        href: '/ops/team',
+        icon: TeamIcon,
+        links: [
+            {
+                title: 'Employees',
+                href: '/ops/team/employees',
+            },
+            {
+                title: 'Investors',
+                href: '/ops/team/investors',
             },
         ],
     },

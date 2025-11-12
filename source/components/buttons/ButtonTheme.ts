@@ -264,7 +264,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Use for: Items within dropdown menus, context menus, select options
         MenuItem: mergeClassNames(
             // Layout
-            'relative flex cursor-default items-center justify-start',
+            'relative flex cursor-default items-center justify-start gap-2',
             // Padding based on selected state (for checkmark icon spacing)
             'pl-8 data-[selected=true]:pl-2',
             // Border

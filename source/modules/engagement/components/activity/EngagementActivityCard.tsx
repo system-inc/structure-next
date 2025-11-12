@@ -33,6 +33,7 @@ import {
     GoogleLogoIcon,
     LinkedinLogoIcon,
     MetaLogoIcon,
+    PinterestLogoIcon,
 } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
@@ -170,6 +171,9 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
     else if(referrerIconType === 'linkedin') {
         ReferrerIcon = LinkedinLogoIcon;
     }
+    else if(referrerIconType === 'pinterest') {
+        ReferrerIcon = PinterestLogoIcon;
+    }
 
     // Render the component
     return (
@@ -187,17 +191,17 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                 setIsExpanded(!isExpanded);
             }}
             className={mergeClassNames(
-                'cursor-pointer rounded-lg border p-3 shadow-sm transition-colors',
+                'cursor-pointer rounded-lg border p-3 transition-colors',
                 hasAddedToCart
-                    ? 'dark:bg-dark-1 border-green-500 bg-white dark:border-green-500'
+                    ? 'border--positive'
                     : isExpanded
-                      ? 'dark:bg-dark-1 border--0 bg-white dark:border--0'
-                      : 'dark:border-dark-4 dark:bg-dark-1 border--3 bg-white hover:border--0/50 active:border--0 dark:hover:border--0/50 dark:active:border--0',
+                      ? 'border--3 background--1'
+                      : 'border--0 hover:border--2 active:border--4',
             )}
         >
             {/* Top row: Location with browser, platform, and device type icons */}
             <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="min-w-0 truncate text-sm font-medium content--2">
+                <span className="min-w-0 truncate text-sm font-medium content--1">
                     {properties.visitorActivity.location}
                 </span>
                 <div className="flex shrink-0 items-center gap-1.5">
@@ -209,9 +213,7 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
 
             {/* Current page + event count */}
             <div className="mb-2 flex items-center justify-between gap-2">
-                <div className="min-w-0 flex-1 truncate font-mono text-xs text-blue-600 dark:text-blue-400">
-                    {currentPath}
-                </div>
+                <div className="min-w-0 flex-1 truncate font-mono text-xs content--informative">{currentPath}</div>
                 <div className="shrink-0 text-xs content--2">
                     {properties.visitorActivity.pageCount}{' '}
                     {properties.visitorActivity.pageCount === 1 ? 'event' : 'events'}
@@ -242,8 +244,8 @@ export function EngagementActivityCard(properties: EngagementActivityCardPropert
                                                 <span
                                                     className={
                                                         isAddToCart
-                                                            ? 'min-w-0 flex-1 truncate font-mono font-semibold text-green-600 dark:text-green-400'
-                                                            : 'min-w-0 flex-1 truncate font-mono text-blue-600 dark:text-blue-400'
+                                                            ? 'min-w-0 flex-1 truncate font-mono font-semibold content--positive'
+                                                            : 'min-w-0 flex-1 truncate font-mono content--informative'
                                                     }
                                                 >
                                                     {isAddToCart ? `🛒 ${path}` : path}

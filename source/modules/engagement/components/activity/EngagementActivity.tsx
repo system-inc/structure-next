@@ -278,7 +278,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
         content = (
             <>
                 <div className="mb-4 text-lg font-semibold">{title}</div>
-                <div className="text-sm text-red-500">
+                <div className="text-sm content--negative">
                     <div className="font-medium">Error:</div>
                     <div className="mt-1">{errorMessage}</div>
                     <div className="mt-2 text-xs content--2">Database: {properties.databaseName}</div>
@@ -302,7 +302,7 @@ export function EngagementActivity(properties: EngagementActivityProperties) {
                     <h2 className="text-lg font-semibold">
                         {title} ({sortedVisitors.length})
                     </h2>
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
+                    <div className="h-2 w-2 animate-pulse rounded-full background--positive" />
                 </div>
 
                 {/* Visitors list - scrollable, takes remaining height */}

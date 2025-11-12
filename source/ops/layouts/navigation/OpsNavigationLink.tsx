@@ -35,12 +35,12 @@ export function OpsNavigationLink(properties: OpsNavigationLinkProperties) {
         <Link
             href={properties.href}
             className={mergeClassNames(
-                'group flex items-center gap-x-2 rounded-md px-1.5 py-1 text-[13px] leading-6 hover:background--3 active:background--4',
+                'group flex items-center gap-x-2 rounded-md px-1.5 py-1 text-[13px] leading-6 hover:background--5 active:background--6 active:content--0',
                 properties.active
                     ? // If the live is active
-                      'background--2 content--0'
+                      'background--4 content--0'
                     : // If the link is not active
-                      '',
+                      'content--1',
             )}
             onClick={handleClick}
         >

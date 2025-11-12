@@ -48,7 +48,7 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
                 />
                 <div className="absolute inset-y-0 right-2 flex items-center">
                     <button
-                        className="relative flex aspect-square w-6 cursor-pointer items-center justify-center rounded dark:text-white"
+                        className="relative flex aspect-square w-6 cursor-pointer items-center justify-center rounded hover:background--6 active:background--7"
                         onClick={function () {
                             setIsOpen(!isOpen);
                         }}
@@ -66,7 +66,7 @@ export function OpsNavigationLinkGroup(properties: OpsNavigationLinkProperties) 
             </div>
 
             <Collapse key={properties.title} isOpen={isOpen} animationConfiguration={transition}>
-                <div className="ml-3 space-y-0.5 border-l pt-0.5 pb-0.5 pl-4">
+                <div className="ml-3 space-y-0.5 border-l border--2 pt-0.5 pb-0.5 pl-4">
                     {properties.links?.map(function (internalNavigationLink) {
                         return (
                             <li key={internalNavigationLink.title}>

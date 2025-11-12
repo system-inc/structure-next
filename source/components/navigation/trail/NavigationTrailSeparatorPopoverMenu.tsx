@@ -33,7 +33,7 @@ export function NavigationTrailSeparatorPopoverMenu(properties: NavigationTrailS
                 const selected = urlPathnameWithTrailingSlash.startsWith(linkWithTrailingSlash);
 
                 return {
-                    content: link.title,
+                    children: link.title,
                     href: link.href,
                     className: 'cursor-pointer w-full',
                     onChange: function () {
