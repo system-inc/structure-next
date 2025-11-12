@@ -23,27 +23,40 @@ export function Calendar(properties: CalendarProperties) {
             captionLayout="label"
             className={mergeClassNames('p-3', properties.className)}
             classNames={{
-                months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
-                month: 'space-y-4',
-                table: 'w-full border-collapse space-y-1',
-                weekdays: 'flex',
-                weekday: 'content--3 rounded-md w-8 font-normal text-[0.8rem]',
-                week: 'flex w-full mt-2',
-                cell: 'relative h-8 w-8 p-0 text-center text-sm focus-within:relative focus-within:z-20',
-                day: 'h-full w-full p-0 cursor-pointer',
-                day_button: 'h-8 w-8 cursor-pointer font-normal hover:background--5 hover:rounded-md',
-                range_start:
-                    'rounded-l-md [&_button]:!background-content--0 [&_button]:!content--10 [&_button]:rounded-l-md [&_button]:rounded-r-none hover:[&_button]:!background-content--8 [&_button]:hover:rounded-l-md [&_button]:hover:rounded-r-none [&.rdp-range_end]:!rounded-md',
-                range_end:
-                    'rounded-r-md [&_button]:!background-content--0 [&_button]:!content--10 [&_button]:rounded-r-md [&_button]:rounded-l-none hover:[&_button]:!background-content--8 [&_button]:hover:rounded-r-md [&_button]:hover:rounded-l-none [&.rdp-range_start]:!rounded-md',
-                range_middle:
-                    'background--5 [&_button]:!background--5 [&_button]:!content--0 [&_button]:!rounded-none [&_button]:hover:!background--7',
-                selected: '',
-                today: '[&_button]:background--informative [&_button]:content--0 [&_button]:rounded-md',
-                outside: 'content--5 opacity-50',
-                disabled: 'content--5 opacity-50',
-                hidden: 'invisible',
-                day_hidden: 'invisible',
+                months: mergeClassNames('flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4'),
+                month: mergeClassNames('space-y-4'),
+                table: mergeClassNames('w-full border-collapse space-y-1'),
+                weekdays: mergeClassNames('flex'),
+                weekday: mergeClassNames('w-8 rounded-md text-[0.8rem] font-normal content--3'),
+                week: mergeClassNames('mt-2 flex w-full'),
+                cell: mergeClassNames(
+                    'relative h-8 w-8 p-0 text-center text-sm focus-within:relative focus-within:z-20',
+                ),
+                day: mergeClassNames('h-full w-full cursor-pointer p-0'),
+                day_button: mergeClassNames(
+                    'h-8 w-8 cursor-pointer hover:rounded-md hover:background-content--0 hover:content--10',
+                ),
+                range_start: mergeClassNames(
+                    'rounded-l-md [&_button]:rounded-l-md [&_button]:rounded-r-none [&_button]:hover:rounded-l-md [&_button]:hover:rounded-r-none [&.rdp-range_end]:rounded-md!',
+                    '[&_button]:background-content--0! hover:[&_button]:background-content--0!',
+                    '[&_button]:content--10!',
+                ),
+                range_end: mergeClassNames(
+                    'rounded-r-md [&_button]:rounded-l-none [&_button]:rounded-r-md [&_button]:hover:rounded-l-none [&_button]:hover:rounded-r-md [&.rdp-range_start]:rounded-md!',
+                    '[&_button]:background-content--0! hover:[&_button]:background-content--0!',
+                    '[&_button]:content--10!',
+                ),
+                range_middle: mergeClassNames(
+                    '[&_button]:rounded-none! [&_button]:background--5! [&_button]:hover:background-content--0!',
+                ),
+                selected: mergeClassNames(''),
+                today: mergeClassNames(
+                    '[&_button]:rounded-md [&_button]:background-content--0! [&_button]:content--10',
+                ),
+                outside: mergeClassNames(''),
+                disabled: mergeClassNames(''),
+                hidden: mergeClassNames(''),
+                day_hidden: mergeClassNames(''),
                 ...properties.classNames,
             }}
             components={{
