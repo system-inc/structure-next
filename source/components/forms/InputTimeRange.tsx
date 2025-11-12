@@ -17,6 +17,7 @@ import { ButtonProperties, Button } from '@structure/source/components/buttons/B
 
 // Dependencies - Assets
 import CalendarIcon from '@structure/assets/icons/time/CalendarIcon.svg';
+import ChevronDownIcon from '@structure/assets/icons/interface/ChevronDownIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -320,11 +321,11 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     variant={'InputSelect'}
                     size="InputSelect"
                     className={mergeClassNames(
-                        'min-w-[246px]',
+                        'min-w-[246px] pl-2',
                         !value && 'content--1',
                         properties.buttonProperties?.className,
                     )}
-                    iconLeft={CalendarIcon}
+                    iconLeft={<CalendarIcon className="mr-2 h-4 w-4" />}
                     onBlur={onBlurIntercept}
                     {...properties.buttonProperties}
                 >
@@ -340,6 +341,10 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     ) : (
                         <span>{placeholder}</span>
                     )}
+                    {/* Spacer to push caret to the right */}
+                    <div className="grow" />
+                    {/* Dropdown caret */}
+                    <ChevronDownIcon className="ml-4 h-4 w-4 content--2" />
                 </Button>
             }
         />
