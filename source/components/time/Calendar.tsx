@@ -19,7 +19,8 @@ export function Calendar(properties: CalendarProperties) {
     return (
         <ReactDayPicker
             showOutsideDays={showOutsideDays}
-            hideNavigation
+            fixedWeeks={true} // Ensures consistent height by always showing 6 weeks
+            hideNavigation={true} // Use our custom navigation caption
             captionLayout="label"
             className={mergeClassNames('p-3', properties.className)}
             classNames={{
@@ -53,7 +54,7 @@ export function Calendar(properties: CalendarProperties) {
                 today: mergeClassNames(
                     '[&_button]:rounded-md [&_button]:background-content--0! [&_button]:content--10',
                 ),
-                outside: mergeClassNames(''),
+                outside: mergeClassNames('invisible'),
                 disabled: mergeClassNames(''),
                 hidden: mergeClassNames(''),
                 day_hidden: mergeClassNames(''),

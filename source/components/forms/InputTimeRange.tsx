@@ -278,7 +278,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                     <div className={mergeClassNames('flex flex-col', showTimeRangePresets && 'border-l border--0')}>
                         <Calendar
                             mode="range"
-                            showOutsideDays={false}
+                            showOutsideDays={true}
                             numberOfMonths={2}
                             defaultMonth={value?.startTime}
                             month={startCalendarMonth}
