@@ -37,11 +37,11 @@ export function TimeIntervalFormInputSelect(properties: TimeIntervalFormInputSel
         TimeInterval.WeekOfYear,
     ];
 
-    // Create items for the select
+    // Create items for the select with formatted display text
     const items = availableIntervals.map(function (interval) {
         return {
-            value: interval,
-            content: titleCase(interval),
+            value: interval, // Keep enum value for internal use
+            children: titleCase(interval), // Format for display (e.g., "Hour of Day")
         };
     });
 
