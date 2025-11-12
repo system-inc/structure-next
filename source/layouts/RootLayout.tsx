@@ -7,6 +7,8 @@ import { cookies } from 'next/headers';
 
 // Dependencies - Main Components
 import { Providers } from '@structure/source/layouts/providers/Providers';
+
+// Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Theme
@@ -52,7 +54,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1, // This makes it easier to enter form fields on mobile without the page zooming in
+    maximumScale: 5, // Allow zooming up to 5x for accessibility
     userScalable: true,
 };
 
@@ -87,18 +89,18 @@ export async function RootLayout(properties: RootLayoutProperties) {
 
     // Map the theme to its corresponding scheme-* utility class
     // For OperatingSystem theme, use the actual OS preference from cookie
-    let schemeClass: string;
+    let schemeClassName: string;
     if(theme === Theme.OperatingSystem) {
         const osTheme = cookieStore.get(operatingSystemThemeKey)?.value as OperatingSystemTheme | undefined;
-        schemeClass = osTheme === OperatingSystemTheme.Dark ? 'scheme-dark' : 'scheme-light';
+        schemeClassName = osTheme === OperatingSystemTheme.Dark ? 'scheme-dark' : 'scheme-light';
     }
     else {
-        schemeClass = ThemeClassName[theme] ?? 'scheme-light';
+        schemeClassName = ThemeClassName[theme] ?? 'scheme-light';
     }
 
     // Render the component
     return (
-        <html lang="en" className={mergeClassNames(properties.htmlClassName, schemeClass)}>
+        <html lang="en" className={mergeClassNames(properties.htmlClassName, schemeClassName)}>
             <body
                 className={mergeClassNames(
                     'background--0 font-sans content--0 transition-colors',
