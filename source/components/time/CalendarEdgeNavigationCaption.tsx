@@ -35,10 +35,7 @@ export function CalendarEdgeNavigationCaption(properties: MonthCaptionProperties
             {isFirst && dayPicker.previousMonth && (
                 <button
                     type="button"
-                    className={mergeClassNames(
-                        buttonTheme.variants.A,
-                        'absolute left-1 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
-                    )}
+                    className={mergeClassNames(buttonTheme.variants.A, 'absolute left-1 h-7 w-7 p-0')}
                     aria-label={dayPicker.labels?.labelPrevious?.(dayPicker.previousMonth)}
                     onClick={function () {
                         if(dayPicker.previousMonth) {
@@ -61,10 +58,7 @@ export function CalendarEdgeNavigationCaption(properties: MonthCaptionProperties
             {isLast && dayPicker.nextMonth && (
                 <button
                     type="button"
-                    className={mergeClassNames(
-                        buttonTheme.variants.A,
-                        'absolute right-1 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
-                    )}
+                    className={mergeClassNames(buttonTheme.variants.A, 'absolute right-1 h-7 w-7 p-0')}
                     aria-label={dayPicker.labels?.labelNext?.(dayPicker.nextMonth)}
                     onClick={function () {
                         if(dayPicker.nextMonth) {

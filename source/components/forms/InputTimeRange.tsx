@@ -177,8 +177,8 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                 type="button"
                 id={camelCase(properties.text)}
                 className={mergeClassNames(
-                    'cursor-pointer rounded-md p-1.5 text-xs content--1 hover:background--1',
-                    properties.isActive && 'background--1',
+                    'cursor-pointer rounded-md p-1.5 text-left text-xs hover:background--2 hover:content--1 active:background--5 active:content--0',
+                    properties.isActive ? 'background--4 content--0' : 'content--2',
                 )}
                 onClick={properties.onClick}
             >
@@ -242,7 +242,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                     {isMounted && value?.startTime && value?.endTime && (
                                         <>
                                             {value?.startTime && (
-                                                <button
+                                                <Button
                                                     onClick={function () {
                                                         if(value?.startTime && value?.endTime) {
                                                             setStartCalendarMonth(value.startTime ?? new Date());
@@ -250,10 +250,10 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                                     }}
                                                 >
                                                     {format(value.startTime, 'LLL d, y')}
-                                                </button>
+                                                </Button>
                                             )}
                                             <span className="px-1">-</span>
-                                            <button
+                                            <Button
                                                 onClick={function () {
                                                     if(value?.startTime && value?.endTime) {
                                                         setStartCalendarMonth(
@@ -263,7 +263,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                                                 }}
                                             >
                                                 {format(value.endTime, 'LLL d, y')}
-                                            </button>
+                                            </Button>
                                         </>
                                     )}
                                 </div>
@@ -307,7 +307,7 @@ export const InputTimeRange = React.forwardRef<InputTimeRangeReferenceInterface,
                         />
                         <div className="flex w-full justify-end p-3">
                             {/* Clear Button */}
-                            <Button variant="Ghost" onClick={clear}>
+                            <Button variant="A" size="Small" onClick={clear}>
                                 Clear
                             </Button>
                         </div>
