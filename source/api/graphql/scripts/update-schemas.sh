@@ -101,7 +101,7 @@ git pull origin main
 echo "  ✓ Base library updated"
 echo ""
 
-# Install npm packages
+# Install packages
 cd ../../
 
 # Load nvm if available
@@ -117,8 +117,8 @@ fi
 # Step 4: Install Dependencies
 # --------------------------------------------------
 echo "📦 Installing dependencies..."
-echo "  → Running npm install"
-npm i --no-audit
+echo "  → Running pnpm install"
+pnpm install --no-audit
 echo "  ✓ Dependencies installed"
 echo ""
 
@@ -197,12 +197,12 @@ rm -rf /tmp/api_schemas_temp
 cd $projectDirectory
 echo ""
 echo "💅 Formatting schema files..."
-npm run graphql:prettier
+pnpm graphql:prettier
 
 # Generate GraphQL code (which includes formatting)
 echo ""
 echo "🚀 Generating TypeScript code from schemas..."
-npm run graphql:generate
+pnpm graphql:generate
 
 echo ""
 echo "=================================================="
