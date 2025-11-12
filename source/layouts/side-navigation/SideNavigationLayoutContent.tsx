@@ -32,6 +32,7 @@ export interface SideNavigationLayoutContentProperties {
     topTitle?: React.ReactNode;
     children: React.ReactNode;
     className?: string;
+    defaultNavigationWidth?: number; // Default width of the navigation sidebar in pixels (default: 288)
 }
 export function SideNavigationLayoutContent(properties: SideNavigationLayoutContentProperties) {
     // Defaults
@@ -42,7 +43,9 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
 
     // Shared State
     const sideNavigationLayoutNavigationOpen = useAtomValue(getAtomForNavigationOpen(properties.layoutIdentifier));
-    const sideNavigationLayoutNavigationWidth = useAtomValue(getAtomForNavigationWidth(properties.layoutIdentifier));
+    const sideNavigationLayoutNavigationWidth = useAtomValue(
+        getAtomForNavigationWidth(properties.layoutIdentifier, properties.defaultNavigationWidth),
+    );
     const sideNavigationLayoutNavigationIsResizing = useAtomValue(
         getAtomForNavigationIsResizing(properties.layoutIdentifier),
     );

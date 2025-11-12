@@ -27,6 +27,7 @@ export interface SideNavigationLayoutNavigationTopProperties {
     className?: string;
     showHeader?: boolean;
     showHeaderBorder?: boolean;
+    defaultNavigationWidth?: number; // Default width of the navigation sidebar in pixels (default: 288)
 }
 export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayoutNavigationTopProperties) {
     // Defaults
@@ -39,7 +40,9 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
 
     // Shared State
     const sideNavigationLayoutNavigationOpen = useAtomValue(getAtomForNavigationOpen(properties.layoutIdentifier));
-    const sideNavigationLayoutNavigationWidth = useAtomValue(getAtomForNavigationWidth(properties.layoutIdentifier));
+    const sideNavigationLayoutNavigationWidth = useAtomValue(
+        getAtomForNavigationWidth(properties.layoutIdentifier, properties.defaultNavigationWidth),
+    );
     const sideNavigationLayoutNavigationIsResizing = useAtomValue(
         getAtomForNavigationIsResizing(properties.layoutIdentifier),
     );

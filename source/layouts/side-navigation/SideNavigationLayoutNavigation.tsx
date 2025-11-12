@@ -6,6 +6,9 @@ import { SideNavigationLayoutNavigationSide } from '@structure/source/layouts/si
 import { atom } from 'jotai';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
+// Dependencies - Services
+import { localStorageService } from '@structure/source/services/local-storage/LocalStorageService';
+
 // Dependencies - Animation
 import { type SpringOptions } from 'motion/react';
 
@@ -33,11 +36,11 @@ export function getAtomForNavigationOpen(identifier: string) {
     // If the atom does not exist
     if(!atomsForNavigationOpen.has(identifier)) {
         // Check session storage to see if the navigation was manually closed
+        const storageKey = localStorageService.getPrefixedKey(
+            getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed',
+        );
         const manuallyClosed =
-            typeof sessionStorage !== 'undefined'
-                ? sessionStorage.getItem(getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed') ===
-                  'true'
-                : false;
+            typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(storageKey) === 'true' : false;
 
         // Determine the default open state
         let openInitialState = !manuallyClosed;
@@ -60,11 +63,16 @@ export function getAtomForNavigationWidth(identifier: string, customDefaultWidth
 
     // If the atom does not exist
     if(!atomsForNavigationWidth.has(identifier)) {
+        // Get the prefixed storage key
+        const storageKey = localStorageService.getPrefixedKey(
+            getSideNavigationLayoutLocalStorageKey(identifier) + 'Width',
+        );
+
         // Create the atom
         atomsForNavigationWidth.set(
             identifier,
             atomWithStorage<number>(
-                getSideNavigationLayoutLocalStorageKey(identifier) + 'Width', // Key
+                storageKey, // Key with project prefix
                 defaultWidth, // Default value
                 // Use session storage to isolate the state to the current tab
                 typeof sessionStorage !== 'undefined'
@@ -86,11 +94,16 @@ export function getAtomForNavigationWidth(identifier: string, customDefaultWidth
 export function getAtomForNavigationManuallyClosed(identifier: string) {
     // If the atom does not exist
     if(!atomsForNavigationManuallyClosed.has(identifier)) {
+        // Get the prefixed storage key
+        const storageKey = localStorageService.getPrefixedKey(
+            getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed',
+        );
+
         // Create the atom
         atomsForNavigationManuallyClosed.set(
             identifier,
             atomWithStorage<boolean>(
-                getSideNavigationLayoutLocalStorageKey(identifier) + 'ManuallyClosed', // Key
+                storageKey, // Key with project prefix
                 false, // Default value
                 // Use session storage to isolate the state to the current tab
                 typeof sessionStorage !== 'undefined'
@@ -179,6 +192,7 @@ export function SideNavigationLayoutNavigation(properties: SideNavigationLayoutN
                 showHeader={showHeader}
                 showHeaderBorder={showHeaderBorder}
                 title={properties.topTitle}
+                defaultNavigationWidth={properties.defaultNavigationWidth}
             />
 
             {/* Side */}

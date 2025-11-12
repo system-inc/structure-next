@@ -343,10 +343,13 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 return;
             }
 
-            // Read the width from session storage
-            const sessionStorageWidth = sessionStorage.getItem(
+            // Get the prefixed storage key
+            const storageKey = localStorageService.getPrefixedKey(
                 getSideNavigationLayoutLocalStorageKey(properties.layoutIdentifier) + 'Width',
             );
+
+            // Read the width from session storage
+            const sessionStorageWidth = sessionStorage.getItem(storageKey);
             // console.log('Initial width from session storage:', sessionStorageWidth);
 
             // Read the width from local storage

@@ -82,6 +82,7 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
                     showHeader={properties.showHeader}
                     topTitle={properties.topTitle}
                     className={properties.contentClassName}
+                    defaultNavigationWidth={properties.defaultNavigationWidth}
                 >
                     <SideNavigationLayoutContentBody>{properties.contentBody}</SideNavigationLayoutContentBody>
                 </SideNavigationLayoutContent>
@@ -118,6 +119,7 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
                 showHeader={properties.showHeader}
                 topTitle={properties.topTitle}
                 className={properties.contentClassName}
+                defaultNavigationWidth={properties.defaultNavigationWidth}
             >
                 <SideNavigationLayoutContentBody>{properties.contentBody}</SideNavigationLayoutContentBody>
             </SideNavigationLayoutContent>
