@@ -105,10 +105,12 @@ input:-webkit-autofill:active {
 /* When a single day is selected in range mode, react-day-picker applies both rdp-range_start */
 /* and rdp-range_end classes to the td, causing conflicting border-radius rules on the button */
 /* (rounded-l-none + rounded-r-none = no rounding). We override this with rdp-single_day class. */
-td.rdp-single_day > button {
-    border-radius: calc(var(--radius) - 2px) !important;
+/* Calendar: Force rounded corners for single-day selections */
+td.rdp-single_day > button,
+.rdp-range_start.rdp-range_end > button {
+    border-radius: 0.375rem !important; /* rounded-md */
 }
-
-td.rdp-single_day > button:hover {
-    border-radius: calc(var(--radius) - 2px) !important;
+td.rdp-single_day > button:hover,
+.rdp-range_start.rdp-range_end > button:hover {
+    border-radius: 0.375rem !important; /* rounded-md */
 }
