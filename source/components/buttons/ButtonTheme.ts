@@ -8,7 +8,8 @@
  */
 
 // Dependencies - Utilities
-import { mergeClassNames } from './../../utilities/style/ClassName';
+// Use relative path to avoid Tailwind CSS resolution issues
+import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Layout styles for styled buttons (not applied to unstyled buttons)
 export const buttonLayoutClassNames =
@@ -187,8 +188,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Use for: Tertiary actions, icon buttons, toolbar buttons, less prominent actions
         Ghost: mergeClassNames(
             buttonCommonClassNames,
-            // Rounded
-            'rounded-lg',
+            buttonCenteredClassNames,
             // Content
             'content--3',
             // Hover
