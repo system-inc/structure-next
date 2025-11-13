@@ -10,6 +10,7 @@ import type { ToggleGroupThemeConfiguration } from '@structure/source/components
 import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
+import type { BadgeThemeConfiguration } from '@structure/source/components/notifications/BadgeTheme';
 import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
 import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text-area/InputTextAreaTheme';
 import type { InputCheckboxThemeConfiguration } from '@structure/source/components/forms-new/fields/checkbox/InputCheckboxTheme';
@@ -23,6 +24,7 @@ interface ComponentThemeContextValue {
     Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
+    Badge?: DeepPartialComponentTheme<BadgeThemeConfiguration>;
     InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
     InputTextArea?: DeepPartialComponentTheme<InputTextAreaThemeConfiguration>;
     InputCheckbox?: DeepPartialComponentTheme<InputCheckboxThemeConfiguration>;

@@ -14,9 +14,7 @@ export function TicketHeader(properties: TicketHeaderProperties) {
             <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-2">
                     <h2 className="text-base font-medium">{properties.subject}</h2>
-                    <Badge variant="info" size="medium">
-                        {properties.status}
-                    </Badge>
+                    <Badge variant="Informative">{properties.status}</Badge>
                 </div>
             </div>
         </BorderContainer>

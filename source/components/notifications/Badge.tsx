@@ -1,110 +1,71 @@
+// Dependencies - React
 import React from 'react';
-import {
-    mergeClassNames,
-    createVariantClassNames,
-    VariantProperties,
-} from '@structure/source/utilities/style/ClassName';
 
-export const badgeVariants = createVariantClassNames(
-    'inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors',
-    {
+// Dependencies - Structure
+import { badgeTheme as structureBadgeTheme } from '@structure/source/components/notifications/BadgeTheme';
+import type { BadgeVariant, BadgeType, BadgeSize } from '@structure/source/components/notifications/BadgeTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+
+// Dependencies - Utilities
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
+
+// Type for icon props - can be either a component reference or pre-rendered JSX
+export type BadgeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
+
+// Component - Badge
+export interface BadgeProperties extends React.HTMLAttributes<HTMLDivElement> {
+    variant?: BadgeVariant;
+    type?: BadgeType;
+    size?: BadgeSize;
+    icon?: BadgeIconType; // Icon to display before children
+    iconClassName?: string; // Custom className for the icon
+    className?: string;
+    children?: React.ReactNode;
+}
+export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(properties, reference) {
+    // Get theme from context and merge with structure theme
+    const componentTheme = useComponentTheme();
+    const badgeTheme = mergeComponentTheme(structureBadgeTheme, componentTheme?.Badge);
+
+    // Apply defaults from theme configuration
+    const variant = properties.variant || badgeTheme.configuration.defaultVariant.variant;
+    const type = properties.type || badgeTheme.configuration.defaultVariant.type;
+    const size = properties.size || badgeTheme.configuration.defaultVariant.size;
+
+    // Create variant class names from theme
+    const badgeVariantClassNames = createVariantClassNames(badgeTheme.configuration.baseClasses, {
         variants: {
-            variant: {
-                success: ['content--positive'],
-                danger: ['content--negative'],
-                warning: ['content--warning'],
-                info: ['content--informative'],
-                muted: ['content--1'],
-            },
-            type: {
-                filled: '',
-                outline: '',
-            },
-            size: {
-                medium: ['px-2 text-xs font-medium', '[&_svg]:size-3.5'],
-                large: ['px-3 text-sm font-medium', '[&_svg]:size-4'],
-            },
+            variant: badgeTheme.variants,
+            type: badgeTheme.types,
+            size: badgeTheme.sizes,
         },
-        compoundVariants: [
-            {
-                type: 'filled',
-                variant: 'success',
-                className: 'background--positive',
-            },
-            {
-                type: 'filled',
-                variant: 'danger',
-                className: 'background--negative',
-            },
-            {
-                type: 'filled',
-                variant: 'warning',
-                className: 'background--warning',
-            },
-            {
-                type: 'filled',
-                variant: 'info',
-                className: 'background--informative',
-            },
-            {
-                type: 'filled',
-                variant: 'muted',
-                className: 'background--1',
-            },
-            {
-                type: 'outline',
-                variant: 'success',
-                className: 'border border--positive',
-            },
-            {
-                type: 'outline',
-                variant: 'danger',
-                className: 'border border--negative',
-            },
-            {
-                type: 'outline',
-                variant: 'warning',
-                className: 'border border--warning',
-            },
-            {
-                type: 'outline',
-                variant: 'info',
-                className: 'border border--informative',
-            },
-            {
-                type: 'outline',
-                variant: 'muted',
-                className: 'border border--0',
-            },
-        ],
-        defaultVariants: {
-            type: 'filled',
-            size: 'large',
-        },
-    },
-);
+        compoundVariants: badgeTheme.compoundVariants,
+        defaultVariants: badgeTheme.configuration.defaultVariant,
+    });
 
-type BadgeProperties = VariantProperties<typeof badgeVariants> & React.HTMLAttributes<HTMLDivElement>;
-export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(
-    { variant, size, type, className, children, ...divProperties },
-    reference,
-) {
+    // Apply variant classes
+    const computedClassName = mergeClassNames(
+        badgeVariantClassNames({
+            variant: variant,
+            type: type,
+            size: size,
+        }),
+        properties.className, // User overrides last
+    );
+
+    // Render icon if provided, or status dot if type is Status
+    const renderedIcon = properties.icon ? (
+        themeIcon(properties.icon, properties.iconClassName)
+    ) : type === 'Status' ? (
+        <div data-dot="true" className="size-1.5 shrink-0 rounded-full" />
+    ) : null;
+
     return (
-        <div
-            ref={reference}
-            className={mergeClassNames(
-                badgeVariants({
-                    size: size,
-                    variant: variant,
-                    type: type,
-                    className: className,
-                }),
-            )}
-            {...divProperties}
-        >
-            {children}
+        <div ref={reference} className={computedClassName} {...properties}>
+            {renderedIcon}
+            {properties.children}
         </div>
     );
 });
-
 Badge.displayName = 'Badge';
