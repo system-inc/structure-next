@@ -87,11 +87,13 @@ export type ButtonVariant = keyof ButtonVariants;
 //     }
 //   }
 export interface ButtonSizes {
+    ExtraExtraSmall: 'ExtraExtraSmall';
     ExtraSmall: 'ExtraSmall';
     Small: 'Small';
     Base: 'Base';
     Large: 'Large';
     ExtraLarge: 'ExtraLarge';
+    IconExtraExtraSmall: 'IconExtraExtraSmall';
     IconExtraSmall: 'IconExtraSmall';
     IconSmall: 'IconSmall';
     Icon: 'Icon';
@@ -321,6 +323,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Sizes
     sizes: {
         // General Purpose Sizes
+        ExtraExtraSmall: 'h-7 px-3 py-1 text-sm',
         ExtraSmall: 'h-7 rounded-md px-2 text-xs',
         Small: 'h-8 rounded-md px-3 text-xs',
         Base: 'h-9 px-4 py-2',
@@ -328,6 +331,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ExtraLarge: 'h-11 rounded-md px-10',
 
         // Icon-only Button Sizes (square buttons with no text, only an icon)
+        IconExtraExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'h-7 w-7'),
         IconExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'rounded-sm p-1'),
         IconSmall: mergeClassNames(buttonIconLayoutClassNames, 'p-1.5'),
         Icon: mergeClassNames(buttonIconLayoutClassNames, 'p-2'),
@@ -344,6 +348,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Maps button sizes to their corresponding icon dimensions (applied via themeIcon utility)
     iconSizes: {
         // Icon dimensions for text buttons (buttons with text + icon)
+        ExtraExtraSmall: 'h-3 w-3',
         ExtraSmall: 'h-2 w-2',
         Small: 'h-3 w-3',
         Base: 'h-4 w-4',
