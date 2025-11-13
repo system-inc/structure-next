@@ -16,7 +16,7 @@ import {
 
 // Dependencies - Main Components
 import { FieldInputText } from '@structure/source/components/forms-new/fields/text/FieldInputText';
-import { FieldInputTextArea } from '@structure/source/components/forms-new/fields/text/FieldInputTextArea';
+import { FieldInputTextArea } from '@structure/source/components/forms-new/fields/text-area/FieldInputTextArea';
 import { FieldInputFile } from '@structure/source/components/forms-new/fields/file/FieldInputFile';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
 import { ContactMessagePreview } from './ContactMessagePreview';
@@ -125,7 +125,10 @@ export function ContactForm() {
                         {/* Field - Attachment Files */}
                         <form.Field identifier="attachmentFiles">
                             <form.FieldLabel>Attachments</form.FieldLabel>
-                            <FieldInputFile multiple={true} />
+                            <FieldInputFile
+                                multiple={true}
+                                description="Attach any files that might help us assist you better."
+                            />
                         </form.Field>
 
                         {/* Submit Button */}

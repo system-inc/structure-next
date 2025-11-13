@@ -12,7 +12,7 @@ import { InputFileDrop } from './InputFileDrop';
 import { InputFileList } from './InputFileList';
 
 // Dependencies - Assets
-import { PlusIcon, TrashSimpleIcon } from '@phosphor-icons/react';
+import { PaperclipIcon, TrashSimpleIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -36,6 +36,7 @@ function InputFileContent(properties: {
     id: string;
     multiple?: boolean;
     className?: string;
+    description?: string;
     renderDropZone?: (properties: DropZoneRenderProperties) => React.ReactNode;
     renderFileListItem?: (properties: FileListItemRenderProperties) => React.ReactNode;
 }) {
@@ -53,10 +54,10 @@ function InputFileContent(properties: {
                 )}
             >
                 <p className="font-medium">Drag and drop or select files to upload.</p>
-                <p className="mt-2 content--1 transition-colors">
-                    Attach any files that might help us assist you better.
-                </p>
-                <Button variant="A" size="Small" iconRight={PlusIcon} className="mt-6">
+                {properties.description && (
+                    <p className="mt-2 content--1 transition-colors">{properties.description}</p>
+                )}
+                <Button variant="A" size="Small" iconLeft={PaperclipIcon} className="mt-6">
                     Select Files
                 </Button>
             </div>
@@ -165,6 +166,7 @@ export interface InputFileProperties {
     accept?: string[];
     multiple?: boolean;
     className?: string;
+    description?: string;
     renderDropZone?: (properties: DropZoneRenderProperties) => React.ReactNode;
     renderFileListItem?: (properties: FileListItemRenderProperties) => React.ReactNode;
 }
@@ -175,6 +177,7 @@ export function InputFile(properties: InputFileProperties) {
                 id={properties.id}
                 multiple={properties.multiple}
                 className={properties.className}
+                description={properties.description}
                 renderDropZone={properties.renderDropZone}
                 renderFileListItem={properties.renderFileListItem}
             />

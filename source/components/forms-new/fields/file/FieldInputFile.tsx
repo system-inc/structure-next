@@ -19,6 +19,7 @@ import { FileSchema } from '@structure/source/utilities/schema/schemas/FileSchem
 export interface FieldInputFileProperties {
     className?: string;
     multiple?: boolean;
+    description?: string;
     renderDropZone?: (properties: DropZoneRenderProperties) => React.ReactNode;
     renderFileListItem?: (properties: FileListItemRenderProperties) => React.ReactNode;
 }
@@ -71,6 +72,7 @@ export function FieldInputFile(properties: FieldInputFileProperties) {
             accept={fileFieldMetadata?.mimeTypes}
             multiple={properties.multiple}
             className={properties.className}
+            description={properties.description}
             renderDropZone={properties.renderDropZone}
             renderFileListItem={properties.renderFileListItem}
         />
