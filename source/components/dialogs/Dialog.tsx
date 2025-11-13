@@ -22,3 +22,7 @@ export type { DialogHeaderProperties } from './DialogHeader';
 export type { DialogContentProperties } from './DialogContent';
 export type { DialogFooterProperties } from './DialogFooter';
 export type { DialogCloseProperties } from './DialogClose';
+
+// Export context and hook
+export { useDialogContext } from './DialogContext';
+export type { DialogContextValue } from './DialogContext';
