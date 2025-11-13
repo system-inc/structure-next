@@ -42,28 +42,25 @@ export function Providers(properties: ProvidersProperties) {
 
     // Render the component
     return (
-        <>
-            {/* Providers */}
-            <NuqsAdapter>
-                <NetworkServiceProvider>
-                    <CookiesProvider cookies={Cookies}>
-                        <WebSocketViaSharedWorkerProvider>
-                            <SharedStateProvider>
-                                <ThemeProvider>
-                                    <EngagementProvider>
-                                        <NoticeProvider>
-                                            <TipProvider delayDuration={100}>
-                                                {properties.children}
-                                                <AuthenticationDialog />
-                                            </TipProvider>
-                                        </NoticeProvider>
-                                    </EngagementProvider>
-                                </ThemeProvider>
-                            </SharedStateProvider>
-                        </WebSocketViaSharedWorkerProvider>
-                    </CookiesProvider>
-                </NetworkServiceProvider>
-            </NuqsAdapter>
-        </>
+        <NuqsAdapter>
+            <NetworkServiceProvider>
+                <CookiesProvider cookies={Cookies}>
+                    <WebSocketViaSharedWorkerProvider>
+                        <SharedStateProvider>
+                            <ThemeProvider>
+                                <EngagementProvider>
+                                    <NoticeProvider>
+                                        <TipProvider delayDuration={100}>
+                                            {properties.children}
+                                            <AuthenticationDialog />
+                                        </TipProvider>
+                                    </NoticeProvider>
+                                </EngagementProvider>
+                            </ThemeProvider>
+                        </SharedStateProvider>
+                    </WebSocketViaSharedWorkerProvider>
+                </CookiesProvider>
+            </NetworkServiceProvider>
+        </NuqsAdapter>
     );
 }
