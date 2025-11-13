@@ -3102,6 +3102,144 @@ export type PostTopicUpdateMutation = {
     };
 };
 
+export type SupportTicketsPrivilegedQueryVariables = Exact<{
+    pagination: PaginationInput;
+}>;
+
+export type SupportTicketsPrivilegedQuery = {
+    __typename?: 'Query';
+    supportTicketsPrivileged: {
+        __typename?: 'PaginationSupportTicketResult';
+        items: Array<{
+            __typename?: 'SupportTicket';
+            id: string;
+            identifier: string;
+            status: SupportTicketStatus;
+            type: string;
+            title: string;
+            description?: string | null;
+            userEmailAddress: string;
+            assignedToProfileId?: string | null;
+            createdAt: any;
+            updatedAt: any;
+            lastUserCommentedAt?: any | null;
+            answeredAt?: any | null;
+            answered: boolean;
+            assignedToProfile?: {
+                __typename?: 'PublicProfile';
+                username: string;
+                displayName?: string | null;
+                images?: Array<{
+                    __typename?: 'GqlMediaObject';
+                    type: MediaObjectType;
+                    url: string;
+                    variant?: string | null;
+                }> | null;
+            } | null;
+            attachments?: Array<{
+                __typename?: 'GqlMediaObject';
+                type: MediaObjectType;
+                url: string;
+                variant?: string | null;
+            }> | null;
+            comments: Array<{
+                __typename?: 'SupportTicketComment';
+                id: string;
+                source: SupportTicketCommentSource;
+                visibility: SupportTicketCommentVisibility;
+                content: string;
+                contentType: RichContentFormat;
+                createdAt: any;
+                attachments?: Array<{
+                    __typename?: 'GqlMediaObject';
+                    type: MediaObjectType;
+                    url: string;
+                    variant?: string | null;
+                }> | null;
+            }>;
+        }>;
+        pagination: {
+            __typename?: 'Pagination';
+            itemIndex: number;
+            itemIndexForNextPage?: number | null;
+            itemIndexForPreviousPage?: number | null;
+            itemsPerPage: number;
+            itemsTotal: number;
+            page: number;
+            pagesTotal: number;
+        };
+    };
+};
+
+export type SupportAllSupportProfilesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type SupportAllSupportProfilesQuery = {
+    __typename?: 'Query';
+    supportAllSupportProfiles: Array<{
+        __typename?: 'PublicProfile';
+        username: string;
+        displayName?: string | null;
+        images?: Array<{
+            __typename?: 'GqlMediaObject';
+            type: MediaObjectType;
+            url: string;
+            variant?: string | null;
+        }> | null;
+    }>;
+};
+
+export type SupportTicketCommentCreatePrivilegedMutationVariables = Exact<{
+    input: SupportTicketCommentCreateInput;
+}>;
+
+export type SupportTicketCommentCreatePrivilegedMutation = {
+    __typename?: 'Mutation';
+    supportTicketCommentCreatePrivileged: {
+        __typename?: 'SupportTicketComment';
+        id: string;
+        content: string;
+        contentType: RichContentFormat;
+        source: SupportTicketCommentSource;
+        visibility: SupportTicketCommentVisibility;
+        createdAt: any;
+    };
+};
+
+export type SupportTicketAssignMutationVariables = Exact<{
+    ticketId: Scalars['String']['input'];
+    username?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type SupportTicketAssignMutation = {
+    __typename?: 'Mutation';
+    supportTicketAssign: {
+        __typename?: 'SupportTicket';
+        id: string;
+        assignedToProfileId?: string | null;
+        assignedToProfile?: {
+            __typename?: 'PublicProfile';
+            username: string;
+            displayName?: string | null;
+            images?: Array<{
+                __typename?: 'GqlMediaObject';
+                type: MediaObjectType;
+                url: string;
+                variant?: string | null;
+            }> | null;
+        } | null;
+    };
+};
+
+export type SupportTicketUpdateStatusPrivilegedMutationVariables = Exact<{
+    id: Scalars['String']['input'];
+    status: SupportTicketStatus;
+}>;
+
+export type SupportTicketUpdateStatusPrivilegedMutation = {
+    __typename?: 'Mutation';
+    supportTicketUpdateStatusPrivileged: { __typename?: 'SupportTicket'; id: string; status: SupportTicketStatus };
+};
+
 export type PostTopicByIdQueryVariables = Exact<{
     id: Scalars['String']['input'];
 }>;
@@ -4010,6 +4148,119 @@ export const PostTopicUpdateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<PostTopicUpdateMutation, PostTopicUpdateMutationVariables>;
+export const SupportTicketsPrivilegedDocument = new TypedDocumentString(`
+    query SupportTicketsPrivileged($pagination: PaginationInput!) {
+  supportTicketsPrivileged(pagination: $pagination) {
+    items {
+      id
+      identifier
+      status
+      type
+      title
+      description
+      userEmailAddress
+      assignedToProfileId
+      assignedToProfile {
+        username
+        displayName
+        images {
+          type
+          url
+          variant
+        }
+      }
+      attachments {
+        type
+        url
+        variant
+      }
+      comments {
+        id
+        source
+        visibility
+        content
+        contentType
+        attachments {
+          type
+          url
+          variant
+        }
+        createdAt
+      }
+      createdAt
+      updatedAt
+      lastUserCommentedAt
+      answeredAt
+      answered
+    }
+    pagination {
+      itemIndex
+      itemIndexForNextPage
+      itemIndexForPreviousPage
+      itemsPerPage
+      itemsTotal
+      page
+      pagesTotal
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportTicketsPrivilegedQuery, SupportTicketsPrivilegedQueryVariables>;
+export const SupportAllSupportProfilesDocument = new TypedDocumentString(`
+    query SupportAllSupportProfiles {
+  supportAllSupportProfiles {
+    username
+    displayName
+    images {
+      type
+      url
+      variant
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportAllSupportProfilesQuery, SupportAllSupportProfilesQueryVariables>;
+export const SupportTicketCommentCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation SupportTicketCommentCreatePrivileged($input: SupportTicketCommentCreateInput!) {
+  supportTicketCommentCreatePrivileged(input: $input) {
+    id
+    content
+    contentType
+    source
+    visibility
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+    SupportTicketCommentCreatePrivilegedMutation,
+    SupportTicketCommentCreatePrivilegedMutationVariables
+>;
+export const SupportTicketAssignDocument = new TypedDocumentString(`
+    mutation SupportTicketAssign($ticketId: String!, $username: String) {
+  supportTicketAssign(ticketId: $ticketId, username: $username) {
+    id
+    assignedToProfileId
+    assignedToProfile {
+      username
+      displayName
+      images {
+        type
+        url
+        variant
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SupportTicketAssignMutation, SupportTicketAssignMutationVariables>;
+export const SupportTicketUpdateStatusPrivilegedDocument = new TypedDocumentString(`
+    mutation SupportTicketUpdateStatusPrivileged($id: String!, $status: SupportTicketStatus!) {
+  supportTicketUpdateStatusPrivileged(id: $id, status: $status) {
+    id
+    status
+  }
+}
+    `) as unknown as TypedDocumentString<
+    SupportTicketUpdateStatusPrivilegedMutation,
+    SupportTicketUpdateStatusPrivilegedMutationVariables
+>;
 export const PostTopicByIdDocument = new TypedDocumentString(`
     query PostTopicById($id: String!) {
   postTopicById(id: $id) {
@@ -4098,6 +4349,63 @@ export interface GraphQLInputObjectFieldValidationMetadata {
 }
 
 export namespace GraphQLInputTypes {
+    export const SupportTicketStatus: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'SupportTicketStatus',
+        values: ['Open', 'Closed', 'Deleted'],
+    };
+
+    export const SupportTicketCommentVisibility: GraphQLInputEnumTypeMetadata = {
+        kind: 'enum',
+        type: 'SupportTicketCommentVisibility',
+        values: ['Public', 'Internal'],
+    };
+
+    export const SupportTicketCommentCreateInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'SupportTicketCommentCreateInput',
+        fields: [
+            {
+                name: 'ticketIdentifier',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'content',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'contentType',
+                kind: 'enum',
+                type: GraphQLInputTypes.RichContentFormat,
+                required: false,
+            },
+            {
+                name: 'replyToCommentId',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'isUuid',
+                    },
+                ],
+            },
+            {
+                name: 'visibility',
+                kind: 'enum',
+                type: GraphQLInputTypes.SupportTicketCommentVisibility,
+                required: false,
+            },
+        ],
+    };
+
     export const PostTopicUpdateInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
         type: 'PostTopicUpdateInput',
@@ -6376,6 +6684,78 @@ export const PostTopicUpdateOperation: GraphQLOperationMetadata<typeof PostTopic
             required: true,
             kind: 'object',
             type: GraphQLInputTypes.PostTopicUpdateInput,
+        },
+    ],
+};
+
+export const SupportTicketsPrivilegedOperation: GraphQLOperationMetadata<typeof SupportTicketsPrivilegedDocument> = {
+    operation: 'SupportTicketsPrivileged',
+    operationType: 'query',
+    document: SupportTicketsPrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'pagination',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.PaginationInput,
+        },
+    ],
+};
+
+export const SupportTicketCommentCreatePrivilegedOperation: GraphQLOperationMetadata<
+    typeof SupportTicketCommentCreatePrivilegedDocument
+> = {
+    operation: 'SupportTicketCommentCreatePrivileged',
+    operationType: 'mutation',
+    document: SupportTicketCommentCreatePrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.SupportTicketCommentCreateInput,
+        },
+    ],
+};
+
+export const SupportTicketAssignOperation: GraphQLOperationMetadata<typeof SupportTicketAssignDocument> = {
+    operation: 'SupportTicketAssign',
+    operationType: 'mutation',
+    document: SupportTicketAssignDocument,
+    parameters: [
+        {
+            parameter: 'ticketId',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'username',
+            required: false,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const SupportTicketUpdateStatusPrivilegedOperation: GraphQLOperationMetadata<
+    typeof SupportTicketUpdateStatusPrivilegedDocument
+> = {
+    operation: 'SupportTicketUpdateStatusPrivileged',
+    operationType: 'mutation',
+    document: SupportTicketUpdateStatusPrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'id',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+        {
+            parameter: 'status',
+            required: true,
+            kind: 'enum',
+            type: GraphQLInputTypes.SupportTicketStatus,
         },
     ],
 };
