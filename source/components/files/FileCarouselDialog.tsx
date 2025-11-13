@@ -16,18 +16,18 @@ export function FileCarouselDialog(properties: FileCarouselDialogProperties) {
         <Dialog
             variant="A"
             size="FullScreen"
-            accessibilityTitle="File Carousel"
             open={properties.open}
             onOpenChange={properties.onOpenChange}
             className=""
-            contentScrollAreaClassName="max-h-full"
-            content={
+        >
+            <Dialog.Header className="sr-only">File Carousel</Dialog.Header>
+            <Dialog.Content scrollAreaClassName="max-h-full">
                 <FileCarousel
                     className={properties.className}
                     files={properties.files}
                     startIndex={properties.startIndex}
                 />
-            }
-        />
+            </Dialog.Content>
+        </Dialog>
     );
 }

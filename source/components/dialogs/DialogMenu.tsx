@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
+import { Dialog } from '@structure/source/components/dialogs/Dialog';
 import { MenuProperties, Menu } from '@structure/source/components/menus/Menu';
 
 // Dependencies - Utilities
@@ -13,7 +13,6 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Component - CommandDialog
 export interface DialogMenuProperties extends MenuProperties {
     keyboardShortcutKey?: string;
-    dialogProperties?: DialogProperties;
 }
 export function DialogMenu(properties: DialogMenuProperties) {
     // State
@@ -74,13 +73,12 @@ export function DialogMenu(properties: DialogMenuProperties) {
         <Dialog
             variant="A"
             position="TopFixed"
-            content={menu}
             open={open}
             onOpenChange={setOpen}
             onOpenAutoFocus={onOpenAutoFocus}
-            closeControl={false}
-            header={properties.dialogProperties?.header}
-            className={mergeClassNames('', properties.dialogProperties?.className)}
-        />
+            closeButton={false}
+        >
+            <Dialog.Content>{menu}</Dialog.Content>
+        </Dialog>
     );
 }

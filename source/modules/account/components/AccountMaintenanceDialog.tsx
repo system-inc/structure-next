@@ -25,7 +25,6 @@ export interface AccountMaintenanceDialogProperties extends DialogProperties {
     actionText: string; // Describes the action requiring authentication (e.g., "change your password")
     onAuthenticated: () => void; // Callback executed after successful authentication
 }
-
 export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
@@ -208,12 +207,13 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
         <Dialog
             variant="A"
             className="max-w-md"
-            accessibilityTitle="Verify Identity"
-            content={content}
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
             open={open}
             onOpenChange={onOpenChangeIntercept}
-        />
+        >
+            <Dialog.Header className="sr-only">Verify Identity</Dialog.Header>
+            <Dialog.Content>{content}</Dialog.Content>
+        </Dialog>
     );
 }

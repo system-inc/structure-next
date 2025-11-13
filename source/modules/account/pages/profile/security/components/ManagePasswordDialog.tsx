@@ -62,9 +62,7 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
             open={open}
             onOpenChange={onOpenChangeIntercept}
         >
-            <Dialog.Header className="sr-only">
-                {properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
-            </Dialog.Header>
+            <Dialog.Header>{properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}</Dialog.Header>
             <Dialog.Content>
                 {showForm ? (
                     <ManagePasswordForm

@@ -44,7 +44,7 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
             open={open}
             onOpenChange={onOpenChangeIntercept}
         >
-            <Dialog.Header className="sr-only">Delete Account</Dialog.Header>
+            <Dialog.Header>Delete Account</Dialog.Header>
             <Dialog.Content>
                 <div>
                     <h2 className="mb-4 text-lg font-semibold text-red-600">Delete Account</h2>

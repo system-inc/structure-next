@@ -18,7 +18,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export interface DialogFooterProperties {
     className?: string;
     closeButton?: boolean | React.ReactNode; // Auto close button in footer
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 export function DialogFooter(properties: DialogFooterProperties) {
     const dialogContext = useDialogContext();

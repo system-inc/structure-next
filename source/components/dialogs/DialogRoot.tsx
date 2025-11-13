@@ -47,7 +47,7 @@ export interface DialogRootProperties {
     closeButton?: boolean | React.ReactNode; // Auto X in top right
 
     // Compound components
-    children: React.ReactNode;
+    children?: React.ReactNode; // Optional to allow extension via compound components
 }
 export function DialogRoot(properties: DialogRootProperties) {
     // Get component theme from context
