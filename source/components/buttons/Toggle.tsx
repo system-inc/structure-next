@@ -1,51 +1,151 @@
-'use client';
+'use client'; // This component uses client-only features
 
+// Dependencies - React and Next.js
 import React from 'react';
-import * as TogglePrimitive from '@radix-ui/react-toggle';
-import {
-    mergeClassNames,
-    createVariantClassNames,
-    VariantProperties,
-} from '@structure/source/utilities/style/ClassName';
 
-export const toggleVariants = createVariantClassNames(
-    'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:background--2 hover:content--1 focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=on]:background--3 data-[state=on]:content--0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+// Dependencies - Main Components
+import * as RadixToggle from '@radix-ui/react-toggle';
+import { Tip } from '@structure/source/components/popovers/Tip';
+import type { PopoverProperties } from '@structure/source/components/popovers/Popover';
+
+// Dependencies - Theme
+import { toggleTheme as structureToggleTheme } from '@structure/source/components/buttons/ToggleTheme';
+import type { ToggleVariant, ToggleSize } from '@structure/source/components/buttons/ToggleTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
+
+// Dependencies - Utilities
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
+
+// Base Toggle Properties
+export interface BaseToggleProperties {
+    className?: string;
+    variant?: ToggleVariant;
+    size?: ToggleSize;
+    iconSize?: ToggleSize; // Independent icon sizing
+    disabled?: boolean;
+    tip?: React.ReactNode;
+    tipProperties?: Omit<PopoverProperties, 'trigger' | 'content'>;
+    isPressed?: React.ComponentPropsWithoutRef<typeof RadixToggle.Root>['pressed'];
+    onIsPressedChange?: React.ComponentPropsWithoutRef<typeof RadixToggle.Root>['onPressedChange'];
+}
+
+// Type for icon props - can be either a component reference or pre-rendered JSX
+export type ToggleIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
+
+// Icon properties
+// Icons can be either:
+// - React.FunctionComponent: Auto-sized based on toggle size variant
+// - React.ReactNode: Pre-rendered JSX with full control over styling
+// Render order: iconLeft → icon → children → iconRight
+export interface ToggleIconProperties {
+    iconLeft?: ToggleIconType;
+    icon?: ToggleIconType;
+    iconRight?: ToggleIconType;
+    children?: React.ReactNode;
+}
+
+// Component - Toggle
+export type ToggleProperties = BaseToggleProperties &
+    ToggleIconProperties &
+    Omit<
+        React.ComponentPropsWithoutRef<typeof RadixToggle.Root>,
+        keyof BaseToggleProperties | keyof ToggleIconProperties
+    >;
+export const Toggle = React.forwardRef<React.ElementRef<typeof RadixToggle.Root>, ToggleProperties>(function Toggle(
     {
-        variants: {
-            variant: {
-                default: 'border--3 hover:background--3 hover:content--0 border bg-transparent shadow-sm',
-                ghost: 'bg-transparent',
-            },
-            size: {
-                default: 'h-9 min-w-9 px-2',
-                sm: 'h-8 min-w-8 px-1.5',
-                lg: 'h-10 min-w-10 px-2.5',
-            },
-        },
-        defaultVariants: {
-            variant: 'default',
-            size: 'default',
-        },
-    },
-);
+        // Toggle-specific properties
+        variant,
+        size,
+        iconSize,
+        icon,
+        iconLeft,
+        iconRight,
 
-export const Toggle = React.forwardRef<
-    React.ElementRef<typeof TogglePrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> & VariantProperties<typeof toggleVariants>
->(function ({ variant, size, className, ...togglePrimitiveRootProperties }, reference) {
-    return (
-        <TogglePrimitive.Root
-            ref={reference}
-            className={mergeClassNames(
-                toggleVariants({
-                    variant: variant,
-                    size: size,
-                    className: className,
-                }),
-            )}
-            {...togglePrimitiveRootProperties}
-        />
+        // DOM properties we handle specially
+        disabled,
+        className,
+        children,
+        tip,
+        tipProperties,
+
+        // Renamed Radix properties
+        isPressed,
+        onIsPressedChange,
+
+        // All other properties spread to Radix Toggle
+        ...toggleProperties
+    },
+    reference,
+) {
+    // Get component theme from context
+    const componentTheme = useComponentTheme();
+
+    // Merge the structure theme with project theme (if set by the layout provider)
+    const toggleTheme = mergeComponentTheme(structureToggleTheme, componentTheme?.Toggle);
+
+    // Get icon size className from theme based on iconSize (takes precedence) or size
+    const iconSizeClassName = iconSize
+        ? toggleTheme.iconSizes[iconSize]
+        : size
+          ? toggleTheme.iconSizes[size]
+          : toggleTheme.configuration.defaultVariant.size
+            ? toggleTheme.iconSizes[toggleTheme.configuration.defaultVariant.size]
+            : undefined;
+
+    // Create toggle variant class names function using the merged theme
+    const toggleVariantClassNames = createVariantClassNames(toggleTheme.configuration.baseClasses, {
+        variants: {
+            variant: toggleTheme.variants,
+            size: toggleTheme.sizes,
+        },
+        // Only apply default size when variant is provided
+        defaultVariants: variant ? toggleTheme.configuration.defaultVariant : {},
+    });
+
+    // Compute final className using the merged theme
+    const computedClassName = mergeClassNames(
+        toggleVariantClassNames({
+            variant: variant,
+            size: size,
+        }),
+        toggleTheme.configuration.focusClasses, // Always applied
+        disabled && toggleTheme.configuration.disabledClasses, // Conditional
+        className, // User overrides (last = highest priority)
     );
+
+    // Determine toggle content
+    // Render order: iconLeft → icon → children → iconRight
+    const content = (
+        <>
+            {iconLeft && themeIcon(iconLeft, iconSizeClassName)}
+            {icon && themeIcon(icon, iconSizeClassName)}
+            {children}
+            {iconRight && themeIcon(iconRight, iconSizeClassName)}
+        </>
+    );
+
+    // Render the component
+    const component = (
+        <RadixToggle.Root
+            ref={reference}
+            disabled={disabled}
+            className={computedClassName}
+            pressed={isPressed}
+            onPressedChange={onIsPressedChange}
+            {...toggleProperties}
+        >
+            {content}
+        </RadixToggle.Root>
+    );
+
+    // Wrap with tip if provided
+    if(tip) {
+        return <Tip variant="Tip" {...tipProperties} trigger={component} content={tip} />;
+    }
+
+    return component;
 });
 
-Toggle.displayName = TogglePrimitive.Root.displayName;
+// Set display name for debugging
+Toggle.displayName = 'Toggle';

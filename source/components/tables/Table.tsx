@@ -7,7 +7,7 @@ import { TableColumnProperties } from '@structure/source/components/tables/Table
 import { TableRowProperties, TableRow } from '@structure/source/components/tables/TableRow';
 import { defaultTableRowsActions } from '@structure/source/components/tables/TableRowsActions';
 import { Button } from '@structure/source/components/buttons/Button';
-import { ToggleButton } from '@structure/source/components/buttons/ToggleButton';
+import { Toggle } from '@structure/source/components/buttons/Toggle';
 import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
 import { InputText } from '@structure/source/components/forms/InputText';
 import { InputMultipleSelect } from '@structure/source/components/forms/InputMultipleSelect';
@@ -467,13 +467,14 @@ export function Table(properties: TableProperties) {
 
                             {/* Filters Toggle */}
                             {properties.filter && (
-                                <ToggleButton
+                                <Toggle
                                     icon={FunnelIcon}
-                                    size="Icon"
+                                    variant="A"
+                                    size="Base"
                                     tip="Toggle filters"
                                     tipProperties={{ side: 'right' }}
-                                    pressed={filtersEnabled}
-                                    onPressedChange={onFiltersToggle}
+                                    isPressed={filtersEnabled}
+                                    onIsPressedChange={onFiltersToggle}
                                 />
                             )}
                         </div>

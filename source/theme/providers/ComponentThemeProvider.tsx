@@ -5,16 +5,18 @@ import React from 'react';
 
 // Dependencies - Theme
 import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
+import type { ToggleThemeConfiguration } from '@structure/source/components/buttons/ToggleTheme';
 import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
-import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextAreaTheme';
+import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text-area/InputTextAreaTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Type - Component Theme Context Value
 interface ComponentThemeContextValue {
     Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
+    Toggle?: DeepPartialComponentTheme<ToggleThemeConfiguration>;
     Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
