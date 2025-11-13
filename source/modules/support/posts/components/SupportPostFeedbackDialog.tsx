@@ -78,8 +78,13 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
     return (
         <Dialog
             variant="A"
-            header="Help Us Improve"
-            content={
+            {...properties}
+            // Spread these properties after all properties to ensure they are not overwritten
+            open={open}
+            onOpenChange={onOpenChangeIntercept}
+        >
+            <Dialog.Header>Help Us Improve</Dialog.Header>
+            <Dialog.Content>
                 <div className="">
                     {/* <div>Current URL: {urlPath}</div> */}
                     <p className="mb-5 text-sm">
@@ -123,8 +128,8 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
                         required={true}
                     />
                 </div>
-            }
-            footer={
+            </Dialog.Content>
+            <Dialog.Footer>
                 <Button
                 // isLoading={chatConversationUpdateMutationState.loading}
                 // onClick={function () {
@@ -133,11 +138,7 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
                 >
                     Submit Feedback
                 </Button>
-            }
-            {...properties}
-            // Spread these properties after all properties to ensure they are not overwritten
-            open={open}
-            onOpenChange={onOpenChangeIntercept}
-        />
+            </Dialog.Footer>
+        </Dialog>
     );
 }

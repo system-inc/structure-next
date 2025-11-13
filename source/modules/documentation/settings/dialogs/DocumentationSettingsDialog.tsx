@@ -48,12 +48,9 @@ export function DocumentationSettingsDialog(properties: DocumentationSettingsDia
 
     // Render the component
     return (
-        <Dialog
-            variant="A"
-            open={properties.isOpen}
-            onOpenChange={properties.onClose}
-            header="Set API Key"
-            content={
+        <Dialog variant="A" open={properties.isOpen} onOpenChange={properties.onClose}>
+            <Dialog.Header>Set API Key</Dialog.Header>
+            <Dialog.Content>
                 <Form
                     formInputs={[
                         <FormInputText
@@ -72,7 +69,7 @@ export function DocumentationSettingsDialog(properties: DocumentationSettingsDia
                     }}
                     onSubmit={handleSubmit}
                 />
-            }
-        />
+            </Dialog.Content>
+        </Dialog>
     );
 }

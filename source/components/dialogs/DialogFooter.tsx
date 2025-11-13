@@ -31,6 +31,7 @@ export function DialogFooter(properties: DialogFooterProperties) {
         <div className={mergeClassNames(dialogContext.dialogTheme.configuration.footerClasses, properties.className)}>
             {properties.children}
 
+            {/* Dismiss Button */}
             {properties.closeButton !== undefined && properties.closeButton !== false && (
                 <DialogClose asChild>
                     {properties.closeButton !== true && properties.closeButton !== undefined ? (

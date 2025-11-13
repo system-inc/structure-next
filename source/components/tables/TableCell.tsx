@@ -16,9 +16,7 @@ import { TableCellContentHtml } from '@structure/source/components/tables/cells/
 import { TableCellContentUrl } from '@structure/source/components/tables/cells/TableCellContentUrl';
 import { TableCellContentNumber } from '@structure/source/components/tables/cells/TableCellContentNumber';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
-import { DialogCloseControl } from '@structure/source/components/dialogs/DialogCloseControl';
 import { ObjectTable } from '@structure/source/components/tables/ObjectTable';
-import { Button } from '@structure/source/components/buttons/Button';
 import { CopyButton } from '@structure/source/components/buttons/CopyButton';
 
 // Dependencies - Utilities
@@ -153,19 +151,15 @@ export function TableCell(properties: TableCellProperties) {
                     variant="A"
                     trigger={<div className="w-full truncate">{properties.value}</div>}
                     className={mergeClassNames('w-full text-sm md:max-w-4xl md:min-w-lg', longContent ? '' : '')}
-                    header={properties.column?.title}
-                    content={value}
-                    footer={
-                        <div className="flex flex-row-reverse">
-                            <DialogCloseControl>
-                                <Button>Dismiss</Button>
-                            </DialogCloseControl>
-                            <CopyButton variant="Ghost" size="Small" className="mr-3 pl-3" value={properties.value}>
-                                Copy
-                            </CopyButton>
-                        </div>
-                    }
-                />
+                >
+                    <Dialog.Header>{properties.column?.title}</Dialog.Header>
+                    <Dialog.Content>{value}</Dialog.Content>
+                    <Dialog.Footer closeButton>
+                        <CopyButton variant="Ghost" size="Small" className="mr-3 pl-3" value={properties.value}>
+                            Copy
+                        </CopyButton>
+                    </Dialog.Footer>
+                </Dialog>
             );
         }
     }

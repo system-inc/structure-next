@@ -326,13 +326,10 @@ export function UsersRolesPage() {
             </div>
 
             {/* Revoke Role Dialog */}
-            <Dialog
-                variant="A"
-                open={revokeDialogOpen}
-                onOpenChange={handleDialogClose}
-                header={revokeSuccess ? 'Role Revoked' : 'Confirm Role Revocation'}
-                content={
-                    revokeSuccess ? (
+            <Dialog variant="A" open={revokeDialogOpen} onOpenChange={handleDialogClose}>
+                <Dialog.Header>{revokeSuccess ? 'Role Revoked' : 'Confirm Role Revocation'}</Dialog.Header>
+                <Dialog.Content>
+                    {revokeSuccess ? (
                         <p>The role has been successfully revoked.</p>
                     ) : (
                         <>
@@ -348,10 +345,10 @@ export function UsersRolesPage() {
                                 />
                             )}
                         </>
-                    )
-                }
-                footer={
-                    revokeSuccess ? (
+                    )}
+                </Dialog.Content>
+                <Dialog.Footer>
+                    {revokeSuccess ? (
                         <Button onClick={handleDialogClose}>Close</Button>
                     ) : (
                         <div className="flex justify-end space-x-2">
@@ -364,9 +361,9 @@ export function UsersRolesPage() {
                                 Revoke Role
                             </AnimatedButton>
                         </div>
-                    )
-                }
-            />
+                    )}
+                </Dialog.Footer>
+            </Dialog>
         </div>
     );
 }

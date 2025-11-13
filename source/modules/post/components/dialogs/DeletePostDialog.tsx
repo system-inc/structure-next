@@ -74,15 +74,14 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
 
     // Render the component
     return (
-        <Dialog
-            variant="A"
-            header={'Delete Post'}
-            content={
+        <Dialog variant="A" {...properties} open={open} onOpenChange={onOpenChangeIntercept}>
+            <Dialog.Header>Delete Post</Dialog.Header>
+            <Dialog.Content>
                 <div>
                     <p>Are you sure you want to delete this post?</p>
                 </div>
-            }
-            footer={
+            </Dialog.Content>
+            <Dialog.Footer>
                 <Button
                     variant="Destructive"
                     isLoading={postDeleteRequest.isLoading}
@@ -92,11 +91,7 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
                 >
                     Delete
                 </Button>
-            }
-            {...properties}
-            // Spread these properties after all properties to ensure they are not overwritten
-            open={open}
-            onOpenChange={onOpenChangeIntercept}
-        />
+            </Dialog.Footer>
+        </Dialog>
     );
 }

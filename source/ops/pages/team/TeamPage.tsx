@@ -7,7 +7,6 @@ import React from 'react';
 import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 import { Button } from '@structure/source/components/buttons/Button';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
-import { DialogCloseControl } from '@structure/source/components/dialogs/DialogCloseControl';
 import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
 
 // Component - TeamPage
@@ -34,17 +33,15 @@ export function TeamPage() {
                 Show Notice
             </Button>
 
-            <Dialog
-                variant="A"
-                trigger={<Button>Launch Dialog</Button>}
-                header="How are you doing?"
-                content="I'm doing great!"
-                footer={
-                    <DialogCloseControl>
+            <Dialog variant="A" trigger={<Button>Launch Dialog</Button>}>
+                <Dialog.Header>How are you doing?</Dialog.Header>
+                <Dialog.Content>I&apos;m doing great!</Dialog.Content>
+                <Dialog.Footer>
+                    <Dialog.Close>
                         <Button>Dismiss</Button>
-                    </DialogCloseControl>
-                }
-            />
+                    </Dialog.Close>
+                </Dialog.Footer>
+            </Dialog>
 
             <p>Kirk Ouimet</p>
             <p>John-Paul Andersen</p>

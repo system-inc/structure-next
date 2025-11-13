@@ -336,13 +336,10 @@ export function UsersPage() {
             </div>
 
             {/* Delete User Dialog */}
-            <Dialog
-                variant="A"
-                open={deleteDialogOpen}
-                onOpenChange={handleDialogClose}
-                header={deleteSuccess ? 'User Deleted' : 'Confirm User Deletion'}
-                content={
-                    deleteSuccess ? (
+            <Dialog variant="A" open={deleteDialogOpen} onOpenChange={handleDialogClose}>
+                <Dialog.Header>{deleteSuccess ? 'User Deleted' : 'Confirm User Deletion'}</Dialog.Header>
+                <Dialog.Content>
+                    {deleteSuccess ? (
                         <p>The user has been successfully deleted.</p>
                     ) : (
                         <>
@@ -358,10 +355,10 @@ export function UsersPage() {
                                 />
                             )}
                         </>
-                    )
-                }
-                footer={
-                    deleteSuccess ? (
+                    )}
+                </Dialog.Content>
+                <Dialog.Footer>
+                    {deleteSuccess ? (
                         <Button onClick={handleDialogClose}>Close</Button>
                     ) : (
                         <div className="flex justify-end space-x-2">
@@ -374,9 +371,9 @@ export function UsersPage() {
                                 Delete User
                             </AnimatedButton>
                         </div>
-                    )
-                }
-            />
+                    )}
+                </Dialog.Footer>
+            </Dialog>
         </div>
     );
 }

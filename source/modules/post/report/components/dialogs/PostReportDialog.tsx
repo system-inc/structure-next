@@ -70,13 +70,18 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
     return (
         <Dialog
             variant="A"
-            header={
+            {...properties}
+            // Spread these properties after all properties to ensure they are not overwritten
+            open={open}
+            onOpenChange={onOpenChangeIntercept}
+        >
+            <Dialog.Header>
                 <div className="flex items-center space-x-3">
                     <FlagIcon className="h-5 w-5" />
                     <div>Report &quot;{properties.ideaTitle}&quot;</div>
                 </div>
-            }
-            content={
+            </Dialog.Header>
+            <Dialog.Content>
                 <div>
                     {
                         // Error reporting
@@ -186,11 +191,7 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
                         )
                     }
                 </div>
-            }
-            {...properties}
-            // Spread these properties after all properties to ensure they are not overwritten
-            open={open}
-            onOpenChange={onOpenChangeIntercept}
-        />
+            </Dialog.Content>
+        </Dialog>
     );
 }

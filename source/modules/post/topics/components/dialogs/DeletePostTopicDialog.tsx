@@ -58,13 +58,18 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
     return (
         <Dialog
             variant="A"
-            header={'Delete Post Topic'}
-            content={
+            {...properties}
+            // Spread these properties after all properties to ensure they are not overwritten
+            open={open}
+            onOpenChange={onOpenChangeIntercept}
+        >
+            <Dialog.Header>Delete Post Topic</Dialog.Header>
+            <Dialog.Content>
                 <div>
                     <p>Are you sure you want to delete this post topic?</p>
                 </div>
-            }
-            footer={
+            </Dialog.Content>
+            <Dialog.Footer>
                 <Button
                     variant="Destructive"
                     isLoading={postTopicDeleteRequest.isLoading}
@@ -74,11 +79,7 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
                 >
                     Delete
                 </Button>
-            }
-            {...properties}
-            // Spread these properties after all properties to ensure they are not overwritten
-            open={open}
-            onOpenChange={onOpenChangeIntercept}
-        />
+            </Dialog.Footer>
+        </Dialog>
     );
 }

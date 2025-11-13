@@ -139,13 +139,10 @@ export function UsernameForm() {
             />
 
             {/* Confirmation Dialog */}
-            <Dialog
-                variant="A"
-                open={isDialogOpen}
-                onOpenChange={handleDialogClose}
-                header={usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}
-                content={
-                    usernameUpdateSuccess ? (
+            <Dialog variant="A" open={isDialogOpen} onOpenChange={handleDialogClose}>
+                <Dialog.Header>{usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}</Dialog.Header>
+                <Dialog.Content>
+                    {usernameUpdateSuccess ? (
                         <p className="">Your username has been successfully changed.</p>
                     ) : (
                         <>
@@ -162,10 +159,10 @@ export function UsernameForm() {
                                 />
                             )}
                         </>
-                    )
-                }
-                footer={
-                    usernameUpdateSuccess ? (
+                    )}
+                </Dialog.Content>
+                <Dialog.Footer>
+                    {usernameUpdateSuccess ? (
                         <Button onClick={handleDialogClose}>Close</Button>
                     ) : (
                         <div className="mt-6 flex justify-end space-x-2">
@@ -178,9 +175,9 @@ export function UsernameForm() {
                                 Confirm
                             </AnimatedButton>
                         </div>
-                    )
-                }
-            />
+                    )}
+                </Dialog.Footer>
+            </Dialog>
         </div>
     );
 }

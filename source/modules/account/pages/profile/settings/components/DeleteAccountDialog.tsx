@@ -39,8 +39,13 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
         <Dialog
             variant="A"
             className="p-6"
-            accessibilityTitle="Delete Account"
-            content={
+            {...properties}
+            // Spread these properties after all properties to ensure they are not overwritten
+            open={open}
+            onOpenChange={onOpenChangeIntercept}
+        >
+            <Dialog.Header className="sr-only">Delete Account</Dialog.Header>
+            <Dialog.Content>
                 <div>
                     <h2 className="mb-4 text-lg font-semibold text-red-600">Delete Account</h2>
                     <p className="mb-4 text-sm content--1">
@@ -52,11 +57,7 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
                         }}
                     />
                 </div>
-            }
-            {...properties}
-            // Spread these properties after all properties to ensure they are not overwritten
-            open={open}
-            onOpenChange={onOpenChangeIntercept}
-        />
+            </Dialog.Content>
+        </Dialog>
     );
 }

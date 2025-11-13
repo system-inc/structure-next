@@ -297,13 +297,10 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
             </div>
 
             {/* Upload dialog */}
-            <Dialog
-                variant="A"
-                open={dialogOpen}
-                onOpenChange={handleDialogClose}
-                header={dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}
-                content={getDialogContent()}
-            />
+            <Dialog variant="A" open={dialogOpen} onOpenChange={handleDialogClose}>
+                <Dialog.Header>{dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}</Dialog.Header>
+                <Dialog.Content>{getDialogContent()}</Dialog.Content>
+            </Dialog>
         </>
     );
 }

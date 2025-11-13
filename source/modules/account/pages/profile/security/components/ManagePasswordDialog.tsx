@@ -57,9 +57,16 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
         <Dialog
             variant="A"
             className="p-6"
-            accessibilityTitle={properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
-            content={
-                showForm ? (
+            {...properties}
+            // Spread these properties after all properties to ensure they are not overwritten
+            open={open}
+            onOpenChange={onOpenChangeIntercept}
+        >
+            <Dialog.Header className="sr-only">
+                {properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
+            </Dialog.Header>
+            <Dialog.Content>
+                {showForm ? (
                     <ManagePasswordForm
                         accountHasPasswordSet={properties.accountHasPasswordSet}
                         onComplete={function () {
@@ -68,12 +75,8 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
                     />
                 ) : (
                     <div style={{ minHeight: '200px' }} />
-                )
-            }
-            {...properties}
-            // Spread these properties after all properties to ensure they are not overwritten
-            open={open}
-            onOpenChange={onOpenChangeIntercept}
-        />
+                )}
+            </Dialog.Content>
+        </Dialog>
     );
 }

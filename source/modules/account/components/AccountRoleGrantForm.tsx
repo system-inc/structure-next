@@ -194,7 +194,9 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             )}
 
             {/* Error State */}
-            {accountPrivilegedRequest.error && <Alert variant="Negative" title={accountPrivilegedRequest.error.message} />}
+            {accountPrivilegedRequest.error && (
+                <Alert variant="Negative" title={accountPrivilegedRequest.error.message} />
+            )}
 
             {/* Empty State */}
             {!accountPrivilegedRequest.isLoading &&
@@ -263,12 +265,9 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             })}
 
             {/* Grant Role Dialog */}
-            <Dialog
-                variant="A"
-                open={grantDialogOpen}
-                onOpenChange={setGrantDialogOpen}
-                header="Confirm Role Grant"
-                content={
+            <Dialog variant="A" open={grantDialogOpen} onOpenChange={setGrantDialogOpen}>
+                <Dialog.Header>Confirm Role Grant</Dialog.Header>
+                <Dialog.Content>
                     <>
                         <p>
                             Are you sure you want to grant the <b>{selectedRoleType}</b> role to{' '}
@@ -282,8 +281,8 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             />
                         )}
                     </>
-                }
-                footer={
+                </Dialog.Content>
+                <Dialog.Footer>
                     <div className="flex justify-end space-x-2">
                         <Button onClick={() => setGrantDialogOpen(false)}>Cancel</Button>
                         <AnimatedButton
@@ -293,8 +292,8 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             Grant Role
                         </AnimatedButton>
                     </div>
-                }
-            />
+                </Dialog.Footer>
+            </Dialog>
         </section>
     );
 }
