@@ -6,6 +6,7 @@ import React from 'react';
 // Dependencies - Theme
 import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
 import type { ToggleThemeConfiguration } from '@structure/source/components/buttons/ToggleTheme';
+import type { ToggleGroupThemeConfiguration } from '@structure/source/components/buttons/ToggleGroupTheme';
 import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
@@ -17,6 +18,7 @@ import type { DeepPartialComponentTheme } from '@structure/source/theme/utilitie
 interface ComponentThemeContextValue {
     Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
     Toggle?: DeepPartialComponentTheme<ToggleThemeConfiguration>;
+    ToggleGroup?: DeepPartialComponentTheme<ToggleGroupThemeConfiguration>;
     Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;

@@ -24,7 +24,7 @@ export function CustomerAndTicketSidePanel(properties: CustomerTicketDetailsProp
     );
 
     return (
-        <div className="relative h-full overflow-hidden border-l border--3">
+        <div className="relative h-full overflow-hidden border-l border--0">
             <CustomerTicketHeader selectedView={selectedView} onViewChange={setSelectedView} />
             {selectedView === CustomerAndTicketSidePanelView.Customer && <CustomerDetails ticket={properties.ticket} />}
             {selectedView === CustomerAndTicketSidePanelView.Ticket && <TicketDetails ticket={properties.ticket} />}

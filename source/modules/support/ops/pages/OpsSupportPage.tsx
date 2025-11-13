@@ -104,7 +104,7 @@ export function OpsSupportPage() {
             </div>
 
             <Button
-                className="absolute top-1.5 right-2 z-10 flex h-8 w-8 items-center justify-center overflow-visible rounded-lg background--2 p-1 transition-all"
+                className="absolute top-1.5 right-2 z-10 flex h-8 w-8 cursor-pointer items-center justify-center overflow-visible transition-all"
                 onClick={function () {
                     setIsSidebarVisible((previous) => !previous);
                 }}

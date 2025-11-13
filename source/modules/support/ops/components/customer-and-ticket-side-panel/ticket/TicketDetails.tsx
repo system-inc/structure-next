@@ -29,7 +29,7 @@ export function TicketDetails(properties: TicketDetailsProperties) {
     }
 
     return (
-        <div className="flex flex-col gap-4 border-b px-4 pt-3 pb-6">
+        <div className="flex flex-col gap-4 border-b border--0 px-4 pt-3 pb-6">
             <div className="flex flex-row items-center justify-start gap-4 content--2">
                 <div className="font-medium content--2">Ticket ID</div>
                 {properties.ticket.identifier}

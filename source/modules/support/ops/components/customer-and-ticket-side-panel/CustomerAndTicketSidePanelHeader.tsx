@@ -7,7 +7,8 @@ import React from 'react';
 import { CustomerAndTicketSidePanelView } from './CustomerAndTicketSidePanelTypes';
 
 // Dependencies - Main Components
-import { ToggleGroup, ToggleGroupItem } from '@structure/source/components/buttons/ToggleGroup';
+import { ToggleGroup } from '@structure/source/components/buttons/ToggleGroup';
+import { ToggleGroupItem } from '@structure/source/components/buttons/ToggleGroupItem';
 import { BorderContainer } from '../BorderContainer';
 
 // Component - CustomerTicketHeader
@@ -24,7 +25,7 @@ export function CustomerTicketHeader(properties: CustomerTicketHeaderProperties)
     // Render the component
     return (
         <BorderContainer>
-            <ToggleGroup className="mr-9" value={properties.selectedView} onValueChange={handleUpdateView}>
+            <ToggleGroup variant="A" className="mr-9" value={properties.selectedView} onValueChange={handleUpdateView}>
                 <ToggleGroupItem value={CustomerAndTicketSidePanelView.Customer}>Customer</ToggleGroupItem>
                 <ToggleGroupItem value={CustomerAndTicketSidePanelView.Ticket}>Ticket</ToggleGroupItem>
             </ToggleGroup>
