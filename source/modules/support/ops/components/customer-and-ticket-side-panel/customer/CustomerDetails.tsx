@@ -7,7 +7,7 @@ import React from 'react';
 import type { SupportTicketsPrivilegedQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
 
 // Dependencies - Assets
-import { Envelope } from '@phosphor-icons/react';
+import { EnvelopeIcon } from '@phosphor-icons/react';
 import { BorderContainer } from '../../BorderContainer';
 
 // Component - CustomerDetails
@@ -21,7 +21,7 @@ export function CustomerDetails(properties: CustomerDetailsProperties) {
                 <div className="flex flex-col gap-4 border-b px-4 pt-3 pb-6">
                     <div className="flex flex-row items-center justify-start gap-2 content--2">
                         <div className="relative h-4 w-4">
-                            <Envelope />
+                            <EnvelopeIcon />
                         </div>
                         {properties.ticket.userEmailAddress}
                     </div>
