@@ -5,10 +5,11 @@ import React from 'react';
 import { BorderContainer } from '../BorderContainer';
 import { Button } from '@structure/source/components/buttons/Button';
 import { InputSelect } from '@structure/source/components/forms/InputSelect';
-import { Checkbox } from '@project/app/_components/form/Checkbox';
+import { InputCheckbox } from '@structure/source/components/forms-new/fields/checkbox/InputCheckbox';
+import type { InputCheckboxState } from '@structure/source/components/forms-new/fields/checkbox/InputCheckbox';
 
 // Dependencies - Assets
-import { ArchiveIcon, TrashIcon, ArrowsClockwiseIcon, FolderOpen } from '@phosphor-icons/react';
+import { ArchiveIcon, TrashIcon, ArrowsClockwiseIcon, FolderOpenIcon } from '@phosphor-icons/react';
 
 // Dependencies - API
 import type { SupportTicketsPrivilegedQuery } from '@structure/source/api/graphql/GraphQlGeneratedCode';
@@ -27,11 +28,14 @@ export interface TicketListHeaderProperties {
     onRefresh: () => void;
 }
 export function TicketListHeader(properties: TicketListHeaderProperties) {
-    // Calculate if all tickets are selected
+    // Calculate checkbox state based on selected tickets
+    const someSelected = properties.selectedTicketIdentifiers.size > 0;
     const allSelected =
         properties.tickets.length > 0 &&
         properties.tickets.every((ticket) => properties.selectedTicketIdentifiers.has(ticket.identifier));
-    const someSelected = properties.selectedTicketIdentifiers.size > 0;
+
+    // Determine checkbox state: checked, indeterminate, or unchecked
+    const checkboxState: InputCheckboxState = allSelected ? true : someSelected ? 'Indeterminate' : false;
 
     // Status options for the dropdown
     const statusOptions = [
@@ -46,10 +50,9 @@ export function TicketListHeader(properties: TicketListHeaderProperties) {
             <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-3">
                     {/* Master checkbox */}
-                    <Checkbox
-                        size="small"
-                        checked={allSelected}
-                        onCheckedChange={(checked) => properties.onSelectAllTickets(checked === true)}
+                    <InputCheckbox
+                        isChecked={checkboxState}
+                        onIsCheckedChange={(isChecked) => properties.onSelectAllTickets(isChecked === true)}
                         aria-label="Select all tickets"
                     />
 
@@ -59,16 +62,18 @@ export function TicketListHeader(properties: TicketListHeaderProperties) {
                         {properties.selectedStatus === SupportTicketStatus.Closed ? (
                             <Button
                                 variant="Ghost"
+                                size="Icon"
                                 onClick={properties.onBulkArchive}
                                 aria-label="Unarchive tickets"
                                 className="p-2"
                                 disabled={!someSelected && properties.tickets.length === 0}
                             >
-                                <FolderOpen className="h-4 w-4" />
+                                <FolderOpenIcon className="h-4 w-4" />
                             </Button>
                         ) : (
                             <Button
                                 variant="Ghost"
+                                size="Icon"
                                 onClick={properties.onBulkArchive}
                                 aria-label="Archive tickets"
                                 className="p-2"
@@ -82,16 +87,18 @@ export function TicketListHeader(properties: TicketListHeaderProperties) {
                         {properties.selectedStatus === SupportTicketStatus.Deleted ? (
                             <Button
                                 variant="Ghost"
+                                size="Icon"
                                 onClick={properties.onBulkDelete}
                                 aria-label="Restore tickets"
                                 className="p-2"
                                 disabled={!someSelected && properties.tickets.length === 0}
                             >
-                                <FolderOpen className="h-4 w-4" />
+                                <FolderOpenIcon className="h-4 w-4" />
                             </Button>
                         ) : (
                             <Button
                                 variant="Ghost"
+                                size="Icon"
                                 onClick={properties.onBulkDelete}
                                 aria-label="Delete tickets"
                                 className="p-2"
@@ -114,7 +121,13 @@ export function TicketListHeader(properties: TicketListHeaderProperties) {
                     />
 
                     {/* Refresh button */}
-                    <Button variant="Ghost" onClick={properties.onRefresh} aria-label="Refresh tickets" className="p-2">
+                    <Button
+                        variant="Ghost"
+                        size="Icon"
+                        onClick={properties.onRefresh}
+                        aria-label="Refresh tickets"
+                        className="p-2"
+                    >
                         {properties.isManuallyRefreshing ? (
                             <ArrowsClockwiseIcon className="h-4 w-4 animate-spin" />
                         ) : (

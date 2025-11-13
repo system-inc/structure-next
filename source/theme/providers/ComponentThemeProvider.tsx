@@ -12,6 +12,7 @@ import type { PopoverThemeConfiguration } from '@structure/source/components/pop
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
 import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text-area/InputTextAreaTheme';
+import type { InputCheckboxThemeConfiguration } from '@structure/source/components/forms-new/fields/checkbox/InputCheckboxTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Type - Component Theme Context Value
@@ -24,6 +25,7 @@ interface ComponentThemeContextValue {
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
     InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
     InputTextArea?: DeepPartialComponentTheme<InputTextAreaThemeConfiguration>;
+    InputCheckbox?: DeepPartialComponentTheme<InputCheckboxThemeConfiguration>;
     // Future component themes:
     // Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
     // Table?: DeepPartialComponentTheme<TableThemeConfiguration>;

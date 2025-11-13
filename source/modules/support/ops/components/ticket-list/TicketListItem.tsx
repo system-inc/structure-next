@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Checkbox } from '@project/app/_components/form/Checkbox';
+import { InputCheckbox } from '@structure/source/components/forms-new/fields/checkbox/InputCheckbox';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -51,10 +51,9 @@ export function TicketListItem(properties: TicketListItemProperties) {
             }}
         >
             {/* Checkbox */}
-            <Checkbox
-                size="small"
-                checked={properties.isChecked}
-                onCheckedChange={properties.onCheckboxChange}
+            <InputCheckbox
+                isChecked={properties.isChecked}
+                onIsCheckedChange={properties.onCheckboxChange}
                 onClick={function (event) {
                     event.stopPropagation();
                 }}

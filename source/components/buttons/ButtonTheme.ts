@@ -70,7 +70,6 @@ export interface ButtonVariants {
     ToggleOn: 'ToggleOn';
     ToggleOff: 'ToggleOff';
     MenuItem: 'MenuItem';
-    InputCheckbox: 'InputCheckbox';
     InputSelect: 'InputSelect';
     TableHeaderCell: 'TableHeaderCell';
 }
@@ -99,7 +98,6 @@ export interface ButtonSizes {
     IconLarge: 'IconLarge';
     IconExtraLarge: 'IconExtraLarge';
     MenuItem: 'MenuItem';
-    InputCheckbox: 'InputCheckbox';
     InputSelect: 'InputSelect';
     TableHeaderCell: 'TableHeaderCell';
 }
@@ -190,12 +188,12 @@ export const buttonTheme: ButtonThemeConfiguration = {
             buttonCommonClassNames,
             buttonCenteredClassNames,
             // Content
-            'content--3',
+            'content--0',
             // Hover
-            'hover:background--6 hover:content--1',
+            'hover:background--6 hover:content---1',
             // Active and Popover open states (for TipButton)
             'active:background--8 data-[state=delayed-open]:background--8 data-[state=instant-open]:background--8 data-[state=open]:background--8',
-            'active:content---1 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',
+            'active:content---3 data-[state=delayed-open]:content---1 data-[state=instant-open]:content---1 data-[state=open]:content---1',
         ),
 
         // Variant Destructive - Dangerous/destructive action button
@@ -281,23 +279,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
             '[&[data-selected=true]>svg:first-child]:animate-in [&[data-selected=true]>svg:first-child]:duration-200 [&[data-selected=true]>svg:first-child]:fade-in',
         ),
 
-        // Variant InputCheckbox - Checkbox button in forms
-        // Use for: Checkbox inputs with custom styling
-        InputCheckbox: mergeClassNames(
-            buttonCommonClassNames,
-            buttonFocusClassNames,
-            'flex items-center justify-center',
-            'rounded-sm border',
-            // Base: Subtle background with border
-            'border--3 background--0 content--0',
-            // Hover: Slight emphasis
-            'hover:border--2 hover:background--2',
-            // Checked state: Inverted colors (content color becomes background)
-            'data-[state=checked]:border-content--0 data-[state=checked]:background-content--0 data-[state=checked]:content--10',
-            // Indeterminate state: Same styling as checked
-            'data-[state=indeterminate]:border-content--0 data-[state=indeterminate]:background-content--0 data-[state=indeterminate]:content--10',
-        ),
-
         // Variant InputSelect - Select input button styling
         // Use for: Custom select/dropdown triggers in forms
         InputSelect: mergeClassNames(
@@ -355,7 +336,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized Sizes
         MenuItem: 'pt-1.5 pr-3 pb-1.5',
-        InputCheckbox: 'h-4 w-4',
         InputSelect: 'px-4 h-9',
         TableHeaderCell: 'h-8',
     },
@@ -379,7 +359,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
 
         // Specialized Sizes
         MenuItem: 'h-4 w-4',
-        InputCheckbox: 'h-3 w-3',
         InputSelect: 'h-4 w-4',
         TableHeaderCell: 'h-3 w-3',
     },
