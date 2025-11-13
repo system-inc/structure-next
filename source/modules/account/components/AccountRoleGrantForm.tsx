@@ -167,7 +167,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             {/* Success Message */}
             {grantSuccess && (
                 <Alert
-                    variant="success"
+                    variant="Positive"
                     title={`Successfully granted ${grantSuccess.role} role to @${grantSuccess.username}`}
                     className="mb-4"
                 />
@@ -194,14 +194,14 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             )}
 
             {/* Error State */}
-            {accountPrivilegedRequest.error && <Alert variant="error" title={accountPrivilegedRequest.error.message} />}
+            {accountPrivilegedRequest.error && <Alert variant="Negative" title={accountPrivilegedRequest.error.message} />}
 
             {/* Empty State */}
             {!accountPrivilegedRequest.isLoading &&
                 !accountPrivilegedRequest.error &&
                 debouncedEmail &&
                 accountPrivilegedRequest.data?.accountPrivileged?.profiles.length === 0 && (
-                    <Alert variant="warning" title="No user found">
+                    <Alert variant="Warning" title="No user found">
                         We couldn&apos;t find any user with this email address.
                     </Alert>
                 )}
@@ -277,7 +277,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                         {accountAccessRoleAssignmentCreatePrivilegedRequest.error && (
                             <Alert
                                 className="mt-4"
-                                variant="error"
+                                variant="Negative"
                                 title={accountAccessRoleAssignmentCreatePrivilegedRequest.error.message}
                             />
                         )}

@@ -11,6 +11,7 @@ import type { LinkThemeConfiguration } from '@structure/source/components/naviga
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { BadgeThemeConfiguration } from '@structure/source/components/notifications/BadgeTheme';
+import type { AlertThemeConfiguration } from '@structure/source/components/notifications/AlertTheme';
 import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
 import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text-area/InputTextAreaTheme';
 import type { InputCheckboxThemeConfiguration } from '@structure/source/components/forms-new/fields/checkbox/InputCheckboxTheme';
@@ -25,6 +26,7 @@ interface ComponentThemeContextValue {
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
     Badge?: DeepPartialComponentTheme<BadgeThemeConfiguration>;
+    Alert?: DeepPartialComponentTheme<AlertThemeConfiguration>;
     InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
     InputTextArea?: DeepPartialComponentTheme<InputTextAreaThemeConfiguration>;
     InputCheckbox?: DeepPartialComponentTheme<InputCheckboxThemeConfiguration>;

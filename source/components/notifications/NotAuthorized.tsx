@@ -18,8 +18,8 @@ export function NotAuthorized(properties: NotAuthorizedProperties) {
     return (
         <div className="flex h-screen flex-col items-center justify-center">
             <Alert
-                variant={'error'}
-                size={'large'}
+                variant="Negative"
+                size="Large"
                 icon={KeyIcon}
                 title="Not Authorized"
                 {...properties.alertProperties}

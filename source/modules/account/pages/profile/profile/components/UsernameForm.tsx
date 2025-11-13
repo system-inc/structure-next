@@ -157,7 +157,7 @@ export function UsernameForm() {
                             {accountProfileUpdateRequest.error && (
                                 <Alert
                                     className="mt-4"
-                                    variant="error"
+                                    variant="Negative"
                                     title={accountProfileUpdateRequest.error.message}
                                 />
                             )}

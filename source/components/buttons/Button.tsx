@@ -35,7 +35,7 @@ export interface BaseButtonProperties {
     onClick?: (event: React.MouseEvent<HTMLElement>) => void | Promise<void>;
 }
 
-// Type for icon props - can be either a component reference or pre-rendered JSX
+// Type - Icon can be either a component reference or pre-rendered JSX
 export type ButtonIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
 
 // Icon properties

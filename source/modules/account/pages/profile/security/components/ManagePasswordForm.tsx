@@ -65,7 +65,7 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
 
         return {
             success: false,
-            message: <Alert variant="error" title="An error occurred while updating your password." />,
+            message: <Alert variant="Negative" title="An error occurred while updating your password." />,
         };
     }
 
@@ -74,7 +74,7 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
         <div className={mergeClassNames('', properties.className)}>
             {success && (
                 <>
-                    <Alert variant="success" title="Your password has been updated." />
+                    <Alert variant="Positive" title="Your password has been updated." />
                     <Button className="mt-4" onClick={properties.onComplete}>
                         Close
                     </Button>

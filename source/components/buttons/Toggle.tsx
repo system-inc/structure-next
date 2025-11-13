@@ -30,7 +30,7 @@ export interface BaseToggleProperties {
     onIsPressedChange?: React.ComponentPropsWithoutRef<typeof RadixToggle.Root>['onPressedChange'];
 }
 
-// Type for icon props - can be either a component reference or pre-rendered JSX
+// Type - Icon can be either a component reference or pre-rendered JSX
 export type ToggleIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
 
 // Icon properties

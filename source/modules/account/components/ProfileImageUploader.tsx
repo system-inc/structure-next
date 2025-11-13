@@ -218,7 +218,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
         // Show error if any
         if(error) {
             return (
-                <Alert variant="error" className="mb-4">
+                <Alert variant="Negative" className="mb-4">
                     {error}
                 </Alert>
             );

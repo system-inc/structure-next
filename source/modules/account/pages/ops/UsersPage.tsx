@@ -353,7 +353,7 @@ export function UsersPage() {
                             {accountDeletePrivilegedRequest.error && (
                                 <Alert
                                     className="mt-4"
-                                    variant="error"
+                                    variant="Negative"
                                     title={accountDeletePrivilegedRequest.error.message}
                                 />
                             )}

@@ -10,7 +10,7 @@ import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilitie
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
 
-// Type for icon props - can be either a component reference or pre-rendered JSX
+// Type - Icon can be either a component reference or pre-rendered JSX
 export type BadgeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
 
 // Component - Badge

@@ -37,7 +37,7 @@ export const useToggleGroupContext = function () {
 // Export context provider for use in ToggleGroup.tsx
 export const ToggleGroupContextProvider = ToggleGroupContext.Provider;
 
-// Type for icon props - can be either a component reference or pre-rendered JSX
+// Type - Icon can be either a component reference or pre-rendered JSX
 export type ToggleGroupItemIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
 
 // Base ToggleGroupItem Properties

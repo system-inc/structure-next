@@ -151,14 +151,14 @@ export function ImageUploader(properties: ImageUploaderProperties) {
 
                                     {/* Error message */}
                                     {childProperties.error && (
-                                        <Alert variant="error" className="mt-2">
+                                        <Alert variant="Negative" className="mt-2">
                                             {childProperties.error.message}
                                         </Alert>
                                     )}
 
                                     {/* Success message */}
                                     {!properties.hideSuccessMessage && uploadSuccess && (
-                                        <Alert variant="success" className="mt-2">
+                                        <Alert variant="Positive" className="mt-2">
                                             Upload successful!
                                         </Alert>
                                     )}

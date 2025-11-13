@@ -143,7 +143,7 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
         <>
             {/* Render an error if defaultValuesQuery is provided and there's an error */}
             {properties.defaultValuesQuery && defaultValuesQueryState.error && (
-                <Alert variant="error" title="Error">
+                <Alert variant="Negative" title="Error">
                     <p>{defaultValuesQueryState.error.message}</p>
                 </Alert>
             )}

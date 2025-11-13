@@ -22,7 +22,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
     // Render the component
     return (
         <div className="flex h-screen w-full items-center justify-center">
-            <Alert variant={'error'} size={'large'} title="Error" className="md:min-w-96">
+            <Alert variant="Negative" size="Large" title="Error" className="md:min-w-96">
                 <div className="space-y-2">
                     {properties.error.message && <p className="break-all">{properties.error.message}</p>}
                     {properties.error.digest && (

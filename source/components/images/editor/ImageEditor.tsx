@@ -227,7 +227,7 @@ export function ImageEditor(properties: ImageEditorProperties) {
     return (
         <div className={`flex flex-col ${properties.className || ''}`} role="region" aria-label="Image editor">
             {error && (
-                <Alert variant="error" className="mb-4">
+                <Alert variant="Negative" className="mb-4">
                     {error}
                 </Alert>
             )}

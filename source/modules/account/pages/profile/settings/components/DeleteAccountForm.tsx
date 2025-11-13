@@ -61,7 +61,7 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
 
         return {
             success: false,
-            message: <Alert variant="error" title="An error occurred while deleting your account." />,
+            message: <Alert variant="Negative" title="An error occurred while deleting your account." />,
         };
     }
 
@@ -70,7 +70,7 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
         <div className={mergeClassNames('', properties.className)}>
             {success && (
                 <>
-                    <Alert variant="success" title="Your account has been deleted." />
+                    <Alert variant="Positive" title="Your account has been deleted." />
                     <Button className="mt-4" onClick={properties.onComplete}>
                         Close
                     </Button>

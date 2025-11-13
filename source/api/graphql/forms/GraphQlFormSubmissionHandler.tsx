@@ -137,7 +137,7 @@ export async function GraphQlFormSubmissionHandler<
         // If there's been an error
         if(mutationResponseError) {
             message = (
-                <Alert variant="error" title="Error">
+                <Alert variant="Negative" title="Error">
                     <p>There&apos;s been an error: {mutationResponseError.message}.</p>
                     <p>{JSON.stringify(mutationResponseError)}</p>
                 </Alert>

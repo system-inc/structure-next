@@ -19,8 +19,8 @@ export function NotConnected(properties: NotConnectedProperties) {
     return (
         <div className="flex h-screen flex-col items-center justify-center">
             <Alert
-                variant={'error'}
-                size={'large'}
+                variant="Negative"
+                size="Large"
                 icon={CloudErrorIcon}
                 title="Not Connected"
                 {...properties.alertProperties}

@@ -151,7 +151,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     className="w-full cursor-pointer rounded-md border border-neutral-200 bg-transparent p-2 text-sm dark:border-neutral-700"
                 />
                 {error && (
-                    <Alert variant="error" className="mt-2">
+                    <Alert variant="Negative" className="mt-2">
                         {error}
                     </Alert>
                 )}
@@ -180,7 +180,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     {properties.children || 'Select Image'}
                 </Button>
                 {error && (
-                    <Alert variant="error" className="mt-2">
+                    <Alert variant="Negative" className="mt-2">
                         {error}
                     </Alert>
                 )}
@@ -225,7 +225,7 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                 </div>
             </div>
             {error && (
-                <Alert variant="error" className="mt-2">
+                <Alert variant="Negative" className="mt-2">
                     {error}
                 </Alert>
             )}

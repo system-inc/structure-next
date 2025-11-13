@@ -343,7 +343,7 @@ export function UsersRolesPage() {
                             {accountAccessRoleAssignmentRevokePrivilegedRequest.error && (
                                 <Alert
                                     className="mt-4"
-                                    variant="error"
+                                    variant="Negative"
                                     title={accountAccessRoleAssignmentRevokePrivilegedRequest.error.message}
                                 />
                             )}
