@@ -241,6 +241,24 @@
     --color-border-warning: light-dark(var(--color-orange-600), var(--color-orange-500));
     --color-border-negative: light-dark(var(--color-red-600), var(--color-red-500));
 
+    /* Borders - Semantic Muted (Soft/Pastel Variants) */
+    --color-border-informative-muted: light-dark(
+        var(--color-blue-200),
+        color-mix(in srgb, var(--color-blue-600) 32%, transparent)
+    );
+    --color-border-positive-muted: light-dark(
+        var(--color-green-200),
+        color-mix(in srgb, var(--color-green-600) 32%, transparent)
+    );
+    --color-border-warning-muted: light-dark(
+        var(--color-orange-200),
+        color-mix(in srgb, var(--color-orange-600) 32%, transparent)
+    );
+    --color-border-negative-muted: light-dark(
+        var(--color-red-200),
+        color-mix(in srgb, var(--color-red-600) 32%, transparent)
+    );
+
     /* Backgrounds - Gradient */
     --color-background-0: light-dark(var(--color-white-1000), var(--color-black-700));
     --color-background-1: light-dark(var(--color-white-950), var(--color-black-650));
@@ -263,6 +281,24 @@
     --color-background-positive: light-dark(var(--color-green-600), var(--color-green-400));
     --color-background-warning: light-dark(var(--color-orange-600), var(--color-orange-400));
     --color-background-negative: light-dark(var(--color-red-600), var(--color-red-400));
+
+    /* Backgrounds - Semantic Muted (Soft/Pastel Variants) */
+    --color-background-informative-muted: light-dark(
+        var(--color-blue-50),
+        color-mix(in srgb, var(--color-blue-600) 16%, transparent)
+    );
+    --color-background-positive-muted: light-dark(
+        var(--color-green-50),
+        color-mix(in srgb, var(--color-green-600) 16%, transparent)
+    );
+    --color-background-warning-muted: light-dark(
+        var(--color-orange-50),
+        color-mix(in srgb, var(--color-orange-600) 16%, transparent)
+    );
+    --color-background-negative-muted: light-dark(
+        var(--color-red-50),
+        color-mix(in srgb, var(--color-red-600) 16%, transparent)
+    );
 
     /* Content - Gradient */
     --color-content-0: light-dark(var(--color-black-800), var(--color-white-700));
