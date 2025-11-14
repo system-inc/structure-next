@@ -21,7 +21,6 @@ export function ApiErrorNotice(properties: ApiErrorNoticeProperties) {
             <Notice
                 variant="Negative"
                 size="Large"
-                presentation="Card"
                 title="API Error"
                 {...properties.noticeProperties}
             >

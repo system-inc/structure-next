@@ -20,7 +20,6 @@ export function NotAuthorizedNotice(properties: NotAuthorizedNoticeProperties) {
             <Notice
                 variant="Negative"
                 size="Large"
-                presentation="Card"
                 icon={KeyIcon}
                 title="Not Authorized"
                 {...properties.noticeProperties}

@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Theme
 import { noticeTheme as structureNoticeTheme } from '@structure/source/components/notices/NoticeTheme';
-import type { NoticeVariant, NoticeSize, NoticePresentation } from '@structure/source/components/notices/NoticeTheme';
+import type { NoticeVariant, NoticeSize } from '@structure/source/components/notices/NoticeTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
 import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
@@ -11,9 +11,7 @@ import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilitie
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Dependencies - Assets
-import WarningIcon from '@structure/assets/icons/status/WarningIcon.svg';
-import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
-import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
+import { CheckCircleIcon, InfoIcon, WarningCircleIcon, WarningIcon } from '@phosphor-icons/react';
 
 // Type - Icon can be either a component reference or pre-rendered JSX
 export type NoticeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
@@ -22,7 +20,6 @@ export type NoticeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElemen
 export interface NoticeProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     variant?: NoticeVariant;
     size?: NoticeSize;
-    presentation?: NoticePresentation;
     title?: React.ReactNode; // Override HTMLAttributes title (string) with ReactNode
     icon?: NoticeIconType; // Icon to display
     iconClassName?: string; // Custom className for the icon
@@ -35,14 +32,12 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
     // Apply defaults from theme configuration
     const variant = properties.variant || noticeTheme.configuration.defaultVariant.variant;
     const size = properties.size || noticeTheme.configuration.defaultVariant.size;
-    const presentation = properties.presentation || noticeTheme.configuration.defaultVariant.presentation;
 
     // Create variant class names from theme
     const noticeVariantClassNames = createVariantClassNames(noticeTheme.configuration.baseClasses, {
         variants: {
             variant: noticeTheme.variants,
             size: noticeTheme.sizes,
-            presentation: noticeTheme.presentations,
         },
         defaultVariants: noticeTheme.configuration.defaultVariant,
     });
@@ -51,19 +46,22 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
     let icon = properties.icon;
     if(!icon) {
         if(variant === 'Negative') {
-            icon = ErrorIcon;
+            icon = WarningCircleIcon;
         }
         else if(variant === 'Warning') {
             icon = WarningIcon;
         }
         else if(variant === 'Positive') {
-            icon = CheckCircledIcon;
+            icon = CheckCircleIcon;
+        }
+        else if(variant === 'Informative') {
+            icon = InfoIcon;
         }
     }
 
     // Variant icon wrapper class names - adjust spacing based on size
     let variantIconContainerClassNames = 'mr-3 ml-1';
-    if(size === 'Large' || size === 'ExtraLarge') {
+    if(size === 'Base' || size === 'Large') {
         variantIconContainerClassNames = 'ml-1 mr-5';
     }
 
@@ -86,18 +84,34 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
         iconClassNames = mergeClassNames(iconClassNames, properties.iconClassName);
     }
 
-    // Variant title class names - ExtraLarge gets larger text
+    // Variant title class names - Size determines text styling, variant determines color
     let titleClassNames = '';
-    if(size === 'ExtraLarge') {
+
+    // Size-based text styling
+    if(size === 'Large') {
         titleClassNames = 'text-base font-medium';
     }
-    else if(size === 'Large') {
+    else if(size === 'Base') {
         titleClassNames = 'text-sm font-medium';
+    }
+
+    // Variant-based color
+    if(variant === 'Positive') {
+        titleClassNames = mergeClassNames(titleClassNames, 'content--positive');
+    }
+    else if(variant === 'Negative') {
+        titleClassNames = mergeClassNames(titleClassNames, 'content--negative');
+    }
+    else if(variant === 'Warning') {
+        titleClassNames = mergeClassNames(titleClassNames, 'content--warning');
+    }
+    else if(variant === 'Informative') {
+        titleClassNames = mergeClassNames(titleClassNames, 'content--informative');
     }
 
     // Variant text wrapper class names
     let variantTextContainerClassNames = 'pt-px pr-3 pb-0.5';
-    if(size === 'Large' || size === 'ExtraLarge') {
+    if(size === 'Base' || size === 'Large') {
         variantTextContainerClassNames = 'pb-1.5 pr-3';
     }
 
@@ -109,7 +123,6 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
                 noticeVariantClassNames({
                     variant: variant,
                     size: size,
-                    presentation: presentation,
                 }),
                 properties.className,
             )}
