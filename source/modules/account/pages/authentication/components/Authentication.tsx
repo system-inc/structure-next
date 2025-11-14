@@ -365,7 +365,7 @@ export function Authentication(properties: AuthenticationProperties) {
 
             {/* Redirect & Redirect */}
             {/* <Duration
-                className="neutral absolute bottom-5 right-5 font-mono text-sm"
+                className="content--4 absolute bottom-5 right-5 font-mono text-sm"
                 startTimeInMilliseconds={authenticationSessionStartTime}
             >
               {redirectUrl && <p>Redirecting to {redirectUrl}</p>}

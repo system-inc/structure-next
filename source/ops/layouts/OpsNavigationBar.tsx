@@ -92,7 +92,7 @@ export function OpsNavigationBar() {
                                 }
                             >
                                 Ops
-                                {/* <span className="ml-2 inline-flex items-center gap-1 rounded-sm border background--2 px-2 text-opsis-content-placeholder">
+                                {/* <span className="ml-2 inline-flex items-center gap-1 rounded-sm border background--2 px-2 content--placeholder">
                                     CMD+K
                                 </span> */}
                             </Button>

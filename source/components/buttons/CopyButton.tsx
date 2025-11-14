@@ -113,7 +113,7 @@ export function CopyButton({ value, notificationData, onCopy, className, ...butt
             {...buttonProperties}
             onClick={onClick}
             className={mergeClassNames(
-                valueCopiedToClipboard && 'bg-light-2 dark:bg-dark-4',
+                valueCopiedToClipboard && 'background--3',
                 valueCopiedToClipboard && 'hover:content--positive',
                 className,
             )}
