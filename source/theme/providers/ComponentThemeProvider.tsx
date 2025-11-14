@@ -8,6 +8,7 @@ import type { ButtonThemeConfiguration } from '@structure/source/components/butt
 import type { ToggleThemeConfiguration } from '@structure/source/components/buttons/ToggleTheme';
 import type { ToggleGroupThemeConfiguration } from '@structure/source/components/buttons/ToggleGroupTheme';
 import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
+import type { TabsThemeConfiguration } from '@structure/source/components/navigation/tabs/TabsTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { BadgeThemeConfiguration } from '@structure/source/components/notifications/BadgeTheme';
@@ -23,6 +24,7 @@ interface ComponentThemeContextValue {
     Toggle?: DeepPartialComponentTheme<ToggleThemeConfiguration>;
     ToggleGroup?: DeepPartialComponentTheme<ToggleGroupThemeConfiguration>;
     Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
+    Tabs?: DeepPartialComponentTheme<TabsThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
     Badge?: DeepPartialComponentTheme<BadgeThemeConfiguration>;

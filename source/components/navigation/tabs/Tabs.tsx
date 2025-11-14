@@ -2,46 +2,95 @@
 
 import React from 'react';
 import * as RadixTabPrimitive from '@radix-ui/react-tabs';
-import {
-    mergeClassNames,
-    createVariantClassNames,
-    VariantProperties,
-} from '@structure/source/utilities/style/ClassName';
 import { AnimatePresence, motion } from 'motion/react';
 
-export const tabsVariants = createVariantClassNames(
-    // Wrapper defaults
-    'z-0 flex items-center gap-1 rounded-full background--1 p-0.5 transition-colors',
-    {
-        variants: {
-            size: {
-                large: null, // These are for providing the sizes to the child tabs via context
-                'extra-small': null, // These are for providing the sizes to the child tabs via context
-            },
-        },
-        defaultVariants: {
-            size: 'large',
-        },
-    },
-);
+// Dependencies - Theme
+import { tabsTheme as structureTabsTheme } from '@structure/source/components/navigation/tabs/TabsTheme';
+import type {
+    TabsVariant,
+    TabsSize,
+    TabsThemeConfiguration,
+} from '@structure/source/components/navigation/tabs/TabsTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
-export const TabsContext = React.createContext<
-    VariantProperties<typeof tabsVariants> & { tabGroupId: string; currentValue: string | undefined }
->({ tabGroupId: '', currentValue: undefined });
+// Dependencies - Utilities
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
 
-export const Tabs = React.forwardRef<
-    React.ComponentRef<typeof RadixTabPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Root> & VariantProperties<typeof tabsVariants>
->(function ({ className, size, activationMode: activationModeProperty, ...radixTabRootProperties }, reference) {
+// Tabs Context - Provides size and theme to TabItems
+export const TabsContext = React.createContext<{
+    size?: TabsSize;
+    tabGroupId: string;
+    currentValue: string | undefined;
+    theme: TabsThemeConfiguration;
+}>({
+    tabGroupId: '',
+    currentValue: undefined,
+    theme: structureTabsTheme,
+});
+
+// Base Tabs Properties
+export interface BaseTabsProperties {
+    className?: string;
+    variant?: TabsVariant;
+    size?: TabsSize;
+}
+
+// Component - Tabs
+export interface TabsProperties
+    extends BaseTabsProperties,
+        Omit<React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Root>, keyof BaseTabsProperties | 'size'> {}
+
+export const Tabs = React.forwardRef<React.ComponentRef<typeof RadixTabPrimitive.Root>, TabsProperties>(function Tabs(
+    { className, variant, size, activationMode: activationModeProperty, ...radixTabRootProperties },
+    reference,
+) {
+    // Get component theme from context
+    const componentTheme = useComponentTheme();
+
+    // Merge the structure theme with project theme (if set by the layout provider)
+    const tabsTheme = mergeComponentTheme(structureTabsTheme, componentTheme?.Tabs);
+
+    // Apply defaults from theme if not provided
+    const effectiveVariant = variant || tabsTheme.configuration.defaultVariant.variant;
+    const effectiveSize = size || tabsTheme.configuration.defaultVariant.size;
+
+    // Default activation mode
     const activationMode = activationModeProperty || 'manual';
 
+    // Generate unique ID for this tab group (for animation layoutId)
     const tabGroupId = React.useId();
+
+    // Create variant class names function using the merged theme
+    const tabsVariantClassNames = createVariantClassNames(tabsTheme.configuration.baseClasses, {
+        variants: {
+            variant: tabsTheme.variants,
+            size: tabsTheme.sizes,
+        },
+        defaultVariants: tabsTheme.configuration.defaultVariant,
+    });
+
+    // Compute final className
+    const computedClassName = mergeClassNames(
+        tabsVariantClassNames({
+            variant: effectiveVariant,
+            size: effectiveSize,
+        }),
+        className,
+    );
 
     return (
         <AnimatePresence mode="popLayout">
-            <TabsContext.Provider value={{ size: size, tabGroupId, currentValue: radixTabRootProperties.value }}>
+            <TabsContext.Provider
+                value={{
+                    size: effectiveSize,
+                    tabGroupId,
+                    currentValue: radixTabRootProperties.value,
+                    theme: tabsTheme,
+                }}
+            >
                 <RadixTabPrimitive.Root ref={reference} activationMode={activationMode} {...radixTabRootProperties}>
-                    <RadixTabPrimitive.List className={mergeClassNames(tabsVariants({ className: className }))}>
+                    <RadixTabPrimitive.List className={computedClassName}>
                         {radixTabRootProperties.children}
                     </RadixTabPrimitive.List>
                 </RadixTabPrimitive.Root>
@@ -51,76 +100,88 @@ export const Tabs = React.forwardRef<
 });
 Tabs.displayName = RadixTabPrimitive.Root.displayName;
 
-// TAB ITEM
-export const tabItemVariants = createVariantClassNames(
-    mergeClassNames(
-        // Default
-        'group relative cursor-pointer rounded-full content--2 transition-colors',
-        // Hover
-        'hover:content--0',
-        // Active
-        'data-[state=active]:content--0',
-    ),
-    {
-        variants: {
-            size: {
-                large: ['inline-flex gap-3 px-6 py-3 text-sm font-medium', '[&_svg]:size-4'],
-                'extra-small': ['inline-flex gap-2 px-6 py-1.5 text-sm', '[&_svg]:size-4'],
-            },
-            icon: {
-                true: null,
-                false: null,
-            },
-        },
-        compoundVariants: [
-            {
-                size: 'large',
-                icon: true,
-                className: 'px-3.5 py-3.5',
-            },
-            {
-                size: 'extra-small',
-                icon: true,
-                className: 'px-2 py-2',
-            },
-        ],
-        defaultVariants: {
-            size: 'large',
-            icon: false,
-        },
-    },
-);
+// Type - Icon can be either a component reference or pre-rendered JSX
+export type TabItemIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
+
+// Base TabItem Properties
+export interface BaseTabItemProperties {
+    className?: string;
+    iconSize?: TabsSize; // Independent icon sizing (takes precedence over size-derived icon size)
+}
+
+// Icon properties
+// Icons can be either:
+// - React.FunctionComponent: Auto-sized based on tab size variant
+// - React.ReactNode: Pre-rendered JSX with full control over styling
+// Render order: iconLeft → icon → children → iconRight
+export interface TabItemIconProperties {
+    iconLeft?: TabItemIconType;
+    icon?: TabItemIconType;
+    iconRight?: TabItemIconType;
+    children?: React.ReactNode;
+}
 
 // Component - TabItem
 export interface TabItemProperties
-    extends Omit<VariantProperties<typeof tabItemVariants>, 'size'>,
-        React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Trigger> {}
+    extends BaseTabItemProperties,
+        TabItemIconProperties,
+        Omit<
+            React.ComponentPropsWithoutRef<typeof RadixTabPrimitive.Trigger>,
+            keyof BaseTabItemProperties | keyof TabItemIconProperties | 'asChild'
+        > {}
+
 export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
-    function ({ className, icon, ...radixTabTriggerProperties }, reference) {
+    function TabItem(
+        { className, icon, iconLeft, iconRight, iconSize, children, ...radixTabTriggerProperties },
+        reference,
+    ) {
         const tabsContext = React.useContext(TabsContext);
         const isActive = tabsContext.currentValue === radixTabTriggerProperties.value;
 
+        // Get icon size className from theme based on iconSize (takes precedence) or size
+        const iconSizeClassName = iconSize
+            ? tabsContext.theme.iconSizes[iconSize]
+            : tabsContext.size
+              ? tabsContext.theme.iconSizes[tabsContext.size]
+              : tabsContext.theme.configuration.defaultVariant.size
+                ? tabsContext.theme.iconSizes[tabsContext.theme.configuration.defaultVariant.size]
+                : undefined;
+
+        // Get size classes from theme (inherited from Tabs parent via context)
+        const sizeClasses = tabsContext.size ? tabsContext.theme.sizes[tabsContext.size] : '';
+
+        // Compute TabItem className
+        const tabItemClassName = mergeClassNames(
+            tabsContext.theme.configuration.itemBaseClasses,
+            sizeClasses,
+            className,
+        );
+
+        // Determine tab item content
+        // Render order: iconLeft → icon → children → iconRight
+        const content = (
+            <>
+                {iconLeft && themeIcon(iconLeft, iconSizeClassName)}
+                {icon && themeIcon(icon, iconSizeClassName)}
+                {children}
+                {iconRight && themeIcon(iconRight, iconSizeClassName)}
+            </>
+        );
+
         return (
             <RadixTabPrimitive.Trigger ref={reference} {...radixTabTriggerProperties} asChild>
-                <motion.button
-                    className={mergeClassNames(
-                        tabItemVariants({ size: tabsContext.size, icon: icon, className: className }),
-                    )}
-                >
+                <motion.button className={tabItemClassName}>
                     {isActive && (
                         <motion.div
                             layoutId={`tab-${tabsContext.tabGroupId}`}
-                            className={mergeClassNames(
-                                'absolute inset-0 h-full w-full border border-transparent',
-                                'z-0 group-data-[state=active]:border--0 group-data-[state=active]:background--0',
-                            )}
+                            className={tabsContext.theme.configuration.itemActiveClasses}
                             style={{
                                 borderRadius: '99px',
                             }}
                         />
                     )}
 
-                    <div className="z-10">{radixTabTriggerProperties.children}</div>
+                    <div className="z-10">{content}</div>
                 </motion.button>
             </RadixTabPrimitive.Trigger>
         );
