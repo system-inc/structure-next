@@ -27,8 +27,9 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export type CopyButtonProperties = Omit<NonLinkButtonProperties, 'onClick'> & {
     value: string;
     notificationData?: Omit<NotificationInterface, 'id'>;
+    onCopy?: (copiedValue: string) => void;
 };
-export function CopyButton({ value, notificationData, className, ...buttonProperties }: CopyButtonProperties) {
+export function CopyButton({ value, notificationData, onCopy, className, ...buttonProperties }: CopyButtonProperties) {
     // Hooks
     const notifications = useNotifications();
 
@@ -52,6 +53,9 @@ export function CopyButton({ value, notificationData, className, ...buttonProper
 
         // Update the state
         setValueCopiedToClipboard(true);
+
+        // Call the onCopy callback if provided
+        onCopy?.(value);
 
         // Show a notice
         if(notificationData) {
@@ -81,7 +85,7 @@ export function CopyButton({ value, notificationData, className, ...buttonProper
                     animate="animate"
                     exit="exit"
                     transition={iconAnimationTransition}
-                    className="text-emerald-500"
+                    className="content--positive"
                 >
                     {themeIcon(CheckCircledIcon, iconSizeClassName)}
                 </motion.div>
@@ -110,7 +114,7 @@ export function CopyButton({ value, notificationData, className, ...buttonProper
             onClick={onClick}
             className={mergeClassNames(
                 valueCopiedToClipboard && 'bg-light-2 dark:bg-dark-4',
-                valueCopiedToClipboard && 'hover:text-emerald-500 dark:hover:text-emerald-500',
+                valueCopiedToClipboard && 'hover:content--positive',
                 className,
             )}
         />
