@@ -21,6 +21,7 @@ export function NotConnectedNotice(properties: NotConnectedNoticeProperties) {
             <Notice
                 variant="Negative"
                 size="Large"
+                presentation="Card"
                 icon={CloudErrorIcon}
                 title="Not Connected"
                 {...properties.noticeProperties}

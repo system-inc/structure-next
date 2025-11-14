@@ -18,7 +18,13 @@ export function ApiErrorNotice(properties: ApiErrorNoticeProperties) {
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
-            <Notice variant="Negative" size="Large" title="API Error" {...properties.noticeProperties}>
+            <Notice
+                variant="Negative"
+                size="Large"
+                presentation="Card"
+                title="API Error"
+                {...properties.noticeProperties}
+            >
                 <div className="space-y-2">
                     <p>There was an error while communicating with our servers.</p>
                     {properties.error?.message && (

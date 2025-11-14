@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Theme
 import { noticeTheme as structureNoticeTheme } from '@structure/source/components/notices/NoticeTheme';
-import type { NoticeVariant, NoticeSize } from '@structure/source/components/notices/NoticeTheme';
+import type { NoticeVariant, NoticeSize, NoticePresentation } from '@structure/source/components/notices/NoticeTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
 import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
@@ -22,6 +22,7 @@ export type NoticeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElemen
 export interface NoticeProperties {
     variant?: NoticeVariant;
     size?: NoticeSize;
+    presentation?: NoticePresentation;
     className?: string;
     icon?: NoticeIconType; // Icon to display
     iconClassName?: string; // Custom className for the icon
@@ -36,12 +37,14 @@ export function Notice(properties: NoticeProperties) {
     // Apply defaults from theme configuration
     const variant = properties.variant || noticeTheme.configuration.defaultVariant.variant;
     const size = properties.size || noticeTheme.configuration.defaultVariant.size;
+    const presentation = properties.presentation || noticeTheme.configuration.defaultVariant.presentation;
 
     // Create variant class names from theme
     const noticeVariantClassNames = createVariantClassNames(noticeTheme.configuration.baseClasses, {
         variants: {
             variant: noticeTheme.variants,
             size: noticeTheme.sizes,
+            presentation: noticeTheme.presentations,
         },
         defaultVariants: noticeTheme.configuration.defaultVariant,
     });
@@ -51,6 +54,7 @@ export function Notice(properties: NoticeProperties) {
         noticeVariantClassNames({
             variant: variant,
             size: size,
+            presentation: presentation,
         }),
         properties.className,
     );
@@ -69,9 +73,9 @@ export function Notice(properties: NoticeProperties) {
         }
     }
 
-    // Variant icon wrapper class names
+    // Variant icon wrapper class names - adjust spacing based on size
     let variantIconContainerClassNames = 'mr-3 ml-1';
-    if(size === 'Large') {
+    if(size === 'Large' || size === 'ExtraLarge') {
         variantIconContainerClassNames = 'ml-1 mr-5';
     }
 
@@ -94,15 +98,18 @@ export function Notice(properties: NoticeProperties) {
         iconClassNames = mergeClassNames(iconClassNames, properties.iconClassName);
     }
 
-    // Variant title class names
+    // Variant title class names - ExtraLarge gets larger text
     let titleClassNames = '';
-    if(size === 'Large') {
+    if(size === 'ExtraLarge') {
         titleClassNames = 'text-base font-medium';
+    }
+    else if(size === 'Large') {
+        titleClassNames = 'text-sm font-medium';
     }
 
     // Variant text wrapper class names
     let variantTextContainerClassNames = 'pt-px pr-3 pb-0.5';
-    if(size === 'Large') {
+    if(size === 'Large' || size === 'ExtraLarge') {
         variantTextContainerClassNames = 'pb-1.5 pr-3';
     }
 
