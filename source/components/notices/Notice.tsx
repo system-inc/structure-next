@@ -47,16 +47,6 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
         defaultVariants: noticeTheme.configuration.defaultVariant,
     });
 
-    // Apply variant classes
-    const computedClassName = mergeClassNames(
-        noticeVariantClassNames({
-            variant: variant,
-            size: size,
-            presentation: presentation,
-        }),
-        properties.className,
-    );
-
     // Determine the icon based on the variant (if not explicitly provided)
     let icon = properties.icon;
     if(!icon) {
@@ -113,7 +103,17 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(functio
 
     // Render the component
     return (
-        <div ref={reference} className={computedClassName}>
+        <div
+            ref={reference}
+            className={mergeClassNames(
+                noticeVariantClassNames({
+                    variant: variant,
+                    size: size,
+                    presentation: presentation,
+                }),
+                properties.className,
+            )}
+        >
             <div className="flex">
                 {icon && <div className={variantIconContainerClassNames}>{themeIcon(icon, iconClassNames)}</div>}
                 <div className={variantTextContainerClassNames}>

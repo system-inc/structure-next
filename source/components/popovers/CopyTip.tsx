@@ -13,10 +13,16 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export interface CopyTipProperties extends Omit<TipProperties, 'content' | 'trigger'> {
     trigger: React.ReactElement; // The element that triggers the copy tip
     value: string;
-    noticeData?: Omit<NotificationInterface, 'id'>;
+    notificationData?: Omit<NotificationInterface, 'id'>;
     copyButtonClassName?: string;
 }
-export function CopyTip({ trigger, noticeData, value, copyButtonClassName, ...tipProperties }: CopyTipProperties) {
+export function CopyTip({
+    trigger,
+    notificationData,
+    value,
+    copyButtonClassName,
+    ...tipProperties
+}: CopyTipProperties) {
     // Render the component
     return (
         <Tip
@@ -26,7 +32,7 @@ export function CopyTip({ trigger, noticeData, value, copyButtonClassName, ...ti
                     <div className="flex items-center border-r border--0">
                         <CopyButton
                             value={value}
-                            noticeData={noticeData}
+                            notificationData={notificationData}
                             className={mergeClassNames('p-1.5', copyButtonClassName)}
                         />
                     </div>

@@ -29,7 +29,7 @@ export function useMetricsExportMenu(
     endTime: Date | null | undefined,
 ): MenuItemProperties[] {
     // Hooks
-    const notice = useNotifications();
+    const notifications = useNotifications();
 
     // Create the export menu items
     const exportMenuItems: MenuItemProperties[] = React.useMemo(
@@ -46,7 +46,7 @@ export function useMetricsExportMenu(
                             startTime || null,
                             endTime || null,
                         );
-                        notice.addNotification({
+                        notifications.addNotification({
                             title: 'Metrics Exported as CSV',
                             content: 'The metrics have been exported as a CSV file.',
                         });
@@ -63,7 +63,7 @@ export function useMetricsExportMenu(
                             startTime || null,
                             endTime || null,
                         );
-                        notice.addNotification({
+                        notifications.addNotification({
                             title: 'Metrics Exported as JSON',
                             content: 'The metrics have been exported as a JSON file.',
                         });
@@ -74,7 +74,7 @@ export function useMetricsExportMenu(
                     content: 'Copy as CSV',
                     onSelected: async function () {
                         await copyMetricsAsCsvToClipboard(chartData, dataSourcesWithMetrics, timeInterval);
-                        notice.addNotification({
+                        notifications.addNotification({
                             title: 'Metrics Copied as CSV',
                             content: 'The metrics have been copied to your clipboard as CSV.',
                         });
@@ -85,7 +85,7 @@ export function useMetricsExportMenu(
                     content: 'Copy as JSON',
                     onSelected: async function () {
                         await copyMetricsAsJsonToClipboard(chartData, dataSourcesWithMetrics, timeInterval);
-                        notice.addNotification({
+                        notifications.addNotification({
                             title: 'Metrics Copied as JSON',
                             content: 'The metrics have been copied to your clipboard as JSON.',
                         });
@@ -93,7 +93,7 @@ export function useMetricsExportMenu(
                 },
             ];
         },
-        [chartData, dataSourcesWithMetrics, timeInterval, startTime, endTime, notice],
+        [chartData, dataSourcesWithMetrics, timeInterval, startTime, endTime, notifications],
     );
 
     return exportMenuItems;

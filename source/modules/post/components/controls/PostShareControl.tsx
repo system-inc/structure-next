@@ -23,7 +23,7 @@ export interface PostShareControlProperties {
 }
 export function PostShareControl(properties: PostShareControlProperties) {
     // Hooks
-    const notice = useNotifications();
+    const notifications = useNotifications();
 
     // Render the component
     return (
@@ -42,7 +42,7 @@ export function PostShareControl(properties: PostShareControlProperties) {
                         // Copy the link to the clipboard
                         navigator.clipboard.writeText(properties.url);
 
-                        notice.addNotification({
+                        notifications.addNotification({
                             title: 'Copied Link',
                             content: (
                                 <Link className="break-all" href={properties.url} target="_blank">

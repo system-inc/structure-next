@@ -19,7 +19,7 @@ import { downloadFile } from '@structure/source/utilities/file/File';
 export interface DownloadButtonInterface extends NonLinkButtonProperties {
     fileName?: string;
     fileExtension?: string;
-    noticeData?: Omit<NotificationInterface, 'id'>;
+    notificationData?: Omit<NotificationInterface, 'id'>;
 }
 
 // Interface - DownloadDataButtonInterface
@@ -39,13 +39,13 @@ export type DownloadButtonProperties = DownloadDataButtonInterface | DownloadUrl
 export function DownloadButton({
     fileName,
     fileExtension,
-    noticeData,
+    notificationData,
     className,
     downloadSource,
     ...buttonProperties
 }: DownloadButtonProperties) {
     // Hooks
-    const notice = useNotifications();
+    const notifications = useNotifications();
 
     // State
     const [downloadStarted, setDownloadStarted] = React.useState(false);
@@ -74,8 +74,8 @@ export function DownloadButton({
         setDownloadStarted(true);
 
         // Show a notice if provided
-        if(noticeData) {
-            notice.addNotification(noticeData);
+        if(notificationData) {
+            notifications.addNotification(notificationData);
         }
 
         // Reset the state after a delay

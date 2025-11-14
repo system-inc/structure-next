@@ -72,7 +72,7 @@ export interface TableProperties extends React.HTMLAttributes<HTMLTableElement> 
 }
 export function Table(properties: TableProperties) {
     // Hooks
-    const notice = useNotifications();
+    const notifications = useNotifications();
 
     // References
     const filtersReference = React.useRef<ColumnFilterGroupDataInterface | undefined>(properties.filters);
@@ -360,7 +360,7 @@ export function Table(properties: TableProperties) {
                         await tableRowsAction.actionFunction(selectedRows, columns);
 
                         // Show a notice
-                        notice.addNotification({
+                        notifications.addNotification({
                             title: tableRowsAction.notice.title,
                             content: tableRowsAction.notice.content,
                         });

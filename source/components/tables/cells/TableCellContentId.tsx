@@ -21,7 +21,7 @@ export function TableCellContentId(properties: TableCellContentIdProperties) {
     // Render the component
     return (
         <CopyTip
-            noticeData={{
+            notificationData={{
                 title: 'ID Copied',
                 content: (
                     <span>

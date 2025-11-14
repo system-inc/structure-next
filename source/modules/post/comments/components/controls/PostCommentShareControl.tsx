@@ -22,7 +22,7 @@ export interface PostCommentShareControlProperties {
 }
 export function PostCommentShareControl(properties: PostCommentShareControlProperties) {
     // Hooks
-    const notice = useNotifications();
+    const notifications = useNotifications();
 
     // Render the component
     return (
@@ -41,7 +41,7 @@ export function PostCommentShareControl(properties: PostCommentShareControlPrope
                         // Copy the link to the clipboard
                         navigator.clipboard.writeText(properties.ideaUrl);
 
-                        notice.addNotification({
+                        notifications.addNotification({
                             title: 'Copied Link',
                             content: properties.ideaUrl,
                         });

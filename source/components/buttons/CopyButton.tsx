@@ -26,11 +26,11 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Component - CopyButton
 export type CopyButtonProperties = Omit<NonLinkButtonProperties, 'onClick'> & {
     value: string;
-    noticeData?: Omit<NotificationInterface, 'id'>;
+    notificationData?: Omit<NotificationInterface, 'id'>;
 };
-export function CopyButton({ value, noticeData, className, ...buttonProperties }: CopyButtonProperties) {
+export function CopyButton({ value, notificationData, className, ...buttonProperties }: CopyButtonProperties) {
     // Hooks
-    const notice = useNotifications();
+    const notifications = useNotifications();
 
     // Get component theme from context
     const componentTheme = useComponentTheme();
@@ -54,8 +54,8 @@ export function CopyButton({ value, noticeData, className, ...buttonProperties }
         setValueCopiedToClipboard(true);
 
         // Show a notice
-        if(noticeData) {
-            notice.addNotification(noticeData);
+        if(notificationData) {
+            notifications.addNotification(notificationData);
         }
 
         // Reset the state after a delay

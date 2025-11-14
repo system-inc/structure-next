@@ -23,7 +23,7 @@ interface ProfileFormValues {
 // Component - ProfileInformationForm
 export function ProfileInformationForm() {
     // Hooks
-    const notice = useNotifications();
+    const notifications = useNotifications();
     const account = useAccount();
     const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
 
@@ -50,7 +50,7 @@ export function ProfileInformationForm() {
             });
 
             if(result?.accountProfileUpdate) {
-                notice.addNotification({
+                notifications.addNotification({
                     title: 'Profile Updated',
                     content: 'Your profile information has been updated successfully.',
                 });
