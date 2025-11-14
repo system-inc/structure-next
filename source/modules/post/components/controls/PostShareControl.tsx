@@ -7,7 +7,7 @@ import React from 'react';
 import { Link } from '@structure/source/components/navigation/Link';
 import { PopoverMenu } from '@structure/source/components/popovers/PopoverMenu';
 import { PostControl } from '@structure/source/modules/post/components/controls/PostControl';
-import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
+import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
 
 // Dependencies - Assets
 import ShareIcon from '@structure/assets/icons/interface/ShareIcon.svg';
@@ -23,7 +23,7 @@ export interface PostShareControlProperties {
 }
 export function PostShareControl(properties: PostShareControlProperties) {
     // Hooks
-    const notice = useNotice();
+    const notice = useNotifications();
 
     // Render the component
     return (
@@ -42,7 +42,7 @@ export function PostShareControl(properties: PostShareControlProperties) {
                         // Copy the link to the clipboard
                         navigator.clipboard.writeText(properties.url);
 
-                        notice.addNotice({
+                        notice.addNotification({
                             title: 'Copied Link',
                             content: (
                                 <Link className="break-all" href={properties.url} target="_blank">

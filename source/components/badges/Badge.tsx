@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Structure
-import { badgeTheme as structureBadgeTheme } from '@structure/source/components/notifications/BadgeTheme';
-import type { BadgeVariant, BadgeType, BadgeSize } from '@structure/source/components/notifications/BadgeTheme';
+import { badgeTheme as structureBadgeTheme } from '@structure/source/components/badges/BadgeTheme';
+import type { BadgeVariant, BadgeType, BadgeSize } from '@structure/source/components/badges/BadgeTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
 import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 

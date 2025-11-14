@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
-import { NoticeInterface } from '@structure/source/components/notifications/Notice';
+import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
+import { NotificationInterface } from '@structure/source/components/notifications/Notification';
 import { Button } from '@structure/source/components/buttons/Button';
 import type { NonLinkButtonProperties } from '@structure/source/components/buttons/Button';
 
@@ -19,7 +19,7 @@ import { downloadFile } from '@structure/source/utilities/file/File';
 export interface DownloadButtonInterface extends NonLinkButtonProperties {
     fileName?: string;
     fileExtension?: string;
-    noticeData?: Omit<NoticeInterface, 'id'>;
+    noticeData?: Omit<NotificationInterface, 'id'>;
 }
 
 // Interface - DownloadDataButtonInterface
@@ -45,7 +45,7 @@ export function DownloadButton({
     ...buttonProperties
 }: DownloadButtonProperties) {
     // Hooks
-    const notice = useNotice();
+    const notice = useNotifications();
 
     // State
     const [downloadStarted, setDownloadStarted] = React.useState(false);
@@ -75,7 +75,7 @@ export function DownloadButton({
 
         // Show a notice if provided
         if(noticeData) {
-            notice.addNotice(noticeData);
+            notice.addNotification(noticeData);
         }
 
         // Reset the state after a delay

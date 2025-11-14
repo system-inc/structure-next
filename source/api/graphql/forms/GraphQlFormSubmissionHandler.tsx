@@ -7,7 +7,7 @@ import React from 'react';
 import { FormValuesInterface, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
 
 // Dependencies - Main Components
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 
 // Dependencies - API
 import { BaseError } from '@structure/source/api/errors/BaseError';
@@ -137,18 +137,18 @@ export async function GraphQlFormSubmissionHandler<
         // If there's been an error
         if(mutationResponseError) {
             message = (
-                <Alert variant="Negative" title="Error">
+                <Notice variant="Negative" title="Error">
                     <p>There&apos;s been an error: {mutationResponseError.message}.</p>
                     <p>{JSON.stringify(mutationResponseError)}</p>
-                </Alert>
+                </Notice>
             );
         }
         else {
             message = (
-                <Alert icon={CheckCircledIcon} title={<b>Success!</b>}>
+                <Notice icon={CheckCircledIcon} title={<b>Success!</b>}>
                     <p>The form was submitted successfully.</p>
                     <p>{JSON.stringify(mutationResponseData)}</p>
-                </Alert>
+                </Notice>
             );
         }
 

@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { TipProperties, Tip } from '@structure/source/components/popovers/Tip';
-import { NoticeInterface } from '@structure/source/components/notifications/Notice';
+import { NotificationInterface } from '@structure/source/components/notifications/Notification';
 import { CopyButton } from '@structure/source/components/buttons/CopyButton';
 
 // Dependencies - Utilities
@@ -13,7 +13,7 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 export interface CopyTipProperties extends Omit<TipProperties, 'content' | 'trigger'> {
     trigger: React.ReactElement; // The element that triggers the copy tip
     value: string;
-    noticeData?: Omit<NoticeInterface, 'id'>;
+    noticeData?: Omit<NotificationInterface, 'id'>;
     copyButtonClassName?: string;
 }
 export function CopyTip({ trigger, noticeData, value, copyButtonClassName, ...tipProperties }: CopyTipProperties) {

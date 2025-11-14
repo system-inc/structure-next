@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Theme
-import { alertTheme as structureAlertTheme } from '@structure/source/components/notifications/AlertTheme';
-import type { AlertVariant, AlertSize } from '@structure/source/components/notifications/AlertTheme';
+import { noticeTheme as structureNoticeTheme } from '@structure/source/components/notices/NoticeTheme';
+import type { NoticeVariant, NoticeSize } from '@structure/source/components/notices/NoticeTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
 import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
@@ -16,39 +16,39 @@ import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.svg';
 
 // Type - Icon can be either a component reference or pre-rendered JSX
-export type AlertIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
+export type NoticeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
 
-// Component - Alert
-export interface AlertProperties {
-    variant?: AlertVariant;
-    size?: AlertSize;
+// Component - Notice
+export interface NoticeProperties {
+    variant?: NoticeVariant;
+    size?: NoticeSize;
     className?: string;
-    icon?: AlertIconType; // Icon to display
+    icon?: NoticeIconType; // Icon to display
     iconClassName?: string; // Custom className for the icon
     title?: React.ReactNode;
     children?: React.ReactNode;
 }
-export function Alert(properties: AlertProperties) {
+export function Notice(properties: NoticeProperties) {
     // Get theme from context and merge with structure theme
     const componentTheme = useComponentTheme();
-    const alertTheme = mergeComponentTheme(structureAlertTheme, componentTheme?.Alert);
+    const noticeTheme = mergeComponentTheme(structureNoticeTheme, componentTheme?.Notice);
 
     // Apply defaults from theme configuration
-    const variant = properties.variant || alertTheme.configuration.defaultVariant.variant;
-    const size = properties.size || alertTheme.configuration.defaultVariant.size;
+    const variant = properties.variant || noticeTheme.configuration.defaultVariant.variant;
+    const size = properties.size || noticeTheme.configuration.defaultVariant.size;
 
     // Create variant class names from theme
-    const alertVariantClassNames = createVariantClassNames(alertTheme.configuration.baseClasses, {
+    const noticeVariantClassNames = createVariantClassNames(noticeTheme.configuration.baseClasses, {
         variants: {
-            variant: alertTheme.variants,
-            size: alertTheme.sizes,
+            variant: noticeTheme.variants,
+            size: noticeTheme.sizes,
         },
-        defaultVariants: alertTheme.configuration.defaultVariant,
+        defaultVariants: noticeTheme.configuration.defaultVariant,
     });
 
     // Apply variant classes
     const computedClassName = mergeClassNames(
-        alertVariantClassNames({
+        noticeVariantClassNames({
             variant: variant,
             size: size,
         }),
@@ -76,7 +76,7 @@ export function Alert(properties: AlertProperties) {
     }
 
     // Build icon class names with variant colors and size
-    const iconSizeClassName = alertTheme.iconSizes?.[size!] || alertTheme.iconSizes?.Base || 'h-[22px] w-[22px]';
+    const iconSizeClassName = noticeTheme.iconSizes?.[size!] || noticeTheme.iconSizes?.Base || 'h-[22px] w-[22px]';
     let iconClassNames = iconSizeClassName;
 
     if(variant === 'Positive') {

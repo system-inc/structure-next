@@ -7,7 +7,7 @@ import React from 'react';
 import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
 import { ValidationSchema } from '@structure/source/utilities/validation/ValidationSchema';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
@@ -65,7 +65,7 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
 
         return {
             success: false,
-            message: <Alert variant="Negative" title="An error occurred while updating your password." />,
+            message: <Notice variant="Negative" title="An error occurred while updating your password." />,
         };
     }
 
@@ -74,7 +74,7 @@ export function ManagePasswordForm(properties: ManagePasswordFormProperties) {
         <div className={mergeClassNames('', properties.className)}>
             {success && (
                 <>
-                    <Alert variant="Positive" title="Your password has been updated." />
+                    <Notice variant="Positive" title="Your password has been updated." />
                     <Button className="mt-4" onClick={properties.onComplete}>
                         Close
                     </Button>

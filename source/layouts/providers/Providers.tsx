@@ -23,7 +23,7 @@ import { ThemeProvider } from '@structure/source/theme/ThemeProvider';
 import { EngagementProvider } from '@structure/source/modules/engagement/EngagementProvider';
 
 // Dependencies - Interaction Providers
-import { NoticeProvider } from '@structure/source/components/notifications/NoticeProvider';
+import { NotificationsProvider } from '@structure/source/components/notifications/NotificationsProvider';
 import { TipProvider } from '@structure/source/components/popovers/TipProvider';
 
 // Dependencies - Main Components
@@ -49,12 +49,12 @@ export function Providers(properties: ProvidersProperties) {
                         <SharedStateProvider>
                             <ThemeProvider>
                                 <EngagementProvider>
-                                    <NoticeProvider>
+                                    <NotificationsProvider>
                                         <TipProvider delayDuration={100}>
                                             {properties.children}
                                             <AuthenticationDialog />
                                         </TipProvider>
-                                    </NoticeProvider>
+                                    </NotificationsProvider>
                                 </EngagementProvider>
                             </ThemeProvider>
                         </SharedStateProvider>

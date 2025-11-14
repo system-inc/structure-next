@@ -1,5 +1,5 @@
 // Dependencies - Main Components
-import { Badge } from '@structure/source/components/notifications/Badge';
+import { Badge } from '@structure/source/components/badges/Badge';
 import { BorderContainer } from '../BorderContainer';
 
 // Component - TicketHeader

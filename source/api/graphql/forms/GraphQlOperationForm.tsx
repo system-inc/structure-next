@@ -11,7 +11,7 @@ import {
     Form,
 } from '@structure/source/components/forms/Form';
 import { FormInputReferenceInterface } from '@structure/source/components/forms/FormInput';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
@@ -143,9 +143,9 @@ export function GraphQlOperationForm(properties: GraphQlOperationFormProperties)
         <>
             {/* Render an error if defaultValuesQuery is provided and there's an error */}
             {properties.defaultValuesQuery && defaultValuesQueryState.error && (
-                <Alert variant="Negative" title="Error">
+                <Notice variant="Negative" title="Error">
                     <p>{defaultValuesQueryState.error.message}</p>
-                </Alert>
+                </Notice>
             )}
 
             {/* Render the form */}

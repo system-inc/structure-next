@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import {
     Cropper,
     CropperRef as CropperReference,
@@ -227,9 +227,9 @@ export function ImageEditor(properties: ImageEditorProperties) {
     return (
         <div className={`flex flex-col ${properties.className || ''}`} role="region" aria-label="Image editor">
             {error && (
-                <Alert variant="Negative" className="mb-4">
+                <Notice variant="Negative" className="mb-4">
                     {error}
-                </Alert>
+                </Notice>
             )}
 
             {previewUrl ? (

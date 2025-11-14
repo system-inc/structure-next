@@ -13,7 +13,7 @@ import { ProfileImage } from '@structure/source/modules/account/components/Profi
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
 import { Button } from '@structure/source/components/buttons/Button';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 
 // Dependencies - API
 import { networkService, gql } from '@structure/source/services/network/NetworkService';
@@ -348,7 +348,7 @@ export function UsersPage() {
                                 <b>{selectedUser?.emailAddress}</b>?
                             </p>
                             {accountDeletePrivilegedRequest.error && (
-                                <Alert
+                                <Notice
                                     className="mt-4"
                                     variant="Negative"
                                     title={accountDeletePrivilegedRequest.error.message}

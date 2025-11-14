@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - API
@@ -61,7 +61,7 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
 
         return {
             success: false,
-            message: <Alert variant="Negative" title="An error occurred while deleting your account." />,
+            message: <Notice variant="Negative" title="An error occurred while deleting your account." />,
         };
     }
 
@@ -70,7 +70,7 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
         <div className={mergeClassNames('', properties.className)}>
             {success && (
                 <>
-                    <Alert variant="Positive" title="Your account has been deleted." />
+                    <Notice variant="Positive" title="Your account has been deleted." />
                     <Button className="mt-4" onClick={properties.onComplete}>
                         Close
                     </Button>

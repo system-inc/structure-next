@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
-import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
+import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
 
 // Dependencies - API
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
@@ -23,7 +23,7 @@ interface ProfileFormValues {
 // Component - ProfileInformationForm
 export function ProfileInformationForm() {
     // Hooks
-    const notice = useNotice();
+    const notice = useNotifications();
     const account = useAccount();
     const accountProfileUpdateRequest = useAccountProfileUpdateRequest();
 
@@ -50,7 +50,7 @@ export function ProfileInformationForm() {
             });
 
             if(result?.accountProfileUpdate) {
-                notice.addNotice({
+                notice.addNotification({
                     title: 'Profile Updated',
                     content: 'Your profile information has been updated successfully.',
                 });

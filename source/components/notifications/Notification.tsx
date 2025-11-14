@@ -6,17 +6,19 @@ import React from 'react';
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
 
+// Dependencies - Animation
+import { motion, PanInfo } from 'motion/react';
+
 // Dependencies - Assets
 import CloseIcon from '@structure/assets/icons/navigation/CloseIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-import { motion, PanInfo } from 'motion/react';
 
 const MotionButton = motion.create(Button);
 
-// Component - Notice
-export interface NoticeInterface {
+// Component - Notification
+export interface NotificationInterface {
     id: string;
     className?: string;
     style?: React.CSSProperties;
@@ -25,7 +27,7 @@ export interface NoticeInterface {
     closeButtonProperties?: React.ComponentPropsWithoutRef<typeof MotionButton>;
     dismissTimeout?: number | boolean;
 }
-export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function (properties, reference) {
+export const Notification = React.forwardRef<HTMLDivElement, NotificationInterface>(function (properties, reference) {
     // State
     const [hovered, setHovered] = React.useState(false);
 
@@ -36,10 +38,11 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
         }
     }
 
+    // Funciton to handle drag event
     async function handleDrag(dragState: DragEvent, { offset }: PanInfo) {
-        const DRAG_OFFSET_FOR_DISMISSAL = 200;
-        // Handle drag event -- Remove notice if offset by 200px in either x-axis direction.
-        if(offset.x > DRAG_OFFSET_FOR_DISMISSAL || offset.x < -DRAG_OFFSET_FOR_DISMISSAL) {
+        const dragOffsetForDismissal = 200;
+        // Handle drag event - Remove notification if offset by 200px in either x-axis direction.
+        if(offset.x > dragOffsetForDismissal || offset.x < -dragOffsetForDismissal) {
             handleRemoval(dragState);
         }
     }
@@ -105,4 +108,4 @@ export const Notice = React.forwardRef<HTMLDivElement, NoticeInterface>(function
 });
 
 // Set the display name for debugging purposes
-Notice.displayName = 'Notice';
+Notification.displayName = 'Notification';

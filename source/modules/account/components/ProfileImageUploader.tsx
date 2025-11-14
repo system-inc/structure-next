@@ -9,7 +9,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { ProfileImage } from './ProfileImage';
 import { ImageSelector } from '@structure/source/components/images/selector/ImageSelector';
 import { ImageEditor } from '@structure/source/components/images/editor/ImageEditor';
@@ -218,9 +218,9 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
         // Show error if any
         if(error) {
             return (
-                <Alert variant="Negative" className="mb-4">
+                <Notice variant="Negative" className="mb-4">
                     {error}
-                </Alert>
+                </Notice>
             );
         }
 

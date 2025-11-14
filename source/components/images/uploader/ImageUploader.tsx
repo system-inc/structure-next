@@ -6,7 +6,7 @@ import React from 'react';
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
 import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { ImageSelector } from '../selector/ImageSelector';
 import { ImageUploaderBase } from './ImageUploaderBase';
 
@@ -151,16 +151,16 @@ export function ImageUploader(properties: ImageUploaderProperties) {
 
                                     {/* Error message */}
                                     {childProperties.error && (
-                                        <Alert variant="Negative" className="mt-2">
+                                        <Notice variant="Negative" className="mt-2">
                                             {childProperties.error.message}
-                                        </Alert>
+                                        </Notice>
                                     )}
 
                                     {/* Success message */}
                                     {!properties.hideSuccessMessage && uploadSuccess && (
-                                        <Alert variant="Positive" className="mt-2">
+                                        <Notice variant="Positive" className="mt-2">
                                             Upload successful!
-                                        </Alert>
+                                        </Notice>
                                     )}
                                 </div>
                             );

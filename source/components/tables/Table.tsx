@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
+import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
 import { TableColumnProperties } from '@structure/source/components/tables/TableColumn';
 import { TableRowProperties, TableRow } from '@structure/source/components/tables/TableRow';
 import { defaultTableRowsActions } from '@structure/source/components/tables/TableRowsActions';
@@ -72,7 +72,7 @@ export interface TableProperties extends React.HTMLAttributes<HTMLTableElement> 
 }
 export function Table(properties: TableProperties) {
     // Hooks
-    const notice = useNotice();
+    const notice = useNotifications();
 
     // References
     const filtersReference = React.useRef<ColumnFilterGroupDataInterface | undefined>(properties.filters);
@@ -360,7 +360,7 @@ export function Table(properties: TableProperties) {
                         await tableRowsAction.actionFunction(selectedRows, columns);
 
                         // Show a notice
-                        notice.addNotice({
+                        notice.addNotification({
                             title: tableRowsAction.notice.title,
                             content: tableRowsAction.notice.content,
                         });

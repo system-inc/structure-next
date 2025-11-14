@@ -9,7 +9,7 @@ import { AnimatedButton } from '@structure/source/components/buttons/AnimatedBut
 import { Form, FormSubmitResponseInterface } from '@structure/source/components/forms/Form';
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
@@ -152,7 +152,7 @@ export function UsernameForm() {
                                 <b>&quot;{newUsername}&quot;</b>?
                             </p>
                             {accountProfileUpdateRequest.error && (
-                                <Alert
+                                <Notice
                                     className="mt-4"
                                     variant="Negative"
                                     title={accountProfileUpdateRequest.error.message}

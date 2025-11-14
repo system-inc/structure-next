@@ -9,7 +9,7 @@ import ImageIcon from '@structure/assets/icons/content/ImageIcon.svg';
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
 import type { ButtonVariant, ButtonSize } from '@structure/source/components/buttons/ButtonTheme';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 
 // Dependencies - Utilities
 import { isImageFile } from '@structure/source/utilities/image/ImageFile';
@@ -151,9 +151,9 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     className="w-full cursor-pointer rounded-md border border-neutral-200 bg-transparent p-2 text-sm dark:border-neutral-700"
                 />
                 {error && (
-                    <Alert variant="Negative" className="mt-2">
+                    <Notice variant="Negative" className="mt-2">
                         {error}
-                    </Alert>
+                    </Notice>
                 )}
             </div>
         );
@@ -180,9 +180,9 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                     {properties.children || 'Select Image'}
                 </Button>
                 {error && (
-                    <Alert variant="Negative" className="mt-2">
+                    <Notice variant="Negative" className="mt-2">
                         {error}
-                    </Alert>
+                    </Notice>
                 )}
             </div>
         );
@@ -225,9 +225,9 @@ export function ImageSelector(properties: ImageSelectorProperties) {
                 </div>
             </div>
             {error && (
-                <Alert variant="Negative" className="mt-2">
+                <Notice variant="Negative" className="mt-2">
                     {error}
-                </Alert>
+                </Notice>
             )}
         </div>
     );

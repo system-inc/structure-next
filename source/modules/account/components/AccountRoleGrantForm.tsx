@@ -7,7 +7,7 @@ import React from 'react';
 import { Button } from '@structure/source/components/buttons/Button';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { InputText } from '@structure/source/components/forms/InputText';
 import { InputSelect } from '@structure/source/components/forms/InputSelect';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
@@ -166,7 +166,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
 
             {/* Success Message */}
             {grantSuccess && (
-                <Alert
+                <Notice
                     variant="Positive"
                     title={`Successfully granted ${grantSuccess.role} role to @${grantSuccess.username}`}
                     className="mb-4"
@@ -195,7 +195,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
 
             {/* Error State */}
             {accountPrivilegedRequest.error && (
-                <Alert variant="Negative" title={accountPrivilegedRequest.error.message} />
+                <Notice variant="Negative" title={accountPrivilegedRequest.error.message} />
             )}
 
             {/* Empty State */}
@@ -203,9 +203,9 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                 !accountPrivilegedRequest.error &&
                 debouncedEmail &&
                 accountPrivilegedRequest.data?.accountPrivileged?.profiles.length === 0 && (
-                    <Alert variant="Warning" title="No user found">
+                    <Notice variant="Warning" title="No user found">
                         We couldn&apos;t find any user with this email address.
-                    </Alert>
+                    </Notice>
                 )}
 
             {/* User Preview and Role Selection */}
@@ -274,7 +274,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             <b>@{selectedUsername}</b>?
                         </p>
                         {accountAccessRoleAssignmentCreatePrivilegedRequest.error && (
-                            <Alert
+                            <Notice
                                 className="mt-4"
                                 variant="Negative"
                                 title={accountAccessRoleAssignmentCreatePrivilegedRequest.error.message}

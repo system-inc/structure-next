@@ -4,9 +4,9 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
-import { NoticeInterface, Notice } from '@structure/source/components/notifications/Notice';
-import { NoticesClearAllButton } from '@structure/source/components/notifications/NoticesClearAllButton';
+import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
+import { NotificationInterface, Notification } from '@structure/source/components/notifications/Notification';
+import { NotificationsClearAllButton } from '@structure/source/components/notifications/NotificationsClearAllButton';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -14,38 +14,37 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Dependencies - Animations
 import { motion, AnimatePresence, type Variants } from 'motion/react';
 
-// Component - NoticeContainer
-export interface NoticeContainerProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-    notices?: NoticeInterface[];
+// Component - NotificationsContainer
+export interface NotificationsContainerProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+    notifications?: NotificationInterface[];
 }
-export function NoticeContainer(properties: NoticeContainerProperties) {
+export function NotificationsContainer(properties: NotificationsContainerProperties) {
     // Constants
-    // const NOTICES_MARGIN_PX = 16;
     const collapsedOffestInPixels = 24;
 
     // Hooks
-    const notice = useNotice();
+    const notifications = useNotifications();
 
     // State
     const [hovered, setHovered] = React.useState(false);
     const [isClearingAll, setIsClearingAll] = React.useState(false);
 
     // References
-    const noticeReferences = React.useMemo(function () {
-        return new WeakMap<NoticeInterface, HTMLDivElement>();
+    const notificationsReferences = React.useMemo(function () {
+        return new WeakMap<NotificationInterface, HTMLDivElement>();
     }, []);
 
-    // Notices
-    const propertiesNotices = properties.notices;
-    const noticesState = React.useMemo(
+    // Notifications
+    const propertiesNotifications = properties.notifications;
+    const notificationsState = React.useMemo(
         function () {
-            return propertiesNotices?.slice().reverse() ?? [];
+            return propertiesNotifications?.slice().reverse() ?? [];
         },
-        [propertiesNotices],
+        [propertiesNotifications],
     );
 
-    // Animation variants for notice items
-    const noticeVariants: Variants = {
+    // Animation variants for notification items
+    const notificationVariants: Variants = {
         // Initial hidden state
         hidden: {
             opacity: 0,
@@ -100,23 +99,25 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
 
             const timeouts: NodeJS.Timeout[] = [];
 
-            noticesState.forEach(function (noticeItem) {
-                if(noticeItem.dismissTimeout === false) return;
+            notificationsState.forEach(function (notificationItem) {
+                if(notificationItem.dismissTimeout === false) return;
 
-                const delay = typeof noticeItem.dismissTimeout === 'number' ? noticeItem.dismissTimeout : 3000;
+                const delay =
+                    typeof notificationItem.dismissTimeout === 'number' ? notificationItem.dismissTimeout : 3000;
 
                 const timeout = setTimeout(function () {
-                    notice.removeNotice(noticeItem.id);
+                    notifications.removeNotification(notificationItem.id);
                 }, delay);
 
                 timeouts.push(timeout);
             });
 
+            // Cleanup timeouts on unmount or when dependencies change
             return function () {
                 timeouts.forEach(clearTimeout);
             };
         },
-        [noticesState, hovered, notice],
+        [notificationsState, hovered, notifications],
     );
 
     // Function to handle mouse enter
@@ -131,12 +132,12 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
         setHovered(false);
     }, []);
 
-    // Function to handle removal of a notice
+    // Function to handle removal of a notification
     const handleRemoval = React.useCallback(
         function (id: string) {
-            notice.removeNotice(id);
+            notifications.removeNotification(id);
         },
-        [notice],
+        [notifications],
     );
 
     // Render the component
@@ -154,16 +155,16 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
             <div
                 className={mergeClassNames(
                     'relative z-50 flex w-full justify-end pt-6 pr-4 md:pr-8',
-                    noticesState.length === 0 ? 'pointer-events-none' : 'pointer-events-auto',
+                    notificationsState.length === 0 ? 'pointer-events-none' : 'pointer-events-auto',
                 )}
             >
-                <NoticesClearAllButton
+                <NotificationsClearAllButton
                     xSpringFunction={function (x: number, onRestFn: () => void) {
                         setIsClearingAll(true);
 
-                        // Remove all notices
-                        noticesState.forEach(function (noticeItem) {
-                            notice.removeNotice(noticeItem.id);
+                        // Remove all notifications
+                        notificationsState.forEach(function (notification) {
+                            notifications.removeNotification(notification.id);
                         });
 
                         // Reset the flag after animation completes
@@ -172,53 +173,52 @@ export function NoticeContainer(properties: NoticeContainerProperties) {
                             onRestFn();
                         }, 300);
                     }}
-                    show={noticesState.length > 1 && hovered}
+                    show={notificationsState.length > 1 && hovered}
                 />
             </div>
 
             <div
                 className={mergeClassNames(
                     'relative z-0 flex h-auto max-h-[50vh] flex-col-reverse overflow-x-hidden overflow-y-auto pt-2 pb-2',
-                    noticesState.length === 0 ? 'pointer-events-none' : 'pointer-events-auto',
+                    notificationsState.length === 0 ? 'pointer-events-none' : 'pointer-events-auto',
                 )}
                 style={{
                     maskImage: 'linear-gradient(to bottom, transparent 0%, black 8px, black 100%)',
                     WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8px, black 100%)',
                 }}
-                // Handle mouse enter when it enters notices
                 onMouseEnter={handleMouseEnter}
                 onFocus={handleMouseEnter}
                 onBlur={handleMouseLeave}
             >
-                {/* Notices */}
+                {/* Notifications */}
                 <AnimatePresence mode="sync" initial={false} propagate>
-                    {noticesState.map(function (noticeItem, index) {
+                    {notificationsState.map(function (notification, index) {
                         return (
                             <motion.div
-                                key={noticeItem.id}
+                                key={notification.id}
                                 custom={{
                                     index: index,
                                     isClearingAll: isClearingAll,
                                 }}
-                                variants={noticeVariants}
+                                variants={notificationVariants}
                                 initial="hidden"
                                 animate={hovered ? 'expanded' : 'visible'}
                                 exit={'exit'}
                                 layout="position"
                                 className={'relative w-full shrink-0 pr-4 pl-4 md:pr-8'}
-                                style={{ zIndex: noticesState.length - index }}
+                                style={{ zIndex: notificationsState.length - index }}
                             >
                                 <div className="pt-2 pb-2">
-                                    <Notice
+                                    <Notification
                                         ref={function (reference) {
                                             if(reference) {
-                                                noticeReferences.set(noticeItem, reference);
+                                                notificationsReferences.set(notification, reference);
                                             }
                                         }}
-                                        {...noticeItem}
+                                        {...notification}
                                         closeButtonProperties={{
                                             onClick: async function () {
-                                                handleRemoval(noticeItem.id);
+                                                handleRemoval(notification.id);
                                             },
                                         }}
                                     />

@@ -1,18 +1,18 @@
 /**
- * Structure Alert Theme
+ * Structure Notice Theme
  *
- * Default alert theme for the structure library. Provides portable, framework-agnostic
- * alert variants and sizes that work out-of-the-box in any project.
+ * Default notice theme for the structure library. Provides portable, framework-agnostic
+ * notice variants and sizes that work out-of-the-box in any project.
  *
- * Projects can override/extend this theme via ProjectSettings.theme.components.Alert
+ * Projects can override/extend this theme via ProjectSettings.theme.components.Notice
  */
 
 // Dependencies - Utilities
 import { mergeClassNames } from '../../utilities/style/ClassName';
 
-// Alert Variants Interface - Source of truth for all alert variants
+// Notice Variants Interface - Source of truth for all notice variants
 // Structure defines its base variants here, and projects can augment to add custom variants
-export interface AlertVariants {
+export interface NoticeVariants {
     Positive: 'Positive';
     Negative: 'Negative';
     Warning: 'Warning';
@@ -20,35 +20,35 @@ export interface AlertVariants {
     Neutral: 'Neutral';
 }
 
-// Type - Alert Variant (derived from AlertVariants interface)
-export type AlertVariant = keyof AlertVariants;
+// Type - Notice Variant (derived from NoticeVariants interface)
+export type NoticeVariant = keyof NoticeVariants;
 
-// Alert Sizes Interface - Source of truth for all alert sizes
+// Notice Sizes Interface - Source of truth for all notice sizes
 // Structure defines its base sizes here, and projects can augment to add custom sizes
-export interface AlertSizes {
+export interface NoticeSizes {
     Base: 'Base';
     Large: 'Large';
 }
 
-// Type - Alert Size (derived from AlertSizes interface)
-export type AlertSize = keyof AlertSizes;
+// Type - Notice Size (derived from NoticeSizes interface)
+export type NoticeSize = keyof NoticeSizes;
 
-// Type - Alert Theme Configuration
-export interface AlertThemeConfiguration {
-    variants: Partial<Record<AlertVariant, string>>;
-    sizes: Partial<Record<AlertSize, string>>;
-    iconSizes: Partial<Record<AlertSize, string>>;
+// Type - Notice Theme Configuration
+export interface NoticeThemeConfiguration {
+    variants: Partial<Record<NoticeVariant, string>>;
+    sizes: Partial<Record<NoticeSize, string>>;
+    iconSizes: Partial<Record<NoticeSize, string>>;
     configuration: {
         baseClasses: string;
         defaultVariant: {
-            variant?: AlertVariant;
-            size?: AlertSize;
+            variant?: NoticeVariant;
+            size?: NoticeSize;
         };
     };
 }
 
-// Alert Theme - Structure Default
-export const alertTheme: AlertThemeConfiguration = {
+// Notice Theme - Structure Default
+export const noticeTheme: NoticeThemeConfiguration = {
     // Variants
     variants: {
         // Variant Positive - Positive outcomes and confirmations
@@ -73,7 +73,7 @@ export const alertTheme: AlertThemeConfiguration = {
         Large: 'p-3 text-base',
     },
 
-    // Icon dimensions for each alert size
+    // Icon dimensions for each notice size
     iconSizes: {
         Base: 'h-[22px] w-[22px]',
         Large: 'h-6 w-6',

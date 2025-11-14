@@ -5,30 +5,30 @@ import { ProjectSettings } from '@project/ProjectSettings';
 import React from 'react';
 
 // Dependencies - Main Components
-import { AlertProperties, Alert } from '@structure/source/components/notifications/Alert';
+import { NoticeProperties, Notice } from '@structure/source/components/notices/Notice';
 
 // Dependencies - Assets
 import CloudErrorIcon from '@structure/assets/icons/status/CloudErrorIcon.svg';
 
-// Component - NotSignedIn
-export type NotConnectedProperties = {
-    alertProperties?: AlertProperties;
+// Component - NotConnectedNotice
+export type NotConnectedNoticeProperties = {
+    noticeProperties?: NoticeProperties;
 };
-export function NotConnected(properties: NotConnectedProperties) {
+export function NotConnectedNotice(properties: NotConnectedNoticeProperties) {
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
-            <Alert
+            <Notice
                 variant="Negative"
                 size="Large"
                 icon={CloudErrorIcon}
                 title="Not Connected"
-                {...properties.alertProperties}
+                {...properties.noticeProperties}
             >
                 <div className="space-y-2">
                     <p>Unable to connect to the {ProjectSettings.title} servers.</p>
                 </div>
-            </Alert>
+            </Notice>
         </div>
     );
 }

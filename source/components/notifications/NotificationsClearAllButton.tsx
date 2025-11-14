@@ -3,33 +3,37 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Hooks
+import { useNotifications } from './NotificationsProvider';
+
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
 
+// Dependencies - Animation
+import { cubicBezier, motion } from 'motion/react';
+
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-import { cubicBezier, motion } from 'motion/react';
-import { useNotice } from './NoticeProvider';
 
 // Component - AnimatedButton
 const MotionButton = motion.create(Button);
 
-// Component - Notice
-export interface NoticesClearAllButtonProperties {
+// Component - NotificationsClearAllButton
+export interface NotificationsClearAllButtonProperties {
     className?: string;
     show?: boolean;
     xSpringFunction: (x: number, onRestFunction: () => void) => void;
 }
-export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, NoticesClearAllButtonProperties>(
+export const NotificationsClearAllButton = React.forwardRef<HTMLButtonElement, NotificationsClearAllButtonProperties>(
     function (properties, reference) {
         // Hooks
-        const notice = useNotice();
+        const notifications = useNotifications();
 
         // Render the component
         return (
             <MotionButton
-                layout
                 ref={reference}
+                layout
                 variant="A"
                 className={mergeClassNames(!properties.show && 'pointer-events-none', properties.className)}
                 initial={{
@@ -43,7 +47,7 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
                     duration: 0.5,
                     type: 'tween',
                 }}
-                onClick={() => notice.removeAllNotices()}
+                onClick={() => notifications.removeAllNotifications()}
             >
                 Clear All
             </MotionButton>
@@ -52,4 +56,4 @@ export const NoticesClearAllButton = React.forwardRef<HTMLButtonElement, Notices
 );
 
 // Set the display name for debugging purposes
-NoticesClearAllButton.displayName = 'ClearAllNoticesButton';
+NotificationsClearAllButton.displayName = 'NotificationsClearAllButton';

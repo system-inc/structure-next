@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Component - Error
@@ -22,7 +22,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
     // Render the component
     return (
         <div className="flex h-screen w-full items-center justify-center">
-            <Alert variant="Negative" size="Large" title="Error" className="md:min-w-96">
+            <Notice variant="Negative" size="Large" title="Error" className="md:min-w-96">
                 <div className="space-y-2">
                     {properties.error.message && <p className="break-all">{properties.error.message}</p>}
                     {properties.error.digest && (
@@ -44,7 +44,7 @@ export function ErrorPage(properties: ErrorPageProperties) {
                         Reset
                     </Button>
                 </div>
-            </Alert>
+            </Notice>
         </div>
     );
 }

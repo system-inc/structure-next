@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
-import { NoticeInterface } from '@structure/source/components/notifications/Notice';
+import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
+import { NotificationInterface } from '@structure/source/components/notifications/Notification';
 import { Button } from '@structure/source/components/buttons/Button';
 import type { NonLinkButtonProperties } from '@structure/source/components/buttons/Button';
 import { animationTimings, iconAnimationVariants } from '@structure/source/components/buttons/AnimatedButton';
@@ -26,11 +26,11 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Component - CopyButton
 export type CopyButtonProperties = Omit<NonLinkButtonProperties, 'onClick'> & {
     value: string;
-    noticeData?: Omit<NoticeInterface, 'id'>;
+    noticeData?: Omit<NotificationInterface, 'id'>;
 };
 export function CopyButton({ value, noticeData, className, ...buttonProperties }: CopyButtonProperties) {
     // Hooks
-    const notice = useNotice();
+    const notice = useNotifications();
 
     // Get component theme from context
     const componentTheme = useComponentTheme();
@@ -55,7 +55,7 @@ export function CopyButton({ value, noticeData, className, ...buttonProperties }
 
         // Show a notice
         if(noticeData) {
-            notice.addNotice(noticeData);
+            notice.addNotification(noticeData);
         }
 
         // Reset the state after a delay

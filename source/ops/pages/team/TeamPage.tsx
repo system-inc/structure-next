@@ -7,12 +7,12 @@ import React from 'react';
 import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/OpsNavigationTrail';
 import { Button } from '@structure/source/components/buttons/Button';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
-import { useNotice } from '@structure/source/components/notifications/NoticeProvider';
+import { useNotifications } from '@structure/source/components/notifications/NotificationsProvider';
 
 // Component - TeamPage
 export function TeamPage() {
     // Hooks
-    const notice = useNotice();
+    const notice = useNotifications();
 
     // Render the component
     return (
@@ -24,7 +24,7 @@ export function TeamPage() {
 
             <Button
                 onClick={async function () {
-                    notice.addNotice({
+                    notice.addNotification({
                         title: 'Hello!',
                         content: 'This is a notice. ' + new Date().toLocaleTimeString('en-US', {}),
                     });

@@ -4,10 +4,10 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ApiError } from '@structure/source/components/notifications/ApiError';
+import { ApiErrorNotice } from '@structure/source/components/notices/ApiErrorNotice';
 // import NotConnected from '@structure/source/components/notifications/NotConnected';
-import { NotAuthorized } from '@structure/source/components/notifications/NotAuthorized';
-import { NotSignedIn } from '@structure/source/components/notifications/NotSignedIn';
+import { NotAuthorizedNotice } from '@structure/source/components/notices/NotAuthorizedNotice';
+import { NotSignedInNotice } from '@structure/source/components/notices/NotSignedInNotice';
 
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
@@ -45,7 +45,7 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
         // Not signed in and not loading - show sign in prompt
         return (
             <React.Suspense fallback={null}>
-                <NotSignedIn />
+                <NotSignedInNotice />
             </React.Suspense>
         );
     }
@@ -58,19 +58,19 @@ export function AuthorizationLayout(properties: AuthorizationLayoutProperties) {
                 return <LineLoadingAnimation />;
             }
             // Not loading and no data - not authorized
-            return <NotAuthorized />;
+            return <NotAuthorizedNotice />;
         }
 
         // Check if the account has any of the accessible roles
         if(!account.data.isAdministrator() && !account.data.hasAnyRole(accessibleRoles)) {
-            return <NotAuthorized />;
+            return <NotAuthorizedNotice />;
         }
     }
     // Check for authentication errors first - these should show sign-in UI, not error UI
     // are expected for unauthenticated users and should trigger the sign-in flow
     else if(account.error && !BaseError.isAuthenticationError(account.error)) {
         // Other API errors (network, server, etc.) should show error screen
-        return <ApiError error={account.error} />;
+        return <ApiErrorNotice error={account.error} />;
     }
 
     // Render the component

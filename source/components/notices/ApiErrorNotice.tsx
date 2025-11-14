@@ -4,21 +4,21 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { AlertProperties, Alert } from '@structure/source/components/notifications/Alert';
+import { NoticeProperties, Notice } from '@structure/source/components/notices/Notice';
 import { BaseError } from '@structure/source/api/errors/BaseError';
 
-// Component - NotAuthorized
-export interface ApiErrorProperties {
+// Component - ApiErrorNotice
+export interface ApiErrorNoticeProperties {
     error?: BaseError | Error;
-    alertProperties?: AlertProperties;
+    noticeProperties?: NoticeProperties;
 }
-export function ApiError(properties: ApiErrorProperties) {
+export function ApiErrorNotice(properties: ApiErrorNoticeProperties) {
     console.error(properties.error);
 
     // Render the component
     return (
         <div className="flex h-screen flex-col items-center justify-center">
-            <Alert variant={'Negative'} size={'Large'} title="API Error" {...properties.alertProperties}>
+            <Notice variant="Negative" size="Large" title="API Error" {...properties.noticeProperties}>
                 <div className="space-y-2">
                     <p>There was an error while communicating with our servers.</p>
                     {properties.error?.message && (
@@ -27,7 +27,7 @@ export function ApiError(properties: ApiErrorProperties) {
                         </p>
                     )}
                 </div>
-            </Alert>
+            </Notice>
         </div>
     );
 }

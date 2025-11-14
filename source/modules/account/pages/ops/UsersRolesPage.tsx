@@ -9,7 +9,7 @@ import { OpsNavigationTrail } from '@structure/source/ops/layouts/navigation/Ops
 import { Button } from '@structure/source/components/buttons/Button';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
 import { Dialog } from '@structure/source/components/dialogs/Dialog';
-import { Alert } from '@structure/source/components/notifications/Alert';
+import { Notice } from '@structure/source/components/notices/Notice';
 import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
 import { AccountRoleGrantForm } from '@structure/source/modules/account/components/AccountRoleGrantForm';
 import {
@@ -338,7 +338,7 @@ export function UsersRolesPage() {
                                 <b>@{selectedRole?.username}</b>?
                             </p>
                             {accountAccessRoleAssignmentRevokePrivilegedRequest.error && (
-                                <Alert
+                                <Notice
                                     className="mt-4"
                                     variant="Negative"
                                     title={accountAccessRoleAssignmentRevokePrivilegedRequest.error.message}

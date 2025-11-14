@@ -5,8 +5,8 @@
 import { useUrlPath, useRouter } from '@structure/source/router/Navigation';
 import React from 'react';
 
-// Component - NotSignedIn
-export function NotSignedIn() {
+// Component - NotSignedInNotice
+export function NotSignedInNotice() {
     // TODO: Clean this up. Just a quick solution for now.
     const urlPath = useUrlPath() ?? '';
     const router = useRouter();
