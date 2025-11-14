@@ -19,17 +19,15 @@ import CheckCircledIcon from '@structure/assets/icons/status/CheckCircledIcon.sv
 export type NoticeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
 
 // Component - Notice
-export interface NoticeProperties {
+export interface NoticeProperties extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
     variant?: NoticeVariant;
     size?: NoticeSize;
     presentation?: NoticePresentation;
-    className?: string;
+    title?: React.ReactNode; // Override HTMLAttributes title (string) with ReactNode
     icon?: NoticeIconType; // Icon to display
     iconClassName?: string; // Custom className for the icon
-    title?: React.ReactNode;
-    children?: React.ReactNode;
 }
-export function Notice(properties: NoticeProperties) {
+export const Notice = React.forwardRef<HTMLDivElement, NoticeProperties>(function (properties, reference) {
     // Get theme from context and merge with structure theme
     const componentTheme = useComponentTheme();
     const noticeTheme = mergeComponentTheme(structureNoticeTheme, componentTheme?.Notice);
@@ -115,7 +113,7 @@ export function Notice(properties: NoticeProperties) {
 
     // Render the component
     return (
-        <div className={computedClassName}>
+        <div ref={reference} className={computedClassName}>
             <div className="flex">
                 {icon && <div className={variantIconContainerClassNames}>{themeIcon(icon, iconClassNames)}</div>}
                 <div className={variantTextContainerClassNames}>
@@ -125,4 +123,6 @@ export function Notice(properties: NoticeProperties) {
             </div>
         </div>
     );
-}
+});
+// Set display name for debugging purposes
+Notice.displayName = 'Notice';
