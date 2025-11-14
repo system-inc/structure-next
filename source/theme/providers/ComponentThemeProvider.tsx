@@ -16,6 +16,7 @@ import type { NoticeThemeConfiguration } from '@structure/source/components/noti
 import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
 import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text-area/InputTextAreaTheme';
 import type { InputCheckboxThemeConfiguration } from '@structure/source/components/forms-new/fields/checkbox/InputCheckboxTheme';
+import type { InputSelectThemeConfiguration } from '@structure/source/components/forms-new/fields/select/InputSelectTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 
 // Type - Component Theme Context Value
@@ -32,6 +33,7 @@ interface ComponentThemeContextValue {
     InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
     InputTextArea?: DeepPartialComponentTheme<InputTextAreaThemeConfiguration>;
     InputCheckbox?: DeepPartialComponentTheme<InputCheckboxThemeConfiguration>;
+    InputSelect?: DeepPartialComponentTheme<InputSelectThemeConfiguration>;
     // Future component themes:
     // Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
     // Table?: DeepPartialComponentTheme<TableThemeConfiguration>;
