@@ -28,7 +28,13 @@ export function DialogFooter(properties: DialogFooterProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames(dialogContext.dialogTheme.configuration.footerClasses, properties.className)}>
+        <div
+            className={mergeClassNames(
+                dialogContext.dialogTheme.configuration.footerClasses,
+                dialogContext.isMobile ? 'shrink-0 px-6 pt-4 pb-6' : '',
+                properties.className,
+            )}
+        >
             {properties.children}
 
             {/* Dismiss Button */}

@@ -26,7 +26,13 @@ export function DialogHeader(properties: DialogHeaderProperties) {
 
     // Render the component
     return (
-        <div className={mergeClassNames(dialogContext.dialogTheme.configuration.headerClasses, properties.className)}>
+        <div
+            className={mergeClassNames(
+                dialogContext.dialogTheme.configuration.headerClasses,
+                dialogContext.isMobile ? 'shrink-0 px-6 pt-6 pb-4' : '',
+                properties.className,
+            )}
+        >
             {typeof properties.children === 'string' ? (
                 <DialogTitle asChild>
                     <div className="font-medium">{properties.children}</div>

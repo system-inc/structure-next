@@ -33,7 +33,7 @@ export function DialogContent(properties: DialogContentProperties) {
     // Desktop
     return (
         <ScrollArea className={mergeClassNames('max-h-[75vh]', properties.scrollAreaClassName)}>
-            <div className={mergeClassNames('px-8 py-6', properties.className)}>{properties.children}</div>
+            <div className={properties.className}>{properties.children}</div>
         </ScrollArea>
     );
 }
