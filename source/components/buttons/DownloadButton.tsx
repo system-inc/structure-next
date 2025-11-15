@@ -90,9 +90,7 @@ export function DownloadButton({
     return (
         <Button
             className={mergeClassNames(
-                downloadStarted
-                    ? 'text-emerald-500 hover:text-emerald-500'
-                    : 'hover:text-dark dark:hover:text-light content--2',
+                downloadStarted ? 'text-emerald-500 hover:text-emerald-500' : 'content--2 hover:content--2',
                 className,
             )}
             icon={IconComponent}

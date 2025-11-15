@@ -15,12 +15,12 @@ export const cardVariants = createVariantClassNames(
                 true: [
                     // Hover state
                     'hover:shadow',
-                    // 'dark:hover:border-opsis-action-secondary-pressed',
+                    // 'dark:hover:border-white-0 dark:border-gray-1000',
 
                     // Active state
                     'active:shadow',
-                    // 'active:border-opsis-action-secondary-pressed',
-                    // 'dark:active:border-opsis-action-secondary-hover',
+                    // 'active:border-white-0 dark:border-gray-1000',
+                    // 'dark:active:border-white-400 dark:border-black-200',
                 ],
             },
         },

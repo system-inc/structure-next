@@ -461,7 +461,7 @@ export function Form(properties: FormProperties) {
                                 return null;
                             }
 
-                            return <PlaceholderAnimation key={formInput.props.id} className="h-[64px] w-full" />;
+                            return <PlaceholderAnimation key={formInput.props.id} className="h-16 w-full" />;
                         })}
                     </div>
                 );
