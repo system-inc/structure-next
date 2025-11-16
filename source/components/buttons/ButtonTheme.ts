@@ -11,14 +11,14 @@
 // Use relative path to avoid Tailwind CSS resolution issues
 import { mergeClassNames } from '../../utilities/style/ClassName';
 
-// Layout styles for styled buttons (not applied to unstyled buttons)
-export const buttonLayoutClassNames =
+// Common layout: flex container with icon/text spacing
+export const buttonCommonLayoutClassNames =
     // Flex layout with spacing between icons and text
     `inline-flex items-center justify-center gap-2`;
 
-// Common button styles: interaction behavior and disabled states
-export const buttonCommonClassNames = mergeClassNames(
-    // Layout
+// Common behavior: text handling, cursor, transitions, disabled states
+export const buttonCommonBehaviorClassNames = mergeClassNames(
+    // Text behavior
     'whitespace-nowrap select-none',
     // Cursor
     'cursor-pointer',
@@ -29,17 +29,15 @@ export const buttonCommonClassNames = mergeClassNames(
     'aria-disabled:cursor-not-allowed aria-disabled:opacity-75',
 );
 
-// Centered button styles: sizing and shape
-export const buttonCenteredClassNames = mergeClassNames(
-    // Shape
-    'rounded-lg',
+// Common typography: font weight for button text
+export const buttonCommonTypographyClassNames = mergeClassNames(
     // Content
-    'text-sm font-medium',
+    'font-medium',
 );
 
-// Focus styles for styled buttons
+// Common focus: ring-offset pattern for 1px gap effect
 // Override global outline with ring-offset pattern for 1px gap effect
-export const buttonFocusClassNames = mergeClassNames(
+export const buttonCommonFocusClassNames = mergeClassNames(
     // Remove global outline
     'focus-visible:outline-none',
     // Ring pattern: 1px gap + 1px border
@@ -49,8 +47,8 @@ export const buttonFocusClassNames = mergeClassNames(
     'focus-visible:ring-offset-background-0',
 );
 
-// Icon button layout: square aspect ratio for icon-only buttons
-export const buttonIconLayoutClassNames = `aspect-square`;
+// Icon-only buttons: square aspect ratio (no text, just icon)
+export const buttonIconOnlyLayoutClassNames = `aspect-square`;
 
 // Button Variants Interface - Source of truth for all button variants
 // Structure defines its base variants here, and projects can augment to add custom variants
@@ -135,11 +133,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant A - Primary button with custom styling
         // Use for: Main call-to-action buttons, primary actions
         A: mergeClassNames(
-            buttonLayoutClassNames,
-            buttonCommonClassNames,
-            buttonCenteredClassNames,
-            buttonFocusClassNames,
-            'border',
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            buttonCommonFocusClassNames,
+            'rounded-lg border',
             // Light mode - Background, border, and text
             'border-white-550 bg-white-850 text-black-800',
             'hover:border-white-450 hover:bg-white-750 hover:text-black-850',
@@ -155,11 +153,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant Outline - Button with visible border and no fill
         // Use for: Secondary actions, alternative options
         Outline: mergeClassNames(
-            buttonLayoutClassNames,
-            buttonCommonClassNames,
-            buttonCenteredClassNames,
-            buttonFocusClassNames,
-            'border border--0 content--0',
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            buttonCommonFocusClassNames,
+            'rounded-lg border border--0 content--0',
             // Hover - Emphasize border and content
             'hover:border--6 hover:content---1',
             // Active and open - Further emphasize border and content
@@ -170,11 +168,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant Contrast - High contrast button using inverted content colors
         // Use for: Important CTAs that need maximum visibility against background--0
         Contrast: mergeClassNames(
-            buttonLayoutClassNames,
-            buttonCommonClassNames,
-            buttonCenteredClassNames,
-            buttonFocusClassNames,
-            'border',
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            buttonCommonFocusClassNames,
+            'rounded-lg border',
             // Base: Use content color as background for true contrast
             'border-content--0 background-content--0 content--10',
             // Hover: Emphasize with darker/lighter content colors
@@ -187,8 +185,10 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant Ghost - Minimal button with no background until hover
         // Use for: Tertiary actions, icon buttons, toolbar buttons, less prominent actions
         Ghost: mergeClassNames(
-            buttonCommonClassNames,
-            buttonCenteredClassNames,
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            'rounded-lg',
             // Content
             'content--0',
             // Hover
@@ -201,11 +201,11 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant Destructive - Dangerous/destructive action button
         // Use for: Delete, remove, or other irreversible destructive actions
         Destructive: mergeClassNames(
-            buttonLayoutClassNames,
-            buttonCommonClassNames,
-            buttonCenteredClassNames,
-            buttonFocusClassNames,
-            'border',
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            buttonCommonFocusClassNames,
+            'rounded-lg border',
             // Base: Subtle background with semantic negative content
             'border--3 background--2 content--negative',
             // Hover: Emphasize border with negative color
@@ -224,7 +224,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant GhostDestructive - Minimal destructive action button
         // Use for: Less prominent destructive actions (e.g., remove from list, clear)
         GhostDestructive: mergeClassNames(
-            buttonCommonClassNames,
+            buttonCommonBehaviorClassNames,
             // Rounded
             'rounded-lg',
             // Content
@@ -239,8 +239,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant ToggleOn - Button in toggled/active state
         // Use for: Toggle buttons, filter chips, or selectable options that are currently ON
         ToggleOn: mergeClassNames(
-            buttonCommonClassNames,
-            buttonCenteredClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
             'rounded-md border',
             // Toggled on: More prominent appearance to show active state
             'border--2 background--3 content--0',
@@ -251,8 +251,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant ToggleOff - Button in untoggled/inactive state
         // Use for: Toggle buttons, filter chips, or selectable options that are currently OFF
         ToggleOff: mergeClassNames(
-            buttonCommonClassNames,
-            buttonCenteredClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
             'rounded-md border',
             // Toggled off: Subtle appearance to show inactive state
             'border--3 background--0 content--2',
@@ -284,8 +284,8 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant InputSelect - Select input button styling
         // Use for: Custom select/dropdown triggers in forms
         InputSelect: mergeClassNames(
-            buttonCommonClassNames,
-            buttonFocusClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonFocusClassNames,
             // Layout (no justify-center because grow handles spacing)
             'inline-flex items-center',
             // Text
@@ -309,7 +309,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
         // Variant TableHeaderCell - Sortable table header cell button
         // Use for: Clickable/sortable table headers
         TableHeaderCell: mergeClassNames(
-            buttonCommonClassNames,
+            buttonCommonBehaviorClassNames,
             'text-xs font-normal',
             // Base: Muted content
             'content--2',
@@ -323,20 +323,20 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Sizes
     sizes: {
         // General Purpose Sizes
-        ExtraExtraSmall: 'h-7 px-3 py-1 text-sm',
-        ExtraSmall: 'h-7 rounded-md px-2 text-xs',
-        Small: 'h-8 rounded-md px-3 text-xs',
-        Base: 'h-9 px-4 py-2',
-        Large: 'h-10 rounded-md px-8',
-        ExtraLarge: 'h-11 rounded-md px-10',
+        ExtraExtraSmall: mergeClassNames('px-3 py-1 text-sm'),
+        ExtraSmall: mergeClassNames('px-2 text-xs'),
+        Small: mergeClassNames('px-3 text-xs'),
+        Base: mergeClassNames('px-4 py-2 text-sm'),
+        Large: mergeClassNames('px-6 py-2.5'),
+        ExtraLarge: mergeClassNames('px-10 py-4 text-lg'),
 
         // Icon-only Button Sizes (square buttons with no text, only an icon)
-        IconExtraExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'h-7 w-7'),
-        IconExtraSmall: mergeClassNames(buttonIconLayoutClassNames, 'rounded-sm p-1'),
-        IconSmall: mergeClassNames(buttonIconLayoutClassNames, 'p-1.5'),
-        Icon: mergeClassNames(buttonIconLayoutClassNames, 'p-2'),
-        IconLarge: mergeClassNames(buttonIconLayoutClassNames, 'p-2.5'),
-        IconExtraLarge: mergeClassNames(buttonIconLayoutClassNames, 'p-3'),
+        IconExtraExtraSmall: mergeClassNames(buttonIconOnlyLayoutClassNames, 'h-7 w-7'),
+        IconExtraSmall: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-1'),
+        IconSmall: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-1.5'),
+        Icon: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-2'),
+        IconLarge: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-2.5'),
+        IconExtraLarge: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-3'),
 
         // Specialized Sizes
         MenuItem: 'pt-1.5 pr-3 pb-1.5',

@@ -52,9 +52,9 @@ export interface ButtonIconProperties {
 
 // Mutually exclusive link patterns
 export type ButtonLinkVariant =
-    | { asChild: true; href?: never; target?: never } // asChild only (no href or target)
-    | { href: string; target?: string; asChild?: never } // Link with href and optional target
-    | { asChild?: never; href?: never; target?: never }; // Regular button (no href or target)
+    | { asChild: true; href?: never; target?: never; prefetch?: boolean } // asChild only (no href or target)
+    | { href: string; target?: string; prefetch?: boolean; asChild?: never } // Link with href and optional target
+    | { asChild?: never; href?: never; target?: never; prefetch?: boolean }; // Regular button (no href or target, but prefetch can be passed through)
 
 // Helper for wrapper components that are always buttons (never links or slots)
 export type NonLinkButtonProperties = Omit<ButtonProperties, 'asChild' | 'href' | 'target'>;
@@ -85,6 +85,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
         disabled, // Handled specially for Link (aria-disabled) and click prevention
         href, // Triggers Link rendering instead of button
         target, // Passed to Link when href is present
+        prefetch, // Passed to Link when href is present
         type = 'button', // Only applies to <button>, not <Link> or Slot
         className, // Merged with variant classes
         children, // Wrapped with icons/spinner, passed to Slot/Link/button
@@ -175,6 +176,7 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
                 ref={reference as React.Ref<HTMLAnchorElement>}
                 href={href}
                 target={target}
+                prefetch={prefetch}
                 aria-disabled={isDisabled ? 'true' : undefined}
                 {...commonProperties}
             >
