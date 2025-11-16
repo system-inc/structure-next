@@ -50,6 +50,19 @@
     background-color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
+/* Background border utilities - uses border colors for backgrounds */
+@utility background-border--* {
+    /* No slash modifier -> solid background */
+    background-color: --value(--color-border- *, [color]);
+
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    background-color: --alpha(--value(--color-border- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    background-color: --alpha(--value(--color-border- *, [color]) / --modifier([percentage]));
+}
+
 /* Text/Content utilities with 0-10 scale + opacity modifier support */
 @utility content--* {
     /* No slash modifier -> solid color */
