@@ -16,6 +16,8 @@ export default {
             useSimpleComment: 'Use single-line comment instead of JSDoc for single-line descriptions.',
             noAnchorElement:
                 "Using <a> elements is not allowed. Use the Link component from '@structure/source/components/navigation/Link' instead.",
+            noHrElement:
+                "Using <hr> elements is not allowed. Use the HorizontalRule component from '@structure/source/components/layout/HorizontalRule' instead.",
         },
         schema: [],
     },
@@ -60,8 +62,13 @@ export default {
             fileName.includes('/components/navigation/Link.tsx') ||
             fileName.includes('/components/navigation/Link.jsx');
 
+        // Check if this is the HorizontalRule component implementation file
+        const isHorizontalRuleComponent =
+            fileName.includes('/components/layout/HorizontalRule.tsx') ||
+            fileName.includes('/components/layout/HorizontalRule.jsx');
+
         return {
-            // Check for <a> elements in JSX
+            // Check for <a> and <hr> elements in JSX
             JSXOpeningElement(node) {
                 // Skip if this is the Link component implementation
                 if(isLinkComponent) {
@@ -73,6 +80,19 @@ export default {
                     context.report({
                         node,
                         messageId: 'noAnchorElement',
+                    });
+                }
+
+                // Skip if this is the HorizontalRule component implementation
+                if(isHorizontalRuleComponent) {
+                    return;
+                }
+
+                // Check if the element is an <hr> tag
+                if(node.name && node.name.type === 'JSXIdentifier' && node.name.name === 'hr') {
+                    context.report({
+                        node,
+                        messageId: 'noHrElement',
                     });
                 }
             },
