@@ -6,12 +6,104 @@ import { cva } from 'class-variance-authority';
 // Type for class property (matching CVA's ClassProp)
 type ClassProperty = { class?: ClassValue; className?: never } | { class?: never; className?: ClassValue };
 
-// Configure tailwind-merge to handle our custom border--# utility
-// Without this, tailwind-merge treats 'border' and 'border--#' as conflicting
+// Configure tailwind-merge to handle our custom double-dash utilities
+// Extends Tailwind's existing class groups so our utilities properly conflict with built-in ones
 const twMerge = extendTailwindMerge({
     extend: {
         classGroups: {
-            'border-custom': [
+            // Extend Tailwind's 'bg-color' group with our custom background utilities
+            // This ensures bg-white-500 and background--0 properly override each other
+            'bg-color': [
+                // Standard background colors
+                'background--0',
+                'background--1',
+                'background--2',
+                'background--3',
+                'background--4',
+                'background--5',
+                'background--6',
+                'background--7',
+                'background--8',
+                'background--9',
+                'background--10',
+                'background---1',
+                'background---2',
+                'background---3',
+                'background--positive',
+                'background--negative',
+                'background--warning',
+                'background--informative',
+                'background--backdrop',
+                // Background using content colors
+                'background-content--0',
+                'background-content--1',
+                'background-content--2',
+                'background-content--3',
+                'background-content--4',
+                'background-content--5',
+                'background-content--6',
+                'background-content--7',
+                'background-content--8',
+                'background-content--9',
+                'background-content--10',
+                'background-content---1',
+                'background-content---2',
+                'background-content---3',
+                'background-content--positive',
+                'background-content--negative',
+                'background-content--warning',
+                'background-content--informative',
+                'background-content--disabled',
+                'background-content--placeholder',
+                // Background using border colors
+                'background-border--0',
+                'background-border--1',
+                'background-border--2',
+                'background-border--3',
+                'background-border--4',
+                'background-border--5',
+                'background-border--6',
+                'background-border--7',
+                'background-border--8',
+                'background-border--9',
+                'background-border--10',
+                'background-border---1',
+                'background-border---2',
+                'background-border---3',
+                'background-border--positive',
+                'background-border--negative',
+                'background-border--warning',
+                'background-border--informative',
+                'background-border--focus',
+            ],
+            // Extend Tailwind's 'text-color' group with our custom content utilities
+            // This ensures text-gray-400 and content--0 properly override each other
+            'text-color': [
+                'content--0',
+                'content--1',
+                'content--2',
+                'content--3',
+                'content--4',
+                'content--5',
+                'content--6',
+                'content--7',
+                'content--8',
+                'content--9',
+                'content--10',
+                'content---1',
+                'content---2',
+                'content---3',
+                'content--positive',
+                'content--negative',
+                'content--warning',
+                'content--informative',
+                'content--disabled',
+                'content--placeholder',
+            ],
+            // Extend Tailwind's 'border-color' group with our custom border utilities
+            // This ensures border-blue-500 and border--0 properly override each other
+            'border-color': [
+                // Standard border colors
                 'border--0',
                 'border--1',
                 'border--2',
@@ -26,6 +118,32 @@ const twMerge = extendTailwindMerge({
                 'border---1',
                 'border---2',
                 'border---3',
+                'border--positive',
+                'border--negative',
+                'border--warning',
+                'border--informative',
+                'border--focus',
+                // Border using content colors
+                'border-content--0',
+                'border-content--1',
+                'border-content--2',
+                'border-content--3',
+                'border-content--4',
+                'border-content--5',
+                'border-content--6',
+                'border-content--7',
+                'border-content--8',
+                'border-content--9',
+                'border-content--10',
+                'border-content---1',
+                'border-content---2',
+                'border-content---3',
+                'border-content--positive',
+                'border-content--negative',
+                'border-content--warning',
+                'border-content--informative',
+                'border-content--disabled',
+                'border-content--placeholder',
             ],
         } as Record<string, string[]>, // Type assertion for custom class group names
     },
