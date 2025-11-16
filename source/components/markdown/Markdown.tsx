@@ -11,6 +11,7 @@ import rehypeHighlight from 'rehype-highlight';
 import { renderToString } from 'react-dom/server';
 import { Link } from '@structure/source/components/navigation/Link';
 import { CopyButton } from '@structure/source/components/buttons/CopyButton';
+import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
 // Dependencies - Styles
 // import '@project/app/_modules/chat/styles/night-owl.css';
@@ -77,7 +78,7 @@ const components: ComponentsProperties = {
         <li className="my-2 pl-1.5 text-[16px] leading-[28px] [&>ol]:my-0 [&>ul]:my-0" {...properties} />
     ),
     blockquote: (properties) => <blockquote className="border-l-2 border--3 pl-4" {...properties} />,
-    hr: (properties) => <hr className="my-10 border--3" {...properties} />,
+    hr: () => <HorizontalRule className="my-10" />,
     table: (properties) => (
         <table className="relative mt-6 mb-6 w-full overflow-auto rounded border border--0" {...properties} />
     ),

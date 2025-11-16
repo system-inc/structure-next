@@ -7,6 +7,7 @@ import React from 'react';
 import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQlOperationForm';
 import { Button } from '@structure/source/components/buttons/Button';
 import { DeletePostTopicDialog } from '@structure/source/modules/post/topics/components/dialogs/DeletePostTopicDialog';
+import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
 // Dependencies - API
 import { gql } from '@structure/source/services/network/NetworkService';
@@ -59,7 +60,7 @@ export function EditSupportPostTopicPage(properties: EditSupportPostTopicPagePro
                 }}
             />
 
-            <hr className="my-16 border--0" />
+            <HorizontalRule className="my-16" />
 
             <div className="flex justify-end">
                 <Button

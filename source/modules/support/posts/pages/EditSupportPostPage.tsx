@@ -13,6 +13,7 @@ import { GraphQlOperationForm } from '@structure/source/api/graphql/forms/GraphQ
 import { FormInputTextArea } from '@structure/source/components/forms/FormInputTextArea';
 import { FormInputText } from '@structure/source/components/forms/FormInputText';
 import { DeletePostDialog } from '@structure/source/modules/post/components/dialogs/DeletePostDialog';
+import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
 // Dependencies - API
 import {
@@ -92,7 +93,9 @@ export function EditSupportPostPage(properties: EditSupportPostPageProperties) {
                     children: 'Save Changes',
                 }}
             />
-            <hr className="my-16 border--0" />
+
+            <HorizontalRule className="my-16" />
+
             <div className="flex justify-end">
                 <Button
                     variant="Destructive"

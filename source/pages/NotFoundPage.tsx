@@ -3,6 +3,9 @@
 // Dependencies - React and Next.js
 import React from 'react';
 
+// Dependencies - Main Components
+import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
+
 // Component - NotFoundPage
 export function NotFoundPage() {
     // Render the component
@@ -10,7 +13,7 @@ export function NotFoundPage() {
         <div>
             <h1>Page Not Found</h1>
 
-            <hr className="my-6 border--0" />
+            <HorizontalRule className="my-6" />
 
             <div className="">
                 <p>The page you are looking for could not be found.</p>

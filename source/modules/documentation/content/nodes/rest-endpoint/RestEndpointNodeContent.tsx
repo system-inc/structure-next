@@ -11,6 +11,7 @@ import {
 import { Button } from '@structure/source/components/buttons/Button';
 import { Markdown } from '@structure/source/components/markdown/Markdown';
 import { Json } from '@structure/source/components/code/json/Json';
+import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 import { RequestParametersTable } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/request-parameters/RequestParametersTable';
 import { ResponseParameters } from '@structure/source/modules/documentation/content/nodes/rest-endpoint/response-parameters/ResponseParameters';
 import {
@@ -387,7 +388,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Request Parameters */}
             {endpoint.requestParameters && (
                 <div className="">
-                    <hr className="mt-6 mb-4 border--0" />
+                    <HorizontalRule className="mt-6 mb-4" />
                     <h3 className="mb-2 text-lg font-medium">Request Parameters</h3>
                     <RequestParametersTable
                         requestParameters={endpoint.requestParameters}
@@ -396,7 +397,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
                 </div>
             )}
 
-            <hr className="mt-6 mb-6 border--0" />
+            <HorizontalRule className="mt-6 mb-6" />
 
             {/* Request Url with Parameters */}
             <div className="mb-4 flex items-center">
@@ -472,7 +473,7 @@ export function RestEndpointNodeContent(properties: RestEndpointNodeContentPrope
             {/* Example Responses */}
             {endpoint.exampleResponses && (
                 <div className="">
-                    <hr className="my-12 border--0" />
+                    <HorizontalRule className="my-12" />
                     <h3 className="mb-4 text-lg font-medium">Example Responses</h3>
                     {endpoint.exampleResponses.map(function (exampleResponse) {
                         return (

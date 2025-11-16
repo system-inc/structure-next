@@ -10,6 +10,7 @@ import { NavigationTrail } from '@structure/source/components/navigation/trail/N
 import { SupportPostFeedback } from '@structure/source/modules/support/posts/components/SupportPostFeedback';
 import { Button } from '@structure/source/components/buttons/Button';
 import { Markdown } from '@structure/source/components/markdown/Markdown';
+import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
 
 // Dependencies - API
 // import { useQuery } from '@apollo/client';
@@ -101,11 +102,11 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
                 {properties.post.content && <Markdown className="mb-4 max-w-2xl">{properties.post.content}</Markdown>}
             </div>
 
-            <hr className="my-16 border--0" />
+            <HorizontalRule className="my-16" />
 
             <SupportPostFeedback className="flex justify-center text-center" />
 
-            <hr className="my-16 border--0" />
+            <HorizontalRule className="my-16" />
 
             <div className="flex justify-center">
                 <div>
