@@ -76,6 +76,19 @@
     color: --alpha(--value(--color-content- *, [color]) / --modifier([percentage]));
 }
 
+/* Content background utilities - uses background colors for content */
+@utility content-background--* {
+    /* No slash modifier -> solid color */
+    color: --value(--color-background- *, [color]);
+
+    /* Slash modifier like /50 -> treat as percentage */
+    --alpha: calc(--modifier(integer) * 1%);
+    color: --alpha(--value(--color-background- *, [color]) / var(--alpha, 100%));
+
+    /* Optional: allow true percentages like /12.5% */
+    color: --alpha(--value(--color-background- *, [color]) / --modifier([percentage]));
+}
+
 /* Prose - Typography styles for rich text content with proper spacing */
 @utility prose {
     & p {
