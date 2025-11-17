@@ -57,18 +57,18 @@ export interface BadgeThemeConfiguration {
 export const badgeTheme: BadgeThemeConfiguration = {
     // Semantic color variants (content colors)
     variants: {
-        Positive: 'content--positive',
-        Negative: 'content--negative',
-        Warning: 'content--warning',
-        Informative: 'content--informative',
-        Neutral: 'content--1',
+        Positive: mergeClassNames('content--positive'),
+        Negative: mergeClassNames('content--negative'),
+        Warning: mergeClassNames('content--warning'),
+        Informative: mergeClassNames('content--informative'),
+        Neutral: mergeClassNames('content--1'),
     },
 
     // Type styles (filled vs outline vs status)
     types: {
-        Filled: '', // Backgrounds applied via compound variants
-        Outline: '', // Borders applied via compound variants
-        Status: 'border border--0 content--0', // Status dot style
+        Filled: mergeClassNames(''), // Backgrounds applied via compound variants
+        Outline: mergeClassNames(''), // Borders applied via compound variants
+        Status: mergeClassNames('border border--0 content--0'), // Status dot style
     },
 
     // Size variants
@@ -80,23 +80,27 @@ export const badgeTheme: BadgeThemeConfiguration = {
     // Compound variants - combinations of type + variant
     compoundVariants: [
         // Filled backgrounds
-        { type: 'Filled', variant: 'Positive', className: 'background--positive' },
-        { type: 'Filled', variant: 'Negative', className: 'background--negative' },
-        { type: 'Filled', variant: 'Warning', className: 'background--warning' },
-        { type: 'Filled', variant: 'Informative', className: 'background--informative' },
-        { type: 'Filled', variant: 'Neutral', className: 'background--1' },
+        { type: 'Filled', variant: 'Positive', className: mergeClassNames('background--positive') },
+        { type: 'Filled', variant: 'Negative', className: mergeClassNames('background--negative') },
+        { type: 'Filled', variant: 'Warning', className: mergeClassNames('background--warning') },
+        { type: 'Filled', variant: 'Informative', className: mergeClassNames('background--informative-muted') },
+        { type: 'Filled', variant: 'Neutral', className: mergeClassNames('background--1') },
         // Outline borders
-        { type: 'Outline', variant: 'Positive', className: 'border border--positive' },
-        { type: 'Outline', variant: 'Negative', className: 'border border--negative' },
-        { type: 'Outline', variant: 'Warning', className: 'border border--warning' },
-        { type: 'Outline', variant: 'Informative', className: 'border border--informative' },
-        { type: 'Outline', variant: 'Neutral', className: 'border border--0' },
+        { type: 'Outline', variant: 'Positive', className: mergeClassNames('border border--positive') },
+        { type: 'Outline', variant: 'Negative', className: mergeClassNames('border border--negative') },
+        { type: 'Outline', variant: 'Warning', className: mergeClassNames('border border--warning') },
+        { type: 'Outline', variant: 'Informative', className: mergeClassNames('border border--informative') },
+        { type: 'Outline', variant: 'Neutral', className: mergeClassNames('border border--0') },
         // Status dot colors (applied to the [data-dot] element)
-        { type: 'Status', variant: 'Positive', className: '[&>[data-dot=true]]:background--positive' },
-        { type: 'Status', variant: 'Negative', className: '[&>[data-dot=true]]:background--negative' },
-        { type: 'Status', variant: 'Warning', className: '[&>[data-dot=true]]:background--warning' },
-        { type: 'Status', variant: 'Informative', className: '[&>[data-dot=true]]:background--informative' },
-        { type: 'Status', variant: 'Neutral', className: '[&>[data-dot=true]]:background--1' },
+        { type: 'Status', variant: 'Positive', className: mergeClassNames('[&>[data-dot=true]]:background--positive') },
+        { type: 'Status', variant: 'Negative', className: mergeClassNames('[&>[data-dot=true]]:background--negative') },
+        { type: 'Status', variant: 'Warning', className: mergeClassNames('[&>[data-dot=true]]:background--warning') },
+        {
+            type: 'Status',
+            variant: 'Informative',
+            className: mergeClassNames('[&>[data-dot=true]]:background--informative'),
+        },
+        { type: 'Status', variant: 'Neutral', className: mergeClassNames('[&>[data-dot=true]]:background--1') },
     ],
 
     // Configuration

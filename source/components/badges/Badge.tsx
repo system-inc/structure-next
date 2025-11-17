@@ -23,15 +23,18 @@ export interface BadgeProperties extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
     children?: React.ReactNode;
 }
-export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(properties, reference) {
+export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(
+    { variant: variantProperty, type: typeProperty, size: sizeProperty, icon, iconClassName, className, children, ...divProperties },
+    reference,
+) {
     // Get theme from context and merge with structure theme
     const componentTheme = useComponentTheme();
     const badgeTheme = mergeComponentTheme(structureBadgeTheme, componentTheme?.Badge);
 
     // Apply defaults from theme configuration
-    const variant = properties.variant || badgeTheme.configuration.defaultVariant.variant;
-    const type = properties.type || badgeTheme.configuration.defaultVariant.type;
-    const size = properties.size || badgeTheme.configuration.defaultVariant.size;
+    const variant = variantProperty || badgeTheme.configuration.defaultVariant.variant;
+    const type = typeProperty || badgeTheme.configuration.defaultVariant.type;
+    const size = sizeProperty || badgeTheme.configuration.defaultVariant.size;
 
     // Create variant class names from theme
     const badgeVariantClassNames = createVariantClassNames(badgeTheme.configuration.baseClasses, {
@@ -51,20 +54,18 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function 
             type: type,
             size: size,
         }),
-        properties.className, // User overrides last
+        className, // User overrides last
     );
 
     // Render icon if provided, or status dot if type is Status
-    const renderedIcon = properties.icon ? (
-        themeIcon(properties.icon, properties.iconClassName)
-    ) : type === 'Status' ? (
+    const renderedIcon = icon ? themeIcon(icon, iconClassName) : type === 'Status' ? (
         <div data-dot="true" className="size-1.5 shrink-0 rounded-full" />
     ) : null;
 
     return (
-        <div ref={reference} className={computedClassName} {...properties}>
+        <div ref={reference} className={computedClassName} {...divProperties}>
             {renderedIcon}
-            {properties.children}
+            {children}
         </div>
     );
 });
