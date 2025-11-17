@@ -1,3 +1,5 @@
+'use client'; // This component uses client-only features
+
 // Dependencies - React
 import React from 'react';
 
