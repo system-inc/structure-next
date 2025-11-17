@@ -24,12 +24,14 @@ export interface DrawerContentProperties {
 export function DrawerContent(properties: DrawerContentProperties) {
     const drawerContext = useDrawerContext();
 
-    // Get the theme classes for this side
+    // Get the theme classes for this side and variant
     const sideTheme = drawerContext.drawerTheme.sides[drawerContext.side ?? 'Bottom'];
+    const variantClasses = drawerContext.variant ? drawerContext.drawerTheme.variants[drawerContext.variant] : '';
 
-    // Combine base wrapper classes with side-specific wrapper classes
+    // Combine base wrapper classes with variant and side-specific wrapper classes
     const wrapperClasses = mergeClassNames(
         drawerContext.drawerTheme.configuration.baseWrapperClasses,
+        variantClasses,
         sideTheme.wrapperClasses,
         properties.className,
     );

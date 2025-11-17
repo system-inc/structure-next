@@ -3,7 +3,7 @@ import React from 'react';
 
 // Dependencies - Theme
 import type { DrawerThemeConfiguration } from './DrawerTheme';
-import type { DrawerSide } from './DrawerTheme';
+import type { DrawerSide, DrawerVariant } from './DrawerTheme';
 
 // Drawer Context Interface
 export interface DrawerContextValue {
@@ -11,6 +11,7 @@ export interface DrawerContextValue {
     onOpenChange: (open: boolean) => void;
     drawerId: string;
     drawerTheme: DrawerThemeConfiguration;
+    variant?: DrawerVariant;
     side?: DrawerSide;
     isNested: boolean;
 }

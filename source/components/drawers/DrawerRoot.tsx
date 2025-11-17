@@ -8,7 +8,7 @@ import { Drawer as VaulDrawer } from 'vaul';
 
 // Dependencies - Theme
 import { drawerTheme as structureDrawerTheme } from './DrawerTheme';
-import type { DrawerSide } from './DrawerTheme';
+import type { DrawerSide, DrawerVariant } from './DrawerTheme';
 
 // Dependencies - Context
 import { DrawerContext, DrawerNestedContext, useIsNestedDrawer } from './DrawerContext';
@@ -22,6 +22,7 @@ export interface DrawerRootProperties {
     shouldScaleBackground?: boolean;
 
     // Theme
+    variant?: DrawerVariant;
     side?: DrawerSide;
 
     // Compound components
@@ -31,8 +32,9 @@ export function DrawerRoot(properties: DrawerRootProperties) {
     // Use the structure drawer theme (projects can override via DrawerTheme.ts in their project)
     const drawerTheme = structureDrawerTheme;
 
-    // Determine side with default from configuration
-    const side = properties.side ?? drawerTheme.configuration.defaultSide;
+    // Determine variant and side with defaults from configuration
+    const variant = properties.variant ?? drawerTheme.configuration.defaultVariant?.variant;
+    const side = properties.side ?? drawerTheme.configuration.defaultVariant?.side;
 
     // Generate unique ID for accessibility
     const drawerId = React.useId();
@@ -69,6 +71,7 @@ export function DrawerRoot(properties: DrawerRootProperties) {
         onOpenChange,
         drawerId,
         drawerTheme,
+        variant,
         side,
         isNested: isNestedDrawer,
     };
