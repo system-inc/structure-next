@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { Drawer as VaulDrawer } from 'vaul';
+import { Drawer } from '@structure/source/components/drawers/Drawer';
 
 // Dependencies - Context
 import { useDialogContext } from './DialogContext';
@@ -22,7 +22,7 @@ export function DialogTrigger(properties: DialogTriggerProperties) {
 
     // Mobile
     if(dialogContext.isMobile) {
-        return <VaulDrawer.Trigger asChild>{properties.children}</VaulDrawer.Trigger>;
+        return <Drawer.Trigger>{properties.children}</Drawer.Trigger>;
     }
 
     // Desktop

@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { Drawer as VaulDrawer } from 'vaul';
+import { Drawer } from '@structure/source/components/drawers/Drawer';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Context
@@ -23,8 +23,15 @@ export interface DialogFooterProperties {
 export function DialogFooter(properties: DialogFooterProperties) {
     const dialogContext = useDialogContext();
 
-    // Mobile or Desktop close component
-    const DialogClose = dialogContext.isMobile ? VaulDrawer.Close : RadixDialog.Close;
+    // Determine the close button element
+    const closeButtonElement =
+        properties.closeButton !== true &&
+        properties.closeButton !== undefined &&
+        React.isValidElement(properties.closeButton) ? (
+            properties.closeButton
+        ) : (
+            <Button variant="A">Dismiss</Button>
+        );
 
     // Render the component
     return (
@@ -39,13 +46,13 @@ export function DialogFooter(properties: DialogFooterProperties) {
 
             {/* Dismiss Button */}
             {properties.closeButton !== undefined && properties.closeButton !== false && (
-                <DialogClose asChild>
-                    {properties.closeButton !== true && properties.closeButton !== undefined ? (
-                        properties.closeButton
+                <>
+                    {dialogContext.isMobile ? (
+                        <Drawer.Close>{closeButtonElement}</Drawer.Close>
                     ) : (
-                        <Button variant="A">Dismiss</Button>
+                        <RadixDialog.Close asChild>{closeButtonElement}</RadixDialog.Close>
                     )}
-                </DialogClose>
+                </>
             )}
         </div>
     );

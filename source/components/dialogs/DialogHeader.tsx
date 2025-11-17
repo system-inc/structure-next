@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { Drawer as VaulDrawer } from 'vaul';
+import { Drawer } from '@structure/source/components/drawers/Drawer';
 
 // Dependencies - Context
 import { useDialogContext } from './DialogContext';
@@ -21,25 +21,29 @@ export interface DialogHeaderProperties {
 export function DialogHeader(properties: DialogHeaderProperties) {
     const dialogContext = useDialogContext();
 
-    // Polymorphic DialogTitle based on mobile or desktop
-    const DialogTitle = dialogContext.isMobile ? VaulDrawer.Title : RadixDialog.Title;
+    // Render title content with proper wrapper
+    const titleContent =
+        typeof properties.children === 'string' ? (
+            <div className="font-medium">{properties.children}</div>
+        ) : (
+            properties.children
+        );
 
-    // Render the component
+    // Mobile: Use Drawer.Header
+    if(dialogContext.isMobile) {
+        return (
+            <Drawer.Header
+                className={mergeClassNames(dialogContext.dialogTheme.configuration.headerClasses, properties.className)}
+            >
+                {titleContent}
+            </Drawer.Header>
+        );
+    }
+
+    // Desktop: Radix Dialog Title
     return (
-        <div
-            className={mergeClassNames(
-                dialogContext.dialogTheme.configuration.headerClasses,
-                dialogContext.isMobile ? 'shrink-0 px-6 pt-6 pb-4' : '',
-                properties.className,
-            )}
-        >
-            {typeof properties.children === 'string' ? (
-                <DialogTitle asChild>
-                    <div className="font-medium">{properties.children}</div>
-                </DialogTitle>
-            ) : (
-                <DialogTitle asChild>{properties.children}</DialogTitle>
-            )}
+        <div className={mergeClassNames(dialogContext.dialogTheme.configuration.headerClasses, properties.className)}>
+            <RadixDialog.Title asChild>{titleContent}</RadixDialog.Title>
         </div>
     );
 }

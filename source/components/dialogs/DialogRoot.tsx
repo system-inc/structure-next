@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { Drawer as VaulDrawer } from 'vaul';
+import { Drawer } from '@structure/source/components/drawers/Drawer';
 import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Theme
@@ -94,27 +94,32 @@ export function DialogRoot(properties: DialogRootProperties) {
         [properties.open],
     );
 
-    // Polymorphic DialogClose based on mobile/desktop
-    const DialogClose = isMobile ? VaulDrawer.Close : RadixDialog.Close;
-
     // Render close button (auto close button in top right)
     function renderCloseButton(additionalClassName?: string) {
         if(properties.closeButton === undefined || properties.closeButton !== false) {
-            return (
-                <DialogClose asChild>
-                    {properties.closeButton !== true && properties.closeButton !== undefined ? (
-                        properties.closeButton
-                    ) : (
-                        <Button
-                            variant="Ghost"
-                            size="IconSmall"
-                            icon={XIcon}
-                            className={mergeClassNames(dialogTheme.configuration.closeClasses, additionalClassName)}
-                            aria-label="Close"
-                        />
-                    )}
-                </DialogClose>
-            );
+            // Determine the close button element
+            const closeButtonElement =
+                properties.closeButton !== true &&
+                properties.closeButton !== undefined &&
+                React.isValidElement(properties.closeButton) ? (
+                    properties.closeButton
+                ) : (
+                    <Button
+                        variant="Ghost"
+                        size="IconSmall"
+                        icon={XIcon}
+                        className={mergeClassNames(dialogTheme.configuration.closeClasses, additionalClassName)}
+                        aria-label="Close"
+                    />
+                );
+
+            // Mobile
+            if(isMobile) {
+                return <Drawer.Close>{closeButtonElement}</Drawer.Close>;
+            }
+
+            // Desktop
+            return <RadixDialog.Close asChild>{closeButtonElement}</RadixDialog.Close>;
         }
         return null;
     }
@@ -137,37 +142,22 @@ export function DialogRoot(properties: DialogRootProperties) {
     return (
         <DialogContext.Provider value={contextValue}>
             {isMobile ? (
-                // Mobile: Vaul Drawer (bottom sheet)
-                <VaulDrawer.Root open={open} onOpenChange={onOpenChange} shouldScaleBackground modal>
+                // Mobile: Drawer (bottom sheet)
+                <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground modal={properties.modal}>
                     {properties.trigger && <DialogTrigger>{properties.trigger}</DialogTrigger>}
-                    <VaulDrawer.Portal>
-                        <VaulDrawer.Overlay
+                    <Drawer.Portal>
+                        <Drawer.Overlay
                             className={mergeClassNames(
                                 dialogTheme.configuration.overlayClasses,
                                 properties.overlayClassName,
                             )}
                         />
-                        <VaulDrawer.Content
-                            className={mergeClassNames(
-                                'fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] w-full flex-col rounded-t-3xl border-t border--0 background--0',
-                                properties.className,
-                            )}
-                            onOpenAutoFocus={function (event) {
-                                if(properties.onOpenAutoFocus) {
-                                    properties.onOpenAutoFocus(event);
-                                }
-                                else {
-                                    event.preventDefault();
-                                    focusFirstFocusableElement(`[data-drawer-id="${dialogId}"]`);
-                                }
-                            }}
-                            data-drawer-id={dialogId}
-                        >
+                        <Drawer.Content className={properties.className} onOpenAutoFocus={properties.onOpenAutoFocus}>
                             {renderCloseButton('absolute top-4 right-4 z-10')}
                             {properties.children}
-                        </VaulDrawer.Content>
-                    </VaulDrawer.Portal>
-                </VaulDrawer.Root>
+                        </Drawer.Content>
+                    </Drawer.Portal>
+                </Drawer>
             ) : (
                 // Desktop: Radix Dialog (centered modal)
                 <RadixDialog.Root open={open} onOpenChange={onOpenChange} modal={properties.modal}>

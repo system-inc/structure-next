@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
-import { Drawer as VaulDrawer } from 'vaul';
+import { Drawer } from '@structure/source/components/drawers/Drawer';
 
 // Dependencies - Context
 import { useDialogContext } from './DialogContext';
@@ -20,7 +20,7 @@ export function DialogClose(properties: DialogCloseProperties) {
 
     // Mobile
     if(dialogContext.isMobile) {
-        return <VaulDrawer.Close asChild>{properties.children}</VaulDrawer.Close>;
+        return <Drawer.Close>{properties.children}</Drawer.Close>;
     }
 
     // Desktop
