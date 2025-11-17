@@ -24,7 +24,16 @@ export interface BadgeProperties extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
 }
 export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(
-    { variant: variantProperty, type: typeProperty, size: sizeProperty, icon, iconClassName, className, children, ...divProperties },
+    {
+        variant: variantProperty,
+        type: typeProperty,
+        size: sizeProperty,
+        icon,
+        iconClassName,
+        className,
+        children,
+        ...divProperties
+    },
     reference,
 ) {
     // Get theme from context and merge with structure theme
@@ -58,7 +67,9 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function 
     );
 
     // Render icon if provided, or status dot if type is Status
-    const renderedIcon = icon ? themeIcon(icon, iconClassName) : type === 'Status' ? (
+    const renderedIcon = icon ? (
+        themeIcon(icon, iconClassName)
+    ) : type === 'Status' ? (
         <div data-dot="true" className="size-1.5 shrink-0 rounded-full" />
     ) : null;
 
