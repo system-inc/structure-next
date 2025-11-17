@@ -16,6 +16,7 @@ import { focusFirstFocusableElement } from '@structure/source/utilities/react/Re
 // Component - DrawerContent
 export interface DrawerContentProperties {
     className?: string;
+    accessibilityDescription: string; // Required for accessibility, can be empty string if title is self-explanatory
     onOpenAutoFocus?: (event: Event) => void;
     onCloseAutoFocus?: (event: Event) => void;
     children?: React.ReactNode;
@@ -33,11 +34,10 @@ export function DrawerContent(properties: DrawerContentProperties) {
         properties.className,
     );
 
-    // Combine base content classes with side-specific content classes
-    const contentClasses = mergeClassNames(
-        drawerContext.drawerTheme.configuration.baseContentClasses,
-        sideTheme.contentClasses,
-    );
+    // Description element for accessibility
+    const accessibilityDescriptionElement = properties.accessibilityDescription ? (
+        <VaulDrawer.Description className="sr-only">{properties.accessibilityDescription}</VaulDrawer.Description>
+    ) : null;
 
     // Render the component
     return (
@@ -55,7 +55,8 @@ export function DrawerContent(properties: DrawerContentProperties) {
             onCloseAutoFocus={properties.onCloseAutoFocus}
             data-drawer-id={drawerContext.drawerId}
         >
-            <div className={contentClasses}>{properties.children}</div>
+            {accessibilityDescriptionElement}
+            {properties.children}
         </VaulDrawer.Content>
     );
 }

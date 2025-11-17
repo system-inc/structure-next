@@ -328,7 +328,7 @@ export function UsersRolesPage() {
             {/* Revoke Role Dialog */}
             <Dialog variant="A" open={revokeDialogOpen} onOpenChange={handleDialogClose}>
                 <Dialog.Header>{revokeSuccess ? 'Role Revoked' : 'Confirm Role Revocation'}</Dialog.Header>
-                <Dialog.Content>
+                <Dialog.Content accessibilityDescription="Remove assigned role from user account">
                     {revokeSuccess ? (
                         <p>The role has been successfully revoked.</p>
                     ) : (

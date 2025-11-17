@@ -21,7 +21,10 @@ export function FileCarouselDialog(properties: FileCarouselDialogProperties) {
             className=""
         >
             <Dialog.Header className="sr-only">File Carousel</Dialog.Header>
-            <Dialog.Content scrollAreaClassName="max-h-full">
+            <Dialog.Content
+                accessibilityDescription="View and navigate through attached files"
+                scrollAreaClassName="max-h-full"
+            >
                 <FileCarousel
                     className={properties.className}
                     files={properties.files}

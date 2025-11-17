@@ -38,7 +38,7 @@ export function AttachmentModal(properties: AttachmentModalProperties) {
     return (
         <Dialog variant="A" open={properties.open} onOpenChange={properties.onOpenChange}>
             <Dialog.Header>Upload Attachments</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="">
                 <InputFile
                     id={inputFileId}
                     files={uploadedFiles}

@@ -152,7 +152,11 @@ export function DialogRoot(properties: DialogRootProperties) {
                                 properties.overlayClassName,
                             )}
                         />
-                        <Drawer.Content className={properties.className} onOpenAutoFocus={properties.onOpenAutoFocus}>
+                        <Drawer.Content
+                            className={properties.className}
+                            accessibilityDescription="" // This will be rendered by Dialog.Content which will be returned in properties.children
+                            onOpenAutoFocus={properties.onOpenAutoFocus}
+                        >
                             {renderCloseButton('absolute top-4 right-4 z-10')}
                             {properties.children}
                         </Drawer.Content>

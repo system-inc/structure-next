@@ -43,7 +43,7 @@ export function AuthenticationDialog() {
             open={account.authenticationDialogSettings.open}
             onOpenChange={handleOpenChange}
         >
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="Authenticate to continue">
                 <Authentication className="" variant="Dialog" scope={account.authenticationDialogSettings.scope} />
             </Dialog.Content>
         </Dialog>

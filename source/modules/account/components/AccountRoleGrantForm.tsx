@@ -267,7 +267,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             {/* Grant Role Dialog */}
             <Dialog variant="A" open={grantDialogOpen} onOpenChange={setGrantDialogOpen}>
                 <Dialog.Header>Confirm Role Grant</Dialog.Header>
-                <Dialog.Content>
+                <Dialog.Content accessibilityDescription="Confirm role grant to user">
                     <>
                         <p>
                             Are you sure you want to grant the <b>{selectedRoleType}</b> role to{' '}

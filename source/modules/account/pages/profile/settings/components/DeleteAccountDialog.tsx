@@ -45,7 +45,7 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header>Delete Account</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="Permanently delete account and all data">
                 <div>
                     <h2 className="mb-4 text-lg font-semibold text-red-600">Delete Account</h2>
                     <p className="mb-4 text-sm content--1">

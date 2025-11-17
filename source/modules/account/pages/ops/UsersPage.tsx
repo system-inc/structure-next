@@ -338,7 +338,7 @@ export function UsersPage() {
             {/* Delete User Dialog */}
             <Dialog variant="A" open={deleteDialogOpen} onOpenChange={handleDialogClose}>
                 <Dialog.Header>{deleteSuccess ? 'User Deleted' : 'Confirm User Deletion'}</Dialog.Header>
-                <Dialog.Content>
+                <Dialog.Content accessibilityDescription="Permanently delete user account and all associated data">
                     {deleteSuccess ? (
                         <p>The user has been successfully deleted.</p>
                     ) : (

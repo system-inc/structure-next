@@ -76,7 +76,7 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
     return (
         <Dialog variant="A" {...properties} open={open} onOpenChange={onOpenChangeIntercept}>
             <Dialog.Header>Delete Post</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="Post deletion confirmation">
                 <div>
                     <p>Are you sure you want to delete this post?</p>
                 </div>

@@ -299,7 +299,7 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
             {/* Upload dialog */}
             <Dialog variant="A" open={dialogOpen} onOpenChange={handleDialogClose}>
                 <Dialog.Header>{dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}</Dialog.Header>
-                <Dialog.Content>{getDialogContent()}</Dialog.Content>
+                <Dialog.Content accessibilityDescription="">{getDialogContent()}</Dialog.Content>
             </Dialog>
         </>
     );

@@ -84,7 +84,7 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header>Help Us Improve</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="Submit feedback with email, issue type, and details">
                 <div className="">
                     {/* <div>Current URL: {urlPath}</div> */}
                     <p className="mb-5 text-sm">

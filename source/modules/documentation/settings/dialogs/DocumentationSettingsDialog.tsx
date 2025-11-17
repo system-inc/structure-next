@@ -50,7 +50,7 @@ export function DocumentationSettingsDialog(properties: DocumentationSettingsDia
     return (
         <Dialog variant="A" open={properties.isOpen} onOpenChange={properties.onClose}>
             <Dialog.Header>Set API Key</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="Configure API key for documentation access">
                 <Form
                     formInputs={[
                         <FormInputText

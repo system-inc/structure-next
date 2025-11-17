@@ -35,7 +35,7 @@ export function TeamPage() {
 
             <Dialog variant="A" trigger={<Button>Launch Dialog</Button>}>
                 <Dialog.Header>How are you doing?</Dialog.Header>
-                <Dialog.Content>I&apos;m doing great!</Dialog.Content>
+                <Dialog.Content accessibilityDescription="For screen reaaders">I&apos;m doing great!</Dialog.Content>
                 <Dialog.Footer>
                     <Dialog.Close>
                         <Button>Dismiss</Button>

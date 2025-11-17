@@ -1,3 +1,6 @@
+// Dependencies - Utilities
+import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+
 // Drawer theme types
 export type DrawerSide = 'Top' | 'Bottom' | 'Left' | 'Right';
 
@@ -5,19 +8,16 @@ export type DrawerSide = 'Top' | 'Bottom' | 'Left' | 'Right';
 export interface DrawerThemeConfiguration {
     configuration: {
         // Base classes for the drawer wrapper
-        baseWrapperClasses: string[];
-        // Base classes for the drawer content (scrollable area)
-        baseContentClasses: string[];
+        baseWrapperClasses: string;
         // Overlay classes
-        overlayClasses: string[];
+        overlayClasses: string;
         // Default variant
         defaultSide?: DrawerSide;
     };
     // Side variants (Top, Bottom, Left, Right)
     sides: {
         [K in DrawerSide]: {
-            wrapperClasses: string[];
-            contentClasses: string[];
+            wrapperClasses: string;
         };
     };
 }
@@ -25,35 +25,22 @@ export interface DrawerThemeConfiguration {
 // Default drawer theme
 export const drawerTheme: DrawerThemeConfiguration = {
     configuration: {
-        baseWrapperClasses: ['w-full', 'fixed', 'inset-x-0', 'h-auto', 'background--0', 'transition-colors', 'z-50'],
-        baseContentClasses: [
-            'h-min',
-            'relative',
-            'overflow-y-auto',
-            'overflow-x-clip',
-            'background--0',
-            'p-3',
-            'transition-colors',
-        ],
-        overlayClasses: ['fixed', 'inset-0', 'background--backdrop', 'transition-colors', 'z-40'],
+        baseWrapperClasses: mergeClassNames('fixed inset-x-0 h-auto w-full', 'background--0', 'z-50', 'flex flex-col'),
+        overlayClasses: mergeClassNames('fixed inset-0 z-40 background--backdrop'),
         defaultSide: 'Bottom',
     },
     sides: {
         Top: {
-            wrapperClasses: ['max-h-screen', 'top-12', 'inset-x-0'],
-            contentClasses: [],
+            wrapperClasses: 'max-h-screen top-12 inset-x-0',
         },
         Bottom: {
-            wrapperClasses: ['bottom-0', 'max-h-[80vh]', 'rounded-t-3xl', 'border-t', 'border--0'],
-            contentClasses: ['rounded-t-3xl', 'py-6', 'max-h-[80dvh]'],
+            wrapperClasses: 'bottom-0 max-h-[80vh] rounded-t-3xl border-t border--0',
         },
         Right: {
-            wrapperClasses: ['right-0', 'inset-y-0', 'h-screen', 'w-screen'],
-            contentClasses: [],
+            wrapperClasses: 'right-0 inset-y-0 h-screen w-screen',
         },
         Left: {
-            wrapperClasses: ['left-0', 'inset-y-0', 'h-screen', 'w-screen'],
-            contentClasses: [],
+            wrapperClasses: 'left-0 inset-y-0 h-screen w-screen',
         },
     },
 };

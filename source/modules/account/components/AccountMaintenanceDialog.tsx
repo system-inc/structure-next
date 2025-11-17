@@ -213,7 +213,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header className="sr-only">Verify Identity</Dialog.Header>
-            <Dialog.Content>{content}</Dialog.Content>
+            <Dialog.Content accessibilityDescription="">{content}</Dialog.Content>
         </Dialog>
     );
 }

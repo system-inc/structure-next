@@ -153,7 +153,7 @@ export function TableCell(properties: TableCellProperties) {
                     className={mergeClassNames('w-full text-sm md:max-w-4xl md:min-w-lg', longContent ? '' : '')}
                 >
                     <Dialog.Header>{properties.column?.title}</Dialog.Header>
-                    <Dialog.Content>{value}</Dialog.Content>
+                    <Dialog.Content accessibilityDescription="View full table cell content">{value}</Dialog.Content>
                     <Dialog.Footer closeButton>
                         <CopyButton variant="Ghost" size="Small" className="mr-3 pl-3" value={properties.value}>
                             Copy

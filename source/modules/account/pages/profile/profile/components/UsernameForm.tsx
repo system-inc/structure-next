@@ -141,7 +141,7 @@ export function UsernameForm() {
             {/* Confirmation Dialog */}
             <Dialog variant="A" open={isDialogOpen} onOpenChange={handleDialogClose}>
                 <Dialog.Header>{usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}</Dialog.Header>
-                <Dialog.Content>
+                <Dialog.Content accessibilityDescription="Update profile username">
                     {usernameUpdateSuccess ? (
                         <p className="">Your username has been successfully changed.</p>
                     ) : (

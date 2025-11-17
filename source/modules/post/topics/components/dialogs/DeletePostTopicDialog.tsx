@@ -64,7 +64,7 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header>Delete Post Topic</Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="Delete post topic confirmation">
                 <div>
                     <p>Are you sure you want to delete this post topic?</p>
                 </div>

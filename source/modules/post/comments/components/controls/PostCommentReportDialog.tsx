@@ -81,7 +81,7 @@ export function PostCommentReportDialog(properties: PostCommentReportDialogPrope
                     <div>Report &quot;{properties.ideaTitle}&quot;</div>
                 </div>
             </Dialog.Header>
-            <Dialog.Content>
+            <Dialog.Content accessibilityDescription="Report inappropriate content with reason and details">
                 <div>
                     {
                         // Error reporting
