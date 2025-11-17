@@ -11,6 +11,7 @@ import type { LinkThemeConfiguration } from '@structure/source/components/naviga
 import type { TabsThemeConfiguration } from '@structure/source/components/navigation/tabs/TabsTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
 import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
+import type { DrawerThemeConfiguration } from '@structure/source/components/drawers/DrawerTheme';
 import type { BadgeThemeConfiguration } from '@structure/source/components/badges/BadgeTheme';
 import type { NoticeThemeConfiguration } from '@structure/source/components/notices/NoticeTheme';
 import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
@@ -28,6 +29,7 @@ interface ComponentThemeContextValue {
     Tabs?: DeepPartialComponentTheme<TabsThemeConfiguration>;
     Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
     Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
+    Drawer?: DeepPartialComponentTheme<DrawerThemeConfiguration>;
     Badge?: DeepPartialComponentTheme<BadgeThemeConfiguration>;
     Notice?: DeepPartialComponentTheme<NoticeThemeConfiguration>;
     InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
