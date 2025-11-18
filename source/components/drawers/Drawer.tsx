@@ -4,7 +4,6 @@ import { DrawerTrigger } from './DrawerTrigger';
 import { DrawerClose } from './DrawerClose';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerBody } from './DrawerBody';
-import { DrawerContent } from './DrawerContent';
 import { DrawerFooter } from './DrawerFooter';
 import { DrawerOverlay } from './DrawerOverlay';
 import { DrawerPortal } from './DrawerPortal';
@@ -15,7 +14,6 @@ export const Drawer = Object.assign(DrawerRoot, {
     Close: DrawerClose,
     Header: DrawerHeader,
     Body: DrawerBody,
-    Content: DrawerContent,
     Footer: DrawerFooter,
     Overlay: DrawerOverlay,
     Portal: DrawerPortal,
@@ -27,7 +25,6 @@ export type { DrawerTriggerProperties } from './DrawerTrigger';
 export type { DrawerCloseProperties } from './DrawerClose';
 export type { DrawerHeaderProperties } from './DrawerHeader';
 export type { DrawerBodyProperties } from './DrawerBody';
-export type { DrawerContentProperties } from './DrawerContent';
 export type { DrawerFooterProperties } from './DrawerFooter';
 export type { DrawerOverlayProperties } from './DrawerOverlay';
 export type { DrawerPortalProperties } from './DrawerPortal';

@@ -16,7 +16,6 @@ import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtil
 import { DrawerContext, DrawerNestedContext, useIsNestedDrawer } from './DrawerContext';
 import { DrawerTrigger } from './DrawerTrigger';
 import { DrawerOverlay } from './DrawerOverlay';
-import { DrawerContent } from './DrawerContent';
 import { DrawerPortal } from './DrawerPortal';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerBody } from './DrawerBody';
@@ -24,6 +23,7 @@ import { DrawerFooter } from './DrawerFooter';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
+import { focusFirstFocusableElement } from '@structure/source/utilities/react/React';
 
 // Component - DrawerRoot
 export interface DrawerRootProperties {
@@ -124,6 +124,7 @@ export function DrawerRoot(properties: DrawerRootProperties) {
     // Render the component
     return (
         <DrawerContext.Provider value={contextValue}>
+            {/* Vaul Root - Controls drawer state and animations */}
             <DrawerRootComponent
                 direction={direction}
                 open={open}
@@ -132,15 +133,24 @@ export function DrawerRoot(properties: DrawerRootProperties) {
                 modal={properties.modal}
             >
                 <DrawerNestedContext.Provider value={{ value: isNestedDrawer ? 2 : 1 }}>
+                    {/* Optional trigger button */}
                     {properties.trigger && <DrawerTrigger>{properties.trigger}</DrawerTrigger>}
+
+                    {/* Portal - Renders drawer content outside the React tree */}
                     <DrawerPortal>
+                        {/* Overlay/backdrop */}
                         <DrawerOverlay
                             className={mergeClassNames(
                                 drawerTheme.configuration.overlayClasses,
                                 properties.overlayClassName,
                             )}
                         />
-                        <DrawerContent
+
+                        {/* Drawer Content - IMPORTANT: Called directly, not wrapped in a component
+                            Wrapping VaulDrawer.Content in a separate component breaks animations
+                            because the wrapper re-renders when state changes, interrupting Vaul's
+                            exit animation lifecycle. Vaul needs direct control over this element. */}
+                        <VaulDrawer.Content
                             className={mergeClassNames(
                                 drawerVariantClassNames({
                                     variant: variant,
@@ -148,11 +158,29 @@ export function DrawerRoot(properties: DrawerRootProperties) {
                                 }),
                                 properties.className,
                             )}
-                            accessibilityTitle={properties.accessibilityTitle}
-                            accessibilityDescription={properties.accessibilityDescription}
-                            onOpenAutoFocus={properties.onOpenAutoFocus}
+                            data-drawer-id={drawerId}
+                            onOpenAutoFocus={function (event) {
+                                // Custom focus handler or default behavior
+                                if(properties.onOpenAutoFocus) {
+                                    properties.onOpenAutoFocus(event);
+                                }
+                                else {
+                                    // Prevent default to avoid keeping focus on trigger button
+                                    // (which gets aria-hidden when drawer opens, causing a11y warnings)
+                                    event.preventDefault();
+                                    // Focus first focusable element inside drawer instead
+                                    focusFirstFocusableElement(`[data-drawer-id="${drawerId}"]`);
+                                }
+                            }}
                             onCloseAutoFocus={properties.onCloseAutoFocus}
                         >
+                            {/* Accessibility - Screen reader only title and description */}
+                            <VaulDrawer.Title className="sr-only">{properties.accessibilityTitle}</VaulDrawer.Title>
+                            <VaulDrawer.Description className="sr-only">
+                                {properties.accessibilityDescription}
+                            </VaulDrawer.Description>
+
+                            {/* Optional header section */}
                             {properties.header && (
                                 <DrawerHeader closeButton={properties.headerCloseButton}>
                                     {typeof properties.header === 'string' ? (
@@ -162,14 +190,20 @@ export function DrawerRoot(properties: DrawerRootProperties) {
                                     )}
                                 </DrawerHeader>
                             )}
+
+                            {/* Optional body section */}
                             {properties.body && <DrawerBody>{properties.body}</DrawerBody>}
+
+                            {/* Custom children (rendered between body and footer) */}
                             {properties.children}
+
+                            {/* Optional footer section (always rendered if no children provided) */}
                             {(properties.footer !== undefined || !properties.children) && (
                                 <DrawerFooter closeButton={properties.footerCloseButton}>
                                     {properties.footer}
                                 </DrawerFooter>
                             )}
-                        </DrawerContent>
+                        </VaulDrawer.Content>
                     </DrawerPortal>
                 </DrawerNestedContext.Provider>
             </DrawerRootComponent>
