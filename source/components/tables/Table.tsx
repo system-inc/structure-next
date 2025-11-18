@@ -470,7 +470,6 @@ export function Table(properties: TableProperties) {
                                 <Toggle
                                     icon={FunnelIcon}
                                     variant="A"
-                                    size="Base"
                                     tip="Toggle filters"
                                     tipProperties={{ side: 'right' }}
                                     isPressed={filtersEnabled}
