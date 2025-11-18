@@ -8,7 +8,7 @@ import React from 'react';
  * selectively override or extend structure's default component themes.
  */
 
-// Theme configuration structure for components with variants and sizes.
+// Theme configuration structure for components with variants and sizes/sides.
 export interface ComponentThemeConfiguration<
     TVariants extends Record<string, string> = Record<string, string>,
     TSizes extends Record<string, string> = Record<string, string>,
@@ -16,14 +16,16 @@ export interface ComponentThemeConfiguration<
 > {
     variants: TVariants;
     sizes?: TSizes; // Optional, not all components use sizes
+    sides?: TSizes; // Optional, some components use sides (like Drawer)
     configuration: TConfiguration;
 }
 
 // Deep partial type for component theme configurations - allows partial overrides at every level.
-// Also allows adding new variants/sizes beyond what's defined in the base structure theme.
+// Also allows adding new variants/sizes/sides beyond what's defined in the base structure theme.
 export type DeepPartialComponentTheme<T extends ComponentThemeConfiguration> = {
     variants?: Partial<T['variants']> & Record<string, string>; // Allow additional custom variants
     sizes?: Partial<T['sizes']> & Record<string, string>; // Allow additional custom sizes
+    sides?: Partial<T['sides']> & Record<string, string>; // Allow additional custom sides (for Drawer)
     configuration?: Partial<T['configuration']>;
 };
 
@@ -33,6 +35,7 @@ export type DeepPartialComponentTheme<T extends ComponentThemeConfiguration> = {
  * Strategy:
  * - **Variants**: Hard override (project completely replaces variant classNames)
  * - **Sizes**: Hard override (project completely replaces size classNames)
+ * - **Sides**: Hard override (project completely replaces side classNames, used by Drawer)
  * - **Configuration**: Shallow merge (project selectively overrides config properties)
  *
  * This prevents Tailwind class conflicts (e.g., bg-blue-600 vs bg-purple-600 in same variant)
@@ -86,6 +89,15 @@ export function mergeComponentTheme<T extends ComponentThemeConfiguration>(
             sizes: {
                 ...structureTheme.sizes,
                 ...projectTheme.sizes,
+            },
+        }),
+
+        // Hard override: Sides completely replace (no className merging)
+        // Only merge if sides exist on structure theme (used by Drawer)
+        ...(structureTheme.sides && {
+            sides: {
+                ...structureTheme.sides,
+                ...projectTheme.sides,
             },
         }),
 

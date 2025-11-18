@@ -1,8 +1,10 @@
 // Dependencies - Theme
 import { Theme } from '@structure/source/theme/ThemeTypes';
-import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
-import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
+import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
+import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
+import type { DrawerThemeConfiguration } from '@structure/source/components/drawers/DrawerTheme';
 
 // Types
 interface ApiService {
@@ -70,9 +72,10 @@ export interface StructureSettingsInterface {
     theme?: {
         defaultTheme: Theme;
         components?: {
-            Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
             Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
-            // Future: Input, Card, etc.
+            Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
+            Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
+            Drawer?: DeepPartialComponentTheme<DrawerThemeConfiguration>;
         };
     };
     assets: {

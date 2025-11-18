@@ -8,7 +8,7 @@
  */
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Base styles shared across all popovers
 export const basePopoverClassNames = mergeClassNames(
