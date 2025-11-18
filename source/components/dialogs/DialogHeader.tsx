@@ -4,11 +4,14 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import * as RadixDialog from '@radix-ui/react-dialog';
-import { Drawer } from '@structure/source/components/drawers/Drawer';
+import { Button } from '@structure/source/components/buttons/Button';
+import { DialogClose } from './DialogClose';
 
 // Dependencies - Context
 import { useDialogContext } from './DialogContext';
+
+// Dependencies - Assets
+import { XIcon } from '@phosphor-icons/react';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -16,34 +19,42 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 // Component - DialogHeader
 export interface DialogHeaderProperties {
     className?: string;
+    closeButton?: boolean | React.ReactElement;
     children: React.ReactNode;
 }
 export function DialogHeader(properties: DialogHeaderProperties) {
     const dialogContext = useDialogContext();
 
-    // Render title content with proper wrapper
-    const titleContent =
-        typeof properties.children === 'string' ? (
-            <div className="font-medium">{properties.children}</div>
-        ) : (
-            properties.children
-        );
+    // Render close button
+    function renderCloseButton() {
+        // Default to true if undefined
+        if(properties.closeButton === undefined || properties.closeButton !== false) {
+            // Determine the close button element
+            const closeButtonElement =
+                properties.closeButton !== true &&
+                properties.closeButton !== undefined &&
+                React.isValidElement(properties.closeButton) ? (
+                    properties.closeButton
+                ) : (
+                    <Button
+                        variant="Ghost"
+                        size="IconSmall"
+                        icon={XIcon}
+                        className={dialogContext.dialogTheme.configuration.closeClasses}
+                        aria-label="Close"
+                    />
+                );
 
-    // Mobile: Use Drawer.Header
-    if(dialogContext.isMobile) {
-        return (
-            <Drawer.Header
-                className={mergeClassNames(dialogContext.dialogTheme.configuration.headerClasses, properties.className)}
-            >
-                {titleContent}
-            </Drawer.Header>
-        );
+            return <DialogClose>{closeButtonElement}</DialogClose>;
+        }
+        return null;
     }
 
-    // Desktop: Radix Dialog Title
+    // Render the component
     return (
         <div className={mergeClassNames(dialogContext.dialogTheme.configuration.headerClasses, properties.className)}>
-            <RadixDialog.Title asChild>{titleContent}</RadixDialog.Title>
+            {renderCloseButton()}
+            {properties.children}
         </div>
     );
 }

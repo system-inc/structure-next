@@ -36,9 +36,15 @@ export function AttachmentModal(properties: AttachmentModalProperties) {
 
     // Render the component
     return (
-        <Dialog variant="A" open={properties.open} onOpenChange={properties.onOpenChange}>
+        <Dialog
+            variant="A"
+            open={properties.open}
+            onOpenChange={properties.onOpenChange}
+            accessibilityTitle="Upload Attachments"
+            accessibilityDescription="Upload files to attach to your content"
+        >
             <Dialog.Header>Upload Attachments</Dialog.Header>
-            <Dialog.Content accessibilityDescription="">
+            <Dialog.Body>
                 <InputFile
                     id={inputFileId}
                     files={uploadedFiles}
@@ -46,7 +52,7 @@ export function AttachmentModal(properties: AttachmentModalProperties) {
                     accept={['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/json']}
                     multiple={true}
                 />
-            </Dialog.Content>
+            </Dialog.Body>
             <Dialog.Footer>
                 <div className="flex justify-end gap-2">
                     <Button variant="Ghost" onClick={handleClose}>

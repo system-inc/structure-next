@@ -16,21 +16,17 @@ export function FileCarouselDialog(properties: FileCarouselDialogProperties) {
         <Dialog
             variant="A"
             size="FullScreen"
-            open={properties.open}
-            onOpenChange={properties.onOpenChange}
-            className=""
-        >
-            <Dialog.Header className="sr-only">File Carousel</Dialog.Header>
-            <Dialog.Content
-                accessibilityDescription="View and navigate through attached files"
-                scrollAreaClassName="max-h-full"
-            >
+            accessibilityTitle="File Carousel"
+            accessibilityDescription="View and navigate through attached files"
+            body={
                 <FileCarousel
                     className={properties.className}
                     files={properties.files}
                     startIndex={properties.startIndex}
                 />
-            </Dialog.Content>
-        </Dialog>
+            }
+            open={properties.open}
+            onOpenChange={properties.onOpenChange}
+        />
     );
 }

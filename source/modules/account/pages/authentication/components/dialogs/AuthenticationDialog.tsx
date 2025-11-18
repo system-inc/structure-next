@@ -40,12 +40,11 @@ export function AuthenticationDialog() {
         <Dialog
             variant="A"
             className="p-12"
+            accessibilityTitle="Authentication Required"
+            accessibilityDescription="Authenticate to continue"
             open={account.authenticationDialogSettings.open}
             onOpenChange={handleOpenChange}
-        >
-            <Dialog.Content accessibilityDescription="Authenticate to continue">
-                <Authentication className="" variant="Dialog" scope={account.authenticationDialogSettings.scope} />
-            </Dialog.Content>
-        </Dialog>
+            body={<Authentication className="" variant="Dialog" scope={account.authenticationDialogSettings.scope} />}
+        />
     );
 }

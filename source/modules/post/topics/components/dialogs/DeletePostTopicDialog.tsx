@@ -11,7 +11,8 @@ import { Button } from '@structure/source/components/buttons/Button';
 import { usePostTopicDeleteRequest } from '@structure/source/modules/post/topics/hooks/usePostTopicDeleteRequest';
 
 // Component - DeletePostTopicDialog
-export interface DeletePostTopicDialogProperties extends DialogProperties {
+export interface DeletePostTopicDialogProperties
+    extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
     postTopicId: string;
 }
 export function DeletePostTopicDialog(properties: DeletePostTopicDialogProperties) {
@@ -60,15 +61,17 @@ export function DeletePostTopicDialog(properties: DeletePostTopicDialogPropertie
             variant="A"
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
+            accessibilityTitle="Delete Post Topic"
+            accessibilityDescription="Delete post topic confirmation"
             open={open}
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header>Delete Post Topic</Dialog.Header>
-            <Dialog.Content accessibilityDescription="Delete post topic confirmation">
+            <Dialog.Body>
                 <div>
                     <p>Are you sure you want to delete this post topic?</p>
                 </div>
-            </Dialog.Content>
+            </Dialog.Body>
             <Dialog.Footer>
                 <Button
                     variant="Destructive"

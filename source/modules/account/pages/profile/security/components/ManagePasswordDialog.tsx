@@ -8,7 +8,8 @@ import { DialogProperties, Dialog } from '@structure/source/components/dialogs/D
 import { ManagePasswordForm } from '@structure/source/modules/account/pages/profile/security/components/ManagePasswordForm';
 
 // Component - ManagePasswordDialog
-export interface ManagePasswordDialogProperties extends DialogProperties {
+export interface ManagePasswordDialogProperties
+    extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
     accountHasPasswordSet: boolean;
 }
 export function ManagePasswordDialog(properties: ManagePasswordDialogProperties) {
@@ -59,11 +60,13 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
             className="p-6"
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
+            accessibilityTitle={properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
+            accessibilityDescription="Manage your account password"
             open={open}
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header>{properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}</Dialog.Header>
-            <Dialog.Content accessibilityDescription="Manage your account password">
+            <Dialog.Body>
                 {showForm ? (
                     <ManagePasswordForm
                         accountHasPasswordSet={properties.accountHasPasswordSet}
@@ -74,7 +77,7 @@ export function ManagePasswordDialog(properties: ManagePasswordDialogProperties)
                 ) : (
                     <div style={{ minHeight: '200px' }} />
                 )}
-            </Dialog.Content>
+            </Dialog.Body>
         </Dialog>
     );
 }

@@ -21,7 +21,8 @@ import { AuthenticationSessionStatus } from '@structure/source/api/graphql/Graph
 // 1. Check if user is already authenticated for account maintenance
 // 2. If not, prompt for authentication (password or email verification)
 // 3. Once authenticated, execute the sensitive operation
-export interface AccountMaintenanceDialogProperties extends DialogProperties {
+export interface AccountMaintenanceDialogProperties
+    extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
     actionText: string; // Describes the action requiring authentication (e.g., "change your password")
     onAuthenticated: () => void; // Callback executed after successful authentication
 }
@@ -207,13 +208,13 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
         <Dialog
             variant="A"
             className="max-w-md"
+            accessibilityTitle="Verify Identity"
+            accessibilityDescription="Verify your identity to perform this sensitive account operation"
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
             open={open}
             onOpenChange={onOpenChangeIntercept}
-        >
-            <Dialog.Header className="sr-only">Verify Identity</Dialog.Header>
-            <Dialog.Content accessibilityDescription="">{content}</Dialog.Content>
-        </Dialog>
+            body={content}
+        />
     );
 }

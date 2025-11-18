@@ -18,7 +18,8 @@ import { usePostReportCreateRequest } from '@structure/source/modules/post/repor
 import FlagIcon from '@structure/assets/icons/interface/FlagIcon.svg';
 
 // Component - PostReportDialog
-export interface PostReportDialogProperties extends DialogProperties {
+export interface PostReportDialogProperties
+    extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
     ideaId: string;
     ideaTitle: string;
 }
@@ -72,6 +73,8 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
             variant="A"
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
+            accessibilityTitle={`Report "${properties.ideaTitle}"`}
+            accessibilityDescription="Report inappropriate content with reason and details"
             open={open}
             onOpenChange={onOpenChangeIntercept}
         >
@@ -81,7 +84,7 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
                     <div>Report &quot;{properties.ideaTitle}&quot;</div>
                 </div>
             </Dialog.Header>
-            <Dialog.Content accessibilityDescription="Report inappropriate content with reason and details">
+            <Dialog.Body>
                 <div>
                     {
                         // Error reporting
@@ -191,7 +194,7 @@ export function PostReportDialog(properties: PostReportDialogProperties) {
                         )
                     }
                 </div>
-            </Dialog.Content>
+            </Dialog.Body>
         </Dialog>
     );
 }

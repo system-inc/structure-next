@@ -6,7 +6,6 @@ import React from 'react';
 // Dependencies - Main Components
 import * as RadixDialog from '@radix-ui/react-dialog';
 import { Drawer } from '@structure/source/components/drawers/Drawer';
-import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Theme
 import { dialogTheme as structureDialogTheme } from './DialogTheme';
@@ -17,9 +16,9 @@ import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtil
 // Dependencies - Context
 import { DialogContext } from './DialogContext';
 import { DialogTrigger } from './DialogTrigger';
-
-// Dependencies - Assets
-import { XIcon } from '@phosphor-icons/react';
+import { DialogHeader } from './DialogHeader';
+import { DialogBody } from './DialogBody';
+import { DialogFooter } from './DialogFooter';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
@@ -27,6 +26,10 @@ import { useIsMobile, focusFirstFocusableElement } from '@structure/source/utili
 
 // Component - DialogRoot
 export interface DialogRootProperties {
+    // Accessibility (REQUIRED)
+    accessibilityTitle: string;
+    accessibilityDescription: string;
+
     // Container
     className?: string;
     overlayClassName?: string;
@@ -43,11 +46,17 @@ export interface DialogRootProperties {
     position?: DialogPosition;
     size?: DialogSize;
 
-    // Auto close button
-    closeButton?: boolean | React.ReactNode; // Auto X in top right
+    // Convenience structure (optional)
+    header?: React.ReactNode; // If string, wrapped in <div className="font-medium">
+    body?: React.ReactNode;
+    footer?: React.ReactNode;
+
+    // Close buttons (default true)
+    headerCloseButton?: boolean | React.ReactElement;
+    footerCloseButton?: boolean | React.ReactElement;
 
     // Compound components
-    children?: React.ReactNode; // Optional to allow extension via compound components
+    children?: React.ReactNode; // Rendered between body and footer
 }
 export function DialogRoot(properties: DialogRootProperties) {
     // Get component theme from context
@@ -94,36 +103,6 @@ export function DialogRoot(properties: DialogRootProperties) {
         [properties.open],
     );
 
-    // Render close button (auto close button in top right)
-    function renderCloseButton(additionalClassName?: string) {
-        if(properties.closeButton === undefined || properties.closeButton !== false) {
-            // Determine the close button element
-            const closeButtonElement =
-                properties.closeButton !== true &&
-                properties.closeButton !== undefined &&
-                React.isValidElement(properties.closeButton) ? (
-                    properties.closeButton
-                ) : (
-                    <Button
-                        variant="Ghost"
-                        size="IconSmall"
-                        icon={XIcon}
-                        className={mergeClassNames(dialogTheme.configuration.closeClasses, additionalClassName)}
-                        aria-label="Close"
-                    />
-                );
-
-            // Mobile
-            if(isMobile) {
-                return <Drawer.Close>{closeButtonElement}</Drawer.Close>;
-            }
-
-            // Desktop
-            return <RadixDialog.Close asChild>{closeButtonElement}</RadixDialog.Close>;
-        }
-        return null;
-    }
-
     // Context value for compound components
     const contextValue = {
         open,
@@ -140,10 +119,16 @@ export function DialogRoot(properties: DialogRootProperties) {
 
     // Render the component
     return (
-        <DialogContext.Provider value={contextValue}>
+        <DialogContext.Provider value={contextValue} key={isMobile ? 'mobile-drawer' : 'desktop-dialog'}>
             {isMobile ? (
                 // Mobile: Drawer (bottom sheet)
-                <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground modal={properties.modal}>
+                <Drawer
+                    open={open}
+                    onOpenChange={onOpenChange}
+                    shouldScaleBackground
+                    modal={properties.modal}
+                    variant={variant}
+                >
                     {properties.trigger && <DialogTrigger>{properties.trigger}</DialogTrigger>}
                     <Drawer.Portal>
                         <Drawer.Overlay
@@ -154,11 +139,24 @@ export function DialogRoot(properties: DialogRootProperties) {
                         />
                         <Drawer.Content
                             className={properties.className}
-                            accessibilityDescription="" // This will be rendered by Dialog.Content which will be returned in properties.children
+                            accessibilityDescription={properties.accessibilityDescription}
+                            accessibilityTitle={properties.accessibilityTitle}
                             onOpenAutoFocus={properties.onOpenAutoFocus}
                         >
-                            {renderCloseButton('absolute top-4 right-4 z-10')}
+                            {properties.header && (
+                                <DialogHeader closeButton={properties.headerCloseButton}>
+                                    {typeof properties.header === 'string' ? (
+                                        <div className="font-medium">{properties.header}</div>
+                                    ) : (
+                                        properties.header
+                                    )}
+                                </DialogHeader>
+                            )}
+                            {properties.body && <DialogBody>{properties.body}</DialogBody>}
                             {properties.children}
+                            {(properties.footer !== undefined || !properties.children) && (
+                                <DialogFooter closeButton={properties.footerCloseButton}>{properties.footer}</DialogFooter>
+                            )}
                         </Drawer.Content>
                     </Drawer.Portal>
                 </Drawer>
@@ -193,8 +191,24 @@ export function DialogRoot(properties: DialogRootProperties) {
                             }}
                             data-dialog-id={dialogId}
                         >
-                            {renderCloseButton()}
+                            <RadixDialog.Title className="sr-only">{properties.accessibilityTitle}</RadixDialog.Title>
+                            <RadixDialog.Description className="sr-only">
+                                {properties.accessibilityDescription}
+                            </RadixDialog.Description>
+                            {properties.header && (
+                                <DialogHeader closeButton={properties.headerCloseButton}>
+                                    {typeof properties.header === 'string' ? (
+                                        <div className="font-medium">{properties.header}</div>
+                                    ) : (
+                                        properties.header
+                                    )}
+                                </DialogHeader>
+                            )}
+                            {properties.body && <DialogBody>{properties.body}</DialogBody>}
                             {properties.children}
+                            {(properties.footer !== undefined || !properties.children) && (
+                                <DialogFooter closeButton={properties.footerCloseButton}>{properties.footer}</DialogFooter>
+                            )}
                         </RadixDialog.Content>
                     </RadixDialog.Portal>
                 </RadixDialog.Root>

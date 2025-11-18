@@ -336,9 +336,15 @@ export function UsersPage() {
             </div>
 
             {/* Delete User Dialog */}
-            <Dialog variant="A" open={deleteDialogOpen} onOpenChange={handleDialogClose}>
+            <Dialog
+                variant="A"
+                accessibilityTitle={deleteSuccess ? 'User Deleted' : 'Confirm User Deletion'}
+                accessibilityDescription="Permanently delete user account and all associated data"
+                open={deleteDialogOpen}
+                onOpenChange={handleDialogClose}
+            >
                 <Dialog.Header>{deleteSuccess ? 'User Deleted' : 'Confirm User Deletion'}</Dialog.Header>
-                <Dialog.Content accessibilityDescription="Permanently delete user account and all associated data">
+                <Dialog.Body>
                     {deleteSuccess ? (
                         <p>The user has been successfully deleted.</p>
                     ) : (
@@ -356,7 +362,7 @@ export function UsersPage() {
                             )}
                         </>
                     )}
-                </Dialog.Content>
+                </Dialog.Body>
                 <Dialog.Footer>
                     {deleteSuccess ? (
                         <Button onClick={handleDialogClose}>Close</Button>

@@ -326,9 +326,15 @@ export function UsersRolesPage() {
             </div>
 
             {/* Revoke Role Dialog */}
-            <Dialog variant="A" open={revokeDialogOpen} onOpenChange={handleDialogClose}>
+            <Dialog
+                variant="A"
+                accessibilityTitle={revokeSuccess ? 'Role Revoked' : 'Confirm Role Revocation'}
+                accessibilityDescription="Remove assigned role from user account"
+                open={revokeDialogOpen}
+                onOpenChange={handleDialogClose}
+            >
                 <Dialog.Header>{revokeSuccess ? 'Role Revoked' : 'Confirm Role Revocation'}</Dialog.Header>
-                <Dialog.Content accessibilityDescription="Remove assigned role from user account">
+                <Dialog.Body>
                     {revokeSuccess ? (
                         <p>The role has been successfully revoked.</p>
                     ) : (
@@ -346,7 +352,7 @@ export function UsersRolesPage() {
                             )}
                         </>
                     )}
-                </Dialog.Content>
+                </Dialog.Body>
                 <Dialog.Footer>
                     {revokeSuccess ? (
                         <Button onClick={handleDialogClose}>Close</Button>

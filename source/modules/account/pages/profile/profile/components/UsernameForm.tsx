@@ -139,9 +139,15 @@ export function UsernameForm() {
             />
 
             {/* Confirmation Dialog */}
-            <Dialog variant="A" open={isDialogOpen} onOpenChange={handleDialogClose}>
+            <Dialog
+                variant="A"
+                accessibilityTitle={usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}
+                accessibilityDescription="Update profile username"
+                open={isDialogOpen}
+                onOpenChange={handleDialogClose}
+            >
                 <Dialog.Header>{usernameUpdateSuccess ? 'Username Updated' : 'Confirm Username Change'}</Dialog.Header>
-                <Dialog.Content accessibilityDescription="Update profile username">
+                <Dialog.Body>
                     {usernameUpdateSuccess ? (
                         <p className="">Your username has been successfully changed.</p>
                     ) : (
@@ -160,7 +166,7 @@ export function UsernameForm() {
                             )}
                         </>
                     )}
-                </Dialog.Content>
+                </Dialog.Body>
                 <Dialog.Footer>
                     {usernameUpdateSuccess ? (
                         <Button onClick={handleDialogClose}>Close</Button>

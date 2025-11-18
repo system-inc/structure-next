@@ -265,9 +265,15 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
             })}
 
             {/* Grant Role Dialog */}
-            <Dialog variant="A" open={grantDialogOpen} onOpenChange={setGrantDialogOpen}>
+            <Dialog
+                variant="A"
+                accessibilityTitle="Confirm Role Grant"
+                accessibilityDescription="Confirm role grant to user"
+                open={grantDialogOpen}
+                onOpenChange={setGrantDialogOpen}
+            >
                 <Dialog.Header>Confirm Role Grant</Dialog.Header>
-                <Dialog.Content accessibilityDescription="Confirm role grant to user">
+                <Dialog.Body>
                     <>
                         <p>
                             Are you sure you want to grant the <b>{selectedRoleType}</b> role to{' '}
@@ -281,7 +287,7 @@ export function AccountRoleGrantForm(properties: { onRoleGranted?: () => void })
                             />
                         )}
                     </>
-                </Dialog.Content>
+                </Dialog.Body>
                 <Dialog.Footer>
                     <div className="flex justify-end space-x-2">
                         <Button onClick={() => setGrantDialogOpen(false)}>Cancel</Button>

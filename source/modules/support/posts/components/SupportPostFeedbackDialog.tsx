@@ -23,7 +23,7 @@ import { FormInputText } from '@structure/source/components/forms/FormInputText'
 // import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Component - SupportPostFeedbackDialog
-export type SupportPostFeedbackDialogProperties = DialogProperties;
+export type SupportPostFeedbackDialogProperties = Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'>;
 export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
@@ -80,11 +80,13 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
             variant="A"
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
+            accessibilityTitle="Help Us Improve"
+            accessibilityDescription="Submit feedback with email, issue type, and details"
             open={open}
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header>Help Us Improve</Dialog.Header>
-            <Dialog.Content accessibilityDescription="Submit feedback with email, issue type, and details">
+            <Dialog.Body>
                 <div className="">
                     {/* <div>Current URL: {urlPath}</div> */}
                     <p className="mb-5 text-sm">
@@ -128,7 +130,7 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
                         required={true}
                     />
                 </div>
-            </Dialog.Content>
+            </Dialog.Body>
             <Dialog.Footer>
                 <Button
                 // isLoading={chatConversationUpdateMutationState.loading}

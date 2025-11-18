@@ -151,9 +151,11 @@ export function TableCell(properties: TableCellProperties) {
                     variant="A"
                     trigger={<div className="w-full truncate">{properties.value}</div>}
                     className={mergeClassNames('w-full text-sm md:max-w-4xl md:min-w-lg', longContent ? '' : '')}
+                    accessibilityTitle={properties.column?.title || 'Cell Content'}
+                    accessibilityDescription="View full table cell content"
                 >
                     <Dialog.Header>{properties.column?.title}</Dialog.Header>
-                    <Dialog.Content accessibilityDescription="View full table cell content">{value}</Dialog.Content>
+                    <Dialog.Body>{value}</Dialog.Body>
                     <Dialog.Footer closeButton>
                         <CopyButton variant="Ghost" size="Small" className="mr-3 pl-3" value={properties.value}>
                             Copy

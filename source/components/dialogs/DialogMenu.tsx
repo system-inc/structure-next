@@ -76,9 +76,10 @@ export function DialogMenu(properties: DialogMenuProperties) {
             open={open}
             onOpenChange={setOpen}
             onOpenAutoFocus={onOpenAutoFocus}
-            closeButton={false}
+            accessibilityTitle="Menu Search"
+            accessibilityDescription="Search and navigate through menu items"
         >
-            <Dialog.Content accessibilityDescription="Search and navigate through menu items">{menu}</Dialog.Content>
+            <Dialog.Body>{menu}</Dialog.Body>
         </Dialog>
     );
 }

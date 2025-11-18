@@ -48,9 +48,15 @@ export function DocumentationSettingsDialog(properties: DocumentationSettingsDia
 
     // Render the component
     return (
-        <Dialog variant="A" open={properties.isOpen} onOpenChange={properties.onClose}>
+        <Dialog
+            variant="A"
+            accessibilityTitle="Set API Key"
+            accessibilityDescription="Configure API key for documentation access"
+            open={properties.isOpen}
+            onOpenChange={properties.onClose}
+        >
             <Dialog.Header>Set API Key</Dialog.Header>
-            <Dialog.Content accessibilityDescription="Configure API key for documentation access">
+            <Dialog.Body>
                 <Form
                     formInputs={[
                         <FormInputText
@@ -69,7 +75,7 @@ export function DocumentationSettingsDialog(properties: DocumentationSettingsDia
                     }}
                     onSubmit={handleSubmit}
                 />
-            </Dialog.Content>
+            </Dialog.Body>
         </Dialog>
     );
 }

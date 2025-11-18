@@ -297,10 +297,19 @@ export function ProfileImageUploader(properties: ProfileImageUploaderProperties)
             </div>
 
             {/* Upload dialog */}
-            <Dialog variant="A" open={dialogOpen} onOpenChange={handleDialogClose}>
-                <Dialog.Header>{dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}</Dialog.Header>
-                <Dialog.Content accessibilityDescription="">{getDialogContent()}</Dialog.Content>
-            </Dialog>
+            <Dialog
+                variant="A"
+                accessibilityTitle={dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}
+                accessibilityDescription={
+                    dialogMode === 'select'
+                        ? 'Upload or remove your profile picture'
+                        : 'Crop and adjust your profile picture'
+                }
+                open={dialogOpen}
+                onOpenChange={handleDialogClose}
+                header={dialogMode === 'select' ? 'Profile Picture' : 'Crop Profile Picture'}
+                body={getDialogContent()}
+            />
         </>
     );
 }

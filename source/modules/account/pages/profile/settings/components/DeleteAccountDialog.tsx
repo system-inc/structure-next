@@ -9,7 +9,7 @@ import { DialogProperties, Dialog } from '@structure/source/components/dialogs/D
 import { DeleteAccountForm } from '@structure/source/modules/account/pages/profile/settings/components/DeleteAccountForm';
 
 // Component - DeleteAccountDialog
-export type DeleteAccountDialogProperties = DialogProperties;
+export type DeleteAccountDialogProperties = Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'>;
 export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);
@@ -41,11 +41,13 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
             className="p-6"
             {...properties}
             // Spread these properties after all properties to ensure they are not overwritten
+            accessibilityTitle="Delete Account"
+            accessibilityDescription="Permanently delete account and all data"
             open={open}
             onOpenChange={onOpenChangeIntercept}
         >
             <Dialog.Header>Delete Account</Dialog.Header>
-            <Dialog.Content accessibilityDescription="Permanently delete account and all data">
+            <Dialog.Body>
                 <div>
                     <h2 className="mb-4 text-lg font-semibold text-red-600">Delete Account</h2>
                     <p className="mb-4 text-sm content--1">
@@ -57,7 +59,7 @@ export function DeleteAccountDialog(properties: DeleteAccountDialogProperties) {
                         }}
                     />
                 </div>
-            </Dialog.Content>
+            </Dialog.Body>
         </Dialog>
     );
 }

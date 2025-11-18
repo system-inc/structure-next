@@ -12,7 +12,8 @@ import { networkService, gql } from '@structure/source/services/network/NetworkS
 import { usePostDeleteRequest } from '@structure/source/modules/post/hooks/usePostDeleteRequest';
 
 // Component - DeletePostDialog
-export interface DeletePostDialogProperties extends DialogProperties {
+export interface DeletePostDialogProperties
+    extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
     postIdentifier: string;
 }
 export function DeletePostDialog(properties: DeletePostDialogProperties) {
@@ -74,13 +75,20 @@ export function DeletePostDialog(properties: DeletePostDialogProperties) {
 
     // Render the component
     return (
-        <Dialog variant="A" {...properties} open={open} onOpenChange={onOpenChangeIntercept}>
+        <Dialog
+            variant="A"
+            {...properties}
+            accessibilityTitle="Delete Post"
+            accessibilityDescription="Post deletion confirmation"
+            open={open}
+            onOpenChange={onOpenChangeIntercept}
+        >
             <Dialog.Header>Delete Post</Dialog.Header>
-            <Dialog.Content accessibilityDescription="Post deletion confirmation">
+            <Dialog.Body>
                 <div>
                     <p>Are you sure you want to delete this post?</p>
                 </div>
-            </Dialog.Content>
+            </Dialog.Body>
             <Dialog.Footer>
                 <Button
                     variant="Destructive"
