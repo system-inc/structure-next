@@ -189,12 +189,10 @@ export function getStringFromReactNode(node: React.ReactNode): string | undefine
 }
 
 // Hook to detect mobile viewport (max-width: 768px)
-// Initializes with correct value to avoid layout shift
+// Always starts with false for SSR safety, then updates to actual viewport after hydration
 export function useIsMobile(): boolean {
-    const [isMobile, setIsMobile] = React.useState(function () {
-        // Initialize on mount with correct value
-        return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-    });
+    // Always start with false to prevent SSR hydration mismatches
+    const [isMobile, setIsMobile] = React.useState(false);
 
     // Effect to update on viewport size changes
     React.useEffect(function () {
