@@ -24,17 +24,15 @@ export function DrawerFooter(properties: DrawerFooterProperties) {
 
     // Render close button
     function renderCloseButton() {
-        // Default to true if undefined
-        if(properties.closeButton === undefined || properties.closeButton !== false) {
+        // Default to false in composition mode (user has full control)
+        // Convenience mode explicitly passes true via DrawerRoot
+        if(properties.closeButton === true || React.isValidElement(properties.closeButton)) {
             // Determine the close button element
-            const closeButtonElement =
-                properties.closeButton !== true &&
-                properties.closeButton !== undefined &&
-                React.isValidElement(properties.closeButton) ? (
-                    properties.closeButton
-                ) : (
-                    <Button variant="A">Dismiss</Button>
-                );
+            const closeButtonElement = React.isValidElement(properties.closeButton) ? (
+                properties.closeButton
+            ) : (
+                <Button variant="A">Dismiss</Button>
+            );
 
             return <DrawerClose>{closeButtonElement}</DrawerClose>;
         }
