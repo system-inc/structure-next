@@ -128,8 +128,10 @@ export function DialogRoot(properties: DialogRootProperties) {
                     shouldScaleBackground
                     modal={properties.modal}
                     variant={variant}
+                    accessibilityTitle={properties.accessibilityTitle}
+                    accessibilityDescription={properties.accessibilityDescription}
+                    trigger={properties.trigger}
                 >
-                    {properties.trigger && <DialogTrigger>{properties.trigger}</DialogTrigger>}
                     <Drawer.Portal>
                         <Drawer.Overlay
                             className={mergeClassNames(
@@ -155,7 +157,9 @@ export function DialogRoot(properties: DialogRootProperties) {
                             {properties.body && <DialogBody>{properties.body}</DialogBody>}
                             {properties.children}
                             {(properties.footer !== undefined || !properties.children) && (
-                                <DialogFooter closeButton={properties.footerCloseButton}>{properties.footer}</DialogFooter>
+                                <DialogFooter closeButton={properties.footerCloseButton}>
+                                    {properties.footer}
+                                </DialogFooter>
                             )}
                         </Drawer.Content>
                     </Drawer.Portal>
@@ -207,7 +211,9 @@ export function DialogRoot(properties: DialogRootProperties) {
                             {properties.body && <DialogBody>{properties.body}</DialogBody>}
                             {properties.children}
                             {(properties.footer !== undefined || !properties.children) && (
-                                <DialogFooter closeButton={properties.footerCloseButton}>{properties.footer}</DialogFooter>
+                                <DialogFooter closeButton={properties.footerCloseButton}>
+                                    {properties.footer}
+                                </DialogFooter>
                             )}
                         </RadixDialog.Content>
                     </RadixDialog.Portal>

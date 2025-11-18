@@ -14,6 +14,7 @@ export interface DrawerContextValue {
     variant?: DrawerVariant;
     side?: DrawerSide;
     isNested: boolean;
+    onOpenAutoFocus?: (event: Event) => void;
 }
 
 // Create Drawer Context

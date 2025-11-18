@@ -23,7 +23,11 @@ export function DialogBody(properties: DialogBodyProperties) {
 
     // Mobile
     if(dialogContext.isMobile) {
-        return <div className={mergeClassNames('grow overflow-y-auto px-6', properties.className)}>{properties.children}</div>;
+        return (
+            <div className={mergeClassNames('grow overflow-y-auto px-6', properties.className)}>
+                {properties.children}
+            </div>
+        );
     }
 
     // Desktop

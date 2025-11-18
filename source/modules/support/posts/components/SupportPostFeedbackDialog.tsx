@@ -23,7 +23,10 @@ import { FormInputText } from '@structure/source/components/forms/FormInputText'
 // import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';
 
 // Component - SupportPostFeedbackDialog
-export type SupportPostFeedbackDialogProperties = Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'>;
+export type SupportPostFeedbackDialogProperties = Omit<
+    DialogProperties,
+    'accessibilityTitle' | 'accessibilityDescription'
+>;
 export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogProperties) {
     // State
     const [open, setOpen] = React.useState(properties.open ?? false);

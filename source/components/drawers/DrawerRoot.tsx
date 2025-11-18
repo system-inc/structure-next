@@ -5,7 +5,6 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Drawer as VaulDrawer } from 'vaul';
-import { Button } from '@structure/source/components/buttons/Button';
 
 // Dependencies - Theme
 import { drawerTheme as structureDrawerTheme } from './DrawerTheme';
@@ -18,17 +17,20 @@ import { DrawerContext, DrawerNestedContext, useIsNestedDrawer } from './DrawerC
 import { DrawerTrigger } from './DrawerTrigger';
 import { DrawerOverlay } from './DrawerOverlay';
 import { DrawerContent } from './DrawerContent';
-import { DrawerClose } from './DrawerClose';
 import { DrawerPortal } from './DrawerPortal';
-
-// Dependencies - Assets
-import { XIcon } from '@phosphor-icons/react';
+import { DrawerHeader } from './DrawerHeader';
+import { DrawerBody } from './DrawerBody';
+import { DrawerFooter } from './DrawerFooter';
 
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - DrawerRoot
 export interface DrawerRootProperties {
+    // Accessibility (REQUIRED)
+    accessibilityTitle: string;
+    accessibilityDescription: string;
+
     // Container
     className?: string;
     overlayClassName?: string;
@@ -42,18 +44,21 @@ export interface DrawerRootProperties {
     onOpenAutoFocus?: (event: Event) => void;
     onCloseAutoFocus?: (event: Event) => void;
 
-    // Accessibility
-    accessibilityDescription?: string; // Description for screen readers
-
     // Theme
     variant?: DrawerVariant;
     side?: DrawerSide;
 
-    // Auto close button
-    closeButton?: boolean | React.ReactNode; // Auto X in top right
+    // Convenience structure (optional)
+    header?: React.ReactNode; // If string, wrapped in <div className="font-medium">
+    body?: React.ReactNode;
+    footer?: React.ReactNode;
+
+    // Close buttons (default true)
+    headerCloseButton?: boolean | React.ReactElement;
+    footerCloseButton?: boolean | React.ReactElement;
 
     // Compound components
-    children?: React.ReactNode;
+    children?: React.ReactNode; // Rendered between body and footer
 }
 export function DrawerRoot(properties: DrawerRootProperties) {
     // Get component theme from context
@@ -66,17 +71,14 @@ export function DrawerRoot(properties: DrawerRootProperties) {
     const variant = properties.variant ?? drawerTheme.configuration.defaultVariant?.variant;
     const side = properties.side ?? drawerTheme.configuration.defaultVariant?.side ?? 'Bottom';
 
-    // Get the theme classes for this side and variant
-    const sideTheme = drawerTheme.sides[side];
-    const variantClasses = variant ? drawerTheme.variants[variant] : '';
-
-    // Combine base wrapper classes with variant and side-specific wrapper classes
-    const contentClassNames = mergeClassNames(
-        drawerTheme.configuration.baseWrapperClasses,
-        variantClasses,
-        sideTheme.wrapperClasses,
-        properties.className,
-    );
+    // Create drawer variant class names function using the merged theme
+    const drawerVariantClassNames = createVariantClassNames(drawerTheme.configuration.baseWrapperClasses, {
+        variants: {
+            variant: drawerTheme.variants,
+            side: drawerTheme.sides,
+        },
+        defaultVariants: drawerTheme.configuration.defaultVariant,
+    });
 
     // Generate unique ID for accessibility
     const drawerId = React.useId();
@@ -107,30 +109,6 @@ export function DrawerRoot(properties: DrawerRootProperties) {
     // Determine the direction for Vaul (lowercase required by Vaul API)
     const direction = (side ?? 'Bottom').toLowerCase() as 'top' | 'bottom' | 'left' | 'right';
 
-    // Render close button (auto close button in top right)
-    function renderCloseButton(additionalClassName?: string) {
-        if(properties.closeButton !== false) {
-            // Determine the close button element
-            const closeButtonElement =
-                properties.closeButton !== true &&
-                properties.closeButton !== undefined &&
-                React.isValidElement(properties.closeButton) ? (
-                    properties.closeButton
-                ) : (
-                    <Button
-                        variant="Ghost"
-                        size="IconSmall"
-                        icon={XIcon}
-                        className={mergeClassNames('absolute top-4 right-4 z-10', additionalClassName)}
-                        aria-label="Close"
-                    />
-                );
-
-            return <DrawerClose>{closeButtonElement}</DrawerClose>;
-        }
-        return null;
-    }
-
     // Context value for compound components
     const contextValue = {
         open,
@@ -140,6 +118,7 @@ export function DrawerRoot(properties: DrawerRootProperties) {
         variant,
         side,
         isNested: isNestedDrawer,
+        onOpenAutoFocus: properties.onOpenAutoFocus,
     };
 
     // Render the component
@@ -162,13 +141,34 @@ export function DrawerRoot(properties: DrawerRootProperties) {
                             )}
                         />
                         <DrawerContent
-                            className={contentClassNames}
-                            accessibilityDescription={properties.accessibilityDescription ?? ''}
+                            className={mergeClassNames(
+                                drawerVariantClassNames({
+                                    variant: variant,
+                                    side: side,
+                                }),
+                                properties.className,
+                            )}
+                            accessibilityTitle={properties.accessibilityTitle}
+                            accessibilityDescription={properties.accessibilityDescription}
                             onOpenAutoFocus={properties.onOpenAutoFocus}
                             onCloseAutoFocus={properties.onCloseAutoFocus}
                         >
-                            {renderCloseButton()}
+                            {properties.header && (
+                                <DrawerHeader closeButton={properties.headerCloseButton}>
+                                    {typeof properties.header === 'string' ? (
+                                        <div className="font-medium">{properties.header}</div>
+                                    ) : (
+                                        properties.header
+                                    )}
+                                </DrawerHeader>
+                            )}
+                            {properties.body && <DrawerBody>{properties.body}</DrawerBody>}
                             {properties.children}
+                            {(properties.footer !== undefined || !properties.children) && (
+                                <DrawerFooter closeButton={properties.footerCloseButton}>
+                                    {properties.footer}
+                                </DrawerFooter>
+                            )}
                         </DrawerContent>
                     </DrawerPortal>
                 </DrawerNestedContext.Provider>
