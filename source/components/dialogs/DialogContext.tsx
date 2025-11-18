@@ -10,6 +10,7 @@ export interface DialogContextValue {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     isMobile: boolean;
+    isResponsive: boolean;
     dialogId: string;
     dialogTheme: DialogThemeConfiguration;
     variant?: DialogVariant;

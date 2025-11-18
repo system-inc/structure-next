@@ -40,6 +40,7 @@ export interface DialogRootProperties {
     onOpenChange?: (open: boolean) => void;
     modal?: boolean;
     onOpenAutoFocus?: (event: Event) => void;
+    isResponsive?: boolean; // Default true - switches to Drawer on mobile
 
     // Theme
     variant?: DialogVariant;
@@ -83,6 +84,9 @@ export function DialogRoot(properties: DialogRootProperties) {
     // Detect mobile viewport
     const isMobile = useIsMobile();
 
+    // Determine if we should use mobile drawer (responsive mode enabled + mobile viewport)
+    const shouldUseMobileDrawer = (properties.isResponsive ?? true) && isMobile;
+
     // Generate unique ID for accessibility
     const dialogId = React.useId();
 
@@ -107,7 +111,8 @@ export function DialogRoot(properties: DialogRootProperties) {
     const contextValue = {
         open,
         onOpenChange,
-        isMobile,
+        isMobile: shouldUseMobileDrawer,
+        isResponsive: properties.isResponsive ?? true,
         dialogId,
         dialogTheme,
         variant,
@@ -119,9 +124,9 @@ export function DialogRoot(properties: DialogRootProperties) {
 
     // Render the component
     return (
-        <DialogContext.Provider value={contextValue} key={isMobile ? 'mobile-drawer' : 'desktop-dialog'}>
-            {isMobile ? (
-                // Mobile: Drawer (bottom sheet)
+        <DialogContext.Provider value={contextValue} key={shouldUseMobileDrawer ? 'mobile-drawer' : 'desktop-dialog'}>
+            {shouldUseMobileDrawer ? (
+                // Mobile: Drawer (bottom sheet) - use Drawer's convenience API
                 <Drawer
                     open={open}
                     onOpenChange={onOpenChange}
@@ -131,38 +136,16 @@ export function DialogRoot(properties: DialogRootProperties) {
                     accessibilityTitle={properties.accessibilityTitle}
                     accessibilityDescription={properties.accessibilityDescription}
                     trigger={properties.trigger}
+                    className={properties.className}
+                    overlayClassName={properties.overlayClassName}
+                    header={properties.header}
+                    body={properties.body}
+                    footer={properties.footer}
+                    headerCloseButton={properties.headerCloseButton}
+                    footerCloseButton={properties.footerCloseButton}
+                    onOpenAutoFocus={properties.onOpenAutoFocus}
                 >
-                    <Drawer.Portal>
-                        <Drawer.Overlay
-                            className={mergeClassNames(
-                                dialogTheme.configuration.overlayClasses,
-                                properties.overlayClassName,
-                            )}
-                        />
-                        <Drawer.Content
-                            className={properties.className}
-                            accessibilityDescription={properties.accessibilityDescription}
-                            accessibilityTitle={properties.accessibilityTitle}
-                            onOpenAutoFocus={properties.onOpenAutoFocus}
-                        >
-                            {properties.header && (
-                                <DialogHeader closeButton={properties.headerCloseButton}>
-                                    {typeof properties.header === 'string' ? (
-                                        <div className="font-medium">{properties.header}</div>
-                                    ) : (
-                                        properties.header
-                                    )}
-                                </DialogHeader>
-                            )}
-                            {properties.body && <DialogBody>{properties.body}</DialogBody>}
-                            {properties.children}
-                            {(properties.footer !== undefined || !properties.children) && (
-                                <DialogFooter closeButton={properties.footerCloseButton}>
-                                    {properties.footer}
-                                </DialogFooter>
-                            )}
-                        </Drawer.Content>
-                    </Drawer.Portal>
+                    {properties.children}
                 </Drawer>
             ) : (
                 // Desktop: Radix Dialog (centered modal)
