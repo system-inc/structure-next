@@ -276,7 +276,7 @@
     --color-background--3: light-dark(var(--color-white-1000), var(--color-black-850));
 
     /* Backgrounds - Semantic */
-    --color-background-backdrop: light-dark(var(--color-dark-100), var(--color-dark-250));
+    --color-background-backdrop: light-dark(var(--color-dark-400), var(--color-dark-600));
     --color-background-informative: light-dark(var(--color-blue-600), var(--color-blue-400));
     --color-background-positive: light-dark(var(--color-green-600), var(--color-green-400));
     --color-background-warning: light-dark(var(--color-orange-600), var(--color-orange-400));
@@ -319,7 +319,7 @@
     /* Content - Semantic */
     --color-content-placeholder: var(--color-gray-600);
     --color-content-disabled: var(--color-gray-400);
-    --color-content-informative: light-dark(var(--color-blue-400), var(--color-blue-400));
+    --color-content-informative: light-dark(var(--color-blue-600), var(--color-blue-400));
     --color-content-positive: light-dark(var(--color-green-600), var(--color-green-500));
     --color-content-warning: light-dark(var(--color-orange-600), var(--color-orange-500));
     --color-content-negative: light-dark(var(--color-red-600), var(--color-red-500));
