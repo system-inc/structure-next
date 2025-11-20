@@ -20,6 +20,9 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 //   }
 export interface DrawerVariants {
     A: 'A';
+    B: 'B';
+    C: 'C';
+    D: 'D';
 }
 
 // Type - Drawer Variant (derived from DrawerVariants interface)
@@ -98,28 +101,29 @@ export interface DrawerThemeConfiguration {
 export const drawerTheme: DrawerThemeConfiguration = {
     // Variants control visual styling (border, background, padding)
     variants: {
-        // Variant A - Styled drawer with border and background
-        // Use for: Standard drawers, forms, menus
-        A: mergeClassNames('background--0', 'border border--0'),
+        A: mergeClassNames('border--0 background--0 dark:background--0'),
+        B: mergeClassNames('border--1 background--0 dark:background--1'),
+        C: mergeClassNames('border--2 background--0 dark:background--2'),
+        D: mergeClassNames('border--3 background--0 dark:background--3'),
     },
 
     // Sides control where the drawer slides in from
     sides: {
         // Top side - Drawer slides in from top
         // Use for: Notifications, search bars
-        Top: 'max-h-screen top-12 inset-x-0',
+        Top: mergeClassNames('inset-x-0 top-12 max-h-screen'),
 
         // Bottom side - Drawer slides in from bottom
         // Use for: Mobile menus, action sheets, forms
-        Bottom: 'bottom-0 max-h-[80vh] rounded-t-3xl',
+        Bottom: mergeClassNames('bottom-0 max-h-[80vh] rounded-t-3xl border-t'),
 
         // Right side - Drawer slides in from right
         // Use for: Side panels, settings, filters
-        Right: 'right-0 inset-y-0 h-screen w-screen',
+        Right: mergeClassNames('inset-y-0 right-0 h-screen w-screen max-w-[min(20rem,80vw)] border-l'),
 
         // Left side - Drawer slides in from left
         // Use for: Navigation menus, side panels
-        Left: 'left-0 inset-y-0 h-screen w-screen',
+        Left: mergeClassNames('inset-y-0 left-0 h-screen w-screen max-w-[min(20rem,80vw)] border-r'),
     },
 
     // Configuration

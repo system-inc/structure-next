@@ -3,6 +3,9 @@
 // Dependencies - React
 import React from 'react';
 
+// Dependencies - Hooks
+import { useIsMobile } from '@structure/source/utilities/react/React';
+
 // Dependencies - Main Components
 import { Popover } from '@structure/source/components/popovers/Popover';
 import type { PopoverProperties } from '@structure/source/components/popovers/Popover';
@@ -12,9 +15,6 @@ import type { DrawerProperties } from '@structure/source/components/drawers/Draw
 // Dependencies - Theme
 import type { PopoverVariant } from '@structure/source/components/popovers/PopoverTheme';
 import type { DrawerVariant } from '@structure/source/components/drawers/DrawerTheme';
-
-// Dependencies - Utilities
-import { useIsMobile } from '@structure/source/utilities/react/React';
 
 // Dependencies - Context
 import { ResponsivePopoverDrawerContext } from './ResponsivePopoverDrawerContext';
@@ -88,7 +88,7 @@ export function ResponsivePopoverDrawerRoot(properties: ResponsivePopoverDrawerR
     return (
         <ResponsivePopoverDrawerContext.Provider value={contextValue}>
             {isMobile ? (
-                // Mobile: Drawer (bottom sheet)
+                // Mobile: Drawer
                 <Drawer
                     accessibilityTitle={properties.accessibilityTitle}
                     accessibilityDescription={properties.accessibilityDescription}

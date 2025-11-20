@@ -27,6 +27,8 @@ export const basePopoverClassNames = mergeClassNames(
 export interface PopoverVariants {
     A: 'A';
     B: 'B';
+    C: 'C';
+    D: 'D';
     Tip: 'Tip';
 }
 
@@ -70,16 +72,22 @@ export interface PopoverThemeConfiguration {
 export const popoverTheme: PopoverThemeConfiguration = {
     // Variants control visual styling (colors, borders, shadows)
     variants: {
-        // Variant A - Primary popover with subtle border
-        // Use for: Dropdowns, menus, general popover content
-        A: mergeClassNames(basePopoverClassNames, 'border border--0 background--0 content--0'),
-
-        // Variant B - Secondary popover with more prominent border
-        // Use for: Alternative popover styling
-        B: mergeClassNames(basePopoverClassNames, 'border border--1 background--0 content--0'),
-
-        // Variant Tip - Compact tooltip styling with shadow
-        // Use for: Tooltips, help text, brief explanatory content
+        A: mergeClassNames(
+            basePopoverClassNames,
+            'border border--0 background--0 shadow-xl shadow-black/10 dark:background--0 dark:shadow-black/40',
+        ),
+        B: mergeClassNames(
+            basePopoverClassNames,
+            'border border--1 background--0 shadow-xl shadow-black/10 dark:background--1 dark:shadow-black/40',
+        ),
+        C: mergeClassNames(
+            basePopoverClassNames,
+            'border border--2 background--0 shadow-xl shadow-black/10 dark:background--2 dark:shadow-black/40',
+        ),
+        D: mergeClassNames(
+            basePopoverClassNames,
+            'border border--3 background--0 shadow-xl shadow-black/10 dark:background--3 dark:shadow-black/40',
+        ),
         Tip: mergeClassNames(basePopoverClassNames, 'border border--3 background--0 content--0 shadow-lg'),
     },
 
@@ -87,7 +95,7 @@ export const popoverTheme: PopoverThemeConfiguration = {
     sizes: {
         // Base size - Full-width popovers for dropdowns and menus
         // Matches trigger width via Radix variables
-        Base: 'rounded-lg',
+        Base: 'rounded-xl',
 
         // Tip size - Compact tooltips with constrained width
         // Fixed max-width for brief content

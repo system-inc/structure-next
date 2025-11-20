@@ -197,15 +197,9 @@ export function DrawerRoot(properties: DrawerRootProperties) {
                             {/* Custom children (rendered between body and footer) */}
                             {properties.children}
 
-                            {/* Optional footer section (always rendered if no children provided) */}
-                            {(properties.footer !== undefined || !properties.children) && (
-                                <DrawerFooter
-                                    // Close button is shown by default if no children and no footer provided
-                                    closeButton={
-                                        properties.footerCloseButton ??
-                                        (properties.footer === undefined && !properties.children ? true : false)
-                                    }
-                                >
+                            {/* Optional footer section - only rendered if there's content or a close button */}
+                            {(properties.footer || properties.footerCloseButton) && (
+                                <DrawerFooter closeButton={properties.footerCloseButton}>
                                     {properties.footer}
                                 </DrawerFooter>
                             )}

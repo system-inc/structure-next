@@ -13,7 +13,5 @@ export interface DrawerBodyProperties {
 }
 export function DrawerBody(properties: DrawerBodyProperties) {
     // Render the component
-    return (
-        <div className={mergeClassNames('grow overflow-y-auto px-6', properties.className)}>{properties.children}</div>
-    );
+    return <div className={mergeClassNames('grow overflow-y-auto', properties.className)}>{properties.children}</div>;
 }

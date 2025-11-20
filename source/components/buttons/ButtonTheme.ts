@@ -323,9 +323,9 @@ export const buttonTheme: ButtonThemeConfiguration = {
     // Sizes
     sizes: {
         // General Purpose Sizes
-        ExtraExtraSmall: mergeClassNames('px-3 py-1 text-sm'),
-        ExtraSmall: mergeClassNames('px-2 text-xs'),
-        Small: mergeClassNames('px-3 text-xs'),
+        ExtraExtraSmall: mergeClassNames('px-1 py-0.5 text-xs'),
+        ExtraSmall: mergeClassNames('px-2 py-1 text-xs'),
+        Small: mergeClassNames('px-3 py-1.5 text-sm'),
         Base: mergeClassNames('px-4 py-2 text-sm'),
         Large: mergeClassNames('px-6 py-2.5'),
         ExtraLarge: mergeClassNames('px-10 py-4 text-lg'),
