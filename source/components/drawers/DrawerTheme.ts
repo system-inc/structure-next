@@ -115,15 +115,15 @@ export const drawerTheme: DrawerThemeConfiguration = {
 
         // Bottom side - Drawer slides in from bottom
         // Use for: Mobile menus, action sheets, forms
-        Bottom: mergeClassNames('bottom-0 max-h-[80vh] rounded-t-3xl border-t'),
-
-        // Right side - Drawer slides in from right
-        // Use for: Side panels, settings, filters
-        Right: mergeClassNames('inset-y-0 right-0 h-screen w-screen max-w-[min(20rem,80vw)] border-l'),
+        Bottom: mergeClassNames('inset-x-0 bottom-0 max-h-[80vh] rounded-t-3xl border-t'),
 
         // Left side - Drawer slides in from left
         // Use for: Navigation menus, side panels
         Left: mergeClassNames('inset-y-0 left-0 h-screen w-screen max-w-[min(20rem,80vw)] border-r'),
+
+        // Right side - Drawer slides in from right
+        // Use for: Side panels, settings, filters
+        Right: mergeClassNames('inset-y-0 right-0 h-screen w-screen max-w-[min(20rem,80vw)] border-l'),
     },
 
     // Configuration
@@ -132,7 +132,7 @@ export const drawerTheme: DrawerThemeConfiguration = {
         baseClasses: '',
 
         // Base wrapper classes
-        baseWrapperClasses: mergeClassNames('fixed inset-x-0 h-auto w-full', 'z-50', 'flex flex-col'),
+        baseWrapperClasses: mergeClassNames('fixed z-50 flex flex-col'),
 
         // Overlay classes
         overlayClasses: mergeClassNames('fixed inset-0 z-40 background--backdrop'),
