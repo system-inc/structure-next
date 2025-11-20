@@ -3,7 +3,7 @@ import {
     AuthenticationProperties,
     Authentication,
 } from '@structure/source/modules/account/pages/authentication/components/Authentication';
-import { ThemeToggle } from '@structure/source/theme/ThemeToggle';
+import { ThemeToggle } from '@structure/source/theme/components/ThemeToggle';
 
 // Component - AuthenticationPage
 export interface AuthenticationPageProperties {

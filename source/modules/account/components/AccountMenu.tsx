@@ -5,7 +5,7 @@ import React from 'react';
 import { AccountMenuSignedIn } from '@structure/source/modules/account/components/AccountMenuSignedIn';
 import { AccountMenuSignedOut } from '@structure/source/modules/account/components/AccountMenuSignedOut';
 import { AnimatedButton } from '@structure/source/components/buttons/AnimatedButton';
-import { ThemeToggle } from '@structure/source/theme/ThemeToggle';
+import { ThemeToggle } from '@structure/source/theme/components/ThemeToggle';
 
 // Dependencies - Accounts
 import { Account } from '@structure/source/modules/account/Account';
@@ -16,8 +16,8 @@ import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
 
 // Component - AccountMenu
 export interface AccountMenuProperties {
-    account: Account | null;
     className?: string;
+    account: Account | null;
 }
 export function AccountMenu(properties: AccountMenuProperties) {
     // Hooks
