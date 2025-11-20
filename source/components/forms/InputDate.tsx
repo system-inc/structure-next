@@ -143,5 +143,5 @@ export const InputDate = React.forwardRef<InputDateReferenceInterface, InputDate
     },
 );
 
-// Set the display name for debugging purposes
+// Set the display name on the component for debugging
 InputDate.displayName = 'InputDate';

@@ -461,5 +461,5 @@ export const AnimatedButton = React.forwardRef<HTMLElement, AnimatedButtonProper
     );
 });
 
-// Set the display name for the component for debugging
+// Set the display name on the component for debugging
 AnimatedButton.displayName = 'AnimatedButton';

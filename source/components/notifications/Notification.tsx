@@ -108,5 +108,5 @@ export const Notification = React.forwardRef<HTMLDivElement, NotificationInterfa
     );
 });
 
-// Set the display name for debugging purposes
+// Set the display name on the component for debugging
 Notification.displayName = 'Notification';

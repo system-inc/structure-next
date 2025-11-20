@@ -90,5 +90,5 @@ export const InputText = React.forwardRef<HTMLInputElement, InputTextProperties>
     );
 });
 
-// Set the display name for the component
+// Set the display name on the component for debugging
 InputText.displayName = 'InputText';

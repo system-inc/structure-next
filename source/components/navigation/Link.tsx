@@ -63,5 +63,5 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProperties>(function
     );
 });
 
-// Set the display name for the component for debugging
+// Set the display name on the component for debugging
 Link.displayName = 'Link';

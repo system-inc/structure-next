@@ -153,5 +153,5 @@ export const InputCheckbox = React.forwardRef<InputCheckboxReferenceInterface, I
     );
 });
 
-// Set the display name for the component for debugging
+// Set the display name on the component for debugging
 InputCheckbox.displayName = 'InputCheckbox';

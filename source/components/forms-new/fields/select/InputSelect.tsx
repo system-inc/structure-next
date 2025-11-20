@@ -46,5 +46,5 @@ export const InputSelect = React.forwardRef<HTMLSelectElement, InputSelectProper
     );
 });
 
-// Set the display name for the component
+// Set the display name on the component for debugging
 InputSelect.displayName = 'InputSelect';

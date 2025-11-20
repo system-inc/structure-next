@@ -308,5 +308,5 @@ export const InputMultipleSelect = React.forwardRef<
     );
 });
 
-// Set the display name for the component for debugging
+// Set the display name on the component for debugging
 InputMultipleSelect.displayName = 'InputMultipleSelect';
