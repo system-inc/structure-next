@@ -49,7 +49,7 @@ export interface TabItemProperties
             keyof BaseTabItemProperties | keyof TabItemIconProperties | 'asChild'
         > {}
 
-export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
+export const TabItem = React.forwardRef<React.ComponentRef<typeof RadixTabPrimitive.Trigger>, TabItemProperties>(
     function TabItem(
         { className, icon, iconLeft, iconRight, iconSize, children, ...radixTabTriggerProperties },
         reference,
@@ -93,14 +93,10 @@ export const TabItem = React.forwardRef<React.ElementRef<typeof RadixTabPrimitiv
                     {isActive && (
                         <motion.div
                             layoutId={`tab-${tabsContext.tabGroupId}`}
-                            className={tabsContext.theme.configuration.itemActiveClasses}
-                            style={{
-                                borderRadius: '99px',
-                            }}
+                            className={mergeClassNames(tabsContext.theme.configuration.itemActiveClasses)}
                         />
                     )}
-
-                    <div className="z-10">{content}</div>
+                    <span className="relative z-10">{content}</span>
                 </motion.button>
             </RadixTabPrimitive.Trigger>
         );

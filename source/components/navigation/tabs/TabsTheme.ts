@@ -13,11 +13,7 @@ import { mergeClassNames } from '../../../utilities/style/ClassName';
 // Layout styles for tabs wrapper (container around all tabs)
 export const tabsWrapperLayoutClassNames = mergeClassNames(
     // Flexbox layout
-    'z-0 flex items-center gap-1',
-    // Shape
-    'rounded-full',
-    // Spacing
-    'p-0.5',
+    'z-0 flex',
     // Animation
     'transition-colors',
 );
@@ -25,9 +21,7 @@ export const tabsWrapperLayoutClassNames = mergeClassNames(
 // Common tab item styles: interaction behavior and layout
 export const tabItemCommonClassNames = mergeClassNames(
     // Layout
-    'group relative cursor-pointer',
-    // Shape
-    'rounded-full',
+    'group relative flex cursor-pointer',
     // Animation
     'transition-colors',
 );
@@ -101,40 +95,40 @@ export const tabsTheme: TabsThemeConfiguration = {
         // Features: Light background container, animated active state indicator, smooth transitions
         A: mergeClassNames(
             tabsWrapperLayoutClassNames,
-            // Background for wrapper
-            'background--1',
+            // Background and padding for wrapper
+            'gap-1 rounded-full background--5 p-0.5',
         ),
     },
 
     // Sizes - Define padding, typography, and spacing for TabItems
     sizes: {
         // Text tabs (with labels)
-        Small: mergeClassNames(tabItemTextLayoutClassNames, 'gap-2 px-4 py-1.5 text-xs'),
+        ExtraSmall: mergeClassNames(tabItemTextLayoutClassNames, 'gap-0.5 p-px text-xs'),
+        Small: mergeClassNames(tabItemTextLayoutClassNames, 'gap-1 p-2 text-xs'),
         Base: mergeClassNames(tabItemTextLayoutClassNames, 'gap-2.5 px-5 py-2 text-sm'),
         Large: mergeClassNames(tabItemTextLayoutClassNames, 'gap-3 px-6 py-3 text-sm font-medium'),
-        ExtraSmall: mergeClassNames(tabItemTextLayoutClassNames, 'gap-2 px-6 py-1.5 text-sm'),
 
         // Icon-only tabs (no text, just icon)
-        IconSmall: 'px-2.5 py-2.5',
-        Icon: 'px-3 py-3',
-        IconLarge: 'px-3.5 py-3.5',
-        IconExtraSmall: 'px-2 py-2',
+        IconExtraSmall: mergeClassNames('p-px'),
+        IconSmall: mergeClassNames('p-2'),
+        Icon: mergeClassNames('p-3'),
+        IconLarge: mergeClassNames('p-3.5'),
     },
 
     // Icon dimensions for TabItem icons
     // Maps tab sizes to their corresponding icon dimensions (applied via themeIcon utility)
     iconSizes: {
         // Icon dimensions for text tabs (tabs with text + icon)
-        Small: 'size-3.5',
-        Base: 'size-4',
-        Large: 'size-4',
-        ExtraSmall: 'size-4',
+        ExtraSmall: 'size-3',
+        Small: 'size-4',
+        Base: 'size-5',
+        Large: 'size-6',
 
         // Icon dimensions for icon-only tabs (no text, just an icon)
-        IconSmall: 'size-3.5',
-        Icon: 'size-4',
-        IconLarge: 'size-4',
-        IconExtraSmall: 'size-4',
+        IconExtraSmall: 'size-3',
+        IconSmall: 'size-4',
+        Icon: 'size-5',
+        IconLarge: 'size-6',
     },
 
     // Configuration
@@ -151,13 +145,17 @@ export const tabsTheme: TabsThemeConfiguration = {
             'hover:content--0',
             // Active state
             'data-[state=active]:content--0',
+            // Variant A
+            'rounded-full',
         ),
 
         // Active state background indicator for TabItem
         // Animated background that slides between tabs using Framer Motion layoutId
         itemActiveClasses: mergeClassNames(
             'absolute inset-0 h-full w-full border border-transparent',
-            'z-0 group-data-[state=active]:border--0 group-data-[state=active]:background--0',
+            'z-0 group-data-[state=active]:border--4 group-data-[state=active]:background--0',
+            // Variant A
+            'rounded-full',
         ),
 
         // Default variant and size
