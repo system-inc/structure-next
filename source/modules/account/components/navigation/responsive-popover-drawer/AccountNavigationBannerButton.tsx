@@ -9,7 +9,7 @@ import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
-import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
+import { ProfileImage } from '@structure/source/modules/account/components/profile-image/ProfileImage';
 
 // Dependencies - Assets
 import { CrownSimpleIcon } from '@phosphor-icons/react/ssr';

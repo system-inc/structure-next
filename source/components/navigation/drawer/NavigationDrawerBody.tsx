@@ -12,7 +12,7 @@ export interface NavigationDrawerBodyProperties {
 export function NavigationDrawerBody(properties: NavigationDrawerBodyProperties) {
     // Render the component
     return (
-        <div className="-mx-3 mt-6 flex flex-col space-y-0.5 px-6 pt-4">
+        <div className="-mx-3 flex flex-col space-y-0.5 px-6 pt-4">
             {properties.navigationLinks.map(function (navigationLink, navigationLinkIndex) {
                 return (
                     <NavigationLink

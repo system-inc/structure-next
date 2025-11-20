@@ -8,7 +8,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Button } from '@structure/source/components/buttons/Button';
 import { Link } from '@structure/source/components/navigation/Link';
-import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
+import { AccountNavigationResponsivePopoverDrawer } from '@structure/source/modules/account/components/navigation/responsive-popover-drawer/AccountNavigationResponsivePopoverDrawer';
 import { OpsNavigation } from './navigation/OpsNavigation';
 import { AnimatePresence, motion } from 'motion/react';
 import Image from 'next/image';
@@ -102,7 +102,7 @@ export function OpsNavigationBar() {
 
                 {/* Top Right */}
                 <div className="absolute right-3 z-30 flex h-12 items-center">
-                    <AccountMenuButton />
+                    <AccountNavigationResponsivePopoverDrawer />
                 </div>
             </div>
 

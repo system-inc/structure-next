@@ -8,7 +8,7 @@ import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
 // Dependencies - Main Components
 import { NonLinkButtonProperties, Button } from '@structure/source/components/buttons/Button';
-import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
+import { ProfileImage } from '@structure/source/modules/account/components/profile-image/ProfileImage';
 
 // Component - AccountNavigationResponsivePopoverDrawerTriggerButton
 // We need to forward references so the button receives the data-state attributes from the popover/drawer

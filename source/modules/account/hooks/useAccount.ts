@@ -4,7 +4,7 @@
 import { useRouter } from '@structure/source/router/Navigation';
 
 // Dependencies - Types
-import { type AuthenticationDialogSettings } from '@structure/source/modules/account/pages/authentication/components/dialogs/AuthenticationDialog';
+import { type AuthenticationDialogSettings } from '@structure/source/modules/account/authentication/components/dialogs/AuthenticationDialog';
 
 // Dependencies - Shared State
 import { useAtomValue, useSetAtom } from 'jotai';

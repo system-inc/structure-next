@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Link } from '@structure/source/components/navigation/Link';
-import { ProfileImage } from '@structure/source/modules/account/components/ProfileImage';
+import { ProfileImage } from '@structure/source/modules/account/components/profile-image/ProfileImage';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';

@@ -1,0 +1,83 @@
+'use client'; // This component uses client-only features
+
+// Dependencies - React and Next.js
+import React from 'react';
+
+// Dependencies - Main Components
+import { DialogProperties, Dialog } from '@structure/source/components/dialogs/Dialog';
+import { ManagePasswordForm } from '@structure/source/modules/account/profile/security/components/ManagePasswordForm';
+
+// Component - ManagePasswordDialog
+export interface ManagePasswordDialogProperties
+    extends Omit<DialogProperties, 'accessibilityTitle' | 'accessibilityDescription'> {
+    accountHasPasswordSet: boolean;
+}
+export function ManagePasswordDialog(properties: ManagePasswordDialogProperties) {
+    // State
+    const [open, setOpen] = React.useState(properties.open ?? false);
+    const [showForm, setShowForm] = React.useState(properties.open ?? false);
+
+    // Effect to update the open state when the open property changes
+    React.useEffect(
+        function () {
+            if(properties.open) {
+                setOpen(true);
+                setShowForm(true);
+            }
+            else {
+                // Hide form immediately, then close dialog after animation
+                setShowForm(false);
+                setTimeout(function () {
+                    setOpen(false);
+                }, 0);
+            }
+        },
+        [properties.open],
+    );
+
+    // Function to intercept the onOpenChange event
+    function onOpenChangeIntercept(open: boolean) {
+        if(!open) {
+            // Hide form first
+            setShowForm(false);
+            // Then notify parent
+            setTimeout(function () {
+                properties.onOpenChange?.(false);
+                setOpen(false);
+            }, 0);
+        }
+        else {
+            properties.onOpenChange?.(true);
+            setOpen(true);
+            setShowForm(true);
+        }
+    }
+
+    // Render the component
+    return (
+        <Dialog
+            variant="A"
+            className="p-6"
+            {...properties}
+            // Spread these properties after all properties to ensure they are not overwritten
+            accessibilityTitle={properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}
+            accessibilityDescription="Manage your account password"
+            open={open}
+            onOpenChange={onOpenChangeIntercept}
+        >
+            <Dialog.Header>{properties.accountHasPasswordSet ? 'Change Password' : 'Set Password'}</Dialog.Header>
+            <Dialog.Body>
+                {showForm ? (
+                    <ManagePasswordForm
+                        accountHasPasswordSet={properties.accountHasPasswordSet}
+                        onComplete={function () {
+                            onOpenChangeIntercept(false);
+                        }}
+                    />
+                ) : (
+                    <div style={{ minHeight: '200px' }} />
+                )}
+            </Dialog.Body>
+        </Dialog>
+    );
+}

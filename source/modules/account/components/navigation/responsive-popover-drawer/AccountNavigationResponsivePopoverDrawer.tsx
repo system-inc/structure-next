@@ -26,8 +26,8 @@ export interface AccountNavigationResponsivePopoverDrawerProperties {
     triggerClassName?: string;
     triggerVariant?: AccountNavigationResponsivePopoverDrawerTriggerButtonProperties['variant'];
     signedOutHeader?: React.ReactNode;
-    accountNavigationLinks: AccountNavigationLinkInterface[];
-    shouldShowAccountNavigationLink: AccountNavigationFilterFunction;
+    accountNavigationLinks?: AccountNavigationLinkInterface[];
+    shouldShowAccountNavigationLink?: AccountNavigationFilterFunction;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
 }
@@ -78,8 +78,8 @@ export function AccountNavigationResponsivePopoverDrawer(
             content={
                 <AccountNavigation
                     close={close}
-                    navigationLinks={properties.accountNavigationLinks}
-                    shouldShowNavigationLink={properties.shouldShowAccountNavigationLink}
+                    navigationLinks={properties.accountNavigationLinks || []}
+                    shouldShowNavigationLink={properties.shouldShowAccountNavigationLink || (() => true)}
                     signedOutHeader={properties.signedOutHeader}
                 />
             }

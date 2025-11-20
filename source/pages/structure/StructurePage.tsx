@@ -5,7 +5,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 // Dependencies - Main Components
-import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
+import { AccountNavigationResponsivePopoverDrawer } from '@structure/source/modules/account/components/navigation/responsive-popover-drawer/AccountNavigationResponsivePopoverDrawer';
 // import Button from '@structure/source/components/buttons/Button';
 // import Menu from '@structure/source/components/menus/Menu';
 // import PopoverMenu from '@structure/source/components/popovers/PopoverMenu';
@@ -314,9 +314,11 @@ export function StructurePage() {
     // Render the component
     return (
         <>
-            <div className="absolute top-4 right-4 z-20">{<AccountMenuButton />}</div>
+            <div className="absolute top-4 right-4 z-20">
+                <AccountNavigationResponsivePopoverDrawer />
+            </div>
 
-            <div className="mx-auto mt-10 max-w-[1024px] px-8">
+            <div className="mx-auto mt-10 max-w-5xl px-8">
                 {/* Header */}
                 <h1 className="mb-10">Interface</h1>
 

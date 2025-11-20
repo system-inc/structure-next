@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { SideNavigationLayoutNavigationSideToggle } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigationSideToggle';
-import { AccountMenuButton } from '@structure/source/modules/account/components/AccountMenuButton';
+import { AccountNavigationResponsivePopoverDrawer } from '@structure/source/modules/account/components/navigation/responsive-popover-drawer/AccountNavigationResponsivePopoverDrawer';
 
 // Dependencies - Shared State
 import { useAtomValue } from 'jotai';
@@ -137,7 +137,7 @@ export function SideNavigationLayoutNavigationTop(properties: SideNavigationLayo
 
             {/* Top Right */}
             <div className="fixed right-4 z-30 flex h-14 items-center">
-                <AccountMenuButton />
+                <AccountNavigationResponsivePopoverDrawer />
             </div>
         </>
     );

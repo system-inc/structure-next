@@ -2,7 +2,7 @@
 
 // Dependencies - Types
 import { BaseError } from '@structure/source/api/errors/BaseError';
-import { type AuthenticationDialogSettings } from '@structure/source/modules/account/pages/authentication/components/dialogs/AuthenticationDialog';
+import { type AuthenticationDialogSettings } from '@structure/source/modules/account/authentication/components/dialogs/AuthenticationDialog';
 
 // Dependencies - Shared State
 import { atom } from 'jotai';

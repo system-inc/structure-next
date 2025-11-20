@@ -27,7 +27,7 @@ import { NotificationsProvider } from '@structure/source/components/notification
 import { TipProvider } from '@structure/source/components/popovers/TipProvider';
 
 // Dependencies - Main Components
-import { AuthenticationDialog } from '@structure/source/modules/account/pages/authentication/components/dialogs/AuthenticationDialog';
+import { AuthenticationDialog } from '@structure/source/modules/account/authentication/components/dialogs/AuthenticationDialog';
 
 // Component - Providers
 export interface ProvidersProperties {
