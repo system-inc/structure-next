@@ -16,7 +16,7 @@ import ErrorIcon from '@structure/assets/icons/status/ErrorIcon.svg';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
-import { getStringFromReactNode } from '@structure/source/utilities/react/React';
+import { stringFromReactNode } from '@structure/source/utilities/react/React';
 
 // Class Names - Menu
 export const menuClassName = mergeClassNames(
@@ -82,7 +82,7 @@ export function Menu(properties: MenuProperties) {
         return (properties.items || []).map(function (item) {
             // If value is undefined, extract it from children
             if(item.value === undefined) {
-                item.value = getStringFromReactNode(item.children);
+                item.value = stringFromReactNode(item.children);
             }
 
             return item;
@@ -303,7 +303,7 @@ export function Menu(properties: MenuProperties) {
             }
             // Search the children
             else {
-                const childrenString = getStringFromReactNode(items[i]?.children);
+                const childrenString = stringFromReactNode(items[i]?.children);
                 if(childrenString && searchPattern.test(childrenString)) {
                     const foundItem = items[i];
                     if(foundItem) {

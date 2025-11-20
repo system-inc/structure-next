@@ -1,4 +1,4 @@
-// Dependencies - React and Next.js
+// Dependencies - React
 import React from 'react';
 
 // Function to wrap function components and SVGs in a span so they can be interacted with
@@ -28,128 +28,10 @@ export function wrapForSlot(children: React.ReactElement, className?: string) {
     );
 }
 
-// Hook to manage state synchronized with session storage
-export function useSessionStorageState<T>(key: string, initialValue: T) {
-    // Create state
-    const [state, setState] = React.useState<T>(function () {
-        try {
-            // Get from session storage by key
-            const sessionStorageValue = sessionStorage.getItem(key);
-
-            // If the value exists, return it
-            if(typeof sessionStorageValue === 'string') {
-                return JSON.parse(sessionStorageValue);
-            }
-            // Else, set the value to the initial value and return it
-            else {
-                sessionStorage.setItem(key, JSON.stringify(initialValue));
-                return initialValue;
-            }
-        } catch {
-            // If error, return the initial value
-            return initialValue;
-        }
-    });
-
-    // Effect to update session storage when state changes
-    React.useEffect(
-        function () {
-            try {
-                // Update session storage
-                sessionStorage.setItem(key, JSON.stringify(state));
-            } catch {
-                // If error, do nothing
-                console.error('Set session storage state failed.');
-            }
-
-            // No need to listen for session storage changes this state will be initialized
-            // to the session storage value, then only updated via setState (which will update the session storage)
-        },
-        [state, key],
-    );
-
-    return [state, setState] as const;
-}
-
-// Hook to trigger re-renders at a specified interval
-// Set milliseconds to 0 or pass enabled=false to pause the interval
-export function useRenderInterval(milliseconds: number, enabled: boolean = true): number {
-    const [tick, setTick] = React.useState(0);
-
-    React.useEffect(
-        function () {
-            // Don't start interval if disabled or milliseconds is 0
-            if(!enabled || milliseconds === 0) {
-                return;
-            }
-
-            const intervalId = setInterval(function () {
-                setTick(function (previous) {
-                    return previous + 1;
-                });
-            }, milliseconds);
-
-            return function () {
-                clearInterval(intervalId);
-            };
-        },
-        [milliseconds, enabled],
-    );
-
-    return tick;
-}
-
-// Function to debounce a value
-export function useDebounce<T>(value: T, delay: number): T {
-    const [debouncedValue, setDebouncedValue] = React.useState<T>(value);
-
-    React.useEffect(
-        function () {
-            const handler = setTimeout(function () {
-                setDebouncedValue(value);
-            }, delay);
-            return function () {
-                return clearTimeout(handler);
-            };
-        },
-        [value, delay],
-    );
-
-    return debouncedValue;
-}
-
-// Hook to get the previous value of a variable
-export function usePreviousValue<T>(value: T): T | undefined {
-    const [current, setCurrent] = React.useState<T>(value);
-    const [previous, setPrevious] = React.useState<T | undefined>(undefined);
-
-    if(value !== current) {
-        setPrevious(current);
-        setCurrent(value);
-    }
-
-    return previous;
-}
-
-// Hook to always access the latest value of a variable without adding it to effect dependencies
-// Useful for accessing current props/state in stable callbacks without recreating them
-export function useLatestPropertyValue<T>(value: T): React.RefObject<T> {
-    const reference = React.useRef<T>(value);
-
-    React.useEffect(
-        function () {
-            reference.current = value;
-        },
-        [value],
-    );
-
-    return reference;
-}
-
 // Function to extract string content from React nodes recursively
 // Useful for searching or displaying text from complex React children
 // Returns undefined if no string content is found
-export function getStringFromReactNode(node: React.ReactNode): string | undefined {
+export function stringFromReactNode(node: React.ReactNode): string | undefined {
     // Handle null/undefined
     if(node === null || node === undefined) {
         return undefined;
@@ -172,7 +54,7 @@ export function getStringFromReactNode(node: React.ReactNode): string | undefine
 
     // Handle arrays
     if(Array.isArray(node)) {
-        const result = node.map(getStringFromReactNode).filter(Boolean).join('');
+        const result = node.map(stringFromReactNode).filter(Boolean).join('');
         return result || undefined;
     }
 
@@ -180,41 +62,12 @@ export function getStringFromReactNode(node: React.ReactNode): string | undefine
     if(React.isValidElement(node)) {
         const nodeProperties = node.props as { children?: React.ReactNode };
         if(nodeProperties.children) {
-            return getStringFromReactNode(nodeProperties.children);
+            return stringFromReactNode(nodeProperties.children);
         }
     }
 
     // Default case
     return undefined;
-}
-
-// Hook to detect mobile viewport (max-width: 768px)
-// Always starts with false for SSR safety, then updates to actual viewport after hydration
-export function useIsMobile(): boolean {
-    // Always start with false to prevent SSR hydration mismatches
-    const [isMobile, setIsMobile] = React.useState(false);
-
-    // Effect to update on viewport size changes
-    React.useEffect(function () {
-        // Set initial value
-        const mediaQuery = window.matchMedia('(max-width: 768px)');
-        setIsMobile(mediaQuery.matches);
-
-        // Function to handle media query changes
-        function handleChange(event: MediaQueryListEvent) {
-            setIsMobile(event.matches);
-        }
-
-        // Add the event listener
-        mediaQuery.addEventListener('change', handleChange);
-
-        // On unmount, remove the event listener
-        return function () {
-            mediaQuery.removeEventListener('change', handleChange);
-        };
-    }, []);
-
-    return isMobile;
 }
 
 // Helper to focus first focusable element within a container
@@ -274,7 +127,7 @@ export function focusNextFormElementByLabel(currentElement: HTMLElement): boolea
 }
 
 // Function to focus the next focusable form element after the current element
-function focusNextFormElement(currentElement: HTMLElement, form: HTMLFormElement): boolean {
+export function focusNextFormElement(currentElement: HTMLElement, form: HTMLFormElement): boolean {
     const formElements = Array.from(
         form.querySelectorAll<HTMLElement>(
             'input:not([type="hidden"]):not([disabled]), ' +
@@ -294,4 +147,22 @@ function focusNextFormElement(currentElement: HTMLElement, form: HTMLFormElement
     }
 
     return false;
+}
+
+// Function to merge multiple references into a single reference callback
+// Useful when you need to pass a reference to a third-party component that also needs its own reference
+// Example: const mergedReference = mergeReferences([localReference, forwardedReference]);
+export function mergeReferences<T>(
+    references: Array<React.RefObject<T> | React.Ref<T> | undefined | null>,
+): React.RefCallback<T> {
+    return function (value) {
+        references.forEach(function (reference) {
+            if(typeof reference === 'function') {
+                reference(value);
+            }
+            else if(reference != null) {
+                (reference as React.RefObject<T | null>).current = value;
+            }
+        });
+    };
 }

@@ -22,7 +22,8 @@ import { DialogFooter } from './DialogFooter';
 
 // Dependencies - Utilities
 import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
-import { useIsMobile, focusFirstFocusableElement } from '@structure/source/utilities/react/React';
+import { useIsMobile } from '@structure/source/utilities/react/hooks/useIsMobile';
+import { focusFirstFocusableElement } from '@structure/source/utilities/react/React';
 
 // Component - DialogRoot
 export interface DialogRootProperties {

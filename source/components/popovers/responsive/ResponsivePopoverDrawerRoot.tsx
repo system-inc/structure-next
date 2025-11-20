@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Hooks
-import { useIsMobile } from '@structure/source/utilities/react/React';
+import { useIsMobile } from '@structure/source/utilities/react/hooks/useIsMobile';
 
 // Dependencies - Main Components
 import { Popover } from '@structure/source/components/popovers/Popover';
@@ -57,7 +57,7 @@ export interface ResponsivePopoverDrawerRootProperties {
 }
 
 export function ResponsivePopoverDrawerRoot(properties: ResponsivePopoverDrawerRootProperties) {
-    // Detect mobile viewport
+    // Hooks
     const isMobile = useIsMobile();
 
     // State

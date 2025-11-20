@@ -274,3 +274,29 @@ export function createVariantClassNames<T extends Record<string, Record<string, 
 
 // Type - VariantProperties
 export type { VariantProps as VariantProperties } from 'class-variance-authority';
+
+/**
+ * Extracts class names that match a given modifier and returns them with the modifier prefix removed.
+ *
+ * Useful for transforming modifier-based classes (like hover:, focus:) into different modifiers
+ * or applying them conditionally.
+ *
+ * @example
+ * classNamesByModifier('hover', 'hover:bg-blue-500 hover:text-white')
+ * // Returns: ['bg-blue-500', 'text-white']
+ *
+ * // Transform hover classes to group-hover classes
+ * const hoverClasses = classNamesByModifier('hover', 'hover:bg-blue-500 hover:text-white');
+ * const groupHoverClasses = hoverClasses.map(className => `group-hover:${className}`);
+ * // groupHoverClasses = ['group-hover:bg-blue-500', 'group-hover:text-white']
+ *
+ * @param {string} modifier - The modifier prefix to match (e.g., 'hover', 'focus', 'dark')
+ * @param {string} classNames - Space-separated string of class names to filter
+ * @returns {string[]} Array of class names with the modifier prefix removed
+ */
+export function classNamesByModifier(modifier: string, classNames: string): string[] {
+    return classNames
+        .split(' ')
+        .filter((currentClassName) => currentClassName.includes(modifier))
+        .map((currentClassName) => currentClassName.replace(modifier + ':', ''));
+}
