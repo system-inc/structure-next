@@ -139,10 +139,16 @@ export function Menu(properties: MenuProperties) {
         // Manage highlight
         setItemsToRenderHighlightIndex(itemRenderIndex);
 
+        // Call the menu item's onClick handler if it exists (for programmatic navigation)
+        // console.log('Menu: Calling item.onClick');
+        item.onClick?.(event);
+
         // Call the onSelected handler for the menu item
+        // console.log('Menu: Calling item.onSelected');
         item.onSelected?.(item, itemRenderIndex, event);
 
         // Call the onItemSelect handler for the menu
+        // console.log('Menu: Calling properties.onItemSelected');
         properties.onItemSelected?.(item, itemRenderIndex, event);
     }
 
@@ -211,24 +217,26 @@ export function Menu(properties: MenuProperties) {
         }
         // Enter or space
         else if(event.key === 'Enter') {
-            // console.log('Press enter');
+            // console.log('Menu: Press enter');
 
             event.preventDefault();
 
-            // Get the highlighted item and trigger its click handler
+            // Get the highlighted item and trigger its button element's native click
+            const highlightedItemHandle = itemHandleReferences.current[itemsToRenderHighlightIndex];
             const highlightedItem = itemsToRender[itemsToRenderHighlightIndex];
-            if(highlightedItem) {
-                // Create a synthetic event to pass to the click handler
-                const syntheticEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window,
-                });
-                itemOnClickIntercept(
-                    highlightedItem,
-                    itemsToRenderHighlightIndex,
-                    syntheticEvent as unknown as React.MouseEvent<HTMLElement, MouseEvent>,
-                );
+
+            // console.log('Menu: highlightedItem:', highlightedItem);
+
+            if(highlightedItemHandle && highlightedItem) {
+                // Trigger the button's native click - this will fire the onClick handler
+                // which calls itemOnClickIntercept, which in turn calls item.onClick for navigation
+                highlightedItemHandle.focus();
+                const buttonElement = document.activeElement as HTMLButtonElement | HTMLAnchorElement;
+                // console.log('Menu: buttonElement:', buttonElement);
+                if(buttonElement) {
+                    // console.log('Menu: Clicking button element');
+                    buttonElement.click();
+                }
             }
         }
         // Escape

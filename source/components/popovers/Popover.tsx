@@ -138,13 +138,21 @@ export function Popover(properties: PopoverProperties) {
                 onKeyDown={function (event) {
                     // console.log('Popover.tsx onKeyDown', event.code);
 
-                    // Open the popover when the user presses the arrow keys, spacebar, or enter
+                    // Open the popover when the user presses the arrow keys or spacebar
+                    // Don't prevent Enter - let it propagate to allow menu item activation
                     if(
                         open == false &&
-                        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Enter'].includes(event.code)
+                        ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(event.code)
                     ) {
                         event.preventDefault();
-                        setOpen(true);
+                        // console.log('Popover.tsx: Calling onOpenChange(true) for arrow/space');
+                        onOpenChange(true);
+                    }
+                    // Enter key opens the menu but doesn't prevent default
+                    // This allows the Enter key to propagate to the Menu component
+                    else if(open == false && event.code === 'Enter') {
+                        // console.log('Popover.tsx: Calling onOpenChange(true) for Enter');
+                        onOpenChange(true);
                     }
                 }}
                 asChild
