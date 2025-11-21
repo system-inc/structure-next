@@ -14,6 +14,7 @@ import type { DialogThemeConfiguration } from '@structure/source/components/dial
 import type { DrawerThemeConfiguration } from '@structure/source/components/drawers/DrawerTheme';
 import type { BadgeThemeConfiguration } from '@structure/source/components/badges/BadgeTheme';
 import type { NoticeThemeConfiguration } from '@structure/source/components/notices/NoticeTheme';
+import type { CardThemeConfiguration } from '@structure/source/components/containers/CardTheme';
 import type { InputTextThemeConfiguration } from '@structure/source/components/forms-new/fields/text/InputTextTheme';
 import type { InputTextAreaThemeConfiguration } from '@structure/source/components/forms-new/fields/text-area/InputTextAreaTheme';
 import type { InputCheckboxThemeConfiguration } from '@structure/source/components/forms-new/fields/checkbox/InputCheckboxTheme';
@@ -32,12 +33,12 @@ interface ComponentThemeContextValue {
     Drawer?: DeepPartialComponentTheme<DrawerThemeConfiguration>;
     Badge?: DeepPartialComponentTheme<BadgeThemeConfiguration>;
     Notice?: DeepPartialComponentTheme<NoticeThemeConfiguration>;
+    Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
     InputText?: DeepPartialComponentTheme<InputTextThemeConfiguration>;
     InputTextArea?: DeepPartialComponentTheme<InputTextAreaThemeConfiguration>;
     InputCheckbox?: DeepPartialComponentTheme<InputCheckboxThemeConfiguration>;
     InputSelect?: DeepPartialComponentTheme<InputSelectThemeConfiguration>;
     // Future component themes:
-    // Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
     // Table?: DeepPartialComponentTheme<TableThemeConfiguration>;
 }
 

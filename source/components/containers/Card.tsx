@@ -1,48 +1,54 @@
+// Dependencies - React
 import React from 'react';
-import {
-    mergeClassNames,
-    createVariantClassNames,
-    VariantProperties,
-} from '@structure/source/utilities/style/ClassName';
-import { Slot } from '@radix-ui/react-slot';
 
-export const cardVariants = createVariantClassNames(
-    // Base styles
-    'flex flex-col items-start justify-start gap-6 rounded-2xl border border--0 background--1 p-8 shadow-lg transition-all',
-    {
+// Dependencies - Theme
+import { cardTheme as structureCardTheme } from './CardTheme';
+import type { CardVariant, CardSize } from './CardTheme';
+import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
+import { mergeComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
+
+// Dependencies - Utilities
+import { mergeClassNames, createVariantClassNames } from '@structure/source/utilities/style/ClassName';
+
+// Component - Card
+export interface CardProperties extends React.HTMLAttributes<HTMLDivElement> {
+    className?: string;
+    variant?: CardVariant;
+    size?: CardSize;
+    children?: React.ReactNode;
+}
+export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function Card(properties, reference) {
+    // Hooks
+    const componentTheme = useComponentTheme();
+
+    // Merge structure theme with project theme
+    const cardTheme = mergeComponentTheme(structureCardTheme, componentTheme?.Card);
+
+    // Create variant className function
+    const cardVariantClassNames = createVariantClassNames(cardTheme.configuration.baseClasses, {
         variants: {
-            interactive: {
-                true: [
-                    // Hover state
-                    'hover:shadow',
-                    // 'dark:hover:border-white-0 dark:border-gray-1000',
-
-                    // Active state
-                    'active:shadow',
-                    // 'active:border-white-0 dark:border-gray-1000',
-                    // 'dark:active:border-white-400 dark:border-black-200',
-                ],
-            },
+            variant: cardTheme.variants,
+            size: cardTheme.sizes,
         },
-    },
-);
+        defaultVariants: properties.variant ? cardTheme.configuration.defaultVariant : {},
+    });
 
-type CardProperties = React.HTMLAttributes<HTMLDivElement> &
-    VariantProperties<typeof cardVariants> & { asChild?: boolean };
-export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function (
-    { className, children, asChild, interactive, ...divProperties },
-    reference,
-) {
-    const Component = asChild ? Slot : 'div';
+    // Compute final className
+    const computedClassName = mergeClassNames(
+        cardVariantClassNames({
+            variant: properties.variant,
+            size: properties.size,
+        }),
+        properties.className,
+    );
 
+    // Render the component
     return (
-        <Component
-            ref={reference}
-            className={mergeClassNames(cardVariants({ className: className, interactive: interactive }))}
-            {...divProperties}
-        >
-            {children}
-        </Component>
+        <div ref={reference} {...properties} className={computedClassName}>
+            {properties.children}
+        </div>
     );
 });
+
+// Set the display name on the component for debugging
 Card.displayName = 'Card';
