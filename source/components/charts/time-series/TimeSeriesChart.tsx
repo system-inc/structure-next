@@ -290,7 +290,10 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                     {showTooltip && (
                         <RechartsTooltip
                             cursor={{
-                                stroke: 'var(--color-border-0)',
+                                stroke:
+                                    properties.chartType === 'Bar'
+                                        ? 'light-dark(var(--color-dark-50), var(--color-light-50))'
+                                        : 'var(--color-border-0)',
                                 strokeWidth:
                                     properties.chartType === 'Bar'
                                         ? chartContentDimensions.width / (properties.data.length || 1)

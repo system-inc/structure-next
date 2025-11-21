@@ -194,7 +194,9 @@ export function DialogRoot(properties: DialogRootProperties) {
                             )}
                             {properties.body && <DialogBody>{properties.body}</DialogBody>}
                             {properties.children}
-                            {(properties.footer !== undefined || !properties.children) && (
+                            {(properties.footer !== undefined ||
+                                properties.footerCloseButton ||
+                                !properties.children) && (
                                 <DialogFooter
                                     closeButton={
                                         properties.footerCloseButton ??

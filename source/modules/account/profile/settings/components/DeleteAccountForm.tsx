@@ -85,6 +85,7 @@ export function DeleteAccountForm(properties: DeleteAccountFormProperties) {
                             <FormInputText key="reason" id="reason" className="grow" label="Reason (optional)" />,
                         ]}
                         buttonProperties={{
+                            variant: 'A',
                             children: 'Delete Account',
                             processingText: 'Deleting account...',
                         }}

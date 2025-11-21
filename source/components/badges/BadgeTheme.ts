@@ -80,9 +80,9 @@ export const badgeTheme: BadgeThemeConfiguration = {
     // Compound variants - combinations of type + variant
     compoundVariants: [
         // Filled backgrounds
-        { type: 'Filled', variant: 'Positive', className: mergeClassNames('background--positive') },
-        { type: 'Filled', variant: 'Negative', className: mergeClassNames('background--negative') },
-        { type: 'Filled', variant: 'Warning', className: mergeClassNames('background--warning') },
+        { type: 'Filled', variant: 'Positive', className: mergeClassNames('background--positive-muted') },
+        { type: 'Filled', variant: 'Negative', className: mergeClassNames('background--negative-muted') },
+        { type: 'Filled', variant: 'Warning', className: mergeClassNames('background--warning-muted') },
         { type: 'Filled', variant: 'Informative', className: mergeClassNames('background--informative-muted') },
         { type: 'Filled', variant: 'Neutral', className: mergeClassNames('background--1') },
         // Outline borders
