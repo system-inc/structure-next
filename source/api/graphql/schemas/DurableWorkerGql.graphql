@@ -174,13 +174,6 @@ type GqlDurableWorkerSchemaResult {
     tables: [GqlDurableWorkerTable!]!
 }
 
-type GqlDurableWorkerSheduleTasksResult {
-    """
-    The number of tasks that were scheduled.
-    """
-    count: Float!
-}
-
 type GqlDurableWorkerStatusResult {
     """
     The tasks currently being processed.
@@ -219,7 +212,15 @@ type GqlDurableWorkerTable {
     name: String!
 }
 
-input GqlDurableWorkerTaskHistoryInput {
+type GqlDurableWorkerTaskHistoryResult {
+    """
+    The task execution history items.
+    """
+    items: [DurableWorkerTaskExecutionGql!]!
+    pagination: Pagination!
+}
+
+input GqlDurableWorkerTaskInput {
     """
     The durable object ID. Either durableObjectId or durableObjectName must be provided.
     """
@@ -238,14 +239,6 @@ input GqlDurableWorkerTaskHistoryInput {
     taskId: String
 }
 
-type GqlDurableWorkerTaskHistoryResult {
-    """
-    The task execution history items.
-    """
-    items: [DurableWorkerTaskExecutionGql!]!
-    pagination: Pagination!
-}
-
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -259,8 +252,10 @@ scalar JSONObject
 type Mutation {
     durableWorkerAbortPrivileged(input: GqlDurableWorkerReasonInput!): OperationResult!
     durableWorkerDisposePrivileged(input: GqlDurableWorkerInput!): OperationResult!
-    durableWorkerSheduleTasksPrivileged(input: GqlDurableWorkerInput!): GqlDurableWorkerSheduleTasksResult!
+    durableWorkerScheduleNextAlarmPrivileged(input: GqlDurableWorkerInput!): OperationResult!
     durableWorkerShutdownPrivileged(input: GqlDurableWorkerReasonInput!): OperationResult!
+    durableWorkerSubscribe(input: GqlDurableWorkerTaskInput!): OperationResult!
+    durableWorkerUnsubscribe(input: GqlDurableWorkerTaskInput!): OperationResult!
 }
 
 type OperationResult {
@@ -304,7 +299,7 @@ type Query {
     durableWorkerSchemaPrivileged(input: GqlDurableWorkerInput!): GqlDurableWorkerSchemaResult!
     durableWorkerStatusPrivileged(input: GqlDurableWorkerInput!): GqlDurableWorkerStatusResult!
     durableWorkerTaskHistoryPrivileged(
-        input: GqlDurableWorkerTaskHistoryInput!
+        input: GqlDurableWorkerTaskInput!
         pagination: PaginationInput!
     ): GqlDurableWorkerTaskHistoryResult!
 }

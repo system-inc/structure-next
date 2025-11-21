@@ -202,9 +202,9 @@
                 "description": "The order direction of a query",
                 "values": ["Ascending", "Descending"]
             },
-            "GqlDurableWorkerTaskHistoryInput": {
+            "GqlDurableWorkerTaskInput": {
                 "kind": "object",
-                "type": "GqlDurableWorkerTaskHistoryInput",
+                "type": "GqlDurableWorkerTaskInput",
                 "fields": [
                     {
                         "kind": "scalar",

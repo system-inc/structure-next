@@ -747,12 +747,6 @@ export type GqlDurableWorkerSchemaResult = {
     tables: Array<GqlDurableWorkerTable>;
 };
 
-export type GqlDurableWorkerSheduleTasksResult = {
-    __typename?: 'GqlDurableWorkerSheduleTasksResult';
-    /** The number of tasks that were scheduled. */
-    count: Scalars['Float']['output'];
-};
-
 export type GqlDurableWorkerStatusResult = {
     __typename?: 'GqlDurableWorkerStatusResult';
     /** The tasks currently being processed. */
@@ -777,7 +771,14 @@ export type GqlDurableWorkerTable = {
     name: Scalars['String']['output'];
 };
 
-export type GqlDurableWorkerTaskHistoryInput = {
+export type GqlDurableWorkerTaskHistoryResult = {
+    __typename?: 'GqlDurableWorkerTaskHistoryResult';
+    /** The task execution history items. */
+    items: Array<DurableWorkerTaskExecutionGql>;
+    pagination: Pagination;
+};
+
+export type GqlDurableWorkerTaskInput = {
     /** The durable object ID. Either durableObjectId or durableObjectName must be provided. */
     durableObjectId?: InputMaybe<Scalars['String']['input']>;
     /** The durable object name. Either durableObjectId or durableObjectName must be provided. */
@@ -786,13 +787,6 @@ export type GqlDurableWorkerTaskHistoryInput = {
     namespace?: InputMaybe<Scalars['String']['input']>;
     /** Optional task ID to filter execution history. */
     taskId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GqlDurableWorkerTaskHistoryResult = {
-    __typename?: 'GqlDurableWorkerTaskHistoryResult';
-    /** The task execution history items. */
-    items: Array<DurableWorkerTaskExecutionGql>;
-    pagination: Pagination;
 };
 
 export type GqlManagedAsset = {
@@ -880,8 +874,10 @@ export type Mutation = {
     dataInteractionDatabaseTableRowsDelete: Scalars['Int']['output'];
     durableWorkerAbortPrivileged: OperationResult;
     durableWorkerDisposePrivileged: OperationResult;
-    durableWorkerSheduleTasksPrivileged: GqlDurableWorkerSheduleTasksResult;
+    durableWorkerScheduleNextAlarmPrivileged: OperationResult;
     durableWorkerShutdownPrivileged: OperationResult;
+    durableWorkerSubscribe: OperationResult;
+    durableWorkerUnsubscribe: OperationResult;
     engagementEventCreate: OperationResult;
     engagementEventsCreate: OperationResult;
     notificationBindingCreate: NotificationBinding;
@@ -1093,12 +1089,20 @@ export type MutationDurableWorkerDisposePrivilegedArgs = {
     input: GqlDurableWorkerInput;
 };
 
-export type MutationDurableWorkerSheduleTasksPrivilegedArgs = {
+export type MutationDurableWorkerScheduleNextAlarmPrivilegedArgs = {
     input: GqlDurableWorkerInput;
 };
 
 export type MutationDurableWorkerShutdownPrivilegedArgs = {
     input: GqlDurableWorkerReasonInput;
+};
+
+export type MutationDurableWorkerSubscribeArgs = {
+    input: GqlDurableWorkerTaskInput;
+};
+
+export type MutationDurableWorkerUnsubscribeArgs = {
+    input: GqlDurableWorkerTaskInput;
 };
 
 export type MutationEngagementEventCreateArgs = {
@@ -1891,7 +1895,7 @@ export type QueryDurableWorkerStatusPrivilegedArgs = {
 };
 
 export type QueryDurableWorkerTaskHistoryPrivilegedArgs = {
-    input: GqlDurableWorkerTaskHistoryInput;
+    input: GqlDurableWorkerTaskInput;
     pagination: PaginationInput;
 };
 
@@ -2172,124 +2176,6 @@ export type AccountAuthenticatedSessionCheckQuery = {
     } | null;
 };
 
-export type AccountMaintenanceDialogAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountMaintenanceDialogAuthenticationQuery = {
-    __typename?: 'Query';
-    accountAuthentication?: {
-        __typename?: 'AuthenticationSession';
-        status: AuthenticationSessionStatus;
-        scopeType: string;
-        currentChallenge?: {
-            __typename?: 'AuthenticationChallenge';
-            challengeType: string;
-            status: AuthenticationChallengeStatus;
-        } | null;
-    } | null;
-};
-
-export type AccountAccessRolesPrivilegedQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountAccessRolesPrivilegedQuery = {
-    __typename?: 'Query';
-    accountAccessRolesPrivileged: Array<{ __typename?: 'AccessRole'; type: string; description?: string | null }>;
-};
-
-export type AccountPrivilegedQueryVariables = Exact<{
-    input: AccountInput;
-}>;
-
-export type AccountPrivilegedQuery = {
-    __typename?: 'Query';
-    accountPrivileged?: {
-        __typename?: 'Account';
-        profiles: Array<{
-            __typename?: 'Profile';
-            username: string;
-            displayName?: string | null;
-            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
-        }>;
-    } | null;
-};
-
-export type AccountAccessRoleAssignmentCreatePrivilegedMutationVariables = Exact<{
-    input: AccessRoleAssignmentCreateInput;
-}>;
-
-export type AccountAccessRoleAssignmentCreatePrivilegedMutation = {
-    __typename?: 'Mutation';
-    accountAccessRoleAssignmentCreatePrivileged: {
-        __typename?: 'AccessRoleAssignment';
-        id: string;
-        status: AccessRoleStatus;
-        expiresAt?: any | null;
-        createdAt: any;
-        updatedAt: any;
-        accessRole?: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null } | null;
-        profile: {
-            __typename?: 'Profile';
-            username: string;
-            displayName?: string | null;
-            createdAt: any;
-            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
-        };
-    };
-};
-
-export type AccountProfileImageRemoveMutationVariables = Exact<{ [key: string]: never }>;
-
-export type AccountProfileImageRemoveMutation = {
-    __typename?: 'Mutation';
-    accountProfileImageRemove: {
-        __typename?: 'Profile';
-        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
-    };
-};
-
-export type AccountEmailsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountEmailsQuery = {
-    __typename?: 'Query';
-    accountEmailAddresses: {
-        __typename?: 'AccountEmailAddressesResult';
-        emailAddresses: Array<{
-            __typename?: 'AccountEmail';
-            id: string;
-            emailAddress: string;
-            type: AccountEmailType;
-            isVerified: boolean;
-        }>;
-    };
-};
-
-export type AccountProfileUpdateMutationVariables = Exact<{
-    input: AccountProfileUpdateInput;
-}>;
-
-export type AccountProfileUpdateMutation = {
-    __typename?: 'Mutation';
-    accountProfileUpdate: {
-        __typename?: 'Profile';
-        id: string;
-        username: string;
-        displayName?: string | null;
-        givenName?: string | null;
-        familyName?: string | null;
-        updatedAt: any;
-        createdAt: any;
-        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
-    };
-};
-
-export type AccountProfileUsernameValidateQueryVariables = Exact<{
-    username: Scalars['String']['input'];
-}>;
-
-export type AccountProfileUsernameValidateQuery = {
-    __typename?: 'Query';
-    accountProfileUsernameValidate: UniqueFieldValidationResult;
-};
-
 export type AccountAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AccountAuthenticationQuery = {
@@ -2424,6 +2310,124 @@ export type AccountAuthenticationEmailVerificationSendMutation = {
                 challengeType: string;
                 status: AuthenticationChallengeStatus;
             } | null;
+        };
+    };
+};
+
+export type AccountMaintenanceDialogAuthenticationQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountMaintenanceDialogAuthenticationQuery = {
+    __typename?: 'Query';
+    accountAuthentication?: {
+        __typename?: 'AuthenticationSession';
+        status: AuthenticationSessionStatus;
+        scopeType: string;
+        currentChallenge?: {
+            __typename?: 'AuthenticationChallenge';
+            challengeType: string;
+            status: AuthenticationChallengeStatus;
+        } | null;
+    } | null;
+};
+
+export type AccountProfileImageRemoveMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AccountProfileImageRemoveMutation = {
+    __typename?: 'Mutation';
+    accountProfileImageRemove: {
+        __typename?: 'Profile';
+        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
+    };
+};
+
+export type AccountEmailsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountEmailsQuery = {
+    __typename?: 'Query';
+    accountEmailAddresses: {
+        __typename?: 'AccountEmailAddressesResult';
+        emailAddresses: Array<{
+            __typename?: 'AccountEmail';
+            id: string;
+            emailAddress: string;
+            type: AccountEmailType;
+            isVerified: boolean;
+        }>;
+    };
+};
+
+export type AccountProfileUpdateMutationVariables = Exact<{
+    input: AccountProfileUpdateInput;
+}>;
+
+export type AccountProfileUpdateMutation = {
+    __typename?: 'Mutation';
+    accountProfileUpdate: {
+        __typename?: 'Profile';
+        id: string;
+        username: string;
+        displayName?: string | null;
+        givenName?: string | null;
+        familyName?: string | null;
+        updatedAt: any;
+        createdAt: any;
+        images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
+    };
+};
+
+export type AccountProfileUsernameValidateQueryVariables = Exact<{
+    username: Scalars['String']['input'];
+}>;
+
+export type AccountProfileUsernameValidateQuery = {
+    __typename?: 'Query';
+    accountProfileUsernameValidate: UniqueFieldValidationResult;
+};
+
+export type AccountAccessRolesPrivilegedQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountAccessRolesPrivilegedQuery = {
+    __typename?: 'Query';
+    accountAccessRolesPrivileged: Array<{ __typename?: 'AccessRole'; type: string; description?: string | null }>;
+};
+
+export type AccountPrivilegedQueryVariables = Exact<{
+    input: AccountInput;
+}>;
+
+export type AccountPrivilegedQuery = {
+    __typename?: 'Query';
+    accountPrivileged?: {
+        __typename?: 'Account';
+        profiles: Array<{
+            __typename?: 'Profile';
+            username: string;
+            displayName?: string | null;
+            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
+        }>;
+    } | null;
+};
+
+export type AccountAccessRoleAssignmentCreatePrivilegedMutationVariables = Exact<{
+    input: AccessRoleAssignmentCreateInput;
+}>;
+
+export type AccountAccessRoleAssignmentCreatePrivilegedMutation = {
+    __typename?: 'Mutation';
+    accountAccessRoleAssignmentCreatePrivileged: {
+        __typename?: 'AccessRoleAssignment';
+        id: string;
+        status: AccessRoleStatus;
+        expiresAt?: any | null;
+        createdAt: any;
+        updatedAt: any;
+        accessRole?: { __typename?: 'AccessRole'; id: string; type: string; description?: string | null } | null;
+        profile: {
+            __typename?: 'Profile';
+            username: string;
+            displayName?: string | null;
+            createdAt: any;
+            images?: Array<{ __typename?: 'GqlMediaObject'; url: string; variant?: string | null }> | null;
         };
     };
 };
@@ -2568,13 +2572,6 @@ export type AccountAccessRoleAssignmentRevokePrivilegedMutation = {
     accountAccessRoleAssignmentRevokePrivileged: { __typename?: 'OperationResult'; success: boolean };
 };
 
-export type AccountEnrolledChallengesQueryVariables = Exact<{ [key: string]: never }>;
-
-export type AccountEnrolledChallengesQuery = {
-    __typename?: 'Query';
-    account: { __typename?: 'Account'; enrolledChallenges: Array<string> };
-};
-
 export type AccountPasswordUpdateMutationVariables = Exact<{
     input: AccountPasswordUpdateInput;
 }>;
@@ -2582,6 +2579,13 @@ export type AccountPasswordUpdateMutationVariables = Exact<{
 export type AccountPasswordUpdateMutation = {
     __typename?: 'Mutation';
     accountPasswordUpdate: { __typename?: 'OperationResult'; success: boolean };
+};
+
+export type AccountEnrolledChallengesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountEnrolledChallengesQuery = {
+    __typename?: 'Query';
+    account: { __typename?: 'Account'; enrolledChallenges: Array<string> };
 };
 
 export type AccountDeleteMutationVariables = Exact<{
@@ -3330,118 +3334,6 @@ export const AccountAuthenticatedSessionCheckDocument = new TypedDocumentString(
     AccountAuthenticatedSessionCheckQuery,
     AccountAuthenticatedSessionCheckQueryVariables
 >;
-export const AccountMaintenanceDialogAuthenticationDocument = new TypedDocumentString(`
-    query AccountMaintenanceDialogAuthentication {
-  accountAuthentication {
-    status
-    scopeType
-    currentChallenge {
-      challengeType
-      status
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountMaintenanceDialogAuthenticationQuery,
-    AccountMaintenanceDialogAuthenticationQueryVariables
->;
-export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
-    query AccountAccessRolesPrivileged {
-  accountAccessRolesPrivileged {
-    type
-    description
-  }
-}
-    `) as unknown as TypedDocumentString<AccountAccessRolesPrivilegedQuery, AccountAccessRolesPrivilegedQueryVariables>;
-export const AccountPrivilegedDocument = new TypedDocumentString(`
-    query AccountPrivileged($input: AccountInput!) {
-  accountPrivileged(input: $input) {
-    profiles {
-      username
-      displayName
-      images {
-        url
-        variant
-      }
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<AccountPrivilegedQuery, AccountPrivilegedQueryVariables>;
-export const AccountAccessRoleAssignmentCreatePrivilegedDocument = new TypedDocumentString(`
-    mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
-  accountAccessRoleAssignmentCreatePrivileged(input: $input) {
-    id
-    accessRole {
-      id
-      type
-      description
-    }
-    status
-    profile {
-      username
-      displayName
-      images {
-        url
-        variant
-      }
-      createdAt
-    }
-    expiresAt
-    createdAt
-    updatedAt
-  }
-}
-    `) as unknown as TypedDocumentString<
-    AccountAccessRoleAssignmentCreatePrivilegedMutation,
-    AccountAccessRoleAssignmentCreatePrivilegedMutationVariables
->;
-export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
-    mutation AccountProfileImageRemove {
-  accountProfileImageRemove {
-    images {
-      url
-      variant
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
-export const AccountEmailsDocument = new TypedDocumentString(`
-    query AccountEmails {
-  accountEmailAddresses {
-    emailAddresses {
-      id
-      emailAddress
-      type
-      isVerified
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<AccountEmailsQuery, AccountEmailsQueryVariables>;
-export const AccountProfileUpdateDocument = new TypedDocumentString(`
-    mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
-  accountProfileUpdate(input: $input) {
-    id
-    username
-    displayName
-    givenName
-    familyName
-    images {
-      url
-      variant
-    }
-    updatedAt
-    createdAt
-  }
-}
-    `) as unknown as TypedDocumentString<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
-export const AccountProfileUsernameValidateDocument = new TypedDocumentString(`
-    query AccountProfileUsernameValidate($username: String!) {
-  accountProfileUsernameValidate(username: $username)
-}
-    `) as unknown as TypedDocumentString<
-    AccountProfileUsernameValidateQuery,
-    AccountProfileUsernameValidateQueryVariables
->;
 export const AccountAuthenticationDocument = new TypedDocumentString(`
     query AccountAuthentication {
   accountAuthentication {
@@ -3563,6 +3455,118 @@ export const AccountAuthenticationEmailVerificationSendDocument = new TypedDocum
     `) as unknown as TypedDocumentString<
     AccountAuthenticationEmailVerificationSendMutation,
     AccountAuthenticationEmailVerificationSendMutationVariables
+>;
+export const AccountMaintenanceDialogAuthenticationDocument = new TypedDocumentString(`
+    query AccountMaintenanceDialogAuthentication {
+  accountAuthentication {
+    status
+    scopeType
+    currentChallenge {
+      challengeType
+      status
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountMaintenanceDialogAuthenticationQuery,
+    AccountMaintenanceDialogAuthenticationQueryVariables
+>;
+export const AccountProfileImageRemoveDocument = new TypedDocumentString(`
+    mutation AccountProfileImageRemove {
+  accountProfileImageRemove {
+    images {
+      url
+      variant
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfileImageRemoveMutation, AccountProfileImageRemoveMutationVariables>;
+export const AccountEmailsDocument = new TypedDocumentString(`
+    query AccountEmails {
+  accountEmailAddresses {
+    emailAddresses {
+      id
+      emailAddress
+      type
+      isVerified
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountEmailsQuery, AccountEmailsQueryVariables>;
+export const AccountProfileUpdateDocument = new TypedDocumentString(`
+    mutation AccountProfileUpdate($input: AccountProfileUpdateInput!) {
+  accountProfileUpdate(input: $input) {
+    id
+    username
+    displayName
+    givenName
+    familyName
+    images {
+      url
+      variant
+    }
+    updatedAt
+    createdAt
+  }
+}
+    `) as unknown as TypedDocumentString<AccountProfileUpdateMutation, AccountProfileUpdateMutationVariables>;
+export const AccountProfileUsernameValidateDocument = new TypedDocumentString(`
+    query AccountProfileUsernameValidate($username: String!) {
+  accountProfileUsernameValidate(username: $username)
+}
+    `) as unknown as TypedDocumentString<
+    AccountProfileUsernameValidateQuery,
+    AccountProfileUsernameValidateQueryVariables
+>;
+export const AccountAccessRolesPrivilegedDocument = new TypedDocumentString(`
+    query AccountAccessRolesPrivileged {
+  accountAccessRolesPrivileged {
+    type
+    description
+  }
+}
+    `) as unknown as TypedDocumentString<AccountAccessRolesPrivilegedQuery, AccountAccessRolesPrivilegedQueryVariables>;
+export const AccountPrivilegedDocument = new TypedDocumentString(`
+    query AccountPrivileged($input: AccountInput!) {
+  accountPrivileged(input: $input) {
+    profiles {
+      username
+      displayName
+      images {
+        url
+        variant
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<AccountPrivilegedQuery, AccountPrivilegedQueryVariables>;
+export const AccountAccessRoleAssignmentCreatePrivilegedDocument = new TypedDocumentString(`
+    mutation AccountAccessRoleAssignmentCreatePrivileged($input: AccessRoleAssignmentCreateInput!) {
+  accountAccessRoleAssignmentCreatePrivileged(input: $input) {
+    id
+    accessRole {
+      id
+      type
+      description
+    }
+    status
+    profile {
+      username
+      displayName
+      images {
+        url
+        variant
+      }
+      createdAt
+    }
+    expiresAt
+    createdAt
+    updatedAt
+  }
+}
+    `) as unknown as TypedDocumentString<
+    AccountAccessRoleAssignmentCreatePrivilegedMutation,
+    AccountAccessRoleAssignmentCreatePrivilegedMutationVariables
 >;
 export const ContactListCreatePrivilegedDocument = new TypedDocumentString(`
     mutation ContactListCreatePrivileged($data: ContactListCreationInput!) {
@@ -3693,13 +3697,6 @@ export const AccountAccessRoleAssignmentRevokePrivilegedDocument = new TypedDocu
     AccountAccessRoleAssignmentRevokePrivilegedMutation,
     AccountAccessRoleAssignmentRevokePrivilegedMutationVariables
 >;
-export const AccountEnrolledChallengesDocument = new TypedDocumentString(`
-    query AccountEnrolledChallenges {
-  account {
-    enrolledChallenges
-  }
-}
-    `) as unknown as TypedDocumentString<AccountEnrolledChallengesQuery, AccountEnrolledChallengesQueryVariables>;
 export const AccountPasswordUpdateDocument = new TypedDocumentString(`
     mutation AccountPasswordUpdate($input: AccountPasswordUpdateInput!) {
   accountPasswordUpdate(input: $input) {
@@ -3707,6 +3704,13 @@ export const AccountPasswordUpdateDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AccountPasswordUpdateMutation, AccountPasswordUpdateMutationVariables>;
+export const AccountEnrolledChallengesDocument = new TypedDocumentString(`
+    query AccountEnrolledChallenges {
+  account {
+    enrolledChallenges
+  }
+}
+    `) as unknown as TypedDocumentString<AccountEnrolledChallengesQuery, AccountEnrolledChallengesQueryVariables>;
 export const AccountDeleteDocument = new TypedDocumentString(`
     mutation AccountDelete($reason: String) {
   accountDelete(reason: $reason) {
@@ -5546,6 +5550,204 @@ export namespace GraphQLInputTypes {
         ],
     };
 
+    export const AccessRoleAssignmentCreateInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'AccessRoleAssignmentCreateInput',
+        fields: [
+            {
+                name: 'expiresAt',
+                kind: 'scalar',
+                type: 'DateTimeISO',
+                required: false,
+            },
+            {
+                name: 'accessRole',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+            {
+                name: 'emailAddress',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isEmail',
+                    },
+                ],
+            },
+            {
+                name: 'username',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+            },
+        ],
+    };
+
+    export const AccountInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'AccountInput',
+        fields: [
+            {
+                name: 'emailAddress',
+                kind: 'scalar',
+                type: 'String',
+                required: true,
+                validation: [
+                    {
+                        type: 'isEmail',
+                    },
+                ],
+            },
+        ],
+    };
+
+    export const AccountProfileUpdateInput: GraphQLInputObjectTypeMetadata = {
+        kind: 'object',
+        type: 'AccountProfileUpdateInput',
+        fields: [
+            {
+                name: 'username',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'isLength',
+                        constraints: [3, 32],
+                    },
+                    {
+                        type: 'isString',
+                    },
+                ],
+            },
+            {
+                name: 'displayName',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [128],
+                    },
+                ],
+            },
+            {
+                name: 'givenName',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [128],
+                    },
+                ],
+            },
+            {
+                name: 'familyName',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [128],
+                    },
+                ],
+            },
+            {
+                name: 'middleName',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [128],
+                    },
+                ],
+            },
+            {
+                name: 'preferredName',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [128],
+                    },
+                ],
+            },
+            {
+                name: 'phoneNumber',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'IsPhoneNumberLite',
+                        constraints: [{}],
+                    },
+                ],
+            },
+            {
+                name: 'birthday',
+                kind: 'scalar',
+                type: 'DateTimeISO',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'isDate',
+                    },
+                ],
+            },
+            {
+                name: 'gender',
+                kind: 'scalar',
+                type: 'String',
+                required: false,
+                validation: [
+                    {
+                        type: 'isOptional',
+                    },
+                    {
+                        type: 'maxLength',
+                        constraints: [32],
+                    },
+                ],
+            },
+        ],
+    };
+
     export const AccountEmailVerificationVerifyInput: GraphQLInputObjectTypeMetadata = {
         kind: 'object',
         type: 'AccountEmailVerificationVerifyInput',
@@ -5743,204 +5945,6 @@ export namespace GraphQLInputTypes {
             },
         ],
     };
-
-    export const AccountProfileUpdateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountProfileUpdateInput',
-        fields: [
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isLength',
-                        constraints: [3, 32],
-                    },
-                    {
-                        type: 'isString',
-                    },
-                ],
-            },
-            {
-                name: 'displayName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'givenName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'familyName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'middleName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'preferredName',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [128],
-                    },
-                ],
-            },
-            {
-                name: 'phoneNumber',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'IsPhoneNumberLite',
-                        constraints: [{}],
-                    },
-                ],
-            },
-            {
-                name: 'birthday',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'isDate',
-                    },
-                ],
-            },
-            {
-                name: 'gender',
-                kind: 'scalar',
-                type: 'String',
-                required: false,
-                validation: [
-                    {
-                        type: 'isOptional',
-                    },
-                    {
-                        type: 'maxLength',
-                        constraints: [32],
-                    },
-                ],
-            },
-        ],
-    };
-
-    export const AccessRoleAssignmentCreateInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccessRoleAssignmentCreateInput',
-        fields: [
-            {
-                name: 'expiresAt',
-                kind: 'scalar',
-                type: 'DateTimeISO',
-                required: false,
-            },
-            {
-                name: 'accessRole',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-            {
-                name: 'username',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-            },
-        ],
-    };
-
-    export const AccountInput: GraphQLInputObjectTypeMetadata = {
-        kind: 'object',
-        type: 'AccountInput',
-        fields: [
-            {
-                name: 'emailAddress',
-                kind: 'scalar',
-                type: 'String',
-                required: true,
-                validation: [
-                    {
-                        type: 'isEmail',
-                    },
-                ],
-            },
-        ],
-    };
 }
 
 export interface GraphQLOperationMetadata<DocumentType> {
@@ -5985,66 +5989,6 @@ export interface GraphQLOperationScalarListParameterMetadata extends BaseGraphQL
     readonly itemKind: 'scalar';
     readonly type: string;
 }
-
-export const AccountPrivilegedOperation: GraphQLOperationMetadata<typeof AccountPrivilegedDocument> = {
-    operation: 'AccountPrivileged',
-    operationType: 'query',
-    document: AccountPrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.AccountInput,
-        },
-    ],
-};
-
-export const AccountAccessRoleAssignmentCreatePrivilegedOperation: GraphQLOperationMetadata<
-    typeof AccountAccessRoleAssignmentCreatePrivilegedDocument
-> = {
-    operation: 'AccountAccessRoleAssignmentCreatePrivileged',
-    operationType: 'mutation',
-    document: AccountAccessRoleAssignmentCreatePrivilegedDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.AccessRoleAssignmentCreateInput,
-        },
-    ],
-};
-
-export const AccountProfileUpdateOperation: GraphQLOperationMetadata<typeof AccountProfileUpdateDocument> = {
-    operation: 'AccountProfileUpdate',
-    operationType: 'mutation',
-    document: AccountProfileUpdateDocument,
-    parameters: [
-        {
-            parameter: 'input',
-            required: true,
-            kind: 'object',
-            type: GraphQLInputTypes.AccountProfileUpdateInput,
-        },
-    ],
-};
-
-export const AccountProfileUsernameValidateOperation: GraphQLOperationMetadata<
-    typeof AccountProfileUsernameValidateDocument
-> = {
-    operation: 'AccountProfileUsernameValidate',
-    operationType: 'query',
-    document: AccountProfileUsernameValidateDocument,
-    parameters: [
-        {
-            parameter: 'username',
-            required: true,
-            kind: 'scalar',
-            type: 'String',
-        },
-    ],
-};
 
 export const AccountAuthenticationRegistrationCompleteOperation: GraphQLOperationMetadata<
     typeof AccountAuthenticationRegistrationCompleteDocument
@@ -6106,6 +6050,66 @@ export const AccountAuthenticationEmailVerificationVerifyOperation: GraphQLOpera
             required: true,
             kind: 'object',
             type: GraphQLInputTypes.AccountEmailVerificationVerifyInput,
+        },
+    ],
+};
+
+export const AccountProfileUpdateOperation: GraphQLOperationMetadata<typeof AccountProfileUpdateDocument> = {
+    operation: 'AccountProfileUpdate',
+    operationType: 'mutation',
+    document: AccountProfileUpdateDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.AccountProfileUpdateInput,
+        },
+    ],
+};
+
+export const AccountProfileUsernameValidateOperation: GraphQLOperationMetadata<
+    typeof AccountProfileUsernameValidateDocument
+> = {
+    operation: 'AccountProfileUsernameValidate',
+    operationType: 'query',
+    document: AccountProfileUsernameValidateDocument,
+    parameters: [
+        {
+            parameter: 'username',
+            required: true,
+            kind: 'scalar',
+            type: 'String',
+        },
+    ],
+};
+
+export const AccountPrivilegedOperation: GraphQLOperationMetadata<typeof AccountPrivilegedDocument> = {
+    operation: 'AccountPrivileged',
+    operationType: 'query',
+    document: AccountPrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.AccountInput,
+        },
+    ],
+};
+
+export const AccountAccessRoleAssignmentCreatePrivilegedOperation: GraphQLOperationMetadata<
+    typeof AccountAccessRoleAssignmentCreatePrivilegedDocument
+> = {
+    operation: 'AccountAccessRoleAssignmentCreatePrivileged',
+    operationType: 'mutation',
+    document: AccountAccessRoleAssignmentCreatePrivilegedDocument,
+    parameters: [
+        {
+            parameter: 'input',
+            required: true,
+            kind: 'object',
+            type: GraphQLInputTypes.AccessRoleAssignmentCreateInput,
         },
     ],
 };
