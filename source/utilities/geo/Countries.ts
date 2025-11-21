@@ -826,14 +826,14 @@ export const Countries: Record<string, CountryInterface> = {
     TW: {
         code: 'TW',
         emoji: getCountryEmojiByCountryCode('TW'),
-        name: 'Taiwan, Province of China',
+        name: 'Taiwan',
         latitude: 23.5,
         longitude: 121.0,
     },
     TZ: {
         code: 'TZ',
         emoji: getCountryEmojiByCountryCode('TZ'),
-        name: 'Tanzania, United Republic of',
+        name: 'Tanzania',
         latitude: -6.0,
         longitude: 35.0,
     },
