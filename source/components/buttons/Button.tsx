@@ -115,8 +115,8 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
     // Create button variant class names function using the merged theme
     const buttonVariantClassNames = createVariantClassNames(buttonTheme.configuration.baseClasses, {
         variants: {
-            variant: buttonTheme.variants,
             size: buttonTheme.sizes,
+            variant: buttonTheme.variants,
         },
         // Only apply default size when variant is provided
         defaultVariants: variant ? buttonTheme.configuration.defaultVariant : {},
@@ -131,8 +131,8 @@ export const Button = React.forwardRef<HTMLElement, ButtonProperties>(function B
     // Compute final className using the merged theme
     const computedClassName = mergeClassNames(
         buttonVariantClassNames({
-            variant, // Primary, Secondary, Ghost, etc.
-            size, // Small, Base, Large, etc.
+            size, // Small, Base, Large, etc. (applied first)
+            variant, // Primary, Secondary, Ghost, etc. (applied last, takes priority)
         }),
         buttonTheme.configuration.focusClasses, // Always applied
         isDisabled && buttonTheme.configuration.disabledClasses, // Conditional
