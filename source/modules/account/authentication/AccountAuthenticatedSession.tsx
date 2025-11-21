@@ -33,7 +33,6 @@ export interface AccountAuthenticatedSessionProperties {
     children: React.ReactNode;
     onAuthenticated?: () => void;
 }
-
 export function AccountAuthenticatedSession(properties: AccountAuthenticatedSessionProperties) {
     // State
     const [authenticationSession, setAuthenticationSession] = React.useState<
@@ -217,6 +216,7 @@ export function AccountAuthenticatedSession(properties: AccountAuthenticatedSess
                 <h2 className="text-base font-medium">{properties.title}</h2>
                 <p className="mt-4 text-sm">{properties.description}</p>
                 <Button
+                    variant="A"
                     isLoading={sessionCreateRequest.isLoading}
                     className="mt-6"
                     onClick={function () {

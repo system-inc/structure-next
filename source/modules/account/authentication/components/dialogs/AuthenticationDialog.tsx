@@ -45,6 +45,7 @@ export function AuthenticationDialog() {
             open={account.authenticationDialogSettings.open}
             onOpenChange={handleOpenChange}
             body={<Authentication className="" variant="Dialog" scope={account.authenticationDialogSettings.scope} />}
+            footerCloseButton={false}
         />
     );
 }

@@ -50,7 +50,7 @@ export function SecurityPage() {
 
             <div className="mt-10">
                 {/* Set or Change Password Button */}
-                <Button onClick={handlePasswordClick}>
+                <Button variant="A" onClick={handlePasswordClick}>
                     {accountHasPasswordSet ? 'Change Password' : 'Set Password'}
                 </Button>
             </div>

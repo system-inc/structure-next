@@ -73,6 +73,7 @@ export function EmailForm(properties: EmailFormProperties) {
                     />,
                 ]}
                 buttonProperties={{
+                    variant: 'A',
                     className: 'w-full h-10',
                     children: <ArrowRightIcon className="h-4 w-4" />,
                 }}

@@ -254,6 +254,7 @@ export function Authentication(properties: AuthenticationProperties) {
                         Sign Out
                     </Button>
                     <Button
+                        variant="A"
                         onClick={function () {
                             router.back();
                         }}

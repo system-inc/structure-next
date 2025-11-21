@@ -215,6 +215,7 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
             open={open}
             onOpenChange={onOpenChangeIntercept}
             body={content}
+            footerCloseButton={false}
         />
     );
 }

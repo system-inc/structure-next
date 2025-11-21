@@ -68,6 +68,7 @@ export function AccountPasswordForm(properties: AccountPasswordFormProperties) {
                     />,
                 ]}
                 buttonProperties={{
+                    variant: 'A',
                     className: 'w-full h-10',
                     children: 'Submit',
                 }}
