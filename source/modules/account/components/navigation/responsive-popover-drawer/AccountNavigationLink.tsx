@@ -28,8 +28,9 @@ export function AccountNavigationLink(properties: AccountNavigationLinkPropertie
     // Hooks
     const urlPath = useUrlPath();
 
-    // Determine if this link is active
-    const isActive = urlPath === properties.href || urlPath.startsWith(properties.href + '/');
+    // Determine if this link is active (exact match or starts with href followed by /)
+    const isActive =
+        urlPath === properties.href || (urlPath.startsWith(properties.href + '/') && properties.href !== '/');
 
     // Render the component
     return (

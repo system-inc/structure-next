@@ -48,7 +48,12 @@ export function SecurityPage() {
         <>
             <h1>Security</h1>
 
-            <div className="mt-10">
+            <p className="mt-4 content--4">
+                Your account uses email-based authentication as the primary sign-in method. You can optionally set a
+                password for extra account protection.
+            </p>
+
+            <div className="mt-8">
                 {/* Set or Change Password Button */}
                 <Button variant="A" onClick={handlePasswordClick}>
                     {accountHasPasswordSet ? 'Change Password' : 'Set Password'}

@@ -50,7 +50,9 @@ export function AccountNavigationSidebar(properties: AccountNavigationSidebarPro
                     );
                 })
                 .map(function (accountNavigationLink, accountNavigationLinkIndex) {
-                    const isActiveRoute = urlPath.includes(accountNavigationLink.href);
+                    const isActiveRoute =
+                        urlPath === accountNavigationLink.href ||
+                        (urlPath.startsWith(accountNavigationLink.href + '/') && accountNavigationLink.href !== '/');
                     return (
                         <Link
                             key={accountNavigationLinkIndex}

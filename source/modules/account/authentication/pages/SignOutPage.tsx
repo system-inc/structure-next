@@ -42,6 +42,7 @@ export function SignOutPage() {
                             Sign Out
                         </Button>
                         <Button
+                            variant="Outline"
                             onClick={function () {
                                 router.back();
                             }}

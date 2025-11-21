@@ -177,37 +177,31 @@ export function AccountMaintenanceDialog(properties: AccountMaintenanceDialogPro
     }
     else {
         // Show the authentication form only if not checking and not authenticated
-        content = (
-            <div className="p-6">
-                {shouldProceed ? (
-                    <AccountAuthenticatedSession
-                        scopeType={AccountSessionScopeType.AccountMaintenance}
-                        title="Verify Identity"
-                        description={`To ${properties.actionText}, please verify your identity for security purposes.`}
-                        buttonText="Continue"
-                        onAuthenticated={properties.onAuthenticated}
-                    >
-                        {/* This will be shown after authentication completes */}
-                        <div className="text-center">
-                            <div className="mb-4 flex justify-center">
-                                <LoadingAnimation className="h-12 w-12" />
-                            </div>
-                            <h2 className="mb-2 text-lg font-semibold">Authentication Successful</h2>
-                            <p className="text-sm content--1">Processing your request...</p>
-                        </div>
-                    </AccountAuthenticatedSession>
-                ) : (
-                    // Dialog is closing, show empty content to prevent flash
-                    <div />
-                )}
-            </div>
+        content = shouldProceed ? (
+            <AccountAuthenticatedSession
+                scopeType={AccountSessionScopeType.AccountMaintenance}
+                title="Verify Identity"
+                description={`To ${properties.actionText}, please verify your identity for security purposes.`}
+                buttonText="Continue"
+                onAuthenticated={properties.onAuthenticated}
+            >
+                <div className="text-center">
+                    <div className="mb-4 flex justify-center">
+                        <LoadingAnimation className="h-12 w-12" />
+                    </div>
+                    <h2 className="mb-2 text-lg font-semibold">Authentication Successful</h2>
+                    <p className="text-sm content--1">Processing your request...</p>
+                </div>
+            </AccountAuthenticatedSession>
+        ) : (
+            // Dialog is closing, show empty content to prevent flash
+            <div />
         );
     }
 
     return (
         <Dialog
             variant="A"
-            className="max-w-md"
             accessibilityTitle="Verify Identity"
             accessibilityDescription="Verify your identity to perform this sensitive account operation"
             {...properties}

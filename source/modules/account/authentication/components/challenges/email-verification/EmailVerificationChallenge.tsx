@@ -25,7 +25,7 @@ export function EmailVerificationChallenge(properties: EmailVerificationChalleng
     // Render the component
     return (
         <div>
-            <h1 className="mb-2 text-xl">Verify Your Email</h1>
+            <h1 className="mb-2">Verify Your Email</h1>
 
             {/* Email Sent */}
             <EmailVerificationVerifyForm emailAddress={properties.emailAddress} onSuccess={properties.onSuccess} />

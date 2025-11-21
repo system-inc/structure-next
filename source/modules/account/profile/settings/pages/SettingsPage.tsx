@@ -31,6 +31,11 @@ export function SettingsPage() {
             <h1>Settings</h1>
 
             <div className="mt-10">
+                <h2 className="mb-2 text-lg font-semibold">Delete Account</h2>
+                <p className="mb-4 text-sm content--4">
+                    Deleting your account is permanent and cannot be undone. All of your data will be permanently
+                    removed and no data recovery will be available.
+                </p>
                 <Button variant="Destructive" onClick={handleDeleteClick}>
                     Delete Account
                 </Button>

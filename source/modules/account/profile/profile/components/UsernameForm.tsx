@@ -169,10 +169,14 @@ export function UsernameForm() {
                 </Dialog.Body>
                 <Dialog.Footer>
                     {usernameUpdateSuccess ? (
-                        <Button onClick={handleDialogClose}>Close</Button>
+                        <Button variant="B" onClick={handleDialogClose}>
+                            Close
+                        </Button>
                     ) : (
                         <div className="mt-6 flex justify-end space-x-2">
-                            <Button onClick={handleDialogClose}>Cancel</Button>
+                            <Button variant="Outline" onClick={handleDialogClose}>
+                                Cancel
+                            </Button>
                             <AnimatedButton
                                 variant="A"
                                 onClick={handleConfirm}
