@@ -254,8 +254,6 @@ type Mutation {
     durableWorkerDisposePrivileged(input: GqlDurableWorkerInput!): OperationResult!
     durableWorkerScheduleNextAlarmPrivileged(input: GqlDurableWorkerInput!): OperationResult!
     durableWorkerShutdownPrivileged(input: GqlDurableWorkerReasonInput!): OperationResult!
-    durableWorkerSubscribe(input: GqlDurableWorkerTaskInput!): OperationResult!
-    durableWorkerUnsubscribe(input: GqlDurableWorkerTaskInput!): OperationResult!
 }
 
 type OperationResult {

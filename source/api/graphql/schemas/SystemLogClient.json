@@ -1,0 +1,434 @@
+{
+    "types": {
+        "input": {
+            "Int": {
+                "kind": "scalar",
+                "type": "Int",
+                "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1."
+            },
+            "String": {
+                "kind": "scalar",
+                "type": "String",
+                "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text."
+            },
+            "SystemLogLevel": {
+                "kind": "enum",
+                "type": "SystemLogLevel",
+                "description": "The level of the system log message.",
+                "values": ["Info", "Debug", "Warning", "Error", "Critical"]
+            },
+            "JSONObject": {
+                "kind": "scalar",
+                "type": "JSONObject",
+                "description": "The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
+            },
+            "Float": {
+                "kind": "scalar",
+                "type": "Float",
+                "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point)."
+            },
+            "ClientCategory": {
+                "kind": "enum",
+                "type": "ClientCategory",
+                "values": ["WebBrowser", "App", "Unknown"]
+            },
+            "DeviceCategory": {
+                "kind": "enum",
+                "type": "DeviceCategory",
+                "values": ["Desktop", "Mobile", "Tablet", "Unknown"]
+            },
+            "SystemLogSourceType": {
+                "kind": "enum",
+                "type": "SystemLogSourceType",
+                "description": "The source type of the system log message.",
+                "values": ["Server", "Client"]
+            },
+            "SystemLogQueryFilters": {
+                "kind": "object",
+                "type": "SystemLogQueryFilters",
+                "fields": [
+                    {
+                        "kind": "enum",
+                        "type": "SystemLogLevel",
+                        "required": false,
+                        "name": "level",
+                        "validation": [
+                            {
+                                "type": "isEnum",
+                                "constraints": [
+                                    {
+                                        "Info": "Info",
+                                        "Debug": "Debug",
+                                        "Warning": "Warning",
+                                        "Error": "Error",
+                                        "Critical": "Critical"
+                                    },
+                                    ["Info", "Debug", "Warning", "Error", "Critical"]
+                                ]
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "event",
+                        "validation": [
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "category",
+                        "validation": [
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "source",
+                        "validation": [
+                            {
+                                "type": "isString"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "enum",
+                        "type": "SystemLogSourceType",
+                        "required": false,
+                        "name": "sourceType",
+                        "validation": [
+                            {
+                                "type": "isEnum",
+                                "constraints": [
+                                    {
+                                        "Server": "Server",
+                                        "Client": "Client"
+                                    },
+                                    ["Server", "Client"]
+                                ]
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "deviceId",
+                        "validation": [
+                            {
+                                "type": "isUuid"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "accountId",
+                        "validation": [
+                            {
+                                "type": "isUuid"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "sessionId",
+                        "validation": [
+                            {
+                                "type": "isUuid"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "traceId",
+                        "validation": [
+                            {
+                                "type": "isUuid"
+                            },
+                            {
+                                "type": "isOptional"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "PaginationInput": {
+                "kind": "object",
+                "type": "PaginationInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "Int",
+                        "required": true,
+                        "name": "itemsPerPage"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "Int",
+                        "required": false,
+                        "name": "itemIndex"
+                    },
+                    {
+                        "kind": "object",
+                        "type": "ColumnFilterInput",
+                        "required": true,
+                        "name": "filters"
+                    },
+                    {
+                        "kind": "object",
+                        "type": "OrderByInput",
+                        "required": true,
+                        "name": "orderBy"
+                    }
+                ]
+            },
+            "ColumnFilterInput": {
+                "kind": "object",
+                "type": "ColumnFilterInput",
+                "fields": [
+                    {
+                        "kind": "enum",
+                        "type": "ColumnFilterConditionOperator",
+                        "required": true,
+                        "name": "operator"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "Boolean",
+                        "required": false,
+                        "name": "caseSensitive"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "column"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "JSON",
+                        "required": true,
+                        "name": "value"
+                    }
+                ]
+            },
+            "ColumnFilterConditionOperator": {
+                "kind": "enum",
+                "type": "ColumnFilterConditionOperator",
+                "description": "The operator of a field filter",
+                "values": [
+                    "Equal",
+                    "NotEqual",
+                    "GreaterThan",
+                    "GreaterThanOrEqual",
+                    "LessThan",
+                    "LessThanOrEqual",
+                    "Like",
+                    "NotLike",
+                    "In",
+                    "NotIn",
+                    "IsNull",
+                    "IsNotNull"
+                ]
+            },
+            "Boolean": {
+                "kind": "scalar",
+                "type": "Boolean",
+                "description": "The `Boolean` scalar type represents `true` or `false`."
+            },
+            "JSON": {
+                "kind": "scalar",
+                "type": "JSON",
+                "description": "The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
+            },
+            "OrderByInput": {
+                "kind": "object",
+                "type": "OrderByInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "key"
+                    },
+                    {
+                        "kind": "enum",
+                        "type": "OrderByDirection",
+                        "required": false,
+                        "name": "direction"
+                    }
+                ]
+            },
+            "OrderByDirection": {
+                "kind": "enum",
+                "type": "OrderByDirection",
+                "description": "The order direction of a query",
+                "values": ["Ascending", "Descending"]
+            },
+            "SystemLogClientInput": {
+                "kind": "object",
+                "type": "SystemLogClientInput",
+                "fields": [
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "level",
+                        "validation": [
+                            {
+                                "type": "isEnum",
+                                "constraints": [
+                                    {
+                                        "Info": "Info",
+                                        "Debug": "Debug",
+                                        "Warning": "Warning",
+                                        "Error": "Error"
+                                    },
+                                    ["Info", "Debug", "Warning", "Error"]
+                                ]
+                            },
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": true,
+                        "name": "event",
+                        "validation": [
+                            {
+                                "type": "maxLength",
+                                "constraints": [100]
+                            },
+                            {
+                                "type": "isNotEmpty"
+                            },
+                            {
+                                "type": "isString"
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "category"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "source"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "message"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "stackTrace"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "JSONObject",
+                        "required": false,
+                        "name": "data"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "String",
+                        "required": false,
+                        "name": "traceId"
+                    },
+                    {
+                        "kind": "scalar",
+                        "type": "Float",
+                        "required": false,
+                        "name": "traceSequence"
+                    }
+                ]
+            },
+            "__TypeKind": {
+                "kind": "enum",
+                "type": "__TypeKind",
+                "description": "An enum describing what kind of type a given `__Type` is.",
+                "values": ["SCALAR", "OBJECT", "INTERFACE", "UNION", "ENUM", "INPUT_OBJECT", "LIST", "NON_NULL"]
+            },
+            "__DirectiveLocation": {
+                "kind": "enum",
+                "type": "__DirectiveLocation",
+                "description": "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.",
+                "values": [
+                    "QUERY",
+                    "MUTATION",
+                    "SUBSCRIPTION",
+                    "FIELD",
+                    "FRAGMENT_DEFINITION",
+                    "FRAGMENT_SPREAD",
+                    "INLINE_FRAGMENT",
+                    "VARIABLE_DEFINITION",
+                    "SCHEMA",
+                    "SCALAR",
+                    "OBJECT",
+                    "FIELD_DEFINITION",
+                    "ARGUMENT_DEFINITION",
+                    "INTERFACE",
+                    "UNION",
+                    "ENUM",
+                    "ENUM_VALUE",
+                    "INPUT_OBJECT",
+                    "INPUT_FIELD_DEFINITION"
+                ]
+            }
+        }
+    }
+}

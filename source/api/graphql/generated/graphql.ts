@@ -280,6 +280,12 @@ export enum AuthenticationSessionStatus {
     OpenStatuses = 'openStatuses',
 }
 
+export enum ClientCategory {
+    App = 'App',
+    Unknown = 'Unknown',
+    WebBrowser = 'WebBrowser',
+}
+
 export type ClientPropertiesInput = {
     environment?: InputMaybe<Scalars['String']['input']>;
 };
@@ -501,6 +507,13 @@ export type DatabaseTablesResult = {
     items: Array<DatabaseTableMetadata>;
     pagination: Pagination;
 };
+
+export enum DeviceCategory {
+    Desktop = 'Desktop',
+    Mobile = 'Mobile',
+    Tablet = 'Tablet',
+    Unknown = 'Unknown',
+}
 
 export enum DeviceOrientation {
     Landscape = 'Landscape',
@@ -876,8 +889,6 @@ export type Mutation = {
     durableWorkerDisposePrivileged: OperationResult;
     durableWorkerScheduleNextAlarmPrivileged: OperationResult;
     durableWorkerShutdownPrivileged: OperationResult;
-    durableWorkerSubscribe: OperationResult;
-    durableWorkerUnsubscribe: OperationResult;
     engagementEventCreate: OperationResult;
     engagementEventsCreate: OperationResult;
     notificationBindingCreate: NotificationBinding;
@@ -915,6 +926,7 @@ export type Mutation = {
     supportTicketCreatePrivileged: SupportTicket;
     supportTicketUpdatePrivileged: SupportTicket;
     supportTicketUpdateStatusPrivileged: SupportTicket;
+    systemLogCreate: OperationResult;
 };
 
 export type MutationAccountAccessRoleAssignmentCreatePrivilegedArgs = {
@@ -1097,14 +1109,6 @@ export type MutationDurableWorkerShutdownPrivilegedArgs = {
     input: GqlDurableWorkerReasonInput;
 };
 
-export type MutationDurableWorkerSubscribeArgs = {
-    input: GqlDurableWorkerTaskInput;
-};
-
-export type MutationDurableWorkerUnsubscribeArgs = {
-    input: GqlDurableWorkerTaskInput;
-};
-
 export type MutationEngagementEventCreateArgs = {
     input: CreateEngagementEventInput;
 };
@@ -1272,6 +1276,10 @@ export type MutationSupportTicketUpdateStatusPrivilegedArgs = {
     status: SupportTicketStatus;
 };
 
+export type MutationSystemLogCreateArgs = {
+    input: SystemLogClientInput;
+};
+
 export type NotificationBinding = {
     __typename?: 'NotificationBinding';
     accountId: Scalars['String']['output'];
@@ -1435,6 +1443,12 @@ export type PaginationInput = {
 export type PaginationSupportTicketResult = {
     __typename?: 'PaginationSupportTicketResult';
     items: Array<SupportTicket>;
+    pagination: Pagination;
+};
+
+export type PaginationSystemLogResult = {
+    __typename?: 'PaginationSystemLogResult';
+    items: Array<SystemLog>;
     pagination: Pagination;
 };
 
@@ -1784,6 +1798,7 @@ export type Query = {
     supportTicket: SupportTicket;
     supportTickets: PaginationSupportTicketResult;
     supportTicketsPrivileged: PaginationSupportTicketResult;
+    systemLogsPrivileged: PaginationSystemLogResult;
 };
 
 export type QueryAccountAccessRoleAssignmentsPrivilegedArgs = {
@@ -1993,6 +2008,11 @@ export type QuerySupportTicketsPrivilegedArgs = {
     pagination: PaginationInput;
 };
 
+export type QuerySystemLogsPrivilegedArgs = {
+    filters?: InputMaybe<SystemLogQueryFilters>;
+    pagination: PaginationInput;
+};
+
 /** The format of the string rich-content */
 export enum RichContentFormat {
     Html = 'Html',
@@ -2084,6 +2104,73 @@ export type SupportTicketUpdateInput = {
     id: Scalars['String']['input'];
     title?: InputMaybe<Scalars['String']['input']>;
 };
+
+export type SystemLog = {
+    __typename?: 'SystemLog';
+    accountId?: Maybe<Scalars['String']['output']>;
+    category?: Maybe<Scalars['String']['output']>;
+    client?: Maybe<Scalars['String']['output']>;
+    clientCategory?: Maybe<ClientCategory>;
+    clientVersion?: Maybe<Scalars['String']['output']>;
+    data?: Maybe<Scalars['JSONObject']['output']>;
+    deviceCategory?: Maybe<DeviceCategory>;
+    deviceId?: Maybe<Scalars['String']['output']>;
+    environment?: Maybe<Scalars['String']['output']>;
+    event: Scalars['String']['output'];
+    ipAddress?: Maybe<Scalars['String']['output']>;
+    level: SystemLogLevel;
+    locale?: Maybe<Scalars['String']['output']>;
+    message?: Maybe<Scalars['String']['output']>;
+    operatingSystem?: Maybe<Scalars['String']['output']>;
+    operatingSystemVersion?: Maybe<Scalars['String']['output']>;
+    requestId?: Maybe<Scalars['String']['output']>;
+    sessionId?: Maybe<Scalars['String']['output']>;
+    source?: Maybe<Scalars['String']['output']>;
+    sourceType?: Maybe<SystemLogSourceType>;
+    stackTrace?: Maybe<Scalars['String']['output']>;
+    traceId?: Maybe<Scalars['String']['output']>;
+    traceSequence?: Maybe<Scalars['Float']['output']>;
+    userAgent?: Maybe<Scalars['String']['output']>;
+};
+
+export type SystemLogClientInput = {
+    category?: InputMaybe<Scalars['String']['input']>;
+    data?: InputMaybe<Scalars['JSONObject']['input']>;
+    event: Scalars['String']['input'];
+    level: Scalars['String']['input'];
+    message?: InputMaybe<Scalars['String']['input']>;
+    source?: InputMaybe<Scalars['String']['input']>;
+    stackTrace?: InputMaybe<Scalars['String']['input']>;
+    traceId?: InputMaybe<Scalars['String']['input']>;
+    traceSequence?: InputMaybe<Scalars['Float']['input']>;
+};
+
+/** The level of the system log message. */
+export enum SystemLogLevel {
+    Critical = 'Critical',
+    Debug = 'Debug',
+    Error = 'Error',
+    Info = 'Info',
+    Warning = 'Warning',
+}
+
+export type SystemLogQueryFilters = {
+    accountId?: InputMaybe<Scalars['String']['input']>;
+    category?: InputMaybe<Scalars['String']['input']>;
+    deviceId?: InputMaybe<Scalars['String']['input']>;
+    event?: InputMaybe<Scalars['String']['input']>;
+    level?: InputMaybe<SystemLogLevel>;
+    sessionId?: InputMaybe<Scalars['String']['input']>;
+    source?: InputMaybe<Scalars['String']['input']>;
+    sourceType?: InputMaybe<SystemLogSourceType>;
+    traceId?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The source type of the system log message. */
+export enum SystemLogSourceType {
+    Client = 'Client',
+    Server = 'Server',
+}
 
 /** An enum of system provided notification destinations. These do not require any configuration by the user. */
 export enum SystemNotificationDestination {
