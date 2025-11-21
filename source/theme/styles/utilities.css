@@ -89,6 +89,11 @@
     color: --alpha(--value(--color-background- *, [color]) / --modifier([percentage]));
 }
 
+/* Shadow utilities with 0-10 scale + reverse ---1/---2/---3 */
+@utility shadow--* {
+    box-shadow: --value(--shadow- *, [box-shadow]);
+}
+
 /* Prose - Typography styles for rich text content with proper spacing */
 @utility prose {
     & p {

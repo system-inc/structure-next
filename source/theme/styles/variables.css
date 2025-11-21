@@ -219,6 +219,9 @@
     --color-white-1000: #ffffff; /* Step 1000 */
 
     /* Borders - Gradient */
+    --color-border--3: light-dark(var(--color-white-750), var(--color-black-500));
+    --color-border--2: light-dark(var(--color-white-700), var(--color-black-450));
+    --color-border--1: light-dark(var(--color-white-650), var(--color-black-400));
     --color-border-0: light-dark(var(--color-white-600), var(--color-black-350));
     --color-border-1: light-dark(var(--color-white-550), var(--color-black-300));
     --color-border-2: light-dark(var(--color-white-500), var(--color-black-250));
@@ -230,9 +233,6 @@
     --color-border-8: light-dark(var(--color-white-200), var(--color-gray-1000));
     --color-border-9: light-dark(var(--color-white-150), var(--color-gray-950));
     --color-border-10: light-dark(var(--color-white-100), var(--color-gray-900));
-    --color-border--1: light-dark(var(--color-white-650), var(--color-black-400));
-    --color-border--2: light-dark(var(--color-white-700), var(--color-black-450));
-    --color-border--3: light-dark(var(--color-white-750), var(--color-black-500));
 
     /* Borders - Semantic */
     --color-border-focus: light-dark(var(--color-gray-250), var(--color-gray-250));
@@ -260,6 +260,9 @@
     );
 
     /* Backgrounds - Gradient */
+    --color-background--3: light-dark(var(--color-white-1000), var(--color-black-850));
+    --color-background--2: light-dark(var(--color-white-1000), var(--color-black-800));
+    --color-background--1: light-dark(var(--color-white-1000), var(--color-black-750));
     --color-background-0: light-dark(var(--color-white-1000), var(--color-black-700));
     --color-background-1: light-dark(var(--color-white-950), var(--color-black-650));
     --color-background-2: light-dark(var(--color-white-900), var(--color-black-600));
@@ -271,9 +274,6 @@
     --color-background-8: light-dark(var(--color-white-600), var(--color-black-300));
     --color-background-9: light-dark(var(--color-white-550), var(--color-black-250));
     --color-background-10: light-dark(var(--color-white-500), var(--color-black-200));
-    --color-background--1: light-dark(var(--color-white-1000), var(--color-black-750));
-    --color-background--2: light-dark(var(--color-white-1000), var(--color-black-800));
-    --color-background--3: light-dark(var(--color-white-1000), var(--color-black-850));
 
     /* Backgrounds - Semantic */
     --color-background-backdrop: light-dark(var(--color-dark-400), var(--color-dark-600));
@@ -301,6 +301,9 @@
     );
 
     /* Content - Gradient */
+    --color-content--3: light-dark(var(--color-black-1000), var(--color-white-1000));
+    --color-content--2: light-dark(var(--color-black-950), var(--color-white-950));
+    --color-content--1: light-dark(var(--color-black-900), var(--color-white-900));
     --color-content-0: light-dark(var(--color-black-800), var(--color-white-700));
     --color-content-1: light-dark(var(--color-black-500), var(--color-white-400));
     --color-content-2: light-dark(var(--color-black-200), var(--color-white-100));
@@ -312,9 +315,6 @@
     --color-content-8: light-dark(var(--color-white-400), var(--color-black-500));
     --color-content-9: light-dark(var(--color-white-700), var(--color-black-800));
     --color-content-10: light-dark(var(--color-white-1000), var(--color-black-1000));
-    --color-content--1: light-dark(var(--color-black-900), var(--color-white-900));
-    --color-content--2: light-dark(var(--color-black-950), var(--color-white-950));
-    --color-content--3: light-dark(var(--color-black-1000), var(--color-white-1000));
 
     /* Content - Semantic */
     --color-content-placeholder: var(--color-gray-600);
@@ -323,4 +323,23 @@
     --color-content-positive: light-dark(var(--color-green-600), var(--color-green-500));
     --color-content-warning: light-dark(var(--color-orange-600), var(--color-orange-500));
     --color-content-negative: light-dark(var(--color-red-600), var(--color-red-500));
+
+    /* Shadow - Gradient scale using existing dark color variables */
+    /* Reverse direction (lighter than base) */
+    --shadow---3: light-dark(0 1px 2px 0 var(--color-dark-25), 0 1px 2px 0 var(--color-dark-250));
+    --shadow---2: light-dark(0 1px 2px 0 var(--color-dark-50), 0 1px 2px 0 var(--color-dark-300));
+    --shadow---1: light-dark(0 1px 2px 0 var(--color-dark-50), 0 1px 2px 0 var(--color-dark-350));
+    /* Base shadow */
+    --shadow--0: light-dark(0 1px 4px 0 var(--color-dark-100), 0 1px 4px 0 var(--color-dark-450));
+    /* Progressive elevation (heavier than base) */
+    --shadow--1: light-dark(0 1px 6px 0 var(--color-dark-100), 0 1px 6px 0 var(--color-dark-450));
+    --shadow--2: light-dark(0 1px 8px 0 var(--color-dark-100), 0 1px 8px 0 var(--color-dark-450));
+    --shadow--3: light-dark(0 1px 12px 0 var(--color-dark-100), 0 1px 12px 0 var(--color-dark-450));
+    --shadow--4: light-dark(0 2px 12px 0 var(--color-dark-100), 0 2px 12px 0 var(--color-dark-450));
+    --shadow--5: light-dark(0 4px 16px 0 var(--color-dark-150), 0 4px 16px 0 var(--color-dark-500));
+    --shadow--6: light-dark(0 6px 16px 0 var(--color-dark-150), 0 6px 16px 0 var(--color-dark-500));
+    --shadow--7: light-dark(0 8px 24px 0 var(--color-dark-200), 0 8px 24px 0 var(--color-dark-550));
+    --shadow--8: light-dark(0 12px 32px 0 var(--color-dark-200), 0 12px 32px 0 var(--color-dark-600));
+    --shadow--9: light-dark(0 16px 48px 0 var(--color-dark-250), 0 16px 48px 0 var(--color-dark-650));
+    --shadow--10: light-dark(0 24px 64px 0 var(--color-dark-300), 0 24px 64px 0 var(--color-dark-700));
 }

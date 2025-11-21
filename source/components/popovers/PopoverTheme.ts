@@ -72,22 +72,10 @@ export interface PopoverThemeConfiguration {
 export const popoverTheme: PopoverThemeConfiguration = {
     // Variants control visual styling (colors, borders, shadows)
     variants: {
-        A: mergeClassNames(
-            basePopoverClassNames,
-            'border border--0 background--0 shadow-xl shadow-black/10 dark:background--0 dark:shadow-black/40',
-        ),
-        B: mergeClassNames(
-            basePopoverClassNames,
-            'border border--1 background--0 shadow-xl shadow-black/10 dark:background--1 dark:shadow-black/40',
-        ),
-        C: mergeClassNames(
-            basePopoverClassNames,
-            'border border--2 background--0 shadow-xl shadow-black/10 dark:background--2 dark:shadow-black/40',
-        ),
-        D: mergeClassNames(
-            basePopoverClassNames,
-            'border border--3 background--0 shadow-xl shadow-black/10 dark:background--3 dark:shadow-black/40',
-        ),
+        A: mergeClassNames(basePopoverClassNames, 'border border--0 background--0 shadow--6 dark:background--0'),
+        B: mergeClassNames(basePopoverClassNames, 'border border--1 background--0 shadow--6 dark:background--1'),
+        C: mergeClassNames(basePopoverClassNames, 'border border--2 background--0 shadow--6 dark:background--2'),
+        D: mergeClassNames(basePopoverClassNames, 'border border--3 background--0 shadow--6 dark:background--3'),
         Tip: mergeClassNames(basePopoverClassNames, 'border border--3 background--0 content--0 shadow-lg'),
     },
 
