@@ -102,7 +102,7 @@ export function OpsNavigationBar() {
 
                 {/* Top Right */}
                 <div className="absolute right-3 z-30 flex h-12 items-center">
-                    <AccountNavigationResponsivePopoverDrawer />
+                    <AccountNavigationResponsivePopoverDrawer triggerVariant="B" />
                 </div>
             </div>
 

@@ -6,6 +6,9 @@ import React from 'react';
 // Dependencies - Animation
 import { PlaceholderAnimation } from '@structure/source/components/animations/PlaceholderAnimation';
 
+// Dependencies - Components
+import { Badge } from '@structure/source/components/badges/Badge';
+
 // Dependencies - Account
 import { useAccount } from '@structure/source/modules/account/hooks/useAccount';
 
@@ -29,7 +32,14 @@ export function EmailAddressesPage() {
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="font-medium">{primaryAccountEmailAddress}</p>
-                                    <p className="mt-1 text-sm content--1">Primary Email • Verified</p>
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <Badge variant="Neutral" type="Outline">
+                                            Primary Email
+                                        </Badge>
+                                        <Badge variant="Positive" type="Status">
+                                            Verified
+                                        </Badge>
+                                    </div>
                                 </div>
                             </div>
                         </div>
