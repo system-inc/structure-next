@@ -60,6 +60,7 @@ export const buttonIconOnlyLayoutClassNames = `aspect-square`;
 //   }
 export interface ButtonVariants {
     A: 'A';
+    B: 'B';
     Outline: 'Outline';
     Contrast: 'Contrast';
     Ghost: 'Ghost';
@@ -130,8 +131,7 @@ export const buttonTheme: ButtonThemeConfiguration = {
     variants: {
         // General Purpose Variants
 
-        // Variant A - Primary button with custom styling
-        // Use for: Main call-to-action buttons, primary actions
+        // Variant A
         A: mergeClassNames(
             buttonCommonLayoutClassNames,
             buttonCommonBehaviorClassNames,
@@ -150,8 +150,26 @@ export const buttonTheme: ButtonThemeConfiguration = {
             'dark:data-[state=open]:border-black-200 dark:data-[state=open]:bg-black-500 dark:data-[state=open]:text-white-900',
         ),
 
+        // Variant B
+        B: mergeClassNames(
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            buttonCommonFocusClassNames,
+            // Border is fully round and outlined
+            'rounded-full border border--0',
+            // Background and content match the page background and content
+            'background--0 content--0',
+            // Hover emphasizes the border and content
+            'hover:border--5 hover:content---1',
+            // Active further emphasizes border
+            'active:border--10 active:content---3',
+            // Open and active states match active styling
+            'data-[state=open]:border--10 data-[state=open]:content---3',
+            'data-[state=active]:border--10 data-[state=active]:content---3',
+        ),
+
         // Variant Outline - Button with visible border and no fill
-        // Use for: Secondary actions, alternative options
         Outline: mergeClassNames(
             buttonCommonLayoutClassNames,
             buttonCommonBehaviorClassNames,
@@ -166,7 +184,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ),
 
         // Variant Contrast - High contrast button using inverted content colors
-        // Use for: Important CTAs that need maximum visibility against background--0
         Contrast: mergeClassNames(
             buttonCommonLayoutClassNames,
             buttonCommonBehaviorClassNames,
@@ -183,7 +200,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ),
 
         // Variant Ghost - Minimal button with no background until hover
-        // Use for: Tertiary actions, icon buttons, toolbar buttons, less prominent actions
         Ghost: mergeClassNames(
             buttonCommonLayoutClassNames,
             buttonCommonBehaviorClassNames,
@@ -199,7 +215,6 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ),
 
         // Variant Destructive - Dangerous/destructive action button
-        // Use for: Delete, remove, or other irreversible destructive actions
         Destructive: mergeClassNames(
             buttonCommonLayoutClassNames,
             buttonCommonBehaviorClassNames,

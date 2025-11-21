@@ -1,3 +1,5 @@
+'use client'; // The component uses client-only features
+
 // Dependencies - React and Next.js
 import React from 'react';
 import { useUrlPath } from '@structure/source/router/Navigation';
