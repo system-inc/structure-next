@@ -12,14 +12,14 @@ export interface BadgeVariants {
 
 export type BadgeVariant = keyof BadgeVariants;
 
-// Badge Types - Visual styles (filled background vs outline vs status dot)
-export interface BadgeTypes {
+// Badge Kinds - Visual styles (filled background vs outline vs status dot)
+export interface BadgeKinds {
     Filled: 'Filled';
     Outline: 'Outline';
     Status: 'Status'; // Shows a colored dot indicator
 }
 
-export type BadgeType = keyof BadgeTypes;
+export type BadgeKind = keyof BadgeKinds;
 
 // Badge Sizes
 export interface BadgeSizes {
@@ -30,9 +30,9 @@ export interface BadgeSizes {
 export type BadgeSize = keyof BadgeSizes;
 
 // Compound Variant Configuration
-// Defines combinations of type + variant for backgrounds and borders
+// Defines combinations of kind + variant for backgrounds and borders
 export interface BadgeCompoundVariant {
-    type: BadgeType;
+    kind: BadgeKind;
     variant: BadgeVariant;
     className: string;
 }
@@ -40,14 +40,14 @@ export interface BadgeCompoundVariant {
 // Badge Theme Configuration
 export interface BadgeThemeConfiguration {
     variants: Partial<Record<BadgeVariant, string>>;
-    types: Partial<Record<BadgeType, string>>;
+    kinds: Partial<Record<BadgeKind, string>>;
     sizes: Partial<Record<BadgeSize, string>>;
     compoundVariants: BadgeCompoundVariant[];
     configuration: {
         baseClasses: string;
         defaultVariant: {
             variant?: BadgeVariant;
-            type?: BadgeType;
+            kind?: BadgeKind;
             size?: BadgeSize;
         };
     };
@@ -64,8 +64,8 @@ export const badgeTheme: BadgeThemeConfiguration = {
         Neutral: mergeClassNames('content--1'),
     },
 
-    // Type styles (filled vs outline vs status)
-    types: {
+    // Kind styles (filled vs outline vs status)
+    kinds: {
         Filled: mergeClassNames(''), // Backgrounds applied via compound variants
         Outline: mergeClassNames(''), // Borders applied via compound variants
         Status: mergeClassNames('border border--0 content--0'), // Status dot style
@@ -77,37 +77,37 @@ export const badgeTheme: BadgeThemeConfiguration = {
         Large: mergeClassNames('px-3 text-sm font-medium', '[&_svg]:size-4'),
     },
 
-    // Compound variants - combinations of type + variant
+    // Compound variants - combinations of kind + variant
     compoundVariants: [
         // Filled backgrounds
-        { type: 'Filled', variant: 'Positive', className: mergeClassNames('background--positive-muted') },
-        { type: 'Filled', variant: 'Negative', className: mergeClassNames('background--negative-muted') },
-        { type: 'Filled', variant: 'Warning', className: mergeClassNames('background--warning-muted') },
-        { type: 'Filled', variant: 'Informative', className: mergeClassNames('background--informative-muted') },
-        { type: 'Filled', variant: 'Neutral', className: mergeClassNames('background--1') },
+        { kind: 'Filled', variant: 'Positive', className: mergeClassNames('background--positive-muted') },
+        { kind: 'Filled', variant: 'Negative', className: mergeClassNames('background--negative-muted') },
+        { kind: 'Filled', variant: 'Warning', className: mergeClassNames('background--warning-muted') },
+        { kind: 'Filled', variant: 'Informative', className: mergeClassNames('background--informative-muted') },
+        { kind: 'Filled', variant: 'Neutral', className: mergeClassNames('background--1') },
         // Outline borders
-        { type: 'Outline', variant: 'Positive', className: mergeClassNames('border border--positive') },
-        { type: 'Outline', variant: 'Negative', className: mergeClassNames('border border--negative') },
-        { type: 'Outline', variant: 'Warning', className: mergeClassNames('border border--warning') },
-        { type: 'Outline', variant: 'Informative', className: mergeClassNames('border border--informative') },
-        { type: 'Outline', variant: 'Neutral', className: mergeClassNames('border border--0') },
+        { kind: 'Outline', variant: 'Positive', className: mergeClassNames('border border--positive') },
+        { kind: 'Outline', variant: 'Negative', className: mergeClassNames('border border--negative') },
+        { kind: 'Outline', variant: 'Warning', className: mergeClassNames('border border--warning') },
+        { kind: 'Outline', variant: 'Informative', className: mergeClassNames('border border--informative') },
+        { kind: 'Outline', variant: 'Neutral', className: mergeClassNames('border border--0') },
         // Status dot colors (applied to the [data-dot] element)
-        { type: 'Status', variant: 'Positive', className: mergeClassNames('[&>[data-dot=true]]:background--positive') },
-        { type: 'Status', variant: 'Negative', className: mergeClassNames('[&>[data-dot=true]]:background--negative') },
-        { type: 'Status', variant: 'Warning', className: mergeClassNames('[&>[data-dot=true]]:background--warning') },
+        { kind: 'Status', variant: 'Positive', className: mergeClassNames('[&>[data-dot=true]]:background--positive') },
+        { kind: 'Status', variant: 'Negative', className: mergeClassNames('[&>[data-dot=true]]:background--negative') },
+        { kind: 'Status', variant: 'Warning', className: mergeClassNames('[&>[data-dot=true]]:background--warning') },
         {
-            type: 'Status',
+            kind: 'Status',
             variant: 'Informative',
             className: mergeClassNames('[&>[data-dot=true]]:background--informative'),
         },
-        { type: 'Status', variant: 'Neutral', className: mergeClassNames('[&>[data-dot=true]]:background--1') },
+        { kind: 'Status', variant: 'Neutral', className: mergeClassNames('[&>[data-dot=true]]:background--1') },
     ],
 
     // Configuration
     configuration: {
         baseClasses: 'inline-flex items-center justify-center gap-2 rounded-full py-1 transition-colors',
         defaultVariant: {
-            type: 'Filled',
+            kind: 'Filled',
             size: 'Base',
         },
     },

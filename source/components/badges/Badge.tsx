@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Structure
 import { badgeTheme as structureBadgeTheme } from '@structure/source/components/badges/BadgeTheme';
-import type { BadgeVariant, BadgeType, BadgeSize } from '@structure/source/components/badges/BadgeTheme';
+import type { BadgeVariant, BadgeKind, BadgeSize } from '@structure/source/components/badges/BadgeTheme';
 import { useComponentTheme } from '@structure/source/theme/providers/ComponentThemeProvider';
 import { mergeComponentTheme, themeIcon } from '@structure/source/theme/utilities/ThemeUtilities';
 
@@ -18,7 +18,7 @@ export type BadgeIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement
 // Component - Badge
 export interface BadgeProperties extends React.HTMLAttributes<HTMLDivElement> {
     variant?: BadgeVariant;
-    type?: BadgeType;
+    kind?: BadgeKind;
     size?: BadgeSize;
     icon?: BadgeIconType; // Icon to display before children
     iconClassName?: string; // Custom className for the icon
@@ -28,7 +28,7 @@ export interface BadgeProperties extends React.HTMLAttributes<HTMLDivElement> {
 export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function Badge(
     {
         variant: variantProperty,
-        type: typeProperty,
+        kind: kindProperty,
         size: sizeProperty,
         icon,
         iconClassName,
@@ -44,14 +44,14 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function 
 
     // Apply defaults from theme configuration
     const variant = variantProperty || badgeTheme.configuration.defaultVariant.variant;
-    const type = typeProperty || badgeTheme.configuration.defaultVariant.type;
+    const kind = kindProperty || badgeTheme.configuration.defaultVariant.kind;
     const size = sizeProperty || badgeTheme.configuration.defaultVariant.size;
 
     // Create variant class names from theme
     const badgeVariantClassNames = createVariantClassNames(badgeTheme.configuration.baseClasses, {
         variants: {
             variant: badgeTheme.variants,
-            type: badgeTheme.types,
+            kind: badgeTheme.kinds,
             size: badgeTheme.sizes,
         },
         compoundVariants: badgeTheme.compoundVariants,
@@ -62,16 +62,16 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProperties>(function 
     const computedClassName = mergeClassNames(
         badgeVariantClassNames({
             variant: variant,
-            type: type,
+            kind: kind,
             size: size,
         }),
         className, // User overrides last
     );
 
-    // Render icon if provided, or status dot if type is Status
+    // Render icon if provided, or status dot if kind is Status
     const renderedIcon = icon ? (
         themeIcon(icon, iconClassName)
-    ) : type === 'Status' ? (
+    ) : kind === 'Status' ? (
         <div data-dot="true" className="size-1.5 shrink-0 rounded-full" />
     ) : null;
 

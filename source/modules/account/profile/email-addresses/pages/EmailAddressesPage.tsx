@@ -33,10 +33,10 @@ export function EmailAddressesPage() {
                                 <div>
                                     <p className="font-medium">{primaryAccountEmailAddress}</p>
                                     <div className="mt-2 flex items-center gap-2">
-                                        <Badge variant="Neutral" type="Outline">
+                                        <Badge variant="Neutral" kind="Outline">
                                             Primary Email
                                         </Badge>
-                                        <Badge variant="Positive" type="Status">
+                                        <Badge variant="Positive" kind="Status">
                                             Verified
                                         </Badge>
                                     </div>
