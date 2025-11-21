@@ -18,6 +18,7 @@ import { SharedStateProvider, globalStore } from '@structure/source/utilities/sh
 
 // Dependencies - Experience Providers
 import { ThemeProvider } from '@structure/source/theme/ThemeProvider';
+import { IconContext } from '@phosphor-icons/react';
 
 // Dependencies - Feature Providers
 import { EngagementProvider } from '@structure/source/modules/engagement/EngagementProvider';
@@ -48,14 +49,16 @@ export function Providers(properties: ProvidersProperties) {
                     <WebSocketViaSharedWorkerProvider>
                         <SharedStateProvider>
                             <ThemeProvider>
-                                <EngagementProvider>
-                                    <NotificationsProvider>
-                                        <TipProvider delayDuration={100}>
-                                            {properties.children}
-                                            <AuthenticationDialog />
-                                        </TipProvider>
-                                    </NotificationsProvider>
-                                </EngagementProvider>
+                                <IconContext.Provider value={{ weight: 'bold', color: 'currentColor' }}>
+                                    <EngagementProvider>
+                                        <NotificationsProvider>
+                                            <TipProvider delayDuration={100}>
+                                                {properties.children}
+                                                <AuthenticationDialog />
+                                            </TipProvider>
+                                        </NotificationsProvider>
+                                    </EngagementProvider>
+                                </IconContext.Provider>
                             </ThemeProvider>
                         </SharedStateProvider>
                     </WebSocketViaSharedWorkerProvider>
