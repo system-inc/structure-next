@@ -53,7 +53,7 @@ export const inputCheckboxTheme: InputCheckboxThemeConfiguration = {
         A: mergeClassNames(
             inputCheckboxBaseClassNames,
             // Base styling
-            'border--2 background--2 shadow-md',
+            'border--2 background--0 shadow-xs dark:background--2',
             // Hover states
             'cursor-pointer hover:border--5',
             // Active states

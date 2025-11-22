@@ -136,10 +136,11 @@ export function SupportPostFeedbackDialog(properties: SupportPostFeedbackDialogP
             </Dialog.Body>
             <Dialog.Footer>
                 <Button
-                // isLoading={chatConversationUpdateMutationState.loading}
-                // onClick={function () {
-                //     renameConversation();
-                // }}
+                    variant="A"
+                    // isLoading={chatConversationUpdateMutationState.loading}
+                    // onClick={function () {
+                    //     renameConversation();
+                    // }}
                 >
                     Submit Feedback
                 </Button>

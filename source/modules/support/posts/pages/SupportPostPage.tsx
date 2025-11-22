@@ -78,6 +78,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
             {account.data?.isAdministrator() && (
                 <div className="float-end flex space-x-2">
                     <Button
+                        variant="B"
                         className="pl-3"
                         iconLeft={EditIcon}
                         href={'/support/posts/' + properties.post.identifier + '/edit'}
@@ -111,7 +112,7 @@ export function SupportPostPage(properties: SupportPostPageProperties) {
             <div className="flex justify-center">
                 <div>
                     <p className="mb-4">Need more help?</p>
-                    <Button size="Large" href="/contact">
+                    <Button variant="A" size="Large" href="/contact">
                         Contact Us
                     </Button>
                 </div>
