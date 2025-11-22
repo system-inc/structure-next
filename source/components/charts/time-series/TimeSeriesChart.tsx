@@ -189,7 +189,7 @@ export function TimeSeriesChart(properties: TimeSeriesChartProperties) {
                             xAxisId="0"
                             yAxisId="left"
                             strokeDasharray="3 3"
-                            stroke="var(--border-tertiary)"
+                            stroke="var(--color-border-0)"
                             vertical={false}
                         />
                     )}
