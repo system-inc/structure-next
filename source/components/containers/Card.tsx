@@ -17,7 +17,10 @@ export interface CardProperties extends React.HTMLAttributes<HTMLDivElement> {
     size?: CardSize;
     children?: React.ReactNode;
 }
-export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function Card(properties, reference) {
+export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function Card(
+    { className, variant, size, children, ...divProperties }: CardProperties,
+    reference,
+) {
     // Hooks
     const componentTheme = useComponentTheme();
 
@@ -30,22 +33,22 @@ export const Card = React.forwardRef<HTMLDivElement, CardProperties>(function Ca
             variant: cardTheme.variants,
             size: cardTheme.sizes,
         },
-        defaultVariants: properties.variant ? cardTheme.configuration.defaultVariant : {},
+        defaultVariants: variant ? cardTheme.configuration.defaultVariant : {},
     });
 
     // Compute final className
     const computedClassName = mergeClassNames(
         cardVariantClassNames({
-            variant: properties.variant,
-            size: properties.size,
+            variant: variant,
+            size: size,
         }),
-        properties.className,
+        className,
     );
 
     // Render the component
     return (
-        <div ref={reference} {...properties} className={computedClassName}>
-            {properties.children}
+        <div ref={reference} {...divProperties} className={computedClassName}>
+            {children}
         </div>
     );
 });
