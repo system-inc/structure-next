@@ -16,7 +16,7 @@ import { ThemeToggle } from '@structure/source/theme/components/ThemeToggle';
 import { AccountNavigationLink } from '@structure/source/modules/account/components/navigation/responsive-popover-drawer/AccountNavigationLink';
 
 // Dependencies - Assets
-import { ArrowRightIcon } from '@phosphor-icons/react/ssr';
+import { ArrowRightIcon, CircleHalfIcon } from '@phosphor-icons/react/ssr';
 
 // Dependencies - Utilities
 import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
@@ -42,6 +42,34 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
     // Determine display context based on isMobile
     const displayContext = responsivePopoverDrawerContext.isMobile ? 'Drawer' : 'Popover';
 
+    // Filter administrator links
+    const administratorLinks = properties.navigationLinks.filter(function (link) {
+        return (
+            link.role === 'Administrator' &&
+            properties.shouldShowNavigationLink(
+                link,
+                displayContext,
+                null,
+                account.data?.isAdministrator() ?? false,
+                account.signedIn,
+            )
+        );
+    });
+
+    // Filter regular account links
+    const regularLinks = properties.navigationLinks.filter(function (link) {
+        return (
+            link.role === 'Any' &&
+            properties.shouldShowNavigationLink(
+                link,
+                displayContext,
+                null,
+                account.data?.isAdministrator() ?? false,
+                account.signedIn,
+            )
+        );
+    });
+
     // Render the component
     return (
         <div
@@ -61,39 +89,25 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
                     properties.signedOutHeader
                 )}
 
-                <HorizontalRule className="mt-2" />
-
                 {/* Administrator Links */}
-                {account.data?.isAdministrator() && (
+                {administratorLinks.length > 0 && (
                     <>
+                        <HorizontalRule className="mt-2" />
                         <div className="mt-2 flex flex-col space-y-0.5">
-                            {properties.navigationLinks
-                                .filter(function (link) {
-                                    return (
-                                        link.role === 'Administrator' &&
-                                        properties.shouldShowNavigationLink(
-                                            link,
-                                            displayContext,
-                                            null,
-                                            account.data?.isAdministrator() ?? false,
-                                            account.signedIn,
-                                        )
-                                    );
-                                })
-                                .map(function (link) {
-                                    return (
-                                        <AccountNavigationLink
-                                            key={link.title}
-                                            onClick={function () {
-                                                properties.close();
-                                            }}
-                                            href={link.href}
-                                            icon={link.icon}
-                                        >
-                                            {link.title} {<ArrowRightIcon weight="bold" className="size-4" />}
-                                        </AccountNavigationLink>
-                                    );
-                                })}
+                            {administratorLinks.map(function (link) {
+                                return (
+                                    <AccountNavigationLink
+                                        key={link.title}
+                                        onClick={function () {
+                                            properties.close();
+                                        }}
+                                        href={link.href}
+                                        icon={link.icon}
+                                    >
+                                        {link.title} {<ArrowRightIcon weight="bold" className="size-4" />}
+                                    </AccountNavigationLink>
+                                );
+                            })}
                         </div>
                         <HorizontalRule className="mt-2" />
                     </>
@@ -109,22 +123,10 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
                 // Make the scroll area thumb more visible in dark mode
                 thumbClassName="dark:background--10/75 dark:hover:background--10/90"
             >
-                <div className="flex flex-col space-y-0.5 py-2">
-                    {/* Regular Account Links */}
-                    {properties.navigationLinks
-                        .filter(function (link) {
-                            return (
-                                link.role === 'Any' &&
-                                properties.shouldShowNavigationLink(
-                                    link,
-                                    displayContext,
-                                    null,
-                                    account.data?.isAdministrator() ?? false,
-                                    account.signedIn,
-                                )
-                            );
-                        })
-                        .map(function (link) {
+                {regularLinks.length > 0 && (
+                    <div className="flex flex-col space-y-0.5 py-2">
+                        {/* Regular Account Links */}
+                        {regularLinks.map(function (link) {
                             return (
                                 <AccountNavigationLink
                                     key={link.title}
@@ -138,7 +140,8 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
                                 </AccountNavigationLink>
                             );
                         })}
-                </div>
+                    </div>
+                )}
             </ScrollArea>
 
             {/* Fixed Bottom Section */}
@@ -156,8 +159,11 @@ export function AccountNavigation(properties: AccountNavigationProperties) {
 
                 <HorizontalRule />
 
-                <div className="flex items-center justify-between pt-2 pr-3 pb-0 pl-3">
-                    <p className="text-sm font-medium">Theme</p>
+                <div className="flex items-center justify-between gap-3 pt-2">
+                    <div className="flex items-center gap-2.5 pl-3">
+                        <CircleHalfIcon className="size-4" />
+                        <p className="text-sm font-medium">Appearance</p>
+                    </div>
                     <ThemeToggle />
                 </div>
             </div>

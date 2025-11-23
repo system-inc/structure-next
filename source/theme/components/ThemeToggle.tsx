@@ -49,9 +49,9 @@ export function ThemeToggle(properties: ThemeToggleProperties) {
                     handleChangeTheme(value as Theme);
                 }}
             >
-                <TabItem value={Theme.OperatingSystem} icon={LaptopIcon} />
                 <TabItem value={Theme.Light} icon={SunIcon} />
                 <TabItem value={Theme.Dark} icon={MoonIcon} />
+                <TabItem value={Theme.OperatingSystem} icon={LaptopIcon} />
             </Tabs>
         </ClientOnly>
     );
