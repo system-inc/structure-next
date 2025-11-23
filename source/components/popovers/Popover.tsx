@@ -24,9 +24,9 @@ export interface PopoverProperties {
     trigger: React.ReactElement; // The element that opens the popover
     content: React.ReactNode; // What appears in the popover
     contentClassName?: string; // Styles the popover content box
-    side?: 'top' | 'bottom' | 'left' | 'right';
+    side?: 'Top' | 'Bottom' | 'Left' | 'Right';
     sideOffset?: number;
-    align?: 'start' | 'center' | 'end';
+    align?: 'Start' | 'Center' | 'End';
     alignOffset?: number;
     portalContainer?: HTMLElement;
     collisionPadding?: number;
@@ -74,9 +74,9 @@ export function Popover(properties: PopoverProperties) {
     ); // Listen for changes to the open property
 
     // Defaults
-    const side = properties.side ?? 'top';
+    const side = properties.side ?? 'Top';
     const sideOffset = properties.sideOffset ?? 4;
-    const align = properties.align ?? 'center';
+    const align = properties.align ?? 'Center';
     const alignOffset = properties.alignOffset ?? 0;
     const collisionPadding = properties.collisionPadding ?? 12;
 
@@ -91,9 +91,9 @@ export function Popover(properties: PopoverProperties) {
 
     // Shared content properties
     const contentProperties = {
-        side: side,
+        side: side.toLowerCase() as 'top' | 'bottom' | 'left' | 'right',
         sideOffset: sideOffset,
-        align: align,
+        align: align.toLowerCase() as 'start' | 'center' | 'end',
         alignOffset: alignOffset,
         collisionPadding: collisionPadding,
         collisionBoundary: properties.collisionBoundary,

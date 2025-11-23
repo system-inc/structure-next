@@ -119,7 +119,7 @@ export function PostCommentReaction(properties: PostCommentReactionProperties) {
                     </div>
                 </div>
             }
-            align="start"
+            align="Start"
             delayInMilliseconds={1500}
             onOpenChange={function (open) {
                 setTipOpen(open);

@@ -471,7 +471,7 @@ export function Table(properties: TableProperties) {
                                     icon={FunnelIcon}
                                     variant="A"
                                     tip="Toggle filters"
-                                    tipProperties={{ side: 'right' }}
+                                    tipProperties={{ side: 'Right' }}
                                     isPressed={filtersEnabled}
                                     onIsPressedChange={onFiltersToggle}
                                 />
@@ -509,7 +509,7 @@ export function Table(properties: TableProperties) {
                                     }
                                     items={rowsSelectionActions}
                                     popoverProperties={{
-                                        align: 'end',
+                                        align: 'End',
                                     }}
                                 />
                             )}
@@ -529,7 +529,7 @@ export function Table(properties: TableProperties) {
                                     search={true}
                                     closeOnItemSelected={false}
                                     popoverProperties={{
-                                        align: 'end',
+                                        align: 'End',
                                     }}
                                     buttonProperties={{
                                         icon: FilterIcon,

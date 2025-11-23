@@ -77,8 +77,8 @@ export function AccountNavigationPopoverMenu(properties: AccountNavigationPopove
             className="rounded-3xl p-0"
             itemsClassName="p-1"
             popoverProperties={{
-                side: 'bottom',
-                align: 'start',
+                side: 'Bottom',
+                align: 'Start',
                 contentClassName: 'w-full rounded-3xl',
             }}
         />

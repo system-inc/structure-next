@@ -151,7 +151,7 @@ export function PostCommentReactionControl(properties: PostCommentReactionContro
                 },
             ]}
             popoverProperties={{
-                side: 'top',
+                side: 'Top',
             }}
         />
     );

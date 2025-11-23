@@ -30,8 +30,8 @@ export function PopoverMenu({
     const [open, setOpen] = React.useState<boolean>(popoverProperties?.open ?? false);
 
     // Defaults
-    const popoverPropertiesSide = popoverProperties?.side ?? 'bottom';
-    const popoverPropertiesAlign = popoverProperties?.align ?? 'start';
+    const popoverPropertiesSide = popoverProperties?.side ?? 'Bottom';
+    const popoverPropertiesAlign = popoverProperties?.align ?? 'Start';
 
     // Function to focus on the search input on open
     function onOpenAutoFocus(event: Event) {

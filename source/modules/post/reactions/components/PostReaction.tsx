@@ -120,7 +120,7 @@ export function PostReaction(properties: PostReactionProperties) {
                     </div>
                 </div>
             }
-            align="start"
+            align="Start"
             delayInMilliseconds={1500}
             onOpenChange={function (open) {
                 setTipOpen(open);

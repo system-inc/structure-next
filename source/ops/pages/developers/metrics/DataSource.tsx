@@ -500,8 +500,8 @@ export const DataSource = React.forwardRef<HTMLLIElement, DataSourceProperties>(
                         <div className="flex items-center space-x-2">
                             {/* The corresponding color of the bar */}
                             <Popover
-                                side="bottom"
-                                align="start"
+                                side="Bottom"
+                                align="Start"
                                 sideOffset={8}
                                 collisionPadding={20}
                                 content={

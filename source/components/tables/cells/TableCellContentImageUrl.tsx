@@ -30,8 +30,8 @@ export function TableCellContentImageUrl(properties: TableCellContentImageUrlPro
                 openOnPress={true}
                 tipClassName="border-none"
                 popoverProperties={{
-                    align: 'start',
-                    side: 'left',
+                    align: 'Start',
+                    side: 'Left',
                 }}
                 tip={
                     (

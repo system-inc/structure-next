@@ -62,7 +62,7 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
                                         <TipButton
                                             className="ml-1"
                                             popoverProperties={{
-                                                side: 'bottom',
+                                                side: 'Bottom',
                                             }}
                                             icon={InformationCircledFilledIcon}
                                             tipClassName="p-2.5"
@@ -145,7 +145,7 @@ export function TableHeaderCell(properties: TableHeaderCellProperties) {
                             },
                         ]}
                         popoverProperties={{
-                            align: 'start',
+                            align: 'Start',
                             alignOffset: -2,
                         }}
                     />

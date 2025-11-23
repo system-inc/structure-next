@@ -56,9 +56,9 @@ export function Tip(properties: TipProperties) {
     );
 
     // Defaults
-    const side = properties.side ?? 'top';
+    const side = properties.side ?? 'Top';
     const sideOffset = properties.sideOffset ?? 4;
-    const align = properties.align ?? 'center';
+    const align = properties.align ?? 'Center';
     const alignOffset = properties.alignOffset ?? 0;
     const collisionPadding = properties.collisionPadding ?? 12;
 
@@ -88,9 +88,9 @@ export function Tip(properties: TipProperties) {
             </RadixTooltip.Trigger>
             <RadixTooltip.Portal container={properties.portalContainer}>
                 <RadixTooltip.Content
-                    side={side}
+                    side={side.toLowerCase() as 'top' | 'bottom' | 'left' | 'right'}
                     sideOffset={sideOffset} // Offset the RadixTooltip from the trigger
-                    align={align}
+                    align={align.toLowerCase() as 'start' | 'center' | 'end'}
                     alignOffset={alignOffset}
                     collisionPadding={collisionPadding}
                     collisionBoundary={properties.collisionBoundary}

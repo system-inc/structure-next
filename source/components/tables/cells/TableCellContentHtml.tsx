@@ -32,8 +32,8 @@ export function TableCellContentHtml(properties: TableCellContentHtmlProperties)
                     ) as React.ReactNode
                 }
                 popoverProperties={{
-                    align: 'start',
-                    side: 'left',
+                    align: 'Start',
+                    side: 'Left',
                 }}
             />
             <div className="ml-1">{properties.value}</div>

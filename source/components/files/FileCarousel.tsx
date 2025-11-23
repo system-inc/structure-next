@@ -145,8 +145,8 @@ export function FileCarousel(properties: FileCarouselProperties) {
                         {currentFile.metadata && (
                             <Popover
                                 content={<MetadataContent metadata={currentFile.metadata} />}
-                                side="top"
-                                align="end"
+                                side="Top"
+                                align="End"
                                 trigger={
                                     <Button
                                         className="rounded-lg p-2 backdrop-blur transition-colors"

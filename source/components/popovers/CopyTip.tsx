@@ -39,7 +39,7 @@ export function CopyTip({
                     <div className="p-1.5 whitespace-nowrap">{value}</div>
                 </div>
             }
-            align="start"
+            align="Start"
             {...tipProperties}
         />
     );

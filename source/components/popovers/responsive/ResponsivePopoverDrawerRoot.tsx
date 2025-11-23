@@ -55,7 +55,6 @@ export interface ResponsivePopoverDrawerRootProperties {
     // Styling
     className?: string;
 }
-
 export function ResponsivePopoverDrawerRoot(properties: ResponsivePopoverDrawerRootProperties) {
     // Hooks
     const isMobile = useIsMobile();

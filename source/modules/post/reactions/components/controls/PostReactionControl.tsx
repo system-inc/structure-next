@@ -163,7 +163,7 @@ export function PostReactionControl(properties: PostReactionControlProperties) {
                 },
             ]}
             popoverProperties={{
-                side: 'top',
+                side: 'Top',
             }}
         />
     );

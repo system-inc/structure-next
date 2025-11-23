@@ -84,7 +84,7 @@ export function AccountNavigationResponsivePopoverDrawer(
                 />
             }
             popoverProperties={{
-                align: 'end',
+                align: 'End',
                 contentClassName: 'w-68',
             }}
             drawerProperties={{
