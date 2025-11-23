@@ -142,7 +142,7 @@
 @utility scroll-area-viewport {
     & > :first-child {
         height: 100%;
-        width: 100%;
+        min-width: 100%;
         table-layout: fixed;
     }
 }
