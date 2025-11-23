@@ -98,6 +98,7 @@ export interface ButtonSizes {
     Icon: 'Icon';
     IconLarge: 'IconLarge';
     IconExtraLarge: 'IconExtraLarge';
+    IconExtraExtraLarge: 'IconExtraLarge';
     MenuItem: 'MenuItem';
     InputSelect: 'InputSelect';
     TableHeaderCell: 'TableHeaderCell';
@@ -346,12 +347,13 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ExtraLarge: mergeClassNames('px-10 py-4 text-lg'),
 
         // Icon-only Button Sizes (square buttons with no text, only an icon)
-        IconExtraExtraSmall: mergeClassNames(buttonIconOnlyLayoutClassNames, 'h-7 w-7'),
+        IconExtraExtraSmall: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-0.5'),
         IconExtraSmall: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-1'),
         IconSmall: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-1.5'),
         Icon: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-2'),
         IconLarge: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-2.5'),
         IconExtraLarge: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-3'),
+        IconExtraExtraLarge: mergeClassNames(buttonIconOnlyLayoutClassNames, 'p-4'),
 
         // Specialized Sizes
         MenuItem: 'pt-1.5 pr-3 pb-1.5',
@@ -371,11 +373,13 @@ export const buttonTheme: ButtonThemeConfiguration = {
         ExtraLarge: 'h-6 w-6',
 
         // Icon dimensions for icon-only buttons (no text, just an icon)
-        IconExtraSmall: 'h-3 w-3',
-        IconSmall: 'h-4 w-4',
-        Icon: 'h-4.5 w-4.5',
-        IconLarge: 'h-6 w-6',
-        IconExtraLarge: 'h-7 w-7',
+        IconExtraExtraSmall: 'h-1.5 w-1.5',
+        IconExtraSmall: 'h-2 w-2',
+        IconSmall: 'h-3 w-3',
+        Icon: 'h-4 w-4',
+        IconLarge: 'h-5 w-5',
+        IconExtraLarge: 'h-6 w-6',
+        IconExtraExtraLarge: 'h-7 w-7',
 
         // Specialized Sizes
         MenuItem: 'h-4 w-4',
