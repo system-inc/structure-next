@@ -7,7 +7,7 @@ import React from 'react';
 import { desktopMinimumWidth } from '@structure/source/layouts/side-navigation/SideNavigationLayoutNavigation';
 
 // Dependencies - Shared State
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import {
     getAtomForNavigationOpen,
     getAtomForNavigationWidth,
@@ -43,6 +43,7 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
 
     // Shared State
     const sideNavigationLayoutNavigationOpen = useAtomValue(getAtomForNavigationOpen(properties.layoutIdentifier));
+    const setSideNavigationLayoutNavigationOpen = useSetAtom(getAtomForNavigationOpen(properties.layoutIdentifier));
     const sideNavigationLayoutNavigationWidth = useAtomValue(
         getAtomForNavigationWidth(properties.layoutIdentifier, properties.defaultNavigationWidth),
     );
@@ -140,6 +141,22 @@ export function SideNavigationLayoutContent(properties: SideNavigationLayoutCont
             )}
             suppressHydrationWarning
         >
+            {/* Dimmed Overlay (mobile only) - Only covers content area */}
+            <motion.div
+                animate={{ opacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0 }}
+                className={mergeClassNames(
+                    'absolute inset-0 z-20 background--backdrop md:hidden',
+                    // If the navigation is closing by window resize, do not show the overlay
+                    sideNavigationLayoutNavigationIsClosingByWindowResize ? 'hidden' : '',
+                    // If the navigation is open, allow pointer events, otherwise disable them
+                    sideNavigationLayoutNavigationOpen === true ? 'pointer-events-auto' : 'pointer-events-none',
+                )}
+                onClick={function () {
+                    // Close the navigation when the overlay is clicked
+                    setSideNavigationLayoutNavigationOpen(false);
+                }}
+            />
+
             {/* Show the line loading animation when the page is loading */}
             <React.Suspense
                 fallback={

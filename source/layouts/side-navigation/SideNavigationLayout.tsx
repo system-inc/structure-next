@@ -58,7 +58,7 @@ export function SideNavigationLayout(properties: SideNavigationLayoutProperties)
     // For Fixed layout, render as siblings (navigation overlays content)
     if(layout === 'Flex') {
         return (
-            <div className="flex h-full w-full">
+            <div className="relative flex h-full w-full">
                 {/* Navigation */}
                 <SideNavigationLayoutNavigation
                     layoutIdentifier={properties.identifier}

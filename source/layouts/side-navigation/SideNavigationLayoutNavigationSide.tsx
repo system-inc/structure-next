@@ -450,7 +450,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                 className={mergeClassNames(
                     // Use fixed positioning for Fixed layout, relative for Flex layout
                     layout === 'Fixed' ? 'fixed z-20' : 'relative',
-                    'flex h-full flex-col',
+                    'flex h-full flex-col background--0',
                     // For Flex layout, prevent flexbox from shrinking the navigation
                     layout === 'Flex' ? 'shrink-0' : '',
                     // Hide overflow when closed for both layouts
@@ -507,22 +507,6 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
                     )}
                 ></div>
             </motion.div>
-
-            {/* Dimmed Overlay (mobile only) */}
-            <motion.div
-                animate={{ opacity: sideNavigationLayoutNavigationOpen === true ? 1 : 0 }}
-                className={mergeClassNames(
-                    'fixed inset-0 z-10 bg-black/50 md:hidden',
-                    // If the navigation is closing by window resize, do not show the overlay
-                    sideNavigationLayoutNavigationIsClosingByWindowResize ? 'hidden' : '',
-                    // If the navigation is open, allow pointer events, otherwise disable them
-                    sideNavigationLayoutNavigationOpen === true ? 'pointer-events-auto' : 'pointer-events-none',
-                )}
-                onClick={function () {
-                    // Close the navigation when the overlay is clicked
-                    setSideNavigationLayoutNavigationOpen(false);
-                }}
-            />
         </>
     );
 }
