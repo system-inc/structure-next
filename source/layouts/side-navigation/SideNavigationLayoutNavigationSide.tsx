@@ -93,7 +93,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
 
     // Spring to animate the container
     const containerOffsetSpring = useSpring(
-        sideNavigationLayoutNavigationOpen === true ? 0 : -(sideNavigationLayoutNavigationWidth - 4), // When closed, show just the drag bar (4px)
+        sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth, // When closed, fully hide the sidebar
         {
             ...sideNavigationLayoutNavigationSpringConfiguration,
         },
@@ -274,7 +274,7 @@ export function SideNavigationLayoutNavigationSide(properties: SideNavigationLay
     React.useEffect(
         function () {
             containerOffsetSpring.set(
-                sideNavigationLayoutNavigationOpen === true ? 0 : -(sideNavigationLayoutNavigationWidth - 4), // When closed, show just the drag bar (4px)
+                sideNavigationLayoutNavigationOpen === true ? 0 : -sideNavigationLayoutNavigationWidth, // When closed, fully hide the sidebar
             );
 
             // Mark the navigation as not closing by window resize
