@@ -111,12 +111,17 @@ export function mergeComponentTheme<T extends ComponentThemeConfiguration>(
 }
 
 // Function to conditionally apply theme className to an icon
-// Accepts either a component reference (applies themeClassName) or pre-rendered ReactNode (user controls styling)
+// Accepts either a component reference (applies themeClassName), pre-rendered ReactNode (user controls styling), or true for empty spacing
 export function themeIcon(
-    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode | undefined,
+    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode | true | undefined,
     themeClassName?: string,
 ): React.ReactNode {
     if(!icon) return null;
+
+    // If icon is true, render an empty spacing element for alignment
+    if(icon === true) {
+        return <span className={themeClassName} aria-hidden="true" />;
+    }
 
     // If it's already a valid React element (pre-rendered JSX), render as-is
     if(React.isValidElement(icon)) {

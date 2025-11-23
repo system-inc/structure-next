@@ -35,13 +35,14 @@ export interface BaseButtonProperties {
     onClick?: (event: React.MouseEvent<HTMLElement>) => void | Promise<void>;
 }
 
-// Type - Icon can be either a component reference or pre-rendered JSX
-export type ButtonIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode;
+// Type - Icon can be either a component reference, pre-rendered JSX, or true for empty spacing
+export type ButtonIconType = React.FunctionComponent<React.SVGProps<SVGSVGElement>> | React.ReactNode | true;
 
 // Icon properties
 // Icons can be either:
 // - React.FunctionComponent: Auto-sized based on button size variant
 // - React.ReactNode: Pre-rendered JSX with full control over styling
+// - true: Renders empty spacing for alignment (useful when mixing buttons with/without icons)
 // Render order: iconLeft → icon → children → iconRight
 export interface ButtonIconProperties {
     iconLeft?: ButtonIconType;

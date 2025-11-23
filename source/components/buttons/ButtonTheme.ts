@@ -61,6 +61,7 @@ export const buttonIconOnlyLayoutClassNames = `aspect-square`;
 export interface ButtonVariants {
     A: 'A';
     B: 'B';
+    Common: 'Common';
     Outline: 'Outline';
     Contrast: 'Contrast';
     Ghost: 'Ghost';
@@ -168,6 +169,14 @@ export const buttonTheme: ButtonThemeConfiguration = {
             // Open and active states match active styling
             'data-[state=open]:border--10 data-[state=open]:content---3',
             'data-[state=active]:border--10 data-[state=active]:content---3',
+        ),
+
+        // Variant Common
+        Common: mergeClassNames(
+            buttonCommonLayoutClassNames,
+            buttonCommonBehaviorClassNames,
+            buttonCommonTypographyClassNames,
+            buttonCommonFocusClassNames,
         ),
 
         // Variant Outline - Button with visible border and no fill
