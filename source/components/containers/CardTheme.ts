@@ -1,5 +1,5 @@
 // Dependencies - Utilities
-import { mergeClassNames } from '@structure/source/utilities/style/ClassName';
+import { mergeClassNames } from '../../utilities/style/ClassName';
 
 // Card Variants
 // Interface allows project-level extension via module augmentation
@@ -43,24 +43,15 @@ export const cardCommonLayoutClassNames = 'flex flex-col';
 // Default Structure Card Theme
 export const cardTheme: CardThemeConfiguration = {
     variants: {
-        A: mergeClassNames(cardCommonLayoutClassNames, 'rounded-2xl border border--0 background--0 shadow--0'),
-        B: mergeClassNames(
-            cardCommonLayoutClassNames,
-            'rounded-2xl border border--1 background--0 shadow--0 dark:background--1',
-        ),
-        C: mergeClassNames(
-            cardCommonLayoutClassNames,
-            'rounded-2xl border border--2 background--1 shadow--0 dark:background--2',
-        ),
-        D: mergeClassNames(
-            cardCommonLayoutClassNames,
-            'rounded-2xl border border--3 background--2 shadow--0 dark:background--3',
-        ),
+        A: mergeClassNames(cardCommonLayoutClassNames, 'border border--0 background--0 shadow--0'),
+        B: mergeClassNames(cardCommonLayoutClassNames, 'border border--1 background--0 shadow--0 dark:background--1'),
+        C: mergeClassNames(cardCommonLayoutClassNames, 'border border--2 background--1 shadow--0 dark:background--2'),
+        D: mergeClassNames(cardCommonLayoutClassNames, 'border border--3 background--2 shadow--0 dark:background--3'),
     },
     sizes: {
-        Small: 'p-4',
-        Base: 'p-8',
-        Large: 'p-12',
+        Small: 'rounded-xl p-4',
+        Base: 'rounded-2xl p-8',
+        Large: 'rounded-2xl p-12',
     },
     configuration: {
         baseClasses: '',

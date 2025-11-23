@@ -3,7 +3,9 @@ import { Theme } from '@structure/source/theme/ThemeTypes';
 import type { DeepPartialComponentTheme } from '@structure/source/theme/utilities/ThemeUtilities';
 import type { LinkThemeConfiguration } from '@structure/source/components/navigation/LinkTheme';
 import type { ButtonThemeConfiguration } from '@structure/source/components/buttons/ButtonTheme';
+import type { CardThemeConfiguration } from '@structure/source/components/containers/CardTheme';
 import type { PopoverThemeConfiguration } from '@structure/source/components/popovers/PopoverTheme';
+import type { DialogThemeConfiguration } from '@structure/source/components/dialogs/DialogTheme';
 import type { DrawerThemeConfiguration } from '@structure/source/components/drawers/DrawerTheme';
 
 // Types
@@ -74,7 +76,9 @@ export interface StructureSettingsInterface {
         components?: {
             Link?: DeepPartialComponentTheme<LinkThemeConfiguration>;
             Button?: DeepPartialComponentTheme<ButtonThemeConfiguration>;
+            Card?: DeepPartialComponentTheme<CardThemeConfiguration>;
             Popover?: DeepPartialComponentTheme<PopoverThemeConfiguration>;
+            Dialog?: DeepPartialComponentTheme<DialogThemeConfiguration>;
             Drawer?: DeepPartialComponentTheme<DrawerThemeConfiguration>;
         };
     };
