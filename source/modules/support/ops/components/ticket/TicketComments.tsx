@@ -6,7 +6,7 @@ import React from 'react';
 import Image from 'next/image';
 
 // Dependencies - Main Components
-import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
+import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 import { FileCarouselProperties } from '@structure/source/components/files/FileCarousel';
 import { FileCarouselDialog } from '@structure/source/components/files/FileCarouselDialog';
 import { CommentAttachments } from '@structure/source/modules/support/ops/components/ticket/TicketCommentAttachments';

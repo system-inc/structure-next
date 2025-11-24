@@ -7,7 +7,7 @@ import React from 'react';
 import { VisitorActivityInterface } from '@structure/source/modules/engagement/components/activity/EngagementActivity';
 
 // Dependencies - Main Components
-import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
+import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 
 // Dependencies - Animation
 import { motion, AnimatePresence, cubicBezier } from 'motion/react';

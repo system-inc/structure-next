@@ -10,7 +10,7 @@ import { useResponsivePopoverDrawerContext } from '@structure/source/components/
 // Dependencies - Main Components
 import { Button } from '@structure/source/components/buttons/Button';
 import { HorizontalRule } from '@structure/source/components/layout/HorizontalRule';
-import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
+import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 import { AccountNavigationBannerButton } from './AccountNavigationBannerButton';
 import { ThemeToggle } from '@structure/source/theme/components/ThemeToggle';
 import { AccountNavigationLink } from '@structure/source/modules/account/components/navigation/responsive-popover-drawer/AccountNavigationLink';

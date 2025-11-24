@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dependencies - Main Components
 import { Pagination as Paginator } from '@structure/source/components/navigation/pagination/Pagination';
-import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
+import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 import { TicketListHeader } from './TicketListHeader';
 import { TicketListItem } from './TicketListItem';
 import { BorderContainer } from '../BorderContainer';

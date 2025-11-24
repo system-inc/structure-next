@@ -8,7 +8,7 @@ import { MenuItemProperties, MenuItemHandle } from '@structure/source/components
 import { MenuItemsList } from '@structure/source/components/menus/MenuItemsList';
 import { MenuSearch } from '@structure/source/components/menus/MenuSearch';
 import { InputReferenceInterface } from '@structure/source/components/forms/Input';
-// import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
+// import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 
 // Dependencies - Assets
 import BrokenCircleIcon from '@structure/assets/icons/animations/BrokenCircleIcon.svg';

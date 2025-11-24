@@ -4,7 +4,7 @@
 import React from 'react';
 
 // Dependencies - Main Components
-import { ScrollArea } from '@structure/source/components/interactions/ScrollArea';
+import { ScrollArea } from '@structure/source/components/containers/ScrollArea';
 
 // Dependencies - Context
 import { useDialogContext } from './DialogContext';
