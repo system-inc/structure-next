@@ -20,6 +20,7 @@ import { mergeClassNames } from '../../../utilities/style/ClassName';
 //   }
 export interface TabsVariants {
     Bubble: 'Bubble';
+    LineBottom: 'LineBottom';
 }
 
 // Type - Tabs Variant (derived from TabsVariants interface)
@@ -39,6 +40,7 @@ export interface TabsSizes {
     Small: 'Small';
     Base: 'Base';
     Large: 'Large';
+    ExtraLarge: 'ExtraLarge';
 }
 
 // Type - Tabs Size (derived from TabsSizes interface)
@@ -65,6 +67,17 @@ export interface TabsThemeConfiguration {
     };
 }
 
+// Type - Deep Partial Tabs Theme (for per-instance or project overrides)
+// Allows partial overrides at every level, including the per-variant configuration objects
+export type DeepPartialTabsTheme = {
+    variants?: Partial<Record<TabsVariant, string>> & Record<string, string>; // Allow additional custom variants
+    variantItemClasses?: Partial<Record<TabsVariant, string>> & Record<string, string>;
+    variantItemWrapperClasses?: Partial<Record<TabsVariant, string>> & Record<string, string>;
+    variantItemActiveClasses?: Partial<Record<TabsVariant, string>> & Record<string, string>;
+    sizes?: Partial<Record<TabsSize, string>> & Record<string, string>; // Allow additional custom sizes
+    configuration?: Partial<TabsThemeConfiguration['configuration']>;
+};
+
 // Tabs Theme - Structure Default
 export const tabsTheme: TabsThemeConfiguration = {
     // Variants
@@ -80,6 +93,16 @@ export const tabsTheme: TabsThemeConfiguration = {
             // Background and padding for wrapper
             'gap-1 rounded-full background--5 p-0.5',
         ),
+
+        // Variant LineBottom - Underline tabs with animated bottom border
+        // Use for: Clean, minimal tab navigation with emphasis on active state
+        // Features: Bottom border baseline, animated active indicator line
+        LineBottom: mergeClassNames(
+            // Layout
+            'flex',
+            // Bottom border (baseline)
+            'border-b border--0',
+        ),
     },
 
     // Per-variant classes for TabItem element
@@ -93,6 +116,15 @@ export const tabsTheme: TabsThemeConfiguration = {
             'content--2 hover:content--0 data-[state=active]:content--0',
             // Shape
             'rounded-full',
+        ),
+
+        LineBottom: mergeClassNames(
+            // Layout
+            'relative flex',
+            // Interaction
+            'cursor-pointer transition-colors',
+            // Colors
+            'content--2 hover:content--0 data-[state=active]:content--0',
         ),
     },
 
@@ -110,17 +142,23 @@ export const tabsTheme: TabsThemeConfiguration = {
             'z-0 group-data-[state=active]:border--4 group-data-[state=active]:background--0',
             'rounded-full', // Match the rounded corners of the tab item
         ),
+
+        LineBottom: mergeClassNames(
+            // Position at bottom of tab item, full width
+            'absolute right-0 -bottom-px left-0',
+            // Line styling, rounded-full means we get a rounded stroke end cap
+            'h-px rounded-full background-content--0',
+        ),
     },
 
     // Sizes - Define padding, typography, and spacing for TabItems
     // Note: TabItem now uses asChild pattern, so children (typically Button components) handle their own sizing
-    // These size classes are applied to the motion.div wrapper for consistent spacing
-    // Note: Even sizes might be variant-specific in the future, but for now they're shared
     sizes: {
-        ExtraSmall: 'inline-flex items-center gap-0.5 text-xs',
-        Small: 'inline-flex items-center gap-1 text-xs',
-        Base: 'inline-flex items-center gap-2.5 text-sm',
-        Large: 'inline-flex items-center gap-3 text-sm font-medium',
+        ExtraSmall: '',
+        Small: '',
+        Base: '',
+        Large: '',
+        ExtraLarge: '',
     },
 
     // Configuration
